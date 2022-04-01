@@ -1,0 +1,5 @@
+rootProject.name = 'customer-terminate-service'
+
+include 'app'
+include 'domain'
+
