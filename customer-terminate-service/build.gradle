@@ -1,0 +1,41 @@
+plugins {
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+ext {
+    springbootMavenBomVersion = '2.6.6'
+}
+
+group = 'se.inera.intyg.cts'
+version = '0.0.1-SNAPSHOT'
+
+allprojects {
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    apply plugin: 'io.spring.dependency-management'
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:${springbootMavenBomVersion}"
+        }
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+}
