@@ -1,11 +1,13 @@
 package se.inera.intyg.cts.domain.model;
 
-import java.util.Objects;
-
 public record OrganisationalRepresentative(PersonId personId, PhoneNumber phoneNumber) {
 
   public OrganisationalRepresentative {
-    Objects.requireNonNull(personId);
-    Objects.requireNonNull(phoneNumber);
+    if (personId == null) {
+      throw new IllegalArgumentException("Missing PersonId");
+    }
+    if (phoneNumber == null) {
+      throw new IllegalArgumentException("Missing PhoneNumber");
+    }
   }
 }

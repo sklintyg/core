@@ -5,6 +5,9 @@ public class Export {
   private final OrganisationalRepresentative organisationalRepresentative;
 
   Export(OrganisationalRepresentative organisationalRepresentative) {
+    if (organisationalRepresentative == null) {
+      throw new IllegalArgumentException("Missing OrganisationalRepresentative");
+    }
     this.organisationalRepresentative = organisationalRepresentative;
   }
 

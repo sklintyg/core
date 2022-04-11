@@ -1,10 +1,12 @@
 package se.inera.intyg.cts.domain.model;
 
-import java.util.Objects;
+import java.util.UUID;
 
-public record TerminationId(String id) {
+public record TerminationId(UUID id) {
 
   public TerminationId {
-    Objects.requireNonNull(id, "Missing terminationId");
+    if (id == null) {
+      throw new IllegalArgumentException("Missing TerminationId");
+    }
   }
 }
