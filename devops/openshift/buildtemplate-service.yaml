@@ -91,7 +91,7 @@ objects:
         dockerfile: |-
           FROM service-base:latest
           ENV APP_NAME=${APP_NAME}
-          ADD ROOT.jar /deployments/
+          ADD app.jar /deployments/
         images:
           - from:
               kind: ImageStreamTag
