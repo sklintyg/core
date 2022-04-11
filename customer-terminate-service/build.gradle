@@ -34,8 +34,4 @@ subprojects {
             mavenBom "org.springframework.boot:spring-boot-dependencies:${springbootMavenBomVersion}"
         }
     }
-
-    tasks.named('test') {
-        useJUnitPlatform()
-    }
 }
