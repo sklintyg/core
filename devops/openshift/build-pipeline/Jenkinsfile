@@ -46,8 +46,7 @@ pipeline {
                                     "-p", "APP_NAME=customer-terminate-service",
                                     "-p", "STAGE=test",
                                     "-p", "BUILD_VERSION=latest",
-                                    "-p", "ARTIFACT_IMAGE_SUFFIX=artifact",
-                                    "-p", "PIPELINE_CALLBACK_URL='${s2iWebhook.getURL()}'")
+                                    "-p", "ARTIFACT_IMAGE_SUFFIX=artifact")
                             openshift.apply(models)
 
                             build = openshift.selector("bc", "customer-terminate-service-artifact").startBuild("--from-dir ./customer-terminate-service")
