@@ -41,7 +41,7 @@ pipeline {
                 script {
                     openshift.withCluster() {
                         openshift.withProject() {
-                            def models = openshift.process("-f", "openshift/buildtemplate-service.yaml",
+                            def models = openshift.process("-f", "devops/openshift/buildtemplate-service.yaml",
                                     "-p", "IS_APP_NAME=customer-terminate-service",
                                     "-p", "APP_NAME=customer-terminate-service",
                                     "-p", "STAGE=test",
