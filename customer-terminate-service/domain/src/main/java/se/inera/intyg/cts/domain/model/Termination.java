@@ -8,7 +8,7 @@ public class Termination {
   private final LocalDateTime created;
   private final Staff creator;
   private final CareProvider careProvider;
-  private final TerminationStatus status;
+  private TerminationStatus status;
   private final Export export;
 
   Termination(TerminationId terminationId, LocalDateTime created, Staff creator,
@@ -39,6 +39,18 @@ public class Termination {
     this.export = export;
   }
 
+  public void collect(CertificateBatch certificateBatch) {
+    if (status == TerminationStatus.CREATED) {
+      status = TerminationStatus.COLLECTING;
+    }
+
+    export().processBatch(certificateBatch);
+
+    if (export().certificateSummary().equals(certificateBatch.certificateSummary())) {
+      status = TerminationStatus.COLLECTION_COMPLETED;
+    }
+  }
+
   public TerminationId terminationId() {
     return terminationId;
   }
@@ -66,8 +78,11 @@ public class Termination {
   @Override
   public String toString() {
     return "Termination{" +
-        "id=" + terminationId +
+        "terminationId=" + terminationId +
+        ", created=" + created +
+        ", creator=" + creator +
         ", careProvider=" + careProvider +
+        ", status=" + status +
         ", export=" + export +
         '}';
   }
