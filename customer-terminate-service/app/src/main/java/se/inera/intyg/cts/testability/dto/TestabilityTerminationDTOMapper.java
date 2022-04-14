@@ -11,7 +11,7 @@ public class TestabilityTerminationDTOMapper {
         testabilityTerminationDTO.creatorHSAId(),
         testabilityTerminationDTO.creatorName(),
         testabilityTerminationDTO.hsaId(),
-        testabilityTerminationDTO.organizationalNumber(),
+        testabilityTerminationDTO.organizationNumber(),
         testabilityTerminationDTO.personId(),
         testabilityTerminationDTO.phoneNumber(),
         testabilityTerminationDTO.status());

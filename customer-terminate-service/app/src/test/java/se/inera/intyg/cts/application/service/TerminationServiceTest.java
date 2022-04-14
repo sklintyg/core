@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CREATOR_HSA_ID;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CREATOR_NAME;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_HSA_ID;
-import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_ORGANIZATIONAL_NUMBER;
+import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_ORGANIZATION_NUMBER;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_PERSON_ID;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_PHONE_NUMBER;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_TERMINATION_ID;
@@ -48,7 +48,7 @@ class TerminationServiceTest {
     @BeforeEach
     void setUp() {
       createTerminationDTO = new CreateTerminationDTO(DEFAULT_CREATOR_HSA_ID, DEFAULT_CREATOR_NAME,
-          DEFAULT_HSA_ID, DEFAULT_ORGANIZATIONAL_NUMBER, DEFAULT_PERSON_ID, DEFAULT_PHONE_NUMBER);
+          DEFAULT_HSA_ID, DEFAULT_ORGANIZATION_NUMBER, DEFAULT_PERSON_ID, DEFAULT_PHONE_NUMBER);
     }
 
     @Test
@@ -82,8 +82,8 @@ class TerminationServiceTest {
 
     @Test
     void shallCreateTerminationWithOrganizationNumber() {
-      assertEquals(DEFAULT_ORGANIZATIONAL_NUMBER,
-          terminationService.create(createTerminationDTO).organizationalNumber());
+      assertEquals(DEFAULT_ORGANIZATION_NUMBER,
+          terminationService.create(createTerminationDTO).organizationNumber());
     }
 
     @Test

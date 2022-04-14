@@ -2,23 +2,23 @@ package se.inera.intyg.cts.domain.model;
 
 public class Export {
 
-  private final OrganisationalRepresentative organisationalRepresentative;
+  private final OrganizationRepresentative organizationRepresentative;
 
-  Export(OrganisationalRepresentative organisationalRepresentative) {
-    if (organisationalRepresentative == null) {
-      throw new IllegalArgumentException("Missing OrganisationalRepresentative");
+  Export(OrganizationRepresentative organizationRepresentative) {
+    if (organizationRepresentative == null) {
+      throw new IllegalArgumentException("Missing OrganizationRepresentative");
     }
-    this.organisationalRepresentative = organisationalRepresentative;
+    this.organizationRepresentative = organizationRepresentative;
   }
 
-  public OrganisationalRepresentative organisationalRepresentative() {
-    return organisationalRepresentative;
+  public OrganizationRepresentative organizationRepresentative() {
+    return organizationRepresentative;
   }
 
   @Override
   public String toString() {
     return "Export{" +
-        "organisationalRepresentative=" + organisationalRepresentative +
+        "organizationRepresentative=" + organizationRepresentative +
         '}';
   }
 }

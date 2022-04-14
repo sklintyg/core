@@ -31,9 +31,9 @@ public class TerminationService {
         .creatorHSAId(createTerminationDTO.creatorHSAId())
         .creatorName(createTerminationDTO.creatorName())
         .careProviderHSAId(createTerminationDTO.hsaId())
-        .careProviderOrganizationalNumber(createTerminationDTO.organizationalNumber())
-        .careProviderOrganisationalRepresentativePersonId(createTerminationDTO.personId())
-        .careProviderOrganisationalRepresentativePhoneNumber(createTerminationDTO.phoneNumber())
+        .careProviderOrganizationNumber(createTerminationDTO.organizationNumber())
+        .careProviderOrganizationRepresentativePersonId(createTerminationDTO.personId())
+        .careProviderOrganizationRepresentativePhoneNumber(createTerminationDTO.phoneNumber())
         .create();
 
     final var createdTermination = terminationRepository.store(termination);

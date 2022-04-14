@@ -29,8 +29,8 @@ public class TerminationEntity {
   private String creatorName;
   @Column(name = "hsa_id")
   private String hsaId;
-  @Column(name = "organizational_number")
-  private String organizationalNumber;
+  @Column(name = "organization_number")
+  private String organizationNumber;
   @Column(name = "person_id")
   private String personId;
   @Column(name = "phone_number")
@@ -42,14 +42,14 @@ public class TerminationEntity {
   }
 
   public TerminationEntity(UUID terminationId, LocalDateTime created, String creatorHSAId,
-      String creatorName, String hsaId, String organizationalNumber, String personId,
+      String creatorName, String hsaId, String organizationNumber, String personId,
       String phoneNumber, String status) {
     this.terminationId = terminationId;
     this.created = created;
     this.creatorHSAId = creatorHSAId;
     this.creatorName = creatorName;
     this.hsaId = hsaId;
-    this.organizationalNumber = organizationalNumber;
+    this.organizationNumber = organizationNumber;
     this.personId = personId;
     this.phoneNumber = phoneNumber;
     this.status = status;
@@ -64,7 +64,7 @@ public class TerminationEntity {
         ", creatorHSAId='" + creatorHSAId + '\'' +
         ", creatorName='" + creatorName + '\'' +
         ", hsaId='" + hsaId + '\'' +
-        ", organizationalNumber='" + organizationalNumber + '\'' +
+        ", organizationNumber='" + organizationNumber + '\'' +
         ", personId='" + personId + '\'' +
         ", phoneNumber='" + phoneNumber + '\'' +
         ", status='" + status + '\'' +
@@ -119,20 +119,20 @@ public class TerminationEntity {
     this.hsaId = hsaId;
   }
 
-  public String getOrganizationalNumber() {
-    return organizationalNumber;
+  public String getOrganizationNumber() {
+    return organizationNumber;
   }
 
-  public void setOrganizationalNumber(String organizationalNumber) {
-    this.organizationalNumber = organizationalNumber;
+  public void setOrganizationNumber(String organizationNumber) {
+    this.organizationNumber = organizationNumber;
   }
 
   public String getPersonId() {
     return personId;
   }
 
-  public void setPersonId(String organizationalRepresentative) {
-    this.personId = organizationalRepresentative;
+  public void setPersonId(String organizationRepresentative) {
+    this.personId = organizationRepresentative;
   }
 
   public String getPhoneNumber() {

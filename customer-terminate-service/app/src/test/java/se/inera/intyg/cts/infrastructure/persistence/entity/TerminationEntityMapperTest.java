@@ -7,7 +7,7 @@ import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CRE
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CREATOR_HSA_ID;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CREATOR_NAME;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_HSA_ID;
-import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_ORGANIZATIONAL_NUMBER;
+import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_ORGANIZATION_NUMBER;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_PERSON_ID;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_PHONE_NUMBER;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_STATUS;
@@ -43,8 +43,8 @@ class TerminationEntityMapperTest {
     }
 
     @Test
-    void shallMapOrganizationalNumber() {
-      assertEquals(DEFAULT_ORGANIZATIONAL_NUMBER, toEntity(termination).getOrganizationalNumber());
+    void shallMapOrganizationNumber() {
+      assertEquals(DEFAULT_ORGANIZATION_NUMBER, toEntity(termination).getOrganizationNumber());
     }
 
     @Test
@@ -99,21 +99,21 @@ class TerminationEntityMapperTest {
     }
 
     @Test
-    void shallMapOrganizationalNumber() {
-      assertEquals(DEFAULT_ORGANIZATIONAL_NUMBER,
-          toDomain(terminationEntity).careProvider().organisationalNumber().number());
+    void shallMapOrganizationNumber() {
+      assertEquals(DEFAULT_ORGANIZATION_NUMBER,
+          toDomain(terminationEntity).careProvider().organizationNumber().number());
     }
 
     @Test
     void shallMapPersonId() {
       assertEquals(DEFAULT_PERSON_ID,
-          toDomain(terminationEntity).export().organisationalRepresentative().personId().id());
+          toDomain(terminationEntity).export().organizationRepresentative().personId().id());
     }
 
     @Test
     void shallMapPhoneNumber() {
       assertEquals(DEFAULT_PHONE_NUMBER,
-          toDomain(terminationEntity).export().organisationalRepresentative().phoneNumber()
+          toDomain(terminationEntity).export().organizationRepresentative().phoneNumber()
               .number());
     }
 

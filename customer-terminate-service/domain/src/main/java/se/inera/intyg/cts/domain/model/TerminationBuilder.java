@@ -10,9 +10,9 @@ public class TerminationBuilder {
   private String creatorHSAId;
   private String creatorName;
   private String careProviderHSAId;
-  private String careProviderOrganizationalNumber;
-  private String careProviderOrganisationalRepresentativePersonId;
-  private String careProviderOrganisationalRepresentativePhoneNumber;
+  private String careProviderOrganizationNumber;
+  private String careProviderOrganizationRepresentativePersonId;
+  private String careProviderOrganizationRepresentativePhoneNumber;
   private TerminationStatus status;
 
   public static TerminationBuilder getInstance() {
@@ -44,19 +44,19 @@ public class TerminationBuilder {
     return this;
   }
 
-  public TerminationBuilder careProviderOrganizationalNumber(String organizationalNumber) {
-    this.careProviderOrganizationalNumber = organizationalNumber;
+  public TerminationBuilder careProviderOrganizationNumber(String organizationNumber) {
+    this.careProviderOrganizationNumber = organizationNumber;
     return this;
   }
 
-  public TerminationBuilder careProviderOrganisationalRepresentativePersonId(String personId) {
-    this.careProviderOrganisationalRepresentativePersonId = personId;
+  public TerminationBuilder careProviderOrganizationRepresentativePersonId(String personId) {
+    this.careProviderOrganizationRepresentativePersonId = personId;
     return this;
   }
 
-  public TerminationBuilder careProviderOrganisationalRepresentativePhoneNumber(
+  public TerminationBuilder careProviderOrganizationRepresentativePhoneNumber(
       String phoneNumber) {
-    this.careProviderOrganisationalRepresentativePhoneNumber = phoneNumber;
+    this.careProviderOrganizationRepresentativePhoneNumber = phoneNumber;
     return this;
   }
 
@@ -74,18 +74,18 @@ public class TerminationBuilder {
 
     final var creator = new Staff(new HSAId(creatorHSAId), creatorName);
     final var hsaId = new HSAId(careProviderHSAId);
-    final var organisationalNumber = new OrganisationalNumber(careProviderOrganizationalNumber);
-    final var personId = new PersonId(careProviderOrganisationalRepresentativePersonId);
-    final var phoneNumber = new PhoneNumber(careProviderOrganisationalRepresentativePhoneNumber);
+    final var organizationNumber = new OrganizationNumber(careProviderOrganizationNumber);
+    final var personId = new PersonId(careProviderOrganizationRepresentativePersonId);
+    final var phoneNumber = new PhoneNumber(careProviderOrganizationRepresentativePhoneNumber);
 
     return new Termination(
         new TerminationId(terminationId),
         created,
         creator,
-        new CareProvider(hsaId, organisationalNumber),
+        new CareProvider(hsaId, organizationNumber),
         status,
         new Export(
-            new OrganisationalRepresentative(personId, phoneNumber)
+            new OrganizationRepresentative(personId, phoneNumber)
         )
     );
   }

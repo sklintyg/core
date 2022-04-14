@@ -9,7 +9,7 @@ public record TerminationDTO(UUID terminationId,
                              String creatorName,
                              String status,
                              String hsaId,
-                             String organizationalNumber,
+                             String organizationNumber,
                              String personId,
                              String phoneNumber) {
 

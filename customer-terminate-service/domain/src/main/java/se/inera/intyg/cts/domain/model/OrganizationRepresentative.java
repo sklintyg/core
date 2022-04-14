@@ -1,8 +1,8 @@
 package se.inera.intyg.cts.domain.model;
 
-public record OrganisationalRepresentative(PersonId personId, PhoneNumber phoneNumber) {
+public record OrganizationRepresentative(PersonId personId, PhoneNumber phoneNumber) {
 
-  public OrganisationalRepresentative {
+  public OrganizationRepresentative {
     if (personId == null) {
       throw new IllegalArgumentException("Missing PersonId");
     }

@@ -12,9 +12,9 @@ public class TerminationDTOMapper {
         termination.creator().name(),
         termination.status().description(),
         termination.careProvider().hsaId().id(),
-        termination.careProvider().organisationalNumber().number(),
-        termination.export().organisationalRepresentative().personId().id(),
-        termination.export().organisationalRepresentative().phoneNumber().number()
+        termination.careProvider().organizationNumber().number(),
+        termination.export().organizationRepresentative().personId().id(),
+        termination.export().organizationRepresentative().phoneNumber().number()
     );
   }
 }
