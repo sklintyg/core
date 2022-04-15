@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.model.TerminationId;
+import se.inera.intyg.cts.domain.model.TerminationStatus;
 
 public class InMemoryTerminationRepository implements TerminationRepository {
 
@@ -24,5 +26,12 @@ public class InMemoryTerminationRepository implements TerminationRepository {
   @Override
   public List<Termination> findAll() {
     return terminationMap.values().stream().toList();
+  }
+
+  @Override
+  public List<Termination> findByStatuses(List<TerminationStatus> statuses) {
+    return terminationMap.values().stream()
+        .filter(termination -> statuses.contains(termination.status()))
+        .collect(Collectors.toList());
   }
 }

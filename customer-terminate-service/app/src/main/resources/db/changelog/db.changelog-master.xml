@@ -6,7 +6,7 @@
 
   <changeSet id="1" author="mww">
     <createTable tableName="termination">
-      <column name="id" type="INTEGER" autoIncrement="true">
+      <column name="id" type="integer" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
       <column name="termination_id" type="varchar(255)">
@@ -37,6 +37,30 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
+  </changeSet>
+
+  <changeSet id="2" author="mww">
+    <createTable tableName="certificate">
+      <column name="id" type="integer" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="certificate_id" type="varchar(255)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="revoked" type="boolean">
+        <constraints nullable="false"/>
+      </column>
+      <column name="xml" type="mediumtext">
+        <constraints nullable="false"/>
+      </column>
+      <column name="termination_id" type="integer">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_certificate_termination_id"
+      baseTableName="certificate" baseColumnNames="termination_id"
+      referencedTableName="termination" referencedColumnNames="id"/>
   </changeSet>
 
 </databaseChangeLog>
