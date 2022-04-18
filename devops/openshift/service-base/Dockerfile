@@ -8,8 +8,9 @@ EXPOSE 8081
 USER root
 RUN ln -snf /usr/share/zoneinfo/Europe/Stockholm /etc/localtime
 RUN mkdir -p /deployments /opt/app/bin
-RUN chmod 777 /deployments
+RUN chmod 777 /deployments /opt/app/bin
 ADD launch.sh /opt/app/bin/
+RUN chmod 777 /opt/app/bin/launch.sh
 
 USER nobody
 CMD ["/opt/app/bin/launch.sh"]

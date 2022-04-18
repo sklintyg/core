@@ -2,10 +2,9 @@ package se.inera.intyg.cts.infrastructure.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.cts.infrastructure.persistence.entity.TerminationEntityMapper.toEntity;
-import static se.inera.intyg.cts.testutil.CertificateTestDataBuilder.defaultCertificate;
+import static se.inera.intyg.cts.testutil.CertificateTestDataBuilder.certificates;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTermination;
 
-import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.cts.domain.model.Termination;
@@ -33,9 +32,7 @@ class JpaCertificateRepositoryTest {
   void shallStoreCertificatesForExistingTermination() {
     inMemoryTerminationEntityRepository.save(toEntity(termination));
 
-    jpaCertificateRepository.store(termination,
-        Arrays.asList(defaultCertificate(), defaultCertificate(), defaultCertificate())
-    );
+    jpaCertificateRepository.store(termination, certificates(3, 0));
 
     assertEquals(3, inMemoryCertificateEntityRepository.count());
   }

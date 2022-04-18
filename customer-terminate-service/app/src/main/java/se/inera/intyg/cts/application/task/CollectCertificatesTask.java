@@ -11,7 +11,7 @@ public class CollectCertificatesTask {
     this.exportService = exportService;
   }
 
-  @Scheduled(fixedRate = 10000)
+  @Scheduled(fixedRate = 9999999)
   public void collectCertificates() {
     exportService.collectCertificatesToExport();
   }

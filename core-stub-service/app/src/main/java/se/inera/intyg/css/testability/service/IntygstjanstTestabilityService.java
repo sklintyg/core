@@ -1,0 +1,22 @@
+package se.inera.intyg.css.testability.service;
+
+import se.inera.intyg.css.infrastructure.persistence.IntygstjanstRepository;
+import se.inera.intyg.css.testability.dto.IntygstjanstCertificatesDTO;
+
+public class IntygstjanstTestabilityService {
+
+  private final IntygstjanstRepository intygstjanstRepository;
+
+  public IntygstjanstTestabilityService(IntygstjanstRepository intygstjanstRepository) {
+    this.intygstjanstRepository = intygstjanstRepository;
+  }
+
+  public void setCertificates(String careProvider,
+      IntygstjanstCertificatesDTO intygstjanstCertificatesDTO) {
+    intygstjanstRepository.store(careProvider, intygstjanstCertificatesDTO.certificates());
+  }
+
+  public void deleteCertificates(String careProvider) {
+    intygstjanstRepository.remove(careProvider);
+  }
+}

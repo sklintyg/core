@@ -14,6 +14,8 @@ public class TerminationBuilder {
   private String careProviderOrganisationalRepresentativePersonId;
   private String careProviderOrganisationalRepresentativePhoneNumber;
   private TerminationStatus status;
+  private int total;
+  private int revoked;
 
   public static TerminationBuilder getInstance() {
     return new TerminationBuilder();
@@ -65,6 +67,18 @@ public class TerminationBuilder {
     return this;
   }
 
+
+  public TerminationBuilder total(int total) {
+    this.total = total;
+    return this;
+  }
+
+
+  public TerminationBuilder revoked(int revoked) {
+    this.revoked = revoked;
+    return this;
+  }
+
   public Termination create() {
     if (terminationId == null) {
       terminationId = UUID.randomUUID();
@@ -85,7 +99,8 @@ public class TerminationBuilder {
         new CareProvider(hsaId, organisationalNumber),
         status,
         new Export(
-            new OrganisationalRepresentative(personId, phoneNumber)
+            new OrganisationalRepresentative(personId, phoneNumber),
+            new CertificateSummary(total, revoked)
         )
     );
   }

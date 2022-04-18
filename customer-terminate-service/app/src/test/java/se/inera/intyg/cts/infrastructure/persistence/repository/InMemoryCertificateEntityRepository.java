@@ -2,10 +2,13 @@ package se.inera.intyg.cts.infrastructure.persistence.repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.random.RandomGenerator;
+import java.util.stream.Collectors;
 import se.inera.intyg.cts.infrastructure.persistence.entity.CertificateEntity;
+import se.inera.intyg.cts.infrastructure.persistence.entity.TerminationEntity;
 
 public class InMemoryCertificateEntityRepository implements CertificateEntityRepository {
 
@@ -13,7 +16,7 @@ public class InMemoryCertificateEntityRepository implements CertificateEntityRep
 
   @Override
   public <S extends CertificateEntity> S save(S entity) {
-    if (entity.getId() == null) {
+    if (entity.getId() == null || entity.getId() < 1L) {
       entity.setId(RandomGenerator.getDefault().nextLong());
     }
 
@@ -86,5 +89,13 @@ public class InMemoryCertificateEntityRepository implements CertificateEntityRep
   @Override
   public void deleteAll() {
     repository.clear();
+  }
+
+  @Override
+  public List<CertificateEntity> findAllByTermination(TerminationEntity terminationEntity) {
+    return repository.values().stream()
+        .filter(certificateEntity -> certificateEntity.getTermination().getTerminationId()
+            == terminationEntity.getTerminationId())
+        .collect(Collectors.toList());
   }
 }

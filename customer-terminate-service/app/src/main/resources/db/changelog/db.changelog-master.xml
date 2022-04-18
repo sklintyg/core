@@ -63,4 +63,22 @@
       referencedTableName="termination" referencedColumnNames="id"/>
   </changeSet>
 
+  <changeSet id="3" author="mww">
+    <createTable tableName="export">
+      <column name="total" type="integer">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revoked" type="integer">
+        <constraints nullable="false"/>
+      </column>
+      <column name="termination_id" type="integer">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_export_termination_id"
+      baseTableName="export" baseColumnNames="termination_id"
+      referencedTableName="termination" referencedColumnNames="id"/>
+  </changeSet>
+
 </databaseChangeLog>

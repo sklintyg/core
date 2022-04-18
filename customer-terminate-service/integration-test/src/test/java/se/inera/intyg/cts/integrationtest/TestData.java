@@ -15,6 +15,7 @@ public class TestData {
 
   private final List<TestabilityTerminationDTO> terminationDTOs = new ArrayList<>();
   private final List<String> terminationIds = new ArrayList<>();
+  private int certificatesCount;
 
   public static TestData create() {
     return new TestData();
@@ -47,6 +48,11 @@ public class TestData {
     return this;
   }
 
+  public TestData certificates(int count) {
+    certificatesCount = count;
+    return this;
+  }
+
   public TestData setup() {
     if (terminationDTOs.size() > 0) {
       for (TestabilityTerminationDTO testabilityTerminationDTO : terminationDTOs) {
@@ -59,13 +65,34 @@ public class TestData {
             .statusCode(HttpStatus.OK.value());
 
         terminationIds.add(testabilityTerminationDTO.terminationId().toString());
+
+        given()
+            .baseUri("http://localhost:18000")
+            .contentType(ContentType.JSON)
+            .body(new IntygstjanstCertificatesDTO(certificates()))
+            .pathParam("careProvider", testabilityTerminationDTO.hsaId())
+            .when()
+            .post("/testability-intygstjanst/v1/certificates/{careProvider}")
+            .then()
+            .statusCode(HttpStatus.OK.value());
       }
     }
     return this;
   }
 
   public void cleanUp() {
+    if (true) {
+      return;
+    }
     terminationIds.forEach(this::delete);
+
+    given()
+        .baseUri("http://localhost:18000")
+        .pathParam("careProvider", "HSA-ID")
+        .when()
+        .delete("/testability-intygstjanst/v1/certificates/{careProvider}")
+        .then()
+        .statusCode(HttpStatus.OK.value());
   }
 
   public TestData terminationId(String terminationId) {
@@ -84,5 +111,17 @@ public class TestData {
         .delete("/testability/v1/terminations/{terminationId}")
         .then()
         .statusCode(HttpStatus.OK.value());
+  }
+
+  private List<CertificateXmlDTO> certificates() {
+    final List<CertificateXmlDTO> certificates = new ArrayList<>(certificatesCount);
+    for (int i = 0; i < certificatesCount; i++) {
+      certificates.add(new CertificateXmlDTO(
+          UUID.randomUUID().toString(),
+          false,
+          "<xml></xml>"
+      ));
+    }
+    return certificates;
   }
 }

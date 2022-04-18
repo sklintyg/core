@@ -9,9 +9,10 @@ public class CertificateEntityMapper {
   public static CertificateEntity toEntity(Certificate certificate,
       TerminationEntity terminationEntity) {
     return new CertificateEntity(
+        0L,
         certificate.certificateId().id(),
-        certificate.certificateXML().xml(),
         certificate.revoked(),
+        certificate.certificateXML().xml(),
         terminationEntity);
   }
 

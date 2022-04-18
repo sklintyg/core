@@ -5,6 +5,7 @@ import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTerm
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.random.RandomGenerator;
 import se.inera.intyg.cts.domain.model.Certificate;
 import se.inera.intyg.cts.domain.model.CertificateId;
 import se.inera.intyg.cts.domain.model.CertificateXML;
@@ -12,6 +13,7 @@ import se.inera.intyg.cts.infrastructure.persistence.entity.CertificateEntity;
 
 public class CertificateTestDataBuilder {
 
+  public static Long DEFAULT_ID = RandomGenerator.getDefault().nextLong();
   public static String DEFAULT_CERTIFICATE_ID = UUID.randomUUID().toString();
   public static boolean DEFAULT_REVOKED = false;
   public static String DEFAULT_XML = "<xml></xml>";
@@ -26,9 +28,10 @@ public class CertificateTestDataBuilder {
 
   public static CertificateEntity defaultCertificateEntity() {
     return new CertificateEntity(
+        DEFAULT_ID,
         DEFAULT_CERTIFICATE_ID,
-        DEFAULT_XML,
         DEFAULT_REVOKED,
+        DEFAULT_XML,
         defaultTerminationEntity()
     );
   }
