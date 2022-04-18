@@ -11,17 +11,20 @@ import se.inera.intyg.cts.infrastructure.integration.GetCertificateBatch;
 
 public class GetCertificateBatchFromIntygstjanst implements GetCertificateBatch {
 
+  private final String baseUrl;
+  private final String certificatesEndpoint;
+
+  public GetCertificateBatchFromIntygstjanst(String baseUrl, String certificatesEndpoint) {
+    this.baseUrl = baseUrl;
+    this.certificatesEndpoint = certificatesEndpoint;
+  }
+
   @Override
   public CertificateBatch get(String careProvider, int limit, int offset) {
-    System.out.println(
-        String.format("limit = %s offset = %s page = %s", limit, offset, offset / limit));
-
-    final var webClient = WebClient.create("http://localhost:18000");
-//    final var webClient = WebClient.create("http://it.localtest.me:8180/inera-certificate");
+    final var webClient = WebClient.create(baseUrl);
     final var certificateExportPageDTOMono = webClient.get()
         .uri(uriBuilder -> uriBuilder
-            .path("/api-intygstjanst/v1/certificates/{careProvider}")
-//            .path("/internalapi/v1/certificates/{careProvider}")
+            .path(certificatesEndpoint + "/{careProvider}")
             .queryParam("size", limit)
             .queryParam("page", (int) offset / limit)
             .build(careProvider))

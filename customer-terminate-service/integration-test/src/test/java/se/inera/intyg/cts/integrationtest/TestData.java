@@ -81,9 +81,6 @@ public class TestData {
   }
 
   public void cleanUp() {
-    if (true) {
-      return;
-    }
     terminationIds.forEach(this::delete);
 
     given()

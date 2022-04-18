@@ -64,8 +64,11 @@ public class AppConfig {
   }
 
   @Bean
-  public GetCertificateBatch certificateBatch() {
-    return new GetCertificateBatchFromIntygstjanst();
+  public GetCertificateBatch certificateBatch(
+      @Value("${integration.intygsjanst.baseurl}") String baseUrl,
+      @Value("${integration.intygsjanst.certificates.endpoint}") String certificatesEndpoint
+  ) {
+    return new GetCertificateBatchFromIntygstjanst(baseUrl, certificatesEndpoint);
   }
 
   @Bean
