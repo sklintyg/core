@@ -3,14 +3,10 @@ package se.inera.intyg.cts.infrastructure.configuration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import se.inera.intyg.cts.application.service.ExportService;
 import se.inera.intyg.cts.application.service.TerminationService;
-import se.inera.intyg.cts.application.task.CollectCertificateTextsTask;
-import se.inera.intyg.cts.application.task.CollectCertificatesTask;
-import se.inera.intyg.cts.application.task.ExportTask;
 import se.inera.intyg.cts.domain.repository.CertificateBatchRepository;
 import se.inera.intyg.cts.domain.repository.CertificateRepository;
 import se.inera.intyg.cts.domain.repository.CertificateTextRepository;
@@ -32,7 +28,6 @@ import se.inera.intyg.cts.infrastructure.persistence.repository.TerminationEntit
 import se.inera.intyg.cts.infrastructure.service.CreateEncryptedZipPackage;
 
 @Configuration
-@EnableScheduling
 public class AppConfig {
 
   @Bean
@@ -113,21 +108,6 @@ public class AppConfig {
       @Value("${integration.intygsjanst.baseurl}") String baseUrl,
       @Value("${integration.intygsjanst.certificate.texts.endpoint}") String certificateTextsEndpoint) {
     return new GetCertificateTextsFromIntygstjanst(webClient, baseUrl, certificateTextsEndpoint);
-  }
-
-  @Bean
-  public CollectCertificatesTask collectCertificatesTask(ExportService exportService) {
-    return new CollectCertificatesTask(exportService);
-  }
-
-  @Bean
-  public CollectCertificateTextsTask collectCertificateTextsTask(ExportService exportService) {
-    return new CollectCertificateTextsTask(exportService);
-  }
-
-  @Bean
-  public ExportTask exportTask(ExportService exportService) {
-    return new ExportTask(exportService);
   }
 
   @Bean
