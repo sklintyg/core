@@ -1,20 +1,8 @@
 package se.inera.intyg.cts.infrastructure.integration.Intygstjanst.dto;
 
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class CertificateExportPageDTO {
-
-  private String careProviderId;
-  private int page;
-  private int count;
-  private long total;
-  private long totalRevoked;
-  private List<CertificateXmlDTO> certificateXmls;
+public record CertificateExportPageDTO(String careProviderId, int page, int count, long total,
+                                       long totalRevoked, List<CertificateXmlDTO> certificateXmls) {
 
 }

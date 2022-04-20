@@ -41,14 +41,14 @@ public class GetCertificateBatchFromIntygstjanst implements GetCertificateBatch 
 
     return new CertificateBatch(
         new CertificateSummary(
-            (int) certificateExportPageDTOMono.getTotal(),
-            (int) certificateExportPageDTOMono.getTotalRevoked()
+            (int) certificateExportPageDTOMono.total(),
+            (int) certificateExportPageDTOMono.totalRevoked()
         ),
-        certificateExportPageDTOMono.getCertificateXmls().stream()
+        certificateExportPageDTOMono.certificateXmls().stream()
             .map(certificateXmlDTO -> new Certificate(
-                new CertificateId(certificateXmlDTO.getId()),
-                certificateXmlDTO.isRevoked(),
-                new CertificateXML(certificateXmlDTO.getXml())
+                new CertificateId(certificateXmlDTO.id()),
+                certificateXmlDTO.revoked(),
+                new CertificateXML(certificateXmlDTO.xml())
             ))
             .collect(Collectors.toList())
     );
