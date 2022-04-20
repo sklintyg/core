@@ -14,13 +14,17 @@ import se.inera.intyg.cts.infrastructure.integration.Intygstjanst.dto.Certificat
 public class GetCertificateTextsFromIntygstjanst implements GetCertificateTexts {
 
   private final WebClient webClient;
+  private final String scheme;
   private final String baseUrl;
+  private final String port;
   private final String certificateTextsEndpoint;
 
-  public GetCertificateTextsFromIntygstjanst(WebClient webClient, String baseUrl,
-      String certificateTextsEndpoint) {
+  public GetCertificateTextsFromIntygstjanst(WebClient webClient, String scheme,
+      String baseUrl, String port, String certificateTextsEndpoint) {
     this.webClient = webClient;
+    this.scheme = scheme;
     this.baseUrl = baseUrl;
+    this.port = port;
     this.certificateTextsEndpoint = certificateTextsEndpoint;
   }
 
@@ -28,9 +32,9 @@ public class GetCertificateTextsFromIntygstjanst implements GetCertificateTexts 
   public List<CertificateText> get() {
     final List<CertificateTextDTO> certificateExportPageDTOMono = webClient.get()
         .uri(uriBuilder -> uriBuilder
-            .scheme("http")
+            .scheme(scheme)
             .host(baseUrl)
-            .port(8180)
+            .port(port)
             .path(certificateTextsEndpoint)
             .build())
         .retrieve()

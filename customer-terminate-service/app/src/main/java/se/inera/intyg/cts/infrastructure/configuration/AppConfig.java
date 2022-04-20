@@ -56,7 +56,7 @@ public class AppConfig {
   }
 
   @Bean
-  public ExportPackage exportToSjut(CreatePackage createPackage,
+  public ExportPackage exportPackage(CreatePackage createPackage,
       TerminationRepository terminationRepository) {
     return new ExportPackage(createPackage, terminationRepository);
   }

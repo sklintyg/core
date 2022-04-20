@@ -13,13 +13,17 @@ import se.inera.intyg.cts.infrastructure.integration.Intygstjanst.dto.Certificat
 public class GetCertificateBatchFromIntygstjanst implements GetCertificateBatch {
 
   private final WebClient webClient;
+  private final String scheme;
   private final String baseUrl;
+  private final String port;
   private final String certificatesEndpoint;
 
-  public GetCertificateBatchFromIntygstjanst(WebClient webClient, String baseUrl,
-      String certificatesEndpoint) {
+  public GetCertificateBatchFromIntygstjanst(WebClient webClient, String scheme,
+      String baseUrl, String port, String certificatesEndpoint) {
     this.webClient = webClient;
+    this.scheme = scheme;
     this.baseUrl = baseUrl;
+    this.port = port;
     this.certificatesEndpoint = certificatesEndpoint;
   }
 
@@ -27,9 +31,9 @@ public class GetCertificateBatchFromIntygstjanst implements GetCertificateBatch 
   public CertificateBatch get(String careProvider, int limit, int offset) {
     final var certificateExportPageDTOMono = webClient.get()
         .uri(uriBuilder -> uriBuilder
-            .scheme("http")
+            .scheme(scheme)
             .host(baseUrl)
-            .port(8180)
+            .port(port)
             .path(certificatesEndpoint + "/{careProvider}")
             .queryParam("size", limit)
             .queryParam("page", offset / limit)

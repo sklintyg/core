@@ -15,16 +15,22 @@ public class IntegrationConfig {
 
   @Bean
   public GetCertificateBatch getCertificateBatch(WebClient webClient,
+      @Value("${integration.intygsjanst.scheme}") String scheme,
       @Value("${integration.intygsjanst.baseurl}") String baseUrl,
+      @Value("${integration.intygsjanst.port}") String port,
       @Value("${integration.intygsjanst.certificates.endpoint}") String certificatesEndpoint) {
-    return new GetCertificateBatchFromIntygstjanst(webClient, baseUrl, certificatesEndpoint);
+    return new GetCertificateBatchFromIntygstjanst(webClient, scheme, baseUrl, port,
+        certificatesEndpoint);
   }
 
   @Bean
   public GetCertificateTexts getCertificateTexts(WebClient webClient,
+      @Value("${integration.intygsjanst.scheme}") String scheme,
       @Value("${integration.intygsjanst.baseurl}") String baseUrl,
+      @Value("${integration.intygsjanst.port}") String port,
       @Value("${integration.intygsjanst.certificate.texts.endpoint}") String certificateTextsEndpoint) {
-    return new GetCertificateTextsFromIntygstjanst(webClient, baseUrl, certificateTextsEndpoint);
+    return new GetCertificateTextsFromIntygstjanst(webClient, scheme, baseUrl,
+        port, certificateTextsEndpoint);
   }
 
   @Bean
