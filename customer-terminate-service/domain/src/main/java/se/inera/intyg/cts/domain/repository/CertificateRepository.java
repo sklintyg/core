@@ -7,4 +7,6 @@ import se.inera.intyg.cts.domain.model.Termination;
 public interface CertificateRepository {
 
   void store(Termination termination, List<Certificate> certificateList);
+
+  List<Certificate> get(Termination termination);
 }

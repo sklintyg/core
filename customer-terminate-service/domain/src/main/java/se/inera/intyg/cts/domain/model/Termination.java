@@ -1,6 +1,7 @@
 package se.inera.intyg.cts.domain.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Termination {
 
@@ -41,14 +42,23 @@ public class Termination {
 
   public void collect(CertificateBatch certificateBatch) {
     if (status == TerminationStatus.CREATED) {
-      status = TerminationStatus.COLLECTING;
+      status = TerminationStatus.COLLECTING_CERTIFICATES;
     }
 
     export().processBatch(certificateBatch);
 
     if (export().certificateSummary().equals(certificateBatch.certificateSummary())) {
-      status = TerminationStatus.COLLECTION_COMPLETED;
+      status = TerminationStatus.COLLECTING_CERTIFICATES_COMPLETED;
     }
+  }
+
+  public void collect(List<CertificateText> certificateTexts) {
+    status = TerminationStatus.COLLECTING_CERTIFICATE_TEXTS_COMPLETED;
+  }
+
+  public void exported(Password password) {
+    export().packagePassword(password);
+    status = TerminationStatus.EXPORTED;
   }
 
   public TerminationId terminationId() {

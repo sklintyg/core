@@ -19,6 +19,9 @@ class TerminationBuilderTest {
   public static final String ORGANIZATIONAL_NUMBER = "organizationalNumber";
   public static final String PERSON_ID = "personId";
   public static final String PHONE_NUMBER = "phoneNumber";
+  public static final int TOTAL = 145;
+  public static final int REVOKED = 13;
+  public static final String PASSWORD = "thisisapassword";
   public static final TerminationStatus DEFAULT_STATUS = TerminationStatus.CREATED;
 
   @Nested
@@ -95,7 +98,6 @@ class TerminationBuilderTest {
     }
   }
 
-
   @Test
   void shallCreateTerminationWithHSAId() {
     assertEquals(HSA_ID, terminationBuilder().create().careProvider().hsaId().id());
@@ -118,6 +120,24 @@ class TerminationBuilderTest {
     assertEquals(PHONE_NUMBER,
         terminationBuilder().create().export().organisationalRepresentative().phoneNumber()
             .number());
+  }
+
+  @Test
+  void shallCreateTerminationWithTotal() {
+    assertEquals(TOTAL,
+        terminationBuilder().create().export().certificateSummary().total());
+  }
+
+  @Test
+  void shallCreateTerminationWithRevoked() {
+    assertEquals(REVOKED,
+        terminationBuilder().create().export().certificateSummary().revoked());
+  }
+
+  @Test
+  void shallCreateTerminationWithPassword() {
+    assertEquals(PASSWORD,
+        terminationBuilder().create().export().password().password());
   }
 
   @Test
@@ -171,6 +191,9 @@ class TerminationBuilderTest {
         .careProviderHSAId(HSA_ID)
         .careProviderOrganizationalNumber(ORGANIZATIONAL_NUMBER)
         .careProviderOrganisationalRepresentativePersonId(PERSON_ID)
-        .careProviderOrganisationalRepresentativePhoneNumber(PHONE_NUMBER);
+        .careProviderOrganisationalRepresentativePhoneNumber(PHONE_NUMBER)
+        .total(TOTAL)
+        .revoked(REVOKED)
+        .packagePassword(PASSWORD);
   }
 }
