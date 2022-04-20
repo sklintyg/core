@@ -85,7 +85,8 @@ class JpaTerminationRepositoryTest {
     }
 
     assertEquals(0,
-        jpaTerminationRepository.findByStatuses(Arrays.asList(TerminationStatus.COLLECTING))
+        jpaTerminationRepository.findByStatuses(
+                Arrays.asList(TerminationStatus.COLLECTING_CERTIFICATES))
             .size());
   }
 }

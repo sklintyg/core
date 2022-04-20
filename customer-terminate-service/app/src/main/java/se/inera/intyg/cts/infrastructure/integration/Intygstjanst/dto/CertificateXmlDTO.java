@@ -1,4 +1,4 @@
-package se.inera.intyg.cts.infrastructure.integration.Intygstjanst;
+package se.inera.intyg.cts.infrastructure.integration.Intygstjanst.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -20,7 +20,9 @@ public class TerminationEntityMapper {
         termination.status().name(),
         new ExportEmbeddable(
             termination.export().certificateSummary().total(),
-            termination.export().certificateSummary().revoked()
+            termination.export().certificateSummary().revoked(),
+            termination.export().password() != null ? termination.export().password().password()
+                : null
         ));
   }
 
@@ -38,6 +40,7 @@ public class TerminationEntityMapper {
         .status(TerminationStatus.valueOf(terminationEntity.getStatus()))
         .total(terminationEntity.getExport().getTotal())
         .revoked(terminationEntity.getExport().getRevoked())
+        .packagePassword(terminationEntity.getExport().getPassword())
         .create();
   }
 }

@@ -1,4 +1,4 @@
-package se.inera.intyg.cts.infrastructure.integration.Intygstjanst;
+package se.inera.intyg.cts.infrastructure.integration.Intygstjanst.dto;
 
 import java.util.List;
 import lombok.AllArgsConstructor;

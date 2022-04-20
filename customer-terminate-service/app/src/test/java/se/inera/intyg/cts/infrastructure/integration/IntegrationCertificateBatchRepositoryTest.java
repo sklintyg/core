@@ -2,6 +2,7 @@ package se.inera.intyg.cts.infrastructure.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.cts.testutil.CertificateTestDataBuilder.certificates;
+import static se.inera.intyg.cts.testutil.CertificateTextTestDataBuilder.certificateTexts;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTermination;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -15,16 +16,19 @@ class IntegrationCertificateBatchRepositoryTest {
 
   private static final int BATCH_SIZE = 30;
   private IntegrationCertificateBatchRepository integrationCertificateBatchRepository;
-  private GetCertificateBatchFromMemory getCertificateBatch;
+  private GetCertificateBatchFromMemory getCertificateBatchFromMemory;
+  private GetCertificateTextsFromMemory getCertificateTextsFromMemory;
   private Termination termination;
 
   @BeforeEach
   void setUp() {
-    getCertificateBatch = new GetCertificateBatchFromMemory();
+    getCertificateBatchFromMemory = new GetCertificateBatchFromMemory();
+    getCertificateTextsFromMemory = new GetCertificateTextsFromMemory();
     integrationCertificateBatchRepository = new IntegrationCertificateBatchRepository(
-        getCertificateBatch, BATCH_SIZE);
+        getCertificateBatchFromMemory, BATCH_SIZE, getCertificateTextsFromMemory);
     termination = defaultTermination();
-    getCertificateBatch.prepare(certificates(80, 5));
+    getCertificateBatchFromMemory.prepare(certificates(80, 5));
+    getCertificateTextsFromMemory.prepare(certificateTexts(10));
   }
 
   @Nested
@@ -84,6 +88,16 @@ class IntegrationCertificateBatchRepositoryTest {
     void shallGetCertificateWithFirstBatch() {
       assertEquals(20,
           integrationCertificateBatchRepository.nextBatch(termination).certificateList().size());
+    }
+  }
+
+  @Nested
+  class CertificateTexts {
+
+    @Test
+    void shallGetCertificateTexts() {
+      assertEquals(10,
+          integrationCertificateBatchRepository.certificateTexts(termination).size());
     }
   }
 }

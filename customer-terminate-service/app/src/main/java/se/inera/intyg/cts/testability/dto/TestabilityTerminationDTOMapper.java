@@ -17,6 +17,6 @@ public class TestabilityTerminationDTOMapper {
         testabilityTerminationDTO.personId(),
         testabilityTerminationDTO.phoneNumber(),
         testabilityTerminationDTO.status(),
-        new ExportEmbeddable(0, 0));
+        new ExportEmbeddable(0, 0, null));
   }
 }

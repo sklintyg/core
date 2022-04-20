@@ -18,5 +18,7 @@ public class ExportEmbeddable {
   private int total;
   @Column(name = "revoked", table = "export")
   private int revoked;
+  @Column(name = "password", table = "export")
+  private String password;
 
 }

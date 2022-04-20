@@ -19,4 +19,9 @@ public class ExportController {
   void startCollectCertificates() {
     exportService.collectCertificatesToExport();
   }
+
+  @PostMapping("/exportPackage")
+  void startExportPackage() {
+    exportService.export();
+  }
 }

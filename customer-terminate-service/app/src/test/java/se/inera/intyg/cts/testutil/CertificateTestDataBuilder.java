@@ -10,6 +10,7 @@ import se.inera.intyg.cts.domain.model.Certificate;
 import se.inera.intyg.cts.domain.model.CertificateId;
 import se.inera.intyg.cts.domain.model.CertificateXML;
 import se.inera.intyg.cts.infrastructure.persistence.entity.CertificateEntity;
+import se.inera.intyg.cts.infrastructure.persistence.entity.TerminationEntity;
 
 public class CertificateTestDataBuilder {
 
@@ -44,6 +45,23 @@ public class CertificateTestDataBuilder {
               new CertificateId(UUID.randomUUID().toString()),
               i >= (total - revokeCount),
               new CertificateXML(DEFAULT_XML)
+          )
+      );
+    }
+    return certificates;
+  }
+
+  public static List<CertificateEntity> certificateEntities(TerminationEntity terminationEntity,
+      int total, int revokeCount) {
+    final List<CertificateEntity> certificates = new ArrayList<>();
+    for (int i = 0; i < total; i++) {
+      certificates.add(
+          new CertificateEntity(
+              RandomGenerator.getDefault().nextLong(),
+              UUID.randomUUID().toString(),
+              i >= (total - revokeCount),
+              DEFAULT_XML,
+              terminationEntity
           )
       );
     }

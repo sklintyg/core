@@ -71,6 +71,9 @@
       <column name="revoked" type="integer">
         <constraints nullable="false"/>
       </column>
+      <column name="password" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
       <column name="termination_id" type="integer">
         <constraints nullable="false"/>
       </column>
@@ -78,6 +81,30 @@
 
     <addForeignKeyConstraint constraintName="fk_export_termination_id"
       baseTableName="export" baseColumnNames="termination_id"
+      referencedTableName="termination" referencedColumnNames="id"/>
+  </changeSet>
+
+  <changeSet id="4" author="mww">
+    <createTable tableName="certificate_text">
+      <column name="id" type="integer" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="certificate_type" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="certificate_type_version" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="xml" type="mediumtext">
+        <constraints nullable="false"/>
+      </column>
+      <column name="termination_id" type="integer">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_certificate_text_termination_id"
+      baseTableName="certificate_text" baseColumnNames="termination_id"
       referencedTableName="termination" referencedColumnNames="id"/>
   </changeSet>
 
