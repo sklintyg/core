@@ -39,8 +39,8 @@ public class TerminationEntity {
   private String creatorName;
   @Column(name = "hsa_id")
   private String hsaId;
-  @Column(name = "organizational_number")
-  private String organizationalNumber;
+  @Column(name = "organization_number")
+  private String organizationNumber;
   @Column(name = "person_id")
   private String personId;
   @Column(name = "phone_number")

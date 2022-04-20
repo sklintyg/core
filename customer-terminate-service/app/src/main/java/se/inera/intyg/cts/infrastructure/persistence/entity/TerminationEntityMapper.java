@@ -14,9 +14,9 @@ public class TerminationEntityMapper {
         termination.creator().hsaId().id(),
         termination.creator().name(),
         termination.careProvider().hsaId().id(),
-        termination.careProvider().organisationalNumber().number(),
-        termination.export().organisationalRepresentative().personId().id(),
-        termination.export().organisationalRepresentative().phoneNumber().number(),
+        termination.careProvider().organizationNumber().number(),
+        termination.export().organizationRepresentative().personId().id(),
+        termination.export().organizationRepresentative().phoneNumber().number(),
         termination.status().name(),
         new ExportEmbeddable(
             termination.export().certificateSummary().total(),
@@ -33,10 +33,10 @@ public class TerminationEntityMapper {
         .creatorHSAId(terminationEntity.getCreatorHSAId())
         .creatorName(terminationEntity.getCreatorName())
         .careProviderHSAId(terminationEntity.getHsaId())
-        .careProviderOrganizationalNumber(terminationEntity.getOrganizationalNumber())
-        .careProviderOrganisationalRepresentativePersonId(
+        .careProviderOrganizationNumber(terminationEntity.getOrganizationNumber())
+        .careProviderOrganizationRepresentativePersonId(
             terminationEntity.getPersonId())
-        .careProviderOrganisationalRepresentativePhoneNumber(terminationEntity.getPhoneNumber())
+        .careProviderOrganizationRepresentativePhoneNumber(terminationEntity.getPhoneNumber())
         .status(TerminationStatus.valueOf(terminationEntity.getStatus()))
         .total(terminationEntity.getExport().getTotal())
         .revoked(terminationEntity.getExport().getRevoked())

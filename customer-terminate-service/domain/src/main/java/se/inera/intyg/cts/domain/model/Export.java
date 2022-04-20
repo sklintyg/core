@@ -2,23 +2,23 @@ package se.inera.intyg.cts.domain.model;
 
 public class Export {
 
-  private final OrganisationalRepresentative organisationalRepresentative;
+  private final OrganizationRepresentative organizationRepresentative;
   private CertificateSummary certificateSummary;
   private Password password;
 
-  Export(OrganisationalRepresentative organisationalRepresentative) {
-    this(organisationalRepresentative, new CertificateSummary(0, 0), null);
+  Export(OrganizationRepresentative organizationRepresentative) {
+    this(organizationRepresentative, new CertificateSummary(0, 0), null);
   }
 
-  Export(OrganisationalRepresentative organisationalRepresentative,
+  Export(OrganizationRepresentative organizationRepresentative,
       CertificateSummary certificateSummary, Password password) {
-    if (organisationalRepresentative == null) {
+    if (organizationRepresentative == null) {
       throw new IllegalArgumentException("Missing OrganisationalRepresentative");
     }
     if (certificateSummary == null) {
       throw new IllegalArgumentException("Missing CertificateSummary");
     }
-    this.organisationalRepresentative = organisationalRepresentative;
+    this.organizationRepresentative = organizationRepresentative;
     this.certificateSummary = certificateSummary;
     this.password = password;
   }
@@ -36,8 +36,8 @@ public class Export {
     this.password = password;
   }
 
-  public OrganisationalRepresentative organisationalRepresentative() {
-    return organisationalRepresentative;
+  public OrganizationRepresentative organizationRepresentative() {
+    return organizationRepresentative;
   }
 
   public CertificateSummary certificateSummary() {
@@ -51,7 +51,7 @@ public class Export {
   @Override
   public String toString() {
     return "Export{" +
-        "organisationalRepresentative=" + organisationalRepresentative +
+        "organizationRepresentative=" + organizationRepresentative +
         ", certificateSummary=" + certificateSummary +
         ", password=" + password +
         '}';

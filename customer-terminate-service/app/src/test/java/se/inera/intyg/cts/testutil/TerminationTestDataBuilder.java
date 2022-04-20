@@ -17,7 +17,7 @@ public class TerminationTestDataBuilder {
   public static final String DEFAULT_HSA_ID = "hsaId";
   public static final String DEFAULT_CREATOR_HSA_ID = "creatorHSAId";
   public static final String DEFAULT_CREATOR_NAME = "creatorName";
-  public static final String DEFAULT_ORGANIZATIONAL_NUMBER = "organizationalNumber";
+  public static final String DEFAULT_ORGANIZATION_NUMBER = "organizationNumber";
   public static final String DEFAULT_PERSON_ID = "personId";
   public static final String DEFAULT_PHONE_NUMBER = "phoneNumber";
   public static final TerminationStatus DEFAULT_STATUS = TerminationStatus.CREATED;
@@ -29,9 +29,9 @@ public class TerminationTestDataBuilder {
         .creatorHSAId(DEFAULT_CREATOR_HSA_ID)
         .creatorName(DEFAULT_CREATOR_NAME)
         .careProviderHSAId(DEFAULT_HSA_ID)
-        .careProviderOrganizationalNumber(DEFAULT_ORGANIZATIONAL_NUMBER)
-        .careProviderOrganisationalRepresentativePersonId(DEFAULT_PERSON_ID)
-        .careProviderOrganisationalRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
+        .careProviderOrganizationNumber(DEFAULT_ORGANIZATION_NUMBER)
+        .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
+        .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
         .status(TerminationStatus.CREATED)
         .create();
   }
@@ -44,7 +44,7 @@ public class TerminationTestDataBuilder {
         DEFAULT_CREATOR_HSA_ID,
         DEFAULT_CREATOR_NAME,
         DEFAULT_HSA_ID,
-        DEFAULT_ORGANIZATIONAL_NUMBER,
+        DEFAULT_ORGANIZATION_NUMBER,
         DEFAULT_PERSON_ID,
         DEFAULT_PHONE_NUMBER,
         DEFAULT_STATUS.toString(),
@@ -59,7 +59,7 @@ public class TerminationTestDataBuilder {
         DEFAULT_CREATOR_HSA_ID,
         DEFAULT_CREATOR_NAME,
         DEFAULT_HSA_ID,
-        DEFAULT_ORGANIZATIONAL_NUMBER,
+        DEFAULT_ORGANIZATION_NUMBER,
         DEFAULT_PERSON_ID,
         DEFAULT_PHONE_NUMBER,
         DEFAULT_STATUS.toString(),

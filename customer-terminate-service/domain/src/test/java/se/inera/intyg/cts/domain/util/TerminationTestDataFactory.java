@@ -25,9 +25,9 @@ public class TerminationTestDataFactory {
         .creatorHSAId(DEFAULT_CREATOR_HSA_ID)
         .creatorName(DEFAULT_CREATOR_NAME)
         .careProviderHSAId(DEFAULT_HSA_ID)
-        .careProviderOrganizationalNumber(DEFAULT_ORGANIZATIONAL_NUMBER)
-        .careProviderOrganisationalRepresentativePersonId(DEFAULT_PERSON_ID)
-        .careProviderOrganisationalRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
+        .careProviderOrganizationNumber(DEFAULT_ORGANIZATIONAL_NUMBER)
+        .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
+        .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
         .status(TerminationStatus.CREATED)
         .create();
   }

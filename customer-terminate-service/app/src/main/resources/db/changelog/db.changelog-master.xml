@@ -24,7 +24,7 @@
       <column name="hsa_id" type="varchar(255)">
         <constraints nullable="false"/>
       </column>
-      <column name="organizational_number" type="varchar(255)">
+      <column name="organization_number" type="varchar(255)">
         <constraints nullable="false"/>
       </column>
       <column name="person_id" type="varchar(255)">

@@ -6,7 +6,7 @@ import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CRE
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CREATOR_HSA_ID;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CREATOR_NAME;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_HSA_ID;
-import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_ORGANIZATIONAL_NUMBER;
+import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_ORGANIZATION_NUMBER;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_PERSON_ID;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_PHONE_NUMBER;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_STATUS;
@@ -41,8 +41,8 @@ class TerminationDTOMapperTest {
     }
 
     @Test
-    void shallMapOrganizationalNumber() {
-      assertEquals(DEFAULT_ORGANIZATIONAL_NUMBER, toDTO(termination).organizationalNumber());
+    void shallMapOrganizationNumber() {
+      assertEquals(DEFAULT_ORGANIZATION_NUMBER, toDTO(termination).organizationNumber());
     }
 
     @Test

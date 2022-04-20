@@ -16,7 +16,7 @@ class TerminationBuilderTest {
   public static final String HSA_ID = "hsaId";
   public static final String CREATOR_HSA_ID = "creatorHSAId";
   public static final String CREATOR_NAME = "creatorName";
-  public static final String ORGANIZATIONAL_NUMBER = "organizationalNumber";
+  public static final String ORGANIZATION_NUMBER = "organizationNumber";
   public static final String PERSON_ID = "personId";
   public static final String PHONE_NUMBER = "phoneNumber";
   public static final int TOTAL = 145;
@@ -104,21 +104,21 @@ class TerminationBuilderTest {
   }
 
   @Test
-  void shallCreateTerminationWithOrganizationalNumber() {
-    assertEquals(ORGANIZATIONAL_NUMBER,
-        terminationBuilder().create().careProvider().organisationalNumber().number());
+  void shallCreateTerminationWithOrganizationNumber() {
+    assertEquals(ORGANIZATION_NUMBER,
+        terminationBuilder().create().careProvider().organizationNumber().number());
   }
 
   @Test
   void shallCreateTerminationWithPersonId() {
     assertEquals(PERSON_ID,
-        terminationBuilder().create().export().organisationalRepresentative().personId().id());
+        terminationBuilder().create().export().organizationRepresentative().personId().id());
   }
 
   @Test
   void shallCreateTerminationWithPhoneNumber() {
     assertEquals(PHONE_NUMBER,
-        terminationBuilder().create().export().organisationalRepresentative().phoneNumber()
+        terminationBuilder().create().export().organizationRepresentative().phoneNumber()
             .number());
   }
 
@@ -162,16 +162,16 @@ class TerminationBuilderTest {
   }
 
   @Test
-  void shallNotExceptTerminationWithoutOrganizationalNumber() {
+  void shallNotExceptTerminationWithoutOrganizationNumber() {
     final var exception = assertThrows(IllegalArgumentException.class,
-        () -> terminationBuilder().careProviderOrganizationalNumber("").create());
-    assertEquals("Missing OrganizationalNumber", exception.getMessage());
+        () -> terminationBuilder().careProviderOrganizationNumber("").create());
+    assertEquals("Missing OrganizationNumber", exception.getMessage());
   }
 
   @Test
   void shallNotExceptTerminationWithoutPersonId() {
     final var exception = assertThrows(IllegalArgumentException.class,
-        () -> terminationBuilder().careProviderOrganisationalRepresentativePersonId("")
+        () -> terminationBuilder().careProviderOrganizationRepresentativePersonId("")
             .create());
     assertEquals("Missing PersonId", exception.getMessage());
   }
@@ -179,7 +179,7 @@ class TerminationBuilderTest {
   @Test
   void shallNotExceptTerminationWithoutPhoneNumber() {
     final var exception = assertThrows(IllegalArgumentException.class,
-        () -> terminationBuilder().careProviderOrganisationalRepresentativePhoneNumber("")
+        () -> terminationBuilder().careProviderOrganizationRepresentativePhoneNumber("")
             .create());
     assertEquals("Missing PhoneNumber", exception.getMessage());
   }
@@ -189,9 +189,9 @@ class TerminationBuilderTest {
         .creatorHSAId(CREATOR_HSA_ID)
         .creatorName(CREATOR_NAME)
         .careProviderHSAId(HSA_ID)
-        .careProviderOrganizationalNumber(ORGANIZATIONAL_NUMBER)
-        .careProviderOrganisationalRepresentativePersonId(PERSON_ID)
-        .careProviderOrganisationalRepresentativePhoneNumber(PHONE_NUMBER)
+        .careProviderOrganizationNumber(ORGANIZATION_NUMBER)
+        .careProviderOrganizationRepresentativePersonId(PERSON_ID)
+        .careProviderOrganizationRepresentativePhoneNumber(PHONE_NUMBER)
         .total(TOTAL)
         .revoked(REVOKED)
         .packagePassword(PASSWORD);
