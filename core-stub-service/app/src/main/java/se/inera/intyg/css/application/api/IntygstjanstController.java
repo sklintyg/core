@@ -9,7 +9,7 @@ import se.inera.intyg.css.application.dto.CertificateExportPageDTO;
 import se.inera.intyg.css.application.service.IntygstjanstService;
 
 @RestController
-@RequestMapping("/api-intygstjanst/v1")
+@RequestMapping("/inera-certificate/internalapi/v1")
 public class IntygstjanstController {
 
   private final IntygstjanstService intygstjanstService;

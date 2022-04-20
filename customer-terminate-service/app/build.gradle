@@ -5,11 +5,14 @@ plugins {
 dependencies {
     implementation project(':domain')
 
+    implementation('net.javacrumbs.shedlock:shedlock-spring:4.33.0')
+    implementation('net.javacrumbs.shedlock:shedlock-provider-redis-spring:4.33.0')
     implementation 'net.lingala.zip4j:zip4j:2.10.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.liquibase:liquibase-core'
+    implementation 'redis.clients:jedis'
 
     compileOnly 'org.projectlombok:lombok'
 
