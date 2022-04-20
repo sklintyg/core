@@ -28,7 +28,7 @@ public class CreateEncryptedZipPackage implements CreatePackage {
 
   public static final String ROOT_FOLDER = "./";
   public static final String CERTIFICATES_FOLDER = "/intyg";
-  private static final String CERTIFICATE_TEXT_FOLDER = "/texter";
+  public static final String CERTIFICATE_TEXT_FOLDER = "/texter";
   public static final String REVOKED_FILENAME = " MAKULERAT";
   public static final String XML_EXTENSION = ".xml";
   public static final String ZIP_EXTENSION = ".zip";
