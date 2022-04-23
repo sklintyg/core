@@ -1,5 +1,7 @@
 package se.inera.intyg.css.testability.api;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +15,9 @@ import se.inera.intyg.css.testability.service.IntygstjanstTestabilityService;
 @RequestMapping("/testability-intygstjanst/v1")
 public class IntygstjanstTestabilityController {
 
+  private final static Logger LOG = LoggerFactory.getLogger(
+      IntygstjanstTestabilityController.class);
+
   private final IntygstjanstTestabilityService intygstjanstTestabilityService;
 
   public IntygstjanstTestabilityController(
@@ -23,16 +28,14 @@ public class IntygstjanstTestabilityController {
   @PostMapping("/certificates/{careProvider}")
   public void saveCertificates(@PathVariable String careProvider,
       @RequestBody IntygstjanstCertificatesDTO intygstjanstCertificatesDTO) {
-    System.out.println(
-        String.format("Save certificates: %s %s", careProvider,
-            intygstjanstCertificatesDTO.certificates().size()));
+    LOG.debug(String.format("Save certificates: %s %s", careProvider,
+        intygstjanstCertificatesDTO.certificates().size()));
     intygstjanstTestabilityService.setCertificates(careProvider, intygstjanstCertificatesDTO);
   }
 
   @DeleteMapping("/certificates/{careProvider}")
   public void deleteCertificates(@PathVariable String careProvider) {
-    System.out.println(
-        String.format("Delete certificates: %s", careProvider));
+    LOG.debug(String.format("Delete certificates: %s", careProvider));
     intygstjanstTestabilityService.deleteCertificates(careProvider);
   }
 }
