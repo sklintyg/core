@@ -10,6 +10,7 @@ import se.inera.intyg.cts.domain.model.Certificate;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.repository.CertificateRepository;
 import se.inera.intyg.cts.infrastructure.persistence.entity.CertificateEntityMapper;
+import se.inera.intyg.cts.infrastructure.persistence.entity.TerminationEntity;
 import se.inera.intyg.cts.infrastructure.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.cts.infrastructure.persistence.repository.TerminationEntityRepository;
 
@@ -27,9 +28,7 @@ public class JpaCertificateRepository implements CertificateRepository {
 
   @Override
   public void store(Termination termination, List<Certificate> certificateList) {
-    final var terminationEntity = terminationEntityRepository
-        .findByTerminationId(termination.terminationId().id())
-        .orElseThrow();
+    final var terminationEntity = getTerminationEntity(termination);
 
     certificateEntityRepository.saveAll(
         certificateList.stream()
@@ -50,5 +49,16 @@ public class JpaCertificateRepository implements CertificateRepository {
     return certificateEntityRepository.findAllByTermination(terminationEntity.get()).stream()
         .map(CertificateEntityMapper::toDomain)
         .collect(Collectors.toList());
+  }
+
+  private TerminationEntity getTerminationEntity(Termination termination) {
+    return terminationEntityRepository
+        .findByTerminationId(termination.terminationId().id())
+        .orElseThrow(() ->
+            new IllegalArgumentException(
+                String.format("Termination with id '%s' doesn't exists!",
+                    termination.terminationId().id())
+            )
+        );
   }
 }
