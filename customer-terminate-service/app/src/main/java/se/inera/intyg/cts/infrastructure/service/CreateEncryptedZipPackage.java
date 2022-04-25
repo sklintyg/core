@@ -52,7 +52,7 @@ public class CreateEncryptedZipPackage implements CreatePackage {
    * Creates an encrypted package for requested Termination. The encrypted package will contain the
    * related Certificates and CertificateTexts.
    *
-   * @param termination Termination to create an encrypted for.
+   * @param termination Termination to create an encrypted package for.
    * @param password    Password to use when encrypting the password.
    * @return File referring to the created encrypted package.
    */
