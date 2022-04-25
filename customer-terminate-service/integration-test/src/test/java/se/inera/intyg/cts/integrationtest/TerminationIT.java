@@ -97,4 +97,56 @@ public class TerminationIT {
 
     assertEquals(10, terminationDTO.length);
   }
+
+  @Test
+  void shallCollectCertificatesToExport() {
+    testData
+        .defaultTermination()
+        .certificates(10)
+        .setup();
+
+    given()
+        .when()
+        .post("/api/v1/exports/collectCertificates")
+        .then()
+        .statusCode(HttpStatus.OK.value());
+
+    final var certificatesCount = given()
+        .pathParam("terminationId", testData.terminationIds().get(0))
+        .when()
+        .get("/testability/v1/terminations/{terminationId}")
+        .then()
+        .statusCode(HttpStatus.OK.value())
+        .extract()
+        .response().as(Integer.class);
+
+    assertEquals(10, certificatesCount);
+  }
+
+  @Test
+  void shallCollectCertificatesToExportInMultipleBatches() {
+    testData
+        .defaultTermination()
+        .certificates(90)
+        .setup();
+
+    for (int i = 0; i < 5; i++) {
+      given()
+          .when()
+          .post("/api/v1/exports/collectCertificates")
+          .then()
+          .statusCode(HttpStatus.OK.value());
+
+      final var certificatesCount = given()
+          .pathParam("terminationId", testData.terminationIds().get(0))
+          .when()
+          .get("/testability/v1/terminations/{terminationId}")
+          .then()
+          .statusCode(HttpStatus.OK.value())
+          .extract()
+          .response().as(Integer.class);
+
+      assertEquals(i == 4 ? 90 : (i + 1) * 20, certificatesCount);
+    }
+  }
 }

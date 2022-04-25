@@ -2,13 +2,16 @@ package se.inera.intyg.cts.testutil;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.random.RandomGenerator;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.model.TerminationBuilder;
 import se.inera.intyg.cts.domain.model.TerminationStatus;
+import se.inera.intyg.cts.infrastructure.persistence.entity.ExportEmbeddable;
 import se.inera.intyg.cts.infrastructure.persistence.entity.TerminationEntity;
 
 public class TerminationTestDataBuilder {
 
+  public static final Long DEFAULT_ID = RandomGenerator.getDefault().nextLong();
   public static final UUID DEFAULT_TERMINATION_ID = UUID.randomUUID();
   public static final LocalDateTime DEFAULT_CREATED = LocalDateTime.now();
   public static final String DEFAULT_HSA_ID = "hsaId";
@@ -35,6 +38,7 @@ public class TerminationTestDataBuilder {
 
   public static TerminationEntity defaultTerminationEntity() {
     return new TerminationEntity(
+        DEFAULT_ID,
         DEFAULT_TERMINATION_ID,
         DEFAULT_CREATED,
         DEFAULT_CREATOR_HSA_ID,
@@ -43,11 +47,13 @@ public class TerminationTestDataBuilder {
         DEFAULT_ORGANIZATION_NUMBER,
         DEFAULT_PERSON_ID,
         DEFAULT_PHONE_NUMBER,
-        DEFAULT_STATUS.toString());
+        DEFAULT_STATUS.toString(),
+        new ExportEmbeddable(0, 0, null));
   }
 
   public static TerminationEntity defaultTerminationEntity(UUID terminationId) {
     return new TerminationEntity(
+        RandomGenerator.getDefault().nextLong(),
         terminationId,
         DEFAULT_CREATED,
         DEFAULT_CREATOR_HSA_ID,
@@ -56,6 +62,7 @@ public class TerminationTestDataBuilder {
         DEFAULT_ORGANIZATION_NUMBER,
         DEFAULT_PERSON_ID,
         DEFAULT_PHONE_NUMBER,
-        DEFAULT_STATUS.toString());
+        DEFAULT_STATUS.toString(),
+        new ExportEmbeddable(0, 0, null));
   }
 }

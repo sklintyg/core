@@ -20,8 +20,8 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
-import se.inera.intyg.cts.infrastructure.persistence.InMemoryTerminationEntityRepository;
 import se.inera.intyg.cts.infrastructure.persistence.JpaTerminationRepository;
+import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryTerminationEntityRepository;
 
 class TerminationServiceTest {
 

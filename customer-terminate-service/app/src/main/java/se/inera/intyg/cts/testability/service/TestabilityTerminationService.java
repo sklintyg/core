@@ -5,6 +5,8 @@ import static se.inera.intyg.cts.testability.dto.TestabilityTerminationDTOMapper
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import se.inera.intyg.cts.infrastructure.persistence.entity.TerminationEntity;
+import se.inera.intyg.cts.infrastructure.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.cts.infrastructure.persistence.repository.TerminationEntityRepository;
 import se.inera.intyg.cts.testability.dto.TestabilityTerminationDTO;
 
@@ -12,9 +14,12 @@ import se.inera.intyg.cts.testability.dto.TestabilityTerminationDTO;
 public class TestabilityTerminationService {
 
   private final TerminationEntityRepository terminationEntityRepository;
+  private final CertificateEntityRepository certificateEntityRepository;
 
-  public TestabilityTerminationService(TerminationEntityRepository terminationEntityRepository) {
+  public TestabilityTerminationService(TerminationEntityRepository terminationEntityRepository,
+      CertificateEntityRepository certificateEntityRepository) {
     this.terminationEntityRepository = terminationEntityRepository;
+    this.certificateEntityRepository = certificateEntityRepository;
   }
 
   @Transactional
@@ -25,6 +30,18 @@ public class TestabilityTerminationService {
   @Transactional
   public void deleteTermination(UUID terminationId) {
     final var terminationEntity = terminationEntityRepository.findByTerminationId(terminationId);
-    terminationEntity.ifPresent(terminationEntityRepository::delete);
+    terminationEntity.ifPresent(this::deleteTermination);
+  }
+
+  public int getCertificatesCount(UUID terminationId) {
+    final var terminationEntity = terminationEntityRepository.findByTerminationId(terminationId);
+    return terminationEntity.orElseThrow().getExport().getTotal();
+  }
+
+  private void deleteTermination(TerminationEntity terminationEntity) {
+    final var certificateEntityList = certificateEntityRepository.findAllByTermination(
+        terminationEntity);
+    certificateEntityList.forEach(certificateEntityRepository::delete);
+    terminationEntityRepository.delete(terminationEntity);
   }
 }

@@ -3,15 +3,25 @@ package se.inera.intyg.cts.infrastructure.persistence.entity;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "termination")
+@SecondaryTable(name = "export", pkJoinColumns = @PrimaryKeyJoinColumn(name = "termination_id"))
 public class TerminationEntity {
 
   @Id
@@ -38,116 +48,7 @@ public class TerminationEntity {
   @Column(name = "status")
   private String status;
 
-  protected TerminationEntity() {
-  }
+  @Embedded
+  private ExportEmbeddable export;
 
-  public TerminationEntity(UUID terminationId, LocalDateTime created, String creatorHSAId,
-      String creatorName, String hsaId, String organizationNumber, String personId,
-      String phoneNumber, String status) {
-    this.terminationId = terminationId;
-    this.created = created;
-    this.creatorHSAId = creatorHSAId;
-    this.creatorName = creatorName;
-    this.hsaId = hsaId;
-    this.organizationNumber = organizationNumber;
-    this.personId = personId;
-    this.phoneNumber = phoneNumber;
-    this.status = status;
-  }
-
-  @Override
-  public String toString() {
-    return "TerminationEntity{" +
-        "id=" + id +
-        ", terminationId='" + terminationId + '\'' +
-        ", created=" + created +
-        ", creatorHSAId='" + creatorHSAId + '\'' +
-        ", creatorName='" + creatorName + '\'' +
-        ", hsaId='" + hsaId + '\'' +
-        ", organizationNumber='" + organizationNumber + '\'' +
-        ", personId='" + personId + '\'' +
-        ", phoneNumber='" + phoneNumber + '\'' +
-        ", status='" + status + '\'' +
-        '}';
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public UUID getTerminationId() {
-    return terminationId;
-  }
-
-  public void setTerminationId(UUID terminationId) {
-    this.terminationId = terminationId;
-  }
-
-  public LocalDateTime getCreated() {
-    return created;
-  }
-
-  public void setCreated(LocalDateTime created) {
-    this.created = created;
-  }
-
-  public String getCreatorHSAId() {
-    return creatorHSAId;
-  }
-
-  public void setCreatorHSAId(String creatorHSAId) {
-    this.creatorHSAId = creatorHSAId;
-  }
-
-  public String getCreatorName() {
-    return creatorName;
-  }
-
-  public void setCreatorName(String creatorName) {
-    this.creatorName = creatorName;
-  }
-
-  public String getHsaId() {
-    return hsaId;
-  }
-
-  public void setHsaId(String hsaId) {
-    this.hsaId = hsaId;
-  }
-
-  public String getOrganizationNumber() {
-    return organizationNumber;
-  }
-
-  public void setOrganizationNumber(String organizationNumber) {
-    this.organizationNumber = organizationNumber;
-  }
-
-  public String getPersonId() {
-    return personId;
-  }
-
-  public void setPersonId(String organizationRepresentative) {
-    this.personId = organizationRepresentative;
-  }
-
-  public String getPhoneNumber() {
-    return phoneNumber;
-  }
-
-  public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
-  }
-
-  public String getStatus() {
-    return status;
-  }
-
-  public void setStatus(String status) {
-    this.status = status;
-  }
 }

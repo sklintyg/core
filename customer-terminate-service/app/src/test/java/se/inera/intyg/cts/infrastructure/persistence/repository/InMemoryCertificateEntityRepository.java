@@ -1,21 +1,22 @@
-package se.inera.intyg.cts.infrastructure.persistence;
+package se.inera.intyg.cts.infrastructure.persistence.repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.random.RandomGenerator;
+import java.util.stream.Collectors;
+import se.inera.intyg.cts.infrastructure.persistence.entity.CertificateEntity;
 import se.inera.intyg.cts.infrastructure.persistence.entity.TerminationEntity;
-import se.inera.intyg.cts.infrastructure.persistence.repository.TerminationEntityRepository;
 
-public class InMemoryTerminationEntityRepository implements TerminationEntityRepository {
+public class InMemoryCertificateEntityRepository implements CertificateEntityRepository {
 
-  private Map<Long, TerminationEntity> repository = new HashMap<>();
+  private Map<Long, CertificateEntity> repository = new HashMap<>();
 
   @Override
-  public <S extends TerminationEntity> S save(S entity) {
-    if (entity.getId() == null) {
+  public <S extends CertificateEntity> S save(S entity) {
+    if (entity.getId() == null || entity.getId() < 1L) {
       entity.setId(RandomGenerator.getDefault().nextLong());
     }
 
@@ -25,14 +26,14 @@ public class InMemoryTerminationEntityRepository implements TerminationEntityRep
   }
 
   @Override
-  public <S extends TerminationEntity> Iterable<S> saveAll(Iterable<S> entities) {
-    final var saved = new ArrayList<TerminationEntity>();
+  public <S extends CertificateEntity> Iterable<S> saveAll(Iterable<S> entities) {
+    final var saved = new ArrayList<CertificateEntity>();
     entities.forEach(entity -> saved.add(save(entity)));
     return (Iterable<S>) saved;
   }
 
   @Override
-  public Optional<TerminationEntity> findById(Long aLong) {
+  public Optional<CertificateEntity> findById(Long aLong) {
     if (repository.containsKey(aLong)) {
       return Optional.of(repository.get(aLong));
     }
@@ -45,13 +46,13 @@ public class InMemoryTerminationEntityRepository implements TerminationEntityRep
   }
 
   @Override
-  public Iterable<TerminationEntity> findAll() {
+  public Iterable<CertificateEntity> findAll() {
     return repository.values();
   }
 
   @Override
-  public Iterable<TerminationEntity> findAllById(Iterable<Long> longs) {
-    final var saved = new ArrayList<TerminationEntity>();
+  public Iterable<CertificateEntity> findAllById(Iterable<Long> longs) {
+    final var saved = new ArrayList<CertificateEntity>();
     longs.forEach(id -> {
       if (repository.containsKey(id)) {
         saved.add(repository.get(id));
@@ -71,7 +72,7 @@ public class InMemoryTerminationEntityRepository implements TerminationEntityRep
   }
 
   @Override
-  public void delete(TerminationEntity entity) {
+  public void delete(CertificateEntity entity) {
     repository.remove(entity.getId());
   }
 
@@ -81,7 +82,7 @@ public class InMemoryTerminationEntityRepository implements TerminationEntityRep
   }
 
   @Override
-  public void deleteAll(Iterable<? extends TerminationEntity> entities) {
+  public void deleteAll(Iterable<? extends CertificateEntity> entities) {
     entities.forEach(this::delete);
   }
 
@@ -91,9 +92,10 @@ public class InMemoryTerminationEntityRepository implements TerminationEntityRep
   }
 
   @Override
-  public Optional<TerminationEntity> findByTerminationId(UUID terminationId) {
+  public List<CertificateEntity> findAllByTermination(TerminationEntity terminationEntity) {
     return repository.values().stream()
-        .filter(terminationEntity -> terminationEntity.getTerminationId().equals(terminationId))
-        .findAny();
+        .filter(certificateEntity -> certificateEntity.getTermination().getTerminationId()
+            == terminationEntity.getTerminationId())
+        .collect(Collectors.toList());
   }
 }

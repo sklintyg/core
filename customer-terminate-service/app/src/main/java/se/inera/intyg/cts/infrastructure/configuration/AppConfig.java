@@ -2,22 +2,29 @@ package se.inera.intyg.cts.infrastructure.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import se.inera.intyg.cts.application.service.TerminationService;
-import se.inera.intyg.cts.infrastructure.persistence.JpaTerminationRepository;
-import se.inera.intyg.cts.infrastructure.persistence.repository.TerminationEntityRepository;
+import se.inera.intyg.cts.domain.repository.CertificateBatchRepository;
+import se.inera.intyg.cts.domain.repository.CertificateRepository;
+import se.inera.intyg.cts.domain.repository.CertificateTextRepository;
+import se.inera.intyg.cts.domain.repository.TerminationRepository;
+import se.inera.intyg.cts.domain.service.CollectExportContent;
+import se.inera.intyg.cts.domain.service.CreatePackage;
+import se.inera.intyg.cts.domain.service.ExportPackage;
 
 @Configuration
 public class AppConfig {
 
   @Bean
-  public TerminationService createTerminationService(
-      TerminationEntityRepository terminationEntityRepository) {
-    return new TerminationService(jpaTerminationRepository(terminationEntityRepository));
+  public CollectExportContent collectExportContent(TerminationRepository terminationRepository,
+      CertificateBatchRepository certificationBatchRepository,
+      CertificateRepository certificationRepository,
+      CertificateTextRepository certificateTextRepository) {
+    return new CollectExportContent(terminationRepository, certificationBatchRepository,
+        certificationRepository, certificateTextRepository);
   }
 
   @Bean
-  public JpaTerminationRepository jpaTerminationRepository(
-      TerminationEntityRepository terminationEntityRepository) {
-    return new JpaTerminationRepository(terminationEntityRepository);
+  public ExportPackage exportPackage(CreatePackage createPackage,
+      TerminationRepository terminationRepository) {
+    return new ExportPackage(createPackage, terminationRepository);
   }
 }

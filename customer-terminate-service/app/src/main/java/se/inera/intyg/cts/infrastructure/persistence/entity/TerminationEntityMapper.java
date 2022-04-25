@@ -8,6 +8,7 @@ public class TerminationEntityMapper {
 
   public static TerminationEntity toEntity(Termination termination) {
     return new TerminationEntity(
+        0L,
         termination.terminationId().id(),
         termination.created(),
         termination.creator().hsaId().id(),
@@ -16,7 +17,13 @@ public class TerminationEntityMapper {
         termination.careProvider().organizationNumber().number(),
         termination.export().organizationRepresentative().personId().id(),
         termination.export().organizationRepresentative().phoneNumber().number(),
-        termination.status().name());
+        termination.status().name(),
+        new ExportEmbeddable(
+            termination.export().certificateSummary().total(),
+            termination.export().certificateSummary().revoked(),
+            termination.export().password() != null ? termination.export().password().password()
+                : null
+        ));
   }
 
   public static Termination toDomain(TerminationEntity terminationEntity) {
@@ -31,6 +38,9 @@ public class TerminationEntityMapper {
             terminationEntity.getPersonId())
         .careProviderOrganizationRepresentativePhoneNumber(terminationEntity.getPhoneNumber())
         .status(TerminationStatus.valueOf(terminationEntity.getStatus()))
+        .total(terminationEntity.getExport().getTotal())
+        .revoked(terminationEntity.getExport().getRevoked())
+        .packagePassword(terminationEntity.getExport().getPassword())
         .create();
   }
 }

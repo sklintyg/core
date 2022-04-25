@@ -1,6 +1,7 @@
 package se.inera.intyg.cts.domain.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Termination {
 
@@ -8,7 +9,7 @@ public class Termination {
   private final LocalDateTime created;
   private final Staff creator;
   private final CareProvider careProvider;
-  private final TerminationStatus status;
+  private TerminationStatus status;
   private final Export export;
 
   Termination(TerminationId terminationId, LocalDateTime created, Staff creator,
@@ -39,6 +40,27 @@ public class Termination {
     this.export = export;
   }
 
+  public void collect(CertificateBatch certificateBatch) {
+    if (status == TerminationStatus.CREATED) {
+      status = TerminationStatus.COLLECTING_CERTIFICATES;
+    }
+
+    export().processBatch(certificateBatch);
+
+    if (export().certificateSummary().equals(certificateBatch.certificateSummary())) {
+      status = TerminationStatus.COLLECTING_CERTIFICATES_COMPLETED;
+    }
+  }
+
+  public void collect(List<CertificateText> certificateTexts) {
+    status = TerminationStatus.COLLECTING_CERTIFICATE_TEXTS_COMPLETED;
+  }
+
+  public void exported(Password password) {
+    export().packagePassword(password);
+    status = TerminationStatus.EXPORTED;
+  }
+
   public TerminationId terminationId() {
     return terminationId;
   }
@@ -66,8 +88,11 @@ public class Termination {
   @Override
   public String toString() {
     return "Termination{" +
-        "id=" + terminationId +
+        "terminationId=" + terminationId +
+        ", created=" + created +
+        ", creator=" + creator +
         ", careProvider=" + careProvider +
+        ", status=" + status +
         ", export=" + export +
         '}';
   }
