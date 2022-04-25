@@ -47,6 +47,15 @@ public class CreateEncryptedZipPackage implements CreatePackage {
     this.certificateTextEntityRepository = certificateTextEntityRepository;
   }
 
+
+  /**
+   * Creates an encrypted package for requested Termination. The encrypted package will contain the
+   * related Certificates and CertificateTexts.
+   *
+   * @param termination Termination to create an encrypted for.
+   * @param password    Password to use when encrypting the password.
+   * @return File referring to the created encrypted package.
+   */
   @Override
   public File create(Termination termination, Password password) {
     final var terminationEntity = terminationEntityRepository.findByTerminationId(
