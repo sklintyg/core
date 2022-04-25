@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import org.springframework.stereotype.Repository;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.model.TerminationId;
 import se.inera.intyg.cts.domain.model.TerminationStatus;
@@ -14,6 +15,7 @@ import se.inera.intyg.cts.domain.repository.TerminationRepository;
 import se.inera.intyg.cts.infrastructure.persistence.entity.TerminationEntityMapper;
 import se.inera.intyg.cts.infrastructure.persistence.repository.TerminationEntityRepository;
 
+@Repository
 public class JpaTerminationRepository implements TerminationRepository {
 
   private final TerminationEntityRepository terminationEntityRepository;

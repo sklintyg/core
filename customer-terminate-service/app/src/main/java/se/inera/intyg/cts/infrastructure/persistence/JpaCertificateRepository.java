@@ -5,6 +5,7 @@ import static se.inera.intyg.cts.infrastructure.persistence.entity.CertificateEn
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Repository;
 import se.inera.intyg.cts.domain.model.Certificate;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.repository.CertificateRepository;
@@ -12,6 +13,7 @@ import se.inera.intyg.cts.infrastructure.persistence.entity.CertificateEntityMap
 import se.inera.intyg.cts.infrastructure.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.cts.infrastructure.persistence.repository.TerminationEntityRepository;
 
+@Repository
 public class JpaCertificateRepository implements CertificateRepository {
 
   private final CertificateEntityRepository certificateEntityRepository;

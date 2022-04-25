@@ -15,6 +15,7 @@ import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.model.enums.AesKeyStrength;
 import net.lingala.zip4j.model.enums.CompressionLevel;
 import net.lingala.zip4j.model.enums.EncryptionMethod;
+import org.springframework.stereotype.Service;
 import se.inera.intyg.cts.domain.model.Password;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.service.CreatePackage;
@@ -24,6 +25,7 @@ import se.inera.intyg.cts.infrastructure.persistence.repository.CertificateEntit
 import se.inera.intyg.cts.infrastructure.persistence.repository.CertificateTextEntityRepository;
 import se.inera.intyg.cts.infrastructure.persistence.repository.TerminationEntityRepository;
 
+@Service
 public class CreateEncryptedZipPackage implements CreatePackage {
 
   public static final String ROOT_FOLDER = "./";

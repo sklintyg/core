@@ -1,6 +1,8 @@
 package se.inera.intyg.cts.infrastructure.integration.Intygstjanst;
 
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import se.inera.intyg.cts.domain.model.Certificate;
 import se.inera.intyg.cts.domain.model.CertificateBatch;
@@ -10,6 +12,7 @@ import se.inera.intyg.cts.domain.model.CertificateXML;
 import se.inera.intyg.cts.infrastructure.integration.GetCertificateBatch;
 import se.inera.intyg.cts.infrastructure.integration.Intygstjanst.dto.CertificateExportPageDTO;
 
+@Service
 public class GetCertificateBatchFromIntygstjanst implements GetCertificateBatch {
 
   private final WebClient webClient;
@@ -18,8 +21,11 @@ public class GetCertificateBatchFromIntygstjanst implements GetCertificateBatch 
   private final String port;
   private final String certificatesEndpoint;
 
-  public GetCertificateBatchFromIntygstjanst(WebClient webClient, String scheme,
-      String baseUrl, String port, String certificatesEndpoint) {
+  public GetCertificateBatchFromIntygstjanst(WebClient webClient,
+      @Value("${integration.intygsjanst.scheme}") String scheme,
+      @Value("${integration.intygsjanst.baseurl}") String baseUrl,
+      @Value("${integration.intygsjanst.port}") String port,
+      @Value("${integration.intygsjanst.certificates.endpoint}") String certificatesEndpoint) {
     this.webClient = webClient;
     this.scheme = scheme;
     this.baseUrl = baseUrl;

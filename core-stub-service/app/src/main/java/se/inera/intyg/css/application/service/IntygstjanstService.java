@@ -1,8 +1,10 @@
 package se.inera.intyg.css.application.service;
 
+import org.springframework.stereotype.Service;
 import se.inera.intyg.css.application.dto.CertificateExportPageDTO;
 import se.inera.intyg.css.infrastructure.persistence.IntygstjanstRepository;
 
+@Service
 public class IntygstjanstService {
 
   private final IntygstjanstRepository intygstjanstRepository;

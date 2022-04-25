@@ -1,11 +1,14 @@
 package se.inera.intyg.cts.infrastructure.integration;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 import se.inera.intyg.cts.domain.model.CertificateBatch;
 import se.inera.intyg.cts.domain.model.CertificateText;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.repository.CertificateBatchRepository;
 
+@Repository
 public class IntegrationCertificateBatchRepository implements CertificateBatchRepository {
 
   private final GetCertificateBatch getCertificateBatch;
@@ -13,7 +16,8 @@ public class IntegrationCertificateBatchRepository implements CertificateBatchRe
   private final GetCertificateTexts getCertificateTexts;
 
   public IntegrationCertificateBatchRepository(GetCertificateBatch getCertificateBatch,
-      int batchSize, GetCertificateTexts getCertificateTexts) {
+      @Value("${certificate.batch.size:30}") int batchSize,
+      GetCertificateTexts getCertificateTexts) {
     this.getCertificateBatch = getCertificateBatch;
     this.batchSize = batchSize;
     this.getCertificateTexts = getCertificateTexts;

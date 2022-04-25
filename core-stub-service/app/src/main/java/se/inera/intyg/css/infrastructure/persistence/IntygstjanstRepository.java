@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Repository;
 import se.inera.intyg.css.application.dto.CertificateXmlDTO;
 
+@Repository
 public class IntygstjanstRepository {
 
   private final Map<String, List<CertificateXmlDTO>> certificates = new HashMap<>();

@@ -1,8 +1,10 @@
 package se.inera.intyg.css.testability.service;
 
+import org.springframework.stereotype.Service;
 import se.inera.intyg.css.infrastructure.persistence.IntygstjanstRepository;
 import se.inera.intyg.css.testability.dto.IntygstjanstCertificatesDTO;
 
+@Service
 public class IntygstjanstTestabilityService {
 
   private final IntygstjanstRepository intygstjanstRepository;

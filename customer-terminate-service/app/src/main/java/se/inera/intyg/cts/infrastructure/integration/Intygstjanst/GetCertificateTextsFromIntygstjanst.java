@@ -2,7 +2,9 @@ package se.inera.intyg.cts.infrastructure.integration.Intygstjanst;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import se.inera.intyg.cts.domain.model.CertificateText;
 import se.inera.intyg.cts.domain.model.CertificateType;
@@ -11,6 +13,7 @@ import se.inera.intyg.cts.domain.model.CertificateXML;
 import se.inera.intyg.cts.infrastructure.integration.GetCertificateTexts;
 import se.inera.intyg.cts.infrastructure.integration.Intygstjanst.dto.CertificateTextDTO;
 
+@Service
 public class GetCertificateTextsFromIntygstjanst implements GetCertificateTexts {
 
   private final WebClient webClient;
@@ -19,8 +22,11 @@ public class GetCertificateTextsFromIntygstjanst implements GetCertificateTexts 
   private final String port;
   private final String certificateTextsEndpoint;
 
-  public GetCertificateTextsFromIntygstjanst(WebClient webClient, String scheme,
-      String baseUrl, String port, String certificateTextsEndpoint) {
+  public GetCertificateTextsFromIntygstjanst(WebClient webClient,
+      @Value("${integration.intygsjanst.scheme}") String scheme,
+      @Value("${integration.intygsjanst.baseurl}") String baseUrl,
+      @Value("${integration.intygsjanst.port}") String port,
+      @Value("${integration.intygsjanst.certificate.texts.endpoint}") String certificateTextsEndpoint) {
     this.webClient = webClient;
     this.scheme = scheme;
     this.baseUrl = baseUrl;

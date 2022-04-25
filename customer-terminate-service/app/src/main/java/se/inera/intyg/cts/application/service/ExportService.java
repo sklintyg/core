@@ -1,12 +1,14 @@
 package se.inera.intyg.cts.application.service;
 
 import java.util.Arrays;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.inera.intyg.cts.domain.model.TerminationStatus;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
 import se.inera.intyg.cts.domain.service.CollectExportContent;
 import se.inera.intyg.cts.domain.service.ExportPackage;
 
+@Service
 public class ExportService {
 
   private final TerminationRepository terminationRepository;

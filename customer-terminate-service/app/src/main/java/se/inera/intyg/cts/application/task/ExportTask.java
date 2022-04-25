@@ -2,8 +2,10 @@ package se.inera.intyg.cts.application.task;
 
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import se.inera.intyg.cts.application.service.ExportService;
 
+@Component
 public class ExportTask {
 
   private static final String TASK_NAME = "CollectCertificateTextsTask.run";
