@@ -15,6 +15,7 @@ import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.model.enums.AesKeyStrength;
 import net.lingala.zip4j.model.enums.CompressionLevel;
 import net.lingala.zip4j.model.enums.EncryptionMethod;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.cts.domain.model.Password;
 import se.inera.intyg.cts.domain.model.Termination;
@@ -28,9 +29,8 @@ import se.inera.intyg.cts.infrastructure.persistence.repository.TerminationEntit
 @Service
 public class CreateEncryptedZipPackage implements CreatePackage {
 
-  public static final String ROOT_FOLDER = "./";
-  public static final String CERTIFICATES_FOLDER = "/intyg";
-  public static final String CERTIFICATE_TEXT_FOLDER = "/texter";
+  public static final String CERTIFICATES_DIR = "/intyg";
+  public static final String CERTIFICATE_TEXT_DIR = "/texter";
   public static final String REVOKED_FILENAME = " MAKULERAT";
   public static final String XML_EXTENSION = ".xml";
   public static final String ZIP_EXTENSION = ".zip";
@@ -38,13 +38,16 @@ public class CreateEncryptedZipPackage implements CreatePackage {
   private final TerminationEntityRepository terminationEntityRepository;
   private final CertificateEntityRepository certificateEntityRepository;
   private final CertificateTextEntityRepository certificateTextEntityRepository;
+  private final String rootDir;
 
   public CreateEncryptedZipPackage(TerminationEntityRepository terminationEntityRepository,
       CertificateEntityRepository certificateEntityRepository,
-      CertificateTextEntityRepository certificateTextEntityRepository) {
+      CertificateTextEntityRepository certificateTextEntityRepository,
+      @Value("${export.package.root.dir}") String rootDir) {
     this.terminationEntityRepository = terminationEntityRepository;
     this.certificateEntityRepository = certificateEntityRepository;
     this.certificateTextEntityRepository = certificateTextEntityRepository;
+    this.rootDir = rootDir;
   }
 
 
@@ -97,15 +100,15 @@ public class CreateEncryptedZipPackage implements CreatePackage {
   }
 
   private String rootDir(Termination termination) {
-    return ROOT_FOLDER + termination.careProvider().hsaId().id();
+    return rootDir + termination.careProvider().hsaId().id();
   }
 
   private String certificatesDir(Termination termination) {
-    return rootDir(termination) + CERTIFICATES_FOLDER;
+    return rootDir(termination) + CERTIFICATES_DIR;
   }
 
   private String certificateTextsDir(Termination termination) {
-    return rootDir(termination) + CERTIFICATE_TEXT_FOLDER;
+    return rootDir(termination) + CERTIFICATE_TEXT_DIR;
   }
 
   private void writeCertificateFile(Termination termination, CertificateEntity certificate) {

@@ -23,10 +23,10 @@ public class GetCertificateTextsFromIntygstjanst implements GetCertificateTexts 
   private final String certificateTextsEndpoint;
 
   public GetCertificateTextsFromIntygstjanst(WebClient webClient,
-      @Value("${integration.intygsjanst.scheme}") String scheme,
-      @Value("${integration.intygsjanst.baseurl}") String baseUrl,
-      @Value("${integration.intygsjanst.port}") String port,
-      @Value("${integration.intygsjanst.certificate.texts.endpoint}") String certificateTextsEndpoint) {
+      @Value("${integration.intygstjanst.scheme}") String scheme,
+      @Value("${integration.intygstjanst.baseurl}") String baseUrl,
+      @Value("${integration.intygstjanst.port}") String port,
+      @Value("${integration.intygstjanst.certificate.texts.endpoint}") String certificateTextsEndpoint) {
     this.webClient = webClient;
     this.scheme = scheme;
     this.baseUrl = baseUrl;

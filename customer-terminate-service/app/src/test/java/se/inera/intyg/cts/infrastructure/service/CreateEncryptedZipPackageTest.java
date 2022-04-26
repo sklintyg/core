@@ -58,7 +58,8 @@ class CreateEncryptedZipPackageTest {
     createEncryptedZipPackage = new CreateEncryptedZipPackage(
         inMemoryTerminationEntityRepository,
         inMemoryCertificateEntityRepository,
-        inMemoryCertificateTextEntityRepository
+        inMemoryCertificateTextEntityRepository,
+        "./"
     );
 
     termination = defaultTermination();
