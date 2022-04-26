@@ -161,7 +161,7 @@ public class CreateEncryptedZipPackage implements CreatePackage {
   }
 
   private ZipFile createZipFile(Termination termination, Password password) {
-    return new ZipFile(
+    return new ZipFile(rootDir +
         termination.careProvider().hsaId().id() + ZIP_EXTENSION,
         password.password().toCharArray()
     );
