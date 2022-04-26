@@ -22,10 +22,10 @@ public class GetCertificateBatchFromIntygstjanst implements GetCertificateBatch 
   private final String certificatesEndpoint;
 
   public GetCertificateBatchFromIntygstjanst(WebClient webClient,
-      @Value("${integration.intygsjanst.scheme}") String scheme,
-      @Value("${integration.intygsjanst.baseurl}") String baseUrl,
-      @Value("${integration.intygsjanst.port}") String port,
-      @Value("${integration.intygsjanst.certificates.endpoint}") String certificatesEndpoint) {
+      @Value("${integration.intygstjanst.scheme}") String scheme,
+      @Value("${integration.intygstjanst.baseurl}") String baseUrl,
+      @Value("${integration.intygstjanst.port}") String port,
+      @Value("${integration.intygstjanst.certificates.endpoint}") String certificatesEndpoint) {
     this.webClient = webClient;
     this.scheme = scheme;
     this.baseUrl = baseUrl;

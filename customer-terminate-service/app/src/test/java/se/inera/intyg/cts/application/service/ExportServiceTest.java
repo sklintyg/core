@@ -50,7 +50,7 @@ class ExportServiceTest {
     final var collectExportContent = new CollectExportContent(terminationRepository,
         integrationCertificateBatchRepository, certificateRepository, certificateTextRepository);
     final var createPackage = new CreateEncryptedZipPackage(inMemoryTerminationEntityRepository,
-        inMemoryCertificateEntityRepository, inMemoryCertificateTextsEntityRepository);
+        inMemoryCertificateEntityRepository, inMemoryCertificateTextsEntityRepository, "./");
     final var exportPackage = new ExportPackage(createPackage, terminationRepository);
     exportService = new ExportService(terminationRepository, collectExportContent, exportPackage);
   }
