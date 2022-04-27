@@ -117,7 +117,8 @@ public class CreateEncryptedZipPackage implements CreatePackage {
     );
 
     try {
-      Files.write(file, Collections.singleton(certificate.getXml()), StandardCharsets.UTF_8);
+      final var xml = decodeBase64Xml(certificate.getXml());
+      Files.write(file, Collections.singleton(xml), StandardCharsets.UTF_8);
     } catch (IOException e) {
       throw new RuntimeException(String.format("Could not write file: %s", file), e);
     }
@@ -138,11 +139,15 @@ public class CreateEncryptedZipPackage implements CreatePackage {
     );
 
     try {
-      final var xml = new String(Base64.getDecoder().decode(certificateTextEntity.getXml()));
+      final var xml = decodeBase64Xml(certificateTextEntity.getXml());
       Files.write(file, Collections.singleton(xml), StandardCharsets.UTF_8);
     } catch (IOException e) {
       throw new RuntimeException(String.format("Could not write file: %s", file), e);
     }
+  }
+
+  private String decodeBase64Xml(String xml) {
+    return new String(Base64.getDecoder().decode(xml));
   }
 
   private String certificateTextFileName(CertificateTextEntity certificateTextEntity) {
