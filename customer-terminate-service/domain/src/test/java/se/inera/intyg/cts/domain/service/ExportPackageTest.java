@@ -15,6 +15,7 @@ class ExportPackageTest {
   private InMemoryTerminationRepository inMemoryTerminationRepository;
   private DummyCreatePackage dummyCreatePackage;
   private ExportPackage exportPackage;
+  private UploadPackageToMemory uploadPackage;
   private Termination termination;
 
   @BeforeEach
@@ -22,7 +23,9 @@ class ExportPackageTest {
     termination = defaultTermination();
     dummyCreatePackage = new DummyCreatePackage();
     inMemoryTerminationRepository = new InMemoryTerminationRepository();
-    exportPackage = new ExportPackage(dummyCreatePackage, inMemoryTerminationRepository);
+    uploadPackage = new UploadPackageToMemory();
+    exportPackage = new ExportPackage(dummyCreatePackage, uploadPackage,
+        inMemoryTerminationRepository);
   }
 
   @Test
