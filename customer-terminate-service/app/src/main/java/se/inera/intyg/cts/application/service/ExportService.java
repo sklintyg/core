@@ -14,13 +14,15 @@ public class ExportService {
   private final TerminationRepository terminationRepository;
   private final CollectExportContent collectExportContent;
   private final ExportPackage exportPackage;
+  private final RandomPasswordGenerator randomPasswordGenerator;
 
   public ExportService(TerminationRepository terminationRepository,
       CollectExportContent collectExportContent,
-      ExportPackage exportPackage) {
+      ExportPackage exportPackage, RandomPasswordGenerator randomPasswordGenerator) {
     this.terminationRepository = terminationRepository;
     this.collectExportContent = collectExportContent;
     this.exportPackage = exportPackage;
+    this.randomPasswordGenerator = randomPasswordGenerator;
   }
 
   @Transactional
@@ -52,7 +54,7 @@ public class ExportService {
     );
 
     terminationsToExport.forEach(
-        termination -> exportPackage.export(termination)
+        termination -> exportPackage.export(termination, randomPasswordGenerator.generateSecureRandomPassword())
     );
   }
 }

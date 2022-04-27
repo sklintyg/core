@@ -1,11 +1,17 @@
 package se.inera.intyg.cts.application.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static se.inera.intyg.cts.testutil.CertificateTestDataBuilder.certificates;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTerminationEntity;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.cts.domain.service.CollectExportContent;
 import se.inera.intyg.cts.domain.service.ExportPackage;
 import se.inera.intyg.cts.infrastructure.integration.GetCertificateBatchFromMemory;
@@ -19,7 +25,11 @@ import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryCertific
 import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryTerminationEntityRepository;
 import se.inera.intyg.cts.infrastructure.service.CreateEncryptedZipPackage;
 
+@ExtendWith(MockitoExtension.class)
 class ExportServiceTest {
+
+  @Mock
+  private RandomPasswordGenerator randomPasswordGenerator;
 
   private InMemoryTerminationEntityRepository inMemoryTerminationEntityRepository;
   private InMemoryCertificateEntityRepository inMemoryCertificateEntityRepository;
@@ -52,7 +62,7 @@ class ExportServiceTest {
     final var createPackage = new CreateEncryptedZipPackage(inMemoryTerminationEntityRepository,
         inMemoryCertificateEntityRepository, inMemoryCertificateTextsEntityRepository, "./");
     final var exportPackage = new ExportPackage(createPackage, terminationRepository);
-    exportService = new ExportService(terminationRepository, collectExportContent, exportPackage);
+    exportService = new ExportService(terminationRepository, collectExportContent, exportPackage, randomPasswordGenerator);
   }
 
   @Test

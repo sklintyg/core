@@ -1,5 +1,6 @@
 package se.inera.intyg.cts.domain.service;
 
+import java.util.Collections;
 import se.inera.intyg.cts.domain.model.Password;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
@@ -15,12 +16,12 @@ public class ExportPackage {
     this.terminationRepository = terminationRepository;
   }
 
-  public void export(Termination termination) {
-    // TODO: Use hardcoded password until sms notification has been implemented.
-    final var password = new Password("password");
-    final var packageToExport = createPackage.create(termination, password);
+  public void export(Termination termination, String password) {
+    final var newPassword = new Password(password);
+    final var packageToExport = createPackage.create(termination, newPassword);
     // TODO: Package will be uploaded to sjut.
-    termination.exported(password);
+    termination.exported(newPassword);
     terminationRepository.store(termination);
   }
+
 }
