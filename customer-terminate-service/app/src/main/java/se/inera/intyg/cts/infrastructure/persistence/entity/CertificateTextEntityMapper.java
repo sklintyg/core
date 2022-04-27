@@ -8,13 +8,13 @@ import se.inera.intyg.cts.domain.model.CertificateXML;
 
 public class CertificateTextEntityMapper {
 
-  public static CertificateTextEntity toEntity(CertificateText certificate,
+  public static CertificateTextEntity toEntity(CertificateText certificateText,
       TerminationEntity terminationEntity) {
     return new CertificateTextEntity(
         0L,
-        certificate.certificateType().type(),
-        certificate.certificateTypeVersion().version(),
-        Base64.getEncoder().encodeToString(certificate.certificateXML().xml().getBytes()),
+        certificateText.certificateType().type(),
+        certificateText.certificateTypeVersion().version(),
+        Base64.getEncoder().encodeToString(certificateText.certificateXML().xml().getBytes()),
         terminationEntity);
   }
 
