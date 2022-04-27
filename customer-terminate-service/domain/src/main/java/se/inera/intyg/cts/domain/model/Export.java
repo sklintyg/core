@@ -1,10 +1,13 @@
 package se.inera.intyg.cts.domain.model;
 
+import java.time.LocalDateTime;
+
 public class Export {
 
   private final OrganizationRepresentative organizationRepresentative;
   private CertificateSummary certificateSummary;
   private Password password;
+  private LocalDateTime receiptTime;
 
   Export(OrganizationRepresentative organizationRepresentative) {
     this(organizationRepresentative, new CertificateSummary(0, 0), null);
@@ -21,6 +24,7 @@ public class Export {
     this.organizationRepresentative = organizationRepresentative;
     this.certificateSummary = certificateSummary;
     this.password = password;
+    this.receiptTime = null;
   }
 
   public void processBatch(CertificateBatch certificateBatch) {
@@ -48,12 +52,21 @@ public class Export {
     return password;
   }
 
+  public LocalDateTime receeiptTime() {
+    return receiptTime;
+  }
+
+  public void receiptTime(LocalDateTime receiptTime) {
+    this.receiptTime = receiptTime;
+  }
+
   @Override
   public String toString() {
     return "Export{" +
         "organizationRepresentative=" + organizationRepresentative +
         ", certificateSummary=" + certificateSummary +
         ", password=" + password +
+        ", receiptTime=" + receiptTime +
         '}';
   }
 }

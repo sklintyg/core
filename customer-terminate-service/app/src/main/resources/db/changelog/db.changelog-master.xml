@@ -108,4 +108,12 @@
       referencedTableName="termination" referencedColumnNames="id"/>
   </changeSet>
 
+  <changeSet id="5" author="mh">
+    <addColumn tableName="export">
+      <column name="receipt_time" type="datetime">
+        <constraints nullable="true"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

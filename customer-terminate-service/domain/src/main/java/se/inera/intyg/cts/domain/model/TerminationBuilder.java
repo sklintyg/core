@@ -17,6 +17,8 @@ public class TerminationBuilder {
   private int total;
   private int revoked;
   private String packagePassword;
+  private LocalDateTime receiptTime;
+
 
   public static TerminationBuilder getInstance() {
     return new TerminationBuilder();
@@ -80,6 +82,11 @@ public class TerminationBuilder {
 
   public TerminationBuilder packagePassword(String packagePassword) {
     this.packagePassword = packagePassword;
+    return this;
+  }
+
+  public TerminationBuilder receiptTime(LocalDateTime receiptTime) {
+    this.receiptTime = receiptTime;
     return this;
   }
 

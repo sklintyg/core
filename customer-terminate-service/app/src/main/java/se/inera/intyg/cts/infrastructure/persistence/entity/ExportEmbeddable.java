@@ -1,5 +1,6 @@
 package se.inera.intyg.cts.infrastructure.persistence.entity;
 
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Table;
@@ -20,5 +21,7 @@ public class ExportEmbeddable {
   private int revoked;
   @Column(name = "password", table = "export")
   private String password;
+  @Column(name = "receipt_time", table = "export")
+  private LocalDateTime receiptTime;
 
 }

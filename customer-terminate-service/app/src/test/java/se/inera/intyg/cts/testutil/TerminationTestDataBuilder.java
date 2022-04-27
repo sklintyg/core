@@ -48,7 +48,7 @@ public class TerminationTestDataBuilder {
         DEFAULT_PERSON_ID,
         DEFAULT_PHONE_NUMBER,
         DEFAULT_STATUS.toString(),
-        new ExportEmbeddable(0, 0, null));
+        new ExportEmbeddable(0, 0, null, null));
   }
 
   public static TerminationEntity defaultTerminationEntity(UUID terminationId) {
@@ -63,6 +63,6 @@ public class TerminationTestDataBuilder {
         DEFAULT_PERSON_ID,
         DEFAULT_PHONE_NUMBER,
         DEFAULT_STATUS.toString(),
-        new ExportEmbeddable(0, 0, null));
+        new ExportEmbeddable(0, 0, null, null));
   }
 }

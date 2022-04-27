@@ -61,6 +61,11 @@ public class Termination {
     status = TerminationStatus.EXPORTED;
   }
 
+  public void receiptReceived(LocalDateTime receiptTime) {
+    export().receiptTime(receiptTime);
+    status = TerminationStatus.RECEIPT_RECEIVED;
+  }
+
   public TerminationId terminationId() {
     return terminationId;
   }

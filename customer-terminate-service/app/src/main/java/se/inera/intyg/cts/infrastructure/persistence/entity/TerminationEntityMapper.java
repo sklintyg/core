@@ -22,7 +22,8 @@ public class TerminationEntityMapper {
             termination.export().certificateSummary().total(),
             termination.export().certificateSummary().revoked(),
             termination.export().password() != null ? termination.export().password().password()
-                : null
+                : null,
+            termination.export().receeiptTime() != null ? termination.export().receeiptTime() :  null
         ));
   }
 
@@ -41,6 +42,7 @@ public class TerminationEntityMapper {
         .total(terminationEntity.getExport().getTotal())
         .revoked(terminationEntity.getExport().getRevoked())
         .packagePassword(terminationEntity.getExport().getPassword())
+        .receiptTime(terminationEntity.getExport().getReceiptTime())
         .create();
   }
 }
