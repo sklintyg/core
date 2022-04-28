@@ -5,6 +5,7 @@ import static se.inera.intyg.cts.testability.dto.TestabilityTerminationDTOMapper
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import se.inera.intyg.cts.infrastructure.persistence.entity.ExportEmbeddable;
 import se.inera.intyg.cts.infrastructure.persistence.entity.TerminationEntity;
 import se.inera.intyg.cts.infrastructure.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.cts.infrastructure.persistence.repository.TerminationEntityRepository;
@@ -33,9 +34,13 @@ public class TestabilityTerminationService {
     terminationEntity.ifPresent(this::deleteTermination);
   }
 
-  public int getCertificatesCount(UUID terminationId) {
+  public ExportEmbeddable getExport(UUID terminationId) {
     final var terminationEntity = terminationEntityRepository.findByTerminationId(terminationId);
-    return terminationEntity.orElseThrow().getExport().getTotal();
+    return terminationEntity.orElseThrow().getExport();
+  }
+
+  public int getCertificatesCount(UUID terminationId) {
+    return getExport(terminationId).getTotal();
   }
 
   private void deleteTermination(TerminationEntity terminationEntity) {

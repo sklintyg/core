@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import se.inera.intyg.cts.infrastructure.persistence.entity.ExportEmbeddable;
 import se.inera.intyg.cts.testability.dto.TestabilityTerminationDTO;
 import se.inera.intyg.cts.testability.service.TestabilityTerminationService;
 
@@ -32,6 +33,11 @@ public class TestabilityTerminationController {
   @DeleteMapping("/{terminationId}")
   void delete(@PathVariable UUID terminationId) {
     testabilityTerminationService.deleteTermination(terminationId);
+  }
+
+  @GetMapping("/export/{terminationId}")
+  ExportEmbeddable getExport(@PathVariable UUID terminationId) {
+    return testabilityTerminationService.getExport(terminationId);
   }
 
   @GetMapping("/{terminationId}")

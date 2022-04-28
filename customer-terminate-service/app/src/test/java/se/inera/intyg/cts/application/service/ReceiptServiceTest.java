@@ -8,6 +8,8 @@ import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTerm
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import se.inera.intyg.cts.domain.model.TerminationStatus;
 import se.inera.intyg.cts.infrastructure.persistence.JpaTerminationRepository;
 import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryTerminationEntityRepository;
@@ -51,6 +53,9 @@ class ReceiptServiceTest {
   public void shallThrowExceptionIfReceiptForNonExistingTermination() {
     inMemoryTerminationEntityRepository.save(defaultTerminationEntity(TERMINATION_UUID));
 
-    assertThrows(IllegalStateException.class, () -> receiptService.handleReceipt(UUID.randomUUID()));
+    final var exception = assertThrows(ResponseStatusException.class,
+        () -> receiptService.handleReceipt(UUID.randomUUID()));
+
+    assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
   }
 }

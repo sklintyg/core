@@ -12,6 +12,8 @@ import se.inera.intyg.cts.domain.repository.InMemoryTerminationRepository;
 
 class ExportPackageTest {
 
+  private static final String PASSWORD = "password";
+
   private InMemoryTerminationRepository inMemoryTerminationRepository;
   private DummyCreatePackage dummyCreatePackage;
   private ExportPackage exportPackage;
@@ -27,14 +29,14 @@ class ExportPackageTest {
 
   @Test
   void shallGeneratePasswordForPackage() {
-    exportPackage.export(termination);
+    exportPackage.export(termination, PASSWORD);
 
     assertNotNull(dummyCreatePackage.password());
   }
 
   @Test
   void shallStorePasswordForPackageInTermination() {
-    exportPackage.export(termination);
+    exportPackage.export(termination, PASSWORD);
 
     assertEquals(dummyCreatePackage.password(),
         inMemoryTerminationRepository.findByTerminationId(termination.terminationId())
@@ -45,7 +47,7 @@ class ExportPackageTest {
 
   @Test
   void shallUpdateStatusToExported() {
-    exportPackage.export(termination);
+    exportPackage.export(termination, PASSWORD);
 
     assertEquals(TerminationStatus.EXPORTED,
         inMemoryTerminationRepository.findByTerminationId(termination.terminationId())
