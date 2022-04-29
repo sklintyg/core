@@ -1,4 +1,4 @@
-package se.inera.intyg.cts.application.service;
+package se.inera.intyg.cts.infrastructure.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,14 +8,14 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class RandomPasswordGeneratorImplTest {
+class PasswordGeneratorImplTest {
 
     @InjectMocks
-    RandomPasswordGeneratorImpl randomPasswordGenerator;
+    PasswordGeneratorImpl randomPasswordGenerator;
 
     @Test
     void testGenerateSecureRandomPasswordChar() {
-        String password = randomPasswordGenerator.generateSecureRandomPassword();
+        String password = randomPasswordGenerator.generateSecurePassword();
         int specialCharCount = 0;
         int numberCharCount = 0;
         int upperCharCount = 0;
@@ -40,8 +40,8 @@ class RandomPasswordGeneratorImplTest {
 
     @Test
     void testPasswordNotEqual() {
-        String password1 = randomPasswordGenerator.generateSecureRandomPassword();
-        String password2 = randomPasswordGenerator.generateSecureRandomPassword();
+        String password1 = randomPasswordGenerator.generateSecurePassword();
+        String password2 = randomPasswordGenerator.generateSecurePassword();
         assertNotEquals(password1, password2, "Password validation failed, passwords are identical");
     }
 }

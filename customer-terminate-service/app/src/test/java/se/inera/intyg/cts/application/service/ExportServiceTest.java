@@ -1,9 +1,7 @@
 package se.inera.intyg.cts.application.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static se.inera.intyg.cts.testutil.CertificateTestDataBuilder.certificates;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTerminationEntity;
 
@@ -14,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.cts.domain.service.CollectExportContent;
 import se.inera.intyg.cts.domain.service.ExportPackage;
+import se.inera.intyg.cts.domain.service.PasswordGenerator;
 import se.inera.intyg.cts.infrastructure.integration.GetCertificateBatchFromMemory;
 import se.inera.intyg.cts.infrastructure.integration.GetCertificateTextsFromMemory;
 import se.inera.intyg.cts.infrastructure.integration.IntegrationCertificateBatchRepository;
@@ -29,7 +28,7 @@ import se.inera.intyg.cts.infrastructure.service.CreateEncryptedZipPackage;
 class ExportServiceTest {
 
   @Mock
-  private RandomPasswordGenerator randomPasswordGenerator;
+  private PasswordGenerator passwordGenerator;
 
   private InMemoryTerminationEntityRepository inMemoryTerminationEntityRepository;
   private InMemoryCertificateEntityRepository inMemoryCertificateEntityRepository;
@@ -61,8 +60,8 @@ class ExportServiceTest {
         integrationCertificateBatchRepository, certificateRepository, certificateTextRepository);
     final var createPackage = new CreateEncryptedZipPackage(inMemoryTerminationEntityRepository,
         inMemoryCertificateEntityRepository, inMemoryCertificateTextsEntityRepository, "./");
-    final var exportPackage = new ExportPackage(createPackage, terminationRepository);
-    exportService = new ExportService(terminationRepository, collectExportContent, exportPackage, randomPasswordGenerator);
+    final var exportPackage = new ExportPackage(createPackage, passwordGenerator, terminationRepository);
+    exportService = new ExportService(terminationRepository, collectExportContent, exportPackage);
   }
 
   @Test

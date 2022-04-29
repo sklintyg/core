@@ -20,11 +20,11 @@ class ExportPackageTest {
   private Termination termination;
 
   @BeforeEach
-  void setUp() {
+  void setUp(PasswordGenerator passwordGenerator) {
     termination = defaultTermination();
     dummyCreatePackage = new DummyCreatePackage();
     inMemoryTerminationRepository = new InMemoryTerminationRepository();
-    exportPackage = new ExportPackage(dummyCreatePackage, inMemoryTerminationRepository);
+    exportPackage = new ExportPackage(dummyCreatePackage, passwordGenerator, inMemoryTerminationRepository);
   }
 
   @Test

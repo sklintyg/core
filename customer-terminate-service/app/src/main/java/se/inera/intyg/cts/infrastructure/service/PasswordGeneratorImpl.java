@@ -1,4 +1,4 @@
-package se.inera.intyg.cts.application.service;
+package se.inera.intyg.cts.infrastructure.service;
 
 import java.security.SecureRandom;
 import java.util.Collections;
@@ -8,9 +8,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
+import se.inera.intyg.cts.domain.service.PasswordGenerator;
 
 @Component
-public class RandomPasswordGeneratorImpl implements RandomPasswordGenerator {
+public class PasswordGeneratorImpl implements PasswordGenerator {
 
     Random random = new SecureRandom();
 
@@ -19,7 +20,7 @@ public class RandomPasswordGeneratorImpl implements RandomPasswordGenerator {
      * @return
      */
     @Override
-    public String generateSecureRandomPassword() {
+    public String generateSecurePassword() {
         Stream<Character> pwdStream = Stream.concat(getRandomNumbers(2),
             Stream.concat(getRandomSpecialChars(2),
                 Stream.concat(getRandomAlphabets(2, true), getRandomAlphabets(4, false))));
@@ -35,12 +36,10 @@ public class RandomPasswordGeneratorImpl implements RandomPasswordGenerator {
         IntStream numbers = random.ints(count, 48, 57);//0-9
         return numbers.mapToObj(data -> (char) data);
     }
-
     private Stream<Character> getRandomSpecialChars(int count) {
         IntStream specialChars = random.ints(count, 33, 47);
         return specialChars.mapToObj(data -> (char) data);
     }
-
     private Stream<Character> getRandomAlphabets(int count, boolean upperCase) {
         IntStream characters = null;
         if (upperCase) {
