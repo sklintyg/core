@@ -1,6 +1,7 @@
 package se.inera.intyg.cts.infrastructure.integration.sjut;
 
 import java.io.File;
+import java.net.URI;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -10,6 +11,7 @@ import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriBuilder;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.service.UploadPackage;
 import se.inera.intyg.cts.infrastructure.integration.sjut.dto.PackageMetadata;
@@ -45,13 +47,7 @@ public class UploadPackageToSjut implements UploadPackage {
     multipartBodyBuilder.part("metadata", packageMetadata);
 
     webClient.post()
-        .uri(uriBuilder -> uriBuilder
-            .scheme(scheme)
-            .host(baseUrl)
-            .port(port)
-            .path(certificatesEndpoint)
-            .build()
-        )
+        .uri(this::getUri)
         .body(BodyInserters.fromMultipartData(multipartBodyBuilder.build()))
         .exchangeToMono(clientResponse ->
         {
@@ -79,5 +75,18 @@ public class UploadPackageToSjut implements UploadPackage {
         "intyg",
         "http://localhost:18010/api/v1/receipt/" + termination.terminationId().id()
     );
+  }
+
+  private URI getUri(UriBuilder uriBuilder) {
+    uriBuilder = uriBuilder
+        .scheme(scheme)
+        .host(baseUrl)
+        .path(certificatesEndpoint);
+
+    if (!port.isBlank()) {
+      uriBuilder.port(port);
+    }
+
+    return uriBuilder.build();
   }
 }
