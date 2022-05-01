@@ -33,3 +33,7 @@ tasks.named('test') {
     useJUnitPlatform {
     }
 }
+
+bootRun {
+    systemProperty("spring.profiles.active", "testability,dev")
+}

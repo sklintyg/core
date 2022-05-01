@@ -1,15 +1,12 @@
 package se.inera.intyg.cts.infrastructure.configuration;
 
+import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManagerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -23,35 +20,26 @@ public class IntegrationConfig {
 
   public static final int IN_MEMORY_SIZE_TO_MANAGE_LARGE_XML_RESPONSES = 16 * 1024 * 1024;
 
+  @Value("${webclient.keystore.type:PKCS12}")
+  private String keyStoreType;
+
+  @Value("${webclient.keystore.password}")
+  private String keyStorePassword;
+
+  @Value("${webclient.keystore.path}")
+  private String keyStorePath;
+
+  @Value("${webclient.truststore.password}")
+  private String trustStorePassword;
+
+  @Value("${webclient.truststore.path}")
+  private String trustStorePath;
+
   @Bean
-  public WebClient webClient()
-      throws NoSuchAlgorithmException, KeyStoreException, UnrecoverableKeyException, IOException, CertificateException {
-    final var keyManagerFactory = KeyManagerFactory.getInstance(
-        KeyManagerFactory.getDefaultAlgorithm());
-    final var trustManagerFactory = TrustManagerFactory.getInstance(
-        TrustManagerFactory.getDefaultAlgorithm());
-
-    final var keyStore = KeyStore.getInstance("PKCS12");
-    keyStore.load(new FileInputStream(ResourceUtils.getFile("classpath:localhost.p12")),
-        "EdKSSx68zh".toCharArray());
-
-    // Set up key manager factory to use our key store
-    keyManagerFactory.init(keyStore, "EdKSSx68zh".toCharArray());
-
-    // truststore
-    final var trustStore = KeyStore.getInstance("PKCS12");
-    trustStore.load(new FileInputStream((ResourceUtils.getFile("classpath:truststore.jks"))),
-        "password".toCharArray());
-
-    trustManagerFactory.init(trustStore);
-
-    final var sslContext = SslContextBuilder
-        .forClient()
-        .keyManager(keyManagerFactory)
-        .trustManager(trustManagerFactory)
-        .build();
-
-    final var httpClient = HttpClient.create().secure(sslSpec -> sslSpec.sslContext(sslContext));
+  public WebClient webClient() {
+    final var sslContext = getSslContext();
+    final var httpClient = HttpClient.create()
+        .secure(sslSpec -> sslSpec.sslContext(sslContext));
 
     final ExchangeStrategies strategies = ExchangeStrategies.builder()
         .codecs(codecs ->
@@ -63,5 +51,51 @@ public class IntegrationConfig {
         .clientConnector(new ReactorClientHttpConnector(httpClient))
         .exchangeStrategies(strategies)
         .build();
+  }
+
+  private KeyManagerFactory getKeyManagerFactory() {
+    try {
+      final var keyManagerFactory = KeyManagerFactory.getInstance(
+          KeyManagerFactory.getDefaultAlgorithm());
+
+      final var keyStore = KeyStore.getInstance(keyStoreType);
+      keyStore.load(new FileInputStream(ResourceUtils.getFile(keyStorePath)),
+          keyStorePassword.toCharArray());
+
+      keyManagerFactory.init(keyStore, keyStorePassword.toCharArray());
+
+      return keyManagerFactory;
+    } catch (Exception ex) {
+      throw new RuntimeException("Could not initialize keystore!", ex);
+    }
+  }
+
+  private TrustManagerFactory getTrustManagerFactory() {
+    try {
+      final var trustManagerFactory = TrustManagerFactory.getInstance(
+          TrustManagerFactory.getDefaultAlgorithm());
+
+      final var trustStore = KeyStore.getInstance(keyStoreType);
+      trustStore.load(new FileInputStream((ResourceUtils.getFile(trustStorePath))),
+          trustStorePassword.toCharArray());
+
+      trustManagerFactory.init(trustStore);
+
+      return trustManagerFactory;
+    } catch (Exception ex) {
+      throw new RuntimeException("Could not initialize truststore!", ex);
+    }
+  }
+
+  private SslContext getSslContext() {
+    try {
+      return SslContextBuilder
+          .forClient()
+          .keyManager(getKeyManagerFactory())
+          .trustManager(getTrustManagerFactory())
+          .build();
+    } catch (Exception ex) {
+      throw new RuntimeException("Could not build SslContext.", ex);
+    }
   }
 }
