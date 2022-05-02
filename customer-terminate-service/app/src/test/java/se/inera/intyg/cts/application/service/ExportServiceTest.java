@@ -16,6 +16,7 @@ import se.inera.intyg.cts.domain.service.PasswordGenerator;
 import se.inera.intyg.cts.infrastructure.integration.GetCertificateBatchFromMemory;
 import se.inera.intyg.cts.infrastructure.integration.GetCertificateTextsFromMemory;
 import se.inera.intyg.cts.infrastructure.integration.IntegrationCertificateBatchRepository;
+import se.inera.intyg.cts.infrastructure.integration.UploadPackageToMemory;
 import se.inera.intyg.cts.infrastructure.persistence.JpaCertificateRepository;
 import se.inera.intyg.cts.infrastructure.persistence.JpaCertificateTextRepository;
 import se.inera.intyg.cts.infrastructure.persistence.JpaTerminationRepository;
@@ -60,7 +61,9 @@ class ExportServiceTest {
         integrationCertificateBatchRepository, certificateRepository, certificateTextRepository);
     final var createPackage = new CreateEncryptedZipPackage(inMemoryTerminationEntityRepository,
         inMemoryCertificateEntityRepository, inMemoryCertificateTextsEntityRepository, "./");
-    final var exportPackage = new ExportPackage(createPackage, passwordGenerator, terminationRepository);
+    final var uploadPackage = new UploadPackageToMemory();
+    final var exportPackage = new ExportPackage(createPackage, uploadPackage,
+        terminationRepository);
     exportService = new ExportService(terminationRepository, collectExportContent, exportPackage);
   }
 

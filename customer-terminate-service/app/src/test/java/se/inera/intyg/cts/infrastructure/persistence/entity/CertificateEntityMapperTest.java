@@ -6,6 +6,7 @@ import static se.inera.intyg.cts.infrastructure.persistence.entity.CertificateEn
 import static se.inera.intyg.cts.testutil.CertificateTestDataBuilder.DEFAULT_CERTIFICATE_ID;
 import static se.inera.intyg.cts.testutil.CertificateTestDataBuilder.DEFAULT_REVOKED;
 import static se.inera.intyg.cts.testutil.CertificateTestDataBuilder.DEFAULT_XML;
+import static se.inera.intyg.cts.testutil.CertificateTestDataBuilder.DEFAULT_XML_AS_BASE64;
 import static se.inera.intyg.cts.testutil.CertificateTestDataBuilder.defaultCertificate;
 import static se.inera.intyg.cts.testutil.CertificateTestDataBuilder.defaultCertificateEntity;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTerminationEntity;
@@ -42,7 +43,7 @@ class CertificateEntityMapperTest {
 
     @Test
     void shallMapXml() {
-      assertEquals(DEFAULT_XML, toEntity(certificate, terminationEntity).getXml());
+      assertEquals(DEFAULT_XML_AS_BASE64, toEntity(certificate, terminationEntity).getXml());
     }
   }
 

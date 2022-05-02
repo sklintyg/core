@@ -14,11 +14,11 @@ public class TerminationTestDataBuilder {
   public static final Long DEFAULT_ID = RandomGenerator.getDefault().nextLong();
   public static final UUID DEFAULT_TERMINATION_ID = UUID.randomUUID();
   public static final LocalDateTime DEFAULT_CREATED = LocalDateTime.now();
-  public static final String DEFAULT_HSA_ID = "hsaId";
+  public static final String DEFAULT_HSA_ID = "TSTNMT2321000156-ALFA";
   public static final String DEFAULT_CREATOR_HSA_ID = "creatorHSAId";
   public static final String DEFAULT_CREATOR_NAME = "creatorName";
-  public static final String DEFAULT_ORGANIZATION_NUMBER = "organizationNumber";
-  public static final String DEFAULT_PERSON_ID = "personId";
+  public static final String DEFAULT_ORGANIZATION_NUMBER = "2-orgnr-ALFA";
+  public static final String DEFAULT_PERSON_ID = "191212121212";
   public static final String DEFAULT_PHONE_NUMBER = "phoneNumber";
 
   public static final String DEFAULT_PASSWORD = "Password";

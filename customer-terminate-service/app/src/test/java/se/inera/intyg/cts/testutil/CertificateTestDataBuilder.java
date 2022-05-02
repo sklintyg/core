@@ -2,7 +2,9 @@ package se.inera.intyg.cts.testutil;
 
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTerminationEntity;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 import java.util.random.RandomGenerator;
@@ -18,6 +20,8 @@ public class CertificateTestDataBuilder {
   public static String DEFAULT_CERTIFICATE_ID = UUID.randomUUID().toString();
   public static boolean DEFAULT_REVOKED = false;
   public static String DEFAULT_XML = "<xml></xml>";
+  public static String DEFAULT_XML_AS_BASE64 = Base64.getEncoder()
+      .encodeToString(DEFAULT_XML.getBytes(StandardCharsets.UTF_8));
 
   public static Certificate defaultCertificate() {
     return new Certificate(
@@ -32,7 +36,7 @@ public class CertificateTestDataBuilder {
         DEFAULT_ID,
         DEFAULT_CERTIFICATE_ID,
         DEFAULT_REVOKED,
-        DEFAULT_XML,
+        DEFAULT_XML_AS_BASE64,
         defaultTerminationEntity()
     );
   }
@@ -60,7 +64,7 @@ public class CertificateTestDataBuilder {
               RandomGenerator.getDefault().nextLong(),
               UUID.randomUUID().toString(),
               i >= (total - revokeCount),
-              DEFAULT_XML,
+              DEFAULT_XML_AS_BASE64,
               terminationEntity
           )
       );
