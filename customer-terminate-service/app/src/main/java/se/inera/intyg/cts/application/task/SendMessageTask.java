@@ -21,7 +21,7 @@ public class SendMessageTask {
   /**
    * Send SMS to terminated customer to inform them that their data is ready to be retrieved.
    */
-  @Scheduled(cron = "${task.sendsms.cron}")
+  @Scheduled(cron = "${task.message.cron}")
   @SchedulerLock(name = TASK_NAME, lockAtLeastFor = LOCK_AT_LEAST, lockAtMostFor = LOCK_AT_MOST)
   public void sendPassword() {
     messageService.sendPassword();

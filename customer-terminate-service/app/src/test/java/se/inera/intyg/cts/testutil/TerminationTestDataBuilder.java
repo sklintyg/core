@@ -20,6 +20,8 @@ public class TerminationTestDataBuilder {
   public static final String DEFAULT_ORGANIZATION_NUMBER = "organizationNumber";
   public static final String DEFAULT_PERSON_ID = "personId";
   public static final String DEFAULT_PHONE_NUMBER = "phoneNumber";
+
+  public static final String DEFAULT_PASSWORD = "Password";
   public static final TerminationStatus DEFAULT_STATUS = TerminationStatus.CREATED;
 
   public static Termination defaultTermination() {
@@ -32,7 +34,7 @@ public class TerminationTestDataBuilder {
         .careProviderOrganizationNumber(DEFAULT_ORGANIZATION_NUMBER)
         .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
         .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
-        .status(TerminationStatus.CREATED)
+        .status(TerminationStatus.CREATED).packagePassword(DEFAULT_PASSWORD)
         .create();
   }
 
