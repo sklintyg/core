@@ -1,7 +1,6 @@
 package se.inera.intyg.cts.application.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
 import static se.inera.intyg.cts.testutil.CertificateTestDataBuilder.certificates;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTerminationEntity;
 
@@ -63,7 +62,7 @@ class ExportServiceTest {
         inMemoryCertificateEntityRepository, inMemoryCertificateTextsEntityRepository, "./");
     final var uploadPackage = new UploadPackageToMemory();
     final var exportPackage = new ExportPackage(createPackage, uploadPackage,
-        terminationRepository);
+        terminationRepository, passwordGenerator);
     exportService = new ExportService(terminationRepository, collectExportContent, exportPackage);
   }
 

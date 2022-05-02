@@ -27,7 +27,7 @@ public class AppConfig {
   @Bean
   public ExportPackage exportPackage(CreatePackage createPackage,
       UploadPackage uploadPackage,
-      TerminationRepository terminationRepository) {
-    return new ExportPackage(createPackage, uploadPackage, terminationRepository);
+      TerminationRepository terminationRepository, PasswordGenerator passwordGenerator) {
+    return new ExportPackage(createPackage, uploadPackage, terminationRepository, passwordGenerator);
   }
 }
