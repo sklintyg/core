@@ -1,61 +1,64 @@
 package se.inera.intyg.cts.application.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTerminationEntity;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+import se.inera.intyg.cts.domain.model.Termination;
+import se.inera.intyg.cts.domain.model.TerminationBuilder;
+import se.inera.intyg.cts.domain.model.TerminationId;
 import se.inera.intyg.cts.domain.model.TerminationStatus;
-import se.inera.intyg.cts.infrastructure.persistence.JpaTerminationRepository;
-import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryTerminationEntityRepository;
+import se.inera.intyg.cts.domain.repository.TerminationRepository;
 
+@ExtendWith(MockitoExtension.class)
 class ReceiptServiceTest {
 
   private static final UUID TERMINATION_UUID = UUID.randomUUID();
-
-  private InMemoryTerminationEntityRepository inMemoryTerminationEntityRepository;
+  @Spy
+  Termination termination = TerminationBuilder.getInstance().terminationId(TERMINATION_UUID)
+      .created(LocalDateTime.now()).creatorHSAId("creatorHSAId").creatorName("creatorName")
+      .careProviderHSAId("2-orgnr-ALFA").careProviderOrganizationNumber("2-orgnr-ALFA")
+      .careProviderOrganizationRepresentativePersonId("191212121212")
+      .careProviderOrganizationRepresentativePhoneNumber("phoneNumber")
+      .status(TerminationStatus.CREATED).packagePassword("Password").create();
+  @Mock
+  private TerminationRepository terminationRepository;
+  @InjectMocks
   private ReceiptService receiptService;
 
-  @BeforeEach
-  void setUp() {
-    inMemoryTerminationEntityRepository = new InMemoryTerminationEntityRepository();
-    final var terminationRepository = new JpaTerminationRepository(
-        inMemoryTerminationEntityRepository);
-    receiptService = new ReceiptService(terminationRepository);
-  }
-
   @Test
-  public void shallSetReceiptTime() {
-    inMemoryTerminationEntityRepository.save(defaultTerminationEntity(TERMINATION_UUID));
+  public void testHandleReceipt() {
+    when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(Optional.of(termination));
 
     receiptService.handleReceipt(TERMINATION_UUID);
 
-    final var terminationEntity = inMemoryTerminationEntityRepository.findByTerminationId(TERMINATION_UUID);
-    assertNotNull(terminationEntity.orElseThrow().getExport().getReceiptTime());
+    verify(terminationRepository, times(1)).findByTerminationId(any(TerminationId.class));
+    verify(termination, times(1)).receiptReceived(any(LocalDateTime.class));
+    verify(terminationRepository, times(1)).store(termination);
   }
 
-  @Test
-  public void shallUpdateTerminationStatus() {
-    inMemoryTerminationEntityRepository.save(defaultTerminationEntity(TERMINATION_UUID));
+  @Test()
+  public void testHandleTerminationNotFound() {
+    when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(Optional.empty());
 
-    receiptService.handleReceipt(TERMINATION_UUID);
+    ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+      receiptService.handleReceipt(TERMINATION_UUID);
+    });
 
-    final var terminationEntity = inMemoryTerminationEntityRepository.findByTerminationId(TERMINATION_UUID);
-    assertEquals(TerminationStatus.RECEIPT_RECEIVED.name(), terminationEntity.orElseThrow().getStatus());
-  }
-
-  @Test
-  public void shallThrowExceptionIfReceiptForNonExistingTermination() {
-    inMemoryTerminationEntityRepository.save(defaultTerminationEntity(TERMINATION_UUID));
-
-    final var exception = assertThrows(ResponseStatusException.class,
-        () -> receiptService.handleReceipt(UUID.randomUUID()));
-
-    assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
-  }
+    assertEquals(exception.getStatus(), HttpStatus.NOT_FOUND);
+ }
 }
