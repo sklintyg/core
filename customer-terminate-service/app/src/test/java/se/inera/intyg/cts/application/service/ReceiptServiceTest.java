@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTermination;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -19,9 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import se.inera.intyg.cts.domain.model.Termination;
-import se.inera.intyg.cts.domain.model.TerminationBuilder;
 import se.inera.intyg.cts.domain.model.TerminationId;
-import se.inera.intyg.cts.domain.model.TerminationStatus;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,12 +28,7 @@ class ReceiptServiceTest {
 
   private static final UUID TERMINATION_UUID = UUID.randomUUID();
   @Spy
-  Termination termination = TerminationBuilder.getInstance().terminationId(TERMINATION_UUID)
-      .created(LocalDateTime.now()).creatorHSAId("creatorHSAId").creatorName("creatorName")
-      .careProviderHSAId("2-orgnr-ALFA").careProviderOrganizationNumber("2-orgnr-ALFA")
-      .careProviderOrganizationRepresentativePersonId("191212121212")
-      .careProviderOrganizationRepresentativePhoneNumber("phoneNumber")
-      .status(TerminationStatus.CREATED).packagePassword("Password").create();
+  Termination termination = defaultTermination();
   @Mock
   private TerminationRepository terminationRepository;
   @InjectMocks
