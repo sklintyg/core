@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.security.KeyStore;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManagerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +19,8 @@ import reactor.netty.http.client.HttpClient;
 
 @Configuration
 public class IntegrationConfig {
+
+  private final static Logger LOG = LoggerFactory.getLogger(IntegrationConfig.class);
 
   public static final int IN_MEMORY_SIZE_TO_MANAGE_LARGE_XML_RESPONSES = 16 * 1024 * 1024;
 
@@ -66,6 +70,7 @@ public class IntegrationConfig {
 
       return keyManagerFactory;
     } catch (Exception ex) {
+      LOG.error("Could not initialize keystore!", ex);
       throw new RuntimeException("Could not initialize keystore!", ex);
     }
   }
@@ -83,6 +88,7 @@ public class IntegrationConfig {
 
       return trustManagerFactory;
     } catch (Exception ex) {
+      LOG.error("Could not initialize truststore!", ex);
       throw new RuntimeException("Could not initialize truststore!", ex);
     }
   }
@@ -95,6 +101,7 @@ public class IntegrationConfig {
           .trustManager(getTrustManagerFactory())
           .build();
     } catch (Exception ex) {
+      LOG.error("Could not build SslContext.", ex);
       throw new RuntimeException("Could not build SslContext.", ex);
     }
   }
