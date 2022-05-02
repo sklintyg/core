@@ -2,6 +2,8 @@ package se.inera.intyg.cts.application.service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +14,8 @@ import se.inera.intyg.cts.domain.repository.TerminationRepository;
 @Service
 public class ReceiptService {
 
+  private final static Logger LOG = LoggerFactory.getLogger(ReceiptService.class);
+
   private final TerminationRepository terminationRepository;
 
   public ReceiptService(
@@ -21,6 +25,7 @@ public class ReceiptService {
 
   @Transactional
   public void handleReceipt(UUID terminationUUID) {
+    LOG.info("Receipt received for termination id '{}'.", terminationUUID);
     final var receiptTime = LocalDateTime.now();
     final var terminationId = new TerminationId(terminationUUID);
     final var terminationOptional =
