@@ -18,7 +18,7 @@ public class SendMessageTask {
     this.messageService = messageService;
   }
 
-  @Scheduled(cron = "${task.message.cron}")
+  @Scheduled(cron = "${task.sendmessage.cron}")
   @SchedulerLock(name = TASK_NAME, lockAtLeastFor = LOCK_AT_LEAST, lockAtMostFor = LOCK_AT_MOST)
   public void sendPassword() {
     messageService.sendPassword();
