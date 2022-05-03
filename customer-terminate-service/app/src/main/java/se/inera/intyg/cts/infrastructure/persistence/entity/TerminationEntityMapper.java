@@ -23,7 +23,7 @@ public class TerminationEntityMapper {
             termination.export().certificateSummary().revoked(),
             termination.export().password() != null ? termination.export().password().password()
                 : null,
-            termination.export().receeiptTime() != null ? termination.export().receeiptTime() :  null
+            termination.export().receeiptTime()
         ));
   }
 

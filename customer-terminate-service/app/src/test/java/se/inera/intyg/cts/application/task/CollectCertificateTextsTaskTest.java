@@ -20,8 +20,8 @@ class CollectCertificateTextsTaskTest {
     private CollectCertificateTextsTask collectCertificateTextsTask;
 
     @Test
-    void collectCertificates() {
-        collectCertificateTextsTask.collectCertificates();
+    void collectCertificateTexts() {
+        collectCertificateTextsTask.collectCertificateTexts();
 
         verify(exportService, times(1)).collectCertificateTextsToExport();
     }

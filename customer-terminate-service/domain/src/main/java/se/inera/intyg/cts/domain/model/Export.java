@@ -10,11 +10,11 @@ public class Export {
   private LocalDateTime receiptTime;
 
   Export(OrganizationRepresentative organizationRepresentative) {
-    this(organizationRepresentative, new CertificateSummary(0, 0), null);
+    this(organizationRepresentative, new CertificateSummary(0, 0), null, null);
   }
 
   Export(OrganizationRepresentative organizationRepresentative,
-      CertificateSummary certificateSummary, Password password) {
+      CertificateSummary certificateSummary, Password password, LocalDateTime receiptTime) {
     if (organizationRepresentative == null) {
       throw new IllegalArgumentException("Missing OrganisationalRepresentative");
     }
@@ -24,7 +24,7 @@ public class Export {
     this.organizationRepresentative = organizationRepresentative;
     this.certificateSummary = certificateSummary;
     this.password = password;
-    this.receiptTime = null;
+    this.receiptTime = receiptTime;
   }
 
   public void processBatch(CertificateBatch certificateBatch) {

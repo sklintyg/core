@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
 import se.inera.intyg.cts.domain.model.TerminationStatus;
-import se.inera.intyg.cts.infrastructure.persistence.entity.ExportEmbeddable;
+import se.inera.intyg.cts.testability.dto.TestabilityExportEmbeddableDTO;
 
 public class ReceiptIT {
 
@@ -62,13 +62,13 @@ public class ReceiptIT {
         .when().post("/api/v1/receipt/{terminationId}")
         .then().statusCode(HttpStatus.OK.value());
 
-    final var export = given()
+    final var exportEmbeddableDTO = given()
         .pathParam("terminationId", terminationId)
         .when().get("/testability/v1/terminations/export/{terminationId}")
         .then().statusCode(HttpStatus.OK.value())
-        .extract().response().as(ExportEmbeddable.class);
+        .extract().response().as(TestabilityExportEmbeddableDTO.class);
 
-    assertNotNull(export.getReceiptTime());
+    assertNotNull(exportEmbeddableDTO.receiptTime());
   }
 
   @Test

@@ -112,7 +112,8 @@ public class TerminationBuilder {
         new Export(
             new OrganizationRepresentative(personId, phoneNumber),
             new CertificateSummary(total, revoked),
-            packagePassword != null ? new Password(packagePassword) : null
+            packagePassword != null ? new Password(packagePassword) : null,
+            receiptTime
         )
     );
   }

@@ -1,24 +1,22 @@
-package se.inera.intyg.cts.infrastructure.service;
+package se.inera.intyg.cts.application.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
 import se.inera.intyg.cts.domain.service.SendPassword;
 import se.inera.intyg.cts.infrastructure.integration.SendSMS;
-import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.SMSResponseDTO;
 
 @Service
-public class SendPasswordImpl implements SendPassword {
+public class SendPasswordWithSMS implements SendPassword {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SendPasswordImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SendPasswordWithSMS.class);
 
     private final SendSMS sendSMS;
     private final TerminationRepository terminationRepository;
 
-    public SendPasswordImpl(SendSMS sendSMS, TerminationRepository terminationRepository) {
+    public SendPasswordWithSMS(SendSMS sendSMS, TerminationRepository terminationRepository) {
         this.sendSMS = sendSMS;
         this.terminationRepository = terminationRepository;
     }

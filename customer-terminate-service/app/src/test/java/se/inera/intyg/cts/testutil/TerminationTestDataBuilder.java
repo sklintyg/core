@@ -3,6 +3,7 @@ package se.inera.intyg.cts.testutil;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.random.RandomGenerator;
+import se.inera.intyg.cts.application.dto.TerminationDTO;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.model.TerminationBuilder;
 import se.inera.intyg.cts.domain.model.TerminationStatus;
@@ -34,8 +35,23 @@ public class TerminationTestDataBuilder {
         .careProviderOrganizationNumber(DEFAULT_ORGANIZATION_NUMBER)
         .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
         .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
-        .status(TerminationStatus.CREATED).packagePassword(DEFAULT_PASSWORD)
+        .status(TerminationStatus.CREATED)
+        .packagePassword(DEFAULT_PASSWORD)
         .create();
+  }
+
+  public static TerminationDTO defaultTerminationDTO() {
+    return new TerminationDTO(
+        DEFAULT_TERMINATION_ID,
+        DEFAULT_CREATED,
+        DEFAULT_CREATOR_HSA_ID,
+        DEFAULT_CREATOR_NAME,
+        DEFAULT_STATUS.toString(),
+        DEFAULT_HSA_ID,
+        DEFAULT_ORGANIZATION_NUMBER,
+        DEFAULT_PERSON_ID,
+        DEFAULT_PHONE_NUMBER
+    );
   }
 
   public static TerminationEntity defaultTerminationEntity() {

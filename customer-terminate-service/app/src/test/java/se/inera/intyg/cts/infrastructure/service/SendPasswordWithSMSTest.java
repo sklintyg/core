@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.cts.application.service.SendPasswordWithSMS;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.model.TerminationId;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
@@ -20,7 +21,7 @@ import se.inera.intyg.cts.infrastructure.integration.SendSMS;
 import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.SMSResponseDTO;
 
 @ExtendWith(MockitoExtension.class)
-class SendPasswordImplTest {
+class SendPasswordWithSMSTest {
 
     @Mock
     private SendSMS sendSMS;
@@ -28,11 +29,11 @@ class SendPasswordImplTest {
     private TerminationRepository terminationRepository;
 
     @InjectMocks
-    private SendPasswordImpl smsService;
+    private SendPasswordWithSMS smsService;
 
     @Test
     void sendPassword() {
-        smsService = new SendPasswordImpl(sendSMS, terminationRepository);
+        smsService = new SendPasswordWithSMS(sendSMS, terminationRepository);
 
         Termination termination = defaultTermination();
         when(sendSMS.sendSMS(termination.export().organizationRepresentative().phoneNumber().number(), termination.export().password().password())).thenReturn(new SMSResponseDTO("ID", "URL"));

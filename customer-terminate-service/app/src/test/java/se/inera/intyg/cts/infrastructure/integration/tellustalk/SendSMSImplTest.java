@@ -48,7 +48,7 @@ class SendSMSImplTest {
 
     @Test
     void sendSMS() throws JsonProcessingException, InterruptedException {
-        String phoneNumber = "123";
+        String phoneNumber = "sms:+46701234567";
         String message = "Hej hej";
         SMSResponseDTO smsResponseDTO = new SMSResponseDTO("JobId", "logHref");
         ObjectMapper objectMapper = new ObjectMapper();

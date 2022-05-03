@@ -32,10 +32,11 @@ class PasswordGeneratorImplTest {
                 lowerCharCount++;
             }
         }
-        assertTrue(specialCharCount == 2, "Password validation failed wrong number of special characters.");
-        assertTrue(numberCharCount == 2, "Password validation failed wrong number of numbers.");
-        assertTrue(upperCharCount == 2, "Password validation failed wrong number of upper case characters.");
-        assertTrue(lowerCharCount == 4, "Password validation failed wrong number of lower case characters.");
+
+        assertEquals(2, specialCharCount, "Password validation failed wrong number of special characters.");
+        assertEquals(2, numberCharCount, "Password validation failed wrong number of numbers.");
+        assertEquals(2, upperCharCount, "Password validation failed wrong number of upper case characters.");
+        assertEquals(4, lowerCharCount, "Password validation failed wrong number of lower case characters.");
     }
 
     @Test
