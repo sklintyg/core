@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTermination;
 
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
 import se.inera.intyg.cts.domain.service.SendPassword;
@@ -34,6 +36,7 @@ class MessageServiceImplTest {
 
     @Test
     void sendPassword() {
+        ReflectionTestUtils.setField(messageService, "sendPasswordActive", true);
         when(terminationRepositoryMock.findByStatuses(anyList())).thenReturn(terminations);
 
         messageService.sendPassword();
@@ -44,6 +47,7 @@ class MessageServiceImplTest {
 
     @Test
     void sendPasswordForAllEvenIfOneFail() {
+        ReflectionTestUtils.setField(messageService, "sendPasswordActive", true);
         when(terminationRepositoryMock.findByStatuses(anyList())).thenReturn(terminations);
         doThrow(new RuntimeException()).when(sendPasswordMock).sendPassword(termination1);
 
@@ -51,5 +55,15 @@ class MessageServiceImplTest {
 
         verify(terminationRepositoryMock, times(1)).findByStatuses(anyList());
         verify(sendPasswordMock, times(2)).sendPassword(any(Termination.class));
+    }
+
+    @Test
+    void shouldNotSendPasswordWhenSendPasswordInactive() {
+        ReflectionTestUtils.setField(messageService, "sendPasswordActive", false);
+        when(terminationRepositoryMock.findByStatuses(anyList())).thenReturn(terminations);
+
+        messageService.sendPassword();
+
+        verifyNoInteractions(sendPasswordMock);
     }
 }

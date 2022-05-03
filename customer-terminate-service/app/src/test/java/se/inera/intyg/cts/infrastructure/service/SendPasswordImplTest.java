@@ -1,7 +1,7 @@
 package se.inera.intyg.cts.infrastructure.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.cts.domain.model.Termination;
+import se.inera.intyg.cts.domain.model.TerminationId;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
 import se.inera.intyg.cts.infrastructure.integration.SendSMS;
 import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.SMSResponseDTO;
@@ -25,11 +26,13 @@ class SendPasswordImplTest {
     private SendSMS sendSMS;
     @Mock
     private TerminationRepository terminationRepository;
+
+    @InjectMocks
     private SendPasswordImpl smsService;
 
     @Test
-    void sendPasswordSmsActive() {
-        smsService = new SendPasswordImpl(sendSMS, terminationRepository, "true");
+    void sendPassword() {
+        smsService = new SendPasswordImpl(sendSMS, terminationRepository);
 
         Termination termination = defaultTermination();
         when(sendSMS.sendSMS(termination.export().organizationRepresentative().phoneNumber().number(), termination.export().password().password())).thenReturn(new SMSResponseDTO("ID", "URL"));
@@ -43,16 +46,11 @@ class SendPasswordImplTest {
     }
 
     @Test
-    void sendPasswordSmsinactive() {
-        smsService = new SendPasswordImpl(sendSMS, terminationRepository, "false");
-
+    void shouldThrowExceptionIfStatusUpdateFailure() {
         Termination termination = defaultTermination();
-        when(terminationRepository.findByTerminationId(termination.terminationId())).thenReturn(Optional.of(termination));
+        when(sendSMS.sendSMS(termination.export().organizationRepresentative().phoneNumber().number(), termination.export().password().password())).thenReturn(new SMSResponseDTO("ID", "URL"));
+        when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(Optional.empty());
 
-        smsService.sendPassword(termination);
-
-        verify(sendSMS, times(0)).sendSMS(anyString(), any());
-        verify(terminationRepository, times(1)).findByTerminationId(termination.terminationId());
-        verify(terminationRepository, times(1)).store(termination);
+        assertThrows(IllegalStateException.class, () -> smsService.sendPassword(termination));
     }
 }

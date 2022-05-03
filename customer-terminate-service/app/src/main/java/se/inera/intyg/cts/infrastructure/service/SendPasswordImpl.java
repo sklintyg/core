@@ -16,26 +16,28 @@ public class SendPasswordImpl implements SendPassword {
     private static final Logger LOG = LoggerFactory.getLogger(SendPasswordImpl.class);
 
     private final SendSMS sendSMS;
-
-    private final String smsActive;
-
     private final TerminationRepository terminationRepository;
 
-    public SendPasswordImpl(SendSMS sendSMS, TerminationRepository terminationRepository, @Value("${sms.active}") String smsActive) {
+    public SendPasswordImpl(SendSMS sendSMS, TerminationRepository terminationRepository) {
         this.sendSMS = sendSMS;
         this.terminationRepository = terminationRepository;
-        this.smsActive = smsActive;
     }
 
     @Override
     public void sendPassword(Termination termination) {
-        if (Boolean.TRUE.toString().equals(smsActive)) {
-            SMSResponseDTO smsResponseDTO = sendSMS.sendSMS(termination.export().organizationRepresentative().phoneNumber().number(), termination.export().password().password());
-            LOG.info("Password for TerminationId: {}, job_id: {}, log_href: {}", termination.terminationId().id(), smsResponseDTO.job_id(), smsResponseDTO.log_href());
-        } else {
-            LOG.info("SMS is inactive!");
-        }
-        Termination updateTermination = terminationRepository.findByTerminationId(termination.terminationId()).get();
+        final var message = termination.export().password().password();
+        final var phoneNumber = termination.export().organizationRepresentative()
+            .phoneNumber().number();
+
+        final var smsResponseDTO = sendSMS.sendSMS(phoneNumber, message);
+        LOG.info("Password sent for terminationId '{}' with jobId '{}' and logHref '{}",
+            termination.terminationId().id(), smsResponseDTO.job_id(), smsResponseDTO.log_href());
+
+        final var updateTermination = terminationRepository
+            .findByTerminationId(termination.terminationId()).orElseThrow(
+                () -> new IllegalStateException(String.format("Could not set status password sent "
+                + "for termination id %s.", termination.terminationId())));
+
         updateTermination.passwordSent();
         terminationRepository.store(updateTermination);
     }
