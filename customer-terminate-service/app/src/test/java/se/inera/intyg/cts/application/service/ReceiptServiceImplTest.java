@@ -24,7 +24,7 @@ import se.inera.intyg.cts.domain.model.TerminationId;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
 
 @ExtendWith(MockitoExtension.class)
-class ReceiptServiceTest {
+class ReceiptServiceImplTest {
 
   private static final UUID TERMINATION_UUID = UUID.randomUUID();
   @Spy
@@ -32,13 +32,13 @@ class ReceiptServiceTest {
   @Mock
   private TerminationRepository terminationRepository;
   @InjectMocks
-  private ReceiptService receiptService;
+  private ReceiptServiceImpl receiptServiceImpl;
 
   @Test
   public void testHandleReceipt() {
     when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(Optional.of(termination));
 
-    receiptService.handleReceipt(TERMINATION_UUID);
+    receiptServiceImpl.handleReceipt(TERMINATION_UUID);
 
     verify(terminationRepository, times(1)).findByTerminationId(any(TerminationId.class));
     verify(termination, times(1)).receiptReceived(any(LocalDateTime.class));
@@ -50,7 +50,7 @@ class ReceiptServiceTest {
     when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(Optional.empty());
 
     ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-      receiptService.handleReceipt(TERMINATION_UUID);
+      receiptServiceImpl.handleReceipt(TERMINATION_UUID);
     });
 
     assertEquals(exception.getStatus(), HttpStatus.NOT_FOUND);

@@ -3,7 +3,6 @@ package se.inera.intyg.cts.application.service;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.model.TerminationStatus;
@@ -11,7 +10,7 @@ import se.inera.intyg.cts.domain.repository.TerminationRepository;
 import se.inera.intyg.cts.domain.service.SendPassword;
 
 @Service
-public class MessageServiceImpl implements se.inera.intyg.cts.application.service.MessageService {
+public class MessageServiceImpl implements MessageService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageServiceImpl.class);
 

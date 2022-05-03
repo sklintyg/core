@@ -25,7 +25,7 @@ import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryTerminat
 import se.inera.intyg.cts.infrastructure.service.CreateEncryptedZipPackage;
 
 @ExtendWith(MockitoExtension.class)
-class ExportServiceTest {
+class ExportServiceImplTest {
 
   @Mock
   private PasswordGenerator passwordGenerator;
@@ -35,7 +35,7 @@ class ExportServiceTest {
   private InMemoryCertificateTextsEntityRepository inMemoryCertificateTextsEntityRepository;
   private GetCertificateBatchFromMemory getCertificateBatchFromMemory;
   private GetCertificateTextsFromMemory getCertificateTextsFromMemory;
-  private ExportService exportService;
+  private ExportServiceImpl exportServiceImpl;
 
   @BeforeEach
   void setUp() {
@@ -63,7 +63,7 @@ class ExportServiceTest {
     final var uploadPackage = new UploadPackageToMemory();
     final var exportPackage = new ExportPackage(createPackage, uploadPackage,
         terminationRepository, passwordGenerator);
-    exportService = new ExportService(terminationRepository, collectExportContent, exportPackage);
+    exportServiceImpl = new ExportServiceImpl(terminationRepository, collectExportContent, exportPackage);
   }
 
   @Test
@@ -71,7 +71,7 @@ class ExportServiceTest {
     inMemoryTerminationEntityRepository.save(defaultTerminationEntity());
     getCertificateBatchFromMemory.prepare(certificates(10, 0));
 
-    exportService.collectCertificatesToExport();
+    exportServiceImpl.collectCertificatesToExport();
 
     assertEquals(10, inMemoryCertificateEntityRepository.count());
   }

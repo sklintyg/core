@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.cts.application.service.ReceiptService;
-import se.inera.intyg.cts.domain.model.TerminationId;
 
 @RestController
 @RequestMapping("/api/v1/receipt")
