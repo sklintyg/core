@@ -14,7 +14,7 @@ import se.inera.intyg.cts.domain.repository.TerminationRepository;
 @Service
 public class ReceiptServiceImpl implements ReceiptService {
 
-  private final static Logger LOG = LoggerFactory.getLogger(ReceiptService.class);
+  private final static Logger LOG = LoggerFactory.getLogger(ReceiptServiceImpl.class);
 
   private final TerminationRepository terminationRepository;
 
