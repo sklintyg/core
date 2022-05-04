@@ -11,7 +11,7 @@ import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.SMSRequestDT
 import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.SMSResponseDTO;
 
 @Service
-public class SendSMSImpl implements SendSMS {
+public class SendSMSWithTellusTalk implements SendSMS {
 
   @Value("${sms.originator.text}")
   private String smsOriginatorText;
@@ -26,7 +26,7 @@ public class SendSMSImpl implements SendSMS {
   private final String password;
 
 
-  public SendSMSImpl(WebClient webClient,
+  public SendSMSWithTellusTalk(WebClient webClient,
       @Value("${integration.tellustalk.scheme}") String scheme,
       @Value("${integration.tellustalk.baseurl}") String baseUrl,
       @Value("${integration.tellustalk.port}") int port,
@@ -52,7 +52,7 @@ public class SendSMSImpl implements SendSMS {
             .port(port)
             .path(tellustalkSendEndpoint)
             .build())
-            .body(Mono.just(smsRequestDTO), SMSRequestDTO.class)
+        .body(Mono.just(smsRequestDTO), SMSRequestDTO.class)
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .headers(headers -> headers.setBasicAuth(username, password))
         .retrieve()
