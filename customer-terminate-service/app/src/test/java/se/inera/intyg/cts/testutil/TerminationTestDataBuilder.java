@@ -83,4 +83,19 @@ public class TerminationTestDataBuilder {
         DEFAULT_STATUS.toString(),
         new ExportEmbeddable(0, 0, null, null));
   }
+
+  public static Termination terminationWithPhoneNumber(String phoneNumber) {
+    return TerminationBuilder.getInstance()
+        .terminationId(DEFAULT_TERMINATION_ID)
+        .created(DEFAULT_CREATED)
+        .creatorHSAId(DEFAULT_CREATOR_HSA_ID)
+        .creatorName(DEFAULT_CREATOR_NAME)
+        .careProviderHSAId(DEFAULT_HSA_ID)
+        .careProviderOrganizationNumber(DEFAULT_ORGANIZATION_NUMBER)
+        .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
+        .careProviderOrganizationRepresentativePhoneNumber(phoneNumber)
+        .status(TerminationStatus.RECEIPT_RECEIVED)
+        .packagePassword(DEFAULT_PASSWORD)
+        .create();
+  }
 }

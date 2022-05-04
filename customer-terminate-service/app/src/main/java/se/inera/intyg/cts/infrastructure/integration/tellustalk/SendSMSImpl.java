@@ -1,7 +1,5 @@
 package se.inera.intyg.cts.infrastructure.integration.tellustalk;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -14,6 +12,9 @@ import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.SMSResponseD
 
 @Service
 public class SendSMSImpl implements SendSMS {
+
+  @Value("${sms.originator.text}")
+  private String smsOriginatorText;
 
   private final WebClient webClient;
   private final String scheme;
@@ -43,9 +44,9 @@ public class SendSMSImpl implements SendSMS {
 
   @Override
   public SMSResponseDTO sendSMS(String phonenumber, String message) {
-    SMSRequestDTO smsRequestDTO = new SMSRequestDTO(phonenumber, message, "Inera AB");
+    SMSRequestDTO smsRequestDTO = new SMSRequestDTO(phonenumber, message, smsOriginatorText);
 
-    SMSResponseDTO smsResponseDTO = webClient.post().uri(uriBuilder -> uriBuilder
+    return webClient.post().uri(uriBuilder -> uriBuilder
             .scheme(scheme)
             .host(baseUrl)
             .port(port)
@@ -58,7 +59,5 @@ public class SendSMSImpl implements SendSMS {
         .bodyToMono(SMSResponseDTO.class)
         .share()
         .block();
-
-    return smsResponseDTO;
   }
 }

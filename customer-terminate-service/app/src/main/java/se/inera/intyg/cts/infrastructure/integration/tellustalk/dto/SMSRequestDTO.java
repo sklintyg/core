@@ -3,7 +3,7 @@ package se.inera.intyg.cts.infrastructure.integration.tellustalk.dto;
 public record SMSRequestDTO(String to, String text, String sms_originator_text) {
 
   public SMSRequestDTO {
-    if (!to.matches("^sms:\\+[1-9]\\d+$")) {
+    if (!to.matches("^sms:\\+46[1-9]\\d+$")) {
       throw new IllegalArgumentException("SMS Phone number format must match 'sms:+46704000000'.");
     }
     if (text == null || text.equals("")) {
