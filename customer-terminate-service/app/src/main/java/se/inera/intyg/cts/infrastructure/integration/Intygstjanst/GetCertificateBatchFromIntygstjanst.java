@@ -1,6 +1,7 @@
 package se.inera.intyg.cts.infrastructure.integration.Intygstjanst;
 
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -21,7 +22,8 @@ public class GetCertificateBatchFromIntygstjanst implements GetCertificateBatch 
   private final String port;
   private final String certificatesEndpoint;
 
-  public GetCertificateBatchFromIntygstjanst(WebClient webClient,
+  public GetCertificateBatchFromIntygstjanst(
+      @Qualifier(value = "intygstjanstWebClient") WebClient webClient,
       @Value("${integration.intygstjanst.scheme}") String scheme,
       @Value("${integration.intygstjanst.baseurl}") String baseUrl,
       @Value("${integration.intygstjanst.port}") String port,

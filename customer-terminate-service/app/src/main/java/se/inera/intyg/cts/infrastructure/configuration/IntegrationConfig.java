@@ -39,12 +39,8 @@ public class IntegrationConfig {
   @Value("${webclient.truststore.path}")
   private String trustStorePath;
 
-  @Bean
-  public WebClient webClient() {
-    final var sslContext = getSslContext();
-    final var httpClient = HttpClient.create()
-        .secure(sslSpec -> sslSpec.sslContext(sslContext));
-
+  @Bean(name = "intygstjanstWebClient")
+  public WebClient webClientForIntygstjanst() {
     final ExchangeStrategies strategies = ExchangeStrategies.builder()
         .codecs(codecs ->
             codecs.defaultCodecs().maxInMemorySize(IN_MEMORY_SIZE_TO_MANAGE_LARGE_XML_RESPONSES)
@@ -52,8 +48,24 @@ public class IntegrationConfig {
         .build();
 
     return WebClient.builder()
-        .clientConnector(new ReactorClientHttpConnector(httpClient))
         .exchangeStrategies(strategies)
+        .build();
+  }
+
+  @Bean(name = "sjutWebClient")
+  public WebClient webClientForSjut() {
+    final var sslContext = getSslContext();
+    final var httpClient = HttpClient.create()
+        .secure(sslSpec -> sslSpec.sslContext(sslContext));
+
+    return WebClient.builder()
+        .clientConnector(new ReactorClientHttpConnector(httpClient))
+        .build();
+  }
+
+  @Bean(name = "tellusTalkWebClient")
+  public WebClient webClientForTellusTalk() {
+    return WebClient.builder()
         .build();
   }
 

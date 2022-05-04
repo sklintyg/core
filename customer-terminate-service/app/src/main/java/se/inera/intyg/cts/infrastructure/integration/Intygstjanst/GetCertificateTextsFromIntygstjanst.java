@@ -2,6 +2,7 @@ package se.inera.intyg.cts.infrastructure.integration.Intygstjanst;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,8 @@ public class GetCertificateTextsFromIntygstjanst implements GetCertificateTexts 
   private final String port;
   private final String certificateTextsEndpoint;
 
-  public GetCertificateTextsFromIntygstjanst(WebClient webClient,
+  public GetCertificateTextsFromIntygstjanst(
+      @Qualifier(value = "intygstjanstWebClient") WebClient webClient,
       @Value("${integration.intygstjanst.scheme}") String scheme,
       @Value("${integration.intygstjanst.baseurl}") String baseUrl,
       @Value("${integration.intygstjanst.port}") String port,

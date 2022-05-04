@@ -1,5 +1,6 @@
 package se.inera.intyg.cts.infrastructure.integration.tellustalk;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -25,8 +26,8 @@ public class SendSMSWithTellusTalk implements SendSMS {
   private final String username;
   private final String password;
 
-
-  public SendSMSWithTellusTalk(WebClient webClient,
+  public SendSMSWithTellusTalk(
+      @Qualifier(value = "tellusTalkWebClient") WebClient webClient,
       @Value("${integration.tellustalk.scheme}") String scheme,
       @Value("${integration.tellustalk.baseurl}") String baseUrl,
       @Value("${integration.tellustalk.port}") int port,
