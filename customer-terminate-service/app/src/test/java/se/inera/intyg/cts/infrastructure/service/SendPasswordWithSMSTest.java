@@ -1,4 +1,4 @@
-package se.inera.intyg.cts.application.service;
+package se.inera.intyg.cts.infrastructure.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
