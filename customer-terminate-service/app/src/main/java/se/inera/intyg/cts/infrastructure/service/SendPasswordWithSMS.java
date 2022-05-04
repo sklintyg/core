@@ -1,4 +1,4 @@
-package se.inera.intyg.cts.application.service;
+package se.inera.intyg.cts.infrastructure.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

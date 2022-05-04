@@ -23,6 +23,7 @@ import se.inera.intyg.cts.domain.model.TerminationId;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
 import se.inera.intyg.cts.infrastructure.integration.SendSMS;
 import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.SMSResponseDTO;
+import se.inera.intyg.cts.infrastructure.service.SendPasswordWithSMS;
 import se.inera.intyg.cts.testutil.TerminationTestDataBuilder;
 
 @ExtendWith(MockitoExtension.class)
