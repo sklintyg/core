@@ -18,7 +18,7 @@ public class ExportTask {
     this.exportService = exportService;
   }
 
-  @Scheduled(cron = "${task.collectcertificate.cron}")
+  @Scheduled(cron = "${task.export.cron}")
   @SchedulerLock(name = TASK_NAME, lockAtLeastFor = LOCK_AT_LEAST, lockAtMostFor = LOCK_AT_MOST)
   public void collectCertificates() {
     exportService.export();

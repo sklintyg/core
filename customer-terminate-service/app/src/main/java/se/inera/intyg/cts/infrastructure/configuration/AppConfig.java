@@ -9,6 +9,7 @@ import se.inera.intyg.cts.domain.repository.TerminationRepository;
 import se.inera.intyg.cts.domain.service.CollectExportContent;
 import se.inera.intyg.cts.domain.service.CreatePackage;
 import se.inera.intyg.cts.domain.service.ExportPackage;
+import se.inera.intyg.cts.domain.service.PasswordGenerator;
 import se.inera.intyg.cts.domain.service.UploadPackage;
 
 @Configuration
@@ -26,7 +27,7 @@ public class AppConfig {
   @Bean
   public ExportPackage exportPackage(CreatePackage createPackage,
       UploadPackage uploadPackage,
-      TerminationRepository terminationRepository) {
-    return new ExportPackage(createPackage, uploadPackage, terminationRepository);
+      TerminationRepository terminationRepository, PasswordGenerator passwordGenerator) {
+    return new ExportPackage(createPackage, uploadPackage, terminationRepository, passwordGenerator);
   }
 }

@@ -10,18 +10,19 @@ public class ExportPackage {
   private final CreatePackage createPackage;
   private final UploadPackage uploadPackage;
   private final TerminationRepository terminationRepository;
+  private final PasswordGenerator passwordGenerator;
 
   public ExportPackage(CreatePackage createPackage,
       UploadPackage uploadPackage,
-      TerminationRepository terminationRepository) {
+      TerminationRepository terminationRepository, PasswordGenerator passwordGenerator) {
     this.createPackage = createPackage;
     this.uploadPackage = uploadPackage;
     this.terminationRepository = terminationRepository;
+    this.passwordGenerator = passwordGenerator;
   }
 
   public void export(Termination termination) {
-    // TODO: Use hardcoded password until sms notification has been implemented.
-    final var password = new Password("password");
+    final var password = new Password(passwordGenerator.generateSecurePassword());
     final var packageToExport = createPackage.create(termination, password);
     uploadPackage.uploadPackage(termination, packageToExport);
     removePackage(packageToExport);

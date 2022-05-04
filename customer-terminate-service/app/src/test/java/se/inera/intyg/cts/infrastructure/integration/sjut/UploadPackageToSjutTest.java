@@ -22,7 +22,6 @@ class UploadPackageToSjutTest {
 
   private static final String SCHEME = "http";
   private static final String BASE_URL = "localhost";
-  private static final String PORT = "8080";
   private static final String UPLOAD_ENDPOINT = "/api/v1/upload";
   private static final String SOURCE_SYSTEM = "intyg";
   private static final String RECEIPT_BASE_URL = "/api/v1/receipt/";
@@ -34,7 +33,7 @@ class UploadPackageToSjutTest {
   @BeforeAll
   static void beforeAll() throws IOException {
     mockSjut = new MockWebServer();
-    mockSjut.start(Integer.parseInt(PORT));
+    mockSjut.start();
   }
 
   @AfterAll
@@ -46,8 +45,8 @@ class UploadPackageToSjutTest {
   void setUp() throws IOException {
     WebClient webClient = WebClient.create();
 
-    uploadPackageToSjut = new UploadPackageToSjut(webClient, SCHEME, BASE_URL, PORT,
-        UPLOAD_ENDPOINT, SOURCE_SYSTEM, RECEIPT_BASE_URL);
+    uploadPackageToSjut = new UploadPackageToSjut(webClient, SCHEME, BASE_URL,
+        Integer.toString(mockSjut.getPort()), UPLOAD_ENDPOINT, SOURCE_SYSTEM, RECEIPT_BASE_URL);
 
     termination = defaultTermination();
     packageFile = File.createTempFile("dummy", "zip");

@@ -22,5 +22,7 @@ public record PackageMetadata(String organizationName,
     if (receiptUrl == null || receiptUrl.isBlank()) {
       throw new IllegalArgumentException("ReceiptUrl cannot be null or blank");
     }
+
+    delegatePnr = delegatePnr.replace("-", "");
   }
 }

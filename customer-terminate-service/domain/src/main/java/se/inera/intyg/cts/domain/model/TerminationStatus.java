@@ -5,7 +5,9 @@ public enum TerminationStatus {
   COLLECTING_CERTIFICATES("Hämtar intyg"),
   COLLECTING_CERTIFICATES_COMPLETED("Intyg hämtade"),
   COLLECTING_CERTIFICATE_TEXTS_COMPLETED("Intygstexter hämtade"),
-  EXPORTED("Uppladdat");
+  EXPORTED("Uppladdat"),
+  RECEIPT_RECEIVED("Kvitterad"),
+  PASSWORD_SENT("Lösenord skickat");
 
   private final String description;
 

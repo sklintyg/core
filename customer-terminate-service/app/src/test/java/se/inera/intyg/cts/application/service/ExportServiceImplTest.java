@@ -6,8 +6,12 @@ import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTerm
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.cts.domain.service.CollectExportContent;
 import se.inera.intyg.cts.domain.service.ExportPackage;
+import se.inera.intyg.cts.domain.service.PasswordGenerator;
 import se.inera.intyg.cts.infrastructure.integration.GetCertificateBatchFromMemory;
 import se.inera.intyg.cts.infrastructure.integration.GetCertificateTextsFromMemory;
 import se.inera.intyg.cts.infrastructure.integration.IntegrationCertificateBatchRepository;
@@ -20,14 +24,18 @@ import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryCertific
 import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryTerminationEntityRepository;
 import se.inera.intyg.cts.infrastructure.service.CreateEncryptedZipPackage;
 
-class ExportServiceTest {
+@ExtendWith(MockitoExtension.class)
+class ExportServiceImplTest {
+
+  @Mock
+  private PasswordGenerator passwordGenerator;
 
   private InMemoryTerminationEntityRepository inMemoryTerminationEntityRepository;
   private InMemoryCertificateEntityRepository inMemoryCertificateEntityRepository;
   private InMemoryCertificateTextsEntityRepository inMemoryCertificateTextsEntityRepository;
   private GetCertificateBatchFromMemory getCertificateBatchFromMemory;
   private GetCertificateTextsFromMemory getCertificateTextsFromMemory;
-  private ExportService exportService;
+  private ExportServiceImpl exportServiceImpl;
 
   @BeforeEach
   void setUp() {
@@ -54,8 +62,8 @@ class ExportServiceTest {
         inMemoryCertificateEntityRepository, inMemoryCertificateTextsEntityRepository, "./");
     final var uploadPackage = new UploadPackageToMemory();
     final var exportPackage = new ExportPackage(createPackage, uploadPackage,
-        terminationRepository);
-    exportService = new ExportService(terminationRepository, collectExportContent, exportPackage);
+        terminationRepository, passwordGenerator);
+    exportServiceImpl = new ExportServiceImpl(terminationRepository, collectExportContent, exportPackage);
   }
 
   @Test
@@ -63,7 +71,7 @@ class ExportServiceTest {
     inMemoryTerminationEntityRepository.save(defaultTerminationEntity());
     getCertificateBatchFromMemory.prepare(certificates(10, 0));
 
-    exportService.collectCertificatesToExport();
+    exportServiceImpl.collectCertificatesToExport();
 
     assertEquals(10, inMemoryCertificateEntityRepository.count());
   }
