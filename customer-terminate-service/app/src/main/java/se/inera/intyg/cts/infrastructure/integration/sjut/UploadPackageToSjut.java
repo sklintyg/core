@@ -5,6 +5,7 @@ import java.net.URI;
 import org.hibernate.service.spi.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -37,7 +38,8 @@ public class UploadPackageToSjut implements UploadPackage {
   private final String sourceSystem;
   private final String receiptBaseUrl;
 
-  public UploadPackageToSjut(WebClient webClient,
+  public UploadPackageToSjut(
+      @Qualifier(value = "sjutWebClient") WebClient webClient,
       @Value("${integration.sjut.scheme}") String scheme,
       @Value("${integration.sjut.baseurl}") String baseUrl,
       @Value("${integration.sjut.port}") String port,
