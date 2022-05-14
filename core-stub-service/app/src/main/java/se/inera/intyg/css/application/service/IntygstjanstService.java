@@ -1,7 +1,9 @@
 package se.inera.intyg.css.application.service;
 
+import java.util.List;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.css.application.dto.CertificateExportPageDTO;
+import se.inera.intyg.css.application.dto.CertificateTextDTO;
 import se.inera.intyg.css.infrastructure.persistence.IntygstjanstRepository;
 
 @Service
@@ -24,5 +26,9 @@ public class IntygstjanstService {
         intygstjanstRepository.countRevoked(careProviderId),
         certificateXmlDTOS
     );
+  }
+
+  public List<CertificateTextDTO> getCertificateTexts() {
+    return intygstjanstRepository.getCertificateTexts();
   }
 }

@@ -1,6 +1,8 @@
 package se.inera.intyg.css.testability.service;
 
+import java.util.List;
 import org.springframework.stereotype.Service;
+import se.inera.intyg.css.application.dto.CertificateTextDTO;
 import se.inera.intyg.css.infrastructure.persistence.IntygstjanstRepository;
 import se.inera.intyg.css.testability.dto.IntygstjanstCertificatesDTO;
 
@@ -20,5 +22,13 @@ public class IntygstjanstTestabilityService {
 
   public void deleteCertificates(String careProvider) {
     intygstjanstRepository.remove(careProvider);
+  }
+
+  public void setCertificateTexts(List<CertificateTextDTO> certificateTexts) {
+    intygstjanstRepository.storeCertificateTexts(certificateTexts);
+  }
+
+  public void deleteCertificateTexts() {
+    intygstjanstRepository.removeCertificateTexts();
   }
 }
