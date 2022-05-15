@@ -72,6 +72,7 @@ public class TestabilityTerminationService {
     terminationEntityRepository.save(terminationEntity);
   }
 
+  @Transactional
   public void saveCertificateTexts(UUID terminationId,
       List<CertificateTextDTO> certificateTextDTOList) {
 
@@ -137,6 +138,7 @@ public class TestabilityTerminationService {
         .getPassword();
   }
 
+  @Transactional
   public void setAsUploaded(UUID terminationId, String password) {
     final var terminationEntity = terminationEntityRepository.findByTerminationId(terminationId)
         .orElseThrow();
@@ -147,6 +149,7 @@ public class TestabilityTerminationService {
     terminationEntityRepository.save(terminationEntity);
   }
 
+  @Transactional
   public void setAsReceiptReceived(UUID terminationId) {
     final var terminationEntity = terminationEntityRepository.findByTerminationId(terminationId)
         .orElseThrow();
