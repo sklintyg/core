@@ -3,9 +3,11 @@ package se.inera.intyg.cts.integrationtest;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,58 +97,14 @@ public class TerminationIT {
             .extract()
             .response().as(TerminationDTO[].class);
 
-    assertEquals(10, terminationDTO.length);
-  }
-
-  @Test
-  void shallCollectCertificatesToExport() {
-    testData
-        .defaultTermination()
-        .certificates(10)
-        .setup();
-
-    given()
-        .when()
-        .post("/api/v1/exports/collectCertificates")
-        .then()
-        .statusCode(HttpStatus.OK.value());
-
-    final var certificatesCount = given()
-        .pathParam("terminationId", testData.terminationIds().get(0))
-        .when()
-        .get("/testability/v1/terminations/{terminationId}")
-        .then()
-        .statusCode(HttpStatus.OK.value())
-        .extract()
-        .response().as(Integer.class);
-
-    assertEquals(10, certificatesCount);
-  }
-
-  @Test
-  void shallCollectCertificatesToExportInMultipleBatches() {
-    testData
-        .defaultTermination()
-        .certificates(90)
-        .setup();
-
-    for (int i = 0; i < 5; i++) {
-      given()
-          .when()
-          .post("/api/v1/exports/collectCertificates")
-          .then()
-          .statusCode(HttpStatus.OK.value());
-
-      final var certificatesCount = given()
-          .pathParam("terminationId", testData.terminationIds().get(0))
-          .when()
-          .get("/testability/v1/terminations/{terminationId}")
-          .then()
-          .statusCode(HttpStatus.OK.value())
-          .extract()
-          .response().as(Integer.class);
-
-      assertEquals(i == 4 ? 90 : (i + 1) * 20, certificatesCount);
-    }
+    testData.terminationIds()
+        .forEach(terminationId ->
+            assertTrue(
+                Stream.of(terminationDTO)
+                    .anyMatch(termination -> terminationId.equalsIgnoreCase(
+                        termination.terminationId().toString())),
+                String.format("Missing termination with id '%s'", terminationId)
+            )
+        );
   }
 }

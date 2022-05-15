@@ -3,6 +3,7 @@ package se.inera.intyg.cts.integrationtest;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static se.inera.intyg.cts.integrationtest.TestData.PHONE_NUMBER;
 
 import io.restassured.RestAssured;
 import java.util.UUID;
@@ -79,5 +80,51 @@ public class ReceiptIT {
         .pathParam("terminationId", UUID.randomUUID())
         .when().post("/api/v1/receipt/{terminationId}")
         .then().statusCode(HttpStatus.NOT_FOUND.value());
+  }
+
+  @Test
+  void shallSendPasswordToOrganizationRepresentativeWhenReceiptIsReceived() {
+    testData
+        .defaultTermination()
+        .certificates(50)
+        .collectCertificates()
+        .certificateTexts(10)
+        .collectCertificateTexts()
+        .uploadPackage("password")
+        .receiptReceived()
+        .setup();
+
+    given()
+        .when()
+        .post("/api/v1/exports/sendPasswords")
+        .then()
+        .statusCode(HttpStatus.OK.value());
+
+    final var generatedPassword = getPassword(testData.terminationIds().get(0));
+    final var passwordSentBySMS = getPasswordSentBySMS(PHONE_NUMBER);
+
+    assertEquals(generatedPassword, passwordSentBySMS);
+  }
+
+  private String getPassword(String terminationId) {
+    return given()
+        .pathParam("terminationId", terminationId)
+        .when()
+        .get("/testability/v1/terminations/{terminationId}/password")
+        .then()
+        .statusCode(HttpStatus.OK.value())
+        .extract().asString();
+  }
+
+  private String getPasswordSentBySMS(String phoneNumber) {
+    return given()
+        .baseUri("http://localhost:18000")
+        .pathParam("phoneNumber", phoneNumber)
+        .when()
+        .get("/testability-tellustalk/v1/passwords/{phoneNumber}")
+        .then()
+        .statusCode(HttpStatus.OK.value())
+        .extract()
+        .asString();
   }
 }
