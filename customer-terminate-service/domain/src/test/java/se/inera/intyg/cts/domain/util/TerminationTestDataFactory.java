@@ -1,7 +1,10 @@
 package se.inera.intyg.cts.domain.util;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.UUID;
+import se.inera.intyg.cts.domain.model.EraseService;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.model.TerminationBuilder;
 import se.inera.intyg.cts.domain.model.TerminationStatus;
@@ -17,8 +20,40 @@ public class TerminationTestDataFactory {
   public static final String DEFAULT_PERSON_ID = "personId";
   public static final String DEFAULT_PHONE_NUMBER = "phoneNumber";
   public static final TerminationStatus DEFAULT_STATUS = TerminationStatus.CREATED;
+  private static final String DEFAULT_PASSWORD = "Password";
+  public static final int DEFAULT_TOTAL = 100;
+  public static final int DEFAULT_REVOKED = 10;
+  private static final LocalDateTime DEFAULT_RECEIPT_TIME = DEFAULT_CREATED.plus(10,
+      ChronoUnit.DAYS);
 
   public static Termination defaultTermination() {
+    return defaultTerminationBuilder()
+        .create();
+  }
+
+  public static Termination exportedTerminationWithStartErase() {
+    return defaultTerminationBuilder()
+        .status(TerminationStatus.START_ERASE)
+        .packagePassword(DEFAULT_PASSWORD)
+        .total(DEFAULT_TOTAL)
+        .revoked(DEFAULT_REVOKED)
+        .receiptTime(DEFAULT_RECEIPT_TIME)
+        .create();
+  }
+
+  public static Termination exportedTerminationWithEraseInProgress(
+      List<EraseService> eraseServices) {
+    return defaultTerminationBuilder()
+        .status(TerminationStatus.ERASE_IN_PROGRESS)
+        .packagePassword(DEFAULT_PASSWORD)
+        .total(DEFAULT_TOTAL)
+        .revoked(DEFAULT_REVOKED)
+        .receiptTime(DEFAULT_RECEIPT_TIME)
+        .eraseServices(eraseServices)
+        .create();
+  }
+
+  private static TerminationBuilder defaultTerminationBuilder() {
     return TerminationBuilder.getInstance()
         .terminationId(DEFAULT_TERMINATION_ID)
         .created(DEFAULT_CREATED)
@@ -28,7 +63,6 @@ public class TerminationTestDataFactory {
         .careProviderOrganizationNumber(DEFAULT_ORGANIZATIONAL_NUMBER)
         .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
         .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
-        .status(TerminationStatus.CREATED)
-        .create();
+        .status(TerminationStatus.CREATED);
   }
 }

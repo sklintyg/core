@@ -2,6 +2,7 @@ package se.inera.intyg.cts.domain.model;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Termination {
 
@@ -11,9 +12,10 @@ public class Termination {
   private final CareProvider careProvider;
   private TerminationStatus status;
   private final Export export;
+  private Erase erase;
 
   Termination(TerminationId terminationId, LocalDateTime created, Staff creator,
-      CareProvider careProvider, TerminationStatus status, Export export) {
+      CareProvider careProvider, TerminationStatus status, Export export, Erase erase) {
     if (terminationId == null) {
       throw new IllegalArgumentException("Missing TerminationId");
     }
@@ -32,12 +34,16 @@ public class Termination {
     if (export == null) {
       throw new IllegalArgumentException("Missing Export");
     }
+    if (erase == null) {
+      throw new IllegalArgumentException("Missing Erase");
+    }
     this.terminationId = terminationId;
     this.created = created;
     this.creator = creator;
     this.careProvider = careProvider;
     this.status = status;
     this.export = export;
+    this.erase = erase;
   }
 
   public void collect(CertificateBatch certificateBatch) {
@@ -94,6 +100,36 @@ public class Termination {
     return export;
   }
 
+  public Erase erase() {
+    return erase;
+  }
+
+  public void startErase(List<EraseService> eraseServices) {
+    erase = new Erase(eraseServices);
+    status = TerminationStatus.ERASE_IN_PROGRESS;
+  }
+
+  public void eraseCancelled() {
+    status = TerminationStatus.ERASE_CANCELLED;
+  }
+
+  public void erased(ServiceId serviceId) {
+    erase = new Erase(
+        erase.eraseServices().stream()
+            .map(service -> {
+              if (service.serviceId().equals(serviceId)) {
+                return new EraseService(serviceId, true);
+              }
+              return service;
+            })
+            .collect(Collectors.toList())
+    );
+
+    if (erase.eraseServices().stream().allMatch(eraseService -> eraseService.erased())) {
+      status = TerminationStatus.ERASE_COMPLETED;
+    }
+  }
+
   @Override
   public String toString() {
     return "Termination{" +
@@ -103,6 +139,7 @@ public class Termination {
         ", careProvider=" + careProvider +
         ", status=" + status +
         ", export=" + export +
+        ", erase=" + erase +
         '}';
   }
 }
