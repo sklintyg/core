@@ -61,6 +61,12 @@ public class TestabilityTerminationController {
     testabilityTerminationService.setAsUploaded(terminationId, password);
   }
 
+  @PostMapping("/{terminationId}/sendNotification")
+  void setAsNotificationSent(@PathVariable UUID terminationId) {
+    LOG.info(String.format("Set termination '%s' as notificationSent", terminationId));
+    testabilityTerminationService.setAsNotificationSent(terminationId);
+  }
+
   @PostMapping("/{terminationId}/receipt")
   void setAsReceiptRecieved(@PathVariable UUID terminationId) {
     LOG.info(String.format("Set termination '%s' as receipt received", terminationId));

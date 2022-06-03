@@ -116,4 +116,12 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="6" author="mh">
+    <addColumn tableName="termination">
+      <column name="email_address" type="varchar(255)" afterColumn="phone_number">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

@@ -24,18 +24,18 @@ class SMSRequestDTOTest {
     @Test
     void SMSRequestDTOBadPhoneNumber(){
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new SMSRequestDTO(BadPhoneNumber, OkPassword, OkSMSOriginator));
-        assertEquals(exception.getMessage(), "SMS Phone number format must match 'sms:+46704000000'.");
+        assertEquals("SMS Phone number 'sms:+4080812121212' format must match 'sms:+46704000000'.", exception.getMessage());
     }
 
     @Test
     void SMSRequestDTOBadPassword(){
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new SMSRequestDTO(OkPhoneNumber, BadPassword, OkSMSOriginator));
-        assertEquals(exception.getMessage(), "Empty password SMS message is not allowed.");
+        assertEquals("Empty password SMS message is not allowed.", exception.getMessage());
     }
 
     @Test
     void SMSRequestDTOBadSMSOriginator(){
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new SMSRequestDTO(OkPhoneNumber, OkPassword, BadSMSOriginator));
-        assertEquals(exception.getMessage(), "SMS originator text is longer than 11 characters.");
+        assertEquals("SMS originator text is longer than 11 characters.", exception.getMessage());
     }
 }

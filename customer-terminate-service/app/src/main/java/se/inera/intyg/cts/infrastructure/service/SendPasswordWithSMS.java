@@ -13,14 +13,14 @@ public class SendPasswordWithSMS implements SendPassword {
 
     private static final Logger LOG = LoggerFactory.getLogger(SendPasswordWithSMS.class);
 
-    private static final String SMS_PREFIX = "sms:";
-    private static final String COUNTRY_CODE = "+46";
-
     private final SendSMS sendSMS;
+    private final MessageFormatter messageFormatter;
     private final TerminationRepository terminationRepository;
 
-    public SendPasswordWithSMS(SendSMS sendSMS, TerminationRepository terminationRepository) {
+    public SendPasswordWithSMS(SendSMS sendSMS, MessageFormatter messageFormatter,
+        TerminationRepository terminationRepository) {
         this.sendSMS = sendSMS;
+        this.messageFormatter = messageFormatter;
         this.terminationRepository = terminationRepository;
     }
 
@@ -30,7 +30,7 @@ public class SendPasswordWithSMS implements SendPassword {
         final var phoneNumber = termination.export().organizationRepresentative()
             .phoneNumber().number();
 
-        final var formattedPhoneNumber = formatPhoneNumber(phoneNumber);
+        final var formattedPhoneNumber = messageFormatter.formatPhoneNumber(phoneNumber);
 
         final var smsResponseDTO = sendSMS.sendSMS(formattedPhoneNumber, message);
         LOG.info("Password sent for terminationId '{}' with jobId '{}' and logHref '{}",
@@ -43,22 +43,5 @@ public class SendPasswordWithSMS implements SendPassword {
 
         updateTermination.passwordSent();
         terminationRepository.store(updateTermination);
-    }
-
-    private String formatPhoneNumber(String phoneNumber) {
-        if (phoneNumber.matches("^sms:\\+46[1-9]\\d+$")) {
-            return phoneNumber;
-        }
-
-        if (phoneNumber.matches("^\\+46[1-9]\\d+$")) {
-            return SMS_PREFIX + phoneNumber;
-        }
-
-        String cleanedPhoneNumber = phoneNumber.replaceAll("\\D", "");
-        if (phoneNumber.startsWith("0")) {
-            cleanedPhoneNumber = cleanedPhoneNumber.substring(1);
-        }
-
-        return SMS_PREFIX + COUNTRY_CODE + cleanedPhoneNumber;
     }
 }

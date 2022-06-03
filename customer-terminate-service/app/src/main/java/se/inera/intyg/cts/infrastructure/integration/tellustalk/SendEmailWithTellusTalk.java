@@ -7,15 +7,15 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import se.inera.intyg.cts.infrastructure.integration.SendSMS;
-import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.SMSRequestDTO;
+import se.inera.intyg.cts.infrastructure.integration.SendEmail;
+import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.EmailRequestDTO;
 import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.TellusTalkResponseDTO;
 
 @Service
-public class SendSMSWithTellusTalk implements SendSMS {
+public class SendEmailWithTellusTalk implements SendEmail {
 
   @Value("${sms.originator.text}")
-  private String smsOriginatorText;
+  private String emailFromName;
 
   private final WebClient webClient;
   private final String scheme;
@@ -26,7 +26,7 @@ public class SendSMSWithTellusTalk implements SendSMS {
   private final String username;
   private final String password;
 
-  public SendSMSWithTellusTalk(
+  public SendEmailWithTellusTalk(
       @Qualifier(value = "tellusTalkWebClient") WebClient webClient,
       @Value("${integration.tellustalk.scheme}") String scheme,
       @Value("${integration.tellustalk.baseurl}") String baseUrl,
@@ -44,8 +44,8 @@ public class SendSMSWithTellusTalk implements SendSMS {
   }
 
   @Override
-  public TellusTalkResponseDTO sendSMS(String phonenumber, String message) {
-    SMSRequestDTO smsRequestDTO = new SMSRequestDTO(phonenumber, message, smsOriginatorText);
+  public TellusTalkResponseDTO sendEmail(String emailAddress, String message, String subject) {
+    EmailRequestDTO emailRequestDTO = new EmailRequestDTO(emailAddress, message, subject, emailFromName);
 
     return webClient.post().uri(uriBuilder -> uriBuilder
             .scheme(scheme)
@@ -53,7 +53,7 @@ public class SendSMSWithTellusTalk implements SendSMS {
             .port(port)
             .path(tellustalkSendEndpoint)
             .build())
-        .body(Mono.just(smsRequestDTO), SMSRequestDTO.class)
+        .body(Mono.just(emailRequestDTO), EmailRequestDTO.class)
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .headers(headers -> headers.setBasicAuth(username, password))
         .retrieve()

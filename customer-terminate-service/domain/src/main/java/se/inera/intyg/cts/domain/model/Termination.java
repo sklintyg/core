@@ -61,6 +61,14 @@ public class Termination {
     status = TerminationStatus.EXPORTED;
   }
 
+  public void notificationSent() {
+    status = TerminationStatus.NOTIFICATION_SENT;
+  }
+
+  public void reminderSent() {
+    status = TerminationStatus.REMINDER_SENT;
+  }
+
   public void receiptReceived(LocalDateTime receiptTime) {
     export().receiptTime(receiptTime);
     status = TerminationStatus.RECEIPT_RECEIVED;

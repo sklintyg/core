@@ -150,6 +150,16 @@ public class TestabilityTerminationService {
   }
 
   @Transactional
+  public void setAsNotificationSent(UUID terminationId) {
+    final var terminationEntity = terminationEntityRepository.findByTerminationId(terminationId)
+        .orElseThrow();
+
+    terminationEntity.setStatus(TerminationStatus.NOTIFICATION_SENT.name());
+
+    terminationEntityRepository.save(terminationEntity);
+  }
+
+  @Transactional
   public void setAsReceiptReceived(UUID terminationId) {
     final var terminationEntity = terminationEntityRepository.findByTerminationId(terminationId)
         .orElseThrow();

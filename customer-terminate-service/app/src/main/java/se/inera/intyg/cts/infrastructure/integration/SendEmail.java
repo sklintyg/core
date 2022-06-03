@@ -2,8 +2,8 @@ package se.inera.intyg.cts.infrastructure.integration;
 
 import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.TellusTalkResponseDTO;
 
-public interface SendSMS {
+public interface SendEmail {
 
-    TellusTalkResponseDTO sendSMS(String phonenumber, String message);
+    TellusTalkResponseDTO sendEmail(String emailAddress, String message, String subject);
 
 }

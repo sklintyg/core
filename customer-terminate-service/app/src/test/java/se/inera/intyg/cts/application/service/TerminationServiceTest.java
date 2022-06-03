@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CREATOR_HSA_ID;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CREATOR_NAME;
+import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_EMAIL_ADDRESS;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_HSA_ID;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_ORGANIZATION_NUMBER;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_PERSON_ID;
@@ -48,7 +49,8 @@ class TerminationServiceTest {
     @BeforeEach
     void setUp() {
       createTerminationDTO = new CreateTerminationDTO(DEFAULT_CREATOR_HSA_ID, DEFAULT_CREATOR_NAME,
-          DEFAULT_HSA_ID, DEFAULT_ORGANIZATION_NUMBER, DEFAULT_PERSON_ID, DEFAULT_PHONE_NUMBER);
+          DEFAULT_HSA_ID, DEFAULT_ORGANIZATION_NUMBER, DEFAULT_PERSON_ID, DEFAULT_PHONE_NUMBER,
+          DEFAULT_EMAIL_ADDRESS);
     }
 
     @Test
@@ -96,6 +98,12 @@ class TerminationServiceTest {
     void shallCreateTerminationWithPhoneNumber() {
       assertEquals(DEFAULT_PHONE_NUMBER,
           terminationService.create(createTerminationDTO).phoneNumber());
+    }
+
+    @Test
+    void shallCreateTerminationWithEmailAddress() {
+      assertEquals(DEFAULT_EMAIL_ADDRESS,
+          terminationService.create(createTerminationDTO).emailAddress());
     }
   }
 
