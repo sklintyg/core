@@ -1,9 +1,9 @@
 package se.inera.intyg.cts.infrastructure.integration;
 
-import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.TellusTalkResponseDTO;
+import javax.mail.MessagingException;
 
 public interface SendEmail {
 
-    TellusTalkResponseDTO sendEmail(String emailAddress, String message, String subject);
-
+    void sendEmail(String emailAddress, String emailBody, String emailSubject)
+        throws MessagingException;
 }

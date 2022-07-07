@@ -169,4 +169,10 @@ public class TestabilityTerminationService {
 
     terminationEntityRepository.save(terminationEntity);
   }
+
+  public String getStatus(UUID terminationId) {
+    return terminationEntityRepository.findByTerminationId(terminationId)
+        .orElseThrow()
+        .getStatus();
+  }
 }

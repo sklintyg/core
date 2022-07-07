@@ -28,7 +28,7 @@ class SendPasswordWithSMSTest {
     @Mock
     private TerminationRepository terminationRepository;
     @Mock
-    private MessageFormatter messageFormatter;
+    private SmsPhoneNumberFormatter smsPhoneNumberFormatter;
 
     @InjectMocks
     private SendPasswordWithSMS smsService;
@@ -39,12 +39,12 @@ class SendPasswordWithSMSTest {
     void sendPassword() {
         Termination termination = terminationWithPhoneNumber(COMPLIANT_PHONE_NUMBER);
         when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(Optional.of(termination));
-        setMocks(termination);
+        setMocks();
 
         smsService.sendPassword(termination);
 
         verify(terminationRepository, times(1)).store(termination);
-        verify(messageFormatter, times(1)).formatPhoneNumber(termination.export()
+        verify(smsPhoneNumberFormatter, times(1)).formatPhoneNumber(termination.export()
             .organizationRepresentative().phoneNumber().number());
         verify(terminationRepository, times(1)).findByTerminationId(termination.terminationId());
         verify(sendSMS, times(1)).sendSMS(termination.export().organizationRepresentative()
@@ -55,13 +55,13 @@ class SendPasswordWithSMSTest {
     void shouldThrowExceptionIfStatusUpdateFailure() {
         Termination termination = defaultTermination();
         when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(Optional.empty());
-        setMocks(termination);
+        setMocks();
 
         assertThrows(IllegalStateException.class, () -> smsService.sendPassword(termination));
     }
 
-    private void setMocks(Termination termination) {
+    private void setMocks() {
         when(sendSMS.sendSMS(any(String.class), any(String.class))).thenReturn(new TellusTalkResponseDTO("ID", "URL"));
-        when(messageFormatter.formatPhoneNumber(any(String.class))).thenReturn(COMPLIANT_PHONE_NUMBER);
+        when(smsPhoneNumberFormatter.formatPhoneNumber(any(String.class))).thenReturn(COMPLIANT_PHONE_NUMBER);
     }
 }

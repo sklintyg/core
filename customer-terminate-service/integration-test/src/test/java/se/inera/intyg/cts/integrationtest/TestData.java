@@ -241,7 +241,7 @@ public class TestData {
     given()
         .baseUri("http://localhost:18000")
         .when()
-        .delete("/testability-tellustalk/v1/emails")
+        .delete("/testability-email/v1/")
         .then()
         .statusCode(HttpStatus.OK.value());
   }

@@ -14,13 +14,13 @@ public class SendPasswordWithSMS implements SendPassword {
     private static final Logger LOG = LoggerFactory.getLogger(SendPasswordWithSMS.class);
 
     private final SendSMS sendSMS;
-    private final MessageFormatter messageFormatter;
+    private final SmsPhoneNumberFormatter smsPhoneNumberFormatter;
     private final TerminationRepository terminationRepository;
 
-    public SendPasswordWithSMS(SendSMS sendSMS, MessageFormatter messageFormatter,
+    public SendPasswordWithSMS(SendSMS sendSMS, SmsPhoneNumberFormatter smsPhoneNumberFormatter,
         TerminationRepository terminationRepository) {
         this.sendSMS = sendSMS;
-        this.messageFormatter = messageFormatter;
+        this.smsPhoneNumberFormatter = smsPhoneNumberFormatter;
         this.terminationRepository = terminationRepository;
     }
 
@@ -30,7 +30,7 @@ public class SendPasswordWithSMS implements SendPassword {
         final var phoneNumber = termination.export().organizationRepresentative()
             .phoneNumber().number();
 
-        final var formattedPhoneNumber = messageFormatter.formatPhoneNumber(phoneNumber);
+        final var formattedPhoneNumber = smsPhoneNumberFormatter.formatPhoneNumber(phoneNumber);
 
         final var smsResponseDTO = sendSMS.sendSMS(formattedPhoneNumber, message);
         LOG.info("Password sent for terminationId '{}' with jobId '{}' and logHref '{}",

@@ -3,11 +3,10 @@ package se.inera.intyg.cts.infrastructure.service;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MessageFormatter {
+public class SmsPhoneNumberFormatter {
 
   private static final String SMS_PREFIX = "sms:";
   private static final String COUNTRY_CODE = "+46";
-  private static final String EMAIL_PREFIX = "email:";
 
   public String formatPhoneNumber(String phoneNumber) {
 
@@ -25,9 +24,5 @@ public class MessageFormatter {
     }
 
     return SMS_PREFIX + COUNTRY_CODE + cleanedPhoneNumber;
-  }
-
-  public String formatEmailAddress(String emailAddress) {
-    return EMAIL_PREFIX + emailAddress;
   }
 }

@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTermination;
 
 import java.util.Optional;
+import javax.mail.MessagingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -35,22 +36,20 @@ class SendPackageNotificationTest {
   @Mock
   private SendSMS sendSMS;
   @Mock
-  private MessageFormatter messageFormatter;
+  private SmsPhoneNumberFormatter smsPhoneNumberFormatter;
   @Mock
   private TerminationRepository terminationRepository;
 
   @InjectMocks
   private SendPackageNotification sendPackageNotification;
 
-  private static final String PHONE_NUMBER = "070-12345678";
   private static final String FORMATTED_PHONE = "sms:+467012345678";
   private static final String EMAIL_ADDRESS = "email@address.se";
-  private static final String FORMATTED_EMAIL = "email:email@address.se";
-  private static final String REMINDER_TEXT_MESSAGE = "reminderTextMessage";
-  private static final String REMINDER_HTML_MESSAGE = "reminderHtmlMessage";
+  private static final String REMINDER_SMS_CONTENT = "reminderSmsContent";
+  private static final String REMINDER_EMAIL_CONTENT = "reminderEmailContent";
   private static final String REMINDER_SUBJECT = "reminderSubject";
-  private static final String NOTIFICATION_TEXT_MESSAGE = "notificationTextMessage";
-  private static final String NOTIFICATION_HTML_MESSAGE = "notificationHtmlMessage";
+  private static final String NOTIFICATION_SMS_CONTENT = "notificationSmsContent";
+  private static final String NOTIFICATION_EMAIL_CONTENT = "notificationEmailContent";
   private static final String NOTIFICATION_SUBJECT = "notificationSubject";
 
   private static final Termination TERMINATION = defaultTermination();
@@ -62,28 +61,29 @@ class SendPackageNotificationTest {
 
     @BeforeEach
     public void init() {
-      ReflectionTestUtils.setField(sendPackageNotification, NOTIFICATION_TEXT_MESSAGE, NOTIFICATION_TEXT_MESSAGE);
-      ReflectionTestUtils.setField(sendPackageNotification, NOTIFICATION_HTML_MESSAGE, NOTIFICATION_HTML_MESSAGE);
+      ReflectionTestUtils.setField(sendPackageNotification, NOTIFICATION_SMS_CONTENT,
+          NOTIFICATION_SMS_CONTENT);
+      ReflectionTestUtils.setField(sendPackageNotification, NOTIFICATION_EMAIL_CONTENT,
+          NOTIFICATION_EMAIL_CONTENT);
       ReflectionTestUtils.setField(sendPackageNotification, NOTIFICATION_SUBJECT, NOTIFICATION_SUBJECT);
-      doReturn(FORMATTED_PHONE).when(messageFormatter).formatPhoneNumber(any(String.class));
-      doReturn(FORMATTED_EMAIL).when(messageFormatter).formatEmailAddress(any(String.class));
+      doReturn(FORMATTED_PHONE).when(smsPhoneNumberFormatter).formatPhoneNumber(any(String.class));
     }
 
     @Test
-    public void shouldSendNotificationWithSmsAndEmail() {
-      setMessageMocks(MESSAGE_RESPONSE, MESSAGE_RESPONSE);
+    public void shouldSendNotificationWithSmsAndEmail() throws MessagingException {
+      setSmsMock(MESSAGE_RESPONSE);
       setTerminationRepoMock(Optional.of(TERMINATION));
 
       sendPackageNotification.sendNotification(TERMINATION);
 
-      verify(sendSMS, times(1)).sendSMS(FORMATTED_PHONE, NOTIFICATION_TEXT_MESSAGE);
-      verify(sendEmail, times(1)).sendEmail(FORMATTED_EMAIL, NOTIFICATION_HTML_MESSAGE,
+      verify(sendSMS, times(1)).sendSMS(FORMATTED_PHONE, NOTIFICATION_SMS_CONTENT);
+      verify(sendEmail, times(1)).sendEmail(EMAIL_ADDRESS, NOTIFICATION_EMAIL_CONTENT,
           NOTIFICATION_SUBJECT);
     }
 
     @Test
     public void shouldUpdateTerminationStatus() {
-      setMessageMocks(MESSAGE_RESPONSE, MESSAGE_RESPONSE);
+      setSmsMock(MESSAGE_RESPONSE);
       setTerminationRepoMock(Optional.of(TERMINATION));
 
       sendPackageNotification.sendNotification(TERMINATION);
@@ -94,8 +94,9 @@ class SendPackageNotificationTest {
     }
 
     @Test
-    public void shouldUpdateTerminationStatusWithOnlyEmailFailure() {
-      setMessageMocks(MESSAGE_RESPONSE, BAD_REQUEST);
+    public void shouldUpdateTerminationStatusWithOnlyEmailFailure() throws MessagingException {
+      setSmsMock(MESSAGE_RESPONSE);
+      setEmailMockToThrow();
       setTerminationRepoMock(Optional.of(TERMINATION));
 
       sendPackageNotification.sendNotification(TERMINATION);
@@ -107,7 +108,7 @@ class SendPackageNotificationTest {
 
     @Test
     public void shouldUpdateTerminationStatusWithOnlySmsFailure() {
-      setMessageMocks(BAD_REQUEST, MESSAGE_RESPONSE);
+      setSmsMock(BAD_REQUEST);
       setTerminationRepoMock(Optional.of(TERMINATION));
 
       sendPackageNotification.sendNotification(TERMINATION);
@@ -118,8 +119,9 @@ class SendPackageNotificationTest {
     }
 
     @Test
-    public void shouldNotUpdateTerminationStatusWithSmsAndEmailFailure() {
-      setMessageMocks(BAD_REQUEST, BAD_REQUEST);
+    public void shouldNotUpdateTerminationStatusWithSmsAndEmailFailure() throws MessagingException {
+      setSmsMock(BAD_REQUEST);
+      setEmailMockToThrow();
 
       sendPackageNotification.sendNotification(TERMINATION);
 
@@ -128,7 +130,7 @@ class SendPackageNotificationTest {
 
     @Test
     public void shouldNotThrowIfUpdateTerminationFailure() {
-      setMessageMocks(MESSAGE_RESPONSE, MESSAGE_RESPONSE);
+      setSmsMock(MESSAGE_RESPONSE);
       setTerminationRepoMock(Optional.empty());
 
       assertDoesNotThrow(() -> sendPackageNotification.sendNotification(TERMINATION));
@@ -140,28 +142,29 @@ class SendPackageNotificationTest {
 
     @BeforeEach
     public void init() {
-      ReflectionTestUtils.setField(sendPackageNotification, REMINDER_TEXT_MESSAGE, REMINDER_TEXT_MESSAGE);
-      ReflectionTestUtils.setField(sendPackageNotification, REMINDER_HTML_MESSAGE, REMINDER_HTML_MESSAGE);
+      ReflectionTestUtils.setField(sendPackageNotification, REMINDER_SMS_CONTENT,
+          REMINDER_SMS_CONTENT);
+      ReflectionTestUtils.setField(sendPackageNotification, REMINDER_EMAIL_CONTENT,
+          REMINDER_EMAIL_CONTENT);
       ReflectionTestUtils.setField(sendPackageNotification, REMINDER_SUBJECT, REMINDER_SUBJECT);
-      doReturn(FORMATTED_PHONE).when(messageFormatter).formatPhoneNumber(any(String.class));
-      doReturn(FORMATTED_EMAIL).when(messageFormatter).formatEmailAddress(any(String.class));
+      doReturn(FORMATTED_PHONE).when(smsPhoneNumberFormatter).formatPhoneNumber(any(String.class));
     }
 
     @Test
-    public void shouldSendNotificationWithSmsAndEmail() {
-      setMessageMocks(MESSAGE_RESPONSE, MESSAGE_RESPONSE);
+    public void shouldSendNotificationWithSmsAndEmail() throws MessagingException {
+      setSmsMock(MESSAGE_RESPONSE);
       setTerminationRepoMock(Optional.of(TERMINATION));
 
       sendPackageNotification.sendReminder(TERMINATION);
 
-      verify(sendSMS, times(1)).sendSMS(FORMATTED_PHONE, REMINDER_TEXT_MESSAGE);
-      verify(sendEmail, times(1)).sendEmail(FORMATTED_EMAIL, REMINDER_HTML_MESSAGE,
+      verify(sendSMS, times(1)).sendSMS(FORMATTED_PHONE, REMINDER_SMS_CONTENT);
+      verify(sendEmail, times(1)).sendEmail(EMAIL_ADDRESS, REMINDER_EMAIL_CONTENT,
           REMINDER_SUBJECT);
     }
 
     @Test
     public void shouldUpdateTerminationStatus() {
-      setMessageMocks(MESSAGE_RESPONSE, MESSAGE_RESPONSE);
+      setSmsMock(MESSAGE_RESPONSE);
       setTerminationRepoMock(Optional.of(TERMINATION));
 
       sendPackageNotification.sendReminder(TERMINATION);
@@ -172,8 +175,9 @@ class SendPackageNotificationTest {
     }
 
     @Test
-    public void shouldUpdateTerminationStatusWithOnlySmsSuccess() {
-      setMessageMocks(MESSAGE_RESPONSE, BAD_REQUEST);
+    public void shouldUpdateTerminationStatusWithOnlySmsSuccess() throws MessagingException {
+      setSmsMock(MESSAGE_RESPONSE);
+      setEmailMockToThrow();
       setTerminationRepoMock(Optional.of(TERMINATION));
 
       sendPackageNotification.sendReminder(TERMINATION);
@@ -185,7 +189,7 @@ class SendPackageNotificationTest {
 
     @Test
     public void shouldUpdateTerminationStatusWithOnlyEmailSuccess() {
-      setMessageMocks(BAD_REQUEST, MESSAGE_RESPONSE);
+      setSmsMock(BAD_REQUEST);
       setTerminationRepoMock(Optional.of(TERMINATION));
 
       sendPackageNotification.sendReminder(TERMINATION);
@@ -196,8 +200,9 @@ class SendPackageNotificationTest {
     }
 
     @Test
-    public void shouldNotUpdateTerminationStatusWithSmsAndEmailFailure() {
-      setMessageMocks(BAD_REQUEST, BAD_REQUEST);
+    public void shouldNotUpdateTerminationStatusWithSmsAndEmailFailure() throws MessagingException {
+      setSmsMock(BAD_REQUEST);
+      setEmailMockToThrow();
 
       sendPackageNotification.sendReminder(TERMINATION);
 
@@ -206,27 +211,23 @@ class SendPackageNotificationTest {
 
     @Test
     public void shouldNotThrowIfUpdateTerminationFailure() {
-      setMessageMocks(MESSAGE_RESPONSE, MESSAGE_RESPONSE);
+      setSmsMock(MESSAGE_RESPONSE);
       setTerminationRepoMock(Optional.empty());
 
       assertDoesNotThrow(() -> sendPackageNotification.sendReminder(TERMINATION));
     }
   }
 
-  private <T, U> void setMessageMocks(T smsResponse, U emailResponse) {
+  private <T> void setSmsMock(T smsResponse) {
     if (smsResponse instanceof Exception) {
       doThrow((Exception) smsResponse).when(sendSMS).sendSMS(any(String.class), any(String.class));
     } else {
       doReturn(smsResponse).when(sendSMS).sendSMS(any(String.class), any(String.class));
     }
-
-    if (emailResponse instanceof Exception) {
-      doThrow((Exception) emailResponse).when(sendEmail).sendEmail(any(String.class), any(String.class),
+  }
+  private void setEmailMockToThrow() throws MessagingException {
+      doThrow(MessagingException.class).when(sendEmail).sendEmail(any(String.class), any(String.class),
           any(String.class));
-    } else {
-      doReturn(emailResponse).when(sendEmail).sendEmail(any(String.class), any(String.class),
-          any(String.class));
-    }
   }
 
   private <T> void setTerminationRepoMock(T termination) {

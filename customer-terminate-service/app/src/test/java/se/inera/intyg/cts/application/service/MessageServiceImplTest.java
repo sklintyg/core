@@ -23,7 +23,6 @@ import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
 import se.inera.intyg.cts.domain.service.SendNotification;
 import se.inera.intyg.cts.domain.service.SendPassword;
-import se.inera.intyg.cts.testutil.TerminationTestDataBuilder;
 
 @ExtendWith(MockitoExtension.class)
 class MessageServiceImplTest {
@@ -40,6 +39,8 @@ class MessageServiceImplTest {
     private final Termination termination1 = defaultTermination();
     private final Termination termination2 = defaultTermination();
     private final List<Termination> terminations = List.of(termination1, termination2);
+
+    public static final int FOURTEEN_DAYS_IN_MINUTES = 20160;
 
     @Nested
     class TestSendPassword {
@@ -83,7 +84,7 @@ class MessageServiceImplTest {
 
         @Test
         void sendNotification() {
-            ReflectionTestUtils.setField(messageService, "sendNotificationsActive", true);
+            ReflectionTestUtils.setField(messageService, "sendNotificationActive", true);
             when(terminationRepositoryMock.findByStatuses(anyList())).thenReturn(terminations);
 
             messageService.sendNotification();
@@ -94,7 +95,7 @@ class MessageServiceImplTest {
 
         @Test
         void shouldNotSendNotificationWhenSendNotificationInactive() {
-            ReflectionTestUtils.setField(messageService, "sendNotificationsActive", false);
+            ReflectionTestUtils.setField(messageService, "sendNotificationActive", false);
             when(terminationRepositoryMock.findByStatuses(anyList())).thenReturn(terminations);
 
             messageService.sendNotification();
@@ -110,8 +111,9 @@ class MessageServiceImplTest {
         void shouldSendReminderWhenPassedReminderTime() {
             final var createdDate = LocalDateTime.now().minusDays(15L);
             final var termination = terminationWithCreatedDate(createdDate);
-            ReflectionTestUtils.setField(messageService, "sendNotificationsActive", true);
-            ReflectionTestUtils.setField(messageService, "reminderDelayInDays", 14);
+            ReflectionTestUtils.setField(messageService, "sendReminderActive", true);
+            ReflectionTestUtils.setField(messageService, "reminderDelayInMinutes",
+                FOURTEEN_DAYS_IN_MINUTES);
             when(terminationRepositoryMock.findByStatuses(anyList())).thenReturn(List.of(termination));
 
             messageService.sendReminder();
@@ -124,8 +126,8 @@ class MessageServiceImplTest {
         void shouldNotSendReminderWhenNotPassedReminderTime() {
             final var createdDate = LocalDateTime.now().minusDays(13L);
             final var termination = terminationWithCreatedDate(createdDate);
-            ReflectionTestUtils.setField(messageService, "sendNotificationsActive", true);
-            ReflectionTestUtils.setField(messageService, "reminderDelayInDays", 14);
+            ReflectionTestUtils.setField(messageService, "sendReminderActive", true);
+            ReflectionTestUtils.setField(messageService, "reminderDelayInMinutes", FOURTEEN_DAYS_IN_MINUTES);
             when(terminationRepositoryMock.findByStatuses(anyList())).thenReturn(List.of(termination));
 
             messageService.sendReminder();
@@ -136,7 +138,7 @@ class MessageServiceImplTest {
 
         @Test
         void shouldNotSendReminderWhenSendNotificationInactive() {
-            ReflectionTestUtils.setField(messageService, "sendNotificationsActive", false);
+            ReflectionTestUtils.setField(messageService, "sendReminderActive", false);
             when(terminationRepositoryMock.findByStatuses(anyList())).thenReturn(terminations);
 
             messageService.sendReminder();

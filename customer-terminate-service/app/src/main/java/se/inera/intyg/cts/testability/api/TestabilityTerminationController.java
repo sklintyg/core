@@ -63,13 +63,13 @@ public class TestabilityTerminationController {
 
   @PostMapping("/{terminationId}/sendNotification")
   void setAsNotificationSent(@PathVariable UUID terminationId) {
-    LOG.info(String.format("Set termination '%s' as notificationSent", terminationId));
+    LOG.info(String.format("Set status for termination '%s' to notification sent", terminationId));
     testabilityTerminationService.setAsNotificationSent(terminationId);
   }
 
   @PostMapping("/{terminationId}/receipt")
   void setAsReceiptRecieved(@PathVariable UUID terminationId) {
-    LOG.info(String.format("Set termination '%s' as receipt received", terminationId));
+    LOG.info(String.format("Set status for termination '%s' to receipt received", terminationId));
     testabilityTerminationService.setAsReceiptReceived(terminationId);
   }
 
@@ -100,5 +100,11 @@ public class TestabilityTerminationController {
   String getPassword(@PathVariable UUID terminationId) {
     LOG.info(String.format("Get package password for termination '%s'", terminationId));
     return testabilityTerminationService.getPassword(terminationId);
+  }
+
+  @GetMapping("/{terminationId}/status")
+  String getStatus(@PathVariable UUID terminationId) {
+    LOG.info(String.format("Get status for termination '%s'", terminationId));
+    return testabilityTerminationService.getStatus(terminationId);
   }
 }

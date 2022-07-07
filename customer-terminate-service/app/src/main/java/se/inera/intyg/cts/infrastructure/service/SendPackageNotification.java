@@ -17,22 +17,22 @@ public class SendPackageNotification implements SendNotification {
 
   private static final Logger LOG = LoggerFactory.getLogger(SendPackageNotification.class);
 
-  @Value("${message.notification.html}")
-  private String notificationHtmlMessage;
+  @Value("${message.notification.email.content}")
+  private String notificationEmailContent;
 
-  @Value("${message.notification.text}")
-  private String notificationTextMessage;
+  @Value("${message.notification.sms.content}")
+  private String notificationSmsContent;
 
-  @Value("${message.reminder.html}")
-  private String reminderHtmlMessage;
+  @Value("${message.reminder.email.content}")
+  private String reminderEmailContent;
 
-  @Value("${message.reminder.text}")
-  private String reminderTextMessage;
+  @Value("${message.reminder.sms.content}")
+  private String reminderSmsContent;
 
-  @Value("${message.notification.subject}")
+  @Value("${message.notification.email.subject}")
   private String notificationSubject;
 
-  @Value("${message.reminder.subject}")
+  @Value("${message.reminder.email.subject}")
   private String reminderSubject;
 
   private static final String SMS = "sms";
@@ -42,22 +42,22 @@ public class SendPackageNotification implements SendNotification {
 
   private final SendSMS sendSMS;
   private final SendEmail sendEmail;
-  private final MessageFormatter messageFormatter;
+  private final SmsPhoneNumberFormatter smsPhoneNumberFormatter;
   private final TerminationRepository terminationRepository;
 
   public SendPackageNotification(SendSMS sendSMS, SendEmail sendEmail,
-      MessageFormatter messageFormatter, TerminationRepository terminationRepository) {
+      SmsPhoneNumberFormatter smsPhoneNumberFormatter, TerminationRepository terminationRepository) {
     this.sendSMS = sendSMS;
     this.sendEmail = sendEmail;
-    this.messageFormatter = messageFormatter;
+    this.smsPhoneNumberFormatter = smsPhoneNumberFormatter;
     this.terminationRepository = terminationRepository;
   }
 
   @Override
   @Transactional
   public void sendNotification(Termination termination) {
-    final var smsSuccess = sendSms(notificationTextMessage, NOTIFICATION, termination);
-    final var emailSuccess = sendEmail(notificationHtmlMessage, NOTIFICATION, notificationSubject,
+    final var smsSuccess = sendSms(notificationSmsContent, NOTIFICATION, termination);
+    final var emailSuccess = sendEmail(notificationEmailContent, NOTIFICATION, notificationSubject,
         termination);
 
     if (smsSuccess || emailSuccess) {
@@ -68,8 +68,8 @@ public class SendPackageNotification implements SendNotification {
   @Override
   @Transactional
   public void sendReminder(Termination termination) {
-    final var smsSuccess = sendSms(reminderTextMessage, REMINDER, termination);
-    final var emailSuccess = sendEmail(reminderHtmlMessage, REMINDER, reminderSubject, termination);
+    final var smsSuccess = sendSms(reminderSmsContent, REMINDER, termination);
+    final var emailSuccess = sendEmail(reminderEmailContent, REMINDER, reminderSubject, termination);
 
     if (smsSuccess || emailSuccess) {
       updateStatus(termination.terminationId(), REMINDER);
@@ -79,9 +79,9 @@ public class SendPackageNotification implements SendNotification {
   private boolean sendSms(String message, String statusType, Termination termination) {
     try {
       final var phoneNumber = termination.export().organizationRepresentative().phoneNumber().number();
-      final var formattedPhoneNumber = messageFormatter.formatPhoneNumber(phoneNumber);
+      final var formattedPhoneNumber = smsPhoneNumberFormatter.formatPhoneNumber(phoneNumber);
       final var smsResponseDTO = sendSMS.sendSMS(formattedPhoneNumber, message);
-      logSendMessageSuccess(SMS, statusType, termination.terminationId(), smsResponseDTO.job_id(),
+      logSendSmsSuccess(statusType, termination.terminationId(), smsResponseDTO.job_id(),
           smsResponseDTO.log_href());
       return true;
 
@@ -93,11 +93,10 @@ public class SendPackageNotification implements SendNotification {
 
   private boolean sendEmail(String message, String statusType, String subject, Termination termination) {
     try {
-      final var emailAddress = termination.export().organizationRepresentative().emailAddress().emailAddress();
-      final var formattedEmailAddress = messageFormatter.formatEmailAddress(emailAddress);
-      final var emailResponseDTO = sendEmail.sendEmail(formattedEmailAddress, message, subject);
-      logSendMessageSuccess(EMAIL, statusType, termination.terminationId(), emailResponseDTO.job_id(),
-          emailResponseDTO.log_href());
+      final var emailAddress = termination.export().organizationRepresentative().emailAddress()
+          .emailAddress();
+      sendEmail.sendEmail(emailAddress, message, subject);
+      logSendEmailSuccess(statusType, termination.terminationId());
       return true;
 
     } catch (Exception e) {
@@ -125,10 +124,14 @@ public class SendPackageNotification implements SendNotification {
     }
   }
 
-  private void logSendMessageSuccess(String messageType, String statusType, TerminationId terminationId,
+  private void logSendSmsSuccess(String statusType, TerminationId terminationId,
       String jobId, String logHref) {
-    LOG.info("Successfully sent {} {} for {} with jobId '{}' and logHref '{}'.", messageType, statusType,
+    LOG.info("Successfully sent sms {} for {} with jobId '{}' and logHref '{}'.", statusType,
         terminationId, jobId, logHref);
+  }
+
+  private void logSendEmailSuccess(String statusType, TerminationId terminationId) {
+    LOG.info("Successfully sent email {} for {}.", statusType, terminationId);
   }
 
   private void logSendMessageFailure(String messageType, String statusType, TerminationId terminationId,

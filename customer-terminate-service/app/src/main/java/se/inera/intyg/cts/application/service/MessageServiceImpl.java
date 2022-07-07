@@ -21,20 +21,23 @@ public class MessageServiceImpl implements MessageService {
     private final SendPassword sendPassword;
     private final SendNotification sendNotification;
     private final Boolean sendPasswordActive;
-    private final Boolean sendNotificationsActive;
-    private final Integer reminderDelayInDays;
+    private final Boolean sendNotificationActive;
+    private final Boolean sendReminderActive;
+    private final Integer reminderDelayInMinutes;
 
     public MessageServiceImpl(TerminationRepository terminationRepository, SendPassword sendPassword,
         SendNotification sendNotification,
         @Value("${send.password.active}") Boolean sendPasswordActive,
-        @Value("${send.notification.active}") Boolean sendNotificationsActive,
-        @Value("${send.reminder.after.days}") Integer reminderDelayInDays) {
+        @Value("${send.notification.active}") Boolean sendNotificationActive,
+        @Value("${send.reminder.active}") Boolean sendReminderActive,
+        @Value("${send.reminder.after.minutes}") Integer reminderDelayInMinutes) {
         this.terminationRepository = terminationRepository;
         this.sendPassword = sendPassword;
         this.sendNotification = sendNotification;
         this.sendPasswordActive = sendPasswordActive;
-        this.sendNotificationsActive = sendNotificationsActive;
-        this.reminderDelayInDays = reminderDelayInDays;
+        this.sendNotificationActive = sendNotificationActive;
+        this.sendReminderActive = sendReminderActive;
+        this.reminderDelayInMinutes = reminderDelayInMinutes;
     }
 
     @Override
@@ -62,7 +65,7 @@ public class MessageServiceImpl implements MessageService {
         for (final var termination: terminationRepository
             .findByStatuses(List.of(TerminationStatus.EXPORTED))) {
 
-            if (sendNotificationsActive) {
+            if (sendNotificationActive) {
                 sendNotification.sendNotification(termination);
 
             } else {
@@ -77,10 +80,10 @@ public class MessageServiceImpl implements MessageService {
         for (final var termination: terminationRepository
             .findByStatuses(List.of(TerminationStatus.NOTIFICATION_SENT))) {
 
-            if (sendNotificationsActive && isTimeForReminder(termination)) {
+            if (sendReminderActive && isTimeForReminder(termination)) {
                 sendNotification.sendReminder(termination);
 
-            } else if (!sendNotificationsActive) {
+            } else if (!sendReminderActive) {
                 LOG.info("Functionality for sending reminder is inactive. Not sending "
                     + "reminder for termination id {}", termination.terminationId());
             }
@@ -88,6 +91,6 @@ public class MessageServiceImpl implements MessageService {
     }
 
     private boolean isTimeForReminder(Termination termination) {
-        return termination.created().plusDays(reminderDelayInDays).isBefore(LocalDateTime.now());
+        return termination.created().plusMinutes(reminderDelayInMinutes).isBefore(LocalDateTime.now());
     }
 }
