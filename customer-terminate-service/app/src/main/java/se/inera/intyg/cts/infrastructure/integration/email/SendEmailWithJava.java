@@ -33,7 +33,7 @@ public class SendEmailWithJava implements SendEmail {
   private MimeMessage createMessage(String emailAddress, String emailSubject, String emailBody)
       throws MessagingException {
     final var mimeMessage = mailSender.createMimeMessage();
-    final var mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "ISO-8859-1");
+    final var mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
     mimeMessage.setFrom(new InternetAddress(emailFromAddress));
     mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(emailAddress));
     mimeMessageHelper.setSubject(emailSubject);
