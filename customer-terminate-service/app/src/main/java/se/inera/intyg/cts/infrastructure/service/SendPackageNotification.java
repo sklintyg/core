@@ -39,6 +39,8 @@ public class SendPackageNotification implements SendNotification {
   private static final String EMAIL = "email";
   private static final String REMINDER = "reminder";
   private static final String NOTIFICATION = "notification";
+  private static final String EMAIL_REGEX =
+      "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
 
   private final SendSMS sendSMS;
   private final SendEmail sendEmail;
@@ -95,6 +97,13 @@ public class SendPackageNotification implements SendNotification {
     try {
       final var emailAddress = termination.export().organizationRepresentative().emailAddress()
           .emailAddress();
+
+      if (invalidEmailAddress(emailAddress)) {
+        LOG.error("Failure sending email {} for {}. Email address has invalid format.", statusType,
+            termination);
+        return false;
+      }
+
       sendEmail.sendEmail(emailAddress, message, subject);
       logSendEmailSuccess(statusType, termination.terminationId());
       return true;
@@ -122,6 +131,10 @@ public class SendPackageNotification implements SendNotification {
     } catch (Exception e) {
       logTerminationUpdateFailure(terminationId, statusType, e);
     }
+  }
+
+  private boolean invalidEmailAddress(String emailAddress) {
+    return !emailAddress.matches(EMAIL_REGEX);
   }
 
   private void logSendSmsSuccess(String statusType, TerminationId terminationId,

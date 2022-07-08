@@ -120,4 +120,20 @@ public class TerminationTestDataBuilder {
         .packagePassword(DEFAULT_PASSWORD)
         .create();
   }
+
+  public static Termination terminationWithEmailAddress(String emailAddress) {
+    return TerminationBuilder.getInstance()
+        .terminationId(DEFAULT_TERMINATION_ID)
+        .created(DEFAULT_CREATED)
+        .creatorHSAId(DEFAULT_CREATOR_HSA_ID)
+        .creatorName(DEFAULT_CREATOR_NAME)
+        .careProviderHSAId(DEFAULT_HSA_ID)
+        .careProviderOrganizationNumber(DEFAULT_ORGANIZATION_NUMBER)
+        .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
+        .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
+        .careProviderOrganizationRepresentativeEmailAddress(emailAddress)
+        .status(TerminationStatus.RECEIPT_RECEIVED)
+        .packagePassword(DEFAULT_PASSWORD)
+        .create();
+  }
 }

@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTermination;
+import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.terminationWithEmailAddress;
 
 import java.util.Optional;
 import javax.mail.MessagingException;
@@ -215,6 +216,77 @@ class SendPackageNotificationTest {
       setTerminationRepoMock(Optional.empty());
 
       assertDoesNotThrow(() -> sendPackageNotification.sendReminder(TERMINATION));
+    }
+  }
+
+  @Nested
+  class TestEmailAddress {
+
+    @BeforeEach
+    public void init() {
+      ReflectionTestUtils.setField(sendPackageNotification, NOTIFICATION_SMS_CONTENT,
+          NOTIFICATION_SMS_CONTENT);
+      ReflectionTestUtils.setField(sendPackageNotification, NOTIFICATION_EMAIL_CONTENT,
+          NOTIFICATION_EMAIL_CONTENT);
+      ReflectionTestUtils.setField(sendPackageNotification, NOTIFICATION_SUBJECT, NOTIFICATION_SUBJECT);
+      doReturn(FORMATTED_PHONE).when(smsPhoneNumberFormatter).formatPhoneNumber(any(String.class));
+    }
+
+    @Test
+    public void shouldSendNotificationWhenValidAddress1() throws MessagingException {
+      final var termination = terminationWithEmailAddress("no-reply.example@address.name.se");
+      setSmsMock(MESSAGE_RESPONSE);
+      setTerminationRepoMock(Optional.of(termination));
+
+      sendPackageNotification.sendNotification(termination);
+
+      verify(sendEmail, times(1)).sendEmail("no-reply.example@address.name.se", NOTIFICATION_EMAIL_CONTENT,
+          NOTIFICATION_SUBJECT);
+    }
+
+    @Test
+    public void shouldSendNotificationWhenValidAddress2() throws MessagingException {
+      final var termination = terminationWithEmailAddress("example@test-name.address.se");
+      setSmsMock(MESSAGE_RESPONSE);
+      setTerminationRepoMock(Optional.of(termination));
+
+      sendPackageNotification.sendNotification(termination);
+
+      verify(sendEmail, times(1)).sendEmail("example@test-name.address.se", NOTIFICATION_EMAIL_CONTENT,
+          NOTIFICATION_SUBJECT);
+    }
+
+    @Test
+    public void shouldNotSendNotificationEmailWhenInvalidAddress1() {
+      final var termination = terminationWithEmailAddress("exam:ple@address.se");
+      setSmsMock(MESSAGE_RESPONSE);
+      setTerminationRepoMock(Optional.of(termination));
+
+      sendPackageNotification.sendNotification(termination);
+
+      verifyNoInteractions(sendEmail);
+    }
+
+    @Test
+    public void shouldNotSendNotificationEmailWhenInvalidAddress2() {
+      final var termination = terminationWithEmailAddress("example@addressse");
+      setSmsMock(MESSAGE_RESPONSE);
+      setTerminationRepoMock(Optional.of(termination));
+
+      sendPackageNotification.sendNotification(termination);
+
+      verifyNoInteractions(sendEmail);
+    }
+
+    @Test
+    public void shouldNotSendNotificationEmailWhenInvalidAddress3() {
+      final var termination = terminationWithEmailAddress("exa..mple@address.se");
+      setSmsMock(MESSAGE_RESPONSE);
+      setTerminationRepoMock(Optional.of(termination));
+
+      sendPackageNotification.sendNotification(termination);
+
+      verifyNoInteractions(sendEmail);
     }
   }
 
