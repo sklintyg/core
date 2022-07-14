@@ -118,7 +118,8 @@
 
   <changeSet id="6" author="mh">
     <addColumn tableName="termination">
-      <column name="email_address" type="varchar(255)" afterColumn="phone_number">
+      <column name="email_address" type="varchar(255)" afterColumn="phone_number"
+        defaultValue="change@me.se">
         <constraints nullable="false"/>
       </column>
     </addColumn>

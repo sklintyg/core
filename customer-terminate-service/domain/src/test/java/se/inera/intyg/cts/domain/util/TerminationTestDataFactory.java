@@ -30,7 +30,22 @@ public class TerminationTestDataFactory {
         .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
         .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
         .careProviderOrganizationRepresentativeEmailAddress(DEFAULT_EMAIL_ADDRESS)
-        .status(TerminationStatus.CREATED)
+        .status(DEFAULT_STATUS)
+        .create();
+  }
+
+  public static Termination terminationWithStatus(TerminationStatus status) {
+    return TerminationBuilder.getInstance()
+        .terminationId(DEFAULT_TERMINATION_ID)
+        .created(DEFAULT_CREATED)
+        .creatorHSAId(DEFAULT_CREATOR_HSA_ID)
+        .creatorName(DEFAULT_CREATOR_NAME)
+        .careProviderHSAId(DEFAULT_HSA_ID)
+        .careProviderOrganizationNumber(DEFAULT_ORGANIZATIONAL_NUMBER)
+        .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
+        .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
+        .careProviderOrganizationRepresentativeEmailAddress(DEFAULT_EMAIL_ADDRESS)
+        .status(status)
         .create();
   }
 }

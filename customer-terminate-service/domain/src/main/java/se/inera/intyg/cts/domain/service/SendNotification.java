@@ -4,8 +4,8 @@ import se.inera.intyg.cts.domain.model.Termination;
 
 public interface SendNotification {
 
-    void sendNotification(Termination termination);
+    boolean sendNotification(Termination termination);
 
-    void sendReminder(Termination termination);
+    boolean sendReminder(Termination termination);
 
 }

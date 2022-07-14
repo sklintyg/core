@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.cts.domain.model.Termination;
-import se.inera.intyg.cts.domain.repository.TerminationRepository;
 import se.inera.intyg.cts.domain.service.SendPassword;
 import se.inera.intyg.cts.infrastructure.integration.SendSMS;
 
@@ -15,33 +14,36 @@ public class SendPasswordWithSMS implements SendPassword {
 
     private final SendSMS sendSMS;
     private final SmsPhoneNumberFormatter smsPhoneNumberFormatter;
-    private final TerminationRepository terminationRepository;
 
-    public SendPasswordWithSMS(SendSMS sendSMS, SmsPhoneNumberFormatter smsPhoneNumberFormatter,
-        TerminationRepository terminationRepository) {
+    public SendPasswordWithSMS(SendSMS sendSMS, SmsPhoneNumberFormatter smsPhoneNumberFormatter) {
         this.sendSMS = sendSMS;
         this.smsPhoneNumberFormatter = smsPhoneNumberFormatter;
-        this.terminationRepository = terminationRepository;
     }
 
     @Override
-    public void sendPassword(Termination termination) {
+    public boolean sendPassword(Termination termination) {
         final var message = termination.export().password().password();
         final var phoneNumber = termination.export().organizationRepresentative()
             .phoneNumber().number();
-
         final var formattedPhoneNumber = smsPhoneNumberFormatter.formatPhoneNumber(phoneNumber);
 
-        final var smsResponseDTO = sendSMS.sendSMS(formattedPhoneNumber, message);
-        LOG.info("Password sent for terminationId '{}' with jobId '{}' and logHref '{}",
-            termination.terminationId().id(), smsResponseDTO.job_id(), smsResponseDTO.log_href());
+        try {
+            final var smsResponseDTO = sendSMS.sendSMS(formattedPhoneNumber, message);
+            logSendPasswordSuccess(termination, smsResponseDTO.job_id(), smsResponseDTO.log_href());
+            return true;
 
-        final var updateTermination = terminationRepository
-            .findByTerminationId(termination.terminationId()).orElseThrow(
-                () -> new IllegalStateException(String.format("Could not set status password sent "
-                + "for termination id %s.", termination.terminationId())));
+        } catch (Exception e) {
+            logSendPasswordFailure(termination, e);
+            return false;
+        }
+    }
 
-        updateTermination.passwordSent();
-        terminationRepository.store(updateTermination);
+    private void logSendPasswordSuccess(Termination termination, String jobId, String logHref) {
+        LOG.info("Successfully sent password with sms for {} with jobId '{}' and logHref '{}'.",
+            termination.terminationId(), jobId, logHref);
+    }
+
+    private void logSendPasswordFailure(Termination termination, Exception e) {
+        LOG.error("Failure sending password with sms for {}.", termination.terminationId(), e);
     }
 }

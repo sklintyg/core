@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.model.TerminationStatus;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
-import se.inera.intyg.cts.domain.service.SendNotification;
-import se.inera.intyg.cts.domain.service.SendPassword;
+import se.inera.intyg.cts.domain.service.SendPackageNotification;
+import se.inera.intyg.cts.domain.service.SendPackagePassword;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -18,22 +18,22 @@ public class MessageServiceImpl implements MessageService {
     private static final Logger LOG = LoggerFactory.getLogger(MessageServiceImpl.class);
 
     private final TerminationRepository terminationRepository;
-    private final SendPassword sendPassword;
-    private final SendNotification sendNotification;
+    private final SendPackagePassword sendPackagePassword;
+    private final SendPackageNotification sendPackageNotification;
     private final Boolean sendPasswordActive;
     private final Boolean sendNotificationActive;
     private final Boolean sendReminderActive;
     private final Integer reminderDelayInMinutes;
 
-    public MessageServiceImpl(TerminationRepository terminationRepository, SendPassword sendPassword,
-        SendNotification sendNotification,
+    public MessageServiceImpl(TerminationRepository terminationRepository,
+        SendPackagePassword sendPackagePassword, SendPackageNotification sendPackageNotification,
         @Value("${send.password.active}") Boolean sendPasswordActive,
         @Value("${send.notification.active}") Boolean sendNotificationActive,
         @Value("${send.reminder.active}") Boolean sendReminderActive,
         @Value("${send.reminder.after.minutes}") Integer reminderDelayInMinutes) {
         this.terminationRepository = terminationRepository;
-        this.sendPassword = sendPassword;
-        this.sendNotification = sendNotification;
+        this.sendPackagePassword = sendPackagePassword;
+        this.sendPackageNotification = sendPackageNotification;
         this.sendPasswordActive = sendPasswordActive;
         this.sendNotificationActive = sendNotificationActive;
         this.sendReminderActive = sendReminderActive;
@@ -46,12 +46,7 @@ public class MessageServiceImpl implements MessageService {
             .findByStatuses(List.of(TerminationStatus.RECEIPT_RECEIVED))) {
 
             if (sendPasswordActive) {
-                try {
-                    sendPassword.sendPassword(termination);
-                } catch (Exception e) {
-                    LOG.error("Failure sending password for termination id {}.",
-                        termination.terminationId(), e);
-                }
+                sendPassword(termination);
 
             } else {
                 LOG.info("Functionality for sending password is inactive. Not sending password for "
@@ -66,7 +61,7 @@ public class MessageServiceImpl implements MessageService {
             .findByStatuses(List.of(TerminationStatus.EXPORTED))) {
 
             if (sendNotificationActive) {
-                sendNotification.sendNotification(termination);
+                sendNotification(termination);
 
             } else {
                 LOG.info("Functionality for sending notification is inactive. Not sending "
@@ -81,7 +76,7 @@ public class MessageServiceImpl implements MessageService {
             .findByStatuses(List.of(TerminationStatus.NOTIFICATION_SENT))) {
 
             if (sendReminderActive && isTimeForReminder(termination)) {
-                sendNotification.sendReminder(termination);
+                sendReminder(termination);
 
             } else if (!sendReminderActive) {
                 LOG.info("Functionality for sending reminder is inactive. Not sending "
@@ -92,5 +87,34 @@ public class MessageServiceImpl implements MessageService {
 
     private boolean isTimeForReminder(Termination termination) {
         return termination.created().plusMinutes(reminderDelayInMinutes).isBefore(LocalDateTime.now());
+    }
+
+    private void sendPassword(Termination termination) {
+        try {
+            sendPackagePassword.sendPassword(termination);
+        } catch (Exception e) {
+            LOG.error("Failure setting status 'password sent' for {}.",
+                termination.terminationId(), e);
+        }
+    }
+
+    private void sendNotification(Termination termination) {
+        try {
+            sendPackageNotification.sendNotification(termination);
+
+        } catch (Exception e) {
+            LOG.error("Failure setting status 'notification sent' for {}.",
+                termination.terminationId(), e);
+        }
+    }
+
+    private void sendReminder(Termination termination) {
+        try {
+            sendPackageNotification.sendReminder(termination);
+
+        } catch (Exception e) {
+            LOG.error("Failure setting status 'reminder sent' for {}.",
+                termination.terminationId(), e);
+        }
     }
 }
