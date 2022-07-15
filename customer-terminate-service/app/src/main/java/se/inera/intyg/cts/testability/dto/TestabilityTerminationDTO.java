@@ -11,6 +11,7 @@ public record TestabilityTerminationDTO(UUID terminationId,
                                         String hsaId,
                                         String organizationNumber,
                                         String personId,
-                                        String phoneNumber) {
+                                        String phoneNumber,
+                                        String emailAddress) {
 
 }

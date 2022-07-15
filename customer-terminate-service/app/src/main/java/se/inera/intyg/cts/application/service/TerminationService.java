@@ -34,6 +34,7 @@ public class TerminationService {
         .careProviderOrganizationNumber(createTerminationDTO.organizationNumber())
         .careProviderOrganizationRepresentativePersonId(createTerminationDTO.personId())
         .careProviderOrganizationRepresentativePhoneNumber(createTerminationDTO.phoneNumber())
+        .careProviderOrganizationRepresentativeEmailAddress(createTerminationDTO.emailAddress())
         .create();
 
     final var createdTermination = terminationRepository.store(termination);

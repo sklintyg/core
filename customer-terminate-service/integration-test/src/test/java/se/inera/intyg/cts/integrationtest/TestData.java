@@ -17,6 +17,7 @@ public class TestData {
   public static final String ORG_NO = "ORG-NO";
   public static final String PERSON_ID = "191212121212";
   public static final String PHONE_NUMBER = "070-1112233";
+  public static final String EMAIL_ADDRESS = "email@address.se";
 
   private final List<TestabilityTerminationDTO> terminationDTOs = new ArrayList<>();
   private final List<String> terminationIds = new ArrayList<>();
@@ -27,6 +28,7 @@ public class TestData {
   private boolean uploadPackage;
   private String password;
   private boolean receiptReceived;
+  private boolean notificationSent;
 
   public static TestData create() {
     return new TestData();
@@ -52,10 +54,29 @@ public class TestData {
               HSA_ID,
               ORG_NO,
               PERSON_ID,
-              PHONE_NUMBER
+              PHONE_NUMBER,
+              EMAIL_ADDRESS
           )
       );
     }
+    return this;
+  }
+
+  public TestData terminationWithCreatedTime(LocalDateTime createdTime) {
+    terminationDTOs.add(
+      new TestabilityTerminationDTO(
+        UUID.randomUUID(),
+          createdTime,
+          "CREATORHSA-ID",
+          "Creator Name",
+          "CREATED",
+          HSA_ID,
+          ORG_NO,
+          PERSON_ID,
+          PHONE_NUMBER,
+          EMAIL_ADDRESS
+      )
+    );
     return this;
   }
 
@@ -82,6 +103,11 @@ public class TestData {
   public TestData uploadPackage(String password) {
     this.uploadPackage = true;
     this.password = password;
+    return this;
+  }
+
+  public TestData notificationSent() {
+    this.notificationSent = true;
     return this;
   }
 
@@ -155,6 +181,17 @@ public class TestData {
               .statusCode(HttpStatus.OK.value());
         }
 
+        if (notificationSent) {
+          given()
+              .contentType(ContentType.JSON)
+              .body(password)
+              .pathParam("terminationId", testabilityTerminationDTO.terminationId().toString())
+              .when()
+              .post("/testability/v1/terminations/{terminationId}/sendNotification")
+              .then()
+              .statusCode(HttpStatus.OK.value());
+        }
+
         if (receiptReceived) {
           given()
               .contentType(ContentType.JSON)
@@ -198,6 +235,13 @@ public class TestData {
         .baseUri("http://localhost:18000")
         .when()
         .delete("/testability-tellustalk/v1/sms")
+        .then()
+        .statusCode(HttpStatus.OK.value());
+
+    given()
+        .baseUri("http://localhost:18000")
+        .when()
+        .delete("/testability-email/v1/")
         .then()
         .statusCode(HttpStatus.OK.value());
   }

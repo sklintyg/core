@@ -19,6 +19,12 @@ public class TellusTalkTestabilityService {
         .orElse("");
   }
 
+  public String getNotificationSentWithSMS(String phoneNumber) {
+    return tellusTalkRepository.findByPhoneNumber(phoneNumber)
+        .map(SMSRequestDTO::text)
+        .orElse("");
+  }
+
   public void deleteSMS() {
     tellusTalkRepository.removeAll();
   }

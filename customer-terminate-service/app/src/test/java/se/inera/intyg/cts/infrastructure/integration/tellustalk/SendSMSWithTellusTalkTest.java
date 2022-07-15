@@ -17,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.reactive.function.client.WebClient;
-import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.SMSResponseDTO;
+import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.TellusTalkResponseDTO;
 
 @ExtendWith(MockitoExtension.class)
 class SendSMSWithTellusTalkTest {
@@ -54,12 +54,12 @@ class SendSMSWithTellusTalkTest {
     ReflectionTestUtils.setField(sendSMS, "smsOriginatorText", "Inera AB");
     String phoneNumber = "sms:+46701234567";
     String message = "Hej hej";
-    SMSResponseDTO smsResponseDTO = new SMSResponseDTO("JobId", "logHref");
+    TellusTalkResponseDTO smsResponseDTO = new TellusTalkResponseDTO("JobId", "logHref");
     ObjectMapper objectMapper = new ObjectMapper();
     mockBackEnd.enqueue(new MockResponse().setBody(objectMapper.writeValueAsString(smsResponseDTO))
         .addHeader("Content-Type", "application/json"));
 
-    SMSResponseDTO response = sendSMS.sendSMS(phoneNumber, message);
+    TellusTalkResponseDTO response = sendSMS.sendSMS(phoneNumber, message);
 
     assertEquals(response.job_id(), smsResponseDTO.job_id());
     assertEquals(response.log_href(), smsResponseDTO.log_href());

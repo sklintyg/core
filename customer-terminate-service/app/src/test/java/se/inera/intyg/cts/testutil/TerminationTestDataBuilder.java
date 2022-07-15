@@ -21,6 +21,7 @@ public class TerminationTestDataBuilder {
   public static final String DEFAULT_ORGANIZATION_NUMBER = "2-orgnr-ALFA";
   public static final String DEFAULT_PERSON_ID = "191212121212";
   public static final String DEFAULT_PHONE_NUMBER = "phoneNumber";
+  public static final String DEFAULT_EMAIL_ADDRESS = "email@address.se";
 
   public static final String DEFAULT_PASSWORD = "Password";
   public static final TerminationStatus DEFAULT_STATUS = TerminationStatus.CREATED;
@@ -35,6 +36,7 @@ public class TerminationTestDataBuilder {
         .careProviderOrganizationNumber(DEFAULT_ORGANIZATION_NUMBER)
         .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
         .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
+        .careProviderOrganizationRepresentativeEmailAddress(DEFAULT_EMAIL_ADDRESS)
         .status(TerminationStatus.CREATED)
         .packagePassword(DEFAULT_PASSWORD)
         .create();
@@ -50,7 +52,8 @@ public class TerminationTestDataBuilder {
         DEFAULT_HSA_ID,
         DEFAULT_ORGANIZATION_NUMBER,
         DEFAULT_PERSON_ID,
-        DEFAULT_PHONE_NUMBER
+        DEFAULT_PHONE_NUMBER,
+        DEFAULT_EMAIL_ADDRESS
     );
   }
 
@@ -65,6 +68,7 @@ public class TerminationTestDataBuilder {
         DEFAULT_ORGANIZATION_NUMBER,
         DEFAULT_PERSON_ID,
         DEFAULT_PHONE_NUMBER,
+        DEFAULT_EMAIL_ADDRESS,
         DEFAULT_STATUS.toString(),
         new ExportEmbeddable(0, 0, null, null));
   }
@@ -80,6 +84,7 @@ public class TerminationTestDataBuilder {
         DEFAULT_ORGANIZATION_NUMBER,
         DEFAULT_PERSON_ID,
         DEFAULT_PHONE_NUMBER,
+        DEFAULT_EMAIL_ADDRESS,
         DEFAULT_STATUS.toString(),
         new ExportEmbeddable(0, 0, null, null));
   }
@@ -94,6 +99,39 @@ public class TerminationTestDataBuilder {
         .careProviderOrganizationNumber(DEFAULT_ORGANIZATION_NUMBER)
         .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
         .careProviderOrganizationRepresentativePhoneNumber(phoneNumber)
+        .careProviderOrganizationRepresentativeEmailAddress(DEFAULT_EMAIL_ADDRESS)
+        .status(TerminationStatus.RECEIPT_RECEIVED)
+        .packagePassword(DEFAULT_PASSWORD)
+        .create();
+  }
+
+  public static Termination terminationWithCreatedDate(LocalDateTime created) {
+    return TerminationBuilder.getInstance()
+        .terminationId(DEFAULT_TERMINATION_ID)
+        .created(created)
+        .creatorHSAId(DEFAULT_CREATOR_HSA_ID)
+        .creatorName(DEFAULT_CREATOR_NAME)
+        .careProviderHSAId(DEFAULT_HSA_ID)
+        .careProviderOrganizationNumber(DEFAULT_ORGANIZATION_NUMBER)
+        .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
+        .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
+        .careProviderOrganizationRepresentativeEmailAddress(DEFAULT_EMAIL_ADDRESS)
+        .status(TerminationStatus.RECEIPT_RECEIVED)
+        .packagePassword(DEFAULT_PASSWORD)
+        .create();
+  }
+
+  public static Termination terminationWithEmailAddress(String emailAddress) {
+    return TerminationBuilder.getInstance()
+        .terminationId(DEFAULT_TERMINATION_ID)
+        .created(DEFAULT_CREATED)
+        .creatorHSAId(DEFAULT_CREATOR_HSA_ID)
+        .creatorName(DEFAULT_CREATOR_NAME)
+        .careProviderHSAId(DEFAULT_HSA_ID)
+        .careProviderOrganizationNumber(DEFAULT_ORGANIZATION_NUMBER)
+        .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
+        .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
+        .careProviderOrganizationRepresentativeEmailAddress(emailAddress)
         .status(TerminationStatus.RECEIPT_RECEIVED)
         .packagePassword(DEFAULT_PASSWORD)
         .create();

@@ -10,6 +10,10 @@ import se.inera.intyg.cts.domain.service.CollectExportContent;
 import se.inera.intyg.cts.domain.service.CreatePackage;
 import se.inera.intyg.cts.domain.service.ExportPackage;
 import se.inera.intyg.cts.domain.service.PasswordGenerator;
+import se.inera.intyg.cts.domain.service.SendNotification;
+import se.inera.intyg.cts.domain.service.SendPackageNotification;
+import se.inera.intyg.cts.domain.service.SendPackagePassword;
+import se.inera.intyg.cts.domain.service.SendPassword;
 import se.inera.intyg.cts.domain.service.UploadPackage;
 
 @Configuration
@@ -29,5 +33,17 @@ public class AppConfig {
       UploadPackage uploadPackage,
       TerminationRepository terminationRepository, PasswordGenerator passwordGenerator) {
     return new ExportPackage(createPackage, uploadPackage, terminationRepository, passwordGenerator);
+  }
+
+  @Bean
+  public SendPackageNotification sendNotifications(SendNotification sendNotification,
+      TerminationRepository terminationRepository) {
+    return new SendPackageNotification(sendNotification, terminationRepository);
+  }
+
+  @Bean
+  public SendPackagePassword sendPackagePassword(SendPassword sendPassword,
+      TerminationRepository terminationRepository) {
+    return new SendPackagePassword(sendPassword, terminationRepository);
   }
 }

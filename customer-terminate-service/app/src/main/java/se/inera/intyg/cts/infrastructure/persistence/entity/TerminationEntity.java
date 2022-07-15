@@ -45,6 +45,8 @@ public class TerminationEntity {
   private String personId;
   @Column(name = "phone_number")
   private String phoneNumber;
+  @Column(name = "email_address")
+  private String emailAddress;
   @Column(name = "status")
   private String status;
 

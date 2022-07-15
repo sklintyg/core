@@ -9,7 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import se.inera.intyg.cts.infrastructure.integration.SendSMS;
 import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.SMSRequestDTO;
-import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.SMSResponseDTO;
+import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.TellusTalkResponseDTO;
 
 @Service
 public class SendSMSWithTellusTalk implements SendSMS {
@@ -44,7 +44,7 @@ public class SendSMSWithTellusTalk implements SendSMS {
   }
 
   @Override
-  public SMSResponseDTO sendSMS(String phonenumber, String message) {
+  public TellusTalkResponseDTO sendSMS(String phonenumber, String message) {
     SMSRequestDTO smsRequestDTO = new SMSRequestDTO(phonenumber, message, smsOriginatorText);
 
     return webClient.post().uri(uriBuilder -> uriBuilder
@@ -57,7 +57,7 @@ public class SendSMSWithTellusTalk implements SendSMS {
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .headers(headers -> headers.setBasicAuth(username, password))
         .retrieve()
-        .bodyToMono(SMSResponseDTO.class)
+        .bodyToMono(TellusTalkResponseDTO.class)
         .share()
         .block();
   }

@@ -150,6 +150,16 @@ public class TestabilityTerminationService {
   }
 
   @Transactional
+  public void setAsNotificationSent(UUID terminationId) {
+    final var terminationEntity = terminationEntityRepository.findByTerminationId(terminationId)
+        .orElseThrow();
+
+    terminationEntity.setStatus(TerminationStatus.NOTIFICATION_SENT.name());
+
+    terminationEntityRepository.save(terminationEntity);
+  }
+
+  @Transactional
   public void setAsReceiptReceived(UUID terminationId) {
     final var terminationEntity = terminationEntityRepository.findByTerminationId(terminationId)
         .orElseThrow();
@@ -158,5 +168,11 @@ public class TestabilityTerminationService {
     terminationEntity.getExport().setReceiptTime(LocalDateTime.now());
 
     terminationEntityRepository.save(terminationEntity);
+  }
+
+  public String getStatus(UUID terminationId) {
+    return terminationEntityRepository.findByTerminationId(terminationId)
+        .orElseThrow()
+        .getStatus();
   }
 }

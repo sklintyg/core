@@ -16,6 +16,7 @@ public class TerminationTestDataFactory {
   public static final String DEFAULT_ORGANIZATIONAL_NUMBER = "organizationalNumber";
   public static final String DEFAULT_PERSON_ID = "personId";
   public static final String DEFAULT_PHONE_NUMBER = "phoneNumber";
+  public static final String DEFAULT_EMAIL_ADDRESS = "email@address.se";
   public static final TerminationStatus DEFAULT_STATUS = TerminationStatus.CREATED;
 
   public static Termination defaultTermination() {
@@ -28,7 +29,23 @@ public class TerminationTestDataFactory {
         .careProviderOrganizationNumber(DEFAULT_ORGANIZATIONAL_NUMBER)
         .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
         .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
-        .status(TerminationStatus.CREATED)
+        .careProviderOrganizationRepresentativeEmailAddress(DEFAULT_EMAIL_ADDRESS)
+        .status(DEFAULT_STATUS)
+        .create();
+  }
+
+  public static Termination terminationWithStatus(TerminationStatus status) {
+    return TerminationBuilder.getInstance()
+        .terminationId(DEFAULT_TERMINATION_ID)
+        .created(DEFAULT_CREATED)
+        .creatorHSAId(DEFAULT_CREATOR_HSA_ID)
+        .creatorName(DEFAULT_CREATOR_NAME)
+        .careProviderHSAId(DEFAULT_HSA_ID)
+        .careProviderOrganizationNumber(DEFAULT_ORGANIZATIONAL_NUMBER)
+        .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
+        .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
+        .careProviderOrganizationRepresentativeEmailAddress(DEFAULT_EMAIL_ADDRESS)
+        .status(status)
         .create();
   }
 }

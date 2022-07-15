@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.icegreen:greenmail:1.6.9'
 
     compileOnly 'org.projectlombok:lombok'
 

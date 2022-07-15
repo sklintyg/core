@@ -14,7 +14,8 @@ public class TerminationDTOMapper {
         termination.careProvider().hsaId().id(),
         termination.careProvider().organizationNumber().number(),
         termination.export().organizationRepresentative().personId().id(),
-        termination.export().organizationRepresentative().phoneNumber().number()
+        termination.export().organizationRepresentative().phoneNumber().number(),
+        termination.export().organizationRepresentative().emailAddress().emailAddress()
     );
   }
 }
