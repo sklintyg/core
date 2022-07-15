@@ -3,6 +3,7 @@ dependencies {
     implementation project(':app')
 
     testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'net.lingala.zip4j:zip4j:2.10.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-web'
 }
