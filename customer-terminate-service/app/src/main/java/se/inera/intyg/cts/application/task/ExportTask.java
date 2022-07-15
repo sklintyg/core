@@ -8,7 +8,7 @@ import se.inera.intyg.cts.application.service.ExportService;
 @Component
 public class ExportTask {
 
-  private static final String TASK_NAME = "CollectCertificateTextsTask.run";
+  private static final String TASK_NAME = "ExportTask.run";
   private static final String LOCK_AT_MOST = "4m";
   private static final String LOCK_AT_LEAST = "4m";
 
