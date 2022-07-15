@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.css.application.service.StatistikService;
 
 @RestController
-@RequestMapping("/internalapi/v1/erase")
+@RequestMapping("/internalapi-statistik/v1/erase")
 public class StatistikController {
 
   private final static Logger LOG = LoggerFactory.getLogger(StatistikController.class);

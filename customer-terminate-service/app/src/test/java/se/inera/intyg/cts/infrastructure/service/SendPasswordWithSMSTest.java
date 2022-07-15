@@ -30,6 +30,7 @@ class SendPasswordWithSMSTest {
 
     @Mock
     private SendSMS sendSMS;
+
     @Mock
     private TerminationRepository terminationRepository;
 
@@ -57,8 +58,10 @@ class SendPasswordWithSMSTest {
     @Test
     void shouldThrowExceptionIfStatusUpdateFailure() {
         Termination termination = defaultTermination();
-        when(sendSMS.sendSMS(any(String.class), any(String.class))).thenReturn(new SMSResponseDTO("ID", "URL"));
-        when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(Optional.empty());
+        when(sendSMS.sendSMS(any(String.class), any(String.class))).thenReturn(
+            new SMSResponseDTO("ID", "URL"));
+        when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(
+            Optional.empty());
 
         assertThrows(IllegalStateException.class, () -> smsService.sendPassword(termination));
     }
@@ -68,7 +71,8 @@ class SendPasswordWithSMSTest {
 
         @Test
         void shouldHandleCompliantPhoneNumber() {
-            final var termination = TerminationTestDataBuilder.terminationWithPhoneNumber(COMPLIANT_PHONE_NUMBER);
+            final var termination = TerminationTestDataBuilder.terminationWithPhoneNumber(
+                COMPLIANT_PHONE_NUMBER);
             setMocks(termination);
 
             smsService.sendPassword(termination);
@@ -79,7 +83,8 @@ class SendPasswordWithSMSTest {
 
         @Test
         void shouldHandlePhoneNumberWithCountryCode() {
-            final var termination = TerminationTestDataBuilder.terminationWithPhoneNumber("+46701234567");
+            final var termination = TerminationTestDataBuilder.terminationWithPhoneNumber(
+                "+46701234567");
             setMocks(termination);
 
             smsService.sendPassword(termination);
@@ -90,7 +95,8 @@ class SendPasswordWithSMSTest {
 
         @Test
         void shouldHandleStandardPhoneNumberFormat() {
-            final var termination = TerminationTestDataBuilder.terminationWithPhoneNumber("070-1234567");
+            final var termination = TerminationTestDataBuilder.terminationWithPhoneNumber(
+                "070-1234567");
             setMocks(termination);
 
             smsService.sendPassword(termination);
@@ -101,7 +107,8 @@ class SendPasswordWithSMSTest {
 
         @Test
         void shouldHandleSomeNonStandardPhoneNumberFormat() {
-            final var termination = TerminationTestDataBuilder.terminationWithPhoneNumber("+70-123R4 5-67");
+            final var termination = TerminationTestDataBuilder.terminationWithPhoneNumber(
+                "+70-123R4 5-67");
             setMocks(termination);
 
             smsService.sendPassword(termination);
@@ -112,7 +119,9 @@ class SendPasswordWithSMSTest {
     }
 
     private void setMocks(Termination termination) {
-        when(sendSMS.sendSMS(any(String.class), any(String.class))).thenReturn(new SMSResponseDTO("ID", "URL"));
-        when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(Optional.of(termination));
+        when(sendSMS.sendSMS(any(String.class), any(String.class))).thenReturn(
+            new SMSResponseDTO("ID", "URL"));
+        when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(
+            Optional.of(termination));
     }
 }

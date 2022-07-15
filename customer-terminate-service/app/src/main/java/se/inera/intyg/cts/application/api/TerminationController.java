@@ -12,16 +12,21 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
+import se.inera.intyg.cts.application.service.EraseService;
 import se.inera.intyg.cts.application.service.TerminationService;
+import se.inera.intyg.cts.domain.model.TerminationId;
 
 @RestController
 @RequestMapping("/api/v1/terminations")
 public class TerminationController {
 
   private final TerminationService terminationService;
+  private final EraseService eraseCareProviderService;
 
-  public TerminationController(TerminationService terminationService) {
+  public TerminationController(TerminationService terminationService,
+      EraseService eraseCareProviderService) {
     this.terminationService = terminationService;
+    this.eraseCareProviderService = eraseCareProviderService;
   }
 
   @PostMapping
@@ -45,5 +50,14 @@ public class TerminationController {
   @GetMapping
   List<TerminationDTO> findAll() {
     return terminationService.findAll();
+  }
+
+  @PostMapping("/{terminationId}/erase")
+  TerminationDTO startErase(@PathVariable UUID terminationId) {
+    try {
+      return eraseCareProviderService.initiateErase(new TerminationId(terminationId));
+    } catch (IllegalArgumentException ex) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
+    }
   }
 }

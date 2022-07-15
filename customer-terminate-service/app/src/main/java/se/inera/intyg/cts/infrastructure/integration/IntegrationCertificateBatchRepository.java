@@ -27,7 +27,8 @@ public class IntegrationCertificateBatchRepository implements CertificateBatchRe
   @Override
   public CertificateSummary certificateSummary(
       Termination termination) {
-    return null;
+    return getCertificateBatch.get(termination.careProvider().hsaId().id(), 1, 0)
+        .certificateSummary();
   }
 
   @Override

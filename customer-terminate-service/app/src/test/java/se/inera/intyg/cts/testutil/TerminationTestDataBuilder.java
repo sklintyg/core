@@ -1,6 +1,7 @@
 package se.inera.intyg.cts.testutil;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.UUID;
 import java.util.random.RandomGenerator;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
@@ -66,7 +67,9 @@ public class TerminationTestDataBuilder {
         DEFAULT_PERSON_ID,
         DEFAULT_PHONE_NUMBER,
         DEFAULT_STATUS.toString(),
-        new ExportEmbeddable(0, 0, null, null));
+        new ExportEmbeddable(0, 0, null, null),
+        Collections.emptyList()
+    );
   }
 
   public static TerminationEntity defaultTerminationEntity(UUID terminationId) {
@@ -81,7 +84,9 @@ public class TerminationTestDataBuilder {
         DEFAULT_PERSON_ID,
         DEFAULT_PHONE_NUMBER,
         DEFAULT_STATUS.toString(),
-        new ExportEmbeddable(0, 0, null, null));
+        new ExportEmbeddable(0, 0, null, null),
+        Collections.emptyList()
+    );
   }
 
   public static Termination terminationWithPhoneNumber(String phoneNumber) {

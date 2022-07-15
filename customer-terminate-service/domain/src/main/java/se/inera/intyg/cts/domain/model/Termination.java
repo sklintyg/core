@@ -104,6 +104,10 @@ public class Termination {
     return erase;
   }
 
+  public void initiateErase() {
+    status = TerminationStatus.START_ERASE;
+  }
+
   public void startErase(List<EraseService> eraseServices) {
     erase = new Erase(eraseServices);
     status = TerminationStatus.ERASE_IN_PROGRESS;

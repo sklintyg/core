@@ -1,5 +1,6 @@
 package se.inera.intyg.cts.domain.service;
 
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -15,14 +16,14 @@ public class EraseDataForCareProvider {
 
   private final static Logger LOG = LoggerFactory.getLogger(EraseDataForCareProvider.class);
 
-  private final EraseDataInServiceProvider eraseDataInServiceProvider;
+  private final List<EraseDataInService> services;
   private final CertificateBatchRepository certificateBatchRepository;
   private final TerminationRepository terminationRepository;
 
-  public EraseDataForCareProvider(EraseDataInServiceProvider eraseDataInServiceProvider,
+  public EraseDataForCareProvider(List<EraseDataInService> services,
       CertificateBatchRepository certificateBatchRepository,
       TerminationRepository terminationRepository) {
-    this.eraseDataInServiceProvider = eraseDataInServiceProvider;
+    this.services = services;
     this.certificateBatchRepository = certificateBatchRepository;
     this.terminationRepository = terminationRepository;
   }
@@ -44,7 +45,7 @@ public class EraseDataForCareProvider {
     }
 
     termination.startErase(
-        eraseDataInServiceProvider.getServices().stream()
+        services.stream()
             .map(eraseDataInService -> new EraseService(eraseDataInService.serviceId(), false))
             .collect(Collectors.toList())
     );
@@ -54,7 +55,7 @@ public class EraseDataForCareProvider {
     final var certificateSummary = certificateBatchRepository.certificateSummary(termination);
     if (!certificateSummary.equals(termination.export().certificateSummary())) {
       LOG.error(String.format(
-          "Certificates for termination '%s' has changed since export. Exported '%s' and current ''%s. Erase will be cancelled!",
+          "Certificates for termination '%s' has changed since export. Exported '%s' and current '%s'. Erase will be cancelled!",
           termination.terminationId().id(), termination.export().certificateSummary(),
           certificateSummary));
       return true;
@@ -63,7 +64,6 @@ public class EraseDataForCareProvider {
   }
 
   private void eraseCareProvider(Termination termination) {
-    final var services = eraseDataInServiceProvider.getServices();
     services.stream()
         .filter(filterOutAlreadyErasedServices(termination))
         .forEach(eraseDataInService(termination));

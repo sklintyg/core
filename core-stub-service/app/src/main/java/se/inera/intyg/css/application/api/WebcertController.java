@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.css.application.service.WebcertService;
 
 @RestController
-@RequestMapping("/internalapi/v1/erase")
+@RequestMapping("/internalapi-webcert/v1/erase")
 public class WebcertController {
 
   private final static Logger LOG = LoggerFactory.getLogger(WebcertController.class);

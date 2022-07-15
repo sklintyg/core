@@ -116,4 +116,22 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="6" author="mww">
+    <createTable tableName="erase">
+      <column name="service_id" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="erased" type="boolean">
+        <constraints nullable="false"/>
+      </column>
+      <column name="termination_id" type="integer">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_erase_termination_id"
+      baseTableName="erase" baseColumnNames="termination_id"
+      referencedTableName="termination" referencedColumnNames="id"/>
+  </changeSet>
+
 </databaseChangeLog>

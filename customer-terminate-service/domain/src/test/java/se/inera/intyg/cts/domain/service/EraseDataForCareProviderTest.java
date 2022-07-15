@@ -13,6 +13,7 @@ import static se.inera.intyg.cts.domain.util.TerminationTestDataFactory.DEFAULT_
 import static se.inera.intyg.cts.domain.util.TerminationTestDataFactory.exportedTerminationWithEraseInProgress;
 import static se.inera.intyg.cts.domain.util.TerminationTestDataFactory.exportedTerminationWithStartErase;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -36,18 +37,17 @@ class EraseDataForCareProviderTest {
   private final InMemoryTerminationRepository inMemoryTerminationRepository = new InMemoryTerminationRepository();
 
   @Mock
-  private EraseDataInServiceProvider eraseDataInServiceProvider;
-
-  @Mock
   private CertificateBatchRepository certificateBatchRepository;
 
   @InjectMocks
   private EraseDataForCareProvider eraseDataForCareProvider;
 
+  private List<EraseDataInService> eraseDataInServices = new ArrayList<>();
+
   @BeforeEach
   void setUp() {
     eraseDataForCareProvider = new EraseDataForCareProvider(
-        eraseDataInServiceProvider,
+        eraseDataInServices,
         certificateBatchRepository,
         inMemoryTerminationRepository
     );
@@ -68,9 +68,7 @@ class EraseDataForCareProviderTest {
 
       @BeforeEach
       void setUp() {
-        doReturn(List.of(eraseDataInService))
-            .when(eraseDataInServiceProvider)
-            .getServices();
+        eraseDataInServices.add(eraseDataInService);
 
         doReturn(new ServiceId(SERVICE_ID))
             .when(eraseDataInService)
@@ -151,9 +149,7 @@ class EraseDataForCareProviderTest {
 
       @BeforeEach
       void setUp() {
-        doReturn(List.of(eraseDataInService))
-            .when(eraseDataInServiceProvider)
-            .getServices();
+        eraseDataInServices.add(eraseDataInService);
       }
 
       @Test
@@ -239,9 +235,9 @@ class EraseDataForCareProviderTest {
 
       @BeforeEach
       void setUp() {
-        doReturn(List.of(eraseDataInServiceOne, eraseDataInServiceTwo, eraseDataInServiceThree))
-            .when(eraseDataInServiceProvider)
-            .getServices();
+        eraseDataInServices.add(eraseDataInServiceOne);
+        eraseDataInServices.add(eraseDataInServiceTwo);
+        eraseDataInServices.add(eraseDataInServiceThree);
 
         doReturn(new ServiceId(SERVICE_ID_ONE))
             .when(eraseDataInServiceOne)
@@ -307,9 +303,9 @@ class EraseDataForCareProviderTest {
 
       @BeforeEach
       void setUp() {
-        doReturn(List.of(eraseDataInServiceOne, eraseDataInServiceTwo, eraseDataInServiceThree))
-            .when(eraseDataInServiceProvider)
-            .getServices();
+        eraseDataInServices.add(eraseDataInServiceOne);
+        eraseDataInServices.add(eraseDataInServiceTwo);
+        eraseDataInServices.add(eraseDataInServiceThree);
       }
 
       @Test
@@ -450,9 +446,9 @@ class EraseDataForCareProviderTest {
 
       @BeforeEach
       void setUp() {
-        doReturn(List.of(eraseDataInServiceOne, eraseDataInServiceTwo, eraseDataInServiceThree))
-            .when(eraseDataInServiceProvider)
-            .getServices();
+        eraseDataInServices.add(eraseDataInServiceOne);
+        eraseDataInServices.add(eraseDataInServiceTwo);
+        eraseDataInServices.add(eraseDataInServiceThree);
       }
 
       @Test

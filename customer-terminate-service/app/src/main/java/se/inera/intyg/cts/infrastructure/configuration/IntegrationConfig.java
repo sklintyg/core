@@ -69,6 +69,12 @@ public class IntegrationConfig {
         .build();
   }
 
+  @Bean(name = "webcertWebClient")
+  public WebClient webClientForWebcert() {
+    return WebClient.builder()
+        .build();
+  }
+
   private KeyManagerFactory getKeyManagerFactory() {
     try {
       final var keyManagerFactory = KeyManagerFactory.getInstance(
