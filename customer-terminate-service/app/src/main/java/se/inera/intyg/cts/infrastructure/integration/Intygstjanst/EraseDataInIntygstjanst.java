@@ -48,7 +48,6 @@ public class EraseDataInIntygstjanst implements EraseDataInService {
               .build(careProvider.hsaId().id())
           )
           .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-          .headers(headers -> headers.setBearerAuth("INCORRECT_KEY"))
           .retrieve()
           .toEntity(String.class)
           .block();
