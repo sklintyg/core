@@ -5,6 +5,7 @@ public record CreateTerminationDTO(String creatorHSAId,
                                    String hsaId,
                                    String organizationNumber,
                                    String personId,
-                                   String phoneNumber) {
+                                   String phoneNumber,
+                                   String emailAddress) {
 
 }

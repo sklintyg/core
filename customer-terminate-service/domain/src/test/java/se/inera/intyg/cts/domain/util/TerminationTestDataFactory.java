@@ -19,6 +19,7 @@ public class TerminationTestDataFactory {
   public static final String DEFAULT_ORGANIZATIONAL_NUMBER = "organizationalNumber";
   public static final String DEFAULT_PERSON_ID = "personId";
   public static final String DEFAULT_PHONE_NUMBER = "phoneNumber";
+  public static final String DEFAULT_EMAIL_ADDRESS = "email@address.se";
   public static final TerminationStatus DEFAULT_STATUS = TerminationStatus.CREATED;
   private static final String DEFAULT_PASSWORD = "Password";
   public static final int DEFAULT_TOTAL = 100;
@@ -53,6 +54,12 @@ public class TerminationTestDataFactory {
         .create();
   }
 
+  public static Termination terminationWithStatus(TerminationStatus status) {
+    return defaultTerminationBuilder()
+        .status(status)
+        .create();
+  }
+
   private static TerminationBuilder defaultTerminationBuilder() {
     return TerminationBuilder.getInstance()
         .terminationId(DEFAULT_TERMINATION_ID)
@@ -63,6 +70,7 @@ public class TerminationTestDataFactory {
         .careProviderOrganizationNumber(DEFAULT_ORGANIZATIONAL_NUMBER)
         .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
         .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
-        .status(TerminationStatus.CREATED);
+        .careProviderOrganizationRepresentativeEmailAddress(DEFAULT_EMAIL_ADDRESS)
+        .status(DEFAULT_STATUS);
   }
 }

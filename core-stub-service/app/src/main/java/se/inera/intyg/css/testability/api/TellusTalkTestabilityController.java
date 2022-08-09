@@ -29,6 +29,12 @@ public class TellusTalkTestabilityController {
     return tellusTalkTestabilityService.getPasswordSentWithSMS(phoneNumber);
   }
 
+  @GetMapping("/smsNotifications/{phoneNumber}")
+  public String getSmsNotification(@PathVariable String phoneNumber) {
+    LOG.info(String.format("Get notification that was sent as sms to: %s", phoneNumber));
+    return tellusTalkTestabilityService.getNotificationSentWithSMS(phoneNumber);
+  }
+
   @DeleteMapping("/sms")
   public void deleteSMS() {
     LOG.info("Delete sms.");

@@ -45,4 +45,16 @@ public class ExportController {
     LOG.info("Start send passwords");
     messageService.sendPassword();
   }
+
+  @PostMapping("/sendNotification")
+  void sendNotification() {
+    LOG.info("Start send notification");
+    messageService.sendNotification();
+  }
+
+  @PostMapping("/sendReminder")
+  void sendReminder() {
+    LOG.info("Start send reminder");
+    messageService.sendReminder();
+  }
 }

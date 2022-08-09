@@ -19,6 +19,7 @@ class TerminationBuilderTest {
   public static final String ORGANIZATION_NUMBER = "organizationNumber";
   public static final String PERSON_ID = "personId";
   public static final String PHONE_NUMBER = "phoneNumber";
+  public static final String EMAIL_ADDRESS = "email@address.se";
   public static final int TOTAL = 145;
   public static final int REVOKED = 13;
   public static final String PASSWORD = "thisisapassword";
@@ -123,6 +124,13 @@ class TerminationBuilderTest {
   }
 
   @Test
+  void shallCreateTerminationWithEmailAddress() {
+    assertEquals(EMAIL_ADDRESS,
+        terminationBuilder().create().export().organizationRepresentative().emailAddress()
+            .emailAddress());
+  }
+
+  @Test
   void shallCreateTerminationWithTotal() {
     assertEquals(TOTAL,
         terminationBuilder().create().export().certificateSummary().total());
@@ -184,6 +192,14 @@ class TerminationBuilderTest {
     assertEquals("Missing PhoneNumber", exception.getMessage());
   }
 
+  @Test
+  void shallNotAcceptTerminationWithoutEmailAddress() {
+    final var exception = assertThrows(IllegalArgumentException.class,
+        () -> terminationBuilder().careProviderOrganizationRepresentativeEmailAddress("")
+            .create());
+    assertEquals("Missing EmailAddress", exception.getMessage());
+  }
+
   private TerminationBuilder terminationBuilder() {
     return TerminationBuilder.getInstance()
         .creatorHSAId(CREATOR_HSA_ID)
@@ -192,6 +208,7 @@ class TerminationBuilderTest {
         .careProviderOrganizationNumber(ORGANIZATION_NUMBER)
         .careProviderOrganizationRepresentativePersonId(PERSON_ID)
         .careProviderOrganizationRepresentativePhoneNumber(PHONE_NUMBER)
+        .careProviderOrganizationRepresentativeEmailAddress(EMAIL_ADDRESS)
         .total(TOTAL)
         .revoked(REVOKED)
         .packagePassword(PASSWORD);

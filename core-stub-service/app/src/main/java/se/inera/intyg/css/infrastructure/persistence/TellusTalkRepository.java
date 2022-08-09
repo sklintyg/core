@@ -15,12 +15,12 @@ public class TellusTalkRepository {
     smsRequestDTOMap.put(smsRequestDTO.to(), smsRequestDTO);
   }
 
-  public Optional<SMSRequestDTO> find(String to) {
+  public Optional<SMSRequestDTO> findSms(String to) {
     return Optional.ofNullable(smsRequestDTOMap.get(to));
   }
 
   public Optional<SMSRequestDTO> findByPhoneNumber(String phoneNumber) {
-    return find(
+    return findSms(
         smsRequestDTOMap.keySet().stream()
             .filter(to -> to.contains(phoneNumber.replace("-", "").substring(1)))
             .findAny()

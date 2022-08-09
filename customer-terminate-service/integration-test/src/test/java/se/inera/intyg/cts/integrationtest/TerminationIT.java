@@ -43,7 +43,8 @@ public class TerminationIT {
         "HSA-ID",
         "ORG-NO",
         "191212121212",
-        "000-1111-2222"
+        "000-1111-2222",
+        "email@address.se"
     );
 
     final var terminationDTO =

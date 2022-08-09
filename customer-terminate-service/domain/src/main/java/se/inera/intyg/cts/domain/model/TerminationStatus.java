@@ -6,6 +6,8 @@ public enum TerminationStatus {
   COLLECTING_CERTIFICATES_COMPLETED("Intyg hämtade"),
   COLLECTING_CERTIFICATE_TEXTS_COMPLETED("Intygstexter hämtade"),
   EXPORTED("Uppladdat"),
+  NOTIFICATION_SENT("Notifiering skickad"),
+  REMINDER_SENT("Påminnelse skickad"),
   RECEIPT_RECEIVED("Kvitterad"),
   PASSWORD_SENT("Lösenord skickat"),
   START_ERASE("Starta radering"),

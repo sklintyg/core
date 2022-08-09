@@ -15,6 +15,7 @@ public class TerminationBuilder {
   private String careProviderOrganizationNumber;
   private String careProviderOrganizationRepresentativePersonId;
   private String careProviderOrganizationRepresentativePhoneNumber;
+  private String careProviderOrganizationRepresentativeEmailAddress;
   private TerminationStatus status;
   private int total;
   private int revoked;
@@ -67,6 +68,12 @@ public class TerminationBuilder {
     return this;
   }
 
+  public TerminationBuilder careProviderOrganizationRepresentativeEmailAddress(
+      String emailAddress) {
+    this.careProviderOrganizationRepresentativeEmailAddress = emailAddress;
+    return this;
+  }
+
   public TerminationBuilder status(TerminationStatus status) {
     this.status = status;
     return this;
@@ -109,6 +116,7 @@ public class TerminationBuilder {
     final var organizationNumber = new OrganizationNumber(careProviderOrganizationNumber);
     final var personId = new PersonId(careProviderOrganizationRepresentativePersonId);
     final var phoneNumber = new PhoneNumber(careProviderOrganizationRepresentativePhoneNumber);
+    final var emailAddress = new EmailAddress(careProviderOrganizationRepresentativeEmailAddress);
 
     return new Termination(
         new TerminationId(terminationId),
@@ -117,7 +125,7 @@ public class TerminationBuilder {
         new CareProvider(hsaId, organizationNumber),
         status,
         new Export(
-            new OrganizationRepresentative(personId, phoneNumber),
+            new OrganizationRepresentative(personId, phoneNumber, emailAddress),
             new CertificateSummary(total, revoked),
             packagePassword != null ? new Password(packagePassword) : null,
             receiptTime

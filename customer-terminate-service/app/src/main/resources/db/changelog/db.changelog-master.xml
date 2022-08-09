@@ -116,7 +116,16 @@
     </addColumn>
   </changeSet>
 
-  <changeSet id="6" author="mww">
+  <changeSet id="6" author="mh">
+    <addColumn tableName="termination">
+      <column name="email_address" type="varchar(255)" afterColumn="phone_number"
+        defaultValue="change@me.se">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="7" author="mww">
     <createTable tableName="erase">
       <column name="service_id" type="varchar(255)">
         <constraints nullable="false"/>

@@ -20,6 +20,7 @@ public class TerminationEntityMapper {
         termination.careProvider().organizationNumber().number(),
         termination.export().organizationRepresentative().personId().id(),
         termination.export().organizationRepresentative().phoneNumber().number(),
+        termination.export().organizationRepresentative().emailAddress().emailAddress(),
         termination.status().name(),
         new ExportEmbeddable(
             termination.export().certificateSummary().total(),
@@ -49,6 +50,7 @@ public class TerminationEntityMapper {
         .careProviderOrganizationRepresentativePersonId(
             terminationEntity.getPersonId())
         .careProviderOrganizationRepresentativePhoneNumber(terminationEntity.getPhoneNumber())
+        .careProviderOrganizationRepresentativeEmailAddress(terminationEntity.getEmailAddress())
         .status(TerminationStatus.valueOf(terminationEntity.getStatus()))
         .total(terminationEntity.getExport().getTotal())
         .revoked(terminationEntity.getExport().getRevoked())

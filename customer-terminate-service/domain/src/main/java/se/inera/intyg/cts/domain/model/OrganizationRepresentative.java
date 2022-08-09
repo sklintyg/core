@@ -1,6 +1,7 @@
 package se.inera.intyg.cts.domain.model;
 
-public record OrganizationRepresentative(PersonId personId, PhoneNumber phoneNumber) {
+public record OrganizationRepresentative(PersonId personId, PhoneNumber phoneNumber,
+                                         EmailAddress emailAddress) {
 
   public OrganizationRepresentative {
     if (personId == null) {
@@ -8,6 +9,9 @@ public record OrganizationRepresentative(PersonId personId, PhoneNumber phoneNum
     }
     if (phoneNumber == null) {
       throw new IllegalArgumentException("Missing PhoneNumber");
+    }
+    if (emailAddress == null) {
+      throw new IllegalArgumentException("Missing EmailAddress");
     }
   }
 }
