@@ -12,15 +12,15 @@ public class EraseCareProviderTask {
   private static final String LOCK_AT_MOST = "PT50S";
   private static final String LOCK_AT_LEAST = "PT50S";
 
-  private final EraseService eraseCareProviderService;
+  private final EraseService eraseService;
 
   public EraseCareProviderTask(EraseService eraseService) {
-    this.eraseCareProviderService = eraseService;
+    this.eraseService = eraseService;
   }
 
   @Scheduled(cron = "${task.erasecareprovider.cron}")
   @SchedulerLock(name = TASK_NAME, lockAtLeastFor = LOCK_AT_LEAST, lockAtMostFor = LOCK_AT_MOST)
   public void eraseCareProvider() {
-    eraseCareProviderService.erase();
+    eraseService.erase();
   }
 }

@@ -13,7 +13,7 @@ import se.inera.intyg.cts.domain.repository.TerminationRepository;
 import se.inera.intyg.cts.domain.service.EraseDataForCareProvider;
 
 @Service
-public class EraseService {
+public class EraseService implements EraseServiceImpl {
 
   private static final Logger LOG = LoggerFactory.getLogger(EraseService.class);
 
@@ -26,6 +26,7 @@ public class EraseService {
     this.eraseDataForCareProvider = eraseDataForCareProvider;
   }
 
+  @Override
   public void erase() {
     final var terminations = terminationRepository.findByStatuses(
         Arrays.asList(TerminationStatus.START_ERASE, TerminationStatus.ERASE_IN_PROGRESS)
@@ -41,6 +42,7 @@ public class EraseService {
     );
   }
 
+  @Override
   public TerminationDTO initiateErase(TerminationId terminationId) {
     final var termination = terminationRepository.findByTerminationId(terminationId)
         .orElseThrow(() -> new IllegalArgumentException(
