@@ -1,78 +1,250 @@
 package se.inera.intyg.cts.application.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static se.inera.intyg.cts.testutil.CertificateTestDataBuilder.certificates;
-import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTerminationEntity;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTerminationBuilder;
 
-import org.junit.jupiter.api.BeforeEach;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.UUID;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.cts.domain.model.TerminationStatus;
+import se.inera.intyg.cts.domain.repository.TerminationRepository;
 import se.inera.intyg.cts.domain.service.CollectExportContent;
 import se.inera.intyg.cts.domain.service.ExportPackage;
-import se.inera.intyg.cts.domain.service.PasswordGenerator;
-import se.inera.intyg.cts.infrastructure.integration.GetCertificateBatchFromMemory;
-import se.inera.intyg.cts.infrastructure.integration.GetCertificateTextsFromMemory;
-import se.inera.intyg.cts.infrastructure.integration.IntegrationCertificateBatchRepository;
-import se.inera.intyg.cts.infrastructure.integration.UploadPackageToMemory;
-import se.inera.intyg.cts.infrastructure.persistence.JpaCertificateRepository;
-import se.inera.intyg.cts.infrastructure.persistence.JpaCertificateTextRepository;
-import se.inera.intyg.cts.infrastructure.persistence.JpaTerminationRepository;
-import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryCertificateEntityRepository;
-import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryCertificateTextsEntityRepository;
-import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryTerminationEntityRepository;
-import se.inera.intyg.cts.infrastructure.service.CreateEncryptedZipPackage;
 
 @ExtendWith(MockitoExtension.class)
 class ExportServiceImplTest {
 
   @Mock
-  private PasswordGenerator passwordGenerator;
+  private TerminationRepository terminationRepository;
 
-  private InMemoryTerminationEntityRepository inMemoryTerminationEntityRepository;
-  private InMemoryCertificateEntityRepository inMemoryCertificateEntityRepository;
-  private InMemoryCertificateTextsEntityRepository inMemoryCertificateTextsEntityRepository;
-  private GetCertificateBatchFromMemory getCertificateBatchFromMemory;
-  private GetCertificateTextsFromMemory getCertificateTextsFromMemory;
-  private ExportServiceImpl exportServiceImpl;
+  @Mock
+  private CollectExportContent collectExportContent;
 
-  @BeforeEach
-  void setUp() {
-    inMemoryTerminationEntityRepository = new InMemoryTerminationEntityRepository();
-    final var terminationRepository = new JpaTerminationRepository(
-        inMemoryTerminationEntityRepository);
-    inMemoryCertificateEntityRepository = new InMemoryCertificateEntityRepository();
-    final var certificateRepository = new JpaCertificateRepository(
-        inMemoryCertificateEntityRepository,
-        inMemoryTerminationEntityRepository);
-    inMemoryCertificateTextsEntityRepository = new InMemoryCertificateTextsEntityRepository();
-    final var certificateTextRepository = new JpaCertificateTextRepository(
-        inMemoryCertificateTextsEntityRepository,
-        inMemoryTerminationEntityRepository);
+  @Mock
+  private ExportPackage exportPackage;
 
-    getCertificateBatchFromMemory = new GetCertificateBatchFromMemory();
-    getCertificateTextsFromMemory = new GetCertificateTextsFromMemory();
-    final var integrationCertificateBatchRepository = new IntegrationCertificateBatchRepository(
-        getCertificateBatchFromMemory, 10, getCertificateTextsFromMemory);
+  @InjectMocks
+  private ExportServiceImpl exportService;
 
-    final var collectExportContent = new CollectExportContent(terminationRepository,
-        integrationCertificateBatchRepository, certificateRepository, certificateTextRepository);
-    final var createPackage = new CreateEncryptedZipPackage(inMemoryTerminationEntityRepository,
-        inMemoryCertificateEntityRepository, inMemoryCertificateTextsEntityRepository, "./");
-    final var uploadPackage = new UploadPackageToMemory();
-    final var exportPackage = new ExportPackage(createPackage, uploadPackage,
-        terminationRepository, passwordGenerator);
-    exportServiceImpl = new ExportServiceImpl(terminationRepository, collectExportContent, exportPackage);
+  @Nested
+  class CollectingCertificates {
+
+    @Test
+    void shallCollectCertificatesForTerminationWithStatusCreated() {
+      final var termination = defaultTerminationBuilder()
+          .status(TerminationStatus.CREATED)
+          .create();
+
+      when(terminationRepository.findByStatuses(
+          Arrays.asList(TerminationStatus.CREATED, TerminationStatus.COLLECTING_CERTIFICATES)))
+          .thenReturn(Collections.singletonList(termination));
+
+      exportService.collectCertificatesToExport();
+
+      verify(collectExportContent, times(1)).collectCertificates(termination.terminationId());
+    }
+
+    @Test
+    void shallCollectCertificatesForTerminationWithStatusCollectingCertificates() {
+      final var termination = defaultTerminationBuilder()
+          .status(TerminationStatus.COLLECTING_CERTIFICATES)
+          .create();
+
+      when(terminationRepository.findByStatuses(
+          Arrays.asList(TerminationStatus.CREATED, TerminationStatus.COLLECTING_CERTIFICATES)))
+          .thenReturn(Collections.singletonList(termination));
+
+      exportService.collectCertificatesToExport();
+
+      verify(collectExportContent, times(1)).collectCertificates(termination.terminationId());
+    }
+
+    @Test
+    void shallCollectCertificatesForMultipleTerminationsIfExists() {
+      final var terminationOne = defaultTerminationBuilder()
+          .status(TerminationStatus.COLLECTING_CERTIFICATES)
+          .terminationId(UUID.randomUUID())
+          .create();
+
+      final var terminationTwo = defaultTerminationBuilder()
+          .status(TerminationStatus.COLLECTING_CERTIFICATES)
+          .terminationId(UUID.randomUUID())
+          .create();
+
+      when(terminationRepository.findByStatuses(
+          Arrays.asList(TerminationStatus.CREATED, TerminationStatus.COLLECTING_CERTIFICATES)))
+          .thenReturn(Arrays.asList(terminationOne, terminationTwo));
+
+      exportService.collectCertificatesToExport();
+
+      verify(collectExportContent, times(1)).collectCertificates(terminationOne.terminationId());
+      verify(collectExportContent, times(1)).collectCertificates(terminationTwo.terminationId());
+    }
+
+    @Test
+    void shallCollectCertificatesForOtherEvenIfOneFails() {
+      final var terminationOne = defaultTerminationBuilder()
+          .status(TerminationStatus.COLLECTING_CERTIFICATES)
+          .terminationId(UUID.randomUUID())
+          .create();
+
+      final var terminationTwo = defaultTerminationBuilder()
+          .status(TerminationStatus.COLLECTING_CERTIFICATES)
+          .terminationId(UUID.randomUUID())
+          .create();
+
+      when(terminationRepository.findByStatuses(
+          Arrays.asList(TerminationStatus.CREATED, TerminationStatus.COLLECTING_CERTIFICATES)))
+          .thenReturn(Arrays.asList(terminationOne, terminationTwo));
+
+      doThrow(new RuntimeException("Something went wrong!"))
+          .when(collectExportContent).collectCertificates(terminationOne.terminationId());
+
+      exportService.collectCertificatesToExport();
+
+      verify(collectExportContent, times(1)).collectCertificates(terminationOne.terminationId());
+      verify(collectExportContent, times(1)).collectCertificates(terminationTwo.terminationId());
+    }
   }
 
-  @Test
-  void shallCollectCertificatesForTermination() {
-    inMemoryTerminationEntityRepository.save(defaultTerminationEntity());
-    getCertificateBatchFromMemory.prepare(certificates(10, 0));
+  @Nested
+  class CollectingCertificateTexts {
 
-    exportServiceImpl.collectCertificatesToExport();
+    @Test
+    void shallCollectCertificateTextsForTerminationWithStatusCollectingCertificatesCompleted() {
+      final var termination = defaultTerminationBuilder()
+          .status(TerminationStatus.COLLECTING_CERTIFICATES_COMPLETED)
+          .create();
 
-    assertEquals(10, inMemoryCertificateEntityRepository.count());
+      when(terminationRepository.findByStatuses(
+          Collections.singletonList(TerminationStatus.COLLECTING_CERTIFICATES_COMPLETED)))
+          .thenReturn(Collections.singletonList(termination));
+
+      exportService.collectCertificateTextsToExport();
+
+      verify(collectExportContent, times(1)).collectCertificateTexts(termination);
+    }
+
+    @Test
+    void shallCollectCertificateTextsForMultipleTerminationsIfExists() {
+      final var terminationOne = defaultTerminationBuilder()
+          .status(TerminationStatus.COLLECTING_CERTIFICATES_COMPLETED)
+          .terminationId(UUID.randomUUID())
+          .create();
+
+      final var terminationTwo = defaultTerminationBuilder()
+          .status(TerminationStatus.COLLECTING_CERTIFICATES_COMPLETED)
+          .terminationId(UUID.randomUUID())
+          .create();
+
+      when(terminationRepository.findByStatuses(
+          Collections.singletonList(TerminationStatus.COLLECTING_CERTIFICATES_COMPLETED)))
+          .thenReturn(Arrays.asList(terminationOne, terminationTwo));
+
+      exportService.collectCertificateTextsToExport();
+
+      verify(collectExportContent, times(1)).collectCertificateTexts(terminationOne);
+      verify(collectExportContent, times(1)).collectCertificateTexts(terminationTwo);
+    }
+
+    @Test
+    void shallCollectCertificateTextsForOtherEvenIfOneFails() {
+      final var terminationOne = defaultTerminationBuilder()
+          .status(TerminationStatus.COLLECTING_CERTIFICATES_COMPLETED)
+          .terminationId(UUID.randomUUID())
+          .create();
+
+      final var terminationTwo = defaultTerminationBuilder()
+          .status(TerminationStatus.COLLECTING_CERTIFICATES_COMPLETED)
+          .terminationId(UUID.randomUUID())
+          .create();
+
+      when(terminationRepository.findByStatuses(
+          Collections.singletonList(TerminationStatus.COLLECTING_CERTIFICATES_COMPLETED)))
+          .thenReturn(Arrays.asList(terminationOne, terminationTwo));
+
+      doThrow(new RuntimeException("Something went wrong!"))
+          .when(collectExportContent).collectCertificateTexts(terminationOne);
+
+      exportService.collectCertificateTextsToExport();
+
+      verify(collectExportContent, times(1)).collectCertificateTexts(terminationOne);
+      verify(collectExportContent, times(1)).collectCertificateTexts(terminationTwo);
+    }
+  }
+
+  @Nested
+  class Export {
+
+    @Test
+    void shallCollectCertificateTextsForTerminationWithStatusCollectingCertificatesCompleted() {
+      final var termination = defaultTerminationBuilder()
+          .status(TerminationStatus.COLLECTING_CERTIFICATE_TEXTS_COMPLETED)
+          .create();
+
+      when(terminationRepository.findByStatuses(
+          Collections.singletonList(TerminationStatus.COLLECTING_CERTIFICATE_TEXTS_COMPLETED)))
+          .thenReturn(Collections.singletonList(termination));
+
+      exportService.export();
+
+      verify(exportPackage, times(1)).export(termination);
+    }
+
+    @Test
+    void shallCollectCertificateTextsForMultipleTerminationsIfExists() {
+      final var terminationOne = defaultTerminationBuilder()
+          .status(TerminationStatus.COLLECTING_CERTIFICATE_TEXTS_COMPLETED)
+          .terminationId(UUID.randomUUID())
+          .create();
+
+      final var terminationTwo = defaultTerminationBuilder()
+          .status(TerminationStatus.COLLECTING_CERTIFICATE_TEXTS_COMPLETED)
+          .terminationId(UUID.randomUUID())
+          .create();
+
+      when(terminationRepository.findByStatuses(
+          Collections.singletonList(TerminationStatus.COLLECTING_CERTIFICATE_TEXTS_COMPLETED)))
+          .thenReturn(Arrays.asList(terminationOne, terminationTwo));
+
+      exportService.export();
+
+      verify(exportPackage, times(1)).export(terminationOne);
+      verify(exportPackage, times(1)).export(terminationTwo);
+    }
+
+    @Test
+    void shallCollectCertificateTextsForOtherEvenIfOneFails() {
+      final var terminationOne = defaultTerminationBuilder()
+          .status(TerminationStatus.COLLECTING_CERTIFICATE_TEXTS_COMPLETED)
+          .terminationId(UUID.randomUUID())
+          .create();
+
+      final var terminationTwo = defaultTerminationBuilder()
+          .status(TerminationStatus.COLLECTING_CERTIFICATE_TEXTS_COMPLETED)
+          .terminationId(UUID.randomUUID())
+          .create();
+
+      when(terminationRepository.findByStatuses(
+          Collections.singletonList(TerminationStatus.COLLECTING_CERTIFICATE_TEXTS_COMPLETED)))
+          .thenReturn(Arrays.asList(terminationOne, terminationTwo));
+
+      doThrow(new RuntimeException("Something went wrong!"))
+          .when(exportPackage).export(terminationOne);
+
+      exportService.export();
+
+      verify(exportPackage, times(1)).export(terminationOne);
+      verify(exportPackage, times(1)).export(terminationTwo);
+    }
   }
 }

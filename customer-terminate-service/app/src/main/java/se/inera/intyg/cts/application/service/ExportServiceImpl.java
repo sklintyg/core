@@ -1,6 +1,7 @@
 package se.inera.intyg.cts.application.service;
 
 import java.util.Arrays;
+import java.util.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,9 @@ public class ExportServiceImpl implements ExportService {
                 termination.terminationId().id().toString());
           } catch (Exception ex) {
             LOG.error(
-                String.format("Failed to collect certificates for termination '%s'"), ex
+                String.format("Failed to collect certificates for termination '%s'",
+                    termination.terminationId().id()),
+                ex
             );
           }
         }
@@ -53,7 +56,7 @@ public class ExportServiceImpl implements ExportService {
   @Transactional
   public void collectCertificateTextsToExport() {
     final var terminationsToExport = terminationRepository.findByStatuses(
-        Arrays.asList(TerminationStatus.COLLECTING_CERTIFICATES_COMPLETED)
+        Collections.singletonList(TerminationStatus.COLLECTING_CERTIFICATES_COMPLETED)
     );
 
     terminationsToExport.forEach(
@@ -64,7 +67,9 @@ public class ExportServiceImpl implements ExportService {
                 termination.terminationId().id().toString());
           } catch (Exception ex) {
             LOG.error(
-                String.format("Failed to collect certificate texts for termination '%s'"), ex
+                String.format("Failed to collect certificate texts for termination '%s'",
+                    termination.terminationId().id()),
+                ex
             );
           }
         }
@@ -75,7 +80,7 @@ public class ExportServiceImpl implements ExportService {
   @Transactional
   public void export() {
     final var terminationsToExport = terminationRepository.findByStatuses(
-        Arrays.asList(TerminationStatus.COLLECTING_CERTIFICATE_TEXTS_COMPLETED)
+        Collections.singletonList(TerminationStatus.COLLECTING_CERTIFICATE_TEXTS_COMPLETED)
     );
 
     terminationsToExport.forEach(
@@ -86,7 +91,9 @@ public class ExportServiceImpl implements ExportService {
                 termination.terminationId().id().toString());
           } catch (Exception ex) {
             LOG.error(
-                String.format("Failed to export termination '%s'"), ex
+                String.format("Failed to export termination '%s'",
+                    termination.terminationId().id()),
+                ex
             );
           }
         }
