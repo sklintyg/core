@@ -8,8 +8,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import se.inera.intyg.cts.domain.model.CareProvider;
 import se.inera.intyg.cts.domain.model.ServiceId;
+import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.service.EraseDataInService;
 import se.inera.intyg.cts.domain.service.EraseException;
 
@@ -38,14 +38,14 @@ public class EraseDataInIntygstjanst implements EraseDataInService {
   }
 
   @Override
-  public void erase(CareProvider careProvider) throws EraseException {
+  public void erase(Termination termination) throws EraseException {
     try {
       webClient.delete().uri(uriBuilder -> uriBuilder
               .scheme(scheme)
               .host(baseUrl)
               .port(port)
               .path(eraseEndpoint + "/{careProvider}")
-              .build(careProvider.hsaId().id())
+              .build(termination.careProvider().hsaId().id())
           )
           .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
           .retrieve()

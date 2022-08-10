@@ -75,6 +75,12 @@ public class IntegrationConfig {
         .build();
   }
 
+  @Bean(name = "intygsstatistikWebClient")
+  public WebClient webClientForIntygsstatistik() {
+    return WebClient.builder()
+        .build();
+  }
+
   private KeyManagerFactory getKeyManagerFactory() {
     try {
       final var keyManagerFactory = KeyManagerFactory.getInstance(

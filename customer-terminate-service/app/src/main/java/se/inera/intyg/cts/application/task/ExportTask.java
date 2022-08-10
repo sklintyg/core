@@ -9,8 +9,8 @@ import se.inera.intyg.cts.application.service.ExportService;
 public class ExportTask {
 
   private static final String TASK_NAME = "ExportTask.run";
-  private static final String LOCK_AT_MOST = "4m";
-  private static final String LOCK_AT_LEAST = "4m";
+  private static final String LOCK_AT_MOST = "PT50S";
+  private static final String LOCK_AT_LEAST = "PT50S";
 
   private final ExportService exportService;
 

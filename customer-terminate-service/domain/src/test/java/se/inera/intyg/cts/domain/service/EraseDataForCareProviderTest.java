@@ -172,7 +172,7 @@ class EraseDataForCareProviderTest {
 
         doThrow(new EraseException("Failed to erase!"))
             .when(eraseDataInService)
-            .erase(termination.careProvider());
+            .erase(termination);
 
         eraseDataForCareProvider.erase(termination);
 
@@ -201,7 +201,7 @@ class EraseDataForCareProviderTest {
         eraseDataForCareProvider.erase(termination);
 
         verify(eraseDataInService)
-            .erase(termination.careProvider());
+            .erase(termination);
       }
     }
   }
@@ -350,7 +350,7 @@ class EraseDataForCareProviderTest {
 
         doThrow(new EraseException("Failed to erase!"))
             .when(eraseDataInServiceTwo)
-            .erase(termination.careProvider());
+            .erase(termination);
 
         eraseDataForCareProvider.erase(termination);
 
@@ -380,7 +380,7 @@ class EraseDataForCareProviderTest {
 
         doThrow(new EraseException("Failed to erase!"))
             .when(eraseDataInServiceTwo)
-            .erase(termination.careProvider());
+            .erase(termination);
 
         eraseDataForCareProvider.erase(termination);
 
@@ -425,11 +425,11 @@ class EraseDataForCareProviderTest {
         eraseDataForCareProvider.erase(termination);
 
         verify(eraseDataInServiceOne)
-            .erase(termination.careProvider());
+            .erase(termination);
         verify(eraseDataInServiceTwo)
-            .erase(termination.careProvider());
+            .erase(termination);
         verify(eraseDataInServiceThree)
-            .erase(termination.careProvider());
+            .erase(termination);
       }
     }
 
@@ -493,7 +493,7 @@ class EraseDataForCareProviderTest {
 
         doThrow(new EraseException("Failed to erase!"))
             .when(eraseDataInServiceTwo)
-            .erase(termination.careProvider());
+            .erase(termination);
 
         eraseDataForCareProvider.erase(termination);
 
@@ -523,7 +523,7 @@ class EraseDataForCareProviderTest {
 
         doThrow(new EraseException("Failed to erase!"))
             .when(eraseDataInServiceTwo)
-            .erase(termination.careProvider());
+            .erase(termination);
 
         eraseDataForCareProvider.erase(termination);
 
@@ -568,11 +568,11 @@ class EraseDataForCareProviderTest {
         eraseDataForCareProvider.erase(termination);
 
         verify(eraseDataInServiceOne, never())
-            .erase(termination.careProvider());
+            .erase(termination);
         verify(eraseDataInServiceTwo)
-            .erase(termination.careProvider());
+            .erase(termination);
         verify(eraseDataInServiceThree, never())
-            .erase(termination.careProvider());
+            .erase(termination);
       }
     }
   }

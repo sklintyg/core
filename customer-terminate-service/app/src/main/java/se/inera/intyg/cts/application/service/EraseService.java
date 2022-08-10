@@ -3,6 +3,8 @@ package se.inera.intyg.cts.application.service;
 import static se.inera.intyg.cts.application.dto.TerminationDTOMapper.toDTO;
 
 import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
 import se.inera.intyg.cts.domain.model.TerminationId;
@@ -12,6 +14,8 @@ import se.inera.intyg.cts.domain.service.EraseDataForCareProvider;
 
 @Service
 public class EraseService {
+
+  private static final Logger LOG = LoggerFactory.getLogger(EraseService.class);
 
   private final TerminationRepository terminationRepository;
   private final EraseDataForCareProvider eraseDataForCareProvider;
@@ -28,7 +32,12 @@ public class EraseService {
     );
 
     terminations.forEach(
-        termination -> eraseDataForCareProvider.erase(termination)
+        termination -> {
+          eraseDataForCareProvider.erase(termination);
+          if (termination.status() == TerminationStatus.ERASE_COMPLETED) {
+            LOG.info("Erase completed for termination '{}'", termination.terminationId().id());
+          }
+        }
     );
   }
 
@@ -39,8 +48,8 @@ public class EraseService {
         ));
 
     termination.initiateErase();
-
     terminationRepository.store(termination);
+    LOG.info("Initiated erase of termination '{}'", termination.terminationId().id());
 
     return toDTO(termination);
   }

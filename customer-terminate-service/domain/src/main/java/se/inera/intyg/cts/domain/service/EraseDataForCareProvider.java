@@ -81,7 +81,7 @@ public class EraseDataForCareProvider {
   private Consumer<EraseDataInService> eraseDataInService(Termination termination) {
     return eraseDataInService -> {
       try {
-        eraseDataInService.erase(termination.careProvider());
+        eraseDataInService.erase(termination);
         termination.erased(eraseDataInService.serviceId());
         LOG.info(String.format("Erased care provider for termination '%s' in service '%s'",
             termination.terminationId().id(),

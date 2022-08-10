@@ -28,6 +28,11 @@ public class TerminationTestDataBuilder {
   public static final TerminationStatus DEFAULT_STATUS = TerminationStatus.CREATED;
 
   public static Termination defaultTermination() {
+    return defaultTerminationBuilder()
+        .create();
+  }
+
+  public static TerminationBuilder defaultTerminationBuilder() {
     return TerminationBuilder.getInstance()
         .terminationId(DEFAULT_TERMINATION_ID)
         .created(DEFAULT_CREATED)
@@ -39,8 +44,7 @@ public class TerminationTestDataBuilder {
         .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
         .careProviderOrganizationRepresentativeEmailAddress(DEFAULT_EMAIL_ADDRESS)
         .status(TerminationStatus.CREATED)
-        .packagePassword(DEFAULT_PASSWORD)
-        .create();
+        .packagePassword(DEFAULT_PASSWORD);
   }
 
   public static TerminationDTO defaultTerminationDTO() {

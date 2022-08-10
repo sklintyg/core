@@ -1,11 +1,11 @@
 package se.inera.intyg.cts.domain.service;
 
-import se.inera.intyg.cts.domain.model.CareProvider;
 import se.inera.intyg.cts.domain.model.ServiceId;
+import se.inera.intyg.cts.domain.model.Termination;
 
 public interface EraseDataInService {
 
-  void erase(CareProvider careProvider) throws EraseException;
+  void erase(Termination termination) throws EraseException;
 
   ServiceId serviceId();
 }
