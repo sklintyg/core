@@ -21,12 +21,11 @@ import se.inera.intyg.cts.domain.model.TerminationId;
 public class TerminationController {
 
   private final TerminationService terminationService;
-  private final EraseService eraseCareProviderService;
+  private final EraseService eraseService;
 
-  public TerminationController(TerminationService terminationService,
-      EraseService eraseCareProviderService) {
+  public TerminationController(TerminationService terminationService, EraseService eraseService) {
     this.terminationService = terminationService;
-    this.eraseCareProviderService = eraseCareProviderService;
+    this.eraseService = eraseService;
   }
 
   @PostMapping
@@ -55,7 +54,7 @@ public class TerminationController {
   @PostMapping("/{terminationId}/erase")
   TerminationDTO startErase(@PathVariable UUID terminationId) {
     try {
-      return eraseCareProviderService.initiateErase(new TerminationId(terminationId));
+      return eraseService.initiateErase(new TerminationId(terminationId));
     } catch (IllegalArgumentException ex) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
     }
