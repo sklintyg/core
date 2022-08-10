@@ -21,7 +21,7 @@ import se.inera.intyg.cts.domain.repository.TerminationRepository;
 import se.inera.intyg.cts.domain.service.EraseDataForCareProvider;
 
 @ExtendWith(MockitoExtension.class)
-class EraseServiceTest {
+class EraseServiceImplTest {
 
   @Mock
   private TerminationRepository terminationRepository;
@@ -30,7 +30,7 @@ class EraseServiceTest {
   private EraseDataForCareProvider eraseDataForCareProvider;
 
   @InjectMocks
-  private EraseService eraseService;
+  private EraseServiceImpl eraseService;
 
   @Test
   void dontEraseIfNoTerminationOfCorrectStatus() {
