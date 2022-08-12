@@ -41,6 +41,16 @@ public class CertificateTestDataBuilder {
     );
   }
 
+  public static CertificateEntity defaultCertificateEntity(String id) {
+    return new CertificateEntity(
+        RandomGenerator.getDefault().nextLong(),
+        id,
+        DEFAULT_REVOKED,
+        DEFAULT_XML_AS_BASE64,
+        defaultTerminationEntity()
+    );
+  }
+
   public static List<Certificate> certificates(int total, int revokeCount) {
     final List<Certificate> certificates = new ArrayList<>();
     for (int i = 0; i < total; i++) {

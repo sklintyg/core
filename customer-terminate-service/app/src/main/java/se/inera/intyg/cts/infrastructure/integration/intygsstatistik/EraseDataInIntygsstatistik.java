@@ -137,14 +137,14 @@ public class EraseDataInIntygsstatistik implements EraseDataInService {
     } catch (Exception ex) {
       LOG.error("Error calling intygsstatistik to delete certificates.", ex);
       throw new EraseException(
-          String.format("Erase care provider failed with message '%s'", ex.getMessage())
+          String.format("Erase certificates failed with message '%s'", ex.getMessage())
       );
     }
   }
 
   private void deleteCareProvider(HSAId hsaId) throws EraseException {
     try {
-      webClient
+      final var deletedCareproviderIds = webClient
           .method(HttpMethod.DELETE)
           .uri(uriBuilder -> uriBuilder
               .scheme(scheme)
@@ -162,6 +162,14 @@ public class EraseDataInIntygsstatistik implements EraseDataInService {
           })
           .block()
           .getBody();
+
+      if (!deletedCareproviderIds.contains(hsaId.id())) {
+        throw new EraseException(
+            String.format(
+                "Erase care provider failed because hsaId '%s' is missing in response '%s'",
+                hsaId.id(), deletedCareproviderIds)
+        );
+      }
     } catch (Exception ex) {
       LOG.error("Error calling intygsstatistik to delete care provider.", ex);
       throw new EraseException(
