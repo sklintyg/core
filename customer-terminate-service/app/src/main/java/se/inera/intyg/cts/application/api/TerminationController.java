@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
-import se.inera.intyg.cts.application.service.EraseServiceImpl;
+import se.inera.intyg.cts.application.service.EraseService;
 import se.inera.intyg.cts.application.service.TerminationService;
 import se.inera.intyg.cts.domain.model.TerminationId;
 
@@ -21,9 +21,9 @@ import se.inera.intyg.cts.domain.model.TerminationId;
 public class TerminationController {
 
   private final TerminationService terminationService;
-  private final EraseServiceImpl eraseService;
+  private final EraseService eraseService;
 
-  public TerminationController(TerminationService terminationService, EraseServiceImpl eraseService) {
+  public TerminationController(TerminationService terminationService, EraseService eraseService) {
     this.terminationService = terminationService;
     this.eraseService = eraseService;
   }
