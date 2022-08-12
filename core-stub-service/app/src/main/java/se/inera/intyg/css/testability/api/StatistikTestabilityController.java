@@ -22,13 +22,25 @@ public class StatistikTestabilityController {
     this.statistikTestabilityService = statistikTestabilityService;
   }
 
-  @GetMapping("/erased/{careProviderId}")
+  @GetMapping("/erased/{certificateId}")
+  public boolean isCertificateErased(@PathVariable String certificateId) {
+    LOG.info(String.format("Check if certificate '%s' has been erased", certificateId));
+    return statistikTestabilityService.isCertificateErased(certificateId);
+  }
+
+  @DeleteMapping("/certificates/erased")
+  public void clearErasedCertificates() {
+    LOG.info("Clear erased certificates");
+    statistikTestabilityService.clearErasedCertificates();
+  }
+
+  @GetMapping("/careproviders/erased/{careProviderId}")
   public boolean isCareProviderErased(@PathVariable String careProviderId) {
     LOG.info(String.format("Check if care provider '%s' has been erased", careProviderId));
     return statistikTestabilityService.isCareProviderErased(careProviderId);
   }
 
-  @DeleteMapping("/erased")
+  @DeleteMapping("/careproviders/erased")
   public void clearErasedCareProviders() {
     LOG.info("Clear erased care providers");
     statistikTestabilityService.clearErasedCareProviders();

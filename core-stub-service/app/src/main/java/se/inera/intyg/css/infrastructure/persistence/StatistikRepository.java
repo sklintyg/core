@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 public class StatistikRepository {
 
   private final List<String> erasedCareProviders = new ArrayList<>();
+  private final List<String> eraseCertificateIds = new ArrayList<>();
 
   public void eraseCareProvider(String careProviderId) {
     erasedCareProviders.add(careProviderId);
@@ -19,5 +20,17 @@ public class StatistikRepository {
 
   public void clearErasedCareProviders() {
     erasedCareProviders.clear();
+  }
+
+  public void eraseCertificates(List<String> certificateIds) {
+    eraseCertificateIds.addAll(certificateIds);
+  }
+
+  public boolean isCertificateErased(String certificateId) {
+    return eraseCertificateIds.contains(certificateId);
+  }
+
+  public void clearErasedCertificateIds() {
+    eraseCertificateIds.clear();
   }
 }

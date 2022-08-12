@@ -12,6 +12,14 @@ public class StatistikTestabilityService {
     this.statistikRepository = statistikRepository;
   }
 
+  public boolean isCertificateErased(String certificateId) {
+    return statistikRepository.isCertificateErased(certificateId);
+  }
+
+  public void clearErasedCertificates() {
+    statistikRepository.clearErasedCertificateIds();
+  }
+
   public boolean isCareProviderErased(String careProviderId) {
     return statistikRepository.isCareProviderErased(careProviderId);
   }
