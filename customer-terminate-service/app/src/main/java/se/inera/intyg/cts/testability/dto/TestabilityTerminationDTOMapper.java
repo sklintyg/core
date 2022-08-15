@@ -1,5 +1,6 @@
 package se.inera.intyg.cts.testability.dto;
 
+import java.util.Collections;
 import se.inera.intyg.cts.infrastructure.persistence.entity.ExportEmbeddable;
 import se.inera.intyg.cts.infrastructure.persistence.entity.TerminationEntity;
 
@@ -18,6 +19,8 @@ public class TestabilityTerminationDTOMapper {
         testabilityTerminationDTO.phoneNumber(),
         testabilityTerminationDTO.emailAddress(),
         testabilityTerminationDTO.status(),
-        new ExportEmbeddable(0, 0, null, null));
+        new ExportEmbeddable(0, 0, null, null),
+        Collections.emptyList()
+    );
   }
 }

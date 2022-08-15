@@ -10,40 +10,40 @@ import se.inera.intyg.cts.infrastructure.integration.SendSMS;
 @Service
 public class SendPasswordWithSMS implements SendPassword {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SendPasswordWithSMS.class);
+  private static final Logger LOG = LoggerFactory.getLogger(SendPasswordWithSMS.class);
 
-    private final SendSMS sendSMS;
-    private final SmsPhoneNumberFormatter smsPhoneNumberFormatter;
+  private final SendSMS sendSMS;
+  private final SmsPhoneNumberFormatter smsPhoneNumberFormatter;
 
-    public SendPasswordWithSMS(SendSMS sendSMS, SmsPhoneNumberFormatter smsPhoneNumberFormatter) {
-        this.sendSMS = sendSMS;
-        this.smsPhoneNumberFormatter = smsPhoneNumberFormatter;
+  public SendPasswordWithSMS(SendSMS sendSMS, SmsPhoneNumberFormatter smsPhoneNumberFormatter) {
+    this.sendSMS = sendSMS;
+    this.smsPhoneNumberFormatter = smsPhoneNumberFormatter;
+  }
+
+  @Override
+  public boolean sendPassword(Termination termination) {
+    final var message = termination.export().password().password();
+    final var phoneNumber = termination.export().organizationRepresentative()
+        .phoneNumber().number();
+    final var formattedPhoneNumber = smsPhoneNumberFormatter.formatPhoneNumber(phoneNumber);
+
+    try {
+      final var smsResponseDTO = sendSMS.sendSMS(formattedPhoneNumber, message);
+      logSendPasswordSuccess(termination, smsResponseDTO.job_id(), smsResponseDTO.log_href());
+      return true;
+
+    } catch (Exception e) {
+      logSendPasswordFailure(termination, e);
+      return false;
     }
+  }
 
-    @Override
-    public boolean sendPassword(Termination termination) {
-        final var message = termination.export().password().password();
-        final var phoneNumber = termination.export().organizationRepresentative()
-            .phoneNumber().number();
-        final var formattedPhoneNumber = smsPhoneNumberFormatter.formatPhoneNumber(phoneNumber);
+  private void logSendPasswordSuccess(Termination termination, String jobId, String logHref) {
+    LOG.info("Successfully sent password with sms for {} with jobId '{}' and logHref '{}'.",
+        termination.terminationId().id(), jobId, logHref);
+  }
 
-        try {
-            final var smsResponseDTO = sendSMS.sendSMS(formattedPhoneNumber, message);
-            logSendPasswordSuccess(termination, smsResponseDTO.job_id(), smsResponseDTO.log_href());
-            return true;
-
-        } catch (Exception e) {
-            logSendPasswordFailure(termination, e);
-            return false;
-        }
-    }
-
-    private void logSendPasswordSuccess(Termination termination, String jobId, String logHref) {
-        LOG.info("Successfully sent password with sms for {} with jobId '{}' and logHref '{}'.",
-            termination.terminationId(), jobId, logHref);
-    }
-
-    private void logSendPasswordFailure(Termination termination, Exception e) {
-        LOG.error("Failure sending password with sms for {}.", termination.terminationId(), e);
-    }
+  private void logSendPasswordFailure(Termination termination, Exception e) {
+    LOG.error("Failure sending password with sms for {}.", termination.terminationId(), e);
+  }
 }

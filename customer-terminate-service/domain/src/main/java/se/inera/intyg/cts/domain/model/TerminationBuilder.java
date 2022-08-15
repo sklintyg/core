@@ -1,6 +1,8 @@
 package se.inera.intyg.cts.domain.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class TerminationBuilder {
@@ -19,7 +21,7 @@ public class TerminationBuilder {
   private int revoked;
   private String packagePassword;
   private LocalDateTime receiptTime;
-
+  private List<EraseService> eraseServices;
 
   public static TerminationBuilder getInstance() {
     return new TerminationBuilder();
@@ -97,6 +99,11 @@ public class TerminationBuilder {
     return this;
   }
 
+  public TerminationBuilder eraseServices(List<EraseService> eraseServices) {
+    this.eraseServices = eraseServices;
+    return this;
+  }
+
   public Termination create() {
     if (terminationId == null) {
       terminationId = UUID.randomUUID();
@@ -122,7 +129,8 @@ public class TerminationBuilder {
             new CertificateSummary(total, revoked),
             packagePassword != null ? new Password(packagePassword) : null,
             receiptTime
-        )
+        ),
+        new Erase(eraseServices == null ? new ArrayList<>() : eraseServices)
     );
   }
 }

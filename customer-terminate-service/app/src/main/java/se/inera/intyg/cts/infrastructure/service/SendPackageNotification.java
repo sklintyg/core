@@ -63,14 +63,16 @@ public class SendPackageNotification implements SendNotification {
   @Override
   public boolean sendReminder(Termination termination) {
     final var smsSuccess = sendSms(reminderSmsContent, REMINDER, termination);
-    final var emailSuccess = sendEmail(reminderEmailContent, REMINDER, reminderSubject, termination);
+    final var emailSuccess = sendEmail(reminderEmailContent, REMINDER, reminderSubject,
+        termination);
 
     return smsSuccess || emailSuccess;
   }
 
   private boolean sendSms(String message, String statusType, Termination termination) {
     try {
-      final var phoneNumber = termination.export().organizationRepresentative().phoneNumber().number();
+      final var phoneNumber = termination.export().organizationRepresentative().phoneNumber()
+          .number();
       final var formattedPhoneNumber = smsPhoneNumberFormatter.formatPhoneNumber(phoneNumber);
       final var smsResponseDTO = sendSMS.sendSMS(formattedPhoneNumber, message);
       logSendSmsSuccess(statusType, termination.terminationId(), smsResponseDTO.job_id(),
@@ -83,7 +85,8 @@ public class SendPackageNotification implements SendNotification {
     }
   }
 
-  private boolean sendEmail(String message, String statusType, String subject, Termination termination) {
+  private boolean sendEmail(String message, String statusType, String subject,
+      Termination termination) {
     try {
       final var emailAddress = termination.export().organizationRepresentative().emailAddress()
           .emailAddress();
@@ -111,15 +114,15 @@ public class SendPackageNotification implements SendNotification {
   private void logSendSmsSuccess(String statusType, TerminationId terminationId,
       String jobId, String logHref) {
     LOG.info("Successfully sent sms {} for {} with jobId '{}' and logHref '{}'.", statusType,
-        terminationId, jobId, logHref);
+        terminationId.id(), jobId, logHref);
   }
 
   private void logSendEmailSuccess(String statusType, TerminationId terminationId) {
-    LOG.info("Successfully sent email {} for {}.", statusType, terminationId);
+    LOG.info("Successfully sent email {} for {}.", statusType, terminationId.id());
   }
 
-  private void logSendMessageFailure(String messageType, String statusType, TerminationId terminationId,
-      Exception e) {
-    LOG.error("Failure sending {} {} for {}.", messageType, statusType, terminationId, e);
+  private void logSendMessageFailure(String messageType, String statusType,
+      TerminationId terminationId, Exception e) {
+    LOG.error("Failure sending {} {} for {}.", messageType, statusType, terminationId.id(), e);
   }
 }

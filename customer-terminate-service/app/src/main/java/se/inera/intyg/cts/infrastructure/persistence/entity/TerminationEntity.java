@@ -1,13 +1,18 @@
 package se.inera.intyg.cts.infrastructure.persistence.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
@@ -52,5 +57,8 @@ public class TerminationEntity {
 
   @Embedded
   private ExportEmbeddable export;
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(name = "erase", joinColumns = @JoinColumn(name = "termination_id"))
+  private List<EraseEmbeddable> eraseList;
 
 }

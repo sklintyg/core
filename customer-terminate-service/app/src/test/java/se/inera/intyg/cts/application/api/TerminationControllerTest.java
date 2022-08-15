@@ -12,6 +12,7 @@ import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_HSA
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_ORGANIZATION_NUMBER;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_PERSON_ID;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_PHONE_NUMBER;
+import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_TERMINATION_ID;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,77 +26,106 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
+import se.inera.intyg.cts.application.service.EraseService;
 import se.inera.intyg.cts.application.service.TerminationService;
+import se.inera.intyg.cts.domain.model.TerminationId;
 import se.inera.intyg.cts.testutil.TerminationTestDataBuilder;
 
 @ExtendWith(MockitoExtension.class)
 class TerminationControllerTest {
 
-    @Mock
-    private TerminationService terminationService;
-    @InjectMocks
-    private TerminationController terminationController;
+  @Mock
+  private TerminationService terminationService;
 
-    private final TerminationDTO terminationDTO = TerminationTestDataBuilder.defaultTerminationDTO();
+  @Mock
+  private EraseService eraseService;
 
-    @Test
-    void create() {
-        CreateTerminationDTO request = new CreateTerminationDTO(DEFAULT_CREATOR_HSA_ID, DEFAULT_CREATOR_NAME,
-            DEFAULT_HSA_ID, DEFAULT_ORGANIZATION_NUMBER, DEFAULT_PERSON_ID, DEFAULT_PHONE_NUMBER,
-            DEFAULT_EMAIL_ADDRESS);
-        when(terminationService.create(request)).thenReturn(terminationDTO);
+  @InjectMocks
+  private TerminationController terminationController;
 
-        TerminationDTO terminationDTOResponse = terminationController.create(request);
+  private final TerminationDTO terminationDTO = TerminationTestDataBuilder.defaultTerminationDTO();
 
-        verify(terminationService, times(1)).create(request);
-        assertEquals(terminationDTOResponse, terminationDTO);
-    }
+  @Test
+  void create() {
+    CreateTerminationDTO request = new CreateTerminationDTO(DEFAULT_CREATOR_HSA_ID,
+        DEFAULT_CREATOR_NAME,
+        DEFAULT_HSA_ID, DEFAULT_ORGANIZATION_NUMBER, DEFAULT_PERSON_ID, DEFAULT_PHONE_NUMBER,
+        DEFAULT_EMAIL_ADDRESS);
+    when(terminationService.create(request)).thenReturn(terminationDTO);
 
-    @Test
-    void createBadRequest() {
-        CreateTerminationDTO request = new CreateTerminationDTO(DEFAULT_CREATOR_HSA_ID, DEFAULT_CREATOR_NAME,
-            DEFAULT_HSA_ID, DEFAULT_ORGANIZATION_NUMBER, DEFAULT_PERSON_ID, DEFAULT_PHONE_NUMBER,
-            DEFAULT_EMAIL_ADDRESS);
+    TerminationDTO terminationDTOResponse = terminationController.create(request);
 
-        when(terminationService.create(request)).thenThrow(IllegalArgumentException.class);
+    verify(terminationService, times(1)).create(request);
+    assertEquals(terminationDTOResponse, terminationDTO);
+  }
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () ->
-            terminationController.create(request));
+  @Test
+  void createBadRequest() {
+    CreateTerminationDTO request = new CreateTerminationDTO(DEFAULT_CREATOR_HSA_ID,
+        DEFAULT_CREATOR_NAME,
+        DEFAULT_HSA_ID, DEFAULT_ORGANIZATION_NUMBER, DEFAULT_PERSON_ID, DEFAULT_PHONE_NUMBER,
+        DEFAULT_EMAIL_ADDRESS);
 
-        verify(terminationService, times(1)).create(request);
-        assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
-    }
+    when(terminationService.create(request)).thenThrow(IllegalArgumentException.class);
 
-    @Test
-    void findById() {
-        UUID uuid = UUID.randomUUID();
-        when(terminationService.findById(uuid)).thenReturn(Optional.of(terminationDTO));
+    ResponseStatusException exception = assertThrows(ResponseStatusException.class, () ->
+        terminationController.create(request));
 
-        TerminationDTO terminationDTOResponse = terminationController.findById(uuid);
+    verify(terminationService, times(1)).create(request);
+    assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
+  }
 
-        verify(terminationService, times(1)).findById(uuid);
-        assertEquals(terminationDTOResponse, terminationDTO);
-    }
+  @Test
+  void findById() {
+    UUID uuid = UUID.randomUUID();
+    when(terminationService.findById(uuid)).thenReturn(Optional.of(terminationDTO));
 
-    @Test
-    void findByIdNotFound() {
-        UUID uuid = UUID.randomUUID();
-        when(terminationService.findById(uuid)).thenReturn(Optional.empty());
+    TerminationDTO terminationDTOResponse = terminationController.findById(uuid);
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () ->
-            terminationController.findById(uuid));
+    verify(terminationService, times(1)).findById(uuid);
+    assertEquals(terminationDTOResponse, terminationDTO);
+  }
 
-        verify(terminationService, times(1)).findById(uuid);
-        assertEquals(exception.getStatus(), HttpStatus.NOT_FOUND);
-    }
+  @Test
+  void findByIdNotFound() {
+    UUID uuid = UUID.randomUUID();
+    when(terminationService.findById(uuid)).thenReturn(Optional.empty());
 
-    @Test
-    void findAll() {
-        when(terminationService.findAll()).thenReturn(List.of(terminationDTO));
+    ResponseStatusException exception = assertThrows(ResponseStatusException.class, () ->
+        terminationController.findById(uuid));
 
-        final var terminationDTOResponse = terminationController.findAll();
+    verify(terminationService, times(1)).findById(uuid);
+    assertEquals(exception.getStatus(), HttpStatus.NOT_FOUND);
+  }
 
-        verify(terminationService, times(1)).findAll();
-        assertEquals(terminationDTOResponse.get(0), terminationDTO);
-    }
+  @Test
+  void findAll() {
+    when(terminationService.findAll()).thenReturn(List.of(terminationDTO));
+
+    final var terminationDTOResponse = terminationController.findAll();
+
+    verify(terminationService, times(1)).findAll();
+    assertEquals(terminationDTOResponse.get(0), terminationDTO);
+  }
+
+  @Test
+  void erase() {
+    final var terminationId = new TerminationId(DEFAULT_TERMINATION_ID);
+    when(eraseService.initiateErase(terminationId)).thenReturn(terminationDTO);
+
+    final var terminationDTOResponse = terminationController.startErase(terminationId.id());
+
+    assertEquals(terminationDTOResponse, terminationDTO);
+  }
+
+  @Test
+  void eraseBadRequest() {
+    final var terminationId = new TerminationId(DEFAULT_TERMINATION_ID);
+    when(eraseService.initiateErase(terminationId)).thenThrow(new IllegalArgumentException());
+
+    final var exception = assertThrows(ResponseStatusException.class, () ->
+        terminationController.startErase(terminationId.id()));
+
+    assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
+  }
 }

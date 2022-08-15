@@ -100,4 +100,14 @@ class IntegrationCertificateBatchRepositoryTest {
           integrationCertificateBatchRepository.certificateTexts(termination).size());
     }
   }
+
+  @Nested
+  class GetCertificateSummary {
+
+    @Test
+    void shallGetCertificateSummary() {
+      assertEquals(new CertificateSummary(80, 5),
+          integrationCertificateBatchRepository.certificateSummary(termination));
+    }
+  }
 }

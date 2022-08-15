@@ -3,6 +3,7 @@ package se.inera.intyg.css.application.api;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,5 +39,11 @@ public class IntygstjanstController {
   public List<CertificateTextDTO> getCertificateTexts() {
     LOG.info("Get certificate texts.");
     return intygstjanstService.getCertificateTexts();
+  }
+
+  @DeleteMapping("/certificates/{careProvider}")
+  public void eraseCareProvider(@PathVariable("careProvider") String careProviderId) {
+    LOG.info(String.format("Erase care provider '%s'.", careProviderId));
+    intygstjanstService.eraseCareProvider(careProviderId);
   }
 }

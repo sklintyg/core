@@ -1,6 +1,7 @@
 package se.inera.intyg.cts.testutil;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.UUID;
 import java.util.random.RandomGenerator;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
@@ -27,6 +28,11 @@ public class TerminationTestDataBuilder {
   public static final TerminationStatus DEFAULT_STATUS = TerminationStatus.CREATED;
 
   public static Termination defaultTermination() {
+    return defaultTerminationBuilder()
+        .create();
+  }
+
+  public static TerminationBuilder defaultTerminationBuilder() {
     return TerminationBuilder.getInstance()
         .terminationId(DEFAULT_TERMINATION_ID)
         .created(DEFAULT_CREATED)
@@ -38,8 +44,7 @@ public class TerminationTestDataBuilder {
         .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
         .careProviderOrganizationRepresentativeEmailAddress(DEFAULT_EMAIL_ADDRESS)
         .status(TerminationStatus.CREATED)
-        .packagePassword(DEFAULT_PASSWORD)
-        .create();
+        .packagePassword(DEFAULT_PASSWORD);
   }
 
   public static TerminationDTO defaultTerminationDTO() {
@@ -70,7 +75,9 @@ public class TerminationTestDataBuilder {
         DEFAULT_PHONE_NUMBER,
         DEFAULT_EMAIL_ADDRESS,
         DEFAULT_STATUS.toString(),
-        new ExportEmbeddable(0, 0, null, null));
+        new ExportEmbeddable(0, 0, null, null),
+        Collections.emptyList()
+    );
   }
 
   public static TerminationEntity defaultTerminationEntity(UUID terminationId) {
@@ -86,7 +93,9 @@ public class TerminationTestDataBuilder {
         DEFAULT_PHONE_NUMBER,
         DEFAULT_EMAIL_ADDRESS,
         DEFAULT_STATUS.toString(),
-        new ExportEmbeddable(0, 0, null, null));
+        new ExportEmbeddable(0, 0, null, null),
+        Collections.emptyList()
+    );
   }
 
   public static Termination terminationWithPhoneNumber(String phoneNumber) {

@@ -31,4 +31,8 @@ public class IntygstjanstService {
   public List<CertificateTextDTO> getCertificateTexts() {
     return intygstjanstRepository.getCertificateTexts();
   }
+
+  public void eraseCareProvider(String careProviderId) {
+    intygstjanstRepository.eraseCareProvider(careProviderId);
+  }
 }

@@ -41,7 +41,7 @@ class CollectExportContentTest {
     inMemoryCertificateBatchRepository = new InMemoryCertificateBatchRepository();
     inMemoryCertificateRepository = new InMemoryCertificateRepository();
     inMemoryCertificateTextRepository = new InMemoryCertificateTextRepository();
-    collectExportContent = new CollectExportContent(inMemoryTerminationRepository,
+    collectExportContent = new CollectExportContentImpl(inMemoryTerminationRepository,
         inMemoryCertificateBatchRepository, inMemoryCertificateRepository,
         inMemoryCertificateTextRepository);
   }

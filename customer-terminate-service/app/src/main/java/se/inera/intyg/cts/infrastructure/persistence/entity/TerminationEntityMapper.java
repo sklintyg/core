@@ -1,5 +1,8 @@
 package se.inera.intyg.cts.infrastructure.persistence.entity;
 
+import java.util.stream.Collectors;
+import se.inera.intyg.cts.domain.model.EraseService;
+import se.inera.intyg.cts.domain.model.ServiceId;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.model.TerminationBuilder;
 import se.inera.intyg.cts.domain.model.TerminationStatus;
@@ -25,7 +28,15 @@ public class TerminationEntityMapper {
             termination.export().password() != null ? termination.export().password().password()
                 : null,
             termination.export().receeiptTime()
-        ));
+        ),
+        termination.erase().eraseServices().stream()
+            .map(eraseService ->
+                new EraseEmbeddable(
+                    eraseService.serviceId().id(),
+                    eraseService.erased())
+            )
+            .collect(Collectors.toList())
+    );
   }
 
   public static Termination toDomain(TerminationEntity terminationEntity) {
@@ -45,6 +56,15 @@ public class TerminationEntityMapper {
         .revoked(terminationEntity.getExport().getRevoked())
         .packagePassword(terminationEntity.getExport().getPassword())
         .receiptTime(terminationEntity.getExport().getReceiptTime())
+        .eraseServices(
+            terminationEntity.getEraseList().stream()
+                .map(eraseEmbeddable ->
+                    new EraseService(
+                        new ServiceId(eraseEmbeddable.getServiceId()),
+                        eraseEmbeddable.isErased()
+                    ))
+                .collect(Collectors.toList())
+        )
         .create();
   }
 }

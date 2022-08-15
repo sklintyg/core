@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.cts.domain.model.CertificateBatch;
+import se.inera.intyg.cts.domain.model.CertificateSummary;
 import se.inera.intyg.cts.domain.model.CertificateText;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.repository.CertificateBatchRepository;
@@ -21,6 +22,13 @@ public class IntegrationCertificateBatchRepository implements CertificateBatchRe
     this.getCertificateBatch = getCertificateBatch;
     this.batchSize = batchSize;
     this.getCertificateTexts = getCertificateTexts;
+  }
+
+  @Override
+  public CertificateSummary certificateSummary(
+      Termination termination) {
+    return getCertificateBatch.get(termination.careProvider().hsaId().id(), 1, 0)
+        .certificateSummary();
   }
 
   @Override

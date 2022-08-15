@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
@@ -17,6 +19,8 @@ import se.inera.intyg.cts.domain.repository.TerminationRepository;
 
 @Service
 public class TerminationService {
+
+  private static final Logger LOG = LoggerFactory.getLogger(TerminationService.class);
 
   private final TerminationRepository terminationRepository;
 
@@ -38,6 +42,10 @@ public class TerminationService {
         .create();
 
     final var createdTermination = terminationRepository.store(termination);
+    LOG.info("Created termination with id '{}' for care provider '{}'",
+        createdTermination.terminationId().id(),
+        createdTermination.careProvider().hsaId().id()
+    );
 
     return toDTO(createdTermination);
   }

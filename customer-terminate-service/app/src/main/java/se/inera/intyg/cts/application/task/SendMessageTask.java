@@ -8,7 +8,7 @@ import se.inera.intyg.cts.application.service.MessageService;
 @Component
 public class SendMessageTask {
 
-  private static final String TASK_NAME = "SendSMSTask.run";
+  private static final String TASK_NAME = "SendMessageTask.run";
   private static final String LOCK_AT_MOST = "PT50S";
   private static final String LOCK_AT_LEAST = "PT50S";
 

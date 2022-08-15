@@ -26,7 +26,8 @@ class SendPackageNotificationTest {
   @BeforeEach
   void setUp() {
     terminationRepository = new InMemoryTerminationRepository();
-    sendPackageNotification = new SendPackageNotification(sendNotification, terminationRepository);
+    sendPackageNotification = new SendPackageNotificationImpl(sendNotification,
+        terminationRepository);
   }
 
   @Test
@@ -36,7 +37,8 @@ class SendPackageNotificationTest {
 
     sendPackageNotification.sendNotification(termination);
 
-    assertEquals(TerminationStatus.NOTIFICATION_SENT, termination(termination.terminationId()).status());
+    assertEquals(TerminationStatus.NOTIFICATION_SENT,
+        termination(termination.terminationId()).status());
   }
 
   @Test
@@ -56,7 +58,8 @@ class SendPackageNotificationTest {
 
     sendPackageNotification.sendReminder(termination);
 
-    assertEquals(TerminationStatus.REMINDER_SENT, termination(termination.terminationId()).status());
+    assertEquals(TerminationStatus.REMINDER_SENT,
+        termination(termination.terminationId()).status());
   }
 
   @Test
@@ -66,7 +69,8 @@ class SendPackageNotificationTest {
 
     sendPackageNotification.sendNotification(termination);
 
-    assertEquals(TerminationStatus.NOTIFICATION_SENT, termination(termination.terminationId()).status());
+    assertEquals(TerminationStatus.NOTIFICATION_SENT,
+        termination(termination.terminationId()).status());
   }
 
   private Termination createTermination(TerminationStatus status) {

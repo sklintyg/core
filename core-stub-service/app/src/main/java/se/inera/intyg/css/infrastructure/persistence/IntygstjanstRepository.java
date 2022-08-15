@@ -15,6 +15,7 @@ public class IntygstjanstRepository {
 
   private final Map<String, List<CertificateXmlDTO>> certificates = new HashMap<>();
   private final List<CertificateTextDTO> certificateTexts = new ArrayList<>();
+  private final List<String> erasedCareProvider = new ArrayList<>();
 
   public void store(String careProvider, List<CertificateXmlDTO> certificateXmlDTOList) {
     certificates.put(careProvider, certificateXmlDTOList);
@@ -52,5 +53,14 @@ public class IntygstjanstRepository {
 
   public List<CertificateTextDTO> getCertificateTexts() {
     return certificateTexts;
+  }
+
+  public void eraseCareProvider(String careProviderId) {
+    remove(careProviderId);
+    erasedCareProvider.add(careProviderId);
+  }
+
+  public void clearErasedCareProviders() {
+    erasedCareProvider.clear();
   }
 }
