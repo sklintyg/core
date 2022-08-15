@@ -71,6 +71,20 @@ public class EraseDataInIntygsstatistik implements EraseDataInService {
     return SERVICE_ID;
   }
 
+  /**
+   * In Intygsstatistik we first need to remove all related certificates before we remove the
+   * careprovider. The reason is to not cause issues in Intygstatistik by removing careprovider
+   * metadata before all certificates have been erased.
+   *
+   * There can be a large number of certificates that needs to be erased, therefor we erase them
+   * in batches (size based on configuration).
+   *
+   * If any errors occurs during erasing, or that we only partially have deleted the certificates,
+   * the implementation will throw an exception.
+   *
+   * @param termination Termination which data should be erased.
+   * @throws EraseException
+   */
   @Override
   public void erase(Termination termination) throws EraseException {
     final var certificatesToDelete = getCertificatesToDelete(termination.terminationId());
