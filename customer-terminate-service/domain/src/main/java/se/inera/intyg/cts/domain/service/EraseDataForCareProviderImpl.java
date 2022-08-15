@@ -28,6 +28,26 @@ public class EraseDataForCareProviderImpl implements EraseDataForCareProvider {
     this.terminationRepository = terminationRepository;
   }
 
+  /**
+   * The implementation has the responsibility to erase all data in related services that belong to
+   * the termination.
+   * <p>
+   * The first time the service is called with a specific termination, it will initialize to erase
+   * by checking what services that should be erased.
+   * <p>
+   * Any subsequent time the service is called with a specific termination, it will use the service
+   * provider to erase all data in each of the services (i.e. Webcert, Intygstjanst) that is not
+   * marked as erased.
+   * <p>
+   * If it is successful in erasing a service, it will mark the service as erased.
+   * <p>
+   * When all services has been erased the termination will receive a status update.
+   * <p>
+   * If for some reason the data has changed since exported, the erase will be cancelled. This is to
+   * make sure that the exported data has the latest changes for the certificates.
+   *
+   * @param termination Termination to erase data for.
+   */
   @Override
   public void erase(Termination termination) {
     if (termination.status().equals(TerminationStatus.START_ERASE)) {
