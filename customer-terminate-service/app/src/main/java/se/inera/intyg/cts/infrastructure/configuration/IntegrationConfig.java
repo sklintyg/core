@@ -81,6 +81,12 @@ public class IntegrationConfig {
         .build();
   }
 
+  @Bean(name = "privatePractitionerWebClient")
+  public WebClient webClientForPrivatePractitioner() {
+    return WebClient.builder()
+        .build();
+  }
+
   private KeyManagerFactory getKeyManagerFactory() {
     try {
       final var keyManagerFactory = KeyManagerFactory.getInstance(

@@ -28,6 +28,8 @@ service.
 
 **Intygsstatistik** - Erase related data to terminated customer.
 
+**Privatlakarportal** - Erase related data to terminated customer.
+
 **SMTP Service** - Send emails to organisation representatives.
 
 **SJUT** - Export encrypted package to SJUT for organisation representatives to download the package
