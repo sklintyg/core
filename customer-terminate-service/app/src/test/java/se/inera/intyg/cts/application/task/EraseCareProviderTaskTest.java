@@ -8,13 +8,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.cts.application.service.EraseServiceImpl;
+import se.inera.intyg.cts.application.service.EraseService;
 
 @ExtendWith(MockitoExtension.class)
 class EraseCareProviderTaskTest {
 
   @Mock
-  private EraseServiceImpl eraseService;
+  private EraseService eraseService;
 
   @InjectMocks
   private EraseCareProviderTask eraseCareProviderTask;

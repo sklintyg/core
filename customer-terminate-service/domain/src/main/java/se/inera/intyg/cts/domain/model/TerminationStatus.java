@@ -9,7 +9,7 @@ public enum TerminationStatus {
   NOTIFICATION_SENT("Notifiering skickad"),
   REMINDER_SENT("Påminnelse skickad"),
   RECEIPT_RECEIVED("Kvitterad"),
-  PASSWORD_SENT("Lösenord skickat"),
+  PASSWORD_SENT("Kryptonyckel skickad"),
   START_ERASE("Starta radering"),
   ERASE_IN_PROGRESS("Radering pågår"),
   ERASE_CANCELLED("Radering avbruten"),

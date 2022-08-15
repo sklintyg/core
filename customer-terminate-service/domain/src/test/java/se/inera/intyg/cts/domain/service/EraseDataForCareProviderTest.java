@@ -46,7 +46,7 @@ class EraseDataForCareProviderTest {
 
   @BeforeEach
   void setUp() {
-    eraseDataForCareProvider = new EraseDataForCareProvider(
+    eraseDataForCareProvider = new EraseDataForCareProviderImpl(
         eraseDataInServices,
         certificateBatchRepository,
         inMemoryTerminationRepository
