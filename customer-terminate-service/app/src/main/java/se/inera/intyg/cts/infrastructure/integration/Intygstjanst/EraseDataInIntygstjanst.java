@@ -17,6 +17,7 @@ import se.inera.intyg.cts.domain.service.EraseException;
 public class EraseDataInIntygstjanst implements EraseDataInService {
 
   private final static Logger LOG = LoggerFactory.getLogger(EraseDataInIntygstjanst.class);
+  private final static ServiceId SERVICE_ID = new ServiceId("intygstjanst");
 
   private final WebClient webClient;
   private final String scheme;
@@ -61,6 +62,6 @@ public class EraseDataInIntygstjanst implements EraseDataInService {
 
   @Override
   public ServiceId serviceId() {
-    return new ServiceId("intygstjanst");
+    return SERVICE_ID;
   }
 }

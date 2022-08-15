@@ -32,6 +32,7 @@ import se.inera.intyg.cts.infrastructure.persistence.repository.TerminationEntit
 public class EraseDataInIntygsstatistik implements EraseDataInService {
 
   private final static Logger LOG = LoggerFactory.getLogger(EraseDataInIntygsstatistik.class);
+  private final static ServiceId SERVICE_ID = new ServiceId("intygsstatistik");
 
   private final TerminationEntityRepository terminationEntityRepository;
   private final CertificateEntityRepository certificateEntityRepository;
@@ -67,7 +68,7 @@ public class EraseDataInIntygsstatistik implements EraseDataInService {
 
   @Override
   public ServiceId serviceId() {
-    return new ServiceId("intygsstatistik");
+    return SERVICE_ID;
   }
 
   @Override

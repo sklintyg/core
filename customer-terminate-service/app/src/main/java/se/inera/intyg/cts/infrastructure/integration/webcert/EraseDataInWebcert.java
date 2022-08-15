@@ -17,6 +17,7 @@ import se.inera.intyg.cts.domain.service.EraseException;
 public class EraseDataInWebcert implements EraseDataInService {
 
   private final static Logger LOG = LoggerFactory.getLogger(EraseDataInWebcert.class);
+  private final static ServiceId SERVICE_ID = new ServiceId("webcert");
 
   private final WebClient webClient;
   private final String scheme;
@@ -61,6 +62,6 @@ public class EraseDataInWebcert implements EraseDataInService {
 
   @Override
   public ServiceId serviceId() {
-    return new ServiceId("webcert");
+    return SERVICE_ID;
   }
 }
