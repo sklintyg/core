@@ -26,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
-import se.inera.intyg.cts.application.service.EraseServiceImpl;
+import se.inera.intyg.cts.application.service.EraseService;
 import se.inera.intyg.cts.application.service.TerminationService;
 import se.inera.intyg.cts.domain.model.TerminationId;
 import se.inera.intyg.cts.testutil.TerminationTestDataBuilder;
@@ -38,7 +38,7 @@ class TerminationControllerTest {
   private TerminationService terminationService;
 
   @Mock
-  private EraseServiceImpl eraseService;
+  private EraseService eraseService;
 
   @InjectMocks
   private TerminationController terminationController;
