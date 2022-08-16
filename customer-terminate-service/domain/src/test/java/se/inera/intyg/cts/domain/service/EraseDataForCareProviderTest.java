@@ -19,7 +19,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.cts.domain.model.CertificateSummary;
@@ -39,7 +38,6 @@ class EraseDataForCareProviderTest {
   @Mock
   private CertificateBatchRepository certificateBatchRepository;
 
-  @InjectMocks
   private EraseDataForCareProvider eraseDataForCareProvider;
 
   private List<EraseDataInService> eraseDataInServices = new ArrayList<>();

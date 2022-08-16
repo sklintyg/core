@@ -4,7 +4,6 @@ import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.cts.application.service.EraseService;
-import se.inera.intyg.cts.application.service.EraseServiceImpl;
 
 @Component
 public class EraseCareProviderTask {
@@ -15,7 +14,7 @@ public class EraseCareProviderTask {
 
   private final EraseService eraseService;
 
-  public EraseCareProviderTask(EraseServiceImpl eraseService) {
+  public EraseCareProviderTask(EraseService eraseService) {
     this.eraseService = eraseService;
   }
 

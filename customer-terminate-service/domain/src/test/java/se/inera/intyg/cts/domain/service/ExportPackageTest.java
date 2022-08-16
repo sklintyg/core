@@ -36,18 +36,19 @@ class ExportPackageTest {
   @Mock
   private UploadPackage uploadPackageMock;
   @InjectMocks
-  private ExportPackage exportPackage;
+  private ExportPackageImpl exportPackage;
   @Mock
   private File packageFile;
   @Captor
   private ArgumentCaptor<Password> passwordCaptor;
   @Spy
-  private Termination termination = defaultTermination();;
+  private Termination termination = defaultTermination();
 
   @BeforeEach
   void setUp() {
     when(passwordGenerator.generateSecurePassword()).thenReturn(PASSWORD);
-    when(createPackageMock.create(any(Termination.class), any(Password.class))).thenReturn(packageFile);
+    when(createPackageMock.create(any(Termination.class), any(Password.class))).thenReturn(
+        packageFile);
   }
 
   @Test
