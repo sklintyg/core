@@ -26,7 +26,7 @@ public class Termination {
   private final static List<TerminationStatus> NEED_RENOTIFICATION_STATUS = List.of(
       TerminationStatus.NOTIFICATION_SENT,
       TerminationStatus.REMINDER_SENT);
-  
+
   private final TerminationId terminationId;
   private final LocalDateTime created;
   private final Staff creator;
@@ -209,7 +209,7 @@ public class Termination {
   }
 
   private void updatePersonId(PersonId personId) {
-    export.change(new OrganizationRepresentative(
+    export.update(new OrganizationRepresentative(
         personId,
         export.organizationRepresentative().phoneNumber(),
         export.organizationRepresentative().emailAddress()
@@ -221,7 +221,7 @@ public class Termination {
   }
 
   private void updatePhoneNumber(PhoneNumber phoneNumber) {
-    export.change(new OrganizationRepresentative(
+    export.update(new OrganizationRepresentative(
         export.organizationRepresentative().personId(),
         phoneNumber,
         export.organizationRepresentative().emailAddress()
@@ -233,7 +233,7 @@ public class Termination {
   }
 
   private void updateEmailAdress(EmailAddress emailAddress) {
-    export.change(new OrganizationRepresentative(
+    export.update(new OrganizationRepresentative(
         export.organizationRepresentative().personId(),
         export.organizationRepresentative().phoneNumber(),
         emailAddress

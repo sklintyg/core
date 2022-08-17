@@ -60,7 +60,7 @@ public class Export {
     this.receiptTime = receiptTime;
   }
 
-  public void change(OrganizationRepresentative organizationRepresentative) {
+  public void update(OrganizationRepresentative organizationRepresentative) {
     this.organizationRepresentative = organizationRepresentative;
   }
 
