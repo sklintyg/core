@@ -2,6 +2,7 @@ package se.inera.intyg.cts.application.api;
 
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,6 +58,24 @@ public class TerminationController {
       return eraseService.initiateErase(new TerminationId(terminationId));
     } catch (IllegalArgumentException ex) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
+    }
+  }
+
+  /**
+   * Trigger a resend of the password
+   * @param terminationId
+   * @return
+   */
+  @PostMapping("/{terminationId}/resendpassword")
+  TerminationDTO resendPassword(@PathVariable UUID terminationId) {
+    try {
+      return terminationService.resendPassword(terminationId);
+    } catch (NotFoundException ex) {
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, String.format("Couldn't find termination with id: %s", terminationId), ex);
+    } catch (IllegalArgumentException ex) {
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, ex.getMessage());
     }
   }
 }

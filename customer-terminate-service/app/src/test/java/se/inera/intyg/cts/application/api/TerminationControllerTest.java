@@ -22,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
@@ -126,6 +127,41 @@ class TerminationControllerTest {
     final var exception = assertThrows(ResponseStatusException.class, () ->
         terminationController.startErase(terminationId.id()));
 
+    assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
+  }
+
+  @Test
+  void resendKey() throws NotFoundException {
+    final var terminationId = new TerminationId(DEFAULT_TERMINATION_ID);
+    when(terminationService.resendPassword(terminationId.id())).thenReturn(terminationDTO);
+
+    TerminationDTO response = terminationController.resendPassword(terminationId.id());
+
+    verify(terminationService, times(1)).resendPassword(terminationId.id());
+    assertEquals(response, terminationDTO);
+  }
+
+  @Test
+  void resendKeyNotFoundException() throws NotFoundException {
+    final var terminationId = new TerminationId(DEFAULT_TERMINATION_ID);
+    when(terminationService.resendPassword(terminationId.id())).thenThrow(new NotFoundException());
+
+    final var exception = assertThrows(ResponseStatusException.class, () ->
+        terminationController.resendPassword(terminationId.id()));
+
+    verify(terminationService, times(1)).resendPassword(terminationId.id());
+    assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
+  }
+
+  @Test
+  void resendKeyIllegalArgumentException() throws NotFoundException {
+    final var terminationId = new TerminationId(DEFAULT_TERMINATION_ID);
+    when(terminationService.resendPassword(terminationId.id())).thenThrow(new IllegalArgumentException());
+
+    final var exception = assertThrows(ResponseStatusException.class, () ->
+        terminationController.resendPassword(terminationId.id()));
+
+    verify(terminationService, times(1)).resendPassword(terminationId.id());
     assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
   }
 }

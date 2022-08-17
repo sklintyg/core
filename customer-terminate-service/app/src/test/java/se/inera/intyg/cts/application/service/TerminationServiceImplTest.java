@@ -2,7 +2,11 @@ package se.inera.intyg.cts.application.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CREATOR_HSA_ID;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CREATOR_NAME;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_EMAIL_ADDRESS;
@@ -14,21 +18,33 @@ import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_TER
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTermination;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTerminationEntity;
 
+import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
+import se.inera.intyg.cts.domain.service.SendPackagePassword;
 import se.inera.intyg.cts.infrastructure.persistence.JpaTerminationRepository;
 import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryTerminationEntityRepository;
 
-class TerminationServiceTest {
+@ExtendWith(MockitoExtension.class)
+class TerminationServiceImplTest {
 
-  private TerminationService terminationService;
+  private TerminationServiceImpl terminationServiceImpl;
   private TerminationRepository terminationRepository;
   private InMemoryTerminationEntityRepository inMemoryTerminationEntityRepository;
+
+  @Mock
+  private SendPackagePassword sendPackagePasswordMock;
+  @Mock
+  private TerminationRepository terminationRepositoryMock;
 
   private Termination termination;
 
@@ -36,7 +52,7 @@ class TerminationServiceTest {
   void setUp() {
     inMemoryTerminationEntityRepository = new InMemoryTerminationEntityRepository();
     terminationRepository = new JpaTerminationRepository(inMemoryTerminationEntityRepository);
-    terminationService = new TerminationService(terminationRepository);
+    terminationServiceImpl = new TerminationServiceImpl(terminationRepository, sendPackagePasswordMock);
 
     termination = defaultTermination();
   }
@@ -55,55 +71,55 @@ class TerminationServiceTest {
 
     @Test
     void shallCreateTermination() {
-      assertNotNull(terminationService.create(createTerminationDTO), "Termination is null");
+      assertNotNull(terminationServiceImpl.create(createTerminationDTO), "Termination is null");
     }
 
     @Test
     void shallCreateTerminationWithTerminationId() {
-      assertNotNull(terminationService.create(createTerminationDTO).terminationId(),
+      assertNotNull(terminationServiceImpl.create(createTerminationDTO).terminationId(),
           "TerminationId is null");
     }
 
     @Test
     void shallCreateTerminationWithCreatorHSAId() {
       assertEquals(DEFAULT_CREATOR_HSA_ID,
-          terminationService.create(createTerminationDTO).creatorHSAId());
+          terminationServiceImpl.create(createTerminationDTO).creatorHSAId());
     }
 
     @Test
     void shallCreateTerminationWithCreatorName() {
       assertEquals(DEFAULT_CREATOR_NAME,
-          terminationService.create(createTerminationDTO).creatorName());
+          terminationServiceImpl.create(createTerminationDTO).creatorName());
     }
 
     @Test
     void shallCreateTerminationWithHSAId() {
       assertEquals(DEFAULT_HSA_ID,
-          terminationService.create(createTerminationDTO).hsaId());
+          terminationServiceImpl.create(createTerminationDTO).hsaId());
     }
 
     @Test
     void shallCreateTerminationWithOrganizationNumber() {
       assertEquals(DEFAULT_ORGANIZATION_NUMBER,
-          terminationService.create(createTerminationDTO).organizationNumber());
+          terminationServiceImpl.create(createTerminationDTO).organizationNumber());
     }
 
     @Test
     void shallCreateTerminationWithPersonId() {
       assertEquals(DEFAULT_PERSON_ID,
-          terminationService.create(createTerminationDTO).personId());
+          terminationServiceImpl.create(createTerminationDTO).personId());
     }
 
     @Test
     void shallCreateTerminationWithPhoneNumber() {
       assertEquals(DEFAULT_PHONE_NUMBER,
-          terminationService.create(createTerminationDTO).phoneNumber());
+          terminationServiceImpl.create(createTerminationDTO).phoneNumber());
     }
 
     @Test
     void shallCreateTerminationWithEmailAddress() {
       assertEquals(DEFAULT_EMAIL_ADDRESS,
-          terminationService.create(createTerminationDTO).emailAddress());
+          terminationServiceImpl.create(createTerminationDTO).emailAddress());
     }
   }
 
@@ -111,13 +127,13 @@ class TerminationServiceTest {
   void shallReturnExistingTermination() {
     inMemoryTerminationEntityRepository.save(defaultTerminationEntity());
 
-    assertTrue(terminationService.findById(DEFAULT_TERMINATION_ID).isPresent(),
+    assertTrue(terminationServiceImpl.findById(DEFAULT_TERMINATION_ID).isPresent(),
         "Shall contain a termination");
   }
 
   @Test
   void shallReturnEmptyOptionalWhenTerminationIdDoesntExist() {
-    assertTrue(terminationService.findById(DEFAULT_TERMINATION_ID).isEmpty(),
+    assertTrue(terminationServiceImpl.findById(DEFAULT_TERMINATION_ID).isEmpty(),
         "Shall not contain any termination");
   }
 
@@ -130,6 +146,45 @@ class TerminationServiceTest {
       );
     }
 
-    assertEquals(numberOfTerminations, terminationService.findAll().size());
+    assertEquals(numberOfTerminations, terminationServiceImpl.findAll().size());
+  }
+
+  @Test
+  void resendKey() throws NotFoundException {
+    terminationServiceImpl = new TerminationServiceImpl(terminationRepositoryMock, sendPackagePasswordMock);
+    termination.passwordSent();
+    when(terminationRepositoryMock.findByTerminationId(termination.terminationId())).thenReturn(Optional.of(termination));
+
+    assertNotNull(terminationServiceImpl.resendPassword(termination.terminationId().id()));
+
+    verify(terminationRepositoryMock, times(1)).findByTerminationId(termination.terminationId());
+    verify(sendPackagePasswordMock, times(1)).sendPassword(termination);
+  }
+
+  @Test
+  void resendKeyNotFound() throws NotFoundException {
+    terminationServiceImpl = new TerminationServiceImpl(terminationRepositoryMock, sendPackagePasswordMock);
+    termination.passwordSent();
+    when(terminationRepositoryMock.findByTerminationId(termination.terminationId())).thenReturn(Optional.empty());
+
+    assertThrows(NotFoundException.class, () -> {
+      terminationServiceImpl.resendPassword(termination.terminationId().id());
+    });
+
+    verify(terminationRepositoryMock, times(1)).findByTerminationId(termination.terminationId());
+    verify(sendPackagePasswordMock, times(0)).sendPassword(termination);
+  }
+
+  @Test
+  void resendKeyInvalidTerminationStatus() throws NotFoundException {
+    terminationServiceImpl = new TerminationServiceImpl(terminationRepositoryMock, sendPackagePasswordMock);
+    when(terminationRepositoryMock.findByTerminationId(termination.terminationId())).thenReturn(Optional.of(termination));
+
+    assertThrows(IllegalArgumentException.class, () -> {
+      terminationServiceImpl.resendPassword(termination.terminationId().id());
+    });
+
+    verify(terminationRepositoryMock, times(1)).findByTerminationId(termination.terminationId());
+    verify(sendPackagePasswordMock, times(0)).sendPassword(termination);
   }
 }

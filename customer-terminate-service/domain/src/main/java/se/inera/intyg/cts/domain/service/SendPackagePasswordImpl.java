@@ -23,4 +23,18 @@ public class SendPackagePasswordImpl implements SendPackagePassword {
       terminationRepository.store(termination);
     }
   }
+
+  /**
+   * Send the password again
+   * @param termination
+   */
+  @Override
+  public void resendPassword(Termination termination) {
+    final boolean sendPasswordSuccess = sendPassword.sendPassword(termination);
+
+    if (sendPasswordSuccess) {
+      termination.passwordResent();
+      terminationRepository.store(termination);
+    }
+  }
 }
