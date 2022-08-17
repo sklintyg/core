@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class Export {
 
-  private final OrganizationRepresentative organizationRepresentative;
+  private OrganizationRepresentative organizationRepresentative;
   private CertificateSummary certificateSummary;
   private Password password;
   private LocalDateTime receiptTime;
@@ -52,12 +52,16 @@ public class Export {
     return password;
   }
 
-  public LocalDateTime receeiptTime() {
+  public LocalDateTime receiptTime() {
     return receiptTime;
   }
 
   public void receiptTime(LocalDateTime receiptTime) {
     this.receiptTime = receiptTime;
+  }
+
+  public void change(OrganizationRepresentative organizationRepresentative) {
+    this.organizationRepresentative = organizationRepresentative;
   }
 
   @Override

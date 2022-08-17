@@ -60,7 +60,7 @@ public class TerminationTestDataFactory {
         .create();
   }
 
-  private static TerminationBuilder defaultTerminationBuilder() {
+  public static TerminationBuilder defaultTerminationBuilder() {
     return TerminationBuilder.getInstance()
         .terminationId(DEFAULT_TERMINATION_ID)
         .created(DEFAULT_CREATED)
