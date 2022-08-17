@@ -66,7 +66,7 @@ public class Export {
 
   public void reset() {
     this.password = null;
-    this.certificateSummary = null;
+    this.certificateSummary = new CertificateSummary(0, 0);
   }
 
   @Override

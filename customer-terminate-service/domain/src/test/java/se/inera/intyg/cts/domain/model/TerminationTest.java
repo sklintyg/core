@@ -137,8 +137,7 @@ class TerminationTest {
             termination.export().organizationRepresentative().phoneNumber()
         );
 
-        assertNull(termination.export().certificateSummary(),
-            () -> "CertificateSummary should be reset to null!");
+        assertEquals(new CertificateSummary(0, 0), termination.export().certificateSummary());
       }
 
       @ParameterizedTest
