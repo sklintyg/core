@@ -64,6 +64,11 @@ public class Export {
     this.organizationRepresentative = organizationRepresentative;
   }
 
+  public void reset() {
+    this.password = null;
+    this.certificateSummary = null;
+  }
+
   @Override
   public String toString() {
     return "Export{" +

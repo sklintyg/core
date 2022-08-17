@@ -1,6 +1,7 @@
 package se.inera.intyg.cts.domain.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.cts.domain.util.TerminationTestDataFactory.defaultTerminationBuilder;
@@ -117,6 +118,49 @@ class TerminationTest {
         );
 
         assertEquals(TerminationStatus.CREATED, termination.status());
+      }
+
+      @ParameterizedTest
+      @MethodSource("statusAllowedToUpdateHsaId")
+      void shallResetCertificateSummaryWhenHsaIdIsUpdated(TerminationStatus terminationStatus) {
+        final var newHsaId = new HSAId("NewHsaId");
+        final var termination = defaultTerminationBuilder()
+            .status(terminationStatus)
+            .total(100)
+            .revoked(10)
+            .create();
+
+        termination.update(
+            newHsaId,
+            termination.export().organizationRepresentative().personId(),
+            termination.export().organizationRepresentative().emailAddress(),
+            termination.export().organizationRepresentative().phoneNumber()
+        );
+
+        assertNull(termination.export().certificateSummary(),
+            () -> "CertificateSummary should be reset to null!");
+      }
+
+      @ParameterizedTest
+      @MethodSource("statusAllowedToUpdateHsaId")
+      void shallResetPasswordWhenHsaIdIsUpdated(TerminationStatus terminationStatus) {
+        final var newHsaId = new HSAId("NewHsaId");
+        final var termination = defaultTerminationBuilder()
+            .status(terminationStatus)
+            .total(100)
+            .revoked(10)
+            .packagePassword("Password")
+            .create();
+
+        termination.update(
+            newHsaId,
+            termination.export().organizationRepresentative().personId(),
+            termination.export().organizationRepresentative().emailAddress(),
+            termination.export().organizationRepresentative().phoneNumber()
+        );
+
+        assertNull(termination.export().password(),
+            () -> "CertificateSummary should be reset to null!");
       }
     }
 

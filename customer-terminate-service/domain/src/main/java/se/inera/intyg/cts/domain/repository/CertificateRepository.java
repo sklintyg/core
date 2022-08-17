@@ -9,4 +9,6 @@ public interface CertificateRepository {
   void store(Termination termination, List<Certificate> certificateList);
 
   List<Certificate> get(Termination termination);
+
+  void remove(Termination termination);
 }

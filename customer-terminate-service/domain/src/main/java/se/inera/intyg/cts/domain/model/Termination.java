@@ -206,6 +206,7 @@ public class Termination {
   private void updateHsaId(HSAId hsaId) {
     careProvider = new CareProvider(hsaId, careProvider.organizationNumber());
     status = newStatusWhenHsaIdIsUpdated();
+    export.reset();
   }
 
   private void updatePersonId(PersonId personId) {
