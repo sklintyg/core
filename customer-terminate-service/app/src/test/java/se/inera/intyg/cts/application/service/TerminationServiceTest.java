@@ -2,7 +2,12 @@ package se.inera.intyg.cts.application.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static se.inera.intyg.cts.application.dto.TerminationDTOMapper.toDTO;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CREATOR_HSA_ID;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CREATOR_NAME;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_EMAIL_ADDRESS;
@@ -18,13 +23,26 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
+import se.inera.intyg.cts.application.dto.TerminationDTO;
+import se.inera.intyg.cts.domain.model.EmailAddress;
+import se.inera.intyg.cts.domain.model.HSAId;
+import se.inera.intyg.cts.domain.model.PersonId;
+import se.inera.intyg.cts.domain.model.PhoneNumber;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
+import se.inera.intyg.cts.domain.service.UpdateTermination;
 import se.inera.intyg.cts.infrastructure.persistence.JpaTerminationRepository;
 import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryTerminationEntityRepository;
 
+@ExtendWith(MockitoExtension.class)
 class TerminationServiceTest {
+
+  @Mock
+  private UpdateTermination updateTermination;
 
   private TerminationService terminationService;
   private TerminationRepository terminationRepository;
@@ -36,7 +54,7 @@ class TerminationServiceTest {
   void setUp() {
     inMemoryTerminationEntityRepository = new InMemoryTerminationEntityRepository();
     terminationRepository = new JpaTerminationRepository(inMemoryTerminationEntityRepository);
-    terminationService = new TerminationService(terminationRepository);
+    terminationService = new TerminationService(terminationRepository, updateTermination);
 
     termination = defaultTermination();
   }
@@ -104,6 +122,52 @@ class TerminationServiceTest {
     void shallCreateTerminationWithEmailAddress() {
       assertEquals(DEFAULT_EMAIL_ADDRESS,
           terminationService.create(createTerminationDTO).emailAddress());
+    }
+  }
+
+  @Nested
+  class UpdateTerminationMetadata {
+
+    private Termination termination;
+    private TerminationDTO terminationDTO;
+
+    @BeforeEach
+    void setUp() {
+      termination = defaultTermination();
+      terminationDTO = toDTO(termination);
+    }
+
+    @Test
+    void shallUpdateTermination() {
+      inMemoryTerminationEntityRepository.save(defaultTerminationEntity());
+      doReturn(termination)
+          .when(updateTermination)
+          .update(any(Termination.class),
+              eq(new HSAId(terminationDTO.hsaId())),
+              eq(new PersonId(terminationDTO.personId())),
+              eq(new EmailAddress(terminationDTO.emailAddress())),
+              eq(new PhoneNumber(terminationDTO.phoneNumber()))
+          );
+
+      final var updatedTermination = terminationService.update(terminationDTO.terminationId(),
+          terminationDTO);
+      assertNotNull(updatedTermination, "Termination is null");
+    }
+
+    @Test
+    void shallThrowExceptionIfTerminationIdIsntMatching() {
+      final var exception = assertThrows(IllegalArgumentException.class, () ->
+          terminationService.update(UUID.randomUUID(), terminationDTO));
+
+      assertTrue(exception.getMessage().contains("doesn't match the id passed in termination"));
+    }
+
+    @Test
+    void shallThrowExceptionIfTerminationDoesntExists() {
+      final var exception = assertThrows(IllegalArgumentException.class, () ->
+          terminationService.update(terminationDTO.terminationId(), terminationDTO));
+
+      assertTrue(exception.getMessage().contains("doesn't exist!"));
     }
   }
 

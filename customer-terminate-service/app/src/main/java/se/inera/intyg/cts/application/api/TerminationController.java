@@ -37,6 +37,16 @@ public class TerminationController {
     }
   }
 
+  @PostMapping("/{terminationId}")
+  TerminationDTO update(@PathVariable UUID terminationId,
+      @RequestBody TerminationDTO terminationDTO) {
+    try {
+      return terminationService.update(terminationId, terminationDTO);
+    } catch (IllegalArgumentException ex) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
+    }
+  }
+
   @GetMapping("/{terminationId}")
   TerminationDTO findById(@PathVariable UUID terminationId) {
     return terminationService.findById(terminationId)

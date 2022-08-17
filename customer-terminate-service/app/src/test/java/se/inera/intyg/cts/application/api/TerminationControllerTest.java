@@ -13,6 +13,7 @@ import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_ORG
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_PERSON_ID;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_PHONE_NUMBER;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_TERMINATION_ID;
+import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTerminationDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -72,6 +73,31 @@ class TerminationControllerTest {
         terminationController.create(request));
 
     verify(terminationService, times(1)).create(request);
+    assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
+  }
+
+  @Test
+  void update() {
+    final var terminationDTO = defaultTerminationDTO();
+    when(terminationService.update(terminationDTO.terminationId(), terminationDTO))
+        .thenReturn(this.terminationDTO);
+
+    final var terminationDTOResponse = terminationController.update(terminationDTO.terminationId(),
+        terminationDTO);
+
+    assertEquals(terminationDTOResponse, this.terminationDTO);
+  }
+
+  @Test
+  void updateBadRequest() {
+    final var terminationDTO = defaultTerminationDTO();
+    when(terminationService.update(terminationDTO.terminationId(), terminationDTO))
+        .thenThrow(IllegalArgumentException.class);
+
+    final var exception = assertThrows(
+        ResponseStatusException.class, () ->
+            terminationController.update(terminationDTO.terminationId(), terminationDTO));
+
     assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
   }
 

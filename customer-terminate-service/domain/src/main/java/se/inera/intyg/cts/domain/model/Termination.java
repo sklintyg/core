@@ -216,7 +216,7 @@ public class Termination {
         export.organizationRepresentative().emailAddress()
     ));
 
-    if (isReExportNeeded(NEED_REEXPORT_STATUS)) {
+    if (isReExportNeeded()) {
       status = newStatusForReExport();
     }
   }
@@ -253,8 +253,8 @@ public class Termination {
     return TerminationStatus.CREATED;
   }
 
-  private boolean isReExportNeeded(List<TerminationStatus> needReExport) {
-    return needReExport.contains(status);
+  private boolean isReExportNeeded() {
+    return NEED_REEXPORT_STATUS.contains(status);
   }
 
   private TerminationStatus newStatusForReExport() {

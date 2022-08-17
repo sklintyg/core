@@ -53,4 +53,14 @@ class JpaCertificateRepositoryTest {
   void shallReturnEmptyForForMissingTermination() {
     assertEquals(0, jpaCertificateRepository.get(termination).size());
   }
+
+  @Test
+  void shallRemoveCertificatesForExistingTermination() {
+    inMemoryTerminationEntityRepository.save(terminationEntity);
+    inMemoryCertificateEntityRepository.saveAll(certificateEntities(terminationEntity, 3, 0));
+
+    jpaCertificateRepository.remove(termination);
+
+    assertEquals(0, jpaCertificateRepository.get(termination).size());
+  }
 }
