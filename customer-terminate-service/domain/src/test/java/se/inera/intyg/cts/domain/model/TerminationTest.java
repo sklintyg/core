@@ -591,4 +591,140 @@ class TerminationTest {
       assertEquals(terminationStatus, termination.status());
     }
   }
+
+  @Nested
+  @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+  class UpdateAll {
+
+    Stream<TerminationStatus> statusAllowedToUpdate() {
+      return Stream.of(
+          TerminationStatus.CREATED,
+          TerminationStatus.COLLECTING_CERTIFICATES,
+          TerminationStatus.COLLECTING_CERTIFICATES_COMPLETED,
+          TerminationStatus.COLLECTING_CERTIFICATE_TEXTS_COMPLETED,
+          TerminationStatus.EXPORTED,
+          TerminationStatus.NOTIFICATION_SENT,
+          TerminationStatus.REMINDER_SENT
+      );
+    }
+
+    @ParameterizedTest
+    @MethodSource("statusAllowedToUpdate")
+    void shallUpdateOfHsaIdIfOfFollowingStatus(TerminationStatus terminationStatus) {
+      final var newHsaId = new HSAId("NewHsaId");
+      final var newPersonId = new PersonId("NewPersonId");
+      final var newEmailAddress = new EmailAddress("NewEmailAddress");
+      final var newPhoneNumber = new PhoneNumber("NewPhoneNumber");
+      final var termination = defaultTerminationBuilder()
+          .status(terminationStatus)
+          .create();
+
+      termination.update(
+          newHsaId,
+          newPersonId,
+          newEmailAddress,
+          newPhoneNumber
+      );
+
+      assertEquals(newHsaId, termination.careProvider().hsaId());
+    }
+
+    @ParameterizedTest
+    @MethodSource("statusAllowedToUpdate")
+    void shallUpdateOfPersonIdIfOfFollowingStatus(TerminationStatus terminationStatus) {
+      final var newHsaId = new HSAId("NewHsaId");
+      final var newPersonId = new PersonId("NewPersonId");
+      final var newEmailAddress = new EmailAddress("NewEmailAddress");
+      final var newPhoneNumber = new PhoneNumber("NewPhoneNumber");
+      final var termination = defaultTerminationBuilder()
+          .status(terminationStatus)
+          .create();
+
+      termination.update(
+          newHsaId,
+          newPersonId,
+          newEmailAddress,
+          newPhoneNumber
+      );
+
+      assertEquals(newPersonId,
+          termination.export().organizationRepresentative().personId());
+    }
+
+    @ParameterizedTest
+    @MethodSource("statusAllowedToUpdate")
+    void shallUpdateOfEmailAddressIfOfFollowingStatus(TerminationStatus terminationStatus) {
+      final var newHsaId = new HSAId("NewHsaId");
+      final var newPersonId = new PersonId("NewPersonId");
+      final var newEmailAddress = new EmailAddress("NewEmailAddress");
+      final var newPhoneNumber = new PhoneNumber("NewPhoneNumber");
+      final var termination = defaultTerminationBuilder()
+          .status(terminationStatus)
+          .create();
+
+      termination.update(
+          newHsaId,
+          newPersonId,
+          newEmailAddress,
+          newPhoneNumber
+      );
+
+      assertEquals(newEmailAddress,
+          termination.export().organizationRepresentative().emailAddress());
+    }
+
+    @ParameterizedTest
+    @MethodSource("statusAllowedToUpdate")
+    void shallUpdateOfPhoneNumberIfOfFollowingStatus(TerminationStatus terminationStatus) {
+      final var newHsaId = new HSAId("NewHsaId");
+      final var newPersonId = new PersonId("NewPersonId");
+      final var newEmailAddress = new EmailAddress("NewEmailAddress");
+      final var newPhoneNumber = new PhoneNumber("NewPhoneNumber");
+      final var termination = defaultTerminationBuilder()
+          .status(terminationStatus)
+          .create();
+
+      termination.update(
+          newHsaId,
+          newPersonId,
+          newEmailAddress,
+          newPhoneNumber
+      );
+
+      assertEquals(newPhoneNumber,
+          termination.export().organizationRepresentative().phoneNumber());
+    }
+
+    Stream<TerminationStatus> statusToResetTermination() {
+      return Stream.of(
+          TerminationStatus.COLLECTING_CERTIFICATES,
+          TerminationStatus.COLLECTING_CERTIFICATES_COMPLETED,
+          TerminationStatus.COLLECTING_CERTIFICATE_TEXTS_COMPLETED,
+          TerminationStatus.EXPORTED,
+          TerminationStatus.NOTIFICATION_SENT,
+          TerminationStatus.REMINDER_SENT
+      );
+    }
+
+    @ParameterizedTest
+    @MethodSource("statusToResetTermination")
+    void shallResetStatusToCreatedWhenHsaIdIsUpdated(TerminationStatus terminationStatus) {
+      final var newHsaId = new HSAId("NewHsaId");
+      final var newPersonId = new PersonId("NewPersonId");
+      final var newEmailAddress = new EmailAddress("NewEmailAddress");
+      final var newPhoneNumber = new PhoneNumber("NewPhoneNumber");
+      final var termination = defaultTerminationBuilder()
+          .status(terminationStatus)
+          .create();
+
+      termination.update(
+          newHsaId,
+          newPersonId,
+          newEmailAddress,
+          newPhoneNumber
+      );
+
+      assertEquals(TerminationStatus.CREATED, termination.status());
+    }
+  }
 }
