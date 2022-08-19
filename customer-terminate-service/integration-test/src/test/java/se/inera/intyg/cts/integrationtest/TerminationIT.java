@@ -1,6 +1,7 @@
 package se.inera.intyg.cts.integrationtest;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -62,6 +63,56 @@ public class TerminationIT {
     testData.terminationId(terminationDTO.terminationId().toString());
 
     assertNotNull(terminationDTO.terminationId());
+  }
+
+  @Test
+  void shallUpdateTermination() {
+    testData
+        .defaultTermination()
+        .setup();
+
+    final var terminationDTO =
+        given()
+            .pathParam("terminationId", testData.terminationIds().get(0))
+            .when()
+            .get("/api/v1/terminations/{terminationId}")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .extract()
+            .response().as(TerminationDTO.class);
+
+    final var updateTerminationDTO = new TerminationDTO(
+        terminationDTO.terminationId(),
+        terminationDTO.created(),
+        terminationDTO.creatorHSAId(),
+        terminationDTO.creatorName(),
+        terminationDTO.status(),
+        "NEWHSA-ID",
+        terminationDTO.organizationNumber(),
+        "2012121212-1212",
+        "070-44556677",
+        "newEmail@address.se"
+    );
+
+    final var actualTerminationDTO =
+        given()
+            .pathParam("terminationId", testData.terminationIds().get(0))
+            .contentType(ContentType.JSON)
+            .body(updateTerminationDTO)
+            .when()
+            .post("/api/v1/terminations/{terminationId}")
+            .then()
+            .contentType(ContentType.JSON)
+            .statusCode(HttpStatus.OK.value())
+            .extract()
+            .response().as(TerminationDTO.class);
+
+    assertAll(
+        () -> assertEquals(updateTerminationDTO.hsaId(), actualTerminationDTO.hsaId()),
+        () -> assertEquals(updateTerminationDTO.personId(), actualTerminationDTO.personId()),
+        () -> assertEquals(updateTerminationDTO.phoneNumber(), actualTerminationDTO.phoneNumber()),
+        () -> assertEquals(updateTerminationDTO.emailAddress(), actualTerminationDTO.emailAddress())
+    );
   }
 
   @Test
