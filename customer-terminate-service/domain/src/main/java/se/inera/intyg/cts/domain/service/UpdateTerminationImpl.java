@@ -24,6 +24,10 @@ public class UpdateTerminationImpl implements UpdateTermination {
     this.certificateTextRepository = certificateTextRepository;
   }
 
+  /**
+   * Updates the termination. If the termination´s status been reset to collect certificates, and
+   * its texts, any already collected data will be removed.
+   */
   @Override
   public Termination update(Termination termination, HSAId hsaId, PersonId personId,
       EmailAddress emailAddress, PhoneNumber phoneNumber) {
