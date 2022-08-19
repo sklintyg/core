@@ -42,7 +42,7 @@ public class TerminationController {
       @RequestBody TerminationDTO terminationDTO) {
     try {
       return terminationService.update(terminationId, terminationDTO);
-    } catch (IllegalArgumentException ex) {
+    } catch (IllegalArgumentException | IllegalStateException ex) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
     }
   }
