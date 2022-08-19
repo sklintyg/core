@@ -1,6 +1,7 @@
 package se.inera.intyg.cts.infrastructure.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static se.inera.intyg.cts.testutil.CertificateTextTestDataBuilder.certificateTextEntities;
 import static se.inera.intyg.cts.testutil.CertificateTextTestDataBuilder.certificateTexts;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTermination;
@@ -13,7 +14,7 @@ import se.inera.intyg.cts.infrastructure.persistence.entity.TerminationEntity;
 import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryCertificateTextsEntityRepository;
 import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryTerminationEntityRepository;
 
-class JpaCertificateTestRepositoryTest {
+class JpaCertificateTextRepositoryTest {
 
   private InMemoryTerminationEntityRepository inMemoryTerminationEntityRepository;
   private InMemoryCertificateTextsEntityRepository inMemoryCertificateTextsEntityRepository;
@@ -52,5 +53,22 @@ class JpaCertificateTestRepositoryTest {
   @Test
   void shallReturnEmptyForForMissingTermination() {
     assertEquals(0, jpaCertificateTextRepository.get(termination).size());
+  }
+
+  @Test
+  void shallRemoveCertificateTextsForExistingTermination() {
+    inMemoryTerminationEntityRepository.save(terminationEntity);
+    inMemoryCertificateTextsEntityRepository.saveAll(certificateTextEntities(terminationEntity, 3));
+
+    jpaCertificateTextRepository.remove(termination);
+
+    assertEquals(0, jpaCertificateTextRepository.get(termination).size());
+  }
+
+  @Test
+  void shallThrowExceptionForMissingTerminationWhenRemovingCertificateTexts() {
+    assertThrows(IllegalArgumentException.class,
+        () -> jpaCertificateTextRepository.remove(termination)
+    );
   }
 }

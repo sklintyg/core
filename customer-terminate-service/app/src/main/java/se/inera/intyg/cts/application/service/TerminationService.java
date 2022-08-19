@@ -58,6 +58,7 @@ public class TerminationService {
     return toDTO(createdTermination);
   }
 
+  @Transactional
   public TerminationDTO update(UUID terminationId, TerminationDTO terminationDTO) {
     if (!terminationId.equals(terminationDTO.terminationId())) {
       throw new IllegalArgumentException(

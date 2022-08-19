@@ -1,6 +1,7 @@
 package se.inera.intyg.cts.infrastructure.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static se.inera.intyg.cts.testutil.CertificateTestDataBuilder.certificateEntities;
 import static se.inera.intyg.cts.testutil.CertificateTestDataBuilder.certificates;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTermination;
@@ -62,5 +63,12 @@ class JpaCertificateRepositoryTest {
     jpaCertificateRepository.remove(termination);
 
     assertEquals(0, jpaCertificateRepository.get(termination).size());
+  }
+
+  @Test
+  void shallThrowExceptionForMissingTermination() {
+    assertThrows(IllegalArgumentException.class,
+        () -> jpaCertificateRepository.remove(termination)
+    );
   }
 }

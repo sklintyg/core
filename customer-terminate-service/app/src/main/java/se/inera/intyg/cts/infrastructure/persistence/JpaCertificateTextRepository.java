@@ -55,14 +55,14 @@ public class JpaCertificateTextRepository implements CertificateTextRepository {
 
   @Override
   public void remove(Termination termination) {
-    final var terminationEntity = getByTerminationId(termination);
-
-    if (terminationEntity.isEmpty()) {
-      return;
-    }
+    final var terminationEntity = getByTerminationId(termination)
+        .orElseThrow(() -> new IllegalArgumentException(
+            String.format("Termination with id '%s' doesn't exists!",
+                termination.terminationId().id())
+        ));
 
     final var certificateTextEntities = certificateTextEntityRepository.findAllByTermination(
-        terminationEntity.get());
+        terminationEntity);
 
     if (certificateTextEntities.size() > 0) {
       certificateTextEntityRepository.deleteAll(certificateTextEntities);
