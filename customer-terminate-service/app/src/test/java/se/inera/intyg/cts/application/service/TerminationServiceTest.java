@@ -28,6 +28,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
+import se.inera.intyg.cts.application.dto.UpdateTerminationDTO;
 import se.inera.intyg.cts.domain.model.EmailAddress;
 import se.inera.intyg.cts.domain.model.HSAId;
 import se.inera.intyg.cts.domain.model.PersonId;
@@ -130,11 +131,18 @@ class TerminationServiceTest {
 
     private Termination termination;
     private TerminationDTO terminationDTO;
+    private UpdateTerminationDTO updateTerminationDTO;
 
     @BeforeEach
     void setUp() {
       termination = defaultTermination();
       terminationDTO = toDTO(termination);
+      updateTerminationDTO = new UpdateTerminationDTO(
+          terminationDTO.hsaId(),
+          terminationDTO.personId(),
+          terminationDTO.phoneNumber(),
+          terminationDTO.emailAddress()
+      );
     }
 
     @Test
@@ -150,22 +158,14 @@ class TerminationServiceTest {
           );
 
       final var updatedTermination = terminationService.update(terminationDTO.terminationId(),
-          terminationDTO);
+          updateTerminationDTO);
       assertNotNull(updatedTermination, "Termination is null");
-    }
-
-    @Test
-    void shallThrowExceptionIfTerminationIdIsntMatching() {
-      final var exception = assertThrows(IllegalArgumentException.class, () ->
-          terminationService.update(UUID.randomUUID(), terminationDTO));
-
-      assertTrue(exception.getMessage().contains("doesn't match the id passed in termination"));
     }
 
     @Test
     void shallThrowExceptionIfTerminationDoesntExists() {
       final var exception = assertThrows(IllegalArgumentException.class, () ->
-          terminationService.update(terminationDTO.terminationId(), terminationDTO));
+          terminationService.update(terminationDTO.terminationId(), updateTerminationDTO));
 
       assertTrue(exception.getMessage().contains("doesn't exist!"));
     }

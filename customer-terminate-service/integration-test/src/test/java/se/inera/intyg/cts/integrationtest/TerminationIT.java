@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
+import se.inera.intyg.cts.application.dto.UpdateTerminationDTO;
 
 public class TerminationIT {
 
@@ -81,14 +82,8 @@ public class TerminationIT {
             .extract()
             .response().as(TerminationDTO.class);
 
-    final var updateTerminationDTO = new TerminationDTO(
-        terminationDTO.terminationId(),
-        terminationDTO.created(),
-        terminationDTO.creatorHSAId(),
-        terminationDTO.creatorName(),
-        terminationDTO.status(),
+    final var updateTerminationDTO = new UpdateTerminationDTO(
         "NEWHSA-ID",
-        terminationDTO.organizationNumber(),
         "2012121212-1212",
         "070-44556677",
         "newEmail@address.se"

@@ -13,7 +13,6 @@ import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_ORG
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_PERSON_ID;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_PHONE_NUMBER;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_TERMINATION_ID;
-import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTerminationDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
+import se.inera.intyg.cts.application.dto.UpdateTerminationDTO;
 import se.inera.intyg.cts.application.service.EraseService;
 import se.inera.intyg.cts.application.service.TerminationService;
 import se.inera.intyg.cts.domain.model.TerminationId;
@@ -78,25 +78,37 @@ class TerminationControllerTest {
 
   @Test
   void update() {
-    final var terminationDTO = defaultTerminationDTO();
-    when(terminationService.update(terminationDTO.terminationId(), terminationDTO))
-        .thenReturn(this.terminationDTO);
+    final var updateTerminationDTO = new UpdateTerminationDTO(
+        "NewHSAId",
+        "NewPersonId",
+        "NewPhoneNumber",
+        "NewEmailAddress"
+    );
 
-    final var terminationDTOResponse = terminationController.update(terminationDTO.terminationId(),
-        terminationDTO);
+    when(terminationService.update(terminationDTO.terminationId(), updateTerminationDTO))
+        .thenReturn(terminationDTO);
 
-    assertEquals(terminationDTOResponse, this.terminationDTO);
+    final var terminationDTOResponse = terminationController.update(
+        terminationDTO.terminationId(),
+        updateTerminationDTO);
+
+    assertEquals(terminationDTOResponse, terminationDTO);
   }
 
   @Test
   void updateBadRequest() {
-    final var terminationDTO = defaultTerminationDTO();
-    when(terminationService.update(terminationDTO.terminationId(), terminationDTO))
+    final var updateTerminationDTO = new UpdateTerminationDTO(
+        "NewHSAId",
+        "NewPersonId",
+        "NewPhoneNumber",
+        "NewEmailAddress"
+    );
+    when(terminationService.update(terminationDTO.terminationId(), updateTerminationDTO))
         .thenThrow(IllegalArgumentException.class);
 
     final var exception = assertThrows(
         ResponseStatusException.class, () ->
-            terminationController.update(terminationDTO.terminationId(), terminationDTO));
+            terminationController.update(terminationDTO.terminationId(), updateTerminationDTO));
 
     assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
   }

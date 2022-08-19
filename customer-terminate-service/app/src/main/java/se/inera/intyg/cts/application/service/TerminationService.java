@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTOMapper;
+import se.inera.intyg.cts.application.dto.UpdateTerminationDTO;
 import se.inera.intyg.cts.domain.model.EmailAddress;
 import se.inera.intyg.cts.domain.model.HSAId;
 import se.inera.intyg.cts.domain.model.PersonId;
@@ -59,14 +60,7 @@ public class TerminationService {
   }
 
   @Transactional
-  public TerminationDTO update(UUID terminationId, TerminationDTO terminationDTO) {
-    if (!terminationId.equals(terminationDTO.terminationId())) {
-      throw new IllegalArgumentException(
-          String.format("TerminationId '%s' doesn't match the id passed in termination '%s'",
-              terminationId, terminationDTO.terminationId())
-      );
-    }
-
+  public TerminationDTO update(UUID terminationId, UpdateTerminationDTO updateTerminationDTO) {
     final var termination = terminationRepository.findByTerminationId(
         new TerminationId(terminationId)).orElseThrow(
         () -> new IllegalArgumentException(
@@ -76,10 +70,10 @@ public class TerminationService {
 
     final var updatedTermination = updateTermination.update(
         termination,
-        new HSAId(terminationDTO.hsaId()),
-        new PersonId(terminationDTO.personId()),
-        new EmailAddress(terminationDTO.emailAddress()),
-        new PhoneNumber(terminationDTO.phoneNumber())
+        new HSAId(updateTerminationDTO.hsaId()),
+        new PersonId(updateTerminationDTO.personId()),
+        new EmailAddress(updateTerminationDTO.emailAddress()),
+        new PhoneNumber(updateTerminationDTO.phoneNumber())
     );
 
     return toDTO(updatedTermination);
