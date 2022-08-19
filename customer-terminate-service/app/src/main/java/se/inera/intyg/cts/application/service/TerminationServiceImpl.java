@@ -14,11 +14,17 @@ import org.springframework.transaction.annotation.Transactional;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTOMapper;
+import se.inera.intyg.cts.application.dto.UpdateTerminationDTO;
+import se.inera.intyg.cts.domain.model.EmailAddress;
+import se.inera.intyg.cts.domain.model.HSAId;
+import se.inera.intyg.cts.domain.model.PersonId;
+import se.inera.intyg.cts.domain.model.PhoneNumber;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.model.TerminationBuilder;
 import se.inera.intyg.cts.domain.model.TerminationId;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
 import se.inera.intyg.cts.domain.service.SendPackagePassword;
+import se.inera.intyg.cts.domain.service.UpdateTermination;
 
 @Service
 public class TerminationServiceImpl implements TerminationService {
@@ -27,10 +33,14 @@ public class TerminationServiceImpl implements TerminationService {
 
   private final TerminationRepository terminationRepository;
   private final SendPackagePassword sendPackagePassword;
+  private final UpdateTermination updateTermination;
 
-  public TerminationServiceImpl(TerminationRepository terminationRepository, SendPackagePassword sendPackagePassword) {
+  public TerminationServiceImpl(TerminationRepository terminationRepository,
+      SendPackagePassword sendPackagePassword,
+      UpdateTermination updateTermination) {
     this.terminationRepository = terminationRepository;
     this.sendPackagePassword = sendPackagePassword;
+    this.updateTermination = updateTermination;
   }
 
   @Override
@@ -88,4 +98,26 @@ public class TerminationServiceImpl implements TerminationService {
       sendPackagePassword.resendPassword(termination);
       return TerminationDTOMapper.toDTO(termination);
   }
+
+  @Override
+  @Transactional
+  public TerminationDTO update(UUID terminationId, UpdateTerminationDTO updateTerminationDTO) {
+    final var termination = terminationRepository.findByTerminationId(
+        new TerminationId(terminationId)).orElseThrow(
+        () -> new IllegalArgumentException(
+            String.format("TerminationId '%s' doesn't exist!", terminationId)
+        )
+    );
+
+    final var updatedTermination = updateTermination.update(
+        termination,
+        new HSAId(updateTerminationDTO.hsaId()),
+        new PersonId(updateTerminationDTO.personId()),
+        new EmailAddress(updateTerminationDTO.emailAddress()),
+        new PhoneNumber(updateTerminationDTO.phoneNumber())
+    );
+
+    return toDTO(updatedTermination);
+  }
+
 }

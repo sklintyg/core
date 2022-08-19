@@ -63,8 +63,11 @@ class JpaCertificateRepositoryTest {
 
   @Test
   void shallRemoveCertificatesForExistingTermination() {
-    inMemoryTerminationEntityRepository.save(terminationEntity);
-    inMemoryCertificateEntityRepository.saveAll(certificateEntities(terminationEntity, 3, 0));
+    terminationEntityRepository.save(terminationEntity);
+    TerminationEntity savedTerminationEntity =
+        terminationEntityRepository.findByTerminationId(terminationEntity.getTerminationId()).get();
+
+    certificateEntityRepository.saveAll(certificateEntities(savedTerminationEntity, 3, 0));
 
     jpaCertificateRepository.remove(termination);
 

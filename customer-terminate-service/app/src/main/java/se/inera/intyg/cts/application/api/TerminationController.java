@@ -1,7 +1,6 @@
 package se.inera.intyg.cts.application.api;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

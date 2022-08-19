@@ -18,7 +18,7 @@ import se.inera.intyg.cts.infrastructure.persistence.repository.CertificateTextE
 import se.inera.intyg.cts.infrastructure.persistence.repository.TerminationEntityRepository;
 
 @DataJpaTest
-class JpaCertificateTestRepositoryTest {
+class JpaCertificateTextRepositoryTest {
 
   @Autowired
   private TerminationEntityRepository terminationEntityRepository;
@@ -63,8 +63,10 @@ class JpaCertificateTestRepositoryTest {
 
   @Test
   void shallRemoveCertificateTextsForExistingTermination() {
-    inMemoryTerminationEntityRepository.save(terminationEntity);
-    inMemoryCertificateTextsEntityRepository.saveAll(certificateTextEntities(terminationEntity, 3));
+    terminationEntityRepository.save(terminationEntity);
+    TerminationEntity savedTerminationEntity = terminationEntityRepository.findByTerminationId(terminationEntity.getTerminationId()).get();
+
+    certificateTextEntityRepository.saveAll(certificateTextEntities(savedTerminationEntity, 3));
 
     jpaCertificateTextRepository.remove(termination);
 

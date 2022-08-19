@@ -5,9 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static se.inera.intyg.cts.application.dto.TerminationDTOMapper.toDTO;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CREATOR_HSA_ID;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CREATOR_NAME;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_EMAIL_ADDRESS;
@@ -31,14 +33,23 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
+import se.inera.intyg.cts.application.dto.TerminationDTO;
+import se.inera.intyg.cts.application.dto.UpdateTerminationDTO;
+import se.inera.intyg.cts.domain.model.EmailAddress;
+import se.inera.intyg.cts.domain.model.HSAId;
+import se.inera.intyg.cts.domain.model.PersonId;
+import se.inera.intyg.cts.domain.model.PhoneNumber;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.model.TerminationId;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
 import se.inera.intyg.cts.domain.service.SendPackagePassword;
+import se.inera.intyg.cts.domain.service.UpdateTermination;
 
 @ExtendWith(MockitoExtension.class)
 class TerminationServiceImplTest {
 
+  @Mock
+  private UpdateTermination updateTermination;
   @Mock
   private SendPackagePassword sendPackagePassword;
   @Mock
@@ -52,7 +63,7 @@ class TerminationServiceImplTest {
 
   @BeforeEach
   void setUp() {
-    terminationServiceImpl = new TerminationServiceImpl(terminationRepository, sendPackagePassword);
+    terminationServiceImpl = new TerminationServiceImpl(terminationRepository, sendPackagePassword, updateTermination);
 
     termination = defaultTermination();
   }
@@ -178,12 +189,12 @@ class TerminationServiceImplTest {
 
     @BeforeEach
     void setUp() {
-      terminationServiceImpl = new TerminationServiceImpl(terminationRepository, sendPackagePassword);
+      terminationServiceImpl = new TerminationServiceImpl(terminationRepository, sendPackagePassword, updateTermination);
     }
 
     @Test
     void resendKey() {
-      terminationServiceImpl = new TerminationServiceImpl(terminationRepository, sendPackagePassword);
+      terminationServiceImpl = new TerminationServiceImpl(terminationRepository, sendPackagePassword, updateTermination);
       when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(Optional.of(termination));
 
       assertNotNull(terminationServiceImpl.resendPassword(termination.terminationId().id()));
@@ -204,4 +215,50 @@ class TerminationServiceImplTest {
       verify(sendPackagePassword, times(0)).resendPassword(termination);
     }
   }
+
+  @Nested
+  class UpdateTerminationMetadata {
+
+    private Termination termination;
+    private TerminationDTO terminationDTO;
+    private UpdateTerminationDTO updateTerminationDTO;
+
+    @BeforeEach
+    void setUp() {
+      termination = defaultTermination();
+      terminationDTO = toDTO(termination);
+      updateTerminationDTO = new UpdateTerminationDTO(
+          terminationDTO.hsaId(),
+          terminationDTO.personId(),
+          terminationDTO.phoneNumber(),
+          terminationDTO.emailAddress()
+      );
+    }
+
+    @Test
+    void shallUpdateTermination() {
+      when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(Optional.of(termination));
+      when(updateTermination.update(
+          any(Termination.class),
+          eq(new HSAId(terminationDTO.hsaId())),
+          eq(new PersonId(terminationDTO.personId())),
+          eq(new EmailAddress(terminationDTO.emailAddress())),
+          eq(new PhoneNumber(terminationDTO.phoneNumber())))).thenReturn(termination);
+
+
+      final var updatedTermination = terminationServiceImpl.update(terminationDTO.terminationId(),
+          updateTerminationDTO);
+      assertNotNull(updatedTermination, "Termination is null");
+    }
+
+    @Test
+    void shallThrowExceptionIfTerminationDoesntExists() {
+      when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(Optional.empty());
+      final var exception = assertThrows(IllegalArgumentException.class, () ->
+          terminationServiceImpl.update(terminationDTO.terminationId(), updateTerminationDTO));
+
+      assertTrue(exception.getMessage().contains("doesn't exist!"));
+    }
+  }
+
 }
