@@ -16,7 +16,7 @@ import se.inera.intyg.cts.infrastructure.persistence.entity.TerminationEntity;
 
 public class CertificateTestDataBuilder {
 
-  public static Long DEFAULT_ID = RandomGenerator.getDefault().nextLong();
+  public static Long DEFAULT_ID = RandomGenerator.getDefault().nextLong(1, 5000);
   public static String DEFAULT_CERTIFICATE_ID = UUID.randomUUID().toString();
   public static boolean DEFAULT_REVOKED = false;
   public static String DEFAULT_XML = "<xml></xml>";
@@ -43,7 +43,7 @@ public class CertificateTestDataBuilder {
 
   public static CertificateEntity defaultCertificateEntity(String id) {
     return new CertificateEntity(
-        RandomGenerator.getDefault().nextLong(),
+        RandomGenerator.getDefault().nextLong(1, 5000),
         id,
         DEFAULT_REVOKED,
         DEFAULT_XML_AS_BASE64,
@@ -71,7 +71,7 @@ public class CertificateTestDataBuilder {
     for (int i = 0; i < total; i++) {
       certificates.add(
           new CertificateEntity(
-              RandomGenerator.getDefault().nextLong(),
+              RandomGenerator.getDefault().nextLong(1, 5000),
               UUID.randomUUID().toString(),
               i >= (total - revokeCount),
               DEFAULT_XML_AS_BASE64,

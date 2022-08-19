@@ -3,24 +3,20 @@ package se.inera.intyg.cts.application.service;
 import static se.inera.intyg.cts.application.dto.TerminationDTOMapper.toDTO;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-import org.springframework.web.server.ResponseStatusException;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTOMapper;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.model.TerminationBuilder;
 import se.inera.intyg.cts.domain.model.TerminationId;
-import se.inera.intyg.cts.domain.model.TerminationStatus;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
 import se.inera.intyg.cts.domain.service.SendPackagePassword;
 
@@ -79,20 +75,17 @@ public class TerminationServiceImpl implements TerminationService {
 
   /**
    * Resend password if all criteria are fulfilled
-   * @param terminationId
-   * @return
-   * @throws NotFoundException
+   * @param terminationId Id of the termination to update.
+   * @return TerminationDTO containing the new status.
+   * @throws NoSuchElementException When termination does not exist
    */
   @Override
   @Transactional
-  public TerminationDTO resendPassword(UUID terminationId) throws NotFoundException {
+  public TerminationDTO resendPassword(UUID terminationId) throws IllegalArgumentException {
     Termination termination = terminationRepository.findByTerminationId(new TerminationId(terminationId)).orElseThrow(
-        () -> new NotFoundException()
-    );
-    if(termination.status().equals(TerminationStatus.PASSWORD_SENT) || termination.status().equals(TerminationStatus.PASSWORD_RESENT)){
+        () -> new IllegalArgumentException (String.format("Termination for id #s not found", terminationId))
+      );
       sendPackagePassword.resendPassword(termination);
       return TerminationDTOMapper.toDTO(termination);
-    }
-    throw new IllegalArgumentException(String.format("Invalid status: %s to resend password.", terminationId));
   }
 }

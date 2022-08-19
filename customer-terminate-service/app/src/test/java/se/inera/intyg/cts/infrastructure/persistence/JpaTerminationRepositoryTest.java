@@ -11,40 +11,44 @@ import java.util.Arrays;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.model.TerminationId;
 import se.inera.intyg.cts.domain.model.TerminationStatus;
-import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryTerminationEntityRepository;
+import se.inera.intyg.cts.infrastructure.persistence.repository.TerminationEntityRepository;
 
+@DataJpaTest
 class JpaTerminationRepositoryTest {
 
+  @Autowired
+  private TerminationEntityRepository terminationEntityRepository;
+
   private JpaTerminationRepository jpaTerminationRepository;
-  private InMemoryTerminationEntityRepository inMemoryTerminationEntityRepository;
   private Termination termination;
 
   @BeforeEach
   void setUp() {
-    inMemoryTerminationEntityRepository = new InMemoryTerminationEntityRepository();
-    jpaTerminationRepository = new JpaTerminationRepository(inMemoryTerminationEntityRepository);
+    jpaTerminationRepository = new JpaTerminationRepository(terminationEntityRepository);
     termination = defaultTermination();
   }
 
   @Test
   void shallStoreNewTermination() {
     jpaTerminationRepository.store(termination);
-    assertEquals(1, inMemoryTerminationEntityRepository.count());
+    assertEquals(1, terminationEntityRepository.count());
   }
 
   @Test
   void shallStoreUpdatedTermination() {
-    inMemoryTerminationEntityRepository.save(toEntity(termination));
+    terminationEntityRepository.save(toEntity(termination));
     jpaTerminationRepository.store(termination);
-    assertEquals(1, inMemoryTerminationEntityRepository.count());
+    assertEquals(1, terminationEntityRepository.count());
   }
 
   @Test
   void shallReturnTerminationWhenFindingByTerminationId() {
-    inMemoryTerminationEntityRepository.save(defaultTerminationEntity());
+    terminationEntityRepository.save(defaultTerminationEntity());
     assertNotNull(
         jpaTerminationRepository.findByTerminationId(new TerminationId(DEFAULT_TERMINATION_ID)),
         "Should return stored Termination");
@@ -54,7 +58,7 @@ class JpaTerminationRepositoryTest {
   void shallReturnAllTerminationsWhenFindingAll() {
     final var numberOfTerminations = 10;
     for (int i = 0; i < numberOfTerminations; i++) {
-      inMemoryTerminationEntityRepository.save(
+      terminationEntityRepository.save(
           defaultTerminationEntity(UUID.randomUUID())
       );
     }
@@ -66,7 +70,7 @@ class JpaTerminationRepositoryTest {
   void shallReturnTerminationsWithCorrectStatus() {
     final var numberOfTerminations = 10;
     for (int i = 0; i < numberOfTerminations; i++) {
-      inMemoryTerminationEntityRepository.save(
+      terminationEntityRepository.save(
           defaultTerminationEntity(UUID.randomUUID())
       );
     }
@@ -79,7 +83,7 @@ class JpaTerminationRepositoryTest {
   void shallReturnNoTerminationsWithIncorrectStatus() {
     final var numberOfTerminations = 10;
     for (int i = 0; i < numberOfTerminations; i++) {
-      inMemoryTerminationEntityRepository.save(
+      terminationEntityRepository.save(
           defaultTerminationEntity(UUID.randomUUID())
       );
     }

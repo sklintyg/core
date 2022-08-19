@@ -13,7 +13,7 @@ import se.inera.intyg.cts.infrastructure.persistence.entity.TerminationEntity;
 
 public class TerminationTestDataBuilder {
 
-  public static final Long DEFAULT_ID = RandomGenerator.getDefault().nextLong();
+  public static final Long DEFAULT_ID = RandomGenerator.getDefault().nextLong(1, 1000);
   public static final UUID DEFAULT_TERMINATION_ID = UUID.randomUUID();
   public static final LocalDateTime DEFAULT_CREATED = LocalDateTime.now();
   public static final String DEFAULT_HSA_ID = "TSTNMT2321000156-ALFA";

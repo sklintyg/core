@@ -28,7 +28,7 @@ public enum TerminationStatus {
   START_ERASE("Starta radering"),
   //Step 10
   ERASE_IN_PROGRESS("Radering pågår"),
-  //Step 11.5 (Optional)
+  //Step 10.5 (Optional)
   ERASE_CANCELLED("Radering avbruten"),
   //Step 12
   ERASE_COMPLETED("Radering utförd");
