@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
+import se.inera.intyg.cts.application.dto.UpdateTerminationDTO;
 import se.inera.intyg.cts.application.service.EraseService;
 import se.inera.intyg.cts.application.service.TerminationService;
 import se.inera.intyg.cts.domain.model.TerminationId;
@@ -34,6 +35,16 @@ public class TerminationController {
     try {
       return terminationService.create(request);
     } catch (IllegalArgumentException ex) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
+    }
+  }
+
+  @PostMapping("/{terminationId}")
+  TerminationDTO update(@PathVariable UUID terminationId,
+      @RequestBody UpdateTerminationDTO updateTerminationDTO) {
+    try {
+      return terminationService.update(terminationId, updateTerminationDTO);
+    } catch (IllegalArgumentException | IllegalStateException ex) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
     }
   }

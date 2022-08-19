@@ -9,4 +9,6 @@ public interface CertificateTextRepository {
   void store(Termination termination, List<CertificateText> certificateTexts);
 
   List<CertificateText> get(Termination termination);
+
+  void remove(Termination termination);
 }

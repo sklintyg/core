@@ -1,15 +1,36 @@
 package se.inera.intyg.cts.domain.model;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Termination {
 
+  private final static List<TerminationStatus> ALLOWED_TO_UPDATE = Arrays.asList(
+      TerminationStatus.CREATED,
+      TerminationStatus.COLLECTING_CERTIFICATES,
+      TerminationStatus.COLLECTING_CERTIFICATES_COMPLETED,
+      TerminationStatus.COLLECTING_CERTIFICATE_TEXTS_COMPLETED,
+      TerminationStatus.EXPORTED,
+      TerminationStatus.NOTIFICATION_SENT,
+      TerminationStatus.REMINDER_SENT
+  );
+
+  private final static List<TerminationStatus> NEED_REEXPORT_STATUS = List.of(
+      TerminationStatus.EXPORTED,
+      TerminationStatus.NOTIFICATION_SENT,
+      TerminationStatus.REMINDER_SENT
+  );
+
+  private final static List<TerminationStatus> NEED_RENOTIFICATION_STATUS = List.of(
+      TerminationStatus.NOTIFICATION_SENT,
+      TerminationStatus.REMINDER_SENT);
+
   private final TerminationId terminationId;
   private final LocalDateTime created;
   private final Staff creator;
-  private final CareProvider careProvider;
+  private CareProvider careProvider;
   private TerminationStatus status;
   private final Export export;
   private Erase erase;
@@ -157,5 +178,98 @@ public class Termination {
         ", export=" + export +
         ", erase=" + erase +
         '}';
+  }
+
+  public void update(HSAId hsaId, PersonId personId, EmailAddress emailAddress,
+      PhoneNumber phoneNumber) {
+    if (notAllowedToUpdate()) {
+      throw new IllegalStateException(
+          String.format(
+              "Not allowed to update because termination '%s' has status '%s'!",
+              terminationId.id(), status)
+      );
+    }
+
+    if (!careProvider.hsaId().equals(hsaId)) {
+      updateHsaId(hsaId);
+    }
+
+    if (!export.organizationRepresentative().personId().equals(personId)) {
+      updatePersonId(personId);
+    }
+
+    if (!export.organizationRepresentative().emailAddress().equals(emailAddress)) {
+      updateEmailAdress(emailAddress);
+    }
+
+    if (!export.organizationRepresentative().phoneNumber().equals(phoneNumber)) {
+      updatePhoneNumber(phoneNumber);
+    }
+  }
+
+  private void updateHsaId(HSAId hsaId) {
+    careProvider = new CareProvider(hsaId, careProvider.organizationNumber());
+    status = newStatusWhenHsaIdIsUpdated();
+    export.reset();
+  }
+
+  private void updatePersonId(PersonId personId) {
+    export.update(new OrganizationRepresentative(
+        personId,
+        export.organizationRepresentative().phoneNumber(),
+        export.organizationRepresentative().emailAddress()
+    ));
+
+    if (isReExportNeeded()) {
+      status = newStatusForReExport();
+    }
+  }
+
+  private void updatePhoneNumber(PhoneNumber phoneNumber) {
+    export.update(new OrganizationRepresentative(
+        export.organizationRepresentative().personId(),
+        phoneNumber,
+        export.organizationRepresentative().emailAddress()
+    ));
+
+    if (isReNotificationNeeded()) {
+      status = newStatusForReNotification();
+    }
+  }
+
+  private void updateEmailAdress(EmailAddress emailAddress) {
+    export.update(new OrganizationRepresentative(
+        export.organizationRepresentative().personId(),
+        export.organizationRepresentative().phoneNumber(),
+        emailAddress
+    ));
+
+    if (isReNotificationNeeded()) {
+      status = newStatusForReNotification();
+    }
+  }
+
+  private boolean notAllowedToUpdate() {
+    return !ALLOWED_TO_UPDATE.contains(status);
+  }
+
+  private TerminationStatus newStatusWhenHsaIdIsUpdated() {
+    return TerminationStatus.CREATED;
+  }
+
+  private boolean isReExportNeeded() {
+    return NEED_REEXPORT_STATUS.contains(status);
+  }
+
+  private TerminationStatus newStatusForReExport() {
+    return TerminationStatus.COLLECTING_CERTIFICATE_TEXTS_COMPLETED;
+  }
+
+  private boolean isReNotificationNeeded() {
+    return NEED_RENOTIFICATION_STATUS.contains(status);
+  }
+
+  private TerminationStatus newStatusForReNotification() {
+    return TerminationStatus.EXPORTED;
   }
 }
