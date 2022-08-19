@@ -29,4 +29,9 @@ public class InMemoryCertificateRepository implements CertificateRepository {
   public List<Certificate> get(Termination termination) {
     return certificatesMap.getOrDefault(termination.terminationId(), Collections.emptyList());
   }
+
+  @Override
+  public void remove(Termination termination) {
+    certificatesMap.remove(termination.terminationId());
+  }
 }

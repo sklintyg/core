@@ -51,6 +51,23 @@ public class JpaCertificateRepository implements CertificateRepository {
         .collect(Collectors.toList());
   }
 
+  @Override
+  public void remove(Termination termination) {
+    final var terminationEntity = terminationEntityRepository
+        .findByTerminationId(termination.terminationId().id())
+        .orElseThrow(() -> new IllegalArgumentException(
+            String.format("Termination with id '%s' doesn't exists!",
+                termination.terminationId().id())
+        ));
+
+    final var certificateEntities = certificateEntityRepository.findAllByTermination(
+        terminationEntity);
+
+    if (certificateEntities.size() > 0) {
+      certificateEntityRepository.deleteAll(certificateEntities);
+    }
+  }
+
   private TerminationEntity getTerminationEntity(Termination termination) {
     return terminationEntityRepository
         .findByTerminationId(termination.terminationId().id())

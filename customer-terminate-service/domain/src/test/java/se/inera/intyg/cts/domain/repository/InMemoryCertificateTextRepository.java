@@ -29,4 +29,9 @@ public class InMemoryCertificateTextRepository implements CertificateTextReposit
   public List<CertificateText> get(Termination termination) {
     return certificateTextsMap.getOrDefault(termination.terminationId(), Collections.emptyList());
   }
+
+  @Override
+  public void remove(Termination termination) {
+    certificateTextsMap.remove(termination.terminationId());
+  }
 }

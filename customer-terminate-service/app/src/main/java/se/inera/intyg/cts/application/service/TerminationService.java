@@ -13,9 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTOMapper;
+import se.inera.intyg.cts.application.dto.UpdateTerminationDTO;
+import se.inera.intyg.cts.domain.model.EmailAddress;
+import se.inera.intyg.cts.domain.model.HSAId;
+import se.inera.intyg.cts.domain.model.PersonId;
+import se.inera.intyg.cts.domain.model.PhoneNumber;
 import se.inera.intyg.cts.domain.model.TerminationBuilder;
 import se.inera.intyg.cts.domain.model.TerminationId;
 import se.inera.intyg.cts.domain.repository.TerminationRepository;
+import se.inera.intyg.cts.domain.service.UpdateTermination;
 
 @Service
 public class TerminationService {
@@ -23,9 +29,12 @@ public class TerminationService {
   private static final Logger LOG = LoggerFactory.getLogger(TerminationService.class);
 
   private final TerminationRepository terminationRepository;
+  private final UpdateTermination updateTermination;
 
-  public TerminationService(TerminationRepository terminationRepository) {
+  public TerminationService(TerminationRepository terminationRepository,
+      UpdateTermination updateTermination) {
     this.terminationRepository = terminationRepository;
+    this.updateTermination = updateTermination;
   }
 
   @Transactional
@@ -48,6 +57,26 @@ public class TerminationService {
     );
 
     return toDTO(createdTermination);
+  }
+
+  @Transactional
+  public TerminationDTO update(UUID terminationId, UpdateTerminationDTO updateTerminationDTO) {
+    final var termination = terminationRepository.findByTerminationId(
+        new TerminationId(terminationId)).orElseThrow(
+        () -> new IllegalArgumentException(
+            String.format("TerminationId '%s' doesn't exist!", terminationId)
+        )
+    );
+
+    final var updatedTermination = updateTermination.update(
+        termination,
+        new HSAId(updateTerminationDTO.hsaId()),
+        new PersonId(updateTerminationDTO.personId()),
+        new EmailAddress(updateTerminationDTO.emailAddress()),
+        new PhoneNumber(updateTerminationDTO.phoneNumber())
+    );
+
+    return toDTO(updatedTermination);
   }
 
   @Transactional

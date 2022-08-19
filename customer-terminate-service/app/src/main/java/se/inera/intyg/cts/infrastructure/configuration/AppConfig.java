@@ -22,6 +22,8 @@ import se.inera.intyg.cts.domain.service.SendPackageNotificationImpl;
 import se.inera.intyg.cts.domain.service.SendPackagePassword;
 import se.inera.intyg.cts.domain.service.SendPackagePasswordImpl;
 import se.inera.intyg.cts.domain.service.SendPassword;
+import se.inera.intyg.cts.domain.service.UpdateTermination;
+import se.inera.intyg.cts.domain.service.UpdateTerminationImpl;
 import se.inera.intyg.cts.domain.service.UploadPackage;
 
 @Configuration
@@ -63,5 +65,13 @@ public class AppConfig {
   public SendPackagePassword sendPackagePassword(SendPassword sendPassword,
       TerminationRepository terminationRepository) {
     return new SendPackagePasswordImpl(sendPassword, terminationRepository);
+  }
+
+  @Bean
+  public UpdateTermination updateTermination(TerminationRepository terminationRepository,
+      CertificateRepository certificateRepository,
+      CertificateTextRepository certificateTextRepository) {
+    return new UpdateTerminationImpl(terminationRepository, certificateRepository,
+        certificateTextRepository);
   }
 }

@@ -26,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
+import se.inera.intyg.cts.application.dto.UpdateTerminationDTO;
 import se.inera.intyg.cts.application.service.EraseService;
 import se.inera.intyg.cts.application.service.TerminationService;
 import se.inera.intyg.cts.domain.model.TerminationId;
@@ -72,6 +73,43 @@ class TerminationControllerTest {
         terminationController.create(request));
 
     verify(terminationService, times(1)).create(request);
+    assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
+  }
+
+  @Test
+  void update() {
+    final var updateTerminationDTO = new UpdateTerminationDTO(
+        "NewHSAId",
+        "NewPersonId",
+        "NewPhoneNumber",
+        "NewEmailAddress"
+    );
+
+    when(terminationService.update(terminationDTO.terminationId(), updateTerminationDTO))
+        .thenReturn(terminationDTO);
+
+    final var terminationDTOResponse = terminationController.update(
+        terminationDTO.terminationId(),
+        updateTerminationDTO);
+
+    assertEquals(terminationDTOResponse, terminationDTO);
+  }
+
+  @Test
+  void updateBadRequest() {
+    final var updateTerminationDTO = new UpdateTerminationDTO(
+        "NewHSAId",
+        "NewPersonId",
+        "NewPhoneNumber",
+        "NewEmailAddress"
+    );
+    when(terminationService.update(terminationDTO.terminationId(), updateTerminationDTO))
+        .thenThrow(IllegalArgumentException.class);
+
+    final var exception = assertThrows(
+        ResponseStatusException.class, () ->
+            terminationController.update(terminationDTO.terminationId(), updateTerminationDTO));
+
     assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
   }
 
