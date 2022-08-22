@@ -84,10 +84,10 @@ public class TerminationServiceImpl implements TerminationService {
   }
 
   /**
-   * Resend password if all criteria are fulfilled
+   * Try to resend password termination exists
    * @param terminationId Id of the termination to update.
    * @return TerminationDTO containing the new status.
-   * @throws NoSuchElementException When termination does not exist
+   * @throws IllegalArgumentException When termination does not exist
    */
   @Override
   @Transactional
@@ -95,8 +95,7 @@ public class TerminationServiceImpl implements TerminationService {
     Termination termination = terminationRepository.findByTerminationId(new TerminationId(terminationId)).orElseThrow(
         () -> new IllegalArgumentException (String.format("Termination for id #s not found", terminationId))
       );
-      sendPackagePassword.resendPassword(termination);
-      return TerminationDTOMapper.toDTO(termination);
+      return TerminationDTOMapper.toDTO(sendPackagePassword.resendPassword(termination));
   }
 
   @Override

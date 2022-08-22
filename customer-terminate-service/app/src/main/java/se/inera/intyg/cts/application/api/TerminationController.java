@@ -74,7 +74,7 @@ public class TerminationController {
   /**
    * Trigger a resend of the password
    * @param terminationId termination id tied to the termination password that should be resent
-   * @return TerminationDTO containing the new status.
+   * @return updated termination
    */
   @PostMapping("/{terminationId}/resendpassword")
   TerminationDTO resendPassword(@PathVariable UUID terminationId) {

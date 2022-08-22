@@ -196,6 +196,7 @@ class TerminationServiceImplTest {
     void resendKey() {
       terminationServiceImpl = new TerminationServiceImpl(terminationRepository, sendPackagePassword, updateTermination);
       when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(Optional.of(termination));
+      when(sendPackagePassword.resendPassword(termination)).thenReturn(termination);
 
       assertNotNull(terminationServiceImpl.resendPassword(termination.terminationId().id()));
 

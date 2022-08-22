@@ -30,7 +30,7 @@ public enum TerminationStatus {
   ERASE_IN_PROGRESS("Radering pågår"),
   //Step 10.5 (Optional)
   ERASE_CANCELLED("Radering avbruten"),
-  //Step 12
+  //Step 11
   ERASE_COMPLETED("Radering utförd");
 
   private final String description;

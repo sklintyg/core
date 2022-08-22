@@ -1,10 +1,11 @@
 package se.inera.intyg.cts.domain.service;
 
+import java.util.Optional;
 import se.inera.intyg.cts.domain.model.Termination;
 
 public interface SendPackagePassword {
 
-  void sendPassword(Termination termination);
+  Optional<Termination> sendPassword(Termination termination);
 
-  void resendPassword(Termination termination);
+  Termination resendPassword(Termination termination);
 }
