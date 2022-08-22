@@ -9,43 +9,49 @@ import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTerm
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.infrastructure.persistence.entity.TerminationEntity;
-import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryCertificateEntityRepository;
-import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryTerminationEntityRepository;
+import se.inera.intyg.cts.infrastructure.persistence.repository.CertificateEntityRepository;
+import se.inera.intyg.cts.infrastructure.persistence.repository.TerminationEntityRepository;
 
+@DataJpaTest
 class JpaCertificateRepositoryTest {
 
-  private InMemoryTerminationEntityRepository inMemoryTerminationEntityRepository;
-  private InMemoryCertificateEntityRepository inMemoryCertificateEntityRepository;
+  @Autowired
+  private TerminationEntityRepository terminationEntityRepository;
+  @Autowired
+  private CertificateEntityRepository certificateEntityRepository;
   private JpaCertificateRepository jpaCertificateRepository;
   private Termination termination;
   private TerminationEntity terminationEntity;
 
   @BeforeEach
   void setUp() {
-    inMemoryTerminationEntityRepository = new InMemoryTerminationEntityRepository();
-    inMemoryCertificateEntityRepository = new InMemoryCertificateEntityRepository();
     jpaCertificateRepository = new JpaCertificateRepository(
-        inMemoryCertificateEntityRepository,
-        inMemoryTerminationEntityRepository);
+        certificateEntityRepository,
+        terminationEntityRepository);
     termination = defaultTermination();
     terminationEntity = defaultTerminationEntity();
   }
 
   @Test
   void shallStoreCertificatesForExistingTermination() {
-    inMemoryTerminationEntityRepository.save(terminationEntity);
-
+    terminationEntityRepository.save(terminationEntity);
     jpaCertificateRepository.store(termination, certificates(3, 0));
 
-    assertEquals(3, inMemoryCertificateEntityRepository.count());
+    assertEquals(3, certificateEntityRepository.count());
   }
 
   @Test
   void shallReturnCertificatesForExistingTermination() {
-    inMemoryTerminationEntityRepository.save(terminationEntity);
-    inMemoryCertificateEntityRepository.saveAll(certificateEntities(terminationEntity, 3, 0));
+    terminationEntityRepository.save(terminationEntity);
+
+    TerminationEntity savedTerminationEntity =
+        terminationEntityRepository.findByTerminationId(terminationEntity.getTerminationId()).get();
+
+    certificateEntityRepository.saveAll(certificateEntities(savedTerminationEntity, 3, 0));
 
     assertEquals(3, jpaCertificateRepository.get(termination).size());
   }
@@ -57,8 +63,11 @@ class JpaCertificateRepositoryTest {
 
   @Test
   void shallRemoveCertificatesForExistingTermination() {
-    inMemoryTerminationEntityRepository.save(terminationEntity);
-    inMemoryCertificateEntityRepository.saveAll(certificateEntities(terminationEntity, 3, 0));
+    terminationEntityRepository.save(terminationEntity);
+    TerminationEntity savedTerminationEntity =
+        terminationEntityRepository.findByTerminationId(terminationEntity.getTerminationId()).get();
+
+    certificateEntityRepository.saveAll(certificateEntities(savedTerminationEntity, 3, 0));
 
     jpaCertificateRepository.remove(termination);
 

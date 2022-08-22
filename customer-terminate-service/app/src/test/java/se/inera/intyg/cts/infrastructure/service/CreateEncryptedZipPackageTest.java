@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 import static se.inera.intyg.cts.infrastructure.service.CreateEncryptedZipPackage.REVOKED_FILENAME;
 import static se.inera.intyg.cts.infrastructure.service.CreateEncryptedZipPackage.XML_EXTENSION;
 import static se.inera.intyg.cts.testutil.CertificateTestDataBuilder.certificateEntities;
@@ -18,27 +19,35 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.AbstractFileHeader;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.cts.domain.model.Password;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.infrastructure.persistence.entity.CertificateEntity;
 import se.inera.intyg.cts.infrastructure.persistence.entity.CertificateTextEntity;
 import se.inera.intyg.cts.infrastructure.persistence.entity.TerminationEntity;
-import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryCertificateEntityRepository;
-import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryCertificateTextsEntityRepository;
-import se.inera.intyg.cts.infrastructure.persistence.repository.InMemoryTerminationEntityRepository;
+import se.inera.intyg.cts.infrastructure.persistence.repository.CertificateEntityRepository;
+import se.inera.intyg.cts.infrastructure.persistence.repository.CertificateTextEntityRepository;
+import se.inera.intyg.cts.infrastructure.persistence.repository.TerminationEntityRepository;
 
+@ExtendWith(MockitoExtension.class)
 class CreateEncryptedZipPackageTest {
 
   public static final String DESTINATION_DIRECTORY = "./destination_directory";
-  private InMemoryTerminationEntityRepository inMemoryTerminationEntityRepository;
-  private InMemoryCertificateEntityRepository inMemoryCertificateEntityRepository;
-  private InMemoryCertificateTextsEntityRepository inMemoryCertificateTextEntityRepository;
+  @Mock
+  private TerminationEntityRepository terminationEntityRepository;
+  @Mock
+  private CertificateEntityRepository certificateEntityRepository;
+  @Mock
+  private CertificateTextEntityRepository certificateTextEntityRepository;
   private CreateEncryptedZipPackage createEncryptedZipPackage;
 
   private Termination termination;
@@ -51,26 +60,23 @@ class CreateEncryptedZipPackageTest {
 
   @BeforeEach
   void setUp() {
-    inMemoryTerminationEntityRepository = new InMemoryTerminationEntityRepository();
-    inMemoryCertificateEntityRepository = new InMemoryCertificateEntityRepository();
-    inMemoryCertificateTextEntityRepository = new InMemoryCertificateTextsEntityRepository();
 
     createEncryptedZipPackage = new CreateEncryptedZipPackage(
-        inMemoryTerminationEntityRepository,
-        inMemoryCertificateEntityRepository,
-        inMemoryCertificateTextEntityRepository,
+        terminationEntityRepository,
+        certificateEntityRepository,
+        certificateTextEntityRepository,
         "./"
     );
 
     termination = defaultTermination();
     terminationEntity = defaultTerminationEntity();
-    inMemoryTerminationEntityRepository.save(terminationEntity);
+    when(terminationEntityRepository.findByTerminationId(termination.terminationId().id())).thenReturn(Optional.of(terminationEntity));
 
     certificates = certificateEntities(terminationEntity, 20, 5);
-    inMemoryCertificateEntityRepository.saveAll(certificates);
+    when(certificateEntityRepository.findAllByTermination(terminationEntity)).thenReturn(certificates);
 
     certificateTexts = certificateTextEntities(terminationEntity, 10);
-    inMemoryCertificateTextEntityRepository.saveAll(certificateTexts);
+    when(certificateTextEntityRepository.findAllByTermination(terminationEntity)).thenReturn(certificateTexts);
   }
 
   @AfterEach

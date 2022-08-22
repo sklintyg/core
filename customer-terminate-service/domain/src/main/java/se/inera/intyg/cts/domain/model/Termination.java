@@ -105,6 +105,10 @@ public class Termination {
     status = TerminationStatus.PASSWORD_SENT;
   }
 
+  public void passwordResent() {
+    status = TerminationStatus.PASSWORD_RESENT;
+  }
+
   public TerminationId terminationId() {
     return terminationId;
   }

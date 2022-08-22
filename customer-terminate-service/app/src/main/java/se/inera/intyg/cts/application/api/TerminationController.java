@@ -70,4 +70,22 @@ public class TerminationController {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
     }
   }
+
+  /**
+   * Trigger a resend of the password
+   * @param terminationId termination id that should have its password resent
+   * @return updated termination
+   */
+  @PostMapping("/{terminationId}/resendpassword")
+  TerminationDTO resendPassword(@PathVariable UUID terminationId) {
+    try {
+      return terminationService.resendPassword(terminationId);
+    } catch (IllegalArgumentException ex) {
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, ex.getMessage());
+    } catch (RuntimeException ex) {
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, String.format("Couldn't find termination with id: %s", terminationId), ex);
+    }
+  }
 }

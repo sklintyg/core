@@ -16,9 +16,9 @@ import se.inera.intyg.cts.infrastructure.persistence.entity.TerminationEntity;
 
 public class CertificateTextTestDataBuilder {
 
-  public static Long DEFAULT_ID = RandomGenerator.getDefault().nextLong();
+  public static Long DEFAULT_ID = RandomGenerator.getDefault().nextLong(1, 5000);
   public static String DEFAULT_CERTIFICATE_TYPE = "certificateType";
-  public static String DEFAULT_CERTIFICATE_TYPE_VERSION = "CertificateTypeVersion";
+  public static String DEFAULT_CERTIFICATE_TYPE_VERSION = "1.5";
   public static String DEFAULT_XML = "<xml></xml>";
   public static String DEFAULT_XML_AS_BASE64 = Base64.getEncoder()
       .encodeToString(DEFAULT_XML.getBytes(StandardCharsets.UTF_8));
@@ -61,7 +61,7 @@ public class CertificateTextTestDataBuilder {
     for (int i = 0; i < total; i++) {
       certificates.add(
           new CertificateTextEntity(
-              RandomGenerator.getDefault().nextLong(),
+              RandomGenerator.getDefault().nextLong(1, 5000),
               DEFAULT_CERTIFICATE_TYPE + i,
               DEFAULT_CERTIFICATE_TYPE_VERSION,
               DEFAULT_XML_AS_BASE64,
