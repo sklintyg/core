@@ -43,11 +43,11 @@ class CreateEncryptedZipPackageTest {
 
   public static final String DESTINATION_DIRECTORY = "./destination_directory";
   @Mock
-  private TerminationEntityRepository inMemoryTerminationEntityRepository;
+  private TerminationEntityRepository terminationEntityRepository;
   @Mock
-  private CertificateEntityRepository inMemoryCertificateEntityRepository;
+  private CertificateEntityRepository certificateEntityRepository;
   @Mock
-  private CertificateTextEntityRepository inMemoryCertificateTextEntityRepository;
+  private CertificateTextEntityRepository certificateTextEntityRepository;
   private CreateEncryptedZipPackage createEncryptedZipPackage;
 
   private Termination termination;
@@ -62,21 +62,21 @@ class CreateEncryptedZipPackageTest {
   void setUp() {
 
     createEncryptedZipPackage = new CreateEncryptedZipPackage(
-        inMemoryTerminationEntityRepository,
-        inMemoryCertificateEntityRepository,
-        inMemoryCertificateTextEntityRepository,
+        terminationEntityRepository,
+        certificateEntityRepository,
+        certificateTextEntityRepository,
         "./"
     );
 
     termination = defaultTermination();
     terminationEntity = defaultTerminationEntity();
-    when(inMemoryTerminationEntityRepository.findByTerminationId(termination.terminationId().id())).thenReturn(Optional.of(terminationEntity));
+    when(terminationEntityRepository.findByTerminationId(termination.terminationId().id())).thenReturn(Optional.of(terminationEntity));
 
     certificates = certificateEntities(terminationEntity, 20, 5);
-    when(inMemoryCertificateEntityRepository.findAllByTermination(terminationEntity)).thenReturn(certificates);
+    when(certificateEntityRepository.findAllByTermination(terminationEntity)).thenReturn(certificates);
 
     certificateTexts = certificateTextEntities(terminationEntity, 10);
-    when(inMemoryCertificateTextEntityRepository.findAllByTermination(terminationEntity)).thenReturn(certificateTexts);
+    when(certificateTextEntityRepository.findAllByTermination(terminationEntity)).thenReturn(certificateTexts);
   }
 
   @AfterEach
