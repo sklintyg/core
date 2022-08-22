@@ -85,7 +85,7 @@ public class TerminationServiceImpl implements TerminationService {
 
   /**
    * Try to resend password termination exists
-   * @param terminationId Id of the termination to update.
+   * @param terminationId Id of the termination to resend.
    * @return TerminationDTO containing the new status.
    * @throws IllegalArgumentException When termination does not exist
    */

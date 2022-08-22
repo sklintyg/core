@@ -73,7 +73,7 @@ public class TerminationController {
 
   /**
    * Trigger a resend of the password
-   * @param terminationId termination id tied to the termination password that should be resent
+   * @param terminationId termination id that should have its password resent
    * @return updated termination
    */
   @PostMapping("/{terminationId}/resendpassword")
