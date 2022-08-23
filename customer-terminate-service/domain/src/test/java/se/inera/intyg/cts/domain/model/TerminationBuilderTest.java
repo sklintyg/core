@@ -94,7 +94,7 @@ class TerminationBuilderTest {
     }
 
     @Test
-    void shallNotExceptExistingTerminationWithoutCreated() {
+    void shallNotAcceptExistingTerminationWithoutCreated() {
       final var exception = assertThrows(IllegalArgumentException.class,
           () -> terminationBuilder()
               .terminationId(DEFAULT_TERMINATION_ID)
@@ -104,7 +104,7 @@ class TerminationBuilderTest {
     }
 
     @Test
-    void shallNotExceptExistingTerminationWithoutModified() {
+    void shallNotAcceptExistingTerminationWithoutModified() {
       final var exception = assertThrows(IllegalArgumentException.class,
           () -> terminationBuilder()
               .terminationId(DEFAULT_TERMINATION_ID)
@@ -115,7 +115,7 @@ class TerminationBuilderTest {
     }
 
     @Test
-    void shallNotExceptExistingTerminationWithoutStatus() {
+    void shallNotAcceptExistingTerminationWithoutStatus() {
       final var exception = assertThrows(IllegalArgumentException.class,
           () -> terminationBuilder()
               .terminationId(DEFAULT_TERMINATION_ID)
@@ -204,35 +204,35 @@ class TerminationBuilderTest {
   }
 
   @Test
-  void shallNotExceptTerminationWithoutCreatorHSAId() {
+  void shallNotAcceptTerminationWithoutCreatorHSAId() {
     final var exception = assertThrows(IllegalArgumentException.class,
         () -> terminationBuilder().creatorHSAId("").create());
     assertEquals("Missing HSAId", exception.getMessage());
   }
 
   @Test
-  void shallNotExceptTerminationWithoutCreatorName() {
+  void shallNotAcceptTerminationWithoutCreatorName() {
     final var exception = assertThrows(IllegalArgumentException.class,
         () -> terminationBuilder().creatorName("").create());
     assertEquals("Missing Name", exception.getMessage());
   }
 
   @Test
-  void shallNotExceptTerminationWithoutHSAId() {
+  void shallNotAcceptTerminationWithoutHSAId() {
     final var exception = assertThrows(IllegalArgumentException.class,
         () -> terminationBuilder().careProviderHSAId("").create());
     assertEquals("Missing HSAId", exception.getMessage());
   }
 
   @Test
-  void shallNotExceptTerminationWithoutOrganizationNumber() {
+  void shallNotAcceptTerminationWithoutOrganizationNumber() {
     final var exception = assertThrows(IllegalArgumentException.class,
         () -> terminationBuilder().careProviderOrganizationNumber("").create());
     assertEquals("Missing OrganizationNumber", exception.getMessage());
   }
 
   @Test
-  void shallNotExceptTerminationWithoutPersonId() {
+  void shallNotAcceptTerminationWithoutPersonId() {
     final var exception = assertThrows(IllegalArgumentException.class,
         () -> terminationBuilder().careProviderOrganizationRepresentativePersonId("")
             .create());
@@ -240,7 +240,7 @@ class TerminationBuilderTest {
   }
 
   @Test
-  void shallNotExceptTerminationWithoutPhoneNumber() {
+  void shallNotAcceptTerminationWithoutPhoneNumber() {
     final var exception = assertThrows(IllegalArgumentException.class,
         () -> terminationBuilder().careProviderOrganizationRepresentativePhoneNumber("")
             .create());
