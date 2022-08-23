@@ -14,6 +14,7 @@ public class TerminationEntityMapper {
         0L,
         termination.terminationId().id(),
         termination.created(),
+        termination.modified(),
         termination.creator().hsaId().id(),
         termination.creator().name(),
         termination.careProvider().hsaId().id(),
@@ -27,6 +28,9 @@ public class TerminationEntityMapper {
             termination.export().certificateSummary().revoked(),
             termination.export().password() != null ? termination.export().password().password()
                 : null,
+            termination.export().exportTime(),
+            termination.export().notificationTime(),
+            termination.export().reminderTime(),
             termination.export().receiptTime()
         ),
         termination.erase().eraseServices().stream()
@@ -43,6 +47,7 @@ public class TerminationEntityMapper {
     return TerminationBuilder.getInstance()
         .terminationId(terminationEntity.getTerminationId())
         .created(terminationEntity.getCreated())
+        .modified(terminationEntity.getModified())
         .creatorHSAId(terminationEntity.getCreatorHSAId())
         .creatorName(terminationEntity.getCreatorName())
         .careProviderHSAId(terminationEntity.getHsaId())
@@ -55,6 +60,9 @@ public class TerminationEntityMapper {
         .total(terminationEntity.getExport().getTotal())
         .revoked(terminationEntity.getExport().getRevoked())
         .packagePassword(terminationEntity.getExport().getPassword())
+        .exportTime(terminationEntity.getExport().getExportTime())
+        .notificationTime(terminationEntity.getExport().getNotificationTime())
+        .reminderTime(terminationEntity.getExport().getReminderTime())
         .receiptTime(terminationEntity.getExport().getReceiptTime())
         .eraseServices(
             terminationEntity.getEraseList().stream()

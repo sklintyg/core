@@ -7,6 +7,7 @@ import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CRE
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CREATOR_HSA_ID;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_CREATOR_NAME;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_HSA_ID;
+import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_MODIFIED;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_ORGANIZATION_NUMBER;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_PERSON_ID;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.DEFAULT_PHONE_NUMBER;
@@ -60,6 +61,11 @@ class TerminationEntityMapperTest {
     @Test
     void shallMapCreated() {
       assertEquals(DEFAULT_CREATED, toEntity(termination).getCreated());
+    }
+
+    @Test
+    void shallMapModified() {
+      assertEquals(DEFAULT_MODIFIED, toEntity(termination).getModified());
     }
 
     @Test
@@ -120,6 +126,11 @@ class TerminationEntityMapperTest {
     @Test
     void shallMapCreated() {
       assertEquals(DEFAULT_CREATED, toDomain(terminationEntity).created());
+    }
+
+    @Test
+    void shallMapModified() {
+      assertEquals(DEFAULT_MODIFIED, toDomain(terminationEntity).modified());
     }
 
     @Test

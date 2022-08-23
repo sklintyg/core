@@ -161,6 +161,32 @@ class TerminationTest {
         assertNull(termination.export().password(),
             () -> "CertificateSummary should be reset to null!");
       }
+
+      @ParameterizedTest
+      @MethodSource("statusAllowedToUpdateHsaId")
+      void shallUpdateModifiedWhenHsaIdIsUpdated(TerminationStatus terminationStatus) {
+        final var newHsaId = new HSAId("NewHsaId");
+        final var termination = defaultTerminationBuilder()
+            .status(terminationStatus)
+            .total(100)
+            .revoked(10)
+            .packagePassword("Password")
+            .create();
+
+        final var beforeUpdate = termination.modified();
+
+        termination.update(
+            newHsaId,
+            termination.export().organizationRepresentative().personId(),
+            termination.export().organizationRepresentative().emailAddress(),
+            termination.export().organizationRepresentative().phoneNumber()
+        );
+
+        assertTrue(termination.modified().isAfter(beforeUpdate), () ->
+            String.format("Expect modified '%s' to be updated and after '%s'",
+                termination.modified(), beforeUpdate)
+        );
+      }
     }
 
     @Nested
@@ -302,6 +328,29 @@ class TerminationTest {
         );
 
         assertEquals(terminationStatus, termination.status());
+      }
+
+      @ParameterizedTest
+      @MethodSource("statusAllowedToUpdatePersonId")
+      void shallUpdateModifiedWhenPersonIdIsUpdated(TerminationStatus terminationStatus) {
+        final var newPersonId = new PersonId("NewPersonId");
+        final var termination = defaultTerminationBuilder()
+            .status(terminationStatus)
+            .create();
+
+        final var beforeUpdate = termination.modified();
+
+        termination.update(
+            termination.careProvider().hsaId(),
+            newPersonId,
+            termination.export().organizationRepresentative().emailAddress(),
+            termination.export().organizationRepresentative().phoneNumber()
+        );
+
+        assertTrue(termination.modified().isAfter(beforeUpdate), () ->
+            String.format("Expect modified '%s' to be updated and after '%s'",
+                termination.modified(), beforeUpdate)
+        );
       }
     }
   }
@@ -447,6 +496,29 @@ class TerminationTest {
 
       assertEquals(terminationStatus, termination.status());
     }
+
+    @ParameterizedTest
+    @MethodSource("statusAllowedToUpdateEmailAddress")
+    void shallUpdateModifiedWhenEmailIsUpdated(TerminationStatus terminationStatus) {
+      final var newEmailAdress = new EmailAddress("NewEmailAdress");
+      final var termination = defaultTerminationBuilder()
+          .status(terminationStatus)
+          .create();
+
+      final var beforeUpdate = termination.modified();
+
+      termination.update(
+          termination.careProvider().hsaId(),
+          termination.export().organizationRepresentative().personId(),
+          newEmailAdress,
+          termination.export().organizationRepresentative().phoneNumber()
+      );
+
+      assertTrue(termination.modified().isAfter(beforeUpdate), () ->
+          String.format("Expect modified '%s' to be updated and after '%s'",
+              termination.modified(), beforeUpdate)
+      );
+    }
   }
 
   @Nested
@@ -589,6 +661,29 @@ class TerminationTest {
       );
 
       assertEquals(terminationStatus, termination.status());
+    }
+
+    @ParameterizedTest
+    @MethodSource("statusAllowedToUpdatePhoneNumber")
+    void shallUpdateModifiedWhenPhoneNumberIsUpdated(TerminationStatus terminationStatus) {
+      final var newPhoneNumber = new PhoneNumber("NewPhoneNumber");
+      final var termination = defaultTerminationBuilder()
+          .status(terminationStatus)
+          .create();
+
+      final var beforeUpdate = termination.modified();
+
+      termination.update(
+          termination.careProvider().hsaId(),
+          termination.export().organizationRepresentative().personId(),
+          termination.export().organizationRepresentative().emailAddress(),
+          newPhoneNumber
+      );
+
+      assertTrue(termination.modified().isAfter(beforeUpdate), () ->
+          String.format("Expect modified '%s' to be updated and after '%s'",
+              termination.modified(), beforeUpdate)
+      );
     }
   }
 

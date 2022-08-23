@@ -7,14 +7,18 @@ public class Export {
   private OrganizationRepresentative organizationRepresentative;
   private CertificateSummary certificateSummary;
   private Password password;
+  private LocalDateTime exportTime;
+  private LocalDateTime notificationTime;
+  private LocalDateTime reminderTime;
   private LocalDateTime receiptTime;
 
   Export(OrganizationRepresentative organizationRepresentative) {
-    this(organizationRepresentative, new CertificateSummary(0, 0), null, null);
+    this(organizationRepresentative, new CertificateSummary(0, 0), null, null, null, null, null);
   }
 
   Export(OrganizationRepresentative organizationRepresentative,
-      CertificateSummary certificateSummary, Password password, LocalDateTime receiptTime) {
+      CertificateSummary certificateSummary, Password password, LocalDateTime exportTime,
+      LocalDateTime notificationTime, LocalDateTime reminderTime, LocalDateTime receiptTime) {
     if (organizationRepresentative == null) {
       throw new IllegalArgumentException("Missing OrganisationalRepresentative");
     }
@@ -24,6 +28,9 @@ public class Export {
     this.organizationRepresentative = organizationRepresentative;
     this.certificateSummary = certificateSummary;
     this.password = password;
+    this.exportTime = exportTime;
+    this.notificationTime = notificationTime;
+    this.reminderTime = reminderTime;
     this.receiptTime = receiptTime;
   }
 
@@ -50,6 +57,30 @@ public class Export {
 
   public Password password() {
     return password;
+  }
+
+  public LocalDateTime exportTime() {
+    return exportTime;
+  }
+
+  public void exportTime(LocalDateTime exportTime) {
+    this.exportTime = exportTime;
+  }
+
+  public LocalDateTime notificationTime() {
+    return notificationTime;
+  }
+
+  public void notificationTime(LocalDateTime notificationTime) {
+    this.notificationTime = notificationTime;
+  }
+
+  public LocalDateTime reminderTime() {
+    return reminderTime;
+  }
+
+  public void reminderTime(LocalDateTime reminderTime) {
+    this.reminderTime = reminderTime;
   }
 
   public LocalDateTime receiptTime() {

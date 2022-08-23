@@ -21,6 +21,12 @@ public class ExportEmbeddable {
   private int revoked;
   @Column(name = "password", table = "export")
   private String password;
+  @Column(name = "export_time", table = "export")
+  private LocalDateTime exportTime;
+  @Column(name = "notification_time", table = "export")
+  private LocalDateTime notificationTime;
+  @Column(name = "reminder_time", table = "export")
+  private LocalDateTime reminderTime;
   @Column(name = "receipt_time", table = "export")
   private LocalDateTime receiptTime;
 

@@ -143,4 +143,34 @@
       referencedTableName="termination" referencedColumnNames="id"/>
   </changeSet>
 
+  <changeSet id="8" author="mww">
+    <addColumn tableName="termination">
+      <column name="modified" type="datetime" afterColumn="created">
+        <constraints nullable="true"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="9" author="mww">
+    <sql>update termination
+         set modified = created</sql>
+  </changeSet>
+
+  <changeSet id="10" author="mww">
+    <addNotNullConstraint tableName="termination" columnName="modified" columnDataType="datetime"/>
+  </changeSet>
+
+  <changeSet id="11" author="mww">
+    <addColumn tableName="export">
+      <column name="export_time" type="datetime" afterColumn="termination_id">
+        <constraints nullable="true"/>
+      </column>
+      <column name="notification_time" type="datetime" afterColumn="export_time">
+        <constraints nullable="true"/>
+      </column>
+      <column name="reminder_time" type="datetime" afterColumn="notification_time">
+        <constraints nullable="true"/>
+      </column>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

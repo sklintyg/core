@@ -16,6 +16,7 @@ public class TerminationTestDataBuilder {
   public static final Long DEFAULT_ID = RandomGenerator.getDefault().nextLong(1, 1000);
   public static final UUID DEFAULT_TERMINATION_ID = UUID.randomUUID();
   public static final LocalDateTime DEFAULT_CREATED = LocalDateTime.now();
+  public static final LocalDateTime DEFAULT_MODIFIED = LocalDateTime.now();
   public static final String DEFAULT_HSA_ID = "TSTNMT2321000156-ALFA";
   public static final String DEFAULT_CREATOR_HSA_ID = "creatorHSAId";
   public static final String DEFAULT_CREATOR_NAME = "creatorName";
@@ -36,6 +37,7 @@ public class TerminationTestDataBuilder {
     return TerminationBuilder.getInstance()
         .terminationId(DEFAULT_TERMINATION_ID)
         .created(DEFAULT_CREATED)
+        .modified(DEFAULT_MODIFIED)
         .creatorHSAId(DEFAULT_CREATOR_HSA_ID)
         .creatorName(DEFAULT_CREATOR_NAME)
         .careProviderHSAId(DEFAULT_HSA_ID)
@@ -67,6 +69,7 @@ public class TerminationTestDataBuilder {
         DEFAULT_ID,
         DEFAULT_TERMINATION_ID,
         DEFAULT_CREATED,
+        DEFAULT_MODIFIED,
         DEFAULT_CREATOR_HSA_ID,
         DEFAULT_CREATOR_NAME,
         DEFAULT_HSA_ID,
@@ -75,7 +78,7 @@ public class TerminationTestDataBuilder {
         DEFAULT_PHONE_NUMBER,
         DEFAULT_EMAIL_ADDRESS,
         DEFAULT_STATUS.toString(),
-        new ExportEmbeddable(0, 0, null, null),
+        new ExportEmbeddable(0, 0, null, null, null, null, null),
         Collections.emptyList()
     );
   }
@@ -85,6 +88,7 @@ public class TerminationTestDataBuilder {
         RandomGenerator.getDefault().nextLong(),
         terminationId,
         DEFAULT_CREATED,
+        DEFAULT_MODIFIED,
         DEFAULT_CREATOR_HSA_ID,
         DEFAULT_CREATOR_NAME,
         DEFAULT_HSA_ID,
@@ -93,7 +97,7 @@ public class TerminationTestDataBuilder {
         DEFAULT_PHONE_NUMBER,
         DEFAULT_EMAIL_ADDRESS,
         DEFAULT_STATUS.toString(),
-        new ExportEmbeddable(0, 0, null, null),
+        new ExportEmbeddable(0, 0, null, null, null, null, null),
         Collections.emptyList()
     );
   }
@@ -102,6 +106,7 @@ public class TerminationTestDataBuilder {
     return TerminationBuilder.getInstance()
         .terminationId(DEFAULT_TERMINATION_ID)
         .created(DEFAULT_CREATED)
+        .created(DEFAULT_MODIFIED)
         .creatorHSAId(DEFAULT_CREATOR_HSA_ID)
         .creatorName(DEFAULT_CREATOR_NAME)
         .careProviderHSAId(DEFAULT_HSA_ID)
@@ -118,6 +123,7 @@ public class TerminationTestDataBuilder {
     return TerminationBuilder.getInstance()
         .terminationId(DEFAULT_TERMINATION_ID)
         .created(created)
+        .modified(created)
         .creatorHSAId(DEFAULT_CREATOR_HSA_ID)
         .creatorName(DEFAULT_CREATOR_NAME)
         .careProviderHSAId(DEFAULT_HSA_ID)
@@ -134,6 +140,7 @@ public class TerminationTestDataBuilder {
     return TerminationBuilder.getInstance()
         .terminationId(DEFAULT_TERMINATION_ID)
         .created(DEFAULT_CREATED)
+        .modified(DEFAULT_MODIFIED)
         .creatorHSAId(DEFAULT_CREATOR_HSA_ID)
         .creatorName(DEFAULT_CREATOR_NAME)
         .careProviderHSAId(DEFAULT_HSA_ID)

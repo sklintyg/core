@@ -9,6 +9,7 @@ public class TerminationBuilder {
 
   private UUID terminationId;
   private LocalDateTime created;
+  private LocalDateTime modified;
   private String creatorHSAId;
   private String creatorName;
   private String careProviderHSAId;
@@ -20,6 +21,9 @@ public class TerminationBuilder {
   private int total;
   private int revoked;
   private String packagePassword;
+  private LocalDateTime exportTime;
+  private LocalDateTime notificationTime;
+  private LocalDateTime reminderTime;
   private LocalDateTime receiptTime;
   private List<EraseService> eraseServices;
 
@@ -34,6 +38,11 @@ public class TerminationBuilder {
 
   public TerminationBuilder created(LocalDateTime created) {
     this.created = created;
+    return this;
+  }
+
+  public TerminationBuilder modified(LocalDateTime modified) {
+    this.modified = modified;
     return this;
   }
 
@@ -94,6 +103,21 @@ public class TerminationBuilder {
     return this;
   }
 
+  public TerminationBuilder exportTime(LocalDateTime exportTime) {
+    this.exportTime = exportTime;
+    return this;
+  }
+
+  public TerminationBuilder notificationTime(LocalDateTime notificationTime) {
+    this.notificationTime = notificationTime;
+    return this;
+  }
+
+  public TerminationBuilder reminderTime(LocalDateTime reminderTime) {
+    this.reminderTime = reminderTime;
+    return this;
+  }
+
   public TerminationBuilder receiptTime(LocalDateTime receiptTime) {
     this.receiptTime = receiptTime;
     return this;
@@ -108,6 +132,7 @@ public class TerminationBuilder {
     if (terminationId == null) {
       terminationId = UUID.randomUUID();
       created = LocalDateTime.now();
+      modified = created;
       status = TerminationStatus.CREATED;
     }
 
@@ -121,6 +146,7 @@ public class TerminationBuilder {
     return new Termination(
         new TerminationId(terminationId),
         created,
+        modified,
         creator,
         new CareProvider(hsaId, organizationNumber),
         status,
@@ -128,6 +154,9 @@ public class TerminationBuilder {
             new OrganizationRepresentative(personId, phoneNumber, emailAddress),
             new CertificateSummary(total, revoked),
             packagePassword != null ? new Password(packagePassword) : null,
+            exportTime,
+            notificationTime,
+            reminderTime,
             receiptTime
         ),
         new Erase(eraseServices == null ? new ArrayList<>() : eraseServices)
