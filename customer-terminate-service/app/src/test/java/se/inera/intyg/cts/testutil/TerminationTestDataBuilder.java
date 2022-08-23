@@ -103,53 +103,20 @@ public class TerminationTestDataBuilder {
   }
 
   public static Termination terminationWithPhoneNumber(String phoneNumber) {
-    return TerminationBuilder.getInstance()
-        .terminationId(DEFAULT_TERMINATION_ID)
-        .created(DEFAULT_CREATED)
-        .created(DEFAULT_MODIFIED)
-        .creatorHSAId(DEFAULT_CREATOR_HSA_ID)
-        .creatorName(DEFAULT_CREATOR_NAME)
-        .careProviderHSAId(DEFAULT_HSA_ID)
-        .careProviderOrganizationNumber(DEFAULT_ORGANIZATION_NUMBER)
-        .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
+    return defaultTerminationBuilder()
         .careProviderOrganizationRepresentativePhoneNumber(phoneNumber)
-        .careProviderOrganizationRepresentativeEmailAddress(DEFAULT_EMAIL_ADDRESS)
-        .status(TerminationStatus.RECEIPT_RECEIVED)
-        .packagePassword(DEFAULT_PASSWORD)
         .create();
   }
 
-  public static Termination terminationWithCreatedDate(LocalDateTime created) {
-    return TerminationBuilder.getInstance()
-        .terminationId(DEFAULT_TERMINATION_ID)
-        .created(created)
-        .modified(created)
-        .creatorHSAId(DEFAULT_CREATOR_HSA_ID)
-        .creatorName(DEFAULT_CREATOR_NAME)
-        .careProviderHSAId(DEFAULT_HSA_ID)
-        .careProviderOrganizationNumber(DEFAULT_ORGANIZATION_NUMBER)
-        .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
-        .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
-        .careProviderOrganizationRepresentativeEmailAddress(DEFAULT_EMAIL_ADDRESS)
-        .status(TerminationStatus.RECEIPT_RECEIVED)
-        .packagePassword(DEFAULT_PASSWORD)
+  public static Termination terminationWithNotificationTime(LocalDateTime notificationTime) {
+    return defaultTerminationBuilder()
+        .notificationTime(notificationTime)
         .create();
   }
 
   public static Termination terminationWithEmailAddress(String emailAddress) {
-    return TerminationBuilder.getInstance()
-        .terminationId(DEFAULT_TERMINATION_ID)
-        .created(DEFAULT_CREATED)
-        .modified(DEFAULT_MODIFIED)
-        .creatorHSAId(DEFAULT_CREATOR_HSA_ID)
-        .creatorName(DEFAULT_CREATOR_NAME)
-        .careProviderHSAId(DEFAULT_HSA_ID)
-        .careProviderOrganizationNumber(DEFAULT_ORGANIZATION_NUMBER)
-        .careProviderOrganizationRepresentativePersonId(DEFAULT_PERSON_ID)
-        .careProviderOrganizationRepresentativePhoneNumber(DEFAULT_PHONE_NUMBER)
+    return defaultTerminationBuilder()
         .careProviderOrganizationRepresentativeEmailAddress(emailAddress)
-        .status(TerminationStatus.RECEIPT_RECEIVED)
-        .packagePassword(DEFAULT_PASSWORD)
         .create();
   }
 }

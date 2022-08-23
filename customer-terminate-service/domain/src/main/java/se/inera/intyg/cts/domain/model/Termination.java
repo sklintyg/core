@@ -241,6 +241,7 @@ public class Termination {
     }
 
     modified = LocalDateTime.now();
+    resetExportTimestamps();
   }
 
   private void updatePhoneNumber(PhoneNumber phoneNumber) {
@@ -255,6 +256,7 @@ public class Termination {
     }
 
     modified = LocalDateTime.now();
+    resetNotificationTimestamps();
   }
 
   private void updateEmailAdress(EmailAddress emailAddress) {
@@ -269,6 +271,7 @@ public class Termination {
     }
 
     modified = LocalDateTime.now();
+    resetNotificationTimestamps();
   }
 
   private boolean notAllowedToUpdate() {
@@ -293,5 +296,15 @@ public class Termination {
 
   private TerminationStatus newStatusForReNotification() {
     return TerminationStatus.EXPORTED;
+  }
+
+  private void resetExportTimestamps() {
+    export.exportTime(null);
+    resetNotificationTimestamps();
+  }
+
+  private void resetNotificationTimestamps() {
+    export.notificationTime(null);
+    export.reminderTime(null);
   }
 }

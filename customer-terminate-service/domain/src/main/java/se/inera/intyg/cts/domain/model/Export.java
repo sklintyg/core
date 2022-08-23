@@ -98,6 +98,9 @@ public class Export {
   public void reset() {
     this.password = null;
     this.certificateSummary = new CertificateSummary(0, 0);
+    this.exportTime = null;
+    this.notificationTime = null;
+    this.reminderTime = null;
   }
 
   @Override
