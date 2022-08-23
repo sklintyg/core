@@ -29,6 +29,7 @@ public class TestData {
   private String password;
   private boolean receiptReceived;
   private boolean notificationSent;
+  private LocalDateTime notificationSentTime;
 
   public static TestData create() {
     return new TestData();
@@ -62,24 +63,6 @@ public class TestData {
     return this;
   }
 
-  public TestData terminationWithCreatedTime(LocalDateTime createdTime) {
-    terminationDTOs.add(
-      new TestabilityTerminationDTO(
-        UUID.randomUUID(),
-          createdTime,
-          "CREATORHSA-ID",
-          "Creator Name",
-          "CREATED",
-          HSA_ID,
-          ORG_NO,
-          PERSON_ID,
-          PHONE_NUMBER,
-          EMAIL_ADDRESS
-      )
-    );
-    return this;
-  }
-
   public TestData certificates(int count) {
     certificatesCount = count;
     return this;
@@ -106,8 +89,9 @@ public class TestData {
     return this;
   }
 
-  public TestData notificationSent() {
+  public TestData notificationSent(LocalDateTime notificationSentTime) {
     this.notificationSent = true;
+    this.notificationSentTime = notificationSentTime;
     return this;
   }
 
@@ -184,7 +168,7 @@ public class TestData {
         if (notificationSent) {
           given()
               .contentType(ContentType.JSON)
-              .body(password)
+              .body(notificationSentTime)
               .pathParam("terminationId", testabilityTerminationDTO.terminationId().toString())
               .when()
               .post("/testability/v1/terminations/{terminationId}/sendNotification")

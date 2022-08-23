@@ -11,6 +11,7 @@ public class TestabilityTerminationDTOMapper {
         0L,
         testabilityTerminationDTO.terminationId(),
         testabilityTerminationDTO.created(),
+        testabilityTerminationDTO.created(),
         testabilityTerminationDTO.creatorHSAId(),
         testabilityTerminationDTO.creatorName(),
         testabilityTerminationDTO.hsaId(),
@@ -19,7 +20,7 @@ public class TestabilityTerminationDTOMapper {
         testabilityTerminationDTO.phoneNumber(),
         testabilityTerminationDTO.emailAddress(),
         testabilityTerminationDTO.status(),
-        new ExportEmbeddable(0, 0, null, null),
+        new ExportEmbeddable(0, 0, null, null, null, null, null),
         Collections.emptyList()
     );
   }

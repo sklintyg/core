@@ -77,7 +77,6 @@ public class MessageServiceImpl implements MessageService {
 
       if (sendReminderActive && isTimeForReminder(termination)) {
         sendReminder(termination);
-
       } else if (!sendReminderActive) {
         LOG.info("Functionality for sending reminder is inactive. Not sending "
             + "reminder for termination id {}", termination.terminationId());
@@ -86,7 +85,8 @@ public class MessageServiceImpl implements MessageService {
   }
 
   private boolean isTimeForReminder(Termination termination) {
-    return termination.created().plusMinutes(reminderDelayInMinutes).isBefore(LocalDateTime.now());
+    return termination.export().notificationTime().plusMinutes(reminderDelayInMinutes)
+        .isBefore(LocalDateTime.now());
   }
 
   private void sendPassword(Termination termination) {

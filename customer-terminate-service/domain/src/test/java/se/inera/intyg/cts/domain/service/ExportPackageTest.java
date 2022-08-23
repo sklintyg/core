@@ -1,6 +1,7 @@
 package se.inera.intyg.cts.domain.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -9,6 +10,7 @@ import static org.mockito.Mockito.when;
 import static se.inera.intyg.cts.domain.util.TerminationTestDataFactory.defaultTermination;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,6 +65,19 @@ class ExportPackageTest {
     verify(termination, times(1)).exported(any(Password.class));
     verify(terminationRepositoryMock, times(1)).store(termination);
     assertEquals(passwordCaptor.getValue().password(), PASSWORD);
+  }
+
+  @Test
+  void shallUpdateExportTimeAfterSuccessfulExport() {
+    when(packageFile.exists()).thenReturn(true);
+
+    final var beforeDateTime = LocalDateTime.now();
+    exportPackage.export(termination);
+
+    assertTrue(beforeDateTime.isBefore(termination.export().exportTime()), () ->
+        String.format("Expect exportTime '%s' to be updated and after '%s'",
+            termination.export().exportTime(), beforeDateTime)
+    );
   }
 
   @Test

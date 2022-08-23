@@ -29,19 +29,25 @@ public class Termination {
 
   private final TerminationId terminationId;
   private final LocalDateTime created;
+  private LocalDateTime modified;
   private final Staff creator;
   private CareProvider careProvider;
   private TerminationStatus status;
   private final Export export;
   private Erase erase;
 
-  Termination(TerminationId terminationId, LocalDateTime created, Staff creator,
-      CareProvider careProvider, TerminationStatus status, Export export, Erase erase) {
+  Termination(TerminationId terminationId, LocalDateTime created, LocalDateTime modified,
+      Staff creator, CareProvider careProvider, TerminationStatus status, Export export,
+      Erase erase) {
+    this.modified = modified;
     if (terminationId == null) {
       throw new IllegalArgumentException("Missing TerminationId");
     }
     if (created == null) {
       throw new IllegalArgumentException("Missing Created");
+    }
+    if (modified == null) {
+      throw new IllegalArgumentException("Missing Modified");
     }
     if (creator == null) {
       throw new IllegalArgumentException("Missing Creator");
@@ -60,6 +66,7 @@ public class Termination {
     }
     this.terminationId = terminationId;
     this.created = created;
+    this.modified = modified;
     this.creator = creator;
     this.careProvider = careProvider;
     this.status = status;
@@ -85,14 +92,17 @@ public class Termination {
 
   public void exported(Password password) {
     export().packagePassword(password);
+    export().exportTime(LocalDateTime.now());
     status = TerminationStatus.EXPORTED;
   }
 
   public void notificationSent() {
+    export().notificationTime(LocalDateTime.now());
     status = TerminationStatus.NOTIFICATION_SENT;
   }
 
   public void reminderSent() {
+    export().reminderTime(LocalDateTime.now());
     status = TerminationStatus.REMINDER_SENT;
   }
 
@@ -115,6 +125,10 @@ public class Termination {
 
   public LocalDateTime created() {
     return created;
+  }
+
+  public LocalDateTime modified() {
+    return modified;
   }
 
   public Staff creator() {
@@ -172,6 +186,7 @@ public class Termination {
     return "Termination{" +
         "terminationId=" + terminationId +
         ", created=" + created +
+        ", modified=" + modified +
         ", creator=" + creator +
         ", careProvider=" + careProvider +
         ", status=" + status +
@@ -211,6 +226,7 @@ public class Termination {
     careProvider = new CareProvider(hsaId, careProvider.organizationNumber());
     status = newStatusWhenHsaIdIsUpdated();
     export.reset();
+    modified = LocalDateTime.now();
   }
 
   private void updatePersonId(PersonId personId) {
@@ -223,6 +239,9 @@ public class Termination {
     if (isReExportNeeded()) {
       status = newStatusForReExport();
     }
+
+    modified = LocalDateTime.now();
+    resetExportTimestamps();
   }
 
   private void updatePhoneNumber(PhoneNumber phoneNumber) {
@@ -235,6 +254,9 @@ public class Termination {
     if (isReNotificationNeeded()) {
       status = newStatusForReNotification();
     }
+
+    modified = LocalDateTime.now();
+    resetNotificationTimestamps();
   }
 
   private void updateEmailAdress(EmailAddress emailAddress) {
@@ -247,6 +269,9 @@ public class Termination {
     if (isReNotificationNeeded()) {
       status = newStatusForReNotification();
     }
+
+    modified = LocalDateTime.now();
+    resetNotificationTimestamps();
   }
 
   private boolean notAllowedToUpdate() {
@@ -271,5 +296,15 @@ public class Termination {
 
   private TerminationStatus newStatusForReNotification() {
     return TerminationStatus.EXPORTED;
+  }
+
+  private void resetExportTimestamps() {
+    export.exportTime(null);
+    resetNotificationTimestamps();
+  }
+
+  private void resetNotificationTimestamps() {
+    export.notificationTime(null);
+    export.reminderTime(null);
   }
 }

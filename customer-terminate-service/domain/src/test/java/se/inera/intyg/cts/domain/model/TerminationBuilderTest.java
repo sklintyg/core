@@ -13,6 +13,7 @@ class TerminationBuilderTest {
 
   public static final UUID DEFAULT_TERMINATION_ID = UUID.randomUUID();
   public static final LocalDateTime DEFAULT_CREATED = LocalDateTime.now();
+  public static final LocalDateTime DEFAULT_MODIFIED = LocalDateTime.now();
   public static final String HSA_ID = "hsaId";
   public static final String CREATOR_HSA_ID = "creatorHSAId";
   public static final String CREATOR_NAME = "creatorName";
@@ -54,6 +55,7 @@ class TerminationBuilderTest {
           terminationBuilder()
               .terminationId(DEFAULT_TERMINATION_ID)
               .created(DEFAULT_CREATED)
+              .modified(DEFAULT_MODIFIED)
               .status(DEFAULT_STATUS)
               .create().terminationId().id());
     }
@@ -64,8 +66,20 @@ class TerminationBuilderTest {
           terminationBuilder()
               .terminationId(DEFAULT_TERMINATION_ID)
               .created(DEFAULT_CREATED)
+              .modified(DEFAULT_MODIFIED)
               .status(DEFAULT_STATUS)
               .create().created());
+    }
+
+    @Test
+    void shallCreateTerminationWithModified() {
+      assertEquals(DEFAULT_MODIFIED,
+          terminationBuilder()
+              .terminationId(DEFAULT_TERMINATION_ID)
+              .created(DEFAULT_CREATED)
+              .modified(DEFAULT_MODIFIED)
+              .status(DEFAULT_STATUS)
+              .create().modified());
     }
 
     @Test
@@ -74,12 +88,13 @@ class TerminationBuilderTest {
           terminationBuilder()
               .terminationId(DEFAULT_TERMINATION_ID)
               .created(DEFAULT_CREATED)
+              .modified(DEFAULT_MODIFIED)
               .status(DEFAULT_STATUS)
               .create().status());
     }
 
     @Test
-    void shallNotExceptExistingTerminationWithoutCreated() {
+    void shallNotAcceptExistingTerminationWithoutCreated() {
       final var exception = assertThrows(IllegalArgumentException.class,
           () -> terminationBuilder()
               .terminationId(DEFAULT_TERMINATION_ID)
@@ -89,11 +104,23 @@ class TerminationBuilderTest {
     }
 
     @Test
-    void shallNotExceptExistingTerminationWithoutStatus() {
+    void shallNotAcceptExistingTerminationWithoutModified() {
       final var exception = assertThrows(IllegalArgumentException.class,
           () -> terminationBuilder()
               .terminationId(DEFAULT_TERMINATION_ID)
               .created(DEFAULT_CREATED)
+              .status(DEFAULT_STATUS)
+              .create());
+      assertEquals("Missing Modified", exception.getMessage());
+    }
+
+    @Test
+    void shallNotAcceptExistingTerminationWithoutStatus() {
+      final var exception = assertThrows(IllegalArgumentException.class,
+          () -> terminationBuilder()
+              .terminationId(DEFAULT_TERMINATION_ID)
+              .created(DEFAULT_CREATED)
+              .modified(DEFAULT_MODIFIED)
               .create());
       assertEquals("Missing Status", exception.getMessage());
     }
@@ -149,35 +176,63 @@ class TerminationBuilderTest {
   }
 
   @Test
-  void shallNotExceptTerminationWithoutCreatorHSAId() {
+  void shallCreateTerminationWithExportTime() {
+    final var expectedTime = LocalDateTime.now();
+    assertEquals(expectedTime,
+        terminationBuilder().exportTime(expectedTime).create().export().exportTime());
+  }
+
+  @Test
+  void shallCreateTerminationWithNotificationTime() {
+    final var expectedTime = LocalDateTime.now();
+    assertEquals(expectedTime,
+        terminationBuilder().notificationTime(expectedTime).create().export().notificationTime());
+  }
+
+  @Test
+  void shallCreateTerminationWithReminderTime() {
+    final var expectedTime = LocalDateTime.now();
+    assertEquals(expectedTime,
+        terminationBuilder().reminderTime(expectedTime).create().export().reminderTime());
+  }
+
+  @Test
+  void shallCreateTerminationWithReceiptTime() {
+    final var expectedTime = LocalDateTime.now();
+    assertEquals(expectedTime,
+        terminationBuilder().receiptTime(expectedTime).create().export().receiptTime());
+  }
+
+  @Test
+  void shallNotAcceptTerminationWithoutCreatorHSAId() {
     final var exception = assertThrows(IllegalArgumentException.class,
         () -> terminationBuilder().creatorHSAId("").create());
     assertEquals("Missing HSAId", exception.getMessage());
   }
 
   @Test
-  void shallNotExceptTerminationWithoutCreatorName() {
+  void shallNotAcceptTerminationWithoutCreatorName() {
     final var exception = assertThrows(IllegalArgumentException.class,
         () -> terminationBuilder().creatorName("").create());
     assertEquals("Missing Name", exception.getMessage());
   }
 
   @Test
-  void shallNotExceptTerminationWithoutHSAId() {
+  void shallNotAcceptTerminationWithoutHSAId() {
     final var exception = assertThrows(IllegalArgumentException.class,
         () -> terminationBuilder().careProviderHSAId("").create());
     assertEquals("Missing HSAId", exception.getMessage());
   }
 
   @Test
-  void shallNotExceptTerminationWithoutOrganizationNumber() {
+  void shallNotAcceptTerminationWithoutOrganizationNumber() {
     final var exception = assertThrows(IllegalArgumentException.class,
         () -> terminationBuilder().careProviderOrganizationNumber("").create());
     assertEquals("Missing OrganizationNumber", exception.getMessage());
   }
 
   @Test
-  void shallNotExceptTerminationWithoutPersonId() {
+  void shallNotAcceptTerminationWithoutPersonId() {
     final var exception = assertThrows(IllegalArgumentException.class,
         () -> terminationBuilder().careProviderOrganizationRepresentativePersonId("")
             .create());
@@ -185,7 +240,7 @@ class TerminationBuilderTest {
   }
 
   @Test
-  void shallNotExceptTerminationWithoutPhoneNumber() {
+  void shallNotAcceptTerminationWithoutPhoneNumber() {
     final var exception = assertThrows(IllegalArgumentException.class,
         () -> terminationBuilder().careProviderOrganizationRepresentativePhoneNumber("")
             .create());

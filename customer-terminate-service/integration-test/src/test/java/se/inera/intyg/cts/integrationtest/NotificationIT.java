@@ -20,7 +20,9 @@ public class NotificationIT {
 
   private TestData testData;
 
-  private static final TypeRef<List<Map<String, List<String>>>> LIST_MESSAGES = new TypeRef<>() { };
+  private static final TypeRef<List<Map<String, List<String>>>> LIST_MESSAGES = new TypeRef<>() {
+  };
+
   @BeforeEach
   void setUp() {
     RestAssured.baseURI = System.getProperty("integration.tests.baseUrl",
@@ -36,6 +38,7 @@ public class NotificationIT {
 
   @Nested
   class TestNotificationSMS {
+
     @Test
     void shouldSendSmsNotificationToOrganizationRepresentativeWhenUploadedPackage() {
       testData
@@ -55,20 +58,21 @@ public class NotificationIT {
 
       final var notificationSentBySMS = getNotificationSentBySMS();
 
-      assertTrue(notificationSentBySMS.startsWith("Hej, du har namngivits som ansvarig för att hämta "
-          + "ett exportfilspaket"));
+      assertTrue(
+          notificationSentBySMS.startsWith("Hej, du har namngivits som ansvarig för att hämta "
+              + "ett exportfilspaket"));
     }
 
     @Test
     void shouldSendSmsReminderToOrganizationRepresentativeAfter14Days() {
       testData
-          .terminationWithCreatedTime(LocalDateTime.now().minusDays(15L))
+          .defaultTermination()
           .certificates(50)
           .collectCertificates()
           .certificateTexts(10)
           .collectCertificateTexts()
           .uploadPackage("password")
-          .notificationSent()
+          .notificationSent(LocalDateTime.now().minusDays(15L))
           .setup();
 
       given()
@@ -86,13 +90,13 @@ public class NotificationIT {
     @Test
     void shouldNotSendSmsReminderToOrganizationRepresentativeBefore14Days() {
       testData
-          .terminationWithCreatedTime(LocalDateTime.now().minusDays(13L))
+          .defaultTermination()
           .certificates(50)
           .collectCertificates()
           .certificateTexts(10)
           .collectCertificateTexts()
           .uploadPackage("password")
-          .notificationSent()
+          .notificationSent(LocalDateTime.now().minusDays(13L))
           .setup();
 
       given()
@@ -145,19 +149,19 @@ public class NotificationIT {
           () -> assertTrue(content.startsWith("<p>Hej, du har "
               + "namngivits som ansvarig för att hämta ett exportfilspaket")),
           () -> assertEquals("NOTIFICATION_SENT", status)
-    );
+      );
     }
 
     @Test
     void shouldSendEmailReminderToOrganizationRepresentativeAfter14Days() {
       final var data = testData
-          .terminationWithCreatedTime(LocalDateTime.now().minusDays(15L))
+          .defaultTermination()
           .certificates(50)
           .collectCertificates()
           .certificateTexts(10)
           .collectCertificateTexts()
           .uploadPackage("password")
-          .notificationSent()
+          .notificationSent(LocalDateTime.now().minusDays(15L))
           .setup();
 
       given()
@@ -191,13 +195,13 @@ public class NotificationIT {
     @Test
     void shouldNotSendEmailReminderToOrganizationRepresentativeBefore14Days() {
       final var data = testData
-          .terminationWithCreatedTime(LocalDateTime.now().minusDays(13L))
+          .defaultTermination()
           .certificates(50)
           .collectCertificates()
           .certificateTexts(10)
           .collectCertificateTexts()
           .uploadPackage("password")
-          .notificationSent()
+          .notificationSent(LocalDateTime.now().minusDays(13L))
           .setup();
 
       given()

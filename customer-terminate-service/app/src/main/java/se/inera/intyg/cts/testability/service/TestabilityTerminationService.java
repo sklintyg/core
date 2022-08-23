@@ -150,11 +150,12 @@ public class TestabilityTerminationService {
   }
 
   @Transactional
-  public void setAsNotificationSent(UUID terminationId) {
+  public void setAsNotificationSent(UUID terminationId, LocalDateTime notificationTime) {
     final var terminationEntity = terminationEntityRepository.findByTerminationId(terminationId)
         .orElseThrow();
 
     terminationEntity.setStatus(TerminationStatus.NOTIFICATION_SENT.name());
+    terminationEntity.getExport().setNotificationTime(notificationTime);
 
     terminationEntityRepository.save(terminationEntity);
   }

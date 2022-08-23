@@ -13,6 +13,7 @@ public class TerminationTestDataFactory {
 
   public static final UUID DEFAULT_TERMINATION_ID = UUID.randomUUID();
   public static final LocalDateTime DEFAULT_CREATED = LocalDateTime.now();
+  public static final LocalDateTime DEFAULT_MODIFIED = LocalDateTime.now();
   public static final String DEFAULT_HSA_ID = "hsaId";
   public static final String DEFAULT_CREATOR_HSA_ID = "creatorHSAId";
   public static final String DEFAULT_CREATOR_NAME = "creatorName";
@@ -64,6 +65,7 @@ public class TerminationTestDataFactory {
     return TerminationBuilder.getInstance()
         .terminationId(DEFAULT_TERMINATION_ID)
         .created(DEFAULT_CREATED)
+        .modified(DEFAULT_MODIFIED)
         .creatorHSAId(DEFAULT_CREATOR_HSA_ID)
         .creatorName(DEFAULT_CREATOR_NAME)
         .careProviderHSAId(DEFAULT_HSA_ID)

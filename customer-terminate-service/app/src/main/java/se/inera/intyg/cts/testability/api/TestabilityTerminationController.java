@@ -1,5 +1,6 @@
 package se.inera.intyg.cts.testability.api;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;
@@ -62,9 +63,11 @@ public class TestabilityTerminationController {
   }
 
   @PostMapping("/{terminationId}/sendNotification")
-  void setAsNotificationSent(@PathVariable UUID terminationId) {
-    LOG.info(String.format("Set status for termination '%s' to notification sent", terminationId));
-    testabilityTerminationService.setAsNotificationSent(terminationId);
+  void setAsNotificationSent(@PathVariable UUID terminationId,
+      @RequestBody LocalDateTime notificationTime) {
+    LOG.info(String.format("Set termination '%s' to notification sent at '%s'",
+        terminationId, notificationTime));
+    testabilityTerminationService.setAsNotificationSent(terminationId, notificationTime);
   }
 
   @PostMapping("/{terminationId}/receipt")

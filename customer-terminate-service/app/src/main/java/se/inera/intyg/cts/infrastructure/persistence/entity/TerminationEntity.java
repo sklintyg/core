@@ -38,6 +38,8 @@ public class TerminationEntity {
   private UUID terminationId;
   @Column(name = "created")
   private LocalDateTime created;
+  @Column(name = "modified")
+  private LocalDateTime modified;
   @Column(name = "creator_hsa_id")
   private String creatorHSAId;
   @Column(name = "creator_name")
