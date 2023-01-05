@@ -1,9 +1,10 @@
 plugins {
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
 }
 
 ext {
-    springbootMavenBomVersion = '2.6.6'
+    springbootMavenBomVersion = '2.7.6'
+    greenMailVersion = "1.6.11"
 }
 
 group = 'se.inera.intyg.css'

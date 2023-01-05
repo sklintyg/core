@@ -1,9 +1,14 @@
 plugins {
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+    id 'org.springframework.boot' version '2.7.6'
 }
 
 ext {
-    springbootMavenBomVersion = '2.6.6'
+    springbootMavenBomVersion = '2.7.6'
+    okhttpVersion = '4.10.0'
+    zip4jVersion = '2.11.2'
+    shedlockVersion = '4.42.0'
+    springDocVersion = '1.6.14'
 }
 
 group = 'se.inera.intyg.cts'
