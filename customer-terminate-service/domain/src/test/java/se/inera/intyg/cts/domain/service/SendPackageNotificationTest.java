@@ -1,7 +1,7 @@
 package se.inera.intyg.cts.domain.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.cts.domain.util.TerminationTestDataFactory.terminationWithStatus;
 
@@ -52,8 +52,8 @@ class SendPackageNotificationTest {
     sendPackageNotification.sendNotification(termination);
 
     final var export = termination(termination.terminationId()).export();
-    assertTrue(beforeDateTime.isBefore(export.notificationTime()), () ->
-        String.format("Expect notificationTime '%s' to be updated and after '%s'",
+    assertFalse(export.notificationTime().isBefore(beforeDateTime), () ->
+        String.format("Expect notificationTime '%s' to be updated and not before '%s'",
             export.notificationTime(), beforeDateTime)
     );
   }
@@ -88,8 +88,8 @@ class SendPackageNotificationTest {
     sendPackageNotification.sendReminder(termination);
 
     final var export = termination(termination.terminationId()).export();
-    assertTrue(beforeDateTime.isBefore(export.reminderTime()), () ->
-        String.format("Expect reminderTime '%s' to be updated and after '%s'",
+    assertFalse(export.reminderTime().isBefore(beforeDateTime), () ->
+        String.format("Expect reminderTime '%s' to be updated and not before '%s'",
             export.reminderTime(), beforeDateTime)
     );
   }

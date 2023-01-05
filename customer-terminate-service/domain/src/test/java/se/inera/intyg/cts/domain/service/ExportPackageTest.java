@@ -1,7 +1,7 @@
 package se.inera.intyg.cts.domain.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -74,8 +74,8 @@ class ExportPackageTest {
     final var beforeDateTime = LocalDateTime.now();
     exportPackage.export(termination);
 
-    assertTrue(beforeDateTime.isBefore(termination.export().exportTime()), () ->
-        String.format("Expect exportTime '%s' to be updated and after '%s'",
+    assertFalse(termination.export().exportTime().isBefore(beforeDateTime), () ->
+        String.format("Expect exportTime '%s' to be updated and not before '%s'",
             termination.export().exportTime(), beforeDateTime)
     );
   }
