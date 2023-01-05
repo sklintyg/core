@@ -55,7 +55,7 @@ URL: https://cts.localtest.me/swagger-ui/index.html
 
 ## Licens
 
-Copyright (C) 2021 Inera AB (http://www.inera.se)
+Copyright (C) 2023 Inera AB (http://www.inera.se)
 
 Terminate Service is free software: you can redistribute it and/or modify it under the terms of the
 GNU Affero General Public License as published by the Free Software Foundation, either version 3 of
