@@ -1,21 +1,25 @@
 plugins {
-    id 'org.springframework.boot' version '2.6.6'
+    id 'org.springframework.boot' version '2.7.6'
+}
+
+springBoot  {
+    buildInfo()
 }
 
 dependencies {
     implementation project(':domain')
 
-    implementation('net.javacrumbs.shedlock:shedlock-spring:4.34.0')
-    implementation('net.javacrumbs.shedlock:shedlock-provider-redis-spring:4.34.0')
-    implementation 'net.lingala.zip4j:zip4j:2.10.0'
+    implementation "net.javacrumbs.shedlock:shedlock-spring:${shedlockVersion}"
+    implementation "net.javacrumbs.shedlock:shedlock-provider-redis-spring:${shedlockVersion}"
+    implementation "net.lingala.zip4j:zip4j:${zip4jVersion}"
+    implementation "org.springdoc:springdoc-openapi-ui:${springDocVersion}"
+    implementation "org.springdoc:springdoc-openapi-data-rest:${springDocVersion}"
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.liquibase:liquibase-core'
     implementation 'redis.clients:jedis'
-
-    implementation 'io.springfox:springfox-boot-starter:3.0.0'
 
     compileOnly 'org.projectlombok:lombok'
 
@@ -28,8 +32,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'com.squareup.okhttp3:okhttp:4.9.3'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.3'
+    testImplementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+    testImplementation "com.squareup.okhttp3:mockwebserver:${okhttpVersion}"
     testImplementation 'com.h2database:h2'
 }
 
