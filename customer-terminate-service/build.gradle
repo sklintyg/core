@@ -11,10 +11,10 @@ ext {
     springDocVersion = '1.6.14'
 }
 
-allprojects {
-    group = 'se.inera.intyg.cts'
-    version = '0.0.1-SNAPSHOT'
+group = 'se.inera.intyg.cts'
+version = '0.0.1-SNAPSHOT'
 
+allprojects {
     repositories {
         mavenCentral()
     }
