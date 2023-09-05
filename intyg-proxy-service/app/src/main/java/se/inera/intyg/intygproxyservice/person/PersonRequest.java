@@ -1,4 +1,4 @@
-package se.inera.intyg.intygproxyservice.dto;
+package se.inera.intyg.intygproxyservice.person;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PersonRequest {
 
-  String id;
+  private String personId;
 }
