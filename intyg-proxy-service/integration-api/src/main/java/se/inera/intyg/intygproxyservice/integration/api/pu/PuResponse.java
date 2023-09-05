@@ -1,11 +1,12 @@
 package se.inera.intyg.intygproxyservice.integration.api.pu;
 
-import java.io.Serializable;
+import lombok.Value;
 
+@Value
+public class PuResponse {
 
-public class PuResponse implements Serializable {
-
-  private static final long serialVersionUID = 2L;
+  Person person;
+  Status status;
 
   public static PuResponse found(final Person person) {
     return new PuResponse(person, Status.FOUND);
@@ -17,22 +18,6 @@ public class PuResponse implements Serializable {
 
   public static PuResponse error() {
     return new PuResponse(null, Status.ERROR);
-  }
-
-  private final Person person;
-  private final Status status;
-
-  protected PuResponse(Person person, Status status) {
-    this.person = person;
-    this.status = status;
-  }
-
-  public Person getPerson() {
-    return person;
-  }
-
-  public Status getStatus() {
-    return status;
   }
 
   public enum Status {
