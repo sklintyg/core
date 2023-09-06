@@ -74,7 +74,7 @@ class FakePuIntegrationServiceTest {
     }
 
     @Test
-    void shallReturnStatusFoundWhenPersonExists() {
+    void shallReturnStatusFoundWhenPersonNotFound() {
       final var actualPuResponse = fakePuIntegrationService.findPerson(
           PuRequest.builder()
               .personId(PERSON_ID)
