@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation project(':integration-api')
     runtimeOnly project(':integration-pu')
+    runtimeOnly project(':integration-fakepu')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
@@ -24,5 +25,20 @@ tasks.named('test') {
 }
 
 bootRun {
-    systemProperty("spring.profiles.active", "testability,dev")
+    systemProperty("spring.profiles.active", "testability,dev,fakepu")
+}
+
+tasks.register("appRunDebug") {
+    println("######## Running in Debug mode ########")
+    doFirst {
+        bootRun.configure {
+            jvmArgs "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=18021"
+        }
+    }
+    finalizedBy("bootRun")
+}
+
+tasks.register("appRun") {
+    println("######## Running in normal mode ########")
+    finalizedBy("bootRun")
 }
