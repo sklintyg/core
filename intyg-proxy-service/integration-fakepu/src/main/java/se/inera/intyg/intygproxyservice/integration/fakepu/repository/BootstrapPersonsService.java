@@ -1,5 +1,6 @@
 package se.inera.intyg.intygproxyservice.integration.fakepu.repository;
 
+import static se.inera.intyg.intygproxyservice.integration.api.pu.PuConstants.FAKEPU_PROFILE;
 import static se.inera.intyg.intygproxyservice.integration.fakepu.repository.PersonConverter.convert;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +19,7 @@ import se.inera.intyg.intygproxyservice.integration.fakepu.repository.model.Pars
 @Service
 @Slf4j
 @AllArgsConstructor
-@Profile("fakepu")
+@Profile(FAKEPU_PROFILE)
 public class BootstrapPersonsService {
 
   public static final String LOCATION_PATTERN = "bootstrap-persons/*.json";
