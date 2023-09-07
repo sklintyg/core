@@ -45,23 +45,22 @@ class PersonServiceTest {
 
     @Test
     void shallThrowExceptionIfPersonRequestContainsNullPersonId() {
+      final var personRequest = PersonRequest.builder()
+          .build();
+
       assertThrows(IllegalArgumentException.class,
-          () -> personService.findPerson(
-              PersonRequest.builder()
-                  .personId(null)
-                  .build()
-          )
+          () -> personService.findPerson(personRequest)
       );
     }
 
     @Test
     void shallThrowExceptionIfPersonRequestContainsEmptyPersonId() {
+      final var personRequest = PersonRequest.builder()
+          .personId("")
+          .build();
+
       assertThrows(IllegalArgumentException.class,
-          () -> personService.findPerson(
-              PersonRequest.builder()
-                  .personId("")
-                  .build()
-          )
+          () -> personService.findPerson(personRequest)
       );
     }
   }
@@ -98,11 +97,9 @@ class PersonServiceTest {
   @Nested
   class PersonNotFoundInPuService {
 
-    private PuResponse puReponseNotFound;
-
     @BeforeEach
     void setUp() {
-      puReponseNotFound = PuResponse.notFound();
+      final var puReponseNotFound = PuResponse.notFound();
 
       doReturn(puReponseNotFound)
           .when(puService)
@@ -125,11 +122,9 @@ class PersonServiceTest {
   @Nested
   class PersonErrorInPuService {
 
-    private PuResponse puResponseError;
-
     @BeforeEach
     void setUp() {
-      puResponseError = PuResponse.error();
+      final var puResponseError = PuResponse.error();
 
       doReturn(puResponseError)
           .when(puService)
