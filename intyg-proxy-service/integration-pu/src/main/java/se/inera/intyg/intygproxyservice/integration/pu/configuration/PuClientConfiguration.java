@@ -1,6 +1,7 @@
 package se.inera.intyg.intygproxyservice.integration.pu.configuration;
 
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofile.v3.rivtabp21.GetPersonsForProfileResponderInterface;
@@ -8,12 +9,14 @@ import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofile.v3
 @Configuration
 public class PuClientConfiguration {
 
+  @Value("${integration.pu.getprofile.endpoint}")
+  private String getPersonEndpoint;
+
   @Bean
   public GetPersonsForProfileResponderInterface getPersonsForProfileResponder() {
     final var jaxWsProxyFactoryBean = new JaxWsProxyFactoryBean();
     jaxWsProxyFactoryBean.setServiceClass(GetPersonsForProfileResponderInterface.class);
-    jaxWsProxyFactoryBean.setAddress(
-        "http://localhost:8040/services/stubs/strategicresourcemanagement/persons/person/GetPersonsForProfile/3/rivtabp21");
+    jaxWsProxyFactoryBean.setAddress(getPersonEndpoint);
     return (GetPersonsForProfileResponderInterface) jaxWsProxyFactoryBean.create();
   }
 }
