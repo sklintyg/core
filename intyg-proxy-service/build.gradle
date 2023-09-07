@@ -7,8 +7,9 @@ ext {
     cxfPluginVersion = "4.0.0"
     jaxb2Version = "3.0.0"
     jaxb2NamespacePrefixVersion = "2.0"
-    jaxbImplVersion = "4.0.0"
-    schemasSupportVersion = "2.1.5"
+    jaxbImplVersion = "4.0.1"
+    jaxsWsVersion = "4.0.1"
+    jakartaWsVersion = "4.0.0"
     springbootMavenBomVersion = '3.1.2'
 }
 
@@ -19,11 +20,7 @@ allprojects {
     repositories {
         mavenLocal()
         maven { url "https://nexus.drift.inera.se/repository/it-public/" }
-        mavenCentral {
-            content {
-                excludeGroupByRegex "se\\.inera.*"
-            }
-        }
+        mavenCentral()
     }
 }
 
