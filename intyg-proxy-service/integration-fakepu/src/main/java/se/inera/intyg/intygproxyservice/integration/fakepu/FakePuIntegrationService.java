@@ -1,6 +1,6 @@
 package se.inera.intyg.intygproxyservice.integration.fakepu;
 
-import static se.inera.intyg.intygproxyservice.integration.api.pu.PuConstants.FAKEPU_PROFILE;
+import static se.inera.intyg.intygproxyservice.integration.api.pu.PuConstants.FAKE_PU_PROFILE;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Profile;
@@ -12,7 +12,7 @@ import se.inera.intyg.intygproxyservice.integration.fakepu.repository.FakePuRepo
 
 @Service
 @AllArgsConstructor
-@Profile(FAKEPU_PROFILE)
+@Profile(FAKE_PU_PROFILE)
 public class FakePuIntegrationService implements PuService {
 
   private final FakePuRepository fakePuRepository;

@@ -1,6 +1,6 @@
 package se.inera.intyg.intygproxyservice.integration.pu;
 
-import static se.inera.intyg.intygproxyservice.integration.api.pu.PuConstants.FAKEPU_PROFILE;
+import static se.inera.intyg.intygproxyservice.integration.api.pu.PuConstants.FAKE_PU_PROFILE;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import se.inera.intyg.intygproxyservice.integration.pu.client.PuClient;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Profile("!" + FAKEPU_PROFILE)
+@Profile("!" + FAKE_PU_PROFILE)
 public class PuIntegrationService implements PuService {
 
   private final PuClient puClient;
