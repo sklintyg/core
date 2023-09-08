@@ -2,6 +2,7 @@ package se.inera.intyg.intygproxyservice.integration.fakepu.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static se.inera.intyg.intygproxyservice.integration.fakepu.TestData.PERSON_ID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,6 @@ import se.inera.intyg.intygproxyservice.integration.api.pu.Person;
 class FakePuRepositoryTest {
 
   private FakePuRepository fakePuRepository;
-  private String PERSON_ID = "191212121212";
 
   @BeforeEach
   void setUp() {
@@ -36,38 +36,34 @@ class FakePuRepositoryTest {
 
   @Test
   void shallThrowExceptionWhenAddingPersonWithNullPersonnummer() {
+    final var person = Person.builder().build();
+
     assertThrows(IllegalArgumentException.class,
-        () -> fakePuRepository.addPerson(
-            Person.builder().build()
-        )
+        () -> fakePuRepository.addPerson(person)
     );
   }
 
   @Test
   void shallThrowExceptionWhenAddingPersonWithEmptyPersonnummer() {
+    final var person = Person.builder()
+        .personnummer("")
+        .build();
+
     assertThrows(IllegalArgumentException.class,
-        () -> fakePuRepository.addPerson(
-            Person.builder()
-                .personnummer("")
-                .build()
-        )
+        () -> fakePuRepository.addPerson(person)
     );
   }
 
   @Test
   void shallThrowExceptionWhenAddingPersonWithExistingPersonnummer() {
-    fakePuRepository.addPerson(
-        Person.builder()
-            .personnummer(PERSON_ID)
-            .build()
-    );
+    final var person = Person.builder()
+        .personnummer(PERSON_ID)
+        .build();
+
+    fakePuRepository.addPerson(person);
 
     assertThrows(IllegalArgumentException.class,
-        () -> fakePuRepository.addPerson(
-            Person.builder()
-                .personnummer(PERSON_ID)
-                .build()
-        )
+        () -> fakePuRepository.addPerson(person)
     );
   }
 

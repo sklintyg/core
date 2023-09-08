@@ -25,6 +25,7 @@ tasks.named('test') {
 }
 
 bootRun {
+    systemProperty("application.dir", "${rootProject.projectDir}/devops/dev")
     systemProperty("spring.profiles.active", "testability,dev,fakepu")
 }
 
