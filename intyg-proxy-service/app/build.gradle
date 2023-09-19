@@ -9,6 +9,7 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation "com.google.guava:guava-gwt:${guavaVersion}"
 
     compileOnly 'org.projectlombok:lombok'
 
@@ -34,7 +35,10 @@ tasks.register("appRunDebug") {
     println("######## Running in Debug mode ########")
     doFirst {
         bootRun.configure {
-            jvmArgs "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=18021"
+            jvmArgs = [
+                    "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=18021",
+                    "-Dlogging.config=${rootProject.projectDir}/devops/dev/config/logback-spring.xml"
+            ]
         }
     }
     finalizedBy("bootRun")
@@ -42,5 +46,10 @@ tasks.register("appRunDebug") {
 
 tasks.register("appRun") {
     println("######## Running in normal mode ########")
+    doFirst {
+        bootRun.configure {
+            jvmArgs = ["-Dlogging.config=${rootProject.projectDir}/devops/dev/config/logback-spring.xml"]
+        }
+    }
     finalizedBy("bootRun")
 }
