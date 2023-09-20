@@ -1,4 +1,4 @@
-package se.inera.intyg.intygproxyservice.filter;
+package se.inera.intyg.intygproxyservice.common;
 
 public class MDCLogConstants {
 

@@ -1,10 +1,10 @@
 package se.inera.intyg.intygproxyservice.filter;
 
 
-import static se.inera.intyg.intygproxyservice.filter.MDCLogConstants.LOG_SESSION_ID_HEADER;
-import static se.inera.intyg.intygproxyservice.filter.MDCLogConstants.LOG_TRACE_ID_HEADER;
-import static se.inera.intyg.intygproxyservice.filter.MDCLogConstants.MDC_SESSION_ID_KEY;
-import static se.inera.intyg.intygproxyservice.filter.MDCLogConstants.MDC_TRACE_ID_KEY;
+import static se.inera.intyg.intygproxyservice.common.MDCLogConstants.LOG_SESSION_ID_HEADER;
+import static se.inera.intyg.intygproxyservice.common.MDCLogConstants.LOG_TRACE_ID_HEADER;
+import static se.inera.intyg.intygproxyservice.common.MDCLogConstants.MDC_SESSION_ID_KEY;
+import static se.inera.intyg.intygproxyservice.common.MDCLogConstants.MDC_TRACE_ID_KEY;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;

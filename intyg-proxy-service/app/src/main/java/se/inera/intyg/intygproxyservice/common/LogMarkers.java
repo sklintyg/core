@@ -1,4 +1,4 @@
-package se.inera.intyg.intygproxyservice.filter;
+package se.inera.intyg.intygproxyservice.common;
 
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;

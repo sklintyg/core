@@ -3,13 +3,14 @@ package se.inera.intyg.intygproxyservice.filter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.filter.AbstractMatcherFilter;
 import ch.qos.logback.core.spi.FilterReply;
+import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
-import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
+import se.inera.intyg.intygproxyservice.common.LogMarkers;
 
 
 public class MarkerFilter extends AbstractMatcherFilter<ILoggingEvent> {
@@ -39,6 +40,7 @@ public class MarkerFilter extends AbstractMatcherFilter<ILoggingEvent> {
         .anyMatch(m -> marker.stream().anyMatch(mark -> mark == m)) ? getOnMatch()
         : getOnMismatch();
   }
+
   public void setMarker(final String name) {
     if (!Strings.isNullOrEmpty(name)) {
       this.markersToMatch.add(MarkerFactory.getMarker(name));
