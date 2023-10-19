@@ -25,11 +25,11 @@ public class MdcServletFilter implements Filter {
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
-    if (request instanceof final HttpServletRequest http) {
-      MDC.put(MDC_TRACE_ID_KEY, http.getHeader(LOG_TRACE_ID_HEADER));
-      MDC.put(MDC_SESSION_ID_KEY, http.getHeader(LOG_SESSION_ID_HEADER));
-    }
     try {
+      if (request instanceof HttpServletRequest http) {
+        MDC.put(MDC_SESSION_ID_KEY, http.getHeader(LOG_TRACE_ID_HEADER));
+        MDC.put(MDC_TRACE_ID_KEY, http.getHeader(LOG_SESSION_ID_HEADER));
+      }
       chain.doFilter(request, response);
     } finally {
       MDC.clear();
