@@ -9,6 +9,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.intygproxyservice.employee.dto.EmployeeRequest;
+import se.inera.intyg.intygproxyservice.employee.dto.EmployeeResponse;
+import se.inera.intyg.intygproxyservice.employee.service.EmployeeService;
 
 @ExtendWith(MockitoExtension.class)
 class EmployeeControllerTest {

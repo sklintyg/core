@@ -1,5 +1,6 @@
 package se.inera.intyg.intygproxyservice.integration.employee;
 
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class GetEmployeeIntegrationService implements GetEmployeeService {
             .builder()
             .employee(Employee
                 .builder()
-                .hsaId(getEmployeeRequest.getHsaId())
+                .personalInformation(Collections.emptyList())
                 .build())
             .build();
     }
