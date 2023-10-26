@@ -6,6 +6,7 @@ dependencies {
     implementation project(':integration-api')
     runtimeOnly project(':integration-pu')
     runtimeOnly project(':integration-fakepu')
+    runtimeOnly project(':integration-hsa')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'

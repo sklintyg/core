@@ -11,4 +11,5 @@ include 'app'
 include 'integration-api'
 include 'integration-pu'
 include 'integration-fakepu'
+include 'integration-hsa'
 
