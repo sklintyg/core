@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package se.inera.intyg.intygproxyservice.employee;
 
 import static org.junit.jupiter.api.Assertions.*;
