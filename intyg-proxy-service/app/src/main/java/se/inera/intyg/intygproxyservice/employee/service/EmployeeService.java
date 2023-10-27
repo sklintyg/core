@@ -37,7 +37,7 @@ public class EmployeeService {
   public EmployeeResponse getEmployee(EmployeeRequest request) {
     validateRequest(request);
 
-    log.info(String.format("Getting employee with hsaId: '%s' and personId '%s'", request.getHsaId(), request.getPersonId()));
+    log.info(String.format("Getting employee with hsaId: '%s' and personId: '%s'", request.getHsaId(), request.getPersonId()));
 
     final var response = getEmployeeService.get(
         GetEmployeeRequest.builder()
@@ -46,7 +46,7 @@ public class EmployeeService {
             .build()
     );
 
-    // TODO: Add more info like hsaId?
+    // TODO: Add more info like hsaId, but how to do this if we get list of info?
     log.info("Employee retrieved");
 
     return EmployeeResponse
