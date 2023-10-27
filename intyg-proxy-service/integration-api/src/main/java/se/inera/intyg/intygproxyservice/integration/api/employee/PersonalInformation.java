@@ -30,27 +30,28 @@ import lombok.Value;
 @Builder
 public class PersonalInformation {
 
-    String personHsaId;
-    String givenName;
-    String middleAndSurName;
-    @Builder.Default
-    List<String> healthCareProfessionalLicence = new ArrayList<>();
-    List<PaTitle> paTitle = new ArrayList<>();
-    List<String> specialityName = new ArrayList<>();
-    List<String> specialityCode = new ArrayList<>();
-    Boolean protectedPerson;
-    LocalDateTime personStartDate;
-    LocalDateTime personEndDate;
-    Boolean feignedPerson;
-    @Builder.Default
-    List<HCPSpecialityCodes> healthCareProfessionalLicenceSpeciality = new ArrayList<>();
-    String age;
-    String gender;
-    String title;
+  String personHsaId;
+  String givenName;
+  String middleAndSurName;
+  @Builder.Default
+  List<String> healthCareProfessionalLicence = new ArrayList<>();
+  List<PaTitle> paTitle = new ArrayList<>();
+  List<String> specialityName = new ArrayList<>();
+  List<String> specialityCode = new ArrayList<>();
+  Boolean protectedPerson;
+  LocalDateTime personStartDate;
+  LocalDateTime personEndDate;
+  Boolean feignedPerson;
+  @Builder.Default
+  List<HCPSpecialityCodes> healthCareProfessionalLicenceSpeciality = new ArrayList<>();
+  String age;
+  String gender;
+  String title;
 
-    @Data
-    public static class PaTitle {
-        private String paTitleName;
-        private String paTitleCode;
-    }
+  @Data
+  public static class PaTitle {
+
+    private String paTitleName;
+    private String paTitleCode;
+  }
 }

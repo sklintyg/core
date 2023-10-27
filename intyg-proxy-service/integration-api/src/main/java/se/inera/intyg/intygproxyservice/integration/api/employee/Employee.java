@@ -9,5 +9,5 @@ import lombok.Value;
 @Builder
 public class Employee implements Serializable {
 
-    List<PersonalInformation> personalInformation;
+  List<PersonalInformation> personalInformation;
 }

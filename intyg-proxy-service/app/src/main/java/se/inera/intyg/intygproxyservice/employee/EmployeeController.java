@@ -14,10 +14,10 @@ import se.inera.intyg.intygproxyservice.employee.service.EmployeeService;
 @AllArgsConstructor
 public class EmployeeController {
 
-    private final EmployeeService employeeService;
+  private final EmployeeService employeeService;
 
-    @PostMapping("")
-    EmployeeResponse getEmployee(@RequestBody EmployeeRequest employeeRequest) {
-        return employeeService.getEmployee(employeeRequest);
-    }
+  @PostMapping("")
+  EmployeeResponse getEmployee(@RequestBody EmployeeRequest employeeRequest) {
+    return employeeService.getEmployee(employeeRequest);
+  }
 }

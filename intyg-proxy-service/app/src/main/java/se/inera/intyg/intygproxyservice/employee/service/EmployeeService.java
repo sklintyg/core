@@ -40,9 +40,9 @@ public class EmployeeService {
     validateRequest(request);
 
     log.info(String.format(
-          "Getting employee with hsaId: '%s' and personId: '%s'",
-          request.getHsaId(),
-          HashUtility.hash(request.getPersonId())
+            "Getting employee with hsaId: '%s' and personId: '%s'",
+            request.getHsaId(),
+            HashUtility.hash(request.getPersonId())
         )
     );
 
@@ -54,10 +54,10 @@ public class EmployeeService {
     );
 
     log.info(String.format(
-          "Employee with hsaId: '%s' and personId: '%s' was retrieved, response had length: '%s'",
-          request.getHsaId(),
-          HashUtility.hash(request.getPersonId()),
-          response.getEmployee().getPersonalInformation().size()
+            "Employee with hsaId: '%s' and personId: '%s' was retrieved, response had length: '%s'",
+            request.getHsaId(),
+            HashUtility.hash(request.getPersonId()),
+            response.getEmployee().getPersonalInformation().size()
         )
     );
 
@@ -74,7 +74,8 @@ public class EmployeeService {
 
     if (isStringInvalid(request.getPersonId()) && isStringInvalid(request.getHsaId())) {
       throw new IllegalArgumentException(
-          String.format("PersonId and HsaId are not valid: '%s', '%s'", request.getPersonId(), request.getHsaId())
+          String.format("PersonId and HsaId are not valid: '%s', '%s'", request.getPersonId(),
+              request.getHsaId())
       );
     }
   }

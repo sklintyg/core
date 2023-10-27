@@ -26,7 +26,7 @@ import lombok.Value;
 @Builder
 public class HCPSpecialityCodes {
 
-    String healthCareProfessionalLicenceCode;
-    String specialityCode;
-    String specialityName;
+  String healthCareProfessionalLicenceCode;
+  String specialityCode;
+  String specialityName;
 }

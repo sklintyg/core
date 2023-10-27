@@ -14,14 +14,15 @@ import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeInte
 @RequiredArgsConstructor
 public class HsaGetEmployeeIntegrationIntegrationService implements GetEmployeeIntegrationService {
 
-    @Override
-    public GetEmployeeIntegrationResponse get(GetEmployeeIntegrationRequest getEmployeeIntegrationRequest) {
-        return GetEmployeeIntegrationResponse
+  @Override
+  public GetEmployeeIntegrationResponse get(
+      GetEmployeeIntegrationRequest getEmployeeIntegrationRequest) {
+    return GetEmployeeIntegrationResponse
+        .builder()
+        .employee(Employee
             .builder()
-            .employee(Employee
-                .builder()
-                .personalInformation(Collections.emptyList())
-                .build())
-            .build();
-    }
+            .personalInformation(Collections.emptyList())
+            .build())
+        .build();
+  }
 }
