@@ -28,7 +28,7 @@ class EmployeeControllerTest {
         when(employeeService.getEmployee(any(EmployeeRequest.class)))
             .thenReturn(expectedResponse);
 
-        final var response = employeeController.findEmployee(
+        final var response = employeeController.getEmployee(
             EmployeeRequest.builder().build()
         );
 

@@ -17,7 +17,7 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @PostMapping("")
-    EmployeeResponse findEmployee(@RequestBody EmployeeRequest employeeRequest) {
+    EmployeeResponse getEmployee(@RequestBody EmployeeRequest employeeRequest) {
         return employeeService.getEmployee(employeeRequest);
     }
 }
