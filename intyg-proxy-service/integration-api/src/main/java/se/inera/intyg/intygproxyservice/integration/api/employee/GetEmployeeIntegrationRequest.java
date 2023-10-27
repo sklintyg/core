@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class GetEmployeeRequest {
+public class GetEmployeeIntegrationRequest {
 
   String hsaId;
   String personId;

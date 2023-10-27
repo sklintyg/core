@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -19,9 +20,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.intygproxyservice.employee.dto.EmployeeRequest;
 import se.inera.intyg.intygproxyservice.employee.service.EmployeeService;
 import se.inera.intyg.intygproxyservice.integration.api.employee.Employee;
-import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeRequest;
-import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeResponse;
-import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeService;
+import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationResponse;
+import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationService;
 
 @ExtendWith(MockitoExtension.class)
 class EmployeeServiceTest {
@@ -34,13 +35,16 @@ class EmployeeServiceTest {
         .hsaId(HSA_ID)
         .build();
 
-    private static final GetEmployeeResponse RESPONSE = GetEmployeeResponse
+    private static final GetEmployeeIntegrationResponse RESPONSE = GetEmployeeIntegrationResponse
         .builder()
-        .employee(Employee.builder().build())
+        .employee(Employee
+            .builder()
+            .personalInformation(Collections.emptyList())
+            .build())
         .build();
 
     @Mock
-    private GetEmployeeService getEmployeeService;
+    private GetEmployeeIntegrationService getEmployeeIntegrationService;
 
     @InjectMocks
     private EmployeeService employeeService;
@@ -94,7 +98,7 @@ class EmployeeServiceTest {
 
             @BeforeEach
             void setUp() {
-                when(getEmployeeService.get(any(GetEmployeeRequest.class)))
+                when(getEmployeeIntegrationService.get(any(GetEmployeeIntegrationRequest.class)))
                     .thenReturn(RESPONSE);
             }
 
@@ -169,7 +173,7 @@ class EmployeeServiceTest {
 
         @BeforeEach
         void setUp() {
-            when(getEmployeeService.get(any(GetEmployeeRequest.class)))
+            when(getEmployeeIntegrationService.get(any(GetEmployeeIntegrationRequest.class)))
                 .thenReturn(RESPONSE);
         }
 
@@ -184,8 +188,8 @@ class EmployeeServiceTest {
         void shallSetHsaIdInRequest() {
             employeeService.getEmployee(REQUEST);
 
-            final var captor = ArgumentCaptor.forClass(GetEmployeeRequest.class);
-            verify(getEmployeeService).get(captor.capture());
+            final var captor = ArgumentCaptor.forClass(GetEmployeeIntegrationRequest.class);
+            verify(getEmployeeIntegrationService).get(captor.capture());
 
             assertEquals(REQUEST.getHsaId(), captor.getValue().getHsaId());
         }
@@ -194,8 +198,8 @@ class EmployeeServiceTest {
         void shallSetPersonIdInRequest() {
             employeeService.getEmployee(REQUEST);
 
-            final var captor = ArgumentCaptor.forClass(GetEmployeeRequest.class);
-            verify(getEmployeeService).get(captor.capture());
+            final var captor = ArgumentCaptor.forClass(GetEmployeeIntegrationRequest.class);
+            verify(getEmployeeIntegrationService).get(captor.capture());
 
             assertEquals(REQUEST.getPersonId(), captor.getValue().getPersonId());
         }

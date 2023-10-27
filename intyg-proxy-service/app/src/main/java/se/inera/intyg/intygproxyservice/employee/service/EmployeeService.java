@@ -19,35 +19,47 @@
 
 package se.inera.intyg.intygproxyservice.employee.service;
 
+import com.google.common.base.Strings;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import se.inera.intyg.intygproxyservice.common.HashUtility;
 import se.inera.intyg.intygproxyservice.employee.dto.EmployeeRequest;
 import se.inera.intyg.intygproxyservice.employee.dto.EmployeeResponse;
-import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeRequest;
-import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeService;
+import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationService;
 
 @Service
 @AllArgsConstructor
 @Slf4j
 public class EmployeeService {
 
-  private final GetEmployeeService getEmployeeService;
+  private final GetEmployeeIntegrationService getEmployeeIntegrationService;
 
   public EmployeeResponse getEmployee(EmployeeRequest request) {
     validateRequest(request);
 
-    log.info(String.format("Getting employee with hsaId: '%s' and personId: '%s'", request.getHsaId(), request.getPersonId()));
+    log.info(String.format(
+          "Getting employee with hsaId: '%s' and personId: '%s'",
+          request.getHsaId(),
+          HashUtility.hash(request.getPersonId())
+        )
+    );
 
-    final var response = getEmployeeService.get(
-        GetEmployeeRequest.builder()
+    final var response = getEmployeeIntegrationService.get(
+        GetEmployeeIntegrationRequest.builder()
             .hsaId(request.getHsaId())
             .personId(request.getPersonId())
             .build()
     );
 
-    // TODO: Add more info like hsaId, but how to do this if we get list of info?
-    log.info("Employee retrieved");
+    log.info(String.format(
+          "Employee with hsaId: '%s' and personId: '%s' was retrieved, response had length: '%s'",
+          request.getHsaId(),
+          HashUtility.hash(request.getPersonId()),
+          response.getEmployee().getPersonalInformation().size()
+        )
+    );
 
     return EmployeeResponse
         .builder()
@@ -68,6 +80,6 @@ public class EmployeeService {
   }
 
   private static boolean isStringInvalid(String value) {
-    return value == null || value.isBlank() || value.isEmpty();
+    return Strings.isNullOrEmpty(value) || value.isBlank();
   }
 }

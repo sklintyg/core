@@ -17,16 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.employee.dto;
+package se.inera.intyg.intygproxyservice.common;
 
-import lombok.Builder;
-import lombok.Value;
-import se.inera.intyg.intygproxyservice.integration.api.employee.Employee;
+import com.google.common.base.Strings;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
+import com.google.common.io.BaseEncoding;
+import java.nio.charset.StandardCharsets;
 
-@Value
-@Builder
-public class EmployeeResponse {
+public final class HashUtility {
 
-  Employee employee;
+    public static final String EMPTY = "EMPTY";
+    private static final HashFunction HASH_FUNCTION = Hashing.sha256();
 
+    private HashUtility() {
+    }
+
+    public static String hash(final String payload) {
+        if (Strings.isNullOrEmpty(payload)) {
+            return EMPTY;
+        }
+
+        final var digest = HASH_FUNCTION.hashString(payload, StandardCharsets.UTF_8).asBytes();
+        return BaseEncoding.base16().lowerCase().encode(digest);
+    }
 }
