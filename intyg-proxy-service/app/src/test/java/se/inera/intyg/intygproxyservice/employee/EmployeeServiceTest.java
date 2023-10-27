@@ -50,7 +50,6 @@ class EmployeeServiceTest {
   public static final String PERSON_ID = "PERSON_ID";
   private static final EmployeeRequest REQUEST = EmployeeRequest
       .builder()
-      .personId(PERSON_ID)
       .hsaId(HSA_ID)
       .build();
 
@@ -76,6 +75,21 @@ class EmployeeServiceTest {
     void shallThrowExceptionIfRequestIsNull() {
       assertThrows(IllegalArgumentException.class,
           () -> employeeService.getEmployee(null)
+      );
+    }
+
+    @Test
+    void shallThrowExceptionIfBothPersonIdAndHsaIdAreDefined() {
+      final var request = EmployeeRequest
+          .builder()
+          .personId(PERSON_ID)
+          .hsaId(HSA_ID)
+          .build();
+
+      assertThrows(IllegalArgumentException.class,
+          () -> employeeService.getEmployee(
+              request
+          )
       );
     }
 
