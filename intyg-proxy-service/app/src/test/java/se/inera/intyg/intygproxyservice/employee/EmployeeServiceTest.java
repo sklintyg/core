@@ -87,9 +87,7 @@ class EmployeeServiceTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> employeeService.getEmployee(
-              request
-          )
+          () -> employeeService.getEmployee(request)
       );
     }
 
