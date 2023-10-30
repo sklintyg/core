@@ -72,14 +72,6 @@ public class EmployeeService {
       throw new IllegalArgumentException("Request to get employee is null");
     }
 
-    if (!isStringInvalid(request.getPersonId()) && !isStringInvalid(request.getHsaId())) {
-      throw new IllegalArgumentException(
-          String.format("PersonId and HsaId cannot both be defined: '%s', '%s'",
-              HashUtility.hash(request.getPersonId()),
-              request.getHsaId())
-      );
-    }
-
     if (isStringInvalid(request.getPersonId()) && isStringInvalid(request.getHsaId())) {
       throw new IllegalArgumentException(
           String.format("PersonId and HsaId are not valid: '%s', '%s'",

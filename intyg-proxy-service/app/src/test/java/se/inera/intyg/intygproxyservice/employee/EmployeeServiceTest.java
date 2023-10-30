@@ -51,6 +51,7 @@ class EmployeeServiceTest {
   private static final EmployeeRequest REQUEST = EmployeeRequest
       .builder()
       .hsaId(HSA_ID)
+      .personId(PERSON_ID)
       .build();
 
   private static final GetEmployeeIntegrationResponse RESPONSE = GetEmployeeIntegrationResponse
@@ -75,19 +76,6 @@ class EmployeeServiceTest {
     void shallThrowExceptionIfRequestIsNull() {
       assertThrows(IllegalArgumentException.class,
           () -> employeeService.getEmployee(null)
-      );
-    }
-
-    @Test
-    void shallThrowExceptionIfBothPersonIdAndHsaIdAreDefined() {
-      final var request = EmployeeRequest
-          .builder()
-          .personId(PERSON_ID)
-          .hsaId(HSA_ID)
-          .build();
-
-      assertThrows(IllegalArgumentException.class,
-          () -> employeeService.getEmployee(request)
       );
     }
 

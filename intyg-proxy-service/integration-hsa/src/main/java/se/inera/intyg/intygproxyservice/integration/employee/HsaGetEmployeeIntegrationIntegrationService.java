@@ -19,7 +19,7 @@
 
 package se.inera.intyg.intygproxyservice.integration.employee;
 
-import java.util.Collections;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +27,7 @@ import se.inera.intyg.intygproxyservice.integration.api.employee.Employee;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationResponse;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationService;
+import se.inera.intyg.intygproxyservice.integration.api.employee.PersonalInformation;
 
 @Service
 @Slf4j
@@ -38,10 +39,21 @@ public class HsaGetEmployeeIntegrationIntegrationService implements GetEmployeeI
       GetEmployeeIntegrationRequest getEmployeeIntegrationRequest) {
     return GetEmployeeIntegrationResponse
         .builder()
-        .employee(Employee
+        .employee(
+            Employee
             .builder()
-            .personalInformation(Collections.emptyList())
-            .build())
+            .personalInformation(
+                List.of(
+                    PersonalInformation
+                        .builder()
+                        .personHsaId("TSTNMT2321000156-DRAA")
+                        .givenName("Ajla")
+                        .middleAndSurName("Doktor")
+                        .build()
+                )
+            )
+            .build()
+        )
         .build();
   }
 }

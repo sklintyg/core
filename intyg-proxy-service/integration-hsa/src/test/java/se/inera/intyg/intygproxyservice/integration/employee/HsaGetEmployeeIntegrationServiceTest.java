@@ -31,18 +31,41 @@ import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeInte
 class HsaGetEmployeeIntegrationServiceTest {
 
   public static final String HSA_ID = "HSA_ID";
+  public static final GetEmployeeIntegrationRequest REQUEST = GetEmployeeIntegrationRequest
+      .builder()
+      .hsaId(HSA_ID)
+      .build();
   @InjectMocks
   HsaGetEmployeeIntegrationIntegrationService hsaGetEmployeeIntegrationService;
 
   @Test
-  void shouldReturnEmployee() {
-    final var response = hsaGetEmployeeIntegrationService.get(
-        GetEmployeeIntegrationRequest
-            .builder()
-            .hsaId(HSA_ID)
-            .build());
+  void shouldReturnEmployeeHsaId() {
+    final var response = hsaGetEmployeeIntegrationService.get(REQUEST);
 
-    assertNotNull(response);
+    assertEquals(
+        "TSTNMT2321000156-DRAA",
+        response.getEmployee().getPersonalInformation().get(0).getPersonHsaId()
+    );
+  }
+
+  @Test
+  void shouldReturnEmployeeFirstName() {
+    final var response = hsaGetEmployeeIntegrationService.get(REQUEST);
+
+    assertEquals(
+        "Ajla",
+        response.getEmployee().getPersonalInformation().get(0).getGivenName()
+    );
+  }
+
+  @Test
+  void shouldReturnEmployeeLastname() {
+    final var response = hsaGetEmployeeIntegrationService.get(REQUEST);
+
+    assertEquals(
+        "Doktor",
+        response.getEmployee().getPersonalInformation().get(0).getMiddleAndSurName()
+    );
   }
 
 }
