@@ -17,15 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.unit.dto;
+package se.inera.intyg.intygproxyservice.common;
 
-import lombok.Builder;
-import lombok.Value;
-import se.inera.intyg.intygproxyservice.integration.api.unit.Unit;
+import com.google.common.base.Strings;
 
-@Value
-@Builder
-public class UnitResponse {
+public final class ValidationUtility {
+  private ValidationUtility() {}
 
-  Unit unit;
+  public static boolean isStringInvalid(String value) {
+    return Strings.isNullOrEmpty(value) || value.isBlank();
+  }
 }

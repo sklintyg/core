@@ -17,15 +17,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.unit.dto;
+package se.inera.intyg.intygproxyservice.common;
 
-import lombok.Builder;
-import lombok.Value;
-import se.inera.intyg.intygproxyservice.integration.api.unit.Unit;
+import static org.junit.jupiter.api.Assertions.*;
 
-@Value
-@Builder
-public class UnitResponse {
+import org.junit.jupiter.api.Test;
 
-  Unit unit;
+class ValidationUtilityTest {
+
+  @Test
+  void shouldReturnFalseIfStringHasValue() {
+    assertFalse(ValidationUtility.isStringInvalid("TEST"));
+  }
+
+  @Test
+  void shouldReturnTrueIfStringIsNull() {
+    assertTrue(ValidationUtility.isStringInvalid(null));
+  }
+
+  @Test
+  void shouldReturnTrueIfStringIsEmpty() {
+    assertTrue(ValidationUtility.isStringInvalid(""));
+  }
+
+  @Test
+  void shouldReturnTrueIfStringIsBlank() {
+    assertTrue(ValidationUtility.isStringInvalid(" "));
+  }
 }

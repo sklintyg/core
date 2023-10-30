@@ -19,7 +19,8 @@
 
 package se.inera.intyg.intygproxyservice.unit.service;
 
-import com.google.common.base.Strings;
+import static se.inera.intyg.intygproxyservice.common.ValidationUtility.isStringInvalid;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -46,12 +47,7 @@ public class UnitService {
             .build()
     );
 
-    log.info(String.format(
-            "Unit with hsaId: '%s' was retrieved, response had length: '%s'",
-            request.getHsaId(),
-            0
-        )
-    );
+    log.info(String.format("Unit with hsaId: '%s' was retrieved", request.getHsaId()));
 
     return UnitResponse
         .builder()
@@ -68,9 +64,5 @@ public class UnitService {
       throw new IllegalArgumentException(
           String.format("HsaId is not valid: '%s'", request.getHsaId()));
     }
-  }
-
-  private static boolean isStringInvalid(String value) {
-    return Strings.isNullOrEmpty(value) || value.isBlank();
   }
 }

@@ -19,7 +19,8 @@
 
 package se.inera.intyg.intygproxyservice.employee.service;
 
-import com.google.common.base.Strings;
+import static se.inera.intyg.intygproxyservice.common.ValidationUtility.isStringInvalid;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -79,9 +80,5 @@ public class EmployeeService {
               request.getHsaId())
       );
     }
-  }
-
-  private static boolean isStringInvalid(String value) {
-    return Strings.isNullOrEmpty(value) || value.isBlank();
   }
 }
