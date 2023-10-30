@@ -32,7 +32,7 @@ import se.inera.intyg.intygproxyservice.integration.api.employee.PersonalInforma
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class HsaGetEmployeeIntegrationIntegrationService implements GetEmployeeIntegrationService {
+public class HsaGetEmployeeIntegrationService implements GetEmployeeIntegrationService {
 
   @Override
   public GetEmployeeIntegrationResponse get(

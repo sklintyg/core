@@ -28,10 +28,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationRequest;
 
 @ExtendWith(MockitoExtension.class)
-class HsaGetHealthCareUnitIntegrationIntegrationServiceTest {
+class HsaGetHealthCareUnitIntegrationServiceTest {
 
   @InjectMocks
-  HsaGetHealthCareUnitIntegrationIntegrationService hsaGetUnitIntegrationIntegrationService;
+  HsaGetHealthCareUnitIntegrationService hsaGetUnitIntegrationIntegrationService;
 
   @Test
   void shouldReturnUnit() {

@@ -36,7 +36,7 @@ class HsaGetEmployeeIntegrationServiceTest {
       .hsaId(HSA_ID)
       .build();
   @InjectMocks
-  HsaGetEmployeeIntegrationIntegrationService hsaGetEmployeeIntegrationService;
+  HsaGetEmployeeIntegrationService hsaGetEmployeeIntegrationService;
 
   @Test
   void shouldReturnEmployeeHsaId() {

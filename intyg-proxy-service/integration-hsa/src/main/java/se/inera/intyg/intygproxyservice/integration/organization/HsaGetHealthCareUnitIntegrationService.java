@@ -26,7 +26,7 @@ import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCa
 import se.inera.intyg.intygproxyservice.integration.api.organization.HealthCareUnit;
 
 @Service
-public class HsaGetHealthCareUnitIntegrationIntegrationService implements
+public class HsaGetHealthCareUnitIntegrationService implements
     GetHealthCareUnitIntegrationService {
 
   @Override
