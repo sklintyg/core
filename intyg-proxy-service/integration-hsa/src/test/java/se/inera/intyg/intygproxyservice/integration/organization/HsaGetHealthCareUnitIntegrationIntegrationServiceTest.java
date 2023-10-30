@@ -28,7 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationRequest;
 
 @ExtendWith(MockitoExtension.class)
-class HsaGetUnitIntegrationIntegrationServiceTest {
+class HsaGetHealthCareUnitIntegrationIntegrationServiceTest {
 
   @InjectMocks
   HsaGetHealthCareUnitIntegrationIntegrationService hsaGetUnitIntegrationIntegrationService;
