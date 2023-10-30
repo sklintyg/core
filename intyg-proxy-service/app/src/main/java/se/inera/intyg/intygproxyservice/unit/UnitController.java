@@ -29,7 +29,7 @@ import se.inera.intyg.intygproxyservice.unit.dto.UnitResponse;
 import se.inera.intyg.intygproxyservice.unit.service.UnitService;
 
 @RestController()
-@RequestMapping("/api/v1/healthcareunit")
+@RequestMapping("/api/v2/healthcareunit")
 @AllArgsConstructor
 public class UnitController {
 
