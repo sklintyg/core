@@ -17,40 +17,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.unit;
+package se.inera.intyg.intygproxyservice.integration.organization;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.intygproxyservice.unit.dto.UnitRequest;
-import se.inera.intyg.intygproxyservice.unit.dto.UnitResponse;
-import se.inera.intyg.intygproxyservice.unit.service.UnitService;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationRequest;
 
 @ExtendWith(MockitoExtension.class)
-class UnitControllerTest {
-
-  @Mock
-  private UnitService unitService;
+class HsaGetUnitIntegrationIntegrationServiceTest {
 
   @InjectMocks
-  private UnitController unitController;
+  HsaGetHealthCareUnitIntegrationIntegrationService hsaGetUnitIntegrationIntegrationService;
 
   @Test
-  void shallReturnUnitResponseWhenCallingGetUnit() {
-    final var expectedResponse = UnitResponse.builder().build();
-    when(unitService.get(any(UnitRequest.class)))
-        .thenReturn(expectedResponse);
-
-    final var response = unitController.getHealthCareUnit(
-        UnitRequest.builder().build()
+  void shouldReturnUnit() {
+    final var response = hsaGetUnitIntegrationIntegrationService.get(
+        GetHealthCareUnitIntegrationRequest
+            .builder()
+            .build()
     );
 
-    assertEquals(expectedResponse, response);
+    assertNotNull(response.getHealthCareUnit());
   }
 }

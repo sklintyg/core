@@ -17,26 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.unit;
+package se.inera.intyg.intygproxyservice.organization;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import se.inera.intyg.intygproxyservice.unit.dto.UnitRequest;
-import se.inera.intyg.intygproxyservice.unit.dto.UnitResponse;
-import se.inera.intyg.intygproxyservice.unit.service.UnitService;
+import se.inera.intyg.intygproxyservice.organization.dto.HealthCareUnitRequest;
+import se.inera.intyg.intygproxyservice.organization.dto.HealthCareUnitResponse;
+import se.inera.intyg.intygproxyservice.organization.service.HealthCareUnitService;
 
 @RestController()
 @RequestMapping("/api/v2/healthcareunit")
 @AllArgsConstructor
-public class UnitController {
+public class HealthCareUnitController {
 
-  private final UnitService unitService;
+  private final HealthCareUnitService healthCareUnitService;
 
   @PostMapping("")
-  UnitResponse getHealthCareUnit(@RequestBody UnitRequest request) {
-    return unitService.get(request);
+  HealthCareUnitResponse getHealthCareUnit(@RequestBody HealthCareUnitRequest request) {
+    return healthCareUnitService.get(request);
   }
 }

@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.integration.api.unit;
+package se.inera.intyg.intygproxyservice.integration.api.organization;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -26,7 +26,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class Unit implements Serializable {
+public class HealthCareUnit implements Serializable {
 
   Boolean unitIsHealthCareUnit;
   String healthCareUnitMemberHsaId;

@@ -17,24 +17,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.integration.unit;
+package se.inera.intyg.intygproxyservice.integration.organization;
 
 import org.springframework.stereotype.Service;
-import se.inera.intyg.intygproxyservice.integration.api.unit.GetUnitIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.unit.GetUnitIntegrationResponse;
-import se.inera.intyg.intygproxyservice.integration.api.unit.GetUnitIntegrationService;
-import se.inera.intyg.intygproxyservice.integration.api.unit.Unit;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationResponse;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationService;
+import se.inera.intyg.intygproxyservice.integration.api.organization.HealthCareUnit;
 
 @Service
-public class HsaGetUnitIntegrationIntegrationService implements GetUnitIntegrationService {
+public class HsaGetHealthCareUnitIntegrationIntegrationService implements
+    GetHealthCareUnitIntegrationService {
 
   @Override
-  public GetUnitIntegrationResponse get(
-      GetUnitIntegrationRequest request) {
-    return GetUnitIntegrationResponse
+  public GetHealthCareUnitIntegrationResponse get(
+      GetHealthCareUnitIntegrationRequest request) {
+    return GetHealthCareUnitIntegrationResponse
         .builder()
-        .unit(
-            Unit.builder().build()
+        .healthCareUnit(
+            HealthCareUnit.builder().build()
         )
         .build();
   }
