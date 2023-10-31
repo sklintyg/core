@@ -20,7 +20,7 @@
 package se.inera.intyg.intygproxyservice.integration.organization;
 
 import org.springframework.stereotype.Service;
-import se.inera.intyg.intygproxyservice.integration.api.organization.HealthCareUnitMembers;
+import se.inera.intyg.intygproxyservice.integration.api.organization.dto.HealthCareUnitMembers;
 import se.inera.intyg.intygproxyservice.integration.api.organization.dto.GetHealthCareUnitMembersIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.organization.dto.GetHealthCareUnitMembersIntegrationResponse;
 import se.inera.intyg.intygproxyservice.integration.api.organization.service.GetHealthCareUnitMembersIntegrationService;

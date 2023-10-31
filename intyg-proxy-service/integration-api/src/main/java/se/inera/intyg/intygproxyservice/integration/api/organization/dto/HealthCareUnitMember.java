@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.integration.api.organization;
+package se.inera.intyg.intygproxyservice.integration.api.organization.dto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

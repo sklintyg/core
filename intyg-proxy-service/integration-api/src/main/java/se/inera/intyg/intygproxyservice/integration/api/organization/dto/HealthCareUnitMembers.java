@@ -17,38 +17,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.integration.api.organization;
+package se.inera.intyg.intygproxyservice.integration.api.organization.dto;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 
 @Value
 @Builder
-public class HealthCareUnit implements Serializable {
-
-  Boolean unitIsHealthCareUnit;
-  String healthCareUnitMemberHsaId;
-  String healthCareUnitMemberName;
-  String healthCareUnitMemberPublicName;
-  LocalDateTime healthCareUnitMemberStartDate;
-  LocalDateTime healthCareUnitMemberEndDate;
-  String healthCareUnitHsaId;
+public class HealthCareUnitMembers {
   String healthCareUnitName;
   String healthCareUnitPublicName;
+  String healthCareUnitHsaId;
   LocalDateTime healthCareUnitStartDate;
   LocalDateTime healthCareUnitEndDate;
-  String healthCareProviderHsaId;
-  String healthCareProviderName;
-  String healthCareProviderPublicName;
-  String healthCareProviderOrgNo;
-  LocalDateTime healthCareProviderStartDate;
-  LocalDateTime healthCareProviderEndDate;
-  Boolean feignedHealthCareUnitMember;
+  @Builder.Default
+  List<String> healthCareUnitPrescriptionCode = new ArrayList<>();
+  @Builder.Default
+  List<String> telephoneNumber = new ArrayList<>();
+  @Builder.Default
+  List<String> postalAddress = new ArrayList<>();
+  String postalCode;
   Boolean feignedHealthCareUnit;
-  Boolean feignedHealthCareProvider;
-  Boolean archivedHealthCareUnitMember;
   Boolean archivedHealthCareUnit;
-  Boolean archivedHealthCareProvider;
+  HealthCareProvider healthCareProvider;
+  List<HealthCareUnitMember> healthCareUnitMember = new ArrayList<>();
 }

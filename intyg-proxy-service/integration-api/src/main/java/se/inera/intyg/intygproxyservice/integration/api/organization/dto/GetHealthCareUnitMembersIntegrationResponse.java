@@ -21,7 +21,6 @@ package se.inera.intyg.intygproxyservice.integration.api.organization.dto;
 
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.intygproxyservice.integration.api.organization.HealthCareUnitMembers;
 
 @Value
 @Builder
