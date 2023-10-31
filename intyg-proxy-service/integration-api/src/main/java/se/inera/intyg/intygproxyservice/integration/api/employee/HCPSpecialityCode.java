@@ -17,20 +17,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.integration.api.organization.dto;
+package se.inera.intyg.intygproxyservice.integration.api.employee;
 
-import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Value;
 
 @Value
 @Builder
-public class HealthCareProvider {
-  String healthCareProviderHsaId;
-  String healthCareProviderName;
-  String healthCareProviderOrgNo;
-  LocalDateTime healthCareProviderStartDate;
-  LocalDateTime healthCareProviderEndDate;
-  Boolean feignedHealthCareProvider;
-  Boolean archivedHealthCareProvider;
+public class HCPSpecialityCode {
+
+  String healthCareProfessionalLicenceCode;
+  String specialityCode;
+  String specialityName;
 }

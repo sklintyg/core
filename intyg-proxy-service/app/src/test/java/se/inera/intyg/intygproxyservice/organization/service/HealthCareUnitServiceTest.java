@@ -32,10 +32,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.intygproxyservice.integration.api.organization.dto.GetHealthCareUnitIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.organization.dto.GetHealthCareUnitIntegrationResponse;
-import se.inera.intyg.intygproxyservice.integration.api.organization.service.GetHealthCareUnitIntegrationService;
-import se.inera.intyg.intygproxyservice.integration.api.organization.dto.HealthCareUnit;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitIntegrationResponse;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationService;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
 import se.inera.intyg.intygproxyservice.organization.dto.HealthCareUnitRequest;
 
 @ExtendWith(MockitoExtension.class)

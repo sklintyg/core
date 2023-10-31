@@ -17,41 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.integration.api.employee;
+package se.inera.intyg.intygproxyservice.integration.api.organization.model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Value;
 
 @Value
 @Builder
-public class PersonalInformation {
-
-  String personHsaId;
-  String givenName;
-  String middleAndSurName;
-  @Builder.Default
-  List<String> healthCareProfessionalLicence = new ArrayList<>();
-  List<PaTitle> paTitle = new ArrayList<>();
-  List<String> specialityName = new ArrayList<>();
-  List<String> specialityCode = new ArrayList<>();
-  Boolean protectedPerson;
-  LocalDateTime personStartDate;
-  LocalDateTime personEndDate;
-  Boolean feignedPerson;
-  @Builder.Default
-  List<HCPSpecialityCodes> healthCareProfessionalLicenceSpeciality = new ArrayList<>();
-  String age;
-  String gender;
-  String title;
-
-  @Data
-  public static class PaTitle {
-
-    private String paTitleName;
-    private String paTitleCode;
-  }
+public class HealthCareProvider {
+  String healthCareProviderHsaId;
+  String healthCareProviderName;
+  String healthCareProviderOrgNo;
+  LocalDateTime healthCareProviderStartDate;
+  LocalDateTime healthCareProviderEndDate;
+  Boolean feignedHealthCareProvider;
+  Boolean archivedHealthCareProvider;
 }

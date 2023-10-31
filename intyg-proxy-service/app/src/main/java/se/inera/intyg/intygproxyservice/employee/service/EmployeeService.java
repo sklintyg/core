@@ -58,7 +58,7 @@ public class EmployeeService {
             "Employee with hsaId: '%s' and personId: '%s' was retrieved, response had length: '%s'",
             request.getHsaId(),
             HashUtility.hash(request.getPersonId()),
-            response.getEmployee().getPersonalInformation().size()
+            response.getEmployee().getPersonInformation().size()
         )
     );
 

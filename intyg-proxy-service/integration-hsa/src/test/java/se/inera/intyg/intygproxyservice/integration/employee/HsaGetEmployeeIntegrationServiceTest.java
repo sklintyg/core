@@ -44,7 +44,7 @@ class HsaGetEmployeeIntegrationServiceTest {
 
     assertEquals(
         "TSTNMT2321000156-DRAA",
-        response.getEmployee().getPersonalInformation().get(0).getPersonHsaId()
+        response.getEmployee().getPersonInformation().get(0).getPersonHsaId()
     );
   }
 
@@ -54,7 +54,7 @@ class HsaGetEmployeeIntegrationServiceTest {
 
     assertEquals(
         "Ajla",
-        response.getEmployee().getPersonalInformation().get(0).getGivenName()
+        response.getEmployee().getPersonInformation().get(0).getGivenName()
     );
   }
 
@@ -64,7 +64,7 @@ class HsaGetEmployeeIntegrationServiceTest {
 
     assertEquals(
         "Doktor",
-        response.getEmployee().getPersonalInformation().get(0).getMiddleAndSurName()
+        response.getEmployee().getPersonInformation().get(0).getMiddleAndSurName()
     );
   }
 

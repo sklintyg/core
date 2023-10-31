@@ -20,10 +20,10 @@
 package se.inera.intyg.intygproxyservice.integration.organization;
 
 import org.springframework.stereotype.Service;
-import se.inera.intyg.intygproxyservice.integration.api.organization.dto.GetHealthCareUnitIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.organization.dto.GetHealthCareUnitIntegrationResponse;
-import se.inera.intyg.intygproxyservice.integration.api.organization.service.GetHealthCareUnitIntegrationService;
-import se.inera.intyg.intygproxyservice.integration.api.organization.dto.HealthCareUnit;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitIntegrationResponse;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationService;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
 
 @Service
 public class HsaGetHealthCareUnitIntegrationService implements

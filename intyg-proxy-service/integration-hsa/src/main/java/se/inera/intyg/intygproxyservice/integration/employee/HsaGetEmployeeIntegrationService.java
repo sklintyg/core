@@ -27,7 +27,7 @@ import se.inera.intyg.intygproxyservice.integration.api.employee.Employee;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationResponse;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationService;
-import se.inera.intyg.intygproxyservice.integration.api.employee.PersonalInformation;
+import se.inera.intyg.intygproxyservice.integration.api.employee.PersonInformation;
 
 @Service
 @Slf4j
@@ -42,9 +42,9 @@ public class HsaGetEmployeeIntegrationService implements GetEmployeeIntegrationS
         .employee(
             Employee
             .builder()
-            .personalInformation(
+            .personInformation(
                 List.of(
-                    PersonalInformation
+                    PersonInformation
                         .builder()
                         .personHsaId("TSTNMT2321000156-DRAA")
                         .givenName("Ajla")

@@ -24,8 +24,8 @@ import static se.inera.intyg.intygproxyservice.common.ValidationUtility.isString
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.intygproxyservice.integration.api.organization.dto.GetHealthCareUnitMembersIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.organization.service.GetHealthCareUnitMembersIntegrationService;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationService;
 import se.inera.intyg.intygproxyservice.organization.dto.HealthCareUnitMembersRequest;
 import se.inera.intyg.intygproxyservice.organization.dto.HealthCareUnitMembersResponse;
 

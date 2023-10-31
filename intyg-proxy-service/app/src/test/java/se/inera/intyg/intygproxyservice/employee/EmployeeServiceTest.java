@@ -58,7 +58,7 @@ class EmployeeServiceTest {
       .builder()
       .employee(Employee
           .builder()
-          .personalInformation(Collections.emptyList())
+          .personInformation(Collections.emptyList())
           .build())
       .build();
 

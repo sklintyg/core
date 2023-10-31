@@ -17,16 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.integration.api.employee;
+package se.inera.intyg.intygproxyservice.integration.api.organization;
 
-import lombok.Builder;
-import lombok.Value;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationResponse;
 
-@Value
-@Builder
-public class HCPSpecialityCodes {
+public interface GetHealthCareUnitMembersIntegrationService {
 
-  String healthCareProfessionalLicenceCode;
-  String specialityCode;
-  String specialityName;
+  GetHealthCareUnitMembersIntegrationResponse get(GetHealthCareUnitMembersIntegrationRequest request);
 }
