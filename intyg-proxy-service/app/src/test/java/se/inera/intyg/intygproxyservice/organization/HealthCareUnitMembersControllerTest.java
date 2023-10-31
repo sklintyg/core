@@ -42,7 +42,7 @@ class HealthCareUnitMembersControllerTest {
   private HealthCareUnitMembersController healthCareUnitMembersController;
 
   @Test
-  void shallReturnUnitResponseWhenCallingGetUnit() {
+  void shallReturnHealthCareUnitMembersResponseWhenCallingGetUnit() {
     final var expectedResponse = HealthCareUnitMembersResponse.builder().build();
     when(healthCareUnitMembersService.get(any(HealthCareUnitMembersRequest.class)))
         .thenReturn(expectedResponse);

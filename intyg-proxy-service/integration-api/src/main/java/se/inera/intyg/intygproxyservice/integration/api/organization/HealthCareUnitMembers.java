@@ -33,8 +33,11 @@ public class HealthCareUnitMembers {
   String healthCareUnitHsaId;
   LocalDateTime healthCareUnitStartDate;
   LocalDateTime healthCareUnitEndDate;
+  @Builder.Default
   List<String> healthCareUnitPrescriptionCode = new ArrayList<>();
+  @Builder.Default
   List<String> telephoneNumber = new ArrayList<>();
+  @Builder.Default
   List<String> postalAddress = new ArrayList<>();
   String postalCode;
   Boolean feignedHealthCareUnit;

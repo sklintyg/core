@@ -39,7 +39,7 @@ public class HealthCareUnitMembersService {
   public HealthCareUnitMembersResponse get(HealthCareUnitMembersRequest request) {
     validateRequest(request);
 
-    log.info(String.format("Getting health care unit member with hsaId: '%s'", request.getHsaId()));
+    log.info(String.format("Getting health care unit members related to hsaId: '%s'", request.getHsaId()));
 
     final var response = getHealthCareUnitMembersIntegrationService.get(
         GetHealthCareUnitMembersIntegrationRequest.builder()
@@ -47,7 +47,7 @@ public class HealthCareUnitMembersService {
             .build()
     );
 
-    log.info(String.format("Health care unit member with hsaId: '%s' was retrieved", request.getHsaId()));
+    log.info(String.format("Health care unit members related to hsaId: '%s' were retrieved", request.getHsaId()));
 
     return HealthCareUnitMembersResponse
         .builder()
@@ -57,7 +57,7 @@ public class HealthCareUnitMembersService {
 
   private static void validateRequest(HealthCareUnitMembersRequest request) {
     if (request == null) {
-      throw new IllegalArgumentException("Request to get health care unit member is null");
+      throw new IllegalArgumentException("Request to get health care unit members is null");
     }
 
     if (isStringInvalid(request.getHsaId())) {
