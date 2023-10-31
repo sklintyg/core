@@ -18,7 +18,7 @@
  under the License.
  -->		
 <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:infrastructure:directory:authorizationmanagement:GetHospLastUpdateResponder:1' xmlns:core='urn:riv:infrastructure:directory:authorizationmanagement:2' targetNamespace='urn:riv:infrastructure:directory:authorizationmanagement:GetHospLastUpdateResponder:1' elementFormDefault='qualified' attributeFormDefault='unqualified' version='1.0'>
-  <xs:import schemaLocation='../../core_components/infrastructure_directory_authorizationmanagement_2.3.xsd' namespace='urn:riv:infrastructure:directory:authorizationmanagement:2' />
+  <xs:import schemaLocation='../../core_components/infrastructure_directory_authorizationmanagement_2.4.xsd' namespace='urn:riv:infrastructure:directory:authorizationmanagement:2' />
   <xs:element name='GetHospLastUpdate' type='tns:GetHospLastUpdateType' />
   <xs:element name='GetHospLastUpdateResponse' type='tns:GetHospLastUpdateResponseType' />
 

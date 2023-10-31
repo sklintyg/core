@@ -17,7 +17,7 @@
  specific language governing permissions and limitations
  under the License.
  -->		
-<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:infrastructure:directory:authorizationmanagement:2' xmlns:m1='urn:riv:infrastructure:directory:authorizationmanagement:2.1' xmlns:m2='urn:riv:infrastructure:directory:authorizationmanagement:2.2' targetNamespace='urn:riv:infrastructure:directory:authorizationmanagement:2' elementFormDefault='qualified' attributeFormDefault='unqualified' version='2.3'>
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:infrastructure:directory:authorizationmanagement:2' xmlns:m1='urn:riv:infrastructure:directory:authorizationmanagement:2.1' xmlns:m2='urn:riv:infrastructure:directory:authorizationmanagement:2.2' targetNamespace='urn:riv:infrastructure:directory:authorizationmanagement:2' elementFormDefault='qualified' attributeFormDefault='unqualified' version='2.4'>
 <xs:import namespace='urn:riv:infrastructure:directory:authorizationmanagement:2.1' schemaLocation="infrastructure_directory_authorizationmanagement_2.1_ext.xsd" />
 <xs:import namespace='urn:riv:infrastructure:directory:authorizationmanagement:2.2' schemaLocation="infrastructure_directory_authorizationmanagement_2.2_ext.xsd" />
 <xs:import namespace='urn:riv:infrastructure:directory:authorizationmanagement:2.3' schemaLocation="infrastructure_directory_authorizationmanagement_2.3_ext.xsd" />
@@ -183,19 +183,27 @@
       <xs:element name="authorizationScopePropertyCode" type="xs:string" />
       <xs:element name="authorizationScopePropertyName" type="xs:string" />
       <xs:element name="authorizationScopePropertyDescription" minOccurs="0" type="xs:string" />
-       <xs:element name="sector" type="tns:SectorType" maxOccurs="unbounded" />
+       <xs:element name="adminCommission" maxOccurs="unbounded" type="tns:AdminCommissionType" />
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+ <xs:complexType name="AdminCommissionType">
+ 	<xs:sequence>
+ 		<xs:element name="adminCommissionHsaId" type="xs:string" />
+ 		<xs:element name="adminCommissionResponsibleOrganisation" type="xs:string" />
+ 		<xs:element name="sector" type="tns:SectorType" minOccurs="0" maxOccurs="unbounded" />
+		<xs:element name="feignedAdminCommission" type="xs:boolean" minOccurs="0" /> 
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="SectorType">
     <xs:sequence>
-      <xs:element name="administrativeCommissionHsaId" type="xs:string" />
       <xs:element name="unitHsaId" type="xs:string" />
       <xs:element name="sectorFlag" type="xs:boolean" minOccurs="0" />
       <xs:element name="name" type="xs:string" />
       <xs:element name="feignedUnit" type="xs:boolean" minOccurs="0" />
-      <xs:element name="feignedAdminCommission" type="xs:boolean" minOccurs="0" /> 
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>

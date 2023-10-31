@@ -17,12 +17,12 @@
  specific language governing permissions and limitations
  under the License.
  -->		
-<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:infrastructure:directory:authorizationmanagement:GetPersonAuthorizedToSystemIncludingProtectedPersonResponder:2' xmlns:core='urn:riv:infrastructure:directory:authorizationmanagement:2' targetNamespace='urn:riv:infrastructure:directory:authorizationmanagement:GetPersonAuthorizedToSystemIncludingProtectedPersonResponder:2' elementFormDefault='qualified' attributeFormDefault='unqualified' version='2.1'>
-  <xs:import schemaLocation='../../core_components/infrastructure_directory_authorizationmanagement_2.3.xsd' namespace='urn:riv:infrastructure:directory:authorizationmanagement:2' />
-  <xs:element name='GetPersonAuthorizedToSystemIncludingProtectedPerson' type='tns:GetPersonAuthorizedToSystemIncludingProtectedPersonType' />
-  <xs:element name='GetPersonAuthorizedToSystemIncludingProtectedPersonResponse' type='tns:GetPersonAuthorizedToSystemIncludingProtectedPersonResponseType' />
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:infrastructure:directory:authorizationmanagement:GetPersonAuthorizedToSystemResponder:2' xmlns:core='urn:riv:infrastructure:directory:authorizationmanagement:2' targetNamespace='urn:riv:infrastructure:directory:authorizationmanagement:GetPersonAuthorizedToSystemResponder:2' elementFormDefault='qualified' attributeFormDefault='unqualified' version='2.1'>
+  <xs:import schemaLocation='../../core_components/infrastructure_directory_authorizationmanagement_2.4.xsd' namespace='urn:riv:infrastructure:directory:authorizationmanagement:2' />
+  <xs:element name='GetPersonAuthorizedToSystem' type='tns:GetPersonAuthorizedToSystemType' />
+  <xs:element name='GetPersonAuthorizedToSystemResponse' type='tns:GetPersonAuthorizedToSystemResponseType' />
 
-  <xs:complexType name='GetPersonAuthorizedToSystemIncludingProtectedPersonType'>
+  <xs:complexType name='GetPersonAuthorizedToSystemType'>
     <xs:sequence>
       <xs:choice>
         <xs:element name="personHsaId" type="xs:string" />
@@ -35,7 +35,7 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name='GetPersonAuthorizedToSystemIncludingProtectedPersonResponseType'>
+  <xs:complexType name='GetPersonAuthorizedToSystemResponseType'>
     <xs:sequence>      
       <xs:element name="authorizedPerson" type="xs:boolean" />
       <xs:element name="personInformation" type="core:PersonType" minOccurs="0" maxOccurs="unbounded" />

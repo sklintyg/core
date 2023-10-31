@@ -38,7 +38,7 @@ wsdl2java {
     cxfVersion = project.getProperties().get("cxfVersion")
     cxfPluginVersion = project.getProperties().get("cxfPluginVersion")
 
-    def authorizationManagementVersion = "2.3"
+    def authorizationManagementVersion = "2.4.3"
     def employeeVersion = "3.0.1"
     def organizationVersion = "4.1"
 
