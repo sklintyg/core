@@ -24,40 +24,40 @@ import static se.inera.intyg.intygproxyservice.common.ValidationUtility.isString
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationService;
-import se.inera.intyg.intygproxyservice.organization.dto.HealthCareUnitRequest;
-import se.inera.intyg.intygproxyservice.organization.dto.HealthCareUnitResponse;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationService;
+import se.inera.intyg.intygproxyservice.organization.dto.HealthCareUnitMembersRequest;
+import se.inera.intyg.intygproxyservice.organization.dto.HealthCareUnitMembersResponse;
 
 @Service
 @AllArgsConstructor
 @Slf4j
-public class HealthCareUnitService {
+public class HealthCareUnitMembersService {
 
-  private final GetHealthCareUnitIntegrationService getHealthCareUnitIntegrationService;
+  private final GetHealthCareUnitMembersIntegrationService getHealthCareUnitMembersIntegrationService;
 
-  public HealthCareUnitResponse get(HealthCareUnitRequest request) {
+  public HealthCareUnitMembersResponse get(HealthCareUnitMembersRequest request) {
     validateRequest(request);
 
-    log.info(String.format("Getting health care unit with hsaId: '%s'", request.getHsaId()));
+    log.info(String.format("Getting health care unit members related to hsaId: '%s'", request.getHsaId()));
 
-    final var response = getHealthCareUnitIntegrationService.get(
-        GetHealthCareUnitIntegrationRequest.builder()
+    final var response = getHealthCareUnitMembersIntegrationService.get(
+        GetHealthCareUnitMembersIntegrationRequest.builder()
             .hsaId(request.getHsaId())
             .build()
     );
 
-    log.info(String.format("Health care unit with hsaId: '%s' was retrieved", request.getHsaId()));
+    log.info(String.format("Health care unit members related to hsaId: '%s' were retrieved", request.getHsaId()));
 
-    return HealthCareUnitResponse
+    return HealthCareUnitMembersResponse
         .builder()
-        .healthCareUnit(response.getHealthCareUnit())
+        .healthCareUnitMembers(response.getHealthCareUnitMembers())
         .build();
   }
 
-  private static void validateRequest(HealthCareUnitRequest request) {
+  private static void validateRequest(HealthCareUnitMembersRequest request) {
     if (request == null) {
-      throw new IllegalArgumentException("Request to get health care unit is null");
+      throw new IllegalArgumentException("Request to get health care unit members is null");
     }
 
     if (isStringInvalid(request.getHsaId())) {

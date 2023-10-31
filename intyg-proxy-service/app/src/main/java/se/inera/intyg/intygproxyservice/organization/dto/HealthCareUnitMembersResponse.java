@@ -17,16 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.integration.api.employee;
+package se.inera.intyg.intygproxyservice.organization.dto;
 
-import java.io.Serializable;
-import java.util.List;
 import lombok.Builder;
 import lombok.Value;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnitMembers;
 
 @Value
 @Builder
-public class Employee implements Serializable {
+public class HealthCareUnitMembersResponse {
 
-  List<PersonInformation> personInformation;
+  HealthCareUnitMembers healthCareUnitMembers;
 }

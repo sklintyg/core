@@ -17,14 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.integration.api.organization;
+package se.inera.intyg.intygproxyservice.integration.api.organization.model;
 
 import lombok.Builder;
 import lombok.Value;
 
 @Value
 @Builder
-public class GetHealthCareUnitIntegrationRequest {
+public class GetHealthCareUnitMembersIntegrationRequest {
 
   String hsaId;
   String personId;

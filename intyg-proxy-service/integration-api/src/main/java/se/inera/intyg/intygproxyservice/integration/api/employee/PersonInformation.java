@@ -19,14 +19,39 @@
 
 package se.inera.intyg.intygproxyservice.integration.api.employee;
 
-import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Value;
 
 @Value
 @Builder
-public class Employee implements Serializable {
+public class PersonInformation {
 
-  List<PersonInformation> personInformation;
+  String personHsaId;
+  String givenName;
+  String middleAndSurName;
+  @Builder.Default
+  List<String> healthCareProfessionalLicence = new ArrayList<>();
+  List<PaTitle> paTitle = new ArrayList<>();
+  List<String> specialityName = new ArrayList<>();
+  List<String> specialityCode = new ArrayList<>();
+  Boolean protectedPerson;
+  LocalDateTime personStartDate;
+  LocalDateTime personEndDate;
+  Boolean feignedPerson;
+  @Builder.Default
+  List<HCPSpecialityCode> healthCareProfessionalLicenceSpeciality = new ArrayList<>();
+  String age;
+  String gender;
+  String title;
+
+  @Data
+  public static class PaTitle {
+
+    private String paTitleName;
+    private String paTitleCode;
+  }
 }

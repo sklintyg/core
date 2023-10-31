@@ -25,22 +25,21 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationRequest;
 
 @ExtendWith(MockitoExtension.class)
-class HsaGetHealthCareUnitIntegrationServiceTest {
+class HsaGetHealthCareUnitMembersIntegrationServiceTest {
 
   @InjectMocks
-  HsaGetHealthCareUnitIntegrationService hsaGetUnitIntegrationIntegrationService;
+  private HsaGetHealthCareUnitMembersIntegrationService hsaGetHealthCareUnitMembersIntegrationService;
 
   @Test
-  void shouldReturnUnit() {
-    final var response = hsaGetUnitIntegrationIntegrationService.get(
-        GetHealthCareUnitIntegrationRequest
-            .builder()
-            .build()
+  void shouldReturnUnitMembers() {
+    final var response = hsaGetHealthCareUnitMembersIntegrationService.get(
+        GetHealthCareUnitMembersIntegrationRequest.builder().build()
     );
 
-    assertNotNull(response.getHealthCareUnit());
+    assertNotNull(response);
   }
+
 }
