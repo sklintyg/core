@@ -17,18 +17,18 @@
  specific language governing permissions and limitations
  under the License.
  -->		
-<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:infrastructure:directory:organization:GetUnitResponder:3' xmlns:m1='urn:riv:infrastructure:directory:organization:GetUnitResponder:3.1' xmlns:core='urn:riv:infrastructure:directory:organization:3' targetNamespace='urn:riv:infrastructure:directory:organization:GetUnitResponder:3' elementFormDefault='qualified' attributeFormDefault='unqualified' version='3.1'>
-  <xs:import schemaLocation='../../core_components/infrastructure_directory_organization_3.0.xsd' namespace='urn:riv:infrastructure:directory:organization:3'/>
-  <xs:import namespace='urn:riv:infrastructure:directory:organization:GetUnitResponder:3.1' schemaLocation="GetUnitResponder_3.1_ext.xsd"/>
-  <xs:element name='GetUnit' type='tns:GetUnitType'/>
-  <xs:element name='GetUnitResponse' type='tns:GetUnitResponseType'/>
-
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:infrastructure:directory:organization:GetUnitResponder:4' xmlns:m1='urn:riv:infrastructure:directory:organization:GetUnitResponder:4.1' xmlns:core='urn:riv:infrastructure:directory:organization:3' targetNamespace='urn:riv:infrastructure:directory:organization:GetUnitResponder:4' elementFormDefault='qualified' attributeFormDefault='unqualified' version='4.1'>
+  <xs:import schemaLocation='../../core_components/infrastructure_directory_organization_3.0.xsd' namespace='urn:riv:infrastructure:directory:organization:3' />
+  <xs:import schemaLocation="GetUnitResponder_4.1_ext.xsd" namespace="urn:riv:infrastructure:directory:organization:GetUnitResponder:4.1"></xs:import>
+  <xs:element name='GetUnit' type='tns:GetUnitType' />
+  <xs:element name='GetUnitResponse' type='tns:GetUnitResponseType' />
+  
   <xs:complexType name='GetUnitType'>
     <xs:sequence>
       <xs:element name="unitHsaId" type="xs:string"/>
       <xs:element name="searchBase" type="core:DNType" minOccurs="0"/>
-      <xs:element name="includeFeignedObject" type="xs:boolean" minOccurs="0"/>
-	  <xs:element name="profile" type="tns:ProfileEnum" minOccurs="0" />
+	  <xs:element name="includeFeignedObject" type="xs:boolean" minOccurs="0" />
+	  <xs:element name="profile" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
       <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>
   </xs:complexType>
@@ -44,6 +44,7 @@
     <xs:sequence>
       <xs:element name="alternateName" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="alternateText" type="xs:string" minOccurs="0"/>
+	  <xs:element name="alternateTextLogotype" type="xs:string" minOccurs="0"/>
       <xs:element name="businessClassification" type="tns:BusinessClassificationType" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="businessType" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="careType" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
@@ -57,7 +58,6 @@
       <xs:element name="facsimileTelephoneNumber" type="core:TelephoneNumberType" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="geographicalCoordinatesRt90" type="tns:GeoCoordRt90Type" minOccurs="0"/>
       <xs:element name="geographicalCoordinatesSWEREF99" type="tns:GeoCoordSWEREF99Type" minOccurs="0"/>
-      <xs:element name="healthCareArea" type="xs:string" minOccurs="0"/>
       <xs:element name="destinationIndicator" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="unitHsaId" type="xs:string"/>
       <xs:element name="jpegPhoto" type="xs:string" minOccurs="0"/>
@@ -68,15 +68,14 @@
       <xs:element name="management" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="municipalityName" type="xs:string" minOccurs="0"/>
       <xs:element name="municipalityCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="nonPublicTelephoneNumber" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="unitName" type="xs:string"/>
       <xs:element name="patientInformation" type="xs:string" minOccurs="0"/>
       <xs:element name="postalAddress" type="core:AddressType" minOccurs="0"/>
       <xs:element name="postalCode" type="xs:string" minOccurs="0"/>
-      <xs:element name="priceInformation" type="xs:string" minOccurs="0"/>
       <xs:element name="publicName" type="xs:string"/>
       <xs:element name="relatedUnitHsaId" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="route" type="xs:string" minOccurs="0"/>
-	  <xs:element name="smsTelephoneNumber" type="core:TelephoneNumberType" minOccurs="0" />
       <xs:element name="street" type="xs:string" minOccurs="0"/>
       <xs:element name="surgeryHour" type="core:TimeSpanType" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="switchboardNumber" type="core:TelephoneNumberType" minOccurs="0"/>
@@ -86,6 +85,7 @@
       <xs:element name="unitExtraInformation" type="xs:string" minOccurs="0"/>
       <xs:element name="unitFunction" type="tns:UnitFunctionType" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="unitTemporaryInformation" type="core:DateSpanType" minOccurs="0"/>
+	  <xs:element name="videoPhone" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="visitingHour" type="core:TimeSpanType" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="visitingRuleAge" type="core:AgeSpanType" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="referralRules" type="xs:string" minOccurs="0"/>
@@ -97,8 +97,8 @@
 	  <xs:element name="indoorRouteDescription" type="xs:string" minOccurs="0" />
 	  <xs:element name="geographicalCoordinatesSWEREF99Latitude" type="xs:string" minOccurs="0" />
 	  <xs:element name="geographicalCoordinatesSWEREF99Longitude" type="xs:string" minOccurs="0" />
-      <xs:element ref="m1:alternateTextLogotype" minOccurs="0"/>
-    </xs:sequence>
+	  <xs:element ref="m1:administrativeCareLevel" minOccurs="0" maxOccurs="unbounded" />
+   </xs:sequence>
   </xs:complexType>
   
   <xs:complexType name='UnitFunctionType'>
@@ -133,13 +133,5 @@
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
-
-  <xs:simpleType name="ProfileEnum">
-    <xs:restriction base="xs:string">
-       <xs:enumeration value="basic" />
-       <xs:enumeration value="extended" />
-       <xs:enumeration value="all" />
-    </xs:restriction>
-  </xs:simpleType>
   
 </xs:schema>

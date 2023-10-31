@@ -40,7 +40,7 @@ wsdl2java {
 
     def authorizationManagementVersion = "2.3"
     def employeeVersion = "2.2"
-    def organizationVersion = "3.1"
+    def organizationVersion = "4.1"
 
     def commonOptions = [
             "-xjc", "-b", "$wsdlDir/general-binding.xjb",
@@ -147,14 +147,14 @@ wsdl2java {
 
             commonOrganizationOptions + [
                     "-p",
-                    "urn:riv:infrastructure:directory:organization:GetUnit:3:rivtabp21=se.riv.infrastructure.directory.organization.getunit.v3.rivtabp21",
+                    "urn:riv:infrastructure:directory:organization:GetUnit:4:rivtabp21=se.riv.infrastructure.directory.organization.getunit.v4.rivtabp21",
                     "-p",
-                    "urn:riv:infrastructure:directory:organization:GetUnitResponder:3=se.riv.infrastructure.directory.organization.getunitresponder.v3",
+                    "urn:riv:infrastructure:directory:organization:GetUnitResponder:4=se.riv.infrastructure.directory.organization.getunitresponder.v4",
                     "-p",
-                    "urn:riv:infrastructure:directory:organization:GetUnitResponder:3.1=se.riv.infrastructure.directory.organization.getunitresponder.v3",
+                    "urn:riv:infrastructure:directory:organization:GetUnitResponder:4.1=se.riv.infrastructure.directory.organization.getunitresponder.v4",
                     "-wsdlLocation",
-                    "classpath:interactions/GetUnitInteraction/GetUnitInteraction_3.1_RIVTABP21.wsdl",
-                    "$wsdlDir/organization/$organizationVersion/interactions/GetUnitInteraction/GetUnitInteraction_3.1_RIVTABP21.wsdl"],
+                    "classpath:interactions/GetUnitInteraction/GetUnitInteraction_4.1_RIVTABP21.wsdl",
+                    "$wsdlDir/organization/$organizationVersion/interactions/GetUnitInteraction/GetUnitInteraction_4.1_RIVTABP21.wsdl"],
 
             commonOrganizationOptions + [
                     "-p",
