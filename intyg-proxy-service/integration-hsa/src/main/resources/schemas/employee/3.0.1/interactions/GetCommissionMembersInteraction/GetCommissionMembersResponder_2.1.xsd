@@ -17,12 +17,12 @@
  specific language governing permissions and limitations
  under the License.
  -->		
-<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:infrastructure:directory:employee:GetCommissionMembersIncludingProtectedPersonResponder:2' xmlns:core='urn:riv:infrastructure:directory:employee:2' targetNamespace='urn:riv:infrastructure:directory:employee:GetCommissionMembersIncludingProtectedPersonResponder:2' elementFormDefault='qualified' attributeFormDefault='unqualified' version='2.1'>
-  <xs:import schemaLocation='../../core_components/infrastructure_directory_employee_2.2.xsd' namespace='urn:riv:infrastructure:directory:employee:2' />
-  <xs:element name='GetCommissionMembersIncludingProtectedPerson' type='tns:GetCommissionMembersIncludingProtectedPersonType' />
-  <xs:element name='GetCommissionMembersIncludingProtectedPersonResponse' type='tns:GetCommissionMembersIncludingProtectedPersonResponseType' />
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:infrastructure:directory:employee:GetCommissionMembersResponder:2' xmlns:core='urn:riv:infrastructure:directory:employee:3' targetNamespace='urn:riv:infrastructure:directory:employee:GetCommissionMembersResponder:2' elementFormDefault='qualified' attributeFormDefault='unqualified' version='2.1'>
+  <xs:import schemaLocation='../../core_components/infrastructure_directory_employee_3.0.xsd' namespace='urn:riv:infrastructure:directory:employee:3' />
+  <xs:element name='GetCommissionMembers' type='tns:GetCommissionMembersType' />
+  <xs:element name='GetCommissionMembersResponse' type='tns:GetCommissionMembersResponseType' />
 
-  <xs:complexType name='GetCommissionMembersIncludingProtectedPersonType'>
+  <xs:complexType name='GetCommissionMembersType'>
     <xs:sequence>
       <xs:element name="healthCareUnitHsaId" type="xs:string" />
       <xs:element name="commissionPurpose" type="xs:string" />
@@ -34,7 +34,7 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name='GetCommissionMembersIncludingProtectedPersonResponseType'>
+  <xs:complexType name='GetCommissionMembersResponseType'>
     <xs:sequence>
       <xs:element name="personInformation" type="core:PersonInformationType" minOccurs="0" maxOccurs="unbounded" />
       <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />

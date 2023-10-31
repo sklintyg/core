@@ -17,9 +17,8 @@
  specific language governing permissions and limitations
  under the License.
  -->		
-<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:infrastructure:directory:employee:GetEmployeeResponder:2' xmlns:core='urn:riv:infrastructure:directory:employee:2'  xmlns:m2='urn:riv:infrastructure:directory:employee:2.2' targetNamespace='urn:riv:infrastructure:directory:employee:GetEmployeeResponder:2' elementFormDefault='qualified' attributeFormDefault='unqualified' version='2.2'>
-  <xs:import schemaLocation='../../core_components/infrastructure_directory_employee_2.2_ext.xsd' namespace='urn:riv:infrastructure:directory:employee:2.2' />
-  <xs:import schemaLocation='../../core_components/infrastructure_directory_employee_2.2.xsd' namespace='urn:riv:infrastructure:directory:employee:2' />
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:infrastructure:directory:employee:GetEmployeeResponder:3' xmlns:core='urn:riv:infrastructure:directory:employee:3' targetNamespace='urn:riv:infrastructure:directory:employee:GetEmployeeResponder:3' elementFormDefault='qualified' attributeFormDefault='unqualified' version='3.0'>
+  <xs:import schemaLocation='../../core_components/infrastructure_directory_employee_3.0.xsd' namespace='urn:riv:infrastructure:directory:employee:3' />
   <xs:element name='GetEmployee' type='tns:GetEmployeeType' />
   <xs:element name='GetEmployeeResponse' type='tns:GetEmployeeResponseType' />
 
@@ -31,8 +30,9 @@
       </xs:choice>
       <xs:element name='searchBase' type='core:DNType' minOccurs="0"/>
 	  <xs:element name="includeFeignedObject" type="xs:boolean" minOccurs="0" />
-      <xs:element ref="m2:profile" minOccurs="0" />
-    </xs:sequence>
+      <xs:element name="profile" type="xs:string" minOccurs="0" />
+      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
+      </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name='GetEmployeeResponseType'>

@@ -39,7 +39,7 @@ wsdl2java {
     cxfPluginVersion = project.getProperties().get("cxfPluginVersion")
 
     def authorizationManagementVersion = "2.3"
-    def employeeVersion = "2.2"
+    def employeeVersion = "3.0.1"
     def organizationVersion = "4.1"
 
     def commonOptions = [
@@ -120,12 +120,12 @@ wsdl2java {
 
             commonEmployeeOptions + [
                     "-p",
-                    "urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPerson:2:rivtabp21=se.riv.infrastructure.directory.employee.getemployeeincludingprotectedperson.v2.rivtabp21",
+                    "urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPerson:3:rivtabp21=se.riv.infrastructure.directory.employee.getemployeeincludingprotectedperson.v3.rivtabp21",
                     "-p",
-                    "urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPersonResponder:2=se.riv.infrastructure.directory.employee.getemployeeincludingprotectedpersonresponder.v2",
+                    "urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPersonResponder:3=se.riv.infrastructure.directory.employee.getemployeeincludingprotectedpersonresponder.v3",
                     "-wsdlLocation",
-                    "classpath:interactions/GetEmployeeIncludingProtectedPersonInteraction/GetEmployeeIncludingProtectedPersonInteraction_2.2_RIVTABP21.wsdl",
-                    "$wsdlDir/employee/$employeeVersion/interactions/GetEmployeeIncludingProtectedPersonInteraction/GetEmployeeIncludingProtectedPersonInteraction_2.2_RIVTABP21.wsdl"],
+                    "classpath:interactions/GetEmployeeIncludingProtectedPersonInteraction/GetEmployeeIncludingProtectedPersonInteraction_3.0_RIVTABP21.wsdl",
+                    "$wsdlDir/employee/$employeeVersion/interactions/GetEmployeeIncludingProtectedPersonInteraction/GetEmployeeIncludingProtectedPersonInteraction_3.0_RIVTABP21.wsdl"],
 
             commonOrganizationOptions + [
                     "-p",

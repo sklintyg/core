@@ -17,24 +17,25 @@
  specific language governing permissions and limitations
  under the License.
  -->		
-<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:infrastructure:directory:employee:GetCommissionMembersResponder:2' xmlns:core='urn:riv:infrastructure:directory:employee:2' targetNamespace='urn:riv:infrastructure:directory:employee:GetCommissionMembersResponder:2' elementFormDefault='qualified' attributeFormDefault='unqualified' version='2.1'>
-  <xs:import schemaLocation='../../core_components/infrastructure_directory_employee_2.2.xsd' namespace='urn:riv:infrastructure:directory:employee:2' />
-  <xs:element name='GetCommissionMembers' type='tns:GetCommissionMembersType' />
-  <xs:element name='GetCommissionMembersResponse' type='tns:GetCommissionMembersResponseType' />
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPersonResponder:3' xmlns:core='urn:riv:infrastructure:directory:employee:3' targetNamespace='urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPersonResponder:3' elementFormDefault='qualified' attributeFormDefault='unqualified' version='3.0'>
+  <xs:import schemaLocation='../../core_components/infrastructure_directory_employee_3.0.xsd' namespace='urn:riv:infrastructure:directory:employee:3' />
+  <xs:element name='GetEmployeeIncludingProtectedPerson' type='tns:GetEmployeeIncludingProtectedPersonType' />
+  <xs:element name='GetEmployeeIncludingProtectedPersonResponse' type='tns:GetEmployeeIncludingProtectedPersonResponseType' />
 
-  <xs:complexType name='GetCommissionMembersType'>
+  <xs:complexType name='GetEmployeeIncludingProtectedPersonType'>
     <xs:sequence>
-      <xs:element name="healthCareUnitHsaId" type="xs:string" />
-      <xs:element name="commissionPurpose" type="xs:string" />
-      <xs:element name="commissionRights" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
-      <xs:element name="healthCareProfessionalLicense" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+      <xs:choice>
+        <xs:element name="personHsaId" type="xs:string" />
+        <xs:element name="personalIdentityNumber" type="xs:string" />
+      </xs:choice>
       <xs:element name='searchBase' type='core:DNType' minOccurs="0"/>
-      <xs:element name="includeFeignedObject" type="xs:boolean" minOccurs="0" />
+	  <xs:element name="includeFeignedObject" type="xs:boolean" minOccurs="0" />
+      <xs:element name="profile" type="xs:string" minOccurs="0" />
       <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name='GetCommissionMembersResponseType'>
+  <xs:complexType name='GetEmployeeIncludingProtectedPersonResponseType'>
     <xs:sequence>
       <xs:element name="personInformation" type="core:PersonInformationType" minOccurs="0" maxOccurs="unbounded" />
       <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />

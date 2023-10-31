@@ -17,9 +17,7 @@
  specific language governing permissions and limitations
  under the License.
  -->		
-<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:infrastructure:directory:employee:2' xmlns:m1='urn:riv:infrastructure:directory:employee:2.1' xmlns:m2='urn:riv:infrastructure:directory:employee:2.2' targetNamespace='urn:riv:infrastructure:directory:employee:2' elementFormDefault='qualified' attributeFormDefault='unqualified' version='2.2'>
-<xs:import namespace='urn:riv:infrastructure:directory:employee:2.1' schemaLocation="infrastructure_directory_employee_2.1_ext.xsd" />
-<xs:import namespace='urn:riv:infrastructure:directory:employee:2.2' schemaLocation="infrastructure_directory_employee_2.2_ext.xsd" />
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:infrastructure:directory:employee:3' targetNamespace='urn:riv:infrastructure:directory:employee:3' elementFormDefault='qualified' attributeFormDefault='unqualified' version='3.0'>
   <xs:simpleType name="TS">
     <xs:annotation>
       <xs:documentation>Regexp declaration for timestamp in the format: YYYYMMDDHHMMSS</xs:documentation>
@@ -57,8 +55,9 @@
       <xs:element name="toDay" type="xs:string" />
       <xs:element name="toTime" type="xs:time" />
       <xs:element name="comment" type="xs:string" minOccurs="0" />
-      <xs:element ref="m1:fromDate" minOccurs="0" />
-      <xs:element ref="m1:toDate" minOccurs="0" />
+      <xs:element name="fromDate"  type="xs:string" minOccurs="0" />
+      <xs:element name="toDate"  type="xs:string" minOccurs="0" />
+      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>
   </xs:complexType>
   
@@ -88,8 +87,8 @@
 	  <xs:element name="personEndDate" type="xs:dateTime" minOccurs="0" />
 	  <xs:element name="feignedPerson" type="xs:boolean" minOccurs="0" />
 	  <xs:element name="healthCareProfessionalLicenceSpeciality" type="tns:HealthCareProfessionalLicenceSpecialityType" minOccurs="0" maxOccurs="unbounded" />
-      <xs:element ref="m2:age" minOccurs="0" />
-      <xs:element ref="m2:gender" minOccurs="1" />
+      <xs:element name="age"  type="xs:string" minOccurs="0" />
+      <xs:element name="gender" type="xs:string" minOccurs="1" />
       <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>
   </xs:complexType>

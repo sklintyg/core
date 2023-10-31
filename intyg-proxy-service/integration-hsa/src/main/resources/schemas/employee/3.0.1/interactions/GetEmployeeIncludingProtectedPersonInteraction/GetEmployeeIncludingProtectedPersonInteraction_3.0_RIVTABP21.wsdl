@@ -17,7 +17,7 @@
  specific language governing permissions and limitations
  under the License.
  -->		
-<wsdl:definitions name='GetEmployeeIncludingProtectedPersonInteraction' xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tjsr='urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPersonResponder:2' xmlns:tjsi='urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPersonInitiator:1' xmlns:tns='urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPerson:2:rivtabp21' targetNamespace='urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPerson:2:rivtabp21' xmlns:itr='urn:riv:itintegration:registry:1'>
+<wsdl:definitions name='GetEmployeeIncludingProtectedPersonInteraction' xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tjsr='urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPersonResponder:3' xmlns:tjsi='urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPersonInitiator:1' xmlns:tns='urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPerson:3:rivtabp21' targetNamespace='urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPerson:3:rivtabp21' xmlns:itr='urn:riv:itintegration:registry:1'>
   <wsdl:documentation>
 			 Tjänsteinteraktionens namn: GetEmployeeIncludingProtectedPersonInteraction
 			 Beskrivning: 
@@ -29,8 +29,8 @@
 			 Förvaltning: Sveriges Kommuner och Landsting
 			 </wsdl:documentation>
   <wsdl:types>
-    <xs:schema targetNamespace='urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPerson:2:rivtabp21'>
-      <xs:import schemaLocation='GetEmployeeIncludingProtectedPersonResponder_2.2.xsd' namespace='urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPersonResponder:2' />
+    <xs:schema targetNamespace='urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPerson:3:rivtabp21'>
+      <xs:import schemaLocation='GetEmployeeIncludingProtectedPersonResponder_3.0.xsd' namespace='urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPersonResponder:3' />
       <xs:import schemaLocation='../../core_components/itintegration_registry_1.0.xsd' namespace='urn:riv:itintegration:registry:1' />
     </xs:schema>
   </wsdl:types>
@@ -52,7 +52,7 @@
   <wsdl:binding name='GetEmployeeIncludingProtectedPersonResponderBinding' type='tns:GetEmployeeIncludingProtectedPersonResponderInterface'>
     <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http' />
     <wsdl:operation name='GetEmployeeIncludingProtectedPerson'>
-      <soap:operation soapAction='urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPersonResponder:2:GetEmployeeIncludingProtectedPerson' style='document' />
+      <soap:operation soapAction='urn:riv:infrastructure:directory:employee:GetEmployeeIncludingProtectedPersonResponder:3:GetEmployeeIncludingProtectedPerson' style='document' />
       <wsdl:input>
         <soap:header use='literal' message='tns:GetEmployeeIncludingProtectedPersonRequest' part='LogicalAddress' />
         <soap:body use='literal' parts='parameters' />
