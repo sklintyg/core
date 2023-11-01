@@ -19,40 +19,27 @@
 
 package se.inera.intyg.intygproxyservice.integration.employee;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.intygproxyservice.integration.api.employee.Employee;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationResponse;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationService;
-import se.inera.intyg.intygproxyservice.integration.api.employee.PersonInformation;
+import se.inera.intyg.intygproxyservice.integration.employee.client.HsaEmployeeClient;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class HsaGetEmployeeIntegrationService implements GetEmployeeIntegrationService {
 
+  private final HsaEmployeeClient hsaEmployeeClient;
+
   @Override
   public GetEmployeeIntegrationResponse get(
       GetEmployeeIntegrationRequest getEmployeeIntegrationRequest) {
-    return GetEmployeeIntegrationResponse
-        .builder()
+    return GetEmployeeIntegrationResponse.builder()
         .employee(
-            Employee
-            .builder()
-            .personInformation(
-                List.of(
-                    PersonInformation
-                        .builder()
-                        .personHsaId("TSTNMT2321000156-DRAA")
-                        .givenName("Ajla")
-                        .middleAndSurName("Doktor")
-                        .build()
-                )
-            )
-            .build()
+            hsaEmployeeClient.getEmployee(getEmployeeIntegrationRequest)
         )
         .build();
   }
