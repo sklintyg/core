@@ -22,6 +22,8 @@ package se.inera.intyg.intygproxyservice.integration.employee.client.converter;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -53,19 +55,28 @@ class GetEmployeeIncludingProtectedPersonResponseTypeConverterTest {
 
   @Test
   void shouldConvertPersonInformationList() {
-    final var response = getEmployeeIncludingProtectedPersonResponseTypeConverter.convert(getType());
+    final var response = getEmployeeIncludingProtectedPersonResponseTypeConverter
+        .convert(getType(List.of(new PersonInformationType())));
 
     assertEquals(1, response.getPersonInformation().size());
     assertEquals(PERSON_INFORMATION, response.getPersonInformation().get(0));
   }
 
-  private GetEmployeeIncludingProtectedPersonResponseType getType() {
+  @Test
+  void shouldConvertPersonInformationListWithSeveralValues() {
+    final var response = getEmployeeIncludingProtectedPersonResponseTypeConverter
+        .convert(getType(List.of(new PersonInformationType(), new PersonInformationType())));
+
+    verify(personInformationTypeConverter, times(2))
+        .convert(any(PersonInformationType.class));
+
+    assertEquals(2, response.getPersonInformation().size());
+  }
+
+  private GetEmployeeIncludingProtectedPersonResponseType getType(
+      List<PersonInformationType> list) {
     final var type = mock(GetEmployeeIncludingProtectedPersonResponseType.class);
-    when(type.getPersonInformation()).thenReturn(
-          List.of(
-            new PersonInformationType()
-        )
-    );
+    when(type.getPersonInformation()).thenReturn(list);
 
     return type;
   }

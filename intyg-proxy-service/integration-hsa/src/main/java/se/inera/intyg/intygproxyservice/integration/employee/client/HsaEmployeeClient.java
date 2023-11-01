@@ -34,10 +34,11 @@ import se.riv.infrastructure.directory.employee.getemployeeincludingprotectedper
 @RequiredArgsConstructor
 public class HsaEmployeeClient {
 
+  public static final String PROFILE = "extended1";
   private final GetEmployeeIncludingProtectedPersonResponderInterface getEmployeeIncludingProtectedPersonResponderInterface;
   private final GetEmployeeIncludingProtectedPersonResponseTypeConverter getEmployeeIncludingProtectedPersonResponseTypeConverter;
 
-  @Value("${integration.hsa.getemployeeincludingprotectedperson.endpoint}")
+  @Value("${integration.hsa.logical.address}")
   private String logicalAddress;
 
   public Employee getEmployee(GetEmployeeIntegrationRequest request) {
@@ -52,6 +53,8 @@ public class HsaEmployeeClient {
     final var parameters = new GetEmployeeIncludingProtectedPersonType();
 
     parameters.setPersonHsaId(hsaId);
+    parameters.setIncludeFeignedObject(false);
+    parameters.setProfile(PROFILE);
     parameters.setPersonalIdentityNumber(personId);
 
     return parameters;
