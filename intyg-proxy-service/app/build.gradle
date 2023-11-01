@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation project(':integration-api')
+    runtimeOnly project(':integration-common')
     runtimeOnly project(':integration-pu')
     runtimeOnly project(':integration-fakepu')
     runtimeOnly project(':integration-hsa')
@@ -29,7 +30,7 @@ tasks.named('test') {
 
 bootRun {
     systemProperty("application.dir", "${rootProject.projectDir}/devops/dev")
-    systemProperty("spring.profiles.active", "testability,dev,fakepu")
+    systemProperty("spring.profiles.active", "testability,dev")
 }
 
 tasks.register("appRunDebug") {
