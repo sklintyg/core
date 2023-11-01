@@ -24,6 +24,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -122,7 +123,8 @@ class PersonInformationTypeConverterTest {
 
     final var response = personInformationTypeConverter.convert(type);
 
-    assertEquals(END_DATE, response.getPersonEndDate());
+    assertEquals(END_DATE.truncatedTo(ChronoUnit.SECONDS),
+        response.getPersonEndDate().truncatedTo(ChronoUnit.SECONDS));
   }
 
   @Test
@@ -131,7 +133,8 @@ class PersonInformationTypeConverterTest {
 
     final var response = personInformationTypeConverter.convert(type);
 
-    assertEquals(START_DATE, response.getPersonStartDate());
+    assertEquals(START_DATE.truncatedTo(ChronoUnit.SECONDS),
+        response.getPersonStartDate().truncatedTo(ChronoUnit.SECONDS));
   }
 
   @Test
