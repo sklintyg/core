@@ -42,17 +42,9 @@ public class HsaEmployeeClient {
 
   public Employee getEmployee(GetEmployeeIntegrationRequest request) {
     final var parameters = getParameters(request.getHsaId(), request.getPersonId());
-
-    try {
-      final var type = getEmployeeIncludingProtectedPersonResponderInterface
-          .getEmployeeIncludingProtectedPerson(logicalAddress, parameters);
-
-      return getEmployeeIncludingProtectedPersonResponseTypeConverter.convert(type);
-    } catch (Exception ex) {
-      log.error("Unexpected error occurred when trying to get employee from HSA", ex);
-      throw new IllegalStateException(ex);
-      // TODO: How should we handle this? For pu an error response is returned
-    }
+    final var type = getEmployeeIncludingProtectedPersonResponderInterface
+        .getEmployeeIncludingProtectedPerson(logicalAddress, parameters);
+    return getEmployeeIncludingProtectedPersonResponseTypeConverter.convert(type);
   }
 
   private static GetEmployeeIncludingProtectedPersonType getParameters(String hsaId,
