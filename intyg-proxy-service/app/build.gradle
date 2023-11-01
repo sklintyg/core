@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation project(':integration-api')
+    runtimeOnly project(':integration-common')
     runtimeOnly project(':integration-pu')
     runtimeOnly project(':integration-fakepu')
     runtimeOnly project(':integration-hsa')

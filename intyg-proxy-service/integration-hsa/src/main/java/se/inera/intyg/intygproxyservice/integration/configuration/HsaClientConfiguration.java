@@ -1,0 +1,52 @@
+package se.inera.intyg.intygproxyservice.integration.configuration;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import se.inera.intyg.intygproxyservice.integration.common.WebServiceClientFactory;
+import se.riv.infrastructure.directory.employee.getemployeeincludingprotectedperson.v3.rivtabp21.GetEmployeeIncludingProtectedPersonResponderInterface;
+import se.riv.infrastructure.directory.organization.gethealthcareunit.v2.rivtabp21.GetHealthCareUnitResponderInterface;
+import se.riv.infrastructure.directory.organization.gethealthcareunitmembers.v2.rivtabp21.GetHealthCareUnitMembersResponderInterface;
+
+@Configuration
+@Slf4j
+@RequiredArgsConstructor
+public class HsaClientConfiguration {
+
+  private final WebServiceClientFactory webServiceClientFactory;
+
+  @Value("${integration.hsa.getemployeeincludingprotectedperson.endpoint}")
+  private String getEmployeeIncludingProtectedPersonEndpoint;
+
+  @Value("${integration.hsa.gethealthcareunit.endpoint}")
+  private String getHealthCareUnitEndpoint;
+
+  @Value("${integration.hsa.gethealthcareunitmembers.endpoint}")
+  private String getHealthCareUnitMembersEndpoint;
+
+  @Bean
+  public GetEmployeeIncludingProtectedPersonResponderInterface getEmployeeIncludingProtectedPerson() {
+    return webServiceClientFactory.create(
+        GetEmployeeIncludingProtectedPersonResponderInterface.class,
+        getEmployeeIncludingProtectedPersonEndpoint
+    );
+  }
+
+  @Bean
+  public GetHealthCareUnitResponderInterface getHealthCareUnitResponderInterface() {
+    return webServiceClientFactory.create(
+        GetHealthCareUnitResponderInterface.class,
+        getHealthCareUnitEndpoint
+    );
+  }
+
+  @Bean
+  public GetHealthCareUnitMembersResponderInterface getHealthCareUnitMembersResponderInterface() {
+    return webServiceClientFactory.create(
+        GetHealthCareUnitMembersResponderInterface.class,
+        getHealthCareUnitMembersEndpoint
+    );
+  }
+}
