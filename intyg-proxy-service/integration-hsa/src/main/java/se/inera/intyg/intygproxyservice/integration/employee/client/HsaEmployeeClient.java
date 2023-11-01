@@ -35,6 +35,7 @@ import se.riv.infrastructure.directory.employee.getemployeeincludingprotectedper
 public class HsaEmployeeClient {
 
   public static final String PROFILE = "extended1";
+
   private final GetEmployeeIncludingProtectedPersonResponderInterface getEmployeeIncludingProtectedPersonResponderInterface;
   private final GetEmployeeIncludingProtectedPersonResponseTypeConverter getEmployeeIncludingProtectedPersonResponseTypeConverter;
 
