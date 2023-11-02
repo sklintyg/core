@@ -19,7 +19,7 @@
 
 package se.inera.intyg.intygproxyservice.integration.organization.client.converter;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -35,7 +35,10 @@ import se.riv.infrastructure.directory.organization.gethealthcareunitresponder.v
 @ExtendWith(MockitoExtension.class)
 class GetHealthCareUnitResponseTypeConverterTest {
 
-  public static final HealthCareUnit HEALTH_CARE_UNIT = HealthCareUnit.builder().build();
+  public static final HealthCareUnit HEALTH_CARE_UNIT = HealthCareUnit
+      .builder()
+      .healthCareUnitName("NAME")
+      .build();
 
   @Mock
   HealthCareUnitTypeConverter healthCareUnitTypeConverter;
@@ -45,15 +48,29 @@ class GetHealthCareUnitResponseTypeConverterTest {
 
   @Test
   void shouldConvertGetHealthCareUnitResponse() {
+    final var type = new GetHealthCareUnitResponseType();
+    type.setHealthCareUnit(new HealthCareUnitType());
     when(healthCareUnitTypeConverter.convert(any(HealthCareUnitType.class)))
         .thenReturn(HEALTH_CARE_UNIT);
 
-    final var getHealthCareUnitResponseType = new GetHealthCareUnitResponseType();
-    getHealthCareUnitResponseType.setHealthCareUnit(new HealthCareUnitType());
-
-    final var response = getHealthCareUnitResponseTypeConverter.convert(
-        getHealthCareUnitResponseType);
+    final var response = getHealthCareUnitResponseTypeConverter.convert(type);
 
     assertEquals(HEALTH_CARE_UNIT, response);
+  }
+
+  @Test
+  void shouldReturnEmptyResponseIfUnitIsNull() {
+    final var type = new GetHealthCareUnitResponseType();
+    type.setHealthCareUnit(null);
+    final var response = getHealthCareUnitResponseTypeConverter.convert(type);
+
+    assertEquals(HealthCareUnit.builder().build(), response);
+  }
+
+  @Test
+  void shouldReturnEmptyResponseIfResponseIsNull() {
+    final var response = getHealthCareUnitResponseTypeConverter.convert(null);
+
+    assertEquals(HealthCareUnit.builder().build(), response);
   }
 }
