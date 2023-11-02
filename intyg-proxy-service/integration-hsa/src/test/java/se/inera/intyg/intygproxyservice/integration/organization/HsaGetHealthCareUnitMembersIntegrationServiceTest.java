@@ -20,26 +20,45 @@
 package se.inera.intyg.intygproxyservice.integration.organization;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnitMembers;
+import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrganizationClient;
 
 @ExtendWith(MockitoExtension.class)
 class HsaGetHealthCareUnitMembersIntegrationServiceTest {
 
+  private static final HealthCareUnitMembers HEALTH_CARE_UNIT_MEMBERS = HealthCareUnitMembers
+      .builder()
+      .build();
+
   @InjectMocks
   private HsaGetHealthCareUnitMembersIntegrationService hsaGetHealthCareUnitMembersIntegrationService;
 
+  @Mock
+  private HsaOrganizationClient hsaOrganizationClient;
+
   @Test
   void shouldReturnUnitMembers() {
+
+    when(hsaOrganizationClient.getHealthCareUnitMembers(
+        any(GetHealthCareUnitMembersIntegrationRequest.class)))
+        .thenReturn(HEALTH_CARE_UNIT_MEMBERS);
+
     final var response = hsaGetHealthCareUnitMembersIntegrationService.get(
-        GetHealthCareUnitMembersIntegrationRequest.builder().build()
+        GetHealthCareUnitMembersIntegrationRequest
+            .builder()
+            .build()
     );
 
-    assertNotNull(response);
+    assertEquals(HEALTH_CARE_UNIT_MEMBERS, response.getHealthCareUnitMembers());
   }
 
 }

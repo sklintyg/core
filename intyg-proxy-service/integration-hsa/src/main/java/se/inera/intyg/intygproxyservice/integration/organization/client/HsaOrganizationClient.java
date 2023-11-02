@@ -24,9 +24,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnitMembers;
+import se.inera.intyg.intygproxyservice.integration.organization.client.converter.GetHealthCareUnitMembersResponseTypeConverter;
 import se.inera.intyg.intygproxyservice.integration.organization.client.converter.GetHealthCareUnitResponseTypeConverter;
 import se.riv.infrastructure.directory.organization.gethealthcareunit.v2.rivtabp21.GetHealthCareUnitResponderInterface;
+import se.riv.infrastructure.directory.organization.gethealthcareunitmembers.v2.rivtabp21.GetHealthCareUnitMembersResponderInterface;
+import se.riv.infrastructure.directory.organization.gethealthcareunitmembersresponder.v2.GetHealthCareUnitMembersType;
 import se.riv.infrastructure.directory.organization.gethealthcareunitresponder.v2.GetHealthCareUnitType;
 
 @Service
@@ -35,13 +40,16 @@ import se.riv.infrastructure.directory.organization.gethealthcareunitresponder.v
 public class HsaOrganizationClient {
 
   private final GetHealthCareUnitResponderInterface getHealthCareUnitResponderInterface;
+  private final GetHealthCareUnitMembersResponderInterface getHealthCareUnitMembersResponderInterface;
+
   private final GetHealthCareUnitResponseTypeConverter getHealthCareUnitResponseTypeConverter;
+  private final GetHealthCareUnitMembersResponseTypeConverter getHealthCareUnitMembersResponseTypeConverter;
 
   @Value("${integration.hsa.logical.address}")
   private String logicalAddress;
 
   public HealthCareUnit getHealthCareUnit(GetHealthCareUnitIntegrationRequest request) {
-    final var parameters = getParameters(request.getHsaId());
+    final var parameters = getHealthCareUnitParameters(request.getHsaId());
 
     final var type = getHealthCareUnitResponderInterface.getHealthCareUnit(
         logicalAddress,
@@ -51,9 +59,28 @@ public class HsaOrganizationClient {
     return getHealthCareUnitResponseTypeConverter.convert(type);
   }
 
-  private static GetHealthCareUnitType getParameters(String hsaId) {
+  public HealthCareUnitMembers getHealthCareUnitMembers(
+      GetHealthCareUnitMembersIntegrationRequest request) {
+    final var parameters = getHealthCareUnitMembersParameters(request.getHsaId());
+
+    final var type = getHealthCareUnitMembersResponderInterface.getHealthCareUnitMembers(
+        logicalAddress,
+        parameters
+    );
+
+    return getHealthCareUnitMembersResponseTypeConverter.convert(type);
+  }
+
+  private static GetHealthCareUnitType getHealthCareUnitParameters(String hsaId) {
     final var parameters = new GetHealthCareUnitType();
     parameters.setHealthCareUnitMemberHsaId(hsaId);
+    parameters.setIncludeFeignedObject(false);
+    return parameters;
+  }
+
+  private static GetHealthCareUnitMembersType getHealthCareUnitMembersParameters(String hsaId) {
+    final var parameters = new GetHealthCareUnitMembersType();
+    parameters.setHealthCareUnitHsaId(hsaId);
     parameters.setIncludeFeignedObject(false);
     return parameters;
   }

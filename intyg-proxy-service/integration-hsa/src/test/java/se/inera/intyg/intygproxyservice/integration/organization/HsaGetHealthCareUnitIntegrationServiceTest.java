@@ -40,13 +40,13 @@ class HsaGetHealthCareUnitIntegrationServiceTest {
   HsaOrganizationClient hsaOrganizationClient;
 
   @InjectMocks
-  HsaGetHealthCareUnitIntegrationService hsaGetUnitIntegrationIntegrationService;
+  HsaGetHealthCareUnitIntegrationService hsaGetUnitIntegrationService;
 
   @Test
   void shouldReturnUnit() {
     when(hsaOrganizationClient.getHealthCareUnit(any(GetHealthCareUnitIntegrationRequest.class)))
         .thenReturn(HEALTH_CARE_UNIT);
-    final var response = hsaGetUnitIntegrationIntegrationService.get(
+    final var response = hsaGetUnitIntegrationService.get(
         GetHealthCareUnitIntegrationRequest
             .builder()
             .build()
