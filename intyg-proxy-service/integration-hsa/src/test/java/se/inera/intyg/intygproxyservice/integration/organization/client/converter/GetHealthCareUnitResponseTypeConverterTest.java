@@ -19,7 +19,7 @@
 
 package se.inera.intyg.intygproxyservice.integration.organization.client.converter;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -48,8 +48,11 @@ class GetHealthCareUnitResponseTypeConverterTest {
     when(healthCareUnitTypeConverter.convert(any(HealthCareUnitType.class)))
         .thenReturn(HEALTH_CARE_UNIT);
 
+    final var getHealthCareUnitResponseType = new GetHealthCareUnitResponseType();
+    getHealthCareUnitResponseType.setHealthCareUnit(new HealthCareUnitType());
+
     final var response = getHealthCareUnitResponseTypeConverter.convert(
-        new GetHealthCareUnitResponseType());
+        getHealthCareUnitResponseType);
 
     assertEquals(HEALTH_CARE_UNIT, response);
   }
