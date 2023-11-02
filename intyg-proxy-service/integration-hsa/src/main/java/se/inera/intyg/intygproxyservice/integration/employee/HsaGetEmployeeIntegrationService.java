@@ -19,8 +19,11 @@
 
 package se.inera.intyg.intygproxyservice.integration.employee;
 
+import static se.inera.intyg.intygproxyservice.integration.api.constants.HsaConstants.FAKE_HSA_PROFILE;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationResponse;
@@ -30,6 +33,7 @@ import se.inera.intyg.intygproxyservice.integration.employee.client.HsaEmployeeC
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Profile("!" + FAKE_HSA_PROFILE)
 public class HsaGetEmployeeIntegrationService implements GetEmployeeIntegrationService {
 
   private final HsaEmployeeClient hsaEmployeeClient;

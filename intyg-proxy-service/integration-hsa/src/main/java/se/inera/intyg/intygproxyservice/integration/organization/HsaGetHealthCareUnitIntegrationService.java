@@ -19,13 +19,17 @@
 
 package se.inera.intyg.intygproxyservice.integration.organization;
 
+import static se.inera.intyg.intygproxyservice.integration.api.constants.HsaConstants.FAKE_HSA_PROFILE;
+
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationService;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitIntegrationResponse;
-import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationService;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
 
 @Service
+@Profile("!" + FAKE_HSA_PROFILE)
 public class HsaGetHealthCareUnitIntegrationService implements
     GetHealthCareUnitIntegrationService {
 
