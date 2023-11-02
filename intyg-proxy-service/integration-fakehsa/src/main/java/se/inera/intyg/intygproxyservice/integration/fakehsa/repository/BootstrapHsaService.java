@@ -74,7 +74,7 @@ public class BootstrapHsaService {
       final var pathMatchingResourcePatternResolver = new PathMatchingResourcePatternResolver();
       return Arrays.asList(pathMatchingResourcePatternResolver.getResources(classpathResourcePath));
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new IllegalStateException(e);
     }
   }
 }

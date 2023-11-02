@@ -46,11 +46,11 @@ public class ParsedHsaPerson {
   @Builder.Default
   private List<Speciality> specialities = new ArrayList<>();
   @Builder.Default
-  private List<String> unitIds = new ArrayList<String>();
+  private List<String> unitIds = new ArrayList<>();
 
   private String title;
   @Builder.Default
-  private List<String> healthCareProfessionalLicence = new ArrayList<String>();
+  private List<String> healthCareProfessionalLicence = new ArrayList<>();
 
   private List<ParsedPaTitle> parsedPaTitle;
 

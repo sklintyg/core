@@ -34,7 +34,7 @@ public class FakeProperties {
   private boolean readOnly = false;
 
   private List<String> allowedInApplications = new ArrayList<>();
-  private List<FakeLogins> logins = new ArrayList<FakeLogins>();
+  private List<FakeLogins> logins = new ArrayList<>();
 
   private Map<String, String> extraContextProperties = new HashMap<>();
 }
