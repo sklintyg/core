@@ -163,5 +163,45 @@ class HsaEmployeeClientTest {
 
       assertEquals(LOGICAL_ADDRESS, captor.getValue());
     }
+
+    @Test
+    void shouldSendIncludeFeignedObjectsAsFalse() {
+      hsaEmployeeClient.getEmployee(
+          GetEmployeeIntegrationRequest
+              .builder()
+              .hsaId(HSA_ID)
+              .personId(PERSON_ID)
+              .build()
+      );
+
+      final var captor = ArgumentCaptor.forClass(GetEmployeeIncludingProtectedPersonType.class);
+
+      verify(
+          getEmployeeIncludingProtectedPersonResponderInterface)
+          .getEmployeeIncludingProtectedPerson(anyString(),
+              captor.capture());
+
+      assertFalse(captor.getValue().isIncludeFeignedObject());
+    }
+
+    @Test
+    void shouldSendProfileInRequest() {
+      hsaEmployeeClient.getEmployee(
+          GetEmployeeIntegrationRequest
+              .builder()
+              .hsaId(HSA_ID)
+              .personId(PERSON_ID)
+              .build()
+      );
+
+      final var captor = ArgumentCaptor.forClass(GetEmployeeIncludingProtectedPersonType.class);
+
+      verify(
+          getEmployeeIncludingProtectedPersonResponderInterface)
+          .getEmployeeIncludingProtectedPerson(anyString(),
+              captor.capture());
+
+      assertEquals("extended1", captor.getValue().getProfile());
+    }
   }
 }
