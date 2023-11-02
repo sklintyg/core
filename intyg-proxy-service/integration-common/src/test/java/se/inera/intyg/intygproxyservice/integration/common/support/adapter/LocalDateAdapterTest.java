@@ -22,25 +22,19 @@ class LocalDateAdapterTest {
   private static final String DATE_STRING = "2012-11-13";
   private static final String DATE_STRING_WITH_TIME_ZONE = "2012-11-13-01:00";
   private static final String DATE_STRING_WITH_Z = "2012-11-13Z";
-
   private static final ZoneId TIME_ZONE = ZoneId.of("Europe/Stockholm");
   private static final LocalDate LOCAL_DATE = LocalDate.of(2012, 11, 13).atStartOfDay(TIME_ZONE)
       .toLocalDate();
-  // (2012, 11, 13);
-
   private static final LocalDateTime LOCAL_DATE_TIME = ZonedDateTime.of(2012, 11, 13, 13, 55, 50, 0,
       TIME_ZONE).toLocalDateTime();
   private static final LocalDateTime LOCAL_DATE_TIME_WITH_MILLIS = LOCAL_DATE_TIME.plusNanos(
       120_000_000);
   private static final LocalDateTime LOCAL_DATE_TIME_START_OF_DAY_STRING = LOCAL_DATE_TIME.withHour(
       0).withMinute(0).withSecond(0).withNano(0);
-
   private static final LocalDate ISO_DATE = LocalDate.of(2012, 11, 13);
   private static final LocalDateTime ISO_DATE_TIME = LocalDateTime.of(2012, 11, 13, 13, 55, 50, 0);
-
   private static final String ISO_DATE_TIME_STRING = "2012-11-13T13:55:50";
   private static final String ISO_DATE_STRING = "2012-11-13";
-
   private static TimeZone systemTimeZone;
 
   @BeforeEach
