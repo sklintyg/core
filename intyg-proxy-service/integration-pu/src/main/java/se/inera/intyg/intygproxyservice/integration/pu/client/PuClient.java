@@ -37,7 +37,7 @@ public class PuClient {
 
       return getPersonsForProfileResponseTypeHandler.handle(getPersonsForProfileResponseType);
     } catch (Exception ex) {
-      log.error("Unexpected error occured when trying to call PU!", ex);
+      log.error("Unexpected error occurred when trying to call PU!", ex);
       return PuResponse.error();
     }
   }

@@ -20,52 +20,42 @@
 package se.inera.intyg.intygproxyservice.integration.employee;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.intygproxyservice.integration.api.employee.Employee;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.employee.client.HsaEmployeeClient;
 
 @ExtendWith(MockitoExtension.class)
 class HsaGetEmployeeIntegrationServiceTest {
 
   public static final String HSA_ID = "HSA_ID";
+
   public static final GetEmployeeIntegrationRequest REQUEST = GetEmployeeIntegrationRequest
       .builder()
       .hsaId(HSA_ID)
       .build();
+  public static final Employee EMPLOYEE = Employee.builder().build();
+
+  @Mock
+  HsaEmployeeClient hsaEmployeeClient;
+
   @InjectMocks
   HsaGetEmployeeIntegrationService hsaGetEmployeeIntegrationService;
 
   @Test
-  void shouldReturnEmployeeHsaId() {
+  void shouldReturnEmployeeReturnedFromClient() {
+    when(hsaEmployeeClient.getEmployee(any(GetEmployeeIntegrationRequest.class)))
+        .thenReturn(EMPLOYEE);
+
     final var response = hsaGetEmployeeIntegrationService.get(REQUEST);
 
-    assertEquals(
-        "TSTNMT2321000156-DRAA",
-        response.getEmployee().getPersonInformation().get(0).getPersonHsaId()
-    );
+    assertEquals(EMPLOYEE, response.getEmployee());
   }
-
-  @Test
-  void shouldReturnEmployeeFirstName() {
-    final var response = hsaGetEmployeeIntegrationService.get(REQUEST);
-
-    assertEquals(
-        "Ajla",
-        response.getEmployee().getPersonInformation().get(0).getGivenName()
-    );
-  }
-
-  @Test
-  void shouldReturnEmployeeLastname() {
-    final var response = hsaGetEmployeeIntegrationService.get(REQUEST);
-
-    assertEquals(
-        "Doktor",
-        response.getEmployee().getPersonInformation().get(0).getMiddleAndSurName()
-    );
-  }
-
 }
