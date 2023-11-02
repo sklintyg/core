@@ -36,6 +36,7 @@ import se.riv.infrastructure.directory.organization.gethealthcareunitresponder.v
 class GetHealthCareUnitResponseTypeConverterTest {
 
   public static final HealthCareUnit HEALTH_CARE_UNIT = HealthCareUnit.builder().build();
+
   @Mock
   HealthCareUnitTypeConverter healthCareUnitTypeConverter;
 
