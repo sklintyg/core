@@ -51,8 +51,10 @@ class HsaOrganizationClientTest {
       .hsaId(HSA_ID)
       .build();
   public static final String LOGICAL_ADDRESS = "LOGICAL_ADDRESS";
+
   @Mock
   GetHealthCareUnitResponseTypeConverter getHealthCareUnitResponseTypeConverter;
+
   @Mock
   GetHealthCareUnitResponderInterface getHealthCareUnitResponderInterface;
 
