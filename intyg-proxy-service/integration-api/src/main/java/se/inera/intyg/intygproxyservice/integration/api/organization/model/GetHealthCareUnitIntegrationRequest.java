@@ -27,5 +27,4 @@ import lombok.Value;
 public class GetHealthCareUnitIntegrationRequest {
 
   String hsaId;
-  String personId;
 }

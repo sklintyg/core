@@ -19,7 +19,7 @@
 
 package se.inera.intyg.intygproxyservice.integration.employee.client.converter;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -33,9 +33,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import riv.infrastructure.directory.employee._3.PersonInformationType;
 import se.inera.intyg.intygproxyservice.integration.api.employee.PersonInformation;
 import se.riv.infrastructure.directory.employee.getemployeeincludingprotectedpersonresponder.v3.GetEmployeeIncludingProtectedPersonResponseType;
+import se.riv.infrastructure.directory.employee.v3.PersonInformationType;
 
 @ExtendWith(MockitoExtension.class)
 class GetEmployeeIncludingProtectedPersonResponseTypeConverterTest {

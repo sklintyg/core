@@ -19,23 +19,23 @@
 
 package se.inera.intyg.intygproxyservice.integration.employee.client.converter;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static se.inera.intyg.intygproxyservice.integration.common.TypeConverterHelper.toXMLGregorianCalendar;
+import static se.inera.intyg.intygproxyservice.integration.common.TypeConverterHelper.truncateToSeconds;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import riv.infrastructure.directory.employee._3.HealthCareProfessionalLicenceSpecialityType;
-import riv.infrastructure.directory.employee._3.PersonInformationType;
+import se.riv.infrastructure.directory.employee.v3.HealthCareProfessionalLicenceSpecialityType;
+import se.riv.infrastructure.directory.employee.v3.PersonInformationType;
 
 @ExtendWith(MockitoExtension.class)
 class PersonInformationTypeConverterTest {
@@ -123,8 +123,8 @@ class PersonInformationTypeConverterTest {
 
     final var response = personInformationTypeConverter.convert(type);
 
-    assertEquals(END_DATE.truncatedTo(ChronoUnit.SECONDS),
-        response.getPersonEndDate().truncatedTo(ChronoUnit.SECONDS));
+    assertEquals(truncateToSeconds(END_DATE),
+        truncateToSeconds(response.getPersonEndDate()));
   }
 
   @Test
@@ -133,7 +133,7 @@ class PersonInformationTypeConverterTest {
 
     final var response = personInformationTypeConverter.convert(type);
 
-    assertEquals(START_DATE.truncatedTo(ChronoUnit.SECONDS),
+    assertEquals(truncateToSeconds(START_DATE),
         response.getPersonStartDate().truncatedTo(ChronoUnit.SECONDS));
   }
 
@@ -141,7 +141,7 @@ class PersonInformationTypeConverterTest {
   void shouldConvertSpecialityLicense() {
     final var type = mock(PersonInformationType.class);
     when(type.getHealthCareProfessionalLicence()).thenReturn(
-        List.of("SPECIALITY")
+        List.of("SPECIALITY", "SPECIALITY_2")
     );
 
     final var response = personInformationTypeConverter.convert(type);
@@ -160,15 +160,12 @@ class PersonInformationTypeConverterTest {
     @BeforeEach
     void setup() {
       type = mock(PersonInformationType.class);
-      final var hcpCode = new HealthCareProfessionalLicenceSpecialityType();
-
-      hcpCode.setSpecialityCode("CODE");
-      hcpCode.setSpecialityName("NAME");
-      hcpCode.setHealthCareProfessionalLicence("LICENCE");
+      final var hcpCode = getHCPCode("CODE", "NAME", "LICENCE");
+      final var hcpCode2 = getHCPCode("CODE2", "NAME2", "LICENCE2");
 
       when(type.getHealthCareProfessionalLicenceSpeciality()).thenReturn(
           List.of(
-              hcpCode
+              hcpCode, hcpCode2
           )
       );
     }
@@ -216,18 +213,19 @@ class PersonInformationTypeConverterTest {
     type.setMiddleAndSurName("MIDDLE_SURNAME");
     type.setProtectedPerson(true);
     type.setTitle("TITLE");
-
-    try {
-      type.setPersonEndDate(
-          DatatypeFactory.newInstance().newXMLGregorianCalendar(END_DATE.toString())
-      );
-      type.setPersonStartDate(
-          DatatypeFactory.newInstance().newXMLGregorianCalendar(START_DATE.toString())
-      );
-    } catch (DatatypeConfigurationException e) {
-      throw new RuntimeException(e);
-    }
-
+    type.setPersonEndDate(toXMLGregorianCalendar(END_DATE));
+    type.setPersonStartDate(toXMLGregorianCalendar(START_DATE));
     return type;
+  }
+
+  private HealthCareProfessionalLicenceSpecialityType getHCPCode(String name, String code,
+      String licence) {
+    final var hcpCode = new HealthCareProfessionalLicenceSpecialityType();
+
+    hcpCode.setSpecialityCode(code);
+    hcpCode.setSpecialityName(name);
+    hcpCode.setHealthCareProfessionalLicence(licence);
+
+    return hcpCode;
   }
 }
