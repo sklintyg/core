@@ -19,24 +19,26 @@
 
 package se.inera.intyg.intygproxyservice.integration.organization;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitIntegrationResponse;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationService;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
+import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrganizationClient;
 
 @Service
+@RequiredArgsConstructor
 public class HsaGetHealthCareUnitIntegrationService implements
     GetHealthCareUnitIntegrationService {
+
+  private final HsaOrganizationClient hsaOrganizationClient;
 
   @Override
   public GetHealthCareUnitIntegrationResponse get(
       GetHealthCareUnitIntegrationRequest request) {
-    return GetHealthCareUnitIntegrationResponse
-        .builder()
+    return GetHealthCareUnitIntegrationResponse.builder()
         .healthCareUnit(
-            HealthCareUnit.builder().build()
-        )
+            hsaOrganizationClient.getHealthCareUnit(request))
         .build();
   }
 }
