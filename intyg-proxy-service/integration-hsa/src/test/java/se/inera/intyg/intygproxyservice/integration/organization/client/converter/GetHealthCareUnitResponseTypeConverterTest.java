@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.integration.organization;
+package se.inera.intyg.intygproxyservice.integration.organization.client.converter;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,30 +28,28 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
-import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrganizationClient;
+import se.riv.infrastructure.directory.organization.gethealthcareunitresponder.v2.GetHealthCareUnitResponseType;
+import se.riv.infrastructure.directory.organization.gethealthcareunitresponder.v2.HealthCareUnitType;
 
 @ExtendWith(MockitoExtension.class)
-class HsaGetHealthCareUnitIntegrationServiceTest {
+class GetHealthCareUnitResponseTypeConverterTest {
 
   public static final HealthCareUnit HEALTH_CARE_UNIT = HealthCareUnit.builder().build();
   @Mock
-  HsaOrganizationClient hsaOrganizationClient;
+  HealthCareUnitTypeConverter healthCareUnitTypeConverter;
 
   @InjectMocks
-  HsaGetHealthCareUnitIntegrationService hsaGetUnitIntegrationIntegrationService;
+  GetHealthCareUnitResponseTypeConverter getHealthCareUnitResponseTypeConverter;
 
   @Test
-  void shouldReturnUnit() {
-    when(hsaOrganizationClient.getHealthCareUnit(any(GetHealthCareUnitIntegrationRequest.class)))
+  void shouldConvertGetHealthCareUnitResponse() {
+    when(healthCareUnitTypeConverter.convert(any(HealthCareUnitType.class)))
         .thenReturn(HEALTH_CARE_UNIT);
-    final var response = hsaGetUnitIntegrationIntegrationService.get(
-        GetHealthCareUnitIntegrationRequest
-            .builder()
-            .build()
-    );
 
-    assertEquals(HEALTH_CARE_UNIT, response.getHealthCareUnit());
+    final var response = getHealthCareUnitResponseTypeConverter.convert(
+        new GetHealthCareUnitResponseType());
+
+    assertEquals(HEALTH_CARE_UNIT, response);
   }
 }

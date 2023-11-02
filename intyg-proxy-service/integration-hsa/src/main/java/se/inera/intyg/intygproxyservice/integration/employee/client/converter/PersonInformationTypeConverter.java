@@ -19,9 +19,9 @@
 
 package se.inera.intyg.intygproxyservice.integration.employee.client.converter;
 
-import java.time.LocalDateTime;
+import static se.inera.intyg.intygproxyservice.integration.common.TypeConverterHelper.toLocalDate;
+
 import java.util.List;
-import javax.xml.datatype.XMLGregorianCalendar;
 import org.springframework.stereotype.Service;
 import riv.infrastructure.directory.employee._3.HealthCareProfessionalLicenceSpecialityType;
 import riv.infrastructure.directory.employee._3.PersonInformationType;
@@ -49,12 +49,6 @@ public class PersonInformationTypeConverter {
             toHCPSpecialityCodes(type.getHealthCareProfessionalLicenceSpeciality())
         )
         .build();
-  }
-
-  private LocalDateTime toLocalDate(XMLGregorianCalendar xmlFormat) {
-    return xmlFormat != null
-        ? xmlFormat.toGregorianCalendar().toZonedDateTime().toLocalDateTime()
-        : null;
   }
 
   private List<HCPSpecialityCode> toHCPSpecialityCodes(
