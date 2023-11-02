@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.intygproxyservice.integration.common.TypeConverterHelper.toXMLGregorianCalendar;
-import static se.inera.intyg.intygproxyservice.integration.common.TypeConverterHelper.truncate;
+import static se.inera.intyg.intygproxyservice.integration.common.TypeConverterHelper.truncateToSeconds;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -123,8 +123,8 @@ class PersonInformationTypeConverterTest {
 
     final var response = personInformationTypeConverter.convert(type);
 
-    assertEquals(truncate(END_DATE),
-        truncate(response.getPersonEndDate()));
+    assertEquals(truncateToSeconds(END_DATE),
+        truncateToSeconds(response.getPersonEndDate()));
   }
 
   @Test
@@ -133,7 +133,7 @@ class PersonInformationTypeConverterTest {
 
     final var response = personInformationTypeConverter.convert(type);
 
-    assertEquals(truncate(START_DATE),
+    assertEquals(truncateToSeconds(START_DATE),
         response.getPersonStartDate().truncatedTo(ChronoUnit.SECONDS));
   }
 

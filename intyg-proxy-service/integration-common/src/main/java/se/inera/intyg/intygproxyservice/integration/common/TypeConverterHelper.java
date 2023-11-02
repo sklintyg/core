@@ -45,7 +45,7 @@ public class TypeConverterHelper {
     }
   }
 
-  public static LocalDateTime truncate(LocalDateTime date) {
+  public static LocalDateTime truncateToSeconds(LocalDateTime date) {
     return date.truncatedTo(ChronoUnit.SECONDS);
   }
 }
