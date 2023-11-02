@@ -4,7 +4,7 @@ import static se.inera.intyg.intygproxyservice.integration.pu.configuration.PuCo
 
 import se.riv.strategicresourcemanagement.persons.person.v3.DeregistrationType;
 
-public abstract class DeregistrationTypeConverter {
+public class DeregistrationTypeConverter {
 
   private DeregistrationTypeConverter() {
     throw new IllegalStateException("Utility class");
