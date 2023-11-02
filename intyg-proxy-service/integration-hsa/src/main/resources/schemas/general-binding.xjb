@@ -25,8 +25,8 @@
   jaxb:extensionBindingPrefixes="xjc" jaxb:version="2.1">
 
   <jaxb:globalBindings collectionType="java.util.ArrayList" generateValueClass="true">
-    <xjc:javaType name="java.time.LocalDate" xmlType="xs:date" adapter="se.inera.intyg.schemas.support.adapter.xml.LocalDateXmlAdapter" />
-    <xjc:javaType name="java.time.LocalDateTime" xmlType="xs:dateTime" adapter="se.inera.intyg.schemas.support.adapter.xml.LocalDateTimeXmlAdapter" />
+    <xjc:javaType name="java.time.LocalDate" xmlType="xs:date" adapter="se.inera.intyg.intygproxyservice.integration.common.support.adapter.xml.LocalDateXmlAdapter" />
+    <xjc:javaType name="java.time.LocalDateTime" xmlType="xs:dateTime" adapter="se.inera.intyg.intygproxyservice.integration.common.support.adapter.xml.LocalDateTimeXmlAdapter" />
     <xjc:serializable uid="1" />
   </jaxb:globalBindings>
 

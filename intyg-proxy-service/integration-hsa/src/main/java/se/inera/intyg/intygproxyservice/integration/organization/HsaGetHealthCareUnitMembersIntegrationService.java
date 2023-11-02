@@ -20,10 +20,10 @@
 package se.inera.intyg.intygproxyservice.integration.organization;
 
 import org.springframework.stereotype.Service;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnitMembers;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationService;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationResponse;
-import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationService;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnitMembers;
 
 @Service
 public class HsaGetHealthCareUnitMembersIntegrationService implements
@@ -32,6 +32,7 @@ public class HsaGetHealthCareUnitMembersIntegrationService implements
   @Override
   public GetHealthCareUnitMembersIntegrationResponse get(
       GetHealthCareUnitMembersIntegrationRequest request) {
+
     return GetHealthCareUnitMembersIntegrationResponse
         .builder()
         .healthCareUnitMembers(HealthCareUnitMembers.builder().build())
