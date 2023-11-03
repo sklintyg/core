@@ -1,4 +1,4 @@
-package se.inera.intyg.intygproxyservice.integration.api.pu;
+package se.inera.intyg.intygproxyservice.integration.api.constants;
 
 public abstract class PuConstants {
 

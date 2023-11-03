@@ -28,6 +28,7 @@ import lombok.Value;
 @Value
 @Builder
 public class HealthCareUnitMembers {
+
   String healthCareUnitName;
   String healthCareUnitPublicName;
   String healthCareUnitHsaId;
@@ -43,5 +44,7 @@ public class HealthCareUnitMembers {
   Boolean feignedHealthCareUnit;
   Boolean archivedHealthCareUnit;
   HealthCareProvider healthCareProvider;
+  @Builder.Default
+
   List<HealthCareUnitMember> healthCareUnitMember = new ArrayList<>();
 }

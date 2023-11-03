@@ -78,7 +78,7 @@
       <xs:element name="description" type="xs:string" minOccurs="0" />
       <xs:element name="title" type="xs:string" minOccurs="0" />
       <xs:element name="healthCareProfessionalLicence" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
-      <xs:element name="paTitle" type="tns:PaTitleType" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="parsedPaTitle" type="tns:PaTitleType" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="specialityName" type="xs:string"  minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="specialityCode" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="dn" type="tns:DNType" />
