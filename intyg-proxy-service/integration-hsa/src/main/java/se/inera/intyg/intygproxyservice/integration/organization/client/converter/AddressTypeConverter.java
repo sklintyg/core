@@ -28,6 +28,7 @@ import se.riv.infrastructure.directory.organization.v2.AddressType;
 public class AddressTypeConverter {
 
   public List<String> convert(AddressType type) {
-    return type != null ? type.getAddressLine() : Collections.emptyList();
+    return type != null && type.getAddressLine() != null ? type.getAddressLine()
+        : Collections.emptyList();
   }
 }

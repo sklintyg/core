@@ -50,12 +50,19 @@ class AddressTypeConverterTest {
   }
 
   @Test
-  void shouldReturnEmptyListIfAddressIsNull() {
+  void shouldReturnEmptyListIfAddressLineIsNull() {
     final var type = mock(AddressType.class);
     when(type.getAddressLine())
         .thenReturn(null);
 
     final var response = addressTypeConverter.convert(type);
+
+    assertEquals(Collections.emptyList(), response);
+  }
+
+  @Test
+  void shouldReturnEmptyListIfAddressIsNull() {
+    final var response = addressTypeConverter.convert(null);
 
     assertEquals(Collections.emptyList(), response);
   }
