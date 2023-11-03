@@ -19,6 +19,8 @@
 
 package se.inera.intyg.intygproxyservice.integration.organization;
 
+import lombok.RequiredArgsConstructor;
+
 import static se.inera.intyg.intygproxyservice.integration.api.constants.HsaConstants.FAKE_HSA_PROFILE;
 
 import org.springframework.context.annotation.Profile;
@@ -26,12 +28,15 @@ import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationService;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationResponse;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnitMembers;
+import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrganizationClient;
 
 @Service
+@RequiredArgsConstructor
 @Profile("!" + FAKE_HSA_PROFILE)
 public class HsaGetHealthCareUnitMembersIntegrationService implements
     GetHealthCareUnitMembersIntegrationService {
+
+  private final HsaOrganizationClient hsaOrganizationClient;
 
   @Override
   public GetHealthCareUnitMembersIntegrationResponse get(
@@ -39,7 +44,7 @@ public class HsaGetHealthCareUnitMembersIntegrationService implements
 
     return GetHealthCareUnitMembersIntegrationResponse
         .builder()
-        .healthCareUnitMembers(HealthCareUnitMembers.builder().build())
+        .healthCareUnitMembers(hsaOrganizationClient.getHealthCareUnitMembers(request))
         .build();
   }
 }

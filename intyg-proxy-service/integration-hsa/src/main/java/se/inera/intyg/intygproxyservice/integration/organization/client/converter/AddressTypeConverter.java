@@ -17,21 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.integration.api.organization.model;
+package se.inera.intyg.intygproxyservice.integration.organization.client.converter;
 
-import java.time.LocalDateTime;
-import lombok.Builder;
-import lombok.Value;
+import java.util.Collections;
+import java.util.List;
+import org.springframework.stereotype.Service;
+import se.riv.infrastructure.directory.organization.v2.AddressType;
 
-@Value
-@Builder
-public class HealthCareProvider {
+@Service
+public class AddressTypeConverter {
 
-  String healthCareProviderHsaId;
-  String healthCareProviderName;
-  String healthCareProviderOrgNo;
-  LocalDateTime healthCareProviderStartDate;
-  LocalDateTime healthCareProviderEndDate;
-  Boolean feignedHealthCareProvider;
-  Boolean archivedHealthCareProvider;
+  public List<String> convert(AddressType type) {
+    return type != null && type.getAddressLine() != null ? type.getAddressLine()
+        : Collections.emptyList();
+  }
 }

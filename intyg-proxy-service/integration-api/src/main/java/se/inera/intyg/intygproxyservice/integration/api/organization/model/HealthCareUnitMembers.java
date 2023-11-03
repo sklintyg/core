@@ -45,6 +45,5 @@ public class HealthCareUnitMembers {
   Boolean archivedHealthCareUnit;
   HealthCareProvider healthCareProvider;
   @Builder.Default
-
   List<HealthCareUnitMember> healthCareUnitMember = new ArrayList<>();
 }

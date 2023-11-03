@@ -17,41 +17,53 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.integration.organization;
+package se.inera.intyg.intygproxyservice.integration.organization.client.converter;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
-import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrganizationClient;
+import se.riv.infrastructure.directory.organization.v2.AddressType;
 
 @ExtendWith(MockitoExtension.class)
-class HsaGetHealthCareUnitIntegrationServiceTest {
-
-  public static final HealthCareUnit HEALTH_CARE_UNIT = HealthCareUnit.builder().build();
-  @Mock
-  HsaOrganizationClient hsaOrganizationClient;
+class AddressTypeConverterTest {
 
   @InjectMocks
-  HsaGetHealthCareUnitIntegrationService hsaGetUnitIntegrationService;
+  AddressTypeConverter addressTypeConverter;
 
   @Test
-  void shouldReturnUnit() {
-    when(hsaOrganizationClient.getHealthCareUnit(any(GetHealthCareUnitIntegrationRequest.class)))
-        .thenReturn(HEALTH_CARE_UNIT);
-    final var response = hsaGetUnitIntegrationService.get(
-        GetHealthCareUnitIntegrationRequest
-            .builder()
-            .build()
-    );
+  void shouldConvertAddressType() {
+    final var address = List.of("A1", "A2");
+    final var type = mock(AddressType.class);
+    when(type.getAddressLine())
+        .thenReturn(address);
 
-    assertEquals(HEALTH_CARE_UNIT, response.getHealthCareUnit());
+    final var response = addressTypeConverter.convert(type);
+
+    assertEquals(address, response);
+  }
+
+  @Test
+  void shouldReturnEmptyListIfAddressLineIsNull() {
+    final var type = mock(AddressType.class);
+    when(type.getAddressLine())
+        .thenReturn(null);
+
+    final var response = addressTypeConverter.convert(type);
+
+    assertEquals(Collections.emptyList(), response);
+  }
+
+  @Test
+  void shouldReturnEmptyListIfAddressIsNull() {
+    final var response = addressTypeConverter.convert(null);
+
+    assertEquals(Collections.emptyList(), response);
   }
 }
