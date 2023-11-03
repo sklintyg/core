@@ -35,6 +35,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.riv.infrastructure.directory.employee.v3.HealthCareProfessionalLicenceSpecialityType;
+import se.riv.infrastructure.directory.employee.v3.PaTitleType;
 import se.riv.infrastructure.directory.employee.v3.PersonInformationType;
 
 @ExtendWith(MockitoExtension.class)
@@ -150,6 +151,36 @@ class PersonInformationTypeConverterTest {
         type.getHealthCareProfessionalLicence(),
         response.getHealthCareProfessionalLicence()
     );
+  }
+
+  @Test
+  void shouldConvertPaTitle() {
+    final var type = mock(PersonInformationType.class);
+    final var pa1 = new PaTitleType();
+    pa1.setPaTitleCode("Code1");
+    pa1.setPaTitleName("Code2");
+
+    when(type.getParsedPaTitle())
+        .thenReturn(List.of(pa1));
+
+    final var response = personInformationTypeConverter.convert(type);
+
+    assertEquals(pa1.getPaTitleCode(), response.getPaTitle().get(0).getPaTitleCode());
+    assertEquals(pa1.getPaTitleName(), response.getPaTitle().get(0).getPaTitleName());
+  }
+
+  @Test
+  void shouldConvertSeveralPaTitle() {
+    final var type = mock(PersonInformationType.class);
+    final var pa1 = new PaTitleType();
+    final var pa2 = new PaTitleType();
+
+    when(type.getParsedPaTitle())
+        .thenReturn(List.of(pa1, pa2));
+
+    final var response = personInformationTypeConverter.convert(type);
+
+    assertEquals(2, response.getPaTitle().size());
   }
 
   @Nested

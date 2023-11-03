@@ -25,7 +25,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.employee.HCPSpecialityCode;
 import se.inera.intyg.intygproxyservice.integration.api.employee.PersonInformation;
+import se.inera.intyg.intygproxyservice.integration.api.employee.PersonInformation.PaTitle;
 import se.riv.infrastructure.directory.employee.v3.HealthCareProfessionalLicenceSpecialityType;
+import se.riv.infrastructure.directory.employee.v3.PaTitleType;
 import se.riv.infrastructure.directory.employee.v3.PersonInformationType;
 
 @Service
@@ -48,6 +50,21 @@ public class PersonInformationTypeConverter {
         .healthCareProfessionalLicenceSpeciality(
             toHCPSpecialityCodes(type.getHealthCareProfessionalLicenceSpeciality())
         )
+        .paTitle(paTitleList(type.getParsedPaTitle()))
+        .build();
+  }
+
+  private List<PaTitle> paTitleList(List<PaTitleType> type) {
+    return type.stream()
+        .map(this::paTitle)
+        .toList();
+  }
+
+  private PaTitle paTitle(PaTitleType type) {
+    return PaTitle
+        .builder()
+        .paTitleCode(type.getPaTitleCode())
+        .paTitleName(type.getPaTitleName())
         .build();
   }
 
