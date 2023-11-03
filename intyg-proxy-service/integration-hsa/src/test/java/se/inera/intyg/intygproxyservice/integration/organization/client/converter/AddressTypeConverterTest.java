@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,5 +47,16 @@ class AddressTypeConverterTest {
     final var response = addressTypeConverter.convert(type);
 
     assertEquals(address, response);
+  }
+
+  @Test
+  void shouldReturnEmptyListIfAddressIsNull() {
+    final var type = mock(AddressType.class);
+    when(type.getAddressLine())
+        .thenReturn(null);
+
+    final var response = addressTypeConverter.convert(type);
+
+    assertEquals(Collections.emptyList(), response);
   }
 }
