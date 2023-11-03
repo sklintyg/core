@@ -47,7 +47,6 @@ class HsaGetHealthCareUnitMembersIntegrationServiceTest {
 
   @Test
   void shouldReturnUnitMembers() {
-
     when(hsaOrganizationClient.getHealthCareUnitMembers(
         any(GetHealthCareUnitMembersIntegrationRequest.class)))
         .thenReturn(HEALTH_CARE_UNIT_MEMBERS);
