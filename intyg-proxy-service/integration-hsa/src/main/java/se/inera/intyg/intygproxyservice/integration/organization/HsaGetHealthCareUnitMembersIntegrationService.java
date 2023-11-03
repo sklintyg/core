@@ -20,6 +20,10 @@
 package se.inera.intyg.intygproxyservice.integration.organization;
 
 import lombok.RequiredArgsConstructor;
+
+import static se.inera.intyg.intygproxyservice.integration.api.constants.HsaConstants.FAKE_HSA_PROFILE;
+
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationService;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationRequest;
@@ -28,6 +32,7 @@ import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrgan
 
 @Service
 @RequiredArgsConstructor
+@Profile("!" + FAKE_HSA_PROFILE)
 public class HsaGetHealthCareUnitMembersIntegrationService implements
     GetHealthCareUnitMembersIntegrationService {
 

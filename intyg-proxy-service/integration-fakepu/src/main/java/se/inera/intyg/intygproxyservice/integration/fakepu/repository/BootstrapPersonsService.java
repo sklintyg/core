@@ -1,6 +1,6 @@
 package se.inera.intyg.intygproxyservice.integration.fakepu.repository;
 
-import static se.inera.intyg.intygproxyservice.integration.api.pu.PuConstants.FAKE_PU_PROFILE;
+import static se.inera.intyg.intygproxyservice.integration.api.constants.PuConstants.FAKE_PU_PROFILE;
 import static se.inera.intyg.intygproxyservice.integration.fakepu.repository.PersonConverter.convert;
 
 import com.fasterxml.jackson.databind.ObjectMapper;

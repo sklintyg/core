@@ -35,6 +35,7 @@ public class PersonInformation {
   String middleAndSurName;
   @Builder.Default
   List<String> healthCareProfessionalLicence = new ArrayList<>();
+  @Builder.Default
   List<PaTitle> paTitle = new ArrayList<>();
   List<String> specialityName = new ArrayList<>();
   List<String> specialityCode = new ArrayList<>();
@@ -49,6 +50,7 @@ public class PersonInformation {
   String title;
 
   @Data
+  @Builder
   public static class PaTitle {
 
     private String paTitleName;
