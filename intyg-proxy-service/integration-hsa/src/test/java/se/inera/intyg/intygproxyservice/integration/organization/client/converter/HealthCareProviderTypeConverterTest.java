@@ -20,23 +20,15 @@
 package se.inera.intyg.intygproxyservice.integration.organization.client.converter;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static se.inera.intyg.intygproxyservice.integration.common.TypeConverterHelper.toXMLGregorianCalendar;
 import static se.inera.intyg.intygproxyservice.integration.common.TypeConverterHelper.truncateToSeconds;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.riv.infrastructure.directory.organization.gethealthcareunitmembersresponder.v2.HealthCareProviderType;
-import se.riv.infrastructure.directory.organization.v2.AddressType;
 
 @ExtendWith(MockitoExtension.class)
 class HealthCareProviderTypeConverterTest {
@@ -46,8 +38,6 @@ class HealthCareProviderTypeConverterTest {
 
   @InjectMocks
   HealthCareProviderTypeConverter healthCareProviderTypeConverter;
-  @Mock
-  AddressTypeConverter addressTypeConverter;
 
   @Test
   void shouldConvertArchived() {
@@ -82,15 +72,6 @@ class HealthCareProviderTypeConverterTest {
   }
 
   @Test
-  void shouldConvertPublicName() {
-    final var type = getType();
-    final var response = healthCareProviderTypeConverter.convert(type);
-
-    assertEquals(type.getHealthCareProviderPublicName(),
-        response.getHealthCareProviderPublicName());
-  }
-
-  @Test
   void shouldConvertOrgNo() {
     final var type = getType();
     final var response = healthCareProviderTypeConverter.convert(type);
@@ -116,39 +97,6 @@ class HealthCareProviderTypeConverterTest {
         truncateToSeconds(response.getHealthCareProviderStartDate()));
   }
 
-  @Nested
-  class TestMockedValues {
-
-    HealthCareProviderType type;
-
-    @BeforeEach
-    void setup() {
-      type = mock(HealthCareProviderType.class);
-      when(type.getTelephoneNumber()).thenReturn(
-          Collections.singletonList("PHONENUMBER")
-      );
-      when(type.getHealthCareProviderPrescriptionCode()).thenReturn(List.of("CODE1", "CODE2"));
-    }
-
-    @Test
-    void shouldConvertPhoneNumber() {
-      final var response = healthCareProviderTypeConverter.convert(type);
-
-      assertEquals(
-          type.getTelephoneNumber(), "")
-      ;
-    }
-
-    @Test
-    void shouldConvertPrescriptionCode() {
-      final var response = healthCareProviderTypeConverter.convert(type);
-
-      assertEquals(
-          type.getHealthCareProviderPrescriptionCode(), "")
-      ;
-    }
-  }
-
   private HealthCareProviderType getType() {
     final var type = new HealthCareProviderType();
     type.setArchivedHealthCareProvider(true);
@@ -159,8 +107,6 @@ class HealthCareProviderTypeConverterTest {
     type.setHealthCareProviderPublicName("PROVIDER_PUBLIC_NAME");
     type.setHealthCareProviderEndDate(toXMLGregorianCalendar(PROVIDER_END_DATE));
     type.setHealthCareProviderStartDate(toXMLGregorianCalendar(PROVIDER_START_DATE));
-    type.setPostalAddress(new AddressType());
-    type.setPostalCode("POSTAL_CODE");
 
     return type;
   }

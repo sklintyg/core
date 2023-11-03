@@ -20,6 +20,7 @@
 package se.inera.intyg.intygproxyservice.integration.organization.client.converter;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.intygproxyservice.integration.common.TypeConverterHelper.toXMLGregorianCalendar;
@@ -36,6 +37,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.riv.infrastructure.directory.organization.gethealthcareunitmembersresponder.v2.HealthCareUnitMemberType;
+import se.riv.infrastructure.directory.organization.v2.AddressType;
 
 @ExtendWith(MockitoExtension.class)
 class HealthCareUnitMemberTypeConverterTest {
@@ -118,10 +120,6 @@ class HealthCareUnitMemberTypeConverterTest {
     void setup() {
       type = mock(HealthCareUnitMemberType.class);
 
-      //final var addressType = mock(AddressType.class);
-      //when(addressType.getAddressLine()).thenReturn(List.of("ADDRESS", "ADDRESS_2"));
-      // when(type.getHealthCareUnitMemberpostalAddress()).thenReturn(addressType);
-
       when(type.getHealthCareUnitMemberTelephoneNumber()).thenReturn(
           Collections.singletonList("PHONENUMBER")
       );
@@ -131,12 +129,17 @@ class HealthCareUnitMemberTypeConverterTest {
 
     @Test
     void shouldConvertAddress() {
+      final var address = List.of("ADDRESS", "ADDRESS_2");
+      final var addressType = mock(AddressType.class);
+      when(addressTypeConverter.convert(any(AddressType.class))).thenReturn(address);
+      when(type.getHealthCareUnitMemberpostalAddress()).thenReturn(addressType);
+
       final var response = healthCareUnitMemberTypeConverter.convert(type);
 
       assertEquals(
-          type.getHealthCareUnitMemberpostalAddress().getAddressLine(),
-          response.getHealthCareUnitMemberpostalAddress())
-      ;
+          address,
+          response.getHealthCareUnitMemberpostalAddress()
+      );
     }
 
     @Test
@@ -145,8 +148,8 @@ class HealthCareUnitMemberTypeConverterTest {
 
       assertEquals(
           type.getHealthCareUnitMemberTelephoneNumber(),
-          response.getHealthCareUnitMemberTelephoneNumber())
-      ;
+          response.getHealthCareUnitMemberTelephoneNumber()
+      );
     }
 
     @Test
@@ -155,8 +158,8 @@ class HealthCareUnitMemberTypeConverterTest {
 
       assertEquals(
           type.getHealthCareUnitMemberpostalCode(),
-          response.getHealthCareUnitMemberpostalCode())
-      ;
+          response.getHealthCareUnitMemberpostalCode()
+      );
     }
 
     @Test
@@ -165,8 +168,8 @@ class HealthCareUnitMemberTypeConverterTest {
 
       assertEquals(
           type.getHealthCareUnitMemberPrescriptionCode(),
-          response.getHealthCareUnitMemberPrescriptionCode())
-      ;
+          response.getHealthCareUnitMemberPrescriptionCode()
+      );
     }
   }
 

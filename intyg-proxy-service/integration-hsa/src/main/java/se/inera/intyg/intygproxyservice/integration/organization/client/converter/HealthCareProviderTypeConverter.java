@@ -37,7 +37,6 @@ public class HealthCareProviderTypeConverter {
         .healthCareProviderOrgNo(type.getHealthCareProviderOrgNo())
         .healthCareProviderEndDate(toLocalDate(type.getHealthCareProviderEndDate()))
         .healthCareProviderStartDate(toLocalDate(type.getHealthCareProviderStartDate()))
-        .healthCareProviderPublicName(type.getHealthCareProviderPublicName())
         .build();
   }
 

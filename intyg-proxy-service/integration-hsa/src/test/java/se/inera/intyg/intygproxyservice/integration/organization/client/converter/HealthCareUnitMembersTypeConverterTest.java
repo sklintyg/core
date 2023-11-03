@@ -103,11 +103,26 @@ class HealthCareUnitMembersTypeConverterTest {
       assertEquals(type.getHealthCareUnitPublicName(), response.getHealthCareUnitPublicName());
     }
 
+    @Test
     void shouldConvertPostalCode() {
       final var type = getType();
       final var response = healthCareUnitMembersTypeConverter.convert(type);
 
       assertEquals(type.getPostalCode(), response.getPostalCode());
+    }
+
+    @Test
+    void shouldConvertPrescriptionCode() {
+      final var type = mock(HealthCareUnitMembersType.class);
+      when(type.getHealthCareUnitPrescriptionCode())
+          .thenReturn(List.of("CODE1", "CODE2"));
+
+      final var response = healthCareUnitMembersTypeConverter.convert(type);
+
+      assertEquals(
+          type.getHealthCareUnitPrescriptionCode(),
+          response.getHealthCareUnitPrescriptionCode()
+      );
     }
 
     @Test
@@ -131,7 +146,7 @@ class HealthCareUnitMembersTypeConverterTest {
 
   @Test
   void shouldConvertHealthCareProvider() {
-    final var provider = HealthCareProvider.builder().healthCareProviderPublicName("NAME").build();
+    final var provider = HealthCareProvider.builder().healthCareProviderName("NAME").build();
     when(healthCareProviderTypeConverter.convert(any(HealthCareProviderType.class)))
         .thenReturn(provider);
     final var type = getType();
@@ -172,6 +187,23 @@ class HealthCareUnitMembersTypeConverterTest {
     final var response = healthCareUnitMembersTypeConverter.convert(type);
 
     assertEquals(type.getTelephoneNumber(), response.getTelephoneNumber());
+  }
+
+  @Test
+  void shouldConvertAddress() {
+    final var type = mock(HealthCareUnitMembersType.class);
+    final var address = List.of("ADDRESS", "ADDRESS_2");
+    final var addressType = mock(AddressType.class);
+
+    when(addressTypeConverter.convert(any(AddressType.class))).thenReturn(address);
+    when(type.getPostalAddress()).thenReturn(addressType);
+
+    final var response = healthCareUnitMembersTypeConverter.convert(type);
+
+    assertEquals(
+        address,
+        response.getPostalAddress()
+    );
   }
 
   private HealthCareUnitMembersType getType() {

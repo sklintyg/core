@@ -29,7 +29,6 @@ public class HealthCareProvider {
 
   String healthCareProviderHsaId;
   String healthCareProviderName;
-  String healthCareProviderPublicName;
   String healthCareProviderOrgNo;
   LocalDateTime healthCareProviderStartDate;
   LocalDateTime healthCareProviderEndDate;
