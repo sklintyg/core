@@ -36,44 +36,61 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnitMembers;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.Unit;
 import se.inera.intyg.intygproxyservice.integration.organization.client.converter.GetHealthCareUnitMembersResponseTypeConverter;
 import se.inera.intyg.intygproxyservice.integration.organization.client.converter.GetHealthCareUnitResponseTypeConverter;
+import se.inera.intyg.intygproxyservice.integration.organization.client.converter.GetUnitResponseTypeConverter;
 import se.riv.infrastructure.directory.organization.gethealthcareunit.v2.rivtabp21.GetHealthCareUnitResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareunitmembers.v2.rivtabp21.GetHealthCareUnitMembersResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareunitmembersresponder.v2.GetHealthCareUnitMembersResponseType;
 import se.riv.infrastructure.directory.organization.gethealthcareunitmembersresponder.v2.GetHealthCareUnitMembersType;
 import se.riv.infrastructure.directory.organization.gethealthcareunitresponder.v2.GetHealthCareUnitResponseType;
 import se.riv.infrastructure.directory.organization.gethealthcareunitresponder.v2.GetHealthCareUnitType;
+import se.riv.infrastructure.directory.organization.getunit.v4.rivtabp21.GetUnitResponderInterface;
+import se.riv.infrastructure.directory.organization.getunitresponder.v4.GetUnitResponseType;
+import se.riv.infrastructure.directory.organization.getunitresponder.v4.GetUnitType;
 
 @ExtendWith(MockitoExtension.class)
 class HsaOrganizationClientTest {
 
-  public static final HealthCareUnit HEALTH_CARE_UNIT = HealthCareUnit.builder().build();
-  public static final HealthCareUnitMembers HEALTH_CARE_UNIT_MEMBERS = HealthCareUnitMembers.builder()
+  private static final HealthCareUnit HEALTH_CARE_UNIT = HealthCareUnit.builder().build();
+  private static final Unit UNIT = Unit.builder().build();
+  private static final HealthCareUnitMembers HEALTH_CARE_UNIT_MEMBERS = HealthCareUnitMembers.builder()
       .build();
 
-  public static final String HSA_ID = "HSA_ID";
-  public static final GetHealthCareUnitIntegrationRequest REQUEST = GetHealthCareUnitIntegrationRequest
+  private static final String HSA_ID = "HSA_ID";
+  private static final GetHealthCareUnitIntegrationRequest REQUEST = GetHealthCareUnitIntegrationRequest
       .builder()
       .hsaId(HSA_ID)
       .build();
 
-  public static final GetHealthCareUnitMembersIntegrationRequest REQUEST_MEMBERS = GetHealthCareUnitMembersIntegrationRequest
+  private static final GetHealthCareUnitMembersIntegrationRequest REQUEST_MEMBERS = GetHealthCareUnitMembersIntegrationRequest
       .builder()
       .hsaId(HSA_ID)
       .build();
-  public static final String LOGICAL_ADDRESS = "LOGICAL_ADDRESS";
+
+  private static final GetUnitIntegrationRequest REQUEST_UNIT = GetUnitIntegrationRequest
+      .builder()
+      .hsaId(HSA_ID)
+      .build();
+
+  private static final String LOGICAL_ADDRESS = "LOGICAL_ADDRESS";
 
   @Mock
   GetHealthCareUnitResponseTypeConverter getHealthCareUnitResponseTypeConverter;
   @Mock
   GetHealthCareUnitMembersResponseTypeConverter getHealthCareUnitMembersResponseTypeConverter;
   @Mock
+  GetUnitResponseTypeConverter getUnitResponseTypeConverter;
+  @Mock
   GetHealthCareUnitMembersResponderInterface getHealthCareUnitMembersResponderInterface;
   @Mock
   GetHealthCareUnitResponderInterface getHealthCareUnitResponderInterface;
+  @Mock
+  GetUnitResponderInterface getUnitResponderInterface;
 
   @InjectMocks
   HsaOrganizationClient hsaOrganizationClient;
@@ -285,6 +302,107 @@ class HsaOrganizationClientTest {
             getHealthCareUnitMembersResponderInterface)
             .getHealthCareUnitMembers(captor.capture(),
                 any(GetHealthCareUnitMembersType.class));
+
+        assertEquals(LOGICAL_ADDRESS, captor.getValue());
+      }
+    }
+  }
+
+  @Nested
+  class UnitTest {
+
+    @Nested
+    class UnexpectedError {
+
+      @Test
+      void shouldThrowErrorIfInterfaceThrowsError() {
+        when(getUnitResponderInterface
+            .getUnit(
+                anyString(),
+                any(GetUnitType.class)
+            )
+        ).thenThrow(new IllegalStateException());
+
+        assertThrows(IllegalStateException.class,
+            () -> hsaOrganizationClient.getUnit(REQUEST_UNIT));
+      }
+    }
+
+    @Nested
+    class CorrectResponseFromInterface {
+
+      @BeforeEach
+      void setup() {
+        when(getUnitResponderInterface
+            .getUnit(
+                anyString(),
+                any(GetUnitType.class)
+            )
+        ).thenReturn(new GetUnitResponseType());
+      }
+
+      @Test
+      void shouldReturnResponseWithUnitReturnedFromConverter() {
+        when(getUnitResponseTypeConverter.convert(
+                any(GetUnitResponseType.class)
+            )
+        ).thenReturn(UNIT);
+
+        final var response = hsaOrganizationClient.getUnit(
+            GetUnitIntegrationRequest.builder().build()
+        );
+
+        assertEquals(UNIT, response);
+      }
+
+      @Test
+      void shouldSendHsaIdInRequest() {
+        hsaOrganizationClient.getUnit(
+            GetUnitIntegrationRequest
+                .builder()
+                .hsaId(HSA_ID)
+                .build()
+        );
+
+        final var captor = ArgumentCaptor.forClass(GetUnitType.class);
+
+        verify(getUnitResponderInterface)
+            .getUnit(anyString(), captor.capture());
+
+        assertEquals(HSA_ID, captor.getValue().getUnitHsaId());
+      }
+
+      @Test
+      void shouldSendIncludeFeignedObjectsAsFalseInRquest() {
+        hsaOrganizationClient.getUnit(
+            GetUnitIntegrationRequest
+                .builder()
+                .hsaId(HSA_ID)
+                .build()
+        );
+
+        final var captor = ArgumentCaptor.forClass(GetUnitType.class);
+
+        verify(getUnitResponderInterface)
+            .getUnit(anyString(), captor.capture());
+
+        assertFalse(captor.getValue().isIncludeFeignedObject());
+      }
+
+      @Test
+      void shouldSendLogicalAddressInRequest() {
+        hsaOrganizationClient.getUnit(
+            GetUnitIntegrationRequest
+                .builder()
+                .hsaId(HSA_ID)
+                .build()
+        );
+
+        final var captor = ArgumentCaptor.forClass(String.class);
+
+        verify(getUnitResponderInterface)
+            .getUnit(captor.capture(),
+                any(GetUnitType.class));
 
         assertEquals(LOGICAL_ADDRESS, captor.getValue());
       }

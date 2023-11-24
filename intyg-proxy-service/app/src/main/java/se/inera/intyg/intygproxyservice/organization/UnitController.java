@@ -35,7 +35,7 @@ public class UnitController {
 
   private final UnitService unitService;
 
-  @PostMapping("")
+  @PostMapping
   UnitResponse getUnit(@RequestBody UnitRequest request) {
     return unitService.get(request);
   }

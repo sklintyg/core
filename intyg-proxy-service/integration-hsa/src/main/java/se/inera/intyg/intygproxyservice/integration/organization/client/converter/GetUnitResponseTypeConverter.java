@@ -19,21 +19,22 @@
 
 package se.inera.intyg.intygproxyservice.integration.organization.client.converter;
 
-import java.util.Collections;
-import java.util.List;
-import org.springframework.stereotype.Component;
-import se.riv.infrastructure.directory.organization.v2.AddressType;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.Unit;
+import se.riv.infrastructure.directory.organization.getunitresponder.v4.GetUnitResponseType;
 
-@Component
-public class AddressTypeConverter {
+@Service
+@RequiredArgsConstructor
+public class GetUnitResponseTypeConverter {
 
-  public List<String> convertV2(AddressType type) {
-    return type != null && type.getAddressLine() != null ? type.getAddressLine()
-        : Collections.emptyList();
-  }
+  private final UnitTypeConverter unitTypeConverter;
 
-  public List<String> convertV3(se.riv.infrastructure.directory.organization.v3.AddressType type) {
-    return type != null && type.getAddressLine() != null ? type.getAddressLine()
-        : Collections.emptyList();
+  public Unit convert(GetUnitResponseType type) {
+    if (type == null || type.getUnit() == null) {
+      return Unit.builder().build();
+    }
+
+    return unitTypeConverter.convert(type.getUnit());
   }
 }

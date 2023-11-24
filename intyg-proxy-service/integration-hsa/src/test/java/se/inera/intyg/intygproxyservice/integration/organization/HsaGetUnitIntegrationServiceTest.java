@@ -19,31 +19,39 @@
 
 package se.inera.intyg.intygproxyservice.integration.organization;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-import static se.inera.intyg.intygproxyservice.integration.api.constants.HsaConstants.FAKE_HSA_PROFILE;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
-import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationService;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationResponse;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.Unit;
 import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrganizationClient;
 
-@Service
-@Profile("!" + FAKE_HSA_PROFILE)
-@RequiredArgsConstructor
-public class HsaGetUnitIntegrationService implements GetUnitIntegrationService {
+@ExtendWith(MockitoExtension.class)
+class HsaGetUnitIntegrationServiceTest {
 
-  private final HsaOrganizationClient hsaOrganizationClient;
+  public static final Unit UNIT = Unit.builder().build();
+  @Mock
+  HsaOrganizationClient hsaOrganizationClient;
 
-  @Override
-  public GetUnitIntegrationResponse get(
-      GetUnitIntegrationRequest request) {
-    final var unit = hsaOrganizationClient.getUnit(request);
+  @InjectMocks
+  HsaGetUnitIntegrationService hsaGetUnitIntegrationService;
 
-    return GetUnitIntegrationResponse.builder()
-        .unit(unit)
-        .build();
+  @Test
+  void shouldReturnUnit() {
+    when(hsaOrganizationClient.getUnit(any(GetUnitIntegrationRequest.class)))
+        .thenReturn(UNIT);
+    final var response = hsaGetUnitIntegrationService.get(
+        GetUnitIntegrationRequest
+            .builder()
+            .build()
+    );
+
+    assertEquals(UNIT, response.getUnit());
   }
 }

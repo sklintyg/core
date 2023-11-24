@@ -44,7 +44,7 @@ public class HealthCareUnitMemberTypeConverter {
         .healthCareUnitMemberPrescriptionCode(type.getHealthCareUnitMemberPrescriptionCode())
         .healthCareUnitMemberTelephoneNumber(type.getHealthCareUnitMemberTelephoneNumber())
         .healthCareUnitMemberpostalAddress(
-            addressTypeConverter.convert(type.getHealthCareUnitMemberpostalAddress()))
+            addressTypeConverter.convertV2(type.getHealthCareUnitMemberpostalAddress()))
         .healthCareUnitMemberpostalCode(type.getHealthCareUnitMemberpostalCode())
         .build();
   }

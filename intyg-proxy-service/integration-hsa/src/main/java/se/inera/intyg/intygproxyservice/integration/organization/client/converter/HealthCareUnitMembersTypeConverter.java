@@ -46,7 +46,7 @@ public class HealthCareUnitMembersTypeConverter {
         .healthCareUnitPrescriptionCode(type.getHealthCareUnitPrescriptionCode())
         .postalCode(type.getPostalCode())
         .telephoneNumber(type.getTelephoneNumber())
-        .postalAddress(addressTypeConverter.convert(type.getPostalAddress()))
+        .postalAddress(addressTypeConverter.convertV2(type.getPostalAddress()))
         .healthCareUnitMember(
             type.getHealthCareUnitMember()
                 .stream()

@@ -9,6 +9,7 @@ import se.inera.intyg.intygproxyservice.integration.common.WebServiceClientFacto
 import se.riv.infrastructure.directory.employee.getemployeeincludingprotectedperson.v3.rivtabp21.GetEmployeeIncludingProtectedPersonResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareunit.v2.rivtabp21.GetHealthCareUnitResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareunitmembers.v2.rivtabp21.GetHealthCareUnitMembersResponderInterface;
+import se.riv.infrastructure.directory.organization.getunit.v4.rivtabp21.GetUnitResponderInterface;
 
 @Configuration
 @Slf4j
@@ -25,6 +26,9 @@ public class HsaClientConfiguration {
 
   @Value("${integration.hsa.gethealthcareunitmembers.endpoint}")
   private String getHealthCareUnitMembersEndpoint;
+
+  @Value("${integration.hsa.getunit.endpoint}")
+  private String getUnitEndpoint;
 
   @Bean
   public GetEmployeeIncludingProtectedPersonResponderInterface getEmployeeIncludingProtectedPerson() {
@@ -47,6 +51,14 @@ public class HsaClientConfiguration {
     return webServiceClientFactory.create(
         GetHealthCareUnitMembersResponderInterface.class,
         getHealthCareUnitMembersEndpoint
+    );
+  }
+
+  @Bean
+  public GetUnitResponderInterface getUnitResponderInterface() {
+    return webServiceClientFactory.create(
+        GetUnitResponderInterface.class,
+        getUnitEndpoint
     );
   }
 }
