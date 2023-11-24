@@ -28,6 +28,7 @@ import lombok.Value;
 @Value
 @Builder
 public class HealthCareUnitMember {
+
   String healthCareUnitMemberName;
   String healthCareUnitMemberPublicName;
   String healthCareUnitMemberHsaId;

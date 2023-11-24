@@ -19,8 +19,12 @@
 
 package se.inera.intyg.intygproxyservice.integration.api.organization;
 
-public interface GetHealthCareUnitMembersIntegrationService {
+import lombok.Builder;
+import lombok.Value;
 
-  GetHealthCareUnitMembersIntegrationResponse get(
-      GetHealthCareUnitMembersIntegrationRequest request);
+@Value
+@Builder
+public class GetHealthCareUnitIntegrationRequest {
+
+  String hsaId;
 }

@@ -17,9 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.integration.organization;
+package se.inera.intyg.intygproxyservice.organization;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -28,30 +28,29 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
-import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrganizationClient;
+import se.inera.intyg.intygproxyservice.organization.dto.UnitRequest;
+import se.inera.intyg.intygproxyservice.organization.dto.UnitResponse;
+import se.inera.intyg.intygproxyservice.organization.service.UnitService;
 
 @ExtendWith(MockitoExtension.class)
-class HsaGetHealthCareUnitIntegrationServiceTest {
+class UnitControllerTest {
 
-  public static final HealthCareUnit HEALTH_CARE_UNIT = HealthCareUnit.builder().build();
   @Mock
-  HsaOrganizationClient hsaOrganizationClient;
+  private UnitService unitService;
 
   @InjectMocks
-  HsaGetHealthCareUnitIntegrationService hsaGetUnitIntegrationService;
+  private UnitController unitController;
 
   @Test
-  void shouldReturnUnit() {
-    when(hsaOrganizationClient.getHealthCareUnit(any(GetHealthCareUnitIntegrationRequest.class)))
-        .thenReturn(HEALTH_CARE_UNIT);
-    final var response = hsaGetUnitIntegrationService.get(
-        GetHealthCareUnitIntegrationRequest
-            .builder()
-            .build()
+  void shallReturnUnitResponseWhenCallingGetUnit() {
+    final var expectedResponse = UnitResponse.builder().build();
+    when(unitService.get(any(UnitRequest.class)))
+        .thenReturn(expectedResponse);
+
+    final var response = unitController.getUnit(
+        UnitRequest.builder().build()
     );
 
-    assertEquals(HEALTH_CARE_UNIT, response.getHealthCareUnit());
+    assertEquals(expectedResponse, response);
   }
 }

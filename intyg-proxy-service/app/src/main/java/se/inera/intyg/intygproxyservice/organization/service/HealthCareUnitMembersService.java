@@ -24,7 +24,7 @@ import static se.inera.intyg.intygproxyservice.common.ValidationUtility.isString
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationService;
 import se.inera.intyg.intygproxyservice.organization.dto.HealthCareUnitMembersRequest;
 import se.inera.intyg.intygproxyservice.organization.dto.HealthCareUnitMembersResponse;
@@ -39,7 +39,8 @@ public class HealthCareUnitMembersService {
   public HealthCareUnitMembersResponse get(HealthCareUnitMembersRequest request) {
     validateRequest(request);
 
-    log.info(String.format("Getting health care unit members related to hsaId: '%s'", request.getHsaId()));
+    log.info(String.format("Getting health care unit members related to hsaId: '%s'",
+        request.getHsaId()));
 
     final var response = getHealthCareUnitMembersIntegrationService.get(
         GetHealthCareUnitMembersIntegrationRequest.builder()
@@ -47,7 +48,8 @@ public class HealthCareUnitMembersService {
             .build()
     );
 
-    log.info(String.format("Health care unit members related to hsaId: '%s' were retrieved", request.getHsaId()));
+    log.info(String.format("Health care unit members related to hsaId: '%s' were retrieved",
+        request.getHsaId()));
 
     return HealthCareUnitMembersResponse
         .builder()

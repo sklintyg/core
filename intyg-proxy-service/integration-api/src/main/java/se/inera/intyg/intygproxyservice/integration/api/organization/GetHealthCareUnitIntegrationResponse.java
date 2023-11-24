@@ -17,24 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.integration.organization.client.converter;
+package se.inera.intyg.intygproxyservice.integration.api.organization;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import lombok.Builder;
+import lombok.Value;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
-import se.riv.infrastructure.directory.organization.gethealthcareunitresponder.v2.GetHealthCareUnitResponseType;
 
-@Service
-@RequiredArgsConstructor
-public class GetHealthCareUnitResponseTypeConverter {
+@Value
+@Builder
+public class GetHealthCareUnitIntegrationResponse {
 
-  private final HealthCareUnitTypeConverter healthCareUnitTypeConverter;
-
-  public HealthCareUnit convert(GetHealthCareUnitResponseType type) {
-    if (type == null || type.getHealthCareUnit() == null) {
-      return HealthCareUnit.builder().build();
-    }
-
-    return healthCareUnitTypeConverter.convert(type.getHealthCareUnit());
-  }
+  HealthCareUnit healthCareUnit;
 }

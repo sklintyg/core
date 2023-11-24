@@ -19,7 +19,8 @@
 
 package se.inera.intyg.intygproxyservice.organization.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -32,56 +33,54 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationResponse;
-import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationService;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
-import se.inera.intyg.intygproxyservice.organization.dto.HealthCareUnitRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationService;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationResponse;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.Unit;
+import se.inera.intyg.intygproxyservice.organization.dto.UnitRequest;
 
 @ExtendWith(MockitoExtension.class)
-class HealthCareUnitServiceTest {
+class UnitServiceTest {
 
   private static final String HSA_ID = "HSA_ID";
 
-  private static final HealthCareUnitRequest REQUEST = HealthCareUnitRequest
+  private static final UnitRequest REQUEST = UnitRequest
       .builder()
       .hsaId(HSA_ID)
       .build();
 
-  private static final GetHealthCareUnitIntegrationResponse RESPONSE = GetHealthCareUnitIntegrationResponse
+  private static final GetUnitIntegrationResponse RESPONSE = GetUnitIntegrationResponse
       .builder()
-      .healthCareUnit(HealthCareUnit
-          .builder()
-          .build())
+      .unit(Unit.builder().build())
       .build();
 
   @Mock
-  private GetHealthCareUnitIntegrationService getHealthCareUnitIntegrationService;
+  private GetUnitIntegrationService getUnitIntegrationService;
 
   @InjectMocks
-  private HealthCareUnitService healthCareUnitService;
+  private UnitService unitService;
 
   @Test
   void shouldThrowIllegalArgumentExceptionIfRequestIsNull() {
-    assertThrows(IllegalArgumentException.class, () -> healthCareUnitService.get(null));
+    assertThrows(IllegalArgumentException.class, () -> unitService.get(null));
   }
 
   @Test
   void shouldThrowIllegalArgumentExceptionIfHsaIdIsNull() {
-    final var request = HealthCareUnitRequest.builder().build();
-    assertThrows(IllegalArgumentException.class, () -> healthCareUnitService.get(request));
+    final var request = UnitRequest.builder().build();
+    assertThrows(IllegalArgumentException.class, () -> unitService.get(request));
   }
 
   @Test
   void shouldThrowIllegalArgumentExceptionIfHsaIdIsEmpty() {
-    final var request = HealthCareUnitRequest.builder().hsaId("").build();
-    assertThrows(IllegalArgumentException.class, () -> healthCareUnitService.get(request));
+    final var request = UnitRequest.builder().hsaId("").build();
+    assertThrows(IllegalArgumentException.class, () -> unitService.get(request));
   }
 
   @Test
   void shouldThrowIllegalArgumentExceptionIfHsaIdIsBlank() {
-    final var request = HealthCareUnitRequest.builder().hsaId(" ").build();
-    assertThrows(IllegalArgumentException.class, () -> healthCareUnitService.get(request));
+    final var request = UnitRequest.builder().hsaId(" ").build();
+    assertThrows(IllegalArgumentException.class, () -> unitService.get(request));
   }
 
   @Nested
@@ -89,23 +88,23 @@ class HealthCareUnitServiceTest {
 
     @BeforeEach
     void setUp() {
-      when(getHealthCareUnitIntegrationService.get(any(GetHealthCareUnitIntegrationRequest.class)))
+      when(getUnitIntegrationService.get(any(GetUnitIntegrationRequest.class)))
           .thenReturn(RESPONSE);
     }
 
     @Test
     void shallReturnUnit() {
-      final var response = healthCareUnitService.get(REQUEST);
+      final var response = unitService.get(REQUEST);
 
-      assertEquals(RESPONSE.getHealthCareUnit(), response.getHealthCareUnit());
+      assertEquals(RESPONSE.getUnit(), response.getUnit());
     }
 
     @Test
     void shallSetHsaIdInRequest() {
-      healthCareUnitService.get(REQUEST);
+      unitService.get(REQUEST);
 
-      final var captor = ArgumentCaptor.forClass(GetHealthCareUnitIntegrationRequest.class);
-      verify(getHealthCareUnitIntegrationService).get(captor.capture());
+      final var captor = ArgumentCaptor.forClass(GetUnitIntegrationRequest.class);
+      verify(getUnitIntegrationService).get(captor.capture());
 
       assertEquals(REQUEST.getHsaId(), captor.getValue().getHsaId());
     }

@@ -19,32 +19,27 @@
 
 package se.inera.intyg.intygproxyservice.integration.organization;
 
-import lombok.RequiredArgsConstructor;
 
 import static se.inera.intyg.intygproxyservice.integration.api.constants.HsaConstants.FAKE_HSA_PROFILE;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationService;
-import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationResponse;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationService;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationResponse;
 import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrganizationClient;
 
 @Service
-@RequiredArgsConstructor
 @Profile("!" + FAKE_HSA_PROFILE)
-public class HsaGetHealthCareUnitMembersIntegrationService implements
-    GetHealthCareUnitMembersIntegrationService {
+@RequiredArgsConstructor
+public class HsaGetUnitIntegrationService implements GetUnitIntegrationService {
 
   private final HsaOrganizationClient hsaOrganizationClient;
 
   @Override
-  public GetHealthCareUnitMembersIntegrationResponse get(
-      GetHealthCareUnitMembersIntegrationRequest request) {
-
-    return GetHealthCareUnitMembersIntegrationResponse
-        .builder()
-        .healthCareUnitMembers(hsaOrganizationClient.getHealthCareUnitMembers(request))
-        .build();
+  public GetUnitIntegrationResponse get(
+      GetUnitIntegrationRequest request) {
+    return GetUnitIntegrationResponse.builder().build();
   }
 }
