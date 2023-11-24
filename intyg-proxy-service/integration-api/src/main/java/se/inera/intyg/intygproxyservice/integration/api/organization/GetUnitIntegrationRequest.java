@@ -26,5 +26,5 @@ import lombok.Value;
 @Builder
 public class GetUnitIntegrationRequest {
 
-    String hsaId;
+  String hsaId;
 }

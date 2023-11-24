@@ -25,6 +25,7 @@ import lombok.Value;
 @Value
 @Builder
 public class GeoCoordRt90 {
-    String xCoordinate;
-    String yCoordinate;
+
+  String xCoordinate;
+  String yCoordinate;
 }

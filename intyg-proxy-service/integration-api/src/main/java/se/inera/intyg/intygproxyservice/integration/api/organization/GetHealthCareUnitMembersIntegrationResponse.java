@@ -27,5 +27,5 @@ import se.inera.intyg.intygproxyservice.integration.api.organization.model.Healt
 @Builder
 public class GetHealthCareUnitMembersIntegrationResponse {
 
-    HealthCareUnitMembers healthCareUnitMembers;
+  HealthCareUnitMembers healthCareUnitMembers;
 }

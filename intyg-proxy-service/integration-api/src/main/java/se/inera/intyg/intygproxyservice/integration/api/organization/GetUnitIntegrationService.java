@@ -21,5 +21,5 @@ package se.inera.intyg.intygproxyservice.integration.api.organization;
 
 public interface GetUnitIntegrationService {
 
-    GetUnitIntegrationResponse get(GetUnitIntegrationRequest request);
+  GetUnitIntegrationResponse get(GetUnitIntegrationRequest request);
 }

@@ -26,6 +26,6 @@ import lombok.Value;
 @Builder
 public class GetHealthCareUnitMembersIntegrationRequest {
 
-    String hsaId;
-    String personId;
+  String hsaId;
+  String personId;
 }

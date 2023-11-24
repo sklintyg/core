@@ -29,28 +29,28 @@ import lombok.Value;
 @Builder
 public class Unit {
 
-    @Builder.Default
-    List<String> businessType = new ArrayList<>();
-    @Builder.Default
-    List<BusinessClassification> businessClassification = new ArrayList<>();
-    @Builder.Default
-    List<String> careType = new ArrayList<>();
-    String countyName;
-    String countyCode;
-    GeoCoordRt90 geographicalCoordinatesRt90;
-    GeoCoordSweref99 geographicalCoordinatesSweref99;
-    String municipalityName;
-    String municipalityCode;
-    String location;
-    LocalDateTime unitStartDate;
-    LocalDateTime unitEndDate;
-    Boolean feignedUnit;
-    String unitHsaId;
-    String unitName;
-    @Builder.Default
-    List<String> postalAddress = new ArrayList<>();
-    String postalCode;
-    String mail;
-    @Builder.Default
-    List<String> management = new ArrayList<>();
+  @Builder.Default
+  List<String> businessType = new ArrayList<>();
+  @Builder.Default
+  List<BusinessClassification> businessClassification = new ArrayList<>();
+  @Builder.Default
+  List<String> careType = new ArrayList<>();
+  String countyName;
+  String countyCode;
+  GeoCoordRt90 geographicalCoordinatesRt90;
+  GeoCoordSweref99 geographicalCoordinatesSweref99;
+  String municipalityName;
+  String municipalityCode;
+  String location;
+  LocalDateTime unitStartDate;
+  LocalDateTime unitEndDate;
+  Boolean feignedUnit;
+  String unitHsaId;
+  String unitName;
+  @Builder.Default
+  List<String> postalAddress = new ArrayList<>();
+  String postalCode;
+  String mail;
+  @Builder.Default
+  List<String> management = new ArrayList<>();
 }

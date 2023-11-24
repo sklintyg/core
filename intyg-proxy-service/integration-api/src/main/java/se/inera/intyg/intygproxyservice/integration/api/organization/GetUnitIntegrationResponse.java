@@ -27,5 +27,5 @@ import se.inera.intyg.intygproxyservice.integration.api.organization.model.Unit;
 @Builder
 public class GetUnitIntegrationResponse {
 
-    Unit unit;
+  Unit unit;
 }

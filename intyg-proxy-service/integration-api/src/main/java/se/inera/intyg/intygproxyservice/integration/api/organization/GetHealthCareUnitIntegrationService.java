@@ -21,5 +21,5 @@ package se.inera.intyg.intygproxyservice.integration.api.organization;
 
 public interface GetHealthCareUnitIntegrationService {
 
-    GetHealthCareUnitIntegrationResponse get(GetHealthCareUnitIntegrationRequest request);
+  GetHealthCareUnitIntegrationResponse get(GetHealthCareUnitIntegrationRequest request);
 }
