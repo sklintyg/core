@@ -19,6 +19,7 @@
 
 package se.inera.intyg.intygproxyservice.integration.api.authorization;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialInformation;
@@ -27,5 +28,5 @@ import se.inera.intyg.intygproxyservice.integration.api.authorization.model.Cred
 @Builder
 public class GetCredentialInformationIntegrationResponse {
 
-  CredentialInformation credentialInformation;
+  List<CredentialInformation> credentialInformation;
 }
