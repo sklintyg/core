@@ -35,23 +35,23 @@ import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrgan
 @ExtendWith(MockitoExtension.class)
 class HsaGetHealthCareUnitIntegrationServiceTest {
 
-    public static final HealthCareUnit HEALTH_CARE_UNIT = HealthCareUnit.builder().build();
-    @Mock
-    HsaOrganizationClient hsaOrganizationClient;
+  public static final HealthCareUnit HEALTH_CARE_UNIT = HealthCareUnit.builder().build();
+  @Mock
+  HsaOrganizationClient hsaOrganizationClient;
 
-    @InjectMocks
-    HsaGetHealthCareUnitIntegrationService hsaGetUnitIntegrationService;
+  @InjectMocks
+  HsaGetHealthCareUnitIntegrationService hsaGetUnitIntegrationService;
 
-    @Test
-    void shouldReturnUnit() {
-        when(hsaOrganizationClient.getHealthCareUnit(any(GetHealthCareUnitIntegrationRequest.class)))
-            .thenReturn(HEALTH_CARE_UNIT);
-        final var response = hsaGetUnitIntegrationService.get(
-            GetHealthCareUnitIntegrationRequest
-                .builder()
-                .build()
-        );
+  @Test
+  void shouldReturnUnit() {
+    when(hsaOrganizationClient.getHealthCareUnit(any(GetHealthCareUnitIntegrationRequest.class)))
+        .thenReturn(HEALTH_CARE_UNIT);
+    final var response = hsaGetUnitIntegrationService.get(
+        GetHealthCareUnitIntegrationRequest
+            .builder()
+            .build()
+    );
 
-        assertEquals(HEALTH_CARE_UNIT, response.getHealthCareUnit());
-    }
+    assertEquals(HEALTH_CARE_UNIT, response.getHealthCareUnit());
+  }
 }

@@ -42,71 +42,71 @@ import se.inera.intyg.intygproxyservice.organization.dto.UnitRequest;
 @ExtendWith(MockitoExtension.class)
 class UnitServiceTest {
 
-    private static final String HSA_ID = "HSA_ID";
+  private static final String HSA_ID = "HSA_ID";
 
-    private static final UnitRequest REQUEST = UnitRequest
-        .builder()
-        .hsaId(HSA_ID)
-        .build();
+  private static final UnitRequest REQUEST = UnitRequest
+      .builder()
+      .hsaId(HSA_ID)
+      .build();
 
-    private static final GetUnitIntegrationResponse RESPONSE = GetUnitIntegrationResponse
-        .builder()
-        .unit(Unit.builder().build())
-        .build();
+  private static final GetUnitIntegrationResponse RESPONSE = GetUnitIntegrationResponse
+      .builder()
+      .unit(Unit.builder().build())
+      .build();
 
-    @Mock
-    private GetUnitIntegrationService getUnitIntegrationService;
+  @Mock
+  private GetUnitIntegrationService getUnitIntegrationService;
 
-    @InjectMocks
-    private UnitService unitService;
+  @InjectMocks
+  private UnitService unitService;
 
-    @Test
-    void shouldThrowIllegalArgumentExceptionIfRequestIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> unitService.get(null));
+  @Test
+  void shouldThrowIllegalArgumentExceptionIfRequestIsNull() {
+    assertThrows(IllegalArgumentException.class, () -> unitService.get(null));
+  }
+
+  @Test
+  void shouldThrowIllegalArgumentExceptionIfHsaIdIsNull() {
+    final var request = UnitRequest.builder().build();
+    assertThrows(IllegalArgumentException.class, () -> unitService.get(request));
+  }
+
+  @Test
+  void shouldThrowIllegalArgumentExceptionIfHsaIdIsEmpty() {
+    final var request = UnitRequest.builder().hsaId("").build();
+    assertThrows(IllegalArgumentException.class, () -> unitService.get(request));
+  }
+
+  @Test
+  void shouldThrowIllegalArgumentExceptionIfHsaIdIsBlank() {
+    final var request = UnitRequest.builder().hsaId(" ").build();
+    assertThrows(IllegalArgumentException.class, () -> unitService.get(request));
+  }
+
+  @Nested
+  class ValidRequest {
+
+    @BeforeEach
+    void setUp() {
+      when(getUnitIntegrationService.get(any(GetUnitIntegrationRequest.class)))
+          .thenReturn(RESPONSE);
     }
 
     @Test
-    void shouldThrowIllegalArgumentExceptionIfHsaIdIsNull() {
-        final var request = UnitRequest.builder().build();
-        assertThrows(IllegalArgumentException.class, () -> unitService.get(request));
+    void shallReturnUnit() {
+      final var response = unitService.get(REQUEST);
+
+      assertEquals(RESPONSE.getUnit(), response.getUnit());
     }
 
     @Test
-    void shouldThrowIllegalArgumentExceptionIfHsaIdIsEmpty() {
-        final var request = UnitRequest.builder().hsaId("").build();
-        assertThrows(IllegalArgumentException.class, () -> unitService.get(request));
+    void shallSetHsaIdInRequest() {
+      unitService.get(REQUEST);
+
+      final var captor = ArgumentCaptor.forClass(GetUnitIntegrationRequest.class);
+      verify(getUnitIntegrationService).get(captor.capture());
+
+      assertEquals(REQUEST.getHsaId(), captor.getValue().getHsaId());
     }
-
-    @Test
-    void shouldThrowIllegalArgumentExceptionIfHsaIdIsBlank() {
-        final var request = UnitRequest.builder().hsaId(" ").build();
-        assertThrows(IllegalArgumentException.class, () -> unitService.get(request));
-    }
-
-    @Nested
-    class ValidRequest {
-
-        @BeforeEach
-        void setUp() {
-            when(getUnitIntegrationService.get(any(GetUnitIntegrationRequest.class)))
-                .thenReturn(RESPONSE);
-        }
-
-        @Test
-        void shallReturnUnit() {
-            final var response = unitService.get(REQUEST);
-
-            assertEquals(RESPONSE.getUnit(), response.getUnit());
-        }
-
-        @Test
-        void shallSetHsaIdInRequest() {
-            unitService.get(REQUEST);
-
-            final var captor = ArgumentCaptor.forClass(GetUnitIntegrationRequest.class);
-            verify(getUnitIntegrationService).get(captor.capture());
-
-            assertEquals(REQUEST.getHsaId(), captor.getValue().getHsaId());
-        }
-    }
+  }
 }

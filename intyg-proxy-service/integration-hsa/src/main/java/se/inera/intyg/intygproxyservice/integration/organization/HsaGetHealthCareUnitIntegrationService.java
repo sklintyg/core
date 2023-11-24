@@ -36,14 +36,14 @@ import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrgan
 public class HsaGetHealthCareUnitIntegrationService implements
     GetHealthCareUnitIntegrationService {
 
-    private final HsaOrganizationClient hsaOrganizationClient;
+  private final HsaOrganizationClient hsaOrganizationClient;
 
-    @Override
-    public GetHealthCareUnitIntegrationResponse get(
-        GetHealthCareUnitIntegrationRequest request) {
-        return GetHealthCareUnitIntegrationResponse.builder()
-            .healthCareUnit(
-                hsaOrganizationClient.getHealthCareUnit(request))
-            .build();
-    }
+  @Override
+  public GetHealthCareUnitIntegrationResponse get(
+      GetHealthCareUnitIntegrationRequest request) {
+    return GetHealthCareUnitIntegrationResponse.builder()
+        .healthCareUnit(
+            hsaOrganizationClient.getHealthCareUnit(request))
+        .build();
+  }
 }

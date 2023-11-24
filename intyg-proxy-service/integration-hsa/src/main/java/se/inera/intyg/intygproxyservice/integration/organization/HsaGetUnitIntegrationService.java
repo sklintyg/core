@@ -35,11 +35,11 @@ import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrgan
 @RequiredArgsConstructor
 public class HsaGetUnitIntegrationService implements GetUnitIntegrationService {
 
-    private final HsaOrganizationClient hsaOrganizationClient;
+  private final HsaOrganizationClient hsaOrganizationClient;
 
-    @Override
-    public GetUnitIntegrationResponse get(
-        GetUnitIntegrationRequest request) {
-        return GetUnitIntegrationResponse.builder().build();
-    }
+  @Override
+  public GetUnitIntegrationResponse get(
+      GetUnitIntegrationRequest request) {
+    return GetUnitIntegrationResponse.builder().build();
+  }
 }

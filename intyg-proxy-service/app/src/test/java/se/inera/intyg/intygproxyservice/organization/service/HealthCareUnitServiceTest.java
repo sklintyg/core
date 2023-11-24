@@ -41,73 +41,73 @@ import se.inera.intyg.intygproxyservice.organization.dto.HealthCareUnitRequest;
 @ExtendWith(MockitoExtension.class)
 class HealthCareUnitServiceTest {
 
-    private static final String HSA_ID = "HSA_ID";
+  private static final String HSA_ID = "HSA_ID";
 
-    private static final HealthCareUnitRequest REQUEST = HealthCareUnitRequest
-        .builder()
-        .hsaId(HSA_ID)
-        .build();
+  private static final HealthCareUnitRequest REQUEST = HealthCareUnitRequest
+      .builder()
+      .hsaId(HSA_ID)
+      .build();
 
-    private static final GetHealthCareUnitIntegrationResponse RESPONSE = GetHealthCareUnitIntegrationResponse
-        .builder()
-        .healthCareUnit(HealthCareUnit
-            .builder()
-            .build())
-        .build();
+  private static final GetHealthCareUnitIntegrationResponse RESPONSE = GetHealthCareUnitIntegrationResponse
+      .builder()
+      .healthCareUnit(HealthCareUnit
+          .builder()
+          .build())
+      .build();
 
-    @Mock
-    private GetHealthCareUnitIntegrationService getHealthCareUnitIntegrationService;
+  @Mock
+  private GetHealthCareUnitIntegrationService getHealthCareUnitIntegrationService;
 
-    @InjectMocks
-    private HealthCareUnitService healthCareUnitService;
+  @InjectMocks
+  private HealthCareUnitService healthCareUnitService;
 
-    @Test
-    void shouldThrowIllegalArgumentExceptionIfRequestIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> healthCareUnitService.get(null));
+  @Test
+  void shouldThrowIllegalArgumentExceptionIfRequestIsNull() {
+    assertThrows(IllegalArgumentException.class, () -> healthCareUnitService.get(null));
+  }
+
+  @Test
+  void shouldThrowIllegalArgumentExceptionIfHsaIdIsNull() {
+    final var request = HealthCareUnitRequest.builder().build();
+    assertThrows(IllegalArgumentException.class, () -> healthCareUnitService.get(request));
+  }
+
+  @Test
+  void shouldThrowIllegalArgumentExceptionIfHsaIdIsEmpty() {
+    final var request = HealthCareUnitRequest.builder().hsaId("").build();
+    assertThrows(IllegalArgumentException.class, () -> healthCareUnitService.get(request));
+  }
+
+  @Test
+  void shouldThrowIllegalArgumentExceptionIfHsaIdIsBlank() {
+    final var request = HealthCareUnitRequest.builder().hsaId(" ").build();
+    assertThrows(IllegalArgumentException.class, () -> healthCareUnitService.get(request));
+  }
+
+  @Nested
+  class ValidRequest {
+
+    @BeforeEach
+    void setUp() {
+      when(getHealthCareUnitIntegrationService.get(any(GetHealthCareUnitIntegrationRequest.class)))
+          .thenReturn(RESPONSE);
     }
 
     @Test
-    void shouldThrowIllegalArgumentExceptionIfHsaIdIsNull() {
-        final var request = HealthCareUnitRequest.builder().build();
-        assertThrows(IllegalArgumentException.class, () -> healthCareUnitService.get(request));
+    void shallReturnUnit() {
+      final var response = healthCareUnitService.get(REQUEST);
+
+      assertEquals(RESPONSE.getHealthCareUnit(), response.getHealthCareUnit());
     }
 
     @Test
-    void shouldThrowIllegalArgumentExceptionIfHsaIdIsEmpty() {
-        final var request = HealthCareUnitRequest.builder().hsaId("").build();
-        assertThrows(IllegalArgumentException.class, () -> healthCareUnitService.get(request));
+    void shallSetHsaIdInRequest() {
+      healthCareUnitService.get(REQUEST);
+
+      final var captor = ArgumentCaptor.forClass(GetHealthCareUnitIntegrationRequest.class);
+      verify(getHealthCareUnitIntegrationService).get(captor.capture());
+
+      assertEquals(REQUEST.getHsaId(), captor.getValue().getHsaId());
     }
-
-    @Test
-    void shouldThrowIllegalArgumentExceptionIfHsaIdIsBlank() {
-        final var request = HealthCareUnitRequest.builder().hsaId(" ").build();
-        assertThrows(IllegalArgumentException.class, () -> healthCareUnitService.get(request));
-    }
-
-    @Nested
-    class ValidRequest {
-
-        @BeforeEach
-        void setUp() {
-            when(getHealthCareUnitIntegrationService.get(any(GetHealthCareUnitIntegrationRequest.class)))
-                .thenReturn(RESPONSE);
-        }
-
-        @Test
-        void shallReturnUnit() {
-            final var response = healthCareUnitService.get(REQUEST);
-
-            assertEquals(RESPONSE.getHealthCareUnit(), response.getHealthCareUnit());
-        }
-
-        @Test
-        void shallSetHsaIdInRequest() {
-            healthCareUnitService.get(REQUEST);
-
-            final var captor = ArgumentCaptor.forClass(GetHealthCareUnitIntegrationRequest.class);
-            verify(getHealthCareUnitIntegrationService).get(captor.capture());
-
-            assertEquals(REQUEST.getHsaId(), captor.getValue().getHsaId());
-        }
-    }
+  }
 }
