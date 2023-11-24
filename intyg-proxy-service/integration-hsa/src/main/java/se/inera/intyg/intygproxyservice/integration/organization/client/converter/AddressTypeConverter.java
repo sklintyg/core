@@ -21,6 +21,7 @@ package se.inera.intyg.intygproxyservice.integration.organization.client.convert
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import org.springframework.stereotype.Component;
 import se.riv.infrastructure.directory.organization.v2.AddressType;
 
@@ -28,12 +29,17 @@ import se.riv.infrastructure.directory.organization.v2.AddressType;
 public class AddressTypeConverter {
 
   public List<String> convertV2(AddressType type) {
-    return type != null && type.getAddressLine() != null ? type.getAddressLine()
-        : Collections.emptyList();
+    return convert(type, AddressType::getAddressLine);
   }
 
   public List<String> convertV3(se.riv.infrastructure.directory.organization.v3.AddressType type) {
-    return type != null && type.getAddressLine() != null ? type.getAddressLine()
+    return convert(type,
+        se.riv.infrastructure.directory.organization.v3.AddressType::getAddressLine);
+  }
+
+  private <T> List<String> convert(T type, Function<T, List<String>> getValues) {
+    return type != null && getValues.apply(type) != null
+        ? getValues.apply(type)
         : Collections.emptyList();
   }
 }
