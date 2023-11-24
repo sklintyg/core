@@ -25,7 +25,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationService;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetUnitIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationRequest;
 import se.inera.intyg.intygproxyservice.organization.dto.UnitRequest;
 import se.inera.intyg.intygproxyservice.organization.dto.UnitResponse;
 
@@ -34,35 +34,35 @@ import se.inera.intyg.intygproxyservice.organization.dto.UnitResponse;
 @Slf4j
 public class UnitService {
 
-  private final GetUnitIntegrationService getUnitIntegrationService;
+    private final GetUnitIntegrationService getUnitIntegrationService;
 
-  public UnitResponse get(UnitRequest request) {
-    validateRequest(request);
+    public UnitResponse get(UnitRequest request) {
+        validateRequest(request);
 
-    log.info(String.format("Getting unit with hsaId: '%s'", request.getHsaId()));
+        log.info(String.format("Getting unit with hsaId: '%s'", request.getHsaId()));
 
-    final var response = getUnitIntegrationService.get(
-        GetUnitIntegrationRequest.builder()
-            .hsaId(request.getHsaId())
-            .build()
-    );
+        final var response = getUnitIntegrationService.get(
+            GetUnitIntegrationRequest.builder()
+                .hsaId(request.getHsaId())
+                .build()
+        );
 
-    log.info(String.format("Unit with hsaId: '%s' was retrieved", request.getHsaId()));
+        log.info(String.format("Unit with hsaId: '%s' was retrieved", request.getHsaId()));
 
-    return UnitResponse
-        .builder()
-        .unit(response.getUnit())
-        .build();
-  }
-
-  private static void validateRequest(UnitRequest request) {
-    if (request == null) {
-      throw new IllegalArgumentException("Request to get unit is null");
+        return UnitResponse
+            .builder()
+            .unit(response.getUnit())
+            .build();
     }
 
-    if (isStringInvalid(request.getHsaId())) {
-      throw new IllegalArgumentException(
-          String.format("HsaId is not valid: '%s'", request.getHsaId()));
+    private static void validateRequest(UnitRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Request to get unit is null");
+        }
+
+        if (isStringInvalid(request.getHsaId())) {
+            throw new IllegalArgumentException(
+                String.format("HsaId is not valid: '%s'", request.getHsaId()));
+        }
     }
-  }
 }

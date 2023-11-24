@@ -26,8 +26,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationService;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetUnitIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetUnitIntegrationResponse;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationResponse;
 import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrganizationClient;
 
 @Service
@@ -35,11 +35,11 @@ import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrgan
 @RequiredArgsConstructor
 public class HsaGetUnitIntegrationService implements GetUnitIntegrationService {
 
-  private final HsaOrganizationClient hsaOrganizationClient;
+    private final HsaOrganizationClient hsaOrganizationClient;
 
-  @Override
-  public GetUnitIntegrationResponse get(
-      GetUnitIntegrationRequest request) {
-    return GetUnitIntegrationResponse.builder().build();
-  }
+    @Override
+    public GetUnitIntegrationResponse get(
+        GetUnitIntegrationRequest request) {
+        return GetUnitIntegrationResponse.builder().build();
+    }
 }

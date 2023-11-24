@@ -17,9 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.intygproxyservice.integration.api.organization;
+package se.inera.intyg.intygproxyservice.integration.api.organization.model;
 
-public interface GetUnitIntegrationService {
+import lombok.Builder;
+import lombok.Value;
 
-    GetUnitIntegrationResponse get(GetUnitIntegrationRequest request);
+@Value
+@Builder
+public class GeoCoordSweref99 {
+
+  String nCoordinate;
+  String eCoordinate;
 }

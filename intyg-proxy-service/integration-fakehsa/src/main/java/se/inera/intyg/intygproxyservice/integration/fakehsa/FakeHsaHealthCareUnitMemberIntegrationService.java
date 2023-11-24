@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationService;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationResponse;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationResponse;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.FakeHsaRepository;
 
 @Service
@@ -16,21 +16,21 @@ import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.FakeHsaRe
 public class FakeHsaHealthCareUnitMemberIntegrationService implements
     GetHealthCareUnitMembersIntegrationService {
 
-  private final FakeHsaRepository fakeHsaRepository;
+    private final FakeHsaRepository fakeHsaRepository;
 
-  @Override
-  public GetHealthCareUnitMembersIntegrationResponse get(
-      GetHealthCareUnitMembersIntegrationRequest request) {
-    validateRequest(request);
-    return GetHealthCareUnitMembersIntegrationResponse.builder()
-        .healthCareUnitMembers(fakeHsaRepository.getHealthCareUnitMembers(request.getHsaId()))
-        .build();
-  }
-
-  private void validateRequest(GetHealthCareUnitMembersIntegrationRequest request) {
-    if (request.getHsaId() == null || request.getHsaId().isEmpty()) {
-      throw new IllegalArgumentException(
-          String.format("Request did not contain a valid hsaId: '%s'", request.getHsaId()));
+    @Override
+    public GetHealthCareUnitMembersIntegrationResponse get(
+        GetHealthCareUnitMembersIntegrationRequest request) {
+        validateRequest(request);
+        return GetHealthCareUnitMembersIntegrationResponse.builder()
+            .healthCareUnitMembers(fakeHsaRepository.getHealthCareUnitMembers(request.getHsaId()))
+            .build();
     }
-  }
+
+    private void validateRequest(GetHealthCareUnitMembersIntegrationRequest request) {
+        if (request.getHsaId() == null || request.getHsaId().isEmpty()) {
+            throw new IllegalArgumentException(
+                String.format("Request did not contain a valid hsaId: '%s'", request.getHsaId()));
+        }
+    }
 }

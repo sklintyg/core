@@ -32,79 +32,79 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationResponse;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationResponse;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationService;
 import se.inera.intyg.intygproxyservice.organization.dto.HealthCareUnitMembersRequest;
 
 @ExtendWith(MockitoExtension.class)
 class HealthCareUnitMembersServiceTest {
 
-  private static final String HSA_ID = "HSA_ID";
+    private static final String HSA_ID = "HSA_ID";
 
-  private static final HealthCareUnitMembersRequest REQUEST = HealthCareUnitMembersRequest
-      .builder()
-      .hsaId(HSA_ID)
-      .build();
+    private static final HealthCareUnitMembersRequest REQUEST = HealthCareUnitMembersRequest
+        .builder()
+        .hsaId(HSA_ID)
+        .build();
 
-  private static final GetHealthCareUnitMembersIntegrationResponse RESPONSE = GetHealthCareUnitMembersIntegrationResponse
-      .builder()
-      .build();
+    private static final GetHealthCareUnitMembersIntegrationResponse RESPONSE = GetHealthCareUnitMembersIntegrationResponse
+        .builder()
+        .build();
 
-  @Mock
-  private GetHealthCareUnitMembersIntegrationService getHealthCareUnitMembersIntegrationService;
+    @Mock
+    private GetHealthCareUnitMembersIntegrationService getHealthCareUnitMembersIntegrationService;
 
-  @InjectMocks
-  private HealthCareUnitMembersService HealthCareUnitMembersService;
+    @InjectMocks
+    private HealthCareUnitMembersService HealthCareUnitMembersService;
 
-  @Test
-  void shouldThrowIllegalArgumentExceptionIfRequestIsNull() {
-    assertThrows(IllegalArgumentException.class, () -> HealthCareUnitMembersService.get(null));
-  }
-
-  @Test
-  void shouldThrowIllegalArgumentExceptionIfHsaIdIsNull() {
-    final var request = HealthCareUnitMembersRequest.builder().build();
-    assertThrows(IllegalArgumentException.class, () -> HealthCareUnitMembersService.get(request));
-  }
-
-  @Test
-  void shouldThrowIllegalArgumentExceptionIfHsaIdIsEmpty() {
-    final var request = HealthCareUnitMembersRequest.builder().hsaId("").build();
-    assertThrows(IllegalArgumentException.class, () -> HealthCareUnitMembersService.get(request));
-  }
-
-  @Test
-  void shouldThrowIllegalArgumentExceptionIfHsaIdIsBlank() {
-    final var request = HealthCareUnitMembersRequest.builder().hsaId(" ").build();
-    assertThrows(IllegalArgumentException.class, () -> HealthCareUnitMembersService.get(request));
-  }
-
-  @Nested
-  class ValidRequest {
-
-    @BeforeEach
-    void setUp() {
-      when(getHealthCareUnitMembersIntegrationService.get(
-          any(GetHealthCareUnitMembersIntegrationRequest.class))
-      ).thenReturn(RESPONSE);
+    @Test
+    void shouldThrowIllegalArgumentExceptionIfRequestIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> HealthCareUnitMembersService.get(null));
     }
 
     @Test
-    void shallReturnUnit() {
-      final var response = HealthCareUnitMembersService.get(REQUEST);
-
-      assertEquals(RESPONSE.getHealthCareUnitMembers(), response.getHealthCareUnitMembers());
+    void shouldThrowIllegalArgumentExceptionIfHsaIdIsNull() {
+        final var request = HealthCareUnitMembersRequest.builder().build();
+        assertThrows(IllegalArgumentException.class, () -> HealthCareUnitMembersService.get(request));
     }
 
     @Test
-    void shallSetHsaIdInRequest() {
-      HealthCareUnitMembersService.get(REQUEST);
-
-      final var captor = ArgumentCaptor.forClass(GetHealthCareUnitMembersIntegrationRequest.class);
-      verify(getHealthCareUnitMembersIntegrationService).get(captor.capture());
-
-      assertEquals(REQUEST.getHsaId(), captor.getValue().getHsaId());
+    void shouldThrowIllegalArgumentExceptionIfHsaIdIsEmpty() {
+        final var request = HealthCareUnitMembersRequest.builder().hsaId("").build();
+        assertThrows(IllegalArgumentException.class, () -> HealthCareUnitMembersService.get(request));
     }
-  }
+
+    @Test
+    void shouldThrowIllegalArgumentExceptionIfHsaIdIsBlank() {
+        final var request = HealthCareUnitMembersRequest.builder().hsaId(" ").build();
+        assertThrows(IllegalArgumentException.class, () -> HealthCareUnitMembersService.get(request));
+    }
+
+    @Nested
+    class ValidRequest {
+
+        @BeforeEach
+        void setUp() {
+            when(getHealthCareUnitMembersIntegrationService.get(
+                any(GetHealthCareUnitMembersIntegrationRequest.class))
+            ).thenReturn(RESPONSE);
+        }
+
+        @Test
+        void shallReturnUnit() {
+            final var response = HealthCareUnitMembersService.get(REQUEST);
+
+            assertEquals(RESPONSE.getHealthCareUnitMembers(), response.getHealthCareUnitMembers());
+        }
+
+        @Test
+        void shallSetHsaIdInRequest() {
+            HealthCareUnitMembersService.get(REQUEST);
+
+            final var captor = ArgumentCaptor.forClass(GetHealthCareUnitMembersIntegrationRequest.class);
+            verify(getHealthCareUnitMembersIntegrationService).get(captor.capture());
+
+            assertEquals(REQUEST.getHsaId(), captor.getValue().getHsaId());
+        }
+    }
 }

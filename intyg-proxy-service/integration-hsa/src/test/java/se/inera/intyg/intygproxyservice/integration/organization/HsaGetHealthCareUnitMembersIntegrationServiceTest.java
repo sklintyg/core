@@ -28,36 +28,36 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnitMembers;
 import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrganizationClient;
 
 @ExtendWith(MockitoExtension.class)
 class HsaGetHealthCareUnitMembersIntegrationServiceTest {
 
-  private static final HealthCareUnitMembers HEALTH_CARE_UNIT_MEMBERS = HealthCareUnitMembers
-      .builder()
-      .build();
+    private static final HealthCareUnitMembers HEALTH_CARE_UNIT_MEMBERS = HealthCareUnitMembers
+        .builder()
+        .build();
 
-  @InjectMocks
-  private HsaGetHealthCareUnitMembersIntegrationService hsaGetHealthCareUnitMembersIntegrationService;
+    @InjectMocks
+    private HsaGetHealthCareUnitMembersIntegrationService hsaGetHealthCareUnitMembersIntegrationService;
 
-  @Mock
-  private HsaOrganizationClient hsaOrganizationClient;
+    @Mock
+    private HsaOrganizationClient hsaOrganizationClient;
 
-  @Test
-  void shouldReturnUnitMembers() {
-    when(hsaOrganizationClient.getHealthCareUnitMembers(
-        any(GetHealthCareUnitMembersIntegrationRequest.class)))
-        .thenReturn(HEALTH_CARE_UNIT_MEMBERS);
+    @Test
+    void shouldReturnUnitMembers() {
+        when(hsaOrganizationClient.getHealthCareUnitMembers(
+            any(GetHealthCareUnitMembersIntegrationRequest.class)))
+            .thenReturn(HEALTH_CARE_UNIT_MEMBERS);
 
-    final var response = hsaGetHealthCareUnitMembersIntegrationService.get(
-        GetHealthCareUnitMembersIntegrationRequest
-            .builder()
-            .build()
-    );
+        final var response = hsaGetHealthCareUnitMembersIntegrationService.get(
+            GetHealthCareUnitMembersIntegrationRequest
+                .builder()
+                .build()
+        );
 
-    assertEquals(HEALTH_CARE_UNIT_MEMBERS, response.getHealthCareUnitMembers());
-  }
+        assertEquals(HEALTH_CARE_UNIT_MEMBERS, response.getHealthCareUnitMembers());
+    }
 
 }

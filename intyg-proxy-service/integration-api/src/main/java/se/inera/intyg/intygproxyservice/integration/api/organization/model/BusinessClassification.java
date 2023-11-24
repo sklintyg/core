@@ -24,8 +24,8 @@ import lombok.Value;
 
 @Value
 @Builder
-public class GetHealthCareUnitMembersIntegrationRequest {
+public class BusinessClassification {
 
-  String hsaId;
-  String personId;
+  String businessClassificationName;
+  String businessClassificationCode;
 }

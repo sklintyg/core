@@ -26,8 +26,8 @@ import static se.inera.intyg.intygproxyservice.integration.api.constants.HsaCons
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationService;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationResponse;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitMembersIntegrationResponse;
 import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrganizationClient;
 
 @Service
@@ -36,15 +36,15 @@ import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrgan
 public class HsaGetHealthCareUnitMembersIntegrationService implements
     GetHealthCareUnitMembersIntegrationService {
 
-  private final HsaOrganizationClient hsaOrganizationClient;
+    private final HsaOrganizationClient hsaOrganizationClient;
 
-  @Override
-  public GetHealthCareUnitMembersIntegrationResponse get(
-      GetHealthCareUnitMembersIntegrationRequest request) {
+    @Override
+    public GetHealthCareUnitMembersIntegrationResponse get(
+        GetHealthCareUnitMembersIntegrationRequest request) {
 
-    return GetHealthCareUnitMembersIntegrationResponse
-        .builder()
-        .healthCareUnitMembers(hsaOrganizationClient.getHealthCareUnitMembers(request))
-        .build();
-  }
+        return GetHealthCareUnitMembersIntegrationResponse
+            .builder()
+            .healthCareUnitMembers(hsaOrganizationClient.getHealthCareUnitMembers(request))
+            .build();
+    }
 }

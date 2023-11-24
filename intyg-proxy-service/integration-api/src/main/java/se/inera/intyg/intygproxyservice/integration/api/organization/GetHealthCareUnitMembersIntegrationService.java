@@ -19,10 +19,8 @@
 
 package se.inera.intyg.intygproxyservice.integration.api.organization;
 
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitMembersIntegrationResponse;
-
 public interface GetHealthCareUnitMembersIntegrationService {
 
-  GetHealthCareUnitMembersIntegrationResponse get(GetHealthCareUnitMembersIntegrationRequest request);
+  GetHealthCareUnitMembersIntegrationResponse get(
+      GetHealthCareUnitMembersIntegrationRequest request);
 }

@@ -24,7 +24,7 @@ import static se.inera.intyg.intygproxyservice.common.ValidationUtility.isString
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationService;
 import se.inera.intyg.intygproxyservice.organization.dto.HealthCareUnitRequest;
 import se.inera.intyg.intygproxyservice.organization.dto.HealthCareUnitResponse;
@@ -34,35 +34,35 @@ import se.inera.intyg.intygproxyservice.organization.dto.HealthCareUnitResponse;
 @Slf4j
 public class HealthCareUnitService {
 
-  private final GetHealthCareUnitIntegrationService getHealthCareUnitIntegrationService;
+    private final GetHealthCareUnitIntegrationService getHealthCareUnitIntegrationService;
 
-  public HealthCareUnitResponse get(HealthCareUnitRequest request) {
-    validateRequest(request);
+    public HealthCareUnitResponse get(HealthCareUnitRequest request) {
+        validateRequest(request);
 
-    log.info(String.format("Getting health care unit with hsaId: '%s'", request.getHsaId()));
+        log.info(String.format("Getting health care unit with hsaId: '%s'", request.getHsaId()));
 
-    final var response = getHealthCareUnitIntegrationService.get(
-        GetHealthCareUnitIntegrationRequest.builder()
-            .hsaId(request.getHsaId())
-            .build()
-    );
+        final var response = getHealthCareUnitIntegrationService.get(
+            GetHealthCareUnitIntegrationRequest.builder()
+                .hsaId(request.getHsaId())
+                .build()
+        );
 
-    log.info(String.format("Health care unit with hsaId: '%s' was retrieved", request.getHsaId()));
+        log.info(String.format("Health care unit with hsaId: '%s' was retrieved", request.getHsaId()));
 
-    return HealthCareUnitResponse
-        .builder()
-        .healthCareUnit(response.getHealthCareUnit())
-        .build();
-  }
-
-  private static void validateRequest(HealthCareUnitRequest request) {
-    if (request == null) {
-      throw new IllegalArgumentException("Request to get health care unit is null");
+        return HealthCareUnitResponse
+            .builder()
+            .healthCareUnit(response.getHealthCareUnit())
+            .build();
     }
 
-    if (isStringInvalid(request.getHsaId())) {
-      throw new IllegalArgumentException(
-          String.format("HsaId is not valid: '%s'", request.getHsaId()));
+    private static void validateRequest(HealthCareUnitRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Request to get health care unit is null");
+        }
+
+        if (isStringInvalid(request.getHsaId())) {
+            throw new IllegalArgumentException(
+                String.format("HsaId is not valid: '%s'", request.getHsaId()));
+        }
     }
-  }
 }

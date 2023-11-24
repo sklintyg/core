@@ -26,8 +26,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationService;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.organization.model.GetHealthCareUnitIntegrationResponse;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetHealthCareUnitIntegrationResponse;
 import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrganizationClient;
 
 @Service
@@ -36,14 +36,14 @@ import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrgan
 public class HsaGetHealthCareUnitIntegrationService implements
     GetHealthCareUnitIntegrationService {
 
-  private final HsaOrganizationClient hsaOrganizationClient;
+    private final HsaOrganizationClient hsaOrganizationClient;
 
-  @Override
-  public GetHealthCareUnitIntegrationResponse get(
-      GetHealthCareUnitIntegrationRequest request) {
-    return GetHealthCareUnitIntegrationResponse.builder()
-        .healthCareUnit(
-            hsaOrganizationClient.getHealthCareUnit(request))
-        .build();
-  }
+    @Override
+    public GetHealthCareUnitIntegrationResponse get(
+        GetHealthCareUnitIntegrationRequest request) {
+        return GetHealthCareUnitIntegrationResponse.builder()
+            .healthCareUnit(
+                hsaOrganizationClient.getHealthCareUnit(request))
+            .build();
+    }
 }

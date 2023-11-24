@@ -19,7 +19,13 @@
 
 package se.inera.intyg.intygproxyservice.integration.api.organization;
 
-public interface GetUnitIntegrationService {
+import lombok.Builder;
+import lombok.Value;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnitMembers;
 
-    GetUnitIntegrationResponse get(GetUnitIntegrationRequest request);
+@Value
+@Builder
+public class GetHealthCareUnitMembersIntegrationResponse {
+
+    HealthCareUnitMembers healthCareUnitMembers;
 }

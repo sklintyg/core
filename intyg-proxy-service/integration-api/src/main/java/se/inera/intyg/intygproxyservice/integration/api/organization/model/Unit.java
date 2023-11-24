@@ -23,56 +23,34 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Value;
 
 @Value
 @Builder
 public class Unit {
 
-  @Builder.Default
-  List<String> businessType = new ArrayList<>();
-  @Builder.Default
-  List<BusinessClassification> businessClassification = new ArrayList<>();
-  @Builder.Default
-  List<String> careType = new ArrayList<>();
-  String countyName;
-  String countyCode;
-  GeoCoordRt90 geographicalCoordinatesRt90;
-  GeoCoordSweref99 geographicalCoordinatesSweref99;
-  String municipalityName;
-  String municipalityCode;
-  String location;
-  LocalDateTime unitStartDate;
-  LocalDateTime unitEndDate;
-  Boolean feignedUnit;
-  String unitHsaId;
-  String unitName;
-  @Builder.Default
-  List<String> postalAddress = new ArrayList<>();
-  String postalCode;
-  String mail;
-  @Builder.Default
-  List<String> management = new ArrayList<>();
-
-  @Data
-  public static class GeoCoordRt90 {
-
-    String xCoordinate;
-    String yCoordinate;
-  }
-
-  @Data
-  public static class GeoCoordSweref99 {
-
-    String nCoordinate;
-    String eCoordinate;
-  }
-
-  @Data
-  public static class BusinessClassification {
-
-    String businessClassificationName;
-    String businessClassificationCode;
-  }
+    @Builder.Default
+    List<String> businessType = new ArrayList<>();
+    @Builder.Default
+    List<BusinessClassification> businessClassification = new ArrayList<>();
+    @Builder.Default
+    List<String> careType = new ArrayList<>();
+    String countyName;
+    String countyCode;
+    GeoCoordRt90 geographicalCoordinatesRt90;
+    GeoCoordSweref99 geographicalCoordinatesSweref99;
+    String municipalityName;
+    String municipalityCode;
+    String location;
+    LocalDateTime unitStartDate;
+    LocalDateTime unitEndDate;
+    Boolean feignedUnit;
+    String unitHsaId;
+    String unitName;
+    @Builder.Default
+    List<String> postalAddress = new ArrayList<>();
+    String postalCode;
+    String mail;
+    @Builder.Default
+    List<String> management = new ArrayList<>();
 }
