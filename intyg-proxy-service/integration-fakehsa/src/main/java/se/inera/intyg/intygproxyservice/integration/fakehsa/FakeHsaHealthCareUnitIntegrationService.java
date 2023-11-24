@@ -16,20 +16,20 @@ import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.FakeHsaRe
 public class FakeHsaHealthCareUnitIntegrationService implements
     GetHealthCareUnitIntegrationService {
 
-    private final FakeHsaRepository fakeHsaRepository;
+  private final FakeHsaRepository fakeHsaRepository;
 
-    @Override
-    public GetHealthCareUnitIntegrationResponse get(GetHealthCareUnitIntegrationRequest request) {
-        validateRequest(request);
-        return GetHealthCareUnitIntegrationResponse.builder()
-            .healthCareUnit(fakeHsaRepository.getHealthCareUnit(request.getHsaId()))
-            .build();
-    }
+  @Override
+  public GetHealthCareUnitIntegrationResponse get(GetHealthCareUnitIntegrationRequest request) {
+    validateRequest(request);
+    return GetHealthCareUnitIntegrationResponse.builder()
+        .healthCareUnit(fakeHsaRepository.getHealthCareUnit(request.getHsaId()))
+        .build();
+  }
 
-    private void validateRequest(GetHealthCareUnitIntegrationRequest request) {
-        if (request.getHsaId() == null || request.getHsaId().isEmpty()) {
-            throw new IllegalArgumentException(
-                String.format("Request did not contain a valid hsaId: '%s'", request.getHsaId()));
-        }
+  private void validateRequest(GetHealthCareUnitIntegrationRequest request) {
+    if (request.getHsaId() == null || request.getHsaId().isEmpty()) {
+      throw new IllegalArgumentException(
+          String.format("Request did not contain a valid hsaId: '%s'", request.getHsaId()));
     }
+  }
 }

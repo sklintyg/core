@@ -17,41 +17,41 @@ import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.FakeHsaRe
 @ExtendWith(MockitoExtension.class)
 class FakeHsaHealthCareUnitIntegrationServiceTest {
 
-    @Mock
-    private FakeHsaRepository fakeHsaRepository;
-    @InjectMocks
-    private FakeHsaHealthCareUnitIntegrationService healthCareUnitIntegrationService;
+  @Mock
+  private FakeHsaRepository fakeHsaRepository;
+  @InjectMocks
+  private FakeHsaHealthCareUnitIntegrationService healthCareUnitIntegrationService;
 
-    private static final String HSA_ID = "hsaId";
-    private static final String EMPTY = "";
+  private static final String HSA_ID = "hsaId";
+  private static final String EMPTY = "";
 
-    @Test
-    void shouldReturnHealthCareUnitMembersResponse() {
-        final var request = GetHealthCareUnitIntegrationRequest.builder().hsaId(HSA_ID).build();
-        final var healthCareUnitMembers = HealthCareUnit.builder().build();
-        final var expectedResponse = GetHealthCareUnitIntegrationResponse.builder()
-            .healthCareUnit(healthCareUnitMembers)
-            .build();
+  @Test
+  void shouldReturnHealthCareUnitMembersResponse() {
+    final var request = GetHealthCareUnitIntegrationRequest.builder().hsaId(HSA_ID).build();
+    final var healthCareUnitMembers = HealthCareUnit.builder().build();
+    final var expectedResponse = GetHealthCareUnitIntegrationResponse.builder()
+        .healthCareUnit(healthCareUnitMembers)
+        .build();
 
-        when(fakeHsaRepository.getHealthCareUnit(request.getHsaId())).thenReturn(
-            healthCareUnitMembers);
+    when(fakeHsaRepository.getHealthCareUnit(request.getHsaId())).thenReturn(
+        healthCareUnitMembers);
 
-        final var result = healthCareUnitIntegrationService.get(
-            request);
-        assertEquals(expectedResponse, result);
-    }
+    final var result = healthCareUnitIntegrationService.get(
+        request);
+    assertEquals(expectedResponse, result);
+  }
 
-    @Test
-    void shouldThrowIlligalArgumentExceptionIfHsaIdIsNotProvided() {
-        final var request = GetHealthCareUnitIntegrationRequest.builder().build();
-        assertThrows(IllegalArgumentException.class,
-            () -> healthCareUnitIntegrationService.get(request));
-    }
+  @Test
+  void shouldThrowIlligalArgumentExceptionIfHsaIdIsNotProvided() {
+    final var request = GetHealthCareUnitIntegrationRequest.builder().build();
+    assertThrows(IllegalArgumentException.class,
+        () -> healthCareUnitIntegrationService.get(request));
+  }
 
-    @Test
-    void shouldThrowIlligalArgumentExceptionIfHsaIdIsEmpty() {
-        final var request = GetHealthCareUnitIntegrationRequest.builder().hsaId(EMPTY).build();
-        assertThrows(IllegalArgumentException.class,
-            () -> healthCareUnitIntegrationService.get(request));
-    }
+  @Test
+  void shouldThrowIlligalArgumentExceptionIfHsaIdIsEmpty() {
+    final var request = GetHealthCareUnitIntegrationRequest.builder().hsaId(EMPTY).build();
+    assertThrows(IllegalArgumentException.class,
+        () -> healthCareUnitIntegrationService.get(request));
+  }
 }
