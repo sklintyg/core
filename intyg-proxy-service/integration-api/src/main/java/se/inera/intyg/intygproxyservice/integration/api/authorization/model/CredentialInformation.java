@@ -19,6 +19,8 @@
 
 package se.inera.intyg.intygproxyservice.integration.api.authorization.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 
@@ -26,4 +28,29 @@ import lombok.Value;
 @Builder
 public class CredentialInformation {
 
+  String givenName;
+  String middleAndSurName;
+  String personHsaId;
+  @Builder.Default
+  List<String> healthCareProfessionalLicence = new ArrayList<>();
+  String personalPrescriptionCode;
+  @Builder.Default
+  List<String> groupPrescriptionCode = new ArrayList<>();
+  @Builder.Default
+  List<NursePrescriptionRight> nursePrescriptionRight = new ArrayList<>();
+  @Builder.Default
+  List<HsaSystemRole> hsaSystemRole = new ArrayList<>();
+  @Builder.Default
+  List<String> paTitleCode = new ArrayList<>();
+  Boolean protectedPerson;
+  @Builder.Default
+  List<Commission> commission = new ArrayList<>();
+  Boolean feignedPerson;
+  @Builder.Default
+  List<String> healthCareProfessionalLicenceCode = new ArrayList<>();
+  @Builder.Default
+  List<HCPSpecialityCodes> healthCareProfessionalLicenceSpeciality = new ArrayList<>();
+  List<String> occupationalCode = new ArrayList<>();
+  String personalIdentity;
+  String healthcareProfessionalLicenseIdentityNumber;
 }
