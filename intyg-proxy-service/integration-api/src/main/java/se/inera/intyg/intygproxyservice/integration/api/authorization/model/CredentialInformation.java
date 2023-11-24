@@ -50,6 +50,7 @@ public class CredentialInformation {
   List<String> healthCareProfessionalLicenceCode = new ArrayList<>();
   @Builder.Default
   List<HCPSpecialityCodes> healthCareProfessionalLicenceSpeciality = new ArrayList<>();
+  @Builder.Default
   List<String> occupationalCode = new ArrayList<>();
   String personalIdentity;
   String healthcareProfessionalLicenseIdentityNumber;
