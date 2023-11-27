@@ -50,21 +50,21 @@ import se.riv.infrastructure.directory.organization.gethealthcareunitresponder.v
 @ExtendWith(MockitoExtension.class)
 class HsaOrganizationClientTest {
 
-  public static final HealthCareUnit HEALTH_CARE_UNIT = HealthCareUnit.builder().build();
-  public static final HealthCareUnitMembers HEALTH_CARE_UNIT_MEMBERS = HealthCareUnitMembers.builder()
+  private static final HealthCareUnit HEALTH_CARE_UNIT = HealthCareUnit.builder().build();
+  private static final HealthCareUnitMembers HEALTH_CARE_UNIT_MEMBERS = HealthCareUnitMembers.builder()
       .build();
 
-  public static final String HSA_ID = "HSA_ID";
-  public static final GetHealthCareUnitIntegrationRequest REQUEST = GetHealthCareUnitIntegrationRequest
+  private static final String HSA_ID = "HSA_ID";
+  private static final GetHealthCareUnitIntegrationRequest REQUEST = GetHealthCareUnitIntegrationRequest
       .builder()
       .hsaId(HSA_ID)
       .build();
 
-  public static final GetHealthCareUnitMembersIntegrationRequest REQUEST_MEMBERS = GetHealthCareUnitMembersIntegrationRequest
+  private static final GetHealthCareUnitMembersIntegrationRequest REQUEST_MEMBERS = GetHealthCareUnitMembersIntegrationRequest
       .builder()
       .hsaId(HSA_ID)
       .build();
-  public static final String LOGICAL_ADDRESS = "LOGICAL_ADDRESS";
+  private static final String LOGICAL_ADDRESS = "LOGICAL_ADDRESS";
 
   @Mock
   GetHealthCareUnitResponseTypeConverter getHealthCareUnitResponseTypeConverter;
