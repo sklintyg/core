@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import se.inera.intyg.intygproxyservice.integration.common.WebServiceClientFactory;
+import se.riv.infrastructure.directory.authorizationmanagement.getcredentialsforpersonincludingprotectedperson.v2.rivtabp21.GetCredentialsForPersonIncludingProtectedPersonResponderInterface;
 import se.riv.infrastructure.directory.employee.getemployeeincludingprotectedperson.v3.rivtabp21.GetEmployeeIncludingProtectedPersonResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareunit.v2.rivtabp21.GetHealthCareUnitResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareunitmembers.v2.rivtabp21.GetHealthCareUnitMembersResponderInterface;
@@ -25,6 +26,17 @@ public class HsaClientConfiguration {
 
   @Value("${integration.hsa.gethealthcareunitmembers.endpoint}")
   private String getHealthCareUnitMembersEndpoint;
+
+  @Value("${integration.hsa.gethealthcareunitmembers.endpoint}")
+  private String getCredentialInformationEndpoint;
+
+  @Bean
+  public GetCredentialsForPersonIncludingProtectedPersonResponderInterface getCredentialInformation() {
+    return webServiceClientFactory.create(
+        GetCredentialsForPersonIncludingProtectedPersonResponderInterface.class,
+        getCredentialInformationEndpoint
+    );
+  }
 
   @Bean
   public GetEmployeeIncludingProtectedPersonResponderInterface getEmployeeIncludingProtectedPerson() {

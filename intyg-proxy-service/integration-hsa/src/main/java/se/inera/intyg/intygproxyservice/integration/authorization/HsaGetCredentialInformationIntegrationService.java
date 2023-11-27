@@ -28,21 +28,23 @@ import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.GetCredentialInformationIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.GetCredentialInformationIntegrationResponse;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.GetCredentialInformationIntegrationService;
-import se.inera.intyg.intygproxyservice.integration.organization.client.HsaOrganizationClient;
+import se.inera.intyg.intygproxyservice.integration.authorization.client.HsaAuthorizationClient;
 
 @Service
 @Profile("!" + FAKE_HSA_PROFILE)
 @RequiredArgsConstructor
-public class HsaGetCredentialInformationService implements
+public class HsaGetCredentialInformationIntegrationService implements
     GetCredentialInformationIntegrationService {
 
-  private final HsaOrganizationClient hsaOrganizationClient;
+  private final HsaAuthorizationClient hsaAuthorizationClient;
 
   @Override
   public GetCredentialInformationIntegrationResponse get(
       GetCredentialInformationIntegrationRequest request) {
+    final var response = hsaAuthorizationClient.getCredentialInformation(request);
 
     return GetCredentialInformationIntegrationResponse.builder()
+        .credentialInformation(response)
         .build();
   }
 }

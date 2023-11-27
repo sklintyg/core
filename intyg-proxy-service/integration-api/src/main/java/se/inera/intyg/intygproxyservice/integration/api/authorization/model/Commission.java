@@ -17,7 +17,6 @@ public class Commission {
   String healthCareProviderName;
   LocalDateTime healthCareUnitStartDate;
   LocalDateTime healthCareUnitEndDate;
-
   String commissionName;
   String commissionHsaId;
   @Builder.Default
