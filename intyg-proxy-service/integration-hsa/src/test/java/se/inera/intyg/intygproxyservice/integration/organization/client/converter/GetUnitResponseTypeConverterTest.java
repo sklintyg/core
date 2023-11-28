@@ -20,6 +20,7 @@
 package se.inera.intyg.intygproxyservice.integration.organization.client.converter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -64,13 +65,13 @@ class GetUnitResponseTypeConverterTest {
     type.setUnit(null);
     final var response = getUnitResponseTypeConverter.convert(type);
 
-    assertEquals(Unit.builder().build(), response);
+    assertNull(response);
   }
 
   @Test
   void shouldReturnEmptyResponseIfResponseIsNull() {
     final var response = getUnitResponseTypeConverter.convert(null);
 
-    assertEquals(Unit.builder().build(), response);
+    assertNull(response);
   }
 }

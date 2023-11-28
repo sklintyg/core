@@ -32,7 +32,7 @@ public class GetUnitResponseTypeConverter {
 
   public Unit convert(GetUnitResponseType type) {
     if (type == null || type.getUnit() == null) {
-      return Unit.builder().build();
+      return null;
     }
 
     return unitTypeConverter.convert(type.getUnit());
