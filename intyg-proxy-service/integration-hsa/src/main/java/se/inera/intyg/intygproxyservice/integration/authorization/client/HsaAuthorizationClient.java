@@ -35,8 +35,8 @@ import se.riv.infrastructure.directory.authorizationmanagement.getcredentialsfor
 @RequiredArgsConstructor
 public class HsaAuthorizationClient {
 
-  private static final String PROFILE_BASIC = "BASIC";
-  
+  private static final String PROFILE_BASIC = "basic";
+
   private final GetCredentialsForPersonIncludingProtectedPersonResponderInterface getCredentialsForPersonIncludingProtectedPersonResponderInterface;
 
   private final GetCredentialInformationResponseTypeConverter getCredentialInformationResponseTypeConverter;

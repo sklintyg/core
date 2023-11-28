@@ -153,7 +153,7 @@ class HsaAuthorizationClientTest {
             getCredentialsForPersonIncludingProtectedPersonResponderInterface)
             .getCredentialsForPersonIncludingProtectedPerson(anyString(), captor.capture());
 
-        assertEquals("BASIC", captor.getValue().getProfile());
+        assertEquals("basic", captor.getValue().getProfile());
       }
 
       @Test
