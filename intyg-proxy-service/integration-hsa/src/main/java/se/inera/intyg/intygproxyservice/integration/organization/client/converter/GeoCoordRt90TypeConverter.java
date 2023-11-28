@@ -27,6 +27,10 @@ import se.riv.infrastructure.directory.organization.getunitresponder.v4.GeoCoord
 public class GeoCoordRt90TypeConverter {
 
   public GeoCoordRt90 convert(GeoCoordRt90Type type) {
+    if (type == null) {
+      return GeoCoordRt90.builder().build();
+    }
+
     return GeoCoordRt90.builder()
         .xCoordinate(type.getXCoordinate())
         .yCoordinate(type.getYCoordinate())

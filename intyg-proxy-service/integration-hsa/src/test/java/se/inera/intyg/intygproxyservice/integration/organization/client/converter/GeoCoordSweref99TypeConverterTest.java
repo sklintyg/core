@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.GeoCoordSweref99;
 import se.riv.infrastructure.directory.organization.getunitresponder.v4.GeoCoordSWEREF99Type;
 
 class GeoCoordSweref99TypeConverterTest {
@@ -17,6 +18,13 @@ class GeoCoordSweref99TypeConverterTest {
     type = new GeoCoordSWEREF99Type();
     type.setECoordinate("E");
     type.setNCoordinate("N");
+  }
+
+  @Test
+  void shouldConvertNull() {
+    final var response = converter.convert(null);
+
+    assertEquals(GeoCoordSweref99.builder().build(), response);
   }
 
   @Test

@@ -27,6 +27,10 @@ import se.riv.infrastructure.directory.organization.getunitresponder.v4.GeoCoord
 public class GeoCoordSweref99TypeConverter {
 
   public GeoCoordSweref99 convert(GeoCoordSWEREF99Type type) {
+    if (type == null) {
+      return GeoCoordSweref99.builder().build();
+    }
+
     return GeoCoordSweref99.builder()
         .eCoordinate(type.getECoordinate())
         .nCoordinate(type.getNCoordinate())
