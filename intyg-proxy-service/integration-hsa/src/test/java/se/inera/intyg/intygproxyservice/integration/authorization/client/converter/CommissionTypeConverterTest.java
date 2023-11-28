@@ -17,6 +17,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.model.Commission;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CommissionRight;
 import se.riv.infrastructure.directory.authorizationmanagement.v2.CommissionRightType;
 import se.riv.infrastructure.directory.authorizationmanagement.v2.CommissionType;
@@ -35,6 +36,13 @@ class CommissionTypeConverterTest {
 
   @InjectMocks
   private CommissionTypeConverter commissionTypeConverter;
+
+  @Test
+  void shouldConvertNull() {
+    final var response = commissionTypeConverter.convert(null);
+
+    assertEquals(Commission.builder().build(), response);
+  }
 
   @Test
   void shouldConvertCommissionHsaId() {
@@ -193,7 +201,7 @@ class CommissionTypeConverterTest {
         .thenReturn(convertedCommissionRight);
 
     final var response = commissionTypeConverter.convert(type);
-    
+
     verify(commissionRightTypeConverter, times(2)).convert(captor.capture());
     assertEquals(2, response.getCommissionRight().size());
     assertEquals(convertedCommissionRight, response.getCommissionRight().get(1));

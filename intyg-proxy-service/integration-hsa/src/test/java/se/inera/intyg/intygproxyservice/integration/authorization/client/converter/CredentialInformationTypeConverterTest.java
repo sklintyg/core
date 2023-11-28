@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.Commission;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialInformation;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.HCPSpecialityCodes;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.HsaSystemRole;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.NursePrescriptionRight;
@@ -39,6 +40,13 @@ class CredentialInformationTypeConverterTest {
 
   @InjectMocks
   CredentialInformationTypeConverter credentialInformationTypeConverter;
+
+  @Test
+  void shouldConvertNull() {
+    final var response = credentialInformationTypeConverter.convert(null);
+
+    assertEquals(CredentialInformation.builder().build(), response);
+  }
 
   @Test
   void shouldConvertHsaId() {

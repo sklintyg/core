@@ -8,6 +8,10 @@ import se.riv.infrastructure.directory.authorizationmanagement.v2.CommissionRigh
 public class CommissionRightTypeConverter {
 
   public CommissionRight convert(CommissionRightType type) {
+    if (type == null) {
+      return CommissionRight.builder().build();
+    }
+
     return CommissionRight.builder()
         .activity(type.getActivity())
         .informationClass(type.getInformationClass())

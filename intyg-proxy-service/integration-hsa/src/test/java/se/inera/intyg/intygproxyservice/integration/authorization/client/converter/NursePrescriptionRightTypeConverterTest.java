@@ -3,11 +3,19 @@ package se.inera.intyg.intygproxyservice.integration.authorization.client.conver
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.model.NursePrescriptionRight;
 import se.riv.infrastructure.directory.authorizationmanagement.v2.NursePrescriptionRightType;
 
 class NursePrescriptionRightTypeConverterTest {
 
   private static final NursePrescriptionRightTypeConverter converter = new NursePrescriptionRightTypeConverter();
+
+  @Test
+  void shouldConvertNull() {
+    final var response = converter.convert(null);
+
+    assertEquals(NursePrescriptionRight.builder().build(), response);
+  }
 
   @Test
   void shouldConvertRight() {

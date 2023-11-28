@@ -8,6 +8,10 @@ import se.riv.infrastructure.directory.authorizationmanagement.v2.NursePrescript
 public class NursePrescriptionRightTypeConverter {
 
   public NursePrescriptionRight convert(NursePrescriptionRightType type) {
+    if (type == null) {
+      return NursePrescriptionRight.builder().build();
+    }
+
     return NursePrescriptionRight.builder()
         .prescriptionRight(type.isPrescriptionRight())
         .healthCareProfessionalLicence(type.getHealthCareProfessionalLicence())

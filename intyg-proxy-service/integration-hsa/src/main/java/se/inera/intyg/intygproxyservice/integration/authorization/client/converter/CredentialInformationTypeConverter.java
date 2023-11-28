@@ -16,6 +16,10 @@ public class CredentialInformationTypeConverter {
   private final HsaSystemRoleTypeConverter hsaSystemRoleTypeConverter;
 
   public CredentialInformation convert(CredentialInformationType type) {
+    if (type == null) {
+      return CredentialInformation.builder().build();
+    }
+
     return CredentialInformation.builder()
         .personHsaId(type.getPersonHsaId())
         .personalIdentity(convertPersonalIdentity(type.getPersonalIdentity()))

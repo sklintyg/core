@@ -14,6 +14,10 @@ public class CommissionTypeConverter {
   private final CommissionRightTypeConverter commissionRightTypeConverter;
 
   public Commission convert(CommissionType type) {
+    if (type == null) {
+      return Commission.builder().build();
+    }
+
     return Commission.builder()
         .commissionHsaId(type.getCommissionHsaId())
         .commissionName(type.getCommissionName())

@@ -8,6 +8,10 @@ import se.riv.infrastructure.directory.authorizationmanagement.v2.HCPSpecialityC
 public class HCPSpecialityCodeTypeConverter {
 
   public HCPSpecialityCodes convert(HCPSpecialityCodesType type) {
+    if (type == null) {
+      return HCPSpecialityCodes.builder().build();
+    }
+
     return HCPSpecialityCodes
         .builder()
         .specialityCode(type.getSpecialityCode())

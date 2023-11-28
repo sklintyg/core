@@ -8,6 +8,10 @@ import se.riv.infrastructure.directory.authorizationmanagement.v2.HsaSystemRoleT
 public class HsaSystemRoleTypeConverter {
 
   public HsaSystemRole convert(HsaSystemRoleType type) {
+    if (type == null) {
+      return HsaSystemRole.builder().build();
+    }
+
     return HsaSystemRole
         .builder()
         .role(type.getRole())

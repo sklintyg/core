@@ -5,12 +5,20 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CommissionRight;
 import se.riv.infrastructure.directory.authorizationmanagement.v2.CommissionRightType;
 
 @ExtendWith(MockitoExtension.class)
 class CommissionRightTypeConverterTest {
 
   private static final CommissionRightTypeConverter converter = new CommissionRightTypeConverter();
+
+  @Test
+  void shouldConvertNull() {
+    final var response = converter.convert(null);
+
+    assertEquals(CommissionRight.builder().build(), response);
+  }
 
   @Test
   void shouldConvertActivity() {
