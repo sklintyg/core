@@ -138,6 +138,25 @@ class HsaAuthorizationClientTest {
       }
 
       @Test
+      void shouldSendIncludeProfileInRquest() {
+        hsaAuthorizationClient.getCredentialInformation(
+            GetCredentialInformationIntegrationRequest
+                .builder()
+                .personHsaId(HSA_ID)
+                .build()
+        );
+
+        final var captor = ArgumentCaptor.forClass(
+            GetCredentialsForPersonIncludingProtectedPersonType.class);
+
+        verify(
+            getCredentialsForPersonIncludingProtectedPersonResponderInterface)
+            .getCredentialsForPersonIncludingProtectedPerson(anyString(), captor.capture());
+
+        assertEquals("BASIC", captor.getValue().getProfile());
+      }
+
+      @Test
       void shouldSendLogicalAddressInRequest() {
         hsaAuthorizationClient.getCredentialInformation(
             GetCredentialInformationIntegrationRequest
