@@ -19,27 +19,22 @@
 
 package se.inera.intyg.intygproxyservice.integration.organization.client.converter;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Function;
 import org.springframework.stereotype.Component;
-import se.riv.infrastructure.directory.organization.v2.AddressType;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.GeoCoordRt90;
+import se.riv.infrastructure.directory.organization.getunitresponder.v4.GeoCoordRt90Type;
 
 @Component
-public class AddressTypeConverter {
+public class GeoCoordRt90TypeConverter {
 
-  public List<String> convertV2(AddressType type) {
-    return convert(type, AddressType::getAddressLine);
+  public GeoCoordRt90 convert(GeoCoordRt90Type type) {
+    if (type == null) {
+      return GeoCoordRt90.builder().build();
+    }
+
+    return GeoCoordRt90.builder()
+        .xCoordinate(type.getXCoordinate())
+        .yCoordinate(type.getYCoordinate())
+        .build();
   }
 
-  public List<String> convertV3(se.riv.infrastructure.directory.organization.v3.AddressType type) {
-    return convert(type,
-        se.riv.infrastructure.directory.organization.v3.AddressType::getAddressLine);
-  }
-
-  private <T> List<String> convert(T type, Function<T, List<String>> getValues) {
-    return type != null && getValues.apply(type) != null
-        ? getValues.apply(type)
-        : Collections.emptyList();
-  }
 }

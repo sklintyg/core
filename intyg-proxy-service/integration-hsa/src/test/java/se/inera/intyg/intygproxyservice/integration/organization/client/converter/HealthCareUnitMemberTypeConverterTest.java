@@ -131,7 +131,7 @@ class HealthCareUnitMemberTypeConverterTest {
     void shouldConvertAddress() {
       final var address = List.of("ADDRESS", "ADDRESS_2");
       final var addressType = mock(AddressType.class);
-      when(addressTypeConverter.convert(any(AddressType.class))).thenReturn(address);
+      when(addressTypeConverter.convertV2(any(AddressType.class))).thenReturn(address);
       when(type.getHealthCareUnitMemberpostalAddress()).thenReturn(addressType);
 
       final var response = healthCareUnitMemberTypeConverter.convert(type);
