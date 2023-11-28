@@ -44,6 +44,8 @@ import se.riv.infrastructure.directory.organization.getunitresponder.v4.GetUnitT
 @RequiredArgsConstructor
 public class HsaOrganizationClient {
 
+  private static final String PROFILE_BASIC = "basic";
+
   private final GetHealthCareUnitResponderInterface getHealthCareUnitResponderInterface;
   private final GetHealthCareUnitMembersResponderInterface getHealthCareUnitMembersResponderInterface;
   private final GetUnitResponderInterface getUnitResponderInterface;
@@ -93,6 +95,7 @@ public class HsaOrganizationClient {
     final var parameters = new GetUnitType();
     parameters.setUnitHsaId(hsaId);
     parameters.setIncludeFeignedObject(false);
+    parameters.getProfile().add(PROFILE_BASIC);
     return parameters;
   }
 

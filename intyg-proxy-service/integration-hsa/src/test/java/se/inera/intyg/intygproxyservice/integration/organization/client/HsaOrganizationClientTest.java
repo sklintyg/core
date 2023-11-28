@@ -406,6 +406,23 @@ class HsaOrganizationClientTest {
 
         assertEquals(LOGICAL_ADDRESS, captor.getValue());
       }
+
+      @Test
+      void shouldSendIncludeProfileBasicInRquest() {
+        hsaOrganizationClient.getUnit(
+            GetUnitIntegrationRequest
+                .builder()
+                .hsaId(HSA_ID)
+                .build()
+        );
+
+        final var captor = ArgumentCaptor.forClass(GetUnitType.class);
+
+        verify(getUnitResponderInterface)
+            .getUnit(anyString(), captor.capture());
+
+        assertEquals("basic", captor.getValue().getProfile().get(0));
+      }
     }
   }
 }
