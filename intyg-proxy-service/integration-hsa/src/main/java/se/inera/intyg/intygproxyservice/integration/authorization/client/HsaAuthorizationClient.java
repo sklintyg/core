@@ -35,6 +35,8 @@ import se.riv.infrastructure.directory.authorizationmanagement.getcredentialsfor
 @RequiredArgsConstructor
 public class HsaAuthorizationClient {
 
+  private static final String PROFILE_BASIC = "BASIC";
+  
   private final GetCredentialsForPersonIncludingProtectedPersonResponderInterface getCredentialsForPersonIncludingProtectedPersonResponderInterface;
 
   private final GetCredentialInformationResponseTypeConverter getCredentialInformationResponseTypeConverter;
@@ -59,6 +61,7 @@ public class HsaAuthorizationClient {
     final var parameters = new GetCredentialsForPersonIncludingProtectedPersonType();
     parameters.setPersonHsaId(hsaId);
     parameters.setIncludeFeignedObject(false);
+    parameters.setProfile(PROFILE_BASIC);
     return parameters;
   }
 }
