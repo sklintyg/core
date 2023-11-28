@@ -49,6 +49,17 @@ class CredentialInformationTypeConverterTest {
   }
 
   @Test
+  void shouldConvertPersonHsaId() {
+    final var type = mock(CredentialInformationType.class);
+    when(type.getPersonalIdentity())
+        .thenReturn(null);
+
+    final var response = credentialInformationTypeConverter.convert(type);
+
+    assertNull(response.getPersonalIdentity());
+  }
+
+  @Test
   void shouldConvertHsaId() {
     final var type = getType();
 

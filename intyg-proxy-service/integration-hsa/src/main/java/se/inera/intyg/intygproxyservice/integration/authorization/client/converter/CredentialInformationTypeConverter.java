@@ -61,6 +61,6 @@ public class CredentialInformationTypeConverter {
   }
 
   private String convertPersonalIdentity(IIType type) {
-    return type == null ? "" : type.getExtension();
+    return type == null ? null : type.getExtension();
   }
 }
