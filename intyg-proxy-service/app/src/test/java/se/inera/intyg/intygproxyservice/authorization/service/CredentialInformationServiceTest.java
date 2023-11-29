@@ -23,72 +23,72 @@ import se.inera.intyg.intygproxyservice.integration.api.authorization.model.Cred
 @ExtendWith(MockitoExtension.class)
 class CredentialInformationServiceTest {
 
-    private static final String HSA_ID = "HSA_ID";
+  private static final String HSA_ID = "HSA_ID";
 
-    private static final CredentialInformationRequest REQUEST = CredentialInformationRequest
-        .builder()
-        .personHsaId(HSA_ID)
-        .build();
+  private static final CredentialInformationRequest REQUEST = CredentialInformationRequest
+      .builder()
+      .personHsaId(HSA_ID)
+      .build();
 
-    private static final GetCredentialInformationIntegrationResponse RESPONSE = GetCredentialInformationIntegrationResponse
-        .builder()
-        .credentialInformation(List.of(CredentialInformation.builder().build()))
-        .build();
+  private static final GetCredentialInformationIntegrationResponse RESPONSE = GetCredentialInformationIntegrationResponse
+      .builder()
+      .credentialInformation(List.of(CredentialInformation.builder().build()))
+      .build();
 
-    @Mock
-    private GetCredentialInformationIntegrationService getCredentialInformationIntegrationService;
+  @Mock
+  private GetCredentialInformationIntegrationService getCredentialInformationIntegrationService;
 
-    @InjectMocks
-    private CredentialInformationService credentialInformationService;
+  @InjectMocks
+  private CredentialInformationService credentialInformationService;
 
-    @Test
-    void shouldThrowIllegalArgumentExceptionIfRequestIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> credentialInformationService.get(null));
+  @Test
+  void shouldThrowIllegalArgumentExceptionIfRequestIsNull() {
+    assertThrows(IllegalArgumentException.class, () -> credentialInformationService.get(null));
+  }
+
+  @Test
+  void shouldThrowIllegalArgumentExceptionIfPersonHsaIdIsNull() {
+    final var request = CredentialInformationRequest.builder().build();
+    assertThrows(IllegalArgumentException.class, () -> credentialInformationService.get(request));
+  }
+
+  @Test
+  void shouldThrowIllegalArgumentExceptionIfPersonHsaIdIsEmpty() {
+    final var request = CredentialInformationRequest.builder().personHsaId("").build();
+    assertThrows(IllegalArgumentException.class, () -> credentialInformationService.get(request));
+  }
+
+  @Test
+  void shouldThrowIllegalArgumentExceptionIfPersonHsaIdIsBlank() {
+    final var request = CredentialInformationRequest.builder().personHsaId("   ").build();
+    assertThrows(IllegalArgumentException.class, () -> credentialInformationService.get(request));
+  }
+
+  @Nested
+  class ValidRequest {
+
+    @BeforeEach
+    void setUp() {
+      when(getCredentialInformationIntegrationService.get(
+          any(GetCredentialInformationIntegrationRequest.class)))
+          .thenReturn(RESPONSE);
     }
 
     @Test
-    void shouldThrowIllegalArgumentExceptionIfPersonHsaIdIsNull() {
-        final var request = CredentialInformationRequest.builder().build();
-        assertThrows(IllegalArgumentException.class, () -> credentialInformationService.get(request));
+    void shallReturnCredentialInformation() {
+      final var response = credentialInformationService.get(REQUEST);
+
+      assertEquals(RESPONSE.getCredentialInformation(), response.getCredentialInformation());
     }
 
     @Test
-    void shouldThrowIllegalArgumentExceptionIfPersonHsaIdIsEmpty() {
-        final var request = CredentialInformationRequest.builder().personHsaId("").build();
-        assertThrows(IllegalArgumentException.class, () -> credentialInformationService.get(request));
+    void shallSetPersonHsaIdInRequest() {
+      credentialInformationService.get(REQUEST);
+
+      final var captor = ArgumentCaptor.forClass(GetCredentialInformationIntegrationRequest.class);
+      verify(getCredentialInformationIntegrationService).get(captor.capture());
+
+      assertEquals(REQUEST.getPersonHsaId(), captor.getValue().getPersonHsaId());
     }
-
-    @Test
-    void shouldThrowIllegalArgumentExceptionIfPersonHsaIdIsBlank() {
-        final var request = CredentialInformationRequest.builder().personHsaId("   ").build();
-        assertThrows(IllegalArgumentException.class, () -> credentialInformationService.get(request));
-    }
-
-    @Nested
-    class ValidRequest {
-
-        @BeforeEach
-        void setUp() {
-            when(getCredentialInformationIntegrationService.get(
-                any(GetCredentialInformationIntegrationRequest.class)))
-                .thenReturn(RESPONSE);
-        }
-
-        @Test
-        void shallReturnCredentialInformation() {
-            final var response = credentialInformationService.get(REQUEST);
-
-            assertEquals(RESPONSE.getCredentialInformation(), response.getCredentialInformation());
-        }
-
-        @Test
-        void shallSetPersonHsaIdInRequest() {
-            credentialInformationService.get(REQUEST);
-
-            final var captor = ArgumentCaptor.forClass(GetCredentialInformationIntegrationRequest.class);
-            verify(getCredentialInformationIntegrationService).get(captor.capture());
-
-            assertEquals(REQUEST.getPersonHsaId(), captor.getValue().getPersonHsaId());
-        }
-    }
+  }
 }
