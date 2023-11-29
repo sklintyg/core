@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareProviderConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCareProvider;
 
 class HealthCareProviderConverterTest {

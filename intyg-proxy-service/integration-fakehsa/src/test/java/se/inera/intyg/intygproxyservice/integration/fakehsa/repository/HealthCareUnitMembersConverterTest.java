@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitMembersConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCareUnit;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedSubUnit;
 

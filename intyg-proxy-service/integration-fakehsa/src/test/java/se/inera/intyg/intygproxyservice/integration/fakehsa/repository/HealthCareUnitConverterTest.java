@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCareUnit;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedSubUnit;
 
@@ -25,7 +26,7 @@ class HealthCareUnitConverterTest {
   }
 
   @Nested
-  class ParsedCareUnitConverter {
+  class ParsedCareHealthHealthCareUnitConverter {
 
     @Test
     void shouldSetIsHealthCareUnitToTrue() {
@@ -148,7 +149,7 @@ class HealthCareUnitConverterTest {
   }
 
   @Nested
-  class ParsedSubUnitConverter {
+  class ParsedSubHealthHealthCareUnitConverter {
 
     @Test
     void shouldSetIsHealthCareUnitToFalse() {

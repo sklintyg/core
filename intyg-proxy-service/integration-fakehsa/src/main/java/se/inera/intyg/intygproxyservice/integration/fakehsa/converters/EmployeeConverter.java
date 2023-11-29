@@ -1,4 +1,4 @@
-package se.inera.intyg.intygproxyservice.integration.fakehsa.repository;
+package se.inera.intyg.intygproxyservice.integration.fakehsa.converters;
 
 import java.util.Collections;
 import java.util.List;

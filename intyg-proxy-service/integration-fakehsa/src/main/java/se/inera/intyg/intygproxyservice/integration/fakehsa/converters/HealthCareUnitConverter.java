@@ -1,4 +1,4 @@
-package se.inera.intyg.intygproxyservice.integration.fakehsa.repository;
+package se.inera.intyg.intygproxyservice.integration.fakehsa.converters;
 
 import org.springframework.stereotype.Component;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
@@ -6,9 +6,8 @@ import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.Par
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedSubUnit;
 
 @Component
-public class HealthCareUnitConverter implements UnitConverter {
+public class HealthCareUnitConverter {
 
-  @Override
   public HealthCareUnit convert(ParsedCareUnit parsedCareUnit) {
     return HealthCareUnit.builder()
         .healthCareUnitHsaId(parsedCareUnit.getId())
@@ -20,8 +19,7 @@ public class HealthCareUnitConverter implements UnitConverter {
         .healthCareProviderOrgNo(parsedCareUnit.getHealthCareProviderOrgno())
         .build();
   }
-
-  @Override
+  
   public HealthCareUnit convert(ParsedSubUnit parsedSubUnit) {
     return HealthCareUnit.builder()
         .healthCareUnitMemberHsaId(parsedSubUnit.getId())
