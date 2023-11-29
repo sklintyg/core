@@ -47,7 +47,11 @@ public class UnitService {
             .build()
     );
 
-    log.info(String.format("Unit with hsaId: '%s' was retrieved", request.getHsaId()));
+    if (response.getUnit() != null) {
+      log.info(String.format("Unit with hsaId: '%s' was retrieved", request.getHsaId()));
+    } else {
+      log.warn("No unit was found with hsaId '{}', returning empty unit", request.getHsaId());
+    }
 
     return UnitResponse
         .builder()

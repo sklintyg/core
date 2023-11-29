@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,33 +38,71 @@ class AddressTypeConverterTest {
   @InjectMocks
   AddressTypeConverter addressTypeConverter;
 
-  @Test
-  void shouldConvertAddressType() {
-    final var address = List.of("A1", "A2");
-    final var type = mock(AddressType.class);
-    when(type.getAddressLine())
-        .thenReturn(address);
+  @Nested
+  class V2 {
 
-    final var response = addressTypeConverter.convert(type);
+    @Test
+    void shouldConvertAddressType() {
+      final var address = List.of("A1", "A2");
+      final var type = mock(AddressType.class);
+      when(type.getAddressLine())
+          .thenReturn(address);
 
-    assertEquals(address, response);
+      final var response = addressTypeConverter.convertV2(type);
+
+      assertEquals(address, response);
+    }
+
+    @Test
+    void shouldReturnEmptyListIfAddressLineIsNull() {
+      final var type = mock(AddressType.class);
+      when(type.getAddressLine())
+          .thenReturn(null);
+
+      final var response = addressTypeConverter.convertV2(type);
+
+      assertEquals(Collections.emptyList(), response);
+    }
+
+    @Test
+    void shouldReturnEmptyListIfAddressIsNull() {
+      final var response = addressTypeConverter.convertV2(null);
+
+      assertEquals(Collections.emptyList(), response);
+    }
   }
 
-  @Test
-  void shouldReturnEmptyListIfAddressLineIsNull() {
-    final var type = mock(AddressType.class);
-    when(type.getAddressLine())
-        .thenReturn(null);
+  @Nested
+  class V3 {
 
-    final var response = addressTypeConverter.convert(type);
+    @Test
+    void shouldConvertAddressType() {
+      final var address = List.of("A1", "A2");
+      final var type = mock(se.riv.infrastructure.directory.organization.v3.AddressType.class);
+      when(type.getAddressLine())
+          .thenReturn(address);
 
-    assertEquals(Collections.emptyList(), response);
-  }
+      final var response = addressTypeConverter.convertV3(type);
 
-  @Test
-  void shouldReturnEmptyListIfAddressIsNull() {
-    final var response = addressTypeConverter.convert(null);
+      assertEquals(address, response);
+    }
 
-    assertEquals(Collections.emptyList(), response);
+    @Test
+    void shouldReturnEmptyListIfAddressLineIsNull() {
+      final var type = mock(se.riv.infrastructure.directory.organization.v3.AddressType.class);
+      when(type.getAddressLine())
+          .thenReturn(null);
+
+      final var response = addressTypeConverter.convertV3(type);
+
+      assertEquals(Collections.emptyList(), response);
+    }
+
+    @Test
+    void shouldReturnEmptyListIfAddressIsNull() {
+      final var response = addressTypeConverter.convertV3(null);
+
+      assertEquals(Collections.emptyList(), response);
+    }
   }
 }
