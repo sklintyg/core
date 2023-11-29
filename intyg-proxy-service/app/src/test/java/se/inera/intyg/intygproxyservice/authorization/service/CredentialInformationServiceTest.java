@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class CredentialInformationServiceTest {
 
   private static final GetCredentialInformationIntegrationResponse RESPONSE = GetCredentialInformationIntegrationResponse
       .builder()
-      .credentialInformation(CredentialInformation.builder().build())
+      .credentialInformation(List.of(CredentialInformation.builder().build()))
       .build();
 
   @Mock
