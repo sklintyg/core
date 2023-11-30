@@ -2,6 +2,9 @@ package se.inera.intyg.intygproxyservice.integration.fakehsa.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -11,10 +14,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialInformation;
 import se.inera.intyg.intygproxyservice.integration.api.employee.Employee;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnitMembers;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.Unit;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CredentialInformationConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.EmployeeConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareProviderConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitConverter;
@@ -22,6 +27,7 @@ import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCar
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.UnitConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCareProvider;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCareUnit;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCredentialInformation;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedHsaPerson;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedSubUnit;
 
@@ -37,6 +43,8 @@ class FakeHsaRepositoryTest {
   private HealthCareUnitMembersConverter healthCareUnitMembersConverter;
   @Mock
   private HealthCareProviderConverter healthCareProviderConverter;
+  @Mock
+  private CredentialInformationConverter credentialInformationConverter;
   @Mock
   private UnitConverter unitConverter;
   @InjectMocks
@@ -254,6 +262,66 @@ class FakeHsaRepositoryTest {
 
       final var result = fakeHsaRepository.getUnit(HSA_ID);
       assertEquals(expectedUnit, result);
+    }
+  }
+
+  @Nested
+  class GetCredentialInformation {
+
+    @Test
+    void shouldReturnEmptyListIfHsaPersonNotFound() {
+      fakeHsaRepository.addParsedCredentialInformation(
+          ParsedCredentialInformation.builder()
+              .hsaId(HSA_ID)
+              .build()
+      );
+      final var result = fakeHsaRepository.getCredentialInformation(HSA_ID);
+
+      assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void shouldReturnEmptyListIfCredentialInformationNotFound() {
+      fakeHsaRepository.addParsedHsaPerson(
+          ParsedHsaPerson.builder()
+              .hsaId(HSA_ID)
+              .build()
+      );
+      final var result = fakeHsaRepository.getCredentialInformation(HSA_ID);
+
+      assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void shouldReturnListOfCredentialInformation() {
+      final var parsedCredentialInformation = ParsedCredentialInformation.builder()
+          .hsaId(HSA_ID)
+          .build();
+
+      final var parsedHsaPerson = ParsedHsaPerson.builder()
+          .hsaId(HSA_ID)
+          .build();
+
+      fakeHsaRepository.addParsedHsaPerson(
+          parsedHsaPerson
+      );
+
+      fakeHsaRepository.addParsedCredentialInformation(
+          parsedCredentialInformation
+      );
+
+      final var credentialInformation = CredentialInformation.builder()
+          .personHsaId(HSA_ID)
+          .build();
+
+      when(credentialInformationConverter.convert(eq(parsedCredentialInformation),
+          eq(parsedHsaPerson), anyMap(), anyMap())).thenReturn(
+          credentialInformation
+      );
+
+      final var result = fakeHsaRepository.getCredentialInformation(HSA_ID);
+
+      assertEquals(List.of(credentialInformation), result);
     }
   }
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CredentialInformationConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.EmployeeConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitMembersConverter;
@@ -19,6 +20,7 @@ class BootstrapHsaServiceTest {
   private HealthCareUnitConverter healthCareUnitConverter;
   private BootstrapHsaService bootstrapHsaService;
   private UnitConverter unitConverter;
+  private CredentialInformationConverter credentialInformationConverter;
 
   @BeforeEach
   void setUp() {
@@ -29,7 +31,8 @@ class BootstrapHsaServiceTest {
         employeeConverter,
         healthCareUnitMembersConverter,
         healthCareUnitConverter,
-        unitConverter
+        unitConverter,
+        credentialInformationConverter
     );
     bootstrapHsaService = new BootstrapHsaService(
         fakeHsaRepository,
