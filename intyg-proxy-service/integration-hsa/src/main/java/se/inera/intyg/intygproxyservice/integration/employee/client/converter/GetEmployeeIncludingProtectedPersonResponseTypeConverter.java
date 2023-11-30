@@ -31,6 +31,9 @@ public class GetEmployeeIncludingProtectedPersonResponseTypeConverter {
   private PersonInformationTypeConverter personInformationTypeConverter;
 
   public Employee convert(GetEmployeeIncludingProtectedPersonResponseType type) {
+    if (type == null || type.getPersonInformation().isEmpty()) {
+      return Employee.builder().build();
+    }
     return Employee.builder()
         .personInformation(
             type.getPersonInformation().stream()

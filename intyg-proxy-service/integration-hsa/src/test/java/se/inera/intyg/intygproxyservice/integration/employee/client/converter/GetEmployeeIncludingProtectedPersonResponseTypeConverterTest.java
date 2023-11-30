@@ -26,13 +26,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.intygproxyservice.integration.api.employee.Employee;
 import se.inera.intyg.intygproxyservice.integration.api.employee.PersonInformation;
 import se.riv.infrastructure.directory.employee.getemployeeincludingprotectedpersonresponder.v3.GetEmployeeIncludingProtectedPersonResponseType;
 import se.riv.infrastructure.directory.employee.v3.PersonInformationType;
@@ -47,14 +48,30 @@ class GetEmployeeIncludingProtectedPersonResponseTypeConverterTest {
   @InjectMocks
   GetEmployeeIncludingProtectedPersonResponseTypeConverter getEmployeeIncludingProtectedPersonResponseTypeConverter;
 
-  @BeforeEach
-  void setup() {
-    when(personInformationTypeConverter.convert(any(PersonInformationType.class)))
-        .thenReturn(PERSON_INFORMATION);
+  @Test
+  void shouldReturnEmptyEmployeeIfTypeIsNull() {
+    final var expectedEmployee = Employee.builder().build();
+
+    final var response = getEmployeeIncludingProtectedPersonResponseTypeConverter.convert(null);
+
+    assertEquals(expectedEmployee, response);
+  }
+
+  @Test
+  void shouldReturnEmptyEmployeeIfPersonalInformationIsEmpty() {
+    final var expectedEmployee = Employee.builder().build();
+
+    final var response = getEmployeeIncludingProtectedPersonResponseTypeConverter.convert(
+        getType(Collections.emptyList())
+    );
+
+    assertEquals(expectedEmployee, response);
   }
 
   @Test
   void shouldConvertPersonInformationList() {
+    when(personInformationTypeConverter.convert(any(PersonInformationType.class)))
+        .thenReturn(PERSON_INFORMATION);
     final var response = getEmployeeIncludingProtectedPersonResponseTypeConverter
         .convert(getType(List.of(new PersonInformationType())));
 
@@ -64,6 +81,8 @@ class GetEmployeeIncludingProtectedPersonResponseTypeConverterTest {
 
   @Test
   void shouldConvertPersonInformationListWithSeveralValues() {
+    when(personInformationTypeConverter.convert(any(PersonInformationType.class)))
+        .thenReturn(PERSON_INFORMATION);
     final var response = getEmployeeIncludingProtectedPersonResponseTypeConverter
         .convert(getType(List.of(new PersonInformationType(), new PersonInformationType())));
 
