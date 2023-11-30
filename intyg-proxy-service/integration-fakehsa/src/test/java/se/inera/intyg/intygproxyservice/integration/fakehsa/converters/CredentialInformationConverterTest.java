@@ -1,6 +1,7 @@
 package se.inera.intyg.intygproxyservice.integration.fakehsa.converters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -219,5 +220,24 @@ class CredentialInformationConverterTest {
     assertEquals(CARE_UNIT_ORG_NUMBER,
         result.getCommission().get(0).getHealthCareProviderOrgNo()
     );
+  }
+
+  @Test
+  void shouldSetCommissionToEmptyListIfCommissionListIsNull() {
+    final var result = credentialInformationConverter.convert(
+        ParsedCredentialInformation.builder()
+            .hsaId(CREDENTIAL_INFORMATION_ID)
+            .givenName(CREDENTIAL_INFORMATION_GIVEN_NAME)
+            .parsedCommissionList(null)
+            .build(),
+        PARSED_HSA_PERSON, CARE_PROVIDER_MAP, CARE_UNIT_MAP);
+    assertTrue(result.getCommission().isEmpty());
+  }
+
+  @Test
+  void shouldSetCommissionToEmptyListCommissonHsaIdNotFoundInUnitMap() {
+    final var result = credentialInformationConverter.convert(CREDENTIAL_INFORMATION,
+        PARSED_HSA_PERSON, CARE_PROVIDER_MAP, Map.of());
+    assertTrue(result.getCommission().isEmpty());
   }
 }
