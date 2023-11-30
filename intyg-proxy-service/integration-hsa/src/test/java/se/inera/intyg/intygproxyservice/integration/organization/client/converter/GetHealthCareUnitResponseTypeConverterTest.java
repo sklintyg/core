@@ -19,7 +19,8 @@
 
 package se.inera.intyg.intygproxyservice.integration.organization.client.converter;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -59,18 +60,18 @@ class GetHealthCareUnitResponseTypeConverterTest {
   }
 
   @Test
-  void shouldReturnEmptyResponseIfUnitIsNull() {
+  void shouldReturnNullIfUnitIsNull() {
     final var type = new GetHealthCareUnitResponseType();
     type.setHealthCareUnit(null);
     final var response = getHealthCareUnitResponseTypeConverter.convert(type);
 
-    assertEquals(HealthCareUnit.builder().build(), response);
+    assertNull(response);
   }
 
   @Test
   void shouldReturnEmptyResponseIfResponseIsNull() {
     final var response = getHealthCareUnitResponseTypeConverter.convert(null);
 
-    assertEquals(HealthCareUnit.builder().build(), response);
+    assertNull(response);
   }
 }

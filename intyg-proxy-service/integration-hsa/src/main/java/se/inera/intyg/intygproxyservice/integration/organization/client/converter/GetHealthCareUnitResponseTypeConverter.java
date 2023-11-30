@@ -32,7 +32,7 @@ public class GetHealthCareUnitResponseTypeConverter {
 
   public HealthCareUnit convert(GetHealthCareUnitResponseType type) {
     if (type == null || type.getHealthCareUnit() == null) {
-      return HealthCareUnit.builder().build();
+      return null;
     }
 
     return healthCareUnitTypeConverter.convert(type.getHealthCareUnit());
