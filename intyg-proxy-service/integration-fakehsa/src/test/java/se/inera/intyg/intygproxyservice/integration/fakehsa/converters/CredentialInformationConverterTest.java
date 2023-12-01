@@ -1,12 +1,15 @@
 package se.inera.intyg.intygproxyservice.integration.fakehsa.converters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.HsaSystemRole;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCareProvider;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCareUnit;
@@ -15,9 +18,13 @@ import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.Par
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedHsaPerson;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedHsaPerson.ParsedPaTitle;
 
+@ExtendWith(MockitoExtension.class)
 class CredentialInformationConverterTest {
 
-  private CredentialInformationConverter credentialInformationConverter = new CredentialInformationConverter();
+  @Mock
+  private CommissonListConverter converter;
+  @InjectMocks
+  private CredentialInformationConverter credentialInformationConverter;
   private static final String CARE_PROVIDER_ID = "careProviderId";
   private static final String CARE_PROVIDER_NAME = "careProviderName";
   private static final String CREDENTIAL_INFORMATION_ID = "credentialInformationId";
@@ -120,124 +127,5 @@ class CredentialInformationConverterTest {
                 .build()
         ),
         result.getHsaSystemRole());
-  }
-
-  @Test
-  void shouldConvertCommissonHsaId() {
-    final var result = credentialInformationConverter.convert(CREDENTIAL_INFORMATION,
-        PARSED_HSA_PERSON, CARE_PROVIDER_MAP, CARE_UNIT_MAP);
-
-    assertEquals(CREDENTIAL_INFORMATION_ID, result.getCommission().get(0).getCommissionHsaId());
-  }
-
-  @Test
-  void shouldConvertCommissonPurpose() {
-    final var result = credentialInformationConverter.convert(CREDENTIAL_INFORMATION,
-        PARSED_HSA_PERSON, CARE_PROVIDER_MAP, CARE_UNIT_MAP);
-
-    assertEquals(CREDENTIAL_INFORMATION_COMMISSION_PURPOSE,
-        result.getCommission().get(0).getCommissionPurpose()
-    );
-  }
-
-  @Test
-  void shouldConvertCommissonName() {
-    final var result = credentialInformationConverter.convert(CREDENTIAL_INFORMATION,
-        PARSED_HSA_PERSON, CARE_PROVIDER_MAP, CARE_UNIT_MAP);
-
-    assertEquals(CREDENTIAL_INFORMATION_GIVEN_NAME,
-        result.getCommission().get(0).getCommissionName()
-    );
-  }
-
-  @Test
-  void shouldConvertHealthCareUnitHsaId() {
-    final var result = credentialInformationConverter.convert(CREDENTIAL_INFORMATION,
-        PARSED_HSA_PERSON, CARE_PROVIDER_MAP, CARE_UNIT_MAP);
-
-    assertEquals(CARE_UNIT_ID,
-        result.getCommission().get(0).getHealthCareUnitHsaId()
-    );
-  }
-
-  @Test
-  void shouldConvertHealthCareUnitName() {
-    final var result = credentialInformationConverter.convert(CREDENTIAL_INFORMATION,
-        PARSED_HSA_PERSON, CARE_PROVIDER_MAP, CARE_UNIT_MAP);
-
-    assertEquals(CARE_UNIT_NAME,
-        result.getCommission().get(0).getHealthCareUnitName()
-    );
-  }
-
-  @Test
-  void shouldConvertHealthCareUnitStartDate() {
-    final var result = credentialInformationConverter.convert(CREDENTIAL_INFORMATION,
-        PARSED_HSA_PERSON, CARE_PROVIDER_MAP, CARE_UNIT_MAP);
-
-    final var expectedStartDate = CARE_UNIT_MAP.get(CARE_UNIT_ID).getStart();
-    assertEquals(expectedStartDate,
-        result.getCommission().get(0).getHealthCareUnitStartDate()
-    );
-  }
-
-  @Test
-  void shouldConvertHealthCareUnitEndDate() {
-    final var result = credentialInformationConverter.convert(CREDENTIAL_INFORMATION,
-        PARSED_HSA_PERSON, CARE_PROVIDER_MAP, CARE_UNIT_MAP);
-
-    final var expectedEndDate = CARE_UNIT_MAP.get(CARE_UNIT_ID).getEnd();
-    assertEquals(expectedEndDate,
-        result.getCommission().get(0).getHealthCareUnitEndDate()
-    );
-  }
-
-  @Test
-  void shouldConvertHealthCareProviderHsaId() {
-    final var result = credentialInformationConverter.convert(CREDENTIAL_INFORMATION,
-        PARSED_HSA_PERSON, CARE_PROVIDER_MAP, CARE_UNIT_MAP);
-
-    assertEquals(CARE_PROVIDER_ID,
-        result.getCommission().get(0).getHealthCareProviderHsaId()
-    );
-  }
-
-  @Test
-  void shouldConvertHealthCareProviderName() {
-    final var result = credentialInformationConverter.convert(CREDENTIAL_INFORMATION,
-        PARSED_HSA_PERSON, CARE_PROVIDER_MAP, CARE_UNIT_MAP);
-
-    assertEquals(CARE_PROVIDER_NAME,
-        result.getCommission().get(0).getHealthCareProviderName()
-    );
-  }
-
-  @Test
-  void shouldConvertHealthCareProviderOrgNo() {
-    final var result = credentialInformationConverter.convert(CREDENTIAL_INFORMATION,
-        PARSED_HSA_PERSON, CARE_PROVIDER_MAP, CARE_UNIT_MAP);
-
-    assertEquals(CARE_UNIT_ORG_NUMBER,
-        result.getCommission().get(0).getHealthCareProviderOrgNo()
-    );
-  }
-
-  @Test
-  void shouldSetCommissionToEmptyListIfCommissionListIsNull() {
-    final var result = credentialInformationConverter.convert(
-        ParsedCredentialInformation.builder()
-            .hsaId(CREDENTIAL_INFORMATION_ID)
-            .givenName(CREDENTIAL_INFORMATION_GIVEN_NAME)
-            .parsedCommissionList(null)
-            .build(),
-        PARSED_HSA_PERSON, CARE_PROVIDER_MAP, CARE_UNIT_MAP);
-    assertTrue(result.getCommission().isEmpty());
-  }
-
-  @Test
-  void shouldSetCommissionToEmptyListCommissonHsaIdNotFoundInUnitMap() {
-    final var result = credentialInformationConverter.convert(CREDENTIAL_INFORMATION,
-        PARSED_HSA_PERSON, CARE_PROVIDER_MAP, Map.of());
-    assertTrue(result.getCommission().isEmpty());
   }
 }
