@@ -2,7 +2,6 @@ package se.inera.intyg.intygproxyservice.integration.fakehsa.converters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,6 @@ import se.inera.intyg.intygproxyservice.integration.api.authorization.model.HsaS
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCareProvider;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCareUnit;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCredentialInformation;
-import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCredentialInformation.ParsedCommission;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedHsaPerson;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedHsaPerson.ParsedPaTitle;
 
@@ -26,13 +24,7 @@ class CredentialInformationConverterTest {
   @InjectMocks
   private CredentialInformationConverter credentialInformationConverter;
   private static final String CARE_PROVIDER_ID = "careProviderId";
-  private static final String CARE_PROVIDER_NAME = "careProviderName";
-  private static final String CREDENTIAL_INFORMATION_ID = "credentialInformationId";
-  private static final String CREDENTIAL_INFORMATION_GIVEN_NAME = "credentialInformationGivenName";
-  private static final String CREDENTIAL_INFORMATION_COMMISSION_PURPOSE = "credentialInformationCommissionPurpose";
   private static final String CARE_UNIT_ID = "careUnitId";
-  private static final String CARE_UNIT_NAME = "careUnitName";
-  private static final String CARE_UNIT_ORG_NUMBER = "careUnitOrgNumber";
   private static final String HSA_PERSON_ID = "hsaPersonId";
   private static final String HSA_PERSON_PRESCRIPTION_CODE = "hsaPersonPrescriptionCode";
   private static final String HSA_PERSON_TITLE_CODE = "hsaPersonTitleCode";
@@ -40,19 +32,11 @@ class CredentialInformationConverterTest {
   private static final Map<String, ParsedCareProvider> CARE_PROVIDER_MAP = Map.of(
       CARE_PROVIDER_ID,
       ParsedCareProvider.builder()
-          .id(CARE_PROVIDER_ID)
-          .name(CARE_PROVIDER_NAME)
           .build()
   );
   private static final Map<String, ParsedCareUnit> CARE_UNIT_MAP = Map.of(
       CARE_UNIT_ID,
       ParsedCareUnit.builder()
-          .id(CARE_UNIT_ID)
-          .name(CARE_UNIT_NAME)
-          .careProviderHsaId(CARE_PROVIDER_ID)
-          .start(LocalDateTime.now())
-          .end(LocalDateTime.now())
-          .healthCareProviderOrgno(CARE_UNIT_ORG_NUMBER)
           .build()
   );
 
@@ -74,20 +58,6 @@ class CredentialInformationConverterTest {
       .build();
   private static final ParsedCredentialInformation CREDENTIAL_INFORMATION =
       ParsedCredentialInformation.builder()
-          .hsaId(CREDENTIAL_INFORMATION_ID)
-          .givenName(CREDENTIAL_INFORMATION_GIVEN_NAME)
-          .parsedCommissionList(
-              List.of(
-                  ParsedCommission.builder()
-                      .healthCareUnitHsaId(CARE_UNIT_ID)
-                      .commissionPurpose(
-                          List.of(
-                              CREDENTIAL_INFORMATION_COMMISSION_PURPOSE
-                          )
-                      )
-                      .build()
-              )
-          )
           .build();
 
 

@@ -11,11 +11,10 @@ import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.Par
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCareUnit;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCredentialInformation;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCredentialInformation.ParsedCommission;
-import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedHsaPerson;
-import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedHsaPerson.ParsedPaTitle;
 
 class CommissonListConverterTest {
 
+  private static final String WRONG_HSA_ID = "WRONG_HSA_ID";
   private CommissonListConverter commissonListConverter = new CommissonListConverter();
   private static final String CARE_PROVIDER_ID = "careProviderId";
   private static final String CARE_PROVIDER_NAME = "careProviderName";
@@ -25,10 +24,6 @@ class CommissonListConverterTest {
   private static final String CARE_UNIT_ID = "careUnitId";
   private static final String CARE_UNIT_NAME = "careUnitName";
   private static final String CARE_UNIT_ORG_NUMBER = "careUnitOrgNumber";
-  private static final String HSA_PERSON_ID = "hsaPersonId";
-  private static final String HSA_PERSON_PRESCRIPTION_CODE = "hsaPersonPrescriptionCode";
-  private static final String HSA_PERSON_TITLE_CODE = "hsaPersonTitleCode";
-  private static final String HSA_PERSON_SYSTEM_ROLE = "systemRole";
   private static final Map<String, ParsedCareProvider> CARE_PROVIDER_MAP = Map.of(
       CARE_PROVIDER_ID,
       ParsedCareProvider.builder()
@@ -47,23 +42,6 @@ class CommissonListConverterTest {
           .healthCareProviderOrgno(CARE_UNIT_ORG_NUMBER)
           .build()
   );
-
-  private static final ParsedHsaPerson PARSED_HSA_PERSON = ParsedHsaPerson.builder()
-      .hsaId(HSA_PERSON_ID)
-      .personalPrescriptionCode(HSA_PERSON_PRESCRIPTION_CODE)
-      .parsedPaTitle(
-          List.of(
-              ParsedPaTitle.builder()
-                  .titleCode(HSA_PERSON_TITLE_CODE)
-                  .build()
-          )
-      )
-      .systemRoles(
-          List.of(
-              HSA_PERSON_SYSTEM_ROLE
-          )
-      )
-      .build();
   private static final ParsedCredentialInformation CREDENTIAL_INFORMATION =
       ParsedCredentialInformation.builder()
           .hsaId(CREDENTIAL_INFORMATION_ID)
@@ -195,7 +173,9 @@ class CommissonListConverterTest {
 
   @Test
   void shouldSetCommissionToEmptyListCommissonHsaIdNotFoundInUnitMap() {
-    final var result = commissonListConverter.convert(CARE_UNIT_MAP, CARE_PROVIDER_MAP,
+    final var result = commissonListConverter.convert(
+        Map.of(WRONG_HSA_ID, ParsedCareUnit.builder()
+            .build()), CARE_PROVIDER_MAP,
         CREDENTIAL_INFORMATION);
     assertTrue(result.isEmpty());
   }
