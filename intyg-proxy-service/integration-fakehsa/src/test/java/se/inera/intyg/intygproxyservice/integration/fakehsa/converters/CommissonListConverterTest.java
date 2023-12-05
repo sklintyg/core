@@ -46,7 +46,7 @@ class CommissonListConverterTest {
       ParsedCredentialInformation.builder()
           .hsaId(CREDENTIAL_INFORMATION_ID)
           .givenName(CREDENTIAL_INFORMATION_GIVEN_NAME)
-          .parsedCommissionList(
+          .commissionList(
               List.of(
                   ParsedCommission.builder()
                       .healthCareUnitHsaId(CARE_UNIT_ID)
@@ -166,7 +166,7 @@ class CommissonListConverterTest {
         CARE_UNIT_MAP, CARE_PROVIDER_MAP, ParsedCredentialInformation.builder()
             .hsaId(CREDENTIAL_INFORMATION_ID)
             .givenName(CREDENTIAL_INFORMATION_GIVEN_NAME)
-            .parsedCommissionList(null)
+            .commissionList(null)
             .build());
     assertTrue(result.isEmpty());
   }

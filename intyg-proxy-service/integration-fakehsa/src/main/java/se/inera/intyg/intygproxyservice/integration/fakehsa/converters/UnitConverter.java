@@ -20,6 +20,7 @@ public class UnitConverter {
         )
         .countyCode(parsedSubUnit.getCountyCode())
         .municipalityCode(parsedSubUnit.getMunicipalityCode())
+        .telephoneNumber(List.of(parsedSubUnit.getTelephoneNumber()))
         .build();
   }
 
@@ -34,6 +35,7 @@ public class UnitConverter {
         )
         .countyCode(parsedCareUnit.getCountyCode())
         .municipalityCode(parsedCareUnit.getMunicipalityCode())
+        .telephoneNumber(List.of(parsedCareUnit.getTelephoneNumber()))
         .build();
   }
 }

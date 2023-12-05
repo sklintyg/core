@@ -52,7 +52,7 @@ public class ParsedHsaPerson {
   @Builder.Default
   private List<String> healthCareProfessionalLicence = new ArrayList<>();
 
-  private List<ParsedPaTitle> parsedPaTitle;
+  private List<ParsedPaTitle> paTitle;
 
   private String personalPrescriptionCode;
 

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCareUnit;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedSubUnit;
 
-class HealthHealthCareUnitConverterTest {
+class UnitConverterTest {
 
   private static final String HSA_ID = "hsaId";
   private static final String UNIT_NAME = "unitName";
@@ -18,6 +18,7 @@ class HealthHealthCareUnitConverterTest {
   private static final String MUNICIPALITY_CODE = "municipalityCode";
   private static final String MAIL = "mail";
   private static final String COUNTRY_CODE = "countryCode";
+  private static final String PHONE_NUMBER = "phoneNumber";
   private UnitConverter unitConverter = new UnitConverter();
 
   @Nested
@@ -63,6 +64,12 @@ class HealthHealthCareUnitConverterTest {
     void shouldConvertMunicipalityCode() {
       final var result = unitConverter.convert(getParsedUnit()).getMunicipalityCode();
       assertEquals(MUNICIPALITY_CODE, result);
+    }
+
+    @Test
+    void shouldConvertPhoneNumber() {
+      final var result = unitConverter.convert(getParsedUnit()).getTelephoneNumber();
+      assertEquals(List.of(PHONE_NUMBER), result);
     }
   }
 
@@ -110,6 +117,12 @@ class HealthHealthCareUnitConverterTest {
       final var result = unitConverter.convert(getParsedSubUnit()).getMunicipalityCode();
       assertEquals(MUNICIPALITY_CODE, result);
     }
+
+    @Test
+    void shouldConvertPhoneNumber() {
+      final var result = unitConverter.convert(getParsedSubUnit()).getTelephoneNumber();
+      assertEquals(List.of(PHONE_NUMBER), result);
+    }
   }
 
   private ParsedSubUnit getParsedSubUnit() {
@@ -122,6 +135,7 @@ class HealthHealthCareUnitConverterTest {
         .countyCode(COUNTRY_CODE)
         .mail(MAIL)
         .municipalityCode(MUNICIPALITY_CODE)
+        .telephoneNumber(PHONE_NUMBER)
         .build();
   }
 
@@ -132,6 +146,7 @@ class HealthHealthCareUnitConverterTest {
         .postalAddress(POSTAL_ADDRESS)
         .postalTown(POSTAL_TOWN)
         .postalCode(POSTAL_CODE)
+        .telephoneNumber(PHONE_NUMBER)
         .countyCode(COUNTRY_CODE)
         .mail(MAIL)
         .municipalityCode(MUNICIPALITY_CODE)

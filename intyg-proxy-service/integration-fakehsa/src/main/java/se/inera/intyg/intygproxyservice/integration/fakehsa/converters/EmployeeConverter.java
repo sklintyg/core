@@ -33,7 +33,7 @@ public class EmployeeConverter {
                     .healthCareProfessionalLicenceSpeciality(getSpecialities(parsedHsaPerson))
                     .middleAndSurName(parsedHsaPerson.getMiddleAndSurname())
                     .protectedPerson(parsedHsaPerson.isProtectedPerson())
-                    .paTitle(getPaTitles(parsedHsaPerson.getParsedPaTitle()))
+                    .paTitle(getPaTitles(parsedHsaPerson.getPaTitle()))
                     .build()
             )
         )

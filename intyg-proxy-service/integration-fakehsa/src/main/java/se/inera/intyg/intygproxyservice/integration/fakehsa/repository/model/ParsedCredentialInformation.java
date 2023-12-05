@@ -39,7 +39,7 @@ public class ParsedCredentialInformation {
   private String hsaId;
   private String givenName;
   @Builder.Default
-  private List<ParsedCommission> parsedCommissionList = new ArrayList<>();
+  private List<ParsedCommission> commissionList = new ArrayList<>();
 
   @Data
   @Builder

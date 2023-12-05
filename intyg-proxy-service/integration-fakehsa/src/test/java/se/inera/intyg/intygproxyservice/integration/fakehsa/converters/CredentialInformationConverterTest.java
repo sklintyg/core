@@ -43,7 +43,7 @@ class CredentialInformationConverterTest {
   private static final ParsedHsaPerson PARSED_HSA_PERSON = ParsedHsaPerson.builder()
       .hsaId(HSA_PERSON_ID)
       .personalPrescriptionCode(HSA_PERSON_PRESCRIPTION_CODE)
-      .parsedPaTitle(
+      .paTitle(
           List.of(
               ParsedPaTitle.builder()
                   .titleCode(HSA_PERSON_TITLE_CODE)

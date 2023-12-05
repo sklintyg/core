@@ -18,11 +18,11 @@ public class CommissonListConverter {
   public List<Commission> convert(Map<String, ParsedCareUnit> careUnitMap,
       Map<String, ParsedCareProvider> careProviderMap,
       ParsedCredentialInformation credentialInformation) {
-    if (credentialInformation.getParsedCommissionList() == null) {
+    if (credentialInformation.getCommissionList() == null) {
       return Collections.emptyList();
     }
 
-    final var filteredCommissonPurpose = credentialInformation.getParsedCommissionList().stream()
+    final var filteredCommissonPurpose = credentialInformation.getCommissionList().stream()
         .filter(isPresentInUnitMap(careUnitMap))
         .filter(hasCommissonPurpose())
         .toList();
@@ -33,7 +33,7 @@ public class CommissonListConverter {
 
     final var commissionsList = new ArrayList<Commission>();
 
-    for (ParsedCommission parsedCommission : credentialInformation.getParsedCommissionList()) {
+    for (ParsedCommission parsedCommission : credentialInformation.getCommissionList()) {
       final var parsedCareUnit = careUnitMap.get(parsedCommission.getHealthCareUnitHsaId());
 
       if (!careProviderMap.containsKey(parsedCareUnit.getCareProviderHsaId())) {

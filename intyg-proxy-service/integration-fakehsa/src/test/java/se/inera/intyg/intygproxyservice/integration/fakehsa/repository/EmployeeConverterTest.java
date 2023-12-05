@@ -225,7 +225,7 @@ class EmployeeConverterTest {
     @Test
     void shouldConvertPaTitle() {
       final var hsaPerson = ParsedHsaPerson.builder()
-          .parsedPaTitle(
+          .paTitle(
               List.of(
                   ParsedPaTitle.builder()
                       .titleName(VALUE)

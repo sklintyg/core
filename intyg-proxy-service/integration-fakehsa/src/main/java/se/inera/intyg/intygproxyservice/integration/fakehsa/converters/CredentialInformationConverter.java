@@ -1,5 +1,6 @@
 package se.inera.intyg.intygproxyservice.integration.fakehsa.converters;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -39,11 +40,11 @@ public class CredentialInformationConverter {
                 .role(role)
                 .build()
         ).
-        toList() : null;
+        toList() : Collections.emptyList();
   }
 
   private static List<String> convertPaTitle(ParsedHsaPerson hsaPerson) {
-    return hsaPerson.getParsedPaTitle() != null ? hsaPerson.getParsedPaTitle().stream()
-        .map(ParsedPaTitle::getTitleCode).toList() : null;
+    return hsaPerson.getPaTitle() != null ? hsaPerson.getPaTitle().stream()
+        .map(ParsedPaTitle::getTitleCode).toList() : Collections.emptyList();
   }
 }
