@@ -71,7 +71,12 @@ public class CredentialsForPersonService {
     }
 
     if (isStringInvalid(request.getPersonId())) {
-      throw new IllegalArgumentException("PersonId is not valid");
+      throw new IllegalArgumentException(
+          String.format(
+              "PersonId is not valid: '%s'",
+              HashUtility.hash(request.getPersonId())
+          )
+      );
     }
   }
 }
