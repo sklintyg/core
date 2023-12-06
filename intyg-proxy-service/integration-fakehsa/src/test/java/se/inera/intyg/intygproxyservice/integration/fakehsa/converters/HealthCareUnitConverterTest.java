@@ -1,4 +1,4 @@
-package se.inera.intyg.intygproxyservice.integration.fakehsa.repository;
+package se.inera.intyg.intygproxyservice.integration.fakehsa.converters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -25,7 +25,7 @@ class HealthCareUnitConverterTest {
   }
 
   @Nested
-  class ParsedCareUnitConverter {
+  class ParsedCareHealthHealthCareUnitConverter {
 
     @Test
     void shouldSetIsHealthCareUnitToTrue() {
@@ -148,7 +148,7 @@ class HealthCareUnitConverterTest {
   }
 
   @Nested
-  class ParsedSubUnitConverter {
+  class ParsedSubHealthHealthCareUnitConverter {
 
     @Test
     void shouldSetIsHealthCareUnitToFalse() {

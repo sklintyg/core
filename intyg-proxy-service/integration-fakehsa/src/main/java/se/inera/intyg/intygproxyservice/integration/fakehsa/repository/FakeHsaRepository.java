@@ -1,13 +1,22 @@
 package se.inera.intyg.intygproxyservice.integration.fakehsa.repository;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialInformation;
 import se.inera.intyg.intygproxyservice.integration.api.employee.Employee;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnitMembers;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.Unit;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CredentialInformationConverter;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.EmployeeConverter;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitConverter;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitMembersConverter;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.UnitConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCareProvider;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCareUnit;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedCredentialInformation;
@@ -21,6 +30,9 @@ public class FakeHsaRepository {
   private final EmployeeConverter employeeConverter;
   private final HealthCareUnitMembersConverter healthCareUnitMembersConverter;
   private final HealthCareUnitConverter healthCareUnitConverter;
+  private final UnitConverter unitConverter;
+  private final CredentialInformationConverter credentialInformationConverter;
+
   private final Map<String, ParsedHsaPerson> hsaPersonMap = new HashMap<>();
   private final Map<String, ParsedCredentialInformation> credentialInformationMap = new HashMap<>();
   private final Map<String, ParsedCareProvider> careProviderMap = new HashMap<>();
@@ -55,6 +67,23 @@ public class FakeHsaRepository {
     return healthCareUnitConverter.convert(parsedCareUnit);
   }
 
+  public List<CredentialInformation> getCredentialInformation(String personHsaId) {
+    final var parsedCredentialInformation = credentialInformationMap.get(personHsaId);
+    final var parsedHsaPerson = hsaPersonMap.get(personHsaId);
+
+    if (parsedCredentialInformation == null || parsedHsaPerson == null) {
+      return Collections.emptyList();
+    }
+
+    final var credentialInformation = credentialInformationConverter.convert(
+        parsedCredentialInformation,
+        parsedHsaPerson,
+        careProviderMap,
+        careUnitMap
+    );
+
+    return List.of(credentialInformation);
+  }
 
   public void addParsedCareProvider(ParsedCareProvider parsedCareProvider) {
     if (parsedCareProvider == null) {
@@ -112,5 +141,28 @@ public class FakeHsaRepository {
 
   private static String trimAllWhiteSpace(String id) {
     return StringUtils.trimAllWhitespace(id.toUpperCase());
+  }
+
+  public Unit getUnit(String id) {
+    final var parsedCareProvider = careProviderMap.get(id);
+
+    if (parsedCareProvider != null) {
+      return Unit.builder()
+          .unitName(parsedCareProvider.getName())
+          .unitHsaId(parsedCareProvider.getId())
+          .build();
+    }
+
+    final var parsedCareUnit = careUnitMap.get(id);
+    if (parsedCareUnit != null) {
+      return unitConverter.convert(parsedCareUnit);
+    }
+
+    final var parsedSubUnit = subUnitMap.get(id);
+    if (parsedSubUnit != null) {
+      return unitConverter.convert(parsedSubUnit);
+    }
+
+    return null;
   }
 }

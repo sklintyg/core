@@ -20,7 +20,6 @@ package se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,28 +39,17 @@ public class ParsedCredentialInformation {
   private String hsaId;
   private String givenName;
   @Builder.Default
-  private List<Commission> commissionList = new ArrayList<>();
+  private List<ParsedCommission> commissionList = new ArrayList<>();
 
   @Data
-  public static class Commission {
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class ParsedCommission {
 
     private String healthCareProviderHsaId;
     private String healthCareUnitHsaId;
-    private List<String> commissionPurpose;
-
-    /**
-     * Medarbetaruppdragets namn, motsv. CommissionType#commissionName
-     */
-
-    public Commission() {
-      healthCareUnitHsaId = "";
-      commissionPurpose = List.of(VARD_OCH_BEHANDLING);
-    }
-
-    public Commission(String healthCareUnitHsaId, String commissionPurpose) {
-      this.healthCareUnitHsaId = healthCareUnitHsaId;
-      this.commissionPurpose = Collections.singletonList(commissionPurpose);
-    }
-
+    @Builder.Default
+    private List<String> commissionPurpose = new ArrayList<>();
   }
 }

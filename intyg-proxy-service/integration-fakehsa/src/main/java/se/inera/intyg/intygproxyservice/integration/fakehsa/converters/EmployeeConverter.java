@@ -1,4 +1,4 @@
-package se.inera.intyg.intygproxyservice.integration.fakehsa.repository;
+package se.inera.intyg.intygproxyservice.integration.fakehsa.converters;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +33,7 @@ public class EmployeeConverter {
                     .healthCareProfessionalLicenceSpeciality(getSpecialities(parsedHsaPerson))
                     .middleAndSurName(parsedHsaPerson.getMiddleAndSurname())
                     .protectedPerson(parsedHsaPerson.isProtectedPerson())
-                    .paTitle(getPaTitles(parsedHsaPerson.getParsedPaTitle()))
+                    .paTitle(getPaTitles(parsedHsaPerson.getPaTitle()))
                     .build()
             )
         )

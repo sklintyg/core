@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.intygproxyservice.integration.api.employee.HCPSpecialityCode;
 import se.inera.intyg.intygproxyservice.integration.api.employee.PersonInformation.PaTitle;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.EmployeeConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedHsaPerson;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedHsaPerson.ParsedPaTitle;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedHsaPerson.Speciality;
@@ -224,7 +225,7 @@ class EmployeeConverterTest {
     @Test
     void shouldConvertPaTitle() {
       final var hsaPerson = ParsedHsaPerson.builder()
-          .parsedPaTitle(
+          .paTitle(
               List.of(
                   ParsedPaTitle.builder()
                       .titleName(VALUE)
