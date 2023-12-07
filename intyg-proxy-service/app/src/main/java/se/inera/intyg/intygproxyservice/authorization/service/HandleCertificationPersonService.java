@@ -42,7 +42,9 @@ public class HandleCertificationPersonService {
 
     log.info(
         String.format(
-            "Getting credential info for person with personId: '%s'",
+            "Performing operation '%s' with reason '%s' on certification person with personId: '%s'",
+            request.getOperation(),
+            request.getReason(),
             HashUtility.hash(request.getPersonId())
         )
     );
@@ -56,8 +58,11 @@ public class HandleCertificationPersonService {
             .build()
     );
 
-    log.info(String.format(
-            "Credentials for person with personId: '%s' was retrieved",
+    log.info(
+        String.format(
+            "Performed operation '%s' with reason '%s' on certification person with personId: '%s'",
+            request.getOperation(),
+            request.getReason(),
             HashUtility.hash(request.getPersonId())
         )
     );
@@ -70,7 +75,7 @@ public class HandleCertificationPersonService {
 
   private static void validateRequest(HandleCertificationPersonRequest request) {
     if (request == null) {
-      throw new IllegalArgumentException("Request to get credentials for person is null");
+      throw new IllegalArgumentException("Request to handle certification person is null");
     }
 
     validateString(request.getPersonId(), HashUtility.hash(request.getPersonId()), "PersonId");
