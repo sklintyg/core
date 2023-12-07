@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.intygproxyservice.integration.common.WebServiceClientFactory;
+import se.riv.infrastructure.directory.authorizationmanagement.gethosplastupdate.v1.rivtabp21.GetHospLastUpdateResponderInterface;
 import se.riv.infrastructure.directory.employee.getemployeeincludingprotectedperson.v3.rivtabp21.GetEmployeeIncludingProtectedPersonResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareunit.v2.rivtabp21.GetHealthCareUnitResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareunitmembers.v2.rivtabp21.GetHealthCareUnitMembersResponderInterface;
@@ -22,6 +23,8 @@ class HsaClientConfigurationTest {
   public static final String GET_EMPLOYEE_INCLUDING_PROTECTED_PERSON_ENDPOINT = "GET_EMPLOYEE_INCLUDING_PROTECTED_PERSON_ENDPOINT";
   public static final String GET_HEALTH_CARE_UNIT_ENDPOINT = "GET_HEALTH_CARE_UNIT_ENDPOINT";
   public static final String GET_HEALTH_CARE_UNIT_MEMBERS_ENDPOINT = "GET_HEALTH_CARE_UNIT_MEMBERS_ENDPOINT";
+  public static final String GET_LAST_UPDATE_ENDPOINT = "GET_LAST_UPDATE_ENDPOINT";
+
   @Mock
   private WebServiceClientFactory webServiceClientFactory;
 
@@ -44,6 +47,11 @@ class HsaClientConfigurationTest {
         hsaClientConfiguration,
         "getHealthCareUnitMembersEndpoint",
         GET_HEALTH_CARE_UNIT_MEMBERS_ENDPOINT
+    );
+    ReflectionTestUtils.setField(
+        hsaClientConfiguration,
+        "getLastUpdateEndpoint",
+        GET_LAST_UPDATE_ENDPOINT
     );
   }
 
@@ -89,6 +97,21 @@ class HsaClientConfigurationTest {
         );
 
     final var actual = hsaClientConfiguration.getHealthCareUnitMembersResponderInterface();
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  void shallReturnGetLastUpdate() {
+    final var expected = mock(GetHospLastUpdateResponderInterface.class);
+
+    doReturn(expected)
+        .when(webServiceClientFactory)
+        .create(
+            GetHospLastUpdateResponderInterface.class,
+            GET_LAST_UPDATE_ENDPOINT
+        );
+
+    final var actual = hsaClientConfiguration.getLastUpdate();
     assertEquals(expected, actual);
   }
 }

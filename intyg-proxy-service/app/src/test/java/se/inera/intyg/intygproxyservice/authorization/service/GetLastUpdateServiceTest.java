@@ -36,4 +36,11 @@ class GetLastUpdateServiceTest {
 
     assertEquals(EXPECTED, response.getLastUpdate());
   }
+
+  @Test
+  void shouldReturnNullIfIntegrationServiceReturnsNull() {
+    final var response = getLastUpdateService.get();
+
+    assertNull(response.getLastUpdate());
+  }
 }

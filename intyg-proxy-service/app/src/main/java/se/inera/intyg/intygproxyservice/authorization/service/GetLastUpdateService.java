@@ -38,11 +38,15 @@ public class GetLastUpdateService {
 
     final var response = getLastUpdateIntegrationService.get();
 
-    log.info("Last update for hsa was retrieved");
+    if (response == null) {
+      log.warn("Last update could not be retrieved");
+    } else {
+      log.info("Last update for hsa was retrieved");
+    }
 
     return GetLastUpdateResponse
         .builder()
-        .lastUpdate(response.getLastUpdate())
+        .lastUpdate(response != null ? response.getLastUpdate() : null)
         .build();
   }
 }
