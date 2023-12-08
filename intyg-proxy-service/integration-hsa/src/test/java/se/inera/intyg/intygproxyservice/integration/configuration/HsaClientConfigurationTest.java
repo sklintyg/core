@@ -22,6 +22,8 @@ class HsaClientConfigurationTest {
   public static final String GET_EMPLOYEE_INCLUDING_PROTECTED_PERSON_ENDPOINT = "GET_EMPLOYEE_INCLUDING_PROTECTED_PERSON_ENDPOINT";
   public static final String GET_HEALTH_CARE_UNIT_ENDPOINT = "GET_HEALTH_CARE_UNIT_ENDPOINT";
   public static final String GET_HEALTH_CARE_UNIT_MEMBERS_ENDPOINT = "GET_HEALTH_CARE_UNIT_MEMBERS_ENDPOINT";
+  public static final String GET_CREDENTIALS_FOR_PERSON_ENDPOINT = "GET_CREDENTIALS_FOR_PERSON";
+
   @Mock
   private WebServiceClientFactory webServiceClientFactory;
 
@@ -44,6 +46,11 @@ class HsaClientConfigurationTest {
         hsaClientConfiguration,
         "getHealthCareUnitMembersEndpoint",
         GET_HEALTH_CARE_UNIT_MEMBERS_ENDPOINT
+    );
+    ReflectionTestUtils.setField(
+        hsaClientConfiguration,
+        "getCredentialsForPersonEndpoint",
+        GET_CREDENTIALS_FOR_PERSON_ENDPOINT
     );
   }
 

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import se.inera.intyg.intygproxyservice.integration.common.WebServiceClientFactory;
 import se.riv.infrastructure.directory.authorizationmanagement.getcredentialsforpersonincludingprotectedperson.v2.rivtabp21.GetCredentialsForPersonIncludingProtectedPersonResponderInterface;
+import se.riv.infrastructure.directory.authorizationmanagement.gethospcredentialsforperson.v1.rivtabp21.GetHospCredentialsForPersonResponderInterface;
 import se.riv.infrastructure.directory.employee.getemployeeincludingprotectedperson.v3.rivtabp21.GetEmployeeIncludingProtectedPersonResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareunit.v2.rivtabp21.GetHealthCareUnitResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareunitmembers.v2.rivtabp21.GetHealthCareUnitMembersResponderInterface;
@@ -33,6 +34,9 @@ public class HsaClientConfiguration {
 
   @Value("${integration.hsa.gethealthcareunitmembers.endpoint}")
   private String getCredentialInformationEndpoint;
+
+  @Value("${integration.hsa.getcredentialsforperson.endpoint}")
+  private String getCredentialsForPersonEndpoint;
 
   @Bean
   public GetCredentialsForPersonIncludingProtectedPersonResponderInterface getCredentialInformation() {
@@ -71,6 +75,14 @@ public class HsaClientConfiguration {
     return webServiceClientFactory.create(
         GetUnitResponderInterface.class,
         getUnitEndpoint
+    );
+  }
+
+  @Bean
+  public GetHospCredentialsForPersonResponderInterface getCredentialsForPerson() {
+    return webServiceClientFactory.create(
+        GetHospCredentialsForPersonResponderInterface.class,
+        getCredentialsForPersonEndpoint
     );
   }
 }
