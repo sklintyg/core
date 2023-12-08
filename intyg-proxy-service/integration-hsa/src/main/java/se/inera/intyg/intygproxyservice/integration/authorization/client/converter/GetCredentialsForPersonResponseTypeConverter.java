@@ -17,7 +17,7 @@ public class GetCredentialsForPersonResponseTypeConverter {
 
   public CredentialsForPerson convert(GetHospCredentialsForPersonResponseType type) {
     if (type == null) {
-      return null;
+      return CredentialsForPerson.builder().build();
     }
 
     return CredentialsForPerson.builder()

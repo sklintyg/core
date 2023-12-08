@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialsForPerson;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.HCPSpecialityCodes;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.HealthCareProfessionalLicence;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.NursePrescriptionRight;
@@ -41,10 +42,10 @@ class GetCredentialsForPersonResponseTypeConverterTest {
   RestrictionTypeConverter restrictionTypeConverter;
 
   @Test
-  void shouldReturnNullIfTypeIsNull() {
+  void shouldReturnEmptyIfTypeIsNull() {
     final var response = getCredentialsForPersonResponseTypeConverter.convert(null);
 
-    assertNull(response);
+    assertEquals(CredentialsForPerson.builder().build(), response);
   }
 
   @Test
