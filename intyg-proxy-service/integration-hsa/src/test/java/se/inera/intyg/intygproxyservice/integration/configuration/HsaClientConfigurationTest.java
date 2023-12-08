@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.intygproxyservice.integration.common.WebServiceClientFactory;
+import se.riv.infrastructure.directory.authorizationmanagement.gethospcredentialsforperson.v1.rivtabp21.GetHospCredentialsForPersonResponderInterface;
 import se.riv.infrastructure.directory.employee.getemployeeincludingprotectedperson.v3.rivtabp21.GetEmployeeIncludingProtectedPersonResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareunit.v2.rivtabp21.GetHealthCareUnitResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareunitmembers.v2.rivtabp21.GetHealthCareUnitMembersResponderInterface;
@@ -96,6 +97,21 @@ class HsaClientConfigurationTest {
         );
 
     final var actual = hsaClientConfiguration.getHealthCareUnitMembersResponderInterface();
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  void shallReturnGetCredentialsForPerson() {
+    final var expected = mock(GetHospCredentialsForPersonResponderInterface.class);
+
+    doReturn(expected)
+        .when(webServiceClientFactory)
+        .create(
+            GetHospCredentialsForPersonResponderInterface.class,
+            GET_CREDENTIALS_FOR_PERSON_ENDPOINT
+        );
+
+    final var actual = hsaClientConfiguration.getCredentialsForPerson();
     assertEquals(expected, actual);
   }
 }
