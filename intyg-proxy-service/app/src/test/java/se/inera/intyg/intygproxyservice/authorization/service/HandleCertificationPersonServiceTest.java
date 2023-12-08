@@ -14,9 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.intygproxyservice.authorization.dto.HandleCertificationPersonRequest;
-import se.inera.intyg.intygproxyservice.integration.api.authorization.GetHandleCertificationPersonIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.authorization.GetHandleCertificationPersonIntegrationResponse;
-import se.inera.intyg.intygproxyservice.integration.api.authorization.GetHandleCertificationPersonIntegrationService;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.HandleCertificationPersonIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.HandleCertificationPersonIntegrationResponse;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.HandleCertificationPersonIntegrationService;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.Result;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,7 +35,7 @@ class HandleCertificationPersonServiceTest {
       .reason(REASON)
       .build();
 
-  private static final GetHandleCertificationPersonIntegrationResponse RESPONSE = GetHandleCertificationPersonIntegrationResponse
+  private static final HandleCertificationPersonIntegrationResponse RESPONSE = HandleCertificationPersonIntegrationResponse
       .builder()
       .result(Result.builder()
           .resultCode("CODE")
@@ -45,7 +45,7 @@ class HandleCertificationPersonServiceTest {
       .build();
 
   @Mock
-  private GetHandleCertificationPersonIntegrationService getHandleCertificationPersonIntegrationService;
+  private HandleCertificationPersonIntegrationService handleCertificationPersonIntegrationService;
 
   @InjectMocks
   private HandleCertificationPersonService handleCertificationPersonService;
@@ -200,7 +200,7 @@ class HandleCertificationPersonServiceTest {
 
     @BeforeEach
     void setUp() {
-      when(getHandleCertificationPersonIntegrationService.get(any())).thenReturn(RESPONSE);
+      when(handleCertificationPersonIntegrationService.get(any())).thenReturn(RESPONSE);
     }
 
     @Test
@@ -215,8 +215,8 @@ class HandleCertificationPersonServiceTest {
       handleCertificationPersonService.get(REQUEST);
 
       final var captor = ArgumentCaptor.forClass(
-          GetHandleCertificationPersonIntegrationRequest.class);
-      verify(getHandleCertificationPersonIntegrationService).get(captor.capture());
+          HandleCertificationPersonIntegrationRequest.class);
+      verify(handleCertificationPersonIntegrationService).get(captor.capture());
 
       assertEquals(REQUEST.getPersonId(), captor.getValue().getPersonId());
     }
@@ -226,8 +226,8 @@ class HandleCertificationPersonServiceTest {
       handleCertificationPersonService.get(REQUEST);
 
       final var captor = ArgumentCaptor.forClass(
-          GetHandleCertificationPersonIntegrationRequest.class);
-      verify(getHandleCertificationPersonIntegrationService).get(captor.capture());
+          HandleCertificationPersonIntegrationRequest.class);
+      verify(handleCertificationPersonIntegrationService).get(captor.capture());
 
       assertEquals(REQUEST.getCertificationId(), captor.getValue().getCertificationId());
     }
@@ -237,8 +237,8 @@ class HandleCertificationPersonServiceTest {
       handleCertificationPersonService.get(REQUEST);
 
       final var captor = ArgumentCaptor.forClass(
-          GetHandleCertificationPersonIntegrationRequest.class);
-      verify(getHandleCertificationPersonIntegrationService).get(captor.capture());
+          HandleCertificationPersonIntegrationRequest.class);
+      verify(handleCertificationPersonIntegrationService).get(captor.capture());
 
       assertEquals(REQUEST.getReason(), captor.getValue().getReason());
     }
@@ -248,8 +248,8 @@ class HandleCertificationPersonServiceTest {
       handleCertificationPersonService.get(REQUEST);
 
       final var captor = ArgumentCaptor.forClass(
-          GetHandleCertificationPersonIntegrationRequest.class);
-      verify(getHandleCertificationPersonIntegrationService).get(captor.capture());
+          HandleCertificationPersonIntegrationRequest.class);
+      verify(handleCertificationPersonIntegrationService).get(captor.capture());
 
       assertEquals(REQUEST.getOperation(), captor.getValue().getOperation());
     }

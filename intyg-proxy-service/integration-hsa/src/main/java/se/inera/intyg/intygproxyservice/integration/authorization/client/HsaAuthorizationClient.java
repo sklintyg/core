@@ -26,14 +26,20 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.GetCredentialInformationIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.GetCredentialsForPersonIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.HandleCertificationPersonIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialInformation;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialsForPerson;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.model.Result;
 import se.inera.intyg.intygproxyservice.integration.authorization.client.converter.GetCredentialInformationResponseTypeConverter;
 import se.inera.intyg.intygproxyservice.integration.authorization.client.converter.GetCredentialsForPersonResponseTypeConverter;
+import se.inera.intyg.intygproxyservice.integration.authorization.client.converter.HandleCertificationPersonResponseTypeConverter;
 import se.riv.infrastructure.directory.authorizationmanagement.getcredentialsforpersonincludingprotectedperson.v2.rivtabp21.GetCredentialsForPersonIncludingProtectedPersonResponderInterface;
 import se.riv.infrastructure.directory.authorizationmanagement.getcredentialsforpersonincludingprotectedpersonresponder.v2.GetCredentialsForPersonIncludingProtectedPersonType;
 import se.riv.infrastructure.directory.authorizationmanagement.gethospcredentialsforperson.v1.rivtabp21.GetHospCredentialsForPersonResponderInterface;
 import se.riv.infrastructure.directory.authorizationmanagement.gethospcredentialsforpersonresponder.v1.GetHospCredentialsForPersonType;
+import se.riv.infrastructure.directory.authorizationmanagement.handlehospcertificationperson.v1.rivtabp21.HandleHospCertificationPersonResponderInterface;
+import se.riv.infrastructure.directory.authorizationmanagement.handlehospcertificationpersonresponder.v1.HandleHospCertificationPersonType;
+import se.riv.infrastructure.directory.authorizationmanagement.handlehospcertificationpersonresponder.v1.OperationEnum;
 
 @Service
 @Slf4j
@@ -44,9 +50,11 @@ public class HsaAuthorizationClient {
 
   private final GetCredentialsForPersonIncludingProtectedPersonResponderInterface getCredentialsForPersonIncludingProtectedPersonResponderInterface;
   private final GetHospCredentialsForPersonResponderInterface getHospCredentialsForPersonResponderInterface;
+  private final HandleHospCertificationPersonResponderInterface handleHospCertificationPersonResponderInterface;
 
   private final GetCredentialInformationResponseTypeConverter getCredentialInformationResponseTypeConverter;
   private final GetCredentialsForPersonResponseTypeConverter getCredentialsForPersonResponseTypeConverter;
+  private final HandleCertificationPersonResponseTypeConverter handleCertificationPersonResponseTypeConverter;
 
   @Value("${integration.hsa.logical.address}")
   private String logicalAddress;
@@ -73,6 +81,28 @@ public class HsaAuthorizationClient {
     );
 
     return getCredentialsForPersonResponseTypeConverter.convert(type);
+  }
+
+  public Result handleCertificationPerson(HandleCertificationPersonIntegrationRequest request) {
+    final var parameters = getHospHandleCertificationPersonType(request);
+
+    final var type = handleHospCertificationPersonResponderInterface.handleHospCertificationPerson(
+        logicalAddress,
+        parameters
+    );
+
+    return handleCertificationPersonResponseTypeConverter.convert(type);
+  }
+
+  private static HandleHospCertificationPersonType getHospHandleCertificationPersonType(
+      HandleCertificationPersonIntegrationRequest request) {
+    final var parameters = new HandleHospCertificationPersonType();
+    parameters.setCertificationId(request.getCertificationId());
+    parameters.setOperation(OperationEnum.valueOf(request.getOperation()));
+    parameters.setPersonalIdentityNumber(request.getPersonId());
+    parameters.setReason(request.getReason());
+
+    return parameters;
   }
 
   private static GetHospCredentialsForPersonType getHospCredentialsForPersonType(String personId) {

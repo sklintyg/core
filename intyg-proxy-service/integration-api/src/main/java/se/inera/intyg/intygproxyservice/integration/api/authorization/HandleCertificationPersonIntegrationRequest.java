@@ -21,11 +21,13 @@ package se.inera.intyg.intygproxyservice.integration.api.authorization;
 
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.intygproxyservice.integration.api.authorization.model.Result;
 
 @Value
 @Builder
-public class GetHandleCertificationPersonIntegrationResponse {
+public class HandleCertificationPersonIntegrationRequest {
 
-  Result result;
+  String personId;
+  String certificationId;
+  String operation;
+  String reason;
 }

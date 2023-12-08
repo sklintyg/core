@@ -18,16 +18,23 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.GetCredentialInformationIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.GetCredentialsForPersonIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.HandleCertificationPersonIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialInformation;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialsForPerson;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.model.Result;
 import se.inera.intyg.intygproxyservice.integration.authorization.client.converter.GetCredentialInformationResponseTypeConverter;
 import se.inera.intyg.intygproxyservice.integration.authorization.client.converter.GetCredentialsForPersonResponseTypeConverter;
+import se.inera.intyg.intygproxyservice.integration.authorization.client.converter.HandleCertificationPersonResponseTypeConverter;
 import se.riv.infrastructure.directory.authorizationmanagement.getcredentialsforpersonincludingprotectedperson.v2.rivtabp21.GetCredentialsForPersonIncludingProtectedPersonResponderInterface;
 import se.riv.infrastructure.directory.authorizationmanagement.getcredentialsforpersonincludingprotectedpersonresponder.v2.GetCredentialsForPersonIncludingProtectedPersonResponseType;
 import se.riv.infrastructure.directory.authorizationmanagement.getcredentialsforpersonincludingprotectedpersonresponder.v2.GetCredentialsForPersonIncludingProtectedPersonType;
 import se.riv.infrastructure.directory.authorizationmanagement.gethospcredentialsforperson.v1.rivtabp21.GetHospCredentialsForPersonResponderInterface;
 import se.riv.infrastructure.directory.authorizationmanagement.gethospcredentialsforpersonresponder.v1.GetHospCredentialsForPersonResponseType;
 import se.riv.infrastructure.directory.authorizationmanagement.gethospcredentialsforpersonresponder.v1.GetHospCredentialsForPersonType;
+import se.riv.infrastructure.directory.authorizationmanagement.handlehospcertificationperson.v1.rivtabp21.HandleHospCertificationPersonResponderInterface;
+import se.riv.infrastructure.directory.authorizationmanagement.handlehospcertificationpersonresponder.v1.HandleHospCertificationPersonResponseType;
+import se.riv.infrastructure.directory.authorizationmanagement.handlehospcertificationpersonresponder.v1.HandleHospCertificationPersonType;
+import se.riv.infrastructure.directory.authorizationmanagement.handlehospcertificationpersonresponder.v1.OperationEnum;
 
 @ExtendWith(MockitoExtension.class)
 class HsaAuthorizationClientTest {
@@ -44,6 +51,14 @@ class HsaAuthorizationClientTest {
       .personId("PERSON_ID")
       .build();
 
+  private static final HandleCertificationPersonIntegrationRequest HANDLE_PERSON_REQUEST = HandleCertificationPersonIntegrationRequest
+      .builder()
+      .personId("PERSON_ID")
+      .reason("REASON")
+      .operation(OperationEnum.ADD.toString())
+      .certificationId("C_ID")
+      .build();
+
   private static final String LOGICAL_ADDRESS = "LOGICAL_ADDRESS";
 
   private static final List<CredentialInformation> CREDENTIALS = List.of(
@@ -56,10 +71,16 @@ class HsaAuthorizationClientTest {
   GetCredentialsForPersonResponseTypeConverter getCredentialsForPersonResponseTypeConverter;
 
   @Mock
+  HandleCertificationPersonResponseTypeConverter handleCertificationPersonResponseTypeConverter;
+
+  @Mock
   GetHospCredentialsForPersonResponderInterface getHospCredentialsForPersonResponderInterface;
 
   @Mock
   GetCredentialsForPersonIncludingProtectedPersonResponderInterface getCredentialsForPersonIncludingProtectedPersonResponderInterface;
+
+  @Mock
+  HandleHospCertificationPersonResponderInterface handleHospCertificationPersonResponderInterface;
 
   @InjectMocks
   HsaAuthorizationClient hsaAuthorizationClient;
@@ -267,6 +288,119 @@ class HsaAuthorizationClientTest {
         verify(getHospCredentialsForPersonResponderInterface)
             .getHospCredentialsForPerson(captor.capture(),
                 any(GetHospCredentialsForPersonType.class));
+
+        assertEquals(LOGICAL_ADDRESS, captor.getValue());
+      }
+    }
+  }
+
+  @Nested
+  class HandleCertificationPersonTest {
+
+    @Nested
+    class UnexpectedError {
+
+      @Test
+      void shouldThrowErrorIfInterfaceThrowsError() {
+        when(handleHospCertificationPersonResponderInterface
+            .handleHospCertificationPerson(
+                anyString(),
+                any(HandleHospCertificationPersonType.class)
+            )
+        ).thenThrow(new IllegalStateException());
+
+        assertThrows(IllegalStateException.class,
+            () -> hsaAuthorizationClient.handleCertificationPerson(HANDLE_PERSON_REQUEST));
+      }
+    }
+
+    @Nested
+    class CorrectResponseFromInterface {
+
+      @BeforeEach
+      void setup() {
+        when(handleHospCertificationPersonResponderInterface
+            .handleHospCertificationPerson(
+                anyString(),
+                any(HandleHospCertificationPersonType.class)
+            )
+        ).thenReturn(new HandleHospCertificationPersonResponseType());
+      }
+
+      @Test
+      void shouldReturnResponseFromConverter() {
+        final var expected = Result.builder().build();
+        when(handleCertificationPersonResponseTypeConverter.convert(
+                any(HandleHospCertificationPersonResponseType.class)
+            )
+        ).thenReturn(expected);
+
+        final var response = hsaAuthorizationClient.handleCertificationPerson(
+            HANDLE_PERSON_REQUEST);
+
+        assertEquals(expected, response);
+      }
+
+      @Test
+      void shouldSendPersonIdInRequest() {
+        hsaAuthorizationClient.handleCertificationPerson(HANDLE_PERSON_REQUEST);
+
+        final var captor = ArgumentCaptor.forClass(HandleHospCertificationPersonType.class);
+
+        verify(handleHospCertificationPersonResponderInterface)
+            .handleHospCertificationPerson(anyString(), captor.capture());
+
+        assertEquals(HANDLE_PERSON_REQUEST.getPersonId(),
+            captor.getValue().getPersonalIdentityNumber());
+      }
+
+      @Test
+      void shouldSendCertificationIdInRequest() {
+        hsaAuthorizationClient.handleCertificationPerson(HANDLE_PERSON_REQUEST);
+
+        final var captor = ArgumentCaptor.forClass(HandleHospCertificationPersonType.class);
+
+        verify(handleHospCertificationPersonResponderInterface)
+            .handleHospCertificationPerson(anyString(), captor.capture());
+
+        assertEquals(HANDLE_PERSON_REQUEST.getCertificationId(),
+            captor.getValue().getCertificationId());
+      }
+
+      @Test
+      void shouldSendReasonInRequest() {
+        hsaAuthorizationClient.handleCertificationPerson(HANDLE_PERSON_REQUEST);
+
+        final var captor = ArgumentCaptor.forClass(HandleHospCertificationPersonType.class);
+
+        verify(handleHospCertificationPersonResponderInterface)
+            .handleHospCertificationPerson(anyString(), captor.capture());
+
+        assertEquals(HANDLE_PERSON_REQUEST.getReason(),
+            captor.getValue().getReason());
+      }
+
+      @Test
+      void shouldSendOperationInRequest() {
+        hsaAuthorizationClient.handleCertificationPerson(HANDLE_PERSON_REQUEST);
+
+        final var captor = ArgumentCaptor.forClass(HandleHospCertificationPersonType.class);
+
+        verify(handleHospCertificationPersonResponderInterface)
+            .handleHospCertificationPerson(anyString(), captor.capture());
+
+        assertEquals(HANDLE_PERSON_REQUEST.getOperation(),
+            captor.getValue().getOperation().toString());
+      }
+
+      @Test
+      void shouldSendLogicalAddressInRequest() {
+        hsaAuthorizationClient.handleCertificationPerson(HANDLE_PERSON_REQUEST);
+
+        final var captor = ArgumentCaptor.forClass(String.class);
+
+        verify(handleHospCertificationPersonResponderInterface)
+            .handleHospCertificationPerson(captor.capture(), any());
 
         assertEquals(LOGICAL_ADDRESS, captor.getValue());
       }
