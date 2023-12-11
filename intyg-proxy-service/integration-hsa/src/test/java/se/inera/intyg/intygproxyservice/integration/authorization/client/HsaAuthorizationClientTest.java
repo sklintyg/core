@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -23,11 +24,14 @@ import se.inera.intyg.intygproxyservice.integration.api.authorization.model.Cred
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialsForPerson;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.Result;
 import se.inera.intyg.intygproxyservice.integration.authorization.client.converter.GetCredentialInformationResponseTypeConverter;
+import se.inera.intyg.intygproxyservice.integration.authorization.client.converter.GetLastUpdateResponseTypeConverter;
 import se.inera.intyg.intygproxyservice.integration.authorization.client.converter.GetCredentialsForPersonResponseTypeConverter;
 import se.inera.intyg.intygproxyservice.integration.authorization.client.converter.HandleCertificationPersonResponseTypeConverter;
 import se.riv.infrastructure.directory.authorizationmanagement.getcredentialsforpersonincludingprotectedperson.v2.rivtabp21.GetCredentialsForPersonIncludingProtectedPersonResponderInterface;
 import se.riv.infrastructure.directory.authorizationmanagement.getcredentialsforpersonincludingprotectedpersonresponder.v2.GetCredentialsForPersonIncludingProtectedPersonResponseType;
 import se.riv.infrastructure.directory.authorizationmanagement.getcredentialsforpersonincludingprotectedpersonresponder.v2.GetCredentialsForPersonIncludingProtectedPersonType;
+import se.riv.infrastructure.directory.authorizationmanagement.gethosplastupdate.v1.rivtabp21.GetHospLastUpdateResponderInterface;
+import se.riv.infrastructure.directory.authorizationmanagement.gethosplastupdateresponder.v1.GetHospLastUpdateResponseType;
 import se.riv.infrastructure.directory.authorizationmanagement.gethospcredentialsforperson.v1.rivtabp21.GetHospCredentialsForPersonResponderInterface;
 import se.riv.infrastructure.directory.authorizationmanagement.gethospcredentialsforpersonresponder.v1.GetHospCredentialsForPersonResponseType;
 import se.riv.infrastructure.directory.authorizationmanagement.gethospcredentialsforpersonresponder.v1.GetHospCredentialsForPersonType;
@@ -40,6 +44,8 @@ import se.riv.infrastructure.directory.authorizationmanagement.handlehospcertifi
 class HsaAuthorizationClientTest {
 
   private static final String HSA_ID = "HSA_ID";
+
+  private static final LocalDateTime LAST_UPDATE = LocalDateTime.now();
 
   private static final GetCredentialInformationIntegrationRequest REQUEST = GetCredentialInformationIntegrationRequest
       .builder()
@@ -68,6 +74,10 @@ class HsaAuthorizationClientTest {
   GetCredentialInformationResponseTypeConverter getCredentialInformationResponseTypeConverter;
 
   @Mock
+  GetLastUpdateResponseTypeConverter getLastUpdateResponseTypeConverter;
+
+
+  @Mock
   GetCredentialsForPersonResponseTypeConverter getCredentialsForPersonResponseTypeConverter;
 
   @Mock
@@ -78,6 +88,9 @@ class HsaAuthorizationClientTest {
 
   @Mock
   GetCredentialsForPersonIncludingProtectedPersonResponderInterface getCredentialsForPersonIncludingProtectedPersonResponderInterface;
+
+  @Mock
+  GetHospLastUpdateResponderInterface getHospLastUpdateResponderInterface;
 
   @Mock
   HandleHospCertificationPersonResponderInterface handleHospCertificationPersonResponderInterface;
@@ -209,6 +222,63 @@ class HsaAuthorizationClientTest {
             getCredentialsForPersonIncludingProtectedPersonResponderInterface)
             .getCredentialsForPersonIncludingProtectedPerson(captor.capture(),
                 any(GetCredentialsForPersonIncludingProtectedPersonType.class));
+
+        assertEquals(LOGICAL_ADDRESS, captor.getValue());
+      }
+    }
+  }
+
+  @Nested
+  class LastUpdateTest {
+
+    @Nested
+    class UnexpectedError {
+
+      @Test
+      void shouldThrowErrorIfInterfaceThrowsError() {
+        when(getHospLastUpdateResponderInterface
+            .getHospLastUpdate(
+                anyString(),
+                any()
+            )
+        ).thenThrow(new IllegalStateException());
+
+        assertThrows(IllegalStateException.class,
+            () -> hsaAuthorizationClient.getLastUpdate());
+      }
+    }
+
+    @Nested
+    class CorrectResponseFromInterface {
+
+      @BeforeEach
+      void setup() {
+        when(getHospLastUpdateResponderInterface
+            .getHospLastUpdate(
+                anyString(),
+                any()
+            )
+        ).thenReturn(new GetHospLastUpdateResponseType());
+      }
+
+      @Test
+      void shouldReturnResponseWithValueFromConverter() {
+        when(getLastUpdateResponseTypeConverter.convert(any()))
+            .thenReturn(LAST_UPDATE);
+
+        final var response = hsaAuthorizationClient.getLastUpdate();
+
+        assertEquals(LAST_UPDATE, response);
+      }
+
+      @Test
+      void shouldSendLogicalAddressInRequest() {
+        hsaAuthorizationClient.getLastUpdate();
+
+        final var captor = ArgumentCaptor.forClass(String.class);
+
+        verify(getHospLastUpdateResponderInterface)
+            .getHospLastUpdate(captor.capture(), any());
 
         assertEquals(LOGICAL_ADDRESS, captor.getValue());
       }
