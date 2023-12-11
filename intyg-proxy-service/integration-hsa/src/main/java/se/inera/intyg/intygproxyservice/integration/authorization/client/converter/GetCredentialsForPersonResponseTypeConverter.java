@@ -1,12 +1,12 @@
 package se.inera.intyg.intygproxyservice.integration.authorization.client.converter;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialsForPerson;
 import se.riv.infrastructure.directory.authorizationmanagement.gethospcredentialsforpersonresponder.v1.GetHospCredentialsForPersonResponseType;
 import se.riv.infrastructure.directory.authorizationmanagement.v2.IIType;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class GetCredentialsForPersonResponseTypeConverter {
 
