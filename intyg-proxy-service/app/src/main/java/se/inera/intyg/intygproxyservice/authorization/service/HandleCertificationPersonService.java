@@ -27,15 +27,15 @@ import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.authorization.dto.HandleCertificationPersonRequest;
 import se.inera.intyg.intygproxyservice.authorization.dto.HandleCertificationPersonResponse;
 import se.inera.intyg.intygproxyservice.common.HashUtility;
-import se.inera.intyg.intygproxyservice.integration.api.authorization.GetHandleCertificationPersonIntegrationRequest;
-import se.inera.intyg.intygproxyservice.integration.api.authorization.GetHandleCertificationPersonIntegrationService;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.HandleCertificationPersonIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.HandleCertificationPersonIntegrationService;
 
 @Service
 @AllArgsConstructor
 @Slf4j
 public class HandleCertificationPersonService {
 
-  private final GetHandleCertificationPersonIntegrationService getHandleCertificationPersonIntegrationService;
+  private final HandleCertificationPersonIntegrationService handleCertificationPersonIntegrationService;
 
   public HandleCertificationPersonResponse get(HandleCertificationPersonRequest request) {
     validateRequest(request);
@@ -49,8 +49,8 @@ public class HandleCertificationPersonService {
         )
     );
 
-    final var response = getHandleCertificationPersonIntegrationService.get(
-        GetHandleCertificationPersonIntegrationRequest.builder()
+    final var response = handleCertificationPersonIntegrationService.get(
+        HandleCertificationPersonIntegrationRequest.builder()
             .personId(request.getPersonId())
             .certificationId(request.getCertificationId())
             .operation(request.getOperation())
@@ -60,10 +60,12 @@ public class HandleCertificationPersonService {
 
     log.info(
         String.format(
-            "Performed operation '%s' with reason '%s' on certification person with personId: '%s'",
+            "Performed operation '%s' with reason '%s' on certification person with personId: '%s'. Result code: '%s'. Result text: '%s'.",
             request.getOperation(),
             request.getReason(),
-            HashUtility.hash(request.getPersonId())
+            HashUtility.hash(request.getPersonId()),
+            response.getResult().getResultCode(),
+            response.getResult().getResultText()
         )
     );
 

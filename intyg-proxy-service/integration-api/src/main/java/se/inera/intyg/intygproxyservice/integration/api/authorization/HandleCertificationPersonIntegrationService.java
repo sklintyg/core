@@ -19,8 +19,8 @@
 
 package se.inera.intyg.intygproxyservice.integration.api.authorization;
 
-public interface GetHandleCertificationPersonIntegrationService {
+public interface HandleCertificationPersonIntegrationService {
 
-  GetHandleCertificationPersonIntegrationResponse get(
-      GetHandleCertificationPersonIntegrationRequest request);
+  HandleCertificationPersonIntegrationResponse get(
+      HandleCertificationPersonIntegrationRequest request);
 }
