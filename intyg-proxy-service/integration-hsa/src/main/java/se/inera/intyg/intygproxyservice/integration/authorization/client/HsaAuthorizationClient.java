@@ -19,6 +19,7 @@
 
 package se.inera.intyg.intygproxyservice.integration.authorization.client;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +28,11 @@ import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.GetCredentialInformationIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialInformation;
 import se.inera.intyg.intygproxyservice.integration.authorization.client.converter.GetCredentialInformationResponseTypeConverter;
+import se.inera.intyg.intygproxyservice.integration.authorization.client.converter.GetLastUpdateResponseTypeConverter;
 import se.riv.infrastructure.directory.authorizationmanagement.getcredentialsforpersonincludingprotectedperson.v2.rivtabp21.GetCredentialsForPersonIncludingProtectedPersonResponderInterface;
 import se.riv.infrastructure.directory.authorizationmanagement.getcredentialsforpersonincludingprotectedpersonresponder.v2.GetCredentialsForPersonIncludingProtectedPersonType;
+import se.riv.infrastructure.directory.authorizationmanagement.gethosplastupdate.v1.rivtabp21.GetHospLastUpdateResponderInterface;
+import se.riv.infrastructure.directory.authorizationmanagement.gethosplastupdateresponder.v1.GetHospLastUpdateType;
 
 @Service
 @Slf4j
@@ -38,8 +42,10 @@ public class HsaAuthorizationClient {
   private static final String PROFILE_BASIC = "basic";
 
   private final GetCredentialsForPersonIncludingProtectedPersonResponderInterface getCredentialsForPersonIncludingProtectedPersonResponderInterface;
+  private final GetHospLastUpdateResponderInterface getHospLastUpdateResponderInterface;
 
   private final GetCredentialInformationResponseTypeConverter getCredentialInformationResponseTypeConverter;
+  private final GetLastUpdateResponseTypeConverter getLastUpdateResponseTypeConverter;
 
   @Value("${integration.hsa.logical.address}")
   private String logicalAddress;
@@ -54,6 +60,15 @@ public class HsaAuthorizationClient {
     );
 
     return getCredentialInformationResponseTypeConverter.convert(type);
+  }
+
+  public LocalDateTime getLastUpdate() {
+    final var response = getHospLastUpdateResponderInterface.getHospLastUpdate(
+        logicalAddress,
+        new GetHospLastUpdateType()
+    );
+
+    return getLastUpdateResponseTypeConverter.convert(response);
   }
 
   private static GetCredentialsForPersonIncludingProtectedPersonType getCredentialInformationParameters(
