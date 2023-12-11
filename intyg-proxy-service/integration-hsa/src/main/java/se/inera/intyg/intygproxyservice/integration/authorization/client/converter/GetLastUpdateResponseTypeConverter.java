@@ -4,10 +4,10 @@ import static se.inera.intyg.intygproxyservice.integration.common.TypeConverterH
 
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import se.riv.infrastructure.directory.authorizationmanagement.gethosplastupdateresponder.v1.GetHospLastUpdateResponseType;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class GetLastUpdateResponseTypeConverter {
 
