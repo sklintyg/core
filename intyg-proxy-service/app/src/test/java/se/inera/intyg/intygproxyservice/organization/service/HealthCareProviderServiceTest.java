@@ -29,7 +29,6 @@ class HealthCareProviderServiceTest {
   private static final HealthCareProviderRequest REQUEST = HealthCareProviderRequest
       .builder()
       .hsaId(HSA_ID)
-      .organizationNumber(ORG_NO)
       .build();
 
   private static final GetHealthCareProviderIntegrationResponse RESPONSE = GetHealthCareProviderIntegrationResponse
@@ -55,42 +54,33 @@ class HealthCareProviderServiceTest {
   }
 
   @Test
-  void shouldThrowIllegalArgumentExceptionIfHsaIdIsNull() {
-    final var request = HealthCareProviderRequest.builder().organizationNumber(ORG_NO).build();
+  void shouldThrowIllegalArgumentExceptionIfBothHsaIdAndOrgNoAreNull() {
+    final var request = HealthCareProviderRequest.builder().build();
+
     assertThrows(IllegalArgumentException.class, () -> healthCareProviderService.get(request));
   }
 
   @Test
-  void shouldThrowIllegalArgumentExceptionIfHsaIdIsEmpty() {
-    final var request = HealthCareProviderRequest.builder().hsaId("").organizationNumber(ORG_NO)
+  void shouldThrowIllegalArgumentExceptionIfBothHsaIdAndOrgNoAreEmpty() {
+    final var request = HealthCareProviderRequest.builder().hsaId("").organizationNumber("")
         .build();
+
     assertThrows(IllegalArgumentException.class, () -> healthCareProviderService.get(request));
   }
 
   @Test
-  void shouldThrowIllegalArgumentExceptionIfOrgNoIdIsBlank() {
-    final var request = HealthCareProviderRequest.builder().hsaId(" ").organizationNumber(ORG_NO)
+  void shouldThrowIllegalArgumentExceptionIfBothHsaIdAndOrgNoAreBlank() {
+    final var request = HealthCareProviderRequest.builder().hsaId(" ").organizationNumber(" ")
         .build();
+
     assertThrows(IllegalArgumentException.class, () -> healthCareProviderService.get(request));
   }
 
   @Test
-  void shouldThrowIllegalArgumentExceptionIfOrgNoIsNull() {
-    final var request = HealthCareProviderRequest.builder().hsaId(HSA_ID).build();
-    assertThrows(IllegalArgumentException.class, () -> healthCareProviderService.get(request));
-  }
-
-  @Test
-  void shouldThrowIllegalArgumentExceptionIfOrgNoIsEmpty() {
-    final var request = HealthCareProviderRequest.builder().organizationNumber("").hsaId(HSA_ID)
+  void shouldThrowIllegalArgumentExceptionIfBothHsaIdAndOrgNoAreDefined() {
+    final var request = HealthCareProviderRequest.builder().hsaId(HSA_ID).organizationNumber(ORG_NO)
         .build();
-    assertThrows(IllegalArgumentException.class, () -> healthCareProviderService.get(request));
-  }
 
-  @Test
-  void shouldThrowIllegalArgumentExceptionIfOrgNoIsBlank() {
-    final var request = HealthCareProviderRequest.builder().hsaId(HSA_ID).organizationNumber("  ")
-        .build();
     assertThrows(IllegalArgumentException.class, () -> healthCareProviderService.get(request));
   }
 
@@ -102,6 +92,51 @@ class HealthCareProviderServiceTest {
       when(getHealthCareProviderIntegrationService.get(
           any(GetHealthCareProviderIntegrationRequest.class)))
           .thenReturn(RESPONSE);
+    }
+
+    @Test
+    void shouldNotThrowIllegalArgumentExceptionIfOnlyHsaIdIsNull() {
+      final var request = HealthCareProviderRequest.builder().organizationNumber(ORG_NO).build();
+
+      assertDoesNotThrow(() -> healthCareProviderService.get(request));
+    }
+
+    @Test
+    void shouldNotThrowIllegalArgumentExceptionIfOnlyHsaIdIsEmpty() {
+      final var request = HealthCareProviderRequest.builder().hsaId("").organizationNumber(ORG_NO)
+          .build();
+
+      assertDoesNotThrow(() -> healthCareProviderService.get(request));
+    }
+
+    @Test
+    void shouldNotThrowIllegalArgumentExceptionIfOnlyOrgNoIdIsBlank() {
+      final var request = HealthCareProviderRequest.builder().hsaId(" ").organizationNumber(ORG_NO)
+          .build();
+
+      assertDoesNotThrow(() -> healthCareProviderService.get(request));
+    }
+
+    @Test
+    void shouldNotThrowIllegalArgumentExceptionIfOnlyOrgNoIsNull() {
+      final var request = HealthCareProviderRequest.builder().hsaId(HSA_ID).build();
+
+      assertDoesNotThrow(() -> healthCareProviderService.get(request));
+    }
+
+    @Test
+    void shouldNotThrowIllegalArgumentExceptionIfOnlyOrgNoIsEmpty() {
+      final var request = HealthCareProviderRequest.builder().organizationNumber("").hsaId(HSA_ID)
+          .build();
+
+      assertDoesNotThrow(() -> healthCareProviderService.get(request));
+    }
+
+    @Test
+    void shouldNotThrowIllegalArgumentExceptionIfOnlyOrgNoIsBlank() {
+      final var request = HealthCareProviderRequest.builder().hsaId(HSA_ID).organizationNumber("  ")
+          .build();
+      assertDoesNotThrow(() -> healthCareProviderService.get(request));
     }
 
     @Test
@@ -123,12 +158,14 @@ class HealthCareProviderServiceTest {
 
     @Test
     void shallSetOrgNoInRequest() {
-      healthCareProviderService.get(REQUEST);
+      healthCareProviderService.get(
+          HealthCareProviderRequest.builder().organizationNumber(ORG_NO).build()
+      );
 
       final var captor = ArgumentCaptor.forClass(GetHealthCareProviderIntegrationRequest.class);
       verify(getHealthCareProviderIntegrationService).get(captor.capture());
 
-      assertEquals(REQUEST.getOrganizationNumber(), captor.getValue().getOrganizationNumber());
+      assertEquals(ORG_NO, captor.getValue().getOrganizationNumber());
     }
   }
 }

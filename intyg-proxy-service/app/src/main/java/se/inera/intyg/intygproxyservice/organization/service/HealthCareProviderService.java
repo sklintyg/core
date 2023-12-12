@@ -71,14 +71,23 @@ public class HealthCareProviderService {
       throw new IllegalArgumentException("Request to get health care provider is null");
     }
 
-    if (isStringInvalid(request.getHsaId())) {
+    if (!isStringInvalid(request.getHsaId()) && !isStringInvalid(request.getOrganizationNumber())) {
       throw new IllegalArgumentException(
-          String.format("HsaId is not valid: '%s'", request.getHsaId()));
+          String.format(
+              "HsaId '%s' and organizationNumber '%s' are both valid, only one should be valid",
+              request.getHsaId(),
+              request.getOrganizationNumber()
+          )
+      );
     }
 
-    if (isStringInvalid(request.getOrganizationNumber())) {
+    if (isStringInvalid(request.getHsaId()) && isStringInvalid(request.getOrganizationNumber())) {
       throw new IllegalArgumentException(
-          String.format("OrganizationNumber is not valid: '%s'", request.getHsaId()));
+          String.format("HsaId '%s' and organizationNumber '%s' are both invalid",
+              request.getHsaId(),
+              request.getOrganizationNumber()
+          )
+      );
     }
   }
 }
