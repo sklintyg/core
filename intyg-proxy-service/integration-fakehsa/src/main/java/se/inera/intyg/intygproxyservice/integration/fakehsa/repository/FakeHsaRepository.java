@@ -9,9 +9,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialInformation;
 import se.inera.intyg.intygproxyservice.integration.api.employee.Employee;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareProvider;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnitMembers;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.Unit;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CareProviderConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CredentialInformationConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.EmployeeConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitConverter;
@@ -32,6 +34,7 @@ public class FakeHsaRepository {
   private final HealthCareUnitConverter healthCareUnitConverter;
   private final UnitConverter unitConverter;
   private final CredentialInformationConverter credentialInformationConverter;
+  private final CareProviderConverter careProviderConverter;
 
   private final Map<String, ParsedHsaPerson> hsaPersonMap = new HashMap<>();
   private final Map<String, ParsedCredentialInformation> credentialInformationMap = new HashMap<>();
@@ -65,6 +68,16 @@ public class FakeHsaRepository {
       throw new IllegalArgumentException(String.format("Unit was not found, id: '%s'", id));
     }
     return healthCareUnitConverter.convert(parsedCareUnit);
+  }
+
+  public List<HealthCareProvider> getHealthCareProvider(String id) {
+    final var parsedProvider = careProviderMap.get(id);
+    
+    if (parsedProvider == null) {
+      return Collections.emptyList();
+    }
+
+    return List.of(careProviderConverter.convert(parsedProvider));
   }
 
   public List<CredentialInformation> getCredentialInformation(String personHsaId) {
