@@ -7,6 +7,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CredentialInformationConverter;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CredentialsForPersonConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.EmployeeConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitMembersConverter;
@@ -21,6 +22,7 @@ class BootstrapHsaServiceTest {
   private BootstrapHsaService bootstrapHsaService;
   private UnitConverter unitConverter;
   private CredentialInformationConverter credentialInformationConverter;
+  private CredentialsForPersonConverter credentialsForPersonConverter;
 
   @BeforeEach
   void setUp() {
@@ -32,7 +34,8 @@ class BootstrapHsaServiceTest {
         healthCareUnitMembersConverter,
         healthCareUnitConverter,
         unitConverter,
-        credentialInformationConverter
+        credentialInformationConverter,
+        credentialsForPersonConverter
     );
     bootstrapHsaService = new BootstrapHsaService(
         fakeHsaRepository,

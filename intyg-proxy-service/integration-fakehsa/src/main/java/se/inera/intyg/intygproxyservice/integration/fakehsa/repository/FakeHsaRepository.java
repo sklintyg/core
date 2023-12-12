@@ -1,5 +1,7 @@
 package se.inera.intyg.intygproxyservice.integration.fakehsa.repository;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -8,11 +10,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialInformation;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialsForPerson;
 import se.inera.intyg.intygproxyservice.integration.api.employee.Employee;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnitMembers;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.Unit;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CredentialInformationConverter;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CredentialsForPersonConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.EmployeeConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitMembersConverter;
@@ -33,6 +37,7 @@ public class FakeHsaRepository {
   private final UnitConverter unitConverter;
   private final CredentialInformationConverter credentialInformationConverter;
 
+  private final CredentialsForPersonConverter credentialsForPersonConverter;
   private final Map<String, ParsedHsaPerson> hsaPersonMap = new HashMap<>();
   private final Map<String, ParsedCredentialInformation> credentialInformationMap = new HashMap<>();
   private final Map<String, ParsedCareProvider> careProviderMap = new HashMap<>();
@@ -83,6 +88,39 @@ public class FakeHsaRepository {
     );
 
     return List.of(credentialInformation);
+  }
+
+  public Unit getUnit(String id) {
+    final var parsedCareProvider = careProviderMap.get(id);
+
+    if (parsedCareProvider != null) {
+      return Unit.builder()
+          .unitName(parsedCareProvider.getName())
+          .unitHsaId(parsedCareProvider.getId())
+          .build();
+    }
+
+    final var parsedCareUnit = careUnitMap.get(id);
+    if (parsedCareUnit != null) {
+      return unitConverter.convert(parsedCareUnit);
+    }
+
+    final var parsedSubUnit = subUnitMap.get(id);
+    if (parsedSubUnit != null) {
+      return unitConverter.convert(parsedSubUnit);
+    }
+
+    return null;
+  }
+
+  public LocalDateTime getLastUpdate() {
+    return LocalDateTime.now(ZoneId.systemDefault());
+  }
+
+  public CredentialsForPerson getCredentialsForPerson(
+      String personId) {
+    final var parsedHsaPerson = hsaPersonMap.get(personId);
+    return credentialsForPersonConverter.convert(parsedHsaPerson);
   }
 
   public void addParsedCareProvider(ParsedCareProvider parsedCareProvider) {
@@ -141,28 +179,5 @@ public class FakeHsaRepository {
 
   private static String trimAllWhiteSpace(String id) {
     return StringUtils.trimAllWhitespace(id.toUpperCase());
-  }
-
-  public Unit getUnit(String id) {
-    final var parsedCareProvider = careProviderMap.get(id);
-
-    if (parsedCareProvider != null) {
-      return Unit.builder()
-          .unitName(parsedCareProvider.getName())
-          .unitHsaId(parsedCareProvider.getId())
-          .build();
-    }
-
-    final var parsedCareUnit = careUnitMap.get(id);
-    if (parsedCareUnit != null) {
-      return unitConverter.convert(parsedCareUnit);
-    }
-
-    final var parsedSubUnit = subUnitMap.get(id);
-    if (parsedSubUnit != null) {
-      return unitConverter.convert(parsedSubUnit);
-    }
-
-    return null;
   }
 }

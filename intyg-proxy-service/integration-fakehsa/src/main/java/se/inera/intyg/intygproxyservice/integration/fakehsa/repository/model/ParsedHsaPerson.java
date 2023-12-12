@@ -51,16 +51,16 @@ public class ParsedHsaPerson {
   private String title;
   @Builder.Default
   private List<String> healthCareProfessionalLicence = new ArrayList<>();
-
-  private List<ParsedPaTitle> paTitle;
+  @Builder.Default
+  private List<ParsedPaTitle> paTitle = new ArrayList<>();
 
   private String personalPrescriptionCode;
-
-  private List<String> systemRoles;
-
-  private List<String> educationCodes;
-
-  private List<Restrictions> restrictions;
+  @Builder.Default
+  private List<String> systemRoles = new ArrayList<>();
+  @Builder.Default
+  private List<String> educationCodes = new ArrayList<>();
+  @Builder.Default
+  private List<Restrictions> restrictions = new ArrayList<>();
 
   private FakeProperties fakeProperties;
 
