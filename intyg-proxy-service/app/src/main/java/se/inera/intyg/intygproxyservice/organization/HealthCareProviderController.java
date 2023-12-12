@@ -36,7 +36,7 @@ public class HealthCareProviderController {
   private final HealthCareProviderService healthCareProviderService;
 
   @PostMapping
-  HealthCareProviderResponse getHealthCareUnit(@RequestBody HealthCareProviderRequest request) {
+  HealthCareProviderResponse getHealthCareProvider(@RequestBody HealthCareProviderRequest request) {
     return healthCareProviderService.get(request);
   }
 }

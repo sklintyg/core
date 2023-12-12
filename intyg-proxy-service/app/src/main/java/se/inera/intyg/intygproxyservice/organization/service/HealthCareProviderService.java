@@ -42,7 +42,8 @@ public class HealthCareProviderService {
     log.info(
         String.format(
             "Getting health care provider with hsaId: '%s' and organizationNumber '%s'",
-            request.getHsaId(), request.getOrganizationNumber())
+            request.getHsaId(), request.getOrganizationNumber()
+        )
     );
 
     final var response = getHealthCareProviderIntegrationService.get(
@@ -53,7 +54,7 @@ public class HealthCareProviderService {
     );
 
     log.info(String.format(
-        "Health care provider with hsaId: '%s' and organizationNumber '%s' was retrieved. Number of results: '%s'.",
+        "Health care provider with hsaId: '%s' and organizationNumber '%s' was retrieved. Number of results: '%s'",
         request.getHsaId(),
         request.getOrganizationNumber(),
         response.getHealthCareProviders().size())

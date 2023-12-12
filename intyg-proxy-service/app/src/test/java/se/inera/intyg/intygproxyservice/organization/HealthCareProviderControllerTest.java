@@ -32,7 +32,7 @@ class HealthCareProviderControllerTest {
     when(healthCareProviderService.get(any(HealthCareProviderRequest.class)))
         .thenReturn(expected);
 
-    final var response = healthCareProviderController.getHealthCareUnit(
+    final var response = healthCareProviderController.getHealthCareProvider(
         HealthCareProviderRequest
             .builder()
             .build()
