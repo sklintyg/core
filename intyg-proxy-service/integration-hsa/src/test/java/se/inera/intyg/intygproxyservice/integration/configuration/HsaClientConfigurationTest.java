@@ -16,6 +16,7 @@ import se.riv.infrastructure.directory.authorizationmanagement.gethospcredential
 import se.riv.infrastructure.directory.authorizationmanagement.handlehospcertificationperson.v1.rivtabp21.HandleHospCertificationPersonResponderInterface;
 import se.riv.infrastructure.directory.authorizationmanagement.gethosplastupdate.v1.rivtabp21.GetHospLastUpdateResponderInterface;
 import se.riv.infrastructure.directory.employee.getemployeeincludingprotectedperson.v3.rivtabp21.GetEmployeeIncludingProtectedPersonResponderInterface;
+import se.riv.infrastructure.directory.organization.gethealthcareprovider.v1.rivtabp21.GetHealthCareProviderResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareunit.v2.rivtabp21.GetHealthCareUnitResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareunitmembers.v2.rivtabp21.GetHealthCareUnitMembersResponderInterface;
 
@@ -24,6 +25,7 @@ class HsaClientConfigurationTest {
 
   public static final String GET_EMPLOYEE_INCLUDING_PROTECTED_PERSON_ENDPOINT = "GET_EMPLOYEE_INCLUDING_PROTECTED_PERSON_ENDPOINT";
   public static final String GET_HEALTH_CARE_UNIT_ENDPOINT = "GET_HEALTH_CARE_UNIT_ENDPOINT";
+  public static final String GET_HEALTH_CARE_PROVIDER_ENDPOINT = "GET_HEALTH_CARE_PROVIDER_ENDPOINT";
   public static final String GET_HEALTH_CARE_UNIT_MEMBERS_ENDPOINT = "GET_HEALTH_CARE_UNIT_MEMBERS_ENDPOINT";
   public static final String GET_LAST_UPDATE_ENDPOINT = "GET_LAST_UPDATE_ENDPOINT";
   public static final String GET_CREDENTIALS_FOR_PERSON_ENDPOINT = "GET_CREDENTIALS_FOR_PERSON";
@@ -51,6 +53,11 @@ class HsaClientConfigurationTest {
         hsaClientConfiguration,
         "getHealthCareUnitMembersEndpoint",
         GET_HEALTH_CARE_UNIT_MEMBERS_ENDPOINT
+    );
+    ReflectionTestUtils.setField(
+        hsaClientConfiguration,
+        "getHealthCareProviderEndpoint",
+        GET_HEALTH_CARE_PROVIDER_ENDPOINT
     );
     ReflectionTestUtils.setField(
         hsaClientConfiguration,
@@ -111,6 +118,21 @@ class HsaClientConfigurationTest {
         );
 
     final var actual = hsaClientConfiguration.getHealthCareUnitMembersResponderInterface();
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  void shallReturnGetHealthCareProviderResponderInterface() {
+    final var expected = mock(GetHealthCareProviderResponderInterface.class);
+
+    doReturn(expected)
+        .when(webServiceClientFactory)
+        .create(
+            GetHealthCareProviderResponderInterface.class,
+            GET_HEALTH_CARE_PROVIDER_ENDPOINT
+        );
+
+    final var actual = hsaClientConfiguration.getHealthCareProviderResponderInterface();
     assertEquals(expected, actual);
   }
 

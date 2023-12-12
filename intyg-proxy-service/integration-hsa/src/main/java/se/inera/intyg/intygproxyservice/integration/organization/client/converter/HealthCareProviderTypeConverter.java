@@ -28,7 +28,20 @@ import se.riv.infrastructure.directory.organization.gethealthcareunitmembersresp
 @Service
 public class HealthCareProviderTypeConverter {
 
-  public HealthCareProvider convert(HealthCareProviderType type) {
+  public HealthCareProvider convertV2(HealthCareProviderType type) {
+    return HealthCareProvider.builder()
+        .archivedHealthCareProvider(type.isArchivedHealthCareProvider())
+        .feignedHealthCareProvider(type.isFeignedHealthCareProvider())
+        .healthCareProviderHsaId(type.getHealthCareProviderHsaId())
+        .healthCareProviderName(type.getHealthCareProviderName())
+        .healthCareProviderOrgNo(type.getHealthCareProviderOrgNo())
+        .healthCareProviderEndDate(toLocalDate(type.getHealthCareProviderEndDate()))
+        .healthCareProviderStartDate(toLocalDate(type.getHealthCareProviderStartDate()))
+        .build();
+  }
+
+  public HealthCareProvider convertV1(
+      se.riv.infrastructure.directory.organization.gethealthcareproviderresponder.v1.HealthCareProviderType type) {
     return HealthCareProvider.builder()
         .archivedHealthCareProvider(type.isArchivedHealthCareProvider())
         .feignedHealthCareProvider(type.isFeignedHealthCareProvider())
