@@ -72,22 +72,11 @@ public class HealthCareProviderService {
     }
 
     if (!isStringInvalid(request.getHsaId()) && !isStringInvalid(request.getOrganizationNumber())) {
-      throw new IllegalArgumentException(
-          String.format(
-              "HsaId '%s' and organizationNumber '%s' are both valid, only one should be valid",
-              request.getHsaId(),
-              request.getOrganizationNumber()
-          )
-      );
+      throw new IllegalArgumentException("Both hsaId and organizationNumber cannot be defined");
     }
 
     if (isStringInvalid(request.getHsaId()) && isStringInvalid(request.getOrganizationNumber())) {
-      throw new IllegalArgumentException(
-          String.format("HsaId '%s' and organizationNumber '%s' are both invalid",
-              request.getHsaId(),
-              request.getOrganizationNumber()
-          )
-      );
+      throw new IllegalArgumentException("One of hsaId or organizationNumber has to be defined");
     }
   }
 }
