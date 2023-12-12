@@ -32,7 +32,7 @@ public class HsaClientConfiguration {
   @Value("${integration.hsa.gethealthcareunitmembers.endpoint}")
   private String getHealthCareUnitMembersEndpoint;
 
-  @Value("${integration.hsa.gethealthcareunit.endpoint}")
+  @Value("${integration.hsa.gethealthcareprovider.endpoint}")
   private String getHealthCareProviderEndpoint;
 
   @Value("${integration.hsa.getunit.endpoint}")
