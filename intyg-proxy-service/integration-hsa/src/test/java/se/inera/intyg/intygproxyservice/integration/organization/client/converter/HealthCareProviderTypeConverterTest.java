@@ -24,6 +24,7 @@ import static se.inera.intyg.intygproxyservice.integration.common.TypeConverterH
 import static se.inera.intyg.intygproxyservice.integration.common.TypeConverterHelper.truncateToSeconds;
 
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,75 +40,154 @@ class HealthCareProviderTypeConverterTest {
   @InjectMocks
   HealthCareProviderTypeConverter healthCareProviderTypeConverter;
 
-  @Test
-  void shouldConvertArchived() {
-    final var type = getType();
-    final var response = healthCareProviderTypeConverter.convert(type);
+  @Nested
+  class TestV2 {
 
-    assertEquals(type.isArchivedHealthCareProvider(), response.getArchivedHealthCareProvider());
+    @Test
+    void shouldConvertArchived() {
+      final var type = getType();
+      final var response = healthCareProviderTypeConverter.convertV2(type);
+
+      assertEquals(type.isArchivedHealthCareProvider(), response.getArchivedHealthCareProvider());
+    }
+
+    @Test
+    void shouldConvertFeigned() {
+      final var type = getType();
+      final var response = healthCareProviderTypeConverter.convertV2(type);
+
+      assertEquals(type.isFeignedHealthCareProvider(), response.getFeignedHealthCareProvider());
+    }
+
+    @Test
+    void shouldConvertName() {
+      final var type = getType();
+      final var response = healthCareProviderTypeConverter.convertV2(type);
+
+      assertEquals(type.getHealthCareProviderName(), response.getHealthCareProviderName());
+    }
+
+    @Test
+    void shouldConvertHsaId() {
+      final var type = getType();
+      final var response = healthCareProviderTypeConverter.convertV2(type);
+
+      assertEquals(type.getHealthCareProviderHsaId(), response.getHealthCareProviderHsaId());
+    }
+
+    @Test
+    void shouldConvertOrgNo() {
+      final var type = getType();
+      final var response = healthCareProviderTypeConverter.convertV2(type);
+
+      assertEquals(type.getHealthCareProviderOrgNo(), response.getHealthCareProviderOrgNo());
+    }
+
+    @Test
+    void shouldConvertEndDate() {
+      final var type = getType();
+      final var response = healthCareProviderTypeConverter.convertV2(type);
+
+      assertEquals(truncateToSeconds(PROVIDER_END_DATE),
+          truncateToSeconds(response.getHealthCareProviderEndDate()));
+    }
+
+    @Test
+    void shouldConvertStartDate() {
+      final var type = getType();
+      final var response = healthCareProviderTypeConverter.convertV2(type);
+
+      assertEquals(truncateToSeconds(PROVIDER_START_DATE),
+          truncateToSeconds(response.getHealthCareProviderStartDate()));
+    }
+
+    private HealthCareProviderType getType() {
+      final var type = new HealthCareProviderType();
+      type.setArchivedHealthCareProvider(true);
+      type.setFeignedHealthCareProvider(true);
+      type.setHealthCareProviderName("PROVIDER_NAME");
+      type.setHealthCareProviderHsaId("PROVIDER_HSA_ID");
+      type.setHealthCareProviderOrgNo("ORG_NO");
+      type.setHealthCareProviderPublicName("PROVIDER_PUBLIC_NAME");
+      type.setHealthCareProviderEndDate(toXMLGregorianCalendar(PROVIDER_END_DATE));
+      type.setHealthCareProviderStartDate(toXMLGregorianCalendar(PROVIDER_START_DATE));
+
+      return type;
+    }
   }
 
-  @Test
-  void shouldConvertFeigned() {
-    final var type = getType();
-    final var response = healthCareProviderTypeConverter.convert(type);
+  @Nested
+  class TestV1 {
 
-    assertEquals(type.isFeignedHealthCareProvider(), response.getFeignedHealthCareProvider());
-  }
+    @Test
+    void shouldConvertArchived() {
+      final var type = getType();
+      final var response = healthCareProviderTypeConverter.convertV1(type);
 
-  @Test
-  void shouldConvertName() {
-    final var type = getType();
-    final var response = healthCareProviderTypeConverter.convert(type);
+      assertEquals(type.isArchivedHealthCareProvider(), response.getArchivedHealthCareProvider());
+    }
 
-    assertEquals(type.getHealthCareProviderName(), response.getHealthCareProviderName());
-  }
+    @Test
+    void shouldConvertFeigned() {
+      final var type = getType();
+      final var response = healthCareProviderTypeConverter.convertV1(type);
 
-  @Test
-  void shouldConvertHsaId() {
-    final var type = getType();
-    final var response = healthCareProviderTypeConverter.convert(type);
+      assertEquals(type.isFeignedHealthCareProvider(), response.getFeignedHealthCareProvider());
+    }
 
-    assertEquals(type.getHealthCareProviderHsaId(), response.getHealthCareProviderHsaId());
-  }
+    @Test
+    void shouldConvertName() {
+      final var type = getType();
+      final var response = healthCareProviderTypeConverter.convertV1(type);
 
-  @Test
-  void shouldConvertOrgNo() {
-    final var type = getType();
-    final var response = healthCareProviderTypeConverter.convert(type);
+      assertEquals(type.getHealthCareProviderName(), response.getHealthCareProviderName());
+    }
 
-    assertEquals(type.getHealthCareProviderOrgNo(), response.getHealthCareProviderOrgNo());
-  }
+    @Test
+    void shouldConvertHsaId() {
+      final var type = getType();
+      final var response = healthCareProviderTypeConverter.convertV1(type);
 
-  @Test
-  void shouldConvertEndDate() {
-    final var type = getType();
-    final var response = healthCareProviderTypeConverter.convert(type);
+      assertEquals(type.getHealthCareProviderHsaId(), response.getHealthCareProviderHsaId());
+    }
 
-    assertEquals(truncateToSeconds(PROVIDER_END_DATE),
-        truncateToSeconds(response.getHealthCareProviderEndDate()));
-  }
+    @Test
+    void shouldConvertOrgNo() {
+      final var type = getType();
+      final var response = healthCareProviderTypeConverter.convertV1(type);
 
-  @Test
-  void shouldConvertStartDate() {
-    final var type = getType();
-    final var response = healthCareProviderTypeConverter.convert(type);
+      assertEquals(type.getHealthCareProviderOrgNo(), response.getHealthCareProviderOrgNo());
+    }
 
-    assertEquals(truncateToSeconds(PROVIDER_START_DATE),
-        truncateToSeconds(response.getHealthCareProviderStartDate()));
-  }
+    @Test
+    void shouldConvertEndDate() {
+      final var type = getType();
+      final var response = healthCareProviderTypeConverter.convertV1(type);
 
-  private HealthCareProviderType getType() {
-    final var type = new HealthCareProviderType();
-    type.setArchivedHealthCareProvider(true);
-    type.setFeignedHealthCareProvider(true);
-    type.setHealthCareProviderName("PROVIDER_NAME");
-    type.setHealthCareProviderHsaId("PROVIDER_HSA_ID");
-    type.setHealthCareProviderOrgNo("ORG_NO");
-    type.setHealthCareProviderPublicName("PROVIDER_PUBLIC_NAME");
-    type.setHealthCareProviderEndDate(toXMLGregorianCalendar(PROVIDER_END_DATE));
-    type.setHealthCareProviderStartDate(toXMLGregorianCalendar(PROVIDER_START_DATE));
+      assertEquals(truncateToSeconds(PROVIDER_END_DATE),
+          truncateToSeconds(response.getHealthCareProviderEndDate()));
+    }
 
-    return type;
+    @Test
+    void shouldConvertStartDate() {
+      final var type = getType();
+      final var response = healthCareProviderTypeConverter.convertV1(type);
+
+      assertEquals(truncateToSeconds(PROVIDER_START_DATE),
+          truncateToSeconds(response.getHealthCareProviderStartDate()));
+    }
+
+    private se.riv.infrastructure.directory.organization.gethealthcareproviderresponder.v1.HealthCareProviderType getType() {
+      final var type = new se.riv.infrastructure.directory.organization.gethealthcareproviderresponder.v1.HealthCareProviderType();
+      type.setArchivedHealthCareProvider(true);
+      type.setFeignedHealthCareProvider(true);
+      type.setHealthCareProviderName("PROVIDER_NAME");
+      type.setHealthCareProviderHsaId("PROVIDER_HSA_ID");
+      type.setHealthCareProviderOrgNo("ORG_NO");
+      type.setHealthCareProviderEndDate(toXMLGregorianCalendar(PROVIDER_END_DATE));
+      type.setHealthCareProviderStartDate(toXMLGregorianCalendar(PROVIDER_START_DATE));
+
+      return type;
+    }
   }
 }

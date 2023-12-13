@@ -53,7 +53,7 @@ public class HealthCareUnitMembersTypeConverter {
                 .map(healthCareUnitMemberTypeConverter::convert)
                 .toList()
         )
-        .healthCareProvider(healthCareProviderTypeConverter.convert(type.getHealthCareProvider()))
+        .healthCareProvider(healthCareProviderTypeConverter.convertV2(type.getHealthCareProvider()))
         .build();
   }
 
