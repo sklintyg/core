@@ -16,54 +16,53 @@ import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.UnitConve
 
 class BootstrapHsaServiceTest {
 
-  private FakeHsaRepository fakeHsaRepository;
-  private EmployeeConverter employeeConverter;
-  private HealthCareUnitMembersConverter healthCareUnitMembersConverter;
-  private HealthCareUnitConverter healthCareUnitConverter;
-  private BootstrapHsaService bootstrapHsaService;
-  private UnitConverter unitConverter;
-  private CredentialInformationConverter credentialInformationConverter;
-  private CredentialsForPersonConverter credentialsForPersonConverter;
-  private CareProviderConverter careProviderConverter;
+    private FakeHsaRepository fakeHsaRepository;
+    private EmployeeConverter employeeConverter;
+    private HealthCareUnitMembersConverter healthCareUnitMembersConverter;
+    private HealthCareUnitConverter healthCareUnitConverter;
+    private BootstrapHsaService bootstrapHsaService;
+    private UnitConverter unitConverter;
+    private CredentialInformationConverter credentialInformationConverter;
+    private CredentialsForPersonConverter credentialsForPersonConverter;
+    private CareProviderConverter careProviderConverter;
 
-  @BeforeEach
-  void setUp() {
-    employeeConverter = new EmployeeConverter();
-    healthCareUnitConverter = new HealthCareUnitConverter();
-    healthCareUnitMembersConverter = new HealthCareUnitMembersConverter();
-    careProviderConverter = new CareProviderConverter();
-    fakeHsaRepository = new FakeHsaRepository(
-        employeeConverter,
-        healthCareUnitMembersConverter,
-        healthCareUnitConverter,
-        unitConverter,
-        credentialInformationConverter,
-        credentialInformationConverter,
-        credentialsForPersonConverter,
-        careProviderConverter
-    );
-    bootstrapHsaService = new BootstrapHsaService(
-        fakeHsaRepository,
-        new ObjectMapper()
-    );
+    @BeforeEach
+    void setUp() {
+        employeeConverter = new EmployeeConverter();
+        healthCareUnitConverter = new HealthCareUnitConverter();
+        healthCareUnitMembersConverter = new HealthCareUnitMembersConverter();
+        careProviderConverter = new CareProviderConverter();
+        fakeHsaRepository = new FakeHsaRepository(
+            employeeConverter,
+            healthCareUnitMembersConverter,
+            healthCareUnitConverter,
+            unitConverter,
+            credentialInformationConverter,
+            careProviderConverter,
+            credentialsForPersonConverter
+        );
+        bootstrapHsaService = new BootstrapHsaService(
+            fakeHsaRepository,
+            new ObjectMapper()
+        );
 
-  }
+    }
 
-  @Test
-  void shallLoadEmployeeToRepository() throws IOException {
-    bootstrapHsaService.bootstrapVardgivare();
-    assertNotNull(fakeHsaRepository.getEmployee("TSTNMT2321000156-1079"));
-  }
+    @Test
+    void shallLoadEmployeeToRepository() throws IOException {
+        bootstrapHsaService.bootstrapVardgivare();
+        assertNotNull(fakeHsaRepository.getEmployee("TSTNMT2321000156-1079"));
+    }
 
-  @Test
-  void shallLoadCareUnitToRepository() throws IOException {
-    bootstrapHsaService.bootstrapVardgivare();
-    assertNotNull(fakeHsaRepository.getHealthCareUnit("TSTNMT2321000156-ALVC"));
-  }
+    @Test
+    void shallLoadCareUnitToRepository() throws IOException {
+        bootstrapHsaService.bootstrapVardgivare();
+        assertNotNull(fakeHsaRepository.getHealthCareUnit("TSTNMT2321000156-ALVC"));
+    }
 
-  @Test
-  void shallLoadSubCareUnitToRepository() throws IOException {
-    bootstrapHsaService.bootstrapVardgivare();
-    assertNotNull(fakeHsaRepository.getHealthCareUnit("TSTNMT2321000156-ALLM"));
-  }
+    @Test
+    void shallLoadSubCareUnitToRepository() throws IOException {
+        bootstrapHsaService.bootstrapVardgivare();
+        assertNotNull(fakeHsaRepository.getHealthCareUnit("TSTNMT2321000156-ALLM"));
+    }
 }
