@@ -367,6 +367,18 @@ class HsaAuthorizationClientTest {
   @Nested
   class HandleCertificationPersonTest {
 
+    @Test
+    void shouldThrowErrorIfOperationIsNotEnum() {
+      final var request = HandleCertificationPersonIntegrationRequest.builder()
+          .operation("NO_MATCH")
+          .build();
+
+      assertThrows(
+          IllegalArgumentException.class,
+          () -> hsaAuthorizationClient.handleCertificationPerson(request)
+      );
+    }
+
     @Nested
     class UnexpectedError {
 

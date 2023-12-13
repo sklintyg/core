@@ -147,14 +147,14 @@ class HealthCareUnitMembersTypeConverterTest {
   @Test
   void shouldConvertHealthCareProvider() {
     final var provider = HealthCareProvider.builder().healthCareProviderName("NAME").build();
-    when(healthCareProviderTypeConverter.convert(any(HealthCareProviderType.class)))
+    when(healthCareProviderTypeConverter.convertV2(any(HealthCareProviderType.class)))
         .thenReturn(provider);
     final var type = getType();
 
     final var response = healthCareUnitMembersTypeConverter.convert(type);
     final var captor = ArgumentCaptor.forClass(HealthCareProviderType.class);
 
-    verify(healthCareProviderTypeConverter).convert(captor.capture());
+    verify(healthCareProviderTypeConverter).convertV2(captor.capture());
 
     assertEquals(type.getHealthCareProvider(), captor.getValue());
     assertEquals(provider, response.getHealthCareProvider());

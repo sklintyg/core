@@ -11,6 +11,7 @@ import se.riv.infrastructure.directory.authorizationmanagement.gethospcredential
 import se.riv.infrastructure.directory.authorizationmanagement.handlehospcertificationperson.v1.rivtabp21.HandleHospCertificationPersonResponderInterface;
 import se.riv.infrastructure.directory.authorizationmanagement.gethosplastupdate.v1.rivtabp21.GetHospLastUpdateResponderInterface;
 import se.riv.infrastructure.directory.employee.getemployeeincludingprotectedperson.v3.rivtabp21.GetEmployeeIncludingProtectedPersonResponderInterface;
+import se.riv.infrastructure.directory.organization.gethealthcareprovider.v1.rivtabp21.GetHealthCareProviderResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareunit.v2.rivtabp21.GetHealthCareUnitResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareunitmembers.v2.rivtabp21.GetHealthCareUnitMembersResponderInterface;
 import se.riv.infrastructure.directory.organization.getunit.v4.rivtabp21.GetUnitResponderInterface;
@@ -30,6 +31,9 @@ public class HsaClientConfiguration {
 
   @Value("${integration.hsa.gethealthcareunitmembers.endpoint}")
   private String getHealthCareUnitMembersEndpoint;
+
+  @Value("${integration.hsa.gethealthcareprovider.endpoint}")
+  private String getHealthCareProviderEndpoint;
 
   @Value("${integration.hsa.getunit.endpoint}")
   private String getUnitEndpoint;
@@ -83,6 +87,14 @@ public class HsaClientConfiguration {
     return webServiceClientFactory.create(
         GetHealthCareUnitMembersResponderInterface.class,
         getHealthCareUnitMembersEndpoint
+    );
+  }
+
+  @Bean
+  public GetHealthCareProviderResponderInterface getHealthCareProviderResponderInterface() {
+    return webServiceClientFactory.create(
+        GetHealthCareProviderResponderInterface.class,
+        getHealthCareProviderEndpoint
     );
   }
 

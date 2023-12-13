@@ -18,13 +18,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialInformation;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialsForPerson;
 import se.inera.intyg.intygproxyservice.integration.api.employee.Employee;
+import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareProvider;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnitMembers;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.Unit;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CareProviderConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CredentialInformationConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CredentialsForPersonConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.EmployeeConverter;
-import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareProviderConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitMembersConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.UnitConverter;
@@ -45,7 +46,7 @@ class FakeHsaRepositoryTest {
   @Mock
   private HealthCareUnitMembersConverter healthCareUnitMembersConverter;
   @Mock
-  private HealthCareProviderConverter healthCareProviderConverter;
+  private CareProviderConverter careProviderConverter;
   @Mock
   private CredentialInformationConverter credentialInformationConverter;
   @Mock
@@ -327,6 +328,37 @@ class FakeHsaRepositoryTest {
       final var result = fakeHsaRepository.getCredentialInformation(HSA_ID);
 
       assertEquals(List.of(credentialInformation), result);
+    }
+  }
+
+  @Nested
+  class GetCareProvider {
+
+    @Test
+    void shouldReturnEmptyListIfNotFound() {
+      final var result = fakeHsaRepository.getHealthCareProvider(HSA_ID);
+
+      assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void shouldReturnListOfCareProvider() {
+      final var parsed = ParsedCareProvider.builder()
+          .id(HSA_ID)
+          .build();
+      fakeHsaRepository.addParsedCareProvider(
+          parsed
+      );
+      final var expected = HealthCareProvider.builder()
+          .healthCareProviderHsaId(HSA_ID)
+          .build();
+
+      when(careProviderConverter.convert(parsed))
+          .thenReturn(expected);
+
+      final var result = fakeHsaRepository.getHealthCareProvider(HSA_ID);
+
+      assertEquals(List.of(expected), result);
     }
   }
 
