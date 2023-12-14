@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialInformation;
+import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialsForPerson;
 import se.inera.intyg.intygproxyservice.integration.api.employee.Employee;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareProvider;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.HealthCareUnit;
@@ -22,6 +24,7 @@ import se.inera.intyg.intygproxyservice.integration.api.organization.model.Healt
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.Unit;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CareProviderConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CredentialInformationConverter;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CredentialsForPersonConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.EmployeeConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitMembersConverter;
@@ -48,6 +51,8 @@ class FakeHsaRepositoryTest {
   private CredentialInformationConverter credentialInformationConverter;
   @Mock
   private UnitConverter unitConverter;
+  @Mock
+  private CredentialsForPersonConverter credentialsForPersonConverter;
   @InjectMocks
   private FakeHsaRepository fakeHsaRepository;
 
@@ -354,6 +359,39 @@ class FakeHsaRepositoryTest {
       final var result = fakeHsaRepository.getHealthCareProvider(HSA_ID);
 
       assertEquals(List.of(expected), result);
+    }
+  }
+
+  @Nested
+  class LastUpdate {
+
+    @Test
+    void shouldReturnLocalDateTimeNow() {
+      final var lastUpdate = fakeHsaRepository.getLastUpdate();
+      assertEquals(LocalDateTime.class, lastUpdate.getClass());
+    }
+  }
+
+  @Nested
+  class CredentialForPerson {
+
+    @Test
+    void shouldReturnCredentialsForPerson() {
+      final var expectedResult = CredentialsForPerson.builder().build();
+
+      final var parsedHsaPerson = ParsedHsaPerson.builder()
+          .hsaId(HSA_ID)
+          .build();
+
+      fakeHsaRepository.addParsedHsaPerson(
+          parsedHsaPerson
+      );
+
+      when(credentialsForPersonConverter.convert(parsedHsaPerson)).thenReturn(expectedResult);
+
+      final var result = fakeHsaRepository.getCredentialsForPerson(HSA_ID);
+
+      assertEquals(expectedResult, result);
     }
   }
 }

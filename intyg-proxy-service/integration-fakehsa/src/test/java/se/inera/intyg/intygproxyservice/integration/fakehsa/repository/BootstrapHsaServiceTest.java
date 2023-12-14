@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CareProviderConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CredentialInformationConverter;
+import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.CredentialsForPersonConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.EmployeeConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitConverter;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.converters.HealthCareUnitMembersConverter;
@@ -22,6 +23,7 @@ class BootstrapHsaServiceTest {
   private BootstrapHsaService bootstrapHsaService;
   private UnitConverter unitConverter;
   private CredentialInformationConverter credentialInformationConverter;
+  private CredentialsForPersonConverter credentialsForPersonConverter;
   private CareProviderConverter careProviderConverter;
 
   @BeforeEach
@@ -36,7 +38,8 @@ class BootstrapHsaServiceTest {
         healthCareUnitConverter,
         unitConverter,
         credentialInformationConverter,
-        careProviderConverter
+        careProviderConverter,
+        credentialsForPersonConverter
     );
     bootstrapHsaService = new BootstrapHsaService(
         fakeHsaRepository,
@@ -44,7 +47,7 @@ class BootstrapHsaServiceTest {
     );
 
   }
-
+    
   @Test
   void shallLoadEmployeeToRepository() throws IOException {
     bootstrapHsaService.bootstrapVardgivare();
