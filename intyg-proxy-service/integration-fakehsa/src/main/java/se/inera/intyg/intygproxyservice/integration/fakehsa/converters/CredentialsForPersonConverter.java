@@ -11,7 +11,7 @@ public class CredentialsForPersonConverter {
 
   private final RestrictionConverter restrictionConverter;
   private final SpecialitiesConverter specialitiesConverter;
-  private final HealthCareProfessionalLicenceTypeConverter licenceTypeConverter;
+  private final ProfessionalLicenceTypeConverter licenceTypeConverter;
 
   public CredentialsForPerson convert(ParsedHsaPerson parsedHsaPerson) {
     if (parsedHsaPerson == null) {

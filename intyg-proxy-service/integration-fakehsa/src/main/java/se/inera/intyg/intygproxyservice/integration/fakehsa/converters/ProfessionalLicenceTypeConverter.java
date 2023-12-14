@@ -5,7 +5,7 @@ import se.inera.intyg.intygproxyservice.integration.api.authorization.model.Heal
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedHsaPerson.HealthCareProfessionalLicenceType;
 
 @Component
-public class HealthCareProfessionalLicenceTypeConverter {
+public class ProfessionalLicenceTypeConverter {
 
   public HealthCareProfessionalLicence convert(
       HealthCareProfessionalLicenceType healthCareProfessionalLicenceType) {

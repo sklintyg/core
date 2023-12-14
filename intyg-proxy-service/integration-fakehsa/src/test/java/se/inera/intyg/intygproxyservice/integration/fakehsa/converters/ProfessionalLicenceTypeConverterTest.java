@@ -9,10 +9,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.ParsedHsaPerson.HealthCareProfessionalLicenceType;
 
 @ExtendWith(MockitoExtension.class)
-class HealthCareProfessionalLicenceTypeConverterTest {
+class ProfessionalLicenceTypeConverterTest {
 
   @InjectMocks
-  private HealthCareProfessionalLicenceTypeConverter licenceTypeConverter;
+  private ProfessionalLicenceTypeConverter licenceTypeConverter;
 
   private static final String LICENCE_NAME = "licenceName";
   private static final String LICENCE_CODE = "licenceCode";

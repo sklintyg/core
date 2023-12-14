@@ -71,7 +71,7 @@ class CredentialsForPersonConverterTest {
   @Mock
   private SpecialitiesConverter specialitiesConverter;
   @Mock
-  private HealthCareProfessionalLicenceTypeConverter licenceTypeConverter;
+  private ProfessionalLicenceTypeConverter licenceTypeConverter;
   @InjectMocks
   private CredentialsForPersonConverter credentialsForPersonConverter;
 
