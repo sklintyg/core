@@ -68,6 +68,10 @@ class CredentialsForPersonConverterTest {
 
   @Mock
   private RestrictionConverter restrictionConverter;
+  @Mock
+  private SpecialitiesConverter specialitiesConverter;
+  @Mock
+  private HealthCareProfessionalLicenceTypeConverter licenceTypeConverter;
   @InjectMocks
   private CredentialsForPersonConverter credentialsForPersonConverter;
 
@@ -111,7 +115,7 @@ class CredentialsForPersonConverterTest {
     final var expectedResult = List.of(
         restriction
     );
-    
+
     when(restrictionConverter.convert(RESTRICTIONS.get(0))).thenReturn(restriction);
 
     final var result = credentialsForPersonConverter.convert(PARSED_HSA_PERSON);
@@ -121,28 +125,35 @@ class CredentialsForPersonConverterTest {
 
   @Test
   void shouldConvertSpecialities() {
-    final var result = credentialsForPersonConverter.convert(PARSED_HSA_PERSON);
+    final var hcpSpecialityCodes = HCPSpecialityCodes.builder()
+        .specialityName(SPECIALITY_NAME)
+        .specialityCode(SPECIALITY_CODE)
+        .build();
 
     final var expectedResult = List.of(
-        HCPSpecialityCodes.builder()
-            .specialityName(SPECIALITY_NAME)
-            .specialityCode(SPECIALITY_CODE)
-            .build()
+        hcpSpecialityCodes
     );
+
+    when(specialitiesConverter.convert(SPECIALITIES.get(0))).thenReturn(hcpSpecialityCodes);
+    final var result = credentialsForPersonConverter.convert(PARSED_HSA_PERSON);
 
     assertEquals(expectedResult, result.getHealthCareProfessionalLicenceSpeciality());
   }
 
   @Test
   void shouldConvertHealthCareProfessionalLicenceType() {
-    final var result = credentialsForPersonConverter.convert(PARSED_HSA_PERSON);
+    final var healthCareProfessionalLicence = HealthCareProfessionalLicence.builder()
+        .healthCareProfessionalLicenceCode(HEALTH_CARE_PROFESSIONAL_LICENCE_CODE)
+        .healthCareProfessionalLicenceName(HEALTH_CARE_PROFESSIONAL_LICENCE_NAME)
+        .build();
 
     final var expectedResult = List.of(
-        HealthCareProfessionalLicence.builder()
-            .healthCareProfessionalLicenceCode(HEALTH_CARE_PROFESSIONAL_LICENCE_CODE)
-            .healthCareProfessionalLicenceName(HEALTH_CARE_PROFESSIONAL_LICENCE_NAME)
-            .build()
+        healthCareProfessionalLicence
     );
+
+    when(licenceTypeConverter.convert(HEALTH_CARE_PROFESSIONAL_LICENCE_TYPES.get(0))).thenReturn(
+        healthCareProfessionalLicence);
+    final var result = credentialsForPersonConverter.convert(PARSED_HSA_PERSON);
 
     assertEquals(expectedResult, result.getHealthCareProfessionalLicence());
   }
