@@ -1,6 +1,6 @@
 package se.inera.intyg.intygproxyservice.integration.authorization.client.converter;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -208,11 +208,20 @@ class CommissionTypeConverterTest {
     assertEquals(convertedCommissionRight, response.getCommissionRight().get(0));
   }
 
+  @Test
+  void shouldConvertCareUnitHsaId() {
+    final var type = getType();
+    final var response = commissionTypeConverter.convert(type);
+
+    assertEquals(type.getHealthCareUnitHsaId(), response.getHealthCareUnitHsaId());
+  }
+
   private CommissionType getType() {
     final var type = new CommissionType();
     type.setCommissionHsaId("HSA_ID");
     type.setCommissionName("NAME");
     type.setCommissionPurpose("PURPOSE");
+    type.setHealthCareUnitHsaId("HSA_ID");
     type.setHealthCareProviderEndDate(toXMLGregorianCalendar(END_DATE));
     type.setHealthCareProviderStartDate(toXMLGregorianCalendar(START_DATE));
     type.setHealthCareUnitStartDate(toXMLGregorianCalendar(START_DATE_UNIT));
