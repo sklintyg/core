@@ -15,11 +15,11 @@ public class GetCredentialInformationResponseTypeConverter {
 
   public List<CredentialInformation> convert(
       GetCredentialsForPersonIncludingProtectedPersonResponseType type) {
-    if (type == null || type.getParsedCredentialInformation() == null) {
+    if (type == null || type.getCredentialInformation() == null) {
       return Collections.emptyList();
     }
 
-    return type.getParsedCredentialInformation().stream()
+    return type.getCredentialInformation().stream()
         .map(credentialInformationTypeConverter::convert)
         .toList();
   }
