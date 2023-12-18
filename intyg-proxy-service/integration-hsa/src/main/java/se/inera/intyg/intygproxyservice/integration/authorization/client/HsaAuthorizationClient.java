@@ -34,15 +34,15 @@ import se.inera.intyg.intygproxyservice.integration.api.authorization.model.Cred
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialsForPerson;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.Result;
 import se.inera.intyg.intygproxyservice.integration.authorization.client.converter.GetCredentialInformationResponseTypeConverter;
-import se.inera.intyg.intygproxyservice.integration.authorization.client.converter.GetLastUpdateResponseTypeConverter;
 import se.inera.intyg.intygproxyservice.integration.authorization.client.converter.GetCredentialsForPersonResponseTypeConverter;
+import se.inera.intyg.intygproxyservice.integration.authorization.client.converter.GetLastUpdateResponseTypeConverter;
 import se.inera.intyg.intygproxyservice.integration.authorization.client.converter.HandleCertificationPersonResponseTypeConverter;
 import se.riv.infrastructure.directory.authorizationmanagement.getcredentialsforpersonincludingprotectedperson.v2.rivtabp21.GetCredentialsForPersonIncludingProtectedPersonResponderInterface;
 import se.riv.infrastructure.directory.authorizationmanagement.getcredentialsforpersonincludingprotectedpersonresponder.v2.GetCredentialsForPersonIncludingProtectedPersonType;
-import se.riv.infrastructure.directory.authorizationmanagement.gethosplastupdate.v1.rivtabp21.GetHospLastUpdateResponderInterface;
-import se.riv.infrastructure.directory.authorizationmanagement.gethosplastupdateresponder.v1.GetHospLastUpdateType;
 import se.riv.infrastructure.directory.authorizationmanagement.gethospcredentialsforperson.v1.rivtabp21.GetHospCredentialsForPersonResponderInterface;
 import se.riv.infrastructure.directory.authorizationmanagement.gethospcredentialsforpersonresponder.v1.GetHospCredentialsForPersonType;
+import se.riv.infrastructure.directory.authorizationmanagement.gethosplastupdate.v1.rivtabp21.GetHospLastUpdateResponderInterface;
+import se.riv.infrastructure.directory.authorizationmanagement.gethosplastupdateresponder.v1.GetHospLastUpdateType;
 import se.riv.infrastructure.directory.authorizationmanagement.handlehospcertificationperson.v1.rivtabp21.HandleHospCertificationPersonResponderInterface;
 import se.riv.infrastructure.directory.authorizationmanagement.handlehospcertificationpersonresponder.v1.HandleHospCertificationPersonType;
 import se.riv.infrastructure.directory.authorizationmanagement.handlehospcertificationpersonresponder.v1.OperationEnum;
@@ -52,7 +52,7 @@ import se.riv.infrastructure.directory.authorizationmanagement.handlehospcertifi
 @RequiredArgsConstructor
 public class HsaAuthorizationClient {
 
-  private static final String PROFILE_BASIC = "basic";
+  private static final String PROFILE_EXTENDED_1 = "extended1";
 
   private final GetCredentialsForPersonIncludingProtectedPersonResponderInterface getCredentialsForPersonIncludingProtectedPersonResponderInterface;
   private final GetHospLastUpdateResponderInterface getHospLastUpdateResponderInterface;
@@ -143,7 +143,7 @@ public class HsaAuthorizationClient {
     final var parameters = new GetCredentialsForPersonIncludingProtectedPersonType();
     parameters.setPersonHsaId(hsaId);
     parameters.setIncludeFeignedObject(false);
-    parameters.setProfile(PROFILE_BASIC);
+    parameters.setProfile(PROFILE_EXTENDED_1);
     return parameters;
   }
 }
