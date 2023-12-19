@@ -20,9 +20,7 @@
 package se.inera.intyg.intygproxyservice.integration.authorization.client;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -115,16 +113,8 @@ public class HsaAuthorizationClient {
       HandleCertificationPersonIntegrationRequest request) {
     final var parameters = new HandleHospCertificationPersonType();
 
-    if (Arrays.stream(OperationEnum.values())
-        .noneMatch(value -> Objects.equals(value.toString(), request.getOperation()))
-    ) {
-      throw new IllegalArgumentException(
-          String.format("Operation '%s' does not match possible enum values",
-              request.getOperation()));
-    }
-
     parameters.setCertificationId(request.getCertificationId());
-    parameters.setOperation(OperationEnum.valueOf(request.getOperation()));
+    parameters.setOperation(OperationEnum.fromValue(request.getOperation()));
     parameters.setPersonalIdentityNumber(request.getPersonId());
     parameters.setReason(request.getReason());
 

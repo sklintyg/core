@@ -63,7 +63,7 @@ class HsaAuthorizationClientTest {
       .builder()
       .personId("PERSON_ID")
       .reason("REASON")
-      .operation(OperationEnum.ADD.toString())
+      .operation("add")
       .certificationId("C_ID")
       .build();
 
@@ -473,7 +473,7 @@ class HsaAuthorizationClientTest {
         verify(handleHospCertificationPersonResponderInterface)
             .handleHospCertificationPerson(anyString(), captor.capture());
 
-        assertEquals(HANDLE_PERSON_REQUEST.getOperation(),
+        assertEquals(OperationEnum.ADD.toString(),
             captor.getValue().getOperation().toString());
       }
 
