@@ -81,9 +81,7 @@ public class HandleCertificationPersonService {
     }
 
     validateString(request.getPersonId(), HashUtility.hash(request.getPersonId()), "PersonId");
-    validateString(request.getCertificationId(), "CertificationId");
     validateString(request.getOperation(), "Operation");
-    validateString(request.getReason(), "Reason");
   }
 
   private static void validateString(String value, String printValue, String label) {
