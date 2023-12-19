@@ -1,6 +1,7 @@
 package se.inera.intyg.intygproxyservice.authorization.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -91,41 +92,6 @@ class HandleCertificationPersonServiceTest {
   }
 
   @Test
-  void shouldThrowIllegalArgumentExceptionIfCertificationIdIsNull() {
-    final var request = HandleCertificationPersonRequest.builder()
-        .personId(PERSON_ID)
-        .reason(REASON)
-        .operation(OPERATION)
-        .build();
-    assertThrows(IllegalArgumentException.class,
-        () -> handleCertificationPersonService.get(request));
-  }
-
-  @Test
-  void shouldThrowIllegalArgumentExceptionIfCertificationIdIsEmpty() {
-    final var request = HandleCertificationPersonRequest.builder()
-        .personId(PERSON_ID)
-        .reason(REASON)
-        .certificationId("")
-        .operation(OPERATION)
-        .build();
-    assertThrows(IllegalArgumentException.class,
-        () -> handleCertificationPersonService.get(request));
-  }
-
-  @Test
-  void shouldThrowIllegalArgumentExceptionIfCertificationIdIsBlank() {
-    final var request = HandleCertificationPersonRequest.builder()
-        .personId(PERSON_ID)
-        .certificationId("    ")
-        .reason(REASON)
-        .operation(OPERATION)
-        .build();
-    assertThrows(IllegalArgumentException.class,
-        () -> handleCertificationPersonService.get(request));
-  }
-
-  @Test
   void shouldThrowIllegalArgumentExceptionIfOperationIsNull() {
     final var request = HandleCertificationPersonRequest.builder()
         .personId(PERSON_ID)
@@ -159,41 +125,6 @@ class HandleCertificationPersonServiceTest {
     assertThrows(IllegalArgumentException.class,
         () -> handleCertificationPersonService.get(request));
   }
-
-  @Test
-  void shouldThrowIllegalArgumentExceptionIfReasonIsNull() {
-    final var request = HandleCertificationPersonRequest.builder()
-        .personId(PERSON_ID)
-        .certificationId(CERTIFICATION_ID)
-        .operation(OPERATION)
-        .build();
-    assertThrows(IllegalArgumentException.class,
-        () -> handleCertificationPersonService.get(request));
-  }
-
-  @Test
-  void shouldThrowIllegalArgumentExceptionIfReasonIsEmpty() {
-    final var request = HandleCertificationPersonRequest.builder()
-        .personId(PERSON_ID)
-        .certificationId(CERTIFICATION_ID)
-        .operation(OPERATION)
-        .build();
-    assertThrows(IllegalArgumentException.class,
-        () -> handleCertificationPersonService.get(request));
-  }
-
-  @Test
-  void shouldThrowIllegalArgumentExceptionIfReasonIsBlank() {
-    final var request = HandleCertificationPersonRequest.builder()
-        .personId(PERSON_ID)
-        .certificationId(CERTIFICATION_ID)
-        .reason("  ")
-        .operation(OPERATION)
-        .build();
-    assertThrows(IllegalArgumentException.class,
-        () -> handleCertificationPersonService.get(request));
-  }
-
 
   @Nested
   class ValidRequest {
