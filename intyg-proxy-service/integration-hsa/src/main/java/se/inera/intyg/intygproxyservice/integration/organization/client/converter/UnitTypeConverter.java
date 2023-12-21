@@ -53,6 +53,7 @@ public class UnitTypeConverter {
         .careType(type.getCareType())
         .businessType(type.getBusinessType())
         .management(type.getManagement())
+        .telephoneNumber(type.getTelephoneNumber())
         .geographicalCoordinatesRt90(
             geoCoordRt90TypeConverter.convert(type.getGeographicalCoordinatesRt90())
         )
