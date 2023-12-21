@@ -1,6 +1,6 @@
 package se.inera.intyg.intygproxyservice.integration.organization.client.converter;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -237,6 +237,14 @@ class UnitTypeConverterTest {
     assertEquals(business, response.getBusinessClassification().get(0));
   }
 
+  @Test
+  void shouldConvertTelephoneNumber() {
+    final var type = getType();
+    final var response = unitTypeConverter.convert(type);
+
+    assertEquals(type.getTelephoneNumber(), response.getTelephoneNumber());
+  }
+
   private UnitType getType() {
     final var type = new UnitType();
     type.setUnitName("NAME");
@@ -246,6 +254,7 @@ class UnitTypeConverterTest {
     type.setFeignedUnit(true);
     type.setLocation("LOCATION");
     type.setMail("MAIL");
+    type.getTelephoneNumber().add("TELEPHONE_NUMBER");
     type.setUnitEndDate(toXMLGregorianCalendar(UNIT_END_DATE));
     type.setUnitStartDate(toXMLGregorianCalendar(UNIT_START_DATE));
     type.setPostalCode("POSTAL_CODE");
