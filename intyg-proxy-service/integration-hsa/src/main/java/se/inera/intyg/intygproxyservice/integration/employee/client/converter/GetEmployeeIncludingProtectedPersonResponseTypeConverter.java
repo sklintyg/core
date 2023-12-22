@@ -19,6 +19,7 @@
 
 package se.inera.intyg.intygproxyservice.integration.employee.client.converter;
 
+import java.util.Collections;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.employee.Employee;
@@ -31,6 +32,12 @@ public class GetEmployeeIncludingProtectedPersonResponseTypeConverter {
   private PersonInformationTypeConverter personInformationTypeConverter;
 
   public Employee convert(GetEmployeeIncludingProtectedPersonResponseType type) {
+    if (type == null || type.getPersonInformation() == null) {
+      return Employee.builder()
+          .personInformation(Collections.emptyList())
+          .build();
+    }
+
     return Employee.builder()
         .personInformation(
             type.getPersonInformation().stream()
