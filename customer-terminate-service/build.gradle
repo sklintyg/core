@@ -29,6 +29,10 @@ sonar {
     }
 }
 
+dependencyCheck {
+    formats = List.of("HTML", "JSON")
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
@@ -63,20 +67,17 @@ subprojects {
         afterEvaluate {
             classDirectories.setFrom(files(classDirectories.files.collect {
                 fileTree(dir: it, exclude: [
-                        "**/testability/*"
+                        "**/testability/**"
                 ])
             }))
         }
     }
 
-    dependencyCheck {
-        formats = List.of("HTML", "JSON")
-    }
-
     sonar {
         properties {
-            property "sonar.exclusions", "**/testability/*"
+            property "sonar.exclusions", "**/testability/**"
             property "sonar.dependencyCheck.htmlReportPath", "${buildDir}/reports/dependency-check-report.html"
+            property "sonar.dependencyCheck.jsonReportPath", "${buildDir}/reports/dependency-check-report.json"
         }
     }
 }
