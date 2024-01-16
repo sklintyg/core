@@ -26,6 +26,8 @@ sonar {
     properties {
         property "sonar.projectKey", "intyg-cts"
         property "sonar.projectName", "intyg-cts"
+        property "sonar.dependencyCheck.htmlReportPath", "${buildDir}/reports/dependency-check-report.html"
+        property "sonar.dependencyCheck.jsonReportPath", "${buildDir}/reports/dependency-check-report.json"
     }
 }
 
@@ -75,9 +77,7 @@ subprojects {
 
     sonar {
         properties {
-            property "sonar.exclusions", "**/testability/**"
-            property "sonar.dependencyCheck.htmlReportPath", "${buildDir}/reports/dependency-check-report.html"
-            property "sonar.dependencyCheck.jsonReportPath", "${buildDir}/reports/dependency-check-report.json"
+            property "sonar.exclusions", "**/testability/*"
         }
     }
 }

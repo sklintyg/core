@@ -32,6 +32,8 @@ sonar {
     properties {
         property "sonar.projectKey", "intyg-intyg-proxy-service"
         property "sonar.projectName", "intyg-intyg-proxy-service"
+        property "sonar.dependencyCheck.htmlReportPath", "${buildDir}/reports/dependency-check-report.html"
+        property "sonar.dependencyCheck.jsonReportPath", "${buildDir}/reports/dependency-check-report.json"
     }
 }
 
@@ -68,13 +70,6 @@ subprojects {
         reports {
             xml.required = true
             html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
-        }
-    }
-
-    sonar {
-        properties {
-            property "sonar.dependencyCheck.htmlReportPath", "${buildDir}/reports/dependency-check-report.html"
-            property "sonar.dependencyCheck.jsonReportPath", "${buildDir}/reports/dependency-check-report.json"
         }
     }
 }
