@@ -77,7 +77,7 @@ subprojects {
 
     sonar {
         properties {
-            property "sonar.exclusions", "**/testability/*"
+            property "sonar.exclusions", "**/testability/**"
         }
     }
 }
