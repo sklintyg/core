@@ -14,7 +14,7 @@ ext {
 }
 
 group = 'se.inera.intyg.cts'
-version = '0.0.1-SNAPSHOT'
+version = System.properties['buildVersion'] ?: '0.0.1-SNAPSHOT'
 
 allprojects {
     repositories {
