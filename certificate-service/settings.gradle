@@ -1,0 +1,3 @@
+rootProject.name = 'certificate-service'
+
+include 'app'
