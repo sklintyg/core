@@ -51,6 +51,7 @@ import se.riv.infrastructure.directory.authorizationmanagement.handlehospcertifi
 public class HsaAuthorizationClient {
 
   private static final String PROFILE_EXTENDED_1 = "extended1";
+  private static final String RESPONSE_MESSAGE_DID_NOT_CONTAIN_PROPER_RESPONSE_DATA = "Response message did not contain proper response data.";
 
   private final GetCredentialsForPersonIncludingProtectedPersonResponderInterface getCredentialsForPersonIncludingProtectedPersonResponderInterface;
   private final GetHospLastUpdateResponderInterface getHospLastUpdateResponderInterface;
@@ -90,12 +91,19 @@ public class HsaAuthorizationClient {
       GetCredentialsForPersonIntegrationRequest request) {
     final var parameters = getHospCredentialsForPersonType(request.getPersonId());
 
-    final var type = getHospCredentialsForPersonResponderInterface.getHospCredentialsForPerson(
-        logicalAddress,
-        parameters
-    );
-
-    return getCredentialsForPersonResponseTypeConverter.convert(type);
+    try {
+      final var type = getHospCredentialsForPersonResponderInterface.getHospCredentialsForPerson(
+          logicalAddress,
+          parameters
+      );
+      return getCredentialsForPersonResponseTypeConverter.convert(type);
+    } catch (Exception exception) {
+      if (exception.getMessage() != null && exception.getMessage()
+          .contains(RESPONSE_MESSAGE_DID_NOT_CONTAIN_PROPER_RESPONSE_DATA)) {
+        return null;
+      }
+      throw exception;
+    }
   }
 
   public Result handleCertificationPerson(HandleCertificationPersonIntegrationRequest request) {

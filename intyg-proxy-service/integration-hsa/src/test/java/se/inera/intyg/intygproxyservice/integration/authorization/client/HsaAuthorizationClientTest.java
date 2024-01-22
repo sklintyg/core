@@ -2,6 +2,7 @@ package se.inera.intyg.intygproxyservice.integration.authorization.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -304,6 +305,20 @@ class HsaAuthorizationClientTest {
 
         assertThrows(IllegalStateException.class,
             () -> hsaAuthorizationClient.getCredentialsForPerson(FOR_PERSON_REQUEST));
+      }
+
+      @Test
+      void shouldReturnNullIfResponseContainsKnownExceptionMessage() {
+        when(getHospCredentialsForPersonResponderInterface
+            .getHospCredentialsForPerson(
+                anyString(),
+                any(GetHospCredentialsForPersonType.class)
+            )
+        ).thenThrow(
+            new IllegalStateException("Response message did not contain proper response data.")
+        );
+
+        assertNull(hsaAuthorizationClient.getCredentialsForPerson(FOR_PERSON_REQUEST));
       }
     }
 

@@ -50,7 +50,7 @@ public class PersonInformationTypeConverter {
         .healthCareProfessionalLicenceSpeciality(
             toHCPSpecialityCodes(type.getHealthCareProfessionalLicenceSpeciality())
         )
-        .paTitle(paTitleList(type.getParsedPaTitle()))
+        .paTitle(paTitleList(type.getPaTitle()))
         .build();
   }
 

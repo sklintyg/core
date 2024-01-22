@@ -160,7 +160,7 @@ class PersonInformationTypeConverterTest {
     pa1.setPaTitleCode("Code1");
     pa1.setPaTitleName("Code2");
 
-    when(type.getParsedPaTitle())
+    when(type.getPaTitle())
         .thenReturn(List.of(pa1));
 
     final var response = personInformationTypeConverter.convert(type);
@@ -175,7 +175,7 @@ class PersonInformationTypeConverterTest {
     final var pa1 = new PaTitleType();
     final var pa2 = new PaTitleType();
 
-    when(type.getParsedPaTitle())
+    when(type.getPaTitle())
         .thenReturn(List.of(pa1, pa2));
 
     final var response = personInformationTypeConverter.convert(type);
