@@ -100,6 +100,7 @@ public class HsaAuthorizationClient {
     } catch (Exception exception) {
       if (exception.getMessage() != null && exception.getMessage()
           .contains(RESPONSE_MESSAGE_DID_NOT_CONTAIN_PROPER_RESPONSE_DATA)) {
+        log.warn("Response message did not contain proper response data, returning null");
         return null;
       }
       throw exception;
