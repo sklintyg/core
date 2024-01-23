@@ -29,6 +29,10 @@ allprojects {
 	}
 }
 
+dependencyCheck {
+	formats = List.of("HTML", "JSON")
+}
+
 subprojects {
 	apply plugin: 'java'
 	apply plugin: 'jacoco'
@@ -58,6 +62,20 @@ subprojects {
 		reports {
 			xml.required = true
 			html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+		}
+
+		afterEvaluate {
+			classDirectories.setFrom(files(classDirectories.files.collect {
+				fileTree(dir: it, exclude: [
+						"**/testability/**"
+				])
+			}))
+		}
+	}
+
+	sonar {
+		properties {
+			property "sonar.exclusions", "**/testability/**"
 		}
 	}
 }
