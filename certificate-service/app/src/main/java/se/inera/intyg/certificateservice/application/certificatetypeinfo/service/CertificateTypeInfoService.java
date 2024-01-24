@@ -11,11 +11,13 @@ import se.inera.intyg.certificateservice.repository.CertificateModelRepository;
 @RequiredArgsConstructor
 public class CertificateTypeInfoService {
 
+  private final CertificateTypeInfoValidator certificateTypeInfoValidator;
   private final CertificateModelRepository certificateModelRepository;
   private final CertificateTypeInfoConverter certificateTypeInfoConverter;
 
   public List<CertificateTypeInfoDTO> getActiveCertificateTypeInfos(
-      GetCertificateTypeInfoRequest getCertificateInfoRequest) {
+      GetCertificateTypeInfoRequest getCertificateTypeInfoRequest) {
+    certificateTypeInfoValidator.validate(getCertificateTypeInfoRequest);
     final var certificateModels = certificateModelRepository.findAllActive();
     return certificateModels.stream()
         .map(certificateTypeInfoConverter::convert)

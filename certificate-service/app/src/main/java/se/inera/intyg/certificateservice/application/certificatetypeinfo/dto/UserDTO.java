@@ -13,6 +13,5 @@ public class UserDTO {
 
   String id;
   RoleTypeDTO role;
-  Boolean subscription;
   Boolean blocked;
 }

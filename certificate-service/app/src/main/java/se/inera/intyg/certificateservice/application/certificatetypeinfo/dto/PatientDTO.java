@@ -19,7 +19,7 @@ public class PatientDTO {
   private String street;
   private String city;
   private String zipCode;
-  private boolean testIndicated;
-  private boolean protectedPerson;
-  private boolean deceased;
+  private Boolean testIndicated;
+  private Boolean protectedPerson;
+  private Boolean deceased;
 }

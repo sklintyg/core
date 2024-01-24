@@ -1,6 +1,9 @@
 package se.inera.intyg.certificateservice.application.certificatetypeinfo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -13,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoConverter;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoService;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoValidator;
 import se.inera.intyg.certificateservice.model.CertificateModel;
 import se.inera.intyg.certificateservice.model.ResourceLink;
 import se.inera.intyg.certificateservice.model.ResourceLinkType;
@@ -32,12 +37,33 @@ class CertificateTypeInfoServiceTest {
   private static final String TITLE = "title";
   private static final String MESSAGE = "message";
   @Mock
+  CertificateTypeInfoValidator certificateTypeInfoValidator;
+  @Mock
   CertificateTypeInfoConverter certificateTypeInfoConverter;
   @Mock
   CertificateModelRepository certificateModelRepository;
-
   @InjectMocks
-  se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoService certificateTypeInfoService;
+  CertificateTypeInfoService certificateTypeInfoService;
+
+  @Test
+  void shallThrowIfRequestIsInvalid() {
+    final var certificateTypeInfoRequest = GetCertificateTypeInfoRequest.builder().build();
+
+    doThrow(IllegalArgumentException.class).when(
+        certificateTypeInfoValidator).validate(certificateTypeInfoRequest);
+    assertThrows(IllegalArgumentException.class,
+
+        () -> certificateTypeInfoService.getActiveCertificateTypeInfos(certificateTypeInfoRequest));
+  }
+
+  @Test
+  void shallNotThrowIfRequestIsInvalid() {
+    final var certificateTypeInfoRequest = GetCertificateTypeInfoRequest.builder().build();
+
+    certificateTypeInfoService.getActiveCertificateTypeInfos(certificateTypeInfoRequest);
+
+    verify(certificateTypeInfoValidator).validate(certificateTypeInfoRequest);
+  }
 
   @Test
   void shallReturnListOfCertificateTypeInfoDTO() {
