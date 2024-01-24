@@ -1,3 +1,4 @@
 rootProject.name = 'certificate-service'
 
 include 'app'
+include 'domain'
