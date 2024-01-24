@@ -9,11 +9,8 @@ import lombok.Value;
 @Builder
 public class CertificateTypeInfoDTO {
 
-  String id;
-  String label;
-  String issuerTypeId;
+  String type;
+  String name;
   String description;
-  String detailedDescription;
   List<ResourceLinkDTO> links;
-  String message;
 }

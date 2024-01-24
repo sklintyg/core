@@ -8,6 +8,10 @@ import se.inera.intyg.certificateservice.model.CertificateModel;
 public class CertificateTypeInfoConverter {
 
   public CertificateTypeInfoDTO convert(CertificateModel certificateModel) {
-    return null;
+    return CertificateTypeInfoDTO.builder()
+        .type(certificateModel.getId().getType().type())
+        .name(certificateModel.getName())
+        .description(certificateModel.getDescription())
+        .build();
   }
 }

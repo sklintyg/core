@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.application.certificatetypeinfo;
+package se.inera.intyg.certificateservice.application.certificatetypeinfo.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -6,6 +6,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -15,27 +17,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoConverter;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoService;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoValidator;
 import se.inera.intyg.certificateservice.model.CertificateModel;
-import se.inera.intyg.certificateservice.model.ResourceLink;
-import se.inera.intyg.certificateservice.model.ResourceLinkType;
+import se.inera.intyg.certificateservice.model.CertificateModelId;
+import se.inera.intyg.certificateservice.model.CertificateType;
+import se.inera.intyg.certificateservice.model.CertificateVersion;
 import se.inera.intyg.certificateservice.repository.CertificateModelRepository;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateTypeInfoServiceTest {
 
-  private static final String ID_1 = "id1";
-  private static final String ID_2 = "id2";
-  private static final String LABEL = "label";
-  private static final String ISSUER_TYPE_ID = "issuerTypeId";
+  private static final String TYPE_1 = "type1";
+  private static final String TYPE_2 = "type2";
   private static final String DESCRIPTION = "description";
-  private static final String DETAILED_DESCRIPTION = "detailedDescription";
   private static final String NAME = "name";
-  private static final String BODY = "body";
-  private static final String TITLE = "title";
-  private static final String MESSAGE = "message";
   @Mock
   CertificateTypeInfoValidator certificateTypeInfoValidator;
   @Mock
@@ -69,16 +63,16 @@ class CertificateTypeInfoServiceTest {
   void shallReturnListOfCertificateTypeInfoDTO() {
     final var certificateTypeInfoRequest = GetCertificateTypeInfoRequest.builder()
         .build();
-    final var certificateTypeInfoDTO1 = CertificateTypeInfoDTO.builder().id(ID_1).build();
-    final var certificateTypeInfoDTO2 = CertificateTypeInfoDTO.builder().id(ID_2).build();
+    final var certificateTypeInfoDTO1 = CertificateTypeInfoDTO.builder().type(TYPE_1).build();
+    final var certificateTypeInfoDTO2 = CertificateTypeInfoDTO.builder().type(TYPE_2).build();
     final var expectedResult = List.of(
         certificateTypeInfoDTO1,
         certificateTypeInfoDTO2
     );
 
     final var certificateTypeInfos = List.of(
-        getCertificateTypeInfo(ID_1),
-        getCertificateTypeInfo(ID_2)
+        getCertificateTypeInfo(TYPE_1),
+        getCertificateTypeInfo(TYPE_2)
     );
 
     when(certificateModelRepository.findAllActive()).thenReturn(certificateTypeInfos);
@@ -94,9 +88,17 @@ class CertificateTypeInfoServiceTest {
   }
 
   @NotNull
-  private static CertificateModel getCertificateTypeInfo(String id) {
-    return new CertificateModel(id, LABEL, ISSUER_TYPE_ID, DESCRIPTION, DETAILED_DESCRIPTION,
-        List.of(new ResourceLink(
-            ResourceLinkType.SIGN_CERTIFICATE, NAME, DESCRIPTION, BODY, true, TITLE)), MESSAGE);
+  private static CertificateModel getCertificateTypeInfo(String type) {
+    return CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .type(new CertificateType(type))
+                .version(new CertificateVersion("1.0"))
+                .build()
+        )
+        .name(NAME)
+        .description(DESCRIPTION)
+        .activeFrom(LocalDateTime.now(ZoneId.systemDefault()))
+        .build();
   }
 }

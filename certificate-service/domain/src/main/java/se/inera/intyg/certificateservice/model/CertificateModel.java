@@ -1,14 +1,15 @@
 package se.inera.intyg.certificateservice.model;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import lombok.Builder;
+import lombok.Value;
 
-public record CertificateModel(
-    String id,
-    String label,
-    String issuerTypeId,
-    String description,
-    String detailedDescription,
-    List<ResourceLink> links,
-    String message) {
+@Value
+@Builder
+public class CertificateModel {
 
+  CertificateModelId id;
+  String name;
+  String description;
+  LocalDateTime activeFrom;
 }

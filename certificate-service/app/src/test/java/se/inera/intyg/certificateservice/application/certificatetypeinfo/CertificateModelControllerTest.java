@@ -30,9 +30,11 @@ class CertificateModelControllerTest {
         CertificateTypeInfoDTO.builder().build()
     );
 
-    when(certificateTypeInfoService.getActiveCertificateTypeInfos(certificateTypeInfoRequest)).thenReturn(expectedResult);
+    when(certificateTypeInfoService.getActiveCertificateTypeInfos(
+        certificateTypeInfoRequest)).thenReturn(expectedResult);
 
-    final var result = certificateTypeInfoController.findActiveCertificateTypeInfos(certificateTypeInfoRequest);
+    final var result = certificateTypeInfoController.findActiveCertificateTypeInfos(
+        certificateTypeInfoRequest);
 
     assertEquals(expectedResult, result);
   }
