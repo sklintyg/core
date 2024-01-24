@@ -13,14 +13,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoConverter;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoService;
 import se.inera.intyg.certificateservice.model.CertificateModel;
 import se.inera.intyg.certificateservice.model.ResourceLink;
 import se.inera.intyg.certificateservice.model.ResourceLinkType;
 import se.inera.intyg.certificateservice.repository.CertificateModelRepository;
 
 @ExtendWith(MockitoExtension.class)
-class CertificateModelServiceTest {
+class CertificateTypeInfoServiceTest {
 
   private static final String ID_1 = "id1";
   private static final String ID_2 = "id2";
@@ -38,7 +37,7 @@ class CertificateModelServiceTest {
   CertificateModelRepository certificateModelRepository;
 
   @InjectMocks
-  CertificateTypeInfoService certificateTypeInfoService;
+  se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoService certificateTypeInfoService;
 
   @Test
   void shallReturnListOfCertificateTypeInfoDTO() {
@@ -62,7 +61,8 @@ class CertificateModelServiceTest {
     when(certificateTypeInfoConverter.convert(certificateTypeInfos.get(1))).thenReturn(
         certificateTypeInfoDTO2);
 
-    final var result = certificateTypeInfoService.getActiveCertificateTypeInfos(certificateTypeInfoRequest);
+    final var result = certificateTypeInfoService.getActiveCertificateTypeInfos(
+        certificateTypeInfoRequest);
 
     assertEquals(expectedResult, result);
   }
