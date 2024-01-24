@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoConverter;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoService;
 import se.inera.intyg.certificateservice.model.CertificateModel;
@@ -41,6 +42,8 @@ class CertificateModelServiceTest {
 
   @Test
   void shallReturnListOfCertificateTypeInfoDTO() {
+    final var certificateTypeInfoRequest = GetCertificateTypeInfoRequest.builder()
+        .build();
     final var certificateTypeInfoDTO1 = CertificateTypeInfoDTO.builder().id(ID_1).build();
     final var certificateTypeInfoDTO2 = CertificateTypeInfoDTO.builder().id(ID_2).build();
     final var expectedResult = List.of(
@@ -59,7 +62,7 @@ class CertificateModelServiceTest {
     when(certificateTypeInfoConverter.convert(certificateTypeInfos.get(1))).thenReturn(
         certificateTypeInfoDTO2);
 
-    final var result = certificateTypeInfoService.getActiveCertificateTypeInfos();
+    final var result = certificateTypeInfoService.getActiveCertificateTypeInfos(certificateTypeInfoRequest);
 
     assertEquals(expectedResult, result);
   }
