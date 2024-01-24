@@ -1,22 +1,21 @@
-package se.inera.intyg.certificateservice.application.certificatetypeinfo;
+package se.inera.intyg.certificateservice.application.certificatetypeinfo.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
-import se.inera.intyg.certificateservice.service.GetActiveCertificateTypeInfoService;
+import se.inera.intyg.certificateservice.repository.CertificateModelRepository;
 
 @Service
 @RequiredArgsConstructor
 public class CertificateTypeInfoService {
 
-
-  private final GetActiveCertificateTypeInfoService getActiveCertificateTypeInfoService;
+  private final CertificateModelRepository certificateModelRepository;
   private final CertificateTypeInfoConverter certificateTypeInfoConverter;
 
   public List<CertificateTypeInfoDTO> getActiveCertificateTypeInfos() {
-    final var activeCertificateTypeInfos = getActiveCertificateTypeInfoService.get();
-    return activeCertificateTypeInfos.stream()
+    final var certificateModels = certificateModelRepository.findAllActive();
+    return certificateModels.stream()
         .map(certificateTypeInfoConverter::convert)
         .toList();
   }

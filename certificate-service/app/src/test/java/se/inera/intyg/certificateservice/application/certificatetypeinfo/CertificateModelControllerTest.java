@@ -10,9 +10,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoService;
 
 @ExtendWith(MockitoExtension.class)
-class CertificateTypeInfoControllerTest {
+class CertificateModelControllerTest {
 
   @Mock
   private CertificateTypeInfoService certificateTypeInfoService;

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoService;
 
 @RequiredArgsConstructor
 @RestController("/api/certificatetypeinfo")

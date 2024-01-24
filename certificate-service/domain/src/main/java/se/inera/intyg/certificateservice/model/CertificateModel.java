@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.model;
 
 import java.util.List;
 
-public record CertificateTypeInfo(
+public record CertificateModel(
     String id,
     String label,
     String issuerTypeId,

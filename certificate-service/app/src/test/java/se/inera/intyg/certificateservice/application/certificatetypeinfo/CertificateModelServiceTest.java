@@ -11,13 +11,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
-import se.inera.intyg.certificateservice.model.CertificateTypeInfo;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoConverter;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoService;
+import se.inera.intyg.certificateservice.model.CertificateModel;
 import se.inera.intyg.certificateservice.model.ResourceLink;
 import se.inera.intyg.certificateservice.model.ResourceLinkType;
-import se.inera.intyg.certificateservice.service.GetActiveCertificateTypeInfoService;
+import se.inera.intyg.certificateservice.repository.CertificateModelRepository;
 
 @ExtendWith(MockitoExtension.class)
-class CertificateTypeInfoServiceTest {
+class CertificateModelServiceTest {
 
   private static final String ID_1 = "id1";
   private static final String ID_2 = "id2";
@@ -32,7 +34,7 @@ class CertificateTypeInfoServiceTest {
   @Mock
   CertificateTypeInfoConverter certificateTypeInfoConverter;
   @Mock
-  GetActiveCertificateTypeInfoService getActiveCertificateTypeInfoService;
+  CertificateModelRepository certificateModelRepository;
 
   @InjectMocks
   CertificateTypeInfoService certificateTypeInfoService;
@@ -51,7 +53,7 @@ class CertificateTypeInfoServiceTest {
         getCertificateTypeInfo(ID_2)
     );
 
-    when(getActiveCertificateTypeInfoService.get()).thenReturn(certificateTypeInfos);
+    when(certificateModelRepository.findAllActive()).thenReturn(certificateTypeInfos);
     when(certificateTypeInfoConverter.convert(certificateTypeInfos.get(0))).thenReturn(
         certificateTypeInfoDTO1);
     when(certificateTypeInfoConverter.convert(certificateTypeInfos.get(1))).thenReturn(
@@ -63,8 +65,8 @@ class CertificateTypeInfoServiceTest {
   }
 
   @NotNull
-  private static CertificateTypeInfo getCertificateTypeInfo(String id) {
-    return new CertificateTypeInfo(id, LABEL, ISSUER_TYPE_ID, DESCRIPTION, DETAILED_DESCRIPTION,
+  private static CertificateModel getCertificateTypeInfo(String id) {
+    return new CertificateModel(id, LABEL, ISSUER_TYPE_ID, DESCRIPTION, DETAILED_DESCRIPTION,
         List.of(new ResourceLink(
             ResourceLinkType.SIGN_CERTIFICATE, NAME, DESCRIPTION, BODY, true, TITLE)), MESSAGE);
   }
