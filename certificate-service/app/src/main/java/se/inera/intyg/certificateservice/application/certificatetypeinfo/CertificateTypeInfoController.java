@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.application.certificatetypeinfo;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
@@ -16,7 +17,7 @@ public class CertificateTypeInfoController {
 
   @PostMapping
   List<CertificateTypeInfoDTO> findActiveCertificateTypeInfos(
-      GetCertificateTypeInfoRequest getCertificateTypeInfoRequest) {
+      @RequestBody GetCertificateTypeInfoRequest getCertificateTypeInfoRequest) {
     return certificateTypeInfoService.getActiveCertificateTypeInfos(getCertificateTypeInfoRequest);
   }
 }
