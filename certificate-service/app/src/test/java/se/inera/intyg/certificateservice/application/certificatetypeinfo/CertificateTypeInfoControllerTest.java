@@ -26,7 +26,7 @@ class CertificateTypeInfoControllerTest {
         CertificateTypeInfoDTO.builder().build()
     );
 
-    when(certificateTypeInfoService.get()).thenReturn(expectedResult);
+    when(certificateTypeInfoService.getActiveCertificateTypeInfos()).thenReturn(expectedResult);
 
     final var result = certificateTypeInfoController.findActiveCertificateTypeInfos();
 

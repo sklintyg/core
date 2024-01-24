@@ -14,6 +14,6 @@ public class CertificateTypeInfoController {
 
   @PostMapping
   List<CertificateTypeInfoDTO> findActiveCertificateTypeInfos() {
-    return certificateTypeInfoService.get();
+    return certificateTypeInfoService.getActiveCertificateTypeInfos();
   }
 }
