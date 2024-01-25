@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 
@@ -12,4 +13,5 @@ public class CertificateModel {
   String name;
   String description;
   LocalDateTime activeFrom;
+  List<CertificateActionSpecification> certificateActionSpecifications;
 }
