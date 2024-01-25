@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.application.infrastructure.certificatemodel;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

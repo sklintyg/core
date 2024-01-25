@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.application.infrastructure.configuration;
+package se.inera.intyg.certificateservice.infrastructure.configuration;
 
 import org.springframework.context.annotation.Configuration;
 

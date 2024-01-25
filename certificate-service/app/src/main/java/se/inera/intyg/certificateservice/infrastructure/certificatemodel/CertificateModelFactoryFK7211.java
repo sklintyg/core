@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.application.infrastructure.certificatemodel;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel;
 
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Value;

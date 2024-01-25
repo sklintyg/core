@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.application.infrastructure.certificatemodel.persistence;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.application.infrastructure.certificatemodel.CertificateModelFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.model.CertificateModel;
 import se.inera.intyg.certificateservice.model.CertificateModelId;
 import se.inera.intyg.certificateservice.model.CertificateType;

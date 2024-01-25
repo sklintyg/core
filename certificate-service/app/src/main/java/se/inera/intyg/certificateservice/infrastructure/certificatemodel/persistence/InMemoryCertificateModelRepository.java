@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.application.infrastructure.certificatemodel.persistence;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.persistence;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -8,7 +8,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import se.inera.intyg.certificateservice.application.infrastructure.certificatemodel.CertificateModelFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.model.CertificateModel;
 import se.inera.intyg.certificateservice.model.CertificateModelId;
 import se.inera.intyg.certificateservice.repository.CertificateModelRepository;
