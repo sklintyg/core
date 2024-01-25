@@ -18,19 +18,19 @@ public class CertificateModel {
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     final var certificateActions = new ArrayList<CertificateAction>();
-    if (specificationContainsActionType(CertificationActionType.CREATE)) {
+    if (specificationContainsActionType(CertificateActionType.CREATE)) {
       if (Boolean.FALSE.equals(actionEvaluation.getPatient().getDeceased())) {
         certificateActions.add(
-            new CertificateAction(CertificationActionType.CREATE)
+            new CertificateAction(CertificateActionType.CREATE)
         );
       }
     }
     return certificateActions;
   }
 
-  private boolean specificationContainsActionType(CertificationActionType certificationActionType) {
+  private boolean specificationContainsActionType(CertificateActionType certificateActionType) {
     return getCertificateActionSpecifications().stream()
         .anyMatch(
-            action -> certificationActionType.equals(action.getCertificationActionType()));
+            action -> certificateActionType.equals(action.getCertificateActionType()));
   }
 }

@@ -1,17 +1,29 @@
 package se.inera.intyg.certificateservice.application.certificatetypeinfo.service;
 
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
+import se.inera.intyg.certificateservice.model.CertificateAction;
 import se.inera.intyg.certificateservice.model.CertificateModel;
 
 @Component
+@RequiredArgsConstructor
 public class CertificateTypeInfoConverter {
 
-  public CertificateTypeInfoDTO convert(CertificateModel certificateModel) {
+  private final ResourceLinkConverter resourceLinkConverter;
+
+  public CertificateTypeInfoDTO convert(CertificateModel certificateModel,
+      List<CertificateAction> certificateActions) {
     return CertificateTypeInfoDTO.builder()
         .type(certificateModel.getId().getType().type())
         .name(certificateModel.getName())
         .description(certificateModel.getDescription())
+        .links(
+            certificateActions.stream()
+                .map(resourceLinkConverter::convert)
+                .toList()
+        )
         .build();
   }
 }

@@ -8,10 +8,10 @@ import java.time.ZoneId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
+import se.inera.intyg.certificateservice.model.CertificateActionType;
 import se.inera.intyg.certificateservice.model.CertificateModelId;
 import se.inera.intyg.certificateservice.model.CertificateType;
 import se.inera.intyg.certificateservice.model.CertificateVersion;
-import se.inera.intyg.certificateservice.model.CertificationActionType;
 
 class CertificateModelFactoryFK7211Test {
 
@@ -71,13 +71,13 @@ class CertificateModelFactoryFK7211Test {
 
   @Test
   void shallIncludeCertificateActionCreate() {
-    final var expectedType = CertificationActionType.CREATE;
+    final var expectedType = CertificateActionType.CREATE;
 
     final var certificateModel = certificateModelFactoryFK7211.create();
 
     assertTrue(certificateModel.getCertificateActionSpecifications().stream().anyMatch(
             actionSpecification -> expectedType.equals(
-                actionSpecification.getCertificationActionType())),
+                actionSpecification.getCertificateActionType())),
         "Expected type: %s".formatted(expectedType));
   }
 }

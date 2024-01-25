@@ -11,7 +11,7 @@ class CertificateModelTest {
   @Test
   void shallReturnCreateActionIfPatientIsNotDeceased() {
     final var expectedActions = List.of(
-        new CertificateAction(CertificationActionType.CREATE)
+        new CertificateAction(CertificateActionType.CREATE)
     );
 
     final var actionEvaluation = ActionEvaluation.builder()
@@ -26,7 +26,7 @@ class CertificateModelTest {
         .certificateActionSpecifications(
             List.of(
                 CertificateActionSpecification.builder()
-                    .certificationActionType(CertificationActionType.CREATE)
+                    .certificateActionType(CertificateActionType.CREATE)
                     .build()
             )
         )
@@ -53,7 +53,7 @@ class CertificateModelTest {
         .certificateActionSpecifications(
             List.of(
                 CertificateActionSpecification.builder()
-                    .certificationActionType(CertificationActionType.CREATE)
+                    .certificateActionType(CertificateActionType.CREATE)
                     .build()
             )
         )

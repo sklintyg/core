@@ -1,5 +1,11 @@
 package se.inera.intyg.certificateservice.model;
 
-public record CertificateAction(CertificationActionType type) {
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+public class CertificateAction {
+
+  CertificateActionType certificateActionType;
 }

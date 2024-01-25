@@ -14,13 +14,21 @@ public class CertificateTypeInfoService {
   private final CertificateTypeInfoValidator certificateTypeInfoValidator;
   private final CertificateModelRepository certificateModelRepository;
   private final CertificateTypeInfoConverter certificateTypeInfoConverter;
+  private final ActionEvaluationFactory actionEvaluationFactory;
 
   public List<CertificateTypeInfoDTO> getActiveCertificateTypeInfos(
       GetCertificateTypeInfoRequest getCertificateTypeInfoRequest) {
     certificateTypeInfoValidator.validate(getCertificateTypeInfoRequest);
+    final var actionEvaluation = actionEvaluationFactory.create(
+        getCertificateTypeInfoRequest.getPatient()
+    );
     final var certificateModels = certificateModelRepository.findAllActive();
     return certificateModels.stream()
-        .map(certificateTypeInfoConverter::convert)
+        .map(certificateModel -> {
+              final var certificateActions = certificateModel.actions(actionEvaluation);
+              return certificateTypeInfoConverter.convert(certificateModel, certificateActions);
+            }
+        )
         .toList();
   }
 }

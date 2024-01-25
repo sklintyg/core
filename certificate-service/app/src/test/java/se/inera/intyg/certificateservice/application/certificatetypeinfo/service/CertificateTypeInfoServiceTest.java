@@ -2,12 +2,12 @@ package se.inera.intyg.certificateservice.application.certificatetypeinfo.servic
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -17,10 +17,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.PatientDTO;
+import se.inera.intyg.certificateservice.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.model.CertificateAction;
 import se.inera.intyg.certificateservice.model.CertificateModel;
-import se.inera.intyg.certificateservice.model.CertificateModelId;
-import se.inera.intyg.certificateservice.model.CertificateType;
-import se.inera.intyg.certificateservice.model.CertificateVersion;
 import se.inera.intyg.certificateservice.repository.CertificateModelRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,12 +30,23 @@ class CertificateTypeInfoServiceTest {
   private static final String TYPE_2 = "type2";
   private static final String DESCRIPTION = "description";
   private static final String NAME = "name";
+
+  private static final List<CertificateAction> CERTIFICATE_ACTIONS = List.of(
+      CertificateAction.builder().build()
+  );
+  private static final ActionEvaluation ACTION_EVALUATION = ActionEvaluation.builder().build();
+  @Mock
+  private CertificateModel certificateModelOne;
+  @Mock
+  private CertificateModel certificateModelTwo;
   @Mock
   CertificateTypeInfoValidator certificateTypeInfoValidator;
   @Mock
   CertificateTypeInfoConverter certificateTypeInfoConverter;
   @Mock
   CertificateModelRepository certificateModelRepository;
+  @Mock
+  ActionEvaluationFactory actionEvaluationFactory;
   @InjectMocks
   CertificateTypeInfoService certificateTypeInfoService;
 
@@ -61,7 +72,9 @@ class CertificateTypeInfoServiceTest {
 
   @Test
   void shallReturnListOfCertificateTypeInfoDTO() {
+    final var patient = PatientDTO.builder().build();
     final var certificateTypeInfoRequest = GetCertificateTypeInfoRequest.builder()
+        .patient(patient)
         .build();
     final var certificateTypeInfoDTO1 = CertificateTypeInfoDTO.builder().type(TYPE_1).build();
     final var certificateTypeInfoDTO2 = CertificateTypeInfoDTO.builder().type(TYPE_2).build();
@@ -70,15 +83,15 @@ class CertificateTypeInfoServiceTest {
         certificateTypeInfoDTO2
     );
 
-    final var certificateTypeInfos = List.of(
-        getCertificateTypeInfo(TYPE_1),
-        getCertificateTypeInfo(TYPE_2)
-    );
+    final var certificateModels = List.of(getCertifiateModel(), getCertifiateModel());
 
-    when(certificateModelRepository.findAllActive()).thenReturn(certificateTypeInfos);
-    when(certificateTypeInfoConverter.convert(certificateTypeInfos.get(0))).thenReturn(
+    when(actionEvaluationFactory.create(patient)).thenReturn(ACTION_EVALUATION);
+    when(certificateModelRepository.findAllActive()).thenReturn(certificateModels);
+    when(certificateTypeInfoConverter.convert(certificateModels.get(0),
+        CERTIFICATE_ACTIONS)).thenReturn(
         certificateTypeInfoDTO1);
-    when(certificateTypeInfoConverter.convert(certificateTypeInfos.get(1))).thenReturn(
+    when(certificateTypeInfoConverter.convert(certificateModels.get(1),
+        CERTIFICATE_ACTIONS)).thenReturn(
         certificateTypeInfoDTO2);
 
     final var result = certificateTypeInfoService.getActiveCertificateTypeInfos(
@@ -88,17 +101,9 @@ class CertificateTypeInfoServiceTest {
   }
 
   @NotNull
-  private static CertificateModel getCertificateTypeInfo(String type) {
-    return CertificateModel.builder()
-        .id(
-            CertificateModelId.builder()
-                .type(new CertificateType(type))
-                .version(new CertificateVersion("1.0"))
-                .build()
-        )
-        .name(NAME)
-        .description(DESCRIPTION)
-        .activeFrom(LocalDateTime.now(ZoneId.systemDefault()))
-        .build();
+  private static CertificateModel getCertifiateModel() {
+    final var certificateModel = mock(CertificateModel.class);
+    doReturn(CERTIFICATE_ACTIONS).when(certificateModel).actions(ACTION_EVALUATION);
+    return certificateModel;
   }
 }

@@ -7,5 +7,5 @@ import lombok.Value;
 @Builder
 public class CertificateActionSpecification {
 
-  CertificationActionType certificationActionType;
+  CertificateActionType certificateActionType;
 }
