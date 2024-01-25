@@ -11,7 +11,7 @@ import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.Get
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoService;
 
 @RequiredArgsConstructor
-@RestController()
+@RestController
 @RequestMapping("/api/certificatetypeinfo")
 public class CertificateTypeInfoController {
 
