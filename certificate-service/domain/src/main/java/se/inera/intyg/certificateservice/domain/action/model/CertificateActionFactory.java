@@ -1,0 +1,17 @@
+package se.inera.intyg.certificateservice.domain.action.model;
+
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+
+public class CertificateActionFactory {
+
+  private CertificateActionFactory() {
+    throw new IllegalStateException("Utility class");
+  }
+
+  public static CertificateAction create(
+      CertificateActionSpecification certificateActionSpecification) {
+    return switch (certificateActionSpecification.getCertificateActionType()) {
+      case CREATE -> new CertificateActionCreate(certificateActionSpecification);
+    };
+  }
+}

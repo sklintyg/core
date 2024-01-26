@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.application.certificatetypeinfo.dto;
+package se.inera.intyg.certificateservice.application.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
