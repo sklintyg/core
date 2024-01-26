@@ -5,7 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
-import se.inera.intyg.certificateservice.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 
 @Service
 @RequiredArgsConstructor

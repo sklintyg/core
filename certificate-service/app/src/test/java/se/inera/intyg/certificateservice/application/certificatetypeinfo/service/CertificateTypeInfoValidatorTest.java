@@ -8,12 +8,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.PatientDTO;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.PersonIdDTO;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.PersonIdTypeDTO;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.RoleTypeDTO;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.UnitDTO;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.UserDTO;
+import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
+import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
+import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
+import se.inera.intyg.certificateservice.application.common.dto.RoleTypeDTO;
+import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
+import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
 class CertificateTypeInfoValidatorTest {
 

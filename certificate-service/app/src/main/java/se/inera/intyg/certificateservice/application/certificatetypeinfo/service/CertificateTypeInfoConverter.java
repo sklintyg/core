@@ -4,8 +4,9 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
-import se.inera.intyg.certificateservice.model.CertificateAction;
-import se.inera.intyg.certificateservice.model.CertificateModel;
+import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
+import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 
 @Component
 @RequiredArgsConstructor

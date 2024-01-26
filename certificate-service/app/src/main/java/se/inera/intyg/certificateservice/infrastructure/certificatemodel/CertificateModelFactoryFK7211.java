@@ -4,12 +4,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateservice.model.CertificateActionSpecification;
-import se.inera.intyg.certificateservice.model.CertificateActionType;
-import se.inera.intyg.certificateservice.model.CertificateModel;
-import se.inera.intyg.certificateservice.model.CertificateModelId;
-import se.inera.intyg.certificateservice.model.CertificateType;
-import se.inera.intyg.certificateservice.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 
 @Component
 public class CertificateModelFactoryFK7211 implements CertificateModelFactory {

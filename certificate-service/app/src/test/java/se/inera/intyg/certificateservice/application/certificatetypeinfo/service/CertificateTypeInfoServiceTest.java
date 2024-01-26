@@ -17,12 +17,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.PatientDTO;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.UserDTO;
-import se.inera.intyg.certificateservice.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.model.CertificateAction;
-import se.inera.intyg.certificateservice.model.CertificateModel;
-import se.inera.intyg.certificateservice.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
+import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
+import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
+import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateTypeInfoServiceTest {

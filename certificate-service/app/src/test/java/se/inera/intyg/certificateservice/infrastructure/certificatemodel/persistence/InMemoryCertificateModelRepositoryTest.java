@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
-import se.inera.intyg.certificateservice.model.CertificateModel;
-import se.inera.intyg.certificateservice.model.CertificateModelId;
-import se.inera.intyg.certificateservice.model.CertificateType;
-import se.inera.intyg.certificateservice.model.CertificateVersion;
 
 @ExtendWith(MockitoExtension.class)
 class InMemoryCertificateModelRepositoryTest {

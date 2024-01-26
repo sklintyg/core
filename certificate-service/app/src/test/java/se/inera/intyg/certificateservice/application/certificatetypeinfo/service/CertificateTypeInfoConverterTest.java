@@ -11,12 +11,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.ResourceLinkDTO;
-import se.inera.intyg.certificateservice.model.CertificateAction;
-import se.inera.intyg.certificateservice.model.CertificateActionSpecification;
-import se.inera.intyg.certificateservice.model.CertificateModel;
-import se.inera.intyg.certificateservice.model.CertificateModelId;
-import se.inera.intyg.certificateservice.model.CertificateType;
+import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
+import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
+import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateTypeInfoConverterTest {

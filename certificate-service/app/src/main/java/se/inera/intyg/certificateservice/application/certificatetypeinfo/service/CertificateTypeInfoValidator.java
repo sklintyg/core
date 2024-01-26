@@ -2,9 +2,9 @@ package se.inera.intyg.certificateservice.application.certificatetypeinfo.servic
 
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.PatientDTO;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.UnitDTO;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.UserDTO;
+import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
+import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
+import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
 @Component
 public class CertificateTypeInfoValidator {

@@ -8,10 +8,10 @@ import java.time.ZoneId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
-import se.inera.intyg.certificateservice.model.CertificateActionType;
-import se.inera.intyg.certificateservice.model.CertificateModelId;
-import se.inera.intyg.certificateservice.model.CertificateType;
-import se.inera.intyg.certificateservice.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 
 class CertificateModelFactoryFK7211Test {
 
