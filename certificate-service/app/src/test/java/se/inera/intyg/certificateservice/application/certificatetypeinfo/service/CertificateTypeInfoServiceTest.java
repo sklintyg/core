@@ -30,9 +30,8 @@ class CertificateTypeInfoServiceTest {
   private static final String TYPE_2 = "type2";
   private static final String DESCRIPTION = "description";
   private static final String NAME = "name";
-
   private static final List<CertificateAction> CERTIFICATE_ACTIONS = List.of(
-      CertificateAction.builder().build()
+      mock(CertificateAction.class)
   );
   private static final ActionEvaluation ACTION_EVALUATION = ActionEvaluation.builder().build();
   @Mock

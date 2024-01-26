@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.certificatetypeinfo.servic
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +26,7 @@ class CertificateTypeInfoConverterTest {
   private static final String DESCRIPTION = "DESCRIPTION";
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder().build();
-  private static final CertificateAction CERTIFICATE_ACTION = CertificateAction.builder().build();
+  private static final CertificateAction CERTIFICATE_ACTION = mock(CertificateAction.class);
   private static final List<CertificateAction> CERTIFICATE_ACTIONS = List.of(CERTIFICATE_ACTION);
   @Mock
   private ResourceLinkConverter resourceLinkConverter;

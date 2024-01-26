@@ -1,6 +1,9 @@
 package se.inera.intyg.certificateservice.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,72 +12,96 @@ import org.junit.jupiter.api.Test;
 class CertificateModelTest {
 
   @Test
-  void shallReturnCreateActionIfPatientIsNotDeceased() {
-    final var expectedActions = List.of(
-        new CertificateAction(CertificateActionType.CREATE)
-    );
-
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(
-            Patient.builder()
-                .deceased(false)
-                .build()
-        )
-        .build();
+  void shallReturnActionIfExistsAndEvaluateTrue() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder().build();
+    final var actionEvaluation = ActionEvaluation.builder().build();
+    final var certificateAction = mock(CertificateAction.class);
+    final var expectedActions = List.of(certificateAction);
 
     final var certificateModel = CertificateModel.builder()
         .certificateActionSpecifications(
             List.of(
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.CREATE)
-                    .build()
+                certificateActionSpecification
             )
         )
         .build();
 
-    final var actualActions = certificateModel.actions(actionEvaluation);
+    try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
+        CertificateActionFactory.class)) {
 
-    assertEquals(expectedActions, actualActions);
+      certificateActionFactory
+          .when(() -> CertificateActionFactory.create(certificateActionSpecification))
+          .thenReturn(certificateAction);
+
+      doReturn(true).when(certificateAction).evaluate(actionEvaluation);
+
+      final var actualActions = certificateModel.actions(actionEvaluation);
+
+      assertEquals(expectedActions, actualActions);
+    }
   }
 
   @Test
-  void shallNotReturnCreateActionIfPatientIsDeceased() {
+  void shallNotReturnActionIfExistsAndEvaluateFalse() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder().build();
+    final var actionEvaluation = ActionEvaluation.builder().build();
+    final var certificateAction = mock(CertificateAction.class);
     final var expectedActions = Collections.emptyList();
-
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(
-            Patient.builder()
-                .deceased(true)
-                .build()
-        )
-        .build();
 
     final var certificateModel = CertificateModel.builder()
         .certificateActionSpecifications(
             List.of(
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.CREATE)
-                    .build()
+                certificateActionSpecification
             )
         )
         .build();
 
-    final var actualActions = certificateModel.actions(actionEvaluation);
+    try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
+        CertificateActionFactory.class)) {
 
-    assertEquals(expectedActions, actualActions);
+      certificateActionFactory
+          .when(() -> CertificateActionFactory.create(certificateActionSpecification))
+          .thenReturn(certificateAction);
+
+      doReturn(false).when(certificateAction).evaluate(actionEvaluation);
+
+      final var actualActions = certificateModel.actions(actionEvaluation);
+
+      assertEquals(expectedActions, actualActions);
+    }
   }
 
   @Test
-  void shallNotReturnCreateActionIfCreateNotInSpecification() {
+  void shallReturnEmptyActionsIfNoActionExistsInFactory() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder().build();
+    final var actionEvaluation = ActionEvaluation.builder().build();
     final var expectedActions = Collections.emptyList();
 
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(
-            Patient.builder()
-                .deceased(false)
-                .build()
+    final var certificateModel = CertificateModel.builder()
+        .certificateActionSpecifications(
+            List.of(
+                certificateActionSpecification
+            )
         )
         .build();
+
+    try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
+        CertificateActionFactory.class)) {
+
+      certificateActionFactory
+          .when(() -> CertificateActionFactory.create(certificateActionSpecification))
+          .thenReturn(null);
+
+      final var actualActions = certificateModel.actions(actionEvaluation);
+
+      assertEquals(expectedActions, actualActions);
+    }
+  }
+
+  @Test
+  void shallReturnEmptyActionsIfNoActionsExistInSpecification() {
+    final var expectedActions = Collections.emptyList();
+    final var actionEvaluation = ActionEvaluation.builder().build();
 
     final var certificateModel = CertificateModel.builder()
         .certificateActionSpecifications(

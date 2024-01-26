@@ -1,8 +1,8 @@
 package se.inera.intyg.certificateservice.model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.Builder;
 import lombok.Value;
 
@@ -17,20 +17,10 @@ public class CertificateModel {
   List<CertificateActionSpecification> certificateActionSpecifications;
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
-    final var certificateActions = new ArrayList<CertificateAction>();
-    if (specificationContainsActionType(CertificateActionType.CREATE)) {
-      if (Boolean.FALSE.equals(actionEvaluation.getPatient().getDeceased())) {
-        certificateActions.add(
-            new CertificateAction(CertificateActionType.CREATE)
-        );
-      }
-    }
-    return certificateActions;
-  }
-
-  private boolean specificationContainsActionType(CertificateActionType certificateActionType) {
-    return getCertificateActionSpecifications().stream()
-        .anyMatch(
-            action -> certificateActionType.equals(action.getCertificateActionType()));
+    return certificateActionSpecifications.stream()
+        .map(CertificateActionFactory::create)
+        .filter(Objects::nonNull)
+        .filter(certificateAction -> certificateAction.evaluate(actionEvaluation))
+        .toList();
   }
 }

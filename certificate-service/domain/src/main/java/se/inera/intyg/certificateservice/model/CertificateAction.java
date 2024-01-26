@@ -1,11 +1,8 @@
 package se.inera.intyg.certificateservice.model;
 
-import lombok.Builder;
-import lombok.Value;
+public interface CertificateAction {
 
-@Value
-@Builder
-public class CertificateAction {
+  CertificateActionType getType();
 
-  CertificateActionType certificateActionType;
+  boolean evaluate(ActionEvaluation actionEvaluation);
 }
