@@ -5,4 +5,8 @@ public interface CertificateAction {
   CertificateActionType getType();
 
   boolean evaluate(ActionEvaluation actionEvaluation);
+
+  String getName();
+
+  String getDescription();
 }

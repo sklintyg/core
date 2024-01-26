@@ -1,23 +1,28 @@
 package se.inera.intyg.certificateservice.model;
 
-import lombok.EqualsAndHashCode;
-
-@EqualsAndHashCode
 public class CertificateActionCreate implements CertificateAction {
 
-  private final CertificateActionSpecification certificateActionSpecification;
-
-  public CertificateActionCreate(CertificateActionSpecification certificateActionSpecification) {
-    this.certificateActionSpecification = certificateActionSpecification;
-  }
+  private static final String NAME = "Skapa intyg";
+  private static final String DESCRIPTION = "Skapa ett intygsutkast";
+  private static final CertificateActionType TYPE = CertificateActionType.CREATE;
 
   @Override
   public CertificateActionType getType() {
-    return certificateActionSpecification.getCertificateActionType();
+    return TYPE;
   }
 
   @Override
   public boolean evaluate(ActionEvaluation actionEvaluation) {
-    return false;
+    return !actionEvaluation.getPatient().getDeceased();
+  }
+
+  @Override
+  public String getName() {
+    return NAME;
+  }
+
+  @Override
+  public String getDescription() {
+    return DESCRIPTION;
   }
 }
