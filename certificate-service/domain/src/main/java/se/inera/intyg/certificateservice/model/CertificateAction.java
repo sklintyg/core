@@ -9,4 +9,8 @@ public interface CertificateAction {
   String getName();
 
   String getDescription();
+
+  default boolean isEnabled() {
+    return true;
+  }
 }
