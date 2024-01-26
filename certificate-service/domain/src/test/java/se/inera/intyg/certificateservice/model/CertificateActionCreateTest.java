@@ -44,6 +44,11 @@ class CertificateActionCreateTest {
                 .deceased(true)
                 .build()
         )
+        .user(
+            User.builder()
+                .blocked(false)
+                .build()
+        )
         .build();
 
     final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
@@ -57,6 +62,51 @@ class CertificateActionCreateTest {
         .patient(
             Patient.builder()
                 .deceased(false)
+                .build()
+        )
+        .user(
+            User.builder()
+                .blocked(false)
+                .build()
+        )
+        .build();
+
+    final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
+
+    assertTrue(actualResult);
+  }
+
+  @Test
+  void shallReturnFalseIfUserIsBlocked() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(
+            Patient.builder()
+                .deceased(false)
+                .build()
+        )
+        .user(
+            User.builder()
+                .blocked(true)
+                .build()
+        )
+        .build();
+
+    final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
+
+    assertFalse(actualResult);
+  }
+
+  @Test
+  void shallReturnTrueIfUserIsNotBlocked() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(
+            Patient.builder()
+                .deceased(false)
+                .build()
+        )
+        .user(
+            User.builder()
+                .blocked(false)
                 .build()
         )
         .build();

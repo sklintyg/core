@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.PatientDTO;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.UserDTO;
 import se.inera.intyg.certificateservice.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.model.CertificateAction;
 import se.inera.intyg.certificateservice.model.CertificateModel;
@@ -72,8 +73,10 @@ class CertificateTypeInfoServiceTest {
   @Test
   void shallReturnListOfCertificateTypeInfoDTO() {
     final var patient = PatientDTO.builder().build();
+    final var user = UserDTO.builder().build();
     final var certificateTypeInfoRequest = GetCertificateTypeInfoRequest.builder()
         .patient(patient)
+        .user(user)
         .build();
     final var certificateTypeInfoDTO1 = CertificateTypeInfoDTO.builder().type(TYPE_1).build();
     final var certificateTypeInfoDTO2 = CertificateTypeInfoDTO.builder().type(TYPE_2).build();
@@ -84,7 +87,7 @@ class CertificateTypeInfoServiceTest {
 
     final var certificateModels = List.of(getCertifiateModel(), getCertifiateModel());
 
-    when(actionEvaluationFactory.create(patient)).thenReturn(ACTION_EVALUATION);
+    when(actionEvaluationFactory.create(patient, user)).thenReturn(ACTION_EVALUATION);
     when(certificateModelRepository.findAllActive()).thenReturn(certificateModels);
     when(certificateTypeInfoConverter.convert(certificateModels.get(0),
         CERTIFICATE_ACTIONS)).thenReturn(

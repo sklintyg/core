@@ -8,4 +8,5 @@ import lombok.Value;
 public class ActionEvaluation {
 
   Patient patient;
+  User user;
 }

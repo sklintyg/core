@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class Patient {
+public class User {
 
-  boolean deceased;
+  boolean blocked;
 }
