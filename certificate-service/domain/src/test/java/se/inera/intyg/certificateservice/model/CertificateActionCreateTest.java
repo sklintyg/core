@@ -11,9 +11,14 @@ class CertificateActionCreateTest {
 
   private CertificateActionCreate certificateActionCreate;
 
+  private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
+      CertificateActionSpecification.builder()
+          .certificateActionType(CertificateActionType.CREATE)
+          .build();
+
   @BeforeEach
   void setUp() {
-    certificateActionCreate = new CertificateActionCreate();
+    certificateActionCreate = new CertificateActionCreate(CERTIFICATE_ACTION_SPECIFICATION);
   }
 
   @Test

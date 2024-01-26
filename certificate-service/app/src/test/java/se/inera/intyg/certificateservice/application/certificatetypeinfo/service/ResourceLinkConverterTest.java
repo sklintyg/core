@@ -9,12 +9,19 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.ResourceLinkTypeDTO;
 import se.inera.intyg.certificateservice.model.CertificateActionCreate;
+import se.inera.intyg.certificateservice.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.model.CertificateActionType;
 
 class ResourceLinkConverterTest {
 
   private static final String NAME = "Skapa intyg";
   private static final String DESCRIPTION = "Skapa ett intygsutkast";
   private ResourceLinkConverter resourceLinkConverter;
+
+  private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
+      CertificateActionSpecification.builder()
+          .certificateActionType(CertificateActionType.CREATE)
+          .build();
 
   @BeforeEach
   void setUp() {
@@ -30,7 +37,8 @@ class ResourceLinkConverterTest {
           .type(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
           .build();
 
-      final var certificateActionCreate = new CertificateActionCreate();
+      final var certificateActionCreate = new CertificateActionCreate(
+          CERTIFICATE_ACTION_SPECIFICATION);
 
       final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
       assertEquals(resourceLinkDTO.getType(), actualResult.getType());
@@ -42,7 +50,8 @@ class ResourceLinkConverterTest {
           .name(NAME)
           .build();
 
-      final var certificateActionCreate = new CertificateActionCreate();
+      final var certificateActionCreate = new CertificateActionCreate(
+          CERTIFICATE_ACTION_SPECIFICATION);
 
       final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
       assertEquals(resourceLinkDTO.getName(), actualResult.getName());
@@ -54,7 +63,8 @@ class ResourceLinkConverterTest {
           .description(DESCRIPTION)
           .build();
 
-      final var certificateActionCreate = new CertificateActionCreate();
+      final var certificateActionCreate = new CertificateActionCreate(
+          CERTIFICATE_ACTION_SPECIFICATION);
 
       final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
       assertEquals(resourceLinkDTO.getDescription(), actualResult.getDescription());
@@ -66,7 +76,8 @@ class ResourceLinkConverterTest {
           .enabled(true)
           .build();
 
-      final var certificateActionCreate = new CertificateActionCreate();
+      final var certificateActionCreate = new CertificateActionCreate(
+          CERTIFICATE_ACTION_SPECIFICATION);
 
       final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
       assertEquals(resourceLinkDTO.isEnabled(), actualResult.isEnabled());
@@ -81,7 +92,8 @@ class ResourceLinkConverterTest {
           .enabled(true)
           .build();
 
-      final var certificateActionCreate = new CertificateActionCreate();
+      final var certificateActionCreate = new CertificateActionCreate(
+          CERTIFICATE_ACTION_SPECIFICATION);
 
       final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
       assertEquals(resourceLinkDTO, actualResult);
