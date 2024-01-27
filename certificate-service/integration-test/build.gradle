@@ -2,8 +2,12 @@ dependencies {
     implementation project(':domain')
     implementation project(':app')
 
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-test'
 }
 
 tasks.register('integrationTest', Test) {
