@@ -1,17 +1,17 @@
 package se.inera.intyg.certificateservice.integrationtest.util;
 
-import java.util.List;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoResponse;
 
 public class CertificateTypeInfoUtil {
 
   public static CertificateTypeInfoDTO certificateTypeInfo(
-      List<CertificateTypeInfoDTO> certificateTypeInfoDTOS, String type) {
-    if (certificateTypeInfoDTOS == null) {
+      GetCertificateTypeInfoResponse response, String type) {
+    if (response == null || response.getList() == null) {
       return null;
     }
-    
-    return certificateTypeInfoDTOS.stream()
+
+    return response.getList().stream()
         .filter(certificateTypeInfoDTO ->
             type.equalsIgnoreCase(certificateTypeInfoDTO.getType())
         )
