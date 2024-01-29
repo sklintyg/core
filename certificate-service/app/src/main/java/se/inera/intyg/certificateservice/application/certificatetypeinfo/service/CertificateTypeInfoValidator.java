@@ -43,7 +43,7 @@ public class CertificateTypeInfoValidator {
 
   private void validateUnitExtended(UnitDTO unit, String parameter) {
     validateUnit(unit, parameter);
-    if (unit.getIsInactive() == null) {
+    if (unit.getInactive() == null) {
       throw new IllegalArgumentException(
           "Required parameter missing: %s.isInactive".formatted(parameter));
     }

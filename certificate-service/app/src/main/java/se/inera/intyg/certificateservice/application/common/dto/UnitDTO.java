@@ -18,5 +18,5 @@ public class UnitDTO {
   private String city;
   private String phoneNumber;
   private String email;
-  private Boolean isInactive;
+  private Boolean inactive;
 }

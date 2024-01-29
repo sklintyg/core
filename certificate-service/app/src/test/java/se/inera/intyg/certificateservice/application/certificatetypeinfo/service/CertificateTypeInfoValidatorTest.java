@@ -211,7 +211,7 @@ class CertificateTypeInfoValidatorTest {
             .unit(
                 UnitDTO.builder()
                     .id(ID)
-                    .isInactive(false)
+                    .inactive(false)
                     .build()
             )
             .build();
@@ -236,7 +236,7 @@ class CertificateTypeInfoValidatorTest {
             .unit(
                 UnitDTO.builder()
                     .id(ID)
-                    .isInactive(false)
+                    .inactive(false)
                     .build()
             )
             .careUnit(
@@ -264,7 +264,7 @@ class CertificateTypeInfoValidatorTest {
             .unit(
                 UnitDTO.builder()
                     .id(ID)
-                    .isInactive(false)
+                    .inactive(false)
                     .build()
             )
             .careUnit(
@@ -299,7 +299,7 @@ class CertificateTypeInfoValidatorTest {
           .unit(
               UnitDTO.builder()
                   .id(ID)
-                  .isInactive(false)
+                  .inactive(false)
                   .build()
           )
           .careUnit(
@@ -329,7 +329,7 @@ class CertificateTypeInfoValidatorTest {
           .unit(
               UnitDTO.builder()
                   .id(ID)
-                  .isInactive(false)
+                  .inactive(false)
                   .build()
           )
           .careUnit(
@@ -362,7 +362,7 @@ class CertificateTypeInfoValidatorTest {
           .unit(
               UnitDTO.builder()
                   .id(ID)
-                  .isInactive(false)
+                  .inactive(false)
                   .build()
           )
           .careUnit(
@@ -401,7 +401,7 @@ class CertificateTypeInfoValidatorTest {
           .unit(
               UnitDTO.builder()
                   .id(ID)
-                  .isInactive(false)
+                  .inactive(false)
                   .build()
           )
           .careUnit(
@@ -436,7 +436,7 @@ class CertificateTypeInfoValidatorTest {
           .unit(
               UnitDTO.builder()
                   .id(ID)
-                  .isInactive(false)
+                  .inactive(false)
                   .build()
           )
           .careUnit(
@@ -475,7 +475,7 @@ class CertificateTypeInfoValidatorTest {
           .unit(
               UnitDTO.builder()
                   .id(ID)
-                  .isInactive(false)
+                  .inactive(false)
                   .build()
           )
           .careUnit(
@@ -519,7 +519,7 @@ class CertificateTypeInfoValidatorTest {
           .unit(
               UnitDTO.builder()
                   .id(ID)
-                  .isInactive(false)
+                  .inactive(false)
                   .build()
           )
           .careUnit(
@@ -564,7 +564,7 @@ class CertificateTypeInfoValidatorTest {
           .unit(
               UnitDTO.builder()
                   .id(ID)
-                  .isInactive(false)
+                  .inactive(false)
                   .build()
           )
           .careUnit(
@@ -609,7 +609,7 @@ class CertificateTypeInfoValidatorTest {
         .unit(
             UnitDTO.builder()
                 .id(ID)
-                .isInactive(false)
+                .inactive(false)
                 .build()
         )
         .careUnit(
@@ -656,7 +656,7 @@ class CertificateTypeInfoValidatorTest {
         .unit(
             UnitDTO.builder()
                 .id(ID)
-                .isInactive(false)
+                .inactive(false)
                 .build()
         )
         .careUnit(
@@ -703,7 +703,7 @@ class CertificateTypeInfoValidatorTest {
         .unit(
             UnitDTO.builder()
                 .id(ID)
-                .isInactive(false)
+                .inactive(false)
                 .build()
         )
         .careUnit(

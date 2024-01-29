@@ -1,10 +1,9 @@
 package se.inera.intyg.certificateservice.application.certificatetypeinfo.service;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoResponse;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 
@@ -17,7 +16,7 @@ public class CertificateTypeInfoService {
   private final CertificateTypeInfoConverter certificateTypeInfoConverter;
   private final ActionEvaluationFactory actionEvaluationFactory;
 
-  public List<CertificateTypeInfoDTO> getActiveCertificateTypeInfos(
+  public GetCertificateTypeInfoResponse getActiveCertificateTypeInfos(
       GetCertificateTypeInfoRequest getCertificateTypeInfoRequest) {
     certificateTypeInfoValidator.validate(getCertificateTypeInfoRequest);
     final var actionEvaluation = actionEvaluationFactory.create(
@@ -25,12 +24,16 @@ public class CertificateTypeInfoService {
         getCertificateTypeInfoRequest.getUser()
     );
     final var certificateModels = certificateModelRepository.findAllActive();
-    return certificateModels.stream()
-        .map(certificateModel -> {
-              final var certificateActions = certificateModel.actions(actionEvaluation);
-              return certificateTypeInfoConverter.convert(certificateModel, certificateActions);
-            }
+    return GetCertificateTypeInfoResponse.builder()
+        .list(
+            certificateModels.stream()
+                .map(certificateModel -> {
+                      final var certificateActions = certificateModel.actions(actionEvaluation);
+                      return certificateTypeInfoConverter.convert(certificateModel, certificateActions);
+                    }
+                )
+                .toList()
         )
-        .toList();
+        .build();
   }
 }
