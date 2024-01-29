@@ -50,7 +50,7 @@ class FK7211InactiveIT {
     );
 
     assertNull(
-        certificateTypeInfo(response.getBody(), "FK7211"),
+        certificateTypeInfo(response.getBody().getList(), "FK7211"),
         "Should not contain %s as it is not active!".formatted(FK7211)
     );
   }

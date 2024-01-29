@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoResponse;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
@@ -81,10 +82,15 @@ class CertificateTypeInfoServiceTest {
         .build();
     final var certificateTypeInfoDTO1 = CertificateTypeInfoDTO.builder().type(TYPE_1).build();
     final var certificateTypeInfoDTO2 = CertificateTypeInfoDTO.builder().type(TYPE_2).build();
-    final var expectedResult = List.of(
-        certificateTypeInfoDTO1,
-        certificateTypeInfoDTO2
-    );
+    final var expectedResult = GetCertificateTypeInfoResponse.builder()
+        .list(
+            List.of(
+                certificateTypeInfoDTO1,
+                certificateTypeInfoDTO2
+
+            )
+        )
+        .build();
 
     final var certificateModels = List.of(getCertifiateModel(), getCertifiateModel());
 

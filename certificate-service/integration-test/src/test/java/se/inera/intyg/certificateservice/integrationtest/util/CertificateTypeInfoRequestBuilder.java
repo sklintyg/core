@@ -67,7 +67,7 @@ public class CertificateTypeInfoRequestBuilder {
         .unit(
             UnitDTO.builder()
                 .id(ALFA_HUDMOTTAGNINGEN)
-                .isInactive(false)
+                .inactive(false)
                 .build()
         )
         .careUnit(

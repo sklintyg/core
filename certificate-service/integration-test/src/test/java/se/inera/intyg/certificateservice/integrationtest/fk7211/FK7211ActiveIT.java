@@ -55,7 +55,7 @@ class FK7211ActiveIT {
     );
 
     assertNotNull(
-        certificateTypeInfo(response.getBody(), FK7211),
+        certificateTypeInfo(response.getBody().getList(), FK7211),
         "Should contain %s as it is active!".formatted(FK7211)
     );
   }
@@ -68,7 +68,7 @@ class FK7211ActiveIT {
 
     assertNotNull(
         resourceLink(
-            certificateTypeInfo(response.getBody(), FK7211),
+            certificateTypeInfo(response.getBody().getList(), FK7211),
             ResourceLinkTypeDTO.CREATE_CERTIFICATE
         ),
         "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
@@ -83,7 +83,7 @@ class FK7211ActiveIT {
 
     assertNull(
         resourceLink(
-            certificateTypeInfo(response.getBody(), FK7211),
+            certificateTypeInfo(response.getBody().getList(), FK7211),
             ResourceLinkTypeDTO.CREATE_CERTIFICATE
         ),
         "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
@@ -98,7 +98,7 @@ class FK7211ActiveIT {
 
     assertNull(
         resourceLink(
-            certificateTypeInfo(response.getBody(), FK7211),
+            certificateTypeInfo(response.getBody().getList(), FK7211),
             ResourceLinkTypeDTO.CREATE_CERTIFICATE
         ),
         "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
@@ -113,7 +113,7 @@ class FK7211ActiveIT {
 
     assertNull(
         resourceLink(
-            certificateTypeInfo(response.getBody(), FK7211),
+            certificateTypeInfo(response.getBody().getList(), FK7211),
             ResourceLinkTypeDTO.CREATE_CERTIFICATE
         ),
         "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)

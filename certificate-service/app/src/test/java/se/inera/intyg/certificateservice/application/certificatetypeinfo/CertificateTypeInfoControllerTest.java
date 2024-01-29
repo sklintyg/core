@@ -11,10 +11,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoResponse;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoService;
 
 @ExtendWith(MockitoExtension.class)
-class CertificateModelControllerTest {
+class CertificateTypeInfoControllerTest {
 
   @Mock
   private CertificateTypeInfoService certificateTypeInfoService;
@@ -25,10 +26,14 @@ class CertificateModelControllerTest {
   void shallReturnListOfCertificateTypeInfo() {
     final var certificateTypeInfoRequest = GetCertificateTypeInfoRequest.builder()
         .build();
-    final var expectedResult = List.of(
-        CertificateTypeInfoDTO.builder().build(),
-        CertificateTypeInfoDTO.builder().build()
-    );
+    final var expectedResult = GetCertificateTypeInfoResponse.builder()
+        .list(
+            List.of(
+                CertificateTypeInfoDTO.builder().build(),
+                CertificateTypeInfoDTO.builder().build()
+            )
+        )
+        .build();
 
     when(certificateTypeInfoService.getActiveCertificateTypeInfos(
         certificateTypeInfoRequest)).thenReturn(expectedResult);
