@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetCertificateTypeInfoResponse {
 
-  List<CertificateTypeInfoDTO> list;
+  private List<CertificateTypeInfoDTO> list;
 }
