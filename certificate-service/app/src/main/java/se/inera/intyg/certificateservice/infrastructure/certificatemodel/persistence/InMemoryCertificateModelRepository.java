@@ -2,10 +2,12 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.persis
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -26,15 +28,16 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
   @Override
   public List<CertificateModel> findAllActive() {
     return getCertificateModelMap().values().stream()
-        .filter(certificateModel ->
-            certificateModel.getActiveFrom().isBefore(LocalDateTime.now(ZoneId.systemDefault()))
-        )
+        .filter(filterActiveCertificateModels())
         .toList();
   }
 
   @Override
   public Optional<CertificateModel> findLatestActiveByType(CertificateType certificateType) {
-    return Optional.empty();
+    return getCertificateModelMap().values().stream()
+        .filter(certificateModel -> certificateType.equals(certificateModel.getId().getType()))
+        .filter(filterActiveCertificateModels())
+        .max(Comparator.comparing(CertificateModel::getActiveFrom));
   }
 
   private Map<CertificateModelId, CertificateModel> getCertificateModelMap() {
@@ -49,5 +52,10 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
       );
     }
     return certificateModelMap;
+  }
+
+  private static Predicate<CertificateModel> filterActiveCertificateModels() {
+    return certificateModel ->
+        certificateModel.getActiveFrom().isBefore(LocalDateTime.now(ZoneId.systemDefault()));
   }
 }
