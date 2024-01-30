@@ -8,5 +8,10 @@ import lombok.Value;
 public class CareProvider {
 
   HsaId hsaId;
-
+  String name;
+  String address;
+  String zipCode;
+  String city;
+  String phoneNumber;
+  String email;
 }

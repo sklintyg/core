@@ -8,4 +8,11 @@ import lombok.Value;
 public class CareUnit implements IssuingUnit {
 
   HsaId hsaId;
+  String name;
+  String address;
+  String zipCode;
+  String city;
+  String phoneNumber;
+  String email;
+  Boolean inactive;
 }
