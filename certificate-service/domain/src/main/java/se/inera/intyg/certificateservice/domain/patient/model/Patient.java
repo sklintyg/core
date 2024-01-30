@@ -7,7 +7,6 @@ import lombok.Value;
 @Builder
 public class Patient {
 
-  boolean deceased;
   PersonId id;
   String firstName;
   String lastName;
@@ -16,6 +15,7 @@ public class Patient {
   String street;
   String city;
   String zipCode;
+  boolean deceased;
   boolean testIndicated;
   boolean protectedPerson;
 }

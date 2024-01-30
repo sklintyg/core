@@ -40,6 +40,25 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
         .max(Comparator.comparing(CertificateModel::getActiveFrom));
   }
 
+  @Override
+  public CertificateModel getById(CertificateModelId certificateModelId) {
+    final var certificateModel = getCertificateModelMap().get(certificateModelId);
+    if (certificateModel == null) {
+      throw new IllegalStateException("CertificateModel missing: %s".formatted(certificateModelId));
+    }
+
+    if (LocalDateTime.now(ZoneId.systemDefault()).isBefore(certificateModel.getActiveFrom())) {
+      throw new IllegalStateException(
+          "CertificateModel with id '%s' not active until '%s'".formatted(
+              certificateModel.getId(),
+              certificateModel.getActiveFrom()
+          )
+      );
+    }
+
+    return certificateModel;
+  }
+
   private Map<CertificateModelId, CertificateModel> getCertificateModelMap() {
     if (certificateModelMap == null) {
       log.info("Initiate certificate model repository");

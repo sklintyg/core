@@ -19,4 +19,8 @@ public class Certificate {
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return Collections.emptyList();
   }
+
+  public void updateMetadata(ActionEvaluation actionEvaluation) {
+    
+  }
 }

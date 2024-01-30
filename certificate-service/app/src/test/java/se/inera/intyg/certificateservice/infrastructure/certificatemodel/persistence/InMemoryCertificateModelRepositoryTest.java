@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 
@@ -229,5 +230,91 @@ class InMemoryCertificateModelRepositoryTest {
         new CertificateType(TYPE_ONE));
 
     assertEquals(expectedModel, actualModel.orElse(null));
+  }
+
+  @Test
+  void shallReturnCertificateModelIfIdExistsAndIsActive() {
+    inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+        List.of(certificateModelFactoryOne)
+    );
+
+    final var expectedModel = CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .type(new CertificateType(TYPE_ONE))
+                .version(new CertificateVersion(VERSION_ONE))
+                .build()
+        )
+        .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+        .build();
+
+    doReturn(expectedModel).when(certificateModelFactoryOne).create();
+
+    final var actualModel = inMemoryCertificateModelRepository.getById(expectedModel.getId());
+
+    assertEquals(expectedModel, actualModel);
+  }
+
+  @Test
+  void shallThrowExceptionIfIdIsMissing() {
+    inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+        List.of(certificateModelFactoryOne)
+    );
+
+    final var expectedModel = CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .type(new CertificateType(TYPE_ONE))
+                .version(new CertificateVersion(VERSION_ONE))
+                .build()
+        )
+        .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+        .build();
+
+    doReturn(expectedModel).when(certificateModelFactoryOne).create();
+
+    final var certificateModelId = CertificateModelId.builder()
+        .type(new CertificateType(TYPE_TWO))
+        .version(new CertificateVersion(VERSION_ONE))
+        .build();
+
+    final var illegalStateException = assertThrows(IllegalStateException.class,
+        () -> inMemoryCertificateModelRepository.getById(certificateModelId)
+    );
+
+    assertEquals("CertificateModel missing: %s".formatted(certificateModelId),
+        illegalStateException.getMessage());
+  }
+
+  @Test
+  void shallThrowExceptionIfCertificateModelNotActive() {
+    inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+        List.of(certificateModelFactoryOne)
+    );
+
+    final var expectedModel = CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .type(new CertificateType(TYPE_ONE))
+                .version(new CertificateVersion(VERSION_ONE))
+                .build()
+        )
+        .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
+        .build();
+
+    final var certificateModelId = expectedModel.getId();
+
+    doReturn(expectedModel).when(certificateModelFactoryOne).create();
+
+    final var illegalStateException = assertThrows(IllegalStateException.class,
+        () -> inMemoryCertificateModelRepository.getById(certificateModelId)
+    );
+
+    assertEquals(
+        "CertificateModel with id '%s' not active until '%s'".formatted(
+            expectedModel.getId(),
+            expectedModel.getActiveFrom()
+        ),
+        illegalStateException.getMessage());
   }
 }

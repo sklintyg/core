@@ -6,4 +6,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 public interface CertificateRepository {
 
   Certificate create(CertificateModel certificateModel);
+
+  Certificate save(Certificate certificate);
 }
