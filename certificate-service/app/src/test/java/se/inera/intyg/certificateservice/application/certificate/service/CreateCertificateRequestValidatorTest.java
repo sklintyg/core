@@ -1,5 +1,4 @@
-package se.inera.intyg.certificateservice.application.certificatetypeinfo.service;
-
+package se.inera.intyg.certificateservice.application.certificate.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -8,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
-import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
@@ -17,8 +15,7 @@ import se.inera.intyg.certificateservice.application.common.dto.RoleTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
-class CertificateTypeInfoValidatorTest {
-
+class CreateCertificateRequestValidatorTest {
 
   private static final String ID = "id";
   private static final String TYPE = "type";
@@ -484,5 +481,92 @@ class CertificateTypeInfoValidatorTest {
 
     assertEquals("Required parameter missing: Patient.protectedPerson",
         illegalArgumentException.getMessage());
+  }
+
+  @Nested
+  class CertificateModelIdValidation {
+
+    @Test
+    void shallThrowIfCertificateModelIdIsNull() {
+      final var request = requestBuilder
+          .certificateModelId(null)
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificateTypeInfoValidator.validate(request));
+
+      assertEquals("Required parameter missing: CertificateModelId",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfCertificateModelIdVersionIsNull() {
+      final var request = requestBuilder
+          .certificateModelId(
+              CertificateModelIdDTO.builder()
+                  .type(TYPE)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificateTypeInfoValidator.validate(request));
+
+      assertEquals("Required parameter missing: CertificateModelId.version",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfCertificateModelIdVersionIsEmpty() {
+      final var request = requestBuilder
+          .certificateModelId(
+              CertificateModelIdDTO.builder()
+                  .type(TYPE)
+                  .version("")
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificateTypeInfoValidator.validate(request));
+
+      assertEquals("Required parameter missing: CertificateModelId.version",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfCertificateModelIdTypeIsNull() {
+      final var request = requestBuilder
+          .certificateModelId(
+              CertificateModelIdDTO.builder()
+                  .version(VERSION)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificateTypeInfoValidator.validate(request));
+
+      assertEquals("Required parameter missing: CertificateModelId.type",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfCertificateModelIdTypeIsEmpty() {
+      final var request = requestBuilder
+          .certificateModelId(
+              CertificateModelIdDTO.builder()
+                  .version(VERSION)
+                  .type("")
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificateTypeInfoValidator.validate(request));
+
+      assertEquals("Required parameter missing: CertificateModelId.type",
+          illegalArgumentException.getMessage());
+    }
   }
 }
