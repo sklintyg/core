@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.common;
 
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
+import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
@@ -10,6 +11,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
 import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
+import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
+import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
 @Component
@@ -36,7 +39,22 @@ public class ActionEvaluationFactory {
     return ActionEvaluation.builder()
         .patient(
             Patient.builder()
+                .id(
+                    PersonId.builder()
+                        .type(convertType(patient.getId().getType()))
+                        .id(patient.getId().getId())
+                        .build()
+                )
+                .fullName(patient.getFullName())
+                .firstName(patient.getFirstName())
+                .middleName(patient.getMiddleName())
+                .lastName(patient.getLastName())
                 .deceased(patient.getDeceased())
+                .city(patient.getCity())
+                .street(patient.getStreet())
+                .zipCode(patient.getZipCode())
+                .protectedPerson(patient.getProtectedPerson())
+                .testIndicated(patient.getTestIndicated())
                 .build()
         )
         .user(
@@ -81,5 +99,12 @@ public class ActionEvaluationFactory {
         )
         .build();
 
+  }
+
+  private PersonIdType convertType(PersonIdTypeDTO type) {
+    return switch (type) {
+      case PERSONAL_IDENTITY_NUMBER -> PersonIdType.PERSONAL_IDENTITY_NUMBER;
+      case COORDINATION_NUMBER -> PersonIdType.COORDINATION_NUMBER;
+    };
   }
 }

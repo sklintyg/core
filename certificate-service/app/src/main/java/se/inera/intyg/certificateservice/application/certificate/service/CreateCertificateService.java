@@ -16,9 +16,12 @@ public class CreateCertificateService {
   public CreateCertificateResponse create(CreateCertificateRequest createCertificateRequest) {
     createCertificateRequestValidator.validate(createCertificateRequest);
     final var actionEvaluation = actionEvaluationFactory.create(
-        createCertificateRequest.getPatient(), createCertificateRequest.getUser(),
-        createCertificateRequest.getUnit(), createCertificateRequest.getCareUnit(),
-        createCertificateRequest.getCareProvider());
+        createCertificateRequest.getPatient(),
+        createCertificateRequest.getUser(),
+        createCertificateRequest.getUnit(),
+        createCertificateRequest.getCareUnit(),
+        createCertificateRequest.getCareProvider()
+    );
     // Prata med CertificateService
     // Konvertera svaret till vårat DTO-format
     return null;

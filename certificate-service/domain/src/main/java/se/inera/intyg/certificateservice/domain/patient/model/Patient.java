@@ -8,4 +8,14 @@ import lombok.Value;
 public class Patient {
 
   boolean deceased;
+  PersonId id;
+  String firstName;
+  String lastName;
+  String middleName;
+  String fullName;
+  String street;
+  String city;
+  String zipCode;
+  boolean testIndicated;
+  boolean protectedPerson;
 }
