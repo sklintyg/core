@@ -9,16 +9,23 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateTypeInfoDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoResponse;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetLatestCertificateTypeVersionResponse;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoService;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.GetLatestCertificateTypeVersionService;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateTypeInfoControllerTest {
 
+  private static final String FK_7211 = "fk7211";
+  private static final String VERSION = "1.0";
   @Mock
   private CertificateTypeInfoService certificateTypeInfoService;
+  @Mock
+  private GetLatestCertificateTypeVersionService getLatestCertificateTypeVersionService;
   @InjectMocks
   private CertificateTypeInfoController certificateTypeInfoController;
 
@@ -40,6 +47,24 @@ class CertificateTypeInfoControllerTest {
 
     final var result = certificateTypeInfoController.findActiveCertificateTypeInfos(
         certificateTypeInfoRequest);
+
+    assertEquals(expectedResult, result);
+  }
+
+  @Test
+  void shallReturnCertificateTypeAndVersion() {
+    final var expectedResult = GetLatestCertificateTypeVersionResponse.builder()
+        .certificateModelId(
+            CertificateModelIdDTO.builder()
+                .type(FK_7211)
+                .version(VERSION)
+                .build()
+        )
+        .build();
+
+    when(getLatestCertificateTypeVersionService.get(FK_7211)).thenReturn(expectedResult);
+
+    final var result = certificateTypeInfoController.findLatestCertificateTypeVersion(FK_7211);
 
     assertEquals(expectedResult, result);
   }

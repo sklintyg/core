@@ -5,11 +5,13 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 
@@ -28,6 +30,11 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
             certificateModel.getActiveFrom().isBefore(LocalDateTime.now(ZoneId.systemDefault()))
         )
         .toList();
+  }
+
+  @Override
+  public Optional<CertificateModel> findLatestActiveByType(CertificateType certificateType) {
+    return Optional.empty();
   }
 
   private Map<CertificateModelId, CertificateModel> getCertificateModelMap() {
