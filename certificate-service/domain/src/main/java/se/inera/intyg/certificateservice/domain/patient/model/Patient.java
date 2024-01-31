@@ -9,7 +9,6 @@ public class Patient {
 
   PersonId id;
   PersonName name;
-  //TODO: Diskutera om vi ska ha ett objekt för address-relaterad information för både unit/patient
   PersonAddress address;
   Deceased deceased;
   TestIndicated testIndicated;

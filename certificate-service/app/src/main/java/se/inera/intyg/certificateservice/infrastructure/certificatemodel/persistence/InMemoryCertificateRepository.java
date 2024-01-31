@@ -4,22 +4,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 
-@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class InMemoryCertificateRepository implements CertificateRepository {
 
-  private Map<CertificateId, Certificate> certificateMap;
+  private final Map<CertificateId, Certificate> certificateMap = new HashMap<>();
 
   @Override
   public Certificate create(CertificateModel certificateModel) {
+    if (certificateModel == null) {
+      throw new IllegalArgumentException("Unable to create, certificateModel was null.");
+    }
     return Certificate.builder()
         .id(new CertificateId(UUID.randomUUID().toString()))
         .certificateModel(certificateModel)
@@ -33,31 +34,17 @@ public class InMemoryCertificateRepository implements CertificateRepository {
           "Unable to save, certificate was null"
       );
     }
-    saveCertificate(certificate);
+    certificateMap.put(certificate.getId(), certificate);
     return certificate;
   }
 
   @Override
-  public Certificate get(CertificateId certificateId) {
-    initializeRepository();
-    return certificateMap.get(certificateId);
-  }
-
-  private void saveCertificate(Certificate certificate) {
-    initializeRepository();
-    if (certificateMap.containsKey(certificate.getId())) {
+  public Certificate getById(CertificateId certificateId) {
+    if (!certificateMap.containsKey(certificateId)) {
       throw new IllegalStateException(
-          "Certificate already present in repository with id '%s'".formatted(certificate.getId())
+          "CertificateId '%s' not present in repository".formatted(certificateId)
       );
     }
-
-    certificateMap.put(certificate.getId(), certificate);
-  }
-
-  private void initializeRepository() {
-    if (certificateMap == null) {
-      log.info("Initiate certificate repository");
-      certificateMap = new HashMap<>();
-    }
+    return certificateMap.get(certificateId);
   }
 }

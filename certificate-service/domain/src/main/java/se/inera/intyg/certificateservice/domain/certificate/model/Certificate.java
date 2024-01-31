@@ -3,17 +3,18 @@ package se.inera.intyg.certificateservice.domain.certificate.model;
 import java.util.Collections;
 import java.util.List;
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 
-@Data
+
 @Builder
+@EqualsAndHashCode
 public class Certificate {
 
-  private CertificateId id;
-  private CertificateModel certificateModel;
+  private final CertificateId id;
+  private final CertificateModel certificateModel;
   private CertificateMetaData certificateMetaData;
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
@@ -24,5 +25,15 @@ public class Certificate {
 
   }
 
+  public CertificateId getId() {
+    return id;
+  }
 
+  public CertificateModel getCertificateModel() {
+    return certificateModel;
+  }
+
+  public CertificateMetaData getCertificateMetaData() {
+    return certificateMetaData;
+  }
 }

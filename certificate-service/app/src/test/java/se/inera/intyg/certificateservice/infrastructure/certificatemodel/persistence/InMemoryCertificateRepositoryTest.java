@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mockStatic;
 
@@ -27,6 +26,12 @@ class InMemoryCertificateRepositoryTest {
 
   @Nested
   class CreateCertificate {
+
+    @Test
+    void shallThrowIfCertificateModelIsNull() {
+      assertThrows(IllegalArgumentException.class, () -> certificateRepository.create(null)
+      );
+    }
 
     @Test
     void shallReturnCertificate() {
@@ -103,29 +108,14 @@ class InMemoryCertificateRepositoryTest {
       final var expectedCertificate = Certificate.builder().build();
 
       final var certificate = certificateRepository.save(expectedCertificate);
-      final var actualCertificate = certificateRepository.get(certificate.getId());
+      final var actualCertificate = certificateRepository.getById(certificate.getId());
 
       assertEquals(expectedCertificate, actualCertificate);
-    }
-
-    @Test
-    void shallThrowIfCertificateAlreadyPresentInRepository() {
-      final var certificate = Certificate.builder().build();
-
-      certificateRepository.save(certificate);
-      assertThrows(IllegalStateException.class,
-          () -> certificateRepository.save(certificate));
     }
   }
 
   @Nested
   class GetCertificate {
-
-    @Test
-    void shallReturnNullIfNoCertificateIsPresentWithProvidedId() {
-      final var actualCertificate = certificateRepository.get(new CertificateId(CERTIFICATE_ID));
-      assertNull(actualCertificate);
-    }
 
     @Test
     void shallReturnCertificateIfCertificateIdIsPresent() {
@@ -136,8 +126,15 @@ class InMemoryCertificateRepositoryTest {
               .build()
       );
 
-      final var actualCertificate = certificateRepository.get(certificateId);
+      final var actualCertificate = certificateRepository.getById(certificateId);
       assertEquals(expectedCertificate, actualCertificate);
+    }
+
+    @Test
+    void shallThrowIfCertificateNotPresentInRepository() {
+      final var certificateId = new CertificateId(CERTIFICATE_ID);
+      assertThrows(IllegalStateException.class,
+          () -> certificateRepository.getById(certificateId));
     }
   }
 }

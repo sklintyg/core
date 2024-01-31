@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.patient.model.Deceased;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
@@ -44,7 +45,7 @@ class CertificateActionCreateTest {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(
             Patient.builder()
-                .deceased(true)
+                .deceased(new Deceased(true))
                 .build()
         )
         .user(
@@ -64,7 +65,7 @@ class CertificateActionCreateTest {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(
             Patient.builder()
-                .deceased(false)
+                .deceased(new Deceased(false))
                 .build()
         )
         .user(
@@ -84,7 +85,7 @@ class CertificateActionCreateTest {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(
             Patient.builder()
-                .deceased(false)
+                .deceased(new Deceased(false))
                 .build()
         )
         .user(
@@ -104,7 +105,7 @@ class CertificateActionCreateTest {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(
             Patient.builder()
-                .deceased(false)
+                .deceased(new Deceased(false))
                 .build()
         )
         .user(

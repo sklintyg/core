@@ -10,5 +10,5 @@ public interface CertificateRepository {
 
   Certificate save(Certificate certificate);
 
-  Certificate get(CertificateId certificateId);
+  Certificate getById(CertificateId certificateId);
 }
