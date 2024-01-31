@@ -4,11 +4,13 @@ import java.util.Collections;
 import java.util.List;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 
 
+@Getter
 @Builder
 @EqualsAndHashCode
 public class Certificate {
@@ -22,18 +24,7 @@ public class Certificate {
   }
 
   public void updateMetadata(ActionEvaluation actionEvaluation) {
-
-  }
-
-  public CertificateId getId() {
-    return id;
-  }
-
-  public CertificateModel getCertificateModel() {
-    return certificateModel;
-  }
-
-  public CertificateMetaData getCertificateMetaData() {
-    return certificateMetaData;
+    certificateMetaData = CertificateMetaData.builder()
+        .build();
   }
 }
