@@ -24,14 +24,14 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 
 @ExtendWith(MockitoExtension.class)
-class CreateCertificateServiceTest {
+class CreateCertificateDomainServiceTest {
 
   @Mock
   private CertificateModelRepository certificateModelRepository;
   @Mock
   private CertificateRepository certificateRepository;
   @InjectMocks
-  private CreateCertificateService createCertificateService;
+  private CreateCertificateDomainService createCertificateDomainService;
 
   private static final CertificateModelId CERTIFICATE_MODEL_ID = CertificateModelId.builder()
       .type(new CertificateType("type"))
@@ -55,26 +55,26 @@ class CreateCertificateServiceTest {
 
     @Test
     void shallReturnCertificate() {
-      final var actualCertificate = createCertificateService.create(CERTIFICATE_MODEL_ID,
+      final var actualCertificate = createCertificateDomainService.create(CERTIFICATE_MODEL_ID,
           ACTION_EVALUATION);
       assertEquals(certificate, actualCertificate);
     }
 
     @Test
     void shallValidateIfAllowedToCreateCertificate() {
-      createCertificateService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION);
+      createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION);
       verify(certificateModel).allowTo(CertificateActionType.CREATE, ACTION_EVALUATION);
     }
 
     @Test
     void shallUpdateCertificateMetadata() {
-      createCertificateService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION);
+      createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION);
       verify(certificate).updateMetadata(ACTION_EVALUATION);
     }
 
     @Test
     void shallSaveNewCertificate() {
-      createCertificateService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION);
+      createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION);
       verify(certificateRepository).save(certificate);
     }
   }
@@ -92,7 +92,7 @@ class CreateCertificateServiceTest {
     @Test
     void shallThrowExceptionIfNotAllowedToCreate() {
       assertThrows(IllegalStateException.class,
-          () -> createCertificateService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION)
+          () -> createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION)
       );
     }
   }

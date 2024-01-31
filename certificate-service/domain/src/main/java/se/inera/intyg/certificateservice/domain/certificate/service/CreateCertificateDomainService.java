@@ -9,7 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 
 @RequiredArgsConstructor
-public class CreateCertificateService {
+public class CreateCertificateDomainService {
 
   private final CertificateModelRepository certificateModelRepository;
   private final CertificateRepository certificateRepository;
