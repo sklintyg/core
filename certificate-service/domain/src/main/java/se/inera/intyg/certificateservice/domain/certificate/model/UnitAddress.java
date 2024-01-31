@@ -5,10 +5,9 @@ import lombok.Value;
 
 @Value
 @Builder
-public class CareProvider {
+public class UnitAddress {
 
-  HsaId hsaId;
-  UnitAddress address;
-  UnitName name;
-  UnitContactInfo contactInfo;
+  String address;
+  String zipCode;
+  String city;
 }

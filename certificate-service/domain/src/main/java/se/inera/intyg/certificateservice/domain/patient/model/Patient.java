@@ -8,14 +8,10 @@ import lombok.Value;
 public class Patient {
 
   PersonId id;
-  String firstName;
-  String lastName;
-  String middleName;
-  String fullName;
-  String street;
-  String city;
-  String zipCode;
-  boolean deceased;
-  boolean testIndicated;
-  boolean protectedPerson;
+  PersonName name;
+  //TODO: Diskutera om vi ska ha ett objekt för address-relaterad information för både unit/patient
+  PersonAddress address;
+  Deceased deceased;
+  TestIndicated testIndicated;
+  ProtectedPerson protectedPerson;
 }

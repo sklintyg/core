@@ -116,7 +116,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, subUnitBuilder.build(), unit, careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getCareUnit().getName(), unit.getName());
+        assertEquals(actionEvaluation.getCareUnit().getName().name(), unit.getName());
       }
 
       @Test
@@ -126,7 +126,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, subUnitBuilder.build(), unit, careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getCareUnit().getAddress(), unit.getAddress());
+        assertEquals(actionEvaluation.getCareUnit().getAddress().getAddress(), unit.getAddress());
       }
 
       @Test
@@ -136,7 +136,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, subUnitBuilder.build(), unit, careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getCareUnit().getZipCode(), unit.getZipCode());
+        assertEquals(actionEvaluation.getCareUnit().getAddress().getZipCode(), unit.getZipCode());
       }
 
       @Test
@@ -146,7 +146,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, subUnitBuilder.build(), unit, careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getCareUnit().getCity(), unit.getCity());
+        assertEquals(actionEvaluation.getCareUnit().getAddress().getCity(), unit.getCity());
       }
 
       @Test
@@ -156,7 +156,8 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, subUnitBuilder.build(), unit, careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getCareUnit().getPhoneNumber(), unit.getPhoneNumber());
+        assertEquals(actionEvaluation.getCareUnit().getContactInfo().getPhoneNumber(),
+            unit.getPhoneNumber());
       }
 
       @Test
@@ -167,7 +168,7 @@ class ActionEvaluationFactoryTest {
             DEFAULT_USER,
             subUnitBuilder.build(), unit, careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getCareUnit().getEmail(), unit.getEmail());
+        assertEquals(actionEvaluation.getCareUnit().getContactInfo().getEmail(), unit.getEmail());
       }
 
       @Test
@@ -177,7 +178,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, subUnitBuilder.build(), unit, careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getCareUnit().getInactive(), unit.getInactive());
+        assertEquals(actionEvaluation.getCareUnit().getInactive().inactive(), unit.getInactive());
       }
 
       @Test
@@ -187,7 +188,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, subUnitBuilder.build(), unit, careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getCareUnit().getInactive(), unit.getInactive());
+        assertEquals(actionEvaluation.getCareUnit().getInactive().inactive(), unit.getInactive());
       }
     }
 
@@ -210,7 +211,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getSubUnit().getName(), unit.getName());
+        assertEquals(actionEvaluation.getSubUnit().getName().name(), unit.getName());
       }
 
       @Test
@@ -220,7 +221,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getSubUnit().getAddress(), unit.getAddress());
+        assertEquals(actionEvaluation.getSubUnit().getAddress().getAddress(), unit.getAddress());
       }
 
       @Test
@@ -230,7 +231,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getSubUnit().getZipCode(), unit.getZipCode());
+        assertEquals(actionEvaluation.getSubUnit().getAddress().getZipCode(), unit.getZipCode());
       }
 
       @Test
@@ -240,7 +241,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getSubUnit().getCity(), unit.getCity());
+        assertEquals(actionEvaluation.getSubUnit().getAddress().getCity(), unit.getCity());
       }
 
       @Test
@@ -250,7 +251,8 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getSubUnit().getPhoneNumber(), unit.getPhoneNumber());
+        assertEquals(actionEvaluation.getSubUnit().getContactInfo().getPhoneNumber(),
+            unit.getPhoneNumber());
       }
 
       @Test
@@ -260,7 +262,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getSubUnit().getEmail(), unit.getEmail());
+        assertEquals(actionEvaluation.getSubUnit().getContactInfo().getEmail(), unit.getEmail());
       }
 
       @Test
@@ -270,7 +272,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getSubUnit().getInactive(), unit.getInactive());
+        assertEquals(actionEvaluation.getSubUnit().getInactive().inactive(), unit.getInactive());
       }
 
       @Test
@@ -280,7 +282,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getSubUnit().getInactive(), unit.getInactive());
+        assertEquals(actionEvaluation.getSubUnit().getInactive().inactive(), unit.getInactive());
       }
     }
 
@@ -303,7 +305,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, subUnitBuilder.build(), careUnitBuilder.build(), unit);
 
-        assertEquals(actionEvaluation.getCareProvider().getName(), unit.getName());
+        assertEquals(actionEvaluation.getCareProvider().getName().name(), unit.getName());
       }
 
       @Test
@@ -313,7 +315,8 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, subUnitBuilder.build(), careUnitBuilder.build(), unit);
 
-        assertEquals(actionEvaluation.getCareProvider().getAddress(), unit.getAddress());
+        assertEquals(actionEvaluation.getCareProvider().getAddress().getAddress(),
+            unit.getAddress());
       }
 
       @Test
@@ -323,7 +326,8 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, subUnitBuilder.build(), careUnitBuilder.build(), unit);
 
-        assertEquals(actionEvaluation.getCareProvider().getZipCode(), unit.getZipCode());
+        assertEquals(actionEvaluation.getCareProvider().getAddress().getZipCode(),
+            unit.getZipCode());
       }
 
       @Test
@@ -333,7 +337,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, subUnitBuilder.build(), careUnitBuilder.build(), unit);
 
-        assertEquals(actionEvaluation.getCareProvider().getCity(), unit.getCity());
+        assertEquals(actionEvaluation.getCareProvider().getAddress().getCity(), unit.getCity());
       }
 
       @Test
@@ -343,7 +347,8 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, subUnitBuilder.build(), careUnitBuilder.build(), unit);
 
-        assertEquals(actionEvaluation.getCareProvider().getPhoneNumber(), unit.getPhoneNumber());
+        assertEquals(actionEvaluation.getCareProvider().getContactInfo().getPhoneNumber(),
+            unit.getPhoneNumber());
       }
 
       @Test
@@ -353,7 +358,8 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, subUnitBuilder.build(), careUnitBuilder.build(), unit);
 
-        assertEquals(actionEvaluation.getCareProvider().getEmail(), unit.getEmail());
+        assertEquals(actionEvaluation.getCareProvider().getContactInfo().getEmail(),
+            unit.getEmail());
       }
     }
 
@@ -369,7 +375,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertTrue(actionEvaluation.getPatient().isDeceased(),
+        assertTrue(actionEvaluation.getPatient().getDeceased().deceased(),
             "Expected patient.deceased to be true");
       }
 
@@ -382,7 +388,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertFalse(actionEvaluation.getPatient().isDeceased(),
+        assertFalse(actionEvaluation.getPatient().getDeceased().deceased(),
             "Expected patient.deceased to be false");
       }
 
@@ -448,7 +454,8 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertEquals(patient.getFirstName(), actionEvaluation.getPatient().getFirstName());
+        assertEquals(patient.getFirstName(),
+            actionEvaluation.getPatient().getName().getFirstName());
       }
 
       @Test
@@ -460,7 +467,8 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertEquals(patient.getMiddleName(), actionEvaluation.getPatient().getMiddleName());
+        assertEquals(patient.getMiddleName(),
+            actionEvaluation.getPatient().getName().getMiddleName());
       }
 
       @Test
@@ -472,7 +480,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertEquals(patient.getLastName(), actionEvaluation.getPatient().getLastName());
+        assertEquals(patient.getLastName(), actionEvaluation.getPatient().getName().getLastName());
       }
 
       @Test
@@ -484,7 +492,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertEquals(patient.getFullName(), actionEvaluation.getPatient().getFullName());
+        assertEquals(patient.getFullName(), actionEvaluation.getPatient().getName().getFullName());
       }
 
       @Test
@@ -496,7 +504,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertEquals(patient.getCity(), actionEvaluation.getPatient().getCity());
+        assertEquals(patient.getCity(), actionEvaluation.getPatient().getAddress().getCity());
       }
 
       @Test
@@ -508,7 +516,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertEquals(patient.getStreet(), actionEvaluation.getPatient().getStreet());
+        assertEquals(patient.getStreet(), actionEvaluation.getPatient().getAddress().getStreet());
       }
 
       @Test
@@ -520,7 +528,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertEquals(patient.getZipCode(), actionEvaluation.getPatient().getZipCode());
+        assertEquals(patient.getZipCode(), actionEvaluation.getPatient().getAddress().getZipCode());
       }
 
       @Test
@@ -532,7 +540,8 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertEquals(patient.getTestIndicated(), actionEvaluation.getPatient().isTestIndicated());
+        assertEquals(patient.getTestIndicated(),
+            actionEvaluation.getPatient().getTestIndicated().testIndicated());
       }
 
       @Test
@@ -544,7 +553,8 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertEquals(patient.getTestIndicated(), actionEvaluation.getPatient().isTestIndicated());
+        assertEquals(patient.getTestIndicated(),
+            actionEvaluation.getPatient().getTestIndicated().testIndicated());
       }
 
       @Test
@@ -557,7 +567,7 @@ class ActionEvaluationFactoryTest {
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
         assertEquals(patient.getProtectedPerson(),
-            actionEvaluation.getPatient().isProtectedPerson());
+            actionEvaluation.getPatient().getProtectedPerson().protectedPerson());
       }
 
       @Test
@@ -570,7 +580,7 @@ class ActionEvaluationFactoryTest {
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
         assertEquals(patient.getProtectedPerson(),
-            actionEvaluation.getPatient().isProtectedPerson());
+            actionEvaluation.getPatient().getProtectedPerson().protectedPerson());
       }
     }
 
@@ -617,7 +627,7 @@ class ActionEvaluationFactoryTest {
 
       final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER);
 
-      assertTrue(actionEvaluation.getPatient().isDeceased(),
+      assertTrue(actionEvaluation.getPatient().getDeceased().deceased(),
           "Expected patient.deceased to be true");
     }
 
@@ -629,7 +639,7 @@ class ActionEvaluationFactoryTest {
 
       final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER);
 
-      assertFalse(actionEvaluation.getPatient().isDeceased(),
+      assertFalse(actionEvaluation.getPatient().getDeceased().deceased(),
           "Expected patient.deceased to be false");
     }
 

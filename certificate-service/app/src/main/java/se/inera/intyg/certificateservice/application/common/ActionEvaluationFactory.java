@@ -9,10 +9,19 @@ import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
+import se.inera.intyg.certificateservice.domain.certificate.model.Inactive;
 import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
+import se.inera.intyg.certificateservice.domain.certificate.model.UnitAddress;
+import se.inera.intyg.certificateservice.domain.certificate.model.UnitContactInfo;
+import se.inera.intyg.certificateservice.domain.certificate.model.UnitName;
+import se.inera.intyg.certificateservice.domain.patient.model.Deceased;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
+import se.inera.intyg.certificateservice.domain.patient.model.PersonAddress;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
+import se.inera.intyg.certificateservice.domain.patient.model.PersonName;
+import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
+import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
 @Component
@@ -23,7 +32,7 @@ public class ActionEvaluationFactory {
     return ActionEvaluation.builder()
         .patient(
             Patient.builder()
-                .deceased(patient.getDeceased())
+                .deceased(new Deceased(patient.getDeceased()))
                 .build()
         )
         .user(
@@ -45,16 +54,24 @@ public class ActionEvaluationFactory {
                         .id(patient.getId().getId())
                         .build()
                 )
-                .fullName(patient.getFullName())
-                .firstName(patient.getFirstName())
-                .middleName(patient.getMiddleName())
-                .lastName(patient.getLastName())
-                .deceased(patient.getDeceased())
-                .city(patient.getCity())
-                .street(patient.getStreet())
-                .zipCode(patient.getZipCode())
-                .protectedPerson(patient.getProtectedPerson())
-                .testIndicated(patient.getTestIndicated())
+                .name(
+                    PersonName.builder()
+                        .fullName(patient.getFullName())
+                        .firstName(patient.getFirstName())
+                        .middleName(patient.getMiddleName())
+                        .lastName(patient.getLastName())
+                        .build()
+                )
+                .deceased(new Deceased(patient.getDeceased()))
+                .address(
+                    PersonAddress.builder()
+                        .city(patient.getCity())
+                        .street(patient.getStreet())
+                        .zipCode(patient.getZipCode())
+                        .build()
+                )
+                .protectedPerson(new ProtectedPerson(patient.getProtectedPerson()))
+                .testIndicated(new TestIndicated(patient.getTestIndicated()))
                 .build()
         )
         .user(
@@ -65,36 +82,60 @@ public class ActionEvaluationFactory {
         .subUnit(
             SubUnit.builder()
                 .hsaId(new HsaId(unit.getId()))
-                .name(unit.getName())
-                .address(unit.getAddress())
-                .zipCode(unit.getZipCode())
-                .city(unit.getCity())
-                .phoneNumber(unit.getPhoneNumber())
-                .email(unit.getEmail())
-                .inactive(unit.getInactive())
+                .name(new UnitName(unit.getName()))
+                .address(
+                    UnitAddress.builder()
+                        .address(unit.getAddress())
+                        .zipCode(unit.getZipCode())
+                        .city(unit.getCity())
+                        .build()
+                )
+                .contactInfo(
+                    UnitContactInfo.builder()
+                        .phoneNumber(unit.getPhoneNumber())
+                        .email(unit.getEmail())
+                        .build()
+                )
+                .inactive(new Inactive(unit.getInactive()))
                 .build()
         )
         .careUnit(
             CareUnit.builder()
                 .hsaId(new HsaId(careUnit.getId()))
-                .name(careUnit.getName())
-                .address(careUnit.getAddress())
-                .zipCode(careUnit.getZipCode())
-                .city(careUnit.getCity())
-                .phoneNumber(careUnit.getPhoneNumber())
-                .email(careUnit.getEmail())
-                .inactive(careUnit.getInactive())
+                .name(new UnitName(careUnit.getName()))
+                .address(
+                    UnitAddress.builder()
+                        .address(careUnit.getAddress())
+                        .zipCode(careUnit.getZipCode())
+                        .city(careUnit.getCity())
+                        .build()
+                )
+                .contactInfo(
+                    UnitContactInfo.builder()
+                        .phoneNumber(careUnit.getPhoneNumber())
+                        .email(careUnit.getEmail())
+                        .build()
+                )
+                .inactive(new Inactive(careUnit.getInactive()))
                 .build()
         )
         .careProvider(
             CareProvider.builder()
                 .hsaId(new HsaId(careProvider.getId()))
-                .name(careProvider.getName())
-                .address(careProvider.getAddress())
-                .zipCode(careProvider.getZipCode())
-                .city(careProvider.getCity())
-                .phoneNumber(careProvider.getPhoneNumber())
-                .email(careProvider.getEmail())
+                .name(new UnitName(careProvider.getName()))
+                .address(
+                    UnitAddress.builder()
+                        .address(careProvider.getAddress())
+                        .zipCode(careProvider.getZipCode())
+                        .city(careProvider.getCity())
+                        .build()
+                )
+                .contactInfo(
+                    UnitContactInfo.builder()
+                        .phoneNumber(careProvider.getPhoneNumber())
+                        .email(careProvider.getEmail())
+                        .build()
+                )
                 .build()
         )
         .build();
