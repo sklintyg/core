@@ -8,7 +8,7 @@ import lombok.Value;
 public class Patient {
 
   PersonId id;
-  PersonName name;
+  Name name;
   PersonAddress address;
   Deceased deceased;
   TestIndicated testIndicated;

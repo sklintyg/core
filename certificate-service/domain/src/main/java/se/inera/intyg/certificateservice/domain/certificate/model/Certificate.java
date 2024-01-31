@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
+import se.inera.intyg.certificateservice.domain.certificate.service.IssuerDomainMapper;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 
 
@@ -25,6 +26,11 @@ public class Certificate {
 
   public void updateMetadata(ActionEvaluation actionEvaluation) {
     certificateMetaData = CertificateMetaData.builder()
+        .patient(actionEvaluation.getPatient())
+        .issuer(IssuerDomainMapper.map(actionEvaluation.getUser()))
+        .careUnit(actionEvaluation.getCareUnit())
+        .careProvider(actionEvaluation.getCareProvider())
+        .issuingUnit(actionEvaluation.getSubUnit())
         .build();
   }
 }

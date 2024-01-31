@@ -26,9 +26,11 @@ class ActionEvaluationFactoryTest {
   private static final String FULL_NAME = "fullName";
   private static final String CITY = "city";
   private static final String STREET = "street";
+  private static final String NAME = "userName";
   private ActionEvaluationFactory actionEvaluationFactory;
 
   private static final UserDTO DEFAULT_USER = UserDTO.builder()
+      .name("defaultName")
       .blocked(false)
       .build();
 
@@ -590,27 +592,42 @@ class ActionEvaluationFactoryTest {
       @Test
       void shallIncludeUserBlockedFalse() {
         final var user = UserDTO.builder()
+            .name(NAME)
             .blocked(false)
             .build();
 
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(), user,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertFalse(actionEvaluation.getUser().isBlocked(),
+        assertFalse(actionEvaluation.getUser().getBlocked().blocked(),
             "Expected user.blocked to be false");
       }
 
       @Test
       void shallIncludeUserBlockedTrue() {
         final var user = UserDTO.builder()
+            .name(NAME)
             .blocked(true)
             .build();
 
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(), user,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertTrue(actionEvaluation.getUser().isBlocked(),
+        assertTrue(actionEvaluation.getUser().getBlocked().blocked(),
             "Expected user.blocked to be true");
+      }
+
+      @Test
+      void shallIncludeUserName() {
+        final var user = UserDTO.builder()
+            .name(NAME)
+            .blocked(true)
+            .build();
+
+        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(), user,
+            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+
+        assertEquals(user.getName(), actionEvaluation.getUser().getName().getFullName());
       }
     }
   }
@@ -651,7 +668,7 @@ class ActionEvaluationFactoryTest {
 
       final var actionEvaluation = actionEvaluationFactory.create(DEFAULT_PATIENT_DTO, user);
 
-      assertFalse(actionEvaluation.getUser().isBlocked(),
+      assertFalse(actionEvaluation.getUser().getBlocked().blocked(),
           "Expected user.blocked to be false");
     }
 
@@ -663,7 +680,7 @@ class ActionEvaluationFactoryTest {
 
       final var actionEvaluation = actionEvaluationFactory.create(DEFAULT_PATIENT_DTO, user);
 
-      assertTrue(actionEvaluation.getUser().isBlocked(),
+      assertTrue(actionEvaluation.getUser().getBlocked().blocked(),
           "Expected user.blocked to be true");
     }
 

@@ -6,6 +6,7 @@ import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.certificate.model.Blocked;
 import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
@@ -15,11 +16,11 @@ import se.inera.intyg.certificateservice.domain.certificate.model.UnitAddress;
 import se.inera.intyg.certificateservice.domain.certificate.model.UnitContactInfo;
 import se.inera.intyg.certificateservice.domain.certificate.model.UnitName;
 import se.inera.intyg.certificateservice.domain.patient.model.Deceased;
+import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonAddress;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
-import se.inera.intyg.certificateservice.domain.patient.model.PersonName;
 import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 import se.inera.intyg.certificateservice.domain.user.model.User;
@@ -37,7 +38,7 @@ public class ActionEvaluationFactory {
         )
         .user(
             User.builder()
-                .blocked(user.getBlocked())
+                .blocked(new Blocked(user.getBlocked()))
                 .build()
         )
         .build();
@@ -55,7 +56,7 @@ public class ActionEvaluationFactory {
                         .build()
                 )
                 .name(
-                    PersonName.builder()
+                    Name.builder()
                         .fullName(patient.getFullName())
                         .firstName(patient.getFirstName())
                         .middleName(patient.getMiddleName())
@@ -76,7 +77,12 @@ public class ActionEvaluationFactory {
         )
         .user(
             User.builder()
-                .blocked(user.getBlocked())
+                .name(
+                    Name.builder()
+                        .fullName(user.getName())
+                        .build()
+                )
+                .blocked(new Blocked(user.getBlocked()))
                 .build()
         )
         .subUnit(

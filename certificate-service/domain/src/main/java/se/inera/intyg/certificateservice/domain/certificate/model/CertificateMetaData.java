@@ -1,9 +1,11 @@
 package se.inera.intyg.certificateservice.domain.certificate.model;
 
 import lombok.Builder;
+import lombok.Getter;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 
 
+@Getter
 @Builder
 public class CertificateMetaData {
 
