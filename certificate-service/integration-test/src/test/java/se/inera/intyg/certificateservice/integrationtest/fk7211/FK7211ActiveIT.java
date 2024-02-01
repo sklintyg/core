@@ -9,6 +9,8 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.ResourceLinkUtil.resourceLink;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -48,75 +50,125 @@ class FK7211ActiveIT {
     this.api = new ApiUtil(restTemplate, port);
   }
 
-  @Test
-  void shallReturnFK7211WhenActive() {
-    final var response = api.certificateTypeInfo(
-        defaultCertificateTypeInfoRequest()
-    );
+  @Nested
+  class GetCertificateTypeInfo {
 
-    assertNotNull(
-        certificateTypeInfo(response.getBody(), FK7211),
-        "Should contain %s as it is active!".formatted(FK7211)
-    );
+    @Test
+    void shallReturnFK7211WhenActive() {
+      final var response = api.certificateTypeInfo(
+          defaultCertificateTypeInfoRequest()
+      );
+
+      assertNotNull(
+          certificateTypeInfo(response.getBody(), FK7211),
+          "Should contain %s as it is active!".formatted(FK7211)
+      );
+    }
+
+    @Test
+    void shallReturnResourceLinkCreateCertificate() {
+      final var response = api.certificateTypeInfo(
+          defaultCertificateTypeInfoRequest()
+      );
+
+      assertNotNull(
+          resourceLink(
+              certificateTypeInfo(response.getBody(), FK7211),
+              ResourceLinkTypeDTO.CREATE_CERTIFICATE
+          ),
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
+      );
+    }
+
+    @Test
+    void shallNotReturnResourceLinkCreateCertificateIfPatientIsDeceased() {
+      final var response = api.certificateTypeInfo(
+          customCertificateTypeInfoRequest().deceased(true).build()
+      );
+
+      assertNull(
+          resourceLink(
+              certificateTypeInfo(response.getBody(), FK7211),
+              ResourceLinkTypeDTO.CREATE_CERTIFICATE
+          ),
+          "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
+      );
+    }
+
+    @Test
+    void shallNotReturnResourceLinkCreateCertificateIfUserIsBlocked() {
+      final var response = api.certificateTypeInfo(
+          customCertificateTypeInfoRequest().blocked(true).build()
+      );
+
+      assertNull(
+          resourceLink(
+              certificateTypeInfo(response.getBody(), FK7211),
+              ResourceLinkTypeDTO.CREATE_CERTIFICATE
+          ),
+          "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
+      );
+    }
+
+    @Test
+    void shallNotReturnResourceLinkCreateCertificateIfUserIsBlockedAndPatientIsDeceased() {
+      final var response = api.certificateTypeInfo(
+          customCertificateTypeInfoRequest().blocked(true).deceased(true).build()
+      );
+
+      assertNull(
+          resourceLink(
+              certificateTypeInfo(response.getBody(), FK7211),
+              ResourceLinkTypeDTO.CREATE_CERTIFICATE
+          ),
+          "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
+      );
+    }
   }
 
-  @Test
-  void shallReturnResourceLinkCreateCertificate() {
-    final var response = api.certificateTypeInfo(
-        defaultCertificateTypeInfoRequest()
-    );
+  @Nested
+  @DisplayName("FK7211 - Aktiva versioner")
+  class ExistsCertificateTypeInfo {
 
-    assertNotNull(
-        resourceLink(
-            certificateTypeInfo(response.getBody(), FK7211),
-            ResourceLinkTypeDTO.CREATE_CERTIFICATE
-        ),
-        "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-    );
+    @Test
+    @DisplayName("FK7211 - Aktiv version skall vara 1.0")
+    void shallReturnLatestVersionWhenTypeExists() {
+
+    }
   }
 
-  @Test
-  void shallNotReturnResourceLinkCreateCertificateIfPatientIsDeceased() {
-    final var response = api.certificateTypeInfo(
-        customCertificateTypeInfoRequest().deceased(true).build()
-    );
+  @Nested
+  @DisplayName("FK7211 - Skapa utkast")
+  class CreateCertificate {
 
-    assertNull(
-        resourceLink(
-            certificateTypeInfo(response.getBody(), FK7211),
-            ResourceLinkTypeDTO.CREATE_CERTIFICATE
-        ),
-        "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-    );
-  }
+    @Test
+    @DisplayName("FK7211 - Om utkastet framgångsrikt skapats skall utkastet returneras")
+    void shallReturnCertificateWhenActive() {
 
-  @Test
-  void shallNotReturnResourceLinkCreateCertificateIfUserIsBlocked() {
-    final var response = api.certificateTypeInfo(
-        customCertificateTypeInfoRequest().blocked(true).build()
-    );
+    }
 
-    assertNull(
-        resourceLink(
-            certificateTypeInfo(response.getBody(), FK7211),
-            ResourceLinkTypeDTO.CREATE_CERTIFICATE
-        ),
-        "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-    );
-  }
+    @Test
+    @DisplayName("FK7211 - Om patienten är avliden skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403PatientIsDeceased() {
 
-  @Test
-  void shallNotReturnResourceLinkCreateCertificateIfUserIsBlockedAndPatientIsDeceased() {
-    final var response = api.certificateTypeInfo(
-        customCertificateTypeInfoRequest().blocked(true).deceased(true).build()
-    );
+    }
 
-    assertNull(
-        resourceLink(
-            certificateTypeInfo(response.getBody(), FK7211),
-            ResourceLinkTypeDTO.CREATE_CERTIFICATE
-        ),
-        "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-    );
+    @Test
+    @DisplayName("FK7211 - Om användaren är blockerad skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403UserIsBlocked() {
+
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om patient är avliden och användaren är blockerad skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403PatientIsDeceasedAndUserIsBlocked() {
+
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om den efterfrågade versionen inte stöds skall felkod 400 (BAD_REQUEST) returneras")
+    void shallReturn400IfVersionNotSupported() {
+
+    }
   }
 }

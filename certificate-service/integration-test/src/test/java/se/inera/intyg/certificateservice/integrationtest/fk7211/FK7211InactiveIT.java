@@ -6,6 +6,8 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateTypeInfoUtil.certificateTypeInfo;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,15 +45,40 @@ class FK7211InactiveIT {
     this.api = new ApiUtil(restTemplate, port);
   }
 
-  @Test
-  void shallNotReturnFK7211WhenInactive() {
-    final var response = api.certificateTypeInfo(
-        defaultCertificateTypeInfoRequest()
-    );
+  @Nested
+  class GetCertificateTypeInfo {
 
-    assertNull(
-        certificateTypeInfo(response.getBody(), "FK7211"),
-        "Should not contain %s as it is not active!".formatted(FK7211)
-    );
+    @Test
+    void shallNotReturnFK7211WhenInactive() {
+      final var response = api.certificateTypeInfo(
+          defaultCertificateTypeInfoRequest()
+      );
+
+      assertNull(
+          certificateTypeInfo(response.getBody(), "FK7211"),
+          "Should not contain %s as it is not active!".formatted(FK7211)
+      );
+    }
+  }
+
+  @Nested
+  class ExistsCertificateTypeInfo {
+
+    @Test
+    @DisplayName("FK7211 - Om typen inte är aktiverad skall ingen version returneras")
+    void shallReturnEmptyWhenTypeIsNotActive() {
+
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7211 - Skapa utkast")
+  class CreateCertificate {
+
+    @Test
+    @DisplayName("FK7211 - Om typen inte är aktiverad skall felkod 400 (BAD_REQUEST) returneras")
+    void shallReturn400WhenTypeIsNotActive() {
+
+    }
   }
 }
