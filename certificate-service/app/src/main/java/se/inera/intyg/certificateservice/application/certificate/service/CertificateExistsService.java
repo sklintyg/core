@@ -19,7 +19,9 @@ public class CertificateExistsService {
       );
     }
     return CertificateExistsResponse.builder()
-        .exists(certificateRepository.exists(new CertificateId(certificateId)).isPresent())
+        .exists(
+            certificateRepository.exists(new CertificateId(certificateId))
+        )
         .build();
   }
 }

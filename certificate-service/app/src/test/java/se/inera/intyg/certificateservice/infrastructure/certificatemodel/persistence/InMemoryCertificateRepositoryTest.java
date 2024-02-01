@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -132,16 +133,15 @@ class InMemoryCertificateRepositoryTest {
   class CertificateExists {
 
     @Test
-    void shouldReturnCertificateIfCertificateExists() {
+    void shouldReturnTrueIfCertificateExists() {
       final var expectedCertificate = Certificate.builder()
           .id(new CertificateId(CERTIFICATE_ID))
           .build();
 
       certificateRepository.save(expectedCertificate);
-      final var actualCertificate = certificateRepository.exists(expectedCertificate.id())
-          .orElse(null);
+      final var result = certificateRepository.exists(new CertificateId(CERTIFICATE_ID));
 
-      assertEquals(expectedCertificate, actualCertificate);
+      assertTrue(result);
     }
 
     @Test
@@ -151,10 +151,9 @@ class InMemoryCertificateRepositoryTest {
           .build();
 
       certificateRepository.save(expectedCertificate);
-      final var actualCertificate = certificateRepository.exists(
-          new CertificateId(WRONG_CERTIFICATE_ID));
+      final var result = certificateRepository.exists(new CertificateId(WRONG_CERTIFICATE_ID));
 
-      assertTrue(actualCertificate.isEmpty());
+      assertFalse(result);
     }
   }
 }

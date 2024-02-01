@@ -4,14 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.CertificateExistsResponse;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 
@@ -41,12 +39,7 @@ class CertificateExistsServiceTest {
         .exists(true)
         .build();
 
-    final var certificate = Optional.of(
-        Certificate.builder()
-            .build()
-    );
-
-    doReturn(certificate).when(certificateRepository).exists(new CertificateId(CERTIFICATE_ID));
+    doReturn(true).when(certificateRepository).exists(new CertificateId(CERTIFICATE_ID));
 
     final var actualResult = certificateExistsService.exist(CERTIFICATE_ID);
 
@@ -59,7 +52,7 @@ class CertificateExistsServiceTest {
         .exists(false)
         .build();
 
-    doReturn(Optional.empty()).when(certificateRepository)
+    doReturn(false).when(certificateRepository)
         .exists(new CertificateId(CERTIFICATE_ID));
 
     final var actualResult = certificateExistsService.exist(CERTIFICATE_ID);
