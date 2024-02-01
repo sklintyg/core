@@ -8,6 +8,7 @@ import lombok.Value;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionFactory;
+import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 
 @Value
 @Builder
@@ -25,5 +26,16 @@ public class CertificateModel {
         .filter(Objects::nonNull)
         .filter(certificateAction -> certificateAction.evaluate(actionEvaluation))
         .toList();
+  }
+
+  public boolean allowTo(CertificateActionType certificateActionType,
+      ActionEvaluation actionEvaluation) {
+    return certificateActionSpecifications.stream()
+        .map(CertificateActionFactory::create)
+        .filter(Objects::nonNull)
+        .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
+        .findFirst()
+        .map(certificateAction -> certificateAction.evaluate(actionEvaluation))
+        .orElse(false);
   }
 }

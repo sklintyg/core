@@ -7,5 +7,10 @@ import lombok.Value;
 @Builder
 public class Patient {
 
-  boolean deceased;
+  PersonId id;
+  Name name;
+  PersonAddress address;
+  Deceased deceased;
+  TestIndicated testIndicated;
+  ProtectedPerson protectedPerson;
 }

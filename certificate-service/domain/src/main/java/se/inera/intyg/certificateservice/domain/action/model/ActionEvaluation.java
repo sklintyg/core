@@ -2,6 +2,9 @@ package se.inera.intyg.certificateservice.domain.action.model;
 
 import lombok.Builder;
 import lombok.Value;
+import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
+import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
+import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
@@ -11,4 +14,7 @@ public class ActionEvaluation {
 
   Patient patient;
   User user;
+  SubUnit subUnit;
+  CareUnit careUnit;
+  CareProvider careProvider;
 }

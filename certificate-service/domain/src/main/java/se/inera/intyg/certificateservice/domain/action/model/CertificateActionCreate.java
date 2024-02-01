@@ -20,7 +20,8 @@ public class CertificateActionCreate implements CertificateAction {
 
   @Override
   public boolean evaluate(ActionEvaluation actionEvaluation) {
-    return !actionEvaluation.getPatient().isDeceased() && !actionEvaluation.getUser().isBlocked();
+    return !actionEvaluation.getPatient().getDeceased().deceased() && !actionEvaluation.getUser()
+        .getBlocked().blocked();
   }
 
   @Override

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserDTO {
 
+  String name;
   String id;
   RoleTypeDTO role;
   Boolean blocked;

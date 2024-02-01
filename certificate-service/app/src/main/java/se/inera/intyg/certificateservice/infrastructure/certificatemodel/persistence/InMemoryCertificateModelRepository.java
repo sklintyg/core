@@ -2,14 +2,18 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.persis
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 
@@ -24,10 +28,35 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
   @Override
   public List<CertificateModel> findAllActive() {
     return getCertificateModelMap().values().stream()
-        .filter(certificateModel ->
-            certificateModel.getActiveFrom().isBefore(LocalDateTime.now(ZoneId.systemDefault()))
-        )
+        .filter(filterActiveCertificateModels())
         .toList();
+  }
+
+  @Override
+  public Optional<CertificateModel> findLatestActiveByType(CertificateType certificateType) {
+    return getCertificateModelMap().values().stream()
+        .filter(certificateModel -> certificateType.equals(certificateModel.getId().getType()))
+        .filter(filterActiveCertificateModels())
+        .max(Comparator.comparing(CertificateModel::getActiveFrom));
+  }
+
+  @Override
+  public CertificateModel getById(CertificateModelId certificateModelId) {
+    final var certificateModel = getCertificateModelMap().get(certificateModelId);
+    if (certificateModel == null) {
+      throw new IllegalStateException("CertificateModel missing: %s".formatted(certificateModelId));
+    }
+
+    if (LocalDateTime.now(ZoneId.systemDefault()).isBefore(certificateModel.getActiveFrom())) {
+      throw new IllegalStateException(
+          "CertificateModel with id '%s' not active until '%s'".formatted(
+              certificateModel.getId(),
+              certificateModel.getActiveFrom()
+          )
+      );
+    }
+
+    return certificateModel;
   }
 
   private Map<CertificateModelId, CertificateModel> getCertificateModelMap() {
@@ -42,5 +71,10 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
       );
     }
     return certificateModelMap;
+  }
+
+  private static Predicate<CertificateModel> filterActiveCertificateModels() {
+    return certificateModel ->
+        certificateModel.getActiveFrom().isBefore(LocalDateTime.now(ZoneId.systemDefault()));
   }
 }

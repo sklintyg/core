@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 
@@ -21,6 +22,10 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.Certifi
 @ExtendWith(MockitoExtension.class)
 class InMemoryCertificateModelRepositoryTest {
 
+  private static final String TYPE_ONE = "type1";
+  private static final String VERSION_ONE = "version1";
+  private static final String TYPE_TWO = "type2";
+  private static final String VERSION_TWO = "version2";
   @Mock
   private CertificateModelFactory certificateModelFactoryOne;
 
@@ -38,8 +43,8 @@ class InMemoryCertificateModelRepositoryTest {
     final var expectedModel = CertificateModel.builder()
         .id(
             CertificateModelId.builder()
-                .type(new CertificateType("type1"))
-                .version(new CertificateVersion("version1"))
+                .type(new CertificateType(TYPE_ONE))
+                .version(new CertificateVersion(VERSION_ONE))
                 .build()
         )
         .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
@@ -61,8 +66,8 @@ class InMemoryCertificateModelRepositoryTest {
     final var expectedModel = CertificateModel.builder()
         .id(
             CertificateModelId.builder()
-                .type(new CertificateType("type1"))
-                .version(new CertificateVersion("version1"))
+                .type(new CertificateType(TYPE_ONE))
+                .version(new CertificateVersion(VERSION_ONE))
                 .build()
         )
         .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
@@ -84,8 +89,8 @@ class InMemoryCertificateModelRepositoryTest {
     final var expectedModelOne = CertificateModel.builder()
         .id(
             CertificateModelId.builder()
-                .type(new CertificateType("type1"))
-                .version(new CertificateVersion("version1"))
+                .type(new CertificateType(TYPE_ONE))
+                .version(new CertificateVersion(VERSION_ONE))
                 .build()
         )
         .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
@@ -96,8 +101,8 @@ class InMemoryCertificateModelRepositoryTest {
     final var expectedModelTwo = CertificateModel.builder()
         .id(
             CertificateModelId.builder()
-                .type(new CertificateType("type2"))
-                .version(new CertificateVersion("version1"))
+                .type(new CertificateType(TYPE_TWO))
+                .version(new CertificateVersion(VERSION_ONE))
                 .build()
         )
         .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
@@ -114,5 +119,202 @@ class InMemoryCertificateModelRepositoryTest {
     assertTrue(actualModels.contains(expectedModelTwo),
         "Expected model with id: %s".formatted(expectedModelTwo.getId())
     );
+  }
+
+  @Test
+  void shallReturnCertificateModelIfActiveAndMatchType() {
+    inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+        List.of(certificateModelFactoryOne)
+    );
+
+    final var expectedModel = CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .type(new CertificateType(TYPE_ONE))
+                .version(new CertificateVersion(VERSION_ONE))
+                .build()
+        )
+        .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+        .build();
+
+    doReturn(expectedModel).when(certificateModelFactoryOne).create();
+
+    final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByType(
+        new CertificateType(TYPE_ONE));
+
+    assertEquals(expectedModel, actualModel.orElse(null));
+  }
+
+  @Test
+  void shallReturnEmptyIfNotActiveAndMatchType() {
+    inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+        List.of(certificateModelFactoryOne)
+    );
+
+    final var model = CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .type(new CertificateType(TYPE_ONE))
+                .version(new CertificateVersion(VERSION_ONE))
+                .build()
+        )
+        .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
+        .build();
+
+    doReturn(model).when(certificateModelFactoryOne).create();
+
+    final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByType(
+        new CertificateType(TYPE_ONE));
+
+    assertTrue(actualModel.isEmpty(),
+        () -> "Expect model to be empty but retured %s".formatted(actualModel.orElseThrow())
+    );
+  }
+
+  @Test
+  void shallReturnEmptyIfActiveAndDifferentType() {
+    inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+        List.of(certificateModelFactoryOne)
+    );
+
+    final var model = CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .type(new CertificateType(TYPE_TWO))
+                .version(new CertificateVersion(VERSION_ONE))
+                .build()
+        )
+        .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+        .build();
+
+    doReturn(model).when(certificateModelFactoryOne).create();
+
+    final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByType(
+        new CertificateType(TYPE_ONE));
+
+    assertTrue(actualModel.isEmpty(),
+        () -> "Expect model to be empty but retured %s".formatted(actualModel.orElseThrow())
+    );
+  }
+
+  @Test
+  void shallReturnLatestCertificateModelIfActiveAndMatchType() {
+    inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+        List.of(certificateModelFactoryOne, certificateModelFactoryTwo)
+    );
+
+    final var modelOne = CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .type(new CertificateType(TYPE_ONE))
+                .version(new CertificateVersion(VERSION_ONE))
+                .build()
+        )
+        .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(5))
+        .build();
+
+    final var expectedModel = CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .type(new CertificateType(TYPE_ONE))
+                .version(new CertificateVersion(VERSION_TWO))
+                .build()
+        )
+        .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+        .build();
+
+    doReturn(modelOne).when(certificateModelFactoryOne).create();
+    doReturn(expectedModel).when(certificateModelFactoryTwo).create();
+
+    final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByType(
+        new CertificateType(TYPE_ONE));
+
+    assertEquals(expectedModel, actualModel.orElse(null));
+  }
+
+  @Test
+  void shallReturnCertificateModelIfIdExistsAndIsActive() {
+    inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+        List.of(certificateModelFactoryOne)
+    );
+
+    final var expectedModel = CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .type(new CertificateType(TYPE_ONE))
+                .version(new CertificateVersion(VERSION_ONE))
+                .build()
+        )
+        .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+        .build();
+
+    doReturn(expectedModel).when(certificateModelFactoryOne).create();
+
+    final var actualModel = inMemoryCertificateModelRepository.getById(expectedModel.getId());
+
+    assertEquals(expectedModel, actualModel);
+  }
+
+  @Test
+  void shallThrowExceptionIfIdIsMissing() {
+    inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+        List.of(certificateModelFactoryOne)
+    );
+
+    final var expectedModel = CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .type(new CertificateType(TYPE_ONE))
+                .version(new CertificateVersion(VERSION_ONE))
+                .build()
+        )
+        .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+        .build();
+
+    doReturn(expectedModel).when(certificateModelFactoryOne).create();
+
+    final var certificateModelId = CertificateModelId.builder()
+        .type(new CertificateType(TYPE_TWO))
+        .version(new CertificateVersion(VERSION_ONE))
+        .build();
+
+    final var illegalStateException = assertThrows(IllegalStateException.class,
+        () -> inMemoryCertificateModelRepository.getById(certificateModelId)
+    );
+
+    assertEquals("CertificateModel missing: %s".formatted(certificateModelId),
+        illegalStateException.getMessage());
+  }
+
+  @Test
+  void shallThrowExceptionIfCertificateModelNotActive() {
+    inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+        List.of(certificateModelFactoryOne)
+    );
+
+    final var expectedModel = CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .type(new CertificateType(TYPE_ONE))
+                .version(new CertificateVersion(VERSION_ONE))
+                .build()
+        )
+        .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
+        .build();
+
+    final var certificateModelId = expectedModel.getId();
+
+    doReturn(expectedModel).when(certificateModelFactoryOne).create();
+
+    final var illegalStateException = assertThrows(IllegalStateException.class,
+        () -> inMemoryCertificateModelRepository.getById(certificateModelId)
+    );
+
+    assertEquals(
+        "CertificateModel with id '%s' not active until '%s'".formatted(
+            expectedModel.getId(),
+            expectedModel.getActiveFrom()
+        ),
+        illegalStateException.getMessage());
   }
 }
