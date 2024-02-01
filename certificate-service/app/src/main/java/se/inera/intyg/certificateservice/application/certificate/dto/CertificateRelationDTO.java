@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationDTO.CertificateRelationBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationDTO.CertificateRelationDTOBuilder;
 
-@JsonDeserialize(builder = CertificateRelationBuilder.class)
+@JsonDeserialize(builder = CertificateRelationDTOBuilder.class)
 @Value
 @Builder
 public class CertificateRelationDTO {
@@ -18,7 +18,7 @@ public class CertificateRelationDTO {
   LocalDateTime created;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class CertificateRelationBuilder {
+  public static class CertificateRelationDTOBuilder {
 
   }
 }

@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO.StaffBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO.StaffDTOBuilder;
 
-@JsonDeserialize(builder = StaffBuilder.class)
+@JsonDeserialize(builder = StaffDTOBuilder.class)
 @Value
 @Builder
 public class StaffDTO {
@@ -16,7 +16,7 @@ public class StaffDTO {
   String prescriptionCode;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class StaffBuilder {
+  public static class StaffDTOBuilder {
 
   }
 }

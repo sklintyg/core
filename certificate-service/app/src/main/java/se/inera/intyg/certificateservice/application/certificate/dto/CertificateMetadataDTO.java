@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO.CertificateMetadataBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO.CertificateMetadataDTOBuilder;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 
-@JsonDeserialize(builder = CertificateMetadataBuilder.class)
+@JsonDeserialize(builder = CertificateMetadataDTOBuilder.class)
 @Value
 @Builder
 public class CertificateMetadataDTO {
@@ -39,7 +39,7 @@ public class CertificateMetadataDTO {
   CertificateSummaryDTO summary;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class CertificateMetadataBuilder {
+  public static class CertificateMetadataDTOBuilder {
 
   }
 }
