@@ -1,8 +1,11 @@
 package se.inera.intyg.certificateservice.integrationtest.fk7211;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.FK7211;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCertificateTypeInfoRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateModelIdUtil.certificateModelId;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateTypeInfoUtil.certificateTypeInfo;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +26,7 @@ import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class FK7211InactiveIT {
 
+  private static final String VERSION = "1.0";
   @LocalServerPort
   private int port;
 
@@ -67,7 +71,11 @@ class FK7211InactiveIT {
     @Test
     @DisplayName("FK7211 - Om typen inte är aktiverad skall ingen version returneras")
     void shallReturnEmptyWhenTypeIsNotActive() {
+      final var response = api.findLatestCertificateTypeVersion(FK7211);
 
+      assertNull(
+          certificateModelId(response.getBody())
+      );
     }
   }
 
@@ -78,7 +86,12 @@ class FK7211InactiveIT {
     @Test
     @DisplayName("FK7211 - Om typen inte är aktiverad skall felkod 400 (BAD_REQUEST) returneras")
     void shallReturn400WhenTypeIsNotActive() {
+      final var response = api.createCertificate(
+          defaultCreateCertificateRequest()
+      );
 
+      assertEquals(400, response.getStatusCode().value()
+          , "Should throw error with status code 400");
     }
   }
 }

@@ -9,8 +9,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoResponse;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetLatestCertificateTypeVersionResponse;
 
 @RequiredArgsConstructor
 public class ApiUtil {
@@ -27,6 +30,37 @@ public class ApiUtil {
         requestUrl,
         HttpMethod.POST,
         new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<CreateCertificateResponse> createCertificate(
+      CreateCertificateRequest request) {
+    final var requestUrl = "http://localhost:" + port + "/api/certificate";
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<GetLatestCertificateTypeVersionResponse> findLatestCertificateTypeVersion(
+      String type) {
+    final var requestUrl =
+        "http://localhost:" + port + "/api/certificatetypeinfo/" + type + "/exists";
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.GET,
+        new HttpEntity<>(headers),
         new ParameterizedTypeReference<>() {
         },
         Collections.emptyMap()

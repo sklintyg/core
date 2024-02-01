@@ -44,11 +44,13 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
   public CertificateModel getById(CertificateModelId certificateModelId) {
     final var certificateModel = getCertificateModelMap().get(certificateModelId);
     if (certificateModel == null) {
-      throw new IllegalStateException("CertificateModel missing: %s".formatted(certificateModelId));
+      throw new IllegalArgumentException(
+          "CertificateModel missing: %s".formatted(certificateModelId)
+      );
     }
 
     if (LocalDateTime.now(ZoneId.systemDefault()).isBefore(certificateModel.getActiveFrom())) {
-      throw new IllegalStateException(
+      throw new IllegalArgumentException(
           "CertificateModel with id '%s' not active until '%s'".formatted(
               certificateModel.getId(),
               certificateModel.getActiveFrom()

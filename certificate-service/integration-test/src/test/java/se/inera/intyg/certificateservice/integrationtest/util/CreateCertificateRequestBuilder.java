@@ -1,0 +1,102 @@
+package se.inera.intyg.certificateservice.integrationtest.util;
+
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
+import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
+import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
+import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
+import se.inera.intyg.certificateservice.application.common.dto.RoleTypeDTO;
+import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
+import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
+
+public class CreateCertificateRequestBuilder {
+
+  private static final String DOKTOR_AJLA = "TSTNMT2321000156-DRAA";
+  private static final String TOLVAN_TOLVANSSON = "191212121212";
+  private static final String ALFA_REGIONEN = "TSTNMT2321000156-ALFA";
+  private static final String ALFA_HUDMOTTAGNINGEN = "TSTNMT2321000156-ALHM";
+  private static final String ALFA_MEDICINCENTRUM = "TSTNMT2321000156-ALMC";
+  private static final String VERSION = "1.0";
+  private static final String TYPE = "fk7211";
+
+  private boolean blocked = false;
+  private boolean deceased = false;
+  private boolean inactive = false;
+  private CertificateModelIdDTO certificateModelId = CertificateModelIdDTO.builder()
+      .version(VERSION)
+      .type(TYPE)
+      .build();
+
+  public static CreateCertificateRequestBuilder create() {
+    return new CreateCertificateRequestBuilder();
+  }
+
+  private CreateCertificateRequestBuilder() {
+
+  }
+
+  public CreateCertificateRequestBuilder blocked(boolean blocked) {
+    this.blocked = blocked;
+    return this;
+  }
+
+  public CreateCertificateRequestBuilder deceased(boolean deceased) {
+    this.deceased = deceased;
+    return this;
+  }
+
+  public CreateCertificateRequestBuilder inactive(boolean inactive) {
+    this.inactive = inactive;
+    return this;
+  }
+
+  public CreateCertificateRequestBuilder certificateModelId(
+      CertificateModelIdDTO certificateModelIdDTO) {
+    this.certificateModelId = certificateModelIdDTO;
+    return this;
+  }
+
+  public CreateCertificateRequest build() {
+    return CreateCertificateRequest.builder()
+        .user(
+            UserDTO.builder()
+                .id(DOKTOR_AJLA)
+                .blocked(blocked)
+                .role(RoleTypeDTO.DOCTOR)
+                .build()
+        )
+        .patient(
+            PatientDTO.builder()
+                .id(
+                    PersonIdDTO.builder()
+                        .id(TOLVAN_TOLVANSSON)
+                        .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
+                        .build()
+                )
+                .protectedPerson(false)
+                .deceased(deceased)
+                .testIndicated(false)
+                .build()
+        )
+        .careProvider(
+            UnitDTO.builder()
+                .id(ALFA_REGIONEN)
+                .build()
+        )
+        .unit(
+            UnitDTO.builder()
+                .id(ALFA_HUDMOTTAGNINGEN)
+                .inactive(inactive)
+                .build()
+        )
+        .careUnit(
+            UnitDTO.builder()
+                .id(ALFA_MEDICINCENTRUM)
+                .build()
+        )
+        .certificateModelId(
+            certificateModelId
+        )
+        .build();
+  }
+}
