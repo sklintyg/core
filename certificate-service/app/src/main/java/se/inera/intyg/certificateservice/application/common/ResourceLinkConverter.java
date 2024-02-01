@@ -21,6 +21,7 @@ public class ResourceLinkConverter {
   private ResourceLinkTypeDTO convertType(CertificateActionType type) {
     return switch (type) {
       case CREATE -> ResourceLinkTypeDTO.CREATE_CERTIFICATE;
+      case READ -> ResourceLinkTypeDTO.READ_CERTIFICATE;
     };
   }
 }
