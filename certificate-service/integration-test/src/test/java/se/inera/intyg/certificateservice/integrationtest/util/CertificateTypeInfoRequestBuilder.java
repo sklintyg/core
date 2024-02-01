@@ -1,5 +1,11 @@
 package se.inera.intyg.certificateservice.integrationtest.util;
 
+import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.ALFA_HUDMOTTAGNINGEN;
+import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.ALFA_MEDICINCENTRUM;
+import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.ALFA_REGIONEN;
+import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.DOKTOR_AJLA;
+import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.TOLVAN_TOLVANSSON;
+
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
@@ -9,12 +15,6 @@ import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
 public class CertificateTypeInfoRequestBuilder {
-
-  private static final String DOKTOR_AJLA = "TSTNMT2321000156-DRAA";
-  private static final String TOLVAN_TOLVANSSON = "191212121212";
-  private static final String ALFA_REGIONEN = "TSTNMT2321000156-ALFA";
-  private static final String ALFA_HUDMOTTAGNINGEN = "TSTNMT2321000156-ALHM";
-  private static final String ALFA_MEDICINCENTRUM = "TSTNMT2321000156-ALMC";
 
   private boolean blocked = false;
   private boolean deceased = false;

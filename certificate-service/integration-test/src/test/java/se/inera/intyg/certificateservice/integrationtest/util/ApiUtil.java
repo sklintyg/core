@@ -23,7 +23,7 @@ public class ApiUtil {
 
   public ResponseEntity<GetCertificateTypeInfoResponse> certificateTypeInfo(
       GetCertificateTypeInfoRequest request) {
-    final var requestUrl = "http://localhost:" + port + "/api/certificatetypeinfo";
+    final var requestUrl = "http://localhost:%s/api/certificatetypeinfo".formatted(port);
     final var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     return this.restTemplate.exchange(
@@ -38,7 +38,7 @@ public class ApiUtil {
 
   public ResponseEntity<CreateCertificateResponse> createCertificate(
       CreateCertificateRequest request) {
-    final var requestUrl = "http://localhost:" + port + "/api/certificate";
+    final var requestUrl = "http://localhost:%s/api/certificate".formatted(port);
     final var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     return this.restTemplate.exchange(
@@ -53,8 +53,8 @@ public class ApiUtil {
 
   public ResponseEntity<GetLatestCertificateTypeVersionResponse> findLatestCertificateTypeVersion(
       String type) {
-    final var requestUrl =
-        "http://localhost:" + port + "/api/certificatetypeinfo/" + type + "/exists";
+    final var requestUrl = "http://localhost:%s/api/certificatetypeinfo/%s/exists"
+        .formatted(port, type);
     final var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     return this.restTemplate.exchange(
