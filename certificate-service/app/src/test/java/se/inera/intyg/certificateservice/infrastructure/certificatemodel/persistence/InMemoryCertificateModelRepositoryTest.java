@@ -246,9 +246,11 @@ class InMemoryCertificateModelRepositoryTest {
           List.of(certificateModelFactoryOne)
       );
 
-      assertThrows(IllegalArgumentException.class,
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
           () -> inMemoryCertificateModelRepository.findLatestActiveByType(null)
       );
+
+      assertEquals("CertificateType is null!", illegalArgumentException.getMessage());
     }
   }
 
@@ -301,13 +303,13 @@ class InMemoryCertificateModelRepositoryTest {
           .version(new CertificateVersion(VERSION_ONE))
           .build();
 
-    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> inMemoryCertificateModelRepository.getById(certificateModelId)
-    );
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> inMemoryCertificateModelRepository.getById(certificateModelId)
+      );
 
-    assertEquals("CertificateModel missing: %s".formatted(certificateModelId),
-        illegalArgumentException.getMessage());
-  }
+      assertEquals("CertificateModel missing: %s".formatted(certificateModelId),
+          illegalArgumentException.getMessage());
+    }
 
     @Test
     void shallThrowExceptionIfCertificateModelNotActive() {
@@ -329,16 +331,17 @@ class InMemoryCertificateModelRepositoryTest {
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
 
-    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> inMemoryCertificateModelRepository.getById(certificateModelId)
-    );
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> inMemoryCertificateModelRepository.getById(certificateModelId)
+      );
 
-    assertEquals(
-        "CertificateModel with id '%s' not active until '%s'".formatted(
-            expectedModel.getId(),
-            expectedModel.getActiveFrom()
-        ),
-        illegalArgumentException.getMessage());
+      assertEquals(
+          "CertificateModel with id '%s' not active until '%s'".formatted(
+              expectedModel.getId(),
+              expectedModel.getActiveFrom()
+          ),
+          illegalArgumentException.getMessage()
+      );
     }
 
     @Test
@@ -347,9 +350,11 @@ class InMemoryCertificateModelRepositoryTest {
           List.of(certificateModelFactoryOne)
       );
 
-      assertThrows(IllegalArgumentException.class,
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
           () -> inMemoryCertificateModelRepository.getById(null)
       );
+
+      assertEquals("CertificateModelId is null!", illegalArgumentException.getMessage());
     }
   }
 }
