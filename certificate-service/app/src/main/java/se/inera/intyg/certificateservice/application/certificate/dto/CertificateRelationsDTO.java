@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationsDTO.CertificateRelationsBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationsDTO.CertificateRelationsDTOBuilder;
 
-@JsonDeserialize(builder = CertificateRelationsBuilder.class)
+@JsonDeserialize(builder = CertificateRelationsDTOBuilder.class)
 @Value
 @Builder
 public class CertificateRelationsDTO {
@@ -15,7 +15,7 @@ public class CertificateRelationsDTO {
   CertificateRelationDTO[] children;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class CertificateRelationsBuilder {
+  public static class CertificateRelationsDTOBuilder {
 
   }
 }

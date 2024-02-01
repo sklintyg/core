@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO.UnitBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO.UnitDTOBuilder;
 
-@JsonDeserialize(builder = UnitBuilder.class)
+@JsonDeserialize(builder = UnitDTOBuilder.class)
 @Value
 @Builder
 public class UnitDTO {
@@ -21,7 +21,7 @@ public class UnitDTO {
   Boolean isInactive;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class UnitBuilder {
+  public static class UnitDTOBuilder {
 
   }
 }
