@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.persis
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mockStatic;
 
 import java.util.UUID;
@@ -18,6 +19,7 @@ class InMemoryCertificateRepositoryTest {
 
   private static final String NAME = "modelName";
   private static final String CERTIFICATE_ID = "certificateId";
+  private static final String WRONG_CERTIFICATE_ID = "WRONG_CERTIFICATE_ID";
   private InMemoryCertificateRepository certificateRepository;
 
   @BeforeEach
@@ -123,6 +125,36 @@ class InMemoryCertificateRepositoryTest {
       final var certificateId = new CertificateId(CERTIFICATE_ID);
       assertThrows(IllegalStateException.class,
           () -> certificateRepository.getById(certificateId));
+    }
+  }
+
+  @Nested
+  class CertificateExists {
+
+    @Test
+    void shouldReturnCertificateIfCertificateExists() {
+      final var expectedCertificate = Certificate.builder()
+          .id(new CertificateId(CERTIFICATE_ID))
+          .build();
+
+      certificateRepository.save(expectedCertificate);
+      final var actualCertificate = certificateRepository.exists(expectedCertificate.id())
+          .orElse(null);
+
+      assertEquals(expectedCertificate, actualCertificate);
+    }
+
+    @Test
+    void shouldReturnEmptyIfCertificateDontExists() {
+      final var expectedCertificate = Certificate.builder()
+          .id(new CertificateId(CERTIFICATE_ID))
+          .build();
+
+      certificateRepository.save(expectedCertificate);
+      final var actualCertificate = certificateRepository.exists(
+          new CertificateId(WRONG_CERTIFICATE_ID));
+
+      assertTrue(actualCertificate.isEmpty());
     }
   }
 }

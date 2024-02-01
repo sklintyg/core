@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -49,5 +50,10 @@ public class InMemoryCertificateRepository implements CertificateRepository {
       );
     }
     return certificateMap.get(certificateId);
+  }
+
+  @Override
+  public Optional<Certificate> exists(CertificateId certificateId) {
+    return Optional.ofNullable(certificateMap.get(certificateId));
   }
 }

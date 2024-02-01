@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.certificate.repository;
 
+import java.util.Optional;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -11,4 +12,6 @@ public interface CertificateRepository {
   Certificate save(Certificate certificate);
 
   Certificate getById(CertificateId certificateId);
+
+  Optional<Certificate> exists(CertificateId certificateId);
 }
