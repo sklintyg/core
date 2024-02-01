@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.application.certificate;
+package se.inera.intyg.certificateservice.application.certificate.dto;
 
 import lombok.Builder;
 import lombok.Value;
@@ -7,5 +7,5 @@ import lombok.Value;
 @Builder
 public class CertificateExistsResponse {
 
-  Boolean exists;
+  boolean exists;
 }

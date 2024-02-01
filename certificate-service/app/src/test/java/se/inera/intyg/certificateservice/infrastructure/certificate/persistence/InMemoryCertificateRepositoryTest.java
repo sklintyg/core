@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.persistence;
+package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -96,7 +96,9 @@ class InMemoryCertificateRepositoryTest {
 
     @Test
     void shallPersistCertificateOnSave() {
-      final var expectedCertificate = Certificate.builder().build();
+      final var expectedCertificate = Certificate.builder()
+          .id(new CertificateId(CERTIFICATE_ID))
+          .build();
 
       final var certificate = certificateRepository.save(expectedCertificate);
       final var actualCertificate = certificateRepository.getById(certificate.id());
@@ -127,6 +129,13 @@ class InMemoryCertificateRepositoryTest {
       assertThrows(IllegalStateException.class,
           () -> certificateRepository.getById(certificateId));
     }
+
+    @Test
+    void shouldThrowExceptionIfCertificateIdIsNull() {
+      assertThrows(IllegalArgumentException.class,
+          () -> certificateRepository.getById(null)
+      );
+    }
   }
 
   @Nested
@@ -154,6 +163,13 @@ class InMemoryCertificateRepositoryTest {
       final var result = certificateRepository.exists(new CertificateId(WRONG_CERTIFICATE_ID));
 
       assertFalse(result);
+    }
+
+    @Test
+    void shouldThrowExceptionIfCertificateIdIsNull() {
+      assertThrows(IllegalArgumentException.class,
+          () -> certificateRepository.exists(null)
+      );
     }
   }
 }

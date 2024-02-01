@@ -34,6 +34,10 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
 
   @Override
   public Optional<CertificateModel> findLatestActiveByType(CertificateType certificateType) {
+    if (certificateType == null) {
+      throw new IllegalArgumentException("CertificateType is null!");
+    }
+
     return getCertificateModelMap().values().stream()
         .filter(certificateModel -> certificateType.equals(certificateModel.getId().getType()))
         .filter(filterActiveCertificateModels())
@@ -42,6 +46,10 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
 
   @Override
   public CertificateModel getById(CertificateModelId certificateModelId) {
+    if (certificateModelId == null) {
+      throw new IllegalArgumentException("CertificateModelId is null!");
+    }
+
     final var certificateModel = getCertificateModelMap().get(certificateModelId);
     if (certificateModel == null) {
       throw new IllegalStateException("CertificateModel missing: %s".formatted(certificateModelId));
