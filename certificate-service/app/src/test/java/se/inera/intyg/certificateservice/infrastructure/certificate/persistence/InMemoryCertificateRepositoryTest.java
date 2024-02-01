@@ -1,8 +1,10 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.persistence;
+package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mockStatic;
 
 import java.util.UUID;
@@ -18,6 +20,7 @@ class InMemoryCertificateRepositoryTest {
 
   private static final String NAME = "modelName";
   private static final String CERTIFICATE_ID = "certificateId";
+  private static final String WRONG_CERTIFICATE_ID = "WRONG_CERTIFICATE_ID";
   private InMemoryCertificateRepository certificateRepository;
 
   @BeforeEach
@@ -93,7 +96,9 @@ class InMemoryCertificateRepositoryTest {
 
     @Test
     void shallPersistCertificateOnSave() {
-      final var expectedCertificate = Certificate.builder().build();
+      final var expectedCertificate = Certificate.builder()
+          .id(new CertificateId(CERTIFICATE_ID))
+          .build();
 
       final var certificate = certificateRepository.save(expectedCertificate);
       final var actualCertificate = certificateRepository.getById(certificate.id());
@@ -123,6 +128,48 @@ class InMemoryCertificateRepositoryTest {
       final var certificateId = new CertificateId(CERTIFICATE_ID);
       assertThrows(IllegalStateException.class,
           () -> certificateRepository.getById(certificateId));
+    }
+
+    @Test
+    void shouldThrowExceptionIfCertificateIdIsNull() {
+      assertThrows(IllegalArgumentException.class,
+          () -> certificateRepository.getById(null)
+      );
+    }
+  }
+
+  @Nested
+  class CertificateExists {
+
+    @Test
+    void shouldReturnTrueIfCertificateExists() {
+      final var expectedCertificate = Certificate.builder()
+          .id(new CertificateId(CERTIFICATE_ID))
+          .build();
+
+      certificateRepository.save(expectedCertificate);
+      final var result = certificateRepository.exists(new CertificateId(CERTIFICATE_ID));
+
+      assertTrue(result);
+    }
+
+    @Test
+    void shouldReturnEmptyIfCertificateDontExists() {
+      final var expectedCertificate = Certificate.builder()
+          .id(new CertificateId(CERTIFICATE_ID))
+          .build();
+
+      certificateRepository.save(expectedCertificate);
+      final var result = certificateRepository.exists(new CertificateId(WRONG_CERTIFICATE_ID));
+
+      assertFalse(result);
+    }
+
+    @Test
+    void shouldThrowExceptionIfCertificateIdIsNull() {
+      assertThrows(IllegalArgumentException.class,
+          () -> certificateRepository.exists(null)
+      );
     }
   }
 }
