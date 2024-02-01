@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.persistence;
+package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -43,11 +43,22 @@ public class InMemoryCertificateRepository implements CertificateRepository {
 
   @Override
   public Certificate getById(CertificateId certificateId) {
+    if (certificateId == null) {
+      throw new IllegalArgumentException("CertificateId is null!");
+    }
     if (!certificateMap.containsKey(certificateId)) {
       throw new IllegalStateException(
           "CertificateId '%s' not present in repository".formatted(certificateId)
       );
     }
     return certificateMap.get(certificateId);
+  }
+
+  @Override
+  public boolean exists(CertificateId certificateId) {
+    if (certificateId == null) {
+      throw new IllegalArgumentException("CertificateId is null!");
+    }
+    return certificateMap.containsKey(certificateId);
   }
 }
