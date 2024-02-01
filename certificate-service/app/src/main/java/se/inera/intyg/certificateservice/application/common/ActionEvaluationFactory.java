@@ -77,6 +77,9 @@ public class ActionEvaluationFactory {
         )
         .user(
             User.builder()
+                .hsaId(
+                    new HsaId(user.getId())
+                )
                 .name(
                     Name.builder()
                         .fullName(user.getName())
@@ -122,7 +125,6 @@ public class ActionEvaluationFactory {
                         .email(careUnit.getEmail())
                         .build()
                 )
-                .inactive(new Inactive(careUnit.getInactive()))
                 .build()
         )
         .careProvider(

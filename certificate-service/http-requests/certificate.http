@@ -1,16 +1,20 @@
-### Get certificatetypeinfo
-POST http://localhost:18030/api/certificatetypeinfo
+### Create certificate
+POST http://localhost:18030/api/certificate
 Content-Type: application/json
 
 {
   "user": {
     "id": "TSTNMT2321000156-DRAA",
+    "name": "Alja Doctor",
     "role": "DOCTOR",
     "blocked": "false"
   },
   "unit": {
     "id": "TSTNMT2321000156-ALHM",
     "name": "Alfa Hudmottagningen",
+    "address": "Alfaadressen 1",
+    "city": "Alfastaden",
+    "zipCode": "Alfapostnummer",
     "inactive": "false"
   },
   "careUnit": {
@@ -26,12 +30,16 @@ Content-Type: application/json
       "type": "PERSONAL_IDENTITY_NUMBER",
       "id": "191212121212"
     },
+    "firstName": "Tolvan",
+    "middleName": "TP",
+    "lastName": "Tolvansson",
+    "fullName": "Tolvan TP Tolvansson",
     "deceased": "false",
     "protectedPerson": "false",
     "testIndicated": "false"
+  },
+  "certificateModelId": {
+    "type": "fk7211",
+    "version": "1.0"
   }
 }
-
-### Get latest version
-GET http://localhost:18030/api/certificatetypeinfo/fk7211/exists
-Content-Type: application/json

@@ -3,6 +3,8 @@ package se.inera.intyg.certificateservice.domain.certificate.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,7 @@ class CertificateTest {
 
   private static final String DEFAULT_VALUE = "defaultCertificateId";
   private static final String EXPECTED_VALUE = "defaultId";
+  private static final LocalDateTime CREATED = LocalDateTime.now(ZoneId.systemDefault());
   private Certificate certificate;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
 
@@ -30,6 +33,7 @@ class CertificateTest {
     certificate = new Certificate(
         new CertificateId(DEFAULT_VALUE),
         CertificateModel.builder().build(),
+        CREATED,
         CertificateMetaData.builder()
             .patient(
                 Patient.builder()
@@ -271,7 +275,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(PersonIdType.PERSONAL_IDENTITY_NUMBER,
-            certificate.getCertificateMetaData().getPatient().getId().getType());
+            certificate.certificateMetaData().getPatient().getId().getType());
       }
 
       @Test
@@ -279,7 +283,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getPatient().getId().getId());
+            certificate.certificateMetaData().getPatient().getId().getId());
       }
 
       @Test
@@ -287,7 +291,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getPatient().getName().getFirstName());
+            certificate.certificateMetaData().getPatient().getName().getFirstName());
       }
 
       @Test
@@ -295,7 +299,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getPatient().getName().getMiddleName());
+            certificate.certificateMetaData().getPatient().getName().getMiddleName());
       }
 
       @Test
@@ -303,7 +307,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getPatient().getName().getLastName());
+            certificate.certificateMetaData().getPatient().getName().getLastName());
       }
 
       @Test
@@ -311,7 +315,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getPatient().getName().getFullName());
+            certificate.certificateMetaData().getPatient().getName().getFullName());
       }
 
       @Test
@@ -319,7 +323,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getPatient().getAddress().getCity());
+            certificate.certificateMetaData().getPatient().getAddress().getCity());
       }
 
       @Test
@@ -327,7 +331,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getPatient().getAddress().getZipCode());
+            certificate.certificateMetaData().getPatient().getAddress().getZipCode());
       }
 
       @Test
@@ -335,14 +339,14 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getPatient().getAddress().getStreet());
+            certificate.certificateMetaData().getPatient().getAddress().getStreet());
       }
 
       @Test
       void shallUpdatePatientProtectedPerson() {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
-        assertTrue(certificate.getCertificateMetaData().getPatient().getProtectedPerson()
+        assertTrue(certificate.certificateMetaData().getPatient().getProtectedPerson()
             .protectedPerson());
       }
 
@@ -350,7 +354,7 @@ class CertificateTest {
       void shallUpdatePatientTestIndicated() {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
-        assertTrue(certificate.getCertificateMetaData().getPatient().getTestIndicated()
+        assertTrue(certificate.certificateMetaData().getPatient().getTestIndicated()
             .testIndicated());
       }
 
@@ -358,7 +362,7 @@ class CertificateTest {
       void shallUpdatePatientDeceased() {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
-        assertTrue(certificate.getCertificateMetaData().getPatient().getDeceased()
+        assertTrue(certificate.certificateMetaData().getPatient().getDeceased()
             .deceased());
       }
     }
@@ -388,7 +392,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getIssuer().getHsaId().id());
+            certificate.certificateMetaData().getIssuer().getHsaId().id());
       }
 
       @Test
@@ -396,14 +400,14 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getIssuer().getName().getFullName());
+            certificate.certificateMetaData().getIssuer().getName().getFullName());
       }
 
       @Test
       void shallUpdateIssuerBlocked() {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
-        assertTrue(certificate.getCertificateMetaData().getIssuer().getBlocked().blocked());
+        assertTrue(certificate.certificateMetaData().getIssuer().getBlocked().blocked());
       }
     }
 
@@ -441,7 +445,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getCareUnit().getHsaId().id());
+            certificate.certificateMetaData().getCareUnit().getHsaId().id());
       }
 
       @Test
@@ -449,7 +453,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getCareUnit().getName().name());
+            certificate.certificateMetaData().getCareUnit().getName().name());
       }
 
       @Test
@@ -457,7 +461,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getCareUnit().getAddress().getAddress());
+            certificate.certificateMetaData().getCareUnit().getAddress().getAddress());
       }
 
       @Test
@@ -465,7 +469,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getCareUnit().getAddress().getCity());
+            certificate.certificateMetaData().getCareUnit().getAddress().getCity());
       }
 
       @Test
@@ -473,7 +477,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getCareUnit().getAddress().getZipCode());
+            certificate.certificateMetaData().getCareUnit().getAddress().getZipCode());
       }
 
       @Test
@@ -481,7 +485,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getCareUnit().getContactInfo().getEmail());
+            certificate.certificateMetaData().getCareUnit().getContactInfo().getEmail());
       }
 
       @Test
@@ -489,14 +493,14 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getCareUnit().getContactInfo().getPhoneNumber());
+            certificate.certificateMetaData().getCareUnit().getContactInfo().getPhoneNumber());
       }
 
       @Test
       void shallUpdateCareUnitInactive() {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
-        assertTrue(certificate.getCertificateMetaData().getCareUnit().getInactive().inactive());
+        assertTrue(certificate.certificateMetaData().getCareUnit().getInactive().inactive());
       }
     }
 
@@ -533,7 +537,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getCareProvider().getHsaId().id());
+            certificate.certificateMetaData().getCareProvider().getHsaId().id());
       }
 
       @Test
@@ -541,7 +545,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getCareProvider().getName().name());
+            certificate.certificateMetaData().getCareProvider().getName().name());
       }
 
       @Test
@@ -549,7 +553,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getCareProvider().getAddress().getAddress());
+            certificate.certificateMetaData().getCareProvider().getAddress().getAddress());
       }
 
       @Test
@@ -557,7 +561,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getCareProvider().getAddress().getCity());
+            certificate.certificateMetaData().getCareProvider().getAddress().getCity());
       }
 
       @Test
@@ -565,7 +569,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getCareProvider().getAddress().getZipCode());
+            certificate.certificateMetaData().getCareProvider().getAddress().getZipCode());
       }
 
       @Test
@@ -573,7 +577,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getCareProvider().getContactInfo().getEmail());
+            certificate.certificateMetaData().getCareProvider().getContactInfo().getEmail());
       }
 
       @Test
@@ -581,7 +585,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getCareProvider().getContactInfo()
+            certificate.certificateMetaData().getCareProvider().getContactInfo()
                 .getPhoneNumber());
       }
     }
@@ -620,7 +624,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getIssuingUnit().getHsaId().id());
+            certificate.certificateMetaData().getIssuingUnit().getHsaId().id());
       }
 
       @Test
@@ -628,7 +632,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getIssuingUnit().getName().name());
+            certificate.certificateMetaData().getIssuingUnit().getName().name());
       }
 
       @Test
@@ -636,7 +640,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getIssuingUnit().getAddress().getAddress());
+            certificate.certificateMetaData().getIssuingUnit().getAddress().getAddress());
       }
 
       @Test
@@ -644,7 +648,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getIssuingUnit().getAddress().getCity());
+            certificate.certificateMetaData().getIssuingUnit().getAddress().getCity());
       }
 
       @Test
@@ -652,7 +656,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getIssuingUnit().getAddress().getZipCode());
+            certificate.certificateMetaData().getIssuingUnit().getAddress().getZipCode());
       }
 
       @Test
@@ -660,7 +664,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getIssuingUnit().getContactInfo().getEmail());
+            certificate.certificateMetaData().getIssuingUnit().getContactInfo().getEmail());
       }
 
       @Test
@@ -668,7 +672,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.getCertificateMetaData().getIssuingUnit().getContactInfo()
+            certificate.certificateMetaData().getIssuingUnit().getContactInfo()
                 .getPhoneNumber());
       }
 
@@ -676,7 +680,7 @@ class CertificateTest {
       void shallUpdateCareUnitInactive() {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
-        assertTrue(certificate.getCertificateMetaData().getIssuingUnit().getInactive().inactive());
+        assertTrue(certificate.certificateMetaData().getIssuingUnit().getInactive().inactive());
       }
     }
   }

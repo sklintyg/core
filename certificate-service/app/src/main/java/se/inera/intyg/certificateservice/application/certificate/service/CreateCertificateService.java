@@ -29,23 +29,28 @@ public class CreateCertificateService {
         createCertificateRequest.getCareProvider()
     );
     final var certificate = createCertificateDomainService.create(
-        CertificateModelId.builder()
-            .type(
-                new CertificateType(
-                    createCertificateRequest.getCertificateModelId().getType()
-                )
-            )
-            .version(
-                new CertificateVersion(
-                    createCertificateRequest.getCertificateModelId().getVersion()
-                )
-            )
-            .build(),
+        certificateModelId(createCertificateRequest),
         actionEvaluation
     );
     return CreateCertificateResponse.builder()
         .certificate(
             certificateConverter.convert(certificate)
+        )
+        .build();
+  }
+
+  private static CertificateModelId certificateModelId(
+      CreateCertificateRequest createCertificateRequest) {
+    return CertificateModelId.builder()
+        .type(
+            new CertificateType(
+                createCertificateRequest.getCertificateModelId().getType()
+            )
+        )
+        .version(
+            new CertificateVersion(
+                createCertificateRequest.getCertificateModelId().getVersion()
+            )
         )
         .build();
   }

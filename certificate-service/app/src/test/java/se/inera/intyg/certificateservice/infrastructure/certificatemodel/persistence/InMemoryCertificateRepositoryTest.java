@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mockStatic;
 
@@ -34,29 +35,6 @@ class InMemoryCertificateRepositoryTest {
     }
 
     @Test
-    void shallReturnCertificate() {
-      final var expectedModel = CertificateModel.builder()
-          .name(NAME)
-          .build();
-
-      final var certificateId = UUID.randomUUID();
-
-      final var expectedCertificate = Certificate.builder()
-          .certificateModel(expectedModel)
-          .id(new CertificateId(certificateId.toString()))
-          .build();
-
-      try (MockedStatic<UUID> uuidMockedStatic = mockStatic(
-          UUID.class)) {
-        uuidMockedStatic.when(UUID::randomUUID).thenReturn(certificateId);
-
-        final var actualCertificate = certificateRepository.create(expectedModel);
-
-        assertEquals(expectedCertificate, actualCertificate);
-      }
-    }
-
-    @Test
     void shallReturnCertificateWithGeneratedId() {
       final var certificateModel = CertificateModel.builder()
           .name(NAME)
@@ -68,7 +46,7 @@ class InMemoryCertificateRepositoryTest {
           UUID.class)) {
         uuidMockedStatic.when(UUID::randomUUID).thenReturn(expectedId);
 
-        final var actualId = certificateRepository.create(certificateModel).getId().id();
+        final var actualId = certificateRepository.create(certificateModel).id().id();
 
         assertEquals(expectedId.toString(), actualId);
       }
@@ -76,11 +54,21 @@ class InMemoryCertificateRepositoryTest {
 
     @Test
     void shallReturnCertificateWithProvidedModel() {
+      final var certificateModel = CertificateModel.builder()
+          .name(NAME)
+          .build();
+
+      final var certificate = certificateRepository.create(certificateModel);
+
+      assertNotNull(certificate.created(), "Expected created on new certificate, was null");
+    }
+
+    @Test
+    void shallReturnCertificateWithCreated() {
       final var expectedModel = CertificateModel.builder()
           .name(NAME)
           .build();
-      final var actualModel = certificateRepository.create(expectedModel)
-          .getCertificateModel();
+      final var actualModel = certificateRepository.create(expectedModel).certificateModel();
 
       assertEquals(expectedModel, actualModel);
     }
@@ -108,7 +96,7 @@ class InMemoryCertificateRepositoryTest {
       final var expectedCertificate = Certificate.builder().build();
 
       final var certificate = certificateRepository.save(expectedCertificate);
-      final var actualCertificate = certificateRepository.getById(certificate.getId());
+      final var actualCertificate = certificateRepository.getById(certificate.id());
 
       assertEquals(expectedCertificate, actualCertificate);
     }

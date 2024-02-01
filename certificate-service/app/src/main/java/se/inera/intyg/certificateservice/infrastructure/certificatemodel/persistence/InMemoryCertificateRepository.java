@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.persistence;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -23,6 +25,7 @@ public class InMemoryCertificateRepository implements CertificateRepository {
     }
     return Certificate.builder()
         .id(new CertificateId(UUID.randomUUID().toString()))
+        .created(LocalDateTime.now(ZoneId.systemDefault()))
         .certificateModel(certificateModel)
         .build();
   }
@@ -34,7 +37,7 @@ public class InMemoryCertificateRepository implements CertificateRepository {
           "Unable to save, certificate was null"
       );
     }
-    certificateMap.put(certificate.getId(), certificate);
+    certificateMap.put(certificate.id(), certificate);
     return certificate;
   }
 

@@ -1,21 +1,18 @@
 package se.inera.intyg.certificateservice.domain.certificate.model;
 
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Value;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 
 
-@Getter
+@Value
 @Builder
 public class CertificateMetaData {
 
-  private Patient patient;
-  private Staff issuer;
-  private IssuingUnit issuingUnit;
-  private CareUnit careUnit;
-  private CareProvider careProvider;
+  Patient patient;
+  Staff issuer;
+  IssuingUnit issuingUnit;
+  CareUnit careUnit;
+  CareProvider careProvider;
 
-  public void patient(Patient patient) {
-    this.patient = patient;
-  }
 }

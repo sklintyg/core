@@ -27,6 +27,7 @@ class ActionEvaluationFactoryTest {
   private static final String CITY = "city";
   private static final String STREET = "street";
   private static final String NAME = "userName";
+  private static final String USER_ID = "userId";
   private ActionEvaluationFactory actionEvaluationFactory;
 
   private static final UserDTO DEFAULT_USER = UserDTO.builder()
@@ -171,26 +172,6 @@ class ActionEvaluationFactoryTest {
             subUnitBuilder.build(), unit, careProviderBuilder.build());
 
         assertEquals(actionEvaluation.getCareUnit().getContactInfo().getEmail(), unit.getEmail());
-      }
-
-      @Test
-      void shallIncludeCareUnitInactiveTrue() {
-        final var unit = careUnitBuilder.inactive(true).build();
-
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
-            DEFAULT_USER, subUnitBuilder.build(), unit, careProviderBuilder.build());
-
-        assertEquals(actionEvaluation.getCareUnit().getInactive().inactive(), unit.getInactive());
-      }
-
-      @Test
-      void shallIncludeCareUnitInactiveFalse() {
-        final var unit = careUnitBuilder.inactive(false).build();
-
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
-            DEFAULT_USER, subUnitBuilder.build(), unit, careProviderBuilder.build());
-
-        assertEquals(actionEvaluation.getCareUnit().getInactive().inactive(), unit.getInactive());
       }
     }
 
@@ -588,6 +569,20 @@ class ActionEvaluationFactoryTest {
 
     @Nested
     class IncludeUser {
+
+      @Test
+      void shallIncludeUserId() {
+        final var user = UserDTO.builder()
+            .id(USER_ID)
+            .name(NAME)
+            .blocked(true)
+            .build();
+
+        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(), user,
+            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+
+        assertEquals(user.getId(), actionEvaluation.getUser().getHsaId().id());
+      }
 
       @Test
       void shallIncludeUserBlockedFalse() {
