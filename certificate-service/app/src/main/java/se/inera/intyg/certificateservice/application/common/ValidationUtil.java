@@ -79,4 +79,10 @@ public class ValidationUtil {
       throw new IllegalArgumentException("Required parameter missing: CertificateModelId.version");
     }
   }
+
+  public static void validateCertificateId(String certificateId) {
+    if (certificateId == null || certificateId.isBlank()) {
+      throw new IllegalArgumentException("Required parameter missing: certificateId");
+    }
+  }
 }

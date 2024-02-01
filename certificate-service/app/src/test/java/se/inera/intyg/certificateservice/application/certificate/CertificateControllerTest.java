@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.GetCert
 @ExtendWith(MockitoExtension.class)
 class CertificateControllerTest {
 
+  private static final String CERTIFICATE_ID = "certificateId";
   @Mock
   private GetCertificateService getCertificateService;
   @Mock
@@ -56,10 +57,10 @@ class CertificateControllerTest {
     final var request = GetCertificateRequest.builder().build();
 
     doReturn(expectedResult).when(getCertificateService).get(
-        request
-    );
+        request,
+        CERTIFICATE_ID);
 
-    final var actualResult = certificateController.getCertificate(request);
+    final var actualResult = certificateController.getCertificate(request, CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
   }

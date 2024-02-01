@@ -1,0 +1,17 @@
+package se.inera.intyg.certificateservice.domain.certificate.service;
+
+import lombok.RequiredArgsConstructor;
+import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+
+@RequiredArgsConstructor
+public class GetCertificateDomainService {
+
+  private final CertificateRepository certificateRepository;
+
+  public Certificate get(CertificateId certificateId, ActionEvaluation actionEvaluation) {
+    return null;
+  }
+}
