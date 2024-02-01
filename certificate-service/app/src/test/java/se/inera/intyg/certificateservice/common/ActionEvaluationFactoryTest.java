@@ -255,7 +255,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getSubUnit().getInactive().inactive(), unit.getInactive());
+        assertEquals(actionEvaluation.getSubUnit().getInactive().value(), unit.getInactive());
       }
 
       @Test
@@ -265,7 +265,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
-        assertEquals(actionEvaluation.getSubUnit().getInactive().inactive(), unit.getInactive());
+        assertEquals(actionEvaluation.getSubUnit().getInactive().value(), unit.getInactive());
       }
     }
 
@@ -358,8 +358,8 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertTrue(actionEvaluation.getPatient().getDeceased().deceased(),
-            "Expected patient.deceased to be true");
+        assertTrue(actionEvaluation.getPatient().getDeceased().value(),
+            "Expected patient.value to be true");
       }
 
       @Test
@@ -371,8 +371,8 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertFalse(actionEvaluation.getPatient().getDeceased().deceased(),
-            "Expected patient.deceased to be false");
+        assertFalse(actionEvaluation.getPatient().getDeceased().value(),
+            "Expected patient.value to be false");
       }
 
       @Test
@@ -524,7 +524,7 @@ class ActionEvaluationFactoryTest {
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
         assertEquals(patient.getTestIndicated(),
-            actionEvaluation.getPatient().getTestIndicated().testIndicated());
+            actionEvaluation.getPatient().getTestIndicated().value());
       }
 
       @Test
@@ -537,7 +537,7 @@ class ActionEvaluationFactoryTest {
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
         assertEquals(patient.getTestIndicated(),
-            actionEvaluation.getPatient().getTestIndicated().testIndicated());
+            actionEvaluation.getPatient().getTestIndicated().value());
       }
 
       @Test
@@ -550,7 +550,7 @@ class ActionEvaluationFactoryTest {
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
         assertEquals(patient.getProtectedPerson(),
-            actionEvaluation.getPatient().getProtectedPerson().protectedPerson());
+            actionEvaluation.getPatient().getProtectedPerson().value());
       }
 
       @Test
@@ -563,7 +563,7 @@ class ActionEvaluationFactoryTest {
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
         assertEquals(patient.getProtectedPerson(),
-            actionEvaluation.getPatient().getProtectedPerson().protectedPerson());
+            actionEvaluation.getPatient().getProtectedPerson().value());
       }
     }
 
@@ -594,8 +594,8 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(), user,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertFalse(actionEvaluation.getUser().getBlocked().blocked(),
-            "Expected user.blocked to be false");
+        assertFalse(actionEvaluation.getUser().getBlocked().value(),
+            "Expected user.value to be false");
       }
 
       @Test
@@ -608,8 +608,8 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(), user,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertTrue(actionEvaluation.getUser().getBlocked().blocked(),
-            "Expected user.blocked to be true");
+        assertTrue(actionEvaluation.getUser().getBlocked().value(),
+            "Expected user.value to be true");
       }
 
       @Test
@@ -639,8 +639,8 @@ class ActionEvaluationFactoryTest {
 
       final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER);
 
-      assertTrue(actionEvaluation.getPatient().getDeceased().deceased(),
-          "Expected patient.deceased to be true");
+      assertTrue(actionEvaluation.getPatient().getDeceased().value(),
+          "Expected patient.value to be true");
     }
 
     @Test
@@ -651,8 +651,8 @@ class ActionEvaluationFactoryTest {
 
       final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER);
 
-      assertFalse(actionEvaluation.getPatient().getDeceased().deceased(),
-          "Expected patient.deceased to be false");
+      assertFalse(actionEvaluation.getPatient().getDeceased().value(),
+          "Expected patient.value to be false");
     }
 
     @Test
@@ -663,8 +663,8 @@ class ActionEvaluationFactoryTest {
 
       final var actionEvaluation = actionEvaluationFactory.create(DEFAULT_PATIENT_DTO, user);
 
-      assertFalse(actionEvaluation.getUser().getBlocked().blocked(),
-          "Expected user.blocked to be false");
+      assertFalse(actionEvaluation.getUser().getBlocked().value(),
+          "Expected user.value to be false");
     }
 
     @Test
@@ -675,8 +675,8 @@ class ActionEvaluationFactoryTest {
 
       final var actionEvaluation = actionEvaluationFactory.create(DEFAULT_PATIENT_DTO, user);
 
-      assertTrue(actionEvaluation.getUser().getBlocked().blocked(),
-          "Expected user.blocked to be true");
+      assertTrue(actionEvaluation.getUser().getBlocked().value(),
+          "Expected user.value to be true");
     }
 
   }

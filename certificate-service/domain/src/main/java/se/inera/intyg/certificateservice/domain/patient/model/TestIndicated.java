@@ -1,5 +1,5 @@
 package se.inera.intyg.certificateservice.domain.patient.model;
 
-public record TestIndicated(boolean testIndicated) {
+public record TestIndicated(boolean value) {
 
 }

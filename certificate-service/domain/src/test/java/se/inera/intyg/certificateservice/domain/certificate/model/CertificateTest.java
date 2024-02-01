@@ -347,7 +347,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertTrue(certificate.certificateMetaData().getPatient().getProtectedPerson()
-            .protectedPerson());
+            .value());
       }
 
       @Test
@@ -355,7 +355,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertTrue(certificate.certificateMetaData().getPatient().getTestIndicated()
-            .testIndicated());
+            .value());
       }
 
       @Test
@@ -363,7 +363,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertTrue(certificate.certificateMetaData().getPatient().getDeceased()
-            .deceased());
+            .value());
       }
     }
 
@@ -407,7 +407,7 @@ class CertificateTest {
       void shallUpdateIssuerBlocked() {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
-        assertTrue(certificate.certificateMetaData().getIssuer().getBlocked().blocked());
+        assertTrue(certificate.certificateMetaData().getIssuer().getBlocked().value());
       }
     }
 
@@ -500,7 +500,7 @@ class CertificateTest {
       void shallUpdateCareUnitInactive() {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
-        assertTrue(certificate.certificateMetaData().getCareUnit().getInactive().inactive());
+        assertTrue(certificate.certificateMetaData().getCareUnit().getInactive().value());
       }
     }
 
@@ -680,7 +680,7 @@ class CertificateTest {
       void shallUpdateCareUnitInactive() {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
-        assertTrue(certificate.certificateMetaData().getIssuingUnit().getInactive().inactive());
+        assertTrue(certificate.certificateMetaData().getIssuingUnit().getInactive().value());
       }
     }
   }

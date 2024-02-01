@@ -12,12 +12,13 @@ public class CertificateActionRead implements CertificateAction {
 
   @Override
   public CertificateActionType getType() {
-    return null;
+    return certificateActionSpecification.getCertificateActionType();
   }
 
   @Override
   public boolean evaluate(ActionEvaluation actionEvaluation) {
-    return false;
+    return !actionEvaluation.getUser().getBlocked().value() && !actionEvaluation.getSubUnit()
+        .getInactive().value();
   }
 
   @Override

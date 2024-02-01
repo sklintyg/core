@@ -21,7 +21,6 @@ public class GetCertificateDomainService {
       );
     }
     certificate.updateMetadata(actionEvaluation);
-    //TODO: Sparas detta
     return certificate;
   }
 }
