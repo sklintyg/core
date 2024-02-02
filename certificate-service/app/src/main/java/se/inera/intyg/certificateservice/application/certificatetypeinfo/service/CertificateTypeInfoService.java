@@ -21,7 +21,10 @@ public class CertificateTypeInfoService {
     certificateTypeInfoValidator.validate(getCertificateTypeInfoRequest);
     final var actionEvaluation = actionEvaluationFactory.create(
         getCertificateTypeInfoRequest.getPatient(),
-        getCertificateTypeInfoRequest.getUser()
+        getCertificateTypeInfoRequest.getUser(),
+        getCertificateTypeInfoRequest.getUnit(),
+        getCertificateTypeInfoRequest.getCareUnit(),
+        getCertificateTypeInfoRequest.getCareProvider()
     );
     final var certificateModels = certificateModelRepository.findAllActive();
     return GetCertificateTypeInfoResponse.builder()

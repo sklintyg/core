@@ -28,22 +28,6 @@ import se.inera.intyg.certificateservice.domain.user.model.User;
 @Component
 public class ActionEvaluationFactory {
 
-  public ActionEvaluation create(PatientDTO patient, UserDTO user) {
-
-    return ActionEvaluation.builder()
-        .patient(
-            Patient.builder()
-                .deceased(new Deceased(patient.getDeceased()))
-                .build()
-        )
-        .user(
-            User.builder()
-                .blocked(new Blocked(user.getBlocked()))
-                .build()
-        )
-        .build();
-  }
-
   public ActionEvaluation create(PatientDTO patient, UserDTO user, UnitDTO unit, UnitDTO careUnit,
       UnitDTO careProvider) {
     return ActionEvaluation.builder()

@@ -16,7 +16,6 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 
 @ExtendWith(MockitoExtension.class)
 class GetCertificateDomainServiceTest {
@@ -27,43 +26,39 @@ class GetCertificateDomainServiceTest {
   private CertificateRepository certificateRepository;
   @Mock
   private Certificate certificate;
-  @Mock
-  private CertificateModel certificateModel;
   @InjectMocks
   private GetCertificateDomainService getCertificateDomainService;
 
   @BeforeEach
   void setUp() {
-    doReturn(certificate).when(certificateRepository).getById(
-        GetCertificateDomainServiceTest.CERTIFICATE_ID);
-    doReturn(certificateModel).when(certificate).certificateModel();
+    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
   }
 
   @Test
   void shallValidateIfAllowedToReadCertificate() {
-    doReturn(true).when(certificateModel).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
     getCertificateDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION);
-    verify(certificateModel).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
+    verify(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
   }
 
   @Test
   void shallThrowIfNotAllowedToRead() {
-    doReturn(false).when(certificateModel).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
-    assertThrows(IllegalArgumentException.class, () -> getCertificateDomainService.get(
-        CERTIFICATE_ID, ACTION_EVALUATION
-    ));
+    doReturn(false).when(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
+    assertThrows(IllegalArgumentException.class,
+        () -> getCertificateDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION)
+    );
   }
 
   @Test
   void shallUpdateCertificateMetadata() {
-    doReturn(true).when(certificateModel).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
     getCertificateDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION);
     verify(certificate).updateMetadata(ACTION_EVALUATION);
   }
 
   @Test
   void shallReturnCertificate() {
-    doReturn(true).when(certificateModel).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
     final var actualCertificate = getCertificateDomainService.get(CERTIFICATE_ID,
         ACTION_EVALUATION);
     assertEquals(certificate, actualCertificate);

@@ -1,14 +1,21 @@
 package se.inera.intyg.certificateservice.domain.certificate.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
+import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.patient.model.Deceased;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
@@ -30,104 +37,106 @@ class CertificateTest {
 
   @BeforeEach
   void setUp() {
-    certificate = new Certificate(
-        new CertificateId(DEFAULT_VALUE),
-        CertificateModel.builder().build(),
-        CREATED,
-        CertificateMetaData.builder()
-            .patient(
-                Patient.builder()
-                    .id(
-                        PersonId.builder()
-                            .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
-                            .id(EXPECTED_VALUE)
-                            .build()
-                    )
-                    .name(
-                        Name.builder()
-                            .fullName(DEFAULT_VALUE)
-                            .firstName(DEFAULT_VALUE)
-                            .middleName(DEFAULT_VALUE)
-                            .lastName(DEFAULT_VALUE)
-                            .build()
-                    )
-                    .deceased(new Deceased(false))
-                    .address(
-                        PersonAddress.builder()
-                            .city(DEFAULT_VALUE)
-                            .street(DEFAULT_VALUE)
-                            .zipCode(DEFAULT_VALUE)
-                            .build()
-                    )
-                    .protectedPerson(new ProtectedPerson(false))
-                    .testIndicated(new TestIndicated(false))
-                    .build()
-            )
-            .issuer(
-                Staff.builder()
-                    .hsaId(new HsaId(DEFAULT_VALUE))
-                    .build()
-            )
-            .issuingUnit(
-                SubUnit.builder()
-                    .hsaId(new HsaId(DEFAULT_VALUE))
-                    .name(new UnitName(DEFAULT_VALUE))
-                    .address(
-                        UnitAddress.builder()
-                            .address(DEFAULT_VALUE)
-                            .zipCode(DEFAULT_VALUE)
-                            .city(DEFAULT_VALUE)
-                            .build()
-                    )
-                    .contactInfo(
-                        UnitContactInfo.builder()
-                            .phoneNumber(DEFAULT_VALUE)
-                            .email(DEFAULT_VALUE)
-                            .build()
-                    )
-                    .inactive(new Inactive(false))
-                    .build()
-            )
-            .careUnit(
-                CareUnit.builder()
-                    .hsaId(new HsaId(DEFAULT_VALUE))
-                    .name(new UnitName(DEFAULT_VALUE))
-                    .address(
-                        UnitAddress.builder()
-                            .address(DEFAULT_VALUE)
-                            .zipCode(DEFAULT_VALUE)
-                            .city(DEFAULT_VALUE)
-                            .build()
-                    )
-                    .contactInfo(
-                        UnitContactInfo.builder()
-                            .phoneNumber(DEFAULT_VALUE)
-                            .email(DEFAULT_VALUE)
-                            .build()
-                    )
-                    .inactive(new Inactive(false))
-                    .build()
-            )
-            .careProvider(
-                CareProvider.builder()
-                    .hsaId(new HsaId(DEFAULT_VALUE))
-                    .name(new UnitName(DEFAULT_VALUE))
-                    .address(
-                        UnitAddress.builder()
-                            .address(DEFAULT_VALUE)
-                            .zipCode(DEFAULT_VALUE)
-                            .city(DEFAULT_VALUE)
-                            .build()
-                    )
-                    .contactInfo(
-                        UnitContactInfo.builder()
-                            .phoneNumber(DEFAULT_VALUE)
-                            .email(DEFAULT_VALUE)
-                            .build()
-                    )
-                    .build()
-            ).build()
-    );
+    certificate = Certificate.builder()
+        .id(new CertificateId(DEFAULT_VALUE))
+        .certificateModel(mock(CertificateModel.class))
+        .created(CREATED)
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .patient(
+                    Patient.builder()
+                        .id(
+                            PersonId.builder()
+                                .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
+                                .id(EXPECTED_VALUE)
+                                .build()
+                        )
+                        .name(
+                            Name.builder()
+                                .fullName(DEFAULT_VALUE)
+                                .firstName(DEFAULT_VALUE)
+                                .middleName(DEFAULT_VALUE)
+                                .lastName(DEFAULT_VALUE)
+                                .build()
+                        )
+                        .deceased(new Deceased(false))
+                        .address(
+                            PersonAddress.builder()
+                                .city(DEFAULT_VALUE)
+                                .street(DEFAULT_VALUE)
+                                .zipCode(DEFAULT_VALUE)
+                                .build()
+                        )
+                        .protectedPerson(new ProtectedPerson(false))
+                        .testIndicated(new TestIndicated(false))
+                        .build()
+                )
+                .issuer(
+                    Staff.builder()
+                        .hsaId(new HsaId(DEFAULT_VALUE))
+                        .build()
+                )
+                .issuingUnit(
+                    SubUnit.builder()
+                        .hsaId(new HsaId(DEFAULT_VALUE))
+                        .name(new UnitName(DEFAULT_VALUE))
+                        .address(
+                            UnitAddress.builder()
+                                .address(DEFAULT_VALUE)
+                                .zipCode(DEFAULT_VALUE)
+                                .city(DEFAULT_VALUE)
+                                .build()
+                        )
+                        .contactInfo(
+                            UnitContactInfo.builder()
+                                .phoneNumber(DEFAULT_VALUE)
+                                .email(DEFAULT_VALUE)
+                                .build()
+                        )
+                        .inactive(new Inactive(false))
+                        .build()
+                )
+                .careUnit(
+                    CareUnit.builder()
+                        .hsaId(new HsaId(DEFAULT_VALUE))
+                        .name(new UnitName(DEFAULT_VALUE))
+                        .address(
+                            UnitAddress.builder()
+                                .address(DEFAULT_VALUE)
+                                .zipCode(DEFAULT_VALUE)
+                                .city(DEFAULT_VALUE)
+                                .build()
+                        )
+                        .contactInfo(
+                            UnitContactInfo.builder()
+                                .phoneNumber(DEFAULT_VALUE)
+                                .email(DEFAULT_VALUE)
+                                .build()
+                        )
+                        .inactive(new Inactive(false))
+                        .build()
+                )
+                .careProvider(
+                    CareProvider.builder()
+                        .hsaId(new HsaId(DEFAULT_VALUE))
+                        .name(new UnitName(DEFAULT_VALUE))
+                        .address(
+                            UnitAddress.builder()
+                                .address(DEFAULT_VALUE)
+                                .zipCode(DEFAULT_VALUE)
+                                .city(DEFAULT_VALUE)
+                                .build()
+                        )
+                        .contactInfo(
+                            UnitContactInfo.builder()
+                                .phoneNumber(DEFAULT_VALUE)
+                                .email(DEFAULT_VALUE)
+                                .build()
+                        )
+                        .build()
+                ).build()
+        )
+        .build();
 
     actionEvaluationBuilder = ActionEvaluation.builder()
         .patient(
@@ -231,7 +240,6 @@ class CertificateTest {
 
   @Nested
   class UpdateMetaData {
-
 
     @Nested
     class UpdatePatient {
@@ -493,7 +501,8 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.certificateMetaData().getCareUnit().getContactInfo().getPhoneNumber());
+            certificate.certificateMetaData().getCareUnit().getContactInfo()
+                .getPhoneNumber());
       }
 
       @Test
@@ -682,6 +691,94 @@ class CertificateTest {
 
         assertTrue(certificate.certificateMetaData().getIssuingUnit().getInactive().value());
       }
+    }
+  }
+
+  @Nested
+  class TestActions {
+
+    @Test
+    void shallReturnActionIfEvaluateTrue() {
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var expectedActions = List.of(certificateAction);
+
+      doReturn(expectedActions).when(certificate.certificateModel()).actions();
+
+      doReturn(true).when(certificateAction).evaluate(actionEvaluation);
+
+      final var actualActions = certificate.actions(actionEvaluation);
+
+      assertEquals(expectedActions, actualActions);
+    }
+
+    @Test
+    void shallNotReturnActionIfEvaluateFalse() {
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var expectedActions = Collections.emptyList();
+
+      doReturn(expectedActions).when(certificate.certificateModel()).actions();
+
+      doReturn(false).when(certificateAction).evaluate(actionEvaluation);
+
+      final var actualActions = certificate.actions(actionEvaluation);
+
+      assertEquals(expectedActions, actualActions);
+    }
+  }
+
+  @Nested
+  class TestAllowTo {
+
+    @Test
+    void shallReturnTrueIfExistsAndEvaluateTrue() {
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var actions = List.of(certificateAction);
+
+      doReturn(actions).when(certificate.certificateModel()).actions();
+
+      doReturn(CertificateActionType.READ).when(certificateAction).getType();
+      doReturn(true).when(certificateAction).evaluate(actionEvaluation);
+
+      assertTrue(
+          certificate.allowTo(CertificateActionType.READ, actionEvaluation),
+          "Expected allowTo to return 'true'"
+      );
+    }
+
+    @Test
+    void shallReturnFalseIfExistsAndEvaluateFalse() {
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var actions = List.of(certificateAction);
+
+      doReturn(actions).when(certificate.certificateModel()).actions();
+
+      doReturn(CertificateActionType.READ).when(certificateAction).getType();
+      doReturn(false).when(certificateAction).evaluate(actionEvaluation);
+
+      assertFalse(
+          certificate.allowTo(CertificateActionType.READ, actionEvaluation),
+          "Expected allowTo to return 'false'"
+      );
+    }
+
+    @Test
+    void shallReturnFalseIfNotExists() {
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var actions = List.of(certificateAction);
+
+      doReturn(actions).when(certificate.certificateModel()).actions();
+
+      doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
+
+      assertFalse(
+          certificate.allowTo(CertificateActionType.READ, actionEvaluation),
+          "Expected allowTo to return 'false'"
+      );
     }
   }
 }

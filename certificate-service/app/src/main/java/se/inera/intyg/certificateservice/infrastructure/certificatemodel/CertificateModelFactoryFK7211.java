@@ -40,6 +40,9 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
             List.of(
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.CREATE)
+                    .build(),
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.READ)
                     .build()
             )
         )

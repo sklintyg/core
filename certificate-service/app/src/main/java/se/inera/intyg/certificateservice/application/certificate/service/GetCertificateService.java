@@ -27,14 +27,13 @@ public class GetCertificateService {
         getCertificateRequest.getCareUnit(),
         getCertificateRequest.getCareProvider()
     );
+    final var certificate = getCertificateDomainService.get(
+        new CertificateId(certificateId),
+        actionEvaluation
+    );
     return GetCertificateResponse.builder()
         .certificate(
-            certificateConverter.convert(
-                getCertificateDomainService.get(
-                    new CertificateId(certificateId),
-                    actionEvaluation
-                )
-            )
+            certificateConverter.convert(certificate)
         )
         .build();
   }

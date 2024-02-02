@@ -14,10 +14,9 @@ public class GetCertificateDomainService {
 
   public Certificate get(CertificateId certificateId, ActionEvaluation actionEvaluation) {
     final var certificate = certificateRepository.getById(certificateId);
-    if (!certificate.certificateModel().allowTo(CertificateActionType.READ, actionEvaluation)) {
+    if (!certificate.allowTo(CertificateActionType.READ, actionEvaluation)) {
       throw new IllegalArgumentException(
-          "Not allowed to read certificate for %s".formatted(
-              certificate.certificateModel().getId())
+          "Not allowed to read certificate for %s".formatted(certificateId)
       );
     }
     certificate.updateMetadata(actionEvaluation);

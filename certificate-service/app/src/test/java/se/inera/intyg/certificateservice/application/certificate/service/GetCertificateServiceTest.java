@@ -45,10 +45,11 @@ class GetCertificateServiceTest {
   @Test
   void shallThrowIfRequestIsInvalid() {
     final var request = GetCertificateRequest.builder().build();
-    doThrow(IllegalArgumentException.class).when(getCertificateRequestValidator).validate(request,
-        CERTIFICATE_ID);
-    assertThrows(IllegalArgumentException.class, () -> getCertificateService.get(request,
-        CERTIFICATE_ID));
+    doThrow(IllegalArgumentException.class).when(getCertificateRequestValidator)
+        .validate(request, CERTIFICATE_ID);
+    assertThrows(IllegalArgumentException.class,
+        () -> getCertificateService.get(request, CERTIFICATE_ID)
+    );
   }
 
   @Test
