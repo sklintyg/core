@@ -20,7 +20,7 @@ public class CertificateActionRead implements CertificateAction {
   @Override
   public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
     if (certificate.isEmpty()) {
-      throw new IllegalArgumentException("Fel!");
+      throw new IllegalArgumentException("Missing required parameter certificate");
     }
     return certificate.get().certificateMetaData().getIssuingUnit().getHsaId()
         .equals(actionEvaluation.getSubUnit().getHsaId());

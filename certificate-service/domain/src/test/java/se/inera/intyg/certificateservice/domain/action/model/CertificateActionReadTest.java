@@ -1,20 +1,18 @@
 package se.inera.intyg.certificateservice.domain.action.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.certificate.model.Blocked;
 import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
-import se.inera.intyg.certificateservice.domain.certificate.model.Inactive;
 import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
@@ -78,31 +76,9 @@ class CertificateActionReadTest {
   }
 
   @Test
-  void shallReturnFalseIfUserIsBlocked() {
-    actionEvaluationBuilder
-        .user(
-            User.builder()
-                .blocked(new Blocked(true))
-                .build()
-        );
-    final var result = certificateActionRead.evaluate(actionEvaluationBuilder.build());
-
-    assertFalse(result);
-  }
-
-  @Test
-  void shallReturnFalseIfIssuingUnitIsBlocked() {
-    actionEvaluationBuilder
-        .subUnit(
-            SubUnit.builder()
-                .inactive(new Inactive(true))
-                .build()
-        )
-        .build();
-
-    final var result = certificateActionRead.evaluate(actionEvaluationBuilder.build());
-
-    assertFalse(result);
+  void shallThrowIfCertificateIsEmpty() {
+    assertThrows(IllegalArgumentException.class,
+        () -> certificateActionRead.evaluate(Optional.empty(), actionEvaluationBuilder.build()));
   }
 
   @Test
