@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.domain.action.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
@@ -21,6 +21,9 @@ import se.inera.intyg.certificateservice.domain.user.model.User;
 class CertificateActionReadTest {
 
   private static final String SUB_UNIT_HSA_ID = "subUnitHsaId";
+  private static final String CARE_UNIT_HSA_ID = "careUnitId";
+  private static final String OTHER_SUB_UNIT = "otherSubUnit";
+  private static final String OTHER_CARE_UNIT = "otherCareUnit";
   private CertificateActionRead certificateActionRead;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
   private CertificateBuilder certificateBuilder;
@@ -37,12 +40,12 @@ class CertificateActionReadTest {
             CertificateMetaData.builder()
                 .issuingUnit(
                     SubUnit.builder()
-                        .hsaId(new HsaId("subUnitHsaId"))
+                        .hsaId(new HsaId(SUB_UNIT_HSA_ID))
                         .build()
                 )
                 .careUnit(
                     CareUnit.builder()
-                        .hsaId(new HsaId("careUnitId"))
+                        .hsaId(new HsaId(CARE_UNIT_HSA_ID))
                         .build()
                 )
                 .careProvider(
@@ -76,13 +79,18 @@ class CertificateActionReadTest {
   }
 
   @Test
-  void shallThrowIfCertificateIsEmpty() {
-    assertThrows(IllegalArgumentException.class,
-        () -> certificateActionRead.evaluate(Optional.empty(), actionEvaluationBuilder.build()));
+  void shallReturnFalseIfCertificateIsEmpty() {
+    final Optional<Certificate> certificate = Optional.empty();
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    assertFalse(
+        certificateActionRead.evaluate(certificate, actionEvaluation),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
   }
 
   @Test
-  void shallReturnTrueIfIssuedUnitMatchesUnit() {
+  void shallReturnTrueIfIssuedUnitMatchesSubUnit() {
     final var actionEvaluation = actionEvaluationBuilder
         .subUnit(
             SubUnit.builder()
@@ -96,6 +104,60 @@ class CertificateActionReadTest {
     assertTrue(
         certificateActionRead.evaluate(Optional.of(certificate), actionEvaluation),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfCareUnitMatchesSubUnit() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .subUnit(
+            SubUnit.builder()
+                .hsaId(new HsaId(CARE_UNIT_HSA_ID))
+                .build()
+        )
+        .build();
+
+    final var certificate = certificateBuilder.build();
+
+    assertTrue(
+        certificateActionRead.evaluate(Optional.of(certificate), actionEvaluation),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnFalseIfIssuedUnitDontMatchSubUnit() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .subUnit(
+            SubUnit.builder()
+                .hsaId(new HsaId(OTHER_SUB_UNIT))
+                .build()
+        )
+        .build();
+
+    final var certificate = certificateBuilder.build();
+
+    assertFalse(
+        certificateActionRead.evaluate(Optional.of(certificate), actionEvaluation),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnFalseIfCareUnitDontMatchSubUnitAndSubUnitDontMatchIssuingUnit() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .subUnit(
+            SubUnit.builder()
+                .hsaId(new HsaId(OTHER_CARE_UNIT))
+                .build()
+        )
+        .build();
+
+    final var certificate = certificateBuilder.build();
+
+    assertFalse(
+        certificateActionRead.evaluate(Optional.of(certificate), actionEvaluation),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
 }

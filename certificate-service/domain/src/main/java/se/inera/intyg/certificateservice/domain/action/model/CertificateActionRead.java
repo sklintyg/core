@@ -19,10 +19,21 @@ public class CertificateActionRead implements CertificateAction {
 
   @Override
   public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
-    if (certificate.isEmpty()) {
-      throw new IllegalArgumentException("Missing required parameter certificate");
-    }
-    return certificate.get().certificateMetaData().getIssuingUnit().getHsaId()
+    return certificate.filter(value ->
+        isIssuingUnitMatchingSubUnit(actionEvaluation, value) ||
+            isCareUnitMatchingSubUnit(actionEvaluation, value)
+    ).isPresent();
+  }
+
+  private static boolean isCareUnitMatchingSubUnit(ActionEvaluation actionEvaluation,
+      Certificate value) {
+    return value.certificateMetaData()
+        .getCareUnit().getHsaId().equals(actionEvaluation.getSubUnit().getHsaId());
+  }
+
+  private static boolean isIssuingUnitMatchingSubUnit(ActionEvaluation actionEvaluation,
+      Certificate value) {
+    return value.certificateMetaData().getIssuingUnit().getHsaId()
         .equals(actionEvaluation.getSubUnit().getHsaId());
   }
 
