@@ -19,7 +19,6 @@ public class AppConfig {
 
   @Bean
   public GetCertificateDomainService getCertificateDomainService(
-      CertificateModelRepository certificateModelRepository,
       CertificateRepository certificateRepository) {
     return new GetCertificateDomainService(certificateRepository);
   }
