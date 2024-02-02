@@ -24,7 +24,6 @@ class CertificateControllerTest {
   private static final String CERTIFICATE_ID = "certificateId";
   @Mock
   private GetCertificateService getCertificateService;
-  private static final String CERTIFICATE_ID = "certificateId";
   @Mock
   private CertificateExistsService certificateExistsService;
   @Mock
