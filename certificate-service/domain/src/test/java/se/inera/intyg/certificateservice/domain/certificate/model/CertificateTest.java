@@ -10,9 +10,12 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -27,6 +30,7 @@ import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
+@ExtendWith(MockitoExtension.class)
 class CertificateTest {
 
   private static final String DEFAULT_VALUE = "defaultCertificateId";
@@ -705,7 +709,7 @@ class CertificateTest {
 
       doReturn(expectedActions).when(certificate.certificateModel()).actions();
 
-      doReturn(true).when(certificateAction).evaluate(actionEvaluation);
+      doReturn(true).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
 
       final var actualActions = certificate.actions(actionEvaluation);
 
@@ -718,9 +722,9 @@ class CertificateTest {
       final var certificateAction = mock(CertificateAction.class);
       final var expectedActions = Collections.emptyList();
 
-      doReturn(expectedActions).when(certificate.certificateModel()).actions();
+      doReturn(List.of(certificateAction)).when(certificate.certificateModel()).actions();
 
-      doReturn(false).when(certificateAction).evaluate(actionEvaluation);
+      doReturn(false).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
 
       final var actualActions = certificate.actions(actionEvaluation);
 
@@ -740,7 +744,7 @@ class CertificateTest {
       doReturn(actions).when(certificate.certificateModel()).actions();
 
       doReturn(CertificateActionType.READ).when(certificateAction).getType();
-      doReturn(true).when(certificateAction).evaluate(actionEvaluation);
+      doReturn(true).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
 
       assertTrue(
           certificate.allowTo(CertificateActionType.READ, actionEvaluation),
@@ -757,7 +761,7 @@ class CertificateTest {
       doReturn(actions).when(certificate.certificateModel()).actions();
 
       doReturn(CertificateActionType.READ).when(certificateAction).getType();
-      doReturn(false).when(certificateAction).evaluate(actionEvaluation);
+      doReturn(false).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
 
       assertFalse(
           certificate.allowTo(CertificateActionType.READ, actionEvaluation),

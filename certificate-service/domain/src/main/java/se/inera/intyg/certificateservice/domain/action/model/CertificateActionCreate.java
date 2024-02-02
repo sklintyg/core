@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.domain.action.model;
 
+import java.util.Optional;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 
 public class CertificateActionCreate implements CertificateAction {
@@ -17,9 +19,9 @@ public class CertificateActionCreate implements CertificateAction {
   public CertificateActionType getType() {
     return certificateActionSpecification.getCertificateActionType();
   }
-
+  
   @Override
-  public boolean evaluate(ActionEvaluation actionEvaluation) {
+  public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
     return !actionEvaluation.getPatient().getDeceased().value() && !actionEvaluation.getUser()
         .getBlocked().value();
   }

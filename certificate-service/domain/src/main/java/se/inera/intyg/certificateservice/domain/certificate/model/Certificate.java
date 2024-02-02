@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.certificate.model;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,7 +11,6 @@ import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-
 
 @Getter
 @Builder
@@ -25,7 +25,9 @@ public class Certificate {
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
-        .filter(certificateAction -> certificateAction.evaluate(actionEvaluation))
+        .filter(
+            certificateAction -> certificateAction.evaluate(Optional.of(this), actionEvaluation)
+        )
         .toList();
   }
 
@@ -34,7 +36,7 @@ public class Certificate {
     return certificateModel.actions().stream()
         .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
         .findFirst()
-        .map(certificateAction -> certificateAction.evaluate(actionEvaluation))
+        .map(certificateAction -> certificateAction.evaluate(Optional.of(this), actionEvaluation))
         .orElse(false);
   }
 

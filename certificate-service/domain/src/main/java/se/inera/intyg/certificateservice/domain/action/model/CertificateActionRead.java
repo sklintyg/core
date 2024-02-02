@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.domain.action.model;
 
+import java.util.Optional;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 
 public class CertificateActionRead implements CertificateAction {
@@ -16,9 +18,12 @@ public class CertificateActionRead implements CertificateAction {
   }
 
   @Override
-  public boolean evaluate(ActionEvaluation actionEvaluation) {
-    return !actionEvaluation.getUser().getBlocked().value() && !actionEvaluation.getSubUnit()
-        .getInactive().value();
+  public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
+    if (certificate.isEmpty()) {
+      throw new IllegalArgumentException("Fel!");
+    }
+    return certificate.get().certificateMetaData().getIssuingUnit().getHsaId()
+        .equals(actionEvaluation.getSubUnit().getHsaId());
   }
 
   @Override
