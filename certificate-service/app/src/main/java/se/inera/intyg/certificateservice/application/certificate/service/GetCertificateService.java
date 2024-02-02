@@ -23,7 +23,6 @@ public class GetCertificateService {
       String certificateId) {
     getCertificateRequestValidator.validate(getCertificateRequest, certificateId);
     final var actionEvaluation = actionEvaluationFactory.create(
-        getCertificateRequest.getPatient(),
         getCertificateRequest.getUser(),
         getCertificateRequest.getUnit(),
         getCertificateRequest.getCareUnit(),
