@@ -42,7 +42,11 @@ public class Certificate {
 
   public void updateMetadata(ActionEvaluation actionEvaluation) {
     certificateMetaData = CertificateMetaData.builder()
-        .patient(actionEvaluation.getPatient())
+        .patient(
+            actionEvaluation.getPatient() == null
+                ? certificateMetaData.getPatient()
+                : actionEvaluation.getPatient()
+        )
         .issuer(Staff.create(actionEvaluation.getUser()))
         .careUnit(actionEvaluation.getCareUnit())
         .careProvider(actionEvaluation.getCareProvider())
