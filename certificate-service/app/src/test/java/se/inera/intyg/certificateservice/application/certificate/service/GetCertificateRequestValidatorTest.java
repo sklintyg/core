@@ -8,9 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
-import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
-import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
-import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.RoleTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
@@ -47,19 +44,6 @@ class GetCertificateRequestValidatorTest {
         .careProvider(
             UnitDTO.builder()
                 .id(ID)
-                .build()
-        )
-        .patient(
-            PatientDTO.builder()
-                .id(
-                    PersonIdDTO.builder()
-                        .id(ID)
-                        .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-                        .build()
-                )
-                .testIndicated(false)
-                .deceased(false)
-                .protectedPerson(false)
                 .build()
         );
   }
@@ -307,179 +291,11 @@ class GetCertificateRequestValidatorTest {
     }
   }
 
-  @Nested
-  class PatientValidation {
-
-    @Test
-    void shallThrowIfPatientIsNull() {
-      final var request = requestBuilder
-          .patient(null)
-          .build();
-
-      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> getCertificateRequestValidator.validate(request, CERTIFICATE_ID));
-
-      assertEquals("Required parameter missing: Patient",
-          illegalArgumentException.getMessage());
-    }
-
-    @Test
-    void shallThrowIfIdIsNull() {
-      final var request = requestBuilder
-          .patient(
-              PatientDTO.builder()
-                  .build()
-          )
-          .build();
-
-      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> getCertificateRequestValidator.validate(request, CERTIFICATE_ID));
-
-      assertEquals("Required parameter missing: Patient.id",
-          illegalArgumentException.getMessage());
-    }
-
-    @Test
-    void shallThrowIfPatientIdIsNull() {
-      final var request = requestBuilder
-          .patient(
-              PatientDTO.builder()
-                  .id(
-                      PersonIdDTO.builder()
-                          .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-                          .build()
-                  )
-                  .build()
-          )
-          .build();
-
-      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> getCertificateRequestValidator.validate(request, CERTIFICATE_ID));
-
-      assertEquals("Required parameter missing: Patient.id.id",
-          illegalArgumentException.getMessage());
-    }
-
-    @Test
-    void shallThrowIfPatientIdIsEmpty() {
-      final var request = requestBuilder
-          .patient(
-              PatientDTO.builder()
-                  .id(
-                      PersonIdDTO.builder()
-                          .id("")
-                          .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-                          .build()
-                  )
-                  .build()
-          )
-          .build();
-
-      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> getCertificateRequestValidator.validate(request, CERTIFICATE_ID));
-
-      assertEquals("Required parameter missing: Patient.id.id",
-          illegalArgumentException.getMessage());
-    }
-
-    @Test
-    void shallThrowIfPatientIdTypeIsNull() {
-      final var request = requestBuilder
-          .patient(
-              PatientDTO.builder()
-                  .id(
-                      PersonIdDTO.builder()
-                          .id(ID)
-                          .build()
-                  )
-                  .build()
-          )
-          .build();
-
-      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> getCertificateRequestValidator.validate(request, CERTIFICATE_ID));
-
-      assertEquals("Required parameter missing: Patient.id.type",
-          illegalArgumentException.getMessage());
-    }
-  }
-
-  @Test
-  void shallThrowIfTestIndicatedIsNull() {
-    final var request = requestBuilder
-        .patient(
-            PatientDTO.builder()
-                .id(
-                    PersonIdDTO.builder()
-                        .id(ID)
-                        .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-                        .build()
-                )
-                .protectedPerson(false)
-                .deceased(false)
-                .build()
-        )
-        .build();
-
-    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> getCertificateRequestValidator.validate(request, CERTIFICATE_ID));
-
-    assertEquals("Required parameter missing: Patient.testIndicated",
-        illegalArgumentException.getMessage());
-  }
-
-  @Test
-  void shallThrowIfDeceasedIsNull() {
-    final var request = requestBuilder
-        .patient(
-            PatientDTO.builder()
-                .id(
-                    PersonIdDTO.builder()
-                        .id(ID)
-                        .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-                        .build()
-                )
-                .protectedPerson(false)
-                .testIndicated(false)
-                .build()
-        )
-        .build();
-
-    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> getCertificateRequestValidator.validate(request, CERTIFICATE_ID));
-
-    assertEquals("Required parameter missing: Patient.deceased",
-        illegalArgumentException.getMessage());
-  }
-
-  @Test
-  void shallThrowIfProtectedPersonIsNull() {
-    final var request = requestBuilder
-        .patient(
-            PatientDTO.builder()
-                .id(
-                    PersonIdDTO.builder()
-                        .id(ID)
-                        .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-                        .build()
-                )
-                .testIndicated(false)
-                .deceased(false)
-                .build()
-        )
-        .build();
-
-    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> getCertificateRequestValidator.validate(request, CERTIFICATE_ID));
-
-    assertEquals("Required parameter missing: Patient.protectedPerson",
-        illegalArgumentException.getMessage());
-  }
-
   @Test
   void shallThrowIfCertificateIdIsNull() {
+    final var request = requestBuilder.build();
     final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> getCertificateRequestValidator.validate(requestBuilder.build(), null));
+        () -> getCertificateRequestValidator.validate(request, null));
 
     assertEquals("Required parameter missing: certificateId",
         illegalArgumentException.getMessage());
@@ -487,8 +303,9 @@ class GetCertificateRequestValidatorTest {
 
   @Test
   void shallThrowIfCertificateIdIsEmpty() {
+    final var request = requestBuilder.build();
     final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> getCertificateRequestValidator.validate(requestBuilder.build(), ""));
+        () -> getCertificateRequestValidator.validate(request, ""));
 
     assertEquals("Required parameter missing: certificateId",
         illegalArgumentException.getMessage());

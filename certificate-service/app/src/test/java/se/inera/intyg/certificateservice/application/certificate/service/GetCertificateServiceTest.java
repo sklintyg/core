@@ -17,7 +17,6 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
-import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
@@ -31,7 +30,6 @@ import se.inera.intyg.certificateservice.domain.certificate.service.GetCertifica
 class GetCertificateServiceTest {
 
   private static final UserDTO USER_DTO = UserDTO.builder().build();
-  private static final PatientDTO PATIENT_DTO = PatientDTO.builder().build();
   private static final UnitDTO UNIT_DTO = UnitDTO.builder().build();
   private static final UnitDTO CARE_UNIT_DTO = UnitDTO.builder().build();
   private static final UnitDTO CARE_PROVIDER_DTO = UnitDTO.builder().build();
@@ -72,7 +70,6 @@ class GetCertificateServiceTest {
 
     final var actionEvaluation = ActionEvaluation.builder().build();
     doReturn(actionEvaluation).when(actionEvaluationFactory).create(
-        PATIENT_DTO,
         USER_DTO,
         UNIT_DTO,
         CARE_UNIT_DTO,
@@ -96,7 +93,6 @@ class GetCertificateServiceTest {
     final var actualResult = getCertificateService.get(
         GetCertificateRequest.builder()
             .user(USER_DTO)
-            .patient(PATIENT_DTO)
             .unit(UNIT_DTO)
             .careUnit(CARE_UNIT_DTO)
             .careProvider(CARE_PROVIDER_DTO)

@@ -28,37 +28,14 @@ import se.inera.intyg.certificateservice.domain.user.model.User;
 @Component
 public class ActionEvaluationFactory {
 
+  public ActionEvaluation create(UserDTO user, UnitDTO unit, UnitDTO careUnit,
+      UnitDTO careProvider) {
+    return create(null, user, unit, careUnit, careProvider);
+  }
+
   public ActionEvaluation create(PatientDTO patient, UserDTO user, UnitDTO unit, UnitDTO careUnit,
       UnitDTO careProvider) {
-    return ActionEvaluation.builder()
-        .patient(
-            Patient.builder()
-                .id(
-                    PersonId.builder()
-                        .type(convertType(patient.getId().getType()))
-                        .id(patient.getId().getId())
-                        .build()
-                )
-                .name(
-                    Name.builder()
-                        .fullName(patient.getFullName())
-                        .firstName(patient.getFirstName())
-                        .middleName(patient.getMiddleName())
-                        .lastName(patient.getLastName())
-                        .build()
-                )
-                .deceased(new Deceased(patient.getDeceased()))
-                .address(
-                    PersonAddress.builder()
-                        .city(patient.getCity())
-                        .street(patient.getStreet())
-                        .zipCode(patient.getZipCode())
-                        .build()
-                )
-                .protectedPerson(new ProtectedPerson(patient.getProtectedPerson()))
-                .testIndicated(new TestIndicated(patient.getTestIndicated()))
-                .build()
-        )
+    final var actionEvaluation = ActionEvaluation.builder()
         .user(
             User.builder()
                 .hsaId(
@@ -129,9 +106,43 @@ public class ActionEvaluationFactory {
                         .build()
                 )
                 .build()
-        )
-        .build();
+        );
+    if (patient != null) {
+      patient(actionEvaluation, patient);
+    }
+    return actionEvaluation.build();
+  }
 
+  private void patient(ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder,
+      PatientDTO patient) {
+    actionEvaluationBuilder.patient(
+        Patient.builder()
+            .id(
+                PersonId.builder()
+                    .type(convertType(patient.getId().getType()))
+                    .id(patient.getId().getId())
+                    .build()
+            )
+            .name(
+                Name.builder()
+                    .fullName(patient.getFullName())
+                    .firstName(patient.getFirstName())
+                    .middleName(patient.getMiddleName())
+                    .lastName(patient.getLastName())
+                    .build()
+            )
+            .deceased(new Deceased(patient.getDeceased()))
+            .address(
+                PersonAddress.builder()
+                    .city(patient.getCity())
+                    .street(patient.getStreet())
+                    .zipCode(patient.getZipCode())
+                    .build()
+            )
+            .protectedPerson(new ProtectedPerson(patient.getProtectedPerson()))
+            .testIndicated(new TestIndicated(patient.getTestIndicated()))
+            .build()
+    );
   }
 
   private PersonIdType convertType(PersonIdTypeDTO type) {

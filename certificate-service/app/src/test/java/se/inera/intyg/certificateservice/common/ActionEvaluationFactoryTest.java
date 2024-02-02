@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.common;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -33,10 +34,6 @@ class ActionEvaluationFactoryTest {
   private static final UserDTO DEFAULT_USER = UserDTO.builder()
       .name("defaultName")
       .blocked(false)
-      .build();
-
-  private static final PatientDTO DEFAULT_PATIENT_DTO = PatientDTO.builder()
-      .deceased(false)
       .build();
 
   private static final String UNIT_NAME = "unitName";
@@ -343,6 +340,21 @@ class ActionEvaluationFactoryTest {
 
         assertEquals(actionEvaluation.getCareProvider().getContactInfo().getEmail(),
             unit.getEmail());
+      }
+    }
+
+    @Nested
+    class ExcludePatient {
+
+      @Test
+      void createActionEvaluationWithoutPatient() {
+        final var actionEvaluation = actionEvaluationFactory.create(DEFAULT_USER,
+            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+
+        assertNull(
+            actionEvaluation.getPatient(),
+            "Expected patient to be null"
+        );
       }
     }
 
