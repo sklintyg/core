@@ -377,6 +377,19 @@ class CertificateTest {
         assertTrue(certificate.certificateMetaData().getPatient().getDeceased()
             .value());
       }
+
+      @Test
+      void shallNotUpdatePatientIfMissing() {
+        final var patientBeforeUpdate = certificate.certificateMetaData().getPatient();
+
+        final var actionEvaluation = actionEvaluationBuilder
+            .patient(null)
+            .build();
+
+        certificate.updateMetadata(actionEvaluation);
+
+        assertEquals(patientBeforeUpdate, certificate.certificateMetaData().getPatient());
+      }
     }
 
     @Nested
