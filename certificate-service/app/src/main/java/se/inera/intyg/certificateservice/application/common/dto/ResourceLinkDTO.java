@@ -1,20 +1,25 @@
 package se.inera.intyg.certificateservice.application.common.dto;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Value;
+import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO.ResourceLinkDTOBuilder;
 
-@Data
+@JsonDeserialize(builder = ResourceLinkDTOBuilder.class)
+@Value
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class ResourceLinkDTO {
 
-  private ResourceLinkTypeDTO type;
-  private String name;
-  private String description;
-  private String body;
-  private boolean enabled;
-  private String title;
+  ResourceLinkTypeDTO type;
+  String name;
+  String description;
+  String body;
+  boolean enabled;
+  String title;
+
+  @JsonPOJOBuilder(withPrefix = "")
+  public static class ResourceLinkDTOBuilder {
+
+  }
 }

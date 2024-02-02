@@ -45,10 +45,10 @@ Content-Type: application/json
 }
 
 ### Certificate exists
-GET http://localhost:18030/api/certificate/671767e5-6ec3-4d87-91b8-1024670cd46b/exists
+GET http://localhost:18030/api/certificate/2fd088d1-f205-48b1-b84d-22678962642d/exists
 
 ### Get certificate
-POST http://localhost:18030/api/certificate/671767e5-6ec3-4d87-91b8-1024670cd46b
+POST http://localhost:18030/api/certificate/2fd088d1-f205-48b1-b84d-22678962642d
 Content-Type: application/json
 
 {

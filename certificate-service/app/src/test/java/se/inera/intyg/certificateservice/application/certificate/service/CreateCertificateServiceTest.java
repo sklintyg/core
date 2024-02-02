@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,9 +17,12 @@ import se.inera.intyg.certificateservice.application.certificate.dto.CreateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
+import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
+import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
@@ -35,6 +40,8 @@ class CreateCertificateServiceTest {
   private CreateCertificateDomainService createCertificateDomainService;
   @Mock
   private CertificateConverter certificateConverter;
+  @Mock
+  private ResourceLinkConverter resourceLinkConverter;
   @InjectMocks
   private CreateCertificateService createCertificateService;
 
@@ -67,10 +74,12 @@ class CreateCertificateServiceTest {
 
   @Test
   void shallReturnResponseWithCreatedCertificate() {
+    final var resourceLinkDTO = ResourceLinkDTO.builder().build();
     final var expectedReponse = CreateCertificateResponse.builder()
         .certificate(
             CertificateDTO.builder().build()
         )
+        .links(List.of(resourceLinkDTO))
         .build();
 
     final var actionEvaluation = ActionEvaluation.builder().build();
@@ -82,7 +91,7 @@ class CreateCertificateServiceTest {
         CREATE_CERTIFICATE_REQUEST.getCareProvider()
     );
 
-    final var certificate = Certificate.builder().build();
+    final var certificate = mock(Certificate.class);
     doReturn(certificate).when(createCertificateDomainService).create(
         CertificateModelId.builder()
             .type(new CertificateType(TYPE))
@@ -91,7 +100,14 @@ class CreateCertificateServiceTest {
         actionEvaluation
     );
 
-    doReturn(expectedReponse.getCertificate()).when(certificateConverter).convert(certificate);
+    final var certificateAction = mock(CertificateAction.class);
+    final List<CertificateAction> certificateActions = List.of(certificateAction);
+    doReturn(certificateActions).when(certificate).actions(actionEvaluation);
+
+    doReturn(expectedReponse.getCertificate()).when(certificateConverter)
+        .convert(certificate);
+
+    doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction);
 
     final var actualResponse = createCertificateService.create(CREATE_CERTIFICATE_REQUEST);
     assertEquals(expectedReponse, actualResponse);

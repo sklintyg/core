@@ -30,10 +30,11 @@ public class CertificateTypeInfoService {
     return GetCertificateTypeInfoResponse.builder()
         .list(
             certificateModels.stream()
-                .map(certificateModel -> {
-                      final var certificateActions = certificateModel.actions(actionEvaluation);
-                      return certificateTypeInfoConverter.convert(certificateModel, certificateActions);
-                    }
+                .map(certificateModel ->
+                    certificateTypeInfoConverter.convert(
+                        certificateModel,
+                        certificateModel.actions(actionEvaluation)
+                    )
                 )
                 .toList()
         )
