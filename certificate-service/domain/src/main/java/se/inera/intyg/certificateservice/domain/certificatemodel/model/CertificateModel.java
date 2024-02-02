@@ -20,19 +20,22 @@ public class CertificateModel {
   LocalDateTime activeFrom;
   List<CertificateActionSpecification> certificateActionSpecifications;
 
-  public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
+  public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()
         .map(CertificateActionFactory::create)
         .filter(Objects::nonNull)
+        .toList();
+  }
+
+  public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
+    return actions().stream()
         .filter(certificateAction -> certificateAction.evaluate(actionEvaluation))
         .toList();
   }
 
   public boolean allowTo(CertificateActionType certificateActionType,
       ActionEvaluation actionEvaluation) {
-    return certificateActionSpecifications.stream()
-        .map(CertificateActionFactory::create)
-        .filter(Objects::nonNull)
+    return actions().stream()
         .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
         .findFirst()
         .map(certificateAction -> certificateAction.evaluate(actionEvaluation))

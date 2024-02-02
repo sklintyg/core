@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
+import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -18,6 +19,7 @@ public class CreateCertificateService {
   private final ActionEvaluationFactory actionEvaluationFactory;
   private final CreateCertificateDomainService createCertificateDomainService;
   private final CertificateConverter certificateConverter;
+  private final ResourceLinkConverter resourceLinkConverter;
 
   public CreateCertificateResponse create(CreateCertificateRequest createCertificateRequest) {
     createCertificateRequestValidator.validate(createCertificateRequest);
@@ -35,6 +37,11 @@ public class CreateCertificateService {
     return CreateCertificateResponse.builder()
         .certificate(
             certificateConverter.convert(certificate)
+        )
+        .links(
+            certificate.actions(actionEvaluation).stream()
+                .map(resourceLinkConverter::convert)
+                .toList()
         )
         .build();
   }

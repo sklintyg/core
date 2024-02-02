@@ -12,6 +12,7 @@ public class CertificateActionFactory {
       CertificateActionSpecification certificateActionSpecification) {
     return switch (certificateActionSpecification.getCertificateActionType()) {
       case CREATE -> new CertificateActionCreate(certificateActionSpecification);
+      case READ -> new CertificateActionRead(certificateActionSpecification);
     };
   }
 }

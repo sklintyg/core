@@ -12,13 +12,18 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateControllerTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
+  @Mock
+  private GetCertificateService getCertificateService;
   @Mock
   private CertificateExistsService certificateExistsService;
   @Mock
@@ -36,7 +41,9 @@ class CertificateControllerTest {
 
     final var request = CreateCertificateRequest.builder().build();
 
-    doReturn(expectedResult).when(createCertificateService).create(request);
+    doReturn(expectedResult).when(createCertificateService).create(
+        request
+    );
 
     final var actualResult = certificateController.createCertificate(request);
 
@@ -65,6 +72,25 @@ class CertificateControllerTest {
     doReturn(expectedResult).when(certificateExistsService).exist(CERTIFICATE_ID);
 
     final var actualResult = certificateController.findExistingCertificate(CERTIFICATE_ID);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnGetCertificateResponse() {
+    final var expectedResult = GetCertificateResponse.builder()
+        .certificate(
+            CertificateDTO.builder().build()
+        )
+        .build();
+
+    final var request = GetCertificateRequest.builder().build();
+
+    doReturn(expectedResult).when(getCertificateService).get(
+        request,
+        CERTIFICATE_ID);
+
+    final var actualResult = certificateController.getCertificate(request, CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
   }

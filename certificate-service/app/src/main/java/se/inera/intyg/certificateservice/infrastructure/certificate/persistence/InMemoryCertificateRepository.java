@@ -47,7 +47,7 @@ public class InMemoryCertificateRepository implements CertificateRepository {
       throw new IllegalArgumentException("CertificateId is null!");
     }
     if (!certificateMap.containsKey(certificateId)) {
-      throw new IllegalStateException(
+      throw new IllegalArgumentException(
           "CertificateId '%s' not present in repository".formatted(certificateId)
       );
     }

@@ -126,15 +126,20 @@ class InMemoryCertificateRepositoryTest {
     @Test
     void shallThrowIfCertificateNotPresentInRepository() {
       final var certificateId = new CertificateId(CERTIFICATE_ID);
-      assertThrows(IllegalStateException.class,
-          () -> certificateRepository.getById(certificateId));
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificateRepository.getById(certificateId)
+      );
+      assertEquals(
+          "CertificateId '%s' not present in repository".formatted(certificateId),
+          illegalArgumentException.getMessage());
     }
 
     @Test
     void shouldThrowExceptionIfCertificateIdIsNull() {
-      assertThrows(IllegalArgumentException.class,
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
           () -> certificateRepository.getById(null)
       );
+      assertEquals("CertificateId is null!", illegalArgumentException.getMessage());
     }
   }
 
@@ -167,9 +172,10 @@ class InMemoryCertificateRepositoryTest {
 
     @Test
     void shouldThrowExceptionIfCertificateIdIsNull() {
-      assertThrows(IllegalArgumentException.class,
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
           () -> certificateRepository.exists(null)
       );
+      assertEquals("CertificateId is null!", illegalArgumentException.getMessage());
     }
   }
 }

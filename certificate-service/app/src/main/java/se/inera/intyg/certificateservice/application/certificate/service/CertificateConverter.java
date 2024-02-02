@@ -67,7 +67,7 @@ public class CertificateConverter {
                         )
                         .isInactive(
                             certificate.certificateMetaData().getIssuingUnit().getInactive()
-                                .inactive()
+                                .value()
                         )
                         .build()
                 )

@@ -43,3 +43,48 @@ Content-Type: application/json
     "version": "1.0"
   }
 }
+
+### Certificate exists
+GET http://localhost:18030/api/certificate/2fd088d1-f205-48b1-b84d-22678962642d/exists
+
+### Get certificate
+POST http://localhost:18030/api/certificate/2fd088d1-f205-48b1-b84d-22678962642d
+Content-Type: application/json
+
+{
+  "user": {
+    "id": "TSTNMT2321000156-DRAA",
+    "name": "Alja Doctor",
+    "role": "DOCTOR",
+    "blocked": "false"
+  },
+  "unit": {
+    "id": "TSTNMT2321000156-ALHM",
+    "name": "Alfa Hudmottagningen",
+    "address": "Alfaadressen 1",
+    "city": "Alfastaden",
+    "zipCode": "Alfapostnummer",
+    "inactive": "false"
+  },
+  "careUnit": {
+    "id": "TSTNMT2321000156-ALMC",
+    "name": "Alfa Medicincentrum"
+  },
+  "careProvider": {
+    "id": "TSTNMT2321000156-ALFA",
+    "name": "Alfa Regionen"
+  },
+  "patient": {
+    "id": {
+      "type": "PERSONAL_IDENTITY_NUMBER",
+      "id": "191212121212"
+    },
+    "firstName": "Tolvan",
+    "middleName": "TP",
+    "lastName": "Tolvansson",
+    "fullName": "Tolvan TP Tolvansson",
+    "deceased": "false",
+    "protectedPerson": "false",
+    "testIndicated": "false"
+  }
+}

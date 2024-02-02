@@ -20,6 +20,7 @@ import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.Get
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoResponse;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
+import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
@@ -31,16 +32,10 @@ class CertificateTypeInfoServiceTest {
 
   private static final String TYPE_1 = "type1";
   private static final String TYPE_2 = "type2";
-  private static final String DESCRIPTION = "description";
-  private static final String NAME = "name";
   private static final List<CertificateAction> CERTIFICATE_ACTIONS = List.of(
       mock(CertificateAction.class)
   );
   private static final ActionEvaluation ACTION_EVALUATION = ActionEvaluation.builder().build();
-  @Mock
-  private CertificateModel certificateModelOne;
-  @Mock
-  private CertificateModel certificateModelTwo;
   @Mock
   CertificateTypeInfoValidator certificateTypeInfoValidator;
   @Mock
@@ -51,6 +46,14 @@ class CertificateTypeInfoServiceTest {
   ActionEvaluationFactory actionEvaluationFactory;
   @InjectMocks
   CertificateTypeInfoService certificateTypeInfoService;
+
+  final GetCertificateTypeInfoRequest certificateTypeInfoRequest = GetCertificateTypeInfoRequest.builder()
+      .user(UserDTO.builder().build())
+      .careProvider(UnitDTO.builder().build())
+      .careUnit(UnitDTO.builder().build())
+      .unit(UnitDTO.builder().build())
+      .patient(PatientDTO.builder().build())
+      .build();
 
   @Test
   void shallThrowIfRequestIsInvalid() {
@@ -74,12 +77,6 @@ class CertificateTypeInfoServiceTest {
 
   @Test
   void shallReturnListOfCertificateTypeInfoDTO() {
-    final var patient = PatientDTO.builder().build();
-    final var user = UserDTO.builder().build();
-    final var certificateTypeInfoRequest = GetCertificateTypeInfoRequest.builder()
-        .patient(patient)
-        .user(user)
-        .build();
     final var certificateTypeInfoDTO1 = CertificateTypeInfoDTO.builder().type(TYPE_1).build();
     final var certificateTypeInfoDTO2 = CertificateTypeInfoDTO.builder().type(TYPE_2).build();
     final var expectedResult = GetCertificateTypeInfoResponse.builder()
@@ -87,14 +84,19 @@ class CertificateTypeInfoServiceTest {
             List.of(
                 certificateTypeInfoDTO1,
                 certificateTypeInfoDTO2
-
             )
         )
         .build();
 
     final var certificateModels = List.of(getCertifiateModel(), getCertifiateModel());
 
-    when(actionEvaluationFactory.create(patient, user)).thenReturn(ACTION_EVALUATION);
+    when(actionEvaluationFactory.create(
+        certificateTypeInfoRequest.getPatient(),
+        certificateTypeInfoRequest.getUser(),
+        certificateTypeInfoRequest.getUnit(),
+        certificateTypeInfoRequest.getCareUnit(),
+        certificateTypeInfoRequest.getCareProvider()
+    )).thenReturn(ACTION_EVALUATION);
     when(certificateModelRepository.findAllActive()).thenReturn(certificateModels);
     when(certificateTypeInfoConverter.convert(certificateModels.get(0),
         CERTIFICATE_ACTIONS)).thenReturn(
