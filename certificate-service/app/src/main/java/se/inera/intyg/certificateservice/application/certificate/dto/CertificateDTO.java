@@ -1,15 +1,20 @@
 package se.inera.intyg.certificateservice.application.certificate.dto;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Value;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO.CertificateDTOBuilder;
 
-@Data
+@JsonDeserialize(builder = CertificateDTOBuilder.class)
+@Value
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class CertificateDTO {
 
-  private CertificateMetadataDTO metadata;
+  CertificateMetadataDTO metadata;
+
+  @JsonPOJOBuilder(withPrefix = "")
+  public static class CertificateDTOBuilder {
+
+  }
 }

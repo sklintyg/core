@@ -6,7 +6,8 @@ import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Con
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.DOKTOR_AJLA;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.TOLVAN_TOLVANSSON;
 
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
@@ -14,31 +15,50 @@ import se.inera.intyg.certificateservice.application.common.dto.RoleTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
-public class CertificateTypeInfoRequestBuilder {
+public class CreateCertificateRequestBuilder {
+
+  private static final String VERSION = "1.0";
+  private static final String TYPE = "fk7211";
 
   private boolean blocked = false;
   private boolean deceased = false;
+  private boolean inactive = false;
+  private CertificateModelIdDTO certificateModelId = CertificateModelIdDTO.builder()
+      .version(VERSION)
+      .type(TYPE)
+      .build();
 
-  public static CertificateTypeInfoRequestBuilder create() {
-    return new CertificateTypeInfoRequestBuilder();
+  public static CreateCertificateRequestBuilder create() {
+    return new CreateCertificateRequestBuilder();
   }
 
-  private CertificateTypeInfoRequestBuilder() {
+  private CreateCertificateRequestBuilder() {
 
   }
 
-  public CertificateTypeInfoRequestBuilder blocked(boolean blocked) {
+  public CreateCertificateRequestBuilder blocked(boolean blocked) {
     this.blocked = blocked;
     return this;
   }
 
-  public CertificateTypeInfoRequestBuilder deceased(boolean deceased) {
+  public CreateCertificateRequestBuilder deceased(boolean deceased) {
     this.deceased = deceased;
     return this;
   }
 
-  public GetCertificateTypeInfoRequest build() {
-    return GetCertificateTypeInfoRequest.builder()
+  public CreateCertificateRequestBuilder inactive(boolean inactive) {
+    this.inactive = inactive;
+    return this;
+  }
+
+  public CreateCertificateRequestBuilder certificateModelId(
+      CertificateModelIdDTO certificateModelIdDTO) {
+    this.certificateModelId = certificateModelIdDTO;
+    return this;
+  }
+
+  public CreateCertificateRequest build() {
+    return CreateCertificateRequest.builder()
         .user(
             UserDTO.builder()
                 .id(DOKTOR_AJLA)
@@ -67,13 +87,16 @@ public class CertificateTypeInfoRequestBuilder {
         .unit(
             UnitDTO.builder()
                 .id(ALFA_HUDMOTTAGNINGEN)
-                .inactive(false)
+                .inactive(inactive)
                 .build()
         )
         .careUnit(
             UnitDTO.builder()
                 .id(ALFA_MEDICINCENTRUM)
                 .build()
+        )
+        .certificateModelId(
+            certificateModelId
         )
         .build();
   }

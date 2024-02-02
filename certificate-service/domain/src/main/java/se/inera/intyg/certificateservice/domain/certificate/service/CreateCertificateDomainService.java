@@ -7,6 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.domain.exception.CertificateActionForbidden;
 
 @RequiredArgsConstructor
 public class CreateCertificateDomainService {
@@ -18,7 +19,7 @@ public class CreateCertificateDomainService {
       ActionEvaluation actionEvaluation) {
     final var certificateModel = certificateModelRepository.getById(certificateModelId);
     if (!certificateModel.allowTo(CertificateActionType.CREATE, actionEvaluation)) {
-      throw new IllegalStateException(
+      throw new CertificateActionForbidden(
           "Not allowed to create certificate for %s".formatted(certificateModelId)
       );
     }

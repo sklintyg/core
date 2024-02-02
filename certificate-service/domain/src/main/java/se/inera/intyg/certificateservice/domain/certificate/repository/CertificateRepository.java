@@ -11,4 +11,6 @@ public interface CertificateRepository {
   Certificate save(Certificate certificate);
 
   Certificate getById(CertificateId certificateId);
+
+  boolean exists(CertificateId certificateId);
 }
