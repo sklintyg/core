@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationsDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
@@ -22,6 +23,8 @@ public class CertificateConverter {
   private static final CertificateStatusTypeDTO STATUS = CertificateStatusTypeDTO.UNSIGNED;
   private static final boolean TEST_CERTIFICATE = false;
   private static final int VERSION = 0;
+  private static final CertificateRelationsDTO RELATIONS = CertificateRelationsDTO.builder()
+      .build();
 
   public CertificateDTO convert(Certificate certificate) {
     return CertificateDTO.builder()
@@ -101,6 +104,7 @@ public class CertificateConverter {
                 .status(STATUS)
                 .testCertificate(TEST_CERTIFICATE)
                 .version(VERSION)
+                .relations(RELATIONS)
                 .build()
         )
         .build();
