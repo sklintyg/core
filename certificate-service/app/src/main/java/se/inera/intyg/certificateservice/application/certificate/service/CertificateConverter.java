@@ -4,13 +4,11 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.PatientDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
-import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
-import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
-import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
 
 @Component
 public class CertificateConverter {
@@ -110,15 +108,10 @@ public class CertificateConverter {
 
   private PatientDTO toPatientDTO(Certificate certificate) {
     return PatientDTO.builder()
-        .id(
+        .personId(
             PersonIdDTO.builder()
                 .id(certificate.certificateMetaData().getPatient().getId().getId())
-                .type(
-                    toPersonIdTypeDTO(
-                        certificate.certificateMetaData().getPatient().getId()
-                            .getType()
-                    )
-                )
+                .type(certificate.certificateMetaData().getPatient().getId().getType().name())
                 .build()
         )
         .firstName(certificate.certificateMetaData().getPatient().getName().getFirstName())
@@ -129,12 +122,5 @@ public class CertificateConverter {
         .city(certificate.certificateMetaData().getPatient().getAddress().getCity())
         .zipCode(certificate.certificateMetaData().getPatient().getAddress().getZipCode())
         .build();
-  }
-
-  private PersonIdTypeDTO toPersonIdTypeDTO(PersonIdType type) {
-    return switch (type) {
-      case PERSONAL_IDENTITY_NUMBER -> PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER;
-      case COORDINATION_NUMBER -> PersonIdTypeDTO.COORDINATION_NUMBER;
-    };
   }
 }

@@ -7,8 +7,7 @@ import java.time.ZoneId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
-import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
@@ -216,12 +215,11 @@ class CertificateConverterTest {
       void shallIncludeId() {
         final var expectedId = PersonIdDTO.builder()
             .id(PATIENT_ID)
-            .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
+            .type(PersonIdType.PERSONAL_IDENTITY_NUMBER.name())
             .build();
 
         assertEquals(expectedId,
-            certificateConverter.convert(certificate).getMetadata().getPatient()
-                .getId()
+            certificateConverter.convert(certificate).getMetadata().getPatient().getPersonId()
         );
       }
 

@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO.CertificateMetadataDTOBuilder;
-import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 
 @JsonDeserialize(builder = CertificateMetadataDTOBuilder.class)
 @Value
