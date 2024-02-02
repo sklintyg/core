@@ -8,9 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
-import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
-import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
-import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.RoleTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
@@ -47,19 +44,6 @@ class GetCertificateRequestValidatorTest {
         .careProvider(
             UnitDTO.builder()
                 .id(ID)
-                .build()
-        )
-        .patient(
-            PatientDTO.builder()
-                .id(
-                    PersonIdDTO.builder()
-                        .id(ID)
-                        .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-                        .build()
-                )
-                .testIndicated(false)
-                .deceased(false)
-                .protectedPerson(false)
                 .build()
         );
   }
@@ -309,8 +293,9 @@ class GetCertificateRequestValidatorTest {
 
   @Test
   void shallThrowIfCertificateIdIsNull() {
+    final var request = requestBuilder.build();
     final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> getCertificateRequestValidator.validate(requestBuilder.build(), null));
+        () -> getCertificateRequestValidator.validate(request, null));
 
     assertEquals("Required parameter missing: certificateId",
         illegalArgumentException.getMessage());
@@ -318,8 +303,9 @@ class GetCertificateRequestValidatorTest {
 
   @Test
   void shallThrowIfCertificateIdIsEmpty() {
+    final var request = requestBuilder.build();
     final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> getCertificateRequestValidator.validate(requestBuilder.build(), ""));
+        () -> getCertificateRequestValidator.validate(request, ""));
 
     assertEquals("Required parameter missing: certificateId",
         illegalArgumentException.getMessage());
