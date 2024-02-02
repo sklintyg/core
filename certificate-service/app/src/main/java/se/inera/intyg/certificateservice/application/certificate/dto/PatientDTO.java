@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.PatientDTO.PatientBuilderDTOBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.PatientDTO.PatientDTOBuilder;
 
-@JsonDeserialize(builder = PatientBuilderDTOBuilder.class)
+@JsonDeserialize(builder = PatientDTOBuilder.class)
 @Value
 @Builder
 public class PatientDTO {
@@ -30,7 +30,7 @@ public class PatientDTO {
   boolean addressFromPU;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class PatientBuilderDTOBuilder {
+  public static class PatientDTOBuilder {
 
   }
 }
