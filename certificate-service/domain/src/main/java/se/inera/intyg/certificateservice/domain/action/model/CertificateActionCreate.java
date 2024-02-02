@@ -19,9 +19,12 @@ public class CertificateActionCreate implements CertificateAction {
   public CertificateActionType getType() {
     return certificateActionSpecification.getCertificateActionType();
   }
-  
+
   @Override
   public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
+    if (actionEvaluation.getPatient() == null || actionEvaluation.getUser() == null) {
+      return false;
+    }
     return !actionEvaluation.getPatient().getDeceased().value() && !actionEvaluation.getUser()
         .getBlocked().value();
   }

@@ -120,4 +120,34 @@ class CertificateActionCreateTest {
 
     assertTrue(actualResult);
   }
+
+  @Test
+  void shallReturnFalseIfPatientMissing() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .user(
+            User.builder()
+                .blocked(new Blocked(false))
+                .build()
+        )
+        .build();
+
+    final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
+
+    assertFalse(actualResult);
+  }
+
+  @Test
+  void shallReturnFalseIfUserMissing() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(
+            Patient.builder()
+                .deceased(new Deceased(false))
+                .build()
+        )
+        .build();
+
+    final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
+
+    assertFalse(actualResult);
+  }
 }
