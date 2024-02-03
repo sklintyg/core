@@ -8,6 +8,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_CITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_EMAIL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_INACTIVE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_PHONENUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ZIP_CODE;
@@ -15,6 +16,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_CITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_EMAIL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_INACTIVE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_PHONENUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ZIP_CODE;
@@ -60,7 +62,8 @@ public class TestDataCommonUnitDTO {
         .zipCode(ALFA_MEDICINCENTRUM_ZIP_CODE)
         .city(ALFA_MEDICINCENTRUM_CITY)
         .email(ALFA_MEDICINCENTRUM_EMAIL)
-        .phoneNumber(ALFA_MEDICINCENTRUM_PHONENUMBER);
+        .phoneNumber(ALFA_MEDICINCENTRUM_PHONENUMBER)
+        .inactive(ALFA_MEDICINCENTRUM_INACTIVE.value());
   }
 
   public static UnitDTO.UnitDTOBuilder alfaAllergimottagningenDtoBuilder() {
@@ -95,7 +98,8 @@ public class TestDataCommonUnitDTO {
         .zipCode(ALFA_VARDCENTRAL_ZIP_CODE)
         .city(ALFA_VARDCENTRAL_CITY)
         .email(ALFA_VARDCENTRAL_EMAIL)
-        .phoneNumber(ALFA_VARDCENTRAL_PHONENUMBER);
+        .phoneNumber(ALFA_VARDCENTRAL_PHONENUMBER)
+        .inactive(ALFA_VARDCENTRAL_INACTIVE.value());
   }
 
   public static UnitDTO.UnitDTOBuilder betaRegionenDtoBuilder() {

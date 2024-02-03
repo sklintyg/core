@@ -1,6 +1,11 @@
 package se.inera.intyg.certificateservice.domain.testdata;
 
+import se.inera.intyg.certificateservice.domain.certificate.model.Inactive;
+
 public class TestDataCareUnitConstants {
+
+  public static final Inactive INACTIVE_TRUE = new Inactive(true);
+  public static final Inactive INACTIVE_FALSE = new Inactive(false);
 
   public static final String ALFA_MEDICINCENTRUM_ID = "TSTNMT2321000156-ALMC";
   public static final String ALFA_MEDICINCENTRUM_NAME = "Alfa Medicincentrum";
@@ -9,6 +14,7 @@ public class TestDataCareUnitConstants {
   public static final String ALFA_MEDICINCENTRUM_ADDRESS = "Storgatan 1";
   public static final String ALFA_MEDICINCENTRUM_ZIP_CODE = "12345";
   public static final String ALFA_MEDICINCENTRUM_CITY = "Småmåla";
+  public static final Inactive ALFA_MEDICINCENTRUM_INACTIVE = INACTIVE_FALSE;
 
   public static final String ALFA_VARDCENTRAL_ID = "TSTNMT2321000156-ALVC";
   public static final String ALFA_VARDCENTRAL_NAME = "Alfa Vårdcentral";
@@ -17,5 +23,5 @@ public class TestDataCareUnitConstants {
   public static final String ALFA_VARDCENTRAL_ADDRESS = "Storgatan 1";
   public static final String ALFA_VARDCENTRAL_ZIP_CODE = "12345";
   public static final String ALFA_VARDCENTRAL_CITY = "Småmåla";
-
+  public static final Inactive ALFA_VARDCENTRAL_INACTIVE = INACTIVE_FALSE;
 }
