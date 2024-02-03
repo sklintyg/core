@@ -41,7 +41,7 @@ class CertificateConverterTest {
   private static final String PATIENT_FIRST_NAME = "patientFirstName";
   private static final String PATIENT_MIDDLE_NAME = "patientMiddleName";
   private static final String PATIENT_LAST_NAME = "patientLastName";
-  private static final String PATIENT_FULL_NAME = "patientFullName";
+  private static final String PATIENT_FULL_NAME = "patientFirstName patientMiddleName patientLastName";
   private static final String PATIENT_STREET = "patientStreet";
   private static final String PATIENT_CITY = "patientCity";
   private static final String PATIENT_ZIPCODE = "patientZipcode";
@@ -98,7 +98,6 @@ class CertificateConverterTest {
                                   .firstName(PATIENT_FIRST_NAME)
                                   .middleName(PATIENT_MIDDLE_NAME)
                                   .lastName(PATIENT_LAST_NAME)
-                                  .fullName(PATIENT_FULL_NAME)
                                   .build()
                           )
                           .address(
@@ -147,7 +146,7 @@ class CertificateConverterTest {
                           .hsaId(new HsaId(ISSUED_BY_ID))
                           .name(
                               Name.builder()
-                                  .fullName(ISSUED_BY_NAME)
+                                  .lastName(ISSUED_BY_NAME)
                                   .build()
                           )
                           .build()

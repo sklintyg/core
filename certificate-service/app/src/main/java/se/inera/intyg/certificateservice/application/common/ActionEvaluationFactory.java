@@ -43,7 +43,7 @@ public class ActionEvaluationFactory {
                 )
                 .name(
                     Name.builder()
-                        .fullName(user.getName())
+                        .lastName(user.getName())
                         .build()
                 )
                 .blocked(new Blocked(user.getBlocked()))
@@ -125,7 +125,6 @@ public class ActionEvaluationFactory {
             )
             .name(
                 Name.builder()
-                    .fullName(patient.getFullName())
                     .firstName(patient.getFirstName())
                     .middleName(patient.getMiddleName())
                     .lastName(patient.getLastName())

@@ -94,7 +94,7 @@ public class CertificateConverter {
                             certificate.certificateMetaData().getIssuer().getHsaId().id()
                         )
                         .fullName(
-                            certificate.certificateMetaData().getIssuer().getName().getFullName()
+                            certificate.certificateMetaData().getIssuer().getName().fullName()
                         )
                         .build()
                 )
@@ -121,7 +121,7 @@ public class CertificateConverter {
         .firstName(certificate.certificateMetaData().getPatient().getName().getFirstName())
         .middleName(certificate.certificateMetaData().getPatient().getName().getMiddleName())
         .lastName(certificate.certificateMetaData().getPatient().getName().getLastName())
-        .fullName(certificate.certificateMetaData().getPatient().getName().getFullName())
+        .fullName(certificate.certificateMetaData().getPatient().getName().fullName())
         .street(certificate.certificateMetaData().getPatient().getAddress().getStreet())
         .city(certificate.certificateMetaData().getPatient().getAddress().getCity())
         .zipCode(certificate.certificateMetaData().getPatient().getAddress().getZipCode())

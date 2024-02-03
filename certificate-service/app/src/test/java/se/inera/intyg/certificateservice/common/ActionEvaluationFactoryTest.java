@@ -24,7 +24,6 @@ class ActionEvaluationFactoryTest {
   private static final String FIRST_NAME = "firstName";
   private static final String MIDDLE_NAME = "middleName";
   private static final String LAST_NAME = "lastName";
-  private static final String FULL_NAME = "fullName";
   private static final String CITY = "city";
   private static final String STREET = "street";
   private static final String NAME = "userName";
@@ -42,7 +41,7 @@ class ActionEvaluationFactoryTest {
   private static final String PHONE_NUMBER = "phoneNumber";
   private static final String ZIP_CODE = "zipCode";
 
-  private PatientDTO.PatientDTOBuilder patientBuilder = PatientDTO.builder()
+  private final PatientDTO.PatientDTOBuilder patientBuilder = PatientDTO.builder()
       .deceased(false)
       .protectedPerson(false)
       .testIndicated(false)
@@ -59,7 +58,7 @@ class ActionEvaluationFactoryTest {
       .lastName("defaultLastName")
       .middleName("defaultMiddleName")
       .fullName("defaultFullName");
-  private UnitDTO.UnitDTOBuilder subUnitBuilder = UnitDTO.builder()
+  private final UnitDTO.UnitDTOBuilder subUnitBuilder = UnitDTO.builder()
       .id("defaultId")
       .name("defaultName")
       .inactive(false)
@@ -69,7 +68,7 @@ class ActionEvaluationFactoryTest {
       .phoneNumber("defaultPhoneNumber")
       .zipCode("defaultZipCode");
 
-  private UnitDTO.UnitDTOBuilder careUnitBuilder = UnitDTO.builder()
+  private final UnitDTO.UnitDTOBuilder careUnitBuilder = UnitDTO.builder()
       .id("defaultId")
       .name("defaultName")
       .inactive(false)
@@ -79,7 +78,7 @@ class ActionEvaluationFactoryTest {
       .phoneNumber("defaultPhoneNumber")
       .zipCode("defaultZipCode");
 
-  private UnitDTO.UnitDTOBuilder careProviderBuilder = UnitDTO.builder()
+  private final UnitDTO.UnitDTOBuilder careProviderBuilder = UnitDTO.builder()
       .id("defaultId")
       .name("defaultName")
       .inactive(false)
@@ -479,18 +478,6 @@ class ActionEvaluationFactoryTest {
       }
 
       @Test
-      void shallIncludePatientFullName() {
-        final var patient = patientBuilder
-            .fullName(FULL_NAME)
-            .build();
-
-        final var actionEvaluation = actionEvaluationFactory.create(patient, DEFAULT_USER,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
-
-        assertEquals(patient.getFullName(), actionEvaluation.getPatient().getName().getFullName());
-      }
-
-      @Test
       void shallIncludePatientCity() {
         final var patient = patientBuilder
             .city(CITY)
@@ -634,7 +621,7 @@ class ActionEvaluationFactoryTest {
         final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(), user,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
-        assertEquals(user.getName(), actionEvaluation.getUser().getName().getFullName());
+        assertEquals(user.getName(), actionEvaluation.getUser().getName().fullName());
       }
     }
   }

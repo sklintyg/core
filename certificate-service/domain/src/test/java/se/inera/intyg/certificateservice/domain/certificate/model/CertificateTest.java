@@ -57,7 +57,6 @@ class CertificateTest {
                         )
                         .name(
                             Name.builder()
-                                .fullName(DEFAULT_VALUE)
                                 .firstName(DEFAULT_VALUE)
                                 .middleName(DEFAULT_VALUE)
                                 .lastName(DEFAULT_VALUE)
@@ -153,7 +152,6 @@ class CertificateTest {
                 )
                 .name(
                     Name.builder()
-                        .fullName(DEFAULT_VALUE)
                         .firstName(DEFAULT_VALUE)
                         .middleName(DEFAULT_VALUE)
                         .lastName(DEFAULT_VALUE)
@@ -176,7 +174,7 @@ class CertificateTest {
                 .hsaId(new HsaId(DEFAULT_VALUE))
                 .name(
                     Name.builder()
-                        .fullName(DEFAULT_VALUE)
+                        .lastName(DEFAULT_VALUE)
                         .build()
                 )
                 .build()
@@ -264,7 +262,6 @@ class CertificateTest {
                             .firstName(EXPECTED_VALUE)
                             .middleName(EXPECTED_VALUE)
                             .lastName(EXPECTED_VALUE)
-                            .fullName(EXPECTED_VALUE)
                             .build()
                     )
                     .deceased(new Deceased(true))
@@ -320,14 +317,6 @@ class CertificateTest {
 
         assertEquals(EXPECTED_VALUE,
             certificate.certificateMetaData().getPatient().getName().getLastName());
-      }
-
-      @Test
-      void shallUpdatePatientFullName() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
-
-        assertEquals(EXPECTED_VALUE,
-            certificate.certificateMetaData().getPatient().getName().getFullName());
       }
 
       @Test
@@ -403,7 +392,7 @@ class CertificateTest {
                     .hsaId(new HsaId(EXPECTED_VALUE))
                     .name(
                         Name.builder()
-                            .fullName(EXPECTED_VALUE)
+                            .lastName(EXPECTED_VALUE)
                             .build()
                     )
                     .blocked(new Blocked(true))
@@ -425,7 +414,7 @@ class CertificateTest {
         certificate.updateMetadata(actionEvaluationBuilder.build());
 
         assertEquals(EXPECTED_VALUE,
-            certificate.certificateMetaData().getIssuer().getName().getFullName());
+            certificate.certificateMetaData().getIssuer().getName().getLastName());
       }
 
       @Test
