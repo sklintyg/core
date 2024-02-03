@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.application.common.dto;
 
-import se.inera.intyg.certificateservice.domain.user.model.UserRole;
+import se.inera.intyg.certificateservice.domain.user.model.Role;
 
 public enum RoleTypeDTO {
   DOCTOR,
@@ -9,18 +9,18 @@ public enum RoleTypeDTO {
   CARE_ADMIN,
   DENTIST;
 
-  public UserRole toUserRole() {
+  public Role toUserRole() {
     return switch (this) {
-      case DOCTOR -> UserRole.DOCTOR;
-      case NURSE -> UserRole.NURSE;
-      case MIDWIFE -> UserRole.MIDWIFE;
-      case CARE_ADMIN -> UserRole.CARE_ADMIN;
-      case DENTIST -> UserRole.DENTIST;
+      case DOCTOR -> Role.DOCTOR;
+      case NURSE -> Role.NURSE;
+      case MIDWIFE -> Role.MIDWIFE;
+      case CARE_ADMIN -> Role.CARE_ADMIN;
+      case DENTIST -> Role.DENTIST;
     };
   }
 
-  public static RoleTypeDTO toRoleType(UserRole userRole) {
-    return switch (userRole) {
+  public static RoleTypeDTO toRoleType(Role role) {
+    return switch (role) {
       case DOCTOR -> DOCTOR;
       case NURSE -> NURSE;
       case MIDWIFE -> MIDWIFE;

@@ -5,6 +5,45 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static se.inera.intyg.certificateservice.domain.patient.model.PersonIdType.COORDINATION_NUMBER;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.BETA_REGIONEN;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.alfaRegionenBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.BETA_REGIONEN_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.BETA_REGIONEN_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_VARDCENTRAL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.alfaMedicincentrumBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ADDRESS;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_CITY;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_EMAIL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_PHONENUMBER;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ZIP_CODE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ALVE_REACT_ALFREDSSON;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.athenaReactAnderssonBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.DECEASED_TRUE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.PROTECTED_PERSON_TRUE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.TEST_INDICATED_TRUE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_HUDMOTTAGNINGEN;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.alfaAllergimottagningenBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_ADDRESS;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_CITY;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_EMAIL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_PHONENUMBER;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_ZIP_CODE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.INACTIVE_TRUE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -20,224 +59,38 @@ import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-import se.inera.intyg.certificateservice.domain.patient.model.Deceased;
-import se.inera.intyg.certificateservice.domain.patient.model.Name;
-import se.inera.intyg.certificateservice.domain.patient.model.Patient;
-import se.inera.intyg.certificateservice.domain.patient.model.PersonAddress;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
-import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
-import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
-import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
-import se.inera.intyg.certificateservice.domain.user.model.User;
+import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateTest {
 
-  private static final String DEFAULT_VALUE = "defaultCertificateId";
-  private static final String EXPECTED_VALUE = "defaultId";
-  private static final LocalDateTime CREATED = LocalDateTime.now(ZoneId.systemDefault());
   private Certificate certificate;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
 
   @BeforeEach
   void setUp() {
     certificate = Certificate.builder()
-        .id(new CertificateId(DEFAULT_VALUE))
+        .id(new CertificateId("defaultCertificateId"))
         .certificateModel(mock(CertificateModel.class))
-        .created(CREATED)
+        .created(LocalDateTime.now(ZoneId.systemDefault()))
         .certificateMetaData(
             CertificateMetaData.builder()
-                .patient(
-                    Patient.builder()
-                        .id(
-                            PersonId.builder()
-                                .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
-                                .id(EXPECTED_VALUE)
-                                .build()
-                        )
-                        .name(
-                            Name.builder()
-                                .firstName(DEFAULT_VALUE)
-                                .middleName(DEFAULT_VALUE)
-                                .lastName(DEFAULT_VALUE)
-                                .build()
-                        )
-                        .deceased(new Deceased(false))
-                        .address(
-                            PersonAddress.builder()
-                                .city(DEFAULT_VALUE)
-                                .street(DEFAULT_VALUE)
-                                .zipCode(DEFAULT_VALUE)
-                                .build()
-                        )
-                        .protectedPerson(new ProtectedPerson(false))
-                        .testIndicated(new TestIndicated(false))
-                        .build()
-                )
-                .issuer(
-                    Staff.builder()
-                        .hsaId(new HsaId(DEFAULT_VALUE))
-                        .build()
-                )
-                .issuingUnit(
-                    SubUnit.builder()
-                        .hsaId(new HsaId(DEFAULT_VALUE))
-                        .name(new UnitName(DEFAULT_VALUE))
-                        .address(
-                            UnitAddress.builder()
-                                .address(DEFAULT_VALUE)
-                                .zipCode(DEFAULT_VALUE)
-                                .city(DEFAULT_VALUE)
-                                .build()
-                        )
-                        .contactInfo(
-                            UnitContactInfo.builder()
-                                .phoneNumber(DEFAULT_VALUE)
-                                .email(DEFAULT_VALUE)
-                                .build()
-                        )
-                        .inactive(new Inactive(false))
-                        .build()
-                )
-                .careUnit(
-                    CareUnit.builder()
-                        .hsaId(new HsaId(DEFAULT_VALUE))
-                        .name(new UnitName(DEFAULT_VALUE))
-                        .address(
-                            UnitAddress.builder()
-                                .address(DEFAULT_VALUE)
-                                .zipCode(DEFAULT_VALUE)
-                                .city(DEFAULT_VALUE)
-                                .build()
-                        )
-                        .contactInfo(
-                            UnitContactInfo.builder()
-                                .phoneNumber(DEFAULT_VALUE)
-                                .email(DEFAULT_VALUE)
-                                .build()
-                        )
-                        .inactive(new Inactive(false))
-                        .build()
-                )
-                .careProvider(
-                    CareProvider.builder()
-                        .hsaId(new HsaId(DEFAULT_VALUE))
-                        .name(new UnitName(DEFAULT_VALUE))
-                        .address(
-                            UnitAddress.builder()
-                                .address(DEFAULT_VALUE)
-                                .zipCode(DEFAULT_VALUE)
-                                .city(DEFAULT_VALUE)
-                                .build()
-                        )
-                        .contactInfo(
-                            UnitContactInfo.builder()
-                                .phoneNumber(DEFAULT_VALUE)
-                                .email(DEFAULT_VALUE)
-                                .build()
-                        )
-                        .build()
-                ).build()
+                .patient(ATHENA_REACT_ANDERSSON)
+                .issuer(TestDataStaff.AJLA_DOKTOR)
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                .careUnit(ALFA_MEDICINCENTRUM)
+                .careProvider(ALFA_REGIONEN)
+                .build()
         )
         .build();
 
     actionEvaluationBuilder = ActionEvaluation.builder()
-        .patient(
-            Patient.builder()
-                .id(
-                    PersonId.builder()
-                        .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
-                        .id(EXPECTED_VALUE)
-                        .build()
-                )
-                .name(
-                    Name.builder()
-                        .firstName(DEFAULT_VALUE)
-                        .middleName(DEFAULT_VALUE)
-                        .lastName(DEFAULT_VALUE)
-                        .build()
-                )
-                .deceased(new Deceased(false))
-                .address(
-                    PersonAddress.builder()
-                        .city(DEFAULT_VALUE)
-                        .street(DEFAULT_VALUE)
-                        .zipCode(DEFAULT_VALUE)
-                        .build()
-                )
-                .protectedPerson(new ProtectedPerson(false))
-                .testIndicated(new TestIndicated(false))
-                .build()
-        )
-        .user(
-            User.builder()
-                .hsaId(new HsaId(DEFAULT_VALUE))
-                .name(
-                    Name.builder()
-                        .lastName(DEFAULT_VALUE)
-                        .build()
-                )
-                .build()
-        )
-        .subUnit(
-            SubUnit.builder()
-                .hsaId(new HsaId(DEFAULT_VALUE))
-                .name(new UnitName(DEFAULT_VALUE))
-                .address(
-                    UnitAddress.builder()
-                        .address(DEFAULT_VALUE)
-                        .zipCode(DEFAULT_VALUE)
-                        .city(DEFAULT_VALUE)
-                        .build()
-                )
-                .contactInfo(
-                    UnitContactInfo.builder()
-                        .phoneNumber(DEFAULT_VALUE)
-                        .email(DEFAULT_VALUE)
-                        .build()
-                )
-                .inactive(new Inactive(false))
-                .build()
-        )
-        .careUnit(
-            CareUnit.builder()
-                .hsaId(new HsaId(DEFAULT_VALUE))
-                .name(new UnitName(DEFAULT_VALUE))
-                .address(
-                    UnitAddress.builder()
-                        .address(DEFAULT_VALUE)
-                        .zipCode(DEFAULT_VALUE)
-                        .city(DEFAULT_VALUE)
-                        .build()
-                )
-                .contactInfo(
-                    UnitContactInfo.builder()
-                        .phoneNumber(DEFAULT_VALUE)
-                        .email(DEFAULT_VALUE)
-                        .build()
-                )
-                .inactive(new Inactive(false))
-                .build()
-        )
-        .careProvider(
-            CareProvider.builder()
-                .hsaId(new HsaId(DEFAULT_VALUE))
-                .name(new UnitName(DEFAULT_VALUE))
-                .address(
-                    UnitAddress.builder()
-                        .address(DEFAULT_VALUE)
-                        .zipCode(DEFAULT_VALUE)
-                        .city(DEFAULT_VALUE)
-                        .build()
-                )
-                .contactInfo(
-                    UnitContactInfo.builder()
-                        .phoneNumber(DEFAULT_VALUE)
-                        .email(DEFAULT_VALUE)
-                        .build()
-                )
-                .build()
-        );
+        .patient(ATHENA_REACT_ANDERSSON)
+        .user(AJLA_DOKTOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+        .careUnit(ALFA_MEDICINCENTRUM)
+        .careProvider(ALFA_REGIONEN);
   }
 
   @Nested
@@ -246,125 +99,184 @@ class CertificateTest {
     @Nested
     class UpdatePatient {
 
-      @BeforeEach
-      void setUp() {
-        actionEvaluationBuilder
-            .patient(
-                Patient.builder()
-                    .id(
-                        PersonId.builder()
-                            .id(EXPECTED_VALUE)
-                            .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
-                            .build()
-                    )
-                    .name(
-                        Name.builder()
-                            .firstName(EXPECTED_VALUE)
-                            .middleName(EXPECTED_VALUE)
-                            .lastName(EXPECTED_VALUE)
-                            .build()
-                    )
-                    .deceased(new Deceased(true))
-                    .address(
-                        PersonAddress.builder()
-                            .city(EXPECTED_VALUE)
-                            .street(EXPECTED_VALUE)
-                            .zipCode(EXPECTED_VALUE)
-                            .build()
-                    )
-                    .protectedPerson(new ProtectedPerson(true))
-                    .testIndicated(new TestIndicated(true))
-                    .build()
-            )
-            .build();
-      }
-
       @Test
       void shallUpdatePatientIdType() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .patient(
+                    athenaReactAnderssonBuilder()
+                        .id(
+                            PersonId.builder()
+                                .id(ATHENA_REACT_ANDERSSON_ID)
+                                .type(COORDINATION_NUMBER)
+                                .build()
+                        )
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(PersonIdType.PERSONAL_IDENTITY_NUMBER,
-            certificate.certificateMetaData().getPatient().getId().getType());
+        assertEquals(COORDINATION_NUMBER,
+            certificate.certificateMetaData().getPatient().getId().getType()
+        );
       }
 
       @Test
       void shallUpdatePatientIdId() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .patient(
+                    athenaReactAnderssonBuilder()
+                        .id(ALVE_REACT_ALFREDSSON.getId())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALVE_REACT_ALFREDSSON.getId().getId(),
             certificate.certificateMetaData().getPatient().getId().getId());
       }
 
       @Test
       void shallUpdatePatientFirstName() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .patient(
+                    athenaReactAnderssonBuilder()
+                        .name(ALVE_REACT_ALFREDSSON.getName())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
-            certificate.certificateMetaData().getPatient().getName().getFirstName());
+        assertEquals(ALVE_REACT_ALFREDSSON.getName().getFirstName(),
+            certificate.certificateMetaData().getPatient().getName().getFirstName()
+        );
       }
 
       @Test
       void shallUpdatePatientMiddleName() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .patient(
+                    athenaReactAnderssonBuilder()
+                        .name(ALVE_REACT_ALFREDSSON.getName())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALVE_REACT_ALFREDSSON.getName().getMiddleName(),
             certificate.certificateMetaData().getPatient().getName().getMiddleName());
       }
 
       @Test
       void shallUpdatePatientLastName() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .patient(
+                    athenaReactAnderssonBuilder()
+                        .name(ALVE_REACT_ALFREDSSON.getName())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALVE_REACT_ALFREDSSON.getName().getLastName(),
             certificate.certificateMetaData().getPatient().getName().getLastName());
       }
 
       @Test
       void shallUpdatePatientAddressCity() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .patient(
+                    athenaReactAnderssonBuilder()
+                        .address(ALVE_REACT_ALFREDSSON.getAddress())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALVE_REACT_ALFREDSSON.getAddress().getCity(),
             certificate.certificateMetaData().getPatient().getAddress().getCity());
       }
 
       @Test
       void shallUpdatePatientAddressZipCode() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .patient(
+                    athenaReactAnderssonBuilder()
+                        .address(ALVE_REACT_ALFREDSSON.getAddress())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALVE_REACT_ALFREDSSON.getAddress().getZipCode(),
             certificate.certificateMetaData().getPatient().getAddress().getZipCode());
       }
 
       @Test
       void shallUpdatePatientAddressStreet() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .patient(
+                    athenaReactAnderssonBuilder()
+                        .address(ALVE_REACT_ALFREDSSON.getAddress())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALVE_REACT_ALFREDSSON.getAddress().getStreet(),
             certificate.certificateMetaData().getPatient().getAddress().getStreet());
       }
 
       @Test
       void shallUpdatePatientProtectedPerson() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .patient(
+                    athenaReactAnderssonBuilder()
+                        .protectedPerson(PROTECTED_PERSON_TRUE)
+                        .build()
+                )
+                .build()
+        );
 
-        assertTrue(certificate.certificateMetaData().getPatient().getProtectedPerson()
-            .value());
+        assertTrue(certificate.certificateMetaData().getPatient().getProtectedPerson().value());
       }
 
       @Test
       void shallUpdatePatientTestIndicated() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .patient(
+                    athenaReactAnderssonBuilder()
+                        .testIndicated(TEST_INDICATED_TRUE)
+                        .build()
+                )
+                .build()
+        );
 
-        assertTrue(certificate.certificateMetaData().getPatient().getTestIndicated()
-            .value());
+        assertTrue(certificate.certificateMetaData().getPatient().getTestIndicated().value());
       }
 
       @Test
       void shallUpdatePatientDeceased() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .patient(
+                    athenaReactAnderssonBuilder()
+                        .deceased(DECEASED_TRUE)
+                        .build()
+                )
+                .build()
+        );
 
-        assertTrue(certificate.certificateMetaData().getPatient().getDeceased()
-            .value());
+        assertTrue(certificate.certificateMetaData().getPatient().getDeceased().value());
       }
 
       @Test
@@ -384,42 +296,49 @@ class CertificateTest {
     @Nested
     class UpdateIssuer {
 
-      @BeforeEach
-      void setUp() {
-        actionEvaluationBuilder
-            .user(
-                User.builder()
-                    .hsaId(new HsaId(EXPECTED_VALUE))
-                    .name(
-                        Name.builder()
-                            .lastName(EXPECTED_VALUE)
-                            .build()
-                    )
-                    .blocked(new Blocked(true))
-                    .build()
-            )
-            .build();
-      }
-
       @Test
       void shallUpdateIssuerHsaId() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .user(
+                    ajlaDoctorBuilder()
+                        .hsaId(TestDataStaff.ALVA_VARDADMINISTRATOR.getHsaId())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALVA_VARDADMINISTRATOR_HSA_ID,
             certificate.certificateMetaData().getIssuer().getHsaId().id());
       }
 
       @Test
       void shallUpdateIssuerName() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .user(
+                    ajlaDoctorBuilder()
+                        .name(TestDataStaff.ALVA_VARDADMINISTRATOR.getName())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALVA_VARDADMINISTRATOR_NAME,
             certificate.certificateMetaData().getIssuer().getName().getLastName());
       }
 
       @Test
       void shallUpdateIssuerBlocked() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .user(
+                    ajlaDoctorBuilder()
+                        .blocked(BLOCKED_TRUE)
+                        .build()
+                )
+                .build()
+        );
 
         assertTrue(certificate.certificateMetaData().getIssuer().getBlocked().value());
       }
@@ -428,92 +347,129 @@ class CertificateTest {
     @Nested
     class UpdateCareUnit {
 
-      @BeforeEach
-      void setUp() {
-        actionEvaluationBuilder
-            .careUnit(
-                CareUnit.builder()
-                    .hsaId(new HsaId(EXPECTED_VALUE))
-                    .name(new UnitName(EXPECTED_VALUE))
-                    .address(
-                        UnitAddress.builder()
-                            .address(EXPECTED_VALUE)
-                            .zipCode(EXPECTED_VALUE)
-                            .city(EXPECTED_VALUE)
-                            .build()
-                    )
-                    .contactInfo(
-                        UnitContactInfo.builder()
-                            .email(EXPECTED_VALUE)
-                            .phoneNumber(EXPECTED_VALUE)
-                            .build()
-                    )
-                    .inactive(new Inactive(true))
-                    .build()
-            )
-            .build();
-      }
-
       @Test
       void shallUpdateCareUnitHsaId() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .careUnit(
+                    alfaMedicincentrumBuilder()
+                        .hsaId(ALFA_VARDCENTRAL.getHsaId())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALFA_VARDCENTRAL_ID,
             certificate.certificateMetaData().getCareUnit().getHsaId().id());
       }
 
       @Test
       void shallUpdateCareUnitName() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .careUnit(
+                    alfaMedicincentrumBuilder()
+                        .name(ALFA_VARDCENTRAL.getName())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALFA_VARDCENTRAL_NAME,
             certificate.certificateMetaData().getCareUnit().getName().name());
       }
 
       @Test
       void shallUpdateCareUnitAddress() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .careUnit(
+                    alfaMedicincentrumBuilder()
+                        .address(ALFA_VARDCENTRAL.getAddress())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALFA_VARDCENTRAL_ADDRESS,
             certificate.certificateMetaData().getCareUnit().getAddress().getAddress());
       }
 
       @Test
       void shallUpdateCareUnitCity() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .careUnit(
+                    alfaMedicincentrumBuilder()
+                        .address(ALFA_VARDCENTRAL.getAddress())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALFA_VARDCENTRAL_CITY,
             certificate.certificateMetaData().getCareUnit().getAddress().getCity());
       }
 
       @Test
       void shallUpdateCareUnitZipCode() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .careUnit(
+                    alfaMedicincentrumBuilder()
+                        .address(ALFA_VARDCENTRAL.getAddress())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALFA_VARDCENTRAL_ZIP_CODE,
             certificate.certificateMetaData().getCareUnit().getAddress().getZipCode());
       }
 
       @Test
       void shallUpdateCareUnitEmail() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .careUnit(
+                    alfaMedicincentrumBuilder()
+                        .contactInfo(ALFA_VARDCENTRAL.getContactInfo())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALFA_VARDCENTRAL_EMAIL,
             certificate.certificateMetaData().getCareUnit().getContactInfo().getEmail());
       }
 
       @Test
       void shallUpdateCareUnitPhoneNumber() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .careUnit(
+                    alfaMedicincentrumBuilder()
+                        .contactInfo(ALFA_VARDCENTRAL.getContactInfo())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
-            certificate.certificateMetaData().getCareUnit().getContactInfo()
-                .getPhoneNumber());
+        assertEquals(ALFA_VARDCENTRAL_PHONENUMBER,
+            certificate.certificateMetaData().getCareUnit().getContactInfo().getPhoneNumber());
       }
 
       @Test
       void shallUpdateCareUnitInactive() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .careUnit(
+                    alfaMedicincentrumBuilder()
+                        .inactive(INACTIVE_TRUE)
+                        .build()
+                )
+                .build()
+        );
 
         assertTrue(certificate.certificateMetaData().getCareUnit().getInactive().value());
       }
@@ -522,269 +478,258 @@ class CertificateTest {
     @Nested
     class UpdateCareProvider {
 
-      @BeforeEach
-      void setUp() {
-        actionEvaluationBuilder
-            .careProvider(
-                CareProvider.builder()
-                    .hsaId(new HsaId(EXPECTED_VALUE))
-                    .name(new UnitName(EXPECTED_VALUE))
-                    .address(
-                        UnitAddress.builder()
-                            .address(EXPECTED_VALUE)
-                            .zipCode(EXPECTED_VALUE)
-                            .city(EXPECTED_VALUE)
-                            .build()
-                    )
-                    .contactInfo(
-                        UnitContactInfo.builder()
-                            .email(EXPECTED_VALUE)
-                            .phoneNumber(EXPECTED_VALUE)
-                            .build()
-                    )
-                    .build()
-            )
-            .build();
-      }
-
       @Test
-      void shallUpdateCareUnitHsaId() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+      void shallUpdateCareProviderHsaId() {
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .careProvider(
+                    alfaRegionenBuilder()
+                        .hsaId(BETA_REGIONEN.getHsaId())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(BETA_REGIONEN_ID,
             certificate.certificateMetaData().getCareProvider().getHsaId().id());
       }
 
       @Test
-      void shallUpdateCareUnitName() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+      void shallUpdateCareProviderName() {
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .careProvider(
+                    alfaRegionenBuilder()
+                        .name(BETA_REGIONEN.getName())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(BETA_REGIONEN_NAME,
             certificate.certificateMetaData().getCareProvider().getName().name());
-      }
-
-      @Test
-      void shallUpdateCareUnitAddress() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
-
-        assertEquals(EXPECTED_VALUE,
-            certificate.certificateMetaData().getCareProvider().getAddress().getAddress());
-      }
-
-      @Test
-      void shallUpdateCareUnitCity() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
-
-        assertEquals(EXPECTED_VALUE,
-            certificate.certificateMetaData().getCareProvider().getAddress().getCity());
-      }
-
-      @Test
-      void shallUpdateCareUnitZipCode() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
-
-        assertEquals(EXPECTED_VALUE,
-            certificate.certificateMetaData().getCareProvider().getAddress().getZipCode());
-      }
-
-      @Test
-      void shallUpdateCareUnitEmail() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
-
-        assertEquals(EXPECTED_VALUE,
-            certificate.certificateMetaData().getCareProvider().getContactInfo().getEmail());
-      }
-
-      @Test
-      void shallUpdateCareUnitPhoneNumber() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
-
-        assertEquals(EXPECTED_VALUE,
-            certificate.certificateMetaData().getCareProvider().getContactInfo()
-                .getPhoneNumber());
       }
     }
 
     @Nested
     class UpdateIssuingUnit {
 
-      @BeforeEach
-      void setUp() {
-        actionEvaluationBuilder
-            .subUnit(
-                SubUnit.builder()
-                    .hsaId(new HsaId(EXPECTED_VALUE))
-                    .name(new UnitName(EXPECTED_VALUE))
-                    .address(
-                        UnitAddress.builder()
-                            .address(EXPECTED_VALUE)
-                            .zipCode(EXPECTED_VALUE)
-                            .city(EXPECTED_VALUE)
-                            .build()
-                    )
-                    .contactInfo(
-                        UnitContactInfo.builder()
-                            .email(EXPECTED_VALUE)
-                            .phoneNumber(EXPECTED_VALUE)
-                            .build()
-                    )
-                    .inactive(new Inactive(true))
-                    .build()
-            )
-            .build();
-      }
-
       @Test
-      void shallUpdateCareUnitHsaId() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+      void shallUpdateIssuingUnitHsaId() {
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .subUnit(
+                    alfaAllergimottagningenBuilder()
+                        .hsaId(ALFA_HUDMOTTAGNINGEN.getHsaId())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALFA_HUDMOTTAGNINGEN_ID,
             certificate.certificateMetaData().getIssuingUnit().getHsaId().id());
       }
 
       @Test
-      void shallUpdateCareUnitName() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+      void shallUpdateIssuingUnitName() {
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .subUnit(
+                    alfaAllergimottagningenBuilder()
+                        .name(ALFA_HUDMOTTAGNINGEN.getName())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALFA_HUDMOTTAGNINGEN_NAME,
             certificate.certificateMetaData().getIssuingUnit().getName().name());
       }
 
       @Test
-      void shallUpdateCareUnitAddress() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+      void shallUpdateIssuingUnitAddress() {
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .subUnit(
+                    alfaAllergimottagningenBuilder()
+                        .address(ALFA_HUDMOTTAGNINGEN.getAddress())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALFA_HUDMOTTAGNINGEN_ADDRESS,
             certificate.certificateMetaData().getIssuingUnit().getAddress().getAddress());
       }
 
       @Test
-      void shallUpdateCareUnitCity() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+      void shallUpdateIssuingUnitCity() {
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .subUnit(
+                    alfaAllergimottagningenBuilder()
+                        .address(ALFA_HUDMOTTAGNINGEN.getAddress())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALFA_HUDMOTTAGNINGEN_CITY,
             certificate.certificateMetaData().getIssuingUnit().getAddress().getCity());
       }
 
       @Test
-      void shallUpdateCareUnitZipCode() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+      void shallUpdateIssuingUnitZipCode() {
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .subUnit(
+                    alfaAllergimottagningenBuilder()
+                        .address(ALFA_HUDMOTTAGNINGEN.getAddress())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALFA_HUDMOTTAGNINGEN_ZIP_CODE,
             certificate.certificateMetaData().getIssuingUnit().getAddress().getZipCode());
       }
 
       @Test
-      void shallUpdateCareUnitEmail() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+      void shallUpdateIssuingUnitEmail() {
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .subUnit(
+                    alfaAllergimottagningenBuilder()
+                        .contactInfo(ALFA_HUDMOTTAGNINGEN.getContactInfo())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
+        assertEquals(ALFA_HUDMOTTAGNINGEN_EMAIL,
             certificate.certificateMetaData().getIssuingUnit().getContactInfo().getEmail());
       }
 
       @Test
-      void shallUpdateCareUnitPhoneNumber() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+      void shallUpdateIssuingUnitPhoneNumber() {
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .subUnit(
+                    alfaAllergimottagningenBuilder()
+                        .contactInfo(ALFA_HUDMOTTAGNINGEN.getContactInfo())
+                        .build()
+                )
+                .build()
+        );
 
-        assertEquals(EXPECTED_VALUE,
-            certificate.certificateMetaData().getIssuingUnit().getContactInfo()
-                .getPhoneNumber());
+        assertEquals(ALFA_HUDMOTTAGNINGEN_PHONENUMBER,
+            certificate.certificateMetaData().getIssuingUnit().getContactInfo().getPhoneNumber());
       }
 
       @Test
-      void shallUpdateCareUnitInactive() {
-        certificate.updateMetadata(actionEvaluationBuilder.build());
+      void shallUpdateIssuingUnitInactive() {
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .subUnit(
+                    alfaAllergimottagningenBuilder()
+                        .inactive(INACTIVE_TRUE)
+                        .build()
+                )
+                .build()
+        );
 
         assertTrue(certificate.certificateMetaData().getIssuingUnit().getInactive().value());
       }
     }
-  }
 
-  @Nested
-  class TestActions {
+    @Nested
+    class TestActions {
 
-    @Test
-    void shallReturnActionIfEvaluateTrue() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
-      final var certificateAction = mock(CertificateAction.class);
-      final var expectedActions = List.of(certificateAction);
+      @Test
+      void shallReturnActionIfEvaluateTrue() {
+        final var actionEvaluation = ActionEvaluation.builder().build();
+        final var certificateAction = mock(CertificateAction.class);
+        final var expectedActions = List.of(certificateAction);
 
-      doReturn(expectedActions).when(certificate.certificateModel()).actions();
+        doReturn(expectedActions).when(certificate.certificateModel()).actions();
 
-      doReturn(true).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
+        doReturn(true).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
 
-      final var actualActions = certificate.actions(actionEvaluation);
+        final var actualActions = certificate.actions(actionEvaluation);
 
-      assertEquals(expectedActions, actualActions);
+        assertEquals(expectedActions, actualActions);
+      }
+
+      @Test
+      void shallNotReturnActionIfEvaluateFalse() {
+        final var actionEvaluation = ActionEvaluation.builder().build();
+        final var certificateAction = mock(CertificateAction.class);
+        final var expectedActions = Collections.emptyList();
+
+        doReturn(List.of(certificateAction)).when(certificate.certificateModel()).actions();
+
+        doReturn(false).when(certificateAction)
+            .evaluate(Optional.of(certificate), actionEvaluation);
+
+        final var actualActions = certificate.actions(actionEvaluation);
+
+        assertEquals(expectedActions, actualActions);
+      }
     }
 
-    @Test
-    void shallNotReturnActionIfEvaluateFalse() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
-      final var certificateAction = mock(CertificateAction.class);
-      final var expectedActions = Collections.emptyList();
+    @Nested
+    class TestAllowTo {
 
-      doReturn(List.of(certificateAction)).when(certificate.certificateModel()).actions();
+      @Test
+      void shallReturnTrueIfExistsAndEvaluateTrue() {
+        final var actionEvaluation = ActionEvaluation.builder().build();
+        final var certificateAction = mock(CertificateAction.class);
+        final var actions = List.of(certificateAction);
 
-      doReturn(false).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
+        doReturn(actions).when(certificate.certificateModel()).actions();
 
-      final var actualActions = certificate.actions(actionEvaluation);
+        doReturn(CertificateActionType.READ).when(certificateAction).getType();
+        doReturn(true).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
 
-      assertEquals(expectedActions, actualActions);
-    }
-  }
+        assertTrue(
+            certificate.allowTo(CertificateActionType.READ, actionEvaluation),
+            "Expected allowTo to return 'true'"
+        );
+      }
 
-  @Nested
-  class TestAllowTo {
+      @Test
+      void shallReturnFalseIfExistsAndEvaluateFalse() {
+        final var actionEvaluation = ActionEvaluation.builder().build();
+        final var certificateAction = mock(CertificateAction.class);
+        final var actions = List.of(certificateAction);
 
-    @Test
-    void shallReturnTrueIfExistsAndEvaluateTrue() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
-      final var certificateAction = mock(CertificateAction.class);
-      final var actions = List.of(certificateAction);
+        doReturn(actions).when(certificate.certificateModel()).actions();
 
-      doReturn(actions).when(certificate.certificateModel()).actions();
+        doReturn(CertificateActionType.READ).when(certificateAction).getType();
+        doReturn(false).when(certificateAction)
+            .evaluate(Optional.of(certificate), actionEvaluation);
 
-      doReturn(CertificateActionType.READ).when(certificateAction).getType();
-      doReturn(true).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
+        assertFalse(
+            certificate.allowTo(CertificateActionType.READ, actionEvaluation),
+            "Expected allowTo to return 'false'"
+        );
+      }
 
-      assertTrue(
-          certificate.allowTo(CertificateActionType.READ, actionEvaluation),
-          "Expected allowTo to return 'true'"
-      );
-    }
+      @Test
+      void shallReturnFalseIfNotExists() {
+        final var actionEvaluation = ActionEvaluation.builder().build();
+        final var certificateAction = mock(CertificateAction.class);
+        final var actions = List.of(certificateAction);
 
-    @Test
-    void shallReturnFalseIfExistsAndEvaluateFalse() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
-      final var certificateAction = mock(CertificateAction.class);
-      final var actions = List.of(certificateAction);
+        doReturn(actions).when(certificate.certificateModel()).actions();
 
-      doReturn(actions).when(certificate.certificateModel()).actions();
+        doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
 
-      doReturn(CertificateActionType.READ).when(certificateAction).getType();
-      doReturn(false).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
-
-      assertFalse(
-          certificate.allowTo(CertificateActionType.READ, actionEvaluation),
-          "Expected allowTo to return 'false'"
-      );
-    }
-
-    @Test
-    void shallReturnFalseIfNotExists() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
-      final var certificateAction = mock(CertificateAction.class);
-      final var actions = List.of(certificateAction);
-
-      doReturn(actions).when(certificate.certificateModel()).actions();
-
-      doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
-
-      assertFalse(
-          certificate.allowTo(CertificateActionType.READ, actionEvaluation),
-          "Expected allowTo to return 'false'"
-      );
+        assertFalse(
+            certificate.allowTo(CertificateActionType.READ, actionEvaluation),
+            "Expected allowTo to return 'false'"
+        );
+      }
     }
   }
 }

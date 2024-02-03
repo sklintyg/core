@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.domain.user.model;
 
-public enum UserRole {
+public enum Role {
   DOCTOR,
   NURSE,
   MIDWIFE,

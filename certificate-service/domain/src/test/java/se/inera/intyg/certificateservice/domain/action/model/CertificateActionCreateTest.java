@@ -6,7 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ALVE_REACT_ALFREDSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR_IS_BLOCKED;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -69,7 +70,11 @@ class CertificateActionCreateTest {
   void shallReturnFalseIfUserIsBlocked() {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(ATHENA_REACT_ANDERSSON)
-        .user(AJLA_DOKTOR_IS_BLOCKED)
+        .user(
+            ajlaDoctorBuilder()
+                .blocked(BLOCKED_TRUE)
+                .build()
+        )
         .build();
 
     final var actualResult = certificateActionCreate.evaluate(actionEvaluation);

@@ -4,8 +4,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Inactive;
 
 public class TestDataSubUnitConstants {
 
-  private static final Inactive INACTIVE_TRUE = new Inactive(true);
-  private static final Inactive INACTIVE_FALSE = new Inactive(false);
+  public static final Inactive INACTIVE_TRUE = new Inactive(true);
+  public static final Inactive INACTIVE_FALSE = new Inactive(false);
 
   public static final String ALFA_ALLERGIMOTTAGNINGEN_ID = "TSTNMT2321000156-ALAM";
   public static final String ALFA_ALLERGIMOTTAGNINGEN_NAME = "Alfa Allergimottagningen";

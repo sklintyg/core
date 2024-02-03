@@ -8,7 +8,5 @@ import lombok.Value;
 public class CareProvider {
 
   HsaId hsaId;
-  UnitAddress address;
   UnitName name;
-  UnitContactInfo contactInfo;
 }
