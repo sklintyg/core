@@ -92,19 +92,6 @@ public class ActionEvaluationFactory {
             CareProvider.builder()
                 .hsaId(new HsaId(careProvider.getId()))
                 .name(new UnitName(careProvider.getName()))
-                .address(
-                    UnitAddress.builder()
-                        .address(careProvider.getAddress())
-                        .zipCode(careProvider.getZipCode())
-                        .city(careProvider.getCity())
-                        .build()
-                )
-                .contactInfo(
-                    UnitContactInfo.builder()
-                        .phoneNumber(careProvider.getPhoneNumber())
-                        .email(careProvider.getEmail())
-                        .build()
-                )
                 .build()
         );
     if (patient != null) {
