@@ -6,6 +6,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 
 import java.util.List;
@@ -57,7 +58,7 @@ class CreateCertificateServiceTest {
       )
       .user(AJLA_DOCTOR_DTO)
       .careProvider(UnitDTO.builder().build())
-      .careUnit(UnitDTO.builder().build())
+      .careUnit(ALFA_MEDICINCENTRUM_DTO)
       .unit(UnitDTO.builder().build())
       .patient(ATHENA_REACT_ANDERSSON_DTO)
       .build();

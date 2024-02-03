@@ -56,9 +56,7 @@ class CertificateActionCreateTest {
   @Test
   void shallReturnTrueIfPatientIsNotDeceased() {
     final var actionEvaluation = ActionEvaluation.builder()
-        .patient(
-            ATHENA_REACT_ANDERSSON
-        )
+        .patient(ATHENA_REACT_ANDERSSON)
         .user(AJLA_DOKTOR)
         .build();
 

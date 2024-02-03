@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 
 import java.util.List;
@@ -30,7 +31,6 @@ import se.inera.intyg.certificateservice.domain.certificate.service.GetCertifica
 class GetCertificateServiceTest {
 
   private static final UnitDTO UNIT_DTO = UnitDTO.builder().build();
-  private static final UnitDTO CARE_UNIT_DTO = UnitDTO.builder().build();
   private static final UnitDTO CARE_PROVIDER_DTO = UnitDTO.builder().build();
   private static final String CERTIFICATE_ID = "certificateId";
   @Mock
@@ -71,7 +71,7 @@ class GetCertificateServiceTest {
     doReturn(actionEvaluation).when(actionEvaluationFactory).create(
         AJLA_DOCTOR_DTO,
         UNIT_DTO,
-        CARE_UNIT_DTO,
+        ALFA_MEDICINCENTRUM_DTO,
         CARE_PROVIDER_DTO
     );
 
@@ -93,7 +93,7 @@ class GetCertificateServiceTest {
         GetCertificateRequest.builder()
             .user(AJLA_DOCTOR_DTO)
             .unit(UNIT_DTO)
-            .careUnit(CARE_UNIT_DTO)
+            .careUnit(ALFA_MEDICINCENTRUM_DTO)
             .careProvider(CARE_PROVIDER_DTO)
             .build(),
         CERTIFICATE_ID

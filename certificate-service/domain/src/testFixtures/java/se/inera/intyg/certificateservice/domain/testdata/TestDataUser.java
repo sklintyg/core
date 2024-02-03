@@ -11,7 +11,7 @@ import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
 public class TestDataUser {
-
+  
   public static final User AJLA_DOKTOR = User.builder()
       .hsaId(new HsaId(AJLA_DOCTOR_HSA_ID))
       .name(

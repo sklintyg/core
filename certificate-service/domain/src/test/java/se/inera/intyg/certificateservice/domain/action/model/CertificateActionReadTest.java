@@ -3,12 +3,14 @@ package se.inera.intyg.certificateservice.domain.action.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
-import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
@@ -21,9 +23,7 @@ import se.inera.intyg.certificateservice.domain.user.model.User;
 class CertificateActionReadTest {
 
   private static final String SUB_UNIT_HSA_ID = "subUnitHsaId";
-  private static final String CARE_UNIT_HSA_ID = "careUnitId";
   private static final String OTHER_SUB_UNIT = "otherSubUnit";
-  private static final String OTHER_CARE_UNIT = "otherCareUnit";
   private CertificateActionRead certificateActionRead;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
   private CertificateBuilder certificateBuilder;
@@ -43,11 +43,7 @@ class CertificateActionReadTest {
                         .hsaId(new HsaId(SUB_UNIT_HSA_ID))
                         .build()
                 )
-                .careUnit(
-                    CareUnit.builder()
-                        .hsaId(new HsaId(CARE_UNIT_HSA_ID))
-                        .build()
-                )
+                .careUnit(ALFA_MEDICINCENTRUM)
                 .careProvider(
                     CareProvider.builder()
                         .hsaId(new HsaId("careProviderId"))
@@ -68,9 +64,7 @@ class CertificateActionReadTest {
         .careProvider(
             CareProvider.builder().build()
         )
-        .careUnit(
-            CareUnit.builder().build()
-        );
+        .careUnit(ALFA_MEDICINCENTRUM);
   }
 
   @Test
@@ -112,7 +106,7 @@ class CertificateActionReadTest {
     final var actionEvaluation = actionEvaluationBuilder
         .subUnit(
             SubUnit.builder()
-                .hsaId(new HsaId(CARE_UNIT_HSA_ID))
+                .hsaId(new HsaId(ALFA_MEDICINCENTRUM_ID))
                 .build()
         )
         .build();
@@ -148,7 +142,7 @@ class CertificateActionReadTest {
     final var actionEvaluation = actionEvaluationBuilder
         .subUnit(
             SubUnit.builder()
-                .hsaId(new HsaId(OTHER_CARE_UNIT))
+                .hsaId(new HsaId(ALFA_VARDCENTRAL_ID))
                 .build()
         )
         .build();

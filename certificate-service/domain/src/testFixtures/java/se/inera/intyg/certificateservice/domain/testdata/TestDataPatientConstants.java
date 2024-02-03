@@ -33,6 +33,11 @@ public class TestDataPatientConstants {
   public static final String ALVE_REACT_ALFREDSSON_FIRST_NAME = "Alve";
   public static final String ALVE_REACT_ALFREDSSON_MIDDLE_NAME = "React";
   public static final String ALVE_REACT_ALFREDSSON_LAST_NAME = "Alfredsson";
+  public static final String ALVE_REACT_ALFREDSSON_FULL_NAME = "%s %s %s".formatted(
+      ALVE_REACT_ALFREDSSON_FIRST_NAME,
+      ALVE_REACT_ALFREDSSON_MIDDLE_NAME,
+      ALVE_REACT_ALFREDSSON_LAST_NAME
+  );
   public static final String ALVE_REACT_ALFREDSSON_STREET = "Reactgatan 456";
   public static final String ALVE_REACT_ALFREDSSON_CITY = "Karlstad";
   public static final String ALVE_REACT_ALFREDSSON_ZIP_CODE = "65340";

@@ -3,6 +3,8 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaMedicincentrumBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 
@@ -30,11 +32,7 @@ class GetCertificateRequestValidatorTest {
                 .inactive(false)
                 .build()
         )
-        .careUnit(
-            UnitDTO.builder()
-                .id(ID)
-                .build()
-        )
+        .careUnit(ALFA_MEDICINCENTRUM_DTO)
         .careProvider(
             UnitDTO.builder()
                 .id(ID)
@@ -208,7 +206,9 @@ class GetCertificateRequestValidatorTest {
       void shallThrowIfIdIsNull() {
         final var request = requestBuilder
             .careUnit(
-                UnitDTO.builder().build()
+                alfaMedicincentrumBuilder()
+                    .id(null)
+                    .build()
             )
             .build();
 
@@ -223,7 +223,7 @@ class GetCertificateRequestValidatorTest {
       void shallThrowIfIdIsEmpty() {
         final var request = requestBuilder
             .careUnit(
-                UnitDTO.builder()
+                alfaMedicincentrumBuilder()
                     .id("")
                     .build()
             )

@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.athenaReactAnderssonDtoBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaMedicincentrumBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 
@@ -35,11 +37,7 @@ class CertificateTypeInfoValidatorTest {
                 .inactive(false)
                 .build()
         )
-        .careUnit(
-            UnitDTO.builder()
-                .id(ID)
-                .build()
-        )
+        .careUnit(ALFA_MEDICINCENTRUM_DTO)
         .careProvider(
             UnitDTO.builder()
                 .id(ID)
@@ -220,7 +218,9 @@ class CertificateTypeInfoValidatorTest {
       void shallThrowIfIdIsNull() {
         final var request = requestBuilder
             .careUnit(
-                UnitDTO.builder().build()
+                alfaMedicincentrumBuilder()
+                    .id(null)
+                    .build()
             )
             .build();
 
@@ -235,7 +235,7 @@ class CertificateTypeInfoValidatorTest {
       void shallThrowIfIdIsEmpty() {
         final var request = requestBuilder
             .careUnit(
-                UnitDTO.builder()
+                alfaMedicincentrumBuilder()
                     .id("")
                     .build()
             )
