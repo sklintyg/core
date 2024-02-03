@@ -17,32 +17,24 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
-import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateRequestValidator;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 
 class CertificateTypeInfoValidatorTest {
 
-  private CreateCertificateRequestValidator certificateTypeInfoValidator;
-  private CreateCertificateRequest.CreateCertificateRequestBuilder requestBuilder;
+  private CertificateTypeInfoValidator certificateTypeInfoValidator;
+  private GetCertificateTypeInfoRequest.GetCertificateTypeInfoRequestBuilder requestBuilder;
 
   @BeforeEach
   void setUp() {
-    certificateTypeInfoValidator = new CreateCertificateRequestValidator();
-    requestBuilder = CreateCertificateRequest.builder()
+    certificateTypeInfoValidator = new CertificateTypeInfoValidator();
+    requestBuilder = GetCertificateTypeInfoRequest.builder()
         .user(AJLA_DOCTOR_DTO)
         .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
         .careUnit(ALFA_MEDICINCENTRUM_DTO)
         .careProvider(ALFA_REGIONEN_DTO)
-        .patient(ATHENA_REACT_ANDERSSON_DTO)
-        .certificateModelId(
-            CertificateModelIdDTO.builder()
-                .type("type")
-                .version("version")
-                .build()
-        );
+        .patient(ATHENA_REACT_ANDERSSON_DTO);
   }
 
   @Nested

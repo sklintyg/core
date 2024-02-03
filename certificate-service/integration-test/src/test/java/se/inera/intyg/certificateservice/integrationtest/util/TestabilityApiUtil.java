@@ -15,41 +15,21 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoResponse;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetLatestCertificateTypeVersionResponse;
+import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityCertificateRequest;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityResetCertificateRequest;
 
 @Slf4j
 @RequiredArgsConstructor
-public class ApiUtil {
+public class TestabilityApiUtil {
 
   private final TestRestTemplate restTemplate;
   private final int port;
-
   private List<String> certificateIds = new ArrayList<>();
 
-  public ResponseEntity<GetCertificateTypeInfoResponse> certificateTypeInfo(
-      GetCertificateTypeInfoRequest request) {
-    final var requestUrl = "http://localhost:%s/api/certificatetypeinfo".formatted(port);
-    final var headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-    return this.restTemplate.exchange(
-        requestUrl,
-        HttpMethod.POST,
-        new HttpEntity<>(request, headers),
-        new ParameterizedTypeReference<>() {
-        },
-        Collections.emptyMap()
-    );
-  }
-
-  public ResponseEntity<CreateCertificateResponse> createCertificate(
-      CreateCertificateRequest request) {
-    final var requestUrl = "http://localhost:%s/api/certificate".formatted(port);
+  public ResponseEntity<CreateCertificateResponse> addCertificate(
+      TestabilityCertificateRequest request) {
+    final var requestUrl = "http://localhost:%s/testability/certificate".formatted(port);
     final var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     final var response = this.restTemplate.<CreateCertificateResponse>exchange(
@@ -68,43 +48,11 @@ public class ApiUtil {
     return response;
   }
 
-  public ResponseEntity<GetLatestCertificateTypeVersionResponse> findLatestCertificateTypeVersion(
-      String type) {
-    final var requestUrl = "http://localhost:%s/api/certificatetypeinfo/%s/exists"
-        .formatted(port, type);
-    final var headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-    return this.restTemplate.exchange(
-        requestUrl,
-        HttpMethod.GET,
-        new HttpEntity<>(headers),
-        new ParameterizedTypeReference<>() {
-        },
-        Collections.emptyMap()
-    );
-  }
-
-  public ResponseEntity<CertificateExistsResponse> certificateExists(
-      String certificateId) {
-    final var requestUrl = "http://localhost:%s/api/certificate/%s/exists"
-        .formatted(port, certificateId);
-    final var headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-    return this.restTemplate.exchange(
-        requestUrl,
-        HttpMethod.GET,
-        new HttpEntity<>(headers),
-        new ParameterizedTypeReference<>() {
-        },
-        Collections.emptyMap()
-    );
-  }
-
   public void reset() {
     if (certificateIds.isEmpty()) {
       return;
     }
-
+    
     final var requestUrl = "http://localhost:%s/testability/certificate".formatted(port);
     final var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);

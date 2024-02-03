@@ -16,11 +16,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
+import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateModelRepository;
 
 @Repository
 @RequiredArgsConstructor
 @Slf4j
-public class InMemoryCertificateModelRepository implements CertificateModelRepository {
+public class InMemoryCertificateModelRepository implements CertificateModelRepository,
+    TestabilityCertificateModelRepository {
 
   private final List<CertificateModelFactory> certificateModelFactories;
   private Map<CertificateModelId, CertificateModel> certificateModelMap;
@@ -67,6 +69,11 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
     }
 
     return certificateModel;
+  }
+
+  @Override
+  public List<CertificateModel> all() {
+    return getCertificateModelMap().values().stream().toList();
   }
 
   private Map<CertificateModelId, CertificateModel> getCertificateModelMap() {

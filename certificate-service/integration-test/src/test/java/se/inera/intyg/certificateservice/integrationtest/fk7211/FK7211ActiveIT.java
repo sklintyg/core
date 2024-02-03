@@ -1,8 +1,10 @@
 package se.inera.intyg.certificateservice.integrationtest.fk7211;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.FK7211;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.VERSION;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.WRONG_VERSION;
@@ -10,11 +12,15 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCertificateTypeInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateModelIdUtil.certificateModelId;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateTypeInfoUtil.certificateTypeInfo;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.exists;
 import static se.inera.intyg.certificateservice.integrationtest.util.ResourceLinkUtil.resourceLink;
+import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -30,9 +36,10 @@ import org.springframework.test.context.DynamicPropertySource;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
+import se.inera.intyg.certificateservice.integrationtest.util.TestabilityApiUtil;
 
 
-@ActiveProfiles("integration-test")
+@ActiveProfiles({"integration-test", TESTABILITY_PROFILE})
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class FK7211ActiveIT {
 
@@ -45,8 +52,8 @@ class FK7211ActiveIT {
   }
 
   private final TestRestTemplate restTemplate;
-
   private ApiUtil api;
+  private TestabilityApiUtil testabilityApi;
 
   @Autowired
   public FK7211ActiveIT(TestRestTemplate restTemplate) {
@@ -56,6 +63,13 @@ class FK7211ActiveIT {
   @BeforeEach
   void setUp() {
     this.api = new ApiUtil(restTemplate, port);
+    this.testabilityApi = new TestabilityApiUtil(restTemplate, port);
+  }
+
+  @AfterEach
+  void tearDown() {
+    testabilityApi.reset();
+    api.reset();
   }
 
   @Nested
@@ -216,6 +230,39 @@ class FK7211ActiveIT {
       );
 
       assertEquals(400, response.getStatusCode().value());
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7211 - Finns intyget i tjänsten")
+  class ExistsCertificate {
+
+    @Test
+    @DisplayName("FK7211 - Om intyget finns så returneras true")
+    void shallReturnTrueIfCertificateExists() {
+      final var testCertificate = testabilityApi.addCertificate(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.certificateExists(
+          certificate(testCertificate.getBody()).getMetadata().getId()
+      );
+
+      assertTrue(
+          exists(response.getBody()),
+          "Should return true when certificate exists!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget inte finns lagrat så returneras false")
+    void shallReturnFalseIfCertificateDoesnt() {
+      final var response = api.certificateExists("certificate-not-exists");
+
+      assertFalse(
+          exists(response.getBody()),
+          "Should return false when certificate doesnt exists!"
+      );
     }
   }
 }
