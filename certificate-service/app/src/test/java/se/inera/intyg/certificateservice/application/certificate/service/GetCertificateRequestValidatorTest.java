@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaAllergimottagningenDtoBuilder;
@@ -15,11 +16,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
-import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 
 class GetCertificateRequestValidatorTest {
 
-  private static final String ID = "id";
   private static final String CERTIFICATE_ID = "certificateId";
   private GetCertificateRequestValidator getCertificateRequestValidator;
   private GetCertificateRequest.GetCertificateRequestBuilder requestBuilder;
@@ -29,12 +28,7 @@ class GetCertificateRequestValidatorTest {
     getCertificateRequestValidator = new GetCertificateRequestValidator();
     requestBuilder = GetCertificateRequest.builder()
         .user(AJLA_DOCTOR_DTO)
-        .unit(
-            UnitDTO.builder()
-                .id(ID)
-                .inactive(false)
-                .build()
-        )
+        .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
         .careUnit(ALFA_MEDICINCENTRUM_DTO)
         .careProvider(ALFA_REGIONEN_DTO);
   }
