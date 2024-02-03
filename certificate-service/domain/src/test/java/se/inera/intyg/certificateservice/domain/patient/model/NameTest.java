@@ -1,6 +1,9 @@
 package se.inera.intyg.certificateservice.domain.patient.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_MIDDLE_NAME;
 
 import org.junit.jupiter.api.Test;
 
@@ -8,12 +11,16 @@ class NameTest {
 
   @Test
   void shallCombineFirstMiddleLastToFullName() {
-    final var expectedFullName = "Tolvan TP Tolvansson";
+    final var expectedFullName = "%s %s %s".formatted(
+        ATHENA_REACT_ANDERSSON_FIRST_NAME,
+        ATHENA_REACT_ANDERSSON_MIDDLE_NAME,
+        ATHENA_REACT_ANDERSSON_LAST_NAME
+    );
 
     final var name = Name.builder()
-        .firstName("Tolvan")
-        .middleName("TP")
-        .lastName("Tolvansson")
+        .firstName(ATHENA_REACT_ANDERSSON_FIRST_NAME)
+        .middleName(ATHENA_REACT_ANDERSSON_MIDDLE_NAME)
+        .lastName(ATHENA_REACT_ANDERSSON_LAST_NAME)
         .build();
 
     assertEquals(expectedFullName, name.fullName());
@@ -21,11 +28,14 @@ class NameTest {
 
   @Test
   void shallCombineFirstLastToFullName() {
-    final var expectedFullName = "Tolvan Tolvansson";
+    final var expectedFullName = "%s %s".formatted(
+        ATHENA_REACT_ANDERSSON_FIRST_NAME,
+        ATHENA_REACT_ANDERSSON_LAST_NAME
+    );
 
     final var name = Name.builder()
-        .firstName("Tolvan")
-        .lastName("Tolvansson")
+        .firstName(ATHENA_REACT_ANDERSSON_FIRST_NAME)
+        .lastName(ATHENA_REACT_ANDERSSON_LAST_NAME)
         .build();
 
     assertEquals(expectedFullName, name.fullName());
@@ -33,11 +43,14 @@ class NameTest {
 
   @Test
   void shallCombineMiddleLastToFullName() {
-    final var expectedFullName = "TP Tolvansson";
+    final var expectedFullName = "%s %s".formatted(
+        ATHENA_REACT_ANDERSSON_MIDDLE_NAME,
+        ATHENA_REACT_ANDERSSON_LAST_NAME
+    );
 
     final var name = Name.builder()
-        .middleName("TP")
-        .lastName("Tolvansson")
+        .middleName(ATHENA_REACT_ANDERSSON_MIDDLE_NAME)
+        .lastName(ATHENA_REACT_ANDERSSON_LAST_NAME)
         .build();
 
     assertEquals(expectedFullName, name.fullName());
@@ -45,11 +58,14 @@ class NameTest {
 
   @Test
   void shallCombineFirstMiddleToFullName() {
-    final var expectedFullName = "Tolvan TP";
+    final var expectedFullName = "%s %s".formatted(
+        ATHENA_REACT_ANDERSSON_FIRST_NAME,
+        ATHENA_REACT_ANDERSSON_MIDDLE_NAME
+    );
 
     final var name = Name.builder()
-        .firstName("Tolvan")
-        .middleName("TP")
+        .firstName(ATHENA_REACT_ANDERSSON_FIRST_NAME)
+        .middleName(ATHENA_REACT_ANDERSSON_MIDDLE_NAME)
         .build();
 
     assertEquals(expectedFullName, name.fullName());
@@ -57,10 +73,12 @@ class NameTest {
 
   @Test
   void shallCombineLastToFullName() {
-    final var expectedFullName = "Tolvansson";
+    final var expectedFullName = "%s".formatted(
+        ATHENA_REACT_ANDERSSON_LAST_NAME
+    );
 
     final var name = Name.builder()
-        .lastName("Tolvansson")
+        .lastName(ATHENA_REACT_ANDERSSON_LAST_NAME)
         .build();
 
     assertEquals(expectedFullName, name.fullName());
@@ -68,10 +86,12 @@ class NameTest {
 
   @Test
   void shallCombineFirstToFullName() {
-    final var expectedFullName = "Tolvan";
+    final var expectedFullName = "%s".formatted(
+        ATHENA_REACT_ANDERSSON_FIRST_NAME
+    );
 
     final var name = Name.builder()
-        .firstName("Tolvan")
+        .firstName(ATHENA_REACT_ANDERSSON_FIRST_NAME)
         .build();
 
     assertEquals(expectedFullName, name.fullName());
@@ -79,10 +99,12 @@ class NameTest {
 
   @Test
   void shallCombineMiddleToFullName() {
-    final var expectedFullName = "TP";
+    final var expectedFullName = "%s".formatted(
+        ATHENA_REACT_ANDERSSON_MIDDLE_NAME
+    );
 
     final var name = Name.builder()
-        .middleName("TP")
+        .middleName(ATHENA_REACT_ANDERSSON_MIDDLE_NAME)
         .build();
 
     assertEquals(expectedFullName, name.fullName());

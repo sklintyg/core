@@ -3,13 +3,13 @@ package se.inera.intyg.certificateservice.domain.action.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ALVE_REACT_ALFREDSSON;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Blocked;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
-import se.inera.intyg.certificateservice.domain.patient.model.Deceased;
-import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
 class CertificateActionCreateTest {
@@ -45,9 +45,7 @@ class CertificateActionCreateTest {
   void shallReturnFalseIfPatientIsDeceased() {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(
-            Patient.builder()
-                .deceased(new Deceased(true))
-                .build()
+            ALVE_REACT_ALFREDSSON
         )
         .user(
             User.builder()
@@ -65,9 +63,7 @@ class CertificateActionCreateTest {
   void shallReturnTrueIfPatientIsNotDeceased() {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(
-            Patient.builder()
-                .deceased(new Deceased(false))
-                .build()
+            ATHENA_REACT_ANDERSSON
         )
         .user(
             User.builder()
@@ -85,9 +81,7 @@ class CertificateActionCreateTest {
   void shallReturnFalseIfUserIsBlocked() {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(
-            Patient.builder()
-                .deceased(new Deceased(false))
-                .build()
+            ATHENA_REACT_ANDERSSON
         )
         .user(
             User.builder()
@@ -105,9 +99,7 @@ class CertificateActionCreateTest {
   void shallReturnTrueIfUserIsNotBlocked() {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(
-            Patient.builder()
-                .deceased(new Deceased(false))
-                .build()
+            ATHENA_REACT_ANDERSSON
         )
         .user(
             User.builder()
@@ -140,9 +132,7 @@ class CertificateActionCreateTest {
   void shallReturnFalseIfUserMissing() {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(
-            Patient.builder()
-                .deceased(new Deceased(false))
-                .build()
+            ATHENA_REACT_ANDERSSON
         )
         .build();
 

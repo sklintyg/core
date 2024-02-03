@@ -1,15 +1,15 @@
-package se.inera.intyg.certificateservice.common;
+package se.inera.intyg.certificateservice.application.common;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.athenaReactAnderssonDtoBuilder;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
-import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
@@ -41,23 +41,6 @@ class ActionEvaluationFactoryTest {
   private static final String PHONE_NUMBER = "phoneNumber";
   private static final String ZIP_CODE = "zipCode";
 
-  private final PatientDTO.PatientDTOBuilder patientBuilder = PatientDTO.builder()
-      .deceased(false)
-      .protectedPerson(false)
-      .testIndicated(false)
-      .id(
-          PersonIdDTO.builder()
-              .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-              .id("defaultId")
-              .build()
-      )
-      .city("defaultCity")
-      .street("defaultStreet")
-      .zipCode("defaultZipCode")
-      .firstName("defaultFirstName")
-      .lastName("defaultLastName")
-      .middleName("defaultMiddleName")
-      .fullName("defaultFullName");
   private final UnitDTO.UnitDTOBuilder subUnitBuilder = UnitDTO.builder()
       .id("defaultId")
       .name("defaultName")
@@ -102,7 +85,7 @@ class ActionEvaluationFactoryTest {
       @Test
       void shallIncludeCareUnitId() {
         final var unit = careUnitBuilder.id(HSA_ID).build();
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, subUnitBuilder.build(), unit, careProviderBuilder.build());
 
         assertEquals(actionEvaluation.getCareUnit().getHsaId().id(), unit.getId());
@@ -112,7 +95,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeCareUnitName() {
         final var unit = careUnitBuilder.name(UNIT_NAME).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, subUnitBuilder.build(), unit, careProviderBuilder.build());
 
         assertEquals(actionEvaluation.getCareUnit().getName().name(), unit.getName());
@@ -122,7 +105,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeCareUnitAddress() {
         final var unit = careUnitBuilder.address(UNIT_ADDRESS).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, subUnitBuilder.build(), unit, careProviderBuilder.build());
 
         assertEquals(actionEvaluation.getCareUnit().getAddress().getAddress(), unit.getAddress());
@@ -132,7 +115,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeCareUnitZipCode() {
         final var unit = careUnitBuilder.zipCode(ZIP_CODE).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, subUnitBuilder.build(), unit, careProviderBuilder.build());
 
         assertEquals(actionEvaluation.getCareUnit().getAddress().getZipCode(), unit.getZipCode());
@@ -142,7 +125,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeCareUnitCity() {
         final var unit = careUnitBuilder.city("UNIT_CITY").build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, subUnitBuilder.build(), unit, careProviderBuilder.build());
 
         assertEquals(actionEvaluation.getCareUnit().getAddress().getCity(), unit.getCity());
@@ -152,7 +135,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeCareUnitPhoneNumber() {
         final var unit = careUnitBuilder.phoneNumber(PHONE_NUMBER).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, subUnitBuilder.build(), unit, careProviderBuilder.build());
 
         assertEquals(actionEvaluation.getCareUnit().getContactInfo().getPhoneNumber(),
@@ -163,7 +146,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeCareUnitEmail() {
         final var unit = careUnitBuilder.email(EMAIL).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER,
             subUnitBuilder.build(), unit, careProviderBuilder.build());
 
@@ -177,7 +160,7 @@ class ActionEvaluationFactoryTest {
       @Test
       void shallIncludeSubUnitId() {
         final var unit = subUnitBuilder.id(HSA_ID).build();
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
         assertEquals(actionEvaluation.getSubUnit().getHsaId().id(), unit.getId());
@@ -187,7 +170,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeSubunitName() {
         final var unit = subUnitBuilder.name(UNIT_NAME).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
         assertEquals(actionEvaluation.getSubUnit().getName().name(), unit.getName());
@@ -197,7 +180,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeSubunitAddress() {
         final var unit = subUnitBuilder.address(UNIT_ADDRESS).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
         assertEquals(actionEvaluation.getSubUnit().getAddress().getAddress(), unit.getAddress());
@@ -207,7 +190,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeSubunitZipCode() {
         final var unit = subUnitBuilder.zipCode(ZIP_CODE).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
         assertEquals(actionEvaluation.getSubUnit().getAddress().getZipCode(), unit.getZipCode());
@@ -217,7 +200,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeSubunitCity() {
         final var unit = subUnitBuilder.city(UNIT_CITY).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
         assertEquals(actionEvaluation.getSubUnit().getAddress().getCity(), unit.getCity());
@@ -227,7 +210,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeSubunitPhoneNumber() {
         final var unit = subUnitBuilder.phoneNumber(PHONE_NUMBER).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
         assertEquals(actionEvaluation.getSubUnit().getContactInfo().getPhoneNumber(),
@@ -238,7 +221,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeSubunitEmail() {
         final var unit = subUnitBuilder.email(EMAIL).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
         assertEquals(actionEvaluation.getSubUnit().getContactInfo().getEmail(), unit.getEmail());
@@ -248,7 +231,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeSubunitInactiveTrue() {
         final var unit = subUnitBuilder.inactive(true).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
         assertEquals(actionEvaluation.getSubUnit().getInactive().value(), unit.getInactive());
@@ -258,7 +241,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeSubunitInactiveFalse() {
         final var unit = subUnitBuilder.inactive(false).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, unit, careUnitBuilder.build(), careProviderBuilder.build());
 
         assertEquals(actionEvaluation.getSubUnit().getInactive().value(), unit.getInactive());
@@ -271,7 +254,7 @@ class ActionEvaluationFactoryTest {
       @Test
       void shallIncludeCareProviderId() {
         final var unit = careProviderBuilder.id(HSA_ID).build();
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, subUnitBuilder.build(), careUnitBuilder.build(), unit);
 
         assertEquals(actionEvaluation.getCareProvider().getHsaId().id(), unit.getId());
@@ -281,7 +264,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeCareProviderName() {
         final var unit = careProviderBuilder.name(UNIT_NAME).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, subUnitBuilder.build(), careUnitBuilder.build(), unit);
 
         assertEquals(actionEvaluation.getCareProvider().getName().name(), unit.getName());
@@ -291,7 +274,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeCareProviderAddress() {
         final var unit = careProviderBuilder.address(UNIT_ADDRESS).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, subUnitBuilder.build(), careUnitBuilder.build(), unit);
 
         assertEquals(actionEvaluation.getCareProvider().getAddress().getAddress(),
@@ -302,7 +285,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeCareProviderZipCode() {
         final var unit = careProviderBuilder.zipCode(ZIP_CODE).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, subUnitBuilder.build(), careUnitBuilder.build(), unit);
 
         assertEquals(actionEvaluation.getCareProvider().getAddress().getZipCode(),
@@ -313,7 +296,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeCareProviderCity() {
         final var unit = careProviderBuilder.city(UNIT_CITY).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, subUnitBuilder.build(), careUnitBuilder.build(), unit);
 
         assertEquals(actionEvaluation.getCareProvider().getAddress().getCity(), unit.getCity());
@@ -323,7 +306,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeCareProviderPhoneNumber() {
         final var unit = careProviderBuilder.phoneNumber(PHONE_NUMBER).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, subUnitBuilder.build(), careUnitBuilder.build(), unit);
 
         assertEquals(actionEvaluation.getCareProvider().getContactInfo().getPhoneNumber(),
@@ -334,7 +317,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeCareProviderEmail() {
         final var unit = careProviderBuilder.email(EMAIL).build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(),
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             DEFAULT_USER, subUnitBuilder.build(), careUnitBuilder.build(), unit);
 
         assertEquals(actionEvaluation.getCareProvider().getContactInfo().getEmail(),
@@ -362,7 +345,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludePatientDeceasedTrue() {
-        final var patient = patientBuilder
+        final var patient = athenaReactAnderssonDtoBuilder()
             .deceased(true)
             .build();
 
@@ -375,7 +358,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludePatientDeceasedFalse() {
-        final var patient = patientBuilder
+        final var patient = athenaReactAnderssonDtoBuilder()
             .deceased(false)
             .build();
 
@@ -388,7 +371,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludePatientIdTypePersonalIdentityNumber() {
-        final var patient = patientBuilder
+        final var patient = athenaReactAnderssonDtoBuilder()
             .id(
                 PersonIdDTO.builder()
                     .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
@@ -406,7 +389,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludePatientIdTypeCoordinationNumber() {
-        final var patient = patientBuilder
+        final var patient = athenaReactAnderssonDtoBuilder()
             .id(
                 PersonIdDTO.builder()
                     .type(PersonIdTypeDTO.COORDINATION_NUMBER)
@@ -424,7 +407,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludePatientIdId() {
-        final var patient = patientBuilder
+        final var patient = athenaReactAnderssonDtoBuilder()
             .id(
                 PersonIdDTO.builder()
                     .type(PersonIdTypeDTO.COORDINATION_NUMBER)
@@ -441,7 +424,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludePatientFirstName() {
-        final var patient = patientBuilder
+        final var patient = athenaReactAnderssonDtoBuilder()
             .firstName(FIRST_NAME)
             .build();
 
@@ -454,7 +437,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludePatientMiddleName() {
-        final var patient = patientBuilder
+        final var patient = athenaReactAnderssonDtoBuilder()
             .middleName(MIDDLE_NAME)
             .build();
 
@@ -467,7 +450,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludePatientLastName() {
-        final var patient = patientBuilder
+        final var patient = athenaReactAnderssonDtoBuilder()
             .lastName(LAST_NAME)
             .build();
 
@@ -479,7 +462,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludePatientCity() {
-        final var patient = patientBuilder
+        final var patient = athenaReactAnderssonDtoBuilder()
             .city(CITY)
             .build();
 
@@ -491,7 +474,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludePatientStreet() {
-        final var patient = patientBuilder
+        final var patient = athenaReactAnderssonDtoBuilder()
             .street(STREET)
             .build();
 
@@ -503,7 +486,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludePatientZipCode() {
-        final var patient = patientBuilder
+        final var patient = athenaReactAnderssonDtoBuilder()
             .zipCode(ZIP_CODE)
             .build();
 
@@ -515,7 +498,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludePatientTestIndicatedTrue() {
-        final var patient = patientBuilder
+        final var patient = athenaReactAnderssonDtoBuilder()
             .testIndicated(true)
             .build();
 
@@ -528,7 +511,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludePatientTestIndicatedFalse() {
-        final var patient = patientBuilder
+        final var patient = athenaReactAnderssonDtoBuilder()
             .testIndicated(false)
             .build();
 
@@ -541,7 +524,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludePatientProtectedPersonTrue() {
-        final var patient = patientBuilder
+        final var patient = athenaReactAnderssonDtoBuilder()
             .protectedPerson(true)
             .build();
 
@@ -554,7 +537,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludePatientProtectedPersonFalse() {
-        final var patient = patientBuilder
+        final var patient = athenaReactAnderssonDtoBuilder()
             .protectedPerson(false)
             .build();
 
@@ -577,7 +560,8 @@ class ActionEvaluationFactoryTest {
             .blocked(true)
             .build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(), user,
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
+            user,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
         assertEquals(user.getId(), actionEvaluation.getUser().getHsaId().id());
@@ -590,7 +574,8 @@ class ActionEvaluationFactoryTest {
             .blocked(false)
             .build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(), user,
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
+            user,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
         assertFalse(actionEvaluation.getUser().getBlocked().value(),
@@ -604,7 +589,8 @@ class ActionEvaluationFactoryTest {
             .blocked(true)
             .build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(), user,
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
+            user,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
         assertTrue(actionEvaluation.getUser().getBlocked().value(),
@@ -618,7 +604,8 @@ class ActionEvaluationFactoryTest {
             .blocked(true)
             .build();
 
-        final var actionEvaluation = actionEvaluationFactory.create(patientBuilder.build(), user,
+        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
+            user,
             subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
 
         assertEquals(user.getName(), actionEvaluation.getUser().getName().fullName());

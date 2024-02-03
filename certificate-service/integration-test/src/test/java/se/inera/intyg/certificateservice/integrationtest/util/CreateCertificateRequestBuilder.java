@@ -1,16 +1,13 @@
 package se.inera.intyg.certificateservice.integrationtest.util;
 
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.athenaReactAnderssonDtoBuilder;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.ALFA_HUDMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.DOKTOR_AJLA;
-import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.TOLVAN_TOLVANSSON;
 
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
-import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
-import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
-import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.RoleTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
@@ -67,16 +64,8 @@ public class CreateCertificateRequestBuilder {
                 .build()
         )
         .patient(
-            PatientDTO.builder()
-                .id(
-                    PersonIdDTO.builder()
-                        .id(TOLVAN_TOLVANSSON)
-                        .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-                        .build()
-                )
-                .protectedPerson(false)
+            athenaReactAnderssonDtoBuilder()
                 .deceased(deceased)
-                .testIndicated(false)
                 .build()
         )
         .careProvider(

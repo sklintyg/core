@@ -3,6 +3,8 @@ package se.inera.intyg.certificateservice.application.certificatetypeinfo.servic
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.athenaReactAnderssonDtoBuilder;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -10,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
-import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.RoleTypeDTO;
@@ -19,10 +20,7 @@ import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
 class CertificateTypeInfoValidatorTest {
 
-
   private static final String ID = "id";
-  private static final String TYPE = "type";
-  private static final String VERSION = "version";
   private CreateCertificateRequestValidator certificateTypeInfoValidator;
   private CreateCertificateRequest.CreateCertificateRequestBuilder requestBuilder;
 
@@ -53,19 +51,7 @@ class CertificateTypeInfoValidatorTest {
                 .id(ID)
                 .build()
         )
-        .patient(
-            PatientDTO.builder()
-                .id(
-                    PersonIdDTO.builder()
-                        .id(ID)
-                        .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-                        .build()
-                )
-                .testIndicated(false)
-                .deceased(false)
-                .protectedPerson(false)
-                .build()
-        )
+        .patient(ATHENA_REACT_ANDERSSON_DTO)
         .certificateModelId(
             CertificateModelIdDTO.builder()
                 .type("type")
@@ -337,7 +323,8 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfIdIsNull() {
       final var request = requestBuilder
           .patient(
-              PatientDTO.builder()
+              athenaReactAnderssonDtoBuilder()
+                  .id(null)
                   .build()
           )
           .build();
@@ -353,7 +340,7 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfPatientIdIsNull() {
       final var request = requestBuilder
           .patient(
-              PatientDTO.builder()
+              athenaReactAnderssonDtoBuilder()
                   .id(
                       PersonIdDTO.builder()
                           .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
@@ -374,7 +361,7 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfPatientIdIsEmpty() {
       final var request = requestBuilder
           .patient(
-              PatientDTO.builder()
+              athenaReactAnderssonDtoBuilder()
                   .id(
                       PersonIdDTO.builder()
                           .id("")
@@ -396,10 +383,10 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfPatientIdTypeIsNull() {
       final var request = requestBuilder
           .patient(
-              PatientDTO.builder()
+              athenaReactAnderssonDtoBuilder()
                   .id(
                       PersonIdDTO.builder()
-                          .id(ID)
+                          .id(ATHENA_REACT_ANDERSSON_DTO.getId().getId())
                           .build()
                   )
                   .build()
@@ -418,15 +405,8 @@ class CertificateTypeInfoValidatorTest {
   void shallThrowIfTestIndicatedIsNull() {
     final var request = requestBuilder
         .patient(
-            PatientDTO.builder()
-                .id(
-                    PersonIdDTO.builder()
-                        .id(ID)
-                        .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-                        .build()
-                )
-                .protectedPerson(false)
-                .deceased(false)
+            athenaReactAnderssonDtoBuilder()
+                .testIndicated(null)
                 .build()
         )
         .build();
@@ -442,15 +422,8 @@ class CertificateTypeInfoValidatorTest {
   void shallThrowIfDeceasedIsNull() {
     final var request = requestBuilder
         .patient(
-            PatientDTO.builder()
-                .id(
-                    PersonIdDTO.builder()
-                        .id(ID)
-                        .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-                        .build()
-                )
-                .protectedPerson(false)
-                .testIndicated(false)
+            athenaReactAnderssonDtoBuilder()
+                .deceased(null)
                 .build()
         )
         .build();
@@ -466,15 +439,8 @@ class CertificateTypeInfoValidatorTest {
   void shallThrowIfProtectedPersonIsNull() {
     final var request = requestBuilder
         .patient(
-            PatientDTO.builder()
-                .id(
-                    PersonIdDTO.builder()
-                        .id(ID)
-                        .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-                        .build()
-                )
-                .testIndicated(false)
-                .deceased(false)
+            athenaReactAnderssonDtoBuilder()
+                .protectedPerson(null)
                 .build()
         )
         .build();

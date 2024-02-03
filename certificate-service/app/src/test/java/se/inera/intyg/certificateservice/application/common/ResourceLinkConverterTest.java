@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.common;
+package se.inera.intyg.certificateservice.application.common;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionCreate;

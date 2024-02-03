@@ -111,20 +111,24 @@ public class CertificateConverter {
   }
 
   private PatientDTO toPatientDTO(Certificate certificate) {
+    final var patient = certificate.certificateMetaData().getPatient();
     return PatientDTO.builder()
         .personId(
             PersonIdDTO.builder()
-                .id(certificate.certificateMetaData().getPatient().getId().getId())
-                .type(certificate.certificateMetaData().getPatient().getId().getType().name())
+                .id(patient.getId().getId())
+                .type(patient.getId().getType().name())
                 .build()
         )
-        .firstName(certificate.certificateMetaData().getPatient().getName().getFirstName())
-        .middleName(certificate.certificateMetaData().getPatient().getName().getMiddleName())
-        .lastName(certificate.certificateMetaData().getPatient().getName().getLastName())
-        .fullName(certificate.certificateMetaData().getPatient().getName().fullName())
-        .street(certificate.certificateMetaData().getPatient().getAddress().getStreet())
-        .city(certificate.certificateMetaData().getPatient().getAddress().getCity())
-        .zipCode(certificate.certificateMetaData().getPatient().getAddress().getZipCode())
+        .firstName(patient.getName().getFirstName())
+        .middleName(patient.getName().getMiddleName())
+        .lastName(patient.getName().getLastName())
+        .fullName(patient.getName().fullName())
+        .street(patient.getAddress().getStreet())
+        .city(patient.getAddress().getCity())
+        .zipCode(patient.getAddress().getZipCode())
+        .testIndicated(patient.getTestIndicated().value())
+        .deceased(patient.getDeceased().value())
+        .protectedPerson(patient.getProtectedPerson().value())
         .build();
   }
 }
