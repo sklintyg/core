@@ -9,7 +9,7 @@ public enum RoleTypeDTO {
   CARE_ADMIN,
   DENTIST;
 
-  public Role toUserRole() {
+  public Role toRole() {
     return switch (this) {
       case DOCTOR -> Role.DOCTOR;
       case NURSE -> Role.NURSE;
