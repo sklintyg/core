@@ -1,17 +1,21 @@
 package se.inera.intyg.certificateservice.application.common.dto;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Value;
+import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO.PersonIdDTOBuilder;
 
-@Data
+@JsonDeserialize(builder = PersonIdDTOBuilder.class)
+@Value
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class PersonIdDTO {
 
-  private PersonIdTypeDTO type;
-  private String id;
+  PersonIdTypeDTO type;
+  String id;
 
+  @JsonPOJOBuilder(withPrefix = "")
+  public static class PersonIdDTOBuilder {
+
+  }
 }
