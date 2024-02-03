@@ -8,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +22,6 @@ import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.Get
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoResponse;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
-import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -48,7 +48,7 @@ class CertificateTypeInfoServiceTest {
   CertificateTypeInfoService certificateTypeInfoService;
 
   final GetCertificateTypeInfoRequest certificateTypeInfoRequest = GetCertificateTypeInfoRequest.builder()
-      .user(UserDTO.builder().build())
+      .user(AJLA_DOCTOR_DTO)
       .careProvider(UnitDTO.builder().build())
       .careUnit(UnitDTO.builder().build())
       .unit(UnitDTO.builder().build())

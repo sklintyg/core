@@ -1,15 +1,13 @@
 package se.inera.intyg.certificateservice.integrationtest.util;
 
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.athenaReactAnderssonDtoBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.ALFA_HUDMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.ALFA_REGIONEN;
-import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.DOKTOR_AJLA;
 
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
-import se.inera.intyg.certificateservice.application.common.dto.RoleTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
-import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
 public class CertificateTypeInfoRequestBuilder {
 
@@ -37,10 +35,8 @@ public class CertificateTypeInfoRequestBuilder {
   public GetCertificateTypeInfoRequest build() {
     return GetCertificateTypeInfoRequest.builder()
         .user(
-            UserDTO.builder()
-                .id(DOKTOR_AJLA)
+            ajlaDoktorDtoBuilder()
                 .blocked(blocked)
-                .role(RoleTypeDTO.DOCTOR)
                 .build()
         )
         .patient(

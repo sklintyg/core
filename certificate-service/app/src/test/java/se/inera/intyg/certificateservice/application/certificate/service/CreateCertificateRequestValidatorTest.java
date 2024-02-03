@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.athenaReactAnderssonDtoBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -12,9 +14,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.CreateCerti
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
-import se.inera.intyg.certificateservice.application.common.dto.RoleTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
-import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
 class CreateCertificateRequestValidatorTest {
 
@@ -28,13 +28,7 @@ class CreateCertificateRequestValidatorTest {
   void setUp() {
     createCertificateRequestValidator = new CreateCertificateRequestValidator();
     requestBuilder = CreateCertificateRequest.builder()
-        .user(
-            UserDTO.builder()
-                .id(ID)
-                .role(RoleTypeDTO.DOCTOR)
-                .blocked(false)
-                .build()
-        )
+        .user(AJLA_DOCTOR_DTO)
         .unit(
             UnitDTO.builder()
                 .id(ID)
@@ -79,8 +73,10 @@ class CreateCertificateRequestValidatorTest {
     void shallThrowIfIdIsNull() {
       final var request = requestBuilder
           .user(
-              UserDTO.builder()
-                  .build())
+              ajlaDoktorDtoBuilder()
+                  .id(null)
+                  .build()
+          )
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
@@ -93,9 +89,10 @@ class CreateCertificateRequestValidatorTest {
     void shallThrowIfIdIsEmpty() {
       final var request = requestBuilder
           .user(
-              UserDTO.builder()
+              ajlaDoktorDtoBuilder()
                   .id("")
-                  .build())
+                  .build()
+          )
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
@@ -108,8 +105,8 @@ class CreateCertificateRequestValidatorTest {
     void shallThrowIfRoleIsNull() {
       final var request = requestBuilder
           .user(
-              UserDTO.builder()
-                  .id(ID)
+              ajlaDoktorDtoBuilder()
+                  .role(null)
                   .build()
           )
           .build();
@@ -124,9 +121,8 @@ class CreateCertificateRequestValidatorTest {
     void shallThrowIfBlockedIsNull() {
       final var request = requestBuilder
           .user(
-              UserDTO.builder()
-                  .id(ID)
-                  .role(RoleTypeDTO.DOCTOR)
+              ajlaDoktorDtoBuilder()
+                  .blocked(null)
                   .build()
           )
           .build();

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,6 @@ import se.inera.intyg.certificateservice.application.common.ActionEvaluationFact
 import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
-import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
@@ -29,7 +29,6 @@ import se.inera.intyg.certificateservice.domain.certificate.service.GetCertifica
 @ExtendWith(MockitoExtension.class)
 class GetCertificateServiceTest {
 
-  private static final UserDTO USER_DTO = UserDTO.builder().build();
   private static final UnitDTO UNIT_DTO = UnitDTO.builder().build();
   private static final UnitDTO CARE_UNIT_DTO = UnitDTO.builder().build();
   private static final UnitDTO CARE_PROVIDER_DTO = UnitDTO.builder().build();
@@ -70,7 +69,7 @@ class GetCertificateServiceTest {
 
     final var actionEvaluation = ActionEvaluation.builder().build();
     doReturn(actionEvaluation).when(actionEvaluationFactory).create(
-        USER_DTO,
+        AJLA_DOCTOR_DTO,
         UNIT_DTO,
         CARE_UNIT_DTO,
         CARE_PROVIDER_DTO
@@ -92,7 +91,7 @@ class GetCertificateServiceTest {
 
     final var actualResult = getCertificateService.get(
         GetCertificateRequest.builder()
-            .user(USER_DTO)
+            .user(AJLA_DOCTOR_DTO)
             .unit(UNIT_DTO)
             .careUnit(CARE_UNIT_DTO)
             .careProvider(CARE_PROVIDER_DTO)

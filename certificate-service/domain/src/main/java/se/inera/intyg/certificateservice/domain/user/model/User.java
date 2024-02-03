@@ -12,5 +12,6 @@ public class User {
 
   HsaId hsaId;
   Name name;
+  UserRole role;
   Blocked blocked;
 }

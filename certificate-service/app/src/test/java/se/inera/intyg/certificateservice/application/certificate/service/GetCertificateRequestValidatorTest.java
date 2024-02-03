@@ -3,14 +3,14 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
-import se.inera.intyg.certificateservice.application.common.dto.RoleTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
-import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
 class GetCertificateRequestValidatorTest {
 
@@ -23,13 +23,7 @@ class GetCertificateRequestValidatorTest {
   void setUp() {
     getCertificateRequestValidator = new GetCertificateRequestValidator();
     requestBuilder = GetCertificateRequest.builder()
-        .user(
-            UserDTO.builder()
-                .id(ID)
-                .role(RoleTypeDTO.DOCTOR)
-                .blocked(false)
-                .build()
-        )
+        .user(AJLA_DOCTOR_DTO)
         .unit(
             UnitDTO.builder()
                 .id(ID)
@@ -67,8 +61,10 @@ class GetCertificateRequestValidatorTest {
     void shallThrowIfIdIsNull() {
       final var request = requestBuilder
           .user(
-              UserDTO.builder()
-                  .build())
+              ajlaDoktorDtoBuilder()
+                  .id(null)
+                  .build()
+          )
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
@@ -81,9 +77,10 @@ class GetCertificateRequestValidatorTest {
     void shallThrowIfIdIsEmpty() {
       final var request = requestBuilder
           .user(
-              UserDTO.builder()
+              ajlaDoktorDtoBuilder()
                   .id("")
-                  .build())
+                  .build()
+          )
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
@@ -96,8 +93,8 @@ class GetCertificateRequestValidatorTest {
     void shallThrowIfRoleIsNull() {
       final var request = requestBuilder
           .user(
-              UserDTO.builder()
-                  .id(ID)
+              ajlaDoktorDtoBuilder()
+                  .role(null)
                   .build()
           )
           .build();
@@ -112,9 +109,8 @@ class GetCertificateRequestValidatorTest {
     void shallThrowIfBlockedIsNull() {
       final var request = requestBuilder
           .user(
-              UserDTO.builder()
-                  .id(ID)
-                  .role(RoleTypeDTO.DOCTOR)
+              ajlaDoktorDtoBuilder()
+                  .blocked(null)
                   .build()
           )
           .build();
