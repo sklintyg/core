@@ -4,7 +4,9 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaMedicincentrumBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaMedicincentrumDtoBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaRegionenDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 
@@ -33,11 +35,7 @@ class GetCertificateRequestValidatorTest {
                 .build()
         )
         .careUnit(ALFA_MEDICINCENTRUM_DTO)
-        .careProvider(
-            UnitDTO.builder()
-                .id(ID)
-                .build()
-        );
+        .careProvider(ALFA_REGIONEN_DTO);
   }
 
   @Nested
@@ -206,7 +204,7 @@ class GetCertificateRequestValidatorTest {
       void shallThrowIfIdIsNull() {
         final var request = requestBuilder
             .careUnit(
-                alfaMedicincentrumBuilder()
+                alfaMedicincentrumDtoBuilder()
                     .id(null)
                     .build()
             )
@@ -223,7 +221,7 @@ class GetCertificateRequestValidatorTest {
       void shallThrowIfIdIsEmpty() {
         final var request = requestBuilder
             .careUnit(
-                alfaMedicincentrumBuilder()
+                alfaMedicincentrumDtoBuilder()
                     .id("")
                     .build()
             )
@@ -258,7 +256,9 @@ class GetCertificateRequestValidatorTest {
     void shallThrowIfIdIsNull() {
       final var request = requestBuilder
           .careProvider(
-              UnitDTO.builder().build()
+              alfaRegionenDtoBuilder()
+                  .id(null)
+                  .build()
           )
           .build();
 
@@ -273,7 +273,7 @@ class GetCertificateRequestValidatorTest {
     void shallThrowIfIdIsEmpty() {
       final var request = requestBuilder
           .careProvider(
-              UnitDTO.builder()
+              alfaRegionenDtoBuilder()
                   .id("")
                   .build()
           )

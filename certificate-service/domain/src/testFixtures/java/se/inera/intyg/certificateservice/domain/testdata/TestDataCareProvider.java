@@ -1,0 +1,23 @@
+package se.inera.intyg.certificateservice.domain.testdata;
+
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.BETA_REGIONEN_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.BETA_REGIONEN_NAME;
+
+import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
+import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
+import se.inera.intyg.certificateservice.domain.certificate.model.UnitName;
+
+public class TestDataCareProvider {
+
+  public static final CareProvider ALFA_REGIONEN = CareProvider.builder()
+      .hsaId(new HsaId(ALFA_REGIONEN_ID))
+      .name(new UnitName(ALFA_REGIONEN_NAME))
+      .build();
+
+  public static final CareProvider BETA_REGIONEN = CareProvider.builder()
+      .hsaId(new HsaId(BETA_REGIONEN_ID))
+      .name(new UnitName(BETA_REGIONEN_NAME))
+      .build();
+}

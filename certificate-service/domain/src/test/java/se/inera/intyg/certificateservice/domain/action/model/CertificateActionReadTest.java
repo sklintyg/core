@@ -3,22 +3,22 @@ package se.inera.intyg.certificateservice.domain.action.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
 import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
-import se.inera.intyg.certificateservice.domain.patient.model.Patient;
-import se.inera.intyg.certificateservice.domain.user.model.User;
 
 class CertificateActionReadTest {
 
@@ -44,26 +44,17 @@ class CertificateActionReadTest {
                         .build()
                 )
                 .careUnit(ALFA_MEDICINCENTRUM)
-                .careProvider(
-                    CareProvider.builder()
-                        .hsaId(new HsaId("careProviderId"))
-                        .build()
-                )
+                .careProvider(ALFA_REGIONEN)
+                .patient(ATHENA_REACT_ANDERSSON)
                 .build()
         );
     actionEvaluationBuilder = ActionEvaluation.builder()
-        .user(
-            User.builder().build()
-        )
+        .user(AJLA_DOKTOR)
         .subUnit(
             SubUnit.builder().build()
         )
-        .patient(
-            Patient.builder().build()
-        )
-        .careProvider(
-            CareProvider.builder().build()
-        )
+        .patient(ATHENA_REACT_ANDERSSON)
+        .careProvider(ALFA_REGIONEN)
         .careUnit(ALFA_MEDICINCENTRUM);
   }
 

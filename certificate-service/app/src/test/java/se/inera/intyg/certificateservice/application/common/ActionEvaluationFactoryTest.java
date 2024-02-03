@@ -8,7 +8,9 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.alveReactAlfredssonDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.athenaReactAnderssonDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaMedicincentrumBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaMedicincentrumDtoBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaRegionenDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 
@@ -47,16 +49,6 @@ class ActionEvaluationFactoryTest {
       .phoneNumber("defaultPhoneNumber")
       .zipCode("defaultZipCode");
 
-  private final UnitDTO.UnitDTOBuilder careProviderBuilder = UnitDTO.builder()
-      .id("defaultId")
-      .name("defaultName")
-      .inactive(false)
-      .address("defaultAddress")
-      .city("defaultCity")
-      .email("defaultEmail")
-      .phoneNumber("defaultPhoneNumber")
-      .zipCode("defaultZipCode");
-
   @BeforeEach
   void setUp() {
     actionEvaluationFactory = new ActionEvaluationFactory();
@@ -70,59 +62,59 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludeCareUnitId() {
-        final var unit = alfaMedicincentrumBuilder().build();
+        final var unit = alfaMedicincentrumDtoBuilder().build();
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, careProviderBuilder.build());
+            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getCareUnit().getHsaId().id(), unit.getId());
       }
 
       @Test
       void shallIncludeCareUnitName() {
-        final var unit = alfaMedicincentrumBuilder().build();
+        final var unit = alfaMedicincentrumDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, careProviderBuilder.build());
+            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getCareUnit().getName().name(), unit.getName());
       }
 
       @Test
       void shallIncludeCareUnitAddress() {
-        final var unit = alfaMedicincentrumBuilder().build();
+        final var unit = alfaMedicincentrumDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, careProviderBuilder.build());
+            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getCareUnit().getAddress().getAddress(), unit.getAddress());
       }
 
       @Test
       void shallIncludeCareUnitZipCode() {
-        final var unit = alfaMedicincentrumBuilder().build();
+        final var unit = alfaMedicincentrumDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, careProviderBuilder.build());
+            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getCareUnit().getAddress().getZipCode(), unit.getZipCode());
       }
 
       @Test
       void shallIncludeCareUnitCity() {
-        final var unit = alfaMedicincentrumBuilder().build();
+        final var unit = alfaMedicincentrumDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, careProviderBuilder.build());
+            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getCareUnit().getAddress().getCity(), unit.getCity());
       }
 
       @Test
       void shallIncludeCareUnitPhoneNumber() {
-        final var unit = alfaMedicincentrumBuilder().build();
+        final var unit = alfaMedicincentrumDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, careProviderBuilder.build());
+            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getCareUnit().getContactInfo().getPhoneNumber(),
             unit.getPhoneNumber());
@@ -130,11 +122,11 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludeCareUnitEmail() {
-        final var unit = alfaMedicincentrumBuilder().build();
+        final var unit = alfaMedicincentrumDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), unit, careProviderBuilder.build());
+            subUnitBuilder.build(), unit, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getCareUnit().getContactInfo().getEmail(), unit.getEmail());
       }
@@ -147,7 +139,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeSubUnitId() {
         final var unit = subUnitBuilder.id(HSA_ID).build();
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, careProviderBuilder.build());
+            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getSubUnit().getHsaId().id(), unit.getId());
       }
@@ -157,7 +149,7 @@ class ActionEvaluationFactoryTest {
         final var unit = subUnitBuilder.name(UNIT_NAME).build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, careProviderBuilder.build());
+            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getSubUnit().getName().name(), unit.getName());
       }
@@ -167,7 +159,7 @@ class ActionEvaluationFactoryTest {
         final var unit = subUnitBuilder.address(UNIT_ADDRESS).build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, careProviderBuilder.build());
+            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getSubUnit().getAddress().getAddress(), unit.getAddress());
       }
@@ -177,7 +169,7 @@ class ActionEvaluationFactoryTest {
         final var unit = subUnitBuilder.zipCode(ZIP_CODE).build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, careProviderBuilder.build());
+            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getSubUnit().getAddress().getZipCode(), unit.getZipCode());
       }
@@ -187,7 +179,7 @@ class ActionEvaluationFactoryTest {
         final var unit = subUnitBuilder.city(UNIT_CITY).build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, careProviderBuilder.build());
+            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getSubUnit().getAddress().getCity(), unit.getCity());
       }
@@ -197,7 +189,7 @@ class ActionEvaluationFactoryTest {
         final var unit = subUnitBuilder.phoneNumber(PHONE_NUMBER).build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, careProviderBuilder.build());
+            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getSubUnit().getContactInfo().getPhoneNumber(),
             unit.getPhoneNumber());
@@ -208,7 +200,7 @@ class ActionEvaluationFactoryTest {
         final var unit = subUnitBuilder.email(EMAIL).build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, careProviderBuilder.build());
+            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getSubUnit().getContactInfo().getEmail(), unit.getEmail());
       }
@@ -218,7 +210,7 @@ class ActionEvaluationFactoryTest {
         final var unit = subUnitBuilder.inactive(true).build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, careProviderBuilder.build());
+            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getSubUnit().getInactive().value(), unit.getInactive());
       }
@@ -228,7 +220,7 @@ class ActionEvaluationFactoryTest {
         final var unit = subUnitBuilder.inactive(false).build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, careProviderBuilder.build());
+            AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getSubUnit().getInactive().value(), unit.getInactive());
       }
@@ -239,7 +231,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludeCareProviderId() {
-        final var unit = careProviderBuilder.id(HSA_ID).build();
+        final var unit = alfaRegionenDtoBuilder().build();
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             AJLA_DOCTOR_DTO, subUnitBuilder.build(), ALFA_MEDICINCENTRUM_DTO, unit);
 
@@ -248,66 +240,12 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludeCareProviderName() {
-        final var unit = careProviderBuilder.name(UNIT_NAME).build();
+        final var unit = alfaRegionenDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             AJLA_DOCTOR_DTO, subUnitBuilder.build(), ALFA_MEDICINCENTRUM_DTO, unit);
 
         assertEquals(actionEvaluation.getCareProvider().getName().name(), unit.getName());
-      }
-
-      @Test
-      void shallIncludeCareProviderAddress() {
-        final var unit = careProviderBuilder.address(UNIT_ADDRESS).build();
-
-        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), ALFA_MEDICINCENTRUM_DTO, unit);
-
-        assertEquals(actionEvaluation.getCareProvider().getAddress().getAddress(),
-            unit.getAddress());
-      }
-
-      @Test
-      void shallIncludeCareProviderZipCode() {
-        final var unit = careProviderBuilder.zipCode(ZIP_CODE).build();
-
-        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), ALFA_MEDICINCENTRUM_DTO, unit);
-
-        assertEquals(actionEvaluation.getCareProvider().getAddress().getZipCode(),
-            unit.getZipCode());
-      }
-
-      @Test
-      void shallIncludeCareProviderCity() {
-        final var unit = careProviderBuilder.city(UNIT_CITY).build();
-
-        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), ALFA_MEDICINCENTRUM_DTO, unit);
-
-        assertEquals(actionEvaluation.getCareProvider().getAddress().getCity(), unit.getCity());
-      }
-
-      @Test
-      void shallIncludeCareProviderPhoneNumber() {
-        final var unit = careProviderBuilder.phoneNumber(PHONE_NUMBER).build();
-
-        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), ALFA_MEDICINCENTRUM_DTO, unit);
-
-        assertEquals(actionEvaluation.getCareProvider().getContactInfo().getPhoneNumber(),
-            unit.getPhoneNumber());
-      }
-
-      @Test
-      void shallIncludeCareProviderEmail() {
-        final var unit = careProviderBuilder.email(EMAIL).build();
-
-        final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), ALFA_MEDICINCENTRUM_DTO, unit);
-
-        assertEquals(actionEvaluation.getCareProvider().getContactInfo().getEmail(),
-            unit.getEmail());
       }
     }
 
