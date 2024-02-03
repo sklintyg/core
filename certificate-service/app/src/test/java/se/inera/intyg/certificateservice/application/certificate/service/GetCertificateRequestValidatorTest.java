@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaAllergimottagningenDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaMedicincentrumDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaRegionenDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
@@ -139,7 +140,9 @@ class GetCertificateRequestValidatorTest {
     void shallThrowIfIdIsNull() {
       final var request = requestBuilder
           .unit(
-              UnitDTO.builder().build()
+              alfaAllergimottagningenDtoBuilder()
+                  .id(null)
+                  .build()
           )
           .build();
 
@@ -154,7 +157,7 @@ class GetCertificateRequestValidatorTest {
     void shallThrowIfIdIsEmpty() {
       final var request = requestBuilder
           .unit(
-              UnitDTO.builder()
+              alfaAllergimottagningenDtoBuilder()
                   .id("")
                   .build()
           )
@@ -171,8 +174,8 @@ class GetCertificateRequestValidatorTest {
     void shallThrowIfIsInactiveIsNull() {
       final var request = requestBuilder
           .unit(
-              UnitDTO.builder()
-                  .id(ID)
+              alfaAllergimottagningenDtoBuilder()
+                  .inactive(null)
                   .build()
           )
           .build();
@@ -183,56 +186,56 @@ class GetCertificateRequestValidatorTest {
       assertEquals("Required parameter missing: Unit.isInactive",
           illegalArgumentException.getMessage());
     }
+  }
 
-    @Nested
-    class CareUnitValidation {
+  @Nested
+  class CareUnitValidation {
 
-      @Test
-      void shallThrowIfCareUnitIsNull() {
-        final var request = requestBuilder
-            .careUnit(null)
-            .build();
+    @Test
+    void shallThrowIfCareUnitIsNull() {
+      final var request = requestBuilder
+          .careUnit(null)
+          .build();
 
-        final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-            () -> getCertificateRequestValidator.validate(request, CERTIFICATE_ID));
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getCertificateRequestValidator.validate(request, CERTIFICATE_ID));
 
-        assertEquals("Required parameter missing: CareUnit",
-            illegalArgumentException.getMessage());
-      }
+      assertEquals("Required parameter missing: CareUnit",
+          illegalArgumentException.getMessage());
+    }
 
-      @Test
-      void shallThrowIfIdIsNull() {
-        final var request = requestBuilder
-            .careUnit(
-                alfaMedicincentrumDtoBuilder()
-                    .id(null)
-                    .build()
-            )
-            .build();
+    @Test
+    void shallThrowIfIdIsNull() {
+      final var request = requestBuilder
+          .careUnit(
+              alfaMedicincentrumDtoBuilder()
+                  .id(null)
+                  .build()
+          )
+          .build();
 
-        final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-            () -> getCertificateRequestValidator.validate(request, CERTIFICATE_ID));
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getCertificateRequestValidator.validate(request, CERTIFICATE_ID));
 
-        assertEquals("Required parameter missing: CareUnit.id",
-            illegalArgumentException.getMessage());
-      }
+      assertEquals("Required parameter missing: CareUnit.id",
+          illegalArgumentException.getMessage());
+    }
 
-      @Test
-      void shallThrowIfIdIsEmpty() {
-        final var request = requestBuilder
-            .careUnit(
-                alfaMedicincentrumDtoBuilder()
-                    .id("")
-                    .build()
-            )
-            .build();
+    @Test
+    void shallThrowIfIdIsEmpty() {
+      final var request = requestBuilder
+          .careUnit(
+              alfaMedicincentrumDtoBuilder()
+                  .id("")
+                  .build()
+          )
+          .build();
 
-        final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-            () -> getCertificateRequestValidator.validate(request, CERTIFICATE_ID));
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getCertificateRequestValidator.validate(request, CERTIFICATE_ID));
 
-        assertEquals("Required parameter missing: CareUnit.id",
-            illegalArgumentException.getMessage());
-      }
+      assertEquals("Required parameter missing: CareUnit.id",
+          illegalArgumentException.getMessage());
     }
   }
 

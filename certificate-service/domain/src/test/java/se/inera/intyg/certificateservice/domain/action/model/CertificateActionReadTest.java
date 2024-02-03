@@ -8,6 +8,9 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 
 import java.util.Optional;
@@ -22,8 +25,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 
 class CertificateActionReadTest {
 
-  private static final String SUB_UNIT_HSA_ID = "subUnitHsaId";
-  private static final String OTHER_SUB_UNIT = "otherSubUnit";
   private CertificateActionRead certificateActionRead;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
   private CertificateBuilder certificateBuilder;
@@ -38,11 +39,7 @@ class CertificateActionReadTest {
     certificateBuilder = Certificate.builder()
         .certificateMetaData(
             CertificateMetaData.builder()
-                .issuingUnit(
-                    SubUnit.builder()
-                        .hsaId(new HsaId(SUB_UNIT_HSA_ID))
-                        .build()
-                )
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
                 .careUnit(ALFA_MEDICINCENTRUM)
                 .careProvider(ALFA_REGIONEN)
                 .patient(ATHENA_REACT_ANDERSSON)
@@ -79,7 +76,7 @@ class CertificateActionReadTest {
     final var actionEvaluation = actionEvaluationBuilder
         .subUnit(
             SubUnit.builder()
-                .hsaId(new HsaId(SUB_UNIT_HSA_ID))
+                .hsaId(new HsaId(ALFA_ALLERGIMOTTAGNINGEN_ID))
                 .build()
         )
         .build();
@@ -115,7 +112,7 @@ class CertificateActionReadTest {
     final var actionEvaluation = actionEvaluationBuilder
         .subUnit(
             SubUnit.builder()
-                .hsaId(new HsaId(OTHER_SUB_UNIT))
+                .hsaId(new HsaId(ALFA_HUDMOTTAGNINGEN_ID))
                 .build()
         )
         .build();

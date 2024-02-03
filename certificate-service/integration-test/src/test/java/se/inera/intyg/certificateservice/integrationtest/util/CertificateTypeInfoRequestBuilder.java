@@ -1,13 +1,12 @@
 package se.inera.intyg.certificateservice.integrationtest.util;
 
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.athenaReactAnderssonDtoBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
-import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.ALFA_HUDMOTTAGNINGEN;
 
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
-import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 
 public class CertificateTypeInfoRequestBuilder {
 
@@ -45,12 +44,7 @@ public class CertificateTypeInfoRequestBuilder {
                 .build()
         )
         .careProvider(ALFA_REGIONEN_DTO)
-        .unit(
-            UnitDTO.builder()
-                .id(ALFA_HUDMOTTAGNINGEN)
-                .inactive(false)
-                .build()
-        )
+        .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
         .careUnit(ALFA_MEDICINCENTRUM_DTO)
         .build();
   }

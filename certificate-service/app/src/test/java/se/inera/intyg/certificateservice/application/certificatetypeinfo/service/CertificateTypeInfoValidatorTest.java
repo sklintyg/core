@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.athenaReactAnderssonDtoBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaAllergimottagningenDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaMedicincentrumDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaRegionenDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
@@ -20,11 +22,9 @@ import se.inera.intyg.certificateservice.application.certificate.service.CreateC
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
-import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 
 class CertificateTypeInfoValidatorTest {
 
-  private static final String ID = "id";
   private CreateCertificateRequestValidator certificateTypeInfoValidator;
   private CreateCertificateRequest.CreateCertificateRequestBuilder requestBuilder;
 
@@ -33,12 +33,7 @@ class CertificateTypeInfoValidatorTest {
     certificateTypeInfoValidator = new CreateCertificateRequestValidator();
     requestBuilder = CreateCertificateRequest.builder()
         .user(AJLA_DOCTOR_DTO)
-        .unit(
-            UnitDTO.builder()
-                .id(ID)
-                .inactive(false)
-                .build()
-        )
+        .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
         .careUnit(ALFA_MEDICINCENTRUM_DTO)
         .careProvider(ALFA_REGIONEN_DTO)
         .patient(ATHENA_REACT_ANDERSSON_DTO)
@@ -151,7 +146,9 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfIdIsNull() {
       final var request = requestBuilder
           .unit(
-              UnitDTO.builder().build()
+              alfaAllergimottagningenDtoBuilder()
+                  .id(null)
+                  .build()
           )
           .build();
 
@@ -166,7 +163,7 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfIdIsEmpty() {
       final var request = requestBuilder
           .unit(
-              UnitDTO.builder()
+              alfaAllergimottagningenDtoBuilder()
                   .id("")
                   .build()
           )
@@ -183,8 +180,8 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfIsInactiveIsNull() {
       final var request = requestBuilder
           .unit(
-              UnitDTO.builder()
-                  .id(ID)
+              alfaAllergimottagningenDtoBuilder()
+                  .inactive(null)
                   .build()
           )
           .build();
@@ -195,56 +192,56 @@ class CertificateTypeInfoValidatorTest {
       assertEquals("Required parameter missing: Unit.isInactive",
           illegalArgumentException.getMessage());
     }
+  }
 
-    @Nested
-    class CareUnitValidation {
+  @Nested
+  class CareUnitValidation {
 
-      @Test
-      void shallThrowIfCareUnitIsNull() {
-        final var request = requestBuilder
-            .careUnit(null)
-            .build();
+    @Test
+    void shallThrowIfCareUnitIsNull() {
+      final var request = requestBuilder
+          .careUnit(null)
+          .build();
 
-        final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-            () -> certificateTypeInfoValidator.validate(request));
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificateTypeInfoValidator.validate(request));
 
-        assertEquals("Required parameter missing: CareUnit",
-            illegalArgumentException.getMessage());
-      }
+      assertEquals("Required parameter missing: CareUnit",
+          illegalArgumentException.getMessage());
+    }
 
-      @Test
-      void shallThrowIfIdIsNull() {
-        final var request = requestBuilder
-            .careUnit(
-                alfaMedicincentrumDtoBuilder()
-                    .id(null)
-                    .build()
-            )
-            .build();
+    @Test
+    void shallThrowIfIdIsNull() {
+      final var request = requestBuilder
+          .careUnit(
+              alfaMedicincentrumDtoBuilder()
+                  .id(null)
+                  .build()
+          )
+          .build();
 
-        final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-            () -> certificateTypeInfoValidator.validate(request));
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificateTypeInfoValidator.validate(request));
 
-        assertEquals("Required parameter missing: CareUnit.id",
-            illegalArgumentException.getMessage());
-      }
+      assertEquals("Required parameter missing: CareUnit.id",
+          illegalArgumentException.getMessage());
+    }
 
-      @Test
-      void shallThrowIfIdIsEmpty() {
-        final var request = requestBuilder
-            .careUnit(
-                alfaMedicincentrumDtoBuilder()
-                    .id("")
-                    .build()
-            )
-            .build();
+    @Test
+    void shallThrowIfIdIsEmpty() {
+      final var request = requestBuilder
+          .careUnit(
+              alfaMedicincentrumDtoBuilder()
+                  .id("")
+                  .build()
+          )
+          .build();
 
-        final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-            () -> certificateTypeInfoValidator.validate(request));
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificateTypeInfoValidator.validate(request));
 
-        assertEquals("Required parameter missing: CareUnit.id",
-            illegalArgumentException.getMessage());
-      }
+      assertEquals("Required parameter missing: CareUnit.id",
+          illegalArgumentException.getMessage());
     }
   }
 

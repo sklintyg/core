@@ -18,6 +18,22 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_PHONENUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ZIP_CODE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ADDRESS;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_CITY;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_EMAIL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_INACTIVE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_ADDRESS;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_CITY;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_EMAIL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_INACTIVE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_PHONENUMBER;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_ZIP_CODE;
 
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 
@@ -25,6 +41,8 @@ public class TestDataCommonUnitDTO {
 
   public static final UnitDTO ALFA_REGIONEN_DTO = alfaRegionenDtoBuilder().build();
   public static final UnitDTO ALFA_MEDICINCENTRUM_DTO = alfaMedicincentrumDtoBuilder().build();
+  public static final UnitDTO ALFA_ALLERGIMOTTAGNINGEN_DTO = alfaAllergimottagningenDtoBuilder().build();
+  public static final UnitDTO ALFA_HUDMOTTAGNINGEN_DTO = alfaHudmottagningenDtoBuilder().build();
   public static final UnitDTO ALFA_VARDCENTRAL_DTO = alfaVardcentralDtoBuilder().build();
   public static final UnitDTO BETA_REGIONEN_DTO = betaRegionenDtoBuilder().build();
 
@@ -43,6 +61,30 @@ public class TestDataCommonUnitDTO {
         .city(ALFA_MEDICINCENTRUM_CITY)
         .email(ALFA_MEDICINCENTRUM_EMAIL)
         .phoneNumber(ALFA_MEDICINCENTRUM_PHONENUMBER);
+  }
+
+  public static UnitDTO.UnitDTOBuilder alfaAllergimottagningenDtoBuilder() {
+    return UnitDTO.builder()
+        .id(ALFA_ALLERGIMOTTAGNINGEN_ID)
+        .name(ALFA_ALLERGIMOTTAGNINGEN_NAME)
+        .address(ALFA_ALLERGIMOTTAGNINGEN_ADDRESS)
+        .zipCode(ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE)
+        .city(ALFA_ALLERGIMOTTAGNINGEN_CITY)
+        .email(ALFA_ALLERGIMOTTAGNINGEN_EMAIL)
+        .phoneNumber(ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER)
+        .inactive(ALFA_ALLERGIMOTTAGNINGEN_INACTIVE.value());
+  }
+
+  public static UnitDTO.UnitDTOBuilder alfaHudmottagningenDtoBuilder() {
+    return UnitDTO.builder()
+        .id(ALFA_HUDMOTTAGNINGEN_ID)
+        .name(ALFA_HUDMOTTAGNINGEN_NAME)
+        .address(ALFA_HUDMOTTAGNINGEN_ADDRESS)
+        .zipCode(ALFA_HUDMOTTAGNINGEN_ZIP_CODE)
+        .city(ALFA_HUDMOTTAGNINGEN_CITY)
+        .email(ALFA_HUDMOTTAGNINGEN_EMAIL)
+        .phoneNumber(ALFA_HUDMOTTAGNINGEN_PHONENUMBER)
+        .inactive(ALFA_HUDMOTTAGNINGEN_INACTIVE.value());
   }
 
   public static UnitDTO.UnitDTOBuilder alfaVardcentralDtoBuilder() {

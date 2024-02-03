@@ -7,8 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.alveReactAlfredssonDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.athenaReactAnderssonDtoBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_HUDMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaHudmottagningenDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaMedicincentrumDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaRegionenDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
@@ -19,13 +21,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
-import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
 
 class ActionEvaluationFactoryTest {
 
-  private static final String HSA_ID = "hsaId";
-  private static final String EMAIL = "email";
   private static final String ID = "patientId";
   private static final String FIRST_NAME = "firstName";
   private static final String MIDDLE_NAME = "middleName";
@@ -33,21 +32,7 @@ class ActionEvaluationFactoryTest {
   private static final String CITY = "city";
   private static final String STREET = "street";
   private ActionEvaluationFactory actionEvaluationFactory;
-  private static final String UNIT_NAME = "unitName";
-  private static final String UNIT_ADDRESS = "unitAddress";
-  private static final String UNIT_CITY = "unitCity";
-  private static final String PHONE_NUMBER = "phoneNumber";
   private static final String ZIP_CODE = "zipCode";
-
-  private final UnitDTO.UnitDTOBuilder subUnitBuilder = UnitDTO.builder()
-      .id("defaultId")
-      .name("defaultName")
-      .inactive(false)
-      .address("defaultAddress")
-      .city("defaultCity")
-      .email("defaultEmail")
-      .phoneNumber("defaultPhoneNumber")
-      .zipCode("defaultZipCode");
 
   @BeforeEach
   void setUp() {
@@ -64,7 +49,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeCareUnitId() {
         final var unit = alfaMedicincentrumDtoBuilder().build();
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, ALFA_REGIONEN_DTO);
+            AJLA_DOCTOR_DTO, ALFA_HUDMOTTAGNINGEN_DTO, unit, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getCareUnit().getHsaId().id(), unit.getId());
       }
@@ -74,7 +59,7 @@ class ActionEvaluationFactoryTest {
         final var unit = alfaMedicincentrumDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, ALFA_REGIONEN_DTO);
+            AJLA_DOCTOR_DTO, ALFA_HUDMOTTAGNINGEN_DTO, unit, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getCareUnit().getName().name(), unit.getName());
       }
@@ -84,7 +69,7 @@ class ActionEvaluationFactoryTest {
         final var unit = alfaMedicincentrumDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, ALFA_REGIONEN_DTO);
+            AJLA_DOCTOR_DTO, ALFA_HUDMOTTAGNINGEN_DTO, unit, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getCareUnit().getAddress().getAddress(), unit.getAddress());
       }
@@ -94,7 +79,7 @@ class ActionEvaluationFactoryTest {
         final var unit = alfaMedicincentrumDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, ALFA_REGIONEN_DTO);
+            AJLA_DOCTOR_DTO, ALFA_HUDMOTTAGNINGEN_DTO, unit, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getCareUnit().getAddress().getZipCode(), unit.getZipCode());
       }
@@ -104,7 +89,7 @@ class ActionEvaluationFactoryTest {
         final var unit = alfaMedicincentrumDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, ALFA_REGIONEN_DTO);
+            AJLA_DOCTOR_DTO, ALFA_HUDMOTTAGNINGEN_DTO, unit, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getCareUnit().getAddress().getCity(), unit.getCity());
       }
@@ -114,7 +99,7 @@ class ActionEvaluationFactoryTest {
         final var unit = alfaMedicincentrumDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), unit, ALFA_REGIONEN_DTO);
+            AJLA_DOCTOR_DTO, ALFA_HUDMOTTAGNINGEN_DTO, unit, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getCareUnit().getContactInfo().getPhoneNumber(),
             unit.getPhoneNumber());
@@ -126,7 +111,7 @@ class ActionEvaluationFactoryTest {
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), unit, ALFA_REGIONEN_DTO);
+            ALFA_HUDMOTTAGNINGEN_DTO, unit, ALFA_REGIONEN_DTO);
 
         assertEquals(actionEvaluation.getCareUnit().getContactInfo().getEmail(), unit.getEmail());
       }
@@ -137,7 +122,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludeSubUnitId() {
-        final var unit = subUnitBuilder.id(HSA_ID).build();
+        final var unit = alfaHudmottagningenDtoBuilder().build();
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
 
@@ -146,7 +131,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludeSubunitName() {
-        final var unit = subUnitBuilder.name(UNIT_NAME).build();
+        final var unit = alfaHudmottagningenDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
@@ -156,7 +141,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludeSubunitAddress() {
-        final var unit = subUnitBuilder.address(UNIT_ADDRESS).build();
+        final var unit = alfaHudmottagningenDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
@@ -166,7 +151,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludeSubunitZipCode() {
-        final var unit = subUnitBuilder.zipCode(ZIP_CODE).build();
+        final var unit = alfaHudmottagningenDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
@@ -176,7 +161,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludeSubunitCity() {
-        final var unit = subUnitBuilder.city(UNIT_CITY).build();
+        final var unit = alfaHudmottagningenDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
@@ -186,7 +171,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludeSubunitPhoneNumber() {
-        final var unit = subUnitBuilder.phoneNumber(PHONE_NUMBER).build();
+        final var unit = alfaHudmottagningenDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
@@ -197,7 +182,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludeSubunitEmail() {
-        final var unit = subUnitBuilder.email(EMAIL).build();
+        final var unit = alfaHudmottagningenDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
@@ -207,7 +192,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludeSubunitInactiveTrue() {
-        final var unit = subUnitBuilder.inactive(true).build();
+        final var unit = alfaHudmottagningenDtoBuilder().inactive(true).build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
@@ -217,7 +202,7 @@ class ActionEvaluationFactoryTest {
 
       @Test
       void shallIncludeSubunitInactiveFalse() {
-        final var unit = subUnitBuilder.inactive(false).build();
+        final var unit = alfaHudmottagningenDtoBuilder().inactive(false).build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             AJLA_DOCTOR_DTO, unit, ALFA_MEDICINCENTRUM_DTO, ALFA_REGIONEN_DTO);
@@ -233,7 +218,7 @@ class ActionEvaluationFactoryTest {
       void shallIncludeCareProviderId() {
         final var unit = alfaRegionenDtoBuilder().build();
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), ALFA_MEDICINCENTRUM_DTO, unit);
+            AJLA_DOCTOR_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_MEDICINCENTRUM_DTO, unit);
 
         assertEquals(actionEvaluation.getCareProvider().getHsaId().id(), unit.getId());
       }
@@ -243,7 +228,7 @@ class ActionEvaluationFactoryTest {
         final var unit = alfaRegionenDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            AJLA_DOCTOR_DTO, subUnitBuilder.build(), ALFA_MEDICINCENTRUM_DTO, unit);
+            AJLA_DOCTOR_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_MEDICINCENTRUM_DTO, unit);
 
         assertEquals(actionEvaluation.getCareProvider().getName().name(), unit.getName());
       }
@@ -255,7 +240,7 @@ class ActionEvaluationFactoryTest {
       @Test
       void createActionEvaluationWithoutPatient() {
         final var actionEvaluation = actionEvaluationFactory.create(AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertNull(
             actionEvaluation.getPatient(),
@@ -272,7 +257,7 @@ class ActionEvaluationFactoryTest {
         final var patient = alveReactAlfredssonDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(patient, AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertTrue(actionEvaluation.getPatient().getDeceased().value(),
             "Expected patient.value to be true");
@@ -283,7 +268,7 @@ class ActionEvaluationFactoryTest {
         final var patient = athenaReactAnderssonDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(patient, AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertFalse(actionEvaluation.getPatient().getDeceased().value(),
             "Expected patient.value to be false");
@@ -295,7 +280,7 @@ class ActionEvaluationFactoryTest {
             .build();
 
         final var actionEvaluation = actionEvaluationFactory.create(patient, AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertEquals(PersonIdType.PERSONAL_IDENTITY_NUMBER,
             actionEvaluation.getPatient().getId().getType());
@@ -313,7 +298,7 @@ class ActionEvaluationFactoryTest {
             .build();
 
         final var actionEvaluation = actionEvaluationFactory.create(patient, AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertEquals(PersonIdType.COORDINATION_NUMBER,
             actionEvaluation.getPatient().getId().getType());
@@ -331,7 +316,7 @@ class ActionEvaluationFactoryTest {
             .build();
 
         final var actionEvaluation = actionEvaluationFactory.create(patient, AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertEquals(patient.getId().getId(), actionEvaluation.getPatient().getId().getId());
       }
@@ -343,7 +328,7 @@ class ActionEvaluationFactoryTest {
             .build();
 
         final var actionEvaluation = actionEvaluationFactory.create(patient, AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertEquals(patient.getFirstName(),
             actionEvaluation.getPatient().getName().getFirstName());
@@ -356,7 +341,7 @@ class ActionEvaluationFactoryTest {
             .build();
 
         final var actionEvaluation = actionEvaluationFactory.create(patient, AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertEquals(patient.getMiddleName(),
             actionEvaluation.getPatient().getName().getMiddleName());
@@ -369,7 +354,7 @@ class ActionEvaluationFactoryTest {
             .build();
 
         final var actionEvaluation = actionEvaluationFactory.create(patient, AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertEquals(patient.getLastName(), actionEvaluation.getPatient().getName().getLastName());
       }
@@ -381,7 +366,7 @@ class ActionEvaluationFactoryTest {
             .build();
 
         final var actionEvaluation = actionEvaluationFactory.create(patient, AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertEquals(patient.getCity(), actionEvaluation.getPatient().getAddress().getCity());
       }
@@ -393,7 +378,7 @@ class ActionEvaluationFactoryTest {
             .build();
 
         final var actionEvaluation = actionEvaluationFactory.create(patient, AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertEquals(patient.getStreet(), actionEvaluation.getPatient().getAddress().getStreet());
       }
@@ -405,7 +390,7 @@ class ActionEvaluationFactoryTest {
             .build();
 
         final var actionEvaluation = actionEvaluationFactory.create(patient, AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertEquals(patient.getZipCode(), actionEvaluation.getPatient().getAddress().getZipCode());
       }
@@ -417,7 +402,7 @@ class ActionEvaluationFactoryTest {
             .build();
 
         final var actionEvaluation = actionEvaluationFactory.create(patient, AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertEquals(patient.getTestIndicated(),
             actionEvaluation.getPatient().getTestIndicated().value());
@@ -430,7 +415,7 @@ class ActionEvaluationFactoryTest {
             .build();
 
         final var actionEvaluation = actionEvaluationFactory.create(patient, AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertEquals(patient.getTestIndicated(),
             actionEvaluation.getPatient().getTestIndicated().value());
@@ -443,7 +428,7 @@ class ActionEvaluationFactoryTest {
             .build();
 
         final var actionEvaluation = actionEvaluationFactory.create(patient, AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertEquals(patient.getProtectedPerson(),
             actionEvaluation.getPatient().getProtectedPerson().value());
@@ -456,7 +441,7 @@ class ActionEvaluationFactoryTest {
             .build();
 
         final var actionEvaluation = actionEvaluationFactory.create(patient, AJLA_DOCTOR_DTO,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertEquals(patient.getProtectedPerson(),
             actionEvaluation.getPatient().getProtectedPerson().value());
@@ -471,7 +456,7 @@ class ActionEvaluationFactoryTest {
         final var user = ajlaDoktorDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            user, subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            user, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertEquals(user.getId(), actionEvaluation.getUser().getHsaId().id());
       }
@@ -481,7 +466,7 @@ class ActionEvaluationFactoryTest {
         final var user = ajlaDoktorDtoBuilder().build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            user, subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            user, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertFalse(actionEvaluation.getUser().getBlocked().value(),
             "Expected user.value to be false");
@@ -494,7 +479,7 @@ class ActionEvaluationFactoryTest {
             .build();
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
-            user, subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            user, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertTrue(actionEvaluation.getUser().getBlocked().value(),
             "Expected user.value to be true");
@@ -506,7 +491,7 @@ class ActionEvaluationFactoryTest {
 
         final var actionEvaluation = actionEvaluationFactory.create(ATHENA_REACT_ANDERSSON_DTO,
             user,
-            subUnitBuilder.build(), subUnitBuilder.build(), subUnitBuilder.build());
+            ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO, ALFA_HUDMOTTAGNINGEN_DTO);
 
         assertEquals(user.getName(), actionEvaluation.getUser().getName().fullName());
       }
