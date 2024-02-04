@@ -49,8 +49,7 @@ public class CertificateActionCreate implements CertificateAction {
   }
 
   private static boolean isUserNotBlocked(ActionEvaluation actionEvaluation) {
-    return !actionEvaluation.getUser()
-        .getBlocked().value();
+    return !actionEvaluation.getUser().getBlocked().value();
   }
 
   private static boolean isPatientAlive(ActionEvaluation actionEvaluation) {
