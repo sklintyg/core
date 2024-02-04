@@ -21,8 +21,8 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_PHONENUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ZIP_CODE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ALVE_REACT_ALFREDSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.athenaReactAnderssonBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.DECEASED_TRUE;
@@ -127,13 +127,13 @@ class CertificateTest {
             actionEvaluationBuilder
                 .patient(
                     athenaReactAnderssonBuilder()
-                        .id(ALVE_REACT_ALFREDSSON.getId())
+                        .id(ATLAS_REACT_ABRAHAMSSON.getId())
                         .build()
                 )
                 .build()
         );
 
-        assertEquals(ALVE_REACT_ALFREDSSON.getId().getId(),
+        assertEquals(ATLAS_REACT_ABRAHAMSSON.getId().getId(),
             certificate.certificateMetaData().getPatient().getId().getId());
       }
 
@@ -143,13 +143,13 @@ class CertificateTest {
             actionEvaluationBuilder
                 .patient(
                     athenaReactAnderssonBuilder()
-                        .name(ALVE_REACT_ALFREDSSON.getName())
+                        .name(ATLAS_REACT_ABRAHAMSSON.getName())
                         .build()
                 )
                 .build()
         );
 
-        assertEquals(ALVE_REACT_ALFREDSSON.getName().getFirstName(),
+        assertEquals(ATLAS_REACT_ABRAHAMSSON.getName().getFirstName(),
             certificate.certificateMetaData().getPatient().getName().getFirstName()
         );
       }
@@ -160,13 +160,13 @@ class CertificateTest {
             actionEvaluationBuilder
                 .patient(
                     athenaReactAnderssonBuilder()
-                        .name(ALVE_REACT_ALFREDSSON.getName())
+                        .name(ATLAS_REACT_ABRAHAMSSON.getName())
                         .build()
                 )
                 .build()
         );
 
-        assertEquals(ALVE_REACT_ALFREDSSON.getName().getMiddleName(),
+        assertEquals(ATLAS_REACT_ABRAHAMSSON.getName().getMiddleName(),
             certificate.certificateMetaData().getPatient().getName().getMiddleName());
       }
 
@@ -176,13 +176,13 @@ class CertificateTest {
             actionEvaluationBuilder
                 .patient(
                     athenaReactAnderssonBuilder()
-                        .name(ALVE_REACT_ALFREDSSON.getName())
+                        .name(ATLAS_REACT_ABRAHAMSSON.getName())
                         .build()
                 )
                 .build()
         );
 
-        assertEquals(ALVE_REACT_ALFREDSSON.getName().getLastName(),
+        assertEquals(ATLAS_REACT_ABRAHAMSSON.getName().getLastName(),
             certificate.certificateMetaData().getPatient().getName().getLastName());
       }
 
@@ -192,13 +192,13 @@ class CertificateTest {
             actionEvaluationBuilder
                 .patient(
                     athenaReactAnderssonBuilder()
-                        .address(ALVE_REACT_ALFREDSSON.getAddress())
+                        .address(ATLAS_REACT_ABRAHAMSSON.getAddress())
                         .build()
                 )
                 .build()
         );
 
-        assertEquals(ALVE_REACT_ALFREDSSON.getAddress().getCity(),
+        assertEquals(ATLAS_REACT_ABRAHAMSSON.getAddress().getCity(),
             certificate.certificateMetaData().getPatient().getAddress().getCity());
       }
 
@@ -208,13 +208,13 @@ class CertificateTest {
             actionEvaluationBuilder
                 .patient(
                     athenaReactAnderssonBuilder()
-                        .address(ALVE_REACT_ALFREDSSON.getAddress())
+                        .address(ATLAS_REACT_ABRAHAMSSON.getAddress())
                         .build()
                 )
                 .build()
         );
 
-        assertEquals(ALVE_REACT_ALFREDSSON.getAddress().getZipCode(),
+        assertEquals(ATLAS_REACT_ABRAHAMSSON.getAddress().getZipCode(),
             certificate.certificateMetaData().getPatient().getAddress().getZipCode());
       }
 
@@ -224,13 +224,13 @@ class CertificateTest {
             actionEvaluationBuilder
                 .patient(
                     athenaReactAnderssonBuilder()
-                        .address(ALVE_REACT_ALFREDSSON.getAddress())
+                        .address(ATLAS_REACT_ABRAHAMSSON.getAddress())
                         .build()
                 )
                 .build()
         );
 
-        assertEquals(ALVE_REACT_ALFREDSSON.getAddress().getStreet(),
+        assertEquals(ATLAS_REACT_ABRAHAMSSON.getAddress().getStreet(),
             certificate.certificateMetaData().getPatient().getAddress().getStreet());
       }
 

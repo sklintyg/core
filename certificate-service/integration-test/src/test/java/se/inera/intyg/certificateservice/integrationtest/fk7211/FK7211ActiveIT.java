@@ -5,9 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ANONYMA_REACT_ATTILA_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATLAS_REACT_ABRAHAMSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_HUDMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_VARDCENTRAL_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.FK7211;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.VERSION;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.WRONG_VERSION;
@@ -116,7 +121,9 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Om patienten är avliden ska inte 'Skapa utkast' vara tillgänglig")
     void shallNotReturnResourceLinkCreateCertificateIfPatientIsDeceased() {
       final var response = api.certificateTypeInfo(
-          customCertificateTypeInfoRequest().deceased(true).build()
+          customCertificateTypeInfoRequest()
+              .patient(ATLAS_REACT_ABRAHAMSSON_DTO)
+              .build()
       );
 
       assertNull(
@@ -132,7 +139,13 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Om användaren är blockerad ska inte 'Skapa utkast' vara tillgänglig")
     void shallNotReturnResourceLinkCreateCertificateIfUserIsBlocked() {
       final var response = api.certificateTypeInfo(
-          customCertificateTypeInfoRequest().blocked(true).build()
+          customCertificateTypeInfoRequest()
+              .user(
+                  ajlaDoktorDtoBuilder()
+                      .blocked(Boolean.TRUE)
+                      .build()
+              )
+              .build()
       );
 
       assertNull(
@@ -148,7 +161,14 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Om användaren är blockerad och patienten avliden ska inte 'Skapa utkast' vara tillgänglig")
     void shallNotReturnResourceLinkCreateCertificateIfUserIsBlockedAndPatientIsDeceased() {
       final var response = api.certificateTypeInfo(
-          customCertificateTypeInfoRequest().blocked(true).deceased(true).build()
+          customCertificateTypeInfoRequest()
+              .user(
+                  ajlaDoktorDtoBuilder()
+                      .blocked(Boolean.TRUE)
+                      .build()
+              )
+              .patient(ATLAS_REACT_ABRAHAMSSON_DTO)
+              .build()
       );
 
       assertNull(
@@ -157,6 +177,44 @@ class FK7211ActiveIT {
               ResourceLinkTypeDTO.CREATE_CERTIFICATE
           ),
           "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Vårdadmininstratör - Om patienten har skyddade personuppgifter ska inte 'Skapa utkast' vara tillgänglig")
+    void shallNotReturnResourceLinkCreateCertificateIfUserIsCareAdminAndPatientIsProtected() {
+      final var response = api.certificateTypeInfo(
+          customCertificateTypeInfoRequest()
+              .user(ALVA_VARDADMINISTRATOR_DTO)
+              .patient(ANONYMA_REACT_ATTILA_DTO)
+              .build()
+      );
+
+      assertNull(
+          resourceLink(
+              certificateTypeInfo(response.getBody(), FK7211),
+              ResourceLinkTypeDTO.CREATE_CERTIFICATE
+          ),
+          "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Läkare - Om patienten har skyddade personuppgifter ska 'Skapa utkast' vara tillgänglig")
+    void shallReturnResourceLinkCreateCertificateIfUserIsDoctorAndPatientIsProtected() {
+      final var response = api.certificateTypeInfo(
+          customCertificateTypeInfoRequest()
+              .user(AJLA_DOCTOR_DTO)
+              .patient(ANONYMA_REACT_ATTILA_DTO)
+              .build()
+      );
+
+      assertNotNull(
+          resourceLink(
+              certificateTypeInfo(response.getBody(), FK7211),
+              ResourceLinkTypeDTO.CREATE_CERTIFICATE
+          ),
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
       );
     }
   }
@@ -203,7 +261,9 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Om patienten är avliden skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403PatientIsDeceased() {
       final var response = api.createCertificate(
-          customCreateCertificateRequest(FK7211, VERSION).deceased(true).build()
+          customCreateCertificateRequest(FK7211, VERSION)
+              .patient(ATLAS_REACT_ABRAHAMSSON_DTO)
+              .build()
       );
 
       assertEquals(403, response.getStatusCode().value());
@@ -213,7 +273,13 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Om användaren är blockerad skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403UserIsBlocked() {
       final var response = api.createCertificate(
-          customCreateCertificateRequest(FK7211, VERSION).blocked(true).build()
+          customCreateCertificateRequest(FK7211, VERSION)
+              .user(
+                  ajlaDoktorDtoBuilder()
+                      .blocked(Boolean.TRUE)
+                      .build()
+              )
+              .build()
       );
 
       assertEquals(403, response.getStatusCode().value());
@@ -223,7 +289,43 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Om patient är avliden och användaren är blockerad skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403PatientIsDeceasedAndUserIsBlocked() {
       final var response = api.createCertificate(
-          customCreateCertificateRequest(FK7211, VERSION).deceased(true).blocked(true).build()
+          customCreateCertificateRequest(FK7211, VERSION)
+              .patient(ATLAS_REACT_ABRAHAMSSON_DTO)
+              .user(
+                  ajlaDoktorDtoBuilder()
+                      .blocked(Boolean.TRUE)
+                      .build()
+              )
+              .build()
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7211 - Läkare - Om patienten har skyddade personuppgifter skall utkastet returneras")
+    void shallReturnCertificateIfPatientIsProtectedPersonAndUserDoctor() {
+      final var response = api.createCertificate(
+          customCreateCertificateRequest(FK7211, VERSION)
+              .patient(ANONYMA_REACT_ATTILA_DTO)
+              .user(AJLA_DOCTOR_DTO)
+              .build()
+      );
+
+      assertNotNull(
+          certificate(response.getBody()),
+          "Should return certificate because the user is a doctor!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Vårdadministratör - Om patienten har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403PatientIsProtectedPersonAndUserDoctor() {
+      final var response = api.createCertificate(
+          customCreateCertificateRequest(FK7211, VERSION)
+              .patient(ANONYMA_REACT_ATTILA_DTO)
+              .user(ALVA_VARDADMINISTRATOR_DTO)
+              .build()
       );
 
       assertEquals(403, response.getStatusCode().value());
@@ -252,7 +354,7 @@ class FK7211ActiveIT {
       );
 
       final var response = api.certificateExists(
-          certificate(testCertificate.getBody()).getMetadata().getId()
+          certificateId(testCertificate.getBody())
       );
 
       assertTrue(
@@ -368,6 +470,47 @@ class FK7211ActiveIT {
       );
 
       assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7211 - Vårdadministratör - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403IfPatientIsProtectedPersonAndUserIsCareAdmin() {
+      final var testCertificate = testabilityApi.addCertificate(
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .patient(ANONYMA_REACT_ATTILA_DTO)
+              .build()
+      );
+
+      final var response = api.getCertificate(
+          customGetCertificateRequest()
+              .user(ALVA_VARDADMINISTRATOR_DTO)
+              .build(),
+          certificateId(testCertificate.getBody())
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7211 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det returneras")
+    void shallReturnCertificateIfPatientIsProtectedPersonAndUserIsDoctor() {
+      final var testCertificate = testabilityApi.addCertificate(
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .patient(ANONYMA_REACT_ATTILA_DTO)
+              .build()
+      );
+
+      final var response = api.getCertificate(
+          customGetCertificateRequest()
+              .user(AJLA_DOCTOR_DTO)
+              .build(),
+          certificateId(testCertificate.getBody())
+      );
+
+      assertNotNull(
+          certificate(response.getBody()),
+          "Should return certificate when exists!"
+      );
     }
   }
 }

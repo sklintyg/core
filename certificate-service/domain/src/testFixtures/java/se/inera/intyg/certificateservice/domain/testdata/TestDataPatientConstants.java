@@ -6,6 +6,7 @@ import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 
 public class TestDataPatientConstants {
 
+  private static final String EMPTY = "";
   public static final TestIndicated TEST_INDICATED_TRUE = new TestIndicated(true);
   public static final TestIndicated TEST_INDICATED_FALSE = new TestIndicated(false);
   public static final Deceased DECEASED_TRUE = new Deceased(true);
@@ -42,7 +43,38 @@ public class TestDataPatientConstants {
   public static final String ALVE_REACT_ALFREDSSON_CITY = "Karlstad";
   public static final String ALVE_REACT_ALFREDSSON_ZIP_CODE = "65340";
   public static final TestIndicated ALVE_REACT_ALFREDSSON_TEST_INDICATED = TEST_INDICATED_FALSE;
-  public static final Deceased ALVE_REACT_ALFREDSSON_DECEASED = DECEASED_TRUE;
+  public static final Deceased ALVE_REACT_ALFREDSSON_DECEASED = DECEASED_FALSE;
   public static final ProtectedPerson ALVE_REACT_ALFREDSSON_PROTECTED_PERSON = PROTECTED_PERSON_FALSE;
 
+  public static final String ATLAS_REACT_ABRAHAMSSON_ID = "19411129-9055";
+  public static final String ATLAS_REACT_ABRAHAMSSON_FIRST_NAME = "Atlas";
+  public static final String ATLAS_REACT_ABRAHAMSSON_MIDDLE_NAME = "React";
+  public static final String ATLAS_REACT_ABRAHAMSSON_LAST_NAME = "Abrahamsson";
+  public static final String ATLAS_REACT_ABRAHAMSSON_FULL_NAME = "%s %s %s".formatted(
+      ATLAS_REACT_ABRAHAMSSON_FIRST_NAME,
+      ATLAS_REACT_ABRAHAMSSON_MIDDLE_NAME,
+      ATLAS_REACT_ABRAHAMSSON_LAST_NAME
+  );
+  public static final String ATLAS_REACT_ABRAHAMSSON_STREET = "Avlidengatan 456";
+  public static final String ATLAS_REACT_ABRAHAMSSON_CITY = "Karlstad";
+  public static final String ATLAS_REACT_ABRAHAMSSON_ZIP_CODE = "65340";
+  public static final TestIndicated ATLAS_REACT_ABRAHAMSSON_TEST_INDICATED = TEST_INDICATED_FALSE;
+  public static final Deceased ATLAS_REACT_ABRAHAMSSON_DECEASED = DECEASED_TRUE;
+  public static final ProtectedPerson ATLAS_REACT_ABRAHAMSSON_PROTECTED_PERSON = PROTECTED_PERSON_FALSE;
+
+  public static final String ANONYMA_REACT_ATTILA_ID = "19401201-9149";
+  public static final String ANONYMA_REACT_ATTILA_FIRST_NAME = "Atlas";
+  public static final String ANONYMA_REACT_ATTILA_MIDDLE_NAME = "React";
+  public static final String ANONYMA_REACT_ATTILA_LAST_NAME = "Abrahamsson";
+  public static final String ANONYMA_REACT_ATTILA_FULL_NAME = "%s %s %s".formatted(
+      ANONYMA_REACT_ATTILA_FIRST_NAME,
+      ANONYMA_REACT_ATTILA_MIDDLE_NAME,
+      ANONYMA_REACT_ATTILA_LAST_NAME
+  );
+  public static final String ANONYMA_REACT_ATTILA_STREET = EMPTY;
+  public static final String ANONYMA_REACT_ATTILA_CITY = EMPTY;
+  public static final String ANONYMA_REACT_ATTILA_ZIP_CODE = EMPTY;
+  public static final TestIndicated ANONYMA_REACT_ATTILA_TEST_INDICATED = TEST_INDICATED_FALSE;
+  public static final Deceased ANONYMA_REACT_ATTILA_DECEASED = DECEASED_FALSE;
+  public static final ProtectedPerson ANONYMA_REACT_ATTILA_PROTECTED_PERSON = PROTECTED_PERSON_TRUE;
 }

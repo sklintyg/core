@@ -3,9 +3,11 @@ package se.inera.intyg.certificateservice.domain.action.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ALVE_REACT_ALFREDSSON;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
@@ -45,7 +47,7 @@ class CertificateActionCreateTest {
   @Test
   void shallReturnFalseIfPatientIsDeceased() {
     final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ALVE_REACT_ALFREDSSON)
+        .patient(ATLAS_REACT_ABRAHAMSSON)
         .user(AJLA_DOKTOR)
         .build();
 
@@ -86,6 +88,30 @@ class CertificateActionCreateTest {
   void shallReturnTrueIfUserIsNotBlocked() {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(ATHENA_REACT_ANDERSSON)
+        .user(AJLA_DOKTOR)
+        .build();
+
+    final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
+
+    assertTrue(actualResult);
+  }
+
+  @Test
+  void shallReturnFalseIfUserIsCareAdminAndPatientIsProtectedPerson() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ANONYMA_REACT_ATTILA)
+        .user(ALVA_VARDADMINISTRATOR)
+        .build();
+
+    final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
+
+    assertFalse(actualResult);
+  }
+
+  @Test
+  void shallReturnTrueIfUserIsDoctorAndPatientIsProtectedPerson() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ANONYMA_REACT_ATTILA)
         .user(AJLA_DOKTOR)
         .build();
 

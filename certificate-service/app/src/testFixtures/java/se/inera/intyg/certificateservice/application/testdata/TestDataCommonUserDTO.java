@@ -4,6 +4,10 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_BLOCKED;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_ROLE;
 
 import se.inera.intyg.certificateservice.application.common.dto.RoleTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
@@ -12,6 +16,7 @@ import se.inera.intyg.certificateservice.application.common.dto.UserDTO.UserDTOB
 public class TestDataCommonUserDTO {
 
   public static final UserDTO AJLA_DOCTOR_DTO = ajlaDoktorDtoBuilder().build();
+  public static final UserDTO ALVA_VARDADMINISTRATOR_DTO = alvaVardadministratorDtoBuilder().build();
 
   public static UserDTOBuilder ajlaDoktorDtoBuilder() {
     return UserDTO.builder()
@@ -19,5 +24,13 @@ public class TestDataCommonUserDTO {
         .name(AJLA_DOCTOR_NAME)
         .role(RoleTypeDTO.toRoleType(AJLA_DOCTOR_ROLE))
         .blocked(AJLA_DOCTOR_BLOCKED.value());
+  }
+
+  public static UserDTOBuilder alvaVardadministratorDtoBuilder() {
+    return UserDTO.builder()
+        .id(ALVA_VARDADMINISTRATOR_HSA_ID)
+        .name(ALVA_VARDADMINISTRATOR_NAME)
+        .role(RoleTypeDTO.toRoleType(ALVA_VARDADMINISTRATOR_ROLE))
+        .blocked(ALVA_VARDADMINISTRATOR_BLOCKED.value());
   }
 }
