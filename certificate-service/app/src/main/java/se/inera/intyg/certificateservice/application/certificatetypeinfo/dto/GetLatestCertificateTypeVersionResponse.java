@@ -1,15 +1,20 @@
 package se.inera.intyg.certificateservice.application.certificatetypeinfo.dto;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Value;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetLatestCertificateTypeVersionResponse.GetLatestCertificateTypeVersionResponseBuilder;
 
-@Data
+@JsonDeserialize(builder = GetLatestCertificateTypeVersionResponseBuilder.class)
+@Value
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class GetLatestCertificateTypeVersionResponse {
 
-  private CertificateModelIdDTO certificateModelId;
+  CertificateModelIdDTO certificateModelId;
+
+  @JsonPOJOBuilder(withPrefix = "")
+  public static class GetLatestCertificateTypeVersionResponseBuilder {
+
+  }
 }

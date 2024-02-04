@@ -5,6 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -18,9 +23,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.CreateCerti
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
-import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
-import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
@@ -54,10 +57,11 @@ class CreateCertificateServiceTest {
               .version(VERSION)
               .build()
       )
-      .careProvider(UnitDTO.builder().build())
-      .careUnit(UnitDTO.builder().build())
-      .unit(UnitDTO.builder().build())
-      .patient(PatientDTO.builder().build())
+      .user(AJLA_DOCTOR_DTO)
+      .careProvider(ALFA_REGIONEN_DTO)
+      .careUnit(ALFA_MEDICINCENTRUM_DTO)
+      .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
+      .patient(ATHENA_REACT_ANDERSSON_DTO)
       .build();
 
   @Test

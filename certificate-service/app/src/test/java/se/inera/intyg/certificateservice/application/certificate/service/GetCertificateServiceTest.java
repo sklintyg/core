@@ -5,6 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -18,8 +22,6 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
-import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
-import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
@@ -29,10 +31,6 @@ import se.inera.intyg.certificateservice.domain.certificate.service.GetCertifica
 @ExtendWith(MockitoExtension.class)
 class GetCertificateServiceTest {
 
-  private static final UserDTO USER_DTO = UserDTO.builder().build();
-  private static final UnitDTO UNIT_DTO = UnitDTO.builder().build();
-  private static final UnitDTO CARE_UNIT_DTO = UnitDTO.builder().build();
-  private static final UnitDTO CARE_PROVIDER_DTO = UnitDTO.builder().build();
   private static final String CERTIFICATE_ID = "certificateId";
   @Mock
   private ActionEvaluationFactory actionEvaluationFactory;
@@ -70,10 +68,10 @@ class GetCertificateServiceTest {
 
     final var actionEvaluation = ActionEvaluation.builder().build();
     doReturn(actionEvaluation).when(actionEvaluationFactory).create(
-        USER_DTO,
-        UNIT_DTO,
-        CARE_UNIT_DTO,
-        CARE_PROVIDER_DTO
+        AJLA_DOCTOR_DTO,
+        ALFA_ALLERGIMOTTAGNINGEN_DTO,
+        ALFA_MEDICINCENTRUM_DTO,
+        ALFA_REGIONEN_DTO
     );
 
     final var certificate = mock(Certificate.class);
@@ -92,10 +90,10 @@ class GetCertificateServiceTest {
 
     final var actualResult = getCertificateService.get(
         GetCertificateRequest.builder()
-            .user(USER_DTO)
-            .unit(UNIT_DTO)
-            .careUnit(CARE_UNIT_DTO)
-            .careProvider(CARE_PROVIDER_DTO)
+            .user(AJLA_DOCTOR_DTO)
+            .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
+            .careUnit(ALFA_MEDICINCENTRUM_DTO)
+            .careProvider(ALFA_REGIONEN_DTO)
             .build(),
         CERTIFICATE_ID
     );

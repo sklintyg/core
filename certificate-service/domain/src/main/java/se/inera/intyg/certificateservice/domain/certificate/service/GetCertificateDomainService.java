@@ -6,6 +6,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.exception.CertificateActionForbidden;
 
 @RequiredArgsConstructor
 public class GetCertificateDomainService {
@@ -15,7 +16,7 @@ public class GetCertificateDomainService {
   public Certificate get(CertificateId certificateId, ActionEvaluation actionEvaluation) {
     final var certificate = certificateRepository.getById(certificateId);
     if (!certificate.allowTo(CertificateActionType.READ, actionEvaluation)) {
-      throw new IllegalArgumentException(
+      throw new CertificateActionForbidden(
           "Not allowed to read certificate for %s".formatted(certificateId)
       );
     }

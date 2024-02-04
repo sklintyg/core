@@ -1,22 +1,27 @@
 package se.inera.intyg.certificateservice.application.common.dto;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Value;
+import se.inera.intyg.certificateservice.application.common.dto.UnitDTO.UnitDTOBuilder;
 
-@Data
+@JsonDeserialize(builder = UnitDTOBuilder.class)
+@Value
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class UnitDTO {
 
-  private String id;
-  private String name;
-  private String address;
-  private String zipCode;
-  private String city;
-  private String phoneNumber;
-  private String email;
-  private Boolean inactive;
+  String id;
+  String name;
+  String address;
+  String zipCode;
+  String city;
+  String phoneNumber;
+  String email;
+  Boolean inactive;
+
+  @JsonPOJOBuilder(withPrefix = "")
+  public static class UnitDTOBuilder {
+
+  }
 }

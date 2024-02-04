@@ -27,5 +27,4 @@ public class PatientDTO {
   public static class PatientDTOBuilder {
 
   }
-
 }

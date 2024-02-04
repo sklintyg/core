@@ -3,75 +3,38 @@ package se.inera.intyg.certificateservice.application.certificatetypeinfo.servic
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.athenaReactAnderssonDtoBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaAllergimottagningenDtoBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaMedicincentrumDtoBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaRegionenDtoBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
-import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateRequestValidator;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
-import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
-import se.inera.intyg.certificateservice.application.common.dto.RoleTypeDTO;
-import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
-import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
 class CertificateTypeInfoValidatorTest {
 
-
-  private static final String ID = "id";
-  private static final String TYPE = "type";
-  private static final String VERSION = "version";
-  private CreateCertificateRequestValidator certificateTypeInfoValidator;
-  private CreateCertificateRequest.CreateCertificateRequestBuilder requestBuilder;
+  private CertificateTypeInfoValidator certificateTypeInfoValidator;
+  private GetCertificateTypeInfoRequest.GetCertificateTypeInfoRequestBuilder requestBuilder;
 
   @BeforeEach
   void setUp() {
-    certificateTypeInfoValidator = new CreateCertificateRequestValidator();
-    requestBuilder = CreateCertificateRequest.builder()
-        .user(
-            UserDTO.builder()
-                .id(ID)
-                .role(RoleTypeDTO.DOCTOR)
-                .blocked(false)
-                .build()
-        )
-        .unit(
-            UnitDTO.builder()
-                .id(ID)
-                .inactive(false)
-                .build()
-        )
-        .careUnit(
-            UnitDTO.builder()
-                .id(ID)
-                .build()
-        )
-        .careProvider(
-            UnitDTO.builder()
-                .id(ID)
-                .build()
-        )
-        .patient(
-            PatientDTO.builder()
-                .id(
-                    PersonIdDTO.builder()
-                        .id(ID)
-                        .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-                        .build()
-                )
-                .testIndicated(false)
-                .deceased(false)
-                .protectedPerson(false)
-                .build()
-        )
-        .certificateModelId(
-            CertificateModelIdDTO.builder()
-                .type("type")
-                .version("version")
-                .build()
-        );
+    certificateTypeInfoValidator = new CertificateTypeInfoValidator();
+    requestBuilder = GetCertificateTypeInfoRequest.builder()
+        .user(AJLA_DOCTOR_DTO)
+        .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
+        .careUnit(ALFA_MEDICINCENTRUM_DTO)
+        .careProvider(ALFA_REGIONEN_DTO)
+        .patient(ATHENA_REACT_ANDERSSON_DTO);
   }
 
   @Nested
@@ -93,8 +56,10 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfIdIsNull() {
       final var request = requestBuilder
           .user(
-              UserDTO.builder()
-                  .build())
+              ajlaDoktorDtoBuilder()
+                  .id(null)
+                  .build()
+          )
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
@@ -107,9 +72,10 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfIdIsEmpty() {
       final var request = requestBuilder
           .user(
-              UserDTO.builder()
+              ajlaDoktorDtoBuilder()
                   .id("")
-                  .build())
+                  .build()
+          )
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
@@ -122,8 +88,8 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfRoleIsNull() {
       final var request = requestBuilder
           .user(
-              UserDTO.builder()
-                  .id(ID)
+              ajlaDoktorDtoBuilder()
+                  .role(null)
                   .build()
           )
           .build();
@@ -138,9 +104,8 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfBlockedIsNull() {
       final var request = requestBuilder
           .user(
-              UserDTO.builder()
-                  .id(ID)
-                  .role(RoleTypeDTO.DOCTOR)
+              ajlaDoktorDtoBuilder()
+                  .blocked(null)
                   .build()
           )
           .build();
@@ -173,7 +138,9 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfIdIsNull() {
       final var request = requestBuilder
           .unit(
-              UnitDTO.builder().build()
+              alfaAllergimottagningenDtoBuilder()
+                  .id(null)
+                  .build()
           )
           .build();
 
@@ -188,7 +155,7 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfIdIsEmpty() {
       final var request = requestBuilder
           .unit(
-              UnitDTO.builder()
+              alfaAllergimottagningenDtoBuilder()
                   .id("")
                   .build()
           )
@@ -205,8 +172,8 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfIsInactiveIsNull() {
       final var request = requestBuilder
           .unit(
-              UnitDTO.builder()
-                  .id(ID)
+              alfaAllergimottagningenDtoBuilder()
+                  .inactive(null)
                   .build()
           )
           .build();
@@ -217,54 +184,56 @@ class CertificateTypeInfoValidatorTest {
       assertEquals("Required parameter missing: Unit.isInactive",
           illegalArgumentException.getMessage());
     }
+  }
 
-    @Nested
-    class CareUnitValidation {
+  @Nested
+  class CareUnitValidation {
 
-      @Test
-      void shallThrowIfCareUnitIsNull() {
-        final var request = requestBuilder
-            .careUnit(null)
-            .build();
+    @Test
+    void shallThrowIfCareUnitIsNull() {
+      final var request = requestBuilder
+          .careUnit(null)
+          .build();
 
-        final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-            () -> certificateTypeInfoValidator.validate(request));
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificateTypeInfoValidator.validate(request));
 
-        assertEquals("Required parameter missing: CareUnit",
-            illegalArgumentException.getMessage());
-      }
+      assertEquals("Required parameter missing: CareUnit",
+          illegalArgumentException.getMessage());
+    }
 
-      @Test
-      void shallThrowIfIdIsNull() {
-        final var request = requestBuilder
-            .careUnit(
-                UnitDTO.builder().build()
-            )
-            .build();
+    @Test
+    void shallThrowIfIdIsNull() {
+      final var request = requestBuilder
+          .careUnit(
+              alfaMedicincentrumDtoBuilder()
+                  .id(null)
+                  .build()
+          )
+          .build();
 
-        final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-            () -> certificateTypeInfoValidator.validate(request));
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificateTypeInfoValidator.validate(request));
 
-        assertEquals("Required parameter missing: CareUnit.id",
-            illegalArgumentException.getMessage());
-      }
+      assertEquals("Required parameter missing: CareUnit.id",
+          illegalArgumentException.getMessage());
+    }
 
-      @Test
-      void shallThrowIfIdIsEmpty() {
-        final var request = requestBuilder
-            .careUnit(
-                UnitDTO.builder()
-                    .id("")
-                    .build()
-            )
-            .build();
+    @Test
+    void shallThrowIfIdIsEmpty() {
+      final var request = requestBuilder
+          .careUnit(
+              alfaMedicincentrumDtoBuilder()
+                  .id("")
+                  .build()
+          )
+          .build();
 
-        final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-            () -> certificateTypeInfoValidator.validate(request));
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificateTypeInfoValidator.validate(request));
 
-        assertEquals("Required parameter missing: CareUnit.id",
-            illegalArgumentException.getMessage());
-      }
+      assertEquals("Required parameter missing: CareUnit.id",
+          illegalArgumentException.getMessage());
     }
   }
 
@@ -288,7 +257,9 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfIdIsNull() {
       final var request = requestBuilder
           .careProvider(
-              UnitDTO.builder().build()
+              alfaRegionenDtoBuilder()
+                  .id(null)
+                  .build()
           )
           .build();
 
@@ -303,7 +274,7 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfIdIsEmpty() {
       final var request = requestBuilder
           .careProvider(
-              UnitDTO.builder()
+              alfaRegionenDtoBuilder()
                   .id("")
                   .build()
           )
@@ -337,7 +308,8 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfIdIsNull() {
       final var request = requestBuilder
           .patient(
-              PatientDTO.builder()
+              athenaReactAnderssonDtoBuilder()
+                  .id(null)
                   .build()
           )
           .build();
@@ -353,7 +325,7 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfPatientIdIsNull() {
       final var request = requestBuilder
           .patient(
-              PatientDTO.builder()
+              athenaReactAnderssonDtoBuilder()
                   .id(
                       PersonIdDTO.builder()
                           .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
@@ -374,7 +346,7 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfPatientIdIsEmpty() {
       final var request = requestBuilder
           .patient(
-              PatientDTO.builder()
+              athenaReactAnderssonDtoBuilder()
                   .id(
                       PersonIdDTO.builder()
                           .id("")
@@ -396,10 +368,10 @@ class CertificateTypeInfoValidatorTest {
     void shallThrowIfPatientIdTypeIsNull() {
       final var request = requestBuilder
           .patient(
-              PatientDTO.builder()
+              athenaReactAnderssonDtoBuilder()
                   .id(
                       PersonIdDTO.builder()
-                          .id(ID)
+                          .id(ATHENA_REACT_ANDERSSON_DTO.getId().getId())
                           .build()
                   )
                   .build()
@@ -418,15 +390,8 @@ class CertificateTypeInfoValidatorTest {
   void shallThrowIfTestIndicatedIsNull() {
     final var request = requestBuilder
         .patient(
-            PatientDTO.builder()
-                .id(
-                    PersonIdDTO.builder()
-                        .id(ID)
-                        .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-                        .build()
-                )
-                .protectedPerson(false)
-                .deceased(false)
+            athenaReactAnderssonDtoBuilder()
+                .testIndicated(null)
                 .build()
         )
         .build();
@@ -442,15 +407,8 @@ class CertificateTypeInfoValidatorTest {
   void shallThrowIfDeceasedIsNull() {
     final var request = requestBuilder
         .patient(
-            PatientDTO.builder()
-                .id(
-                    PersonIdDTO.builder()
-                        .id(ID)
-                        .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-                        .build()
-                )
-                .protectedPerson(false)
-                .testIndicated(false)
+            athenaReactAnderssonDtoBuilder()
+                .deceased(null)
                 .build()
         )
         .build();
@@ -466,15 +424,8 @@ class CertificateTypeInfoValidatorTest {
   void shallThrowIfProtectedPersonIsNull() {
     final var request = requestBuilder
         .patient(
-            PatientDTO.builder()
-                .id(
-                    PersonIdDTO.builder()
-                        .id(ID)
-                        .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-                        .build()
-                )
-                .testIndicated(false)
-                .deceased(false)
+            athenaReactAnderssonDtoBuilder()
+                .protectedPerson(null)
                 .build()
         )
         .build();

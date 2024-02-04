@@ -8,7 +8,9 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateModelIdUtil.certificateModelId;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateTypeInfoUtil.certificateTypeInfo;
+import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -23,7 +25,7 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
 
-@ActiveProfiles("integration-test")
+@ActiveProfiles({"integration-test", TESTABILITY_PROFILE})
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class FK7211InactiveIT {
 
@@ -36,7 +38,6 @@ class FK7211InactiveIT {
   }
 
   private final TestRestTemplate restTemplate;
-
   private ApiUtil api;
 
   @Autowired
@@ -47,6 +48,11 @@ class FK7211InactiveIT {
   @BeforeEach
   void setUp() {
     this.api = new ApiUtil(restTemplate, port);
+  }
+
+  @AfterEach
+  void tearDown() {
+    api.reset();
   }
 
   @Nested

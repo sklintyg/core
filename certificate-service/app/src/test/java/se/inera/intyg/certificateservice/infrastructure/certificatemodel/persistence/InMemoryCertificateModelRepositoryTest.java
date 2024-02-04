@@ -18,7 +18,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
+import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateModelRepository;
 
 @ExtendWith(MockitoExtension.class)
 class InMemoryCertificateModelRepositoryTest {
@@ -33,7 +35,7 @@ class InMemoryCertificateModelRepositoryTest {
   @Mock
   private CertificateModelFactory certificateModelFactoryTwo;
 
-  private InMemoryCertificateModelRepository inMemoryCertificateModelRepository;
+  private CertificateModelRepository inMemoryCertificateModelRepository;
 
   @Nested
   class FindAllActive {
@@ -355,6 +357,53 @@ class InMemoryCertificateModelRepositoryTest {
       );
 
       assertEquals("CertificateModelId is null!", illegalArgumentException.getMessage());
+    }
+  }
+
+  @Nested
+  class TestTestabilityCertificateModelRepository {
+
+    private TestabilityCertificateModelRepository testabilityCertificateModelRepository;
+
+    @Test
+    void shallReturnListOfAllCertificateModelsEvenIfTheyAreNotActive() {
+      testabilityCertificateModelRepository = new InMemoryCertificateModelRepository(
+          List.of(certificateModelFactoryOne, certificateModelFactoryTwo)
+      );
+
+      final var expectedModelOne = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE_ONE))
+                  .version(new CertificateVersion(VERSION_ONE))
+                  .build()
+          )
+          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+          .build();
+
+      doReturn(expectedModelOne).when(certificateModelFactoryOne).create();
+
+      final var expectedModelTwo = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE_TWO))
+                  .version(new CertificateVersion(VERSION_ONE))
+                  .build()
+          )
+          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
+          .build();
+
+      doReturn(expectedModelTwo).when(certificateModelFactoryTwo).create();
+
+      final var actualModels = testabilityCertificateModelRepository.all();
+
+      assertEquals(2, actualModels.size());
+      assertTrue(actualModels.contains(expectedModelOne),
+          "Expected model with id: %s".formatted(expectedModelOne.getId())
+      );
+      assertTrue(actualModels.contains(expectedModelTwo),
+          "Expected model with id: %s".formatted(expectedModelTwo.getId())
+      );
     }
   }
 }

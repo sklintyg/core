@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.application.common;
 
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
-import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
@@ -20,7 +19,6 @@ import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonAddress;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
-import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 import se.inera.intyg.certificateservice.domain.user.model.User;
@@ -43,10 +41,11 @@ public class ActionEvaluationFactory {
                 )
                 .name(
                     Name.builder()
-                        .fullName(user.getName())
+                        .lastName(user.getName())
                         .build()
                 )
                 .blocked(new Blocked(user.getBlocked()))
+                .role(user.getRole().toRole())
                 .build()
         )
         .subUnit(
@@ -92,19 +91,6 @@ public class ActionEvaluationFactory {
             CareProvider.builder()
                 .hsaId(new HsaId(careProvider.getId()))
                 .name(new UnitName(careProvider.getName()))
-                .address(
-                    UnitAddress.builder()
-                        .address(careProvider.getAddress())
-                        .zipCode(careProvider.getZipCode())
-                        .city(careProvider.getCity())
-                        .build()
-                )
-                .contactInfo(
-                    UnitContactInfo.builder()
-                        .phoneNumber(careProvider.getPhoneNumber())
-                        .email(careProvider.getEmail())
-                        .build()
-                )
                 .build()
         );
     if (patient != null) {
@@ -119,13 +105,12 @@ public class ActionEvaluationFactory {
         Patient.builder()
             .id(
                 PersonId.builder()
-                    .type(convertType(patient.getId().getType()))
+                    .type(patient.getId().getType().toPersonIdType())
                     .id(patient.getId().getId())
                     .build()
             )
             .name(
                 Name.builder()
-                    .fullName(patient.getFullName())
                     .firstName(patient.getFirstName())
                     .middleName(patient.getMiddleName())
                     .lastName(patient.getLastName())
@@ -143,12 +128,5 @@ public class ActionEvaluationFactory {
             .testIndicated(new TestIndicated(patient.getTestIndicated()))
             .build()
     );
-  }
-
-  private PersonIdType convertType(PersonIdTypeDTO type) {
-    return switch (type) {
-      case PERSONAL_IDENTITY_NUMBER -> PersonIdType.PERSONAL_IDENTITY_NUMBER;
-      case COORDINATION_NUMBER -> PersonIdType.COORDINATION_NUMBER;
-    };
   }
 }

@@ -20,14 +20,14 @@ public class PatientDTO {
   String street;
   String city;
   String zipCode;
-  boolean coordinationNumber;
-  boolean testIndicated;
-  boolean protectedPerson;
-  boolean deceased;
-  boolean differentNameFromEHR;
-  boolean personIdChanged;
-  boolean reserveId;
-  boolean addressFromPU;
+  Boolean coordinationNumber;
+  Boolean testIndicated;
+  Boolean protectedPerson;
+  Boolean deceased;
+  Boolean differentNameFromEHR;
+  Boolean personIdChanged;
+  Boolean reserveId;
+  Boolean addressFromPU;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class PatientDTOBuilder {

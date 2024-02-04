@@ -16,6 +16,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.exception.CertificateActionForbidden;
 
 @ExtendWith(MockitoExtension.class)
 class GetCertificateDomainServiceTest {
@@ -44,7 +45,7 @@ class GetCertificateDomainServiceTest {
   @Test
   void shallThrowIfNotAllowedToRead() {
     doReturn(false).when(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
-    assertThrows(IllegalArgumentException.class,
+    assertThrows(CertificateActionForbidden.class,
         () -> getCertificateDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION)
     );
   }

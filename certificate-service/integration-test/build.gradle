@@ -1,3 +1,5 @@
+apply plugin: "java-test-fixtures"
+
 dependencies {
     implementation project(':domain')
     implementation project(':app')
@@ -8,6 +10,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-test'
+    testImplementation testFixtures(project(":app"))
+    testImplementation testFixtures(project(":domain"))
 }
 
 tasks.register('integrationTest', Test) {
