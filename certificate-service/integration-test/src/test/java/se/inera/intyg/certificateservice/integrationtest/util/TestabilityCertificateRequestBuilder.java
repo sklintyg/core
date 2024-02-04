@@ -7,7 +7,9 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
+import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
+import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityCertificateRequest;
 
 public class TestabilityCertificateRequestBuilder {
@@ -21,6 +23,8 @@ public class TestabilityCertificateRequestBuilder {
       .build();
 
   private UnitDTO unit = ALFA_ALLERGIMOTTAGNINGEN_DTO;
+  private UserDTO user = AJLA_DOCTOR_DTO;
+  private PatientDTO patient = ATHENA_REACT_ANDERSSON_DTO;
 
   public static TestabilityCertificateRequestBuilder create() {
     return new TestabilityCertificateRequestBuilder();
@@ -30,8 +34,18 @@ public class TestabilityCertificateRequestBuilder {
 
   }
 
+  public TestabilityCertificateRequestBuilder user(UserDTO user) {
+    this.user = user;
+    return this;
+  }
+
   public TestabilityCertificateRequestBuilder unit(UnitDTO unit) {
     this.unit = unit;
+    return this;
+  }
+
+  public TestabilityCertificateRequestBuilder patient(PatientDTO patient) {
+    this.patient = patient;
     return this;
   }
 
@@ -43,8 +57,8 @@ public class TestabilityCertificateRequestBuilder {
 
   public TestabilityCertificateRequest build() {
     return TestabilityCertificateRequest.builder()
-        .user(AJLA_DOCTOR_DTO)
-        .patient(ATHENA_REACT_ANDERSSON_DTO)
+        .user(user)
+        .patient(patient)
         .careProvider(ALFA_REGIONEN_DTO)
         .unit(unit)
         .careUnit(ALFA_MEDICINCENTRUM_DTO)

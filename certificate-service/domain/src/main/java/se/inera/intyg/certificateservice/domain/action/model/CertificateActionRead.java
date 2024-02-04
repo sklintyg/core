@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.domain.action.model;
 
+import static se.inera.intyg.certificateservice.domain.user.model.Role.CARE_ADMIN;
+
 import java.util.Optional;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
@@ -19,10 +21,15 @@ public class CertificateActionRead implements CertificateAction {
 
   @Override
   public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
-    return certificate.filter(value ->
-        isIssuingUnitMatchingSubUnit(actionEvaluation, value) ||
-            isCareUnitMatchingSubUnit(actionEvaluation, value)
-    ).isPresent();
+    return certificate
+        .filter(value ->
+            isIssuingUnitMatchingSubUnit(actionEvaluation, value)
+                || isCareUnitMatchingSubUnit(actionEvaluation, value)
+        )
+        .filter(value ->
+            ifPatientIsProtectedUserMustNotBeCareAdmin(actionEvaluation, value)
+        )
+        .isPresent();
   }
 
   private static boolean isCareUnitMatchingSubUnit(ActionEvaluation actionEvaluation,
@@ -35,6 +42,12 @@ public class CertificateActionRead implements CertificateAction {
       Certificate value) {
     return value.certificateMetaData().getIssuingUnit().getHsaId()
         .equals(actionEvaluation.getSubUnit().getHsaId());
+  }
+
+  private static boolean ifPatientIsProtectedUserMustNotBeCareAdmin(
+      ActionEvaluation actionEvaluation, Certificate value) {
+    return !value.certificateMetaData().getPatient().getProtectedPerson().value()
+        || !CARE_ADMIN.equals(actionEvaluation.getUser().getRole());
   }
 
   @Override

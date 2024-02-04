@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.action.model;
 import java.util.Optional;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.user.model.Role;
 
 public class CertificateActionCreate implements CertificateAction {
 
@@ -23,6 +24,10 @@ public class CertificateActionCreate implements CertificateAction {
   @Override
   public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
     if (actionEvaluation.getPatient() == null || actionEvaluation.getUser() == null) {
+      return false;
+    }
+    if (Role.CARE_ADMIN.equals(actionEvaluation.getUser().getRole())
+        && actionEvaluation.getPatient().getProtectedPerson().value()) {
       return false;
     }
     return !actionEvaluation.getPatient().getDeceased().value() && !actionEvaluation.getUser()
