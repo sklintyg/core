@@ -58,7 +58,7 @@ public class FakeHsaRepository {
   public HealthCareUnitMembers getHealthCareUnitMembers(String id) {
     final var parsedCareUnit = careUnitMap.get(id);
     if (parsedCareUnit == null) {
-      throw new IllegalArgumentException(String.format("Care unit was not found, id: '%s'", id));
+      return HealthCareUnitMembers.builder().build();
     }
     return healthCareUnitMembersConverter.convert(parsedCareUnit);
   }
@@ -77,7 +77,7 @@ public class FakeHsaRepository {
 
   public List<HealthCareProvider> getHealthCareProvider(String id) {
     final var parsedProvider = careProviderMap.get(id);
-    
+
     if (parsedProvider == null) {
       return Collections.emptyList();
     }
