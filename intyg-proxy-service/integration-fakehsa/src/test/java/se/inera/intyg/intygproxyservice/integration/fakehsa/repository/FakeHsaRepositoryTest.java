@@ -102,7 +102,7 @@ class FakeHsaRepositoryTest {
     }
 
     @Test
-    void shouldThrowIlligalArgumentExceptionIfEmployeeNotFound() {
+    void shouldThrowIllegalArgumentExceptionIfEmployeeNotFound() {
       final var parsedHsaPerson = ParsedHsaPerson.builder().personalIdentityNumber(PERSON_ID)
           .build();
 
@@ -132,11 +132,14 @@ class FakeHsaRepositoryTest {
 
 
     @Test
-    void shouldThrowIlligalArgumentExceptionIfCareUnitNotFound() {
+    void shouldReturnEmptyHealthCareUnitMembersIfMissing() {
       final var parsedCareProvider = ParsedCareProvider.builder().id(HSA_ID).build();
+      final var expectedHealthCareUnitMembers = HealthCareUnitMembers.builder().build();
+
       fakeHsaRepository.addParsedCareProvider(parsedCareProvider);
-      assertThrows(IllegalArgumentException.class,
-          () -> fakeHsaRepository.getHealthCareUnitMembers(HSA_ID));
+
+      final var result = fakeHsaRepository.getHealthCareUnitMembers(HSA_ID);
+      assertEquals(expectedHealthCareUnitMembers, result);
     }
   }
 
@@ -183,7 +186,7 @@ class FakeHsaRepositoryTest {
 
 
     @Test
-    void shouldThrowIlligalArgumentExceptionIfUnitNotFound() {
+    void shouldThrowIllegalArgumentExceptionIfUnitNotFound() {
       final var parsedCareProvider = ParsedCareProvider.builder().id(HSA_ID).build();
       fakeHsaRepository.addParsedCareProvider(parsedCareProvider);
       assertThrows(IllegalArgumentException.class,
@@ -195,7 +198,7 @@ class FakeHsaRepositoryTest {
   class GetUnit {
 
     @Test
-    void shouldReturnUnitFromCareproviderMap() {
+    void shouldReturnUnitFromCareProviderMap() {
       final var expectedUnit = Unit.builder()
           .unitHsaId(HSA_ID)
           .unitName(UNIT_NAME)
