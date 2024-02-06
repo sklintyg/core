@@ -34,7 +34,7 @@ class CertificateModelFactoryFK7211Test {
 
     final var certificateModel = certificateModelFactoryFK7211.create();
 
-    assertEquals(expectedId, certificateModel.getId());
+    assertEquals(expectedId, certificateModel.id());
   }
 
   @Test
@@ -43,7 +43,7 @@ class CertificateModelFactoryFK7211Test {
 
     final var certificateModel = certificateModelFactoryFK7211.create();
 
-    assertEquals(expectedName, certificateModel.getName());
+    assertEquals(expectedName, certificateModel.name());
   }
 
   @Test
@@ -55,7 +55,7 @@ class CertificateModelFactoryFK7211Test {
 
     final var certificateModel = certificateModelFactoryFK7211.create();
 
-    assertEquals(expectedDescription, certificateModel.getDescription());
+    assertEquals(expectedDescription, certificateModel.description());
   }
 
   @Test
@@ -66,7 +66,7 @@ class CertificateModelFactoryFK7211Test {
 
     final var certificateModel = certificateModelFactoryFK7211.create();
 
-    assertEquals(expectedActiveFrom, certificateModel.getActiveFrom());
+    assertEquals(expectedActiveFrom, certificateModel.activeFrom());
   }
 
   @Test
@@ -75,9 +75,9 @@ class CertificateModelFactoryFK7211Test {
 
     final var certificateModel = certificateModelFactoryFK7211.create();
 
-    assertTrue(certificateModel.getCertificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(
-                actionSpecification.getCertificateActionType())),
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
         "Expected type: %s".formatted(expectedType));
   }
 }

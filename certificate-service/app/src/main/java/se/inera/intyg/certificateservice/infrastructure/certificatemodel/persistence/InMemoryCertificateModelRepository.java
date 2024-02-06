@@ -41,9 +41,9 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
     }
 
     return getCertificateModelMap().values().stream()
-        .filter(certificateModel -> certificateType.equals(certificateModel.getId().getType()))
+        .filter(certificateModel -> certificateType.equals(certificateModel.id().type()))
         .filter(filterActiveCertificateModels())
-        .max(Comparator.comparing(CertificateModel::getActiveFrom));
+        .max(Comparator.comparing(CertificateModel::activeFrom));
   }
 
   @Override
@@ -59,11 +59,11 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
       );
     }
 
-    if (LocalDateTime.now(ZoneId.systemDefault()).isBefore(certificateModel.getActiveFrom())) {
+    if (LocalDateTime.now(ZoneId.systemDefault()).isBefore(certificateModel.activeFrom())) {
       throw new IllegalArgumentException(
           "CertificateModel with id '%s' not active until '%s'".formatted(
-              certificateModel.getId(),
-              certificateModel.getActiveFrom()
+              certificateModel.id(),
+              certificateModel.activeFrom()
           )
       );
     }
@@ -82,8 +82,8 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
       certificateModelMap = new HashMap<>();
       certificateModelFactories.forEach(certificateModelFactory -> {
             final var certificateModel = certificateModelFactory.create();
-            certificateModelMap.put(certificateModel.getId(), certificateModel);
-            log.info("Loaded certificate model '{}' to repository", certificateModel.getId());
+            certificateModelMap.put(certificateModel.id(), certificateModel);
+            log.info("Loaded certificate model '{}' to repository", certificateModel.id());
           }
       );
     }
@@ -92,6 +92,6 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
 
   private static Predicate<CertificateModel> filterActiveCertificateModels() {
     return certificateModel ->
-        certificateModel.getActiveFrom().isBefore(LocalDateTime.now(ZoneId.systemDefault()));
+        certificateModel.activeFrom().isBefore(LocalDateTime.now(ZoneId.systemDefault()));
   }
 }

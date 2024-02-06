@@ -17,9 +17,9 @@ public class CertificateTypeInfoConverter {
   public CertificateTypeInfoDTO convert(CertificateModel certificateModel,
       List<CertificateAction> certificateActions) {
     return CertificateTypeInfoDTO.builder()
-        .type(certificateModel.getId().getType().type())
-        .name(certificateModel.getName())
-        .description(certificateModel.getDescription())
+        .type(certificateModel.id().type().type())
+        .name(certificateModel.name())
+        .description(certificateModel.description())
         .links(
             certificateActions.stream()
                 .map(resourceLinkConverter::convert)

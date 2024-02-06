@@ -10,7 +10,7 @@ public class CertificateActionFactory {
 
   public static CertificateAction create(
       CertificateActionSpecification certificateActionSpecification) {
-    return switch (certificateActionSpecification.getCertificateActionType()) {
+    return switch (certificateActionSpecification.certificateActionType()) {
       case CREATE -> new CertificateActionCreate(certificateActionSpecification);
       case READ -> new CertificateActionRead(certificateActionSpecification);
     };

@@ -17,9 +17,9 @@ public class Staff {
 
   public static Staff create(User user) {
     return Staff.builder()
-        .hsaId(user.getHsaId())
-        .name(user.getName())
-        .blocked(user.getBlocked())
+        .hsaId(user.hsaId())
+        .name(user.name())
+        .blocked(user.blocked())
         .build();
   }
 }

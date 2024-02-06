@@ -36,7 +36,7 @@ public class TestabilityCertificateService {
         .build();
 
     final var certificateModel = testabilityCertificateModelRepository.all().stream()
-        .filter(model -> model.getId().equals(certificateModelId))
+        .filter(model -> model.id().equals(certificateModelId))
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException(
                 "No certificateModelId matching ä%s'".formatted(certificateModelId)
