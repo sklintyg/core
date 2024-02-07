@@ -117,7 +117,7 @@ class CertificateTest {
         );
 
         assertEquals(COORDINATION_NUMBER,
-            certificate.certificateMetaData().getPatient().getId().getType()
+            certificate.certificateMetaData().patient().id().type()
         );
       }
 
@@ -127,14 +127,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .patient(
                     athenaReactAnderssonBuilder()
-                        .id(ATLAS_REACT_ABRAHAMSSON.getId())
+                        .id(ATLAS_REACT_ABRAHAMSSON.id())
                         .build()
                 )
                 .build()
         );
 
-        assertEquals(ATLAS_REACT_ABRAHAMSSON.getId().getId(),
-            certificate.certificateMetaData().getPatient().getId().getId());
+        assertEquals(ATLAS_REACT_ABRAHAMSSON.id().id(),
+            certificate.certificateMetaData().patient().id().id());
       }
 
       @Test
@@ -143,14 +143,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .patient(
                     athenaReactAnderssonBuilder()
-                        .name(ATLAS_REACT_ABRAHAMSSON.getName())
+                        .name(ATLAS_REACT_ABRAHAMSSON.name())
                         .build()
                 )
                 .build()
         );
 
-        assertEquals(ATLAS_REACT_ABRAHAMSSON.getName().getFirstName(),
-            certificate.certificateMetaData().getPatient().getName().getFirstName()
+        assertEquals(ATLAS_REACT_ABRAHAMSSON.name().firstName(),
+            certificate.certificateMetaData().patient().name().firstName()
         );
       }
 
@@ -160,14 +160,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .patient(
                     athenaReactAnderssonBuilder()
-                        .name(ATLAS_REACT_ABRAHAMSSON.getName())
+                        .name(ATLAS_REACT_ABRAHAMSSON.name())
                         .build()
                 )
                 .build()
         );
 
-        assertEquals(ATLAS_REACT_ABRAHAMSSON.getName().getMiddleName(),
-            certificate.certificateMetaData().getPatient().getName().getMiddleName());
+        assertEquals(ATLAS_REACT_ABRAHAMSSON.name().middleName(),
+            certificate.certificateMetaData().patient().name().middleName());
       }
 
       @Test
@@ -176,14 +176,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .patient(
                     athenaReactAnderssonBuilder()
-                        .name(ATLAS_REACT_ABRAHAMSSON.getName())
+                        .name(ATLAS_REACT_ABRAHAMSSON.name())
                         .build()
                 )
                 .build()
         );
 
-        assertEquals(ATLAS_REACT_ABRAHAMSSON.getName().getLastName(),
-            certificate.certificateMetaData().getPatient().getName().getLastName());
+        assertEquals(ATLAS_REACT_ABRAHAMSSON.name().lastName(),
+            certificate.certificateMetaData().patient().name().lastName());
       }
 
       @Test
@@ -192,14 +192,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .patient(
                     athenaReactAnderssonBuilder()
-                        .address(ATLAS_REACT_ABRAHAMSSON.getAddress())
+                        .address(ATLAS_REACT_ABRAHAMSSON.address())
                         .build()
                 )
                 .build()
         );
 
-        assertEquals(ATLAS_REACT_ABRAHAMSSON.getAddress().getCity(),
-            certificate.certificateMetaData().getPatient().getAddress().getCity());
+        assertEquals(ATLAS_REACT_ABRAHAMSSON.address().city(),
+            certificate.certificateMetaData().patient().address().city());
       }
 
       @Test
@@ -208,14 +208,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .patient(
                     athenaReactAnderssonBuilder()
-                        .address(ATLAS_REACT_ABRAHAMSSON.getAddress())
+                        .address(ATLAS_REACT_ABRAHAMSSON.address())
                         .build()
                 )
                 .build()
         );
 
-        assertEquals(ATLAS_REACT_ABRAHAMSSON.getAddress().getZipCode(),
-            certificate.certificateMetaData().getPatient().getAddress().getZipCode());
+        assertEquals(ATLAS_REACT_ABRAHAMSSON.address().zipCode(),
+            certificate.certificateMetaData().patient().address().zipCode());
       }
 
       @Test
@@ -224,14 +224,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .patient(
                     athenaReactAnderssonBuilder()
-                        .address(ATLAS_REACT_ABRAHAMSSON.getAddress())
+                        .address(ATLAS_REACT_ABRAHAMSSON.address())
                         .build()
                 )
                 .build()
         );
 
-        assertEquals(ATLAS_REACT_ABRAHAMSSON.getAddress().getStreet(),
-            certificate.certificateMetaData().getPatient().getAddress().getStreet());
+        assertEquals(ATLAS_REACT_ABRAHAMSSON.address().street(),
+            certificate.certificateMetaData().patient().address().street());
       }
 
       @Test
@@ -246,7 +246,7 @@ class CertificateTest {
                 .build()
         );
 
-        assertTrue(certificate.certificateMetaData().getPatient().getProtectedPerson().value());
+        assertTrue(certificate.certificateMetaData().patient().protectedPerson().value());
       }
 
       @Test
@@ -261,7 +261,7 @@ class CertificateTest {
                 .build()
         );
 
-        assertTrue(certificate.certificateMetaData().getPatient().getTestIndicated().value());
+        assertTrue(certificate.certificateMetaData().patient().testIndicated().value());
       }
 
       @Test
@@ -276,12 +276,12 @@ class CertificateTest {
                 .build()
         );
 
-        assertTrue(certificate.certificateMetaData().getPatient().getDeceased().value());
+        assertTrue(certificate.certificateMetaData().patient().deceased().value());
       }
 
       @Test
       void shallNotUpdatePatientIfMissing() {
-        final var patientBeforeUpdate = certificate.certificateMetaData().getPatient();
+        final var patientBeforeUpdate = certificate.certificateMetaData().patient();
 
         final var actionEvaluation = actionEvaluationBuilder
             .patient(null)
@@ -289,7 +289,7 @@ class CertificateTest {
 
         certificate.updateMetadata(actionEvaluation);
 
-        assertEquals(patientBeforeUpdate, certificate.certificateMetaData().getPatient());
+        assertEquals(patientBeforeUpdate, certificate.certificateMetaData().patient());
       }
     }
 
@@ -302,14 +302,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .user(
                     ajlaDoctorBuilder()
-                        .hsaId(TestDataStaff.ALVA_VARDADMINISTRATOR.getHsaId())
+                        .hsaId(TestDataStaff.ALVA_VARDADMINISTRATOR.hsaId())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(ALVA_VARDADMINISTRATOR_HSA_ID,
-            certificate.certificateMetaData().getIssuer().getHsaId().id());
+            certificate.certificateMetaData().issuer().hsaId().id());
       }
 
       @Test
@@ -318,14 +318,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .user(
                     ajlaDoctorBuilder()
-                        .name(TestDataStaff.ALVA_VARDADMINISTRATOR.getName())
+                        .name(TestDataStaff.ALVA_VARDADMINISTRATOR.name())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(ALVA_VARDADMINISTRATOR_NAME,
-            certificate.certificateMetaData().getIssuer().getName().getLastName());
+            certificate.certificateMetaData().issuer().name().lastName());
       }
 
       @Test
@@ -340,7 +340,7 @@ class CertificateTest {
                 .build()
         );
 
-        assertTrue(certificate.certificateMetaData().getIssuer().getBlocked().value());
+        assertTrue(certificate.certificateMetaData().issuer().blocked().value());
       }
     }
 
@@ -353,14 +353,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .careUnit(
                     alfaMedicincentrumBuilder()
-                        .hsaId(ALFA_VARDCENTRAL.getHsaId())
+                        .hsaId(ALFA_VARDCENTRAL.hsaId())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(ALFA_VARDCENTRAL_ID,
-            certificate.certificateMetaData().getCareUnit().getHsaId().id());
+            certificate.certificateMetaData().careUnit().hsaId().id());
       }
 
       @Test
@@ -369,14 +369,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .careUnit(
                     alfaMedicincentrumBuilder()
-                        .name(ALFA_VARDCENTRAL.getName())
+                        .name(ALFA_VARDCENTRAL.name())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(ALFA_VARDCENTRAL_NAME,
-            certificate.certificateMetaData().getCareUnit().getName().name());
+            certificate.certificateMetaData().careUnit().name().name());
       }
 
       @Test
@@ -385,14 +385,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .careUnit(
                     alfaMedicincentrumBuilder()
-                        .address(ALFA_VARDCENTRAL.getAddress())
+                        .address(ALFA_VARDCENTRAL.address())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(ALFA_VARDCENTRAL_ADDRESS,
-            certificate.certificateMetaData().getCareUnit().getAddress().getAddress());
+            certificate.certificateMetaData().careUnit().address().address());
       }
 
       @Test
@@ -401,14 +401,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .careUnit(
                     alfaMedicincentrumBuilder()
-                        .address(ALFA_VARDCENTRAL.getAddress())
+                        .address(ALFA_VARDCENTRAL.address())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(ALFA_VARDCENTRAL_CITY,
-            certificate.certificateMetaData().getCareUnit().getAddress().getCity());
+            certificate.certificateMetaData().careUnit().address().city());
       }
 
       @Test
@@ -417,14 +417,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .careUnit(
                     alfaMedicincentrumBuilder()
-                        .address(ALFA_VARDCENTRAL.getAddress())
+                        .address(ALFA_VARDCENTRAL.address())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(ALFA_VARDCENTRAL_ZIP_CODE,
-            certificate.certificateMetaData().getCareUnit().getAddress().getZipCode());
+            certificate.certificateMetaData().careUnit().address().zipCode());
       }
 
       @Test
@@ -433,14 +433,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .careUnit(
                     alfaMedicincentrumBuilder()
-                        .contactInfo(ALFA_VARDCENTRAL.getContactInfo())
+                        .contactInfo(ALFA_VARDCENTRAL.contactInfo())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(ALFA_VARDCENTRAL_EMAIL,
-            certificate.certificateMetaData().getCareUnit().getContactInfo().getEmail());
+            certificate.certificateMetaData().careUnit().contactInfo().email());
       }
 
       @Test
@@ -449,14 +449,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .careUnit(
                     alfaMedicincentrumBuilder()
-                        .contactInfo(ALFA_VARDCENTRAL.getContactInfo())
+                        .contactInfo(ALFA_VARDCENTRAL.contactInfo())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(ALFA_VARDCENTRAL_PHONENUMBER,
-            certificate.certificateMetaData().getCareUnit().getContactInfo().getPhoneNumber());
+            certificate.certificateMetaData().careUnit().contactInfo().phoneNumber());
       }
 
       @Test
@@ -471,7 +471,7 @@ class CertificateTest {
                 .build()
         );
 
-        assertTrue(certificate.certificateMetaData().getCareUnit().getInactive().value());
+        assertTrue(certificate.certificateMetaData().careUnit().inactive().value());
       }
     }
 
@@ -484,14 +484,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .careProvider(
                     alfaRegionenBuilder()
-                        .hsaId(BETA_REGIONEN.getHsaId())
+                        .hsaId(BETA_REGIONEN.hsaId())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(BETA_REGIONEN_ID,
-            certificate.certificateMetaData().getCareProvider().getHsaId().id());
+            certificate.certificateMetaData().careProvider().hsaId().id());
       }
 
       @Test
@@ -500,14 +500,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .careProvider(
                     alfaRegionenBuilder()
-                        .name(BETA_REGIONEN.getName())
+                        .name(BETA_REGIONEN.name())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(BETA_REGIONEN_NAME,
-            certificate.certificateMetaData().getCareProvider().getName().name());
+            certificate.certificateMetaData().careProvider().name().name());
       }
     }
 
@@ -520,14 +520,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .subUnit(
                     alfaAllergimottagningenBuilder()
-                        .hsaId(ALFA_HUDMOTTAGNINGEN.getHsaId())
+                        .hsaId(ALFA_HUDMOTTAGNINGEN.hsaId())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(ALFA_HUDMOTTAGNINGEN_ID,
-            certificate.certificateMetaData().getIssuingUnit().getHsaId().id());
+            certificate.certificateMetaData().issuingUnit().hsaId().id());
       }
 
       @Test
@@ -536,14 +536,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .subUnit(
                     alfaAllergimottagningenBuilder()
-                        .name(ALFA_HUDMOTTAGNINGEN.getName())
+                        .name(ALFA_HUDMOTTAGNINGEN.name())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(ALFA_HUDMOTTAGNINGEN_NAME,
-            certificate.certificateMetaData().getIssuingUnit().getName().name());
+            certificate.certificateMetaData().issuingUnit().name().name());
       }
 
       @Test
@@ -552,14 +552,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .subUnit(
                     alfaAllergimottagningenBuilder()
-                        .address(ALFA_HUDMOTTAGNINGEN.getAddress())
+                        .address(ALFA_HUDMOTTAGNINGEN.address())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(ALFA_HUDMOTTAGNINGEN_ADDRESS,
-            certificate.certificateMetaData().getIssuingUnit().getAddress().getAddress());
+            certificate.certificateMetaData().issuingUnit().address().address());
       }
 
       @Test
@@ -568,14 +568,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .subUnit(
                     alfaAllergimottagningenBuilder()
-                        .address(ALFA_HUDMOTTAGNINGEN.getAddress())
+                        .address(ALFA_HUDMOTTAGNINGEN.address())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(ALFA_HUDMOTTAGNINGEN_CITY,
-            certificate.certificateMetaData().getIssuingUnit().getAddress().getCity());
+            certificate.certificateMetaData().issuingUnit().address().city());
       }
 
       @Test
@@ -584,14 +584,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .subUnit(
                     alfaAllergimottagningenBuilder()
-                        .address(ALFA_HUDMOTTAGNINGEN.getAddress())
+                        .address(ALFA_HUDMOTTAGNINGEN.address())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(ALFA_HUDMOTTAGNINGEN_ZIP_CODE,
-            certificate.certificateMetaData().getIssuingUnit().getAddress().getZipCode());
+            certificate.certificateMetaData().issuingUnit().address().zipCode());
       }
 
       @Test
@@ -600,14 +600,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .subUnit(
                     alfaAllergimottagningenBuilder()
-                        .contactInfo(ALFA_HUDMOTTAGNINGEN.getContactInfo())
+                        .contactInfo(ALFA_HUDMOTTAGNINGEN.contactInfo())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(ALFA_HUDMOTTAGNINGEN_EMAIL,
-            certificate.certificateMetaData().getIssuingUnit().getContactInfo().getEmail());
+            certificate.certificateMetaData().issuingUnit().contactInfo().email());
       }
 
       @Test
@@ -616,14 +616,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .subUnit(
                     alfaAllergimottagningenBuilder()
-                        .contactInfo(ALFA_HUDMOTTAGNINGEN.getContactInfo())
+                        .contactInfo(ALFA_HUDMOTTAGNINGEN.contactInfo())
                         .build()
                 )
                 .build()
         );
 
         assertEquals(ALFA_HUDMOTTAGNINGEN_PHONENUMBER,
-            certificate.certificateMetaData().getIssuingUnit().getContactInfo().getPhoneNumber());
+            certificate.certificateMetaData().issuingUnit().contactInfo().phoneNumber());
       }
 
       @Test
@@ -638,7 +638,7 @@ class CertificateTest {
                 .build()
         );
 
-        assertTrue(certificate.certificateMetaData().getIssuingUnit().getInactive().value());
+        assertTrue(certificate.certificateMetaData().issuingUnit().inactive().value());
       }
     }
 

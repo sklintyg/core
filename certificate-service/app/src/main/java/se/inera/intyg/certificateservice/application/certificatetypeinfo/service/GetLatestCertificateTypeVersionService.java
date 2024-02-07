@@ -23,8 +23,8 @@ public class GetLatestCertificateTypeVersionService {
             GetLatestCertificateTypeVersionResponse.builder()
                 .certificateModelId(
                     CertificateModelIdDTO.builder()
-                        .type(certificateModel.getId().getType().type())
-                        .version(certificateModel.getId().getVersion().version())
+                        .type(certificateModel.id().type().type())
+                        .version(certificateModel.id().version().version())
                         .build()
                 )
                 .build()

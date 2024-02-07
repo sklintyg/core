@@ -16,7 +16,7 @@ public class CertificateActionRead implements CertificateAction {
 
   @Override
   public CertificateActionType getType() {
-    return certificateActionSpecification.getCertificateActionType();
+    return certificateActionSpecification.certificateActionType();
   }
 
   @Override
@@ -34,20 +34,22 @@ public class CertificateActionRead implements CertificateAction {
 
   private static boolean isCareUnitMatchingSubUnit(ActionEvaluation actionEvaluation,
       Certificate value) {
-    return value.certificateMetaData()
-        .getCareUnit().getHsaId().equals(actionEvaluation.getSubUnit().getHsaId());
+    return value.certificateMetaData().careUnit().hsaId().equals(
+        actionEvaluation.subUnit().hsaId()
+    );
   }
 
   private static boolean isIssuingUnitMatchingSubUnit(ActionEvaluation actionEvaluation,
       Certificate value) {
-    return value.certificateMetaData().getIssuingUnit().getHsaId()
-        .equals(actionEvaluation.getSubUnit().getHsaId());
+    return value.certificateMetaData().issuingUnit().hsaId().equals(
+        actionEvaluation.subUnit().hsaId()
+    );
   }
 
   private static boolean ifPatientIsProtectedUserMustNotBeCareAdmin(
       ActionEvaluation actionEvaluation, Certificate value) {
-    return !value.certificateMetaData().getPatient().getProtectedPerson().value()
-        || !CARE_ADMIN.equals(actionEvaluation.getUser().getRole());
+    return !value.certificateMetaData().patient().protectedPerson().value()
+        || !CARE_ADMIN.equals(actionEvaluation.user().role());
   }
 
   @Override

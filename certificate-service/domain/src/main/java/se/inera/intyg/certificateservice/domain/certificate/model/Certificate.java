@@ -43,14 +43,14 @@ public class Certificate {
   public void updateMetadata(ActionEvaluation actionEvaluation) {
     certificateMetaData = CertificateMetaData.builder()
         .patient(
-            actionEvaluation.getPatient() == null
-                ? certificateMetaData.getPatient()
-                : actionEvaluation.getPatient()
+            actionEvaluation.patient() == null
+                ? certificateMetaData.patient()
+                : actionEvaluation.patient()
         )
-        .issuer(Staff.create(actionEvaluation.getUser()))
-        .careUnit(actionEvaluation.getCareUnit())
-        .careProvider(actionEvaluation.getCareProvider())
-        .issuingUnit(actionEvaluation.getSubUnit())
+        .issuer(Staff.create(actionEvaluation.user()))
+        .careUnit(actionEvaluation.careUnit())
+        .careProvider(actionEvaluation.careProvider())
+        .issuingUnit(actionEvaluation.subUnit())
         .build();
   }
 }
