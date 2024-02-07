@@ -10,6 +10,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-test'
+    testImplementation 'org.testcontainers:mysql:1.19.4'
     testImplementation testFixtures(project(":app"))
     testImplementation testFixtures(project(":domain"))
 }
