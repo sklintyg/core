@@ -15,37 +15,37 @@
       <column name="created" type="datetime">
         <constraints nullable="false"/>
       </column>
-      <column name="created_by_staff_key" type="bigint">
+      <column name="created_by_staff_key" type="integer">
         <constraints nullable="false"/>
       </column>
       <column name="modified" type="datetime">
         <constraints nullable="false"/>
       </column>
-      <column name="issued_by_staff_key" type="bigint">
+      <column name="issued_by_staff_key" type="integer">
         <constraints nullable="false"/>
       </column>
-      <column name="issued_on_unit_key" type="bigint">
+      <column name="issued_on_unit_key" type="integer">
         <constraints nullable="false"/>
       </column>
-      <column name="care_unit_unit_key" type="bigint">
+      <column name="care_unit_unit_key" type="integer">
         <constraints nullable="false"/>
       </column>
-      <column name="care_provider_unit_key" type="bigint">
+      <column name="care_provider_unit_key" type="integer">
         <constraints nullable="false"/>
       </column>
-      <column name="patient_key" type="bigint">
+      <column name="patient_key" type="integer">
         <constraints nullable="false"/>
       </column>
       <column name="version" type="integer">
         <constraints nullable="false"/>
       </column>
-      <column name="certificate_model_key" type="bigint">
+      <column name="certificate_model_key" type="integer">
         <constraints nullable="false"/>
       </column>
     </createTable>
 
     <createTable tableName="certificate_model">
-      <column name="key" type="bigint" autoIncrement="true">
+      <column name="key" type="integer" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
       <column name="type" type="varchar(255)">
@@ -64,13 +64,13 @@
       referencedTableName="certificate_model" referencedColumnNames="key"/>
 
     <createTable tableName="patient">
-      <column name="key" type="bigint" autoIncrement="true">
+      <column name="key" type="integer" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
       <column name="patient_id" type="varchar(255)">
         <constraints nullable="false"/>
       </column>
-      <column name="patient_id_type_key" type="integer">
+      <column name="patient_id_type_key" type="tinyint">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -80,7 +80,7 @@
       referencedTableName="patient" referencedColumnNames="key"/>
 
     <createTable tableName="unit">
-      <column name="key" type="bigint" autoIncrement="true">
+      <column name="key" type="integer" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
       <column name="hsa_id" type="varchar(255)">
@@ -89,7 +89,7 @@
       <column name="name" type="varchar(255)">
         <constraints nullable="false"/>
       </column>
-      <column name="unit_type_key" type="integer">
+      <column name="unit_type_key" type="tinyint">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -105,13 +105,13 @@
       referencedTableName="unit" referencedColumnNames="key"/>
 
     <createTable tableName="staff">
-      <column name="key" type="bigint" autoIncrement="true">
+      <column name="key" type="integer" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
-      <column name="issued_by_hsa_id" type="varchar(255)">
+      <column name="hsa_id" type="varchar(255)">
         <constraints nullable="false"/>
       </column>
-      <column name="issued_by_name" type="varchar(255)">
+      <column name="name" type="varchar(255)">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -124,7 +124,7 @@
       referencedTableName="staff" referencedColumnNames="key"/>
 
     <createTable tableName="unit_type">
-      <column name="key" type="integer" autoIncrement="true">
+      <column name="key" type="tinyint" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
       <column name="type" type="varchar(255)">
@@ -136,14 +136,24 @@
       baseTableName="unit" baseColumnNames="unit_type_key"
       referencedTableName="unit_type" referencedColumnNames="key"/>
 
+    <insert tableName="unit_type">
+      <column name="type" value="SUB_UNIT"/>
+    </insert>
+    <insert tableName="unit_type">
+      <column name="type" value="CARE_UNIT"/>
+    </insert>
+    <insert tableName="unit_type">
+      <column name="type" value="CARE_PROVIDER"/>
+    </insert>
+
     <createTable tableName="unit_relation">
       <column name="key" type="integer" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
-      <column name="child_unit_key" type="bigint">
+      <column name="child_unit_key" type="integer">
         <constraints nullable="false"/>
       </column>
-      <column name="parent_unit_key" type="bigint">
+      <column name="parent_unit_key" type="integer">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -172,7 +182,7 @@
       referencedTableName="certificate" referencedColumnNames="key"/>
 
     <createTable tableName="patient_id_type">
-      <column name="key" type="integer" autoIncrement="true">
+      <column name="key" type="tinyint" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
       <column name="type" type="varchar(255)">
@@ -183,5 +193,12 @@
     <addForeignKeyConstraint constraintName="fk_patient_patient_id_type_key"
       baseTableName="patient" baseColumnNames="patient_id_type_key"
       referencedTableName="patient_id_type" referencedColumnNames="key"/>
+
+    <insert tableName="patient_id_type">
+      <column name="type" value="PERSONAL_IDENTITY_NUMBER"/>
+    </insert>
+    <insert tableName="patient_id_type">
+      <column name="type" value="COORDINATION_NUMBER"/>
+    </insert>
   </changeSet>
 </databaseChangeLog>
