@@ -6,52 +6,52 @@
 
   <changeSet id="1" author="mh">
     <createTable tableName="certificate">
-      <column name="key" type="bigint" autoIncrement="true">
+      <column name="key" type="bigint unsigned" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
-      <column name="certificate_id" type="varchar(255)">
+      <column name="certificate_id" type="varchar(64)">
         <constraints nullable="false" unique="true"/>
       </column>
       <column name="created" type="datetime">
         <constraints nullable="false"/>
       </column>
-      <column name="created_by_staff_key" type="integer">
+      <column name="created_by_staff_key" type="integer unsigned">
         <constraints nullable="false"/>
       </column>
       <column name="modified" type="datetime">
         <constraints nullable="false"/>
       </column>
-      <column name="issued_by_staff_key" type="integer">
+      <column name="issued_by_staff_key" type="integer unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="issued_on_unit_key" type="integer">
+      <column name="issued_on_unit_key" type="integer unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="care_unit_unit_key" type="integer">
+      <column name="care_unit_unit_key" type="integer unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="care_provider_unit_key" type="integer">
+      <column name="care_provider_unit_key" type="integer unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="patient_key" type="integer">
+      <column name="patient_key" type="integer unsigned">
         <constraints nullable="false"/>
       </column>
       <column name="version" type="integer">
         <constraints nullable="false"/>
       </column>
-      <column name="certificate_model_key" type="integer">
+      <column name="certificate_model_key" type="integer unsigned">
         <constraints nullable="false"/>
       </column>
     </createTable>
 
     <createTable tableName="certificate_model">
-      <column name="key" type="integer" autoIncrement="true">
+      <column name="key" type="integer unsigned" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
-      <column name="type" type="varchar(255)">
+      <column name="type" type="varchar(24)">
         <constraints nullable="false"/>
       </column>
-      <column name="version" type="varchar(255)">
+      <column name="version" type="varchar(24)">
         <constraints nullable="false"/>
       </column>
       <column name="name" type="varchar(255)">
@@ -64,13 +64,13 @@
       referencedTableName="certificate_model" referencedColumnNames="key"/>
 
     <createTable tableName="patient">
-      <column name="key" type="integer" autoIncrement="true">
+      <column name="key" type="integer unsigned" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
-      <column name="patient_id" type="varchar(255)">
+      <column name="patient_id" type="varchar(24)">
         <constraints nullable="false"/>
       </column>
-      <column name="patient_id_type_key" type="tinyint">
+      <column name="patient_id_type_key" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -80,16 +80,16 @@
       referencedTableName="patient" referencedColumnNames="key"/>
 
     <createTable tableName="unit">
-      <column name="key" type="integer" autoIncrement="true">
+      <column name="key" type="integer unsigned" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
-      <column name="hsa_id" type="varchar(255)">
+      <column name="hsa_id" type="varchar(64)">
         <constraints nullable="false"/>
       </column>
       <column name="name" type="varchar(255)">
         <constraints nullable="false"/>
       </column>
-      <column name="unit_type_key" type="tinyint">
+      <column name="unit_type_key" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -105,10 +105,10 @@
       referencedTableName="unit" referencedColumnNames="key"/>
 
     <createTable tableName="staff">
-      <column name="key" type="integer" autoIncrement="true">
+      <column name="key" type="integer unsigned" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
-      <column name="hsa_id" type="varchar(255)">
+      <column name="hsa_id" type="varchar(64)">
         <constraints nullable="false"/>
       </column>
       <column name="name" type="varchar(255)">
@@ -124,10 +124,10 @@
       referencedTableName="staff" referencedColumnNames="key"/>
 
     <createTable tableName="unit_type">
-      <column name="key" type="tinyint" autoIncrement="true">
+      <column name="key" type="tinyint unsigned" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
-      <column name="type" type="varchar(255)">
+      <column name="type" type="varchar(32)">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -147,13 +147,13 @@
     </insert>
 
     <createTable tableName="unit_relation">
-      <column name="key" type="integer" autoIncrement="true">
+      <column name="key" type="integer unsigned" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
-      <column name="child_unit_key" type="integer">
+      <column name="child_unit_key" type="integer unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="parent_unit_key" type="integer">
+      <column name="parent_unit_key" type="integer unsigned">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -166,10 +166,10 @@
       referencedTableName="unit" referencedColumnNames="key"/>
 
     <createTable tableName="certificate_data">
-      <column name="key" type="bigint" autoIncrement="true">
+      <column name="key" type="bigint unsigned" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
-      <column name="certificate_key" type="bigint">
+      <column name="certificate_key" type="bigint unsigned">
         <constraints nullable="false" unique="true"/>
       </column>
       <column name="data" type="mediumblob">
@@ -182,10 +182,10 @@
       referencedTableName="certificate" referencedColumnNames="key"/>
 
     <createTable tableName="patient_id_type">
-      <column name="key" type="tinyint" autoIncrement="true">
+      <column name="key" type="tinyint unsigned" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
-      <column name="type" type="varchar(255)">
+      <column name="type" type="varchar(64)">
         <constraints nullable="false"/>
       </column>
     </createTable>
