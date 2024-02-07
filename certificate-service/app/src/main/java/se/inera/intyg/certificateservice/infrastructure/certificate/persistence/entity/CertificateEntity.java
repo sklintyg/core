@@ -5,16 +5,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "certificate")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class CertificateEntity {
@@ -33,16 +37,21 @@ public class CertificateEntity {
   private int version;
   @OneToOne
   private CertificateModelEntity certificateModel;
-  @OneToOne
+  @ManyToOne
   private PatientEntity patient;
-  @OneToOne(mappedBy = "created_by_staff_key")
+  @ManyToOne
+  @JoinColumn(name = "created_by_staff_key", referencedColumnName = "key")
   private StaffEntity createdBy;
-  @OneToOne(mappedBy = "issued_by_staff_key")
+  @ManyToOne
+  @JoinColumn(name = "issued_by_staff_key", referencedColumnName = "key")
   private StaffEntity issuedBy;
-  @OneToOne(mappedBy = "issued_on_unit_key")
+  @ManyToOne
+  @JoinColumn(name = "issued_on_unit_key", referencedColumnName = "key")
   private UnitEntity issuedOnUnit;
-  @OneToOne(mappedBy = "care_provider_unit_key")
+  @ManyToOne
+  @JoinColumn(name = "care_provider_unit_key", referencedColumnName = "key")
   private UnitEntity careProvider;
-  @OneToOne(mappedBy = "care_unit_unit_key")
+  @ManyToOne
+  @JoinColumn(name = "care_unit_unit_key", referencedColumnName = "key")
   private UnitEntity careUnit;
 }
