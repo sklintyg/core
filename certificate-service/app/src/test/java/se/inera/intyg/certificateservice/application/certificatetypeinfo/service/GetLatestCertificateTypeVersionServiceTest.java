@@ -56,7 +56,7 @@ class GetLatestCertificateTypeVersionServiceTest {
     final var certificateModel = mock(CertificateModel.class);
     when(certificateModelRepository.findLatestActiveByType(new CertificateType(TYPE)))
         .thenReturn(Optional.of(certificateModel));
-    when(certificateModel.getId()).thenReturn(
+    when(certificateModel.id()).thenReturn(
         CertificateModelId.builder()
             .type(new CertificateType(TYPE))
             .version(new CertificateVersion(VERSION))

@@ -77,7 +77,7 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertEquals(ALFA_MEDICINCENTRUM_ID, actionEvaluation.getCareUnit().getHsaId().id());
+      assertEquals(ALFA_MEDICINCENTRUM_ID, actionEvaluation.careUnit().hsaId().id());
     }
 
     @Test
@@ -90,7 +90,7 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertEquals(ALFA_MEDICINCENTRUM_NAME, actionEvaluation.getCareUnit().getName().name());
+      assertEquals(ALFA_MEDICINCENTRUM_NAME, actionEvaluation.careUnit().name().name());
     }
 
     @Test
@@ -104,7 +104,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ALFA_MEDICINCENTRUM_ADDRESS,
-          actionEvaluation.getCareUnit().getAddress().getAddress()
+          actionEvaluation.careUnit().address().address()
       );
     }
 
@@ -118,9 +118,7 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertEquals(ALFA_MEDICINCENTRUM_ZIP_CODE,
-          actionEvaluation.getCareUnit().getAddress().getZipCode()
-      );
+      assertEquals(ALFA_MEDICINCENTRUM_ZIP_CODE, actionEvaluation.careUnit().address().zipCode());
     }
 
     @Test
@@ -134,7 +132,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ALFA_MEDICINCENTRUM_CITY,
-          actionEvaluation.getCareUnit().getAddress().getCity()
+          actionEvaluation.careUnit().address().city()
       );
     }
 
@@ -149,7 +147,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ALFA_MEDICINCENTRUM_PHONENUMBER,
-          actionEvaluation.getCareUnit().getContactInfo().getPhoneNumber()
+          actionEvaluation.careUnit().contactInfo().phoneNumber()
       );
     }
 
@@ -164,7 +162,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ALFA_MEDICINCENTRUM_EMAIL,
-          actionEvaluation.getCareUnit().getContactInfo().getEmail()
+          actionEvaluation.careUnit().contactInfo().email()
       );
     }
   }
@@ -182,7 +180,7 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ID, actionEvaluation.getSubUnit().getHsaId().id());
+      assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ID, actionEvaluation.subUnit().hsaId().id());
     }
 
     @Test
@@ -195,7 +193,7 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertEquals(ALFA_ALLERGIMOTTAGNINGEN_NAME, actionEvaluation.getSubUnit().getName().name());
+      assertEquals(ALFA_ALLERGIMOTTAGNINGEN_NAME, actionEvaluation.subUnit().name().name());
     }
 
     @Test
@@ -209,7 +207,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ADDRESS,
-          actionEvaluation.getSubUnit().getAddress().getAddress()
+          actionEvaluation.subUnit().address().address()
       );
     }
 
@@ -224,7 +222,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE,
-          actionEvaluation.getSubUnit().getAddress().getZipCode()
+          actionEvaluation.subUnit().address().zipCode()
       );
     }
 
@@ -239,7 +237,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ALFA_ALLERGIMOTTAGNINGEN_CITY,
-          actionEvaluation.getSubUnit().getAddress().getCity()
+          actionEvaluation.subUnit().address().city()
       );
     }
 
@@ -254,7 +252,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER,
-          actionEvaluation.getSubUnit().getContactInfo().getPhoneNumber()
+          actionEvaluation.subUnit().contactInfo().phoneNumber()
       );
     }
 
@@ -269,7 +267,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ALFA_ALLERGIMOTTAGNINGEN_EMAIL,
-          actionEvaluation.getSubUnit().getContactInfo().getEmail()
+          actionEvaluation.subUnit().contactInfo().email()
       );
     }
 
@@ -288,7 +286,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(INACTIVE_TRUE.value(),
-          actionEvaluation.getSubUnit().getInactive().value()
+          actionEvaluation.subUnit().inactive().value()
       );
     }
 
@@ -303,7 +301,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ALFA_ALLERGIMOTTAGNINGEN_INACTIVE.value(),
-          actionEvaluation.getSubUnit().getInactive().value()
+          actionEvaluation.subUnit().inactive().value()
       );
     }
   }
@@ -321,7 +319,7 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertEquals(ALFA_REGIONEN_ID, actionEvaluation.getCareProvider().getHsaId().id());
+      assertEquals(ALFA_REGIONEN_ID, actionEvaluation.careProvider().hsaId().id());
     }
 
     @Test
@@ -334,7 +332,7 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertEquals(ALFA_REGIONEN_NAME, actionEvaluation.getCareProvider().getName().name());
+      assertEquals(ALFA_REGIONEN_NAME, actionEvaluation.careProvider().name().name());
     }
   }
 
@@ -351,7 +349,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertNull(
-          actionEvaluation.getPatient(),
+          actionEvaluation.patient(),
           "Expected patient to be null"
       );
     }
@@ -371,7 +369,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(PersonIdType.PERSONAL_IDENTITY_NUMBER,
-          actionEvaluation.getPatient().getId().getType());
+          actionEvaluation.patient().id().type());
     }
 
     @Test
@@ -394,7 +392,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(PersonIdType.COORDINATION_NUMBER,
-          actionEvaluation.getPatient().getId().getType()
+          actionEvaluation.patient().id().type()
       );
     }
 
@@ -408,7 +406,7 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertEquals(ATHENA_REACT_ANDERSSON_ID, actionEvaluation.getPatient().getId().getId());
+      assertEquals(ATHENA_REACT_ANDERSSON_ID, actionEvaluation.patient().id().id());
     }
 
     @Test
@@ -422,7 +420,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ATHENA_REACT_ANDERSSON_FIRST_NAME,
-          actionEvaluation.getPatient().getName().getFirstName()
+          actionEvaluation.patient().name().firstName()
       );
     }
 
@@ -437,7 +435,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ATHENA_REACT_ANDERSSON_MIDDLE_NAME,
-          actionEvaluation.getPatient().getName().getMiddleName()
+          actionEvaluation.patient().name().middleName()
       );
     }
 
@@ -452,7 +450,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ATHENA_REACT_ANDERSSON_LAST_NAME,
-          actionEvaluation.getPatient().getName().getLastName()
+          actionEvaluation.patient().name().lastName()
       );
     }
 
@@ -467,7 +465,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ATHENA_REACT_ANDERSSON_CITY,
-          actionEvaluation.getPatient().getAddress().getCity()
+          actionEvaluation.patient().address().city()
       );
     }
 
@@ -482,7 +480,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ATHENA_REACT_ANDERSSON_STREET,
-          actionEvaluation.getPatient().getAddress().getStreet()
+          actionEvaluation.patient().address().street()
       );
     }
 
@@ -497,7 +495,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ATHENA_REACT_ANDERSSON_ZIP_CODE,
-          actionEvaluation.getPatient().getAddress().getZipCode()
+          actionEvaluation.patient().address().zipCode()
       );
     }
 
@@ -511,7 +509,7 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertTrue(actionEvaluation.getPatient().getDeceased().value(),
+      assertTrue(actionEvaluation.patient().deceased().value(),
           "Expected patient.value to be true");
     }
 
@@ -525,7 +523,7 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertFalse(actionEvaluation.getPatient().getDeceased().value(),
+      assertFalse(actionEvaluation.patient().deceased().value(),
           "Expected patient.value to be false");
     }
 
@@ -544,7 +542,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(TEST_INDICATED_TRUE.value(),
-          actionEvaluation.getPatient().getTestIndicated().value()
+          actionEvaluation.patient().testIndicated().value()
       );
     }
 
@@ -559,7 +557,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ATHENA_REACT_ANDERSSON_TEST_INDICATED.value(),
-          actionEvaluation.getPatient().getTestIndicated().value()
+          actionEvaluation.patient().testIndicated().value()
       );
     }
 
@@ -578,7 +576,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(PROTECTED_PERSON_TRUE.value(),
-          actionEvaluation.getPatient().getProtectedPerson().value()
+          actionEvaluation.patient().protectedPerson().value()
       );
     }
 
@@ -593,7 +591,7 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(ATHENA_REACT_ANDERSSON_PROTECTED_PERSON.value(),
-          actionEvaluation.getPatient().getProtectedPerson().value()
+          actionEvaluation.patient().protectedPerson().value()
       );
     }
   }
@@ -611,7 +609,7 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertEquals(AJLA_DOCTOR_HSA_ID, actionEvaluation.getUser().getHsaId().id());
+      assertEquals(AJLA_DOCTOR_HSA_ID, actionEvaluation.user().hsaId().id());
     }
 
     @Test
@@ -624,7 +622,7 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertEquals(AJLA_DOCTOR_BLOCKED.value(), actionEvaluation.getUser().getBlocked().value());
+      assertEquals(AJLA_DOCTOR_BLOCKED.value(), actionEvaluation.user().blocked().value());
     }
 
     @Test
@@ -641,7 +639,7 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertEquals(BLOCKED_TRUE.value(), actionEvaluation.getUser().getBlocked().value());
+      assertEquals(BLOCKED_TRUE.value(), actionEvaluation.user().blocked().value());
     }
 
     @Test
@@ -654,7 +652,7 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertEquals(AJLA_DOCTOR_NAME, actionEvaluation.getUser().getName().getLastName());
+      assertEquals(AJLA_DOCTOR_NAME, actionEvaluation.user().name().lastName());
     }
 
     @Test
@@ -667,7 +665,7 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertEquals(AJLA_DOCTOR_ROLE, actionEvaluation.getUser().getRole());
+      assertEquals(AJLA_DOCTOR_ROLE, actionEvaluation.user().role());
     }
   }
 }

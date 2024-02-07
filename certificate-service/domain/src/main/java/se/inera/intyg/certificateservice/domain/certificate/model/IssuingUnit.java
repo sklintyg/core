@@ -2,13 +2,13 @@ package se.inera.intyg.certificateservice.domain.certificate.model;
 
 public interface IssuingUnit {
 
-  public HsaId getHsaId();
+  public HsaId hsaId();
 
-  public UnitAddress getAddress();
+  public UnitAddress address();
 
-  public UnitName getName();
+  public UnitName name();
 
-  public UnitContactInfo getContactInfo();
+  public UnitContactInfo contactInfo();
 
-  public Inactive getInactive();
+  public Inactive inactive();
 }

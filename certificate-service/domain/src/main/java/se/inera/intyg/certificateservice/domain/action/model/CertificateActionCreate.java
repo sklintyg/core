@@ -18,12 +18,12 @@ public class CertificateActionCreate implements CertificateAction {
 
   @Override
   public CertificateActionType getType() {
-    return certificateActionSpecification.getCertificateActionType();
+    return certificateActionSpecification.certificateActionType();
   }
 
   @Override
   public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
-    if (actionEvaluation.getPatient() == null || actionEvaluation.getUser() == null) {
+    if (actionEvaluation.patient() == null || actionEvaluation.user() == null) {
       return false;
     }
     if (isPatientProtectedPersonAndUserHasRoleCareAdmin(actionEvaluation)) {
@@ -44,15 +44,15 @@ public class CertificateActionCreate implements CertificateAction {
 
   private static boolean isPatientProtectedPersonAndUserHasRoleCareAdmin(
       ActionEvaluation actionEvaluation) {
-    return Role.CARE_ADMIN.equals(actionEvaluation.getUser().getRole())
-        && actionEvaluation.getPatient().getProtectedPerson().value();
+    return Role.CARE_ADMIN.equals(actionEvaluation.user().role())
+        && actionEvaluation.patient().protectedPerson().value();
   }
 
   private static boolean isUserNotBlocked(ActionEvaluation actionEvaluation) {
-    return !actionEvaluation.getUser().getBlocked().value();
+    return !actionEvaluation.user().blocked().value();
   }
 
   private static boolean isPatientAlive(ActionEvaluation actionEvaluation) {
-    return !actionEvaluation.getPatient().getDeceased().value();
+    return !actionEvaluation.patient().deceased().value();
   }
 }

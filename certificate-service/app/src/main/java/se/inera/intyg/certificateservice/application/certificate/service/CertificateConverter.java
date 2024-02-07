@@ -31,70 +31,65 @@ public class CertificateConverter {
         .metadata(
             CertificateMetadataDTO.builder()
                 .id(certificate.id().id())
-                .type(certificate.certificateModel().getId().getType().type())
-                .typeName(certificate.certificateModel().getId().getType().type())
-                .typeVersion(certificate.certificateModel().getId().getVersion().version())
-                .name(certificate.certificateModel().getName())
-                .description(certificate.certificateModel().getDescription())
+                .type(certificate.certificateModel().id().type().type())
+                .typeName(certificate.certificateModel().id().type().type())
+                .typeVersion(certificate.certificateModel().id().version().version())
+                .name(certificate.certificateModel().name())
+                .description(certificate.certificateModel().description())
                 .created(certificate.created())
                 .patient(
                     toPatientDTO(certificate)
                 )
                 .unit(
                     UnitDTO.builder()
-                        .unitId(certificate.certificateMetaData().getIssuingUnit().getHsaId().id())
+                        .unitId(certificate.certificateMetaData().issuingUnit().hsaId().id())
                         .unitName(
-                            certificate.certificateMetaData().getIssuingUnit().getName().name()
+                            certificate.certificateMetaData().issuingUnit().name().name()
                         )
                         .address(
-                            certificate.certificateMetaData().getIssuingUnit().getAddress()
-                                .getAddress()
+                            certificate.certificateMetaData().issuingUnit().address().address()
                         )
                         .city(
-                            certificate.certificateMetaData().getIssuingUnit().getAddress()
-                                .getCity()
+                            certificate.certificateMetaData().issuingUnit().address().city()
                         )
                         .zipCode(
-                            certificate.certificateMetaData().getIssuingUnit().getAddress()
-                                .getZipCode()
+                            certificate.certificateMetaData().issuingUnit().address().zipCode()
                         )
                         .phoneNumber(
-                            certificate.certificateMetaData().getIssuingUnit().getContactInfo()
-                                .getPhoneNumber()
+                            certificate.certificateMetaData().issuingUnit().contactInfo()
+                                .phoneNumber()
                         )
                         .email(
-                            certificate.certificateMetaData().getIssuingUnit().getContactInfo()
-                                .getEmail()
+                            certificate.certificateMetaData().issuingUnit().contactInfo().email()
                         )
                         .isInactive(
-                            certificate.certificateMetaData().getIssuingUnit().getInactive()
-                                .value()
+                            certificate.certificateMetaData().issuingUnit().inactive().value()
                         )
                         .build()
                 )
                 .careUnit(
                     UnitDTO.builder()
-                        .unitId(certificate.certificateMetaData().getCareUnit().getHsaId().id())
+                        .unitId(certificate.certificateMetaData().careUnit().hsaId().id())
                         .unitName(
-                            certificate.certificateMetaData().getCareUnit().getName().name()
+                            certificate.certificateMetaData().careUnit().name().name()
                         )
                         .build()
                 )
                 .careProvider(
                     UnitDTO.builder()
-                        .unitId(certificate.certificateMetaData().getCareProvider().getHsaId().id())
+                        .unitId(certificate.certificateMetaData().careProvider().hsaId().id())
                         .unitName(
-                            certificate.certificateMetaData().getCareProvider().getName().name()
+                            certificate.certificateMetaData().careProvider().name().name()
                         )
                         .build()
                 )
                 .issuedBy(
                     StaffDTO.builder()
                         .personId(
-                            certificate.certificateMetaData().getIssuer().getHsaId().id()
+                            certificate.certificateMetaData().issuer().hsaId().id()
                         )
                         .fullName(
-                            certificate.certificateMetaData().getIssuer().getName().fullName()
+                            certificate.certificateMetaData().issuer().name().fullName()
                         )
                         .build()
                 )
@@ -111,24 +106,24 @@ public class CertificateConverter {
   }
 
   private PatientDTO toPatientDTO(Certificate certificate) {
-    final var patient = certificate.certificateMetaData().getPatient();
+    final var patient = certificate.certificateMetaData().patient();
     return PatientDTO.builder()
         .personId(
             PersonIdDTO.builder()
-                .id(patient.getId().getId())
-                .type(patient.getId().getType().name())
+                .id(patient.id().id())
+                .type(patient.id().type().name())
                 .build()
         )
-        .firstName(patient.getName().getFirstName())
-        .middleName(patient.getName().getMiddleName())
-        .lastName(patient.getName().getLastName())
-        .fullName(patient.getName().fullName())
-        .street(patient.getAddress().getStreet())
-        .city(patient.getAddress().getCity())
-        .zipCode(patient.getAddress().getZipCode())
-        .testIndicated(patient.getTestIndicated().value())
-        .deceased(patient.getDeceased().value())
-        .protectedPerson(patient.getProtectedPerson().value())
+        .firstName(patient.name().firstName())
+        .middleName(patient.name().middleName())
+        .lastName(patient.name().lastName())
+        .fullName(patient.name().fullName())
+        .street(patient.address().street())
+        .city(patient.address().city())
+        .zipCode(patient.address().zipCode())
+        .testIndicated(patient.testIndicated().value())
+        .deceased(patient.deceased().value())
+        .protectedPerson(patient.protectedPerson().value())
         .build();
   }
 }

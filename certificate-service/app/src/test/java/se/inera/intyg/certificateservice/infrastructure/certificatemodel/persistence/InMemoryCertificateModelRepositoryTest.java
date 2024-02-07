@@ -120,10 +120,10 @@ class InMemoryCertificateModelRepositoryTest {
 
       assertEquals(2, actualModels.size());
       assertTrue(actualModels.contains(expectedModelOne),
-          "Expected model with id: %s".formatted(expectedModelOne.getId())
+          "Expected model with id: %s".formatted(expectedModelOne.id())
       );
       assertTrue(actualModels.contains(expectedModelTwo),
-          "Expected model with id: %s".formatted(expectedModelTwo.getId())
+          "Expected model with id: %s".formatted(expectedModelTwo.id())
       );
     }
   }
@@ -277,7 +277,7 @@ class InMemoryCertificateModelRepositoryTest {
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
 
-      final var actualModel = inMemoryCertificateModelRepository.getById(expectedModel.getId());
+      final var actualModel = inMemoryCertificateModelRepository.getById(expectedModel.id());
 
       assertEquals(expectedModel, actualModel);
     }
@@ -329,7 +329,7 @@ class InMemoryCertificateModelRepositoryTest {
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
           .build();
 
-      final var certificateModelId = expectedModel.getId();
+      final var certificateModelId = expectedModel.id();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
 
@@ -339,8 +339,8 @@ class InMemoryCertificateModelRepositoryTest {
 
       assertEquals(
           "CertificateModel with id '%s' not active until '%s'".formatted(
-              expectedModel.getId(),
-              expectedModel.getActiveFrom()
+              expectedModel.id(),
+              expectedModel.activeFrom()
           ),
           illegalArgumentException.getMessage()
       );
@@ -399,10 +399,10 @@ class InMemoryCertificateModelRepositoryTest {
 
       assertEquals(2, actualModels.size());
       assertTrue(actualModels.contains(expectedModelOne),
-          "Expected model with id: %s".formatted(expectedModelOne.getId())
+          "Expected model with id: %s".formatted(expectedModelOne.id())
       );
       assertTrue(actualModels.contains(expectedModelTwo),
-          "Expected model with id: %s".formatted(expectedModelTwo.getId())
+          "Expected model with id: %s".formatted(expectedModelTwo.id())
       );
     }
   }
