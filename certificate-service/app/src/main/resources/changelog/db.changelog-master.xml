@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-  <changeSet id="1" author="mww">
+  <changeSet id="1" author="mh">
     <createTable tableName="certificate">
       <column name="key" type="bigint" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
@@ -43,9 +43,7 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-  </changeSet>
 
-  <changeSet id="2" author="mww">
     <createTable tableName="certificate_model">
       <column name="key" type="bigint" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
@@ -64,9 +62,7 @@
     <addForeignKeyConstraint constraintName="fk_certificate_certificate_model_key"
       baseTableName="certificate" baseColumnNames="certificate_model_key"
       referencedTableName="certificate_model" referencedColumnNames="key"/>
-  </changeSet>
 
-  <changeSet id="3" author="mww">
     <createTable tableName="patient">
       <column name="key" type="bigint" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
@@ -82,9 +78,7 @@
     <addForeignKeyConstraint constraintName="fk_certificate_patient_key"
       baseTableName="certificate" baseColumnNames="patient_key"
       referencedTableName="patient" referencedColumnNames="key"/>
-  </changeSet>
 
-  <changeSet id="4" author="mww">
     <createTable tableName="unit">
       <column name="key" type="bigint" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
@@ -109,9 +103,7 @@
     <addForeignKeyConstraint constraintName="fk_certificate_care_provider_unit_key"
       baseTableName="certificate" baseColumnNames="care_provider_unit_key"
       referencedTableName="unit" referencedColumnNames="key"/>
-  </changeSet>
 
-  <changeSet id="5" author="mh">
     <createTable tableName="staff">
       <column name="key" type="bigint" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
@@ -130,9 +122,7 @@
     <addForeignKeyConstraint constraintName="fk_certificate_issued_by_staff_key"
       baseTableName="certificate" baseColumnNames="issued_by_staff_key"
       referencedTableName="staff" referencedColumnNames="key"/>
-  </changeSet>
 
-  <changeSet id="6" author="mh">
     <createTable tableName="unit_type">
       <column name="key" type="integer" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
@@ -145,9 +135,7 @@
     <addForeignKeyConstraint constraintName="fk_unit_unit_type_key"
       baseTableName="unit" baseColumnNames="unit_type_key"
       referencedTableName="unit_type" referencedColumnNames="key"/>
-  </changeSet>
 
-  <changeSet id="7" author="mh">
     <createTable tableName="unit_relation">
       <column name="key" type="integer" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
@@ -166,9 +154,7 @@
     <addForeignKeyConstraint constraintName="fk_unit_relation_parent_unit_key"
       baseTableName="unit_relation" baseColumnNames="parent_unit_key"
       referencedTableName="unit" referencedColumnNames="key"/>
-  </changeSet>
 
-  <changeSet id="8" author="mh">
     <createTable tableName="certificate_data">
       <column name="key" type="bigint" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
@@ -184,9 +170,7 @@
     <addForeignKeyConstraint constraintName="fk_certificate_data_certificate_key"
       baseTableName="certificate_data" baseColumnNames="certificate_key"
       referencedTableName="certificate" referencedColumnNames="key"/>
-  </changeSet>
 
-  <changeSet id="9" author="mh">
     <createTable tableName="patient_id_type">
       <column name="key" type="integer" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
