@@ -42,6 +42,9 @@
       <column name="certificate_model_key" type="integer unsigned">
         <constraints nullable="false"/>
       </column>
+      <column name="certificate_data_key" type="bigint unsigned">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
 
     <createTable tableName="certificate_model">
@@ -169,17 +172,14 @@
       <column name="key" type="bigint unsigned" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
-      <column name="certificate_key" type="bigint unsigned">
-        <constraints nullable="false" unique="true"/>
-      </column>
       <column name="data" type="mediumblob">
         <constraints nullable="false"/>
       </column>
     </createTable>
 
     <addForeignKeyConstraint constraintName="fk_certificate_data_certificate_key"
-      baseTableName="certificate_data" baseColumnNames="certificate_key"
-      referencedTableName="certificate" referencedColumnNames="key"/>
+      baseTableName="certificate" baseColumnNames="certificate_data_key"
+      referencedTableName="certificate_data" referencedColumnNames="key"/>
 
     <createTable tableName="patient_id_type">
       <column name="key" type="tinyint unsigned" autoIncrement="true">

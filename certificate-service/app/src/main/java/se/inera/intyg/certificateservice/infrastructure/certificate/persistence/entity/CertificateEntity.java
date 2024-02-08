@@ -3,12 +3,10 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -37,25 +35,21 @@ public class CertificateEntity {
   private LocalDateTime modified;
   @Column(name = "version")
   private int version;
-  @OneToOne
-  private CertificateModelEntity certificateModel;
-  @ManyToOne
-  private PatientEntity patient;
-  @ManyToOne
-  @JoinColumn(name = "created_by_staff_key", referencedColumnName = "key")
-  private StaffEntity createdBy;
-  @ManyToOne
-  @JoinColumn(name = "issued_by_staff_key", referencedColumnName = "key")
-  private StaffEntity issuedBy;
-  @ManyToOne
-  @JoinColumn(name = "issued_on_unit_key", referencedColumnName = "key")
-  private UnitEntity issuedOnUnit;
-  @ManyToOne
-  @JoinColumn(name = "care_provider_unit_key", referencedColumnName = "key")
-  private UnitEntity careProvider;
-  @ManyToOne
-  @JoinColumn(name = "care_unit_unit_key", referencedColumnName = "key")
-  private UnitEntity careUnit;
-  @OneToOne(fetch = FetchType.LAZY, mappedBy = "certificateKey", cascade = CascadeType.REMOVE)
+  @Column(name = "certificate_model_key")
+  private int certificateModelKey;
+  @Column(name = "patient_key")
+  private int patientKey;
+  @Column(name = "created_by_staff_key")
+  private int createdBy;
+  @Column(name = "issued_by_staff_key")
+  private int issuedBy;
+  @Column(name = "issued_on_unit_key")
+  private int issuedOnUnit;
+  @Column(name = "care_provider_unit_key")
+  private int careProvider;
+  @Column(name = "care_unit_unit_key")
+  private int careUnit;
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "certificate_data_key", referencedColumnName = "key")
   private CertificateDataEntity data;
 }

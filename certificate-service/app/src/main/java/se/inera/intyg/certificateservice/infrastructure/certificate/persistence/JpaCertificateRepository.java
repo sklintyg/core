@@ -62,72 +62,85 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
       );
     }
 
-    certificateEntityRepository.save(
+    final var patientEntity = patientEntityRepository.save(
+        PatientEntity.builder()
+            .id(certificate.certificateMetaData().patient().id().id())
+            .type(
+                PatientIdTypeEntity.builder()
+                    .key(1)
+                    .type(PersonIdType.PERSONAL_IDENTITY_NUMBER.name())
+                    .build()
+            )
+            .build()
+    );
+
+    final var careUnitEntity = unitEntityRepository.save(
+        UnitEntity.builder()
+            .name(certificate.certificateMetaData().careUnit().name().name())
+            .hsaId(certificate.certificateMetaData().careUnit().hsaId().id())
+            .type(
+                UnitTypeEntity.builder()
+                    .key(2)
+                    .type("CARE_UNIT")
+                    .build()
+            )
+            .build()
+    );
+
+    final var careProviderEntity = unitEntityRepository.save(
+        UnitEntity.builder()
+            .name(certificate.certificateMetaData().careProvider().name().name())
+            .hsaId(certificate.certificateMetaData().careProvider().hsaId().id())
+            .type(
+                UnitTypeEntity.builder()
+                    .key(3)
+                    .type("CARE_PROVIDER")
+                    .build()
+            )
+            .build()
+    );
+
+    final var subUnitEntity = unitEntityRepository.save(
+        UnitEntity.builder()
+            .name(certificate.certificateMetaData().issuingUnit().name().name())
+            .hsaId(certificate.certificateMetaData().issuingUnit().hsaId().id())
+            .type(
+                UnitTypeEntity.builder()
+                    .key(1)
+                    .type("SUB_UNIT")
+                    .build()
+            )
+            .build()
+    );
+
+    final var staffEntity = staffEntityRepository.save(
+        StaffEntity.builder()
+            .name(certificate.certificateMetaData().issuer().name().fullName())
+            .hsaId(certificate.certificateMetaData().issuer().hsaId().id())
+            .build()
+    );
+
+    final var certificateModelEntity = certificateModelEntityRepository.save(
+        CertificateModelEntity.builder()
+            .type(certificate.certificateModel().id().type().type())
+            .name(certificate.certificateModel().name())
+            .version(certificate.certificateModel().id().version().version())
+            .build()
+    );
+
+    final var save = certificateEntityRepository.save(
         CertificateEntity.builder()
             .certificateId(certificate.id().id())
             .modified(LocalDateTime.now())
             .version(1)
             .created(certificate.created())
-            .patient(
-                PatientEntity.builder()
-                    .id(certificate.certificateMetaData().patient().id().id())
-                    .type(
-                        PatientIdTypeEntity.builder()
-                            .key(1)
-                            .type(PersonIdType.PERSONAL_IDENTITY_NUMBER.name())
-                            .build()
-                    )
-                    .build()
-            )
-            .careUnit(
-                UnitEntity.builder()
-                    .name(certificate.certificateMetaData().careUnit().name().name())
-                    .hsaId(certificate.certificateMetaData().careUnit().hsaId().id())
-                    .type(
-                        UnitTypeEntity.builder()
-                            .key(2)
-                            .type("CARE_UNIT")
-                            .build()
-                    )
-                    .build()
-            )
-            .careProvider(
-                UnitEntity.builder()
-                    .name(certificate.certificateMetaData().careProvider().name().name())
-                    .hsaId(certificate.certificateMetaData().careProvider().hsaId().id())
-                    .type(
-                        UnitTypeEntity.builder()
-                            .key(3)
-                            .type("CARE_PROVIDER")
-                            .build()
-                    )
-                    .build()
-            )
-            .issuedOnUnit(
-                UnitEntity.builder()
-                    .name(certificate.certificateMetaData().issuingUnit().name().name())
-                    .hsaId(certificate.certificateMetaData().issuingUnit().hsaId().id())
-                    .type(
-                        UnitTypeEntity.builder()
-                            .key(1)
-                            .type("SUB_UNIT")
-                            .build()
-                    )
-                    .build()
-            )
-            .issuedBy(
-                StaffEntity.builder()
-                    .name(certificate.certificateMetaData().issuer().name().fullName())
-                    .hsaId(certificate.certificateMetaData().issuer().hsaId().id())
-                    .build()
-            )
-            .certificateModel(
-                CertificateModelEntity.builder()
-                    .type(certificate.certificateModel().id().type().type())
-                    .name(certificate.certificateModel().name())
-                    .version(certificate.certificateModel().id().version().version())
-                    .build()
-            )
+            .createdBy(staffEntity.getKey())
+            .patientKey(patientEntity.getKey())
+            .issuedBy(staffEntity.getKey())
+            .issuedOnUnit(subUnitEntity.getKey())
+            .careUnit(careUnitEntity.getKey())
+            .careProvider(careProviderEntity.getKey())
+            .certificateModelKey(certificateModelEntity.getKey())
             .data(
                 CertificateDataEntity.builder()
                     .data(new byte[0])
@@ -136,13 +149,14 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
             .build()
     );
 
+    System.out.println(save);
+
     // certificateDataEntityRepository.save(
     //     CertificateDataEntity.builder()
     //         .key(save.getKey())
     //         .data(new byte[0])
     //         .build()
     // );
-
     return certificate;
   }
 
