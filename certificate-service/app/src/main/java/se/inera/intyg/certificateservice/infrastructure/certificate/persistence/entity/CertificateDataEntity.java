@@ -7,7 +7,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.nio.charset.StandardCharsets;
 import lombok.AllArgsConstructor;
@@ -28,8 +30,9 @@ public class CertificateDataEntity {
   @Column(name = "key")
   private Long key;
 
-  @Column(name = "certificate_key")
-  private Long certificateKey;
+  @OneToOne
+  @JoinColumn(name = "certificateId")
+  private CertificateEntity certificateKey;
 
   @Lob
   @Basic(fetch = FetchType.LAZY)

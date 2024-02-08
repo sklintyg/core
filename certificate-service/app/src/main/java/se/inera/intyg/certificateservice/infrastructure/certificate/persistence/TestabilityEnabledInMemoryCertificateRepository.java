@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateRepository;
 
-@Profile(TESTABILITY_PROFILE)
+@Profile("!" + TESTABILITY_PROFILE)
 @Repository
 @RequiredArgsConstructor
 public class TestabilityEnabledInMemoryCertificateRepository

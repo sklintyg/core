@@ -1,13 +1,16 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
+import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
@@ -18,13 +21,25 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitTypeEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateDataEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntityRepository;
+import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateRepository;
 
+@Profile(TESTABILITY_PROFILE)
 @Repository
 @RequiredArgsConstructor
-public class JpaCertificateRepository implements CertificateRepository {
+public class JpaCertificateRepository implements TestabilityCertificateRepository {
 
   private final CertificateEntityRepository certificateEntityRepository;
+  private final CertificateModelEntityRepository certificateModelEntityRepository;
+  private final CertificateDataEntityRepository certificateDataEntityRepository;
+  private final StaffEntityRepository staffEntityRepository;
+  private final UnitEntityRepository unitEntityRepository;
+  private final PatientEntityRepository patientEntityRepository;
 
   @Override
   public Certificate create(CertificateModel certificateModel) {
@@ -58,6 +73,7 @@ public class JpaCertificateRepository implements CertificateRepository {
                     .id(certificate.certificateMetaData().patient().id().id())
                     .type(
                         PatientIdTypeEntity.builder()
+                            .key(1)
                             .type(PersonIdType.PERSONAL_IDENTITY_NUMBER.name())
                             .build()
                     )
@@ -69,6 +85,7 @@ public class JpaCertificateRepository implements CertificateRepository {
                     .hsaId(certificate.certificateMetaData().careUnit().hsaId().id())
                     .type(
                         UnitTypeEntity.builder()
+                            .key(2)
                             .type("CARE_UNIT")
                             .build()
                     )
@@ -80,6 +97,7 @@ public class JpaCertificateRepository implements CertificateRepository {
                     .hsaId(certificate.certificateMetaData().careProvider().hsaId().id())
                     .type(
                         UnitTypeEntity.builder()
+                            .key(3)
                             .type("CARE_PROVIDER")
                             .build()
                     )
@@ -91,6 +109,7 @@ public class JpaCertificateRepository implements CertificateRepository {
                     .hsaId(certificate.certificateMetaData().issuingUnit().hsaId().id())
                     .type(
                         UnitTypeEntity.builder()
+                            .key(1)
                             .type("SUB_UNIT")
                             .build()
                     )
@@ -117,6 +136,13 @@ public class JpaCertificateRepository implements CertificateRepository {
             .build()
     );
 
+    // certificateDataEntityRepository.save(
+    //     CertificateDataEntity.builder()
+    //         .key(save.getKey())
+    //         .data(new byte[0])
+    //         .build()
+    // );
+
     return certificate;
   }
 
@@ -128,5 +154,15 @@ public class JpaCertificateRepository implements CertificateRepository {
   @Override
   public boolean exists(CertificateId certificateId) {
     return false;
+  }
+
+  @Override
+  public Certificate insert(Certificate certificate) {
+    return null;
+  }
+
+  @Override
+  public void remove(List<CertificateId> certificateIds) {
+
   }
 }

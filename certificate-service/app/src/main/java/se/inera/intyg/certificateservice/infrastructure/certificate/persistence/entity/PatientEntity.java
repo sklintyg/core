@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -27,5 +28,6 @@ public class PatientEntity {
   @Column(name = "patient_id")
   private String id;
   @ManyToOne
+  @JoinColumn(name = "patient_id_type_key")
   private PatientIdTypeEntity type;
 }
