@@ -22,8 +22,9 @@ public class UpdateCertificateService {
   public UpdateCertificateResponse update(UpdateCertificateRequest updateCertificateRequest,
       String certificateId) {
     updateCertificateRequestValidator.validate(updateCertificateRequest, certificateId);
-    
+
     final var actionEvaluation = actionEvaluationFactory.create(
+        updateCertificateRequest.getPatient(),
         updateCertificateRequest.getUser(),
         updateCertificateRequest.getUnit(),
         updateCertificateRequest.getCareUnit(),

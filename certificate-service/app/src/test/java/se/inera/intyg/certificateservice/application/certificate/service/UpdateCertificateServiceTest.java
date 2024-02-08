@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonCertificateDTO.certificate;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
@@ -71,6 +72,7 @@ class UpdateCertificateServiceTest {
 
     final var actionEvaluation = ActionEvaluation.builder().build();
     doReturn(actionEvaluation).when(actionEvaluationFactory).create(
+        ATHENA_REACT_ANDERSSON_DTO,
         AJLA_DOCTOR_DTO,
         ALFA_ALLERGIMOTTAGNINGEN_DTO,
         ALFA_MEDICINCENTRUM_DTO,
@@ -92,6 +94,7 @@ class UpdateCertificateServiceTest {
     final var actualResult = updateCertificateService.update(
         UpdateCertificateRequest.builder()
             .user(AJLA_DOCTOR_DTO)
+            .patient(ATHENA_REACT_ANDERSSON_DTO)
             .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
             .careUnit(ALFA_MEDICINCENTRUM_DTO)
             .careProvider(ALFA_REGIONEN_DTO)

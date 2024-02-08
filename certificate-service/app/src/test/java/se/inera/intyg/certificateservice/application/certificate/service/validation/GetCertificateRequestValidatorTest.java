@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.application.certificate.service;
+package se.inera.intyg.certificateservice.application.certificate.service.validation;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,7 +16,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
-import se.inera.intyg.certificateservice.application.certificate.service.validation.GetCertificateRequestValidator;
 
 class GetCertificateRequestValidatorTest {
 
