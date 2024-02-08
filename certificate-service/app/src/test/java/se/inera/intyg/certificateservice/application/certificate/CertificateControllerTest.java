@@ -14,14 +14,19 @@ import se.inera.intyg.certificateservice.application.certificate.dto.CreateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateControllerTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
+  @Mock
+  private UpdateCertificateService updateCertificateService;
   @Mock
   private GetCertificateService getCertificateService;
   @Mock
@@ -34,9 +39,7 @@ class CertificateControllerTest {
   @Test
   void shallReturnCreateCertificateResponse() {
     final var expectedResult = CreateCertificateResponse.builder()
-        .certificate(
-            CertificateDTO.builder().build()
-        )
+        .certificate(CertificateDTO.builder().build())
         .build();
 
     final var request = CreateCertificateRequest.builder().build();
@@ -79,9 +82,7 @@ class CertificateControllerTest {
   @Test
   void shallReturnGetCertificateResponse() {
     final var expectedResult = GetCertificateResponse.builder()
-        .certificate(
-            CertificateDTO.builder().build()
-        )
+        .certificate(CertificateDTO.builder().build())
         .build();
 
     final var request = GetCertificateRequest.builder().build();
@@ -91,6 +92,22 @@ class CertificateControllerTest {
         CERTIFICATE_ID);
 
     final var actualResult = certificateController.getCertificate(request, CERTIFICATE_ID);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnUpdateCertificateResponse() {
+    final var expectedResult = UpdateCertificateResponse.builder()
+        .certificate(CertificateDTO.builder().build())
+        .build();
+
+    final var request = UpdateCertificateRequest.builder().build();
+
+    doReturn(expectedResult).when(updateCertificateService).update(request, CERTIFICATE_ID);
+
+    final var actualResult = certificateController.updateCertificate(request,
+        CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
   }

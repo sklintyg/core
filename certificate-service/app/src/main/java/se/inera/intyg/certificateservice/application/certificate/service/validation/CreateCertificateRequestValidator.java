@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.application.certificate.service;
+package se.inera.intyg.certificateservice.application.certificate.service.validation;
 
 import static se.inera.intyg.certificateservice.application.common.ValidationUtil.validateCertificateId;
 import static se.inera.intyg.certificateservice.application.common.ValidationUtil.validatePatient;
