@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 
 @Configuration
@@ -21,5 +22,11 @@ public class AppConfig {
   public GetCertificateDomainService getCertificateDomainService(
       CertificateRepository certificateRepository) {
     return new GetCertificateDomainService(certificateRepository);
+  }
+
+  @Bean
+  public UpdateCertificateDomainService updateCertificateDomainService(
+      CertificateRepository certificateRepository) {
+    return new UpdateCertificateDomainService(certificateRepository);
   }
 }
