@@ -26,7 +26,9 @@ class CertificateActionCreateTest {
 
   @BeforeEach
   void setUp() {
-    certificateActionCreate = new CertificateActionCreate(CERTIFICATE_ACTION_SPECIFICATION);
+    certificateActionCreate = (CertificateActionCreate) CertificateActionFactory.create(
+        CERTIFICATE_ACTION_SPECIFICATION
+    );
   }
 
   @Test

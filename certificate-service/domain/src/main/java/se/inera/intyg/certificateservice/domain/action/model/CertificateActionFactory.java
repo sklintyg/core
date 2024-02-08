@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.action.model;
 
+import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 
 public class CertificateActionFactory {
@@ -8,11 +9,34 @@ public class CertificateActionFactory {
     throw new IllegalStateException("Utility class");
   }
 
-  public static CertificateAction create(
-      CertificateActionSpecification certificateActionSpecification) {
-    return switch (certificateActionSpecification.certificateActionType()) {
-      case CREATE -> new CertificateActionCreate(certificateActionSpecification);
-      case READ -> new CertificateActionRead(certificateActionSpecification);
+  public static CertificateAction create(CertificateActionSpecification actionSpecification) {
+    return switch (actionSpecification.certificateActionType()) {
+      case CREATE -> CertificateActionCreate.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleProtectedPerson()
+              )
+          )
+          .build();
+      case READ -> CertificateActionRead.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleWithinCareUnit(),
+                  new ActionRuleProtectedPerson()
+              )
+          )
+          .build();
+      case UPDATE -> CertificateActionUpdate.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleWithinCareUnit(),
+                  new ActionRuleProtectedPerson()
+              )
+          )
+          .build();
     };
   }
 }

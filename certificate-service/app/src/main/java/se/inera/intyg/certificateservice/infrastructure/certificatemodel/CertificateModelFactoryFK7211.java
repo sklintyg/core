@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -10,6 +12,14 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementValidationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 
 @Component
 public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
@@ -43,6 +53,65 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.READ)
+                    .build(),
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.UPDATE)
+                    .build()
+            )
+        )
+        .elementSpecifications(
+            List.of(
+                categoryBeraknatNedkomstdatum(
+                    questionBeraknatNedkomstdatum()
+                )
+            )
+        )
+        .build();
+  }
+
+  private static ElementSpecification categoryBeraknatNedkomstdatum(
+      ElementSpecification... children) {
+    return ElementSpecification.builder()
+        .id(new ElementId("KAT_1"))
+        .configuration(
+            ElementConfigurationCategory.builder()
+                .name("Beräknat nedkomstdatum")
+                .build()
+        )
+        .children(
+            List.of(children)
+        )
+        .build();
+  }
+
+  private static ElementSpecification questionBeraknatNedkomstdatum() {
+    return ElementSpecification.builder()
+        .id(new ElementId("FRG_1"))
+        .configuration(
+            ElementConfigurationDate.builder()
+                .name("Beräknat nedkomstdatum")
+                .id("beraknatnedkomstdatum")
+                .minDate(LocalDate.now().minus(Period.ofDays(0)))
+                .maxDate(LocalDate.now().plus(Period.ofYears(1)))
+                .build()
+        )
+        .rules(
+            List.of(
+                ElementRule.builder()
+                    .id(new ElementId("FRG_1"))
+                    .type(ElementRuleType.MANDATORY)
+                    .expression(
+                        new RuleExpression("$beraknatnedkomstdatum")
+                    )
+                    .build()
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationDate.builder()
+                    .mandatory(true)
+                    .min(Period.ofDays(0))
+                    .max(Period.ofYears(1))
                     .build()
             )
         )

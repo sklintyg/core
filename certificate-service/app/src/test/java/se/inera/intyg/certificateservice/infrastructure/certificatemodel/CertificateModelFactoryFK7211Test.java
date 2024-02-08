@@ -3,15 +3,26 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.ZoneId;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementValidationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 
 class CertificateModelFactoryFK7211Test {
 
@@ -79,5 +90,130 @@ class CertificateModelFactoryFK7211Test {
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
         ),
         "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionRead() {
+    final var expectedType = CertificateActionType.READ;
+
+    final var certificateModel = certificateModelFactoryFK7211.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionUpdate() {
+    final var expectedType = CertificateActionType.UPDATE;
+
+    final var certificateModel = certificateModelFactoryFK7211.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Nested
+  class CertificateSpecifications {
+
+    @Nested
+    class CategoryBeraknatNedkomstdatum {
+
+      private static final ElementId ELEMENT_ID = new ElementId("KAT_1");
+
+      @Test
+      void shallIncludeId() {
+        final var certificateModel = certificateModelFactoryFK7211.create();
+
+        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
+                certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeConfiguration() {
+        final var expectedConfiguration = ElementConfigurationCategory.builder()
+            .name("Beräknat nedkomstdatum")
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK7211.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+    }
+
+    @Nested
+    class QuestionBeraknatNedkomstdatum {
+
+      private static final ElementId ELEMENT_ID = new ElementId("FRG_1");
+
+      @Test
+      void shallIncludeId() {
+        final var certificateModel = certificateModelFactoryFK7211.create();
+
+        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
+                certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeConfiguration() {
+        final var expectedConfiguration = ElementConfigurationDate.builder()
+            .name("Beräknat nedkomstdatum")
+            .id("beraknatnedkomstdatum")
+            .minDate(LocalDate.now(ZoneId.systemDefault()))
+            .maxDate(LocalDate.now(ZoneId.systemDefault()).plusYears(1))
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK7211.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+
+      @Test
+      void shallIncludeRules() {
+        final var expectedRules = List.of(
+            ElementRule.builder()
+                .id(new ElementId("FRG_1"))
+                .type(ElementRuleType.MANDATORY)
+                .expression(
+                    new RuleExpression("$beraknatnedkomstdatum")
+                )
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK7211.create();
+
+        assertEquals(expectedRules,
+            certificateModel.elementSpecification(ELEMENT_ID).rules()
+        );
+      }
+
+      @Test
+      void shallIncludeValidations() {
+        final var expectedValidations = List.of(
+            ElementValidationDate.builder()
+                .mandatory(true)
+                .min(Period.ofDays(0))
+                .max(Period.ofYears(1))
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK7211.create();
+
+        assertEquals(expectedValidations,
+            certificateModel.elementSpecification(ELEMENT_ID).validations()
+        );
+      }
+    }
   }
 }

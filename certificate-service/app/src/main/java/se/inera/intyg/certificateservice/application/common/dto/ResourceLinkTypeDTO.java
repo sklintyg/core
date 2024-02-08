@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.common.dto;
 
 import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.CREATE;
 import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.READ;
+import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.UPDATE;
 
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 
@@ -59,6 +60,7 @@ public enum ResourceLinkTypeDTO {
     return switch (type) {
       case CREATE -> CREATE_CERTIFICATE;
       case READ -> READ_CERTIFICATE;
+      case UPDATE -> EDIT_CERTIFICATE;
     };
   }
 
@@ -66,6 +68,7 @@ public enum ResourceLinkTypeDTO {
     return switch (this) {
       case CREATE_CERTIFICATE -> CREATE;
       case READ_CERTIFICATE -> READ;
+      case EDIT_CERTIFICATE -> UPDATE;
       default -> throw new IllegalArgumentException(
           "Cannot convert %s to certificate action type!".formatted(this)
       );

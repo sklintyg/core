@@ -3,25 +3,11 @@ package se.inera.intyg.certificateservice.domain.action.model;
 import java.util.Optional;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 
-public interface CertificateAction {
-
-  CertificateActionType getType();
+public interface ActionRule {
 
   default boolean evaluate(ActionEvaluation actionEvaluation) {
     return evaluate(Optional.empty(), actionEvaluation);
   }
 
   boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation);
-
-  default String getName() {
-    return null;
-  }
-
-  default String getDescription() {
-    return null;
-  }
-
-  default boolean isEnabled() {
-    return true;
-  }
 }
