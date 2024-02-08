@@ -11,12 +11,14 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import java.nio.charset.StandardCharsets;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "certificate_data")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class CertificateDataEntity {

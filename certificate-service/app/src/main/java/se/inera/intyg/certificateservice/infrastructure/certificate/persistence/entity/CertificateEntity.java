@@ -54,4 +54,6 @@ public class CertificateEntity {
   @ManyToOne
   @JoinColumn(name = "care_unit_unit_key", referencedColumnName = "key")
   private UnitEntity careUnit;
+  @OneToOne
+  private CertificateDataEntity data;
 }
