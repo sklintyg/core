@@ -2,6 +2,8 @@ package se.inera.intyg.certificateservice.domain.certificate.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -21,6 +23,10 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_PHONENUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ZIP_CODE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.DATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.dateElementDataBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementDataConstants.DATE_ELEMENT_VALUE_DATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.athenaReactAnderssonBuilder;
@@ -47,6 +53,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +66,7 @@ import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
 
@@ -66,13 +74,15 @@ import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
 class CertificateTest {
 
   private Certificate certificate;
+  private CertificateModel certificateModel;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
 
   @BeforeEach
   void setUp() {
+    certificateModel = mock(CertificateModel.class);
     certificate = Certificate.builder()
-        .id(new CertificateId("defaultCertificateId"))
-        .certificateModel(mock(CertificateModel.class))
+        .id(CERTIFICATE_ID)
+        .certificateModel(certificateModel)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
         .certificateMetaData(
             CertificateMetaData.builder()
@@ -82,6 +92,9 @@ class CertificateTest {
                 .careUnit(ALFA_MEDICINCENTRUM)
                 .careProvider(ALFA_REGIONEN)
                 .build()
+        )
+        .elementData(
+            List.of(DATE)
         )
         .build();
 
@@ -641,95 +654,161 @@ class CertificateTest {
         assertTrue(certificate.certificateMetaData().issuingUnit().inactive().value());
       }
     }
+  }
 
-    @Nested
-    class TestActions {
+  @Nested
+  class TestActions {
 
-      @Test
-      void shallReturnActionIfEvaluateTrue() {
-        final var actionEvaluation = ActionEvaluation.builder().build();
-        final var certificateAction = mock(CertificateAction.class);
-        final var expectedActions = List.of(certificateAction);
+    @Test
+    void shallReturnActionIfEvaluateTrue() {
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var expectedActions = List.of(certificateAction);
 
-        doReturn(expectedActions).when(certificate.certificateModel()).actions();
+      doReturn(expectedActions).when(certificate.certificateModel()).actions();
 
-        doReturn(true).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
+      doReturn(true).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
 
-        final var actualActions = certificate.actions(actionEvaluation);
+      final var actualActions = certificate.actions(actionEvaluation);
 
-        assertEquals(expectedActions, actualActions);
-      }
-
-      @Test
-      void shallNotReturnActionIfEvaluateFalse() {
-        final var actionEvaluation = ActionEvaluation.builder().build();
-        final var certificateAction = mock(CertificateAction.class);
-        final var expectedActions = Collections.emptyList();
-
-        doReturn(List.of(certificateAction)).when(certificate.certificateModel()).actions();
-
-        doReturn(false).when(certificateAction)
-            .evaluate(Optional.of(certificate), actionEvaluation);
-
-        final var actualActions = certificate.actions(actionEvaluation);
-
-        assertEquals(expectedActions, actualActions);
-      }
+      assertEquals(expectedActions, actualActions);
     }
 
-    @Nested
-    class TestAllowTo {
+    @Test
+    void shallNotReturnActionIfEvaluateFalse() {
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var expectedActions = Collections.emptyList();
 
-      @Test
-      void shallReturnTrueIfExistsAndEvaluateTrue() {
-        final var actionEvaluation = ActionEvaluation.builder().build();
-        final var certificateAction = mock(CertificateAction.class);
-        final var actions = List.of(certificateAction);
+      doReturn(List.of(certificateAction)).when(certificate.certificateModel()).actions();
 
-        doReturn(actions).when(certificate.certificateModel()).actions();
+      doReturn(false).when(certificateAction)
+          .evaluate(Optional.of(certificate), actionEvaluation);
 
-        doReturn(CertificateActionType.READ).when(certificateAction).getType();
-        doReturn(true).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
+      final var actualActions = certificate.actions(actionEvaluation);
 
-        assertTrue(
-            certificate.allowTo(CertificateActionType.READ, actionEvaluation),
-            "Expected allowTo to return 'true'"
-        );
-      }
+      assertEquals(expectedActions, actualActions);
+    }
+  }
 
-      @Test
-      void shallReturnFalseIfExistsAndEvaluateFalse() {
-        final var actionEvaluation = ActionEvaluation.builder().build();
-        final var certificateAction = mock(CertificateAction.class);
-        final var actions = List.of(certificateAction);
+  @Nested
+  class TestAllowTo {
 
-        doReturn(actions).when(certificate.certificateModel()).actions();
+    @Test
+    void shallReturnTrueIfExistsAndEvaluateTrue() {
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var actions = List.of(certificateAction);
 
-        doReturn(CertificateActionType.READ).when(certificateAction).getType();
-        doReturn(false).when(certificateAction)
-            .evaluate(Optional.of(certificate), actionEvaluation);
+      doReturn(actions).when(certificate.certificateModel()).actions();
 
-        assertFalse(
-            certificate.allowTo(CertificateActionType.READ, actionEvaluation),
-            "Expected allowTo to return 'false'"
-        );
-      }
+      doReturn(CertificateActionType.READ).when(certificateAction).getType();
+      doReturn(true).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
 
-      @Test
-      void shallReturnFalseIfNotExists() {
-        final var actionEvaluation = ActionEvaluation.builder().build();
-        final var certificateAction = mock(CertificateAction.class);
-        final var actions = List.of(certificateAction);
+      assertTrue(
+          certificate.allowTo(CertificateActionType.READ, actionEvaluation),
+          "Expected allowTo to return 'true'"
+      );
+    }
 
-        doReturn(actions).when(certificate.certificateModel()).actions();
+    @Test
+    void shallReturnFalseIfExistsAndEvaluateFalse() {
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var actions = List.of(certificateAction);
 
-        doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
+      doReturn(actions).when(certificate.certificateModel()).actions();
 
-        assertFalse(
-            certificate.allowTo(CertificateActionType.READ, actionEvaluation),
-            "Expected allowTo to return 'false'"
-        );
-      }
+      doReturn(CertificateActionType.READ).when(certificateAction).getType();
+      doReturn(false).when(certificateAction)
+          .evaluate(Optional.of(certificate), actionEvaluation);
+
+      assertFalse(
+          certificate.allowTo(CertificateActionType.READ, actionEvaluation),
+          "Expected allowTo to return 'false'"
+      );
+    }
+
+    @Test
+    void shallReturnFalseIfNotExists() {
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var actions = List.of(certificateAction);
+
+      doReturn(actions).when(certificate.certificateModel()).actions();
+
+      doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
+
+      assertFalse(
+          certificate.allowTo(CertificateActionType.READ, actionEvaluation),
+          "Expected allowTo to return 'false'"
+      );
+    }
+  }
+
+  @Nested
+  class TestUpdateData {
+
+    @BeforeEach
+    void setUp() {
+      doReturn(true).when(certificateModel).elementSpecificationExists(DATE.id());
+    }
+
+    @Test
+    void shallUpdateDataIfChanged() {
+      final var newValue = List.of(
+          dateElementDataBuilder()
+              .value(
+                  ElementValueDate.builder()
+                      .date(DATE_ELEMENT_VALUE_DATE.plusDays(1))
+                      .build()
+              )
+              .build()
+      );
+
+      certificate.updateData(newValue);
+
+      assertEquals(newValue, certificate.elementData());
+    }
+
+    @Test
+    void shallUpdateDataIfChangedAndHaveOwnCopyOfList() {
+      final var newValue = new ArrayList<>(
+          List.of(
+              dateElementDataBuilder()
+                  .value(
+                      ElementValueDate.builder()
+                          .date(DATE_ELEMENT_VALUE_DATE.plusDays(1))
+                          .build()
+                  )
+                  .build()
+          )
+      );
+
+      certificate.updateData(newValue);
+
+      newValue.remove(0);
+
+      assertNotEquals(newValue, certificate.elementData());
+    }
+
+    @Test
+    void shallThrowExceptionIfElementIdDontExists() {
+      final var newValue = List.of(
+          DATE,
+          dateElementDataBuilder()
+              .id(new ElementId("NOT_EXISTS"))
+              .build()
+      );
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificate.updateData(newValue)
+      );
+
+      assertTrue(illegalArgumentException.getMessage().contains("NOT_EXISTS"),
+          () -> "Expected to contain 'NOT_EXISTS' in exception message '%s'"
+              .formatted(illegalArgumentException.getMessage())
+      );
     }
   }
 }

@@ -30,4 +30,16 @@ class CertificateActionFactoryTest {
     assert certificateAction != null;
     assertEquals(certificateAction.getClass(), CertificateActionRead.class);
   }
+
+  @Test
+  void shallReturnCertificateActionUpdateIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.UPDATE)
+        .build();
+
+    final var certificateAction = CertificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionUpdate.class);
+  }
 }

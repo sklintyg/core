@@ -2,10 +2,14 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementDataConstants.DATE_ELEMENT_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementSpecification.DATE_ELEMENT_SPECIFICATION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementSpecification.dateElementSpecificationBuilder;
 
 import java.util.Collections;
 import java.util.List;
@@ -293,6 +297,176 @@ class CertificateModelTest {
 
         assertFalse(actualResult, "Expected allowTo to return 'false'");
       }
+    }
+  }
+
+  @Nested
+  class TestElementSpecificationExists {
+
+    @Test
+    void shallReturnTrueIfElementExitsOnRootLevel() {
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(
+              List.of(DATE_ELEMENT_SPECIFICATION)
+          )
+          .build();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId(DATE_ELEMENT_ID)),
+          "Expected to find '%s' among specifications '%s'".formatted(DATE_ELEMENT_ID,
+              certificateModel.elementSpecifications())
+      );
+    }
+
+    @Test
+    void shallReturnTrueIfElementExitsOnRootLevelAsSecond() {
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(
+              List.of(
+                  dateElementSpecificationBuilder()
+                      .id(new ElementId("ANOTHER_ELEMENT_ID"))
+                      .build(),
+                  DATE_ELEMENT_SPECIFICATION
+              )
+          )
+          .build();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId(DATE_ELEMENT_ID)),
+          "Expected to find '%s' among specifications '%s'".formatted(DATE_ELEMENT_ID,
+              certificateModel.elementSpecifications())
+      );
+    }
+
+    @Test
+    void shallReturnTrueIfElementExitsOnNextLevel() {
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(
+              List.of(
+                  dateElementSpecificationBuilder()
+                      .id(new ElementId("ANOTHER_ELEMENT_ID"))
+                      .children(List.of(DATE_ELEMENT_SPECIFICATION))
+                      .build()
+              )
+          )
+          .build();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId(DATE_ELEMENT_ID)),
+          "Expected to find '%s' among specifications '%s'".formatted(DATE_ELEMENT_ID,
+              certificateModel.elementSpecifications())
+      );
+    }
+
+    @Test
+    void shallReturnTrueIfElementExitsOnNextLevelOnSecondRoot() {
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(
+              List.of(
+                  dateElementSpecificationBuilder()
+                      .id(new ElementId("ANOTHER_ELEMENT_ID"))
+                      .build(),
+                  dateElementSpecificationBuilder()
+                      .id(new ElementId("ANOTHER_ELEMENT_ID"))
+                      .children(List.of(DATE_ELEMENT_SPECIFICATION))
+                      .build()
+              )
+          )
+          .build();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId(DATE_ELEMENT_ID)),
+          "Expected to find '%s' among specifications '%s'".formatted(DATE_ELEMENT_ID,
+              certificateModel.elementSpecifications())
+      );
+    }
+  }
+
+  @Nested
+  class TestElementSpecificationWithId {
+
+    @Test
+    void shallReturnElementIfElementExitsOnRootLevel() {
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(
+              List.of(DATE_ELEMENT_SPECIFICATION)
+          )
+          .build();
+
+      assertEquals(DATE_ELEMENT_SPECIFICATION,
+          certificateModel.elementSpecification(DATE_ELEMENT_SPECIFICATION.id())
+      );
+    }
+
+    @Test
+    void shallReturnElementIfElementExitsOnRootLevelAsSecond() {
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(
+              List.of(
+                  dateElementSpecificationBuilder()
+                      .id(new ElementId("ANOTHER_ELEMENT_ID"))
+                      .build(),
+                  DATE_ELEMENT_SPECIFICATION
+              )
+          )
+          .build();
+
+      assertEquals(DATE_ELEMENT_SPECIFICATION,
+          certificateModel.elementSpecification(DATE_ELEMENT_SPECIFICATION.id())
+      );
+    }
+
+    @Test
+    void shallReturnElementIfElementExitsOnNextLevel() {
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(
+              List.of(
+                  dateElementSpecificationBuilder()
+                      .id(new ElementId("ANOTHER_ELEMENT_ID"))
+                      .children(List.of(DATE_ELEMENT_SPECIFICATION))
+                      .build()
+              )
+          )
+          .build();
+
+      assertEquals(DATE_ELEMENT_SPECIFICATION,
+          certificateModel.elementSpecification(DATE_ELEMENT_SPECIFICATION.id())
+      );
+    }
+
+    @Test
+    void shallReturnElementIfElementExitsOnNextLevelOnSecondRoot() {
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(
+              List.of(
+                  dateElementSpecificationBuilder()
+                      .id(new ElementId("ANOTHER_ELEMENT_ID"))
+                      .build(),
+                  dateElementSpecificationBuilder()
+                      .id(new ElementId("ANOTHER_ELEMENT_ID"))
+                      .children(List.of(DATE_ELEMENT_SPECIFICATION))
+                      .build()
+              )
+          )
+          .build();
+
+      assertEquals(DATE_ELEMENT_SPECIFICATION,
+          certificateModel.elementSpecification(DATE_ELEMENT_SPECIFICATION.id())
+      );
+    }
+
+    @Test
+    void shallThrowExceptionIfElementDoesntExists() {
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(
+              List.of(
+                  dateElementSpecificationBuilder()
+                      .id(new ElementId("ANOTHER_ELEMENT_ID"))
+                      .build()
+              )
+          )
+          .build();
+
+      final var elementId = DATE_ELEMENT_SPECIFICATION.id();
+      assertThrows(IllegalArgumentException.class,
+          () -> certificateModel.elementSpecification(elementId)
+      );
     }
   }
 }

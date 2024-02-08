@@ -6,7 +6,6 @@ import java.util.Optional;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.experimental.Accessors;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -15,13 +14,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 @Getter
 @Builder
 @EqualsAndHashCode
-@Accessors(fluent = true)
 public class Certificate {
 
   private final CertificateId id;
   private final CertificateModel certificateModel;
   private final LocalDateTime created;
   private CertificateMetaData certificateMetaData;
+  private List<ElementData> elementData;
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
@@ -52,5 +51,21 @@ public class Certificate {
         .careProvider(actionEvaluation.careProvider())
         .issuingUnit(actionEvaluation.subUnit())
         .build();
+  }
+
+  public void updateData(List<ElementData> newData) {
+    final var missingIds = newData.stream()
+        .filter(newDataElement -> !certificateModel.elementSpecificationExists(newDataElement.id()))
+        .map(newDataElement -> newDataElement.id().id())
+        .reduce("", (s, s2) -> s.isBlank() ? s2 : s.concat(", " + s2));
+
+    if (!missingIds.isEmpty()) {
+      throw new IllegalArgumentException(
+          "ElementIds '%s' are missing from certificateModelId '%s'"
+              .formatted(missingIds, certificateModel.id())
+      );
+    }
+
+    this.elementData = newData.stream().toList();
   }
 }

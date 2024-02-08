@@ -25,20 +25,19 @@ import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
 import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 
-class CertificateActionReadTest {
+class CertificateActionUpdateTest {
 
-  private CertificateActionRead certificateActionRead;
+  private CertificateActionUpdate certificateActionUpdate;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
   private CertificateBuilder certificateBuilder;
-
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
-          .certificateActionType(CertificateActionType.READ)
+          .certificateActionType(CertificateActionType.UPDATE)
           .build();
 
   @BeforeEach
   void setUp() {
-    certificateActionRead = (CertificateActionRead) CertificateActionFactory.create(
+    certificateActionUpdate = (CertificateActionUpdate) CertificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION);
     certificateBuilder = Certificate.builder()
         .certificateMetaData(
@@ -59,7 +58,7 @@ class CertificateActionReadTest {
 
   @Test
   void shallReturnTypeFromSpecification() {
-    assertEquals(CertificateActionType.READ, certificateActionRead.getType());
+    assertEquals(CertificateActionType.UPDATE, certificateActionUpdate.getType());
   }
 
   @Test
@@ -68,7 +67,7 @@ class CertificateActionReadTest {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     assertFalse(
-        certificateActionRead.evaluate(certificate, actionEvaluation),
+        certificateActionUpdate.evaluate(certificate, actionEvaluation),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -86,7 +85,7 @@ class CertificateActionReadTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionRead.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionUpdate.evaluate(Optional.of(certificate), actionEvaluation),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -104,7 +103,7 @@ class CertificateActionReadTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionRead.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionUpdate.evaluate(Optional.of(certificate), actionEvaluation),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -122,7 +121,7 @@ class CertificateActionReadTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionRead.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionUpdate.evaluate(Optional.of(certificate), actionEvaluation),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -140,7 +139,7 @@ class CertificateActionReadTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionRead.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionUpdate.evaluate(Optional.of(certificate), actionEvaluation),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -163,7 +162,7 @@ class CertificateActionReadTest {
         .build();
 
     assertFalse(
-        certificateActionRead.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionUpdate.evaluate(Optional.of(certificate), actionEvaluation),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -184,7 +183,7 @@ class CertificateActionReadTest {
         .build();
 
     assertTrue(
-        certificateActionRead.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionUpdate.evaluate(Optional.of(certificate), actionEvaluation),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }

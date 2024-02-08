@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 
 @Builder
 @Getter(AccessLevel.NONE)
-public class CertificateActionRead implements CertificateAction {
+public class CertificateActionUpdate implements CertificateAction {
 
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
