@@ -1,8 +1,9 @@
 package se.inera.intyg.certificateservice.application.testdata;
 
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CONFIG_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CONFIG_TEXT;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.QUESTION_ID;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificatePatientDTO.ATHENA_REACT_ANDERSSON_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonStaffDTO.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonWebcertUnitDTO.ALFA_MEDICINCENTRUM_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonWebcertUnitDTO.ALFA_REGIONEN_DTO;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -19,22 +20,18 @@ public class TestDataCommonCertificateDTO {
     throw new IllegalStateException("Utility class");
   }
 
-  public static final CertificateDTO CERTIFICATE = certificate().build();
-  public static final CertificateDTO FK7211_CERTIFICATE = fk7211Certificate().build();
+  private static final String QUESTION_ID = "questionId";
+  private static final String FK7211_CONFIG_ID = "beraknatnedkomstdatum";
+  private static final String FK7211_CONFIG_TEXT = "Beräknat nedkomstdatum";
+  public static final CertificateMetadataDTO METADATA = certificateMetadata().build();
 
-  public static CertificateDTOBuilder certificate() {
-    return CertificateDTO.builder()
-        .data(
-            Map.of(
-                QUESTION_ID,
-                CertificateDataElement.builder()
-                    .build()
-            )
-        )
-        .metadata(
-            CertificateMetadataDTO.builder()
-                .build()
-        );
+  public static CertificateMetadataDTO.CertificateMetadataDTOBuilder certificateMetadata() {
+    return CertificateMetadataDTO.builder()
+        .patient(ATHENA_REACT_ANDERSSON_DTO)
+        .unit(ALFA_MEDICINCENTRUM_DTO)
+        .careUnit(ALFA_MEDICINCENTRUM_DTO)
+        .careProvider(ALFA_REGIONEN_DTO)
+        .issuedBy(AJLA_DOKTOR);
   }
 
   public static CertificateDTOBuilder fk7211Certificate() {
@@ -61,9 +58,7 @@ public class TestDataCommonCertificateDTO {
             )
         )
         .metadata(
-            //TODO: Create test data for metadata
-            CertificateMetadataDTO.builder()
-                .build()
+            certificateMetadata().build()
         );
   }
 }

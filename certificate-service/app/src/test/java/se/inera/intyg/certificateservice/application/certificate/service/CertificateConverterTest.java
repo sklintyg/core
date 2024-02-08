@@ -32,6 +32,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_NAME;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,6 +55,8 @@ class CertificateConverterTest {
   private static final String TYPE_NAME = "typeName";
   private static final String TYPE_DESCRIPTION = "typeDescription";
   private static final LocalDateTime CREATED = LocalDateTime.now(ZoneId.systemDefault());
+  private static final String QUESTION_ID_1 = "questionId1";
+  private static final LocalDate DATE = LocalDate.of(2024, 02, 8);
   private final CertificateConverter certificateConverter = new CertificateConverter();
   private static final String CERTIFICATE_ID = "certificateId";
   private Certificate certificate;
@@ -349,6 +352,15 @@ class CertificateConverterTest {
             certificateConverter.convert(certificate).getMetadata().getIssuedBy().getFullName()
         );
       }
+    }
+  }
+
+  @Nested
+  class CertificateData {
+
+    @Test
+    void shallIncludeQuestionId() {
+
     }
   }
 }

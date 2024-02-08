@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.application.certificate.service.valida
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonCertificateDTO.CERTIFICATE;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonCertificateDTO.certificateMetadata;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.athenaReactAnderssonDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
@@ -38,7 +38,9 @@ class UpdateCertificateRequestValidatorTest {
         .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
         .careUnit(ALFA_MEDICINCENTRUM_DTO)
         .careProvider(ALFA_REGIONEN_DTO)
-        .certificate(CERTIFICATE);
+        .certificate(CertificateDTO.builder().metadata(
+            certificateMetadata().build()
+        ).build());
   }
 
   @Nested

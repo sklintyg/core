@@ -4,21 +4,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonCertificateDTO.certificate;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.QUESTION_ID;
 
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.validation.UpdateCertificateRequestValidator;
@@ -33,7 +33,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertif
 class UpdateCertificateServiceTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
-  private static final CertificateDTO CERTIFICATE = certificate().build();
+  private static final String QUESTION_ID = "questionId";
   @Mock
   private UpdateCertificateRequestValidator updateCertificateRequestValidator;
 
@@ -65,7 +65,10 @@ class UpdateCertificateServiceTest {
 
   @Test
   void shallReturnUpdateCertificateResponse() {
-    final var expectedCertificate = CertificateDTO.builder().build();
+    final var expectedCertificate = CertificateDTO.builder()
+        .data(Map.of(QUESTION_ID, CertificateDataElement.builder().build()))
+        .build();
+
     final var expectedResult = UpdateCertificateResponse.builder()
         .certificate(expectedCertificate)
         .build();
@@ -81,7 +84,7 @@ class UpdateCertificateServiceTest {
     final var elementData = ElementData.builder().build();
 
     doReturn(elementData).when(elementDataConverter)
-        .convert(QUESTION_ID, CERTIFICATE.getData().get(QUESTION_ID));
+        .convert(QUESTION_ID, expectedCertificate.getData().get(QUESTION_ID));
 
     final var certificate = Certificate.builder().build();
 
@@ -89,7 +92,7 @@ class UpdateCertificateServiceTest {
         new CertificateId(CERTIFICATE_ID), List.of(elementData), actionEvaluation
     );
 
-    doReturn(CertificateDTO.builder().build()).when(certificateConverter).convert(certificate);
+    doReturn(expectedCertificate).when(certificateConverter).convert(certificate);
 
     final var actualResult = updateCertificateService.update(
         UpdateCertificateRequest.builder()
@@ -98,7 +101,7 @@ class UpdateCertificateServiceTest {
             .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
             .careUnit(ALFA_MEDICINCENTRUM_DTO)
             .careProvider(ALFA_REGIONEN_DTO)
-            .certificate(CERTIFICATE)
+            .certificate(expectedCertificate)
             .build(),
         CERTIFICATE_ID);
 
