@@ -2,12 +2,15 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +28,7 @@ public class UnitEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "key")
   private int key;
-  @Column(name = "hsa_id")
+  @Column(name = "hsa_id", unique = true)
   private String hsaId;
   @Column(name = "name")
   private String name;

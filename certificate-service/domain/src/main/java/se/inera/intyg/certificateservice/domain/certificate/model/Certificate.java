@@ -21,6 +21,8 @@ public class Certificate {
   private final CertificateId id;
   private final CertificateModel certificateModel;
   private final LocalDateTime created;
+  private LocalDateTime modified;
+  private int version;
   private CertificateMetaData certificateMetaData;
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {

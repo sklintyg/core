@@ -71,7 +71,7 @@
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
       <column name="patient_id" type="varchar(24)">
-        <constraints nullable="false"/>
+        <constraints nullable="false" unique="true"/>
       </column>
       <column name="patient_id_type_key" type="tinyint unsigned">
         <constraints nullable="false"/>
@@ -87,7 +87,7 @@
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
       <column name="hsa_id" type="varchar(64)">
-        <constraints nullable="false"/>
+        <constraints nullable="false" unique="true"/>
       </column>
       <column name="name" type="varchar(255)">
         <constraints nullable="false"/>
@@ -112,7 +112,7 @@
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
       <column name="hsa_id" type="varchar(64)">
-        <constraints nullable="false"/>
+        <constraints nullable="false" unique="true"/>
       </column>
       <column name="name" type="varchar(255)">
         <constraints nullable="false"/>
@@ -193,6 +193,12 @@
     <addForeignKeyConstraint constraintName="fk_patient_patient_id_type_key"
       baseTableName="patient" baseColumnNames="patient_id_type_key"
       referencedTableName="patient_id_type" referencedColumnNames="key"/>
+
+    <addUniqueConstraint
+      columnNames="type, version"
+      constraintName="unique_certificate_model"
+      tableName="certificate_model"
+    />
 
     <insert tableName="patient_id_type">
       <column name="type" value="PERSONAL_IDENTITY_NUMBER"/>

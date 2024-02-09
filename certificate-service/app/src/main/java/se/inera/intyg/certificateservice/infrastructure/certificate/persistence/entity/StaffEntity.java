@@ -23,7 +23,7 @@ public class StaffEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "key")
   private int key;
-  @Column(name = "hsa_id")
+  @Column(name = "hsa_id", unique = true)
   private String hsaId;
   @Column(name = "name")
   private String name;

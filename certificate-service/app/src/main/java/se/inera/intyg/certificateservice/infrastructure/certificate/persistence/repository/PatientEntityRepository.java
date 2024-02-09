@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
 
 @Repository
-public interface PatientEntityRepository extends
-    CrudRepository<PatientEntity, Long> {
+public interface PatientEntityRepository extends CrudRepository<PatientEntity, Long> {
 
+  public PatientEntity findById(String patientId);
 }

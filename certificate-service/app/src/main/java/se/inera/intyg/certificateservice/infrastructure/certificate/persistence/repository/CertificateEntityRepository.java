@@ -8,4 +8,6 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 public interface CertificateEntityRepository extends CrudRepository<CertificateEntity, Long> {
 
   CertificateEntity getCertificateEntityByCertificateId(String certificateId);
+
+  CertificateEntity findByCertificateId(String certificateId);
 }

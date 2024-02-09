@@ -6,13 +6,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "certificate_model")
+@Table(
+    name = "certificate_model",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"type", "version"})}
+)
 @Data
 @Builder
 @AllArgsConstructor

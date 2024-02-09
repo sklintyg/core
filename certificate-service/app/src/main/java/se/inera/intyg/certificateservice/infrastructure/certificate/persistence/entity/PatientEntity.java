@@ -25,7 +25,7 @@ public class PatientEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "key")
   private int key;
-  @Column(name = "patient_id")
+  @Column(name = "patient_id", unique = true)
   private String id;
   @ManyToOne
   @JoinColumn(name = "patient_id_type_key")
