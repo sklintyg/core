@@ -39,7 +39,7 @@ class CertificateDataConverterTest {
   private CertificateDataConverter certificateDataConverter;
 
   @Test
-  void shallConvertSingleElementDataToSingleEntryMap() {
+  void shallConvertSingleElementData() {
     final var elementId = new ElementId(ID_1);
 
     final var elementData = ElementData.builder()
@@ -62,7 +62,7 @@ class CertificateDataConverterTest {
 
 
   @Test
-  void shallConvertMultipleElementDataItemsToMapWithCorrespondingEntries() {
+  void shallConvertMultipleElementData() {
     final var elementId1 = new ElementId(ID_1);
     final var elementId2 = new ElementId(ID_2);
 
@@ -174,7 +174,7 @@ class CertificateDataConverterTest {
   }
 
   @Test
-  void shallSetParentAttributeCorrectlyWhenParentExistsForSubQuestion() {
+  void shallSetParentAttributeCorrectlyWhenParentExistsWithSubQuestion() {
     final var parentElementId = "parent1";
     final var childElementId = "child1";
     final var subQuestionId = "child2";
