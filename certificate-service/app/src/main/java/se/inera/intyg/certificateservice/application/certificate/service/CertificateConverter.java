@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
@@ -12,6 +13,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 
 @Component
+@RequiredArgsConstructor
 public class CertificateConverter {
 
   /**
@@ -25,6 +27,7 @@ public class CertificateConverter {
   private static final int VERSION = 0;
   private static final CertificateRelationsDTO RELATIONS = CertificateRelationsDTO.builder()
       .build();
+  private final CertificateDataConverter certificateDataConverter;
 
   public CertificateDTO convert(Certificate certificate) {
     return CertificateDTO.builder()
@@ -101,6 +104,12 @@ public class CertificateConverter {
                 .version(VERSION)
                 .relations(RELATIONS)
                 .build()
+        )
+        .data(
+            certificateDataConverter.convert(
+                certificate.certificateModel(),
+                certificate.elementData()
+            )
         )
         .build();
   }

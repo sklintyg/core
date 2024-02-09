@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
@@ -35,6 +36,7 @@ public class UpdateCertificateService {
         .entrySet()
         .stream()
         .map(entry -> elementDataConverter.convert(entry.getKey(), entry.getValue()))
+        .filter(Objects::nonNull)
         .toList();
 
     final var updatedCertificate = updateCertificateDomainService.update(

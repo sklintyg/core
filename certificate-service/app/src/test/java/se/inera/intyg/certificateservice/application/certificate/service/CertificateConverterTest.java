@@ -34,20 +34,37 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.ZoneId;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementValidationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
 
+@ExtendWith(MockitoExtension.class)
 class CertificateConverterTest {
 
   private static final String TYPE = "type";
@@ -55,43 +72,113 @@ class CertificateConverterTest {
   private static final String TYPE_NAME = "typeName";
   private static final String TYPE_DESCRIPTION = "typeDescription";
   private static final LocalDateTime CREATED = LocalDateTime.now(ZoneId.systemDefault());
-  private static final String QUESTION_ID_1 = "questionId1";
   private static final LocalDate DATE = LocalDate.of(2024, 02, 8);
-  private final CertificateConverter certificateConverter = new CertificateConverter();
+  private static final String Q_1 = "q1";
+  private static final String CONFIG_TEXT = "configText";
+  private static final String ID = "valueId";
+  private static final String EXPRESSION = "$beraknatnedkomstdatum";
+  private static final String Q_2 = "q2";
+  private static final String NAME = "Beräknat nedkomstdatum";
+  @Mock
+  private CertificateDataConverter certificateDataConverter;
+  @InjectMocks
+  private CertificateConverter certificateConverter;
   private static final String CERTIFICATE_ID = "certificateId";
   private Certificate certificate;
 
+  @BeforeEach
+  void setUp() {
+    certificate = Certificate.builder()
+        .id(new CertificateId(CERTIFICATE_ID))
+        .created(CREATED)
+        .certificateModel(
+            CertificateModel.builder()
+                .id(
+                    CertificateModelId.builder()
+                        .type(new CertificateType(TYPE))
+                        .version(new CertificateVersion(VERSION))
+                        .build()
+                )
+                .name(TYPE_NAME)
+                .description(TYPE_DESCRIPTION)
+                .elementSpecifications(
+                    List.of(
+                        ElementSpecification.builder()
+                            .id(new ElementId(Q_1))
+                            .configuration(
+                                ElementConfigurationCategory.builder()
+                                    .name(NAME)
+                                    .build()
+                            )
+                            .children(
+                                List.of(
+                                    ElementSpecification.builder()
+                                        .id(new ElementId(ID))
+                                        .configuration(
+                                            ElementConfigurationDate.builder()
+                                                .id(ID)
+                                                .name(NAME)
+                                                .minDate(LocalDate.now().minus(Period.ofDays(0)))
+                                                .maxDate(LocalDate.now().plus(Period.ofYears(1)))
+                                                .build()
+                                        )
+                                        .rules(
+                                            List.of(
+                                                ElementRule.builder()
+                                                    .id(new ElementId(ID))
+                                                    .type(ElementRuleType.MANDATORY)
+                                                    .expression(
+                                                        new RuleExpression(EXPRESSION))
+                                                    .build()
+                                            )
+                                        )
+                                        .validations(
+                                            List.of(
+                                                ElementValidationDate.builder()
+                                                    .mandatory(true)
+                                                    .min(Period.ofDays(0))
+                                                    .max(Period.ofYears(1))
+                                                    .build()
+                                            )
+                                        )
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                )
+                .build()
+        )
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .patient(ATHENA_REACT_ANDERSSON)
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                .careUnit(ALFA_MEDICINCENTRUM)
+                .careProvider(ALFA_REGIONEN)
+                .issuer(AJLA_DOKTOR)
+                .build()
+        )
+        .elementData(
+            List.of(
+                ElementData.builder()
+                    .id(new ElementId(Q_1))
+                    .value(null)
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId(Q_2))
+                    .value(
+                        ElementValueDate.builder()
+                            .date(DATE)
+                            .build()
+                    )
+                    .build()
+            )
+        )
+        .build();
+  }
+
   @Nested
   class CertificateMetadata {
-
-    @BeforeEach
-    void setUp() {
-      certificate = Certificate.builder()
-          .id(new CertificateId(CERTIFICATE_ID))
-          .created(CREATED)
-          .certificateModel(
-              CertificateModel.builder()
-                  .id(
-                      CertificateModelId.builder()
-                          .type(new CertificateType(TYPE))
-                          .version(new CertificateVersion(VERSION))
-                          .build()
-                  )
-                  .name(TYPE_NAME)
-                  .description(TYPE_DESCRIPTION)
-                  .build()
-          )
-          .certificateMetaData(
-              CertificateMetaData.builder()
-                  .patient(ATHENA_REACT_ANDERSSON)
-                  .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
-                  .careUnit(ALFA_MEDICINCENTRUM)
-                  .careProvider(ALFA_REGIONEN)
-                  .issuer(AJLA_DOKTOR)
-                  .build()
-          )
-          .build();
-    }
 
     @Test
     void shallIncludeCertificateId() {
@@ -352,15 +439,6 @@ class CertificateConverterTest {
             certificateConverter.convert(certificate).getMetadata().getIssuedBy().getFullName()
         );
       }
-    }
-  }
-
-  @Nested
-  class CertificateData {
-
-    @Test
-    void shallIncludeQuestionId() {
-
     }
   }
 }

@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,12 +16,7 @@ class ElementDataConverterTest {
   private ElementDataConverter elementDataConverter;
 
   private CertificateDataElement.CertificateDataElementBuilder certificateDataElementBuilder =
-      CertificateDataElement.builder()
-          .value(
-              CertificateDataValueDate.builder()
-                  .date(LocalDate.now())
-                  .build()
-          );
+      CertificateDataElement.builder();
 
   @BeforeEach
   void setUp() {
@@ -30,10 +26,24 @@ class ElementDataConverterTest {
   @Test
   void shallConvertQuestionId() {
     final var result = elementDataConverter.convert(EXPECTED_ID,
-        certificateDataElementBuilder.build()
+        certificateDataElementBuilder.value(
+                CertificateDataValueDate.builder()
+                    .date(LocalDate.now())
+                    .build()
+            )
+            .build()
     );
 
     assertEquals(EXPECTED_ID, result.id().id());
+  }
+
+  @Test
+  void shallConvertToNullIfCertificateHasNoValue() {
+    final var result = elementDataConverter.convert(EXPECTED_ID,
+        certificateDataElementBuilder.build()
+    );
+
+    assertNull(result.value());
   }
 
   @Test

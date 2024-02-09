@@ -13,9 +13,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 public class ElementDataConverter {
 
   public ElementData convert(String questionId, CertificateDataElement certificateDataElement) {
+    final var value = certificateDataElement.getValue();
     return ElementData.builder()
         .id(new ElementId(questionId))
-        .value(convertValue(certificateDataElement.getValue()))
+        .value(value != null ? convertValue(value) : null)
         .build();
   }
 
