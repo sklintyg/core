@@ -29,20 +29,22 @@ public class CertificateDataConverter {
     final var childParentMap = certificateModel.elementSpecifications().stream()
         .flatMap(this::mapChildrenToParents)
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    
+
     final var index = new AtomicInteger(0);
-    return elementData.stream()
-        .map(data -> updateData(
-            data,
-            certificateModel.elementSpecification(data.id()),
-            index.incrementAndGet(),
-            childParentMap)
-        )
-        .reduce(new HashMap<>(), (map1, map2) -> {
-              map1.putAll(map2);
-              return map1;
-            }
-        );
+    final Map<String, CertificateDataElement> convertedData = new HashMap<>();
+
+    elementData.forEach(element -> {
+          final var certificateDataElementMap = updateData(
+              element,
+              certificateModel.elementSpecification(element.id()),
+              index.incrementAndGet(),
+              childParentMap
+          );
+          convertedData.putAll(certificateDataElementMap);
+        }
+    );
+
+    return convertedData;
   }
 
   private Stream<Map.Entry<String, String>> mapChildrenToParents(ElementSpecification parent) {
