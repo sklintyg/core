@@ -41,6 +41,8 @@ public class PersonInformationTypeConverter {
         .gender(type.getGender())
         .personHsaId(type.getPersonHsaId())
         .givenName(type.getGivenName())
+        .specialityName(type.getSpecialityName())
+        .specialityCode(type.getSpecialityCode())
         .middleAndSurName(type.getMiddleAndSurName())
         .protectedPerson(type.isProtectedPerson())
         .title(type.getTitle())
