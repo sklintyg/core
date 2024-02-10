@@ -155,11 +155,6 @@ class CertificateDataConverterTest {
 
   @Test
   void shallSetParentAttributeToNullWhenNoParentExists() {
-    final var elementData = List.of(
-        ElementData.builder()
-            .id(new ElementId(ID_1))
-            .build()
-    );
     final var certificateModel = CertificateModel.builder()
         .elementSpecifications(List.of(
             ElementSpecification.builder()
@@ -168,7 +163,7 @@ class CertificateDataConverterTest {
         ))
         .build();
 
-    final var result = certificateDataConverter.convert(certificateModel, elementData);
+    final var result = certificateDataConverter.convert(certificateModel, Collections.emptyList());
 
     final var certificateDataElement = result.get(ID_1);
     assertNull(certificateDataElement.getParent(),
@@ -179,11 +174,6 @@ class CertificateDataConverterTest {
   void shallSetParentAttributeCorrectlyWhenParentExists() {
     final var parentElementId = "parent1";
     final var childElementId = "child1";
-    final var elementData = List.of(
-        ElementData.builder()
-            .id(new ElementId(childElementId))
-            .build()
-    );
 
     final var childSpecification = ElementSpecification.builder()
         .id(new ElementId(childElementId))
@@ -198,7 +188,7 @@ class CertificateDataConverterTest {
         .elementSpecifications(List.of(parentSpecification))
         .build();
 
-    final var result = certificateDataConverter.convert(certificateModel, elementData);
+    final var result = certificateDataConverter.convert(certificateModel, Collections.emptyList());
 
     final var certificateDataElement = result.get(childElementId);
     assertEquals(parentElementId, certificateDataElement.getParent());
@@ -209,14 +199,6 @@ class CertificateDataConverterTest {
     final var parentElementId = "parent1";
     final var childElementId = "child1";
     final var subQuestionId = "child2";
-    final var elementData = List.of(
-        ElementData.builder()
-            .id(new ElementId(childElementId))
-            .build(),
-        ElementData.builder()
-            .id(new ElementId(subQuestionId))
-            .build()
-    );
 
     final var subChildSpecification = ElementSpecification.builder()
         .id(new ElementId(subQuestionId))
@@ -239,7 +221,7 @@ class CertificateDataConverterTest {
         )
         .build();
 
-    final var result = certificateDataConverter.convert(certificateModel, elementData);
+    final var result = certificateDataConverter.convert(certificateModel, Collections.emptyList());
 
     final var certificateDataElement = result.get(subQuestionId);
     assertEquals(childElementId, certificateDataElement.getParent());

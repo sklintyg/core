@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +34,6 @@ public class CertificateDataConverter {
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
     final var elementIdElementValueMap = elementData.stream()
-        .filter(hasValue())
         .collect(Collectors.toMap(ElementData::id, ElementData::value));
 
     final var atomicInteger = new AtomicInteger(0);
@@ -112,9 +110,5 @@ public class CertificateDataConverter {
               return Stream.concat(childToParent, subChildren);
             }
         );
-  }
-
-  private static Predicate<ElementData> hasValue() {
-    return data -> data.value() != null;
   }
 }
