@@ -169,8 +169,7 @@ class CertificateDataConverterTest {
     final var result = certificateDataConverter.convert(certificateModel, elementData);
 
     final var certificateDataElement = result.get(childElementId);
-    assertEquals(parentElementId, certificateDataElement.getParent(),
-        "Parent attribute should be correctly set when parent exists.");
+    assertEquals(parentElementId, certificateDataElement.getParent());
   }
 
   @Test
@@ -209,7 +208,6 @@ class CertificateDataConverterTest {
     final var result = certificateDataConverter.convert(certificateModel, elementData);
 
     final var certificateDataElement = result.get(subQuestionId);
-    assertEquals(childElementId, certificateDataElement.getParent(),
-        "Parent attribute should be correctly set when parent exists.");
+    assertEquals(childElementId, certificateDataElement.getParent());
   }
 }

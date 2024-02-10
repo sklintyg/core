@@ -10,11 +10,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 public class CertificateDataValidationConverter {
 
   public CertificateDataValidation[] convert(List<ElementRule> rules) {
-    return rules != null
-        ? rules.stream()
+    if (rules == null) {
+      return new CertificateDataValidation[0];
+    }
+    return rules.stream()
         .map(CertificateDataValidationConverter::getCertificateDataValidation)
-        .toArray(CertificateDataValidation[]::new)
-        : null;
+        .toArray(CertificateDataValidation[]::new);
   }
 
   private static CertificateDataValidation getCertificateDataValidation(
