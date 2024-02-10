@@ -26,6 +26,9 @@ public class CertificateDataConverter {
 
   public Map<String, CertificateDataElement> convert(CertificateModel certificateModel,
       List<ElementData> elementData) {
+    if (elementData == null) {
+      return Collections.emptyMap();
+    }
     final var childParentMap = certificateModel.elementSpecifications().stream()
         .flatMap(this::mapChildrenToParents)
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));

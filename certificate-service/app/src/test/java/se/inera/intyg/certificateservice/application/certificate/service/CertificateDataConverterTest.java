@@ -38,6 +38,13 @@ class CertificateDataConverterTest {
   @InjectMocks
   private CertificateDataConverter certificateDataConverter;
 
+
+  @Test
+  void shallReturnEmptyMapIfElementDataIsNull() {
+    final var result = certificateDataConverter.convert(CertificateModel.builder().build(), null);
+    assertTrue(result.isEmpty(), "Should return empty map if element data is null");
+  }
+
   @Test
   void shallConvertSingleElementData() {
     final var elementId = new ElementId(ID_1);
