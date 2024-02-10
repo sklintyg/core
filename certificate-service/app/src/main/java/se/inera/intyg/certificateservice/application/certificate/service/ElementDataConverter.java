@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
+import static se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigTypes.CATEGORY;
+
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValue;
@@ -13,10 +15,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 public class ElementDataConverter {
 
   public ElementData convert(String questionId, CertificateDataElement certificateDataElement) {
+    if (certificateDataElement.getConfig().getType().equals(CATEGORY)) {
+      return null;
+    }
     final var value = certificateDataElement.getValue();
     return ElementData.builder()
         .id(new ElementId(questionId))
-        .value(value != null ? convertValue(value) : null)
+        .value(convertValue(value))
         .build();
   }
 
