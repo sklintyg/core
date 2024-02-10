@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_NAME;
@@ -37,6 +38,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -44,6 +46,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
@@ -79,6 +82,7 @@ class CertificateConverterTest {
   private static final String EXPRESSION = "$beraknatnedkomstdatum";
   private static final String Q_2 = "q2";
   private static final String NAME = "Beräknat nedkomstdatum";
+  private static final String KEY = "key";
   @Mock
   private CertificateDataConverter certificateDataConverter;
   @InjectMocks
@@ -439,6 +443,21 @@ class CertificateConverterTest {
             certificateConverter.convert(certificate).getMetadata().getIssuedBy().getFullName()
         );
       }
+    }
+  }
+
+  @Nested
+  class CertificateData {
+
+    @Test
+    void shouldIncludeData() {
+      final var expectedValue = Map.of(KEY, CertificateDataElement.builder().build());
+
+      doReturn(expectedValue).when(certificateDataConverter)
+          .convert(certificate.certificateModel(), certificate.elementData());
+
+      assertEquals(expectedValue,
+          certificateConverter.convert(certificate).getData());
     }
   }
 }
