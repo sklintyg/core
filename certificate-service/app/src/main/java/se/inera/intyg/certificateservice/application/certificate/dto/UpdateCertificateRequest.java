@@ -1,17 +1,17 @@
 package se.inera.intyg.certificateservice.application.certificate.dto;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Value;
+import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest.UpdateCertificateRequestBuilder;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
-@Data
+@JsonDeserialize(builder = UpdateCertificateRequestBuilder.class)
+@Value
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class UpdateCertificateRequest {
 
   UserDTO user;
@@ -20,4 +20,9 @@ public class UpdateCertificateRequest {
   UnitDTO careProvider;
   PatientDTO patient;
   CertificateDTO certificate;
+
+  @JsonPOJOBuilder(withPrefix = "")
+  public static class UpdateCertificateRequestBuilder {
+
+  }
 }
