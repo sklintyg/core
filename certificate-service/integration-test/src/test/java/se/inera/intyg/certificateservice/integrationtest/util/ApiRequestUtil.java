@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.integrationtest.util;
 
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityCertificateRequest;
@@ -45,6 +46,14 @@ public class ApiRequestUtil {
 
   public static GetCertificateRequest defaultGetCertificateRequest() {
     return GetCertificateRequestBuilder.create().build();
+  }
+
+  public static UpdateCertificateRequestBuilder customUpdateCertificateRequest() {
+    return UpdateCertificateRequestBuilder.create();
+  }
+
+  public static UpdateCertificateRequest defaultUpdateCertificateRequest() {
+    return UpdateCertificateRequestBuilder.create().build();
   }
 
   public static TestabilityCertificateRequestBuilder customTestabilityCertificateRequest(

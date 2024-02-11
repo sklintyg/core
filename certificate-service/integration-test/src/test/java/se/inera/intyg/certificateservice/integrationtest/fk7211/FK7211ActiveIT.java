@@ -20,6 +20,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customUpdateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCertificateTypeInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateRequest;
@@ -29,9 +30,13 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.exists;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueFromData;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateDateValue;
 import static se.inera.intyg.certificateservice.integrationtest.util.ResourceLinkUtil.resourceLink;
 import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
 
+import java.time.LocalDate;
+import java.util.Objects;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,6 +50,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
@@ -418,7 +424,7 @@ class FK7211ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7211 - Om intyget är utfärdat på på samma vårdenhet skall det returneras")
+    @DisplayName("FK7211 - Om intyget är utfärdat på samma vårdenhet skall det returneras")
     void shallReturnCertificateIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
       final var testCertificate = testabilityApi.addCertificate(
           customTestabilityCertificateRequest(FK7211, VERSION)
@@ -511,6 +517,218 @@ class FK7211ActiveIT {
           certificate(response.getBody()),
           "Should return certificate when exists!"
       );
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7211 - Uppdatera svarsalternativ")
+  class UpdateCertificate {
+
+    @Test
+    @DisplayName("FK7211 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall svarsalternativ uppdateras")
+    void shallUpdateDataIfUserIsDoctorAndPatientIsProtectedPerson() {
+      final var testCertificate = testabilityApi.addCertificate(
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .patient(ANONYMA_REACT_ATTILA_DTO)
+              .build()
+      );
+      final var questionId = "FRG_1";
+      final var expectedDate = LocalDate.now().plusDays(5);
+      final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
+
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateValue(certificate, questionId, expectedDate))
+      );
+
+      final var response = api.updateCertificate(
+          customUpdateCertificateRequest()
+              .user(AJLA_DOCTOR_DTO)
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificate.getBody())
+      );
+
+      assertEquals(expectedDate,
+          getValueFromData(response.getBody(), CertificateDataValueType.DATE, questionId)
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Vårdadmin - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
+    void shallNotUpdateDataIfUserIsCareAdminAndPatientIsProtectedPerson() {
+      final var testCertificate = testabilityApi.addCertificate(
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .patient(ANONYMA_REACT_ATTILA_DTO)
+              .build()
+      );
+      final var questionId = "FRG_1";
+      final var expectedDate = LocalDate.now().plusDays(5);
+      final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
+
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateValue(certificate, questionId, expectedDate))
+      );
+
+      final var response = api.updateCertificate(
+          customUpdateCertificateRequest()
+              .user(ALVA_VARDADMINISTRATOR_DTO)
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificate.getBody())
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall svarsalternativ uppdateras")
+    void shallUpdateDataIfUnitIsCareUnitAndOnSameCareUnit() {
+      final var testCertificate = testabilityApi.addCertificate(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var questionId = "FRG_1";
+      final var expectedDate = LocalDate.now().plusDays(5);
+      final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
+
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateValue(certificate, questionId, expectedDate))
+      );
+
+      final var response = api.updateCertificate(
+          customUpdateCertificateRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificate.getBody())
+      );
+
+      assertEquals(expectedDate,
+          getValueFromData(response.getBody(), CertificateDataValueType.DATE, questionId)
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på samma mottagning skall svarsalternativ uppdateras")
+    void shallUpdateDataIfUnitIsSubUnitAndOnSameUnit() {
+      final var testCertificate = testabilityApi.addCertificate(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var questionId = "FRG_1";
+      final var expectedDate = LocalDate.now().plusDays(5);
+      final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
+
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateValue(certificate, questionId, expectedDate))
+      );
+
+      final var response = api.updateCertificate(
+          customUpdateCertificateRequest()
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificate.getBody())
+      );
+
+      assertEquals(expectedDate,
+          getValueFromData(response.getBody(), CertificateDataValueType.DATE, questionId)
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på samma vårdenhet skall svarsalternativ uppdateras")
+    void shallUpdateDataIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
+      final var testCertificate = testabilityApi.addCertificate(
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build()
+      );
+
+      final var questionId = "FRG_1";
+      final var expectedDate = LocalDate.now().plusDays(5);
+      final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
+
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateValue(certificate, questionId, expectedDate))
+      );
+
+      final var response = api.updateCertificate(
+          customUpdateCertificateRequest()
+              .certificate(certificate)
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
+          certificateId(testCertificate.getBody())
+      );
+
+      assertEquals(expectedDate,
+          getValueFromData(response.getBody(), CertificateDataValueType.DATE, questionId)
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
+      final var testCertificate = testabilityApi.addCertificate(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var questionId = "FRG_1";
+      final var expectedDate = LocalDate.now().plusDays(5);
+      final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
+
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateValue(certificate, questionId, expectedDate))
+      );
+
+      final var response = api.updateCertificate(
+          customUpdateCertificateRequest()
+              .certificate(certificate)
+              .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .build(),
+          certificateId(testCertificate.getBody())
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
+      final var testCertificate = testabilityApi.addCertificate(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var questionId = "FRG_1";
+      final var expectedDate = LocalDate.now().plusDays(5);
+      final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
+
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateValue(certificate, questionId, expectedDate))
+      );
+
+      final var response = api.updateCertificate(
+          customUpdateCertificateRequest()
+              .certificate(certificate)
+              .unit(ALFA_VARDCENTRAL_DTO)
+              .build(),
+          certificateId(testCertificate.getBody())
+      );
+
+      assertEquals(403, response.getStatusCode().value());
     }
   }
 }
