@@ -1,13 +1,11 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
-import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigCategory;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigDate;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
@@ -26,19 +24,6 @@ class ElementDataConverterTest {
   @BeforeEach
   void setUp() {
     elementDataConverter = new ElementDataConverter();
-  }
-
-  @Test
-  void shallReturnNullIfCategory() {
-    final var result = elementDataConverter.convert(EXPECTED_ID,
-        certificateDataElementBuilder
-            .config(
-                CertificateDataConfigCategory.builder().build()
-            )
-            .build()
-    );
-
-    assertNull(result);
   }
 
   @Test

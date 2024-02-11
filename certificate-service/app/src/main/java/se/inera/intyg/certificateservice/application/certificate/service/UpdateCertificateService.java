@@ -1,10 +1,13 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
-import java.util.Objects;
+import java.util.Map.Entry;
+import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigTypes;
 import se.inera.intyg.certificateservice.application.certificate.service.validation.UpdateCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
@@ -35,8 +38,8 @@ public class UpdateCertificateService {
     final var elementDataList = updateCertificateRequest.getCertificate().getData()
         .entrySet()
         .stream()
+        .filter(removeCategories())
         .map(entry -> elementDataConverter.convert(entry.getKey(), entry.getValue()))
-        .filter(Objects::nonNull)
         .toList();
 
     final var updatedCertificate = updateCertificateDomainService.update(
@@ -48,5 +51,11 @@ public class UpdateCertificateService {
     return UpdateCertificateResponse.builder()
         .certificate(certificateConverter.convert(updatedCertificate))
         .build();
+  }
+
+  private static Predicate<Entry<String, CertificateDataElement>> removeCategories() {
+    return entry -> !CertificateDataConfigTypes.CATEGORY.equals(
+        entry.getValue().getConfig().getType())
+        ;
   }
 }

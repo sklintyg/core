@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
@@ -21,6 +22,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigCategory;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigDate;
 import se.inera.intyg.certificateservice.application.certificate.service.validation.UpdateCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
@@ -66,7 +69,11 @@ class UpdateCertificateServiceTest {
   @Test
   void shallReturnUpdateCertificateResponse() {
     final var expectedCertificate = CertificateDTO.builder()
-        .data(Map.of(QUESTION_ID, CertificateDataElement.builder().build()))
+        .data(
+            Map.of(QUESTION_ID, CertificateDataElement.builder()
+                .config(CertificateDataConfigDate.builder().build())
+                .build())
+        )
         .build();
 
     final var expectedResult = UpdateCertificateResponse.builder()
@@ -106,5 +113,40 @@ class UpdateCertificateServiceTest {
         CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallNotGenerateElementDataForCategories() {
+    final var expectedCertificate = CertificateDTO.builder()
+        .data(
+            Map.of(QUESTION_ID, CertificateDataElement.builder()
+                .config(
+                    CertificateDataConfigCategory.builder().build()
+                )
+                .build())
+        )
+        .build();
+
+    final var actionEvaluation = ActionEvaluation.builder().build();
+    doReturn(actionEvaluation).when(actionEvaluationFactory).create(
+        ATHENA_REACT_ANDERSSON_DTO,
+        AJLA_DOCTOR_DTO,
+        ALFA_ALLERGIMOTTAGNINGEN_DTO,
+        ALFA_MEDICINCENTRUM_DTO,
+        ALFA_REGIONEN_DTO
+    );
+
+    updateCertificateService.update(
+        UpdateCertificateRequest.builder()
+            .user(AJLA_DOCTOR_DTO)
+            .patient(ATHENA_REACT_ANDERSSON_DTO)
+            .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
+            .careUnit(ALFA_MEDICINCENTRUM_DTO)
+            .careProvider(ALFA_REGIONEN_DTO)
+            .certificate(expectedCertificate)
+            .build(),
+        CERTIFICATE_ID);
+
+    verifyNoInteractions(elementDataConverter);
   }
 }
