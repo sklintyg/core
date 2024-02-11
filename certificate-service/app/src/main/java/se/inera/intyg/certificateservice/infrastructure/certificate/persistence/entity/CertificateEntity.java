@@ -27,7 +27,7 @@ public class CertificateEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "key")
+  @Column(name = "`key`")
   private Long key;
   @Column(name = "certificate_id", unique = true)
   private String certificateId;
@@ -40,6 +40,7 @@ public class CertificateEntity {
   @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
   private CertificateModelEntity certificateModel;
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+  @JoinColumn(name = "patient_key", referencedColumnName = "key", nullable = false)
   private PatientEntity patient;
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
   @JoinColumn(name = "created_by_staff_key", referencedColumnName = "key", nullable = false)
@@ -50,10 +51,10 @@ public class CertificateEntity {
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
   @JoinColumn(name = "issued_on_unit_key", referencedColumnName = "key", nullable = false)
   private UnitEntity issuedOnUnit;
-  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
   @JoinColumn(name = "care_provider_unit_key", referencedColumnName = "key", nullable = false)
   private UnitEntity careProvider;
-  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
   @JoinColumn(name = "care_unit_unit_key", referencedColumnName = "key", nullable = false)
   private UnitEntity careUnit;
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

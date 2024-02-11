@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -12,13 +13,13 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 
-@Getter
+@Data
 @Builder
 @EqualsAndHashCode
 @Accessors(fluent = true)
 public class Certificate {
 
-  private final CertificateId id;
+  private CertificateId id;
   private final CertificateModel certificateModel;
   private final LocalDateTime created;
   private LocalDateTime modified;

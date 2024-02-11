@@ -8,6 +8,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
 import se.inera.intyg.certificateservice.domain.certificate.model.IssuingUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.UnitName;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.UnitEntityMapper;
 
 class UnitEntityMapperTest {
 

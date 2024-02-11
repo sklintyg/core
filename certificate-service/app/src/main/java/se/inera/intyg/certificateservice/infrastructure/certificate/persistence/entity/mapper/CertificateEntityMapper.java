@@ -1,14 +1,15 @@
-package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity;
+package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
 import java.time.LocalDateTime;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 
 public class CertificateEntityMapper {
 
   public static CertificateEntity toEntity(Certificate certificate) {
     return CertificateEntity.builder()
-        .certificateId("b7c07158-bb0f-4785-93fe-228b626d981a")
+        .certificateId(certificate.id().id())
         .created(certificate.created())
         .version(certificate.version() + 1)
         .modified(LocalDateTime.now())

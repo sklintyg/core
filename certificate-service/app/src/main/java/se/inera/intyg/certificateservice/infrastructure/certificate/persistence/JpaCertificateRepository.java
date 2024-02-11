@@ -6,35 +6,35 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
-import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
-import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
-import se.inera.intyg.certificateservice.domain.certificate.model.IssuingUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.Staff;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
-import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateModelEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateModelEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PatientEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.Unit;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.UnitEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateDataEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.utils.CertificateToObjectUtility;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.utils.RepositoryUtility;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateRepository;
 
 @Profile(TESTABILITY_PROFILE)
@@ -71,6 +71,8 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
       );
     }
 
+    certificate.id(new CertificateId("7d9d24f3-6eba-4b5d-9eb0-81e96b475748"));
+
     final var certificateEntity = buildCertificateEntity(certificate);
     log.debug(certificateEntityRepository.save(certificateEntity).toString());
 
@@ -79,35 +81,51 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
   private CertificateEntity buildCertificateEntity(Certificate certificate) {
     final var certificateFromDB = certificateEntityRepository.findByCertificateId(
-        "b7c07158-bb0f-4785-93fe-228b626d981a"
-    );
+        certificate.id().id());
 
-    final var careUnit = findUnit(getCareUnit(certificate).hsaId());
-    final var issuedOn = findUnit(getIssuingUnit(certificate).hsaId());
-    final var careProvider = findUnit(getCareProvider(certificate).hsaId());
+    final var careUnit = findUnit(CertificateToObjectUtility.getCareUnit(certificate));
+    final var issuedOn = findUnit(CertificateToObjectUtility.getIssuingUnit(certificate));
+    final var careProvider = findUnit(CertificateToObjectUtility.getCareProvider(certificate));
 
-    final var issuedBy = findStaff(getIssuer(certificate).hsaId().id());
-    final var createdBy = findStaff(getIssuer(certificate).hsaId().id());
+    final var issuedBy = findStaff(CertificateToObjectUtility.getIssuer(certificate));
+    final var createdBy = findStaff(CertificateToObjectUtility.getIssuer(certificate));
 
-    final var patient = findPatient(certificate);
+    //final var patient = findPatient(certificate);
     final var model = findModel(certificate);
 
-    final var certificateEntity =
-        certificateFromDB == null
-            ? CertificateEntityMapper.toEntity(certificate)
-            : CertificateEntityMapper.updateEntity(certificateFromDB);
+    final var certificateEntity = certificateFromDB == null
+        ? CertificateEntityMapper.toEntity(certificate)
+        : CertificateEntityMapper.updateEntity(certificateFromDB);
 
     certificateEntity.setIssuedBy(
-        getEntity(issuedBy, getIssuer(certificate), StaffEntityMapper::toEntity)
+        RepositoryUtility.getEntity(issuedBy, CertificateToObjectUtility.getIssuer(certificate),
+            StaffEntityMapper::toEntity)
     );
     certificateEntity.setCreatedBy(
-        getEntity(createdBy, getIssuer(certificate), StaffEntityMapper::toEntity)
+        RepositoryUtility.getEntity(createdBy, CertificateToObjectUtility.getIssuer(certificate),
+            StaffEntityMapper::toEntity)
     );
-    certificateEntity.setPatient(patient);
-    certificateEntity.setCareProvider(careProvider);
-    certificateEntity.setCareUnit(careUnit);
-    certificateEntity.setIssuedOnUnit(issuedOn);
-    certificateEntity.setCertificateModel(model);
+
+    certificateEntity.setPatient(
+        PatientEntityMapper.toEntity(certificate.certificateMetaData().patient()));
+
+    certificateEntity.setCareProvider(RepositoryUtility.getEntity(careProvider,
+        CertificateToObjectUtility.getCareProvider(certificate),
+        UnitEntityMapper::toCareProviderEntity));
+    certificateEntity.setCareUnit(
+        RepositoryUtility.getEntity(careUnit, CertificateToObjectUtility.getCareUnit(certificate),
+            UnitEntityMapper::toSubUnitEntity)
+    );
+    certificateEntity.setIssuedOnUnit(RepositoryUtility.getEntity(issuedOn,
+        CertificateToObjectUtility.getIssuingUnit(certificate),
+        UnitEntityMapper::toCareUnitEntity));
+
+    certificateEntity.setCertificateModel(
+        RepositoryUtility.getEntity(model,
+            CertificateToObjectUtility.getCertificateModel(certificate),
+            CertificateModelEntityMapper::toEntity)
+    );
+
     certificateEntity.setData(
         CertificateDataEntity.builder()
             .data(new byte[0])
@@ -117,57 +135,36 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     return certificateEntity;
   }
 
-  private <T, R> T getEntity(T entity, R object, Function<R, T> mapper) {
-    return entity != null ? entity : mapper.apply(object);
-  }
-
   private CertificateModelEntity findModel(Certificate certificate) {
     return certificateModelEntityRepository.findByTypeAndVersion(
-        getCertificateModelId(certificate).type().type(),
-        getCertificateModelId(certificate).version().version()
+        CertificateToObjectUtility.getCertificateModel(certificate).id().type().type(),
+        CertificateToObjectUtility.getCertificateModel(certificate).id().version().version()
     );
   }
 
   private PatientEntity findPatient(Certificate certificate) {
     return patientEntityRepository.findById(
-        getPatient(certificate).id().id()
+        CertificateToObjectUtility.getPatient(certificate).id().id()
     );
   }
 
-  private static CertificateModelId getCertificateModelId(Certificate certificate) {
-    return certificate.certificateModel().id();
-  }
-
-  private static Patient getPatient(Certificate certificate) {
-    return certificate.certificateMetaData().patient();
-  }
-
-  private static Staff getIssuer(Certificate certificate) {
-    return certificate.certificateMetaData().issuer();
-  }
-
-  private static CareProvider getCareProvider(Certificate certificate) {
-    return certificate.certificateMetaData().careProvider();
-  }
-
-  private static IssuingUnit getIssuingUnit(Certificate certificate) {
-    return certificate.certificateMetaData().issuingUnit();
-  }
-
-  private static CareUnit getCareUnit(Certificate certificate) {
-    return certificate.certificateMetaData().careUnit();
-  }
-
-  private StaffEntity findStaff(String hsaId) {
-    return staffEntityRepository.findByHsaId(
-        hsaId
+  private StaffEntity findStaff(Staff staff) {
+    final var staffEntity = staffEntityRepository.findByHsaId(
+        staff.hsaId().id()
     );
+
+    return RepositoryUtility.saveIfNotExists(staffEntity, staff, StaffEntityMapper::toEntity,
+        staffEntityRepository);
   }
 
-  private UnitEntity findUnit(HsaId certificate) {
-    return unitEntityRepository.findByHsaId(
-        certificate.id()
-    );
+  private UnitEntity findUnit(Unit unit) {
+    final var unitEntity = unitEntityRepository.findByHsaId(unit.getHsaId());
+
+    return RepositoryUtility.saveIfNotExists(
+        unitEntity,
+        unit,
+        UnitEntityMapper::toEntity,
+        unitEntityRepository);
   }
 
   @Override
