@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
+import java.util.Collections;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
@@ -11,11 +12,11 @@ public class ElementSpecification {
   ElementId id;
   ElementConfiguration configuration;
   @Builder.Default
-  List<ElementRule> rules = List.of();
+  List<ElementRule> rules = Collections.emptyList();
   @Builder.Default
-  List<ElementValidation> validations = List.of();
+  List<ElementValidation> validations = Collections.emptyList();
   @Builder.Default
-  List<ElementSpecification> children = List.of();
+  List<ElementSpecification> children = Collections.emptyList();
 
   public boolean exists(ElementId id) {
     if (id().equals(id)) {
