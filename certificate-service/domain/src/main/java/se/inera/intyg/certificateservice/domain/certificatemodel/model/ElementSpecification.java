@@ -10,8 +10,10 @@ public class ElementSpecification {
 
   ElementId id;
   ElementConfiguration configuration;
-  List<ElementRule> rules;
-  List<ElementValidation> validations;
+  @Builder.Default
+  List<ElementRule> rules = List.of();
+  @Builder.Default
+  List<ElementValidation> validations = List.of();
   @Builder.Default
   List<ElementSpecification> children = List.of();
 
