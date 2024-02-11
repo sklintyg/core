@@ -563,15 +563,8 @@ class FK7211ActiveIT {
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
-      final var questionId = "FRG_1";
-      final var expectedDate = LocalDate.now().plusDays(5);
-      final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
 
-      Objects.requireNonNull(
-          certificate.getData().put(
-              questionId,
-              updateDateValue(certificate, questionId, expectedDate))
-      );
+      final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
 
       final var response = api.updateCertificate(
           customUpdateCertificateRequest()
@@ -682,15 +675,7 @@ class FK7211ActiveIT {
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      final var questionId = "FRG_1";
-      final var expectedDate = LocalDate.now().plusDays(5);
       final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
-
-      Objects.requireNonNull(
-          certificate.getData().put(
-              questionId,
-              updateDateValue(certificate, questionId, expectedDate))
-      );
 
       final var response = api.updateCertificate(
           customUpdateCertificateRequest()
@@ -710,15 +695,7 @@ class FK7211ActiveIT {
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      final var questionId = "FRG_1";
-      final var expectedDate = LocalDate.now().plusDays(5);
       final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
-
-      Objects.requireNonNull(
-          certificate.getData().put(
-              questionId,
-              updateDateValue(certificate, questionId, expectedDate))
-      );
 
       final var response = api.updateCertificate(
           customUpdateCertificateRequest()
