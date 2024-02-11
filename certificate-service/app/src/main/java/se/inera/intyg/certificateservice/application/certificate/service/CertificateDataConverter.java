@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,12 +38,15 @@ public class CertificateDataConverter {
         .collect(Collectors.toMap(ElementData::id, ElementData::value));
 
     final var atomicInteger = new AtomicInteger(0);
-    return toCertificateDataElementMap(
+
+    final var certificateDataElementStream = toCertificateDataElementMap(
         certificateModel.elementSpecifications(),
         elementIdElementValueMap,
         atomicInteger,
         childParentMap
     );
+    
+    return collectStreamOfCertificateDataElementsToMap(certificateDataElementStream);
   }
 
   private Map<String, CertificateDataElement> convertData(
@@ -71,30 +75,34 @@ public class CertificateDataConverter {
         .build();
 
     certificateDataElementHashMap.put(questionId, certificateDataElement);
-    certificateDataElementHashMap.putAll(children);
+    certificateDataElementHashMap.putAll(collectStreamOfCertificateDataElementsToMap(children));
 
     return certificateDataElementHashMap;
   }
 
-  private Map<String, CertificateDataElement> toCertificateDataElementMap(
+  private static Map<String, CertificateDataElement> collectStreamOfCertificateDataElementsToMap(
+      Stream<Set<Entry<String, CertificateDataElement>>> stream) {
+    return stream.flatMap(Set::stream).collect(Collectors.toMap(
+        Entry::getKey,
+        Entry::getValue
+    ));
+  }
+
+  private Stream<Set<Entry<String, CertificateDataElement>>> toCertificateDataElementMap(
       List<ElementSpecification> elementSpecification,
       Map<ElementId, ElementValue> elementIdElementValueMap, AtomicInteger atomicInteger,
       Map<String, String> childParentMap) {
-    return elementSpecification
-        .stream()
-        .map(
-            specification -> convertData(
-                elementIdElementValueMap,
-                specification,
-                atomicInteger,
-                childParentMap
-            )
-        )
-        .flatMap(map -> map.entrySet().stream())
-        .collect(Collectors.toMap(
-                Entry::getKey,
-                Entry::getValue
-            )
+    return elementSpecification.stream()
+        .flatMap(
+            specification -> {
+              final var dataElementMap = convertData(
+                  elementIdElementValueMap,
+                  specification,
+                  atomicInteger,
+                  childParentMap
+              );
+              return Stream.of(dataElementMap.entrySet());
+            }
         );
   }
 
