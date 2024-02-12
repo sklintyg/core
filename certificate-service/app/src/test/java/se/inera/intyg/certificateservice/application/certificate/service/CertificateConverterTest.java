@@ -37,6 +37,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,6 +49,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
+import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
@@ -77,12 +79,13 @@ class CertificateConverterTest {
   private static final LocalDateTime CREATED = LocalDateTime.now(ZoneId.systemDefault());
   private static final LocalDate DATE = LocalDate.of(2024, 02, 8);
   private static final String Q_1 = "q1";
-  private static final String CONFIG_TEXT = "configText";
   private static final String ID = "valueId";
   private static final String EXPRESSION = "$beraknatnedkomstdatum";
   private static final String Q_2 = "q2";
   private static final String NAME = "Beräknat nedkomstdatum";
   private static final String KEY = "key";
+  private static final long CERTIFICATE_VERSION = 3L;
+  private List<ResourceLinkDTO> resourceLinkDTOS = Collections.emptyList();
   @Mock
   private CertificateDataConverter certificateDataConverter;
   @InjectMocks
@@ -95,6 +98,7 @@ class CertificateConverterTest {
     certificate = Certificate.builder()
         .id(new CertificateId(CERTIFICATE_ID))
         .created(CREATED)
+        .version(CERTIFICATE_VERSION)
         .certificateModel(
             CertificateModel.builder()
                 .id(
@@ -232,6 +236,13 @@ class CertificateConverterTest {
     void shallIncludeCreated() {
       assertEquals(CREATED,
           certificateConverter.convert(certificate).getMetadata().getCreated()
+      );
+    }
+
+    @Test
+    void shallIncludeVersion() {
+      assertEquals(CERTIFICATE_VERSION,
+          certificateConverter.convert(certificate).getMetadata().getVersion()
       );
     }
 

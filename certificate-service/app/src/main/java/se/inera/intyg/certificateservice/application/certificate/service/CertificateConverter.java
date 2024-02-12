@@ -24,7 +24,6 @@ public class CertificateConverter {
   private static final boolean SENT = false;
   private static final CertificateStatusTypeDTO STATUS = CertificateStatusTypeDTO.UNSIGNED;
   private static final boolean TEST_CERTIFICATE = false;
-  private static final int VERSION = 0;
   private static final CertificateRelationsDTO RELATIONS = CertificateRelationsDTO.builder()
       .build();
   private final CertificateDataConverter certificateDataConverter;
@@ -35,6 +34,7 @@ public class CertificateConverter {
             CertificateMetadataDTO.builder()
                 .id(certificate.id().id())
                 .type(certificate.certificateModel().id().type().type())
+                .version(certificate.version())
                 .typeName(certificate.certificateModel().id().type().type())
                 .typeVersion(certificate.certificateModel().id().version().version())
                 .name(certificate.certificateModel().name())
@@ -101,7 +101,6 @@ public class CertificateConverter {
                 .sent(SENT)
                 .status(STATUS)
                 .testCertificate(TEST_CERTIFICATE)
-                .version(VERSION)
                 .relations(RELATIONS)
                 .build()
         )

@@ -23,6 +23,7 @@ public class Certificate {
   private CertificateMetaData certificateMetaData;
   @Builder.Default
   private List<ElementData> elementData = Collections.emptyList();
+  private long version;
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
@@ -67,7 +68,7 @@ public class Certificate {
               .formatted(missingIds, certificateModel.id())
       );
     }
-
+    this.version++;
     this.elementData = newData.stream().toList();
   }
 }
