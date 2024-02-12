@@ -10,5 +10,5 @@ public interface CertificateEntityRepository extends CrudRepository<CertificateE
 
   CertificateEntity findByCertificateId(String certificateId);
 
-  void deleteAllByCertificateId(List<String> certificateIds);
+  void deleteAllByCertificateIdIn(List<String> certificateIds);
 }

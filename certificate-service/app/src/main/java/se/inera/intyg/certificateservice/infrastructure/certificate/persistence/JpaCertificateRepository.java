@@ -78,13 +78,28 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
   @Override
   public Certificate getById(CertificateId certificateId) {
-    return CertificateEntityMapper.toDomain(
-        certificateEntityRepository.findByCertificateId(certificateId.id())
-    );
+    if (certificateId == null) {
+      throw new IllegalArgumentException("Cannot get certificate if certificateId is null");
+    }
+
+    final var certificate = certificateEntityRepository.findByCertificateId(certificateId.id());
+
+    if (certificate == null) {
+      throw new IllegalArgumentException(
+          "CertificateId '%s' not present in repository".formatted(certificateId)
+      );
+    }
+
+    return CertificateEntityMapper.toDomain(certificate);
   }
 
   @Override
   public boolean exists(CertificateId certificateId) {
+    if (certificateId == null) {
+      throw new IllegalArgumentException(
+          "Cannot check if certificate exists since certificateId is null");
+    }
+
     return certificateEntityRepository.findByCertificateId(certificateId.id()) != null;
   }
 
@@ -95,7 +110,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
   @Override
   public void remove(List<CertificateId> certificateIds) {
-    certificateEntityRepository.deleteAllByCertificateId(
+    certificateEntityRepository.deleteAllByCertificateIdIn(
         certificateIds.stream()
             .map(CertificateId::id)
             .toList()
