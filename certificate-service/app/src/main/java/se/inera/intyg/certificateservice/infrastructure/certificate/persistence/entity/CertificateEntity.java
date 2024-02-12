@@ -40,24 +40,24 @@ public class CertificateEntity {
   @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
   private CertificateModelEntity certificateModel;
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-  @JoinColumn(name = "patient_key", referencedColumnName = "key", nullable = false)
+  @JoinColumn(name = "patient_key", referencedColumnName = "`key`", nullable = false)
   private PatientEntity patient;
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-  @JoinColumn(name = "created_by_staff_key", referencedColumnName = "key", nullable = false)
+  @JoinColumn(name = "created_by_staff_key", referencedColumnName = "`key`", nullable = false)
   private StaffEntity createdBy;
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-  @JoinColumn(name = "issued_by_staff_key", referencedColumnName = "key", nullable = false)
+  @JoinColumn(name = "issued_by_staff_key", referencedColumnName = "`key`", nullable = false)
   private StaffEntity issuedBy;
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-  @JoinColumn(name = "issued_on_unit_key", referencedColumnName = "key", nullable = false)
+  @JoinColumn(name = "issued_on_unit_key", referencedColumnName = "`key`", nullable = false)
   private UnitEntity issuedOnUnit;
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-  @JoinColumn(name = "care_provider_unit_key", referencedColumnName = "key", nullable = false)
+  @JoinColumn(name = "care_provider_unit_key", referencedColumnName = "`key`", nullable = false)
   private UnitEntity careProvider;
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-  @JoinColumn(name = "care_unit_unit_key", referencedColumnName = "key", nullable = false)
+  @JoinColumn(name = "care_unit_unit_key", referencedColumnName = "`key`", nullable = false)
   private UnitEntity careUnit;
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JoinColumn(name = "certificate_data_key", referencedColumnName = "key")
+  @JoinColumn(name = "certificate_data_key", referencedColumnName = "`key`")
   private CertificateDataEntity data;
 }

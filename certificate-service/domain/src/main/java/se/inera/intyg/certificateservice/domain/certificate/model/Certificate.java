@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
@@ -13,16 +12,14 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 
-@Data
 @Builder
+@Getter
 @EqualsAndHashCode
 public class Certificate {
 
-  private CertificateId id;
+  private final CertificateId id;
   private final CertificateModel certificateModel;
   private final LocalDateTime created;
-  private LocalDateTime modified;
-  private int version;
   private CertificateMetaData certificateMetaData;
   @Builder.Default
   private List<ElementData> elementData = Collections.emptyList();

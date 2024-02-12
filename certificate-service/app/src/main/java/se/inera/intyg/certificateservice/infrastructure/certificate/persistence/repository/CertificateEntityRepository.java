@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository;
 
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
@@ -7,7 +8,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 @Repository
 public interface CertificateEntityRepository extends CrudRepository<CertificateEntity, Long> {
 
-  CertificateEntity getCertificateEntityByCertificateId(String certificateId);
-
   CertificateEntity findByCertificateId(String certificateId);
+
+  void deleteAllByCertificateId(List<String> certificateIds);
 }

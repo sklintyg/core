@@ -7,15 +7,17 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Staff;
+import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateDataEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateModelEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
@@ -26,7 +28,6 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.Unit;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.UnitEntityMapper;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateDataEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntityRepository;
@@ -44,7 +45,6 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
   private final CertificateEntityRepository certificateEntityRepository;
   private final CertificateModelEntityRepository certificateModelEntityRepository;
-  private final CertificateDataEntityRepository certificateDataEntityRepository;
   private final StaffEntityRepository staffEntityRepository;
   private final UnitEntityRepository unitEntityRepository;
   private final PatientEntityRepository patientEntityRepository;
@@ -70,17 +70,43 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
       );
     }
 
-    certificate.id(new CertificateId("7d9d24f3-6eba-4b5d-9eb0-81e96b475748"));
-
     final var certificateEntity = buildCertificateEntity(certificate);
     log.debug(certificateEntityRepository.save(certificateEntity).toString());
 
     return certificate;
   }
 
+  @Override
+  public Certificate getById(CertificateId certificateId) {
+    return CertificateEntityMapper.toDomain(
+        certificateEntityRepository.findByCertificateId(certificateId.id())
+    );
+  }
+
+  @Override
+  public boolean exists(CertificateId certificateId) {
+    return certificateEntityRepository.findByCertificateId(certificateId.id()) != null;
+  }
+
+  @Override
+  public Certificate insert(Certificate certificate) {
+    return save(certificate);
+  }
+
+  @Override
+  public void remove(List<CertificateId> certificateIds) {
+    certificateEntityRepository.deleteAllByCertificateId(
+        certificateIds.stream()
+            .map(CertificateId::id)
+            .toList()
+    );
+  }
+
+  @SneakyThrows
   private CertificateEntity buildCertificateEntity(Certificate certificate) {
     final var certificateFromDB = certificateEntityRepository.findByCertificateId(
-        certificate.id().id());
+        certificate.id().id()
+    );
 
     final var careUnit = findUnit(CertificateToObjectUtility.getCareUnit(certificate));
     final var issuedOn = findUnit(CertificateToObjectUtility.getIssuingUnit(certificate));
@@ -89,7 +115,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     final var issuedBy = findStaff(CertificateToObjectUtility.getIssuer(certificate));
     final var createdBy = findStaff(CertificateToObjectUtility.getIssuer(certificate));
 
-    //final var patient = findPatient(certificate);
+    final var patient = findPatient(certificate);
     final var model = findModel(certificate);
 
     final var certificateEntity = certificateFromDB == null
@@ -97,38 +123,56 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
         : CertificateEntityMapper.updateEntity(certificateFromDB);
 
     certificateEntity.setIssuedBy(
-        RepositoryUtility.getEntity(issuedBy, CertificateToObjectUtility.getIssuer(certificate),
+        RepositoryUtility.getEntity(
+            issuedBy,
+            CertificateToObjectUtility.getIssuer(certificate),
             StaffEntityMapper::toEntity)
     );
     certificateEntity.setCreatedBy(
-        RepositoryUtility.getEntity(createdBy, CertificateToObjectUtility.getIssuer(certificate),
+        RepositoryUtility.getEntity(
+            createdBy,
+            CertificateToObjectUtility.getIssuer(certificate),
             StaffEntityMapper::toEntity)
     );
 
     certificateEntity.setPatient(
-        PatientEntityMapper.toEntity(certificate.certificateMetaData().patient()));
-
-    certificateEntity.setCareProvider(RepositoryUtility.getEntity(careProvider,
-        CertificateToObjectUtility.getCareProvider(certificate),
-        UnitEntityMapper::toCareProviderEntity));
-    certificateEntity.setCareUnit(
-        RepositoryUtility.getEntity(careUnit, CertificateToObjectUtility.getCareUnit(certificate),
-            UnitEntityMapper::toSubUnitEntity)
+        RepositoryUtility.getEntity(
+            patient,
+            CertificateToObjectUtility.getPatient(certificate),
+            PatientEntityMapper::toEntity)
     );
-    certificateEntity.setIssuedOnUnit(RepositoryUtility.getEntity(issuedOn,
-        CertificateToObjectUtility.getIssuingUnit(certificate),
-        UnitEntityMapper::toCareUnitEntity));
+
+    certificateEntity.setCareProvider(
+        RepositoryUtility.getEntity(
+            careProvider,
+            CertificateToObjectUtility.getCareProvider(certificate),
+            UnitEntityMapper::toCareProviderEntity)
+    );
+
+    certificateEntity.setCareUnit(
+        RepositoryUtility.getEntity(
+            careUnit,
+            CertificateToObjectUtility.getCareUnit(certificate),
+            UnitEntityMapper::toCareUnitEntity)
+    );
+
+    certificateEntity.setIssuedOnUnit(
+        RepositoryUtility.getEntity(
+            issuedOn,
+            CertificateToObjectUtility.getIssuingUnit(certificate),
+            certificate.certificateMetaData().issuingUnit() instanceof SubUnit
+                ? UnitEntityMapper::toCareUnitEntity : UnitEntityMapper::toSubUnitEntity)
+    );
 
     certificateEntity.setCertificateModel(
-        RepositoryUtility.getEntity(model,
+        RepositoryUtility.getEntity(
+            model,
             CertificateToObjectUtility.getCertificateModel(certificate),
             CertificateModelEntityMapper::toEntity)
     );
 
     certificateEntity.setData(
-        CertificateDataEntity.builder()
-            .data(new byte[0])
-            .build()
+        CertificateDataEntityMapper.toEntity(certificate.elementData())
     );
 
     return certificateEntity;
@@ -164,25 +208,5 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
         unit,
         UnitEntityMapper::toEntity,
         unitEntityRepository);
-  }
-
-  @Override
-  public Certificate getById(CertificateId certificateId) {
-    return null;
-  }
-
-  @Override
-  public boolean exists(CertificateId certificateId) {
-    return false;
-  }
-
-  @Override
-  public Certificate insert(Certificate certificate) {
-    return null;
-  }
-
-  @Override
-  public void remove(List<CertificateId> certificateIds) {
-
   }
 }
