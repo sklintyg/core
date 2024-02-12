@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.common;
 
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
@@ -83,6 +84,19 @@ public class ValidationUtil {
   public static void validateCertificateId(String certificateId) {
     if (certificateId == null || certificateId.isBlank()) {
       throw new IllegalArgumentException("Required parameter missing: certificateId");
+    }
+  }
+
+  public static void validateCertificate(CertificateDTO certificateDTO) {
+    if (certificateDTO == null) {
+      throw new IllegalArgumentException("Required parameter missing: Certificate");
+    }
+    if (certificateDTO.getMetadata() == null) {
+      throw new IllegalArgumentException("Required parameter missing: Certificate.metadata");
+    }
+
+    if (certificateDTO.getData() == null) {
+      throw new IllegalArgumentException("Required parameter missing: Certificate.data");
     }
   }
 }

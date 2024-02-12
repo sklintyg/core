@@ -1,13 +1,13 @@
 package se.inera.intyg.certificateservice.domain.certificate.model;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.experimental.Accessors;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -16,7 +16,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 @Data
 @Builder
 @EqualsAndHashCode
-@Accessors(fluent = true)
 public class Certificate {
 
   private CertificateId id;
@@ -25,6 +24,9 @@ public class Certificate {
   private LocalDateTime modified;
   private int version;
   private CertificateMetaData certificateMetaData;
+  @Builder.Default
+  private List<ElementData> elementData = Collections.emptyList();
+  private long version;
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
@@ -55,5 +57,21 @@ public class Certificate {
         .careProvider(actionEvaluation.careProvider())
         .issuingUnit(actionEvaluation.subUnit())
         .build();
+  }
+
+  public void updateData(List<ElementData> newData) {
+    final var missingIds = newData.stream()
+        .filter(newDataElement -> !certificateModel.elementSpecificationExists(newDataElement.id()))
+        .map(newDataElement -> newDataElement.id().id())
+        .reduce("", (s, s2) -> s.isBlank() ? s2 : s.concat(", " + s2));
+
+    if (!missingIds.isEmpty()) {
+      throw new IllegalArgumentException(
+          "ElementIds '%s' are missing from certificateModelId '%s'"
+              .formatted(missingIds, certificateModel.id())
+      );
+    }
+    this.version++;
+    this.elementData = newData.stream().toList();
   }
 }

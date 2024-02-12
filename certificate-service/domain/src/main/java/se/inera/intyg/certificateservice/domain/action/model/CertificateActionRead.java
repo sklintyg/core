@@ -1,18 +1,19 @@
 package se.inera.intyg.certificateservice.domain.action.model;
 
-import static se.inera.intyg.certificateservice.domain.user.model.Role.CARE_ADMIN;
-
+import java.util.List;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 
+@Builder
+@Getter(AccessLevel.NONE)
 public class CertificateActionRead implements CertificateAction {
 
   private final CertificateActionSpecification certificateActionSpecification;
-
-  public CertificateActionRead(CertificateActionSpecification certificateActionSpecification) {
-    this.certificateActionSpecification = certificateActionSpecification;
-  }
+  private final List<ActionRule> actionRules;
 
   @Override
   public CertificateActionType getType() {
@@ -21,44 +22,8 @@ public class CertificateActionRead implements CertificateAction {
 
   @Override
   public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
-    return certificate
-        .filter(value ->
-            isIssuingUnitMatchingSubUnit(actionEvaluation, value)
-                || isCareUnitMatchingSubUnit(actionEvaluation, value)
-        )
-        .filter(value ->
-            ifPatientIsProtectedUserMustNotBeCareAdmin(actionEvaluation, value)
-        )
-        .isPresent();
-  }
-
-  private static boolean isCareUnitMatchingSubUnit(ActionEvaluation actionEvaluation,
-      Certificate value) {
-    return value.certificateMetaData().careUnit().hsaId().equals(
-        actionEvaluation.subUnit().hsaId()
-    );
-  }
-
-  private static boolean isIssuingUnitMatchingSubUnit(ActionEvaluation actionEvaluation,
-      Certificate value) {
-    return value.certificateMetaData().issuingUnit().hsaId().equals(
-        actionEvaluation.subUnit().hsaId()
-    );
-  }
-
-  private static boolean ifPatientIsProtectedUserMustNotBeCareAdmin(
-      ActionEvaluation actionEvaluation, Certificate value) {
-    return !value.certificateMetaData().patient().protectedPerson().value()
-        || !CARE_ADMIN.equals(actionEvaluation.user().role());
-  }
-
-  @Override
-  public String getName() {
-    return null;
-  }
-
-  @Override
-  public String getDescription() {
-    return null;
+    return actionRules.stream()
+        .filter(value -> value.evaluate(certificate, actionEvaluation))
+        .count() == actionRules.size();
   }
 }

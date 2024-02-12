@@ -19,6 +19,7 @@ public class CertificateModel {
   String description;
   LocalDateTime activeFrom;
   List<CertificateActionSpecification> certificateActionSpecifications;
+  List<ElementSpecification> elementSpecifications;
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()
@@ -40,5 +41,20 @@ public class CertificateModel {
         .findFirst()
         .map(certificateAction -> certificateAction.evaluate(actionEvaluation))
         .orElse(false);
+  }
+
+  public boolean elementSpecificationExists(ElementId id) {
+    return elementSpecifications.stream()
+        .anyMatch(elementSpecification -> elementSpecification.exists(id));
+  }
+
+  public ElementSpecification elementSpecification(ElementId id) {
+    return elementSpecifications.stream()
+        .filter(elementSpecification -> elementSpecification.exists(id))
+        .map(elementSpecification -> elementSpecification.elementSpecification(id))
+        .findAny()
+        .orElseThrow(
+            () -> new IllegalArgumentException("No element with id '%s' exists".formatted(id))
+        );
   }
 }

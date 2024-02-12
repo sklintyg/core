@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
@@ -9,9 +11,11 @@ import se.inera.intyg.certificateservice.application.certificate.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
+import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 
 @Component
+@RequiredArgsConstructor
 public class CertificateConverter {
 
   /**
@@ -22,16 +26,17 @@ public class CertificateConverter {
   private static final boolean SENT = false;
   private static final CertificateStatusTypeDTO STATUS = CertificateStatusTypeDTO.UNSIGNED;
   private static final boolean TEST_CERTIFICATE = false;
-  private static final int VERSION = 0;
   private static final CertificateRelationsDTO RELATIONS = CertificateRelationsDTO.builder()
       .build();
+  private final CertificateDataConverter certificateDataConverter;
 
-  public CertificateDTO convert(Certificate certificate) {
+  public CertificateDTO convert(Certificate certificate, List<ResourceLinkDTO> resourceLinks) {
     return CertificateDTO.builder()
         .metadata(
             CertificateMetadataDTO.builder()
                 .id(certificate.id().id())
                 .type(certificate.certificateModel().id().type().type())
+                .version(certificate.version())
                 .typeName(certificate.certificateModel().id().type().type())
                 .typeVersion(certificate.certificateModel().id().version().version())
                 .name(certificate.certificateModel().name())
@@ -98,10 +103,16 @@ public class CertificateConverter {
                 .sent(SENT)
                 .status(STATUS)
                 .testCertificate(TEST_CERTIFICATE)
-                .version(VERSION)
                 .relations(RELATIONS)
                 .build()
         )
+        .data(
+            certificateDataConverter.convert(
+                certificate.certificateModel(),
+                certificate.elementData()
+            )
+        )
+        .links(resourceLinks)
         .build();
   }
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.service.validation.CreateCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateDomainService;
@@ -35,13 +36,11 @@ public class CreateCertificateService {
         actionEvaluation
     );
     return CreateCertificateResponse.builder()
-        .certificate(
-            certificateConverter.convert(certificate)
-        )
-        .links(
+        .certificate(certificateConverter.convert(
+            certificate,
             certificate.actions(actionEvaluation).stream()
                 .map(resourceLinkConverter::convert)
-                .toList()
+                .toList())
         )
         .build();
   }

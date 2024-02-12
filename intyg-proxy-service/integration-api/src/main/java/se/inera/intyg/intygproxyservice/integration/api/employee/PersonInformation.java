@@ -37,7 +37,9 @@ public class PersonInformation {
   List<String> healthCareProfessionalLicence = new ArrayList<>();
   @Builder.Default
   List<PaTitle> paTitle = new ArrayList<>();
+  @Builder.Default
   List<String> specialityName = new ArrayList<>();
+  @Builder.Default
   List<String> specialityCode = new ArrayList<>();
   Boolean protectedPerson;
   LocalDateTime personStartDate;

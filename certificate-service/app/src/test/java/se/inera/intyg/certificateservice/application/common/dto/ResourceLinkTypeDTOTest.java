@@ -23,6 +23,13 @@ class ResourceLinkTypeDTOTest {
   }
 
   @Test
+  void shallReturnCertificateActionTypeUpdate() {
+    assertEquals(CertificateActionType.UPDATE,
+        ResourceLinkTypeDTO.EDIT_CERTIFICATE.toCertificateActionType()
+    );
+  }
+
+  @Test
   void shallThrowExceptionForNotSupportedType() {
     assertThrows(IllegalArgumentException.class,
         ResourceLinkTypeDTO.SRS_FULL_VIEW::toCertificateActionType
@@ -40,6 +47,13 @@ class ResourceLinkTypeDTOTest {
   void shallReturnResourceLinkTypeDTOReadCertificate() {
     assertEquals(ResourceLinkTypeDTO.READ_CERTIFICATE,
         ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.READ)
+    );
+  }
+
+  @Test
+  void shallReturnResourceLinkTypeDTOEditCertificate() {
+    assertEquals(ResourceLinkTypeDTO.EDIT_CERTIFICATE,
+        ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.UPDATE)
     );
   }
 }

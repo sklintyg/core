@@ -13,9 +13,13 @@ public interface CertificateAction {
 
   boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation);
 
-  String getName();
+  default String getName() {
+    return null;
+  }
 
-  String getDescription();
+  default String getDescription() {
+    return null;
+  }
 
   default boolean isEnabled() {
     return true;

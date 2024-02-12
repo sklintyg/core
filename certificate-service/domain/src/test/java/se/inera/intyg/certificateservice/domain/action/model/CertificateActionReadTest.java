@@ -31,13 +31,15 @@ class CertificateActionReadTest {
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
   private CertificateBuilder certificateBuilder;
 
+  private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
+      CertificateActionSpecification.builder()
+          .certificateActionType(CertificateActionType.READ)
+          .build();
+
   @BeforeEach
   void setUp() {
-    certificateActionRead = new CertificateActionRead(
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.READ)
-            .build()
-    );
+    certificateActionRead = (CertificateActionRead) CertificateActionFactory.create(
+        CERTIFICATE_ACTION_SPECIFICATION);
     certificateBuilder = Certificate.builder()
         .certificateMetaData(
             CertificateMetaData.builder()

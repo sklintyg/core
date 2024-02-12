@@ -183,6 +183,20 @@ class PersonInformationTypeConverterTest {
     assertEquals(2, response.getPaTitle().size());
   }
 
+  @Test
+  void shouldConvertSpecialityName() {
+    final var type = getPersonInformationType();
+    final var response = personInformationTypeConverter.convert(type);
+    assertEquals(type.getSpecialityName(), response.getSpecialityName());
+  }
+
+  @Test
+  void shouldConvertSpecialityCode() {
+    final var type = getPersonInformationType();
+    final var response = personInformationTypeConverter.convert(type);
+    assertEquals(type.getSpecialityCode(), response.getSpecialityCode());
+  }
+
   @Nested
   class HCPSpecialityCodes {
 
@@ -246,6 +260,8 @@ class PersonInformationTypeConverterTest {
     type.setTitle("TITLE");
     type.setPersonEndDate(toXMLGregorianCalendar(END_DATE));
     type.setPersonStartDate(toXMLGregorianCalendar(START_DATE));
+    type.getSpecialityName().add("SPECIAL1");
+    type.getSpecialityCode().add("CODE1");
     return type;
   }
 
