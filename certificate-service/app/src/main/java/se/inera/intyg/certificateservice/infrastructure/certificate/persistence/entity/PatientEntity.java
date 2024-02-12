@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
 
 @Entity
 @Table(name = "patient")
@@ -24,11 +25,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PatientEntity {
 
+  @NaturalId
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "`key`")
-  private int key;
+  @Column(name = "`key`", updatable = false)
+  private Integer key;
   @Id
-  @Column(name = "patient_id", unique = true)
+  @Column(name = "patient_id", unique = true, updatable = false)
   private String id;
   @ManyToOne
   @JoinColumn(name = "patient_id_type_key")
