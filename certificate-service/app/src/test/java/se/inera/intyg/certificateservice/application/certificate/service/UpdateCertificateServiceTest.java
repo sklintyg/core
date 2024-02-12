@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
@@ -11,6 +12,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -26,7 +28,10 @@ import se.inera.intyg.certificateservice.application.certificate.dto.config.Cert
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigDate;
 import se.inera.intyg.certificateservice.application.certificate.service.validation.UpdateCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
+import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
+import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -51,6 +56,9 @@ class UpdateCertificateServiceTest {
   @Mock
   private CertificateConverter certificateConverter;
 
+  @Mock
+  private ResourceLinkConverter resourceLinkConverter;
+
   @InjectMocks
   private UpdateCertificateService updateCertificateService;
 
@@ -68,11 +76,15 @@ class UpdateCertificateServiceTest {
 
   @Test
   void shallReturnUpdateCertificateResponse() {
+    final var resourceLinkDTO = ResourceLinkDTO.builder().build();
     final var expectedCertificate = CertificateDTO.builder()
         .data(
             Map.of(QUESTION_ID, CertificateDataElement.builder()
                 .config(CertificateDataConfigDate.builder().build())
                 .build())
+        )
+        .links(
+            List.of(resourceLinkDTO)
         )
         .build();
 
@@ -93,13 +105,19 @@ class UpdateCertificateServiceTest {
     doReturn(elementData).when(elementDataConverter)
         .convert(QUESTION_ID, expectedCertificate.getData().get(QUESTION_ID));
 
-    final var certificate = Certificate.builder().build();
+    final var certificate = mock(Certificate.class);
 
     doReturn(certificate).when(updateCertificateDomainService).update(
         new CertificateId(CERTIFICATE_ID), List.of(elementData), actionEvaluation
     );
 
-    doReturn(expectedCertificate).when(certificateConverter).convert(certificate);
+    final var certificateAction = mock(CertificateAction.class);
+    final List<CertificateAction> certificateActions = List.of(certificateAction);
+    doReturn(certificateActions).when(certificate).actions(actionEvaluation);
+
+    doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction);
+    doReturn(expectedCertificate).when(certificateConverter)
+        .convert(certificate, List.of(resourceLinkDTO));
 
     final var actualResult = updateCertificateService.update(
         UpdateCertificateRequest.builder()
@@ -135,6 +153,16 @@ class UpdateCertificateServiceTest {
         ALFA_MEDICINCENTRUM_DTO,
         ALFA_REGIONEN_DTO
     );
+
+    final var certificate = mock(Certificate.class);
+
+    doReturn(certificate).when(updateCertificateDomainService).update(
+        new CertificateId(CERTIFICATE_ID), Collections.emptyList(), actionEvaluation
+    );
+
+    final var certificateAction = mock(CertificateAction.class);
+    final List<CertificateAction> certificateActions = List.of(certificateAction);
+    doReturn(certificateActions).when(certificate).actions(actionEvaluation);
 
     updateCertificateService.update(
         UpdateCertificateRequest.builder()

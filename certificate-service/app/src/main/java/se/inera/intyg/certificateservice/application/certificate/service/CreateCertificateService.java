@@ -36,13 +36,11 @@ public class CreateCertificateService {
         actionEvaluation
     );
     return CreateCertificateResponse.builder()
-        .certificate(
-            certificateConverter.convert(certificate)
-        )
-        .links(
+        .certificate(certificateConverter.convert(
+            certificate,
             certificate.actions(actionEvaluation).stream()
                 .map(resourceLinkConverter::convert)
-                .toList()
+                .toList())
         )
         .build();
   }

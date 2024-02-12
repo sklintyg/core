@@ -85,7 +85,7 @@ class CertificateConverterTest {
   private static final String NAME = "Beräknat nedkomstdatum";
   private static final String KEY = "key";
   private static final long CERTIFICATE_VERSION = 3L;
-  private List<ResourceLinkDTO> resourceLinkDTOS = Collections.emptyList();
+  private List<ResourceLinkDTO> resourceLinkDTOs = Collections.emptyList();
   @Mock
   private CertificateDataConverter certificateDataConverter;
   @InjectMocks
@@ -191,28 +191,28 @@ class CertificateConverterTest {
     @Test
     void shallIncludeCertificateId() {
       assertEquals(CERTIFICATE_ID,
-          certificateConverter.convert(certificate).getMetadata().getId()
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getId()
       );
     }
 
     @Test
     void shallIncludeCertificateType() {
       assertEquals(TYPE,
-          certificateConverter.convert(certificate).getMetadata().getType()
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getType()
       );
     }
 
     @Test
     void shallIncludeCertificateTypeName() {
       assertEquals(TYPE,
-          certificateConverter.convert(certificate).getMetadata().getTypeName()
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getTypeName()
       );
     }
 
     @Test
     void shallIncludeCertificateTypeVersion() {
       assertEquals(VERSION,
-          certificateConverter.convert(certificate).getMetadata()
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata()
               .getTypeVersion()
       );
     }
@@ -220,14 +220,14 @@ class CertificateConverterTest {
     @Test
     void shallIncludeCertificateName() {
       assertEquals(TYPE_NAME,
-          certificateConverter.convert(certificate).getMetadata().getName()
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getName()
       );
     }
 
     @Test
     void shallIncludeCertificateTypeDescription() {
       assertEquals(TYPE_DESCRIPTION,
-          certificateConverter.convert(certificate).getMetadata()
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata()
               .getDescription()
       );
     }
@@ -235,14 +235,14 @@ class CertificateConverterTest {
     @Test
     void shallIncludeCreated() {
       assertEquals(CREATED,
-          certificateConverter.convert(certificate).getMetadata().getCreated()
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getCreated()
       );
     }
 
     @Test
     void shallIncludeVersion() {
       assertEquals(CERTIFICATE_VERSION,
-          certificateConverter.convert(certificate).getMetadata().getVersion()
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getVersion()
       );
     }
 
@@ -257,14 +257,15 @@ class CertificateConverterTest {
             .build();
 
         assertEquals(expectedId,
-            certificateConverter.convert(certificate).getMetadata().getPatient().getPersonId()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getPatient()
+                .getPersonId()
         );
       }
 
       @Test
       void shallIncludeFirstName() {
         assertEquals(ATHENA_REACT_ANDERSSON_FIRST_NAME,
-            certificateConverter.convert(certificate).getMetadata().getPatient()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getPatient()
                 .getFirstName()
         );
       }
@@ -272,7 +273,7 @@ class CertificateConverterTest {
       @Test
       void shallIncludeMiddleName() {
         assertEquals(ATHENA_REACT_ANDERSSON_MIDDLE_NAME,
-            certificateConverter.convert(certificate).getMetadata().getPatient()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getPatient()
                 .getMiddleName()
         );
       }
@@ -280,7 +281,7 @@ class CertificateConverterTest {
       @Test
       void shallIncludeLastName() {
         assertEquals(ATHENA_REACT_ANDERSSON_LAST_NAME,
-            certificateConverter.convert(certificate).getMetadata().getPatient()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getPatient()
                 .getLastName()
         );
       }
@@ -288,7 +289,7 @@ class CertificateConverterTest {
       @Test
       void shallIncludeFullName() {
         assertEquals(ATHENA_REACT_ANDERSSON_FULL_NAME,
-            certificateConverter.convert(certificate).getMetadata().getPatient()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getPatient()
                 .getFullName()
         );
       }
@@ -296,7 +297,7 @@ class CertificateConverterTest {
       @Test
       void shallIncludeStreet() {
         assertEquals(ATHENA_REACT_ANDERSSON_STREET,
-            certificateConverter.convert(certificate).getMetadata().getPatient()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getPatient()
                 .getStreet()
         );
       }
@@ -304,7 +305,7 @@ class CertificateConverterTest {
       @Test
       void shallIncludeCity() {
         assertEquals(ATHENA_REACT_ANDERSSON_CITY,
-            certificateConverter.convert(certificate).getMetadata().getPatient()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getPatient()
                 .getCity()
         );
       }
@@ -312,7 +313,7 @@ class CertificateConverterTest {
       @Test
       void shallIncludeZipCode() {
         assertEquals(ATHENA_REACT_ANDERSSON_ZIP_CODE,
-            certificateConverter.convert(certificate).getMetadata().getPatient()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getPatient()
                 .getZipCode()
         );
       }
@@ -320,7 +321,7 @@ class CertificateConverterTest {
       @Test
       void shallIncludeDeceased() {
         assertEquals(ATHENA_REACT_ANDERSSON_DECEASED.value(),
-            certificateConverter.convert(certificate).getMetadata().getPatient()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getPatient()
                 .getDeceased()
         );
       }
@@ -328,7 +329,7 @@ class CertificateConverterTest {
       @Test
       void shallIncludeTestIndicated() {
         assertEquals(ATHENA_REACT_ANDERSSON_TEST_INDICATED.value(),
-            certificateConverter.convert(certificate).getMetadata().getPatient()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getPatient()
                 .getTestIndicated()
         );
       }
@@ -336,7 +337,7 @@ class CertificateConverterTest {
       @Test
       void shallIncludeProtectedPerson() {
         assertEquals(ATHENA_REACT_ANDERSSON_PROTECTED_PERSON.value(),
-            certificateConverter.convert(certificate).getMetadata().getPatient()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getPatient()
                 .getProtectedPerson()
         );
       }
@@ -348,56 +349,64 @@ class CertificateConverterTest {
       @Test
       void shallIncludeId() {
         assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ID,
-            certificateConverter.convert(certificate).getMetadata().getUnit().getUnitId()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getUnit()
+                .getUnitId()
         );
       }
 
       @Test
       void shallIncludeName() {
         assertEquals(ALFA_ALLERGIMOTTAGNINGEN_NAME,
-            certificateConverter.convert(certificate).getMetadata().getUnit().getUnitName()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getUnit()
+                .getUnitName()
         );
       }
 
       @Test
       void shallIncludeAddress() {
         assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ADDRESS,
-            certificateConverter.convert(certificate).getMetadata().getUnit().getAddress()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getUnit()
+                .getAddress()
         );
       }
 
       @Test
       void shallIncludeCity() {
         assertEquals(ALFA_ALLERGIMOTTAGNINGEN_CITY,
-            certificateConverter.convert(certificate).getMetadata().getUnit().getCity()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getUnit()
+                .getCity()
         );
       }
 
       @Test
       void shallIncludeZipCode() {
         assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE,
-            certificateConverter.convert(certificate).getMetadata().getUnit().getZipCode()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getUnit()
+                .getZipCode()
         );
       }
 
       @Test
       void shallIncludeEmail() {
         assertEquals(ALFA_ALLERGIMOTTAGNINGEN_EMAIL,
-            certificateConverter.convert(certificate).getMetadata().getUnit().getEmail()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getUnit()
+                .getEmail()
         );
       }
 
       @Test
       void shallIncludePhonenumber() {
         assertEquals(ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER,
-            certificateConverter.convert(certificate).getMetadata().getUnit().getPhoneNumber()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getUnit()
+                .getPhoneNumber()
         );
       }
 
       @Test
       void shallIncludeIsInactive() {
         assertEquals(ALFA_ALLERGIMOTTAGNINGEN_INACTIVE.value(),
-            certificateConverter.convert(certificate).getMetadata().getUnit().getIsInactive()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getUnit()
+                .getIsInactive()
         );
       }
     }
@@ -408,14 +417,16 @@ class CertificateConverterTest {
       @Test
       void shallIncludeId() {
         assertEquals(ALFA_MEDICINCENTRUM_ID,
-            certificateConverter.convert(certificate).getMetadata().getCareUnit().getUnitId()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getCareUnit()
+                .getUnitId()
         );
       }
 
       @Test
       void shallIncludeName() {
         assertEquals(ALFA_MEDICINCENTRUM_NAME,
-            certificateConverter.convert(certificate).getMetadata().getCareUnit().getUnitName()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getCareUnit()
+                .getUnitName()
         );
       }
     }
@@ -426,14 +437,16 @@ class CertificateConverterTest {
       @Test
       void shallIncludeId() {
         assertEquals(ALFA_REGIONEN_ID,
-            certificateConverter.convert(certificate).getMetadata().getCareProvider().getUnitId()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata()
+                .getCareProvider().getUnitId()
         );
       }
 
       @Test
       void shallIncludeName() {
         assertEquals(ALFA_REGIONEN_NAME,
-            certificateConverter.convert(certificate).getMetadata().getCareProvider().getUnitName()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata()
+                .getCareProvider().getUnitName()
         );
       }
     }
@@ -444,14 +457,16 @@ class CertificateConverterTest {
       @Test
       void shallIncludeId() {
         assertEquals(AJLA_DOCTOR_HSA_ID,
-            certificateConverter.convert(certificate).getMetadata().getIssuedBy().getPersonId()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getIssuedBy()
+                .getPersonId()
         );
       }
 
       @Test
       void shallIncludeName() {
         assertEquals(AJLA_DOCTOR_NAME,
-            certificateConverter.convert(certificate).getMetadata().getIssuedBy().getFullName()
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getIssuedBy()
+                .getFullName()
         );
       }
     }
@@ -461,14 +476,26 @@ class CertificateConverterTest {
   class CertificateData {
 
     @Test
-    void shouldIncludeData() {
+    void shallIncludeData() {
       final var expectedValue = Map.of(KEY, CertificateDataElement.builder().build());
 
       doReturn(expectedValue).when(certificateDataConverter)
           .convert(certificate.certificateModel(), certificate.elementData());
 
       assertEquals(expectedValue,
-          certificateConverter.convert(certificate).getData());
+          certificateConverter.convert(certificate, resourceLinkDTOs).getData());
+    }
+  }
+
+  @Nested
+  class CertificateResourceLinks {
+
+    @Test
+    void shallIncludeLinks() {
+      final var resourceLinkDTO = ResourceLinkDTO.builder().build();
+      final var expectedLinks = List.of(resourceLinkDTO);
+      assertEquals(expectedLinks,
+          certificateConverter.convert(certificate, expectedLinks).getLinks());
     }
   }
 }

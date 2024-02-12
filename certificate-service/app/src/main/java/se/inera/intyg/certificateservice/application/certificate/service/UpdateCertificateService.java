@@ -10,6 +10,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigTypes;
 import se.inera.intyg.certificateservice.application.certificate.service.validation.UpdateCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
+import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertificateDomainService;
 
@@ -22,6 +23,7 @@ public class UpdateCertificateService {
   private final ElementDataConverter elementDataConverter;
   private final ActionEvaluationFactory actionEvaluationFactory;
   private final CertificateConverter certificateConverter;
+  private final ResourceLinkConverter resourceLinkConverter;
 
   public UpdateCertificateResponse update(UpdateCertificateRequest updateCertificateRequest,
       String certificateId) {
@@ -49,7 +51,12 @@ public class UpdateCertificateService {
     );
 
     return UpdateCertificateResponse.builder()
-        .certificate(certificateConverter.convert(updatedCertificate))
+        .certificate(certificateConverter.convert(
+            updatedCertificate,
+            updatedCertificate.actions(actionEvaluation).stream()
+                .map(resourceLinkConverter::convert)
+                .toList())
+        )
         .build();
   }
 

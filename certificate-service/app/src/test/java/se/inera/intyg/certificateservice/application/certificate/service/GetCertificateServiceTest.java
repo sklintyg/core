@@ -58,13 +58,14 @@ class GetCertificateServiceTest {
 
   @Test
   void shallReturnResponseWithCertificate() {
-    final var certificateDTO = CertificateDTO.builder().build();
     final var resourceLinkDTO = ResourceLinkDTO.builder().build();
+    final var certificateDTO = CertificateDTO.builder()
+        .links(List.of(resourceLinkDTO))
+        .build();
     final var expectedResponse = GetCertificateResponse.builder()
         .certificate(
             certificateDTO
         )
-        .links(List.of(resourceLinkDTO))
         .build();
 
     final var actionEvaluation = ActionEvaluation.builder().build();
@@ -85,9 +86,9 @@ class GetCertificateServiceTest {
     final List<CertificateAction> certificateActions = List.of(certificateAction);
     doReturn(certificateActions).when(certificate).actions(actionEvaluation);
 
-    doReturn(certificateDTO).when(certificateConverter).convert(certificate);
-
     doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction);
+    doReturn(certificateDTO).when(certificateConverter)
+        .convert(certificate, List.of(resourceLinkDTO));
 
     final var actualResult = getCertificateService.get(
         GetCertificateRequest.builder()
