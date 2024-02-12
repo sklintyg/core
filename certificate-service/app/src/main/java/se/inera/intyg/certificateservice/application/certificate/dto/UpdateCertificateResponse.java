@@ -4,17 +4,17 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse.GetCertificateResponseBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse.UpdateCertificateResponseBuilder;
 
-@JsonDeserialize(builder = GetCertificateResponseBuilder.class)
+@JsonDeserialize(builder = UpdateCertificateResponseBuilder.class)
 @Value
 @Builder
-public class GetCertificateResponse {
+public class UpdateCertificateResponse {
 
   CertificateDTO certificate;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class GetCertificateResponseBuilder {
+  public static class UpdateCertificateResponseBuilder {
 
   }
 }

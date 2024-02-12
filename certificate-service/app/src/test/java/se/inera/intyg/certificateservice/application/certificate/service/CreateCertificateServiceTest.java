@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.service.validation.CreateCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
@@ -81,9 +82,10 @@ class CreateCertificateServiceTest {
     final var resourceLinkDTO = ResourceLinkDTO.builder().build();
     final var expectedReponse = CreateCertificateResponse.builder()
         .certificate(
-            CertificateDTO.builder().build()
+            CertificateDTO.builder()
+                .links(List.of(resourceLinkDTO))
+                .build()
         )
-        .links(List.of(resourceLinkDTO))
         .build();
 
     final var actionEvaluation = ActionEvaluation.builder().build();
@@ -108,10 +110,10 @@ class CreateCertificateServiceTest {
     final List<CertificateAction> certificateActions = List.of(certificateAction);
     doReturn(certificateActions).when(certificate).actions(actionEvaluation);
 
-    doReturn(expectedReponse.getCertificate()).when(certificateConverter)
-        .convert(certificate);
-
     doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction);
+
+    doReturn(expectedReponse.getCertificate()).when(certificateConverter)
+        .convert(certificate, List.of(resourceLinkDTO));
 
     final var actualResponse = createCertificateService.create(CREATE_CERTIFICATE_REQUEST);
     assertEquals(expectedReponse, actualResponse);

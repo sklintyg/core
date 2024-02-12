@@ -73,6 +73,7 @@ import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
 @ExtendWith(MockitoExtension.class)
 class CertificateTest {
 
+  private long version = 0L;
   private Certificate certificate;
   private CertificateModel certificateModel;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
@@ -82,6 +83,7 @@ class CertificateTest {
     certificateModel = mock(CertificateModel.class);
     certificate = Certificate.builder()
         .id(CERTIFICATE_ID)
+        .version(version)
         .certificateModel(certificateModel)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
         .certificateMetaData(
@@ -790,6 +792,23 @@ class CertificateTest {
       newValue.remove(0);
 
       assertNotEquals(newValue, certificate.elementData());
+    }
+
+    @Test
+    void shallIncrementVersionOnUpdateData() {
+      final var newValue = List.of(
+          dateElementDataBuilder()
+              .value(
+                  ElementValueDate.builder()
+                      .date(DATE_ELEMENT_VALUE_DATE.plusDays(1))
+                      .build()
+              )
+              .build()
+      );
+
+      certificate.updateData(newValue);
+
+      assertEquals(version + 1, certificate.version());
     }
 
     @Test

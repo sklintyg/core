@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificate.model;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.Builder;
@@ -20,7 +21,9 @@ public class Certificate {
   private final CertificateModel certificateModel;
   private final LocalDateTime created;
   private CertificateMetaData certificateMetaData;
-  private List<ElementData> elementData;
+  @Builder.Default
+  private List<ElementData> elementData = Collections.emptyList();
+  private long version;
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
@@ -65,7 +68,7 @@ public class Certificate {
               .formatted(missingIds, certificateModel.id())
       );
     }
-
+    this.version++;
     this.elementData = newData.stream().toList();
   }
 }

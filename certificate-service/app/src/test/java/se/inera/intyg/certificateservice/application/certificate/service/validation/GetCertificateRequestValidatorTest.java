@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.application.certificate.service;
+package se.inera.intyg.certificateservice.application.certificate.service.validation;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -284,23 +284,27 @@ class GetCertificateRequestValidatorTest {
     }
   }
 
-  @Test
-  void shallThrowIfCertificateIdIsNull() {
-    final var request = requestBuilder.build();
-    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> getCertificateRequestValidator.validate(request, null));
+  @Nested
+  class CertificateIdValidation {
 
-    assertEquals("Required parameter missing: certificateId",
-        illegalArgumentException.getMessage());
-  }
+    @Test
+    void shallThrowIfCertificateIdIsNull() {
+      final var request = requestBuilder.build();
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getCertificateRequestValidator.validate(request, null));
 
-  @Test
-  void shallThrowIfCertificateIdIsEmpty() {
-    final var request = requestBuilder.build();
-    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> getCertificateRequestValidator.validate(request, ""));
+      assertEquals("Required parameter missing: certificateId",
+          illegalArgumentException.getMessage());
+    }
 
-    assertEquals("Required parameter missing: certificateId",
-        illegalArgumentException.getMessage());
+    @Test
+    void shallThrowIfCertificateIdIsEmpty() {
+      final var request = requestBuilder.build();
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getCertificateRequestValidator.validate(request, ""));
+
+      assertEquals("Required parameter missing: certificateId",
+          illegalArgumentException.getMessage());
+    }
   }
 }
