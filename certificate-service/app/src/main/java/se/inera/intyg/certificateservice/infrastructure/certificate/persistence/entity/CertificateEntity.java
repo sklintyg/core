@@ -36,7 +36,7 @@ public class CertificateEntity {
   @Column(name = "modified")
   private LocalDateTime modified;
   @Column(name = "version")
-  private int version;
+  private Long version;
   @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
   private CertificateModelEntity certificateModel;
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})

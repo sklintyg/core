@@ -4,12 +4,15 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Staff;
 import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.Unit;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
 
 public class CertificateToObjectUtility {
+
+  private CertificateToObjectUtility() {
+    throw new IllegalStateException("Utility class");
+  }
 
   public static CertificateModel getCertificateModel(Certificate certificate) {
     return certificate.certificateModel();

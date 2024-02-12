@@ -7,6 +7,10 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 
 public class StaffEntityMapper {
 
+  private StaffEntityMapper() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static StaffEntity toEntity(Staff staff) {
     return StaffEntity.builder()
         .hsaId(staff.hsaId().id())

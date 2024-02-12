@@ -7,6 +7,10 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 
 public class CertificateEntityMapper {
 
+  private CertificateEntityMapper() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static CertificateEntity toEntity(Certificate certificate) {
     return CertificateEntity.builder()
         .certificateId(certificate.id().id())

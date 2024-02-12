@@ -12,6 +12,10 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 
 public class UnitEntityMapper {
 
+  private UnitEntityMapper() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static UnitEntity toEntity(Unit unit) {
     return switch (unit.getType()) {
       case SUB_UNIT -> toSubUnitEntity(unit);
