@@ -16,7 +16,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Staff;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateModelEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;

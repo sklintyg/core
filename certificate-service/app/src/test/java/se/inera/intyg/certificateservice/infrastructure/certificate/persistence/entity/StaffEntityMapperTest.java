@@ -52,6 +52,13 @@ class StaffEntityMapperTest {
 
       assertEquals(ENTITY.getHsaId(), response.hsaId().id());
     }
+
+    @Test
+    void shouldMapName() {
+      final var response = StaffEntityMapper.toDomain(ENTITY);
+
+      assertEquals(ENTITY.getName(), response.name().fullName());
+    }
   }
 
 }

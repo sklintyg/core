@@ -1,5 +1,10 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
+import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
+import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
+import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
+import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
+import se.inera.intyg.certificateservice.domain.certificate.model.UnitName;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.Unit;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
@@ -15,6 +20,13 @@ public class UnitEntityMapper {
     };
   }
 
+  public static CareProvider toCareProviderDomain(UnitEntity unit) {
+    return CareProvider.builder()
+        .name(new UnitName(unit.getName()))
+        .hsaId(new HsaId(unit.getHsaId()))
+        .build();
+  }
+
   public static UnitEntity toCareProviderEntity(Unit unit) {
     return UnitEntity.builder()
         .type(
@@ -28,6 +40,13 @@ public class UnitEntityMapper {
         .build();
   }
 
+  public static CareUnit toCareUnitDomain(UnitEntity unit) {
+    return CareUnit.builder()
+        .name(new UnitName(unit.getName()))
+        .hsaId(new HsaId(unit.getHsaId()))
+        .build();
+  }
+
   public static UnitEntity toCareUnitEntity(Unit unit) {
     return UnitEntity.builder()
         .type(
@@ -38,6 +57,13 @@ public class UnitEntityMapper {
         )
         .hsaId(unit.getHsaId())
         .name(unit.getName())
+        .build();
+  }
+
+  public static SubUnit toSubUnitDomain(UnitEntity unit) {
+    return SubUnit.builder()
+        .name(new UnitName(unit.getName()))
+        .hsaId(new HsaId(unit.getHsaId()))
         .build();
   }
 
