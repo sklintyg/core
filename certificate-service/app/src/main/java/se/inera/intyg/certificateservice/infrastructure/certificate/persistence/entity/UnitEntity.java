@@ -23,7 +23,7 @@ public class UnitEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "key")
+  @Column(name = "`key`")
   private int key;
   @Column(name = "hsa_id", unique = true)
   private String hsaId;

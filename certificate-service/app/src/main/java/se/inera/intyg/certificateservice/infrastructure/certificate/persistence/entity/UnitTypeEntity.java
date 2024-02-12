@@ -21,7 +21,7 @@ public class UnitTypeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "key")
+  @Column(name = "`key`")
   private int key;
   @Column(name = "type")
   private String type;
