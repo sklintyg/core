@@ -12,8 +12,8 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 
-@Builder
 @Getter
+@Builder
 @EqualsAndHashCode
 public class Certificate {
 
