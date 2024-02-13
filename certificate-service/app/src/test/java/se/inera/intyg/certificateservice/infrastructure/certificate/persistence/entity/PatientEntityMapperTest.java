@@ -92,6 +92,24 @@ class PatientEntityMapperTest {
     }
 
     @Test
+    void shouldMapFirstName() {
+      final var response = PatientEntityMapper.toDomain(PATIENT_ENTITY_DECEASED);
+      assertEquals(PATIENT_ENTITY_DECEASED.getFirstName(), response.name().firstName());
+    }
+
+    @Test
+    void shouldMapMiddleName() {
+      final var response = PatientEntityMapper.toDomain(PATIENT_ENTITY_DECEASED);
+      assertEquals(PATIENT_ENTITY_DECEASED.getMiddleName(), response.name().middleName());
+    }
+
+    @Test
+    void shouldMapLastName() {
+      final var response = PatientEntityMapper.toDomain(PATIENT_ENTITY_DECEASED);
+      assertEquals(PATIENT_ENTITY_DECEASED.getLastName(), response.name().lastName());
+    }
+
+    @Test
     void shouldMapProtectedPerson() {
       final var response = PatientEntityMapper.toDomain(PATIENT_ENTITY_PROTECTED);
       assertEquals(PATIENT_ENTITY_PROTECTED.isProtectedPerson(),
@@ -142,6 +160,9 @@ class PatientEntityMapperTest {
             .type(PersonIdType.PERSONAL_IDENTITY_NUMBER.name())
             .key(1)
             .build())
+        .firstName("FIRST")
+        .middleName("MIDDLE")
+        .lastName("LAST")
         .build();
   }
 

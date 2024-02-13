@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
@@ -40,7 +39,6 @@ import se.inera.intyg.certificateservice.testability.certificate.service.reposit
 
 @Profile(TESTABILITY_PROFILE)
 @Repository
-@Slf4j
 @RequiredArgsConstructor
 public class JpaCertificateRepository implements TestabilityCertificateRepository {
 
@@ -54,7 +52,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   @Override
   public Certificate create(CertificateModel certificateModel) {
     if (certificateModel == null) {
-      throw new IllegalArgumentException("Unable to create, certificateModel was null.");
+      throw new IllegalArgumentException("Unable to create, certificateModel was null");
     }
 
     return Certificate.builder()
@@ -73,7 +71,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     }
 
     final var certificateEntity = buildCertificateEntity(certificate);
-    log.debug(certificateEntityRepository.save(certificateEntity).toString());
+    certificateEntityRepository.save(certificateEntity);
 
     return certificate;
   }
@@ -92,12 +90,11 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
       );
     }
 
-    final var modelEntity = CertificateModelEntityMapper.toDomain(
+    final var model = CertificateModelEntityMapper.toDomain(
         certificate.getCertificateModel()
     );
-    final var model = certificateModelRepository.getById(modelEntity.id());
-
-    return CertificateEntityMapper.toDomain(certificate, model);
+    final var modelFromDB = certificateModelRepository.getById(model.id());
+    return CertificateEntityMapper.toDomain(certificate, modelFromDB);
   }
 
   @Override
@@ -193,9 +190,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
             CertificateModelEntityMapper::toEntity)
     );
 
-    certificateEntity.setData(
-        CertificateDataEntityMapper.toEntity(certificate.elementData())
-    );
+    certificateEntity.setData(CertificateDataEntityMapper.toEntity(certificate.elementData()));
 
     return certificateEntity;
   }

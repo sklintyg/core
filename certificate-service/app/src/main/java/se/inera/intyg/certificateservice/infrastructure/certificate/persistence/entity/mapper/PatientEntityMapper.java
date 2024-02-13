@@ -38,12 +38,11 @@ public class PatientEntityMapper {
   }
 
   public static Patient toDomain(PatientEntity patientEntity) {
-    final var type = PersonIdType.valueOf(patientEntity.getType().getType());
 
     return Patient.builder()
         .id(PersonId.builder()
             .id(patientEntity.getId())
-            .type(type)
+            .type(PersonIdType.valueOf(patientEntity.getType().getType()))
             .build())
         .protectedPerson(new ProtectedPerson(patientEntity.isProtectedPerson()))
         .name(

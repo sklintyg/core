@@ -17,10 +17,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.patient.model.Deceased;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
+import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
+import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 
 class CertificateEntityMapperTest {
@@ -38,6 +41,8 @@ class CertificateEntityMapperTest {
           .build()
       )
       .build();
+
+  // TODO: Create test factory for these to not copy paste
 
   public static final CertificateEntity CERTIFICATE_ENTITY = CertificateEntity.builder()
       .version(1L)
@@ -84,6 +89,21 @@ class CertificateEntityMapperTest {
           StaffEntity.builder()
               .name("NAME")
               .hsaId("HSA_ID")
+              .build()
+      )
+      .patient(
+          PatientEntity.builder()
+              .id("ID")
+              .protectedPerson(false)
+              .testIndicated(false)
+              .deceased(false)
+              .type(PatientIdTypeEntity.builder()
+                  .type(PersonIdType.PERSONAL_IDENTITY_NUMBER.name())
+                  .key(1)
+                  .build())
+              .firstName("FIRST")
+              .middleName("MIDDLE")
+              .lastName("LAST")
               .build()
       )
       .build();
@@ -234,17 +254,20 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapPatient() {
       final var expected = Patient.builder()
-          .id(
-              PersonId.builder()
-                  .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
-                  .id("ID")
-                  .build()
-          )
+          .id(PersonId.builder()
+              .id("ID")
+              .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
+              .build())
           .name(
               Name.builder()
-                  .lastName("NAME")
+                  .firstName("FIRST")
+                  .lastName("LAST")
+                  .middleName("MIDDLE")
                   .build()
           )
+          .protectedPerson(new ProtectedPerson(false))
+          .deceased(new Deceased(false))
+          .testIndicated(new TestIndicated(false))
           .build();
 
       final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
