@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
 
@@ -28,14 +29,12 @@ public class CertificateEntityMapper {
     return entity;
   }
 
-  public static Certificate toDomain(CertificateEntity certificateEntity) {
+  public static Certificate toDomain(CertificateEntity certificateEntity, CertificateModel model) {
     return Certificate.builder()
         .id(new CertificateId(certificateEntity.getCertificateId()))
         .created(certificateEntity.getCreated())
         .version(certificateEntity.getVersion())
-        .certificateModel(
-            CertificateModelEntityMapper.toDomain(certificateEntity.getCertificateModel())
-        )
+        .certificateModel(model)
         .certificateMetaData(
             CertificateMetaData.builder()
                 .careProvider(
@@ -54,7 +53,9 @@ public class CertificateEntityMapper {
                         certificateEntity.getIssuedBy()
                     )
                 )
-                .patient(null)
+                .patient(
+                    PatientEntityMapper.toDomain(certificateEntity.getPatient())
+                )
                 .build()
         )
         .build();

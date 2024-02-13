@@ -30,18 +30,20 @@ class CertificateEntityMapperTest {
       .created(LocalDateTime.now().minusDays(2))
       .build();
 
+  private final static CertificateModel MODEL = CertificateModel.builder()
+      .name("NAME")
+      .id(CertificateModelId.builder()
+          .version(new CertificateVersion("VERSION"))
+          .type(new CertificateType("TYPE"))
+          .build()
+      )
+      .build();
+
   public static final CertificateEntity CERTIFICATE_ENTITY = CertificateEntity.builder()
       .version(1L)
       .modified(LocalDateTime.now())
       .certificateId("ID")
       .created(LocalDateTime.now())
-      .certificateModel(
-          CertificateModelEntity.builder()
-              .version("VERSION")
-              .type("TYPE")
-              .name("NAME")
-              .build()
-      )
       .careProvider(
           UnitEntity.builder()
               .type(
@@ -128,40 +130,30 @@ class CertificateEntityMapperTest {
 
     @Test
     void shouldMapId() {
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY);
+      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(CERTIFICATE_ENTITY.getCertificateId(), response.id().id());
     }
 
     @Test
     void shouldMapCreated() {
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY);
+      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(CERTIFICATE_ENTITY.getCreated(), response.created());
     }
 
     @Test
     void shouldMapVersion() {
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY);
+      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(CERTIFICATE_ENTITY.getVersion(), response.version());
     }
 
     @Test
     void shouldMapModel() {
-      final var expected = CertificateModel.builder()
-          .id(
-              CertificateModelId.builder()
-                  .type(new CertificateType("TYPE"))
-                  .version(new CertificateVersion("VERSION"))
-                  .build()
-          )
-          .name("NAME")
-          .build();
+      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY);
-
-      assertEquals(expected, response.certificateModel());
+      assertEquals(MODEL, response.certificateModel());
     }
 
     @Test
@@ -171,7 +163,7 @@ class CertificateEntityMapperTest {
           .name(new UnitName("NAME_PROVIDER"))
           .build();
 
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY);
+      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(expected, response.certificateMetaData().careProvider());
     }
@@ -183,7 +175,7 @@ class CertificateEntityMapperTest {
           .name(new UnitName("NAME_UNIT"))
           .build();
 
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY);
+      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(expected, response.certificateMetaData().careUnit());
     }
@@ -195,7 +187,7 @@ class CertificateEntityMapperTest {
           .name(new UnitName("NAME_ISSUED"))
           .build();
 
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY);
+      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(expected, response.certificateMetaData().issuingUnit());
     }
@@ -220,7 +212,7 @@ class CertificateEntityMapperTest {
           .name(new UnitName("NAME_ISSUED"))
           .build();
 
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY);
+      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(expected, response.certificateMetaData().issuingUnit());
     }
@@ -234,7 +226,7 @@ class CertificateEntityMapperTest {
               .build())
           .build();
 
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY);
+      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(expected, response.certificateMetaData().issuer());
     }
@@ -255,7 +247,7 @@ class CertificateEntityMapperTest {
           )
           .build();
 
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY);
+      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(expected, response.certificateMetaData().patient());
     }

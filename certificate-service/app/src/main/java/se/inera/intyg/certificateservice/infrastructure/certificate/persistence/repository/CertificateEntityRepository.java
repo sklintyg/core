@@ -8,6 +8,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 @Repository
 public interface CertificateEntityRepository extends CrudRepository<CertificateEntity, Long> {
 
+  //TODO: Change to optional
   CertificateEntity findByCertificateId(String certificateId);
 
   void deleteAllByCertificateIdIn(List<String> certificateIds);

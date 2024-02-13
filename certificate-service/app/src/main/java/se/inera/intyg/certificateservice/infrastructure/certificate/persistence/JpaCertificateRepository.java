@@ -16,6 +16,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Staff;
 import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateModelEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
@@ -48,6 +49,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   private final StaffEntityRepository staffEntityRepository;
   private final UnitEntityRepository unitEntityRepository;
   private final PatientEntityRepository patientEntityRepository;
+  private final CertificateModelRepository certificateModelRepository;
 
   @Override
   public Certificate create(CertificateModel certificateModel) {
@@ -90,7 +92,12 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
       );
     }
 
-    return CertificateEntityMapper.toDomain(certificate);
+    final var modelEntity = CertificateModelEntityMapper.toDomain(
+        certificate.getCertificateModel()
+    );
+    final var model = certificateModelRepository.getById(modelEntity.id());
+
+    return CertificateEntityMapper.toDomain(certificate, model);
   }
 
   @Override
