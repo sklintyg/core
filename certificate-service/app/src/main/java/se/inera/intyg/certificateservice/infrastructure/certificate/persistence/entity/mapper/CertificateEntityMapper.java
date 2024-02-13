@@ -3,7 +3,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import java.time.LocalDateTime;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
 
 public class CertificateEntityMapper {
 
@@ -30,6 +32,31 @@ public class CertificateEntityMapper {
     return Certificate.builder()
         .id(new CertificateId(certificateEntity.getCertificateId()))
         .created(certificateEntity.getCreated())
+        .version(certificateEntity.getVersion())
+        .certificateModel(
+            CertificateModelEntityMapper.toDomain(certificateEntity.getCertificateModel())
+        )
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .careProvider(
+                    UnitEntityMapper.toCareProviderDomain(certificateEntity.getCareProvider())
+                )
+                .careUnit(
+                    UnitEntityMapper.toCareUnitDomain(certificateEntity.getCareUnit())
+                )
+                .issuingUnit(certificateEntity.getIssuedOnUnit().getType().getKey()
+                    == UnitType.SUB_UNIT.getKey()
+                    ? UnitEntityMapper.toSubUnitDomain(certificateEntity.getIssuedOnUnit())
+                    : UnitEntityMapper.toCareUnitDomain(certificateEntity.getIssuedOnUnit())
+                )
+                .issuer(
+                    StaffEntityMapper.toDomain(
+                        certificateEntity.getIssuedBy()
+                    )
+                )
+                .patient(null)
+                .build()
+        )
         .build();
   }
 
