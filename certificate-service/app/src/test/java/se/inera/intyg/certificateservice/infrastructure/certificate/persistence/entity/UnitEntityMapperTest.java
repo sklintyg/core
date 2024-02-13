@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -176,7 +176,7 @@ class UnitEntityMapperTest {
       void shouldMapName() {
         final var response = UnitEntityMapper.toSubUnitDomain(SUB_UNIT_ENTITY);
 
-        assertEquals(SUB_UNIT_ENTITY.getName(), response.name());
+        assertEquals(SUB_UNIT_ENTITY.getName(), response.name().name());
       }
     }
 

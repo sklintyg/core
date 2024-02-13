@@ -17,7 +17,7 @@ class CertificateEntityMapperTest {
       .build();
 
   public static final CertificateEntity CERTIFICATE_ENTITY = CertificateEntity.builder()
-      .version(1)
+      .version(1L)
       .modified(LocalDateTime.now())
       .certificateId("ID")
       .created(LocalDateTime.now())
