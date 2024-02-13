@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType.CATEGORY;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType.DATE;
+
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfig;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigCategory;
@@ -11,19 +14,20 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 public class CertificateDataConfigConverter {
 
   public CertificateDataConfig convert(ElementSpecification elementSpecification) {
-    return switch (elementSpecification.configuration().type()) {
-      case CATEGORY -> CertificateDataConfigCategory.builder()
+    if (CATEGORY.equals(elementSpecification.configuration().type())) {
+      return CertificateDataConfigCategory.builder()
           .text(elementSpecification.configuration().name())
           .build();
-      case DATE -> {
-        final var configuration = (ElementConfigurationDate) elementSpecification.configuration();
-        yield CertificateDataConfigDate.builder()
-            .id(configuration.id())
-            .text(configuration.name())
-            .minDate(configuration.minDate())
-            .maxDate(configuration.maxDate())
-            .build();
-      }
-    };
+    }
+    if (DATE.equals(elementSpecification.configuration().type())) {
+      final var configuration = (ElementConfigurationDate) elementSpecification.configuration();
+      return CertificateDataConfigDate.builder()
+          .id(configuration.id())
+          .text(configuration.name())
+          .minDate(configuration.minDate())
+          .maxDate(configuration.maxDate())
+          .build();
+    }
+    return null;
   }
 }

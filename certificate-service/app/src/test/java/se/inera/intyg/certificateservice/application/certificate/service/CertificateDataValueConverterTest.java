@@ -21,7 +21,7 @@ class CertificateDataValueConverterTest {
   private final CertificateDataValueConverter converter = new CertificateDataValueConverter();
 
   @Test
-  void shallReturnNullIfTypeIsCategory() {
+  void shallReturnNullIfTypeIsNotDefined() {
     final var configuration = ElementSpecification.builder()
         .id(new ElementId(ELEMENT_ID))
         .configuration(

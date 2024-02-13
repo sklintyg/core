@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType.ISSUING_UNIT;
+
 import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -37,17 +40,22 @@ public class CertificateDataConverter {
     final var elementIdElementValueMap = elementData.stream()
         .collect(Collectors.toMap(ElementData::id, ElementData::value));
 
+    final var elementSpecifications = certificateModel.elementSpecifications().stream()
+        .filter(removeIssuingUnitSpecifications())
+        .toList();
+
     final var atomicInteger = new AtomicInteger(0);
 
     final var certificateDataElementStream = toCertificateDataElementMap(
-        certificateModel.elementSpecifications(),
+        elementSpecifications,
         elementIdElementValueMap,
         atomicInteger,
         childParentMap
     );
-    
+
     return collectStreamOfCertificateDataElementsToMap(certificateDataElementStream);
   }
+
 
   private Map<String, CertificateDataElement> convertData(
       Map<ElementId, ElementValue> elementIdElementValueMap,
@@ -118,5 +126,9 @@ public class CertificateDataConverter {
               return Stream.concat(childToParent, subChildren);
             }
         );
+  }
+
+  private static Predicate<ElementSpecification> removeIssuingUnitSpecifications() {
+    return specification -> !(specification.configuration().type().equals(ISSUING_UNIT));
   }
 }

@@ -22,6 +22,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIssuingUnit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -50,7 +52,12 @@ class CertificateDataConverterTest {
     final var elementId = new ElementId(ID_1);
 
     final var elementSpecifications = List.of(
-        ElementSpecification.builder().id(elementId).build()
+        ElementSpecification.builder()
+            .id(elementId)
+            .configuration(
+                ElementConfigurationDate.builder().build()
+            )
+            .build()
     );
 
     final var certificateModel = CertificateModel.builder()
@@ -68,7 +75,12 @@ class CertificateDataConverterTest {
     final var elementId = new ElementId(ID_1);
 
     final var elementSpecifications = List.of(
-        ElementSpecification.builder().id(elementId).build()
+        ElementSpecification.builder()
+            .id(elementId)
+            .configuration(
+                ElementConfigurationDate.builder().build()
+            )
+            .build()
     );
 
     final var certificateModel = CertificateModel.builder()
@@ -87,8 +99,18 @@ class CertificateDataConverterTest {
     final var elementId2 = new ElementId(ID_2);
 
     final var elementSpecifications = List.of(
-        ElementSpecification.builder().id(elementId1).build(),
-        ElementSpecification.builder().id(elementId2).build()
+        ElementSpecification.builder()
+            .id(elementId1)
+            .configuration(
+                ElementConfigurationDate.builder().build()
+            )
+            .build(),
+        ElementSpecification.builder()
+            .id(elementId2)
+            .configuration(
+                ElementConfigurationDate.builder().build()
+            )
+            .build()
     );
 
     final var certificateModel = CertificateModel.builder()
@@ -109,9 +131,15 @@ class CertificateDataConverterTest {
 
     final var elementSpecification1 = ElementSpecification.builder()
         .id(elementId1)
+        .configuration(
+            ElementConfigurationDate.builder().build()
+        )
         .build();
     final var elementSpecification2 = ElementSpecification.builder()
         .id(elementId2)
+        .configuration(
+            ElementConfigurationDate.builder().build()
+        )
         .build();
 
     final var certificateModel = CertificateModel.builder()
@@ -135,11 +163,17 @@ class CertificateDataConverterTest {
 
     final var elementSpecification1 = ElementSpecification.builder()
         .id(elementId1)
+        .configuration(
+            ElementConfigurationDate.builder().build()
+        )
         .children(List.of(children))
         .build();
 
     final var elementSpecification2 = ElementSpecification.builder()
         .id(elementId2)
+        .configuration(
+            ElementConfigurationDate.builder().build()
+        )
         .build();
 
     final var certificateModel = CertificateModel.builder()
@@ -158,6 +192,9 @@ class CertificateDataConverterTest {
     final var certificateModel = CertificateModel.builder()
         .elementSpecifications(List.of(
             ElementSpecification.builder()
+                .configuration(
+                    ElementConfigurationDate.builder().build()
+                )
                 .id(new ElementId(ID_1))
                 .build()
         ))
@@ -177,10 +214,16 @@ class CertificateDataConverterTest {
 
     final var childSpecification = ElementSpecification.builder()
         .id(new ElementId(childElementId))
+        .configuration(
+            ElementConfigurationDate.builder().build()
+        )
         .build();
 
     final var parentSpecification = ElementSpecification.builder()
         .id(new ElementId(parentElementId))
+        .configuration(
+            ElementConfigurationDate.builder().build()
+        )
         .children(List.of(childSpecification))
         .build();
 
@@ -202,16 +245,25 @@ class CertificateDataConverterTest {
 
     final var subChildSpecification = ElementSpecification.builder()
         .id(new ElementId(subQuestionId))
+        .configuration(
+            ElementConfigurationDate.builder().build()
+        )
         .children(List.of())
         .build();
 
     final var childSpecification = ElementSpecification.builder()
         .id(new ElementId(childElementId))
+        .configuration(
+            ElementConfigurationDate.builder().build()
+        )
         .children(List.of(subChildSpecification))
         .build();
 
     final var parentSpecification = ElementSpecification.builder()
         .id(new ElementId(parentElementId))
+        .configuration(
+            ElementConfigurationDate.builder().build()
+        )
         .children(List.of(childSpecification))
         .build();
 
@@ -232,7 +284,12 @@ class CertificateDataConverterTest {
     final var elementId = new ElementId(ID_1);
 
     final var elementSpecifications = List.of(
-        ElementSpecification.builder().id(elementId).build()
+        ElementSpecification.builder()
+            .configuration(
+                ElementConfigurationDate.builder().build()
+            )
+            .id(elementId)
+            .build()
     );
 
     final var certificateModel = CertificateModel.builder()
@@ -251,6 +308,9 @@ class CertificateDataConverterTest {
   void shallConvertCertificateDataElementValidation() {
     final var elementId = new ElementId(ID_1);
     final var elementSpecification = ElementSpecification.builder()
+        .configuration(
+            ElementConfigurationDate.builder().build()
+        )
         .rules(
             List.of(
                 ElementRule.builder().build()
@@ -287,6 +347,9 @@ class CertificateDataConverterTest {
 
     final var elementSpecification = ElementSpecification.builder()
         .id(elementId)
+        .configuration(
+            ElementConfigurationDate.builder().build()
+        )
         .build();
 
     final var elementSpecifications = List.of(
@@ -304,5 +367,27 @@ class CertificateDataConverterTest {
 
     assertNotNull(result.get(ID_1).getValue(),
         "CertificateDataElement should contain value");
+  }
+
+  @Test
+  void shallNotConvertSpecificationsOfIssuingUnitTypeConfiguration() {
+    final var elementSpecification = ElementSpecification.builder()
+        .configuration(
+            ElementConfigurationIssuingUnit.builder().build()
+        )
+        .build();
+
+    final var elementSpecifications = List.of(
+        elementSpecification
+    );
+
+    final var certificateModel = CertificateModel.builder()
+        .elementSpecifications(elementSpecifications)
+        .build();
+
+    final var result = certificateDataConverter.convert(certificateModel, Collections.emptyList());
+
+    assertTrue(result.isEmpty(),
+        "Should not convert ELementConfigurationMetaData");
   }
 }

@@ -18,6 +18,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIssuingUnit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -212,6 +213,33 @@ class CertificateModelFactoryFK7211Test {
 
         assertEquals(expectedValidations,
             certificateModel.elementSpecification(ELEMENT_ID).validations()
+        );
+      }
+    }
+
+    @Nested
+    class IssuingUnitContactInfo {
+
+      private static final ElementId ELEMENT_ID = new ElementId("ISSUING_UNIT");
+
+      @Test
+      void shallIncludeId() {
+        final var certificateModel = certificateModelFactoryFK7211.create();
+
+        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
+                certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeConfiguration() {
+        final var expectedConfiguration = ElementConfigurationIssuingUnit.builder().build();
+
+        final var certificateModel = certificateModelFactoryFK7211.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).configuration()
         );
       }
     }

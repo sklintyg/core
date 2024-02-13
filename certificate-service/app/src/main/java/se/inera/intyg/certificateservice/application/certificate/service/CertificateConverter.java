@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIssuingUnit;
 
 @Component
 @RequiredArgsConstructor
@@ -29,6 +30,7 @@ public class CertificateConverter {
   private static final CertificateRelationsDTO RELATIONS = CertificateRelationsDTO.builder()
       .build();
   private final CertificateDataConverter certificateDataConverter;
+  private final CertificateMetaDataUnitConverter certificateMetaDataUnitConverter;
 
   public CertificateDTO convert(Certificate certificate, List<ResourceLinkDTO> resourceLinks) {
     return CertificateDTO.builder()
@@ -46,31 +48,12 @@ public class CertificateConverter {
                     toPatientDTO(certificate)
                 )
                 .unit(
-                    UnitDTO.builder()
-                        .unitId(certificate.certificateMetaData().issuingUnit().hsaId().id())
-                        .unitName(
-                            certificate.certificateMetaData().issuingUnit().name().name()
-                        )
-                        .address(
-                            certificate.certificateMetaData().issuingUnit().address().address()
-                        )
-                        .city(
-                            certificate.certificateMetaData().issuingUnit().address().city()
-                        )
-                        .zipCode(
-                            certificate.certificateMetaData().issuingUnit().address().zipCode()
-                        )
-                        .phoneNumber(
-                            certificate.certificateMetaData().issuingUnit().contactInfo()
-                                .phoneNumber()
-                        )
-                        .email(
-                            certificate.certificateMetaData().issuingUnit().contactInfo().email()
-                        )
-                        .isInactive(
-                            certificate.certificateMetaData().issuingUnit().inactive().value()
-                        )
-                        .build()
+                    certificateMetaDataUnitConverter.convert(
+                        certificate.certificateMetaData().issuingUnit(),
+                        certificate.elementData().stream()
+                            .filter(data -> data.value() instanceof ElementValueIssuingUnit)
+                            .toList()
+                    )
                 )
                 .careUnit(
                     UnitDTO.builder()
