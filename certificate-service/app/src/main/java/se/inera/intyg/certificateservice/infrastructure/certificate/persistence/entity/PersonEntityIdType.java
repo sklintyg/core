@@ -1,11 +1,11 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity;
 
-public enum PersonIdType {
+public enum PersonEntityIdType {
   PERSONAL_IDENTITY_NUMBER(1), COORDINATION_NUMBER(2);
 
   private int key;
 
-  private PersonIdType(int key) {
+  private PersonEntityIdType(int key) {
     this.key = key;
   }
 

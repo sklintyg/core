@@ -1,9 +1,11 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
+import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
+import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientIdTypeEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PersonIdType;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PersonEntityIdType;
 
 public class PatientEntityMapper {
 
@@ -12,7 +14,7 @@ public class PatientEntityMapper {
   }
 
   public static PatientEntity toEntity(Patient patient) {
-    final var type = PersonIdType.valueOf(patient.id().type().name());
+    final var type = PersonEntityIdType.valueOf(patient.id().type().name());
 
     return PatientEntity.builder()
         .id(patient.id().id())
@@ -22,6 +24,17 @@ public class PatientEntityMapper {
                 .type(type.name())
                 .build()
         )
+        .build();
+  }
+
+  public static Patient toDomain(PatientEntity patientEntity) {
+    final var type = PersonIdType.valueOf(patientEntity.getType().getType());
+
+    return Patient.builder()
+        .id(PersonId.builder()
+            .id(patientEntity.getId())
+            .type(type)
+            .build())
         .build();
   }
 }

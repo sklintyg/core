@@ -18,6 +18,15 @@ class PatientEntityMapperTest {
           .build())
       .build();
 
+  private static final PatientEntity PATIENT_ENTITY = PatientEntity.builder()
+      .id("ID")
+      .type(PatientIdTypeEntity.builder()
+          .type(PersonIdType.PERSONAL_IDENTITY_NUMBER.name())
+          .key(1)
+          .build())
+      .build();
+
+
   @Nested
   class ToEntity {
 
@@ -31,6 +40,22 @@ class PatientEntityMapperTest {
     void shouldMapType() {
       final var response = PatientEntityMapper.toEntity(PATIENT);
       assertEquals(PATIENT.id().type().name(), response.getType().getType());
+    }
+  }
+
+  @Nested
+  class ToDomain {
+
+    @Test
+    void shouldMapId() {
+      final var response = PatientEntityMapper.toDomain(PATIENT_ENTITY);
+      assertEquals(PATIENT_ENTITY.getId(), response.id().id());
+    }
+
+    @Test
+    void shouldMapType() {
+      final var response = PatientEntityMapper.toDomain(PATIENT_ENTITY);
+      assertEquals(PATIENT_ENTITY.getType().getType(), response.id().type().name());
     }
   }
 
