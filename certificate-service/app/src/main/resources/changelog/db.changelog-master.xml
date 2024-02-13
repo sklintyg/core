@@ -76,6 +76,18 @@
       <column name="patient_id_type_key" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
+      <column name="protected_person" type="tinyint unsigned"/>
+      <column name="test_indicated" type="tinyint unsigned"/>
+      <column name="deceased" type="tinyint unsigned"/>
+      <column name="first_name" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="middle_name" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_name" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
 
     <addForeignKeyConstraint constraintName="fk_certificate_patient_key"

@@ -27,6 +27,18 @@ public class PatientEntity {
   private Integer key;
   @Column(name = "patient_id", unique = true, updatable = false)
   private String id;
+  @Column(name = "protected_person")
+  private boolean protectedPerson;
+  @Column(name = "deceased")
+  private boolean deceased;
+  @Column(name = "test_indicated")
+  private boolean testIndicated;
+  @Column(name = "first_name")
+  private String firstName;
+  @Column(name = "last_name")
+  private String lastName;
+  @Column(name = "middle_name")
+  private String middleName;
   @ManyToOne
   @JoinColumn(name = "patient_id_type_key")
   private PatientIdTypeEntity type;

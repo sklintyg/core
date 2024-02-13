@@ -1,8 +1,12 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
+import se.inera.intyg.certificateservice.domain.patient.model.Deceased;
+import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
+import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
+import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientIdTypeEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PersonEntityIdType;
@@ -24,6 +28,12 @@ public class PatientEntityMapper {
                 .type(type.name())
                 .build()
         )
+        .firstName(patient.name().firstName())
+        .lastName(patient.name().lastName())
+        .middleName(patient.name().middleName())
+        .testIndicated(patient.testIndicated().value())
+        .protectedPerson(patient.protectedPerson().value())
+        .deceased(patient.deceased().value())
         .build();
   }
 
@@ -35,6 +45,16 @@ public class PatientEntityMapper {
             .id(patientEntity.getId())
             .type(type)
             .build())
+        .protectedPerson(new ProtectedPerson(patientEntity.isProtectedPerson()))
+        .name(
+            Name.builder()
+                .lastName(patientEntity.getLastName())
+                .middleName(patientEntity.getMiddleName())
+                .firstName(patientEntity.getFirstName())
+                .build()
+        )
+        .deceased(new Deceased(patientEntity.isDeceased()))
+        .testIndicated(new TestIndicated(patientEntity.isTestIndicated()))
         .build();
   }
 }
