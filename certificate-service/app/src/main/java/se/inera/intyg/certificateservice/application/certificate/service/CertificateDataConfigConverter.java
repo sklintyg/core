@@ -28,6 +28,8 @@ public class CertificateDataConfigConverter {
           .maxDate(configuration.maxDate())
           .build();
     }
-    return null;
+    throw new IllegalStateException(
+        "Config '%s' is not supported".formatted(elementSpecification.configuration().type())
+    );
   }
 }

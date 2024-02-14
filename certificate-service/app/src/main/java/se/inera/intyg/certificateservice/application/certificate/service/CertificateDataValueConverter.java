@@ -22,6 +22,11 @@ public class CertificateDataValueConverter {
           .date(value)
           .build();
     }
-    return null;
+    if (ElementType.CATEGORY.equals(elementSpecification.configuration().type())) {
+      return null;
+    }
+    throw new IllegalStateException(
+        "Config '%s' is not supported ".formatted(elementSpecification.configuration().type())
+    );
   }
 }

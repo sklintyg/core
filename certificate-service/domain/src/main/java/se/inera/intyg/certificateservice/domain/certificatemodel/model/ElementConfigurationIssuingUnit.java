@@ -11,6 +11,8 @@ public class ElementConfigurationIssuingUnit implements ElementConfiguration {
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.ISSUING_UNIT;
 
+  public static final ElementId ISSUING_UNIT = new ElementId("ISSUING_UNIT");
+
   @Override
   public String name() {
     return null;

@@ -3,8 +3,7 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
@@ -59,7 +58,7 @@ class CertificateMetaDataUnitConverterTest {
   void shallConvertUnitId() {
     final var issuingUnit = careUnitBuilder.hsaId(new HsaId(EXPECTED_ID)).build();
     final var result = certificateMetaDataUnitConverter.convert(issuingUnit,
-        Collections.emptyList());
+        Optional.empty());
     assertEquals(EXPECTED_ID, result.getUnitId());
   }
 
@@ -67,7 +66,7 @@ class CertificateMetaDataUnitConverterTest {
   void shallConvertName() {
     final var issuingUnit = careUnitBuilder.name(new UnitName(EXPECTED_UNIT_NAME)).build();
     final var result = certificateMetaDataUnitConverter.convert(issuingUnit,
-        Collections.emptyList());
+        Optional.empty());
     assertEquals(EXPECTED_UNIT_NAME, result.getUnitName());
   }
 
@@ -83,14 +82,14 @@ class CertificateMetaDataUnitConverterTest {
         )
         .build();
     final var result = certificateMetaDataUnitConverter.convert(issuingUnit,
-        Collections.emptyList());
+        Optional.empty());
     assertEquals(EXPECTED_ADDRESS, result.getAddress());
   }
 
   @Test
   void shallConvertAddressCityFromElementData() {
     final var issuingUnit = careUnitBuilder.build();
-    final var elementData = List.of(
+    final var elementData = Optional.of(
         getElementData(ISSUING_UNIT, EXPECTED_ADDRESS, null, null, null)
     );
     final var result = certificateMetaDataUnitConverter.convert(issuingUnit, elementData);
@@ -109,14 +108,14 @@ class CertificateMetaDataUnitConverterTest {
         )
         .build();
     final var result = certificateMetaDataUnitConverter.convert(issuingUnit,
-        Collections.emptyList());
+        Optional.empty());
     assertEquals(EXPECTED_CITY, result.getCity());
   }
 
   @Test
   void shallConvertCityFromElementData() {
     final var issuingUnit = careUnitBuilder.build();
-    final var elementData = List.of(
+    final var elementData = Optional.of(
         getElementData(ISSUING_UNIT, null, EXPECTED_CITY, null, null)
     );
     final var result = certificateMetaDataUnitConverter.convert(issuingUnit, elementData);
@@ -135,14 +134,14 @@ class CertificateMetaDataUnitConverterTest {
         )
         .build();
     final var result = certificateMetaDataUnitConverter.convert(issuingUnit,
-        Collections.emptyList());
+        Optional.empty());
     assertEquals(EXPECTED_ZIP_CODE, result.getZipCode());
   }
 
   @Test
   void shallConvertZipcodeFromElementData() {
     final var issuingUnit = careUnitBuilder.build();
-    final var elementData = List.of(
+    final var elementData = Optional.of(
         getElementData(ISSUING_UNIT, null, null, EXPECTED_ZIP_CODE, null)
     );
     final var result = certificateMetaDataUnitConverter.convert(issuingUnit, elementData);
@@ -159,14 +158,14 @@ class CertificateMetaDataUnitConverterTest {
         )
         .build();
     final var result = certificateMetaDataUnitConverter.convert(issuingUnit,
-        Collections.emptyList());
+        Optional.empty());
     assertEquals(EXPECTED_PHONE_NUMBER, result.getPhoneNumber());
   }
 
   @Test
   void shallConvertPhoneNumberFromElementData() {
     final var issuingUnit = careUnitBuilder.build();
-    final var elementData = List.of(
+    final var elementData = Optional.of(
         getElementData(ISSUING_UNIT, null, null, null, EXPECTED_PHONE_NUMBER)
     );
     final var result = certificateMetaDataUnitConverter.convert(issuingUnit, elementData);
@@ -184,7 +183,7 @@ class CertificateMetaDataUnitConverterTest {
         )
         .build();
     final var result = certificateMetaDataUnitConverter.convert(issuingUnit,
-        Collections.emptyList());
+        Optional.empty());
     assertEquals(EXPECTED_EMAIL, result.getEmail());
   }
 
@@ -194,7 +193,7 @@ class CertificateMetaDataUnitConverterTest {
         .inactive(new Inactive(true))
         .build();
     final var result = certificateMetaDataUnitConverter.convert(issuingUnit,
-        Collections.emptyList());
+        Optional.empty());
     assertTrue(result.getIsInactive());
   }
 

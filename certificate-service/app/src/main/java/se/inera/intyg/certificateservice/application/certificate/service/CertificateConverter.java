@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIssuingUnit.ISSUING_UNIT;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,7 +15,6 @@ import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIssuingUnit;
 
 @Component
 @RequiredArgsConstructor
@@ -51,8 +52,8 @@ public class CertificateConverter {
                     certificateMetaDataUnitConverter.convert(
                         certificate.certificateMetaData().issuingUnit(),
                         certificate.elementData().stream()
-                            .filter(data -> data.value() instanceof ElementValueIssuingUnit)
-                            .toList()
+                            .filter(data -> data.id().equals(ISSUING_UNIT))
+                            .findFirst()
                     )
                 )
                 .careUnit(

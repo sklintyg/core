@@ -33,6 +33,7 @@ import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -346,7 +347,7 @@ class CertificateConverterTest {
         final var expectedUnit = alfaMedicincentrumDtoBuilder().build();
         doReturn(expectedUnit).when(certificateMetaDataUnitConverter).convert(
             certificate.certificateMetaData().issuingUnit(),
-            Collections.emptyList()
+            Optional.empty()
         );
         assertEquals(expectedUnit,
             certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getUnit()

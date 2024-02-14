@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import org.junit.jupiter.api.Nested;
@@ -24,7 +24,7 @@ class CertificateDataConfigConverterTest {
   private final CertificateDataConfigConverter converter = new CertificateDataConfigConverter();
 
   @Test
-  void shallReturnNullIfTypeNotSupportedConfig() {
+  void shallThrowIfConfigTypeNotSupported() {
     final var elementSpecification = ElementSpecification.builder()
         .configuration(
             ElementConfigurationIssuingUnit.builder()
@@ -32,9 +32,7 @@ class CertificateDataConfigConverterTest {
         )
         .build();
 
-    final var result = converter.convert(elementSpecification);
-
-    assertNull(result);
+    assertThrows(IllegalStateException.class, () -> converter.convert(elementSpecification));
   }
 
   @Nested

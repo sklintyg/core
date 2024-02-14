@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel;
 
-import static se.inera.intyg.certificateservice.application.common.CertificateConstants.ISSUING_UNIT;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIssuingUnit.ISSUING_UNIT;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -124,7 +124,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
 
   private static ElementSpecification issuingUnitContactInfo() {
     return ElementSpecification.builder()
-        .id(new ElementId(ISSUING_UNIT))
+        .id(ISSUING_UNIT)
         .configuration(
             ElementConfigurationIssuingUnit.builder()
                 .build()
