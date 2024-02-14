@@ -5,7 +5,6 @@ import static se.inera.intyg.certificateservice.testability.common.TestabilityCo
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.UUID;
-import lombok.SneakyThrows;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
@@ -119,7 +118,6 @@ public class JpaCertificateRepository implements CertificateRepository {
     return certificateEntityRepository.findByCertificateId(certificateId.id()) != null;
   }
 
-  @SneakyThrows
   private CertificateEntity buildCertificateEntity(Certificate certificate) {
     final var certificateFromDB = certificateEntityRepository.findByCertificateId(
         certificate.id().id()
