@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.application.certificate;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,12 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
 
@@ -29,6 +33,7 @@ public class CertificateController {
   private final CreateCertificateService createCertificateService;
   private final CertificateExistsService certificateExistsService;
   private final UpdateCertificateService updateCertificateService;
+  private final DeleteCertificateService deleteCertificateService;
 
   @PostMapping
   CreateCertificateResponse createCertificate(
@@ -54,5 +59,14 @@ public class CertificateController {
       @RequestBody UpdateCertificateRequest updateCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
     return updateCertificateService.update(updateCertificateRequest, certificateId);
+  }
+
+  @DeleteMapping("/{certificateId}/{version}")
+  ResponseEntity<Void> deleteCertificate(
+      @RequestBody DeleteCertificateRequest deleteCertificateRequest,
+      @PathVariable("certificateId") String certificateId,
+      @PathVariable("version") Long version) {
+    deleteCertificateService.delete(deleteCertificateRequest, certificateId, version);
+    return ResponseEntity.ok().build();
   }
 }

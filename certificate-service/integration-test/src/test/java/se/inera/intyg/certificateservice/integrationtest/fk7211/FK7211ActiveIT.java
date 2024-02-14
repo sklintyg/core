@@ -68,7 +68,7 @@ class FK7211ActiveIT {
   static void testProperties(DynamicPropertyRegistry registry) {
     registry.add("certificate.model.fk7211.v1_0.active.from", () -> "2024-01-01T00:00:00");
   }
-
+  
   private final TestRestTemplate restTemplate;
   private ApiUtil api;
   private TestabilityApiUtil testabilityApi;
