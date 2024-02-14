@@ -177,6 +177,13 @@ class JpaCertificateRepositoryTest {
           response.created().truncatedTo(ChronoUnit.SECONDS)
       );
     }
+
+    @Test
+    void shouldCreateCertificateWithRevision() {
+      final var response = jpaCertificateRepository.create(CONVERTED_MODEL);
+
+      assertEquals(0, response.revision().value());
+    }
   }
 
   @Nested

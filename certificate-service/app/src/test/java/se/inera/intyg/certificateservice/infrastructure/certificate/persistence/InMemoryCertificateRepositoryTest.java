@@ -75,6 +75,16 @@ class InMemoryCertificateRepositoryTest {
 
       assertEquals(expectedModel, actualModel);
     }
+
+    @Test
+    void shallReturnCertificateWithRevison() {
+      final var expectedModel = CertificateModel.builder()
+          .name(NAME)
+          .build();
+      final var actualModel = certificateRepository.create(expectedModel);
+
+      assertEquals(0, actualModel.revision().value());
+    }
   }
 
   @Nested

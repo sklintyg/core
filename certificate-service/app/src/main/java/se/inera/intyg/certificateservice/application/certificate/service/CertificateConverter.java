@@ -39,7 +39,7 @@ public class CertificateConverter {
             CertificateMetadataDTO.builder()
                 .id(certificate.id().id())
                 .type(certificate.certificateModel().id().type().type())
-                .version(certificate.revision())
+                .version(certificate.revision().value())
                 .typeName(certificate.certificateModel().id().type().type())
                 .typeVersion(certificate.certificateModel().id().version().version())
                 .name(certificate.certificateModel().name())

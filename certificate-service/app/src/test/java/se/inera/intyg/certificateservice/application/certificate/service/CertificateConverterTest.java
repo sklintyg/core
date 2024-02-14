@@ -49,6 +49,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -78,7 +79,7 @@ class CertificateConverterTest {
   private static final String Q_2 = "q2";
   private static final String NAME = "Beräknat nedkomstdatum";
   private static final String KEY = "key";
-  private static final long CERTIFICATE_VERSION = 3L;
+  private static final Revision REVISION = new Revision(3L);
   private List<ResourceLinkDTO> resourceLinkDTOs = Collections.emptyList();
   @Mock
   private CertificateMetaDataUnitConverter certificateMetaDataUnitConverter;
@@ -94,7 +95,7 @@ class CertificateConverterTest {
     certificate = Certificate.builder()
         .id(new CertificateId(CERTIFICATE_ID))
         .created(CREATED)
-        .revision(CERTIFICATE_VERSION)
+        .revision(REVISION)
         .certificateModel(
             CertificateModel.builder()
                 .id(
@@ -237,7 +238,7 @@ class CertificateConverterTest {
 
     @Test
     void shallIncludeVersion() {
-      assertEquals(CERTIFICATE_VERSION,
+      assertEquals(REVISION.value(),
           certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getVersion()
       );
     }

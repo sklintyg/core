@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
@@ -18,7 +19,7 @@ public class CertificateEntityMapper {
     return CertificateEntity.builder()
         .certificateId(certificate.id().id())
         .created(certificate.created())
-        .version(certificate.revision() + 1)
+        .version(certificate.revision().value() + 1)
         .modified(LocalDateTime.now())
         .build();
   }
@@ -33,7 +34,7 @@ public class CertificateEntityMapper {
     return Certificate.builder()
         .id(new CertificateId(certificateEntity.getCertificateId()))
         .created(certificateEntity.getCreated())
-        .revision(certificateEntity.getVersion())
+        .revision(new Revision(certificateEntity.getVersion()))
         .certificateModel(model)
         .certificateMetaData(
             CertificateMetaData.builder()

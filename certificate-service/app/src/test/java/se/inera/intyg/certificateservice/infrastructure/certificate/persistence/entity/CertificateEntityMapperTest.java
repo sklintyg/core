@@ -14,6 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Staff;
 import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.UnitName;
@@ -36,6 +37,7 @@ class CertificateEntityMapperTest {
   private final static Certificate CERTIFICATE = Certificate.builder()
       .id(new CertificateId("ID"))
       .created(LocalDateTime.now().minusDays(2))
+      .revision(new Revision(3L))
       .build();
 
   private final static CertificateModel MODEL = CertificateModel.builder()
@@ -180,7 +182,7 @@ class CertificateEntityMapperTest {
     void shouldMapVersion() {
       final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
-      assertEquals(CERTIFICATE_ENTITY.getVersion(), response.revision());
+      assertEquals(CERTIFICATE_ENTITY.getVersion(), response.revision().value());
     }
 
     @Test
