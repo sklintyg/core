@@ -9,6 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -22,6 +23,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateModelEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
@@ -126,6 +128,12 @@ class JpaCertificateRepositoryTest {
       .hsaId("HSA_ID")
       .build();
 
+  private static final LocalDate NOW = LocalDate.now();
+  private static final String JSON =
+      "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"date\":[" + NOW.getYear() + ",";
+
+  private static final CertificateDataEntity DATA = new CertificateDataEntity(JSON);
+
   private static final CertificateEntity CERTIFICATE_ENTITY = CertificateEntity.builder()
       .version(1L)
       .modified(LocalDateTime.now())
@@ -137,20 +145,7 @@ class JpaCertificateRepositoryTest {
       .issuedBy(ISSUED_BY)
       .patient(PATIENT)
       .certificateModel(MODEL)
-      .build();
-
-  private static final CertificateEntity SAVED_ENTITY = CertificateEntity.builder()
-      .key(2L)
-      .version(1L)
-      .modified(LocalDateTime.now())
-      .certificateId("ID")
-      .created(LocalDateTime.now())
-      .careProvider(CARE_PROVIDER)
-      .careUnit(CARE_UNIT)
-      .issuedOnUnit(ISSUED_ON_UNIT)
-      .issuedBy(ISSUED_BY)
-      .patient(PATIENT)
-      .certificateModel(MODEL)
+      .data(DATA)
       .build();
 
   @Nested
