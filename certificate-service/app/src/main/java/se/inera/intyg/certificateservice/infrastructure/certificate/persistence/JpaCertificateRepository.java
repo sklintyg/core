@@ -4,16 +4,15 @@ import static se.inera.intyg.certificateservice.testability.common.TestabilityCo
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Staff;
 import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
@@ -35,12 +34,11 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.utils.CertificateToObjectUtility;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.utils.RepositoryUtility;
-import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateRepository;
 
-@Profile(TESTABILITY_PROFILE)
+@Profile("!" + TESTABILITY_PROFILE)
+@Primary
 @Repository
-@RequiredArgsConstructor
-public class JpaCertificateRepository implements TestabilityCertificateRepository {
+public class JpaCertificateRepository implements CertificateRepository {
 
   private final CertificateEntityRepository certificateEntityRepository;
   private final CertificateModelEntityRepository certificateModelEntityRepository;
@@ -48,6 +46,19 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   private final UnitEntityRepository unitEntityRepository;
   private final PatientEntityRepository patientEntityRepository;
   private final CertificateModelRepository certificateModelRepository;
+
+  public JpaCertificateRepository(CertificateEntityRepository certificateEntityRepository,
+      CertificateModelEntityRepository certificateModelEntityRepository,
+      StaffEntityRepository staffEntityRepository, UnitEntityRepository unitEntityRepository,
+      PatientEntityRepository patientEntityRepository,
+      CertificateModelRepository certificateModelRepository) {
+    this.certificateEntityRepository = certificateEntityRepository;
+    this.certificateModelEntityRepository = certificateModelEntityRepository;
+    this.staffEntityRepository = staffEntityRepository;
+    this.unitEntityRepository = unitEntityRepository;
+    this.patientEntityRepository = patientEntityRepository;
+    this.certificateModelRepository = certificateModelRepository;
+  }
 
   @Override
   public Certificate create(CertificateModel certificateModel) {
@@ -107,21 +118,6 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     return certificateEntityRepository.findByCertificateId(certificateId.id()) != null;
   }
 
-  @Override
-  public Certificate insert(Certificate certificate) {
-    return save(certificate);
-  }
-
-  @Override
-  public void remove(List<CertificateId> certificateIds) {
-    certificateEntityRepository.deleteAllByCertificateIdIn(
-        certificateIds.stream()
-            .map(CertificateId::id)
-            .toList()
-    );
-  }
-
-  @SneakyThrows
   private CertificateEntity buildCertificateEntity(Certificate certificate) {
     final var certificateFromDB = certificateEntityRepository.findByCertificateId(
         certificate.id().id()
