@@ -83,7 +83,7 @@ class CertificateTest {
     certificateModel = mock(CertificateModel.class);
     certificate = Certificate.builder()
         .id(CERTIFICATE_ID)
-        .version(version)
+        .revision(version)
         .certificateModel(certificateModel)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
         .certificateMetaData(
@@ -808,7 +808,7 @@ class CertificateTest {
 
       certificate.updateData(newValue);
 
-      assertEquals(version + 1, certificate.version());
+      assertEquals(version + 1, certificate.revision());
     }
 
     @Test

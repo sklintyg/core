@@ -94,7 +94,7 @@ class CertificateConverterTest {
     certificate = Certificate.builder()
         .id(new CertificateId(CERTIFICATE_ID))
         .created(CREATED)
-        .version(CERTIFICATE_VERSION)
+        .revision(CERTIFICATE_VERSION)
         .certificateModel(
             CertificateModel.builder()
                 .id(

@@ -18,7 +18,7 @@ public class CertificateEntityMapper {
     return CertificateEntity.builder()
         .certificateId(certificate.id().id())
         .created(certificate.created())
-        .version(certificate.version() + 1)
+        .version(certificate.revision() + 1)
         .modified(LocalDateTime.now())
         .build();
   }
@@ -33,7 +33,7 @@ public class CertificateEntityMapper {
     return Certificate.builder()
         .id(new CertificateId(certificateEntity.getCertificateId()))
         .created(certificateEntity.getCreated())
-        .version(certificateEntity.getVersion())
+        .revision(certificateEntity.getVersion())
         .certificateModel(model)
         .certificateMetaData(
             CertificateMetaData.builder()

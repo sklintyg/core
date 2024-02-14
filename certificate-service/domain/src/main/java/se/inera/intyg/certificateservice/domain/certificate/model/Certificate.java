@@ -23,7 +23,8 @@ public class Certificate {
   private CertificateMetaData certificateMetaData;
   @Builder.Default
   private List<ElementData> elementData = Collections.emptyList();
-  private long version;
+  private Revision revision;
+  private Status status;
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
@@ -68,7 +69,19 @@ public class Certificate {
               .formatted(missingIds, certificateModel.id())
       );
     }
-    this.version++;
+    revision = revision.increment();
     this.elementData = newData.stream().toList();
+  }
+
+  public void delete(Revision revision) {
+    if (!this.revision.equals(revision)) {
+      // kastar exception
+    }
+
+    if (this.status != Status.DRAFT) {
+      // kastar exception
+    }
+
+    this.status = Status.DELETED_DRAFT;
   }
 }
