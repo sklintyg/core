@@ -18,9 +18,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Staff;
 import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.UnitName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.patient.model.Deceased;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
@@ -30,6 +27,7 @@ import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.utils.RepositoryTestFactory;
 
 class CertificateEntityMapperTest {
 
@@ -38,89 +36,11 @@ class CertificateEntityMapperTest {
       .created(LocalDateTime.now().minusDays(2))
       .build();
 
-  private final static CertificateModel MODEL = CertificateModel.builder()
-      .name("NAME")
-      .id(CertificateModelId.builder()
-          .version(new CertificateVersion("VERSION"))
-          .type(new CertificateType("TYPE"))
-          .build()
-      )
-      .build();
-
+  private final static CertificateModel MODEL = RepositoryTestFactory.certificateModel();
   private static final LocalDate NOW = LocalDate.now();
-
-  private final static String JSON =
-      "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"date\":[" + NOW.getYear() + ","
-          + NOW.getMonthValue() + "," + NOW.getDayOfMonth() + "]}}]";
-
-  // TODO: Create test factory for these to not copy paste
-
-  public static final CertificateEntity CERTIFICATE_ENTITY = CertificateEntity.builder()
-      .version(1L)
-      .modified(LocalDateTime.now())
-      .certificateId("ID")
-      .created(LocalDateTime.now())
-      .careProvider(
-          UnitEntity.builder()
-              .type(
-                  UnitTypeEntity.builder()
-                      .type(UnitType.CARE_PROVIDER.name())
-                      .key(UnitType.CARE_PROVIDER.getKey())
-                      .build()
-              )
-              .hsaId("HSA_ID_PROVIDER")
-              .name("NAME_PROVIDER")
-              .build()
-      )
-      .careUnit(
-          UnitEntity.builder()
-              .type(
-                  UnitTypeEntity.builder()
-                      .type(UnitType.CARE_UNIT.name())
-                      .key(UnitType.CARE_UNIT.getKey())
-                      .build()
-              )
-              .hsaId("HSA_ID_UNIT")
-              .name("NAME_UNIT")
-              .build()
-      )
-      .issuedOnUnit(
-          UnitEntity.builder()
-              .type(
-                  UnitTypeEntity.builder()
-                      .type(UnitType.SUB_UNIT.name())
-                      .key(UnitType.SUB_UNIT.getKey())
-                      .build()
-              )
-              .hsaId("HSA_ID_ISSUED")
-              .name("NAME_ISSUED")
-              .build()
-      )
-      .issuedBy(
-          StaffEntity.builder()
-              .name("NAME")
-              .hsaId("HSA_ID")
-              .build()
-      )
-      .patient(
-          PatientEntity.builder()
-              .id("ID")
-              .protectedPerson(false)
-              .testIndicated(false)
-              .deceased(false)
-              .type(PatientIdTypeEntity.builder()
-                  .type(PersonIdType.PERSONAL_IDENTITY_NUMBER.name())
-                  .key(1)
-                  .build())
-              .firstName("FIRST")
-              .middleName("MIDDLE")
-              .lastName("LAST")
-              .build()
-      )
-      .data(
-          new CertificateDataEntity(JSON)
-      )
-      .build();
+  private final static String JSON = RepositoryTestFactory.jsonString(NOW);
+  public static final CertificateEntity CERTIFICATE_ENTITY =
+      RepositoryTestFactory.certificateEntity(JSON);
 
   @Nested
   class ToEntity {
@@ -193,8 +113,8 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapCareProvider() {
       final var expected = CareProvider.builder()
-          .hsaId(new HsaId("HSA_ID_PROVIDER"))
-          .name(new UnitName("NAME_PROVIDER"))
+          .hsaId(new HsaId(CERTIFICATE_ENTITY.getCareProvider().getHsaId()))
+          .name(new UnitName(CERTIFICATE_ENTITY.getCareProvider().getName()))
           .build();
 
       final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
@@ -205,8 +125,8 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapCareUnit() {
       final var expected = CareUnit.builder()
-          .hsaId(new HsaId("HSA_ID_UNIT"))
-          .name(new UnitName("NAME_UNIT"))
+          .hsaId(new HsaId(CERTIFICATE_ENTITY.getCareUnit().getHsaId()))
+          .name(new UnitName(CERTIFICATE_ENTITY.getCareUnit().getName()))
           .build();
 
       final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
@@ -217,8 +137,8 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapIssuedOnUnitAsSubUnit() {
       final var expected = SubUnit.builder()
-          .hsaId(new HsaId("HSA_ID_ISSUED"))
-          .name(new UnitName("NAME_ISSUED"))
+          .hsaId(new HsaId(CERTIFICATE_ENTITY.getIssuedOnUnit().getHsaId()))
+          .name(new UnitName(CERTIFICATE_ENTITY.getIssuedOnUnit().getName()))
           .build();
 
       final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
@@ -254,9 +174,9 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapIssuer() {
       final var expected = Staff.builder()
-          .hsaId(new HsaId("HSA_ID"))
+          .hsaId(new HsaId(CERTIFICATE_ENTITY.getIssuedBy().getHsaId()))
           .name(Name.builder()
-              .lastName("NAME")
+              .lastName(CERTIFICATE_ENTITY.getIssuedBy().getName())
               .build())
           .build();
 
@@ -274,9 +194,9 @@ class CertificateEntityMapperTest {
               .build())
           .name(
               Name.builder()
-                  .firstName("FIRST")
-                  .lastName("LAST")
-                  .middleName("MIDDLE")
+                  .firstName(CERTIFICATE_ENTITY.getPatient().getFirstName())
+                  .lastName(CERTIFICATE_ENTITY.getPatient().getLastName())
+                  .middleName(CERTIFICATE_ENTITY.getPatient().getMiddleName())
                   .build()
           )
           .protectedPerson(new ProtectedPerson(false))

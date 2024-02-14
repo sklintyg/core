@@ -12,6 +12,7 @@ import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PatientEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.utils.RepositoryTestFactory;
 
 class PatientEntityMapperTest {
 
@@ -19,10 +20,12 @@ class PatientEntityMapperTest {
   private static final Patient PATIENT_DECEASED = getPatient(false, true, false);
   private static final Patient PATIENT_TEST = getPatient(true, false, false);
 
-  private static final PatientEntity PATIENT_ENTITY_DECEASED = getPatientEntity(false, true, false);
-  private static final PatientEntity PATIENT_ENTITY_PROTECTED = getPatientEntity(false, false,
-      true);
-  private static final PatientEntity PATIENT_ENTITY_TEST = getPatientEntity(true, false, false);
+  private static final PatientEntity PATIENT_ENTITY_DECEASED = RepositoryTestFactory
+      .patientEntity(false, true, false);
+  private static final PatientEntity PATIENT_ENTITY_PROTECTED = RepositoryTestFactory
+      .patientEntity(false, false, true);
+  private static final PatientEntity PATIENT_ENTITY_TEST = RepositoryTestFactory
+      .patientEntity(true, false, false);
 
   @Nested
   class ToEntity {
@@ -146,23 +149,6 @@ class PatientEntityMapperTest {
         .protectedPerson(new ProtectedPerson(protectedPerson))
         .deceased(new Deceased(deceased))
         .testIndicated(new TestIndicated(testIndicated))
-        .build();
-  }
-
-  private static PatientEntity getPatientEntity(boolean testIndicated, boolean isDeceased,
-      boolean isProtectedPerson) {
-    return PatientEntity.builder()
-        .id("ID")
-        .protectedPerson(isProtectedPerson)
-        .testIndicated(testIndicated)
-        .deceased(isDeceased)
-        .type(PatientIdTypeEntity.builder()
-            .type(PersonIdType.PERSONAL_IDENTITY_NUMBER.name())
-            .key(1)
-            .build())
-        .firstName("FIRST")
-        .middleName("MIDDLE")
-        .lastName("LAST")
         .build();
   }
 
