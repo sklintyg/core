@@ -2,13 +2,17 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Staff;
 import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
@@ -17,6 +21,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.patient.model.Deceased;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
@@ -41,6 +46,12 @@ class CertificateEntityMapperTest {
           .build()
       )
       .build();
+
+  private static final LocalDate NOW = LocalDate.now();
+
+  private final static String JSON =
+      "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"date\":[" + NOW.getYear() + ","
+          + NOW.getMonthValue() + "," + NOW.getDayOfMonth() + "]}}]";
 
   // TODO: Create test factory for these to not copy paste
 
@@ -105,6 +116,9 @@ class CertificateEntityMapperTest {
               .middleName("MIDDLE")
               .lastName("LAST")
               .build()
+      )
+      .data(
+          new CertificateDataEntity(JSON)
       )
       .build();
 
@@ -273,6 +287,23 @@ class CertificateEntityMapperTest {
       final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(expected, response.certificateMetaData().patient());
+    }
+
+    @Test
+    void shouldMapData() {
+      final var expected = List.of(
+          ElementData.builder()
+              .id(new ElementId("F10"))
+              .value(ElementValueDate
+                  .builder()
+                  .date(NOW)
+                  .build())
+              .build()
+      );
+
+      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+
+      assertEquals(expected, response.elementData());
     }
   }
 
