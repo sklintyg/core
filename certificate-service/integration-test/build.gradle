@@ -10,16 +10,36 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-test'
+    testImplementation 'org.testcontainers:mysql:1.19.4'
     testImplementation testFixtures(project(":app"))
     testImplementation testFixtures(project(":domain"))
 }
 
-tasks.register('integrationTest', Test) {
-    description = 'Runs integration tests.'
-    group = 'verification'
+testing {
+    suites {
+        integrationTest(JvmTestSuite) {
+            testType = TestSuiteType.INTEGRATION_TEST
+            description = 'Runs integration tests.'
+            group = 'verification'
 
-    useJUnitPlatform {
+            sources {
+                java {
+                    srcDirs = ['src/test/java']
+                }
+                resources {
+                    srcDirs = ['src/test/resources']
+                }
+            }
+            configurations {
+                integrationTestAnnotationProcessor.extendsFrom testAnnotationProcessor
+                integrationTestImplementation.extendsFrom testImplementation
+                integrationTestCompileOnly.extendsFrom testCompileOnly
+            }
+            targets.all {
+                testTask.configure {
+                    shouldRunAfter(test)
+                }
+            }
+        }
     }
-
-    doNotTrackState("IntegrationTests should always be run on will")
 }

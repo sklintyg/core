@@ -1,0 +1,222 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+  <changeSet id="1" author="mh">
+    <createTable tableName="certificate">
+      <column name="key" type="bigint unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="certificate_id" type="varchar(64)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="created" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by_staff_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="modified" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="issued_by_staff_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="issued_on_unit_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="care_unit_unit_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="care_provider_unit_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="patient_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="integer">
+        <constraints nullable="false"/>
+      </column>
+      <column name="certificate_model_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="certificate_data_key" type="bigint unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="certificate_model">
+      <column name="key" type="integer unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="type" type="varchar(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="varchar(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_certificate_certificate_model_key"
+      baseTableName="certificate" baseColumnNames="certificate_model_key"
+      referencedTableName="certificate_model" referencedColumnNames="key"/>
+
+    <createTable tableName="patient">
+      <column name="key" type="integer unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="patient_id" type="varchar(24)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="patient_id_type_key" type="tinyint unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="protected_person" type="tinyint unsigned"/>
+      <column name="test_indicated" type="tinyint unsigned"/>
+      <column name="deceased" type="tinyint unsigned"/>
+      <column name="first_name" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="middle_name" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_name" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_certificate_patient_key"
+      baseTableName="certificate" baseColumnNames="patient_key"
+      referencedTableName="patient" referencedColumnNames="key"/>
+
+    <createTable tableName="unit">
+      <column name="key" type="integer unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="hsa_id" type="varchar(64)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="name" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="unit_type_key" type="tinyint unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_certificate_issued_on_unit_key"
+      baseTableName="certificate" baseColumnNames="issued_on_unit_key"
+      referencedTableName="unit" referencedColumnNames="key"/>
+    <addForeignKeyConstraint constraintName="fk_certificate_care_unit_unit_key"
+      baseTableName="certificate" baseColumnNames="care_unit_unit_key"
+      referencedTableName="unit" referencedColumnNames="key"/>
+    <addForeignKeyConstraint constraintName="fk_certificate_care_provider_unit_key"
+      baseTableName="certificate" baseColumnNames="care_provider_unit_key"
+      referencedTableName="unit" referencedColumnNames="key"/>
+
+    <createTable tableName="staff">
+      <column name="key" type="integer unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="hsa_id" type="varchar(64)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="name" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_certificate_created_by_staff_key"
+      baseTableName="certificate" baseColumnNames="created_by_staff_key"
+      referencedTableName="staff" referencedColumnNames="key"/>
+    <addForeignKeyConstraint constraintName="fk_certificate_issued_by_staff_key"
+      baseTableName="certificate" baseColumnNames="issued_by_staff_key"
+      referencedTableName="staff" referencedColumnNames="key"/>
+
+    <createTable tableName="unit_type">
+      <column name="key" type="tinyint unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="type" type="varchar(32)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_unit_unit_type_key"
+      baseTableName="unit" baseColumnNames="unit_type_key"
+      referencedTableName="unit_type" referencedColumnNames="key"/>
+
+    <insert tableName="unit_type">
+      <column name="type" value="SUB_UNIT"/>
+    </insert>
+    <insert tableName="unit_type">
+      <column name="type" value="CARE_UNIT"/>
+    </insert>
+    <insert tableName="unit_type">
+      <column name="type" value="CARE_PROVIDER"/>
+    </insert>
+
+    <createTable tableName="unit_relation">
+      <column name="key" type="integer unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="child_unit_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="parent_unit_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_unit_relation_child_unit_key"
+      baseTableName="unit_relation" baseColumnNames="child_unit_key"
+      referencedTableName="unit" referencedColumnNames="key"/>
+    <addForeignKeyConstraint constraintName="fk_unit_relation_parent_unit_key"
+      baseTableName="unit_relation" baseColumnNames="parent_unit_key"
+      referencedTableName="unit" referencedColumnNames="key"/>
+
+    <createTable tableName="certificate_data">
+      <column name="key" type="bigint unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="data" type="mediumblob">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_certificate_data_certificate_key"
+      baseTableName="certificate" baseColumnNames="certificate_data_key"
+      referencedTableName="certificate_data" referencedColumnNames="key"/>
+
+    <createTable tableName="patient_id_type">
+      <column name="key" type="tinyint unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="type" type="varchar(64)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_patient_patient_id_type_key"
+      baseTableName="patient" baseColumnNames="patient_id_type_key"
+      referencedTableName="patient_id_type" referencedColumnNames="key"/>
+
+    <addUniqueConstraint
+      columnNames="type, version"
+      constraintName="unique_certificate_model"
+      tableName="certificate_model"
+    />
+
+    <insert tableName="patient_id_type">
+      <column name="type" value="PERSONAL_IDENTITY_NUMBER"/>
+    </insert>
+    <insert tableName="patient_id_type">
+      <column name="type" value="COORDINATION_NUMBER"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>

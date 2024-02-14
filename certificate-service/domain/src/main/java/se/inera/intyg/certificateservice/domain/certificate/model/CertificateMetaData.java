@@ -14,5 +14,5 @@ public class CertificateMetaData {
   IssuingUnit issuingUnit;
   CareUnit careUnit;
   CareProvider careProvider;
-
+  
 }
