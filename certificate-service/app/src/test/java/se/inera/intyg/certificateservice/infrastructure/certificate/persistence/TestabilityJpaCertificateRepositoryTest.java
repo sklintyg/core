@@ -1,18 +1,15 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import org.junit.jupiter.api.Nested;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -38,23 +35,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntityRepository;
 
 @ExtendWith(MockitoExtension.class)
-class JpaCertificateRepositoryTest {
-
-  @Mock
-  CertificateEntityRepository certificateEntityRepository;
-  @Mock
-  CertificateModelEntityRepository certificateModelEntityRepository;
-  @Mock
-  StaffEntityRepository staffEntityRepository;
-  @Mock
-  UnitEntityRepository unitEntityRepository;
-  @Mock
-  PatientEntityRepository patientEntityRepository;
-  @Mock
-  CertificateModelRepository certificateModelRepository;
-
-  @InjectMocks
-  JpaCertificateRepository jpaCertificateRepository;
+class TestabilityJpaCertificateRepositoryTest {
 
   private static final CertificateModelEntity MODEL = CertificateModelEntity.builder()
       .name("NAME")
@@ -68,8 +49,6 @@ class JpaCertificateRepositoryTest {
       .version("VERSION_1")
       .build();
 
-  private static final CertificateModel CONVERTED_MODEL = CertificateModelEntityMapper.toDomain(
-      MODEL);
   private static final CertificateModel SAVED_MODEL = CertificateModelEntityMapper.toDomain(
       MODEL_FROM_DB);
 
@@ -135,7 +114,7 @@ class JpaCertificateRepositoryTest {
   private static final CertificateEntity CERTIFICATE_ENTITY = CertificateEntity.builder()
       .version(1L)
       .modified(LocalDateTime.now())
-      .certificateId("ID")
+      .certificateId("ID1")
       .created(LocalDateTime.now())
       .careProvider(CARE_PROVIDER)
       .careUnit(CARE_UNIT)
@@ -146,110 +125,42 @@ class JpaCertificateRepositoryTest {
       .data(DATA)
       .build();
 
-  @Nested
-  class Create {
+  @Mock
+  CertificateEntityRepository certificateEntityRepository;
+  @Mock
+  CertificateModelEntityRepository certificateModelEntityRepository;
+  @Mock
+  StaffEntityRepository staffEntityRepository;
+  @Mock
+  UnitEntityRepository unitEntityRepository;
+  @Mock
+  PatientEntityRepository patientEntityRepository;
+  @Mock
+  CertificateModelRepository certificateModelRepository;
 
-    @Test
-    void shouldThrowExceptionIfCertificateModelIsNull() {
-      assertThrows(IllegalArgumentException.class, () -> jpaCertificateRepository.create(null));
-    }
+  @InjectMocks
+  TestabilityJpaCertificateRepository testabilityJpaCertificateRepository;
 
-    @Test
-    void shouldCreateCertificateWithModel() {
-      final var response = jpaCertificateRepository.create(CONVERTED_MODEL);
+  @Test
+  void shouldInsertCertificates() {
+    final var captor = ArgumentCaptor.forClass(CertificateEntity.class);
+    final var certificate = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, SAVED_MODEL);
 
-      assertEquals(CONVERTED_MODEL, response.certificateModel());
-    }
+    final var response = testabilityJpaCertificateRepository.insert(certificate);
 
-    @Test
-    void shouldCreateCertificateWithId() {
-      final var response = jpaCertificateRepository.create(CONVERTED_MODEL);
-
-      assertNotNull(response.id().id());
-    }
-
-    @Test
-    void shouldCreateCertificateWithCreated() {
-      final var response = jpaCertificateRepository.create(CONVERTED_MODEL);
-
-      assertEquals(
-          LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
-          response.created().truncatedTo(ChronoUnit.SECONDS)
-      );
-    }
+    verify(certificateEntityRepository, times(1)).save(captor.capture());
+    assertEquals(certificate.id().id(), captor.getValue().getCertificateId());
+    assertEquals(certificate.id().id(), response.id().id());
   }
 
-  @Nested
-  class Save {
+  @Test
+  void shouldRemoveCertificates() {
+    final var ids = List.of("ID1", "ID2");
 
-    @Test
-    void shouldThrowExceptionIfCertificateIsNull() {
-      assertThrows(IllegalArgumentException.class, () -> jpaCertificateRepository.save(null));
-    }
+    testabilityJpaCertificateRepository.remove(
+        List.of(new CertificateId("ID1"), new CertificateId("ID2")));
 
-    @Test
-    void shouldReturnCertificate() {
-      final var certificate = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, SAVED_MODEL);
-
-      final var response = jpaCertificateRepository.save(certificate);
-
-      assertEquals(certificate, response);
-    }
-
-  }
-
-  @Nested
-  class GetById {
-
-    @Test
-    void shouldThrowExceptionIfIdIsNull() {
-      assertThrows(IllegalArgumentException.class, () -> jpaCertificateRepository.getById(null));
-    }
-
-    @Test
-    void shouldThrowExceptionIfCertificateIsNull() {
-      final var id = new CertificateId("ID");
-      assertThrows(IllegalArgumentException.class,
-          () -> jpaCertificateRepository.getById(id)
-      );
-    }
-
-    @Test
-    void shouldReturnCertificateFromRepository() {
-      when(certificateEntityRepository.findByCertificateId("ID"))
-          .thenReturn(CERTIFICATE_ENTITY);
-      when(certificateModelRepository.getById(CONVERTED_MODEL.id()))
-          .thenReturn(SAVED_MODEL);
-
-      final var convertedCertificate = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          SAVED_MODEL);
-      final var response = jpaCertificateRepository.getById(new CertificateId("ID"));
-
-      assertEquals(convertedCertificate, response);
-    }
-  }
-
-  @Nested
-  class Exists {
-
-    @Test
-    void shouldThrowExceptionIfNoCertificateId() {
-      assertThrows(IllegalArgumentException.class, () -> jpaCertificateRepository.exists(null));
-    }
-
-    @Test
-    void shouldReturnFalseIfCertificateDoesNotExist() {
-      assertFalse(jpaCertificateRepository.exists(new CertificateId("ID")));
-    }
-
-    @Test
-    void shouldReturnTrueIfCertificateExists() {
-      when(certificateEntityRepository.findByCertificateId("ID"))
-          .thenReturn(CertificateEntity.builder().build());
-
-      assertTrue(jpaCertificateRepository.exists(new CertificateId("ID")));
-    }
-
+    verify(certificateEntityRepository, times(1)).deleteAllByCertificateIdIn(ids);
   }
 
 }
