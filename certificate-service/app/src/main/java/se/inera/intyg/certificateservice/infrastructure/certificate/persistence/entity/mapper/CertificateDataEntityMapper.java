@@ -19,8 +19,7 @@ public class CertificateDataEntityMapper {
 
   // TODO: Fix error handling
 
-  public static CertificateDataEntity toEntity(List<ElementData> elements)
-      throws JsonProcessingException {
+  public static CertificateDataEntity toEntity(List<ElementData> elements) {
     final var mappedElements = elements.stream()
         .map(ElementDataMapper::toMapped)
         .toList();
@@ -31,7 +30,7 @@ public class CertificateDataEntityMapper {
     try {
       mapper.writeValue(out, mappedElements);
     } catch (IOException e) {
-      throw new IllegalStateException(e);
+      throw new IllegalStateException("Error when processing element data to JSON", e);
     }
 
     final var data = out.toByteArray();
@@ -41,17 +40,18 @@ public class CertificateDataEntityMapper {
         .build();
   }
 
-  public static List<ElementData> toDomain(String jsonString) {
-    final List<MappedElementData> elements;
+  public static List<ElementData> toDomain(CertificateDataEntity entity) {
     try {
-      elements = new ObjectMapper().readValue(jsonString,
+      final var elements = new ObjectMapper().readValue(entity.getData(),
           new TypeReference<List<MappedElementData>>() {
           });
+
+      return elements.stream()
+          .map(ElementDataMapper::toDomain)
+          .toList();
+
     } catch (JsonProcessingException e) {
-      throw new IllegalStateException(e);
+      throw new IllegalStateException("Error when processing json to ElementData", e);
     }
-    return elements.stream()
-        .map(ElementDataMapper::toDomain)
-        .toList();
   }
 }

@@ -59,7 +59,7 @@ public class CertificateEntityMapper {
                 .build()
         )
         .elementData(
-            CertificateDataEntityMapper.toDomain(certificateEntity.getData().getData())
+            CertificateDataEntityMapper.toDomain(certificateEntity.getData())
         )
         .build();
   }
