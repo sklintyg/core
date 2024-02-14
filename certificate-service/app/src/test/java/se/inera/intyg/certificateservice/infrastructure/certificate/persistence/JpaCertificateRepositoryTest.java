@@ -130,7 +130,8 @@ class JpaCertificateRepositoryTest {
 
   private static final LocalDate NOW = LocalDate.now();
   private static final String JSON =
-      "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"date\":[" + NOW.getYear() + ",";
+      "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"date\":[" + NOW.getYear() + ","
+          + NOW.getMonthValue() + "," + NOW.getDayOfMonth() + "]}}]";
 
   private static final CertificateDataEntity DATA = new CertificateDataEntity(JSON);
 

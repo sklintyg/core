@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -50,6 +51,16 @@ class CertificateDataEntityMapperTest {
     final var response = CertificateDataEntityMapper.toDomain(new CertificateDataEntity(json));
 
     assertEquals(expected, response);
+  }
+
+  @Test
+  void shouldThrowErrorIfJsonStringIsFormattedWrong() {
+    final var json =
+        "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"date\":[" + NOW.getYear() + ",";
+    final var object = new CertificateDataEntity(json);
+
+    assertThrows(IllegalStateException.class,
+        () -> CertificateDataEntityMapper.toDomain(object));
   }
 
 }
