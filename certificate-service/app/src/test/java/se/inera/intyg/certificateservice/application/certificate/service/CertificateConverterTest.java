@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonWebcertUnitDTO.alfaMedicincentrumDtoBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_NAME;
@@ -22,14 +23,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ADDRESS;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_CITY;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_EMAIL;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_INACTIVE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_NAME;
 
@@ -40,6 +33,7 @@ import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -86,6 +80,8 @@ class CertificateConverterTest {
   private static final String KEY = "key";
   private static final long CERTIFICATE_VERSION = 3L;
   private List<ResourceLinkDTO> resourceLinkDTOs = Collections.emptyList();
+  @Mock
+  private CertificateMetaDataUnitConverter certificateMetaDataUnitConverter;
   @Mock
   private CertificateDataConverter certificateDataConverter;
   @InjectMocks
@@ -347,66 +343,14 @@ class CertificateConverterTest {
     class UnitConvert {
 
       @Test
-      void shallIncludeId() {
-        assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ID,
-            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getUnit()
-                .getUnitId()
+      void shallIncludeUnit() {
+        final var expectedUnit = alfaMedicincentrumDtoBuilder().build();
+        doReturn(expectedUnit).when(certificateMetaDataUnitConverter).convert(
+            certificate.certificateMetaData().issuingUnit(),
+            Optional.empty()
         );
-      }
-
-      @Test
-      void shallIncludeName() {
-        assertEquals(ALFA_ALLERGIMOTTAGNINGEN_NAME,
+        assertEquals(expectedUnit,
             certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getUnit()
-                .getUnitName()
-        );
-      }
-
-      @Test
-      void shallIncludeAddress() {
-        assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ADDRESS,
-            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getUnit()
-                .getAddress()
-        );
-      }
-
-      @Test
-      void shallIncludeCity() {
-        assertEquals(ALFA_ALLERGIMOTTAGNINGEN_CITY,
-            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getUnit()
-                .getCity()
-        );
-      }
-
-      @Test
-      void shallIncludeZipCode() {
-        assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE,
-            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getUnit()
-                .getZipCode()
-        );
-      }
-
-      @Test
-      void shallIncludeEmail() {
-        assertEquals(ALFA_ALLERGIMOTTAGNINGEN_EMAIL,
-            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getUnit()
-                .getEmail()
-        );
-      }
-
-      @Test
-      void shallIncludePhonenumber() {
-        assertEquals(ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER,
-            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getUnit()
-                .getPhoneNumber()
-        );
-      }
-
-      @Test
-      void shallIncludeIsInactive() {
-        assertEquals(ALFA_ALLERGIMOTTAGNINGEN_INACTIVE.value(),
-            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getUnit()
-                .getIsInactive()
         );
       }
     }

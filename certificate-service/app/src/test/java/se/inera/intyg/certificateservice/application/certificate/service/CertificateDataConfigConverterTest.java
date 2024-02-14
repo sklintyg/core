@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import org.junit.jupiter.api.Nested;
@@ -10,6 +11,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.config.Cert
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIssuingUnit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 
 class CertificateDataConfigConverterTest {
@@ -20,6 +22,18 @@ class CertificateDataConfigConverterTest {
   private static final LocalDate MIN_DATE = LocalDate.of(2020, 1, 1);
   private static final LocalDate MAX_DATE = LocalDate.of(2023, 12, 31);
   private final CertificateDataConfigConverter converter = new CertificateDataConfigConverter();
+
+  @Test
+  void shallThrowIfConfigTypeNotSupported() {
+    final var elementSpecification = ElementSpecification.builder()
+        .configuration(
+            ElementConfigurationIssuingUnit.builder()
+                .build()
+        )
+        .build();
+
+    assertThrows(IllegalStateException.class, () -> converter.convert(elementSpecification));
+  }
 
   @Nested
   class CategoryTypeConfiguration {

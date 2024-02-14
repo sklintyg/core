@@ -12,7 +12,6 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -22,6 +21,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigCategory;
@@ -51,6 +52,9 @@ class UpdateCertificateServiceTest {
   private ElementDataConverter elementDataConverter;
 
   @Mock
+  private ElementMetaDataConverter elementMetaDataConverter;
+
+  @Mock
   private UpdateCertificateDomainService updateCertificateDomainService;
 
   @Mock
@@ -77,14 +81,21 @@ class UpdateCertificateServiceTest {
   @Test
   void shallReturnUpdateCertificateResponse() {
     final var resourceLinkDTO = ResourceLinkDTO.builder().build();
+    final var unitDTO = UnitDTO.builder().build();
     final var expectedCertificate = CertificateDTO.builder()
         .data(
             Map.of(QUESTION_ID, CertificateDataElement.builder()
-                .config(CertificateDataConfigDate.builder().build())
+                .config(CertificateDataConfigDate.builder()
+                    .build())
                 .build())
         )
         .links(
             List.of(resourceLinkDTO)
+        )
+        .metadata(
+            CertificateMetadataDTO.builder()
+                .unit(unitDTO)
+                .build()
         )
         .build();
 
@@ -104,11 +115,14 @@ class UpdateCertificateServiceTest {
 
     doReturn(elementData).when(elementDataConverter)
         .convert(QUESTION_ID, expectedCertificate.getData().get(QUESTION_ID));
+    doReturn(elementData).when(elementMetaDataConverter).convert(unitDTO);
+
+    final var elementDataList = List.of(elementData, elementData);
 
     final var certificate = mock(Certificate.class);
 
     doReturn(certificate).when(updateCertificateDomainService).update(
-        new CertificateId(CERTIFICATE_ID), List.of(elementData), actionEvaluation
+        new CertificateId(CERTIFICATE_ID), elementDataList, actionEvaluation
     );
 
     final var certificateAction = mock(CertificateAction.class);
@@ -135,6 +149,7 @@ class UpdateCertificateServiceTest {
 
   @Test
   void shallNotGenerateElementDataForCategories() {
+    final var unitDTO = UnitDTO.builder().build();
     final var expectedCertificate = CertificateDTO.builder()
         .data(
             Map.of(QUESTION_ID, CertificateDataElement.builder()
@@ -142,6 +157,11 @@ class UpdateCertificateServiceTest {
                     CertificateDataConfigCategory.builder().build()
                 )
                 .build())
+        )
+        .metadata(
+            CertificateMetadataDTO.builder()
+                .unit(unitDTO)
+                .build()
         )
         .build();
 
@@ -155,9 +175,12 @@ class UpdateCertificateServiceTest {
     );
 
     final var certificate = mock(Certificate.class);
+    final var elementData = ElementData.builder().build();
+    final var elementDataList = List.of(elementData);
 
+    doReturn(elementData).when(elementMetaDataConverter).convert(unitDTO);
     doReturn(certificate).when(updateCertificateDomainService).update(
-        new CertificateId(CERTIFICATE_ID), Collections.emptyList(), actionEvaluation
+        new CertificateId(CERTIFICATE_ID), elementDataList, actionEvaluation
     );
 
     final var certificateAction = mock(CertificateAction.class);

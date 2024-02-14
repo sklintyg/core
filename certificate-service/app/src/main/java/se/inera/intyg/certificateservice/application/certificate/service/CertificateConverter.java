@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIssuingUnit.ISSUING_UNIT;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -29,6 +31,7 @@ public class CertificateConverter {
   private static final CertificateRelationsDTO RELATIONS = CertificateRelationsDTO.builder()
       .build();
   private final CertificateDataConverter certificateDataConverter;
+  private final CertificateMetaDataUnitConverter certificateMetaDataUnitConverter;
 
   public CertificateDTO convert(Certificate certificate, List<ResourceLinkDTO> resourceLinks) {
     return CertificateDTO.builder()
@@ -46,31 +49,12 @@ public class CertificateConverter {
                     toPatientDTO(certificate)
                 )
                 .unit(
-                    UnitDTO.builder()
-                        .unitId(certificate.certificateMetaData().issuingUnit().hsaId().id())
-                        .unitName(
-                            certificate.certificateMetaData().issuingUnit().name().name()
-                        )
-                        .address(
-                            certificate.certificateMetaData().issuingUnit().address().address()
-                        )
-                        .city(
-                            certificate.certificateMetaData().issuingUnit().address().city()
-                        )
-                        .zipCode(
-                            certificate.certificateMetaData().issuingUnit().address().zipCode()
-                        )
-                        .phoneNumber(
-                            certificate.certificateMetaData().issuingUnit().contactInfo()
-                                .phoneNumber()
-                        )
-                        .email(
-                            certificate.certificateMetaData().issuingUnit().contactInfo().email()
-                        )
-                        .isInactive(
-                            certificate.certificateMetaData().issuingUnit().inactive().value()
-                        )
-                        .build()
+                    certificateMetaDataUnitConverter.convert(
+                        certificate.certificateMetaData().issuingUnit(),
+                        certificate.elementData().stream()
+                            .filter(data -> data.id().equals(ISSUING_UNIT))
+                            .findFirst()
+                    )
                 )
                 .careUnit(
                     UnitDTO.builder()

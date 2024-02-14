@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 
 import java.util.Map.Entry;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
@@ -21,6 +22,7 @@ public class UpdateCertificateService {
   private final UpdateCertificateRequestValidator updateCertificateRequestValidator;
   private final UpdateCertificateDomainService updateCertificateDomainService;
   private final ElementDataConverter elementDataConverter;
+  private final ElementMetaDataConverter elementMetaDataConverter;
   private final ActionEvaluationFactory actionEvaluationFactory;
   private final CertificateConverter certificateConverter;
   private final ResourceLinkConverter resourceLinkConverter;
@@ -37,11 +39,19 @@ public class UpdateCertificateService {
         updateCertificateRequest.getCareProvider()
     );
 
-    final var elementDataList = updateCertificateRequest.getCertificate().getData()
-        .entrySet()
-        .stream()
-        .filter(removeCategories())
-        .map(entry -> elementDataConverter.convert(entry.getKey(), entry.getValue()))
+    final var elementDataList = Stream.concat(
+            updateCertificateRequest.getCertificate().getData()
+                .entrySet()
+                .stream()
+                .filter(removeCategories())
+                .map(entry -> elementDataConverter.convert(entry.getKey(), entry.getValue()))
+            ,
+            Stream.of(
+                elementMetaDataConverter.convert(
+                    updateCertificateRequest.getCertificate().getMetadata().getUnit()
+                )
+            )
+        )
         .toList();
 
     final var updatedCertificate = updateCertificateDomainService.update(
@@ -62,7 +72,6 @@ public class UpdateCertificateService {
 
   private static Predicate<Entry<String, CertificateDataElement>> removeCategories() {
     return entry -> !CertificateDataConfigTypes.CATEGORY.equals(
-        entry.getValue().getConfig().getType())
-        ;
+        entry.getValue().getConfig().getType());
   }
 }

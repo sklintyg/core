@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel;
 
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIssuingUnit.ISSUING_UNIT;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -14,6 +16,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIssuingUnit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -63,7 +66,8 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
             List.of(
                 categoryBeraknatNedkomstdatum(
                     questionBeraknatNedkomstdatum()
-                )
+                ),
+                issuingUnitContactInfo()
             )
         )
         .build();
@@ -117,4 +121,15 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         )
         .build();
   }
+
+  private static ElementSpecification issuingUnitContactInfo() {
+    return ElementSpecification.builder()
+        .id(ISSUING_UNIT)
+        .configuration(
+            ElementConfigurationIssuingUnit.builder()
+                .build()
+        )
+        .build();
+  }
+
 }
