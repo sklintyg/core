@@ -61,6 +61,17 @@ public class RepositoryTestFactory {
         .build();
   }
 
+  public static StaffEntity staffEntity() {
+    return staffEntity("NAME", "HSA_ID");
+  }
+
+  public static StaffEntity staffEntity(String name, String hsaId) {
+    return StaffEntity.builder()
+        .name(name)
+        .hsaId(hsaId)
+        .build();
+  }
+
   public static CertificateEntity certificateEntity(String json) {
     return CertificateEntity.builder()
         .version(1L)
@@ -103,12 +114,7 @@ public class RepositoryTestFactory {
                 .name("NAME_ISSUED")
                 .build()
         )
-        .issuedBy(
-            StaffEntity.builder()
-                .name("NAME")
-                .hsaId("HSA_ID")
-                .build()
-        )
+        .issuedBy(staffEntity("ISSUED_BY_NAME", "ISSUED_BY_HSA_ID"))
         .patient(patientEntity())
         .data(new CertificateDataEntity(json))
         .build();
