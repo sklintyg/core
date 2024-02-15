@@ -45,10 +45,10 @@ Content-Type: application/json
 }
 
 ### Certificate exists
-GET http://localhost:18030/api/certificate/2fd088d1-f205-48b1-b84d-22678962642d/exists
+GET http://localhost:18030/api/certificate/a4665551-1b91-456d-b9e8-40b954c62723/exists
 
 ### Get certificate
-POST http://localhost:18030/api/certificate/2fd088d1-f205-48b1-b84d-22678962642d
+POST http://localhost:18030/api/certificate/a4665551-1b91-456d-b9e8-40b954c62723
 Content-Type: application/json
 
 {
@@ -93,7 +93,7 @@ Content-Type: application/json
 }
 
 ### Update certificate
-PUT http://localhost:18030/api/certificate/5246e783-cfaa-4604-8d56-8923228ad096
+PUT http://localhost:18030/api/certificate/a3f72863-0857-4df8-be6a-a73b22a69b67
 Content-Type: application/json
 
 {
@@ -292,5 +292,47 @@ Content-Type: application/json
         "title": null
       }
     ]
+  }
+}
+
+### Delete certificate
+DELETE http://localhost:18030/api/certificate/5cc3a55a-db56-41c2-b1ee-30b005c5229e/0
+Content-Type: application/json
+
+{
+  "user": {
+    "id": "TSTNMT2321000156-DRAA",
+    "name": "Alja Doctor",
+    "role": "DOCTOR",
+    "blocked": "false"
+  },
+  "unit": {
+    "id": "TSTNMT2321000156-ALHM",
+    "name": "Alfa Hudmottagningen",
+    "address": "Alfaadressen 1",
+    "city": "Alfastaden",
+    "zipCode": "Alfapostnummer",
+    "inactive": "false"
+  },
+  "careUnit": {
+    "id": "TSTNMT2321000156-ALMC",
+    "name": "Alfa Medicincentrum"
+  },
+  "careProvider": {
+    "id": "TSTNMT2321000156-ALFA",
+    "name": "Alfa Regionen"
+  },
+  "patient": {
+    "id": {
+      "type": "PERSONAL_IDENTITY_NUMBER",
+      "id": "191212121212"
+    },
+    "firstName": "Tolvan",
+    "middleName": "TP",
+    "lastName": "Tolvansson",
+    "fullName": "Tolvan TP Tolvansson",
+    "deceased": "false",
+    "protectedPerson": "false",
+    "testIndicated": "false"
   }
 }

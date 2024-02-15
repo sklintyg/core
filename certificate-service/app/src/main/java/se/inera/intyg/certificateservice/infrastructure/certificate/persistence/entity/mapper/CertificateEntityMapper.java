@@ -24,8 +24,8 @@ public class CertificateEntityMapper {
         .build();
   }
 
-  public static CertificateEntity updateEntity(CertificateEntity entity) {
-    entity.setRevision(entity.getRevision());
+  public static CertificateEntity updateEntity(CertificateEntity entity, Certificate certificate) {
+    entity.setRevision(certificate.revision().value());
     entity.setModified(LocalDateTime.now());
     return entity;
   }

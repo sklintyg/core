@@ -12,6 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Staff;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -83,6 +84,13 @@ public class JpaCertificateRepository implements CertificateRepository {
       );
     }
 
+    if (Status.DELETED_DRAFT.equals(certificate.status())) {
+      final var certificateEntity = certificateEntityRepository.findByCertificateId(
+          certificate.id().id()
+      );
+      certificateEntityRepository.delete(certificateEntity);
+      return certificate;
+    }
     final var certificateEntity = buildCertificateEntity(certificate);
     certificateEntityRepository.save(certificateEntity);
 
@@ -137,7 +145,7 @@ public class JpaCertificateRepository implements CertificateRepository {
 
     final var certificateEntity = certificateFromDB == null
         ? CertificateEntityMapper.toEntity(certificate)
-        : CertificateEntityMapper.updateEntity(certificateFromDB);
+        : CertificateEntityMapper.updateEntity(certificateFromDB, certificate);
 
     certificateEntity.setIssuedBy(
         RepositoryUtility.getEntity(

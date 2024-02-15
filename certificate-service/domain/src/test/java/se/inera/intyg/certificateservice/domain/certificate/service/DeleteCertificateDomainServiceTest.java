@@ -55,6 +55,19 @@ class DeleteCertificateDomainServiceTest {
   }
 
   @Test
+  void shallUpdateMetaData() {
+    final var revision = new Revision(1);
+
+    final var certificate = mock(Certificate.class);
+    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
+    doReturn(true).when(certificate).allowTo(DELETE, ACTION_EVALUATION);
+
+    deleteCertificateDomainService.delete(CERTIFICATE_ID, revision, ACTION_EVALUATION);
+
+    verify(certificate).updateMetadata(ACTION_EVALUATION);
+  }
+
+  @Test
   void shallReturnDeletedCertificate() {
     final var revision = new Revision(1);
     final var expectedCertificate = mock(Certificate.class);

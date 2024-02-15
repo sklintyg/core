@@ -148,14 +148,14 @@ class CertificateEntityMapperTest {
 
     @Test
     void shouldSetRevision() {
-      final var response = CertificateEntityMapper.updateEntity(CERTIFICATE_ENTITY);
-      assertEquals(CERTIFICATE_ENTITY.getRevision(), response.getRevision());
+      final var response = CertificateEntityMapper.updateEntity(CERTIFICATE_ENTITY, CERTIFICATE);
+      assertEquals(3, response.getRevision());
 
     }
 
     @Test
     void shouldSetModified() {
-      final var response = CertificateEntityMapper.updateEntity(CERTIFICATE_ENTITY);
+      final var response = CertificateEntityMapper.updateEntity(CERTIFICATE_ENTITY, CERTIFICATE);
       assertEquals(CERTIFICATE_ENTITY.getModified(), response.getModified());
 
     }

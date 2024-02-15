@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -16,7 +18,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
@@ -40,6 +44,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 @ExtendWith(MockitoExtension.class)
 class JpaCertificateRepositoryTest {
 
+  private static final String CERTIFICATE_ID = "certificateId";
   @Mock
   CertificateEntityRepository certificateEntityRepository;
   @Mock
@@ -203,6 +208,20 @@ class JpaCertificateRepositoryTest {
       assertEquals(certificate, response);
     }
 
+    @Test
+    void shouldDeleteCertificate() {
+      final var expectedResult = Certificate.builder()
+          .id(new CertificateId(CERTIFICATE_ID))
+          .status(Status.DELETED_DRAFT)
+          .build();
+
+      doReturn(CERTIFICATE_ENTITY).when(certificateEntityRepository)
+          .findByCertificateId(CERTIFICATE_ID);
+      final var actualResult = jpaCertificateRepository.save(expectedResult);
+
+      verify(certificateEntityRepository).delete(CERTIFICATE_ENTITY);
+      assertEquals(expectedResult, actualResult);
+    }
   }
 
   @Nested
