@@ -186,7 +186,11 @@ public class JpaCertificateRepository implements CertificateRepository {
             CertificateModelEntityMapper::toEntity)
     );
 
-    certificateEntity.setData(CertificateDataEntityMapper.toEntity(certificate.elementData()));
+    final var certificateDataEntity = CertificateDataEntityMapper.toEntity(
+        certificate.elementData());
+    certificateDataEntity.setKey(certificateEntity.getKey());
+    certificateDataEntity.setCertificate(certificateEntity);
+    certificateEntity.setData(certificateDataEntity);
 
     return certificateEntity;
   }

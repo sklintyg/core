@@ -22,5 +22,4 @@ public class ElementDataMapper {
         .value(ElementValueMapper.toMapped(element.value()))
         .build();
   }
-
 }

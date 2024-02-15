@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIssuingUnit;
 
 public class ElementValueMapper {
 
@@ -15,18 +16,34 @@ public class ElementValueMapper {
           .date(valueDate.getDate())
           .build();
     }
+    if (mappedValue instanceof MappedElementValueIssuingUnit valueIssuingUnit) {
+      return ElementValueIssuingUnit.builder()
+          .address(valueIssuingUnit.getAddress())
+          .city(valueIssuingUnit.getCity())
+          .zipCode(valueIssuingUnit.getZipCode())
+          .phoneNumber(valueIssuingUnit.getPhoneNumber())
+          .build();
+    }
 
-    return null;
+    throw new IllegalStateException("MappedElementValue not supported '%s'".formatted(mappedValue));
   }
 
-  public static MappedElementValue toMapped(ElementValue element) {
-    if (element instanceof ElementValueDate elementValueDate) {
+  public static MappedElementValue toMapped(ElementValue value) {
+    if (value instanceof ElementValueDate elementValueDate) {
       return MappedElementValueDate.builder()
           .date(elementValueDate.date())
           .build();
     }
 
-    return null;
-  }
+    if (value instanceof ElementValueIssuingUnit elementValueIssuingUnit) {
+      return MappedElementValueIssuingUnit.builder()
+          .address(elementValueIssuingUnit.address())
+          .zipCode(elementValueIssuingUnit.zipCode())
+          .city(elementValueIssuingUnit.city())
+          .phoneNumber(elementValueIssuingUnit.phoneNumber())
+          .build();
+    }
 
+    throw new IllegalStateException("ElementValue not supported '%s'".formatted(value));
+  }
 }

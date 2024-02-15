@@ -12,9 +12,4 @@ public class ElementConfigurationIssuingUnit implements ElementConfiguration {
   ElementType type = ElementType.ISSUING_UNIT;
 
   public static final ElementId ISSUING_UNIT = new ElementId("ISSUING_UNIT");
-
-  @Override
-  public String name() {
-    return null;
-  }
 }

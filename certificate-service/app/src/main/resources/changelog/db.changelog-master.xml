@@ -42,9 +42,6 @@
       <column name="certificate_model_key" type="integer unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="certificate_data_key" type="bigint unsigned">
-        <constraints nullable="false"/>
-      </column>
     </createTable>
 
     <createTable tableName="certificate_model">
@@ -76,18 +73,18 @@
       <column name="patient_id_type_key" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="protected_person" type="tinyint unsigned"/>
-      <column name="test_indicated" type="tinyint unsigned"/>
-      <column name="deceased" type="tinyint unsigned"/>
-      <column name="first_name" type="varchar(255)">
+      <column name="protected_person" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="middle_name" type="varchar(255)">
+      <column name="test_indicated" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="last_name" type="varchar(255)">
+      <column name="deceased" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
+      <column name="first_name" type="varchar(255)"/>
+      <column name="middle_name" type="varchar(255)"/>
+      <column name="last_name" type="varchar(255)"/>
     </createTable>
 
     <addForeignKeyConstraint constraintName="fk_certificate_patient_key"
@@ -152,33 +149,14 @@
       referencedTableName="unit_type" referencedColumnNames="key"/>
 
     <insert tableName="unit_type">
-      <column name="type" value="SUB_UNIT"/>
+      <column name="type" value="CARE_PROVIDER"/>
     </insert>
     <insert tableName="unit_type">
       <column name="type" value="CARE_UNIT"/>
     </insert>
     <insert tableName="unit_type">
-      <column name="type" value="CARE_PROVIDER"/>
+      <column name="type" value="SUB_UNIT"/>
     </insert>
-
-    <createTable tableName="unit_relation">
-      <column name="key" type="integer unsigned" autoIncrement="true">
-        <constraints nullable="false" primaryKey="true" unique="true"/>
-      </column>
-      <column name="child_unit_key" type="integer unsigned">
-        <constraints nullable="false"/>
-      </column>
-      <column name="parent_unit_key" type="integer unsigned">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-
-    <addForeignKeyConstraint constraintName="fk_unit_relation_child_unit_key"
-      baseTableName="unit_relation" baseColumnNames="child_unit_key"
-      referencedTableName="unit" referencedColumnNames="key"/>
-    <addForeignKeyConstraint constraintName="fk_unit_relation_parent_unit_key"
-      baseTableName="unit_relation" baseColumnNames="parent_unit_key"
-      referencedTableName="unit" referencedColumnNames="key"/>
 
     <createTable tableName="certificate_data">
       <column name="key" type="bigint unsigned" autoIncrement="true">
@@ -188,10 +166,6 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-
-    <addForeignKeyConstraint constraintName="fk_certificate_data_certificate_key"
-      baseTableName="certificate" baseColumnNames="certificate_data_key"
-      referencedTableName="certificate_data" referencedColumnNames="key"/>
 
     <createTable tableName="patient_id_type">
       <column name="key" type="tinyint unsigned" autoIncrement="true">
