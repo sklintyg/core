@@ -30,6 +30,13 @@ class ResourceLinkTypeDTOTest {
   }
 
   @Test
+  void shallReturnCertificateActionTypeDelete() {
+    assertEquals(CertificateActionType.DELETE,
+        ResourceLinkTypeDTO.REMOVE_CERTIFICATE.toCertificateActionType()
+    );
+  }
+
+  @Test
   void shallThrowExceptionForNotSupportedType() {
     assertThrows(IllegalArgumentException.class,
         ResourceLinkTypeDTO.SRS_FULL_VIEW::toCertificateActionType
@@ -54,6 +61,13 @@ class ResourceLinkTypeDTOTest {
   void shallReturnResourceLinkTypeDTOEditCertificate() {
     assertEquals(ResourceLinkTypeDTO.EDIT_CERTIFICATE,
         ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.UPDATE)
+    );
+  }
+
+  @Test
+  void shallReturnResourceLinkTypeDTORemoveCertificate() {
+    assertEquals(ResourceLinkTypeDTO.REMOVE_CERTIFICATE,
+        ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.DELETE)
     );
   }
 }

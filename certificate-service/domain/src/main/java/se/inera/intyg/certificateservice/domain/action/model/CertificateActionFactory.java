@@ -37,7 +37,15 @@ public class CertificateActionFactory {
               )
           )
           .build();
-      case DELETE -> null;
+      case DELETE -> CertificateActionDelete.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleWithinCareUnit(),
+                  new ActionRuleProtectedPerson()
+              )
+          )
+          .build();
     };
   }
 }
