@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
@@ -54,7 +53,6 @@ class DeleteCertificateServiceTest {
       .careProvider(ALFA_REGIONEN_DTO)
       .careUnit(ALFA_MEDICINCENTRUM_DTO)
       .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
-      .patient(ATHENA_REACT_ANDERSSON_DTO)
       .build();
 
   @Test
@@ -82,7 +80,6 @@ class DeleteCertificateServiceTest {
         .build();
     final var actionEvaluation = ActionEvaluation.builder().build();
     doReturn(actionEvaluation).when(actionEvaluationFactory).create(
-        DELETE_CERTIFICATE_REQUEST.getPatient(),
         DELETE_CERTIFICATE_REQUEST.getUser(),
         DELETE_CERTIFICATE_REQUEST.getUnit(),
         DELETE_CERTIFICATE_REQUEST.getCareUnit(),

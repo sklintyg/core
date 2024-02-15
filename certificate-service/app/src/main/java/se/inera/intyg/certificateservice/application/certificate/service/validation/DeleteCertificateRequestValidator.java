@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate.service.validation;
 
 import static se.inera.intyg.certificateservice.application.common.ValidationUtil.validateCertificateId;
-import static se.inera.intyg.certificateservice.application.common.ValidationUtil.validatePatient;
 import static se.inera.intyg.certificateservice.application.common.ValidationUtil.validateUnit;
 import static se.inera.intyg.certificateservice.application.common.ValidationUtil.validateUnitExtended;
 import static se.inera.intyg.certificateservice.application.common.ValidationUtil.validateUser;
@@ -19,7 +18,6 @@ public class DeleteCertificateRequestValidator {
     validateUnitExtended(deleteCertificateRequest.getUnit(), "Unit");
     validateUnit(deleteCertificateRequest.getCareUnit(), "CareUnit");
     validateUnit(deleteCertificateRequest.getCareProvider(), "CareProvider");
-    validatePatient(deleteCertificateRequest.getPatient());
     validateCertificateId(certificateId);
     validateVersion(version);
   }

@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.action.model;
 
 import lombok.Builder;
 import lombok.Value;
+import lombok.With;
 import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
@@ -12,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.user.model.User;
 @Builder
 public class ActionEvaluation {
 
+  @With
   Patient patient;
   User user;
   SubUnit subUnit;

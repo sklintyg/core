@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.patient.model.PersonIdType.COORDINATION_NUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.BETA_REGIONEN;
@@ -62,6 +64,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
@@ -702,7 +705,7 @@ class CertificateTest {
 
     @Test
     void shallReturnTrueIfExistsAndEvaluateTrue() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = actionEvaluationBuilder.build();
       final var certificateAction = mock(CertificateAction.class);
       final var actions = List.of(certificateAction);
 
@@ -719,7 +722,7 @@ class CertificateTest {
 
     @Test
     void shallReturnFalseIfExistsAndEvaluateFalse() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = actionEvaluationBuilder.build();
       final var certificateAction = mock(CertificateAction.class);
       final var actions = List.of(certificateAction);
 
@@ -737,7 +740,7 @@ class CertificateTest {
 
     @Test
     void shallReturnFalseIfNotExists() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = actionEvaluationBuilder.build();
       final var certificateAction = mock(CertificateAction.class);
       final var actions = List.of(certificateAction);
 
@@ -749,6 +752,25 @@ class CertificateTest {
           certificate.allowTo(CertificateActionType.READ, actionEvaluation),
           "Expected allowTo to return 'false'"
       );
+    }
+
+    @Test
+    void shallUseCertificatePatientIfPatientNotPresentInActionEvalutaion() {
+      final var actionEvaluation = actionEvaluationBuilder.patient(null).build();
+      final var actionEvaluationArgumentCaptor = ArgumentCaptor.forClass(ActionEvaluation.class);
+
+      final var certificateAction = mock(CertificateAction.class);
+      final var actions = List.of(certificateAction);
+
+      doReturn(actions).when(certificate.certificateModel()).actions();
+      doReturn(CertificateActionType.DELETE).when(certificateAction).getType();
+
+      certificate.allowTo(CertificateActionType.DELETE, actionEvaluation);
+
+      verify(certificateAction).evaluate(any(Optional.class),
+          actionEvaluationArgumentCaptor.capture());
+
+      assertEquals(ATHENA_REACT_ANDERSSON, actionEvaluationArgumentCaptor.getValue().patient());
     }
   }
 

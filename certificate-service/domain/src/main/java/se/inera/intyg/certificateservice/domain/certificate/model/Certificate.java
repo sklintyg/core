@@ -39,8 +39,16 @@ public class Certificate {
     return certificateModel.actions().stream()
         .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
         .findFirst()
-        .map(certificateAction -> certificateAction.evaluate(Optional.of(this), actionEvaluation))
+        .map(certificateAction -> certificateAction.evaluate(Optional.of(this),
+            addPatientIfMissing(actionEvaluation)))
         .orElse(false);
+  }
+
+  private ActionEvaluation addPatientIfMissing(ActionEvaluation actionEvaluation) {
+    if (actionEvaluation.patient() != null) {
+      return actionEvaluation;
+    }
+    return actionEvaluation.withPatient(certificateMetaData.patient());
   }
 
   public void updateMetadata(ActionEvaluation actionEvaluation) {

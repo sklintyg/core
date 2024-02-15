@@ -28,7 +28,6 @@ public class DeleteCertificateService {
     deleteCertificateRequestValidator.validate(deleteCertificateRequest, certificateId, version);
 
     final var actionEvaluation = actionEvaluationFactory.create(
-        deleteCertificateRequest.getPatient(),
         deleteCertificateRequest.getUser(),
         deleteCertificateRequest.getUnit(),
         deleteCertificateRequest.getCareUnit(),
@@ -40,7 +39,7 @@ public class DeleteCertificateService {
         new Revision(version),
         actionEvaluation
     );
-    
+
     return DeleteCertificateResponse.builder()
         .certificate(certificateConverter.convert(
             certificate,
