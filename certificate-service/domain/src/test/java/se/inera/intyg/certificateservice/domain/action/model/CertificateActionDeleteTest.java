@@ -187,5 +187,15 @@ class CertificateActionDeleteTest {
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
+
+  @Test
+  void shallReturnName() {
+    assertEquals("Radera", certificateActionDelete.getName());
+  }
+
+  @Test
+  void shallReturnDescription() {
+    assertEquals("Raderar intygsutkastet.", certificateActionDelete.getDescription());
+  }
 }
 

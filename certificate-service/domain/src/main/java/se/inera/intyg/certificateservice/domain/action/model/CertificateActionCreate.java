@@ -16,7 +16,7 @@ public class CertificateActionCreate implements CertificateAction {
   private final List<ActionRule> actionRules;
 
   private static final String NAME = "Skapa intyg";
-  private static final String DESCRIPTION = "Skapa ett intygsutkast";
+  private static final String DESCRIPTION = "Skapa ett intygsutkast.";
 
   @Override
   public CertificateActionType getType() {

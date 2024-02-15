@@ -12,6 +12,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 @Getter(AccessLevel.NONE)
 public class CertificateActionDelete implements CertificateAction {
 
+  private static final String NAME = "Radera";
+  private static final String DESCRIPTION = "Raderar intygsutkastet.";
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
 
@@ -25,5 +27,15 @@ public class CertificateActionDelete implements CertificateAction {
     return actionRules.stream()
         .filter(value -> value.evaluate(certificate, actionEvaluation))
         .count() == actionRules.size();
+  }
+
+  @Override
+  public String getName() {
+    return NAME;
+  }
+
+  @Override
+  public String getDescription() {
+    return DESCRIPTION;
   }
 }
