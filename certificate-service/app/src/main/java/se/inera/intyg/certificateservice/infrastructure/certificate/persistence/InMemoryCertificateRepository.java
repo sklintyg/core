@@ -4,18 +4,23 @@ import static se.inera.intyg.certificateservice.testability.common.TestabilityCo
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
+import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 
 @Profile("!" + TESTABILITY_PROFILE)
 @Repository
@@ -73,5 +78,15 @@ public class InMemoryCertificateRepository implements CertificateRepository {
       throw new IllegalArgumentException("CertificateId is null!");
     }
     return certificateMap.containsKey(certificateId);
+  }
+
+  @Override
+  public List<Certificate> findByPatientByCareUnit(Patient patient, CareUnit careUnit) {
+    return Collections.emptyList();
+  }
+
+  @Override
+  public List<Certificate> findByPatientBySubUnit(Patient patient, SubUnit subUnit) {
+    return Collections.emptyList();
   }
 }

@@ -4,10 +4,13 @@ import static se.inera.intyg.certificateservice.testability.common.TestabilityCo
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
+import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
@@ -17,6 +20,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateModelEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
@@ -126,6 +130,16 @@ public class JpaCertificateRepository implements CertificateRepository {
     }
 
     return certificateEntityRepository.findByCertificateId(certificateId.id()) != null;
+  }
+
+  @Override
+  public List<Certificate> findByPatientByCareUnit(Patient patient, CareUnit careUnit) {
+    return Collections.emptyList();
+  }
+
+  @Override
+  public List<Certificate> findByPatientBySubUnit(Patient patient, SubUnit subUnit) {
+    return Collections.emptyList();
   }
 
   private CertificateEntity buildCertificateEntity(Certificate certificate) {
