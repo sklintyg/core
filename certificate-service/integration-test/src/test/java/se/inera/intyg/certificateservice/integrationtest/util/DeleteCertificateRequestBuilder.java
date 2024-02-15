@@ -52,7 +52,6 @@ public class DeleteCertificateRequestBuilder {
         .careProvider(ALFA_REGIONEN_DTO)
         .unit(unit)
         .careUnit(careUnit)
-        .patient(patient)
         .build();
   }
 }

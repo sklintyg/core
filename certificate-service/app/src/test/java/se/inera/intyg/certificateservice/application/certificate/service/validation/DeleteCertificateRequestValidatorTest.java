@@ -2,8 +2,6 @@ package se.inera.intyg.certificateservice.application.certificate.service.valida
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.athenaReactAnderssonDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
@@ -17,8 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
-import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
-import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 
 class DeleteCertificateRequestValidatorTest {
 
@@ -34,7 +30,7 @@ class DeleteCertificateRequestValidatorTest {
         .user(AJLA_DOCTOR_DTO)
         .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
         .careUnit(ALFA_MEDICINCENTRUM_DTO)
-        .careProvider(ALFA_REGIONEN_DTO)
+        .careProvider(ALFA_REGIONEN_DTO);
   }
 
   @Nested
