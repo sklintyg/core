@@ -58,7 +58,7 @@ class CertificateEntityMapperTest {
   // TODO: Create test factory for these to not copy paste
 
   public static final CertificateEntity CERTIFICATE_ENTITY = CertificateEntity.builder()
-      .version(1L)
+      .revision(1L)
       .modified(LocalDateTime.now())
       .certificateId("ID")
       .created(LocalDateTime.now())
@@ -149,7 +149,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldSetVersion() {
       final var response = CertificateEntityMapper.updateEntity(CERTIFICATE_ENTITY);
-      assertEquals(CERTIFICATE_ENTITY.getVersion(), response.getVersion());
+      assertEquals(CERTIFICATE_ENTITY.getRevision(), response.getRevision());
 
     }
 
@@ -182,7 +182,7 @@ class CertificateEntityMapperTest {
     void shouldMapVersion() {
       final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
-      assertEquals(CERTIFICATE_ENTITY.getVersion(), response.revision().value());
+      assertEquals(CERTIFICATE_ENTITY.getRevision(), response.revision().value());
     }
 
     @Test

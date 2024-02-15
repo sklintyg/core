@@ -133,7 +133,7 @@ class JpaCertificateRepositoryTest {
   private static final CertificateDataEntity DATA = new CertificateDataEntity(JSON);
 
   private static final CertificateEntity CERTIFICATE_ENTITY = CertificateEntity.builder()
-      .version(1L)
+      .revision(1L)
       .modified(LocalDateTime.now())
       .certificateId("ID")
       .created(LocalDateTime.now())
