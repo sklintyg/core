@@ -795,7 +795,7 @@ class CertificateTest {
     }
 
     @Test
-    void shallIncrementVersionOnUpdateData() {
+    void shallIncrementRevisionOnUpdateData() {
       final var newValue = List.of(
           dateElementDataBuilder()
               .value(
