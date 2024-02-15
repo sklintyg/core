@@ -22,7 +22,7 @@ public class ActionEvaluation {
   CareProvider careProvider;
 
 
-  public boolean isIssuingUnitCareUnit(SubUnit subUnit, CareUnit careUnit) {
+  public boolean isIssuingUnitCareUnit() {
     return Objects.equals(subUnit.hsaId().id(), careUnit.hsaId().id());
   }
 }

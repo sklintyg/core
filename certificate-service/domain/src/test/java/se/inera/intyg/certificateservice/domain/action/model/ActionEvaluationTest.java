@@ -32,8 +32,7 @@ class ActionEvaluationTest {
         .subUnit(ALFA_MEDICINSKT_CENTRUM)
         .build();
 
-    assertTrue(actionEvaluation.isIssuingUnitCareUnit(actionEvaluation.subUnit(),
-        actionEvaluation.careUnit()));
+    assertTrue(actionEvaluation.isIssuingUnitCareUnit());
   }
 
   @Test
@@ -41,7 +40,6 @@ class ActionEvaluationTest {
     final var actionEvaluation = actionEvaluationBuilder
         .build();
 
-    assertFalse(actionEvaluation.isIssuingUnitCareUnit(actionEvaluation.subUnit(),
-        actionEvaluation.careUnit()));
+    assertFalse(actionEvaluation.isIssuingUnitCareUnit());
   }
 }

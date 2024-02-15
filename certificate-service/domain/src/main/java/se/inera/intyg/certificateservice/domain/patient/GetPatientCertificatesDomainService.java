@@ -19,8 +19,7 @@ public class GetPatientCertificatesDomainService {
   }
 
   private List<Certificate> getPatientCertificates(ActionEvaluation actionEvaluation) {
-    if (actionEvaluation.isIssuingUnitCareUnit(actionEvaluation.subUnit(),
-        actionEvaluation.careUnit())) {
+    if (actionEvaluation.isIssuingUnitCareUnit()) {
       return certificateRepository.findByPatientByCareUnit(actionEvaluation.patient(),
           actionEvaluation.careUnit());
     }
