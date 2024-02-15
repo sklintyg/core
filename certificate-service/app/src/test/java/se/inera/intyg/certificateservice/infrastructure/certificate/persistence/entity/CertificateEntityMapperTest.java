@@ -147,7 +147,7 @@ class CertificateEntityMapperTest {
   class UpdateEntity {
 
     @Test
-    void shouldSetVersion() {
+    void shouldSetRevision() {
       final var response = CertificateEntityMapper.updateEntity(CERTIFICATE_ENTITY);
       assertEquals(CERTIFICATE_ENTITY.getRevision(), response.getRevision());
 
@@ -179,7 +179,7 @@ class CertificateEntityMapperTest {
     }
 
     @Test
-    void shouldMapVersion() {
+    void shouldMapRevision() {
       final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(CERTIFICATE_ENTITY.getRevision(), response.revision().value());
