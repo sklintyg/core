@@ -24,6 +24,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_PHONENUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.REVISION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.DATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.dateElementDataBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementDataConstants.DATE_ELEMENT_VALUE_DATE;
@@ -75,17 +76,19 @@ class CertificateTest {
 
   private final long version = 0L;
   private Certificate certificate;
+  private Certificate.CertificateBuilder certificateBuilder;
   private CertificateModel certificateModel;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
 
   @BeforeEach
   void setUp() {
     certificateModel = mock(CertificateModel.class);
-    certificate = Certificate.builder()
+    certificateBuilder = Certificate.builder()
         .id(CERTIFICATE_ID)
-        .revision(new Revision(version))
+        .revision(REVISION)
         .certificateModel(certificateModel)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
+        .status(Status.DRAFT)
         .certificateMetaData(
             CertificateMetaData.builder()
                 .patient(ATHENA_REACT_ANDERSSON)
@@ -97,8 +100,9 @@ class CertificateTest {
         )
         .elementData(
             List.of(DATE)
-        )
-        .build();
+        );
+
+    certificate = certificateBuilder.build();
 
     actionEvaluationBuilder = ActionEvaluation.builder()
         .patient(ATHENA_REACT_ANDERSSON)
@@ -828,6 +832,42 @@ class CertificateTest {
           () -> "Expected to contain 'NOT_EXISTS' in exception message '%s'"
               .formatted(illegalArgumentException.getMessage())
       );
+    }
+  }
+
+  @Nested
+  class TestDelete {
+
+    @Test
+    void shallThrowExceptionIfRevisionDontMatch() {
+      final var revision = new Revision(2);
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.delete(revision)
+      );
+      assertTrue(illegalStateException.getMessage().contains("Incorrect revision"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowExceptionIfStatusDoesntMatchDraft() {
+      final var deletedCertificate = certificateBuilder
+          .status(Status.DELETED_DRAFT)
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> deletedCertificate.delete(REVISION)
+      );
+
+      assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+
+    @Test
+    void shallReturnStateDeleteDraftWhenDeleted() {
+      certificate.delete(REVISION);
+      assertEquals(Status.DELETED_DRAFT, certificate.status());
     }
   }
 }

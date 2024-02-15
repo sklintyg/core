@@ -75,11 +75,16 @@ public class Certificate {
 
   public void delete(Revision revision) {
     if (!this.revision.equals(revision)) {
-      // kastar exception
+      throw new IllegalStateException(
+          "Incorrect revision '%s' != '%s' - unable to delete".formatted(revision, this.revision)
+      );
     }
 
     if (this.status != Status.DRAFT) {
-      // kastar exception
+      throw new IllegalStateException(
+          "Incorrect status '%s' - required status is '%s' to delete".formatted(this.status,
+              Status.DRAFT)
+      );
     }
 
     this.status = Status.DELETED_DRAFT;
