@@ -37,6 +37,7 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case DELETE -> null;
     };
   }
 }

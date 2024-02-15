@@ -40,6 +40,7 @@ public class DeleteCertificateService {
         new Revision(version),
         actionEvaluation
     );
+    
     return DeleteCertificateResponse.builder()
         .certificate(certificateConverter.convert(
             certificate,
