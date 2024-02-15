@@ -43,7 +43,7 @@ class CertificateActionCreateTest {
 
   @Test
   void shallReturnDescription() {
-    assertEquals("Skapa ett intygsutkast", certificateActionCreate.getDescription());
+    assertEquals("Skapa ett intygsutkast.", certificateActionCreate.getDescription());
   }
 
   @Test

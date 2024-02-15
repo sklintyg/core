@@ -87,6 +87,12 @@ public class ValidationUtil {
     }
   }
 
+  public static void validateVersion(Long version) {
+    if (version == null) {
+      throw new IllegalArgumentException("Required parameter missing: version");
+    }
+  }
+
   public static void validateCertificate(CertificateDTO certificateDTO) {
     if (certificateDTO == null) {
       throw new IllegalArgumentException("Required parameter missing: Certificate");

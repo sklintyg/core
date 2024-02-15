@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.patient.model.PersonIdType.COORDINATION_NUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.BETA_REGIONEN;
@@ -24,6 +26,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_PHONENUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.REVISION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.DATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.dateElementDataBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementDataConstants.DATE_ELEMENT_VALUE_DATE;
@@ -61,6 +64,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
@@ -73,19 +77,21 @@ import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
 @ExtendWith(MockitoExtension.class)
 class CertificateTest {
 
-  private long version = 0L;
+  private final long version = 0L;
   private Certificate certificate;
+  private Certificate.CertificateBuilder certificateBuilder;
   private CertificateModel certificateModel;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
 
   @BeforeEach
   void setUp() {
     certificateModel = mock(CertificateModel.class);
-    certificate = Certificate.builder()
+    certificateBuilder = Certificate.builder()
         .id(CERTIFICATE_ID)
-        .version(version)
+        .revision(REVISION)
         .certificateModel(certificateModel)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
+        .status(Status.DRAFT)
         .certificateMetaData(
             CertificateMetaData.builder()
                 .patient(ATHENA_REACT_ANDERSSON)
@@ -97,8 +103,9 @@ class CertificateTest {
         )
         .elementData(
             List.of(DATE)
-        )
-        .build();
+        );
+
+    certificate = certificateBuilder.build();
 
     actionEvaluationBuilder = ActionEvaluation.builder()
         .patient(ATHENA_REACT_ANDERSSON)
@@ -698,7 +705,7 @@ class CertificateTest {
 
     @Test
     void shallReturnTrueIfExistsAndEvaluateTrue() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = actionEvaluationBuilder.build();
       final var certificateAction = mock(CertificateAction.class);
       final var actions = List.of(certificateAction);
 
@@ -715,7 +722,7 @@ class CertificateTest {
 
     @Test
     void shallReturnFalseIfExistsAndEvaluateFalse() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = actionEvaluationBuilder.build();
       final var certificateAction = mock(CertificateAction.class);
       final var actions = List.of(certificateAction);
 
@@ -733,7 +740,7 @@ class CertificateTest {
 
     @Test
     void shallReturnFalseIfNotExists() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = actionEvaluationBuilder.build();
       final var certificateAction = mock(CertificateAction.class);
       final var actions = List.of(certificateAction);
 
@@ -745,6 +752,25 @@ class CertificateTest {
           certificate.allowTo(CertificateActionType.READ, actionEvaluation),
           "Expected allowTo to return 'false'"
       );
+    }
+
+    @Test
+    void shallUseCertificatePatientIfPatientNotPresentInActionEvalutaion() {
+      final var actionEvaluation = actionEvaluationBuilder.patient(null).build();
+      final var actionEvaluationArgumentCaptor = ArgumentCaptor.forClass(ActionEvaluation.class);
+
+      final var certificateAction = mock(CertificateAction.class);
+      final var actions = List.of(certificateAction);
+
+      doReturn(actions).when(certificate.certificateModel()).actions();
+      doReturn(CertificateActionType.DELETE).when(certificateAction).getType();
+
+      certificate.allowTo(CertificateActionType.DELETE, actionEvaluation);
+
+      verify(certificateAction).evaluate(any(Optional.class),
+          actionEvaluationArgumentCaptor.capture());
+
+      assertEquals(ATHENA_REACT_ANDERSSON, actionEvaluationArgumentCaptor.getValue().patient());
     }
   }
 
@@ -795,7 +821,7 @@ class CertificateTest {
     }
 
     @Test
-    void shallIncrementVersionOnUpdateData() {
+    void shallIncrementRevisionOnUpdateData() {
       final var newValue = List.of(
           dateElementDataBuilder()
               .value(
@@ -808,7 +834,7 @@ class CertificateTest {
 
       certificate.updateData(newValue);
 
-      assertEquals(version + 1, certificate.version());
+      assertEquals(version + 1, certificate.revision().value());
     }
 
     @Test
@@ -828,6 +854,42 @@ class CertificateTest {
           () -> "Expected to contain 'NOT_EXISTS' in exception message '%s'"
               .formatted(illegalArgumentException.getMessage())
       );
+    }
+  }
+
+  @Nested
+  class TestDelete {
+
+    @Test
+    void shallThrowExceptionIfRevisionDontMatch() {
+      final var revision = new Revision(2);
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.delete(revision)
+      );
+      assertTrue(illegalStateException.getMessage().contains("Incorrect revision"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowExceptionIfStatusDoesntMatchDraft() {
+      final var deletedCertificate = certificateBuilder
+          .status(Status.DELETED_DRAFT)
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> deletedCertificate.delete(REVISION)
+      );
+
+      assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+
+    @Test
+    void shallReturnStateDeleteDraftWhenDeleted() {
+      certificate.delete(REVISION);
+      assertEquals(Status.DELETED_DRAFT, certificate.status());
     }
   }
 }

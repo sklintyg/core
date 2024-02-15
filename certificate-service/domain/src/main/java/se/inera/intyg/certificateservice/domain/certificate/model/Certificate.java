@@ -23,7 +23,8 @@ public class Certificate {
   private CertificateMetaData certificateMetaData;
   @Builder.Default
   private List<ElementData> elementData = Collections.emptyList();
-  private long version;
+  private Revision revision;
+  private Status status;
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
@@ -38,8 +39,16 @@ public class Certificate {
     return certificateModel.actions().stream()
         .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
         .findFirst()
-        .map(certificateAction -> certificateAction.evaluate(Optional.of(this), actionEvaluation))
+        .map(certificateAction -> certificateAction.evaluate(Optional.of(this),
+            addPatientIfMissing(actionEvaluation)))
         .orElse(false);
+  }
+
+  private ActionEvaluation addPatientIfMissing(ActionEvaluation actionEvaluation) {
+    if (actionEvaluation.patient() != null) {
+      return actionEvaluation;
+    }
+    return actionEvaluation.withPatient(certificateMetaData.patient());
   }
 
   public void updateMetadata(ActionEvaluation actionEvaluation) {
@@ -68,7 +77,24 @@ public class Certificate {
               .formatted(missingIds, certificateModel.id())
       );
     }
-    this.version++;
+    revision = revision.increment();
     this.elementData = newData.stream().toList();
+  }
+
+  public void delete(Revision revision) {
+    if (!this.revision.equals(revision)) {
+      throw new IllegalStateException(
+          "Incorrect revision '%s' != '%s' - unable to delete".formatted(revision, this.revision)
+      );
+    }
+
+    if (this.status != Status.DRAFT) {
+      throw new IllegalStateException(
+          "Incorrect status '%s' - required status is '%s' to delete".formatted(this.status,
+              Status.DRAFT)
+      );
+    }
+
+    this.status = Status.DELETED_DRAFT;
   }
 }

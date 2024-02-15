@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
@@ -18,13 +20,13 @@ public class CertificateEntityMapper {
     return CertificateEntity.builder()
         .certificateId(certificate.id().id())
         .created(certificate.created())
-        .version(certificate.version() + 1)
+        .revision(certificate.revision().value())
         .modified(LocalDateTime.now())
         .build();
   }
 
-  public static CertificateEntity updateEntity(CertificateEntity entity) {
-    entity.setVersion(entity.getVersion() + 1);
+  public static CertificateEntity updateEntity(CertificateEntity entity, Certificate certificate) {
+    entity.setRevision(certificate.revision().value());
     entity.setModified(LocalDateTime.now());
     return entity;
   }
@@ -33,7 +35,8 @@ public class CertificateEntityMapper {
     return Certificate.builder()
         .id(new CertificateId(certificateEntity.getCertificateId()))
         .created(certificateEntity.getCreated())
-        .version(certificateEntity.getVersion())
+        .status(Status.DRAFT)
+        .revision(new Revision(certificateEntity.getRevision()))
         .certificateModel(model)
         .certificateMetaData(
             CertificateMetaData.builder()

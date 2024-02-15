@@ -392,58 +392,59 @@ class CreateCertificateRequestValidatorTest {
       assertEquals("Required parameter missing: Patient.id.type",
           illegalArgumentException.getMessage());
     }
+
+    @Test
+    void shallThrowIfTestIndicatedIsNull() {
+      final var request = requestBuilder
+          .patient(
+              athenaReactAnderssonDtoBuilder()
+                  .testIndicated(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> createCertificateRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: Patient.testIndicated",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfDeceasedIsNull() {
+      final var request = requestBuilder
+          .patient(
+              athenaReactAnderssonDtoBuilder()
+                  .deceased(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> createCertificateRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: Patient.deceased",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfProtectedPersonIsNull() {
+      final var request = requestBuilder
+          .patient(
+              athenaReactAnderssonDtoBuilder()
+                  .protectedPerson(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> createCertificateRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: Patient.protectedPerson",
+          illegalArgumentException.getMessage());
+    }
   }
 
-  @Test
-  void shallThrowIfTestIndicatedIsNull() {
-    final var request = requestBuilder
-        .patient(
-            athenaReactAnderssonDtoBuilder()
-                .testIndicated(null)
-                .build()
-        )
-        .build();
-
-    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> createCertificateRequestValidator.validate(request));
-
-    assertEquals("Required parameter missing: Patient.testIndicated",
-        illegalArgumentException.getMessage());
-  }
-
-  @Test
-  void shallThrowIfDeceasedIsNull() {
-    final var request = requestBuilder
-        .patient(
-            athenaReactAnderssonDtoBuilder()
-                .deceased(null)
-                .build()
-        )
-        .build();
-
-    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> createCertificateRequestValidator.validate(request));
-
-    assertEquals("Required parameter missing: Patient.deceased",
-        illegalArgumentException.getMessage());
-  }
-
-  @Test
-  void shallThrowIfProtectedPersonIsNull() {
-    final var request = requestBuilder
-        .patient(
-            athenaReactAnderssonDtoBuilder()
-                .protectedPerson(null)
-                .build()
-        )
-        .build();
-
-    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> createCertificateRequestValidator.validate(request));
-
-    assertEquals("Required parameter missing: Patient.protectedPerson",
-        illegalArgumentException.getMessage());
-  }
 
   @Nested
   class CertificateModelIdValidation {

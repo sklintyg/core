@@ -15,7 +15,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 class ResourceLinkConverterTest {
 
   private static final String NAME = "Skapa intyg";
-  private static final String DESCRIPTION = "Skapa ett intygsutkast";
+  private static final String DESCRIPTION = "Skapa ett intygsutkast.";
   private ResourceLinkConverter resourceLinkConverter;
 
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION_CREATE =

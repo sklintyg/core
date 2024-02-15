@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 
 class InMemoryCertificateRepositoryTest {
@@ -75,6 +76,16 @@ class InMemoryCertificateRepositoryTest {
 
       assertEquals(expectedModel, actualModel);
     }
+
+    @Test
+    void shallReturnCertificateWithRevison() {
+      final var expectedModel = CertificateModel.builder()
+          .name(NAME)
+          .build();
+      final var actualModel = certificateRepository.create(expectedModel);
+
+      assertEquals(0, actualModel.revision().value());
+    }
   }
 
   @Nested
@@ -105,6 +116,25 @@ class InMemoryCertificateRepositoryTest {
 
       assertEquals(expectedCertificate, actualCertificate);
     }
+
+    @Test
+    void shouldDeleteCertificate() {
+      final var certificate = Certificate.builder()
+          .id(new CertificateId(CERTIFICATE_ID))
+          .build();
+
+      final var deletedCertificate = Certificate.builder()
+          .id(new CertificateId(CERTIFICATE_ID))
+          .status(Status.DELETED_DRAFT)
+          .build();
+
+      certificateRepository.save(certificate);
+      certificateRepository.save(deletedCertificate);
+
+      assertFalse(certificateRepository.exists(new CertificateId(CERTIFICATE_ID)));
+    }
+
+
   }
 
   @Nested

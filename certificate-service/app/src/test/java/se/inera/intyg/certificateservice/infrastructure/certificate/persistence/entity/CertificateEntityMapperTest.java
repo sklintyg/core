@@ -14,6 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Staff;
 import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.UnitName;
@@ -36,6 +37,7 @@ class CertificateEntityMapperTest {
   private final static Certificate CERTIFICATE = Certificate.builder()
       .id(new CertificateId("ID"))
       .created(LocalDateTime.now().minusDays(2))
+      .revision(new Revision(3L))
       .build();
 
   private final static CertificateModel MODEL = CertificateModel.builder()
@@ -56,7 +58,7 @@ class CertificateEntityMapperTest {
   // TODO: Create test factory for these to not copy paste
 
   public static final CertificateEntity CERTIFICATE_ENTITY = CertificateEntity.builder()
-      .version(1L)
+      .revision(1L)
       .modified(LocalDateTime.now())
       .certificateId("ID")
       .created(LocalDateTime.now())
@@ -145,15 +147,15 @@ class CertificateEntityMapperTest {
   class UpdateEntity {
 
     @Test
-    void shouldSetVersion() {
-      final var response = CertificateEntityMapper.updateEntity(CERTIFICATE_ENTITY);
-      assertEquals(CERTIFICATE_ENTITY.getVersion(), response.getVersion());
+    void shouldSetRevision() {
+      final var response = CertificateEntityMapper.updateEntity(CERTIFICATE_ENTITY, CERTIFICATE);
+      assertEquals(3, response.getRevision());
 
     }
 
     @Test
     void shouldSetModified() {
-      final var response = CertificateEntityMapper.updateEntity(CERTIFICATE_ENTITY);
+      final var response = CertificateEntityMapper.updateEntity(CERTIFICATE_ENTITY, CERTIFICATE);
       assertEquals(CERTIFICATE_ENTITY.getModified(), response.getModified());
 
     }
@@ -177,10 +179,10 @@ class CertificateEntityMapperTest {
     }
 
     @Test
-    void shouldMapVersion() {
+    void shouldMapRevision() {
       final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
-      assertEquals(CERTIFICATE_ENTITY.getVersion(), response.version());
+      assertEquals(CERTIFICATE_ENTITY.getRevision(), response.revision().value());
     }
 
     @Test

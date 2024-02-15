@@ -117,6 +117,18 @@ class CertificateModelFactoryFK7211Test {
         "Expected type: %s".formatted(expectedType));
   }
 
+  @Test
+  void shallIncludeCertificateActionDelete() {
+    final var expectedType = CertificateActionType.DELETE;
+
+    final var certificateModel = certificateModelFactoryFK7211.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
   @Nested
   class CertificateSpecifications {
 

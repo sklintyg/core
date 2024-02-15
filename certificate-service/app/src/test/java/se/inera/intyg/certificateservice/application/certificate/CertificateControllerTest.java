@@ -12,12 +12,15 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
 
@@ -25,6 +28,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.UpdateC
 class CertificateControllerTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
+  private static final Long VERSION = 0L;
   @Mock
   private UpdateCertificateService updateCertificateService;
   @Mock
@@ -33,6 +37,8 @@ class CertificateControllerTest {
   private CertificateExistsService certificateExistsService;
   @Mock
   private CreateCertificateService createCertificateService;
+  @Mock
+  private DeleteCertificateService deleteCertificateService;
   @InjectMocks
   private CertificateController certificateController;
 
@@ -108,6 +114,21 @@ class CertificateControllerTest {
 
     final var actualResult = certificateController.updateCertificate(request,
         CERTIFICATE_ID);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnDeleteCertificateResponse() {
+    final var request = DeleteCertificateRequest.builder().build();
+    final var expectedResult = DeleteCertificateResponse.builder()
+        .certificate(CertificateDTO.builder().build())
+        .build();
+    doReturn(expectedResult).when(deleteCertificateService)
+        .delete(request, CERTIFICATE_ID, VERSION);
+
+    final var actualResult = certificateController.deleteCertificate(request, CERTIFICATE_ID,
+        VERSION);
 
     assertEquals(expectedResult, actualResult);
   }

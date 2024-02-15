@@ -10,13 +10,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 
 @Builder
 @Getter(AccessLevel.NONE)
-public class CertificateActionCreate implements CertificateAction {
+public class CertificateActionDelete implements CertificateAction {
 
+  private static final String NAME = "Radera";
+  private static final String DESCRIPTION = "Raderar intygsutkastet.";
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
-
-  private static final String NAME = "Skapa intyg";
-  private static final String DESCRIPTION = "Skapa ett intygsutkast.";
 
   @Override
   public CertificateActionType getType() {
@@ -25,15 +24,9 @@ public class CertificateActionCreate implements CertificateAction {
 
   @Override
   public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
-    if (actionEvaluation.patient() == null || actionEvaluation.user() == null) {
-      return false;
-    }
-
-    final var evaluated = actionRules.stream()
-        .filter(value -> value.evaluate(actionEvaluation))
+    return actionRules.stream()
+        .filter(value -> value.evaluate(certificate, actionEvaluation))
         .count() == actionRules.size();
-
-    return evaluated && isPatientAlive(actionEvaluation) && isUserNotBlocked(actionEvaluation);
   }
 
   @Override
@@ -44,13 +37,5 @@ public class CertificateActionCreate implements CertificateAction {
   @Override
   public String getDescription() {
     return DESCRIPTION;
-  }
-
-  private static boolean isUserNotBlocked(ActionEvaluation actionEvaluation) {
-    return !actionEvaluation.user().blocked().value();
-  }
-
-  private static boolean isPatientAlive(ActionEvaluation actionEvaluation) {
-    return !actionEvaluation.patient().deceased().value();
   }
 }

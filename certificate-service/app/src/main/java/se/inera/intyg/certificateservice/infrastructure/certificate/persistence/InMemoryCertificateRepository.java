@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 
@@ -31,6 +33,7 @@ public class InMemoryCertificateRepository implements CertificateRepository {
         .id(new CertificateId(UUID.randomUUID().toString()))
         .created(LocalDateTime.now(ZoneId.systemDefault()))
         .certificateModel(certificateModel)
+        .revision(new Revision(0))
         .build();
   }
 
@@ -41,6 +44,12 @@ public class InMemoryCertificateRepository implements CertificateRepository {
           "Unable to save, certificate was null"
       );
     }
+
+    if (Status.DELETED_DRAFT.equals(certificate.status())) {
+      certificateMap.remove(certificate.id());
+      return certificate;
+    }
+
     certificateMap.put(certificate.id(), certificate);
     return certificate;
   }
