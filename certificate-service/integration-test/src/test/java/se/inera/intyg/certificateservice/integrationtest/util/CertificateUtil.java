@@ -21,6 +21,14 @@ public class CertificateUtil {
     return certificate.getMetadata().getId();
   }
 
+  public static long version(CreateCertificateResponse response) {
+    final var certificate = certificate(response);
+    if (certificate == null || certificate.getMetadata() == null) {
+      return 0L;
+    }
+    return certificate.getMetadata().getVersion();
+  }
+
   public static CertificateDTO certificate(CreateCertificateResponse response) {
     if (response == null || response.getCertificate() == null) {
       return null;

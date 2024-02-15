@@ -18,11 +18,13 @@ import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Con
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.WRONG_VERSION;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCertificateTypeInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCreateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customDeleteCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customUpdateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCertificateTypeInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultDeleteCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateModelIdUtil.certificateModelId;
@@ -32,6 +34,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.exists;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueFromData;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateDateValue;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.version;
 import static se.inera.intyg.certificateservice.integrationtest.util.ResourceLinkUtil.resourceLink;
 import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
 
@@ -68,7 +71,7 @@ class FK7211ActiveIT {
   static void testProperties(DynamicPropertyRegistry registry) {
     registry.add("certificate.model.fk7211.v1_0.active.from", () -> "2024-01-01T00:00:00");
   }
-  
+
   private final TestRestTemplate restTemplate;
   private ApiUtil api;
   private TestabilityApiUtil testabilityApi;
@@ -703,6 +706,111 @@ class FK7211ActiveIT {
               .unit(ALFA_VARDCENTRAL_DTO)
               .build(),
           certificateId(testCertificate.getBody())
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7211 - Ta bort utkast")
+  class DeleteCertificate {
+
+    @Test
+    @DisplayName("FK7211 - Om utkastet är skapat på samma mottagning skall det gå att tas bort")
+    void shallDeleteCertificateIfCertificateIsOnSameSubUnit() {
+      final var testCertificate = testabilityApi.addCertificate(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var certificateId = certificateId(testCertificate.getBody());
+      api.deleteCertificate(
+          defaultDeleteCertificateRequest(),
+          certificateId,
+          version(testCertificate.getBody())
+      );
+
+      assertFalse(
+          exists(api.certificateExists(certificateId).getBody())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om utkastet är skapat på samma vårdenhet skall det gå att tas bort")
+    void shallDeleteCertificateIfCertificateIsOnSameCareUnit() {
+      final var testCertificate = testabilityApi.addCertificate(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var certificateId = certificateId(testCertificate.getBody());
+      api.deleteCertificate(
+          customDeleteCertificateRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
+          certificateId,
+          version(testCertificate.getBody())
+      );
+
+      assertFalse(
+          exists(api.certificateExists(certificateId).getBody())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om utkastet är skapat på annan mottagning skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403IfUnitIsSubUnitAndNotOnSameSubUnit() {
+      final var testCertificate = testabilityApi.addCertificate(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var certificateId = certificateId(testCertificate.getBody());
+      final var response = api.deleteCertificate(
+          customDeleteCertificateRequest()
+              .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .build(),
+          certificateId,
+          version(testCertificate.getBody())
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om utkastet är skapat på annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403IfUnitIsCareUnitAndNotOnSameCareUnit() {
+      final var testCertificate = testabilityApi.addCertificate(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var certificateId = certificateId(testCertificate.getBody());
+      final var response = api.deleteCertificate(
+          customDeleteCertificateRequest()
+              .unit(ALFA_VARDCENTRAL_DTO)
+              .careUnit(ALFA_VARDCENTRAL_DTO)
+              .build(),
+          certificateId,
+          version(testCertificate.getBody())
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7211 - Vårdadmin - Om utkastet är skapat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
+    void shallNotUpdateDataIfUserIsCareAdminAndPatientIsProtectedPerson() {
+      final var testCertificate = testabilityApi.addCertificate(
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .patient(ANONYMA_REACT_ATTILA_DTO)
+              .build()
+      );
+
+      final var certificateId = certificateId(testCertificate.getBody());
+      final var response = api.deleteCertificate(
+          customDeleteCertificateRequest()
+              .user(ALVA_VARDADMINISTRATOR_DTO)
+              .build(),
+          certificateId,
+          version(testCertificate.getBody())
       );
 
       assertEquals(403, response.getStatusCode().value());

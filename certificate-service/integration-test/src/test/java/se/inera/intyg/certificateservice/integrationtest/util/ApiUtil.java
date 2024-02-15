@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
@@ -85,6 +86,27 @@ public class ApiUtil {
     return this.restTemplate.exchange(
         requestUrl,
         HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<GetCertificateResponse> deleteCertificate(
+      DeleteCertificateRequest request, String certificateId, long version) {
+    final var requestUrl = "http://localhost:%s/api/certificate/%s/%s".formatted(
+        port,
+        certificateId,
+        Long.toString(version)
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.DELETE,
         new HttpEntity<>(request, headers),
         new ParameterizedTypeReference<>() {
         },
