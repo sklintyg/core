@@ -19,7 +19,7 @@ public class CertificateEntityMapper {
     return CertificateEntity.builder()
         .certificateId(certificate.id().id())
         .created(certificate.created())
-        .version(certificate.revision().value() + 1)
+        .version(certificate.revision().value())
         .modified(LocalDateTime.now())
         .build();
   }
