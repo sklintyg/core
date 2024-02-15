@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +13,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
@@ -62,11 +62,10 @@ public class CertificateController {
   }
 
   @DeleteMapping("/{certificateId}/{version}")
-  ResponseEntity<Void> deleteCertificate(
+  DeleteCertificateResponse deleteCertificate(
       @RequestBody DeleteCertificateRequest deleteCertificateRequest,
       @PathVariable("certificateId") String certificateId,
       @PathVariable("version") Long version) {
-    deleteCertificateService.delete(deleteCertificateRequest, certificateId, version);
-    return ResponseEntity.ok().build();
+    return deleteCertificateService.delete(deleteCertificateRequest, certificateId, version);
   }
 }

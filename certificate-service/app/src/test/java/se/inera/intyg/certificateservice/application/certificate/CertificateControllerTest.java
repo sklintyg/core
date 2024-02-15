@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.application.certificate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +13,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
@@ -119,10 +119,17 @@ class CertificateControllerTest {
   }
 
   @Test
-  void shallCallDeleteCertificateService() {
+  void shallReturnDeleteCertificateResponse() {
     final var request = DeleteCertificateRequest.builder().build();
-    certificateController.deleteCertificate(request, CERTIFICATE_ID, VERSION);
+    final var expectedResult = DeleteCertificateResponse.builder()
+        .certificate(CertificateDTO.builder().build())
+        .build();
+    doReturn(expectedResult).when(deleteCertificateService)
+        .delete(request, CERTIFICATE_ID, VERSION);
 
-    verify(deleteCertificateService).delete(request, CERTIFICATE_ID, VERSION);
+    final var actualResult = certificateController.deleteCertificate(request, CERTIFICATE_ID,
+        VERSION);
+
+    assertEquals(expectedResult, actualResult);
   }
 }
