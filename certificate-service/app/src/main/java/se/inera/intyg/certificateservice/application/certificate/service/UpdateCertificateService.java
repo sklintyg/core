@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
@@ -27,6 +28,7 @@ public class UpdateCertificateService {
   private final CertificateConverter certificateConverter;
   private final ResourceLinkConverter resourceLinkConverter;
 
+  @Transactional
   public UpdateCertificateResponse update(UpdateCertificateRequest updateCertificateRequest,
       String certificateId) {
     updateCertificateRequestValidator.validate(updateCertificateRequest, certificateId);

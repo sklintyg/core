@@ -4,10 +4,10 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.nio.charset.StandardCharsets;
@@ -25,11 +25,12 @@ import lombok.NoArgsConstructor;
 public class CertificateDataEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "key")
+  @Column(name = "`key`")
   private Long key;
 
-  @OneToOne(mappedBy = "data")
+  @OneToOne
+  @MapsId
+  @JoinColumn(name = "`key`")
   private CertificateEntity certificate;
 
   @Lob

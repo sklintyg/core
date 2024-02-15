@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -57,7 +58,7 @@ public class CertificateEntity {
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
   @JoinColumn(name = "care_unit_unit_key", referencedColumnName = "`key`", nullable = false)
   private UnitEntity careUnit;
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JoinColumn(name = "certificate_data_key", referencedColumnName = "`key`")
+  @OneToOne(mappedBy = "certificate", cascade = CascadeType.ALL)
+  @PrimaryKeyJoinColumn
   private CertificateDataEntity data;
 }
