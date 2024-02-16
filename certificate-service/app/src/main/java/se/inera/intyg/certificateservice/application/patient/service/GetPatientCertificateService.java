@@ -34,7 +34,7 @@ public class GetPatientCertificateService {
     final var certificates = getPatientCertificatesDomainService.get(actionEvaluation);
 
     return GetPatientCertificatesResponse.builder()
-        .certificate(certificates.stream()
+        .certificates(certificates.stream()
             .map(certificate -> certificateConverter.convert(
                     certificate,
                     certificate.actions(actionEvaluation).stream()

@@ -26,6 +26,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCerti
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoResponse;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetLatestCertificateTypeVersionResponse;
+import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
+import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesResponse;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityResetCertificateRequest;
 
 @Slf4j
@@ -78,6 +80,25 @@ public class ApiUtil {
     final var requestUrl = "http://localhost:%s/api/certificate/%s".formatted(
         port,
         certificateId
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<GetPatientCertificatesResponse> getPatientCertificates(
+      GetPatientCertificatesRequest request) {
+    final var requestUrl = "http://localhost:%s/api/patient/certificate".formatted(
+        port
     );
 
     final var headers = new HttpHeaders();

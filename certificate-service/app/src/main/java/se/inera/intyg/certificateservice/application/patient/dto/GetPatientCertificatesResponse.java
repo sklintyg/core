@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCerti
 @Builder
 public class GetPatientCertificatesResponse {
 
-  List<CertificateDTO> certificate;
+  List<CertificateDTO> certificates;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class GetPatientCertificatesResponseBuilder {

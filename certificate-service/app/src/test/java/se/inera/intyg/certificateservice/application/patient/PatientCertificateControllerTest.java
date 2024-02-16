@@ -26,7 +26,7 @@ class PatientCertificateControllerTest {
   void shallReturnGetPatientCertificatesResponse() {
     final var certificates = List.of(CertificateDTO.builder().build());
     final var expectedResult = GetPatientCertificatesResponse.builder()
-        .certificate(certificates)
+        .certificates(certificates)
         .build();
 
     final var request = GetPatientCertificatesRequest.builder().build();

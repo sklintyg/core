@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.testability.certificate.service;
 
 import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
 
+import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +29,7 @@ import se.inera.intyg.certificateservice.testability.certificate.service.reposit
 
 @Profile(TESTABILITY_PROFILE)
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class TestabilityCertificateService {
 

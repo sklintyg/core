@@ -64,7 +64,7 @@ class GetPatientCertificateServiceTest {
         .links(List.of(resourceLinkDTO))
         .build();
     final var expectedResponse = GetPatientCertificatesResponse.builder()
-        .certificate(
+        .certificates(
             List.of(certificateDTO)
         )
         .build();
