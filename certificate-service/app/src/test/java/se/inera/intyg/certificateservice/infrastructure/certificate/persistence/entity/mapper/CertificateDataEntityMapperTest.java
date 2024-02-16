@@ -13,18 +13,17 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 
 class CertificateDataEntityMapperTest {
 
-  private static final LocalDate NOW = LocalDate.now();
+  private static final LocalDate DATE = LocalDate.parse("2024-02-16");
 
   @Test
   void shouldConvertToEntity() {
     final var expected =
-        "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"date\":[" + NOW.getYear() + ","
-            + NOW.getMonthValue() + "," + NOW.getDayOfMonth() + "]}}]";
+        "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"date\":\"2024-02-16\"}}]";
     final var element = ElementData.builder()
         .id(new ElementId("F10"))
         .value(ElementValueDate
             .builder()
-            .date(NOW)
+            .date(DATE)
             .build())
         .build();
 
@@ -36,14 +35,13 @@ class CertificateDataEntityMapperTest {
   @Test
   void shouldConvertToDomain() {
     final var json =
-        "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"date\":[" + NOW.getYear() + ","
-            + NOW.getMonthValue() + "," + NOW.getDayOfMonth() + "]}}]";
+        "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"date\":\"2024-02-16\"}}]";
     final var expected = List.of(
         ElementData.builder()
             .id(new ElementId("F10"))
             .value(ElementValueDate
                 .builder()
-                .date(NOW)
+                .date(DATE)
                 .build())
             .build()
     );
@@ -56,11 +54,11 @@ class CertificateDataEntityMapperTest {
   @Test
   void shouldThrowErrorIfJsonStringIsFormattedWrong() {
     final var json =
-        "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"date\":[" + NOW.getYear() + ",";
+        "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"date\":\"2024\"}}]";
     final var object = new CertificateDataEntity(json);
 
     assertThrows(IllegalStateException.class,
-        () -> CertificateDataEntityMapper.toDomain(object));
+        () -> CertificateDataEntityMapper.toDomain(object)
+    );
   }
-
 }

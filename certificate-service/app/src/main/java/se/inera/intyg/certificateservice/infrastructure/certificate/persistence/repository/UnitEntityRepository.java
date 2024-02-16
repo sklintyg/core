@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository;
 
+import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
@@ -7,6 +8,5 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 @Repository
 public interface UnitEntityRepository extends CrudRepository<UnitEntity, Long> {
 
-  UnitEntity findByHsaId(String hsaId);
-
+  Optional<UnitEntity> findByHsaId(String hsaId);
 }

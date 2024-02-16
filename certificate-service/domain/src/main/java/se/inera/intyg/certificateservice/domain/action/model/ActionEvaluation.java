@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.domain.action.model;
 
-import java.util.Objects;
 import lombok.Builder;
 import lombok.Value;
 import lombok.With;
@@ -23,6 +22,6 @@ public class ActionEvaluation {
 
 
   public boolean isIssuingUnitCareUnit() {
-    return Objects.equals(subUnit.hsaId().id(), careUnit.hsaId().id());
+    return subUnit.hsaId().equals(careUnit.hsaId());
   }
 }

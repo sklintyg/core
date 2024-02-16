@@ -1,6 +1,10 @@
-package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity;
+package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_MIDDLE_NAME;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -11,7 +15,9 @@ import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PatientEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientIdTypeEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PersonEntityIdType;
 
 class PatientEntityMapperTest {
 
@@ -133,14 +139,14 @@ class PatientEntityMapperTest {
       boolean protectedPerson) {
     return Patient.builder()
         .id(PersonId.builder()
-            .id("ID")
+            .id(ATHENA_REACT_ANDERSSON_ID)
             .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
             .build())
         .name(
             Name.builder()
-                .firstName("FIRST")
-                .lastName("LAST")
-                .middleName("MIDDLE")
+                .firstName(ATHENA_REACT_ANDERSSON_FIRST_NAME)
+                .lastName(ATHENA_REACT_ANDERSSON_MIDDLE_NAME)
+                .middleName(ATHENA_REACT_ANDERSSON_LAST_NAME)
                 .build()
         )
         .protectedPerson(new ProtectedPerson(protectedPerson))
@@ -152,18 +158,17 @@ class PatientEntityMapperTest {
   private static PatientEntity getPatientEntity(boolean testIndicated, boolean isDeceased,
       boolean isProtectedPerson) {
     return PatientEntity.builder()
-        .id("ID")
+        .id(ATHENA_REACT_ANDERSSON_ID)
         .protectedPerson(isProtectedPerson)
         .testIndicated(testIndicated)
         .deceased(isDeceased)
         .type(PatientIdTypeEntity.builder()
-            .type(PersonIdType.PERSONAL_IDENTITY_NUMBER.name())
-            .key(1)
+            .type(PersonEntityIdType.PERSONAL_IDENTITY_NUMBER.name())
+            .key(PersonEntityIdType.PERSONAL_IDENTITY_NUMBER.getKey())
             .build())
-        .firstName("FIRST")
-        .middleName("MIDDLE")
-        .lastName("LAST")
+        .firstName(ATHENA_REACT_ANDERSSON_FIRST_NAME)
+        .middleName(ATHENA_REACT_ANDERSSON_MIDDLE_NAME)
+        .lastName(ATHENA_REACT_ANDERSSON_LAST_NAME)
         .build();
   }
-
 }

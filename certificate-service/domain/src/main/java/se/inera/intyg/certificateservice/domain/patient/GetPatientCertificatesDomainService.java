@@ -13,18 +13,22 @@ public class GetPatientCertificatesDomainService {
   private final CertificateRepository certificateRepository;
 
   public List<Certificate> get(ActionEvaluation actionEvaluation) {
-    return getPatientCertificates(actionEvaluation).stream()
+    return certificates(actionEvaluation).stream()
         .filter(certificate -> certificate.allowTo(CertificateActionType.READ, actionEvaluation))
         .toList();
   }
 
-  private List<Certificate> getPatientCertificates(ActionEvaluation actionEvaluation) {
+  private List<Certificate> certificates(ActionEvaluation actionEvaluation) {
     if (actionEvaluation.isIssuingUnitCareUnit()) {
-      return certificateRepository.findByPatientByCareUnit(actionEvaluation.patient(),
-          actionEvaluation.careUnit());
+      return certificateRepository.findByPatientByCareUnit(
+          actionEvaluation.patient(),
+          actionEvaluation.careUnit()
+      );
     }
-    return certificateRepository.findByPatientBySubUnit(actionEvaluation.patient(),
-        actionEvaluation.subUnit());
+    return certificateRepository.findByPatientBySubUnit(
+        actionEvaluation.patient(),
+        actionEvaluation.subUnit()
+    );
   }
 }
 

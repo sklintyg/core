@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity;
+package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
@@ -30,9 +33,20 @@ import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientIdTypeEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitTypeEntity;
 
+@ExtendWith(MockitoExtension.class)
 class CertificateEntityMapperTest {
+
+  @InjectMocks
+  private CertificateEntityMapper certificateEntityMapper;
 
   private final static Certificate CERTIFICATE = Certificate.builder()
       .id(new CertificateId("ID"))
@@ -129,14 +143,14 @@ class CertificateEntityMapperTest {
 
     @Test
     void shouldMapId() {
-      final var response = CertificateEntityMapper.toEntity(CERTIFICATE);
+      final var response = certificateEntityMapper.toCertificateEntity(CERTIFICATE);
 
       assertEquals(CERTIFICATE.id().id(), response.getCertificateId());
     }
 
     @Test
     void shouldMapCreated() {
-      final var response = CertificateEntityMapper.toEntity(CERTIFICATE);
+      final var response = certificateEntityMapper.toCertificateEntity(CERTIFICATE);
 
       assertEquals(CERTIFICATE.created(), response.getCreated());
     }
@@ -144,50 +158,32 @@ class CertificateEntityMapperTest {
   }
 
   @Nested
-  class UpdateEntity {
-
-    @Test
-    void shouldSetRevision() {
-      final var response = CertificateEntityMapper.updateEntity(CERTIFICATE_ENTITY, CERTIFICATE);
-      assertEquals(3, response.getRevision());
-
-    }
-
-    @Test
-    void shouldSetModified() {
-      final var response = CertificateEntityMapper.updateEntity(CERTIFICATE_ENTITY, CERTIFICATE);
-      assertEquals(CERTIFICATE_ENTITY.getModified(), response.getModified());
-
-    }
-  }
-
-  @Nested
   class ToDomain {
 
     @Test
     void shouldMapId() {
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(CERTIFICATE_ENTITY.getCertificateId(), response.id().id());
     }
 
     @Test
     void shouldMapCreated() {
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(CERTIFICATE_ENTITY.getCreated(), response.created());
     }
 
     @Test
     void shouldMapRevision() {
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(CERTIFICATE_ENTITY.getRevision(), response.revision().value());
     }
 
     @Test
     void shouldMapModel() {
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(MODEL, response.certificateModel());
     }
@@ -199,7 +195,7 @@ class CertificateEntityMapperTest {
           .name(new UnitName("NAME_PROVIDER"))
           .build();
 
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(expected, response.certificateMetaData().careProvider());
     }
@@ -211,7 +207,7 @@ class CertificateEntityMapperTest {
           .name(new UnitName("NAME_UNIT"))
           .build();
 
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(expected, response.certificateMetaData().careUnit());
     }
@@ -223,7 +219,7 @@ class CertificateEntityMapperTest {
           .name(new UnitName("NAME_ISSUED"))
           .build();
 
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(expected, response.certificateMetaData().issuingUnit());
     }
@@ -248,7 +244,7 @@ class CertificateEntityMapperTest {
           .name(new UnitName("NAME_ISSUED"))
           .build();
 
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(expected, response.certificateMetaData().issuingUnit());
     }
@@ -262,7 +258,7 @@ class CertificateEntityMapperTest {
               .build())
           .build();
 
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(expected, response.certificateMetaData().issuer());
     }
@@ -286,7 +282,7 @@ class CertificateEntityMapperTest {
           .testIndicated(new TestIndicated(false))
           .build();
 
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(expected, response.certificateMetaData().patient());
     }
@@ -303,7 +299,7 @@ class CertificateEntityMapperTest {
               .build()
       );
 
-      final var response = CertificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(expected, response.elementData());
     }

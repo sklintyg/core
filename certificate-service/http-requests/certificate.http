@@ -1,4 +1,4 @@
-### Create certificate
+### Create certificate - Hudmottagningen
 POST http://localhost:18030/api/certificate
 Content-Type: application/json
 
@@ -19,7 +19,61 @@ Content-Type: application/json
   },
   "careUnit": {
     "id": "TSTNMT2321000156-ALMC",
-    "name": "Alfa Medicincentrum"
+    "name": "Alfa Medicincentrum",
+    "address": "Alfaadressen 1",
+    "city": "Alfastaden",
+    "zipCode": "Alfapostnummer",
+    "inactive": "false"
+  },
+  "careProvider": {
+    "id": "TSTNMT2321000156-ALFA",
+    "name": "Alfa Regionen"
+  },
+  "patient": {
+    "id": {
+      "type": "PERSONAL_IDENTITY_NUMBER",
+      "id": "191212121212"
+    },
+    "firstName": "Tolvan",
+    "middleName": "TP",
+    "lastName": "Tolvansson",
+    "fullName": "Tolvan TP Tolvansson",
+    "deceased": "false",
+    "protectedPerson": "false",
+    "testIndicated": "false"
+  },
+  "certificateModelId": {
+    "type": "fk7211",
+    "version": "1.0"
+  }
+}
+
+### Create certificate - Allergimottagningen
+POST http://localhost:18030/api/certificate
+Content-Type: application/json
+
+{
+  "user": {
+    "id": "TSTNMT2321000156-DRAA",
+    "name": "Alja Doctor",
+    "role": "DOCTOR",
+    "blocked": "false"
+  },
+  "unit": {
+    "id": "TSTNMT2321000156-ALAM",
+    "name": "Alfa Allergimottagningen",
+    "address": "Alfaadressen 1",
+    "city": "Alfastaden",
+    "zipCode": "Alfapostnummer",
+    "inactive": "false"
+  },
+  "careUnit": {
+    "id": "TSTNMT2321000156-ALMC",
+    "name": "Alfa Medicincentrum",
+    "address": "Alfaadressen 1",
+    "city": "Alfastaden",
+    "zipCode": "Alfapostnummer",
+    "inactive": "false"
   },
   "careProvider": {
     "id": "TSTNMT2321000156-ALFA",
@@ -45,10 +99,10 @@ Content-Type: application/json
 }
 
 ### Certificate exists
-GET http://localhost:18030/api/certificate/a4665551-1b91-456d-b9e8-40b954c62723/exists
+GET http://localhost:18030/api/certificate/87ee572b-f55d-4955-b7a0-cb60d5e7be45/exists
 
 ### Get certificate
-POST http://localhost:18030/api/certificate/a4665551-1b91-456d-b9e8-40b954c62723
+POST http://localhost:18030/api/certificate/87ee572b-f55d-4955-b7a0-cb60d5e7be45
 Content-Type: application/json
 
 {
@@ -93,7 +147,7 @@ Content-Type: application/json
 }
 
 ### Update certificate
-PUT http://localhost:18030/api/certificate/a3f72863-0857-4df8-be6a-a73b22a69b67
+PUT http://localhost:18030/api/certificate/87ee572b-f55d-4955-b7a0-cb60d5e7be45
 Content-Type: application/json
 
 {
@@ -159,7 +213,7 @@ Content-Type: application/json
         "address": "Alfaadressen 1",
         "zipCode": "Alfapostnummer",
         "city": "Alfastaden",
-        "phoneNumber": null,
+        "phoneNumber": "009911",
         "email": null,
         "isInactive": false
       },

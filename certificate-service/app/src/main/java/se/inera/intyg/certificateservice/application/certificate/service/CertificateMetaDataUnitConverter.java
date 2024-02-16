@@ -22,20 +22,37 @@ public class CertificateMetaDataUnitConverter {
               .city(elementValue.city())
               .zipCode(elementValue.zipCode())
               .phoneNumber(elementValue.phoneNumber())
-              .email(issuingUnit.contactInfo().email())
-              .isInactive(issuingUnit.inactive().value())
+              .email(
+                  issuingUnit.contactInfo() == null ? null : issuingUnit.contactInfo().email()
+              )
+              .isInactive(
+                  issuingUnit.inactive() == null ? Boolean.FALSE : issuingUnit.inactive().value()
+              )
               .build();
         })
         .orElse(
             UnitDTO.builder()
                 .unitId(issuingUnit.hsaId().id())
                 .unitName(issuingUnit.name().name())
-                .address(issuingUnit.address().address())
-                .city(issuingUnit.address().city())
-                .zipCode(issuingUnit.address().zipCode())
-                .phoneNumber(issuingUnit.contactInfo().phoneNumber())
-                .email(issuingUnit.contactInfo().email())
-                .isInactive(issuingUnit.inactive().value())
+                .address(
+                    issuingUnit.address() == null ? null : issuingUnit.address().address()
+                )
+                .city(
+                    issuingUnit.address() == null ? null : issuingUnit.address().city()
+                )
+                .zipCode(
+                    issuingUnit.address() == null ? null : issuingUnit.address().zipCode()
+                )
+                .phoneNumber(
+                    issuingUnit.contactInfo() == null ? null
+                        : issuingUnit.contactInfo().phoneNumber()
+                )
+                .email(
+                    issuingUnit.contactInfo() == null ? null : issuingUnit.contactInfo().email()
+                )
+                .isInactive(
+                    issuingUnit.inactive() == null ? Boolean.FALSE : issuingUnit.inactive().value()
+                )
                 .build()
         );
   }

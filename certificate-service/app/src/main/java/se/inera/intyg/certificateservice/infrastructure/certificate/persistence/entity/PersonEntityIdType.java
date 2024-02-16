@@ -5,7 +5,7 @@ public enum PersonEntityIdType {
 
   private int key;
 
-  private PersonEntityIdType(int key) {
+  PersonEntityIdType(int key) {
     this.key = key;
   }
 
