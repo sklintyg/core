@@ -4,7 +4,6 @@ import static se.inera.intyg.certificateservice.testability.common.TestabilityCo
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,11 +81,25 @@ public class InMemoryCertificateRepository implements CertificateRepository {
 
   @Override
   public List<Certificate> findByPatientByCareUnit(Patient patient, CareUnit careUnit) {
-    return Collections.emptyList();
+    return certificateMap.values().stream()
+        .filter(
+            certificate -> certificate.certificateMetaData().patient().id().equals(patient.id())
+        )
+        .filter(certificate -> certificate.certificateMetaData().careUnit().hsaId()
+            .equals(careUnit.hsaId())
+        )
+        .toList();
   }
 
   @Override
   public List<Certificate> findByPatientBySubUnit(Patient patient, SubUnit subUnit) {
-    return Collections.emptyList();
+    return certificateMap.values().stream()
+        .filter(
+            certificate -> certificate.certificateMetaData().patient().id().equals(patient.id())
+        )
+        .filter(certificate -> certificate.certificateMetaData().issuingUnit().hsaId()
+            .equals(subUnit.hsaId())
+        )
+        .toList();
   }
 }
