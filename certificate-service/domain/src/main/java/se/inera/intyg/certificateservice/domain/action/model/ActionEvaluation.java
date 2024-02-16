@@ -19,4 +19,9 @@ public class ActionEvaluation {
   SubUnit subUnit;
   CareUnit careUnit;
   CareProvider careProvider;
+
+
+  public boolean isIssuingUnitCareUnit() {
+    return subUnit.hsaId().equals(careUnit.hsaId());
+  }
 }

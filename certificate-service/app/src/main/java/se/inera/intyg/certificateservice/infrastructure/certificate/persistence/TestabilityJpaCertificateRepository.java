@@ -8,31 +8,24 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntityRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntityRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntityRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntityRepository;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateRepository;
 
 @Profile(TESTABILITY_PROFILE)
 @Primary
 @Repository
-public class TestabilityJpaCertificateRepository
-    extends JpaCertificateRepository implements
-    TestabilityCertificateRepository {
+public class TestabilityJpaCertificateRepository extends JpaCertificateRepository
+    implements TestabilityCertificateRepository {
 
   private final CertificateEntityRepository certificateEntityRepository;
 
   public TestabilityJpaCertificateRepository(
       CertificateEntityRepository certificateEntityRepository,
-      CertificateModelEntityRepository certificateModelEntityRepository,
-      StaffEntityRepository staffEntityRepository, UnitEntityRepository unitEntityRepository,
-      PatientEntityRepository patientEntityRepository,
-      CertificateModelRepository certificateModelRepository) {
-    super(certificateEntityRepository, certificateModelEntityRepository, staffEntityRepository,
-        unitEntityRepository, patientEntityRepository, certificateModelRepository);
+      PatientRepository patientRepository,
+      UnitRepository unitRepository,
+      CertificateEntityMapper certificateEntityMapper) {
+    super(certificateEntityRepository, patientRepository, unitRepository, certificateEntityMapper);
     this.certificateEntityRepository = certificateEntityRepository;
   }
 
@@ -49,5 +42,4 @@ public class TestabilityJpaCertificateRepository
             .toList()
     );
   }
-
 }

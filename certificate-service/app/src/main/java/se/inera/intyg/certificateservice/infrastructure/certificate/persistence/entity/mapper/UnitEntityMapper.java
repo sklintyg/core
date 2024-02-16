@@ -3,9 +3,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
+import se.inera.intyg.certificateservice.domain.certificate.model.IssuingUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.UnitName;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.Unit;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitTypeEntity;
@@ -16,22 +16,33 @@ public class UnitEntityMapper {
     throw new IllegalStateException("Utility class");
   }
 
-  public static UnitEntity toEntity(Unit unit) {
-    return switch (unit.getType()) {
-      case SUB_UNIT -> toSubUnitEntity(unit);
-      case CARE_UNIT -> toCareUnitEntity(unit);
-      case CARE_PROVIDER -> toCareProviderEntity(unit);
-    };
-  }
-
-  public static CareProvider toCareProviderDomain(UnitEntity unit) {
-    return CareProvider.builder()
-        .name(new UnitName(unit.getName()))
-        .hsaId(new HsaId(unit.getHsaId()))
+  public static UnitEntity toEntity(CareUnit careUnit) {
+    return UnitEntity.builder()
+        .type(
+            UnitTypeEntity.builder()
+                .key(UnitType.CARE_UNIT.getKey())
+                .type(UnitType.CARE_UNIT.name())
+                .build()
+        )
+        .hsaId(careUnit.hsaId().id())
+        .name(careUnit.name().name())
         .build();
   }
 
-  public static UnitEntity toCareProviderEntity(Unit unit) {
+  public static UnitEntity toEntity(SubUnit subUnit) {
+    return UnitEntity.builder()
+        .type(
+            UnitTypeEntity.builder()
+                .key(UnitType.SUB_UNIT.getKey())
+                .type(UnitType.SUB_UNIT.name())
+                .build()
+        )
+        .hsaId(subUnit.hsaId().id())
+        .name(subUnit.name().name())
+        .build();
+  }
+
+  public static UnitEntity toEntity(CareProvider careProvider) {
     return UnitEntity.builder()
         .type(
             UnitTypeEntity.builder()
@@ -39,8 +50,15 @@ public class UnitEntityMapper {
                 .type(UnitType.CARE_PROVIDER.name())
                 .build()
         )
-        .hsaId(unit.getHsaId())
-        .name(unit.getName())
+        .hsaId(careProvider.hsaId().id())
+        .name(careProvider.name().name())
+        .build();
+  }
+
+  public static CareProvider toCareProviderDomain(UnitEntity unit) {
+    return CareProvider.builder()
+        .name(new UnitName(unit.getName()))
+        .hsaId(new HsaId(unit.getHsaId()))
         .build();
   }
 
@@ -51,19 +69,6 @@ public class UnitEntityMapper {
         .build();
   }
 
-  public static UnitEntity toCareUnitEntity(Unit unit) {
-    return UnitEntity.builder()
-        .type(
-            UnitTypeEntity.builder()
-                .key(UnitType.CARE_UNIT.getKey())
-                .type(UnitType.CARE_UNIT.name())
-                .build()
-        )
-        .hsaId(unit.getHsaId())
-        .name(unit.getName())
-        .build();
-  }
-
   public static SubUnit toSubUnitDomain(UnitEntity unit) {
     return SubUnit.builder()
         .name(new UnitName(unit.getName()))
@@ -71,16 +76,9 @@ public class UnitEntityMapper {
         .build();
   }
 
-  public static UnitEntity toSubUnitEntity(Unit unit) {
-    return UnitEntity.builder()
-        .type(
-            UnitTypeEntity.builder()
-                .key(UnitType.SUB_UNIT.getKey())
-                .type(UnitType.SUB_UNIT.name())
-                .build()
-        )
-        .hsaId(unit.getHsaId())
-        .name(unit.getName())
-        .build();
+  public static IssuingUnit toIssuingUnitDomain(UnitEntity unit) {
+    return unit.getType().getKey() == UnitType.SUB_UNIT.getKey()
+        ? toSubUnitDomain(unit)
+        : toCareUnitDomain(unit);
   }
 }

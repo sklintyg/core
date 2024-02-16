@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.integrationtest.util;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
@@ -10,6 +11,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType;
+import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesResponse;
 
 public class CertificateUtil {
 
@@ -43,6 +45,23 @@ public class CertificateUtil {
     }
 
     return response.getCertificate();
+  }
+
+  public static List<CertificateDTO> certificates(GetPatientCertificatesResponse response) {
+    if (response == null || response.getCertificates() == null) {
+      return null;
+    }
+    return response.getCertificates();
+  }
+
+  public static boolean exists(List<CertificateDTO> certificates, CertificateDTO certificate) {
+    if (certificates == null || certificate == null) {
+      return false;
+    }
+    return certificates.stream()
+        .anyMatch(certificateDTO -> certificateDTO.getMetadata().getId()
+            .equals(certificate.getMetadata().getId())
+        );
   }
 
   public static boolean exists(CertificateExistsResponse response) {

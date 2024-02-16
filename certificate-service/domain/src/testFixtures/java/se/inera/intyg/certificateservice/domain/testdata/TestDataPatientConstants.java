@@ -63,9 +63,9 @@ public class TestDataPatientConstants {
   public static final ProtectedPerson ATLAS_REACT_ABRAHAMSSON_PROTECTED_PERSON = PROTECTED_PERSON_FALSE;
 
   public static final String ANONYMA_REACT_ATTILA_ID = "19401201-9149";
-  public static final String ANONYMA_REACT_ATTILA_FIRST_NAME = "Atlas";
+  public static final String ANONYMA_REACT_ATTILA_FIRST_NAME = "Anonyma";
   public static final String ANONYMA_REACT_ATTILA_MIDDLE_NAME = "React";
-  public static final String ANONYMA_REACT_ATTILA_LAST_NAME = "Abrahamsson";
+  public static final String ANONYMA_REACT_ATTILA_LAST_NAME = "Attila";
   public static final String ANONYMA_REACT_ATTILA_FULL_NAME = "%s %s %s".formatted(
       ANONYMA_REACT_ATTILA_FIRST_NAME,
       ANONYMA_REACT_ATTILA_MIDDLE_NAME,

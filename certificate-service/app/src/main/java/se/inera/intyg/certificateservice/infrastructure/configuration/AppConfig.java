@@ -8,6 +8,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.DeleteCertif
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.domain.patient.GetPatientCertificatesDomainService;
 
 @Configuration
 public class AppConfig {
@@ -35,5 +36,11 @@ public class AppConfig {
   public DeleteCertificateDomainService deleteCertificateDomainService(
       CertificateRepository certificateRepository) {
     return new DeleteCertificateDomainService(certificateRepository);
+  }
+
+  @Bean
+  public GetPatientCertificatesDomainService getPatientCertificatesDomainService(
+      CertificateRepository certificateRepository) {
+    return new GetPatientCertificatesDomainService(certificateRepository);
   }
 }

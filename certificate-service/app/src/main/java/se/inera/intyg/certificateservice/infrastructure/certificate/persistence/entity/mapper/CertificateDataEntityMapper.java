@@ -2,7 +2,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -17,41 +19,43 @@ public class CertificateDataEntityMapper {
     throw new IllegalStateException("Utility class");
   }
 
-  // TODO: Fix error handling
-
   public static CertificateDataEntity toEntity(List<ElementData> elements) {
     final var mappedElements = elements.stream()
         .map(ElementDataMapper::toMapped)
         .toList();
 
-    final var out = new ByteArrayOutputStream();
-    final var mapper = new ObjectMapper();
+    try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
-    try {
-      mapper.writeValue(out, mappedElements);
+      objectMapper().writeValue(out, mappedElements);
+
+      return CertificateDataEntity.builder()
+          .data(out.toByteArray())
+          .build();
     } catch (IOException e) {
       throw new IllegalStateException("Error when processing element data to JSON", e);
     }
-
-    final var data = out.toByteArray();
-
-    return CertificateDataEntity.builder()
-        .data(data)
-        .build();
   }
 
   public static List<ElementData> toDomain(CertificateDataEntity entity) {
     try {
-      final var elements = new ObjectMapper().readValue(entity.getData(),
+      final var elements = objectMapper().readValue(
+          entity.getData(),
           new TypeReference<List<MappedElementData>>() {
-          });
+          }
+      );
 
       return elements.stream()
           .map(ElementDataMapper::toDomain)
           .toList();
-
     } catch (JsonProcessingException e) {
       throw new IllegalStateException("Error when processing json to ElementData", e);
     }
+  }
+
+  private static JsonMapper objectMapper() {
+    return JsonMapper.builder()
+        .addModule(new JavaTimeModule())
+        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+        .build();
   }
 }

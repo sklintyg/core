@@ -6,6 +6,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
+import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityCertificateRequest;
 
 public class ApiRequestUtil {
@@ -47,6 +48,14 @@ public class ApiRequestUtil {
 
   public static GetCertificateRequest defaultGetCertificateRequest() {
     return GetCertificateRequestBuilder.create().build();
+  }
+
+  public static GetPatientCertificatesRequest defaultGetPatientCertificateRequest() {
+    return GetPatientCertificatesRequestBuilder.create().build();
+  }
+
+  public static GetPatientCertificatesRequestBuilder customGetPatientCertificatesRequest() {
+    return GetPatientCertificatesRequestBuilder.create();
   }
 
   public static UpdateCertificateRequestBuilder customUpdateCertificateRequest() {
