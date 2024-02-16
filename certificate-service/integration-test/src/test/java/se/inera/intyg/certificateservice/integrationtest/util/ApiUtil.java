@@ -97,7 +97,7 @@ public class ApiUtil {
 
   public ResponseEntity<GetPatientCertificatesResponse> getPatientCertificates(
       GetPatientCertificatesRequest request) {
-    final var requestUrl = "http://localhost:%s/api/patient/certificate".formatted(
+    final var requestUrl = "http://localhost:%s/api/patient/certificates".formatted(
         port
     );
 
