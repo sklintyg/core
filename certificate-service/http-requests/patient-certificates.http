@@ -1,5 +1,5 @@
 ### Get certificates for patient - Same careunit
-POST http://localhost:18030/api/patient/certificate
+POST http://localhost:18030/api/patient/certificates
 Content-Type: application/json
 
 {
@@ -41,7 +41,7 @@ Content-Type: application/json
 }
 
 ### Get certificates for patient - Same subunit
-POST http://localhost:18030/api/patient/certificate
+POST http://localhost:18030/api/patient/certificates
 Content-Type: application/json
 
 {

@@ -7,6 +7,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCerti
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
+import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoRequest;
+import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesRequest;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityCertificateRequest;
 
 public class ApiRequestUtil {
@@ -58,12 +60,28 @@ public class ApiRequestUtil {
     return GetPatientCertificatesRequestBuilder.create();
   }
 
-  public static UpdateCertificateRequestBuilder customUpdateCertificateRequest() {
-    return UpdateCertificateRequestBuilder.create();
+  public static GetUnitCertificatesInfoRequest defaultGetUnitCertificatesInfoRequest() {
+    return GetUnitCertificatesInfoRequestBuilder.create().build();
+  }
+
+  public static GetUnitCertificatesInfoRequestBuilder customGetUnitCertificatesInfoRequest() {
+    return GetUnitCertificatesInfoRequestBuilder.create();
+  }
+
+  public static GetUnitCertificatesRequest defaultGetUnitCertificatesRequest() {
+    return GetUnitCertificatesRequestBuilder.create().build();
+  }
+
+  public static GetUnitCertificatesRequestBuilder customGetUnitCertificatesRequest() {
+    return GetUnitCertificatesRequestBuilder.create();
   }
 
   public static UpdateCertificateRequest defaultUpdateCertificateRequest() {
     return UpdateCertificateRequestBuilder.create().build();
+  }
+
+  public static UpdateCertificateRequestBuilder customUpdateCertificateRequest() {
+    return UpdateCertificateRequestBuilder.create();
   }
 
   public static DeleteCertificateRequest defaultDeleteCertificateRequest() {

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIssuingUnit;
-import se.inera.intyg.certificateservice.domain.certificate.model.IssuingUnit;
+import se.inera.intyg.certificateservice.domain.unit.model.IssuingUnit;
 
 @Component
 public class CertificateMetaDataUnitConverter {

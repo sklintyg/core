@@ -350,7 +350,7 @@ Content-Type: application/json
 }
 
 ### Delete certificate
-DELETE http://localhost:18030/api/certificate/5cc3a55a-db56-41c2-b1ee-30b005c5229e/0
+DELETE http://localhost:18030/api/certificate/640de5cb-d99b-437c-bb9a-296107f4efc9/0
 Content-Type: application/json
 
 {

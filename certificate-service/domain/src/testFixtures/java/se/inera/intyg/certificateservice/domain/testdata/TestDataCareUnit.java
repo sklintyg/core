@@ -15,12 +15,12 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_PHONENUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ZIP_CODE;
 
-import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
-import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit.CareUnitBuilder;
-import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
-import se.inera.intyg.certificateservice.domain.certificate.model.UnitAddress;
-import se.inera.intyg.certificateservice.domain.certificate.model.UnitContactInfo;
-import se.inera.intyg.certificateservice.domain.certificate.model.UnitName;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
+import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
+import se.inera.intyg.certificateservice.domain.unit.model.CareUnit.CareUnitBuilder;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitAddress;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitContactInfo;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
 
 public class TestDataCareUnit {
 

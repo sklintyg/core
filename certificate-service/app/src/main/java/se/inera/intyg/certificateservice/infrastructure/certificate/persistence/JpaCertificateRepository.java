@@ -1,46 +1,30 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
-import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
-import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
-import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-import se.inera.intyg.certificateservice.domain.patient.model.Patient;
+import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
+import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateRepository;
 
-@Profile("!" + TESTABILITY_PROFILE)
-@Primary
 @Repository
-public class JpaCertificateRepository implements CertificateRepository {
+@RequiredArgsConstructor
+public class JpaCertificateRepository implements TestabilityCertificateRepository {
 
   private final CertificateEntityRepository certificateEntityRepository;
-  private final PatientRepository patientRepository;
-  private final UnitRepository unitRepository;
   private final CertificateEntityMapper certificateEntityMapper;
-
-  public JpaCertificateRepository(
-      CertificateEntityRepository certificateEntityRepository,
-      PatientRepository patientRepository,
-      UnitRepository unitRepository,
-      CertificateEntityMapper certificateEntityMapper) {
-    this.certificateEntityRepository = certificateEntityRepository;
-    this.patientRepository = patientRepository;
-    this.unitRepository = unitRepository;
-    this.certificateEntityMapper = certificateEntityMapper;
-  }
+  private final CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;
 
   @Override
   public Certificate create(CertificateModel certificateModel) {
@@ -105,24 +89,33 @@ public class JpaCertificateRepository implements CertificateRepository {
   }
 
   @Override
-  public List<Certificate> findByPatientByCareUnit(Patient patient, CareUnit careUnit) {
-    return certificateEntityRepository.findCertificateEntitiesByPatientAndCareUnit(
-            patientRepository.patient(patient),
-            unitRepository.careUnit(careUnit)
-        )
-        .stream()
+  public List<Certificate> findByCertificatesRequest(CertificatesRequest request) {
+    if (request.statuses().isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    final var specification = certificateEntitySpecificationFactory.create(request);
+
+    return certificateEntityRepository.findAll(specification).stream()
         .map(certificateEntityMapper::toDomain)
         .toList();
   }
 
   @Override
-  public List<Certificate> findByPatientBySubUnit(Patient patient, SubUnit subUnit) {
-    return certificateEntityRepository.findCertificateEntitiesByPatientAndIssuedOnUnit(
-            patientRepository.patient(patient),
-            unitRepository.subUnit(subUnit)
-        )
-        .stream()
-        .map(certificateEntityMapper::toDomain)
-        .toList();
+  public Certificate insert(Certificate certificate) {
+    final var savedEntity = certificateEntityRepository.save(
+        certificateEntityMapper.toEntity(certificate)
+    );
+
+    return certificateEntityMapper.toDomain(savedEntity);
+  }
+
+  @Override
+  public void remove(List<CertificateId> certificateIds) {
+    certificateEntityRepository.deleteAllByCertificateIdIn(
+        certificateIds.stream()
+            .map(CertificateId::id)
+            .toList()
+    );
   }
 }

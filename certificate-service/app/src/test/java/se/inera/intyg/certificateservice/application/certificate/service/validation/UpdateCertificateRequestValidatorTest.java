@@ -14,6 +14,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 
+import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -38,9 +39,17 @@ class UpdateCertificateRequestValidatorTest {
         .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
         .careUnit(ALFA_MEDICINCENTRUM_DTO)
         .careProvider(ALFA_REGIONEN_DTO)
-        .certificate(CertificateDTO.builder().metadata(
-            certificateMetadata().build()
-        ).build());
+        .certificate(
+            CertificateDTO.builder()
+                .metadata(certificateMetadata().build())
+                .data(Collections.emptyMap())
+                .build()
+        );
+  }
+
+  @Test
+  void validRequest() {
+    updateCertificateRequestValidator.validate(requestBuilder.build(), CERTIFICATE_ID);
   }
 
   @Nested

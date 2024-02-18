@@ -27,7 +27,7 @@ import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCerti
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.patient.GetPatientCertificatesDomainService;
+import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
 
 @ExtendWith(MockitoExtension.class)
 class GetPatientCertificateServiceTest {

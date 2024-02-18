@@ -24,11 +24,11 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_PHONENUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_ZIP_CODE;
 
-import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
-import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
-import se.inera.intyg.certificateservice.domain.certificate.model.UnitAddress;
-import se.inera.intyg.certificateservice.domain.certificate.model.UnitContactInfo;
-import se.inera.intyg.certificateservice.domain.certificate.model.UnitName;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
+import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitAddress;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitContactInfo;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
 
 public class TestDataSubUnit {
 

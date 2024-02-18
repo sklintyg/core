@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 
 @Getter
 @Builder
@@ -39,8 +40,9 @@ public class Certificate {
     return certificateModel.actions().stream()
         .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
         .findFirst()
-        .map(certificateAction -> certificateAction.evaluate(Optional.of(this),
-            addPatientIfMissing(actionEvaluation)))
+        .map(certificateAction ->
+            certificateAction.evaluate(Optional.of(this), addPatientIfMissing(actionEvaluation))
+        )
         .orElse(false);
   }
 

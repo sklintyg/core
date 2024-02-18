@@ -4,7 +4,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificate.persi
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import se.inera.intyg.certificateservice.domain.certificate.model.Staff;
+import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntityRepository;
 

@@ -1,6 +1,10 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_MIDDLE_NAME;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,22 +14,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
-import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
-import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
-import se.inera.intyg.certificateservice.domain.certificate.model.Staff;
-import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
-import se.inera.intyg.certificateservice.domain.certificate.model.UnitName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.patient.model.Deceased;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
@@ -33,6 +32,11 @@ import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
+import se.inera.intyg.certificateservice.domain.staff.model.Staff;
+import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
+import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
+import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
@@ -114,8 +118,10 @@ class CertificateEntityMapperTest {
       )
       .issuedBy(
           StaffEntity.builder()
-              .name("NAME")
-              .hsaId("HSA_ID")
+              .hsaId(AJLA_DOCTOR_HSA_ID)
+              .firstName(AJLA_DOCTOR_FIRST_NAME)
+              .middleName(AJLA_DOCTOR_MIDDLE_NAME)
+              .lastName(AJLA_DOCTOR_LAST_NAME)
               .build()
       )
       .patient(
@@ -252,10 +258,14 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapIssuer() {
       final var expected = Staff.builder()
-          .hsaId(new HsaId("HSA_ID"))
-          .name(Name.builder()
-              .lastName("NAME")
-              .build())
+          .hsaId(new HsaId(AJLA_DOCTOR_HSA_ID))
+          .name(
+              Name.builder()
+                  .firstName(AJLA_DOCTOR_FIRST_NAME)
+                  .middleName(AJLA_DOCTOR_MIDDLE_NAME)
+                  .lastName(AJLA_DOCTOR_LAST_NAME)
+                  .build()
+          )
           .build();
 
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);

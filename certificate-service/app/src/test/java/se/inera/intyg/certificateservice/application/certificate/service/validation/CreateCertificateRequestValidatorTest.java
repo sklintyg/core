@@ -45,6 +45,11 @@ class CreateCertificateRequestValidatorTest {
         );
   }
 
+  @Test
+  void validRequest() {
+    createCertificateRequestValidator.validate(requestBuilder.build());
+  }
+
   @Nested
   class UserValidation {
 

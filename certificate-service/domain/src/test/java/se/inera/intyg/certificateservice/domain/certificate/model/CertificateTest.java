@@ -37,6 +37,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.DECEASED_TRUE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.PROTECTED_PERSON_TRUE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.TEST_INDICATED_TRUE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_HUDMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.alfaAllergimottagningenBuilder;
@@ -51,7 +52,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_HSA_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
 import java.time.LocalDateTime;
@@ -77,7 +77,6 @@ import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
 @ExtendWith(MockitoExtension.class)
 class CertificateTest {
 
-  private final long version = 0L;
   private Certificate certificate;
   private Certificate.CertificateBuilder certificateBuilder;
   private CertificateModel certificateModel;
@@ -324,7 +323,7 @@ class CertificateTest {
             actionEvaluationBuilder
                 .user(
                     ajlaDoctorBuilder()
-                        .hsaId(TestDataStaff.ALVA_VARDADMINISTRATOR.hsaId())
+                        .hsaId(ALVA_VARDADMINISTRATOR.hsaId())
                         .build()
                 )
                 .build()
@@ -340,14 +339,14 @@ class CertificateTest {
             actionEvaluationBuilder
                 .user(
                     ajlaDoctorBuilder()
-                        .name(TestDataStaff.ALVA_VARDADMINISTRATOR.name())
+                        .name(ALVA_VARDADMINISTRATOR.name())
                         .build()
                 )
                 .build()
         );
 
-        assertEquals(ALVA_VARDADMINISTRATOR_NAME,
-            certificate.certificateMetaData().issuer().name().lastName());
+        assertEquals(ALVA_VARDADMINISTRATOR.name(),
+            certificate.certificateMetaData().issuer().name());
       }
 
       @Test
@@ -834,6 +833,7 @@ class CertificateTest {
 
       certificate.updateData(newValue);
 
+      long version = 0L;
       assertEquals(version + 1, certificate.revision().value());
     }
 

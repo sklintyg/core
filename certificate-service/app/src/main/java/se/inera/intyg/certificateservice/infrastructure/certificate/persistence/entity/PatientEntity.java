@@ -35,10 +35,10 @@ public class PatientEntity {
   private boolean testIndicated;
   @Column(name = "first_name")
   private String firstName;
-  @Column(name = "last_name")
-  private String lastName;
   @Column(name = "middle_name")
   private String middleName;
+  @Column(name = "last_name")
+  private String lastName;
   @ManyToOne
   @JoinColumn(name = "patient_id_type_key")
   private PatientIdTypeEntity type;

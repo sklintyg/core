@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.domain.action.model;
 
-import static se.inera.intyg.certificateservice.domain.user.model.Role.CARE_ADMIN;
+import static se.inera.intyg.certificateservice.domain.staff.model.Role.CARE_ADMIN;
 
 import java.util.Optional;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;

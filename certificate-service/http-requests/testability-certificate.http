@@ -43,3 +43,15 @@ Content-Type: application/json
     "version": "1.0"
   }
 }
+
+### Create certificate
+DELETE http://localhost:18030/testability/certificate
+Content-Type: application/json
+
+{
+  "certificateIds": [
+    "1044b6f0-1349-419c-a78c-bacc592d56ae",
+    "0c7eb0f2-586d-41a3-b925-bff1b101be66",
+    "daaf645e-bbae-4692-b007-1b11cd6a3666"
+  ]
+}

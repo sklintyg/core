@@ -18,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
-import se.inera.intyg.certificateservice.domain.exception.CertificateActionForbidden;
+import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateCertificateDomainServiceTest {

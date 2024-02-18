@@ -6,7 +6,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
-import se.inera.intyg.certificateservice.domain.exception.CertificateActionForbidden;
+import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 
 @RequiredArgsConstructor
 public class GetCertificateDomainService {

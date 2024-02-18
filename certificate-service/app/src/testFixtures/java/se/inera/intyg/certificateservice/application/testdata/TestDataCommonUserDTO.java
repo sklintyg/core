@@ -1,12 +1,18 @@
 package se.inera.intyg.certificateservice.application.testdata;
 
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_BLOCKED;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FULLNAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ROLE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_BLOCKED;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_FULL_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_HSA_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_ROLE;
 
 import se.inera.intyg.certificateservice.application.common.dto.RoleTypeDTO;
@@ -21,7 +27,10 @@ public class TestDataCommonUserDTO {
   public static UserDTOBuilder ajlaDoktorDtoBuilder() {
     return UserDTO.builder()
         .id(AJLA_DOCTOR_HSA_ID)
-        .name(AJLA_DOCTOR_NAME)
+        .firstName(AJLA_DOCTOR_FIRST_NAME)
+        .middleName(AJLA_DOCTOR_MIDDLE_NAME)
+        .lastName(AJLA_DOCTOR_LAST_NAME)
+        .fullName(AJLA_DOCTOR_FULLNAME)
         .role(RoleTypeDTO.toRoleType(AJLA_DOCTOR_ROLE))
         .blocked(AJLA_DOCTOR_BLOCKED.value());
   }
@@ -29,7 +38,10 @@ public class TestDataCommonUserDTO {
   public static UserDTOBuilder alvaVardadministratorDtoBuilder() {
     return UserDTO.builder()
         .id(ALVA_VARDADMINISTRATOR_HSA_ID)
-        .name(ALVA_VARDADMINISTRATOR_NAME)
+        .firstName(ALVA_VARDADMINISTRATOR_FIRST_NAME)
+        .middleName(ALVA_VARDADMINISTRATOR_MIDDLE_NAME)
+        .lastName(ALVA_VARDADMINISTRATOR_LAST_NAME)
+        .fullName(ALVA_VARDADMINISTRATOR_FULL_NAME)
         .role(RoleTypeDTO.toRoleType(ALVA_VARDADMINISTRATOR_ROLE))
         .blocked(ALVA_VARDADMINISTRATOR_BLOCKED.value());
   }

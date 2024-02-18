@@ -28,6 +28,10 @@ import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.Get
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetLatestCertificateTypeVersionResponse;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesResponse;
+import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoRequest;
+import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoResponse;
+import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesRequest;
+import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesResponse;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityResetCertificateRequest;
 
 @Slf4j
@@ -98,6 +102,44 @@ public class ApiUtil {
   public ResponseEntity<GetPatientCertificatesResponse> getPatientCertificates(
       GetPatientCertificatesRequest request) {
     final var requestUrl = "http://localhost:%s/api/patient/certificates".formatted(
+        port
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<GetUnitCertificatesInfoResponse> getUnitCertificatesInfo(
+      GetUnitCertificatesInfoRequest request) {
+    final var requestUrl = "http://localhost:%s/api/unit/certificates/info".formatted(
+        port
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<GetUnitCertificatesResponse> getUnitCertificates(
+      GetUnitCertificatesRequest request) {
+    final var requestUrl = "http://localhost:%s/api/unit/certificates".formatted(
         port
     );
 

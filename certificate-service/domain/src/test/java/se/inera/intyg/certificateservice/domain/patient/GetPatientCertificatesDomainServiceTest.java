@@ -21,7 +21,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
+import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest.CertificatesRequestBuilder;
+import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
 
 @ExtendWith(MockitoExtension.class)
 class GetPatientCertificatesDomainServiceTest {
@@ -33,6 +37,7 @@ class GetPatientCertificatesDomainServiceTest {
   private GetPatientCertificatesDomainService getPatientCertificatesDomainService;
 
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
+  private CertificatesRequestBuilder certificatesRequestBuilder;
 
   @BeforeEach
   void setUp() {
@@ -42,16 +47,21 @@ class GetPatientCertificatesDomainServiceTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .careUnit(ALFA_MEDICINCENTRUM)
         .careProvider(ALFA_REGIONEN);
+
+    certificatesRequestBuilder = CertificatesRequest.builder()
+        .statuses(Status.all())
+        .issuedUnitId(ALFA_ALLERGIMOTTAGNINGEN.hsaId())
+        .personId(ATHENA_REACT_ANDERSSON.id());
   }
 
   @Test
   void shallGetCertificatesBySubUnit() {
     final var actionEvaluation = actionEvaluationBuilder.build();
+    final var certificatesRequest = certificatesRequestBuilder.build();
 
     getPatientCertificatesDomainService.get(actionEvaluation);
 
-    verify(certificateRepository).findByPatientBySubUnit(actionEvaluation.patient(),
-        actionEvaluation.subUnit());
+    verify(certificateRepository).findByCertificatesRequest(certificatesRequest);
   }
 
   @Test
@@ -59,22 +69,25 @@ class GetPatientCertificatesDomainServiceTest {
     final var actionEvaluation = actionEvaluationBuilder
         .subUnit(ALFA_MEDICINSKT_CENTRUM)
         .build();
+    final var certificatesRequest = certificatesRequestBuilder
+        .careUnitId(ALFA_MEDICINSKT_CENTRUM.hsaId())
+        .issuedUnitId(null)
+        .build();
 
     getPatientCertificatesDomainService.get(actionEvaluation);
 
-    verify(certificateRepository).findByPatientByCareUnit(actionEvaluation.patient(),
-        actionEvaluation.careUnit());
+    verify(certificateRepository).findByCertificatesRequest(certificatesRequest);
   }
 
   @Test
   void shallReturnListOfCertificatesForPatient() {
-    final var actionEvaluation = actionEvaluationBuilder
-        .build();
+    final var actionEvaluation = actionEvaluationBuilder.build();
+    final var certificatesRequest = certificatesRequestBuilder.build();
 
     final var certificate = mock(Certificate.class);
     doReturn(true).when(certificate).allowTo(CertificateActionType.READ, actionEvaluation);
     doReturn(List.of(certificate)).when(certificateRepository)
-        .findByPatientBySubUnit(actionEvaluation.patient(), actionEvaluation.subUnit());
+        .findByCertificatesRequest(certificatesRequest);
 
     final var actualResult = getPatientCertificatesDomainService.get(actionEvaluation);
 
@@ -83,15 +96,15 @@ class GetPatientCertificatesDomainServiceTest {
 
   @Test
   void shallReturnFilteredListOfCertificatesForPatient() {
-    final var actionEvaluation = actionEvaluationBuilder
-        .build();
+    final var actionEvaluation = actionEvaluationBuilder.build();
+    final var certificatesRequest = certificatesRequestBuilder.build();
 
     final var certificate1 = mock(Certificate.class);
     final var certificate2 = mock(Certificate.class);
     doReturn(true).when(certificate1).allowTo(CertificateActionType.READ, actionEvaluation);
     doReturn(false).when(certificate2).allowTo(CertificateActionType.READ, actionEvaluation);
     doReturn(List.of(certificate1, certificate2)).when(certificateRepository)
-        .findByPatientBySubUnit(actionEvaluation.patient(), actionEvaluation.subUnit());
+        .findByCertificatesRequest(certificatesRequest);
 
     final var actualResult = getPatientCertificatesDomainService.get(actionEvaluation);
 

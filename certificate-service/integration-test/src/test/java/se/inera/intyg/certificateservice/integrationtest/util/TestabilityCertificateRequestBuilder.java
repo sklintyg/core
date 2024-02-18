@@ -23,6 +23,7 @@ public class TestabilityCertificateRequestBuilder {
       .build();
 
   private UnitDTO unit = ALFA_ALLERGIMOTTAGNINGEN_DTO;
+  private UnitDTO careUnit = ALFA_MEDICINCENTRUM_DTO;
   private UserDTO user = AJLA_DOCTOR_DTO;
   private PatientDTO patient = ATHENA_REACT_ANDERSSON_DTO;
 
@@ -44,6 +45,11 @@ public class TestabilityCertificateRequestBuilder {
     return this;
   }
 
+  public TestabilityCertificateRequestBuilder careUnit(UnitDTO careUnit) {
+    this.careUnit = careUnit;
+    return this;
+  }
+
   public TestabilityCertificateRequestBuilder patient(PatientDTO patient) {
     this.patient = patient;
     return this;
@@ -61,7 +67,7 @@ public class TestabilityCertificateRequestBuilder {
         .patient(patient)
         .careProvider(ALFA_REGIONEN_DTO)
         .unit(unit)
-        .careUnit(ALFA_MEDICINCENTRUM_DTO)
+        .careUnit(careUnit)
         .certificateModelId(
             certificateModelId
         )
