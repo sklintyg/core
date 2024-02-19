@@ -7,7 +7,7 @@ import se.inera.intyg.certificateservice.application.common.ActionEvaluationFact
 import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesResponse;
-import se.inera.intyg.certificateservice.domain.patient.GetPatientCertificatesDomainService;
+import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
 
 @Service
 @RequiredArgsConstructor

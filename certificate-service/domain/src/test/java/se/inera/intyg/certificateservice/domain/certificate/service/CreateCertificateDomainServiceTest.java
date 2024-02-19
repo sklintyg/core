@@ -22,7 +22,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
-import se.inera.intyg.certificateservice.domain.exception.CertificateActionForbidden;
+import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 
 @ExtendWith(MockitoExtension.class)
 class CreateCertificateDomainServiceTest {

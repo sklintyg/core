@@ -77,6 +77,15 @@ public class CertificateConverter {
                         .personId(
                             certificate.certificateMetaData().issuer().hsaId().id()
                         )
+                        .firstName(
+                            certificate.certificateMetaData().issuer().name().firstName()
+                        )
+                        .middleName(
+                            certificate.certificateMetaData().issuer().name().middleName()
+                        )
+                        .lastName(
+                            certificate.certificateMetaData().issuer().name().lastName()
+                        )
                         .fullName(
                             certificate.certificateMetaData().issuer().name().fullName()
                         )

@@ -23,8 +23,11 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FULLNAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_MIDDLE_NAME;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -123,8 +126,8 @@ class CertificateConverterTest {
                                             ElementConfigurationDate.builder()
                                                 .id(ID)
                                                 .name(NAME)
-                                                .minDate(LocalDate.now().minus(Period.ofDays(0)))
-                                                .maxDate(LocalDate.now().plus(Period.ofYears(1)))
+                                                .min(Period.ofDays(0))
+                                                .max(Period.ofYears(1))
                                                 .build()
                                         )
                                         .rules(
@@ -408,8 +411,32 @@ class CertificateConverterTest {
       }
 
       @Test
-      void shallIncludeName() {
-        assertEquals(AJLA_DOCTOR_NAME,
+      void shallIncludeFirstName() {
+        assertEquals(AJLA_DOCTOR_FIRST_NAME,
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getIssuedBy()
+                .getFirstName()
+        );
+      }
+
+      @Test
+      void shallIncludeLastMiddle() {
+        assertEquals(AJLA_DOCTOR_MIDDLE_NAME,
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getIssuedBy()
+                .getMiddleName()
+        );
+      }
+
+      @Test
+      void shallIncludeLastName() {
+        assertEquals(AJLA_DOCTOR_LAST_NAME,
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getIssuedBy()
+                .getLastName()
+        );
+      }
+
+      @Test
+      void shallIncludeFullName() {
+        assertEquals(AJLA_DOCTOR_FULLNAME,
             certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getIssuedBy()
                 .getFullName()
         );

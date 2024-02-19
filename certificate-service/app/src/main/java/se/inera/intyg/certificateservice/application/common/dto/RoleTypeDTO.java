@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.application.common.dto;
 
-import se.inera.intyg.certificateservice.domain.user.model.Role;
+import se.inera.intyg.certificateservice.domain.staff.model.Role;
 
 public enum RoleTypeDTO {
   DOCTOR,

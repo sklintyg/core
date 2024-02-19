@@ -8,10 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -112,7 +109,9 @@ class JpaCertificateRepositoryTest {
       .build();
 
   private static final StaffEntity ISSUED_BY = StaffEntity.builder()
-      .name("NAME")
+      .firstName("NAME")
+      .middleName("NAME")
+      .lastName("NAME")
       .hsaId("HSA_ID")
       .build();
 
@@ -137,12 +136,15 @@ class JpaCertificateRepositoryTest {
       .data(DATA)
       .build();
 
+  private static final Certificate CERTIFICATE = Certificate.builder().build();
+
   @Nested
   class Create {
 
     @Test
     void shouldThrowExceptionIfCertificateModelIsNull() {
-      assertThrows(IllegalArgumentException.class, () -> jpaCertificateRepository.create(null));
+      assertThrows(IllegalArgumentException.class,
+          () -> jpaCertificateRepository.create(null));
     }
 
     @Test
@@ -221,7 +223,8 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldThrowExceptionIfIdIsNull() {
-      assertThrows(IllegalArgumentException.class, () -> jpaCertificateRepository.getById(null));
+      assertThrows(IllegalArgumentException.class,
+          () -> jpaCertificateRepository.getById(null));
     }
 
     @Test
@@ -252,7 +255,8 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldThrowExceptionIfNoCertificateId() {
-      assertThrows(IllegalArgumentException.class, () -> jpaCertificateRepository.exists(null));
+      assertThrows(IllegalArgumentException.class,
+          () -> jpaCertificateRepository.exists(null));
     }
 
     @Test
@@ -272,58 +276,28 @@ class JpaCertificateRepositoryTest {
   }
 
   @Nested
-  class FindByPatientAndSubUnit {
+  class TestabilityFeatures {
 
     @Test
-    void shouldReturnListOfCertificates() {
-      final var expectedCertificate = Certificate.builder()
-          .id(CERTIFICATE_ID)
-          .build();
+    void shouldInsertCertificates() {
+      doReturn(CERTIFICATE_ENTITY).when(certificateEntityMapper).toEntity(CERTIFICATE);
+      doReturn(CERTIFICATE_ENTITY).when(certificateEntityRepository).save(CERTIFICATE_ENTITY);
+      doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
 
-      final var expectedCertificates = List.of(
-          expectedCertificate
-      );
+      final var actualCertificate = jpaCertificateRepository.insert(CERTIFICATE);
 
-      doReturn(ISSUED_ON_UNIT).when(unitRepository).subUnit(ALFA_ALLERGIMOTTAGNINGEN);
-      doReturn(PATIENT).when(patientRepository).patient(ATHENA_REACT_ANDERSSON);
-      doReturn(List.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository)
-          .findCertificateEntitiesByPatientAndIssuedOnUnit(PATIENT, ISSUED_ON_UNIT);
-      doReturn(expectedCertificate).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
-
-      final var actualCertificates = jpaCertificateRepository.findByPatientBySubUnit(
-          ATHENA_REACT_ANDERSSON,
-          ALFA_ALLERGIMOTTAGNINGEN
-      );
-
-      assertEquals(expectedCertificates, actualCertificates);
+      assertEquals(CERTIFICATE, actualCertificate);
     }
-  }
-
-  @Nested
-  class FindByPatientAndCareUnit {
 
     @Test
-    void shouldReturnListOfCertificates() {
-      final var expectedCertificate = Certificate.builder()
-          .id(CERTIFICATE_ID)
-          .build();
+    void shouldRemoveCertificates() {
+      final var ids = List.of("ID1", "ID2");
 
-      final var expectedCertificates = List.of(
-          expectedCertificate
+      jpaCertificateRepository.remove(
+          List.of(new CertificateId("ID1"), new CertificateId("ID2"))
       );
 
-      doReturn(CARE_UNIT).when(unitRepository).careUnit(ALFA_MEDICINCENTRUM);
-      doReturn(PATIENT).when(patientRepository).patient(ATHENA_REACT_ANDERSSON);
-      doReturn(List.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository)
-          .findCertificateEntitiesByPatientAndCareUnit(PATIENT, CARE_UNIT);
-      doReturn(expectedCertificate).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
-
-      final var actualCertificates = jpaCertificateRepository.findByPatientByCareUnit(
-          ATHENA_REACT_ANDERSSON,
-          ALFA_MEDICINCENTRUM
-      );
-
-      assertEquals(expectedCertificates, actualCertificates);
+      verify(certificateEntityRepository).deleteAllByCertificateIdIn(ids);
     }
   }
 }

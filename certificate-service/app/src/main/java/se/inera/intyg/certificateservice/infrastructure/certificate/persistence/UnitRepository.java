@@ -4,10 +4,10 @@ import static se.inera.intyg.certificateservice.infrastructure.certificate.persi
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
-import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
-import se.inera.intyg.certificateservice.domain.certificate.model.IssuingUnit;
-import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
+import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
+import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
+import se.inera.intyg.certificateservice.domain.unit.model.IssuingUnit;
+import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntityRepository;
 
@@ -25,7 +25,7 @@ public class UnitRepository {
             )
         );
   }
-  
+
   public UnitEntity careUnit(CareUnit careUnit) {
     return unitEntityRepository.findByHsaId(careUnit.hsaId().id())
         .orElseGet(

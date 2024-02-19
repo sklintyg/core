@@ -12,6 +12,9 @@ import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO.St
 public class StaffDTO {
 
   String personId;
+  String firstName;
+  String middleName;
+  String lastName;
   String fullName;
   String prescriptionCode;
 

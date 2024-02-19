@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.integrationtest.util;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
@@ -12,6 +13,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesResponse;
+import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesResponse;
 
 public class CertificateUtil {
 
@@ -23,12 +25,36 @@ public class CertificateUtil {
     return certificate.getMetadata().getId();
   }
 
+  public static String certificateId(List<CreateCertificateResponse> responses) {
+    final var certificate = certificate(responses);
+    if (certificate == null || certificate.getMetadata() == null) {
+      return null;
+    }
+    return certificate.getMetadata().getId();
+  }
+
+  public static long version(List<CreateCertificateResponse> responses) {
+    final var certificate = certificate(responses);
+    if (certificate == null || certificate.getMetadata() == null) {
+      return 0L;
+    }
+    return certificate.getMetadata().getVersion();
+  }
+
   public static long version(CreateCertificateResponse response) {
     final var certificate = certificate(response);
     if (certificate == null || certificate.getMetadata() == null) {
       return 0L;
     }
     return certificate.getMetadata().getVersion();
+  }
+
+  public static CertificateDTO certificate(List<CreateCertificateResponse> responses) {
+    if (responses == null || responses.size() != 1) {
+      return null;
+    }
+
+    return certificate(responses.get(0));
   }
 
   public static CertificateDTO certificate(CreateCertificateResponse response) {
@@ -49,7 +75,14 @@ public class CertificateUtil {
 
   public static List<CertificateDTO> certificates(GetPatientCertificatesResponse response) {
     if (response == null || response.getCertificates() == null) {
-      return null;
+      return Collections.emptyList();
+    }
+    return response.getCertificates();
+  }
+
+  public static List<CertificateDTO> certificates(GetUnitCertificatesResponse response) {
+    if (response == null || response.getCertificates() == null) {
+      return Collections.emptyList();
     }
     return response.getCertificates();
   }

@@ -11,8 +11,11 @@ import se.inera.intyg.certificateservice.application.common.dto.UserDTO.UserDTOB
 @Builder
 public class UserDTO {
 
-  String name;
   String id;
+  String firstName;
+  String middleName;
+  String lastName;
+  String fullName;
   RoleTypeDTO role;
   Boolean blocked;
 

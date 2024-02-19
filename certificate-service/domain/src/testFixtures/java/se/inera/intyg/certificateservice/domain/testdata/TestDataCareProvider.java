@@ -5,10 +5,10 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProv
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.BETA_REGIONEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.BETA_REGIONEN_NAME;
 
-import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
-import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider.CareProviderBuilder;
-import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
-import se.inera.intyg.certificateservice.domain.certificate.model.UnitName;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
+import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
+import se.inera.intyg.certificateservice.domain.unit.model.CareProvider.CareProviderBuilder;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
 
 public class TestDataCareProvider {
 

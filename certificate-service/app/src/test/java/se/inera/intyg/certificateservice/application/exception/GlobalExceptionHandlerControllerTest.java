@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatusCode;
-import se.inera.intyg.certificateservice.domain.exception.CertificateActionForbidden;
+import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 
 class GlobalExceptionHandlerControllerTest {
 

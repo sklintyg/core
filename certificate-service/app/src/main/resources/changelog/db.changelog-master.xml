@@ -12,6 +12,12 @@
       <column name="certificate_id" type="varchar(64)">
         <constraints nullable="false" unique="true"/>
       </column>
+      <column name="certificate_model_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="patient_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
       <column name="created" type="datetime">
         <constraints nullable="false"/>
       </column>
@@ -33,13 +39,7 @@
       <column name="care_provider_unit_key" type="integer unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="patient_key" type="integer unsigned">
-        <constraints nullable="false"/>
-      </column>
       <column name="revision" type="bigint">
-        <constraints nullable="false"/>
-      </column>
-      <column name="certificate_model_key" type="integer unsigned">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -73,18 +73,18 @@
       <column name="patient_id_type_key" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
+      <column name="first_name" type="varchar(255)"/>
+      <column name="middle_name" type="varchar(255)"/>
+      <column name="last_name" type="varchar(255)"/>
       <column name="protected_person" type="tinyint unsigned">
-        <constraints nullable="false"/>
-      </column>
-      <column name="test_indicated" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
       <column name="deceased" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="first_name" type="varchar(255)"/>
-      <column name="middle_name" type="varchar(255)"/>
-      <column name="last_name" type="varchar(255)"/>
+      <column name="test_indicated" type="tinyint unsigned">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
 
     <addForeignKeyConstraint constraintName="fk_certificate_patient_key"
@@ -123,9 +123,9 @@
       <column name="hsa_id" type="varchar(64)">
         <constraints nullable="false" unique="true"/>
       </column>
-      <column name="name" type="varchar(255)">
-        <constraints nullable="false"/>
-      </column>
+      <column name="first_name" type="varchar(255)"/>
+      <column name="middle_name" type="varchar(255)"/>
+      <column name="last_name" type="varchar(255)"/>
     </createTable>
 
     <addForeignKeyConstraint constraintName="fk_certificate_created_by_staff_key"

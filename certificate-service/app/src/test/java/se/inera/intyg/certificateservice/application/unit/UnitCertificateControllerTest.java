@@ -1,0 +1,58 @@
+package se.inera.intyg.certificateservice.application.unit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doReturn;
+
+import java.util.List;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO;
+import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoRequest;
+import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoResponse;
+import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesRequest;
+import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesResponse;
+import se.inera.intyg.certificateservice.application.unit.service.GetUnitCertificatesInfoService;
+import se.inera.intyg.certificateservice.application.unit.service.GetUnitCertificatesService;
+
+@ExtendWith(MockitoExtension.class)
+class UnitCertificateControllerTest {
+
+  @Mock
+  private GetUnitCertificatesService getUnitCertificatesService;
+  @Mock
+  private GetUnitCertificatesInfoService getUnitCertificatesInfoService;
+  @InjectMocks
+  private UnitCertificateController unitCertificateController;
+
+  @Test
+  void shallReturnGetUnitCertificatesResponse() {
+    final var certificates = List.of(CertificateDTO.builder().build());
+    final var expectedResult = GetUnitCertificatesResponse.builder()
+        .certificates(certificates)
+        .build();
+
+    final var request = GetUnitCertificatesRequest.builder().build();
+    doReturn(expectedResult).when(getUnitCertificatesService).get(request);
+
+    final var actualResult = unitCertificateController.getUnitCertificates(request);
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnGetUnitCertificatesInfoResponse() {
+    final var staffs = List.of(StaffDTO.builder().build());
+    final var expectedResult = GetUnitCertificatesInfoResponse.builder()
+        .staffs(staffs)
+        .build();
+
+    final var request = GetUnitCertificatesInfoRequest.builder().build();
+    doReturn(expectedResult).when(getUnitCertificatesInfoService).get(request);
+
+    final var actualResult = unitCertificateController.getUnitCertificatesInfo(request);
+    assertEquals(expectedResult, actualResult);
+  }
+}

@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIssuingUnit.ISSUING_UNIT;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.List;
@@ -98,8 +97,8 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
             ElementConfigurationDate.builder()
                 .name("Beräknat nedkomstdatum")
                 .id("beraknatnedkomstdatum")
-                .minDate(LocalDate.now().minus(Period.ofDays(0)))
-                .maxDate(LocalDate.now().plus(Period.ofYears(1)))
+                .min(Period.ofDays(0))
+                .max(Period.ofYears(1))
                 .build()
         )
         .rules(

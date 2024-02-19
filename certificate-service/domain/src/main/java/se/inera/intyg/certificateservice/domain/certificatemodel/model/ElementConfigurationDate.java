@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
-import java.time.LocalDate;
+import java.time.Period;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
@@ -14,6 +14,6 @@ public class ElementConfigurationDate implements ElementConfiguration {
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.DATE;
   String id;
-  LocalDate minDate;
-  LocalDate maxDate;
+  Period min;
+  Period max;
 }

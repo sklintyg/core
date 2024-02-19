@@ -3,8 +3,10 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_MIDDLE_NAME;
 
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -25,7 +27,9 @@ class StaffRepositoryTest {
 
   private static final StaffEntity STAFF_ENTITY = StaffEntity.builder()
       .hsaId(AJLA_DOCTOR_HSA_ID)
-      .name(AJLA_DOCTOR_NAME)
+      .firstName(AJLA_DOCTOR_FIRST_NAME)
+      .middleName(AJLA_DOCTOR_MIDDLE_NAME)
+      .lastName(AJLA_DOCTOR_LAST_NAME)
       .build();
 
   @Test

@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.domain.testdata;
 
-import se.inera.intyg.certificateservice.domain.certificate.model.Inactive;
+import se.inera.intyg.certificateservice.domain.unit.model.Inactive;
 
 public class TestDataCareUnitConstants {
 

@@ -7,7 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
-import se.inera.intyg.certificateservice.domain.exception.CertificateActionForbidden;
+import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 
 @RequiredArgsConstructor
 public class CreateCertificateDomainService {

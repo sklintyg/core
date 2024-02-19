@@ -1,8 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
-import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
-import se.inera.intyg.certificateservice.domain.certificate.model.Staff;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
+import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
 
 public class StaffEntityMapper {
@@ -14,7 +14,9 @@ public class StaffEntityMapper {
   public static StaffEntity toEntity(Staff staff) {
     return StaffEntity.builder()
         .hsaId(staff.hsaId().id())
-        .name(staff.name().fullName())
+        .firstName(staff.name().firstName())
+        .middleName(staff.name().middleName())
+        .lastName(staff.name().lastName())
         .build();
   }
 
@@ -22,7 +24,9 @@ public class StaffEntityMapper {
     return Staff.builder()
         .hsaId(new HsaId(entity.getHsaId()))
         .name(Name.builder()
-            .lastName(entity.getName())
+            .firstName(entity.getFirstName())
+            .middleName(entity.getMiddleName())
+            .lastName(entity.getLastName())
             .build())
         .build();
   }

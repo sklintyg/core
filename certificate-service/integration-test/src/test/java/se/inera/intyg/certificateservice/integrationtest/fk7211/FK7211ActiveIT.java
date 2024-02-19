@@ -8,7 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ALVE_REACT_ALFREDSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ANONYMA_REACT_ATTILA_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATLAS_REACT_ABRAHAMSSON_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonStaffDTO.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonStaffDTO.ALVA_VARDADMINISTRATOR;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_HUDMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_VARDCENTRAL_DTO;
@@ -23,6 +27,8 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customDeleteCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetPatientCertificatesRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetUnitCertificatesInfoRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetUnitCertificatesRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customUpdateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCertificateTypeInfoRequest;
@@ -30,6 +36,8 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultDeleteCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetPatientCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetUnitCertificatesInfoRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetUnitCertificatesRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateModelIdUtil.certificateModelId;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateTypeInfoUtil.certificateTypeInfo;
@@ -44,6 +52,8 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ResourceLin
 import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,10 +68,14 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
+import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
 import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
+import se.inera.intyg.certificateservice.integrationtest.util.StaffUtil;
 import se.inera.intyg.certificateservice.integrationtest.util.TestabilityApiUtil;
 
 
@@ -363,12 +377,12 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om intyget finns så returneras true")
     void shallReturnTrueIfCertificateExists() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
       final var response = api.certificateExists(
-          certificateId(testCertificate.getBody())
+          certificateId(testCertificates)
       );
 
       assertTrue(
@@ -396,13 +410,13 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om intyget är utfärdat på samma mottagning skall det returneras")
     void shallReturnCertificateIfUnitIsSubUnitAndOnSameUnit() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
       final var response = api.getCertificate(
           defaultGetCertificateRequest(),
-          certificateId(testCertificate.getBody())
+          certificateId(testCertificates)
       );
 
       assertNotNull(
@@ -414,7 +428,7 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det returneras")
     void shallReturnCertificateIfUnitIsCareUnitAndOnSameCareUnit() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
@@ -422,7 +436,7 @@ class FK7211ActiveIT {
           customGetCertificateRequest()
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build(),
-          certificateId(testCertificate.getBody())
+          certificateId(testCertificates)
       );
 
       assertNotNull(
@@ -434,7 +448,7 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om intyget är utfärdat på samma vårdenhet skall det returneras")
     void shallReturnCertificateIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           customTestabilityCertificateRequest(FK7211, VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
@@ -444,7 +458,7 @@ class FK7211ActiveIT {
           customGetCertificateRequest()
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build(),
-          certificateId(testCertificate.getBody())
+          certificateId(testCertificates)
       );
 
       assertNotNull(
@@ -456,13 +470,13 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
       final var response = api.getCertificate(
           customGetCertificateRequest().unit(ALFA_HUDMOTTAGNINGEN_DTO).build(),
-          certificateId(testCertificate.getBody())
+          certificateId(testCertificates)
       );
 
       assertEquals(403, response.getStatusCode().value());
@@ -471,7 +485,7 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
@@ -480,7 +494,7 @@ class FK7211ActiveIT {
               .careUnit(ALFA_VARDCENTRAL_DTO)
               .unit(ALFA_VARDCENTRAL_DTO)
               .build(),
-          certificateId(testCertificate.getBody())
+          certificateId(testCertificates)
       );
 
       assertEquals(403, response.getStatusCode().value());
@@ -489,7 +503,7 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Vårdadministratör - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfPatientIsProtectedPersonAndUserIsCareAdmin() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           customTestabilityCertificateRequest(FK7211, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
@@ -499,7 +513,7 @@ class FK7211ActiveIT {
           customGetCertificateRequest()
               .user(ALVA_VARDADMINISTRATOR_DTO)
               .build(),
-          certificateId(testCertificate.getBody())
+          certificateId(testCertificates)
       );
 
       assertEquals(403, response.getStatusCode().value());
@@ -508,7 +522,7 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det returneras")
     void shallReturnCertificateIfPatientIsProtectedPersonAndUserIsDoctor() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           customTestabilityCertificateRequest(FK7211, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
@@ -518,7 +532,7 @@ class FK7211ActiveIT {
           customGetCertificateRequest()
               .user(AJLA_DOCTOR_DTO)
               .build(),
-          certificateId(testCertificate.getBody())
+          certificateId(testCertificates)
       );
 
       assertNotNull(
@@ -535,14 +549,14 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall svarsalternativ uppdateras")
     void shallUpdateDataIfUserIsDoctorAndPatientIsProtectedPerson() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           customTestabilityCertificateRequest(FK7211, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
       final var questionId = "FRG_1";
       final var expectedDate = LocalDate.now().plusDays(5);
-      final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
+      final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
@@ -555,7 +569,7 @@ class FK7211ActiveIT {
               .user(AJLA_DOCTOR_DTO)
               .certificate(certificate)
               .build(),
-          certificateId(testCertificate.getBody())
+          certificateId(testCertificates)
       );
 
       assertEquals(expectedDate,
@@ -566,20 +580,20 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Vårdadmin - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
     void shallNotUpdateDataIfUserIsCareAdminAndPatientIsProtectedPerson() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           customTestabilityCertificateRequest(FK7211, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
 
-      final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
+      final var certificate = certificate(testCertificates);
 
       final var response = api.updateCertificate(
           customUpdateCertificateRequest()
               .user(ALVA_VARDADMINISTRATOR_DTO)
               .certificate(certificate)
               .build(),
-          certificateId(testCertificate.getBody())
+          certificateId(testCertificates)
       );
 
       assertEquals(403, response.getStatusCode().value());
@@ -588,13 +602,13 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall svarsalternativ uppdateras")
     void shallUpdateDataIfUnitIsCareUnitAndOnSameCareUnit() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
       final var questionId = "FRG_1";
       final var expectedDate = LocalDate.now().plusDays(5);
-      final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
+      final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
@@ -607,7 +621,7 @@ class FK7211ActiveIT {
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .certificate(certificate)
               .build(),
-          certificateId(testCertificate.getBody())
+          certificateId(testCertificates)
       );
 
       assertEquals(expectedDate,
@@ -618,13 +632,13 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om intyget är utfärdat på samma mottagning skall svarsalternativ uppdateras")
     void shallUpdateDataIfUnitIsSubUnitAndOnSameUnit() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
       final var questionId = "FRG_1";
       final var expectedDate = LocalDate.now().plusDays(5);
-      final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
+      final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
@@ -636,7 +650,7 @@ class FK7211ActiveIT {
           customUpdateCertificateRequest()
               .certificate(certificate)
               .build(),
-          certificateId(testCertificate.getBody())
+          certificateId(testCertificates)
       );
 
       assertEquals(expectedDate,
@@ -647,7 +661,7 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om intyget är utfärdat på samma vårdenhet skall svarsalternativ uppdateras")
     void shallUpdateDataIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           customTestabilityCertificateRequest(FK7211, VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
@@ -655,7 +669,7 @@ class FK7211ActiveIT {
 
       final var questionId = "FRG_1";
       final var expectedDate = LocalDate.now().plusDays(5);
-      final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
+      final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
@@ -668,7 +682,7 @@ class FK7211ActiveIT {
               .certificate(certificate)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build(),
-          certificateId(testCertificate.getBody())
+          certificateId(testCertificates)
       );
 
       assertEquals(expectedDate,
@@ -679,18 +693,18 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
+      final var certificate = certificate(testCertificates);
 
       final var response = api.updateCertificate(
           customUpdateCertificateRequest()
               .certificate(certificate)
               .unit(ALFA_HUDMOTTAGNINGEN_DTO)
               .build(),
-          certificateId(testCertificate.getBody())
+          certificateId(testCertificates)
       );
 
       assertEquals(403, response.getStatusCode().value());
@@ -699,18 +713,18 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      final var certificate = Objects.requireNonNull(testCertificate.getBody()).getCertificate();
+      final var certificate = certificate(testCertificates);
 
       final var response = api.updateCertificate(
           customUpdateCertificateRequest()
               .certificate(certificate)
               .unit(ALFA_VARDCENTRAL_DTO)
               .build(),
-          certificateId(testCertificate.getBody())
+          certificateId(testCertificates)
       );
 
       assertEquals(403, response.getStatusCode().value());
@@ -724,15 +738,15 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om utkastet är skapat på samma mottagning skall det gå att tas bort")
     void shallDeleteCertificateIfCertificateIsOnSameSubUnit() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      final var certificateId = certificateId(testCertificate.getBody());
+      final var certificateId = certificateId(testCertificates);
       api.deleteCertificate(
           defaultDeleteCertificateRequest(),
           certificateId,
-          version(testCertificate.getBody())
+          version(testCertificates)
       );
 
       assertFalse(
@@ -743,17 +757,17 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om utkastet är skapat på samma vårdenhet skall det gå att tas bort")
     void shallDeleteCertificateIfCertificateIsOnSameCareUnit() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      final var certificateId = certificateId(testCertificate.getBody());
+      final var certificateId = certificateId(testCertificates);
       api.deleteCertificate(
           customDeleteCertificateRequest()
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build(),
           certificateId,
-          version(testCertificate.getBody())
+          version(testCertificates)
       );
 
       assertFalse(
@@ -764,17 +778,17 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om utkastet är skapat på annan mottagning skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsSubUnitAndNotOnSameSubUnit() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      final var certificateId = certificateId(testCertificate.getBody());
+      final var certificateId = certificateId(testCertificates);
       final var response = api.deleteCertificate(
           customDeleteCertificateRequest()
               .unit(ALFA_HUDMOTTAGNINGEN_DTO)
               .build(),
           certificateId,
-          version(testCertificate.getBody())
+          version(testCertificates)
       );
 
       assertEquals(403, response.getStatusCode().value());
@@ -783,18 +797,18 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om utkastet är skapat på annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsCareUnitAndNotOnSameCareUnit() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      final var certificateId = certificateId(testCertificate.getBody());
+      final var certificateId = certificateId(testCertificates);
       final var response = api.deleteCertificate(
           customDeleteCertificateRequest()
               .unit(ALFA_VARDCENTRAL_DTO)
               .careUnit(ALFA_VARDCENTRAL_DTO)
               .build(),
           certificateId,
-          version(testCertificate.getBody())
+          version(testCertificates)
       );
 
       assertEquals(403, response.getStatusCode().value());
@@ -803,19 +817,19 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Vårdadmin - Om utkastet är skapat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
     void shallNotUpdateDataIfUserIsCareAdminAndPatientIsProtectedPerson() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           customTestabilityCertificateRequest(FK7211, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
 
-      final var certificateId = certificateId(testCertificate.getBody());
+      final var certificateId = certificateId(testCertificates);
       final var response = api.deleteCertificate(
           customDeleteCertificateRequest()
               .user(ALVA_VARDADMINISTRATOR_DTO)
               .build(),
           certificateId,
-          version(testCertificate.getBody())
+          version(testCertificates)
       );
 
       assertEquals(403, response.getStatusCode().value());
@@ -829,11 +843,11 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om intyget är utfärdat på samma mottagning skall det returneras")
     void shallReturnCertificateIfUnitIsSubUnitAndOnSameUnit() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      testabilityApi.addCertificate(
+      testabilityApi.addCertificates(
           customTestabilityCertificateRequest(FK7211, VERSION)
               .patient(ALVE_REACT_ALFREDSSON_DTO)
               .build()
@@ -845,7 +859,7 @@ class FK7211ActiveIT {
 
       assertAll(
           () -> assertTrue(
-              exists(certificates(response.getBody()), certificate(testCertificate.getBody()))
+              exists(certificates(response.getBody()), certificate(testCertificates))
           ),
           () -> assertEquals(1, certificates(response.getBody()).size())
       );
@@ -854,13 +868,13 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om intyget är utfärdat på samma vårdenhet skall det returneras")
     void shallReturnCertificateIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           customTestabilityCertificateRequest(FK7211, VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
 
-      testabilityApi.addCertificate(
+      testabilityApi.addCertificates(
           customTestabilityCertificateRequest(FK7211, VERSION)
               .patient(ALVE_REACT_ALFREDSSON_DTO)
               .unit(ALFA_MEDICINCENTRUM_DTO)
@@ -875,7 +889,7 @@ class FK7211ActiveIT {
 
       assertAll(
           () -> assertTrue(
-              exists(certificates(response.getBody()), certificate(testCertificate.getBody()))
+              exists(certificates(response.getBody()), certificate(testCertificates))
           ),
           () -> assertEquals(1, certificates(response.getBody()).size())
       );
@@ -884,11 +898,11 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det returneras")
     void shallReturnCertificateIfUnitIsCareUnitAndOnSameCareUnit() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      testabilityApi.addCertificate(
+      testabilityApi.addCertificates(
           customTestabilityCertificateRequest(FK7211, VERSION)
               .patient(ALVE_REACT_ALFREDSSON_DTO)
               .build()
@@ -902,7 +916,7 @@ class FK7211ActiveIT {
 
       assertAll(
           () -> assertTrue(
-              exists(certificates(response.getBody()), certificate(testCertificate.getBody()))
+              exists(certificates(response.getBody()), certificate(testCertificates))
           ),
           () -> assertEquals(1, certificates(response.getBody()).size())
       );
@@ -911,7 +925,7 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det returneras")
     void shallReturnCertificateIfPatientIsProtectedPersonAndUserIsDoctor() {
-      final var testCertificate = testabilityApi.addCertificate(
+      final var testCertificates = testabilityApi.addCertificates(
           customTestabilityCertificateRequest(FK7211, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
@@ -926,7 +940,7 @@ class FK7211ActiveIT {
 
       assertAll(
           () -> assertTrue(
-              exists(certificates(response.getBody()), certificate(testCertificate.getBody()))
+              exists(certificates(response.getBody()), certificate(testCertificates))
           ),
           () -> assertEquals(1, certificates(response.getBody()).size())
       );
@@ -935,7 +949,7 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Vårdadministratör - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfPatientIsProtectedPersonAndUserIsCareAdmin() {
-      testabilityApi.addCertificate(
+      testabilityApi.addCertificates(
           customTestabilityCertificateRequest(FK7211, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
@@ -954,7 +968,7 @@ class FK7211ActiveIT {
     @Test
     @DisplayName("FK7211 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
-      testabilityApi.addCertificate(
+      testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
@@ -966,6 +980,479 @@ class FK7211ActiveIT {
       );
 
       assertTrue(certificates(response.getBody()).isEmpty());
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7211 - Hämta ej signerade utkast sökkriterier")
+  class GetUnitCertificatesInfo {
+
+    @Test
+    @DisplayName("FK7211 - Returnera lista av personal som har sparat utkast på mottagning")
+    void shallReturnAListOfStaffOnTheSameSubUnit() {
+      testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION),
+          defaultTestablilityCertificateRequest(FK7211, VERSION),
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .user(ALVA_VARDADMINISTRATOR_DTO)
+              .build()
+      );
+
+      final var response = api.getUnitCertificatesInfo(
+          defaultGetUnitCertificatesInfoRequest()
+      );
+
+      final var staff = StaffUtil.staff(response.getBody());
+
+      assertAll(
+          () -> assertTrue(() -> staff.contains(AJLA_DOKTOR),
+              () -> "Expected '%s' in result: '%s'".formatted(AJLA_DOKTOR, staff)),
+          () -> assertTrue(() -> staff.contains(ALVA_VARDADMINISTRATOR),
+              () -> "Expected '%s' in result: '%s'".formatted(ALVA_VARDADMINISTRATOR, staff)),
+          () -> assertEquals(2, staff.size())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Returnera lista av personal som har sparat utkast på vårdenhet")
+    void shallReturnAListOfStaffOnTheSameCareUnit() {
+      testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .user(ALVA_VARDADMINISTRATOR_DTO)
+              .build()
+      );
+
+      final var response = api.getUnitCertificatesInfo(
+          customGetUnitCertificatesInfoRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build()
+      );
+
+      final var staff = StaffUtil.staff(response.getBody());
+
+      assertAll(
+          () -> assertTrue(() -> staff.contains(AJLA_DOKTOR),
+              () -> "Expected '%s' in result: '%s'".formatted(AJLA_DOKTOR, staff)),
+          () -> assertTrue(() -> staff.contains(ALVA_VARDADMINISTRATOR),
+              () -> "Expected '%s' in result: '%s'".formatted(ALVA_VARDADMINISTRATOR, staff)),
+          () -> assertEquals(2, staff.size())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Inkludera inte personal som har sparat utkast på annan mottagning")
+    void shallReturnAListOfStaffNotIncludingStaffOnDifferentSubUnit() {
+      testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION),
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .user(ALVA_VARDADMINISTRATOR_DTO)
+              .build()
+      );
+
+      final var response = api.getUnitCertificatesInfo(
+          defaultGetUnitCertificatesInfoRequest()
+      );
+
+      final var staff = StaffUtil.staff(response.getBody());
+
+      assertAll(
+          () -> assertTrue(() -> staff.contains(AJLA_DOKTOR),
+              () -> "Expected '%s' in result: '%s'".formatted(AJLA_DOKTOR, staff)),
+          () -> assertFalse(() -> staff.contains(ALVA_VARDADMINISTRATOR),
+              () -> "Didnt expect '%s' in result: '%s'".formatted(ALVA_VARDADMINISTRATOR, staff)),
+          () -> assertEquals(1, staff.size())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Inkludera inte personal som har sparat utkast på annan vårdenhet")
+    void shallReturnAListOfStaffNotIncludingStaffOnDifferentCareUnit() {
+      testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION),
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .careUnit(ALFA_VARDCENTRAL_DTO)
+              .unit(ALFA_VARDCENTRAL_DTO)
+              .user(ALVA_VARDADMINISTRATOR_DTO)
+              .build()
+      );
+
+      final var response = api.getUnitCertificatesInfo(
+          customGetUnitCertificatesInfoRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build()
+      );
+
+      final var staff = StaffUtil.staff(response.getBody());
+
+      assertAll(
+          () -> assertTrue(() -> staff.contains(AJLA_DOKTOR),
+              () -> "Expected '%s' in result: '%s'".formatted(AJLA_DOKTOR, staff)),
+          () -> assertFalse(() -> staff.contains(ALVA_VARDADMINISTRATOR),
+              () -> "Didnt expect '%s' in result: '%s'".formatted(ALVA_VARDADMINISTRATOR, staff)),
+          () -> assertEquals(1, staff.size())
+      );
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7211 - Hämta ej signerade utkast")
+  class GetUnitCertificates {
+
+    @Test
+    @DisplayName("FK7211 - Returnera lista med utkast som har sparats på mottagning")
+    void shallReturnCertificatesOnTheSameSubUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.getUnitCertificates(
+          defaultGetUnitCertificatesRequest()
+      );
+
+      assertAll(
+          () -> assertTrue(
+              () -> exists(certificates(response.getBody()), certificate(testCertificates)),
+              () -> "Expected '%s' in result: '%s'".formatted(certificateId(testCertificates),
+                  certificates(response.getBody()))),
+          () -> assertEquals(1, certificates(response.getBody()).size())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Returnera lista med utkast som har sparats på vårdenhet")
+    void shallReturnCertificatesOnTheSameCareUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build()
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build()
+      );
+
+      assertAll(
+          () -> assertTrue(
+              () -> exists(certificates(response.getBody()), certificate(testCertificates)),
+              () -> "Expected '%s' in result: '%s'".formatted(certificateId(testCertificates),
+                  certificates(response.getBody()))),
+          () -> assertEquals(1, certificates(response.getBody()).size())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Returnera lista med utkast som har sparats på mottagning inom vårdenhet")
+    void shallReturnCertificatesIssuedOnSubUnitOnTheSameCareUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build()
+      );
+
+      assertAll(
+          () -> assertTrue(
+              () -> exists(certificates(response.getBody()), certificate(testCertificates)),
+              () -> "Expected '%s' in result: '%s'".formatted(certificateId(testCertificates),
+                  certificates(response.getBody()))),
+          () -> assertEquals(1, certificates(response.getBody()).size())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Ej returnera utkast som sparats på annan mottagning")
+    void shallNotReturnCertificatesOnDifferentSubUnit() {
+      testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .build()
+      );
+
+      final var response = api.getUnitCertificates(
+          defaultGetUnitCertificatesRequest()
+      );
+
+      assertEquals(0, certificates(response.getBody()).size(),
+          "Expect list to be empty but contains: '%s'".formatted(certificates(response.getBody()))
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Ej returnera utkast som sparats på annan vårdenhet")
+    void shallNotReturnCertificatesOnDifferentCareUnit() {
+      testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .unit(ALFA_VARDCENTRAL_DTO)
+              .careUnit(ALFA_VARDCENTRAL_DTO)
+              .build()
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build()
+      );
+
+      assertEquals(0, certificates(response.getBody()).size(),
+          "Expect list to be empty but contains: '%s'".formatted(certificates(response.getBody()))
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Ej returnera utkast som sparats på vårdenheten när man är på mottagningen")
+    void shallNotReturnCertificatesOnCareUnitWhenOnSubUnit() {
+      testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build()
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
+              .build()
+      );
+
+      assertEquals(0, certificates(response.getBody()).size(),
+          "Expect list to be empty but contains: '%s'".formatted(certificates(response.getBody()))
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Returnera lista med utkast som har sparats datum efter från och med datum")
+    void shallReturnCertificatesSavedAfterFrom() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .queryCriteria(
+                  CertificatesQueryCriteriaDTO.builder()
+                      .from(LocalDateTime.now().minusDays(1))
+                      .build()
+              )
+              .build()
+      );
+
+      assertAll(
+          () -> assertTrue(
+              () -> exists(certificates(response.getBody()), certificate(testCertificates)),
+              () -> "Expected '%s' in result: '%s'".formatted(certificateId(testCertificates),
+                  certificates(response.getBody()))),
+          () -> assertEquals(1, certificates(response.getBody()).size())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Ej returnera utkast som har sparats datum före från och med datum")
+    void shallNotReturnCertificatesSavedBeforeFrom() {
+      testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .queryCriteria(
+                  CertificatesQueryCriteriaDTO.builder()
+                      .from(LocalDateTime.now().plusDays(1))
+                      .build()
+              )
+              .build()
+      );
+
+      assertEquals(0, certificates(response.getBody()).size(),
+          "Expect list to be empty but contains: '%s'".formatted(certificates(response.getBody()))
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Returnera lista med utkast som har sparat datum före till och med datum")
+    void shallReturnCertificatesSavedBeforeTo() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .queryCriteria(
+                  CertificatesQueryCriteriaDTO.builder()
+                      .to(LocalDateTime.now().plusDays(1))
+                      .build()
+              )
+              .build()
+      );
+
+      assertAll(
+          () -> assertTrue(
+              () -> exists(certificates(response.getBody()), certificate(testCertificates)),
+              () -> "Expected '%s' in result: '%s'".formatted(certificateId(testCertificates),
+                  certificates(response.getBody()))),
+          () -> assertEquals(1, certificates(response.getBody()).size())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Ej returnera utkast som har sparats datum efter till och med datum")
+    void shallNotReturnCertificatesSavedAfterTo() {
+      testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .queryCriteria(
+                  CertificatesQueryCriteriaDTO.builder()
+                      .to(LocalDateTime.now().minusDays(1))
+                      .build()
+              )
+              .build()
+      );
+
+      assertEquals(0, certificates(response.getBody()).size(),
+          "Expect list to be empty but contains: '%s'".formatted(certificates(response.getBody()))
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Returnera lista med utkast som har sparats på patienten")
+    void shallReturnCertificatesSavedOnPatient() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .queryCriteria(
+                  CertificatesQueryCriteriaDTO.builder()
+                      .personId(
+                          PersonIdDTO.builder()
+                              .id(ATHENA_REACT_ANDERSSON_DTO.getId().getId())
+                              .type(ATHENA_REACT_ANDERSSON_DTO.getId().getType().name())
+                              .build()
+                      )
+                      .build()
+              )
+              .build()
+      );
+
+      assertAll(
+          () -> assertTrue(
+              () -> exists(certificates(response.getBody()), certificate(testCertificates)),
+              () -> "Expected '%s' in result: '%s'".formatted(certificateId(testCertificates),
+                  certificates(response.getBody()))),
+          () -> assertEquals(1, certificates(response.getBody()).size())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Ej returnera utkast som har sparats på annan patient")
+    void shallNotReturnCertificatesSavedOnDifferentPatient() {
+      testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .queryCriteria(
+                  CertificatesQueryCriteriaDTO.builder()
+                      .personId(
+                          PersonIdDTO.builder()
+                              .id(ALVE_REACT_ALFREDSSON_DTO.getId().getId())
+                              .type(ALVE_REACT_ALFREDSSON_DTO.getId().getType().name())
+                              .build()
+                      )
+                      .build()
+              )
+              .build()
+      );
+
+      assertEquals(0, certificates(response.getBody()).size(),
+          "Expect list to be empty but contains: '%s'".formatted(certificates(response.getBody()))
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Returnera lista med utkast som har sparats av vald användare")
+    void shallReturnCertificatesSavedBySameStaff() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .queryCriteria(
+                  CertificatesQueryCriteriaDTO.builder()
+                      .issuedByStaffId(AJLA_DOCTOR_DTO.getId())
+                      .build()
+              )
+              .build()
+      );
+
+      assertAll(
+          () -> assertTrue(
+              () -> exists(certificates(response.getBody()), certificate(testCertificates)),
+              () -> "Expected '%s' in result: '%s'".formatted(certificateId(testCertificates),
+                  certificates(response.getBody()))),
+          () -> assertEquals(1, certificates(response.getBody()).size())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Ej returnera utkast som har sparats av annan användare")
+    void shallNotReturnCertificatesSavedByDifferentStaff() {
+      testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .queryCriteria(
+                  CertificatesQueryCriteriaDTO.builder()
+                      .issuedByStaffId(ALVA_VARDADMINISTRATOR_DTO.getId())
+                      .build()
+              )
+              .build()
+      );
+
+      assertEquals(0, certificates(response.getBody()).size(),
+          "Expect list to be empty but contains: '%s'".formatted(certificates(response.getBody()))
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Ej returnera utkast som har annan status")
+    void shallNotReturnCertificatesWithDifferentStatus() {
+      testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .queryCriteria(
+                  CertificatesQueryCriteriaDTO.builder()
+                      .statuses(List.of(CertificateStatusTypeDTO.LOCKED))
+                      .build()
+              )
+              .build()
+      );
+
+      assertEquals(0, certificates(response.getBody()).size(),
+          "Expect list to be empty but contains: '%s'".formatted(certificates(response.getBody()))
+      );
     }
   }
 }

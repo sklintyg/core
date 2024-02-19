@@ -3,7 +3,6 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
@@ -181,8 +180,8 @@ class CertificateModelFactoryFK7211Test {
         final var expectedConfiguration = ElementConfigurationDate.builder()
             .name("Beräknat nedkomstdatum")
             .id("beraknatnedkomstdatum")
-            .minDate(LocalDate.now(ZoneId.systemDefault()))
-            .maxDate(LocalDate.now(ZoneId.systemDefault()).plusYears(1))
+            .min(Period.ofDays(0))
+            .max(Period.ofYears(1))
             .build();
 
         final var certificateModel = certificateModelFactoryFK7211.create();

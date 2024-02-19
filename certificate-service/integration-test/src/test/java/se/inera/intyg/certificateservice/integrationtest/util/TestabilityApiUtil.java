@@ -5,6 +5,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -27,12 +28,19 @@ public class TestabilityApiUtil {
   private final int port;
   private List<String> certificateIds = new ArrayList<>();
 
+  public List<CreateCertificateResponse> addCertificates(
+      TestabilityCertificateRequest... requests) {
+    return Stream.of(requests)
+        .map(request -> addCertificate(request).getBody())
+        .toList();
+  }
+
   public ResponseEntity<CreateCertificateResponse> addCertificate(
       TestabilityCertificateRequest request) {
     final var requestUrl = "http://localhost:%s/testability/certificate".formatted(port);
     final var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    final var response = this.restTemplate.<CreateCertificateResponse>exchange(
+    final ResponseEntity<CreateCertificateResponse> response = this.restTemplate.exchange(
         requestUrl,
         HttpMethod.POST,
         new HttpEntity<>(request, headers),
@@ -44,7 +52,6 @@ public class TestabilityApiUtil {
     if (certificateId(response.getBody()) != null) {
       certificateIds.add(certificateId(response.getBody()));
     }
-
     return response;
   }
 
@@ -52,7 +59,7 @@ public class TestabilityApiUtil {
     if (certificateIds.isEmpty()) {
       return;
     }
-    
+
     final var requestUrl = "http://localhost:%s/testability/certificate".formatted(port);
     final var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);

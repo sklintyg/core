@@ -3,6 +3,9 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType.CATEGORY;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType.DATE;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfig;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigCategory;
@@ -24,12 +27,16 @@ public class CertificateDataConfigConverter {
       return CertificateDataConfigDate.builder()
           .id(configuration.id())
           .text(configuration.name())
-          .minDate(configuration.minDate())
-          .maxDate(configuration.maxDate())
+          .minDate(date(configuration.min()))
+          .maxDate(date(configuration.max()))
           .build();
     }
     throw new IllegalStateException(
         "Config '%s' is not supported".formatted(elementSpecification.configuration().type())
     );
+  }
+
+  private static LocalDate date(Period period) {
+    return period == null ? null : LocalDate.now(ZoneId.systemDefault()).plus(period);
   }
 }

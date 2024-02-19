@@ -10,11 +10,11 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.certificate.model.CareProvider;
-import se.inera.intyg.certificateservice.domain.certificate.model.CareUnit;
-import se.inera.intyg.certificateservice.domain.certificate.model.HsaId;
-import se.inera.intyg.certificateservice.domain.certificate.model.SubUnit;
-import se.inera.intyg.certificateservice.domain.certificate.model.UnitName;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
+import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
+import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
+import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitTypeEntity;

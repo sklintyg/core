@@ -27,8 +27,8 @@ public class TestDataElementSpecification {
             ElementConfigurationDate.builder()
                 .name(DATE_ELEMENT_NAME)
                 .id(DATE_ELEMENT_VALUE_ID)
-                .minDate(DATE_ELEMENT_CONFIGURATION_MIN)
-                .maxDate(DATE_ELEMENT_CONFIGURATION_MAX)
+                .min(DATE_ELEMENT_CONFIGURATION_MIN)
+                .max(DATE_ELEMENT_CONFIGURATION_MAX)
                 .build()
         )
         .rules(

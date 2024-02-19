@@ -33,6 +33,11 @@ class GetCertificateRequestValidatorTest {
         .careProvider(ALFA_REGIONEN_DTO);
   }
 
+  @Test
+  void validRequest() {
+    getCertificateRequestValidator.validate(requestBuilder.build(), CERTIFICATE_ID);
+  }
+
   @Nested
   class UserValidation {
 

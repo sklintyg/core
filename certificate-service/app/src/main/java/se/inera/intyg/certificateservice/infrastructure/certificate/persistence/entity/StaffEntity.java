@@ -25,6 +25,10 @@ public class StaffEntity {
   private int key;
   @Column(name = "hsa_id", unique = true)
   private String hsaId;
-  @Column(name = "name")
-  private String name;
+  @Column(name = "first_name")
+  private String firstName;
+  @Column(name = "middle_name")
+  private String middleName;
+  @Column(name = "last_name")
+  private String lastName;
 }

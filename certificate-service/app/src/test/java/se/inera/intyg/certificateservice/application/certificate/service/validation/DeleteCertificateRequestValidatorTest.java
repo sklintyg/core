@@ -33,6 +33,11 @@ class DeleteCertificateRequestValidatorTest {
         .careProvider(ALFA_REGIONEN_DTO);
   }
 
+  @Test
+  void validRequest() {
+    deleteCertificateRequestValidator.validate(requestBuilder.build(), CERTIFICATE_ID, VERSION);
+  }
+
   @Nested
   class UserValidation {
 

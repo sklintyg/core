@@ -22,8 +22,6 @@ import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCerti
 
 class GetPatientCertificatesRequestValidatorTest {
 
-  private static final String TYPE = "type";
-  private static final String VERSION = "version";
   private GetPatientCertificatesRequestValidator getPatientCertificatesRequestValidator;
   private GetPatientCertificatesRequest.GetPatientCertificatesRequestBuilder requestBuilder;
 
@@ -36,6 +34,11 @@ class GetPatientCertificatesRequestValidatorTest {
         .careUnit(ALFA_MEDICINCENTRUM_DTO)
         .careProvider(ALFA_REGIONEN_DTO)
         .patient(ATHENA_REACT_ANDERSSON_DTO);
+  }
+
+  @Test
+  void validRequest() {
+    getPatientCertificatesRequestValidator.validate(requestBuilder.build());
   }
 
   @Nested
