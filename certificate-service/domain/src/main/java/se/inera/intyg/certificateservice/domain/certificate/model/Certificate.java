@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 
 @Getter
@@ -67,7 +68,9 @@ public class Certificate {
         .build();
   }
 
-  public void updateData(List<ElementData> newData) {
+  public void updateData(List<ElementData> newData, Revision revision,
+      ActionEvaluation actionEvaluation) {
+    throwIfConcurrentModiciation(revision, "update", actionEvaluation);
     final var missingIds = newData.stream()
         .filter(newDataElement -> !certificateModel.elementSpecificationExists(newDataElement.id()))
         .map(newDataElement -> newDataElement.id().id())
@@ -79,24 +82,31 @@ public class Certificate {
               .formatted(missingIds, certificateModel.id())
       );
     }
-    revision = revision.increment();
+    this.revision = this.revision.increment();
     this.elementData = newData.stream().toList();
   }
 
-  public void delete(Revision revision) {
-    if (!this.revision.equals(revision)) {
-      throw new IllegalStateException(
-          "Incorrect revision '%s' != '%s' - unable to delete".formatted(revision, this.revision)
-      );
-    }
-
+  public void delete(Revision revision, ActionEvaluation actionEvaluation) {
+    throwIfConcurrentModiciation(revision, "delete", actionEvaluation);
     if (this.status != Status.DRAFT) {
       throw new IllegalStateException(
           "Incorrect status '%s' - required status is '%s' to delete".formatted(this.status,
               Status.DRAFT)
       );
     }
-
     this.status = Status.DELETED_DRAFT;
   }
+
+  private void throwIfConcurrentModiciation(Revision revision, String operation,
+      ActionEvaluation actionEvaluation) {
+    if (!this.revision.equals(revision)) {
+      throw new ConcurrentModificationException(
+          "Incorrect revision '%s' != '%s' - unable to %s".formatted(revision, this.revision,
+              operation),
+          actionEvaluation.user(),
+          actionEvaluation.subUnit()
+      );
+    }
+  }
 }
+

@@ -71,6 +71,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
 
@@ -776,11 +777,6 @@ class CertificateTest {
   @Nested
   class TestUpdateData {
 
-    @BeforeEach
-    void setUp() {
-      doReturn(true).when(certificateModel).elementSpecificationExists(DATE.id());
-    }
-
     @Test
     void shallUpdateDataIfChanged() {
       final var newValue = List.of(
@@ -792,8 +788,8 @@ class CertificateTest {
               )
               .build()
       );
-
-      certificate.updateData(newValue);
+      doReturn(true).when(certificateModel).elementSpecificationExists(DATE.id());
+      certificate.updateData(newValue, REVISION, actionEvaluationBuilder.build());
 
       assertEquals(newValue, certificate.elementData());
     }
@@ -811,8 +807,8 @@ class CertificateTest {
                   .build()
           )
       );
-
-      certificate.updateData(newValue);
+      doReturn(true).when(certificateModel).elementSpecificationExists(DATE.id());
+      certificate.updateData(newValue, REVISION, actionEvaluationBuilder.build());
 
       newValue.remove(0);
 
@@ -820,7 +816,47 @@ class CertificateTest {
     }
 
     @Test
-    void shallIncrementRevisionOnUpdateData() {
+    void shallIncrementOnUpdateData() {
+      final var newValue = List.of(
+          dateElementDataBuilder()
+              .value(
+                  ElementValueDate.builder()
+                      .date(DATE_ELEMENT_VALUE_DATE.plusDays(1))
+                      .build()
+              )
+              .build()
+      );
+      doReturn(true).when(certificateModel).elementSpecificationExists(DATE.id());
+      certificate.updateData(newValue, REVISION, actionEvaluationBuilder.build());
+
+      long version = 0L;
+      assertEquals(version + 1, certificate.revision().value());
+    }
+
+    @Test
+    void shallThrowExceptionIfElementIdDontExists() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var newValue = List.of(
+          DATE,
+          dateElementDataBuilder()
+              .id(new ElementId("NOT_EXISTS"))
+              .build()
+      );
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificate.updateData(newValue, REVISION, actionEvaluation)
+      );
+
+      assertTrue(illegalArgumentException.getMessage().contains("NOT_EXISTS"),
+          () -> "Expected to contain 'NOT_EXISTS' in exception message '%s'"
+              .formatted(illegalArgumentException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowExceptionIfRevisionDontMatch() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var revision = new Revision(1);
       final var newValue = List.of(
           dateElementDataBuilder()
               .value(
@@ -831,28 +867,13 @@ class CertificateTest {
               .build()
       );
 
-      certificate.updateData(newValue);
-
-      long version = 0L;
-      assertEquals(version + 1, certificate.revision().value());
-    }
-
-    @Test
-    void shallThrowExceptionIfElementIdDontExists() {
-      final var newValue = List.of(
-          DATE,
-          dateElementDataBuilder()
-              .id(new ElementId("NOT_EXISTS"))
-              .build()
+      final var concurrentModificationException = assertThrows(
+          ConcurrentModificationException.class,
+          () -> certificate.updateData(newValue, revision, actionEvaluation)
       );
 
-      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> certificate.updateData(newValue)
-      );
-
-      assertTrue(illegalArgumentException.getMessage().contains("NOT_EXISTS"),
-          () -> "Expected to contain 'NOT_EXISTS' in exception message '%s'"
-              .formatted(illegalArgumentException.getMessage())
+      assertTrue(concurrentModificationException.getMessage().contains("Incorrect revision"),
+          () -> "Received message was: %s".formatted(concurrentModificationException.getMessage())
       );
     }
   }
@@ -862,23 +883,26 @@ class CertificateTest {
 
     @Test
     void shallThrowExceptionIfRevisionDontMatch() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
       final var revision = new Revision(2);
-      final var illegalStateException = assertThrows(IllegalStateException.class,
-          () -> certificate.delete(revision)
+      final var concurrentModificationException = assertThrows(
+          ConcurrentModificationException.class,
+          () -> certificate.delete(revision, actionEvaluation)
       );
-      assertTrue(illegalStateException.getMessage().contains("Incorrect revision"),
-          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      assertTrue(concurrentModificationException.getMessage().contains("Incorrect revision"),
+          () -> "Received message was: %s".formatted(concurrentModificationException.getMessage())
       );
     }
 
     @Test
     void shallThrowExceptionIfStatusDoesntMatchDraft() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
       final var deletedCertificate = certificateBuilder
           .status(Status.DELETED_DRAFT)
           .build();
 
       final var illegalStateException = assertThrows(IllegalStateException.class,
-          () -> deletedCertificate.delete(REVISION)
+          () -> deletedCertificate.delete(REVISION, actionEvaluation)
       );
 
       assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
@@ -888,7 +912,7 @@ class CertificateTest {
 
     @Test
     void shallReturnStateDeleteDraftWhenDeleted() {
-      certificate.delete(REVISION);
+      certificate.delete(REVISION, actionEvaluationBuilder.build());
       assertEquals(Status.DELETED_DRAFT, certificate.status());
     }
   }

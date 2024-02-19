@@ -23,8 +23,8 @@ public class DeleteCertificateDomainService {
       );
     }
 
+    certificate.delete(revision, actionEvaluation);
     certificate.updateMetadata(actionEvaluation);
-    certificate.delete(revision);
 
     return certificateRepository.save(certificate);
   }

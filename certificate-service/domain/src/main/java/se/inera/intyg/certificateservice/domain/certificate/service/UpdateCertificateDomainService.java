@@ -7,6 +7,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 
@@ -16,7 +17,7 @@ public class UpdateCertificateDomainService {
   private final CertificateRepository certificateRepository;
 
   public Certificate update(CertificateId certificateId, List<ElementData> elementData,
-      ActionEvaluation actionEvaluation) {
+      ActionEvaluation actionEvaluation, Revision revision) {
     final var certificate = certificateRepository.getById(certificateId);
     if (!certificate.allowTo(CertificateActionType.UPDATE, actionEvaluation)) {
       throw new CertificateActionForbidden(
@@ -24,8 +25,8 @@ public class UpdateCertificateDomainService {
       );
     }
 
+    certificate.updateData(elementData, revision, actionEvaluation);
     certificate.updateMetadata(actionEvaluation);
-    certificate.updateData(elementData);
 
     return certificateRepository.save(certificate);
   }
