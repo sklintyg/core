@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
+import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
 @Getter
 @Builder
@@ -95,6 +96,15 @@ public class Certificate {
       );
     }
     this.status = Status.DELETED_DRAFT;
+  }
+
+  public ValidationResult validate(ActionEvaluation actionEvaluation) {
+    return validate(this.elementData, actionEvaluation);
+  }
+
+  public ValidationResult validate(List<ElementData> elementData,
+      ActionEvaluation actionEvaluation) {
+    return null;
   }
 
   private void throwIfConcurrentModiciation(Revision revision, String operation,
