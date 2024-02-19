@@ -51,7 +51,7 @@ class DeleteCertificateDomainServiceTest {
 
     deleteCertificateDomainService.delete(CERTIFICATE_ID, revision, ACTION_EVALUATION);
 
-    verify(certificate).delete(revision);
+    verify(certificate).delete(revision, ACTION_EVALUATION);
   }
 
   @Test

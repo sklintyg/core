@@ -36,6 +36,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertificateDomainService;
 
 @ExtendWith(MockitoExtension.class)
@@ -122,8 +123,8 @@ class UpdateCertificateServiceTest {
     final var certificate = mock(Certificate.class);
 
     doReturn(certificate).when(updateCertificateDomainService).update(
-        new CertificateId(CERTIFICATE_ID), elementDataList, actionEvaluation
-    );
+        new CertificateId(CERTIFICATE_ID), elementDataList, actionEvaluation,
+        new Revision(0));
 
     final var certificateAction = mock(CertificateAction.class);
     final List<CertificateAction> certificateActions = List.of(certificateAction);
@@ -180,8 +181,8 @@ class UpdateCertificateServiceTest {
 
     doReturn(elementData).when(elementMetaDataConverter).convert(unitDTO);
     doReturn(certificate).when(updateCertificateDomainService).update(
-        new CertificateId(CERTIFICATE_ID), elementDataList, actionEvaluation
-    );
+        new CertificateId(CERTIFICATE_ID), elementDataList, actionEvaluation,
+        new Revision(0));
 
     final var certificateAction = mock(CertificateAction.class);
     final List<CertificateAction> certificateActions = List.of(certificateAction);

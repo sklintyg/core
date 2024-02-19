@@ -14,6 +14,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.validat
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertificateDomainService;
 
 @Service
@@ -59,8 +60,8 @@ public class UpdateCertificateService {
     final var updatedCertificate = updateCertificateDomainService.update(
         new CertificateId(certificateId),
         elementDataList,
-        actionEvaluation
-    );
+        actionEvaluation,
+        new Revision(updateCertificateRequest.getCertificate().getMetadata().getVersion()));
 
     return UpdateCertificateResponse.builder()
         .certificate(certificateConverter.convert(
