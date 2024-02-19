@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigCategory;
@@ -19,8 +21,8 @@ class CertificateDataConfigConverterTest {
   private static final String CATEGORY_NAME = "Test Category";
   private static final String DATE_ID = "dateId";
   private static final String DATE_NAME = "Test Date";
-  private static final LocalDate MIN_DATE = LocalDate.of(2020, 1, 1);
-  private static final LocalDate MAX_DATE = LocalDate.of(2023, 12, 31);
+  private static final LocalDate MIN_DATE = LocalDate.now(ZoneId.systemDefault()).minusDays(1);
+  private static final LocalDate MAX_DATE = LocalDate.now(ZoneId.systemDefault()).plusDays(5);
   private final CertificateDataConfigConverter converter = new CertificateDataConfigConverter();
 
   @Test
@@ -116,7 +118,7 @@ class CertificateDataConfigConverterTest {
       final var elementSpecification = ElementSpecification.builder()
           .configuration(
               ElementConfigurationDate.builder()
-                  .minDate(MIN_DATE)
+                  .min(Period.ofDays(-1))
                   .build())
           .build();
 
@@ -130,7 +132,7 @@ class CertificateDataConfigConverterTest {
       final var elementSpecification = ElementSpecification.builder()
           .configuration(
               ElementConfigurationDate.builder()
-                  .maxDate(MAX_DATE)
+                  .max(Period.ofDays(5))
                   .build())
           .build();
 

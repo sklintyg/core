@@ -126,8 +126,8 @@ class CertificateConverterTest {
                                             ElementConfigurationDate.builder()
                                                 .id(ID)
                                                 .name(NAME)
-                                                .minDate(LocalDate.now().minus(Period.ofDays(0)))
-                                                .maxDate(LocalDate.now().plus(Period.ofYears(1)))
+                                                .min(Period.ofDays(0))
+                                                .max(Period.ofYears(1))
                                                 .build()
                                         )
                                         .rules(
