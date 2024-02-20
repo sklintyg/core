@@ -3,13 +3,19 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementDataConstants.DATE_ELEMENT_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementSpecification.DATE_ELEMENT_SPECIFICATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementSpecification.dateElementSpecificationBuilder;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 
 class ElementSpecificationTest {
 
@@ -89,6 +95,34 @@ class ElementSpecificationTest {
       assertThrows(IllegalArgumentException.class,
           () -> element.elementSpecification(elementId)
       );
+    }
+  }
+
+  @Nested
+  class TestValidate {
+
+    private static final ElementId ELEMENT_ID = new ElementId("elementId");
+    private static final FieldId FIELD_ID = new FieldId("fieldId");
+    private static final ElementId CATEGORY_ID = new ElementId("categoryId");
+
+    @Test
+    void shallReturnEmptyIfValid() {
+      final var expectedResult = Collections.emptyList();
+      final var validation = mock(ElementValidation.class);
+      final var element = dateElementSpecificationBuilder()
+          .id(ELEMENT_ID)
+          .validations(List.of(validation))
+          .build();
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(mock(ElementValue.class))
+          .build();
+
+      doReturn(expectedResult).when(validation).validate(elementData, Optional.empty());
+
+      final var actualResult = element.validate(List.of(elementData), Optional.empty());
+      assertEquals(expectedResult, actualResult);
     }
   }
 }

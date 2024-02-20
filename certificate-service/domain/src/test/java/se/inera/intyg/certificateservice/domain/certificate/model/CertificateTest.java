@@ -916,4 +916,9 @@ class CertificateTest {
       assertEquals(Status.DELETED_DRAFT, certificate.status());
     }
   }
+
+  @Nested
+  class TestValidate {
+
+  }
 }

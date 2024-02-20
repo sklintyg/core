@@ -2,8 +2,11 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Value;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
 
 @Value
 @Builder
@@ -47,5 +50,12 @@ public class ElementSpecification {
                 "No element with id '%s' exists within '%s'".formatted(id, id())
             )
         );
+  }
+
+  public List<ValidationError> validate(List<ElementData> elementData,
+      Optional<ElementId> categoryId) {
+    // Validera sig själv om den innehåller validations.
+    // Anropa sina bar att validera sig och skickar även med föräldern
+    return null;
   }
 }
