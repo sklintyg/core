@@ -56,11 +56,7 @@ public class ElementSpecification {
   public List<ValidationError> validate(List<ElementData> elementData,
       Optional<ElementId> categoryId) {
     final var validationErrors = validations.stream()
-        .map(elementValidation -> elementValidation.validate(
-                dataForElement(elementData),
-                categoryId
-            )
-        )
+        .map(validation -> validation.validate(dataForElement(elementData), categoryId))
         .flatMap(List::stream);
 
     final var childrenValidationErrors = children.stream()
@@ -81,22 +77,21 @@ public class ElementSpecification {
     return elementData.stream()
         .filter(data -> id.equals(data.id()))
         .findAny()
-        .map(data -> {
-              if (data.value() == null) {
-                return data.withValue(
-                    configuration.emptyValue()
-                );
-              }
-              return data;
-            }
-        )
+        .map(this::getElementData)
         .orElse(
             ElementData.builder()
                 .id(id)
-                .value(
-                    configuration().emptyValue()
-                )
+                .value(configuration().emptyValue())
                 .build()
         );
+  }
+
+  private ElementData getElementData(ElementData data) {
+    if (data.value() == null) {
+      return data.withValue(
+          configuration().emptyValue()
+      );
+    }
+    return data;
   }
 }
