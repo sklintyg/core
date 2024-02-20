@@ -60,7 +60,7 @@ class ValidateCertificateDomainServiceTest {
     final var expectedResult = ValidationResult.builder().build();
 
     doReturn(true).when(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
-    doReturn(expectedResult).when(certificate).validate(ELEMENT_DATA_LIST, ACTION_EVALUATION);
+    doReturn(expectedResult).when(certificate).validate(ELEMENT_DATA_LIST);
 
     final var actualResult = validateCertificateDomainService.validate(CERTIFICATE_ID,
         ELEMENT_DATA_LIST, ACTION_EVALUATION);

@@ -24,6 +24,6 @@ public class ValidateCertificateDomainService {
       );
     }
 
-    return certificate.validate(elementData, actionEvaluation);
+    return certificate.validate(elementData);
   }
 }
