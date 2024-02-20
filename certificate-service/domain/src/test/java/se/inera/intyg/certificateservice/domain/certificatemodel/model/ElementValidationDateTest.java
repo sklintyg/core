@@ -1,19 +1,23 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.dateElementDataBuilder;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.ZoneId;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.validation.model.ErrorMessage;
+import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
 
 class ElementValidationDateTest {
 
+  private static final ElementId ELEMENT_ID = new ElementId("elementId");
+  private static final FieldId FIELD_ID = new FieldId("fieldId");
+  private static final ElementId CATEGORY_ID = new ElementId("categoryId");
   private ElementValidationDate elementValidationDate;
 
   @BeforeEach
@@ -26,127 +30,82 @@ class ElementValidationDateTest {
   }
 
   @Test
-  void shallReturnFalseIfDataIsNull() {
-    assertFalse(elementValidationDate.validate(null),
-        () -> "Expected value '%s' to be false with validator '%s'".formatted(null,
-            elementValidationDate)
+  void shallReturnValidationErrorIfDateIsNull() {
+    final var expectedValidationError = List.of(
+        ValidationError.builder()
+            .elementId(ELEMENT_ID)
+            .fieldId(FIELD_ID)
+            .categoryId(CATEGORY_ID)
+            .message(new ErrorMessage("Ange ett datum."))
+            .build()
     );
-  }
 
-  @Test
-  void shallReturnFalseIfValueIsNull() {
-    final var notDate = dateElementDataBuilder()
-        .value(null)
-        .build();
-
-    assertFalse(elementValidationDate.validate(notDate),
-        () -> "Expected value '%s' to be false with validator '%s'".formatted(notDate,
-            elementValidationDate)
-    );
-  }
-
-  @Test
-  void shallReturnTrueIfDateIsNullAndNotMandatory() {
-    final var elementValidationDate = ElementValidationDate.builder()
-        .mandatory(false)
-        .build();
-    
-    final var notDate = dateElementDataBuilder()
-        .value(
-            ElementValueDate.builder().build()
-        )
-        .build();
-
-    assertTrue(elementValidationDate.validate(notDate),
-        () -> "Expected value '%s' to be true with validator '%s'".formatted(notDate,
-            elementValidationDate)
-    );
-  }
-
-  @Test
-  void shallReturnFalseIfValueIsNotDate() {
-    final var notDate = dateElementDataBuilder()
-        .value(
-            new ElementValue() {
-            }
-        )
-        .build();
-
-    assertFalse(elementValidationDate.validate(notDate),
-        () -> "Expected value '%s' to be false with validator '%s'".formatted(notDate,
-            elementValidationDate)
-    );
-  }
-
-  @Test
-  void shallReturnTrueIfEqualMin() {
-    final var date = dateElementDataBuilder()
+    final var elementData = ElementData.builder()
+        .id(ELEMENT_ID)
         .value(
             ElementValueDate.builder()
-                .date(
-                    LocalDate.now(ZoneId.systemDefault())
-                )
+                .dateId(FIELD_ID)
                 .build()
         )
         .build();
 
-    assertTrue(elementValidationDate.validate(date),
-        () -> "Expected value '%s' to be true with validator '%s'".formatted(date,
-            elementValidationDate)
-    );
+    final var actualResult = elementValidationDate.validate(elementData,
+        Optional.of(CATEGORY_ID));
+    assertEquals(expectedValidationError, actualResult);
   }
 
   @Test
-  void shallReturnTrueIfBeforeMin() {
-    final var date = dateElementDataBuilder()
+  void shallReturnValidationErrorIfDateIsBeforeMin() {
+    final var expectedValidationError = List.of(
+        ValidationError.builder()
+            .elementId(ELEMENT_ID)
+            .fieldId(FIELD_ID)
+            .categoryId(CATEGORY_ID)
+            .message(
+                new ErrorMessage("Ange ett datum som är tidigast %s.".formatted(LocalDate.now())))
+            .build()
+    );
+
+    final var elementData = ElementData.builder()
+        .id(ELEMENT_ID)
         .value(
             ElementValueDate.builder()
-                .date(
-                    LocalDate.now(ZoneId.systemDefault()).minusDays(1)
-                )
+                .dateId(FIELD_ID)
+                .date(LocalDate.now().minusDays(1))
                 .build()
         )
         .build();
 
-    assertFalse(elementValidationDate.validate(date),
-        () -> "Expected value '%s' to be false with validator '%s'".formatted(date,
-            elementValidationDate)
-    );
+    final var actualResult = elementValidationDate.validate(elementData,
+        Optional.of(CATEGORY_ID));
+    assertEquals(expectedValidationError, actualResult);
   }
 
   @Test
-  void shallReturnTrueIfEqualMax() {
-    final var date = dateElementDataBuilder()
+  void shallReturnValidationErrorIfDateIsAfterMax() {
+    final var expectedValidationError = List.of(
+        ValidationError.builder()
+            .elementId(ELEMENT_ID)
+            .fieldId(FIELD_ID)
+            .categoryId(CATEGORY_ID)
+            .message(
+                new ErrorMessage(
+                    "Ange ett datum som är senast %s.".formatted(LocalDate.now().plusDays(30))))
+            .build()
+    );
+
+    final var elementData = ElementData.builder()
+        .id(ELEMENT_ID)
         .value(
             ElementValueDate.builder()
-                .date(
-                    LocalDate.now(ZoneId.systemDefault()).plusDays(30)
-                )
+                .dateId(FIELD_ID)
+                .date(LocalDate.now().plusDays(31))
                 .build()
         )
         .build();
 
-    assertTrue(elementValidationDate.validate(date),
-        () -> "Expected value '%s' to be true with validator '%s'".formatted(date,
-            elementValidationDate)
-    );
-  }
-
-  @Test
-  void shallReturnFalseIfAfterMax() {
-    final var date = dateElementDataBuilder()
-        .value(
-            ElementValueDate.builder()
-                .date(
-                    LocalDate.now(ZoneId.systemDefault()).plusDays(31)
-                )
-                .build()
-        )
-        .build();
-
-    assertFalse(elementValidationDate.validate(date),
-        () -> "Expected value '%s' to be false with validator '%s'".formatted(date,
-            elementValidationDate)
-    );
+    final var actualResult = elementValidationDate.validate(elementData,
+        Optional.of(CATEGORY_ID));
+    assertEquals(expectedValidationError, actualResult);
   }
 }
