@@ -23,6 +23,7 @@ import org.mockito.ArgumentCaptor;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidation;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
 
 class ElementSpecificationTest {

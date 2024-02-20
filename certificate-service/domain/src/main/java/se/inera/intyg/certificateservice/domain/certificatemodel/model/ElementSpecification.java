@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidation;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
 
 @Value

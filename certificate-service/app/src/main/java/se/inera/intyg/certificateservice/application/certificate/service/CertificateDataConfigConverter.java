@@ -25,7 +25,7 @@ public class CertificateDataConfigConverter {
     if (DATE.equals(elementSpecification.configuration().type())) {
       final var configuration = (ElementConfigurationDate) elementSpecification.configuration();
       return CertificateDataConfigDate.builder()
-          .id(configuration.id())
+          .id(configuration.id().value())
           .text(configuration.name())
           .minDate(date(configuration.min()))
           .maxDate(date(configuration.max()))

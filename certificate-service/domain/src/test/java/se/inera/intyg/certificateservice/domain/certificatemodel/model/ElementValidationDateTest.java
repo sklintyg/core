@@ -13,7 +13,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIssuingUnit;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ErrorMessage;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
 
@@ -56,7 +57,7 @@ class ElementValidationDateTest {
       final Optional<ElementId> categoryId = Optional.empty();
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)
-          .value(ElementValueIssuingUnit.builder().build())
+          .value(ElementValueUnitContactInformation.builder().build())
           .build();
 
       assertThrows(IllegalArgumentException.class,

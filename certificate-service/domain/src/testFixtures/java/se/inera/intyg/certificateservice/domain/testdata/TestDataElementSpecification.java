@@ -16,7 +16,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementValidationDate;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 
 public class TestDataElementSpecification {
@@ -30,7 +31,7 @@ public class TestDataElementSpecification {
         .configuration(
             ElementConfigurationDate.builder()
                 .name(DATE_ELEMENT_NAME)
-                .id(DATE_ELEMENT_VALUE_ID)
+                .id(new FieldId(DATE_ELEMENT_VALUE_ID))
                 .min(DATE_ELEMENT_CONFIGURATION_MIN)
                 .max(DATE_ELEMENT_CONFIGURATION_MAX)
                 .build()

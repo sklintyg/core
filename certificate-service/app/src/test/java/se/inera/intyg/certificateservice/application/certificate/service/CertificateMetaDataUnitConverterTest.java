@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIssuingUnit;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
@@ -201,7 +201,7 @@ class CertificateMetaDataUnitConverterTest {
       String phoneNumber) {
     return ElementData.builder()
         .id(new ElementId(id))
-        .value(ElementValueIssuingUnit.builder()
+        .value(ElementValueUnitContactInformation.builder()
             .address(address)
             .city(city)
             .zipCode(zipcode)

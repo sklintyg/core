@@ -15,14 +15,14 @@ public class ElementConfigurationDate implements ElementConfiguration {
   String name;
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.DATE;
-  String id;
+  FieldId id;
   Period min;
   Period max;
 
   @Override
   public ElementValue emptyValue() {
     return ElementValueDate.builder()
-        .dateId(new FieldId(id))
+        .dateId(id)
         .build();
   }
 }

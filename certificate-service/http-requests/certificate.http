@@ -349,6 +349,135 @@ Content-Type: application/json
   }
 }
 
+### Validate certificate
+POST http://localhost:18030/api/certificate/ce28d0e6-f924-4142-b403-4239ce3a6594/validate
+Content-Type: application/json
+
+{
+  "user": {
+    "id": "TSTNMT2321000156-DRAA",
+    "name": "Alja Doctor",
+    "role": "DOCTOR",
+    "blocked": "false"
+  },
+  "unit": {
+    "id": "TSTNMT2321000156-ALHM",
+    "name": "Alfa Hudmottagningen",
+    "address": "Alfaadressen 1",
+    "city": "Alfastaden",
+    "zipCode": "Alfapostnummer",
+    "inactive": "false"
+  },
+  "careUnit": {
+    "id": "TSTNMT2321000156-ALMC",
+    "name": "Alfa Medicincentrum"
+  },
+  "careProvider": {
+    "id": "TSTNMT2321000156-ALFA",
+    "name": "Alfa Regionen"
+  },
+  "patient": {
+    "id": {
+      "type": "PERSONAL_IDENTITY_NUMBER",
+      "id": "191212121212"
+    },
+    "firstName": "Tolvan",
+    "middleName": "TP",
+    "lastName": "Tolvansson",
+    "fullName": "Tolvan TP Tolvansson",
+    "deceased": "false",
+    "protectedPerson": "false",
+    "testIndicated": "false",
+    "street": "",
+    "zipcode": "",
+    "city": ""
+  },
+  "certificate": {
+    "metadata": {
+      "id": "5246e783-cfaa-4604-8d56-8923228ad096",
+      "type": "fk7211",
+      "typeVersion": "1.0",
+      "typeName": "fk7211",
+      "name": "Intyg om graviditet",
+      "description": "Intyg om graviditet Ungefär i vecka 20 får du ett intyg om graviditet av barnmorskan. Intyget anger också datum för beräknad förlossning. Intyget skickar du till Försäkringskassan, som ger besked om kommande föräldrapenning.",
+      "created": "2024-02-14T08:37:07",
+      "status": "UNSIGNED",
+      "testCertificate": false,
+      "forwarded": false,
+      "sent": false,
+      "sentTo": null,
+      "relations": {
+        "parent": null,
+        "children": null
+      },
+      "unit": {
+        "unitId": "TSTNMT2321000156-ALHM",
+        "unitName": "Alfa Hudmottagningen",
+        "address": "",
+        "zipCode": "",
+        "city": "",
+        "phoneNumber": "",
+        "email": null,
+        "isInactive": false
+      },
+      "careUnit": {
+        "unitId": "TSTNMT2321000156-ALMC",
+        "unitName": "Alfa Medicincentrum",
+        "address": null,
+        "zipCode": null,
+        "city": null,
+        "phoneNumber": null,
+        "email": null,
+        "isInactive": null
+      },
+      "careProvider": {
+        "unitId": "TSTNMT2321000156-ALFA",
+        "unitName": "Alfa Regionen",
+        "address": null,
+        "zipCode": null,
+        "city": null,
+        "phoneNumber": null,
+        "email": null,
+        "isInactive": null
+      },
+      "patient": {
+        "personId": {
+          "type": "PERSONAL_IDENTITY_NUMBER",
+          "id": "191212121212"
+        },
+        "previousPersonId": null,
+        "firstName": "Tolvan",
+        "lastName": "Tolvansson",
+        "middleName": "TP",
+        "fullName": "Tolvan TP Tolvansson",
+        "street": "",
+        "city": "",
+        "zipCode": "",
+        "coordinationNumber": null,
+        "testIndicated": false,
+        "protectedPerson": false,
+        "deceased": false,
+        "differentNameFromEHR": null,
+        "personIdChanged": null,
+        "reserveId": null,
+        "addressFromPU": null
+      },
+      "issuedBy": {
+        "personId": "TSTNMT2321000156-DRAA",
+        "fullName": "Alja Doctor",
+        "prescriptionCode": null
+      },
+      "version": 1,
+      "latestMajorVersion": true,
+      "readyForSign": null,
+      "responsibleHospName": null,
+      "recipient": null,
+      "summary": null
+    },
+    "data": {}
+  }
+}
+
 ### Delete certificate
 DELETE http://localhost:18030/api/certificate/640de5cb-d99b-437c-bb9a-296107f4efc9/0
 Content-Type: application/json

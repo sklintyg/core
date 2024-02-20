@@ -47,21 +47,21 @@ public class CertificateController {
 
   @GetMapping("/{certificateId}/exists")
   CertificateExistsResponse findExistingCertificate(
-      @PathVariable String certificateId) {
+      @PathVariable("certificateId") String certificateId) {
     return certificateExistsService.exist(certificateId);
   }
 
   @PostMapping("/{certificateId}")
   GetCertificateResponse getCertificate(
       @RequestBody GetCertificateRequest getCertificateRequest,
-      @PathVariable String certificateId) {
+      @PathVariable("certificateId") String certificateId) {
     return getCertificateService.get(getCertificateRequest, certificateId);
   }
 
   @PutMapping("/{certificateId}")
   UpdateCertificateResponse updateCertificate(
       @RequestBody UpdateCertificateRequest updateCertificateRequest,
-      @PathVariable String certificateId) {
+      @PathVariable("certificateId") String certificateId) {
     return updateCertificateService.update(updateCertificateRequest, certificateId);
   }
 
@@ -75,7 +75,7 @@ public class CertificateController {
   @PostMapping("/{certificateId}/validate")
   ValidateCertificateResponse validateCertificate(
       @RequestBody ValidateCertificateRequest validateCertificateRequest,
-      @PathVariable String certificateId) {
+      @PathVariable("certificateId") String certificateId) {
     return validateCertificateService.validate(validateCertificateRequest, certificateId);
   }
 }

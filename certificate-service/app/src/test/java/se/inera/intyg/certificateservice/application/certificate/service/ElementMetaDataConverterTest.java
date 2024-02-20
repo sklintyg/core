@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIssuingUnit;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 
 class ElementMetaDataConverterTest {
 
@@ -35,13 +35,14 @@ class ElementMetaDataConverterTest {
 
   @Test
   void shallIncludeIssuingUnitAddress() {
-    final var expectedAddressElement = (ElementValueIssuingUnit) ElementData.builder()
-        .value(ElementValueIssuingUnit.builder()
+    final var expectedAddressElement = (ElementValueUnitContactInformation) ElementData.builder()
+        .value(ElementValueUnitContactInformation.builder()
             .address(ADDRESS)
             .build())
         .build().value();
 
-    final var actualElements = (ElementValueIssuingUnit) converter.convert(CERTIFICATE_METADATA_DTO)
+    final var actualElements = (ElementValueUnitContactInformation) converter.convert(
+            CERTIFICATE_METADATA_DTO)
         .get(0).value();
 
     assertEquals(actualElements.address(), expectedAddressElement.address());
@@ -49,13 +50,14 @@ class ElementMetaDataConverterTest {
 
   @Test
   void shallIncludeIssuingUnitZipCode() {
-    final var expectedAddressElement = (ElementValueIssuingUnit) ElementData.builder()
-        .value(ElementValueIssuingUnit.builder()
+    final var expectedAddressElement = (ElementValueUnitContactInformation) ElementData.builder()
+        .value(ElementValueUnitContactInformation.builder()
             .zipCode(ZIP_CODE)
             .build())
         .build().value();
 
-    final var actualElements = (ElementValueIssuingUnit) converter.convert(CERTIFICATE_METADATA_DTO)
+    final var actualElements = (ElementValueUnitContactInformation) converter.convert(
+            CERTIFICATE_METADATA_DTO)
         .get(0).value();
 
     assertEquals(actualElements.zipCode(), expectedAddressElement.zipCode());
@@ -63,13 +65,14 @@ class ElementMetaDataConverterTest {
 
   @Test
   void shallIncludeIssuingUnitCity() {
-    final var expectedAddressElement = (ElementValueIssuingUnit) ElementData.builder()
-        .value(ElementValueIssuingUnit.builder()
+    final var expectedAddressElement = (ElementValueUnitContactInformation) ElementData.builder()
+        .value(ElementValueUnitContactInformation.builder()
             .city(CITY)
             .build())
         .build().value();
 
-    final var actualElements = (ElementValueIssuingUnit) converter.convert(CERTIFICATE_METADATA_DTO)
+    final var actualElements = (ElementValueUnitContactInformation) converter.convert(
+            CERTIFICATE_METADATA_DTO)
         .get(0).value();
 
     assertEquals(actualElements.city(), expectedAddressElement.city());
@@ -77,13 +80,14 @@ class ElementMetaDataConverterTest {
 
   @Test
   void shallIncludeIssuingUnitPhoneNumber() {
-    final var expectedAddressElement = (ElementValueIssuingUnit) ElementData.builder()
-        .value(ElementValueIssuingUnit.builder()
+    final var expectedAddressElement = (ElementValueUnitContactInformation) ElementData.builder()
+        .value(ElementValueUnitContactInformation.builder()
             .phoneNumber(PHONE_NUMBER)
             .build())
         .build().value();
 
-    final var actualElements = (ElementValueIssuingUnit) converter.convert(CERTIFICATE_METADATA_DTO)
+    final var actualElements = (ElementValueUnitContactInformation) converter.convert(
+            CERTIFICATE_METADATA_DTO)
         .get(0).value();
 
     assertEquals(actualElements.phoneNumber(), expectedAddressElement.phoneNumber());

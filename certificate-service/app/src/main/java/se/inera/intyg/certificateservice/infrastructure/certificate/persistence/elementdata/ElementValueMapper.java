@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIssuingUnit;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 
 public class ElementValueMapper {
 
@@ -17,7 +17,7 @@ public class ElementValueMapper {
           .build();
     }
     if (mappedValue instanceof MappedElementValueIssuingUnit valueIssuingUnit) {
-      return ElementValueIssuingUnit.builder()
+      return ElementValueUnitContactInformation.builder()
           .address(valueIssuingUnit.getAddress())
           .city(valueIssuingUnit.getCity())
           .zipCode(valueIssuingUnit.getZipCode())
@@ -35,12 +35,12 @@ public class ElementValueMapper {
           .build();
     }
 
-    if (value instanceof ElementValueIssuingUnit elementValueIssuingUnit) {
+    if (value instanceof ElementValueUnitContactInformation elementValueUnitContactInformation) {
       return MappedElementValueIssuingUnit.builder()
-          .address(elementValueIssuingUnit.address())
-          .zipCode(elementValueIssuingUnit.zipCode())
-          .city(elementValueIssuingUnit.city())
-          .phoneNumber(elementValueIssuingUnit.phoneNumber())
+          .address(elementValueUnitContactInformation.address())
+          .zipCode(elementValueUnitContactInformation.zipCode())
+          .city(elementValueUnitContactInformation.city())
+          .phoneNumber(elementValueUnitContactInformation.phoneNumber())
           .build();
     }
 

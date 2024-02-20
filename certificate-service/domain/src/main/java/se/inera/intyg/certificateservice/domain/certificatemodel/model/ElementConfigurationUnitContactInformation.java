@@ -6,10 +6,11 @@ import lombok.Value;
 
 @Value
 @Builder
-public class ElementConfigurationIssuingUnit implements ElementConfiguration {
+public class ElementConfigurationUnitContactInformation implements ElementConfiguration {
 
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.ISSUING_UNIT;
 
-  public static final ElementId ISSUING_UNIT = new ElementId("ISSUING_UNIT");
+  public static final ElementId UNIT_CONTACT_INFORMATION = new ElementId(
+      "UNIT_CONTACT_INFORMATION");
 }

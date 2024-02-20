@@ -18,7 +18,7 @@ public class CertificateDataValueConverter {
       final var value = elementValue != null ? ((ElementValueDate) elementValue).date() : null;
       final var configuration = (ElementConfigurationDate) elementSpecification.configuration();
       return CertificateDataValueDate.builder()
-          .id(configuration.id())
+          .id(configuration.id().value())
           .date(value)
           .build();
     }

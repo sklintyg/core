@@ -7,19 +7,22 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigCategory;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIssuingUnit;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate.ElementConfigurationDateBuilder;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 class CertificateDataConfigConverterTest {
 
   private static final String CATEGORY_NAME = "Test Category";
-  private static final String DATE_ID = "dateId";
+  private static final FieldId DATE_ID = new FieldId("dateId");
   private static final String DATE_NAME = "Test Date";
   private static final LocalDate MIN_DATE = LocalDate.now(ZoneId.systemDefault()).minusDays(1);
   private static final LocalDate MAX_DATE = LocalDate.now(ZoneId.systemDefault()).plusDays(5);
@@ -29,7 +32,7 @@ class CertificateDataConfigConverterTest {
   void shallThrowIfConfigTypeNotSupported() {
     final var elementSpecification = ElementSpecification.builder()
         .configuration(
-            ElementConfigurationIssuingUnit.builder()
+            ElementConfigurationUnitContactInformation.builder()
                 .build()
         )
         .build();
@@ -72,11 +75,19 @@ class CertificateDataConfigConverterTest {
   @Nested
   class DateTypeConfiguration {
 
+    private ElementConfigurationDateBuilder elementConfigurationDateBuilder;
+
+    @BeforeEach
+    void setUp() {
+      elementConfigurationDateBuilder = ElementConfigurationDate.builder()
+          .id(DATE_ID);
+    }
+
     @Test
     void shallCreateCertificateDataConfigDate() {
       final var elementSpecification = ElementSpecification.builder()
           .configuration(
-              ElementConfigurationDate.builder()
+              elementConfigurationDateBuilder
                   .build())
           .build();
 
@@ -89,21 +100,21 @@ class CertificateDataConfigConverterTest {
     void shallSetCorrectIdForDate() {
       final var elementSpecification = ElementSpecification.builder()
           .configuration(
-              ElementConfigurationDate.builder()
+              elementConfigurationDateBuilder
                   .id(DATE_ID)
                   .build())
           .build();
 
       final var result = converter.convert(elementSpecification);
 
-      assertEquals(DATE_ID, ((CertificateDataConfigDate) result).getId());
+      assertEquals(DATE_ID.value(), ((CertificateDataConfigDate) result).getId());
     }
 
     @Test
     void shallSetCorrectTextForDate() {
       final var elementSpecification = ElementSpecification.builder()
           .configuration(
-              ElementConfigurationDate.builder()
+              elementConfigurationDateBuilder
                   .name(DATE_NAME)
                   .build())
           .build();
@@ -117,7 +128,7 @@ class CertificateDataConfigConverterTest {
     void shallSetCorrectMinDateForDate() {
       final var elementSpecification = ElementSpecification.builder()
           .configuration(
-              ElementConfigurationDate.builder()
+              elementConfigurationDateBuilder
                   .min(Period.ofDays(-1))
                   .build())
           .build();
@@ -131,7 +142,7 @@ class CertificateDataConfigConverterTest {
     void shallSetCorrectMaxDateForDate() {
       final var elementSpecification = ElementSpecification.builder()
           .configuration(
-              ElementConfigurationDate.builder()
+              elementConfigurationDateBuilder
                   .max(Period.ofDays(5))
                   .build())
           .build();

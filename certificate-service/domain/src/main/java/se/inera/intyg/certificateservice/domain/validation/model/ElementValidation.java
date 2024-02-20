@@ -1,8 +1,9 @@
-package se.inera.intyg.certificateservice.domain.certificatemodel.model;
+package se.inera.intyg.certificateservice.domain.validation.model;
 
 import java.util.List;
 import java.util.Optional;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
 
 public interface ElementValidation {
