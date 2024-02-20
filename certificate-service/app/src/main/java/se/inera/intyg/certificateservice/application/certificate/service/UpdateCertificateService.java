@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 
 import java.util.Map.Entry;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +22,7 @@ public class UpdateCertificateService {
 
   private final UpdateCertificateRequestValidator updateCertificateRequestValidator;
   private final UpdateCertificateDomainService updateCertificateDomainService;
-  private final ElementDataConverter elementDataConverter;
-  private final ElementMetaDataConverter elementMetaDataConverter;
+  private final ElementCertificateConverter elementCertificateConverter;
   private final ActionEvaluationFactory actionEvaluationFactory;
   private final CertificateConverter certificateConverter;
   private final ResourceLinkConverter resourceLinkConverter;
@@ -42,24 +40,13 @@ public class UpdateCertificateService {
         updateCertificateRequest.getCareProvider()
     );
 
-    final var elementDataList = Stream.concat(
-            updateCertificateRequest.getCertificate().getData()
-                .entrySet()
-                .stream()
-                .filter(removeCategories())
-                .map(entry -> elementDataConverter.convert(entry.getKey(), entry.getValue()))
-            ,
-            Stream.of(
-                elementMetaDataConverter.convert(
-                    updateCertificateRequest.getCertificate().getMetadata().getUnit()
-                )
-            )
-        )
-        .toList();
+    final var elementData = elementCertificateConverter.convert(
+        updateCertificateRequest.getCertificate()
+    );
 
     final var updatedCertificate = updateCertificateDomainService.update(
         new CertificateId(certificateId),
-        elementDataList,
+        elementData,
         actionEvaluation,
         new Revision(updateCertificateRequest.getCertificate().getMetadata().getVersion()));
 

@@ -18,11 +18,14 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.ValidateCertificateService;
 
 @RequiredArgsConstructor
 @RestController
@@ -34,6 +37,7 @@ public class CertificateController {
   private final CertificateExistsService certificateExistsService;
   private final UpdateCertificateService updateCertificateService;
   private final DeleteCertificateService deleteCertificateService;
+  private final ValidateCertificateService validateCertificateService;
 
   @PostMapping
   CreateCertificateResponse createCertificate(
@@ -43,29 +47,35 @@ public class CertificateController {
 
   @GetMapping("/{certificateId}/exists")
   CertificateExistsResponse findExistingCertificate(
-      @PathVariable("certificateId") String certificateId) {
+      @PathVariable String certificateId) {
     return certificateExistsService.exist(certificateId);
   }
 
   @PostMapping("/{certificateId}")
   GetCertificateResponse getCertificate(
       @RequestBody GetCertificateRequest getCertificateRequest,
-      @PathVariable("certificateId") String certificateId) {
+      @PathVariable String certificateId) {
     return getCertificateService.get(getCertificateRequest, certificateId);
   }
 
   @PutMapping("/{certificateId}")
   UpdateCertificateResponse updateCertificate(
       @RequestBody UpdateCertificateRequest updateCertificateRequest,
-      @PathVariable("certificateId") String certificateId) {
+      @PathVariable String certificateId) {
     return updateCertificateService.update(updateCertificateRequest, certificateId);
   }
 
   @DeleteMapping("/{certificateId}/{version}")
   DeleteCertificateResponse deleteCertificate(
       @RequestBody DeleteCertificateRequest deleteCertificateRequest,
-      @PathVariable("certificateId") String certificateId,
-      @PathVariable("version") Long version) {
+      @PathVariable("certificateId") String certificateId, @PathVariable("version") Long version) {
     return deleteCertificateService.delete(deleteCertificateRequest, certificateId, version);
+  }
+
+  @PostMapping("/{certificateId}/validate")
+  ValidateCertificateResponse validateCertificate(
+      @RequestBody ValidateCertificateRequest validateCertificateRequest,
+      @PathVariable String certificateId) {
+    return validateCertificateService.validate(validateCertificateRequest, certificateId);
   }
 }

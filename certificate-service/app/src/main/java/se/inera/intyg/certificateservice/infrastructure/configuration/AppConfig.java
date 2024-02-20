@@ -7,6 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertif
 import se.inera.intyg.certificateservice.domain.certificate.service.DeleteCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.ValidateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesDomainService;
@@ -56,5 +57,11 @@ public class AppConfig {
   public GetUnitCertificatesInfoDomainService getUnitCertificatesInfoDomainService(
       CertificateRepository certificateRepository) {
     return new GetUnitCertificatesInfoDomainService(certificateRepository);
+  }
+
+  @Bean
+  public ValidateCertificateDomainService validateCertificateDomainService(
+      CertificateRepository certificateRepository) {
+    return new ValidateCertificateDomainService(certificateRepository);
   }
 }

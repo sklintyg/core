@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
@@ -25,7 +24,6 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigCategory;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigDate;
 import se.inera.intyg.certificateservice.application.certificate.service.validation.UpdateCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
@@ -50,11 +48,7 @@ class UpdateCertificateServiceTest {
   @Mock
   private ActionEvaluationFactory actionEvaluationFactory;
   @Mock
-  private ElementDataConverter elementDataConverter;
-
-  @Mock
-  private ElementMetaDataConverter elementMetaDataConverter;
-
+  private ElementCertificateConverter elementCertificateConverter;
   @Mock
   private UpdateCertificateDomainService updateCertificateDomainService;
 
@@ -81,9 +75,14 @@ class UpdateCertificateServiceTest {
 
   @Test
   void shallReturnUpdateCertificateResponse() {
+    final var expectedCertificateDTO = CertificateDTO.builder().build();
+    final var expectedResult = UpdateCertificateResponse.builder()
+        .certificate(expectedCertificateDTO)
+        .build();
+    
     final var resourceLinkDTO = ResourceLinkDTO.builder().build();
     final var unitDTO = UnitDTO.builder().build();
-    final var expectedCertificate = CertificateDTO.builder()
+    final var certificateDTO = CertificateDTO.builder()
         .data(
             Map.of(QUESTION_ID, CertificateDataElement.builder()
                 .config(CertificateDataConfigDate.builder()
@@ -100,10 +99,6 @@ class UpdateCertificateServiceTest {
         )
         .build();
 
-    final var expectedResult = UpdateCertificateResponse.builder()
-        .certificate(expectedCertificate)
-        .build();
-
     final var actionEvaluation = ActionEvaluation.builder().build();
     doReturn(actionEvaluation).when(actionEvaluationFactory).create(
         ATHENA_REACT_ANDERSSON_DTO,
@@ -113,12 +108,10 @@ class UpdateCertificateServiceTest {
         ALFA_REGIONEN_DTO
     );
     final var elementData = ElementData.builder().build();
-
-    doReturn(elementData).when(elementDataConverter)
-        .convert(QUESTION_ID, expectedCertificate.getData().get(QUESTION_ID));
-    doReturn(elementData).when(elementMetaDataConverter).convert(unitDTO);
-
     final var elementDataList = List.of(elementData, elementData);
+
+    doReturn(elementDataList).when(elementCertificateConverter)
+        .convert(certificateDTO);
 
     final var certificate = mock(Certificate.class);
 
@@ -131,7 +124,7 @@ class UpdateCertificateServiceTest {
     doReturn(certificateActions).when(certificate).actions(actionEvaluation);
 
     doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction);
-    doReturn(expectedCertificate).when(certificateConverter)
+    doReturn(expectedCertificateDTO).when(certificateConverter)
         .convert(certificate, List.of(resourceLinkDTO));
 
     final var actualResult = updateCertificateService.update(
@@ -141,64 +134,10 @@ class UpdateCertificateServiceTest {
             .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
             .careUnit(ALFA_MEDICINCENTRUM_DTO)
             .careProvider(ALFA_REGIONEN_DTO)
-            .certificate(expectedCertificate)
+            .certificate(certificateDTO)
             .build(),
         CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
-  }
-
-  @Test
-  void shallNotGenerateElementDataForCategories() {
-    final var unitDTO = UnitDTO.builder().build();
-    final var expectedCertificate = CertificateDTO.builder()
-        .data(
-            Map.of(QUESTION_ID, CertificateDataElement.builder()
-                .config(
-                    CertificateDataConfigCategory.builder().build()
-                )
-                .build())
-        )
-        .metadata(
-            CertificateMetadataDTO.builder()
-                .unit(unitDTO)
-                .build()
-        )
-        .build();
-
-    final var actionEvaluation = ActionEvaluation.builder().build();
-    doReturn(actionEvaluation).when(actionEvaluationFactory).create(
-        ATHENA_REACT_ANDERSSON_DTO,
-        AJLA_DOCTOR_DTO,
-        ALFA_ALLERGIMOTTAGNINGEN_DTO,
-        ALFA_MEDICINCENTRUM_DTO,
-        ALFA_REGIONEN_DTO
-    );
-
-    final var certificate = mock(Certificate.class);
-    final var elementData = ElementData.builder().build();
-    final var elementDataList = List.of(elementData);
-
-    doReturn(elementData).when(elementMetaDataConverter).convert(unitDTO);
-    doReturn(certificate).when(updateCertificateDomainService).update(
-        new CertificateId(CERTIFICATE_ID), elementDataList, actionEvaluation,
-        new Revision(0));
-
-    final var certificateAction = mock(CertificateAction.class);
-    final List<CertificateAction> certificateActions = List.of(certificateAction);
-    doReturn(certificateActions).when(certificate).actions(actionEvaluation);
-
-    updateCertificateService.update(
-        UpdateCertificateRequest.builder()
-            .user(AJLA_DOCTOR_DTO)
-            .patient(ATHENA_REACT_ANDERSSON_DTO)
-            .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
-            .careUnit(ALFA_MEDICINCENTRUM_DTO)
-            .careProvider(ALFA_REGIONEN_DTO)
-            .certificate(expectedCertificate)
-            .build(),
-        CERTIFICATE_ID);
-
-    verifyNoInteractions(elementDataConverter);
   }
 }

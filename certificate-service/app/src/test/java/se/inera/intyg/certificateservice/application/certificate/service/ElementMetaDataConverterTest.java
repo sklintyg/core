@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIssuingUnit;
@@ -22,6 +23,10 @@ class ElementMetaDataConverterTest {
       .city(CITY)
       .phoneNumber(PHONE_NUMBER)
       .build();
+  private static final CertificateMetadataDTO CERTIFICATE_METADATA_DTO =
+      CertificateMetadataDTO.builder()
+          .unit(UNIT_DTO)
+          .build();
 
   @BeforeEach
   void setUp() {
@@ -36,7 +41,8 @@ class ElementMetaDataConverterTest {
             .build())
         .build().value();
 
-    final var actualElements = (ElementValueIssuingUnit) converter.convert(UNIT_DTO).value();
+    final var actualElements = (ElementValueIssuingUnit) converter.convert(CERTIFICATE_METADATA_DTO)
+        .get(0).value();
 
     assertEquals(actualElements.address(), expectedAddressElement.address());
   }
@@ -49,7 +55,8 @@ class ElementMetaDataConverterTest {
             .build())
         .build().value();
 
-    final var actualElements = (ElementValueIssuingUnit) converter.convert(UNIT_DTO).value();
+    final var actualElements = (ElementValueIssuingUnit) converter.convert(CERTIFICATE_METADATA_DTO)
+        .get(0).value();
 
     assertEquals(actualElements.zipCode(), expectedAddressElement.zipCode());
   }
@@ -62,7 +69,8 @@ class ElementMetaDataConverterTest {
             .build())
         .build().value();
 
-    final var actualElements = (ElementValueIssuingUnit) converter.convert(UNIT_DTO).value();
+    final var actualElements = (ElementValueIssuingUnit) converter.convert(CERTIFICATE_METADATA_DTO)
+        .get(0).value();
 
     assertEquals(actualElements.city(), expectedAddressElement.city());
   }
@@ -75,7 +83,8 @@ class ElementMetaDataConverterTest {
             .build())
         .build().value();
 
-    final var actualElements = (ElementValueIssuingUnit) converter.convert(UNIT_DTO).value();
+    final var actualElements = (ElementValueIssuingUnit) converter.convert(CERTIFICATE_METADATA_DTO)
+        .get(0).value();
 
     assertEquals(actualElements.phoneNumber(), expectedAddressElement.phoneNumber());
   }
