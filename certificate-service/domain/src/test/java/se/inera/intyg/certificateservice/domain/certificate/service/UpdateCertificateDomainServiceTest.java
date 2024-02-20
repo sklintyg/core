@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.UPDATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.REVISION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.DATE;
 
 import java.util.List;
@@ -40,7 +41,7 @@ class UpdateCertificateDomainServiceTest {
 
     assertThrows(CertificateActionForbidden.class,
         () -> updateCertificateDomainService.update(CERTIFICATE_ID, data, ACTION_EVALUATION,
-            new Revision(0))
+            REVISION)
     );
   }
 

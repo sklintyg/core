@@ -233,7 +233,7 @@ class CertificateModelFactoryFK7211Test {
     @Nested
     class IssuingUnitContactInfo {
 
-      private static final ElementId ELEMENT_ID = new ElementId("ISSUING_UNIT");
+      private static final ElementId ELEMENT_ID = new ElementId("UNIT_CONTACT_INFORMATION");
 
       @Test
       void shallIncludeId() {

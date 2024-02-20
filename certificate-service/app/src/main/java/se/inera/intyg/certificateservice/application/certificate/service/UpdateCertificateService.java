@@ -1,14 +1,10 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
-import java.util.Map.Entry;
-import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigTypes;
 import se.inera.intyg.certificateservice.application.certificate.service.validation.UpdateCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
@@ -58,10 +54,5 @@ public class UpdateCertificateService {
                 .toList())
         )
         .build();
-  }
-
-  private static Predicate<Entry<String, CertificateDataElement>> removeCategories() {
-    return entry -> !CertificateDataConfigTypes.CATEGORY.equals(
-        entry.getValue().getConfig().getType());
   }
 }
