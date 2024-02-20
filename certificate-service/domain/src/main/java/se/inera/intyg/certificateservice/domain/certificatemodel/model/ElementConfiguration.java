@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
+
 public interface ElementConfiguration {
 
   default String name() {
@@ -8,4 +10,7 @@ public interface ElementConfiguration {
 
   ElementType type();
 
+  default ElementValue emptyValue() {
+    return null;
+  }
 }

@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -54,8 +55,48 @@ public class ElementSpecification {
 
   public List<ValidationError> validate(List<ElementData> elementData,
       Optional<ElementId> categoryId) {
-    // Validera sig själv om den innehåller validations.
-    // Anropa sina bar att validera sig och skickar även med föräldern
-    return null;
+    final var validationErrors = validations.stream()
+        .map(elementValidation -> elementValidation.validate(
+                dataForElement(elementData),
+                categoryId
+            )
+        )
+        .flatMap(List::stream);
+
+    final var childrenValidationErrors = children.stream()
+        .map(child -> child.validate(elementData, categoryForElement(categoryId)))
+        .flatMap(List::stream);
+
+    return Stream.concat(validationErrors, childrenValidationErrors).toList();
+  }
+
+  private Optional<ElementId> categoryForElement(Optional<ElementId> categoryId) {
+    if (ElementType.CATEGORY.equals(configuration.type())) {
+      return Optional.of(id);
+    }
+    return categoryId;
+  }
+
+  private ElementData dataForElement(List<ElementData> elementData) {
+    return elementData.stream()
+        .filter(data -> id.equals(data.id()))
+        .findAny()
+        .map(data -> {
+              if (data.value() == null) {
+                return data.withValue(
+                    configuration.emptyValue()
+                );
+              }
+              return data;
+            }
+        )
+        .orElse(
+            ElementData.builder()
+                .id(id)
+                .value(
+                    configuration().emptyValue()
+                )
+                .build()
+        );
   }
 }
