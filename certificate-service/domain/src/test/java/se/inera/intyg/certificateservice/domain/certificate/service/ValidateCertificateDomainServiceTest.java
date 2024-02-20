@@ -1,0 +1,69 @@
+package se.inera.intyg.certificateservice.domain.certificate.service;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
+
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
+import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
+
+@ExtendWith(MockitoExtension.class)
+class ValidateCertificateDomainServiceTest {
+
+  private static final CertificateId CERTIFICATE_ID = new CertificateId("certificateId");
+  private static final ActionEvaluation ACTION_EVALUATION = ActionEvaluation.builder().build();
+  private static final List<ElementData> ELEMENT_DATA_LIST = List.of(ElementData.builder().build());
+  @Mock
+  private CertificateRepository certificateRepository;
+  @Mock
+  private Certificate certificate;
+  @InjectMocks
+  private ValidateCertificateDomainService validateCertificateDomainService;
+
+  @BeforeEach
+  void setUp() {
+    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
+  }
+
+  @Test
+  void shallValidateIfAllowedToReadCertificate() {
+    doReturn(true).when(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
+    validateCertificateDomainService.validate(CERTIFICATE_ID, ELEMENT_DATA_LIST, ACTION_EVALUATION);
+    verify(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
+  }
+
+  @Test
+  void shallThrowIfNotAllowedToRead() {
+    doReturn(false).when(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
+    assertThrows(CertificateActionForbidden.class,
+        () -> validateCertificateDomainService.validate(CERTIFICATE_ID, ELEMENT_DATA_LIST,
+            ACTION_EVALUATION)
+    );
+  }
+
+  @Test
+  void shallReturnValidationResult() {
+    final var expectedResult = ValidationResult.builder().build();
+
+    doReturn(true).when(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
+    doReturn(expectedResult).when(certificate).validate(ELEMENT_DATA_LIST, ACTION_EVALUATION);
+
+    final var actualResult = validateCertificateDomainService.validate(CERTIFICATE_ID,
+        ELEMENT_DATA_LIST, ACTION_EVALUATION);
+    assertEquals(expectedResult, actualResult);
+  }
+}
