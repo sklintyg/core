@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
@@ -7,8 +8,12 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.service.validation.GetCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
+import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
+import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
+import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.staff.model.Role;
 
 @Service
 @RequiredArgsConstructor
@@ -33,13 +38,48 @@ public class GetCertificateService {
         new CertificateId(certificateId),
         actionEvaluation
     );
+
+    final var resourceLinkDTOS = new java.util.ArrayList<>(
+        certificate.actions(actionEvaluation).stream()
+            .map(resourceLinkConverter::convert)
+            .toList()
+    );
+
+    if (userIsDoctor(actionEvaluation)) {
+      addSignActionIfUserHasEditPrivilege(resourceLinkDTOS);
+    }
+
     return GetCertificateResponse.builder()
         .certificate(certificateConverter.convert(
-            certificate,
-            certificate.actions(actionEvaluation).stream()
-                .map(resourceLinkConverter::convert)
-                .toList())
+                certificate,
+                resourceLinkDTOS
+            )
         )
         .build();
+  }
+
+  /**
+   * Temporaly fix to get sign certificate resource link. Related methods:
+   * <p>
+   * addSignActionIfUserHasEditPrivilege() createResourceLinkDTO() userIsDoctor()
+   */
+  private void addSignActionIfUserHasEditPrivilege(List<ResourceLinkDTO> resourceLinkDTOS) {
+    resourceLinkDTOS.stream()
+        .filter(link -> link.getType().equals(ResourceLinkTypeDTO.EDIT_CERTIFICATE))
+        .findAny()
+        .ifPresent(action -> resourceLinkDTOS.add(createResourceLinkDTO()));
+  }
+
+  private ResourceLinkDTO createResourceLinkDTO() {
+    return ResourceLinkDTO.builder()
+        .type(ResourceLinkTypeDTO.SIGN_CERTIFICATE)
+        .name("Signera intyget")
+        .description("Intyget signeras.")
+        .enabled(true)
+        .build();
+  }
+
+  private static boolean userIsDoctor(ActionEvaluation actionEvaluation) {
+    return actionEvaluation.user().role().equals(Role.DOCTOR);
   }
 }
