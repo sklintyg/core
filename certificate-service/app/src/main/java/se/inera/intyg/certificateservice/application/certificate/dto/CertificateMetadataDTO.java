@@ -38,6 +38,7 @@ public class CertificateMetadataDTO {
   String responsibleHospName;
   CertificateRecipientDTO recipient;
   CertificateSummaryDTO summary;
+  boolean validForSign;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class CertificateMetadataDTOBuilder {

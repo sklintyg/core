@@ -21,6 +21,7 @@ public class CertificatesQueryCriteriaDTO {
   String issuedByStaffId;
   PersonIdDTO personId;
   Boolean forwarded;
+  Boolean validForSign;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class CertificatesQueryCriteriaDTOBuilder {

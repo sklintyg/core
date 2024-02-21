@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonWebcertUnitDTO.alfaMedicincentrumDtoBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
@@ -53,6 +55,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -76,7 +79,7 @@ class CertificateConverterTest {
   private static final String TYPE_NAME = "typeName";
   private static final String TYPE_DESCRIPTION = "typeDescription";
   private static final LocalDateTime CREATED = LocalDateTime.now(ZoneId.systemDefault());
-  private static final LocalDate DATE = LocalDate.of(2024, 02, 8);
+  private static final LocalDate DATE = LocalDate.now().plusDays(1);
   private static final String Q_1 = "q1";
   private static final String ID = "valueId";
   private static final String EXPRESSION = "$beraknatnedkomstdatum";
@@ -93,13 +96,15 @@ class CertificateConverterTest {
   private CertificateConverter certificateConverter;
   private static final String CERTIFICATE_ID = "certificateId";
   private Certificate certificate;
+  private Certificate.CertificateBuilder certificateBuilder;
 
   @BeforeEach
   void setUp() {
-    certificate = Certificate.builder()
+    certificateBuilder = Certificate.builder()
         .id(new CertificateId(CERTIFICATE_ID))
         .created(CREATED)
         .revision(REVISION)
+        .status(Status.DRAFT)
         .certificateModel(
             CertificateModel.builder()
                 .id(
@@ -174,7 +179,7 @@ class CertificateConverterTest {
                     .value(null)
                     .build(),
                 ElementData.builder()
-                    .id(new ElementId(Q_2))
+                    .id(new ElementId(ID))
                     .value(
                         ElementValueDate.builder()
                             .date(DATE)
@@ -182,8 +187,8 @@ class CertificateConverterTest {
                     )
                     .build()
             )
-        )
-        .build();
+        );
+    certificate = certificateBuilder.build();
   }
 
   @Nested
@@ -340,6 +345,36 @@ class CertificateConverterTest {
         assertEquals(ATHENA_REACT_ANDERSSON_PROTECTED_PERSON.value(),
             certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getPatient()
                 .getProtectedPerson()
+        );
+      }
+
+      @Test
+      void shallIncludeValidForSignTrueIfDraftAndValid() {
+        assertTrue(
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata()
+                .isValidForSign()
+        );
+      }
+
+      @Test
+      void shallIncludeValidForSignFalseIfDraftAndInvalid() {
+        final var invalidCertificate = certificateBuilder
+            .elementData(Collections.emptyList())
+            .build();
+        assertFalse(
+            certificateConverter.convert(invalidCertificate, resourceLinkDTOs).getMetadata()
+                .isValidForSign()
+        );
+      }
+
+      @Test
+      void shallIncludeValidForSignFalseIfNotDraft() {
+        final var invalidCertificate = certificateBuilder
+            .status(Status.DELETED_DRAFT)
+            .build();
+        assertFalse(
+            certificateConverter.convert(invalidCertificate, resourceLinkDTOs).getMetadata()
+                .isValidForSign()
         );
       }
     }

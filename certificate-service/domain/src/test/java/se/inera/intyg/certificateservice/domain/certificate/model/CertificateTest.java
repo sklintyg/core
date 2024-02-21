@@ -1002,4 +1002,21 @@ class CertificateTest {
       assertEquals(expectedElementData, listArgumentCaptor.getValue());
     }
   }
+
+  @Nested
+  class TestIsDraft {
+
+    @Test
+    void shallReturnTrueIfStatusIsDraft() {
+      assertTrue(certificate.isDraft());
+    }
+
+    @Test
+    void shallReturnFalseIfStatusIsNotDraft() {
+      final var certificateWithStatusDeleted = certificateBuilder
+          .status(Status.DELETED_DRAFT)
+          .build();
+      assertFalse(certificateWithStatusDeleted.isDraft());
+    }
+  }
 }

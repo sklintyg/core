@@ -126,5 +126,9 @@ public class Certificate {
       );
     }
   }
+
+  public boolean isDraft() {
+    return status().equals(Status.DRAFT);
+  }
 }
 
