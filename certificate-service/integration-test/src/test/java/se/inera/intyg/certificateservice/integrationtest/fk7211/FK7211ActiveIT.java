@@ -733,6 +733,32 @@ class FK7211ActiveIT {
 
       assertEquals(403, response.getStatusCode().value());
     }
+
+    @Test
+    @DisplayName("FK7211 - Om utkastet sparas med en inaktuell revision av utkastet skall felkod 409 (CONFLICT) returneras")
+    void shallNotUpdateDataIfUserIsTryingToSaveWithAnOldRevision() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var certificate = certificate(testCertificates);
+
+      api.updateCertificate(
+          customUpdateCertificateRequest()
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.updateCertificateWithConcurrentError(
+          customUpdateCertificateRequest()
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(409, response.getStatusCode().value());
+    }
   }
 
   @Nested
@@ -820,7 +846,7 @@ class FK7211ActiveIT {
 
     @Test
     @DisplayName("FK7211 - Vårdadmin - Om utkastet är skapat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
-    void shallNotUpdateDataIfUserIsCareAdminAndPatientIsProtectedPerson() {
+    void shallNotDeleteDataIfUserIsCareAdminAndPatientIsProtectedPerson() {
       final var testCertificates = testabilityApi.addCertificates(
           customTestabilityCertificateRequest(FK7211, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
@@ -1609,7 +1635,6 @@ class FK7211ActiveIT {
           testCertificates,
           certificate(testCertificates).getMetadata().getUnit()
               .withAddress("")
-
       );
 
       final var questionId = "FRG_1";
@@ -1651,7 +1676,6 @@ class FK7211ActiveIT {
           testCertificates,
           certificate(testCertificates).getMetadata().getUnit()
               .withZipCode("")
-
       );
 
       final var questionId = "FRG_1";
@@ -1693,7 +1717,6 @@ class FK7211ActiveIT {
           testCertificates,
           certificate(testCertificates).getMetadata().getUnit()
               .withCity("")
-
       );
 
       final var questionId = "FRG_1";
@@ -1735,7 +1758,6 @@ class FK7211ActiveIT {
           testCertificates,
           certificate(testCertificates).getMetadata().getUnit()
               .withPhoneNumber("")
-
       );
 
       final var questionId = "FRG_1";

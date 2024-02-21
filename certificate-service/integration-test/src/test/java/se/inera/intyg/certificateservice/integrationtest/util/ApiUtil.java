@@ -231,6 +231,26 @@ public class ApiUtil {
     );
   }
 
+  public ResponseEntity<String> updateCertificateWithConcurrentError(
+      UpdateCertificateRequest request, String certificateId) {
+    final var requestUrl = "http://localhost:%s/api/certificate/%s".formatted(
+        port,
+        certificateId
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.PUT,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
   public ResponseEntity<ValidateCertificateResponse> validateCertificate(
       ValidateCertificateRequest request, String certificateId) {
     final var requestUrl = "http://localhost:%s/api/certificate/%s/validate".formatted(
