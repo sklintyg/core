@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.domain.certificatemodel.model;
+package se.inera.intyg.certificateservice.domain.validation.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -14,9 +14,8 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
-import se.inera.intyg.certificateservice.domain.validation.model.ErrorMessage;
-import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 class ElementValidationDateTest {
 

@@ -24,7 +24,9 @@ public class ElementCertificateConverter {
                 .entrySet()
                 .stream()
                 .filter(removeCategories())
-                .map(entry -> elementDataConverter.convert(entry.getKey(), entry.getValue()))
+                .map(entry ->
+                    elementDataConverter.convert(entry.getKey(), entry.getValue())
+                )
             ,
             elementMetaDataConverter.convert(certificateDTO.getMetadata()).stream()
         )

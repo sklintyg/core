@@ -70,7 +70,7 @@ class ValidateCertificateServiceTest {
         .field(FIELD_ID)
         .text(MESSAGE)
         .build();
-    final var expectedValidiationErrors = new ValidationErrorDTO[]{expectedValidationError};
+    final var expectedValidiationErrors = List.of(expectedValidationError);
     final var expectedResult = ValidateCertificateResponse.builder()
         .validationErrors(expectedValidiationErrors)
         .build();

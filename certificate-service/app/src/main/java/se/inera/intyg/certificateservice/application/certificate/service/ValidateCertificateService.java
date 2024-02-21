@@ -46,7 +46,7 @@ public class ValidateCertificateService {
         .validationErrors(
             validationResult.errors().stream()
                 .map(this::convertValidationErrors)
-                .toArray(ValidationErrorDTO[]::new)
+                .toList()
         )
         .build();
   }

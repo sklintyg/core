@@ -78,7 +78,7 @@ public class ElementSpecification {
     return elementData.stream()
         .filter(data -> id.equals(data.id()))
         .findAny()
-        .map(this::getElementData)
+        .map(this::elementData)
         .orElse(
             ElementData.builder()
                 .id(id)
@@ -87,7 +87,7 @@ public class ElementSpecification {
         );
   }
 
-  private ElementData getElementData(ElementData data) {
+  private ElementData elementData(ElementData data) {
     if (data.value() == null) {
       return data.withValue(
           configuration().emptyValue()

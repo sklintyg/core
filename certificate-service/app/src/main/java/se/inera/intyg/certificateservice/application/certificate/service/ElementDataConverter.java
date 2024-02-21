@@ -8,6 +8,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Component
 public class ElementDataConverter {
@@ -25,6 +26,7 @@ public class ElementDataConverter {
       case DATE -> {
         final var dateValue = (CertificateDataValueDate) value;
         yield ElementValueDate.builder()
+            .dateId(new FieldId(dateValue.getId()))
             .date(dateValue.getDate())
             .build();
       }

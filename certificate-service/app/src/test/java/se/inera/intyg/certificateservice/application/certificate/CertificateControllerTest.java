@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.application.certificate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 
+import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +20,6 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.ValidationErrorDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
@@ -144,11 +144,11 @@ class CertificateControllerTest {
   void shallReturnValidateCertificateResponse() {
     final var request = ValidateCertificateRequest.builder().build();
     final var expectedResult = ValidateCertificateResponse.builder()
-        .validationErrors(new ValidationErrorDTO[]{})
+        .validationErrors(Collections.emptyList())
         .build();
 
     doReturn(expectedResult).when(validateCertificateService).validate(request, CERTIFICATE_ID);
-    
+
     final var actualResult = certificateController.validateCertificate(request,
         CERTIFICATE_ID);
 

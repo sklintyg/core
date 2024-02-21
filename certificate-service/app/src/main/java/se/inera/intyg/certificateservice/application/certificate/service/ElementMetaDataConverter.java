@@ -13,19 +13,18 @@ public class ElementMetaDataConverter {
 
   public List<ElementData> convert(CertificateMetadataDTO certificateMetadataDTO) {
     final var unit = certificateMetadataDTO.getUnit();
-    return
-        List.of(
-            ElementData.builder()
-                .id(UNIT_CONTACT_INFORMATION)
-                .value(
-                    ElementValueUnitContactInformation.builder()
-                        .address(unit.getAddress())
-                        .city(unit.getCity())
-                        .zipCode(unit.getZipCode())
-                        .phoneNumber(unit.getPhoneNumber())
-                        .build()
-                )
-                .build()
-        );
+    return List.of(
+        ElementData.builder()
+            .id(UNIT_CONTACT_INFORMATION)
+            .value(
+                ElementValueUnitContactInformation.builder()
+                    .address(unit.getAddress())
+                    .city(unit.getCity())
+                    .zipCode(unit.getZipCode())
+                    .phoneNumber(unit.getPhoneNumber())
+                    .build()
+            )
+            .build()
+    );
   }
 }

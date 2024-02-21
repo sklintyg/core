@@ -4,12 +4,16 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import org.springframework.http.ResponseEntity;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.ValidationErrorDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesResponse;
@@ -128,5 +132,26 @@ public class CertificateUtil {
       case DATE -> ((CertificateDataValueDate) response.getCertificate().getData().get(questionId)
           .getValue()).getDate();
     };
+  }
+
+  public static List<ValidationErrorDTO> validationErrors(
+      ResponseEntity<ValidateCertificateResponse> response) {
+    if (response == null || response.getBody() == null) {
+      throw new IllegalArgumentException("Missing response!");
+    }
+    return response.getBody().getValidationErrors();
+  }
+
+  public static CertificateDTO updateUnit(List<CreateCertificateResponse> responses,
+      UnitDTO unitDTO) {
+    final var certificate = certificate(responses);
+    return CertificateDTO.builder()
+        .data(certificate.getData())
+        .metadata(
+            certificate.getMetadata().withUnit(
+                unitDTO
+            )
+        )
+        .build();
   }
 }
