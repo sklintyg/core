@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel;
 
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIssuingUnit.ISSUING_UNIT;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -15,13 +15,15 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIssuingUnit;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementValidationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 
 @Component
 public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
@@ -96,7 +98,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         .configuration(
             ElementConfigurationDate.builder()
                 .name("Beräknat nedkomstdatum")
-                .id("beraknatnedkomstdatum")
+                .id(new FieldId("beraknatnedkomstdatum"))
                 .min(Period.ofDays(0))
                 .max(Period.ofYears(1))
                 .build()
@@ -126,12 +128,15 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
 
   private static ElementSpecification issuingUnitContactInfo() {
     return ElementSpecification.builder()
-        .id(ISSUING_UNIT)
+        .id(UNIT_CONTACT_INFORMATION)
         .configuration(
-            ElementConfigurationIssuingUnit.builder()
-                .build()
+            ElementConfigurationUnitContactInformation.builder().build()
+        )
+        .validations(
+            List.of(
+                ElementValidationUnitContactInformation.builder().build()
+            )
         )
         .build();
   }
-
 }

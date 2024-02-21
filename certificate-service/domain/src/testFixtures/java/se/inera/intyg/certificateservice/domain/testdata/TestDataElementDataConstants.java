@@ -13,4 +13,7 @@ public class TestDataElementDataConstants {
   public static final Period DATE_ELEMENT_CONFIGURATION_MAX = Period.ofMonths(1);
   public static final String DATE_ELEMENT_RULE_EXPRESSION = "$%s".formatted(DATE_ELEMENT_VALUE_ID);
 
+  public static final String CATEGORY_ELEMENT_ID = "categoryElementId";
+  public static final String CATEGORY_ELEMENT_NAME = "categoryElementName";
+
 }

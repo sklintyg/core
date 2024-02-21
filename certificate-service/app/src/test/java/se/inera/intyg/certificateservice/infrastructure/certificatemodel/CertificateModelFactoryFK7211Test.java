@@ -17,12 +17,14 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIssuingUnit;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementValidationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 
 class CertificateModelFactoryFK7211Test {
 
@@ -179,7 +181,7 @@ class CertificateModelFactoryFK7211Test {
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationDate.builder()
             .name("Beräknat nedkomstdatum")
-            .id("beraknatnedkomstdatum")
+            .id(new FieldId("beraknatnedkomstdatum"))
             .min(Period.ofDays(0))
             .max(Period.ofYears(1))
             .build();
@@ -231,7 +233,7 @@ class CertificateModelFactoryFK7211Test {
     @Nested
     class IssuingUnitContactInfo {
 
-      private static final ElementId ELEMENT_ID = new ElementId("ISSUING_UNIT");
+      private static final ElementId ELEMENT_ID = new ElementId("UNIT_CONTACT_INFORMATION");
 
       @Test
       void shallIncludeId() {
@@ -245,12 +247,26 @@ class CertificateModelFactoryFK7211Test {
 
       @Test
       void shallIncludeConfiguration() {
-        final var expectedConfiguration = ElementConfigurationIssuingUnit.builder().build();
+        final var expectedConfiguration = ElementConfigurationUnitContactInformation.builder()
+            .build();
 
         final var certificateModel = certificateModelFactoryFK7211.create();
 
         assertEquals(expectedConfiguration,
             certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+
+      @Test
+      void shallIncludeValidation() {
+        final var expectedValidation = List.of(
+            ElementValidationUnitContactInformation.builder().build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK7211.create();
+
+        assertEquals(expectedValidation,
+            certificateModel.elementSpecification(ELEMENT_ID).validations()
         );
       }
     }

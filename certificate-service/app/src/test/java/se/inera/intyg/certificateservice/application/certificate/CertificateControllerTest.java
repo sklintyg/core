@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.application.certificate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 
+import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,17 +19,23 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.ValidateCertificateService;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateControllerTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
   private static final Long VERSION = 0L;
+
+  @Mock
+  private ValidateCertificateService validateCertificateService;
   @Mock
   private UpdateCertificateService updateCertificateService;
   @Mock
@@ -129,6 +136,21 @@ class CertificateControllerTest {
 
     final var actualResult = certificateController.deleteCertificate(request, CERTIFICATE_ID,
         VERSION);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnValidateCertificateResponse() {
+    final var request = ValidateCertificateRequest.builder().build();
+    final var expectedResult = ValidateCertificateResponse.builder()
+        .validationErrors(Collections.emptyList())
+        .build();
+
+    doReturn(expectedResult).when(validateCertificateService).validate(request, CERTIFICATE_ID);
+
+    final var actualResult = certificateController.validateCertificate(request,
+        CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
   }

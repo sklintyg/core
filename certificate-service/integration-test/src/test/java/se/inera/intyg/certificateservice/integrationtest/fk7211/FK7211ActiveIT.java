@@ -31,6 +31,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetUnitCertificatesRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customUpdateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customValidateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCertificateTypeInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultDeleteCertificateRequest;
@@ -47,12 +48,15 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.exists;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueFromData;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateDateValue;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateUnit;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.validationErrors;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.version;
 import static se.inera.intyg.certificateservice.integrationtest.util.ResourceLinkUtil.resourceLink;
 import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.AfterEach;
@@ -729,6 +733,32 @@ class FK7211ActiveIT {
 
       assertEquals(403, response.getStatusCode().value());
     }
+
+    @Test
+    @DisplayName("FK7211 - Om utkastet sparas med en inaktuell revision av utkastet skall felkod 409 (CONFLICT) returneras")
+    void shallNotUpdateDataIfUserIsTryingToSaveWithAnOldRevision() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var certificate = certificate(testCertificates);
+
+      api.updateCertificate(
+          customUpdateCertificateRequest()
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.updateCertificateWithConcurrentError(
+          customUpdateCertificateRequest()
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(409, response.getStatusCode().value());
+    }
   }
 
   @Nested
@@ -816,7 +846,7 @@ class FK7211ActiveIT {
 
     @Test
     @DisplayName("FK7211 - Vårdadmin - Om utkastet är skapat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
-    void shallNotUpdateDataIfUserIsCareAdminAndPatientIsProtectedPerson() {
+    void shallNotDeleteDataIfUserIsCareAdminAndPatientIsProtectedPerson() {
       final var testCertificates = testabilityApi.addCertificates(
           customTestabilityCertificateRequest(FK7211, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
@@ -1452,6 +1482,309 @@ class FK7211ActiveIT {
 
       assertEquals(0, certificates(response.getBody()).size(),
           "Expect list to be empty but contains: '%s'".formatted(certificates(response.getBody()))
+      );
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7211 - Validera utkast")
+  class ValidateCertificate {
+
+    @Test
+    @DisplayName("FK7211 - Om utkastet innehåller korrekt 'beräknad nedkomst' skall utkastet vara klar för signering")
+    void shallReturnEmptyListOfErrorsIfDateIsCorrect() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var questionId = "FRG_1";
+      final var date = LocalDate.now().plusDays(5);
+      final var certificate = certificate(testCertificates);
+
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateValue(certificate, questionId, date))
+      );
+
+      final var response = api.validateCertificate(
+          customValidateCertificateRequest()
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(Collections.emptyList(), validationErrors(response));
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om utkastet innehåller 'beräknad nedkomst' före dagens datum skall valideringsfel returneras")
+    void shallReturnListOfErrorsIfDateIsBeforeTodaysDate() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var questionId = "FRG_1";
+      final var date = LocalDate.now().minusDays(1);
+      final var certificate = certificate(testCertificates);
+
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateValue(certificate, questionId, date))
+      );
+
+      final var response = api.validateCertificate(
+          customValidateCertificateRequest()
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertEquals(1, validationErrors(response).size(),
+              () -> "Wrong number of errors '%s'".formatted(validationErrors(response))
+          ),
+          () -> assertTrue(validationErrors(response).get(0).getText()
+                  .contains("Ange ett datum som är tidigast"),
+              () -> "Expect to contain 'Ange ett datum som är tidigast' but was '%s'"
+                  .formatted(validationErrors(response).get(0))
+          )
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om utkastet innehåller 'beräknad nedkomst' längre än ett år fram skall valideringsfel returneras")
+    void shallReturnListOfErrorsIfDateIsAfterOneYearInFuture() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var questionId = "FRG_1";
+      final var date = LocalDate.now().plusYears(1).plusDays(1);
+      final var certificate = certificate(testCertificates);
+
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateValue(certificate, questionId, date))
+      );
+
+      final var response = api.validateCertificate(
+          customValidateCertificateRequest()
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertEquals(1, validationErrors(response).size(),
+              () -> "Wrong number of errors '%s'".formatted(validationErrors(response))
+          ),
+          () -> assertTrue(validationErrors(response).get(0).getText()
+                  .contains("Ange ett datum som är senast"),
+              () -> "Expect to contain 'Ange ett datum som är senast' but was '%s'"
+                  .formatted(validationErrors(response).get(0))
+          )
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om utkastet saknar 'beräknad nedkomst' skall valideringsfel returneras")
+    void shallReturnListOfErrorsIfDateIsAMissing() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var questionId = "FRG_1";
+      final var certificate = certificate(testCertificates);
+
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateValue(certificate, questionId, null))
+      );
+
+      final var response = api.validateCertificate(
+          customValidateCertificateRequest()
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertEquals(1, validationErrors(response).size(),
+              () -> "Wrong number of errors '%s'".formatted(validationErrors(response))
+          ),
+          () -> assertTrue(validationErrors(response).get(0).getText()
+                  .contains("Ange ett datum."),
+              () -> "Expect to contain 'Ange ett datum.' but was '%s'"
+                  .formatted(validationErrors(response).get(0))
+          )
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om utkastet saknar 'Vårdenhetens adress' skall valideringsfel returneras")
+    void shallReturnListOfErrorsIfMissingUnitContactAddress() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var certificate = updateUnit(
+          testCertificates,
+          certificate(testCertificates).getMetadata().getUnit()
+              .withAddress("")
+      );
+
+      final var questionId = "FRG_1";
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateValue(certificate, questionId, LocalDate.now()
+              )
+          )
+      );
+
+      final var response = api.validateCertificate(
+          customValidateCertificateRequest()
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertEquals(1, validationErrors(response).size(),
+              () -> "Wrong number of errors '%s'".formatted(validationErrors(response))
+          ),
+          () -> assertTrue(validationErrors(response).get(0).getText()
+                  .contains("Ange postadress."),
+              () -> "Expect to contain 'Ange postadress.' but was '%s'"
+                  .formatted(validationErrors(response).get(0))
+          )
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om utkastet saknar 'Vårdenhetens postnummer' skall valideringsfel returneras")
+    void shallReturnListOfErrorsIfMissingUnitContactZipCode() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var certificate = updateUnit(
+          testCertificates,
+          certificate(testCertificates).getMetadata().getUnit()
+              .withZipCode("")
+      );
+
+      final var questionId = "FRG_1";
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateValue(certificate, questionId, LocalDate.now()
+              )
+          )
+      );
+
+      final var response = api.validateCertificate(
+          customValidateCertificateRequest()
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertEquals(1, validationErrors(response).size(),
+              () -> "Wrong number of errors '%s'".formatted(validationErrors(response))
+          ),
+          () -> assertTrue(validationErrors(response).get(0).getText()
+                  .contains("Ange postnummer."),
+              () -> "Expect to contain 'Ange postnummer.' but was '%s'"
+                  .formatted(validationErrors(response).get(0))
+          )
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om utkastet saknar 'Vårdenhetens postort' skall valideringsfel returneras")
+    void shallReturnListOfErrorsIfMissingUnitContactCity() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var certificate = updateUnit(
+          testCertificates,
+          certificate(testCertificates).getMetadata().getUnit()
+              .withCity("")
+      );
+
+      final var questionId = "FRG_1";
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateValue(certificate, questionId, LocalDate.now()
+              )
+          )
+      );
+
+      final var response = api.validateCertificate(
+          customValidateCertificateRequest()
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertEquals(1, validationErrors(response).size(),
+              () -> "Wrong number of errors '%s'".formatted(validationErrors(response))
+          ),
+          () -> assertTrue(validationErrors(response).get(0).getText()
+                  .contains("Ange postort."),
+              () -> "Expect to contain 'Ange postort.' but was '%s'"
+                  .formatted(validationErrors(response).get(0))
+          )
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om utkastet saknar 'Vårdenhetens telefonnummer' skall valideringsfel returneras")
+    void shallReturnListOfErrorsIfMissingUnitContactPhoneNumber() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var certificate = updateUnit(
+          testCertificates,
+          certificate(testCertificates).getMetadata().getUnit()
+              .withPhoneNumber("")
+      );
+
+      final var questionId = "FRG_1";
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateValue(certificate, questionId, LocalDate.now()
+              )
+          )
+      );
+
+      final var response = api.validateCertificate(
+          customValidateCertificateRequest()
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertEquals(1, validationErrors(response).size(),
+              () -> "Wrong number of errors '%s'".formatted(validationErrors(response))
+          ),
+          () -> assertTrue(validationErrors(response).get(0).getText()
+                  .contains("Ange telefonnummer."),
+              () -> "Expect to contain 'Ange telefonnummer.' but was '%s'"
+                  .formatted(validationErrors(response).get(0))
+          )
       );
     }
   }

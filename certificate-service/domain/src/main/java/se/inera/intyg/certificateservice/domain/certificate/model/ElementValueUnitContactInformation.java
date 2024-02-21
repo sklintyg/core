@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class ElementValueIssuingUnit implements ElementValue {
+public class ElementValueUnitContactInformation implements ElementValue {
 
   String address;
   String city;

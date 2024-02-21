@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIssuingUnit.ISSUING_UNIT;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +52,7 @@ public class CertificateConverter {
                     certificateMetaDataUnitConverter.convert(
                         certificate.certificateMetaData().issuingUnit(),
                         certificate.elementData().stream()
-                            .filter(data -> data.id().equals(ISSUING_UNIT))
+                            .filter(data -> data.id().equals(UNIT_CONTACT_INFORMATION))
                             .findFirst()
                     )
                 )

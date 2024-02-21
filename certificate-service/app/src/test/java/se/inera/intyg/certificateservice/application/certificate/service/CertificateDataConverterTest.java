@@ -23,7 +23,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIssuingUnit;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -373,7 +373,7 @@ class CertificateDataConverterTest {
   void shallNotConvertSpecificationsOfIssuingUnitTypeConfiguration() {
     final var elementSpecification = ElementSpecification.builder()
         .configuration(
-            ElementConfigurationIssuingUnit.builder().build()
+            ElementConfigurationUnitContactInformation.builder().build()
         )
         .build();
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Value;
+import lombok.With;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO.CertificateMetadataDTOBuilder;
 
 @JsonDeserialize(builder = CertificateMetadataDTOBuilder.class)
@@ -25,6 +26,7 @@ public class CertificateMetadataDTO {
   boolean sent;
   String sentTo;
   CertificateRelationsDTO relations;
+  @With
   UnitDTO unit;
   UnitDTO careUnit;
   UnitDTO careProvider;

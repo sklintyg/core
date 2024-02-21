@@ -4,7 +4,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIssuingUnit;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.unit.model.IssuingUnit;
 
 @Component
@@ -14,7 +14,7 @@ public class CertificateMetaDataUnitConverter {
   public UnitDTO convert(IssuingUnit issuingUnit, Optional<ElementData> elementData) {
     return elementData
         .map(data -> {
-          final var elementValue = (ElementValueIssuingUnit) data.value();
+          final var elementValue = (ElementValueUnitContactInformation) data.value();
           return UnitDTO.builder()
               .unitId(issuingUnit.hsaId().id())
               .unitName(issuingUnit.name().name())

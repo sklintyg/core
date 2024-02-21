@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -71,9 +72,13 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
+import se.inera.intyg.certificateservice.domain.validation.model.ErrorMessage;
+import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
+import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateTest {
@@ -914,6 +919,87 @@ class CertificateTest {
     void shallReturnStateDeleteDraftWhenDeleted() {
       certificate.delete(REVISION, actionEvaluationBuilder.build());
       assertEquals(Status.DELETED_DRAFT, certificate.status());
+    }
+  }
+
+  @Nested
+  class TestValidate {
+
+    @Test
+    void shallReturnValidationResultWithNoErrors() {
+      final var expectedResult = ValidationResult.builder()
+          .errors(Collections.emptyList())
+          .build();
+
+      final var specification = mock(ElementSpecification.class);
+      doReturn(Collections.emptyList()).when(specification)
+          .validate(certificate.elementData(), Optional.empty());
+      doReturn(List.of(specification)).when(certificateModel).elementSpecifications();
+
+      final var actualResult = certificate.validate();
+      assertEquals(expectedResult, actualResult);
+    }
+
+    @Test
+    void shallReturnValidationResultWithErrors() {
+      final var validationErrors = List.of(ValidationError.builder().build());
+      final var expectedResult = ValidationResult.builder()
+          .errors(validationErrors)
+          .build();
+
+      final var specification = mock(ElementSpecification.class);
+      doReturn(validationErrors).when(specification)
+          .validate(certificate.elementData(), Optional.empty());
+      doReturn(List.of(specification)).when(certificateModel).elementSpecifications();
+
+      final var actualResult = certificate.validate();
+      assertEquals(expectedResult, actualResult);
+    }
+
+    @Test
+    void shallReturnValidationResultWithErrorsFromMultipleSpecifications() {
+      final var validationErrorOne = ValidationError.builder()
+          .message(new ErrorMessage("ErrorOne"))
+          .build();
+      final var validationErrorTwo = ValidationError.builder()
+          .message(new ErrorMessage("ErrorTwo"))
+          .build();
+
+      final var expectedResult = ValidationResult.builder()
+          .errors(List.of(validationErrorOne, validationErrorTwo))
+          .build();
+
+      final var specificationOne = mock(ElementSpecification.class);
+      final var specificationTwo = mock(ElementSpecification.class);
+      final var validationErrorsOne = List.of(validationErrorOne);
+      final var validationErrorsTwo = List.of(validationErrorTwo);
+      doReturn(validationErrorsOne).when(specificationOne)
+          .validate(certificate.elementData(), Optional.empty());
+      doReturn(validationErrorsTwo).when(specificationTwo)
+          .validate(certificate.elementData(), Optional.empty());
+      doReturn(List.of(specificationOne, specificationTwo)).when(certificateModel)
+          .elementSpecifications();
+
+      final var actualResult = certificate.validate();
+      assertEquals(expectedResult, actualResult);
+    }
+
+    @Test
+    void shallValidateWithProvidedElementData() {
+      final var expectedElementData = List.of(ElementData.builder().build());
+
+      final var specification = mock(ElementSpecification.class);
+      doReturn(Collections.emptyList()).when(specification)
+          .validate(expectedElementData, Optional.empty());
+      doReturn(List.of(specification)).when(certificateModel).elementSpecifications();
+
+      certificate.validate(expectedElementData);
+
+      final ArgumentCaptor<List<ElementData>> listArgumentCaptor = ArgumentCaptor.forClass(
+          List.class);
+      verify(specification).validate(listArgumentCaptor.capture(), eq(Optional.empty()));
+
+      assertEquals(expectedElementData, listArgumentCaptor.getValue());
     }
   }
 }

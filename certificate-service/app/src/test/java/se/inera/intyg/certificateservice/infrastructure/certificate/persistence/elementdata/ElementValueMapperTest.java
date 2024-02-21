@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIssuingUnit;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIssuingUnit;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
 class ElementValueMapperTest {
@@ -92,7 +92,7 @@ class ElementValueMapperTest {
     private static final String CITY = "city";
     private static final String PHONE_NUMBER = "phoneNumber";
     private static final MappedElementData ISSUING_UNIT_MAPPED_DATA = MappedElementData.builder()
-        .id(ElementConfigurationIssuingUnit.ISSUING_UNIT.id())
+        .id(ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION.id())
         .value(
             MappedElementValueIssuingUnit.builder()
                 .address(ADDRESS)
@@ -103,9 +103,9 @@ class ElementValueMapperTest {
         )
         .build();
     private static final ElementData ISSUING_UNIT_DATA = ElementData.builder()
-        .id(ElementConfigurationIssuingUnit.ISSUING_UNIT)
+        .id(ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION)
         .value(
-            ElementValueIssuingUnit.builder()
+            ElementValueUnitContactInformation.builder()
                 .address(ADDRESS)
                 .zipCode(ZIP_CODE)
                 .city(CITY)

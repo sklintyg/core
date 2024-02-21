@@ -4,6 +4,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.CreateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
@@ -82,6 +83,14 @@ public class ApiRequestUtil {
 
   public static UpdateCertificateRequestBuilder customUpdateCertificateRequest() {
     return UpdateCertificateRequestBuilder.create();
+  }
+
+  public static ValidateCertificateRequest defaultValidateCertificateRequest() {
+    return ValidateCertificateRequestBuilder.create().build();
+  }
+
+  public static ValidateCertificateRequestBuilder customValidateCertificateRequest() {
+    return ValidateCertificateRequestBuilder.create();
   }
 
   public static DeleteCertificateRequest defaultDeleteCertificateRequest() {
