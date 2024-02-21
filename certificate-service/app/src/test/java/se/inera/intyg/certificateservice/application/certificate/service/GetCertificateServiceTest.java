@@ -23,11 +23,14 @@ import se.inera.intyg.certificateservice.application.certificate.service.validat
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
+import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.staff.model.Role;
+import se.inera.intyg.certificateservice.domain.user.model.User;
 
 @ExtendWith(MockitoExtension.class)
 class GetCertificateServiceTest {
@@ -58,7 +61,10 @@ class GetCertificateServiceTest {
 
   @Test
   void shallReturnResponseWithCertificate() {
-    final var resourceLinkDTO = ResourceLinkDTO.builder().build();
+    final var resourceLinkDTO = ResourceLinkDTO.builder()
+        .type(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
+        .build();
+
     final var certificateDTO = CertificateDTO.builder()
         .links(List.of(resourceLinkDTO))
         .build();
@@ -68,7 +74,9 @@ class GetCertificateServiceTest {
         )
         .build();
 
-    final var actionEvaluation = ActionEvaluation.builder().build();
+    final var actionEvaluation = ActionEvaluation.builder()
+        .user(User.builder().role(Role.DOCTOR).build())
+        .build();
     doReturn(actionEvaluation).when(actionEvaluationFactory).create(
         AJLA_DOCTOR_DTO,
         ALFA_ALLERGIMOTTAGNINGEN_DTO,
