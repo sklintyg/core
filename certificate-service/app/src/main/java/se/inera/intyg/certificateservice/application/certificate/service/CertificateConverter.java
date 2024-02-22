@@ -44,6 +44,7 @@ public class CertificateConverter {
                 .typeVersion(certificate.certificateModel().id().version().version())
                 .name(certificate.certificateModel().name())
                 .description(certificate.certificateModel().description())
+                .validForSign(certificate.isDraft() && certificate.validate().isValid())
                 .created(certificate.created())
                 .patient(
                     toPatientDTO(certificate)

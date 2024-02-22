@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.application.common;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
@@ -163,6 +165,31 @@ class CertificatesRequestFactoryTest {
       assertEquals(expectedStatuses,
           certificatesRequestFactory.create(queryCriteriaDTO).statuses()
       );
+    }
+
+    @Test
+    void shallNotIncludeValidCertificateIfValidForSignIsNull() {
+      final var queryCriteriaDTO = CertificatesQueryCriteriaDTO.builder().build();
+
+      assertNull(certificatesRequestFactory.create(queryCriteriaDTO).validCertificates());
+    }
+
+    @Test
+    void shallIncludeValidCertificateTrueIfValidForSignIsTrue() {
+      final var queryCriteriaDTO = CertificatesQueryCriteriaDTO.builder()
+          .validForSign(Boolean.TRUE)
+          .build();
+
+      assertTrue(certificatesRequestFactory.create(queryCriteriaDTO).validCertificates());
+    }
+
+    @Test
+    void shallIncludeValidCertificateFalseIfValidForSignIsFalse() {
+      final var queryCriteriaDTO = CertificatesQueryCriteriaDTO.builder()
+          .validForSign(Boolean.FALSE)
+          .build();
+
+      assertFalse(certificatesRequestFactory.create(queryCriteriaDTO).validCertificates());
     }
   }
 }

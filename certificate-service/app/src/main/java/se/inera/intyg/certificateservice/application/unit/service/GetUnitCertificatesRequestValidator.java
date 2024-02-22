@@ -19,5 +19,8 @@ public class GetUnitCertificatesRequestValidator {
     if (getUnitCertificatesRequest.getPatient() != null) {
       validatePatient(getUnitCertificatesRequest.getPatient());
     }
+    if (getUnitCertificatesRequest.getCertificatesQueryCriteria() == null) {
+      throw new IllegalArgumentException("Required parameter missing: certificatesQueryCriteria");
+    }
   }
 }

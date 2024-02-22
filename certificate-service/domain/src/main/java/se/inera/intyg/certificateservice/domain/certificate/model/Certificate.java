@@ -27,7 +27,8 @@ public class Certificate {
   @Builder.Default
   private List<ElementData> elementData = Collections.emptyList();
   private Revision revision;
-  private Status status;
+  @Builder.Default
+  private Status status = Status.DRAFT;
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
@@ -125,6 +126,10 @@ public class Certificate {
           actionEvaluation.subUnit()
       );
     }
+  }
+
+  public boolean isDraft() {
+    return status().equals(Status.DRAFT);
   }
 }
 

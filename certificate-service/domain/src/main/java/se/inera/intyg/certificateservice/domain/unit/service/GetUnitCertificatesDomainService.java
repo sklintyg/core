@@ -1,6 +1,10 @@
 package se.inera.intyg.certificateservice.domain.unit.service;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
 import java.util.List;
+import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -18,7 +22,14 @@ public class GetUnitCertificatesDomainService {
             request.apply(actionEvaluation)
         ).stream()
         .filter(certificate -> certificate.allowTo(CertificateActionType.READ, actionEvaluation))
+        .filter(filterOnValid(request))
         .toList();
+  }
+
+  private static Predicate<Certificate> filterOnValid(CertificatesRequest request) {
+    return certificate -> request.validCertificates() == null
+        || (FALSE.equals(request.validCertificates()) && certificate.validate().isInvalid())
+        || (TRUE.equals(request.validCertificates()) && certificate.validate().isValid());
   }
 }
 

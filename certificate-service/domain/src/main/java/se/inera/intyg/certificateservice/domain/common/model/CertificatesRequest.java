@@ -22,6 +22,7 @@ public class CertificatesRequest {
   @With
   HsaId careUnitId;
   PersonId personId;
+  Boolean validCertificates;
 
   public CertificatesRequest apply(ActionEvaluation actionEvaluation) {
     if (issuedUnitId() == null && actionEvaluation.isIssuingUnitSubUnit()) {

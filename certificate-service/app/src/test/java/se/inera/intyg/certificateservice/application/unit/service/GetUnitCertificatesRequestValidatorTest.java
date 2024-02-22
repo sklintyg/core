@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
+import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesRequest.GetUnitCertificatesRequestBuilder;
 
@@ -34,12 +35,27 @@ class GetUnitCertificatesRequestValidatorTest {
         .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
         .careUnit(ALFA_MEDICINCENTRUM_DTO)
         .careProvider(ALFA_REGIONEN_DTO)
-        .patient(ATHENA_REACT_ANDERSSON_DTO);
+        .patient(ATHENA_REACT_ANDERSSON_DTO)
+        .certificatesQueryCriteria(CertificatesQueryCriteriaDTO.builder().build());
   }
 
   @Test
   void validRequest() {
     getUnitCertificatesRequestValidator.validate(requestBuilder.build());
+  }
+
+  @Test
+  void shallThrowIfCertificateQueryCriteriaIsNull() {
+    final var request = requestBuilder
+        .certificatesQueryCriteria(null)
+        .build();
+
+    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+        () -> getUnitCertificatesRequestValidator.validate(request));
+
+    assertEquals("Required parameter missing: certificatesQueryCriteria",
+        illegalArgumentException.getMessage()
+    );
   }
 
   @Nested

@@ -42,6 +42,7 @@ public class CertificatesRequestFactory {
                 ? List.of(Status.DRAFT)
                 : Collections.emptyList()
         )
+        .validCertificates(queryCriteria.getValidForSign())
         .build();
   }
 

@@ -10,7 +10,5 @@ public interface ElementConfiguration {
 
   ElementType type();
 
-  default ElementValue emptyValue() {
-    return null;
-  }
+  ElementValue emptyValue();
 }
