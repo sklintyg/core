@@ -1484,6 +1484,142 @@ class FK7211ActiveIT {
           "Expect list to be empty but contains: '%s'".formatted(certificates(response.getBody()))
       );
     }
+
+    @Test
+    @DisplayName("FK7211 - Returnera utkast som inte är färdiga för signering när man söker på ej färdiga")
+    void shallReturnDraftsWhichAreNotValid() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .queryCriteria(
+                  CertificatesQueryCriteriaDTO.builder()
+                      .statuses(List.of(CertificateStatusTypeDTO.UNSIGNED))
+                      .validForSign(Boolean.FALSE)
+                      .build()
+              )
+              .build()
+      );
+
+      assertAll(
+          () -> assertTrue(
+              () -> exists(certificates(response.getBody()), certificate(testCertificates)),
+              () -> "Expected '%s' in result: '%s'".formatted(certificateId(testCertificates),
+                  certificates(response.getBody()))),
+          () -> assertEquals(1, certificates(response.getBody()).size())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Ej returnera utkast som är färdiga för signering när man söker på ej färdiga")
+    void shallNotReturnDraftsWhichAreValidWhenQueryingInvalid() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var questionId = "FRG_1";
+      final var expectedDate = LocalDate.now().plusDays(5);
+      final var certificate = certificate(testCertificates);
+
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateValue(certificate, questionId, expectedDate))
+      );
+
+      api.updateCertificate(
+          customUpdateCertificateRequest()
+              .user(AJLA_DOCTOR_DTO)
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .queryCriteria(
+                  CertificatesQueryCriteriaDTO.builder()
+                      .statuses(List.of(CertificateStatusTypeDTO.UNSIGNED))
+                      .validForSign(Boolean.FALSE)
+                      .build()
+              )
+              .build()
+      );
+
+      assertEquals(0, certificates(response.getBody()).size(),
+          "Expect list to be empty but contains: '%s'".formatted(certificates(response.getBody()))
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Returnera utkast som är färdiga för signering när man söker på färdiga")
+    void shallReturnDraftsWhichAreValid() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var questionId = "FRG_1";
+      final var expectedDate = LocalDate.now().plusDays(5);
+      final var certificate = certificate(testCertificates);
+
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateValue(certificate, questionId, expectedDate))
+      );
+
+      api.updateCertificate(
+          customUpdateCertificateRequest()
+              .user(AJLA_DOCTOR_DTO)
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .queryCriteria(
+                  CertificatesQueryCriteriaDTO.builder()
+                      .statuses(List.of(CertificateStatusTypeDTO.UNSIGNED))
+                      .validForSign(Boolean.TRUE)
+                      .build()
+              )
+              .build()
+      );
+
+      assertAll(
+          () -> assertTrue(
+              () -> exists(certificates(response.getBody()), certificate(testCertificates)),
+              () -> "Expected '%s' in result: '%s'".formatted(certificateId(testCertificates),
+                  certificates(response.getBody()))),
+          () -> assertEquals(1, certificates(response.getBody()).size())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Ej returnera utkast som är inte är färdig för signering när man söker på färdiga")
+    void shallNotReturnDraftsWhichAreInvalidWhenQueryingValid() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .queryCriteria(
+                  CertificatesQueryCriteriaDTO.builder()
+                      .statuses(List.of(CertificateStatusTypeDTO.UNSIGNED))
+                      .validForSign(Boolean.TRUE)
+                      .build()
+              )
+              .build()
+      );
+
+      assertEquals(0, certificates(response.getBody()).size(),
+          "Expect list to be empty but contains: '%s'".formatted(certificates(response.getBody()))
+      );
+    }
   }
 
   @Nested

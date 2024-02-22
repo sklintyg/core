@@ -41,7 +41,6 @@ public class GetUnitCertificatesService {
         actionEvaluation
     );
 
-    // Filtera utifrån GetUnitCertificatesRequest
     return GetUnitCertificatesResponse.builder()
         .certificates(certificates.stream()
             .map(certificate -> certificateConverter.convert(

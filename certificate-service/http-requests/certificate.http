@@ -147,7 +147,7 @@ Content-Type: application/json
 }
 
 ### Update certificate
-PUT http://localhost:18030/api/certificate/87ee572b-f55d-4955-b7a0-cb60d5e7be45
+PUT http://localhost:18030/api/certificate/594662d8-576e-49a7-af27-729673a6be4c
 Content-Type: application/json
 
 {
@@ -293,7 +293,7 @@ Content-Type: application/json
           "type": "DATE",
           "type": "DATE",
           "id": "beraknatnedkomstdatum",
-          "date": "2024-02-15"
+          "date": "2024-02-29"
         },
         "validation": [
           {

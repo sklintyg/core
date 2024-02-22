@@ -11,6 +11,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_MEDICINSKT_CENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest.CertificatesRequestBuilder;
+import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
+import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
 @ExtendWith(MockitoExtension.class)
 class GetUnitCertificatesDomainServiceTest {
@@ -128,5 +131,53 @@ class GetUnitCertificatesDomainServiceTest {
     assertEquals(ALFA_MEDICINCENTRUM.hsaId(),
         certificateRequestCaptor.getValue().careUnitId()
     );
+  }
+
+  @Test
+  void shallNotReturnValidCertificatesIfAskingForInValidCertificates() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificatesRequest = certificatesRequestBuilder
+        .validCertificates(Boolean.FALSE)
+        .build();
+
+    final var certificate = mock(Certificate.class);
+    doReturn(true).when(certificate).allowTo(CertificateActionType.READ, actionEvaluation);
+    doReturn(ValidationResult.builder().build()).when(certificate).validate();
+    doReturn(List.of(certificate)).when(certificateRepository)
+        .findByCertificatesRequest(certificatesRequest);
+
+    final var actualResult = getUnitCertificatesDomainService.get(
+        certificatesRequest,
+        actionEvaluation
+    );
+
+    assertEquals(Collections.emptyList(), actualResult);
+  }
+
+  @Test
+  void shallNotReturnInValidCertificatesIfAskingForValidCertificates() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificatesRequest = certificatesRequestBuilder
+        .validCertificates(Boolean.TRUE)
+        .build();
+
+    final var certificate = mock(Certificate.class);
+    doReturn(true).when(certificate).allowTo(CertificateActionType.READ, actionEvaluation);
+    doReturn(
+        ValidationResult.builder()
+            .errors(List.of(ValidationError.builder().build()))
+            .build()
+    ).when(certificate).validate();
+    doReturn(List.of(certificate)).when(certificateRepository)
+        .findByCertificatesRequest(certificatesRequest);
+
+    final var actualResult = getUnitCertificatesDomainService.get(
+        certificatesRequest,
+        actionEvaluation
+    );
+
+    assertEquals(Collections.emptyList(), actualResult);
   }
 }
