@@ -9,6 +9,7 @@ plugins {
 
 ext {
 	springbootMavenBomVersion = '3.2.2'
+	logbackEcsEncoderVersion = "1.6.0"
 }
 
 group = 'se.inera.intyg.certificateservice'
