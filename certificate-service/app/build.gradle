@@ -9,10 +9,11 @@ dependencies {
     implementation project(':domain')
 
     implementation "co.elastic.logging:logback-ecs-encoder:${logbackEcsEncoderVersion}"
+    implementation "com.google.guava:guava:${guavaVersion}"
+    implementation 'org.liquibase:liquibase-core'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.liquibase:liquibase-core'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -44,7 +45,7 @@ tasks.register("appRunDebug") {
         bootRun.configure {
             jvmArgs = [
                     "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=18031",
-//                    "-Dlogging.config=${rootProject.projectDir}/devops/dev/config/logback-spring.xml"
+                    "-Dlogging.config=${rootProject.projectDir}/devops/dev/config/logback-spring.xml"
             ]
         }
     }
@@ -55,7 +56,7 @@ tasks.register("appRun") {
     println("######## Running in normal mode ########")
     doFirst {
         bootRun.configure {
-//            jvmArgs = ["-Dlogging.config=${rootProject.projectDir}/devops/dev/config/logback-spring.xml"]
+            jvmArgs = ["-Dlogging.config=${rootProject.projectDir}/devops/dev/config/logback-spring.xml"]
         }
     }
     finalizedBy("bootRun")

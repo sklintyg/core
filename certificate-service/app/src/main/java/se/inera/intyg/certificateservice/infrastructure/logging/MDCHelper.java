@@ -1,8 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.logging;
 
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.LOG_SESSION_ID_HEADER;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.LOG_TRACE_ID_HEADER;
-
 import jakarta.servlet.http.HttpServletRequest;
 import java.nio.CharBuffer;
 import java.util.Optional;
@@ -13,6 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class MDCHelper {
 
+  protected static final String LOG_TRACE_ID_HEADER = "x-trace-id";
+  protected static final String LOG_SESSION_ID_HEADER = "x-session-id";
   private static final int LENGTH_LIMIT = 8;
   private static final char[] BASE62CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
 
@@ -20,7 +19,7 @@ public class MDCHelper {
     return Optional.ofNullable(
             http.getHeader(LOG_SESSION_ID_HEADER)
         )
-        .orElse("MISSING");
+        .orElse("-");
   }
 
   public String traceId(HttpServletRequest http) {

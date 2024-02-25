@@ -8,8 +8,9 @@ plugins {
 }
 
 ext {
+	guavaVersion = '33.0.0-jre'
+	logbackEcsEncoderVersion = '1.6.0'
 	springbootMavenBomVersion = '3.2.2'
-	logbackEcsEncoderVersion = "1.6.0"
 }
 
 group = 'se.inera.intyg.certificateservice'
