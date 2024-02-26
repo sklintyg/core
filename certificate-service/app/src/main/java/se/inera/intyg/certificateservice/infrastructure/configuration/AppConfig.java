@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.configuration;
 
+import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
@@ -9,6 +10,8 @@ import se.inera.intyg.certificateservice.domain.certificate.service.GetCertifica
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ValidateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
+import se.inera.intyg.certificateservice.domain.event.service.CertificateEventSubscriber;
 import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesInfoDomainService;
@@ -19,26 +22,39 @@ public class AppConfig {
   @Bean
   public CreateCertificateDomainService createCertificateDomainService(
       CertificateModelRepository certificateModelRepository,
-      CertificateRepository certificateRepository) {
-    return new CreateCertificateDomainService(certificateModelRepository, certificateRepository);
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new CreateCertificateDomainService(certificateModelRepository, certificateRepository,
+        certificateEventDomainService);
   }
 
   @Bean
   public GetCertificateDomainService getCertificateDomainService(
-      CertificateRepository certificateRepository) {
-    return new GetCertificateDomainService(certificateRepository);
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new GetCertificateDomainService(certificateRepository, certificateEventDomainService);
   }
 
   @Bean
   public UpdateCertificateDomainService updateCertificateDomainService(
-      CertificateRepository certificateRepository) {
-    return new UpdateCertificateDomainService(certificateRepository);
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new UpdateCertificateDomainService(certificateRepository, certificateEventDomainService);
   }
 
   @Bean
   public DeleteCertificateDomainService deleteCertificateDomainService(
-      CertificateRepository certificateRepository) {
-    return new DeleteCertificateDomainService(certificateRepository);
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new DeleteCertificateDomainService(certificateRepository, certificateEventDomainService);
+  }
+
+  @Bean
+  public ValidateCertificateDomainService validateCertificateDomainService(
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new ValidateCertificateDomainService(certificateRepository,
+        certificateEventDomainService);
   }
 
   @Bean
@@ -60,8 +76,8 @@ public class AppConfig {
   }
 
   @Bean
-  public ValidateCertificateDomainService validateCertificateDomainService(
-      CertificateRepository certificateRepository) {
-    return new ValidateCertificateDomainService(certificateRepository);
+  public CertificateEventDomainService certificateEventDomainService(
+      List<CertificateEventSubscriber> subscribers) {
+    return new CertificateEventDomainService(subscribers);
   }
 }

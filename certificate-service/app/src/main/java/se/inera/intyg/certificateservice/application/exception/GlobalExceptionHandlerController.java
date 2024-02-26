@@ -16,7 +16,7 @@ public class GlobalExceptionHandlerController {
 
   @ExceptionHandler(IllegalArgumentException.class)
   public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException exception) {
-    log.error("Bad request", exception);
+    log.warn("Bad request", exception);
 
     return ResponseEntity
         .status(HttpStatus.BAD_REQUEST)
@@ -26,7 +26,7 @@ public class GlobalExceptionHandlerController {
   @ExceptionHandler(CertificateActionForbidden.class)
   public ResponseEntity<String> handleCertificateActionForbidden(
       CertificateActionForbidden exception) {
-    log.error("Forbidden", exception);
+    log.warn("Forbidden", exception);
 
     return ResponseEntity
         .status(HttpStatus.FORBIDDEN)
@@ -36,7 +36,7 @@ public class GlobalExceptionHandlerController {
   @ExceptionHandler(ConcurrentModificationException.class)
   public ResponseEntity<String> handleConcurrentModificationException(
       ConcurrentModificationException exception) {
-    log.error("Conflict", exception);
+    log.warn("Conflict", exception);
     return ResponseEntity
         .status(HttpStatus.CONFLICT)
         .body("%s på enheten %s".formatted(
