@@ -21,6 +21,7 @@ public class TestabilityCertificateRequest {
   UnitDTO careProvider;
   PatientDTO patient;
   CertificateModelIdDTO certificateModelId;
+  TestabilityFillTypeDTO fillType;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class TestabilityCertificateRequestBuilder {
