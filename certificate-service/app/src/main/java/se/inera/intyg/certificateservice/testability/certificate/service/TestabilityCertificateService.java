@@ -5,6 +5,7 @@ import static se.inera.intyg.certificateservice.testability.common.TestabilityCo
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import se.inera.intyg.certificateservice.testability.certificate.dto.Testability
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityResetCertificateRequest;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityStatusTypeDTO;
+import se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityCertificateFillService;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateModelRepository;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateRepository;
 
@@ -38,6 +40,7 @@ public class TestabilityCertificateService {
   private final ActionEvaluationFactory actionEvaluationFactory;
   private final CertificateConverter certificateConverter;
   private final ResourceLinkConverter resourceLinkConverter;
+  private final List<TestabilityCertificateFillService> testabilityCertificateFillServices;
 
   public CreateCertificateResponse create(
       TestabilityCertificateRequest testabilityCertificateRequest) {
@@ -65,6 +68,18 @@ public class TestabilityCertificateService {
 
     final var certificate = testabilityCertificateRepository.create(certificateModel);
     certificate.updateMetadata(actionEvaluation);
+
+    certificate.updateData(
+        testabilityCertificateFillServices.stream()
+            .filter(fillService -> fillService.certificateModelIds().contains(certificateModelId))
+            .findAny()
+            .map(fillService -> fillService.fill(certificateModel,
+                testabilityCertificateRequest.getFillType()))
+            .orElse(Collections.emptyList()),
+        certificate.revision(),
+        actionEvaluation
+    );
+
     testabilityCertificateRepository.insert(certificate);
 
     return CreateCertificateResponse.builder()
