@@ -1,7 +1,9 @@
 package se.inera.intyg.certificateservice.domain.certificate.service;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
@@ -9,6 +11,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,6 +22,9 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
+import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
+import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
+import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,6 +35,8 @@ class ValidateCertificateDomainServiceTest {
   private static final List<ElementData> ELEMENT_DATA_LIST = List.of(ElementData.builder().build());
   @Mock
   private CertificateRepository certificateRepository;
+  @Mock
+  private CertificateEventDomainService certificateEventDomainService;
   @Mock
   private Certificate certificate;
   @InjectMocks
@@ -65,5 +73,26 @@ class ValidateCertificateDomainServiceTest {
     final var actualResult = validateCertificateDomainService.validate(CERTIFICATE_ID,
         ELEMENT_DATA_LIST, ACTION_EVALUATION);
     assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallPublicValidateCertificateEvent() {
+    final var expectedResult = ValidationResult.builder().build();
+
+    doReturn(true).when(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
+    doReturn(expectedResult).when(certificate).validate(ELEMENT_DATA_LIST);
+
+    validateCertificateDomainService.validate(CERTIFICATE_ID, ELEMENT_DATA_LIST, ACTION_EVALUATION);
+
+    final var certificateEventCaptor = ArgumentCaptor.forClass(CertificateEvent.class);
+    verify(certificateEventDomainService).publish(certificateEventCaptor.capture());
+
+    assertAll(
+        () -> assertEquals(CertificateEventType.VALIDATED,
+            certificateEventCaptor.getValue().type()),
+        () -> assertEquals(certificate, certificateEventCaptor.getValue().certificate()),
+        () -> assertEquals(ACTION_EVALUATION, certificateEventCaptor.getValue().actionEvaluation()),
+        () -> assertTrue(certificateEventCaptor.getValue().duration() >= 0)
+    );
   }
 }
