@@ -26,6 +26,13 @@ public class TestabilityCertificateFillServiceFK7211 implements TestabilityCerti
   @Override
   public List<ElementData> fill(CertificateModel certificateModel,
       TestabilityFillTypeDTO fillType) {
+    if (TestabilityFillTypeDTO.EMPTY.equals(fillType)) {
+      return Collections.emptyList();
+    }
+    return fillWithValues(certificateModel);
+  }
+
+  private static List<ElementData> fillWithValues(CertificateModel certificateModel) {
     final var elementSpecification = certificateModel.elementSpecification(
         QUESTION_BERAKNAT_NEDKOMSTDATUM_ID);
     final var elementValue = elementSpecification.configuration().emptyValue();
