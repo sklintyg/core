@@ -1,8 +1,8 @@
 plugins {
-    id 'org.springframework.boot' version '3.1.2'
-    id 'io.spring.dependency-management' version '1.1.2'
+    id 'org.springframework.boot' version '3.2.2'
+    id 'io.spring.dependency-management' version '1.1.4'
     id 'org.sonarqube' version '4.4.1.3373'
-    id "org.owasp.dependencycheck" version "7.4.4"
+    id "org.owasp.dependencycheck" version "9.0.9"
 }
 
 ext {
@@ -13,8 +13,11 @@ ext {
     jaxbImplVersion = "4.0.1"
     jaxsWsVersion = "4.0.1"
     jakartaWsVersion = "4.0.0"
-    springbootMavenBomVersion = '3.1.2'
-    guavaVersion = '32.1.2-jre'
+    springbootMavenBomVersion = '3.2.2'
+    guavaVersion = '33.0.0-jre'
+
+    ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
+    nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'
 }
 
 group = 'se.inera.intyg.intyg-proxy-service'
@@ -23,7 +26,7 @@ version = System.properties['buildVersion'] ?: '0.0.1-SNAPSHOT'
 allprojects {
     repositories {
         mavenLocal()
-        maven { url "https://nexus.drift.inera.se/repository/it-public/" }
+        maven { url "${ineraMavenRepository}" }
         mavenCentral()
     }
 }
@@ -39,6 +42,10 @@ sonar {
 
 dependencyCheck {
     formats = List.of("HTML", "JSON")
+
+    nvd {
+        datafeedUrl="${nvdMirror}"
+    }
 }
 
 subprojects {

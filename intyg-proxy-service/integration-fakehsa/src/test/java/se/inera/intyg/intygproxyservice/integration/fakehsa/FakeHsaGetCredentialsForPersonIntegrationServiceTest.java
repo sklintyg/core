@@ -26,17 +26,19 @@ class FakeHsaGetCredentialsForPersonIntegrationServiceTest {
 
   @Test
   void shouldThrowIfParameterPersonIdIsMissing() {
-    assertThrows(IllegalArgumentException.class, () ->
-        credentialsForPersonIntegrationService.get(
-            GetCredentialsForPersonIntegrationRequest.builder().build()));
+    final var request = GetCredentialsForPersonIntegrationRequest.builder().build();
+    assertThrows(IllegalArgumentException.class,
+        () -> credentialsForPersonIntegrationService.get(request)
+    );
   }
 
 
   @Test
   void shouldThrowIfParameterPersonIdIsEmpty() {
-    assertThrows(IllegalArgumentException.class, () ->
-        credentialsForPersonIntegrationService.get(
-            GetCredentialsForPersonIntegrationRequest.builder().personId("").build()));
+    final var request = GetCredentialsForPersonIntegrationRequest.builder().personId("").build();
+    assertThrows(IllegalArgumentException.class,
+        () -> credentialsForPersonIntegrationService.get(request)
+    );
   }
 
   @Test

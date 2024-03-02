@@ -6,7 +6,7 @@ import se.inera.intyg.intygproxyservice.integration.fakepu.repository.model.Pars
 import se.inera.intyg.intygproxyservice.integration.fakepu.repository.model.ParsedName;
 import se.inera.intyg.intygproxyservice.integration.fakepu.repository.model.ParsedPerson;
 
-public abstract class PersonConverter {
+public class PersonConverter {
 
   private PersonConverter() {
     throw new IllegalStateException("Utility class");

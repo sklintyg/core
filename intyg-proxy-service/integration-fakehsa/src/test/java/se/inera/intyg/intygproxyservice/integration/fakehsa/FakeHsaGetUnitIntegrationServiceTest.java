@@ -25,17 +25,21 @@ class FakeHsaGetUnitIntegrationServiceTest {
 
   @Test
   void shouldThrowIfHsaIdIsNull() {
-    assertThrows(IllegalArgumentException.class, () -> fakeHsaGetUnitIntegrationService.get(
-        GetUnitIntegrationRequest.builder().build()
-    ));
+    final var request = GetUnitIntegrationRequest.builder().build();
+    assertThrows(IllegalArgumentException.class,
+        () -> fakeHsaGetUnitIntegrationService.get(request)
+    );
   }
 
 
   @Test
   void shouldThrowIfHsaIdIsEmpty() {
-    assertThrows(IllegalArgumentException.class, () -> fakeHsaGetUnitIntegrationService.get(
-        GetUnitIntegrationRequest.builder().hsaId("").build()
-    ));
+    final var request = GetUnitIntegrationRequest.builder()
+        .hsaId("")
+        .build();
+    assertThrows(IllegalArgumentException.class,
+        () -> fakeHsaGetUnitIntegrationService.get(request)
+    );
   }
 
   @Test
