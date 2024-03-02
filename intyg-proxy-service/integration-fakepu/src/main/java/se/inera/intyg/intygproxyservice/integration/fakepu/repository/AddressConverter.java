@@ -2,7 +2,7 @@ package se.inera.intyg.intygproxyservice.integration.fakepu.repository;
 
 import se.inera.intyg.intygproxyservice.integration.fakepu.repository.model.ParsedAddress;
 
-public abstract class AddressConverter {
+public class AddressConverter {
 
   private AddressConverter() {
     throw new IllegalStateException("Utility class");
@@ -29,7 +29,7 @@ public abstract class AddressConverter {
   }
 
   private static void addDelimiterIfNeeded(StringBuilder addressBuilder) {
-    if (addressBuilder.length() > 0) {
+    if (!addressBuilder.isEmpty()) {
       addressBuilder.append(", ");
     }
   }

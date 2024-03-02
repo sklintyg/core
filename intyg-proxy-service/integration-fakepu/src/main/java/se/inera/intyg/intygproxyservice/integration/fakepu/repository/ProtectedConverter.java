@@ -1,6 +1,6 @@
 package se.inera.intyg.intygproxyservice.integration.fakepu.repository;
 
-public abstract class ProtectedConverter {
+public class ProtectedConverter {
 
   private ProtectedConverter() {
     throw new IllegalStateException("Utility class");
