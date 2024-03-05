@@ -8,7 +8,7 @@ class PrintCertificateServiceTest {
 
   @Test
   void should() {
-    service.getField();
+    service.get();
   }
 
 }

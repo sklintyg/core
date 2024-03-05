@@ -20,6 +20,7 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
 import java.io.File;
+import java.io.IOException;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -36,97 +37,65 @@ public class PrintCertificateService {
 
   @SneakyThrows
   public void get() {
-    final var pathTemplate = "C:\\Intyg\\core\\certificate-service\\app\\src\\main\\resources\\fk7804-005-f-001_olast_211122.pdf";
+    final var pathTemplate = "C:\\Users\\mhoernfeldt\\Documents\\intyg\\core\\certificate-service\\app\\src\\main\\java\\se\\inera\\intyg\\certificateservice\\application\\certificate\\service\\fk7804.pdf";
 
     final var pdfDocument = PDDocument.load(new File(pathTemplate));
 
-    setField("SomeFieldName", "SomeFieldValue", pdfDocument);
+    fillPDF(pdfDocument);
     pdfDocument.save("lisjp.pdf");
     pdfDocument.close();
-
   }
 
   @SneakyThrows
   public static void setField(String name, String value, PDDocument pdfDocument) {
     final var docCatalog = pdfDocument.getDocumentCatalog();
     final var acroForm = docCatalog.getAcroForm();
-    final var fields = acroForm.getFields();
-    final var tree = fields.get(0).getAcroForm().getFieldTree();
-
-    final var values = fields.get(0).getAcroForm().getCOSObject().getValues();
     final var field = acroForm.getField(name);
     if (field != null) {
+      System.out.println("Modifying field with name " + name);
+      System.out.println("Old value is: " + field.getValueAsString());
       field.setValue(value);
+      System.out.println("New value is: " + field.getValueAsString());
     } else {
       System.err.println("No field found with name:" + name);
     }
   }
 
   @SneakyThrows
-  public static void getField() {
-    final var pathTemplate = "C:\\Intyg\\core\\certificate-service\\app\\src\\main\\resources\\fk7804-005-f-001_olast_2111222.pdf";
-    final var pdfDocument = PDDocument.load(new File(pathTemplate));
-
+  public static void fillPDF(PDDocument pdfDocument) {
     final var docCatalog = pdfDocument.getDocumentCatalog();
     final var acroForm = docCatalog.getAcroForm();
 
-    //SET PATIENT_ID VALUE (String)
-    System.out.println("Modifying patient id...");
-    final var patientIdField = acroForm.getField(FIELD_PATIENT_ID);
+    setField(FIELD_PATIENT_ID, NEW_PATIENT_ID, pdfDocument);
+    setField(FIELD_CHECKBOX, "Off", pdfDocument);
+    setField(FIELD_DATE, "2024-02-02", pdfDocument);
 
-    System.out.println("Old value is: " + patientIdField.getValueAsString());
+    fillFooter(pdfDocument);
 
-    patientIdField.setValue(NEW_PATIENT_ID);
-    System.out.println("New value is: " + patientIdField.getValueAsString());
-
-    //SET CHECKBOX VALUE
-    System.out.println("\n" + "Modifying checkbox...");
-    final var checkboxField = acroForm.getField(FIELD_CHECKBOX);
-
-    System.out.println("Old value is: " + checkboxField.getValueAsString());
-
-    checkboxField.setValue("Off");
-    System.out.println("New value is: " + checkboxField.getValueAsString());
-
-    //SET NEW DATE VALUE
-    System.out.println("\n" + "Modifying date...");
-    final var dateField = acroForm.getField(FIELD_DATE);
-
-    System.out.println("Old value is: " + dateField.getValueAsString());
-
-    dateField.setValue("2024-02-02");
-    System.out.println("New value is: " + dateField.getValueAsString());
-
-    //ADD FOOTER TEXT
-    System.out.println("\n" + "Adding footer text on the first page...");
-
-    final var page = pdfDocument.getPage(0);
-    PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, page,
-        AppendMode.APPEND, true, true);
-
-    contentStream.beginText();
-    final var text = "Footer text";
-    contentStream.newLineAtOffset(250, 25);
-    contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
-    contentStream.showText(text);
-    contentStream.endText();
-    contentStream.close();
-
-    //ADD WATERMARK ON PDF
     System.out.println("\n" + "Adding watermark on PDF...NOT DONE");
 
     //MAKE PDF READ-ONLY
     acroForm.flatten();
     System.out.println("\n" + "The PDF has been set to read-only");
 
-    // SAVE AND CLOSE PDF
-    pdfDocument.save("lisjp.pdf");
-    pdfDocument.close();
-    System.out.println("\n" + "The PDF has been saved");
-
     //Ta bort hjälprutorna
     //Kolla upp om det är möjligt att signera PDFer med PdfBox
 
   }
 
+  private static void fillFooter(PDDocument pdfDocument) throws IOException {
+    final var text = "Footer text";
+    final var page = pdfDocument.getPage(0);
+    final var contentStream = new PDPageContentStream(pdfDocument, page,
+        AppendMode.APPEND, true, true);
+
+    System.out.println("\n" + "Adding footer text on the first page...");
+
+    contentStream.beginText();
+    contentStream.newLineAtOffset(250, 25);
+    contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
+    contentStream.showText(text);
+    contentStream.endText();
+    contentStream.close();
+  }
 }
