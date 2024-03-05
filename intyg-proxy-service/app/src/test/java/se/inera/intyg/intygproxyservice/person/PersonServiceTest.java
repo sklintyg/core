@@ -16,8 +16,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.intygproxyservice.integration.api.pu.Person;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
-import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse.Status;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuService;
+import se.inera.intyg.intygproxyservice.person.dto.PersonDTO;
+import se.inera.intyg.intygproxyservice.person.dto.PersonRequest;
+import se.inera.intyg.intygproxyservice.person.dto.StatusDTOType;
+import se.inera.intyg.intygproxyservice.person.service.PersonDTOMapperImpl;
+import se.inera.intyg.intygproxyservice.person.service.PersonService;
 
 @ExtendWith(MockitoExtension.class)
 class PersonServiceTest {
@@ -32,6 +36,10 @@ class PersonServiceTest {
   @InjectMocks
   private PersonService personService;
 
+  @BeforeEach
+  void setUp() {
+    personService = new PersonService(puService, new PersonDTOMapperImpl());
+  }
 
   @Nested
   class RequestValidation {
@@ -84,13 +92,14 @@ class PersonServiceTest {
     @Test
     void shallReturnStatusFound() {
       final var personResponse = personService.findPerson(PU_REQUEST);
-      assertEquals(Status.FOUND, personResponse.getStatus());
+      assertEquals(StatusDTOType.FOUND, personResponse.getStatus());
     }
 
     @Test
     void shallReturnPersonFound() {
+      final var expectedPerson = PersonDTO.builder().build();
       final var personResponse = personService.findPerson(PU_REQUEST);
-      assertEquals(puResponseFound.getPerson(), personResponse.getPerson());
+      assertEquals(expectedPerson, personResponse.getPerson());
     }
   }
 
@@ -109,7 +118,7 @@ class PersonServiceTest {
     @Test
     void shallReturnStatusNotFound() {
       final var personResponse = personService.findPerson(PU_REQUEST);
-      assertEquals(Status.NOT_FOUND, personResponse.getStatus());
+      assertEquals(StatusDTOType.NOT_FOUND, personResponse.getStatus());
     }
 
     @Test
@@ -134,7 +143,7 @@ class PersonServiceTest {
     @Test
     void shallReturnStatusError() {
       final var personResponse = personService.findPerson(PU_REQUEST);
-      assertEquals(Status.ERROR, personResponse.getStatus());
+      assertEquals(StatusDTOType.ERROR, personResponse.getStatus());
     }
 
     @Test

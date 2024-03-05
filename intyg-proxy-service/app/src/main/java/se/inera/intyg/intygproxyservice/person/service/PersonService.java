@@ -1,17 +1,21 @@
-package se.inera.intyg.intygproxyservice.person;
+package se.inera.intyg.intygproxyservice.person.service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse.Status;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuService;
+import se.inera.intyg.intygproxyservice.person.dto.PersonRequest;
+import se.inera.intyg.intygproxyservice.person.dto.PersonResponse;
+import se.inera.intyg.intygproxyservice.person.dto.StatusDTOType;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PersonService {
 
   private final PuService puService;
+  private final PersonDTOMapper personDTOMapper;
 
   public PersonResponse findPerson(PersonRequest personRequest) {
     validateRequest(personRequest);
@@ -42,13 +46,16 @@ public class PersonService {
     );
   }
 
-  private static PersonResponse convert(PuResponse puResponse) {
+  private PersonResponse convert(PuResponse puResponse) {
     return PersonResponse.builder()
         .person(
-            Status.FOUND.equals(puResponse.getStatus()) ? puResponse.getPerson() : null
+            Status.FOUND.equals(
+                puResponse.getStatus())
+                ? personDTOMapper.toDTO(puResponse.getPerson())
+                : null
         )
         .status(
-            puResponse.getStatus()
+            StatusDTOType.valueOf(puResponse.getStatus().name())
         )
         .build();
   }
