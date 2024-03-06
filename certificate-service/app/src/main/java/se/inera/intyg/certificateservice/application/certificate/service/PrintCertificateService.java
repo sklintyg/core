@@ -81,9 +81,6 @@ public class PrintCertificateService {
     System.out.println("\n" + "Removing fields...NOT DONE");
     removingFields(pdfDocument);
 
-    System.out.println("\n" + "Signing PDF...NOT DONE");
-    signingPDF(pdfDocument);
-
     System.out.println("\n" + "Setting the PDF as read-only...");
     acroForm.flatten();
 
@@ -100,26 +97,29 @@ public class PrintCertificateService {
   }
 
   private static void fillFooter(PDDocument pdfDocument) throws IOException {
-    final var text = "Footer text";
+    final var text = "Det här intyget är utksrivet via Webcert";
+    final var fontSize = 9;
     final var page = pdfDocument.getPage(0);
+    final var font = PDType1Font.HELVETICA;
     final var contentStream = new PDPageContentStream(pdfDocument, page,
         AppendMode.APPEND, true, true);
 
     System.out.println("\n" + "Adding footer text on the first page...");
 
+    float titleWidth = font.getStringWidth(text) / 1000 * fontSize;
+    float titleHeight = font.getFontDescriptor().getFontBoundingBox().getHeight() / 1000 * fontSize;
     contentStream.beginText();
-    contentStream.newLineAtOffset(250, 25);
-    contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
-    contentStream.showText(text);
+    contentStream.newLineAtOffset((
+            page.getMediaBox().getWidth() - titleWidth) / 2,
+        titleHeight + 25
+    );
+    contentStream.setFont(font, fontSize);
+    contentStream.drawString(text);
     contentStream.endText();
     contentStream.close();
   }
 
   private static void removingFields(PDDocument pdfDocument) {
-
-  }
-
-  private static void signingPDF(PDDocument pdfDocument) {
 
   }
 }
