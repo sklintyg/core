@@ -38,10 +38,12 @@ public class PrintCertificateService {
 
   public static final String NEW_PATIENT_ID = "20121212-1212";
 
+  public ClassLoader classLoader = getClass().getClassLoader();
+
+
   @SneakyThrows
   public void get() {
-    ClassLoader classLoader = getClass().getClassLoader();
-    File file = new File(classLoader.getResource("fk7804-005-f-001_olast_2111222.pdf").getFile());
+    File file = new File(classLoader.getResource("fk7804_ifylld.pdf").getFile());
     final var pdfDocument = PDDocument.load(new File(String.valueOf(file)));
 
     fillPDF(pdfDocument);
@@ -50,7 +52,7 @@ public class PrintCertificateService {
   }
 
   @SneakyThrows
-  public static void setField(String name, String value, PDDocument pdfDocument) {
+  public void setField(String name, String value, PDDocument pdfDocument) {
     final var docCatalog = pdfDocument.getDocumentCatalog();
     final var acroForm = docCatalog.getAcroForm();
     final var field = acroForm.getField(name);
@@ -65,7 +67,7 @@ public class PrintCertificateService {
   }
 
   @SneakyThrows
-  public static void fillPDF(PDDocument pdfDocument) {
+  public void fillPDF(PDDocument pdfDocument) {
     final var docCatalog = pdfDocument.getDocumentCatalog();
     final var acroForm = docCatalog.getAcroForm();
 
@@ -87,16 +89,16 @@ public class PrintCertificateService {
   }
 
   @SneakyThrows
-  private static void addWatermark(PDDocument pdfDocument) {
+  private void addWatermark(PDDocument pdfDocument) {
+    File file = new File(classLoader.getResource("UTKAST.pdf").getFile());
     final var overlay = new Overlay();
     overlay.setInputPDF(pdfDocument);
     overlay.setOverlayPosition(Position.BACKGROUND);
-    overlay.setAllPagesOverlayFile(
-        "C:\\Users\\mhoernfeldt\\Documents\\intyg\\core\\certificate-service\\app\\src\\main\\java\\se\\inera\\intyg\\certificateservice\\application\\certificate\\service\\UTKAST.pdf");
+    overlay.setAllPagesOverlayFile(String.valueOf(file));
     overlay.overlay(new HashMap<>()).save("lisjp.pdf");
   }
 
-  private static void fillFooter(PDDocument pdfDocument) throws IOException {
+  private void fillFooter(PDDocument pdfDocument) throws IOException {
     final var text = "Det här intyget är utksrivet via Webcert";
     final var fontSize = 9;
     final var page = pdfDocument.getPage(0);
@@ -119,7 +121,7 @@ public class PrintCertificateService {
     contentStream.close();
   }
 
-  private static void removingFields(PDDocument pdfDocument) {
+  private void removingFields(PDDocument pdfDocument) {
 
   }
 }
