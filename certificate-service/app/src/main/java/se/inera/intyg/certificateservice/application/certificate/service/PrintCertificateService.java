@@ -37,9 +37,9 @@ public class PrintCertificateService {
 
   @SneakyThrows
   public void get() {
-    final var pathTemplate = "C:\\Users\\mhoernfeldt\\Documents\\intyg\\core\\certificate-service\\app\\src\\main\\java\\se\\inera\\intyg\\certificateservice\\application\\certificate\\service\\fk7804.pdf";
-
-    final var pdfDocument = PDDocument.load(new File(pathTemplate));
+    ClassLoader classLoader = getClass().getClassLoader();
+    File file = new File(classLoader.getResource("fk7804-005-f-001_olast_2111222.pdf").getFile());
+    final var pdfDocument = PDDocument.load(new File(String.valueOf(file)));
 
     fillPDF(pdfDocument);
     pdfDocument.save("lisjp.pdf");
@@ -52,7 +52,7 @@ public class PrintCertificateService {
     final var acroForm = docCatalog.getAcroForm();
     final var field = acroForm.getField(name);
     if (field != null) {
-      System.out.println("Modifying field with name " + name);
+      System.out.println("\n" + "Modifying field with name " + name);
       System.out.println("Old value is: " + field.getValueAsString());
       field.setValue(value);
       System.out.println("New value is: " + field.getValueAsString());
@@ -73,13 +73,16 @@ public class PrintCertificateService {
     fillFooter(pdfDocument);
 
     System.out.println("\n" + "Adding watermark on PDF...NOT DONE");
+    addWatermark(pdfDocument);
 
-    //MAKE PDF READ-ONLY
+    System.out.println("\n" + "Removing fields...NOT DONE");
+    removingFields(pdfDocument);
+
+    System.out.println("\n" + "Signing PDF...NOT DONE");
+    signingPDF(pdfDocument);
+
+    System.out.println("\n" + "Setting the PDF as read-only...");
     acroForm.flatten();
-    System.out.println("\n" + "The PDF has been set to read-only");
-
-    //Ta bort hjälprutorna
-    //Kolla upp om det är möjligt att signera PDFer med PdfBox
 
   }
 
@@ -97,5 +100,17 @@ public class PrintCertificateService {
     contentStream.showText(text);
     contentStream.endText();
     contentStream.close();
+  }
+
+  private static void addWatermark(PDDocument pdfDocument) {
+
+  }
+
+  private static void removingFields(PDDocument pdfDocument) {
+
+  }
+
+  private static void signingPDF(PDDocument pdfDocument) {
+
   }
 }
