@@ -43,7 +43,7 @@ public class PrintCertificateService {
 
   @SneakyThrows
   public void get() {
-    File file = new File(classLoader.getResource("fk7804_ifylld.pdf").getFile());
+    File file = new File(classLoader.getResource("fk7804_ifylld_utan_hjalptext.pdf").getFile());
     final var pdfDocument = PDDocument.load(new File(String.valueOf(file)));
 
     fillPDF(pdfDocument);
@@ -77,11 +77,8 @@ public class PrintCertificateService {
 
     fillFooter(pdfDocument);
 
-    System.out.println("\n" + "Adding watermark on PDF...NOT DONE");
+    System.out.println("\n" + "Adding watermark on PDF...");
     addWatermark(pdfDocument);
-
-    System.out.println("\n" + "Removing fields...NOT DONE");
-    removingFields(pdfDocument);
 
     System.out.println("\n" + "Setting the PDF as read-only...");
     acroForm.flatten();
@@ -119,9 +116,5 @@ public class PrintCertificateService {
     contentStream.drawString(text);
     contentStream.endText();
     contentStream.close();
-  }
-
-  private void removingFields(PDDocument pdfDocument) {
-
   }
 }
