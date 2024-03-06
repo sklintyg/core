@@ -21,7 +21,10 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import lombok.SneakyThrows;
+import org.apache.pdfbox.multipdf.Overlay;
+import org.apache.pdfbox.multipdf.Overlay.Position;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
@@ -86,6 +89,16 @@ public class PrintCertificateService {
 
   }
 
+  @SneakyThrows
+  private static void addWatermark(PDDocument pdfDocument) {
+    final var overlay = new Overlay();
+    overlay.setInputPDF(pdfDocument);
+    overlay.setOverlayPosition(Position.BACKGROUND);
+    overlay.setAllPagesOverlayFile(
+        "C:\\Users\\mhoernfeldt\\Documents\\intyg\\core\\certificate-service\\app\\src\\main\\java\\se\\inera\\intyg\\certificateservice\\application\\certificate\\service\\UTKAST.pdf");
+    overlay.overlay(new HashMap<>()).save("lisjp.pdf");
+  }
+
   private static void fillFooter(PDDocument pdfDocument) throws IOException {
     final var text = "Footer text";
     final var page = pdfDocument.getPage(0);
@@ -100,10 +113,6 @@ public class PrintCertificateService {
     contentStream.showText(text);
     contentStream.endText();
     contentStream.close();
-  }
-
-  private static void addWatermark(PDDocument pdfDocument) {
-
   }
 
   private static void removingFields(PDDocument pdfDocument) {
