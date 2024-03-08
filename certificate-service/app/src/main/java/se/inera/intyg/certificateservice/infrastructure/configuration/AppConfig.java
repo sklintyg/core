@@ -9,12 +9,14 @@ import se.inera.intyg.certificateservice.domain.certificate.service.DeleteCertif
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ValidateCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventSubscriber;
 import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesInfoDomainService;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorCertificateV4;
 
 @Configuration
 public class AppConfig {
@@ -79,5 +81,10 @@ public class AppConfig {
   public CertificateEventDomainService certificateEventDomainService(
       List<CertificateEventSubscriber> subscribers) {
     return new CertificateEventDomainService(subscribers);
+  }
+
+  @Bean
+  public XmlGenerator xmlGenerator() {
+    return new XmlGeneratorCertificateV4();
   }
 }

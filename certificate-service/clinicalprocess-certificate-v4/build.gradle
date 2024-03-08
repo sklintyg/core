@@ -1,0 +1,19 @@
+dependencies {
+    implementation project(':domain')
+
+    implementation "se.inera.intyg.schemas:schemas-contract:${schemasContractVersion}"
+    implementation "se.riv.clinicalprocess.healthcond.certificate:clinicalprocess-healthcond-certificate-schemas:${rivtaClinicalprocessSchemasVersion}"
+
+    compileOnly "org.projectlombok:lombok"
+    compileOnly "org.slf4j:slf4j-api"
+    annotationProcessor "org.projectlombok:lombok"
+
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testImplementation "org.junit.jupiter:junit-jupiter-params"
+    testImplementation "org.mockito:mockito-junit-jupiter"
+    testRuntimeOnly "org.slf4j:slf4j-simple"
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
