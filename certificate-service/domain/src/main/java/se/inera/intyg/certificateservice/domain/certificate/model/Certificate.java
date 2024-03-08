@@ -72,7 +72,7 @@ public class Certificate {
 
   public void updateData(List<ElementData> newData, Revision revision,
       ActionEvaluation actionEvaluation) {
-    throwIfConcurrentModiciation(revision, "update", actionEvaluation);
+    throwIfConcurrentModification(revision, "update", actionEvaluation);
     final var missingIds = newData.stream()
         .filter(newDataElement -> !certificateModel.elementSpecificationExists(newDataElement.id()))
         .map(newDataElement -> newDataElement.id().id())
@@ -89,7 +89,7 @@ public class Certificate {
   }
 
   public void delete(Revision revision, ActionEvaluation actionEvaluation) {
-    throwIfConcurrentModiciation(revision, "delete", actionEvaluation);
+    throwIfConcurrentModification(revision, "delete", actionEvaluation);
     if (this.status != Status.DRAFT) {
       throw new IllegalStateException(
           "Incorrect status '%s' - required status is '%s' to delete".formatted(this.status,
@@ -116,7 +116,7 @@ public class Certificate {
         .build();
   }
 
-  private void throwIfConcurrentModiciation(Revision revision, String operation,
+  private void throwIfConcurrentModification(Revision revision, String operation,
       ActionEvaluation actionEvaluation) {
     if (!this.revision.equals(revision)) {
       throw new ConcurrentModificationException(
