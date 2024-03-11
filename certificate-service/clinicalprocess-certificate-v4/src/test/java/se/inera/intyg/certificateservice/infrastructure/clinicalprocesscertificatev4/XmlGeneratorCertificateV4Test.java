@@ -31,8 +31,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
+import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
+import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
 import se.riv.clinicalprocess.healthcond.certificate.registerCertificate.v3.RegisterCertificateType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.ArbetsplatsKod;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.Befattning;
@@ -282,16 +283,17 @@ class XmlGeneratorCertificateV4Test {
     );
   }
 
-  private RegisterCertificateType unmarshal(String response) {
+  private RegisterCertificateType unmarshal(Xml response) {
     try {
       System.out.println(response);
       final var context = JAXBContext.newInstance(RegisterCertificateType.class);
       final var unmarshaller = context.createUnmarshaller();
-      final var stringReader = new StringReader(response);
+      final var stringReader = new StringReader(response.xml());
       final var jaxbElement = (JAXBElement<RegisterCertificateType>) unmarshaller.unmarshal(
           stringReader);
       return jaxbElement.getValue();
     } catch (Exception ex) {
+      ex.printStackTrace();
       throw new IllegalStateException(ex);
     }
   }

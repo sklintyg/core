@@ -23,6 +23,8 @@ import se.inera.intyg.certificateservice.application.common.ActionEvaluationFact
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateXml;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
+import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateXmlDomainService;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.user.model.User;
@@ -32,6 +34,13 @@ class GetCertificateXmlServiceTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
   private static final String XML = "XML";
+  private static final long VERSION = 99;
+  private static final CertificateXml CERTIFICATE_XML = CertificateXml.builder()
+      .certificateId(new CertificateId(CERTIFICATE_ID))
+      .revision(new Revision(VERSION))
+      .xml(new Xml(XML))
+      .build();
+
   public static final GetCertificateXmlRequest REQUEST = GetCertificateXmlRequest.builder()
       .user(AJLA_DOCTOR_DTO)
       .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
@@ -76,7 +85,7 @@ class GetCertificateXmlServiceTest {
           ALFA_REGIONEN_DTO
       );
 
-      doReturn(new CertificateXml(XML)).when(getCertificateXmlDomainService).get(
+      doReturn(CERTIFICATE_XML).when(getCertificateXmlDomainService).get(
           new CertificateId(CERTIFICATE_ID),
           actionEvaluation
       );
@@ -85,7 +94,9 @@ class GetCertificateXmlServiceTest {
     @Test
     void shallReturnResponseWithXml() {
       final var expectedResponse = GetCertificateXmlResponse.builder()
+          .certificateId(CERTIFICATE_ID)
           .xml(XML)
+          .version(VERSION)
           .build();
 
       final var actualResult = getCertificateXmlService.get(

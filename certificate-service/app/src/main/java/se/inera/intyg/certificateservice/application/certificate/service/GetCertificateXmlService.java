@@ -26,13 +26,15 @@ public class GetCertificateXmlService {
         request.getCareProvider()
     );
 
-    final var xml = getCertificateXmlDomainService.get(
+    final var certificateXml = getCertificateXmlDomainService.get(
         new CertificateId(certificateId),
         actionEvaluation
     );
 
     return GetCertificateXmlResponse.builder()
-        .xml(xml.xml())
+        .certificateId(certificateXml.certificateId().id())
+        .xml(certificateXml.xml().xml())
+        .version(certificateXml.revision().value())
         .build();
   }
 }

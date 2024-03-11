@@ -25,6 +25,12 @@ public class GetCertificateXmlDomainService {
 
     certificate.updateMetadata(actionEvaluation);
 
-    return xmlGenerator.generate(certificate);
+    final var xml = xmlGenerator.generate(certificate);
+    
+    return CertificateXml.builder()
+        .certificateId(certificate.id())
+        .revision(certificate.revision())
+        .xml(xml)
+        .build();
   }
 }

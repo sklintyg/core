@@ -1,5 +1,13 @@
 package se.inera.intyg.certificateservice.domain.certificate.model;
 
-public record CertificateXml(String xml) {
+import lombok.Builder;
+import lombok.Value;
 
+@Value
+@Builder
+public class CertificateXml {
+
+  CertificateId certificateId;
+  Revision revision;
+  Xml xml;
 }

@@ -16,6 +16,9 @@ import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateXml;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
+import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 
@@ -23,8 +26,14 @@ import se.inera.intyg.certificateservice.domain.common.exception.CertificateActi
 class GetCertificateXmlDomainServiceTest {
 
   private static final CertificateId CERTIFICATE_ID = new CertificateId("certificateId");
+  private static final Revision REVISION = new Revision(99);
   private static final ActionEvaluation ACTION_EVALUATION = ActionEvaluation.builder().build();
-  public static final String XML = "XML";
+  public static final Xml XML = new Xml("XML");
+  public static final CertificateXml CERTIFICATE_XML = CertificateXml.builder()
+      .certificateId(CERTIFICATE_ID)
+      .revision(REVISION)
+      .xml(XML)
+      .build();
 
   @Mock
   private Certificate certificate;
@@ -47,6 +56,8 @@ class GetCertificateXmlDomainServiceTest {
     @BeforeEach
     void setup() {
       doReturn(true).when(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
+      doReturn(CERTIFICATE_ID).when(certificate).id();
+      doReturn(REVISION).when(certificate).revision();
     }
 
     @Test
@@ -56,14 +67,19 @@ class GetCertificateXmlDomainServiceTest {
     }
 
     @Test
-    void shallReturnXmlFromXmlGenerator() {
+    void shallReturnResponseWithXMLFromGenerator() {
       doReturn(XML).when(xmlGenerator).generate(certificate);
 
       final var response = getCertificateXmlDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION);
 
-      assertEquals(XML, response.xml());
+      assertEquals(CERTIFICATE_XML, response);
     }
 
+    @Test
+    void shallUpdateCertificateMetadata() {
+      getCertificateXmlDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION);
+      verify(certificate).updateMetadata(ACTION_EVALUATION);
+    }
   }
 
   @Test

@@ -11,6 +11,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 @Builder
 public class GetCertificateXmlResponse {
 
+  String certificateId;
+  long version;
   String xml;
 
   @JsonPOJOBuilder(withPrefix = "")
