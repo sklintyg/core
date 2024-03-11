@@ -61,7 +61,7 @@ class GetCertificateXmlDomainServiceTest {
 
       final var response = getCertificateXmlDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION);
 
-      assertEquals(XML, response);
+      assertEquals(XML, response.xml());
     }
 
   }
