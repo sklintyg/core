@@ -101,6 +101,10 @@ public class ApiRequestUtil {
     return DeleteCertificateRequestBuilder.create();
   }
 
+  public static GetCertificateXmlRequestBuilder customGetCertificateXmlRequest() {
+    return GetCertificateXmlRequestBuilder.create();
+  }
+
   public static TestabilityCertificateRequestBuilder customTestabilityCertificateRequest(
       String type,
       String version) {

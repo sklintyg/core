@@ -3,6 +3,8 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
@@ -27,9 +29,11 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
 import java.io.StringReader;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
@@ -45,10 +49,18 @@ import se.riv.clinicalprocess.healthcond.certificate.types.v3.TypAvIntyg;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Enhet;
 import se.riv.clinicalprocess.healthcond.certificate.v3.HosPersonal;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Patient;
+import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
+import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Vardgivare;
 
 @ExtendWith(MockitoExtension.class)
 class XmlGeneratorCertificateV4Test {
+
+  private static final String SUB_ANSWER_ID = "SUB_ANSWER_ID";
+  private static final String ANSWER_ID = "ANSWER_ID";
+
+  @Mock
+  XmlGeneratorValue xmlGeneratorValue;
 
   @InjectMocks
   XmlGeneratorCertificateV4 xmlGeneratorCertificateV4;
@@ -280,6 +292,27 @@ class XmlGeneratorCertificateV4Test {
         () -> assertEquals(expected.getVardgivareId().getExtension(),
             vardgivare.getVardgivareId().getExtension()),
         () -> assertEquals(expected.getVardgivarnamn(), vardgivare.getVardgivarnamn())
+    );
+  }
+
+  @Test
+  void shouldIncludeAnswers() {
+    final var answer = new Svar();
+    final var subAnswer = new Delsvar();
+    subAnswer.setId(SUB_ANSWER_ID);
+    answer.setId(ANSWER_ID);
+    answer.getDelsvar().add(subAnswer);
+    final var expectedAnswers = List.of(answer);
+    when(xmlGeneratorValue.generate(any()))
+        .thenReturn(expectedAnswers);
+
+    final var answers = unmarshal(
+        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE)
+    ).getIntyg().getSvar();
+
+    assertAll(
+        () -> assertEquals(ANSWER_ID, answers.get(0).getId()),
+        () -> assertEquals(SUB_ANSWER_ID, answers.get(0).getDelsvar().get(0).getId())
     );
   }
 

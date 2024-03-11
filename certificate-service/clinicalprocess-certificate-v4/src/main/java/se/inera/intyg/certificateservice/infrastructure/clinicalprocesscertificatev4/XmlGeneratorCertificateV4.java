@@ -4,6 +4,8 @@ import static se.inera.intyg.certificateservice.domain.common.model.HsaId.OID;
 
 import jakarta.xml.bind.JAXBContext;
 import java.io.StringWriter;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
@@ -24,13 +26,17 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Enhet;
 import se.riv.clinicalprocess.healthcond.certificate.v3.HosPersonal;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Intyg;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Patient;
+import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Vardgivare;
 
+@RequiredArgsConstructor
 public class XmlGeneratorCertificateV4 implements XmlGenerator {
 
   private static final String EMPTY = "";
   private static final String NOT_APPLICABLE = "N/A";
   private static final String PRESCRIPTION_CODE_MASKED = "0000000";
+
+  private final XmlGeneratorValue xmlGeneratorValue;
 
   @Override
   public Xml generate(Certificate certificate) {
@@ -41,7 +47,8 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
                 version(certificate),
                 typAvIntyg(certificate),
                 patient(certificate),
-                skapadAv(certificate)
+                skapadAv(certificate),
+                svar(certificate)
             )
         )
     );
@@ -54,14 +61,19 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
   }
 
   private static Intyg intyg(IntygId intygId, String version, TypAvIntyg typAvIntyg,
-      Patient patient, HosPersonal skapadAv) {
+      Patient patient, HosPersonal skapadAv, List<Svar> answers) {
     final var intyg = new Intyg();
     intyg.setIntygsId(intygId);
     intyg.setVersion(version);
     intyg.setTyp(typAvIntyg);
     intyg.setPatient(patient);
     intyg.setSkapadAv(skapadAv);
+    intyg.getSvar().addAll(answers);
     return intyg;
+  }
+
+  private List<Svar> svar(Certificate certificate) {
+    return xmlGeneratorValue.generate(certificate.elementData());
   }
 
   private static IntygId intygsId(Certificate certificate) {

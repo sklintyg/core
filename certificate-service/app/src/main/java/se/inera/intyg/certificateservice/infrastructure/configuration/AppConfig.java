@@ -18,6 +18,7 @@ import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertif
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesInfoDomainService;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorCertificateV4;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorValue;
 
 @Configuration
 public class AppConfig {
@@ -91,7 +92,12 @@ public class AppConfig {
   }
 
   @Bean
-  public XmlGenerator xmlGenerator() {
-    return new XmlGeneratorCertificateV4();
+  public XmlGeneratorValue xmlGeneratorValue() {
+    return new XmlGeneratorValue();
+  }
+
+  @Bean
+  public XmlGenerator xmlGenerator(XmlGeneratorValue xmlGeneratorValue) {
+    return new XmlGeneratorCertificateV4(xmlGeneratorValue);
   }
 }

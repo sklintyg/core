@@ -26,6 +26,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customDeleteCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetCertificateXmlRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetPatientCertificatesRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetUnitCertificatesInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetUnitCertificatesRequest;
@@ -558,7 +559,7 @@ class FK7211ActiveIT {
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
-      final var questionId = "FRG_1";
+      final var questionId = "1";
       final var expectedDate = LocalDate.now().plusDays(5);
       final var certificate = certificate(testCertificates);
 
@@ -610,7 +611,7 @@ class FK7211ActiveIT {
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      final var questionId = "FRG_1";
+      final var questionId = "1";
       final var expectedDate = LocalDate.now().plusDays(5);
       final var certificate = certificate(testCertificates);
 
@@ -640,7 +641,7 @@ class FK7211ActiveIT {
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      final var questionId = "FRG_1";
+      final var questionId = "1";
       final var expectedDate = LocalDate.now().plusDays(5);
       final var certificate = certificate(testCertificates);
 
@@ -671,7 +672,7 @@ class FK7211ActiveIT {
               .build()
       );
 
-      final var questionId = "FRG_1";
+      final var questionId = "1";
       final var expectedDate = LocalDate.now().plusDays(5);
       final var certificate = certificate(testCertificates);
 
@@ -1519,7 +1520,7 @@ class FK7211ActiveIT {
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      final var questionId = "FRG_1";
+      final var questionId = "1";
       final var expectedDate = LocalDate.now().plusDays(5);
       final var certificate = certificate(testCertificates);
 
@@ -1560,7 +1561,7 @@ class FK7211ActiveIT {
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      final var questionId = "FRG_1";
+      final var questionId = "1";
       final var expectedDate = LocalDate.now().plusDays(5);
       final var certificate = certificate(testCertificates);
 
@@ -1633,7 +1634,7 @@ class FK7211ActiveIT {
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      final var questionId = "FRG_1";
+      final var questionId = "1";
       final var date = LocalDate.now().plusDays(5);
       final var certificate = certificate(testCertificates);
 
@@ -1660,7 +1661,7 @@ class FK7211ActiveIT {
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      final var questionId = "FRG_1";
+      final var questionId = "1";
       final var date = LocalDate.now().minusDays(1);
       final var certificate = certificate(testCertificates);
 
@@ -1696,7 +1697,7 @@ class FK7211ActiveIT {
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      final var questionId = "FRG_1";
+      final var questionId = "1";
       final var date = LocalDate.now().plusYears(1).plusDays(1);
       final var certificate = certificate(testCertificates);
 
@@ -1732,7 +1733,7 @@ class FK7211ActiveIT {
           defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
-      final var questionId = "FRG_1";
+      final var questionId = "1";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
@@ -1773,7 +1774,7 @@ class FK7211ActiveIT {
               .withAddress("")
       );
 
-      final var questionId = "FRG_1";
+      final var questionId = "1";
       Objects.requireNonNull(
           certificate.getData().put(
               questionId,
@@ -1814,7 +1815,7 @@ class FK7211ActiveIT {
               .withZipCode("")
       );
 
-      final var questionId = "FRG_1";
+      final var questionId = "1";
       Objects.requireNonNull(
           certificate.getData().put(
               questionId,
@@ -1855,7 +1856,7 @@ class FK7211ActiveIT {
               .withCity("")
       );
 
-      final var questionId = "FRG_1";
+      final var questionId = "1";
       Objects.requireNonNull(
           certificate.getData().put(
               questionId,
@@ -1896,7 +1897,7 @@ class FK7211ActiveIT {
               .withPhoneNumber("")
       );
 
-      final var questionId = "FRG_1";
+      final var questionId = "1";
       Objects.requireNonNull(
           certificate.getData().put(
               questionId,
@@ -1923,5 +1924,42 @@ class FK7211ActiveIT {
           )
       );
     }
+  }
+
+  @Nested
+  @DisplayName("FK7211 - Hämta intygsxml")
+  class GetCertificateXml {
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på samma vårdenhet ska XML returneras")
+    void shallReturnCertificateXMLIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build()
+      );
+
+      final var response = api.getCertificateXml(
+          customGetCertificateXmlRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertNotNull(response, "Should return non null response"),
+          () -> assertNotNull(response.getBody(), "Should return non null response body"),
+          () -> assertNotNull(response.getBody().getXml(),
+              "Should return certificate xml when exists"
+          ),
+          () -> assertNotNull(response.getBody().getCertificateId(),
+              "Should return certificate id when exists"
+          ),
+          () -> assertNotNull(response.getBody().getVersion(),
+              "Should return certificate version when exists"
+          )
+      );
+    }
+
   }
 }

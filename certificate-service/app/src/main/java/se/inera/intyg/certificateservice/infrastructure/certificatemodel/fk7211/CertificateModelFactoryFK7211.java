@@ -48,7 +48,8 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
       .build();
   public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_CATEGORY_ID = new ElementId(
       "KAT_1");
-  public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_ID = new ElementId("FRG_1");
+  public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_ID = new ElementId("1");
+  private static final String QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID = "1.1";
 
   @Override
   public CertificateModel create() {
@@ -112,7 +113,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         .configuration(
             ElementConfigurationDate.builder()
                 .name("Beräknat nedkomstdatum")
-                .id(new FieldId("beraknatnedkomstdatum"))
+                .id(new FieldId(QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID))
                 .min(Period.ofDays(0))
                 .max(Period.ofYears(1))
                 .build()
@@ -123,7 +124,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
                     .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
                     .type(ElementRuleType.MANDATORY)
                     .expression(
-                        new RuleExpression("$beraknatnedkomstdatum")
+                        new RuleExpression("$" + QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID)
                     )
                     .build()
             )
