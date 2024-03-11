@@ -16,6 +16,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
@@ -24,6 +26,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.Certifi
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ValidateCertificateService;
 
@@ -38,6 +41,7 @@ public class CertificateController {
   private final UpdateCertificateService updateCertificateService;
   private final DeleteCertificateService deleteCertificateService;
   private final ValidateCertificateService validateCertificateService;
+  private final SignCertificateService signCertificateService;
 
   @PostMapping
   CreateCertificateResponse createCertificate(
@@ -77,5 +81,12 @@ public class CertificateController {
       @RequestBody ValidateCertificateRequest validateCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
     return validateCertificateService.validate(validateCertificateRequest, certificateId);
+  }
+
+  @PostMapping("/{certificateId}/sign")
+  SignCertificateResponse signCertificate(
+      @RequestBody SignCertificateRequest signCertificateRequest,
+      @PathVariable("certificateId") String certificateId) {
+    return signCertificateService.sign(signCertificateRequest, certificateId);
   }
 }
