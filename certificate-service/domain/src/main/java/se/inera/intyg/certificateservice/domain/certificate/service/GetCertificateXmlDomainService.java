@@ -21,7 +21,9 @@ public class GetCertificateXmlDomainService {
           "Not allowed to read certificate for %s so cannot get XML".formatted(certificateId)
       );
     }
-    
+
+    certificate.updateMetadata(actionEvaluation);
+
     return xmlGenerator.generate(certificate);
   }
 }

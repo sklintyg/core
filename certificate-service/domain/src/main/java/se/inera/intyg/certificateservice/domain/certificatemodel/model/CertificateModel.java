@@ -9,12 +9,14 @@ import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 @Value
 @Builder
 public class CertificateModel {
 
   CertificateModelId id;
+  Code type;
   String name;
   String description;
   LocalDateTime activeFrom;

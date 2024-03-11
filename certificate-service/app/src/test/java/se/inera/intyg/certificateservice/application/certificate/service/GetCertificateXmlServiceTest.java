@@ -23,7 +23,7 @@ import se.inera.intyg.certificateservice.application.common.ActionEvaluationFact
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateXmlDomainService;
-import se.inera.intyg.certificateservice.domain.staff.model.Role;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
 @ExtendWith(MockitoExtension.class)

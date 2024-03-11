@@ -25,9 +25,11 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigDate;
+import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
+import se.inera.intyg.certificateservice.application.certificate.service.converter.ElementCertificateConverter;
 import se.inera.intyg.certificateservice.application.certificate.service.validation.UpdateCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
-import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
+import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
@@ -79,7 +81,7 @@ class UpdateCertificateServiceTest {
     final var expectedResult = UpdateCertificateResponse.builder()
         .certificate(expectedCertificateDTO)
         .build();
-    
+
     final var resourceLinkDTO = ResourceLinkDTO.builder().build();
     final var unitDTO = UnitDTO.builder().build();
     final var certificateDTO = CertificateDTO.builder()

@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoRequest.GetUnitCertificatesInfoRequestBuilder;
+import se.inera.intyg.certificateservice.application.unit.service.validator.GetUnitCertificatesInfoRequestValidator;
 
 class GetUnitCertificatesInfoRequestValidatorTest {
 

@@ -14,6 +14,7 @@ public class TestDataSubUnitConstants {
   public static final String ALFA_ALLERGIMOTTAGNINGEN_ADDRESS = "Storgatan 1";
   public static final String ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE = "12345";
   public static final String ALFA_ALLERGIMOTTAGNINGEN_CITY = "Småmåla";
+  public static final String ALFA_ALLERGIMOTTAGNINGEN_WORKPLACE_CODE = "1627";
   public static final Inactive ALFA_ALLERGIMOTTAGNINGEN_INACTIVE = INACTIVE_FALSE;
 
   public static final String ALFA_HUDMOTTAGNINGEN_ID = "TSTNMT2321000156-ALHM";
@@ -23,6 +24,7 @@ public class TestDataSubUnitConstants {
   public static final String ALFA_HUDMOTTAGNINGEN_ADDRESS = "Storgatan 1";
   public static final String ALFA_HUDMOTTAGNINGEN_ZIP_CODE = "12345";
   public static final String ALFA_HUDMOTTAGNINGEN_CITY = "Småmåla";
+  public static final String ALFA_HUDMOTTAGNINGEN_WORKPLACE_CODE = "1627";
   public static final Inactive ALFA_HUDMOTTAGNINGEN_INACTIVE = INACTIVE_FALSE;
 
 }

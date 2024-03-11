@@ -22,6 +22,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
@@ -53,6 +54,13 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
   public CertificateModel create() {
     return CertificateModel.builder()
         .id(FK7211_V1_0)
+        .type(
+            new Code(
+                "IGRAV",
+                "b64ea353-e8f6-4832-b563-fc7d46f29548",
+                NAME
+            )
+        )
         .name(NAME)
         .description(DESCRIPTION)
         .activeFrom(activeFrom)

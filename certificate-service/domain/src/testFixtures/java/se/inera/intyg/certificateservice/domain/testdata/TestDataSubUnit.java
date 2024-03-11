@@ -14,6 +14,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_INACTIVE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_WORKPLACE_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_ADDRESS;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_CITY;
@@ -29,6 +30,7 @@ import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitAddress;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitContactInfo;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
+import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
 
 public class TestDataSubUnit {
 
@@ -53,6 +55,7 @@ public class TestDataSubUnit {
                 .phoneNumber(ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER)
                 .build()
         )
+        .workplaceCode(new WorkplaceCode(ALFA_ALLERGIMOTTAGNINGEN_WORKPLACE_CODE))
         .inactive(ALFA_ALLERGIMOTTAGNINGEN_INACTIVE);
   }
 

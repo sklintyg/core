@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.testdata;
 
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
@@ -40,6 +41,7 @@ public class TestDataCertificate {
                         .version(FK7211_VERSION)
                         .build()
                 )
+                .type(FK7211_CODE_TYPE)
                 .build()
         )
         .certificateMetaData(

@@ -21,6 +21,7 @@ import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesRequest.GetUnitCertificatesRequestBuilder;
+import se.inera.intyg.certificateservice.application.unit.service.validator.GetUnitCertificatesRequestValidator;
 
 class GetUnitCertificatesRequestValidatorTest {
 
@@ -186,6 +187,23 @@ class GetUnitCertificatesRequestValidatorTest {
           () -> getUnitCertificatesRequestValidator.validate(request));
 
       assertEquals("Required parameter missing: Unit.id",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfWorkplaceCodeIsNull() {
+      final var request = requestBuilder
+          .unit(
+              alfaAllergimottagningenDtoBuilder()
+                  .workplaceCode(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getUnitCertificatesRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: Unit.workplaceCode",
           illegalArgumentException.getMessage());
     }
 
