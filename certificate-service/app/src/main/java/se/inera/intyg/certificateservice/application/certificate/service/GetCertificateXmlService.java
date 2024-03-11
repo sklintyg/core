@@ -32,7 +32,7 @@ public class GetCertificateXmlService {
     );
 
     return GetCertificateXmlResponse.builder()
-        .xml(xml)
+        .xml(xml.xml())
         .build();
   }
 }

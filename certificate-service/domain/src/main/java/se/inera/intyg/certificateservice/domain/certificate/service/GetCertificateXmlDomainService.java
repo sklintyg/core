@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateXml;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 
@@ -13,7 +14,7 @@ public class GetCertificateXmlDomainService {
   private final CertificateRepository certificateRepository;
   private final XmlGenerator xmlGenerator;
 
-  public String get(CertificateId certificateId, ActionEvaluation actionEvaluation) {
+  public CertificateXml get(CertificateId certificateId, ActionEvaluation actionEvaluation) {
     final var certificate = certificateRepository.getById(certificateId);
 
     if (!certificate.allowTo(CertificateActionType.READ, actionEvaluation)) {
@@ -24,6 +25,6 @@ public class GetCertificateXmlDomainService {
 
     certificate.updateMetadata(actionEvaluation);
 
-    return xmlGenerator.generate(certificate);
+    return new CertificateXml(xmlGenerator.generate(certificate));
   }
 }
