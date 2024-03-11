@@ -22,6 +22,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.validat
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateXml;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateXmlDomainService;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.user.model.User;
@@ -75,7 +76,7 @@ class GetCertificateXmlServiceTest {
           ALFA_REGIONEN_DTO
       );
 
-      doReturn(XML).when(getCertificateXmlDomainService).get(
+      doReturn(new CertificateXml(XML)).when(getCertificateXmlDomainService).get(
           new CertificateId(CERTIFICATE_ID),
           actionEvaluation
       );

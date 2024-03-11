@@ -6,10 +6,11 @@ import jakarta.xml.bind.JAXBContext;
 import java.io.StringWriter;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateXml;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
+import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
 import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
-import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
 import se.riv.clinicalprocess.healthcond.certificate.registerCertificate.v3.ObjectFactory;
 import se.riv.clinicalprocess.healthcond.certificate.registerCertificate.v3.RegisterCertificateType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.ArbetsplatsKod;
@@ -32,15 +33,17 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
   private static final String PRESCRIPTION_CODE_MASKED = "0000000";
 
   @Override
-  public String generate(Certificate certificate) {
-    return marshall(
-        registerCertificateType(
-            intyg(
-                intygsId(certificate),
-                version(certificate),
-                typAvIntyg(certificate),
-                patient(certificate),
-                skapadAv(certificate)
+  public CertificateXml generate(Certificate certificate) {
+    return new CertificateXml(
+        marshall(
+            registerCertificateType(
+                intyg(
+                    intygsId(certificate),
+                    version(certificate),
+                    typAvIntyg(certificate),
+                    patient(certificate),
+                    skapadAv(certificate)
+                )
             )
         )
     );
