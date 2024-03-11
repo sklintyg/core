@@ -185,6 +185,23 @@ class ValidateCertificateRequestValidatorTest {
     }
 
     @Test
+    void shallThrowIfWorkplaceCodeIsNull() {
+      final var request = requestBuilder
+          .unit(
+              alfaAllergimottagningenDtoBuilder()
+                  .workplaceCode(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> validateCertificateRequestValidator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: Unit.workplaceCode",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
     void shallThrowIfIsInactiveIsNull() {
       final var request = requestBuilder
           .unit(
