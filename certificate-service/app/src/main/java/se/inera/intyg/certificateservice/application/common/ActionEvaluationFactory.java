@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.domain.patient.model.PersonAddress;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
-import se.inera.intyg.certificateservice.domain.staff.model.Blocked;
+import se.inera.intyg.certificateservice.domain.common.model.Blocked;
 import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.Inactive;
@@ -21,6 +21,9 @@ import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitAddress;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitContactInfo;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
+import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
+import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
+import se.inera.intyg.certificateservice.domain.common.model.Speciality;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
 @Component
@@ -48,6 +51,18 @@ public class ActionEvaluationFactory {
                 )
                 .blocked(new Blocked(user.getBlocked()))
                 .role(user.getRole().toRole())
+                .paTitles(
+                    user.getPaTitles().stream()
+                        .map(paTitleDTO ->
+                            new PaTitle(paTitleDTO.getCode(), paTitleDTO.getDescription())
+                        )
+                        .toList()
+                )
+                .specialities(
+                    user.getSpecialities().stream()
+                        .map(Speciality::new)
+                        .toList()
+                )
                 .build()
         )
         .subUnit(
@@ -67,6 +82,7 @@ public class ActionEvaluationFactory {
                         .email(unit.getEmail())
                         .build()
                 )
+                .workplaceCode(new WorkplaceCode(unit.getWorkplaceCode()))
                 .inactive(new Inactive(unit.getInactive()))
                 .build()
         )

@@ -8,6 +8,10 @@ plugins {
 }
 
 ext {
+	cxfVersion = "4.0.0"
+	cxfPluginVersion = "4.0.0"
+	jaxb2NamespacePrefixVersion = "2.0"
+	jakartaWsVersion = "4.0.1"
 	guavaVersion = '33.0.0-jre'
 	logbackEcsEncoderVersion = '1.6.0'
 	springbootMavenBomVersion = '3.2.2'

@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.common.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO.UserDTOBuilder;
@@ -17,6 +18,8 @@ public class UserDTO {
   String lastName;
   String fullName;
   RoleTypeDTO role;
+  List<PaTitleDTO> paTitles;
+  List<String> specialities;
   Boolean blocked;
 
   @JsonPOJOBuilder(withPrefix = "")

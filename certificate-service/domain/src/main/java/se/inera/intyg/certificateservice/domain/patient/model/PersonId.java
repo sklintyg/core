@@ -9,4 +9,8 @@ public class PersonId {
 
   String id;
   PersonIdType type;
+
+  public String idWithoutDash() {
+    return id.replace("-", "");
+  }
 }

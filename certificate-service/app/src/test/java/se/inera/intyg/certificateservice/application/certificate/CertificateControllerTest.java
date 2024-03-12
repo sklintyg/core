@@ -17,6 +17,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
@@ -25,6 +27,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.Certifi
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateXmlService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ValidateCertificateService;
 
@@ -46,6 +49,8 @@ class CertificateControllerTest {
   private CreateCertificateService createCertificateService;
   @Mock
   private DeleteCertificateService deleteCertificateService;
+  @Mock
+  private GetCertificateXmlService getCertificateXmlService;
   @InjectMocks
   private CertificateController certificateController;
 
@@ -151,6 +156,19 @@ class CertificateControllerTest {
 
     final var actualResult = certificateController.validateCertificate(request,
         CERTIFICATE_ID);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnGetCertificateXmlResponse() {
+    final var request = GetCertificateXmlRequest.builder().build();
+    final var expectedResult = GetCertificateXmlResponse.builder()
+        .xml("XML")
+        .build();
+    doReturn(expectedResult).when(getCertificateXmlService).get(request, CERTIFICATE_ID);
+
+    final var actualResult = certificateController.getCertificateXml(request, CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
   }

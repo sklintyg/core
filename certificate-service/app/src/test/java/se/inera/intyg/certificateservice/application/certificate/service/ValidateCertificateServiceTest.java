@@ -20,6 +20,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidationErrorDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.service.converter.ElementCertificateConverter;
 import se.inera.intyg.certificateservice.application.certificate.service.validation.ValidateCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;

@@ -22,6 +22,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
@@ -34,22 +35,33 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
   private static final String FK_7211 = "fk7211";
   private static final String VERSION = "1.0";
   private static final String NAME = "Intyg om graviditet";
-  private static final String DESCRIPTION = "Intyg om graviditet "
-      + "Ungefär i vecka 20 får du ett intyg om graviditet av barnmorskan. Intyget anger "
-      + "också datum för beräknad förlossning. Intyget skickar du till Försäkringskassan, "
-      + "som ger besked om kommande föräldrapenning.";
+  private static final String DESCRIPTION = """
+      När en patient är gravid ska hen få ett intyg om graviditet av hälso- och sjukvården. Intyget behövs om föräldern begär ersättning från Försäkringskassan innan barnet är fött.
+            
+      Patienten ska:
+      Be barnmorskan, läkaren eller sjuksköterskan om ett intyg om graviditet
+      Barnmorskan, läkaren eller sjuksköterskan ska:
+      Skriva ett intyg om graviditet och skicka in intyget om graviditet till Försäkringskassan digitalt.""";
   public static final CertificateModelId FK7211_V1_0 = CertificateModelId.builder()
       .type(new CertificateType(FK_7211))
       .version(new CertificateVersion(VERSION))
       .build();
   public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_CATEGORY_ID = new ElementId(
       "KAT_1");
-  public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_ID = new ElementId("FRG_1");
+  public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_ID = new ElementId("1");
+  private static final String QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID = "1.1";
 
   @Override
   public CertificateModel create() {
     return CertificateModel.builder()
         .id(FK7211_V1_0)
+        .type(
+            new Code(
+                "IGRAV",
+                "b64ea353-e8f6-4832-b563-fc7d46f29548",
+                NAME
+            )
+        )
         .name(NAME)
         .description(DESCRIPTION)
         .activeFrom(activeFrom)
@@ -101,7 +113,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         .configuration(
             ElementConfigurationDate.builder()
                 .name("Beräknat nedkomstdatum")
-                .id(new FieldId("beraknatnedkomstdatum"))
+                .id(new FieldId(QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID))
                 .min(Period.ofDays(0))
                 .max(Period.ofYears(1))
                 .build()
@@ -112,7 +124,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
                     .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
                     .type(ElementRuleType.MANDATORY)
                     .expression(
-                        new RuleExpression("$beraknatnedkomstdatum")
+                        new RuleExpression("$" + QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID)
                     )
                     .build()
             )

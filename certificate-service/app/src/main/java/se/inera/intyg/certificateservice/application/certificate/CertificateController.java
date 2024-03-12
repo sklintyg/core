@@ -16,6 +16,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
@@ -24,6 +26,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.Certifi
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateXmlService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ValidateCertificateService;
 
@@ -38,6 +41,7 @@ public class CertificateController {
   private final UpdateCertificateService updateCertificateService;
   private final DeleteCertificateService deleteCertificateService;
   private final ValidateCertificateService validateCertificateService;
+  private final GetCertificateXmlService getCertificateXmlService;
 
   @PostMapping
   CreateCertificateResponse createCertificate(
@@ -78,4 +82,12 @@ public class CertificateController {
       @PathVariable("certificateId") String certificateId) {
     return validateCertificateService.validate(validateCertificateRequest, certificateId);
   }
+
+  @PostMapping("/{certificateId}/xml")
+  GetCertificateXmlResponse getCertificateXml(
+      @RequestBody GetCertificateXmlRequest getCertificateXmlRequest,
+      @PathVariable("certificateId") String certificateId) {
+    return getCertificateXmlService.get(getCertificateXmlRequest, certificateId);
+  }
+
 }
