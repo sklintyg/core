@@ -93,12 +93,11 @@ public class CertificateController {
       @PathVariable("certificateId") String certificateId) {
     return getCertificateXmlService.get(getCertificateXmlRequest, certificateId);
   }
-
-
-  @PostMapping("/{certificateId}/sign")
+  
+  @PostMapping("/{certificateId}/sign/{version}")
   SignCertificateResponse signCertificate(
       @RequestBody SignCertificateRequest signCertificateRequest,
-      @PathVariable("certificateId") String certificateId) {
-    return signCertificateService.sign(signCertificateRequest, certificateId);
+      @PathVariable("certificateId") String certificateId, @PathVariable("version") Long version) {
+    return signCertificateService.sign(signCertificateRequest, certificateId, version);
   }
 }

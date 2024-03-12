@@ -182,10 +182,12 @@ class CertificateControllerTest {
   void shallReturnSignCertificateResponse() {
     final var request = SignCertificateRequest.builder().build();
     final var expectedResult = SignCertificateResponse.builder()
+        .certificate(CertificateDTO.builder().build())
         .build();
-    doReturn(expectedResult).when(signCertificateService).sign(request, CERTIFICATE_ID);
+    doReturn(expectedResult).when(signCertificateService).sign(request, CERTIFICATE_ID, VERSION);
 
-    final var actualResult = certificateController.signCertificate(request, CERTIFICATE_ID);
+    final var actualResult = certificateController.signCertificate(request, CERTIFICATE_ID,
+        VERSION);
 
     assertEquals(expectedResult, actualResult);
   }

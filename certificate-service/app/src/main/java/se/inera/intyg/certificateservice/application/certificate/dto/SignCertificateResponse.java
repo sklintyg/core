@@ -12,6 +12,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.SignCertifi
 @Builder
 public class SignCertificateResponse {
 
+  CertificateDTO certificate;
+  
   @JsonPOJOBuilder(withPrefix = "")
   public static class SignCertificateResponseBuilder {
 

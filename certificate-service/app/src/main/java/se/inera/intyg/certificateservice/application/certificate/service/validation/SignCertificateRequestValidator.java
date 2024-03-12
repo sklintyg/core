@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate.service.validation;
 
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateCertificateId;
-import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validatePatient;
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateUnit;
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateUnitExtended;
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateUser;
@@ -18,6 +17,8 @@ public class SignCertificateRequestValidator {
     validateUnit(request.getCareUnit(), "CareUnit");
     validateUnit(request.getCareProvider(), "CareProvider");
     validateCertificateId(certificateId);
-    validatePatient(request.getPatient());
+    if (request.getSignatureXml() == null || request.getSignatureXml().isBlank()) {
+      throw new IllegalArgumentException("Required parameter missing: signatureXml");
+    }
   }
 }
