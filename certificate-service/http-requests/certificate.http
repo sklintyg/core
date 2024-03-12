@@ -7,6 +7,8 @@ Content-Type: application/json
     "id": "TSTNMT2321000156-DRAA",
     "name": "Alja Doctor",
     "role": "DOCTOR",
+    "paTitles": [],
+    "specialities": [],
     "blocked": "false"
   },
   "unit": {
@@ -15,6 +17,7 @@ Content-Type: application/json
     "address": "Alfaadressen 1",
     "city": "Alfastaden",
     "zipCode": "Alfapostnummer",
+    "workplaceCode": "1627",
     "inactive": "false"
   },
   "careUnit": {
@@ -65,6 +68,7 @@ Content-Type: application/json
     "address": "Alfaadressen 1",
     "city": "Alfastaden",
     "zipCode": "Alfapostnummer",
+    "workplaceCode": "1627",
     "inactive": "false"
   },
   "careUnit": {
@@ -102,8 +106,10 @@ Content-Type: application/json
 GET http://localhost:18030/api/certificate/87ee572b-f55d-4955-b7a0-cb60d5e7be45/exists
 
 ### Get certificate
-POST http://localhost:18030/api/certificate/87ee572b-f55d-4955-b7a0-cb60d5e7be45
+POST http://localhost:18030/api/certificate/84c2eab5-63d0-45eb-86e8-285c6e41f019
 Content-Type: application/json
+#x-trace-id: "thisIsTraceId"
+#x-session-id: "thisIsSessionId"
 
 {
   "user": {
@@ -118,6 +124,57 @@ Content-Type: application/json
     "address": "Alfaadressen 1",
     "city": "Alfastaden",
     "zipCode": "Alfapostnummer",
+    "workplaceCode": "1627",
+    "inactive": "false"
+  },
+  "careUnit": {
+    "id": "TSTNMT2321000156-ALMC",
+    "name": "Alfa Medicincentrum"
+  },
+  "careProvider": {
+    "id": "TSTNMT2321000156-ALFA",
+    "name": "Alfa Regionen"
+  },
+  "patient": {
+    "id": {
+      "type": "PERSONAL_IDENTITY_NUMBER",
+      "id": "191212121212"
+    },
+    "firstName": "Tolvan",
+    "middleName": "TP",
+    "lastName": "Tolvansson",
+    "fullName": "Tolvan TP Tolvansson",
+    "deceased": "false",
+    "protectedPerson": "false",
+    "testIndicated": "false",
+    "street": "",
+    "zipcode": "",
+    "city": ""
+  }
+}
+
+### Get certificate (CARE_ADMIN)
+POST http://localhost:18030/api/certificate/faddf3e8-a8c1-4428-8d7b-018ecd089058
+Content-Type: application/json
+#x-trace-id: "thisIsTraceId"
+#x-session-id: "thisIsSessionId"
+
+{
+  "user": {
+    "id": "TSTNMT2321000156-VAAA",
+    "name": "Alva Vårdadministratör",
+    "role": "CARE_ADMIN",
+    "paTitles": [],
+    "specialities": [],
+    "blocked": "false"
+  },
+  "unit": {
+    "id": "TSTNMT2321000156-ALHM",
+    "name": "Alfa Hudmottagningen",
+    "address": "Alfaadressen 1",
+    "city": "Alfastaden",
+    "zipCode": "Alfapostnummer",
+    "workplaceCode": "1627",
     "inactive": "false"
   },
   "careUnit": {
@@ -147,7 +204,7 @@ Content-Type: application/json
 }
 
 ### Update certificate
-PUT http://localhost:18030/api/certificate/594662d8-576e-49a7-af27-729673a6be4c
+PUT http://localhost:18030/api/certificate/bf9408d5-54ee-4fae-b7b2-2425c35d1bd2
 Content-Type: application/json
 
 {
@@ -163,6 +220,7 @@ Content-Type: application/json
     "address": "Alfaadressen 1",
     "city": "Alfastaden",
     "zipCode": "Alfapostnummer",
+    "workplaceCode": "1627",
     "inactive": "false"
   },
   "careUnit": {
@@ -272,8 +330,8 @@ Content-Type: application/json
       "summary": null
     },
     "data": {
-      "FRG_1": {
-        "id": "FRG_1",
+      "1": {
+        "id": "1",
         "parent": "KAT_1",
         "index": 2,
         "config": {
@@ -285,22 +343,22 @@ Content-Type: application/json
           "text": "Beräknat nedkomstdatum",
           "description": null,
           "accordion": null,
-          "id": "beraknatnedkomstdatum",
+          "id": "1.1",
           "minDate": "2024-02-14",
           "maxDate": "2025-02-14"
         },
         "value": {
           "type": "DATE",
           "type": "DATE",
-          "id": "beraknatnedkomstdatum",
+          "id": "1.1",
           "date": "2024-02-29"
         },
         "validation": [
           {
             "type": "MANDATORY_VALIDATION",
             "type": "MANDATORY_VALIDATION",
-            "questionId": "FRG_1",
-            "expression": "$beraknatnedkomstdatum"
+            "questionId": "1",
+            "expression": "$1.1"
           }
         ],
         "validationError": null,
@@ -350,7 +408,7 @@ Content-Type: application/json
 }
 
 ### Validate certificate
-POST http://localhost:18030/api/certificate/ce28d0e6-f924-4142-b403-4239ce3a6594/validate
+POST http://localhost:18030/api/certificate/15f71666-9fb5-45c0-8651-0ae8268c8c79/validate
 Content-Type: application/json
 
 {
@@ -366,6 +424,7 @@ Content-Type: application/json
     "address": "Alfaadressen 1",
     "city": "Alfastaden",
     "zipCode": "Alfapostnummer",
+    "workplaceCode": "1627",
     "inactive": "false"
   },
   "careUnit": {
@@ -479,7 +538,7 @@ Content-Type: application/json
 }
 
 ### Delete certificate
-DELETE http://localhost:18030/api/certificate/640de5cb-d99b-437c-bb9a-296107f4efc9/0
+DELETE http://localhost:18030/api/certificate/15f71666-9fb5-45c0-8651-0ae8268c8c79/0
 Content-Type: application/json
 
 {
@@ -495,6 +554,7 @@ Content-Type: application/json
     "address": "Alfaadressen 1",
     "city": "Alfastaden",
     "zipCode": "Alfapostnummer",
+    "workplaceCode": "1627",
     "inactive": "false"
   },
   "careUnit": {

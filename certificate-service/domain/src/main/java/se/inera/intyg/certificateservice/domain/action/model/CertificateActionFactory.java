@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.action.model;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 
 public class CertificateActionFactory {
 
@@ -43,6 +44,15 @@ public class CertificateActionFactory {
               List.of(
                   new ActionRuleWithinCareUnit(),
                   new ActionRuleProtectedPerson()
+              )
+          )
+          .build();
+      case SIGN -> CertificateActionSign.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleWithinCareUnit(),
+                  new ActionRuleRole(List.of(Role.DOCTOR))
               )
           )
           .build();
