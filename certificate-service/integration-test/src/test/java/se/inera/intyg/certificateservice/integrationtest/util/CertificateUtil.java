@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.integrationtest.util;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -10,6 +12,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
@@ -140,6 +143,24 @@ public class CertificateUtil {
       throw new IllegalArgumentException("Missing response!");
     }
     return response.getBody().getValidationErrors();
+  }
+
+  public static String decodeXml(ResponseEntity<GetCertificateXmlResponse> response) {
+    if (response == null || response.getBody() == null) {
+      throw new IllegalArgumentException("Missing response!");
+    }
+    return new String(
+        Base64.getDecoder().decode(response.getBody().getXml()),
+        StandardCharsets.UTF_8
+    );
+  }
+
+  public static GetCertificateXmlResponse certificateXmlReponse(
+      ResponseEntity<GetCertificateXmlResponse> response) {
+    if (response == null || response.getBody() == null) {
+      throw new IllegalArgumentException("Missing response!");
+    }
+    return response.getBody();
   }
 
   public static CertificateDTO updateUnit(List<CreateCertificateResponse> responses,

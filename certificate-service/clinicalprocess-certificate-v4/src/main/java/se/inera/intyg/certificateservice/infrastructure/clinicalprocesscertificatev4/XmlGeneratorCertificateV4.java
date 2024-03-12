@@ -52,6 +52,7 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
             )
         )
     );
+
   }
 
   private static RegisterCertificateType registerCertificateType(Intyg intyg) {
@@ -192,7 +193,6 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
       context.createMarshaller().marshal(element, writer);
       return new Xml(writer.toString());
     } catch (Exception e) {
-      e.printStackTrace();
       throw new IllegalStateException(e);
     }
   }

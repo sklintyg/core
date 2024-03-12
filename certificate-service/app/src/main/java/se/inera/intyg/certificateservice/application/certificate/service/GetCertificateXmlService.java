@@ -33,7 +33,7 @@ public class GetCertificateXmlService {
 
     return GetCertificateXmlResponse.builder()
         .certificateId(certificateXml.certificateId().id())
-        .xml(certificateXml.xml().xml())
+        .xml(certificateXml.xml().base64())
         .version(certificateXml.revision().value())
         .build();
   }

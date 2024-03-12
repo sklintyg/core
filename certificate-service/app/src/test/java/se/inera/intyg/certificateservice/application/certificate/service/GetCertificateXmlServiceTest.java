@@ -9,6 +9,8 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -34,6 +36,9 @@ class GetCertificateXmlServiceTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
   private static final String XML = "XML";
+  private static final String XML_BASE64 = Base64.getEncoder().encodeToString(
+      XML.getBytes(StandardCharsets.UTF_8)
+  );
   private static final long VERSION = 99;
   private static final CertificateXml CERTIFICATE_XML = CertificateXml.builder()
       .certificateId(new CertificateId(CERTIFICATE_ID))
@@ -95,7 +100,7 @@ class GetCertificateXmlServiceTest {
     void shallReturnResponseWithXml() {
       final var expectedResponse = GetCertificateXmlResponse.builder()
           .certificateId(CERTIFICATE_ID)
-          .xml(XML)
+          .xml(XML_BASE64)
           .version(VERSION)
           .build();
 

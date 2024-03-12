@@ -37,6 +37,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultDeleteCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateXmlRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetPatientCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetUnitCertificatesInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetUnitCertificatesRequest;
@@ -45,7 +46,9 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateTypeInfoUtil.certificateTypeInfo;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateXmlReponse;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificates;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.decodeXml;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.exists;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueFromData;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateDateValue;
@@ -1931,8 +1934,54 @@ class FK7211ActiveIT {
   class GetCertificateXml {
 
     @Test
-    @DisplayName("FK7211 - Om intyget är utfärdat på samma vårdenhet ska XML returneras")
+    @DisplayName("FK7211 - Om intyget är utfärdat på samma mottagning skall det returneras")
     void shallReturnCertificateXMLIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.getCertificateXml(
+          defaultGetCertificateXmlRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertTrue(decodeXml(response).contains("Läkare"),
+              () -> "Expected 'Läkare' to be part of xml: '%s'".formatted(decodeXml(response))),
+          () -> assertEquals(certificate(testCertificates).getMetadata().getId(),
+              certificateXmlReponse(response).getCertificateId()),
+          () -> assertEquals(certificate(testCertificates).getMetadata().getVersion(),
+              certificateXmlReponse(response).getVersion())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det returneras")
+    void shallReturnCertificateIfUnitIsCareUnitAndOnSameCareUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.getCertificateXml(
+          customGetCertificateXmlRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertTrue(decodeXml(response).contains("Läkare"),
+              () -> "Expected 'Läkare' to be part of xml: '%s'".formatted(decodeXml(response))),
+          () -> assertEquals(certificate(testCertificates).getMetadata().getId(),
+              certificateXmlReponse(response).getCertificateId()),
+          () -> assertEquals(certificate(testCertificates).getMetadata().getVersion(),
+              certificateXmlReponse(response).getVersion())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på samma vårdenhet skall det returneras")
+    void shallReturnCertificateIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
           customTestabilityCertificateRequest(FK7211, VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
@@ -1947,19 +1996,91 @@ class FK7211ActiveIT {
       );
 
       assertAll(
-          () -> assertNotNull(response, "Should return non null response"),
-          () -> assertNotNull(response.getBody(), "Should return non null response body"),
-          () -> assertNotNull(response.getBody().getXml(),
-              "Should return certificate xml when exists"
-          ),
-          () -> assertNotNull(response.getBody().getCertificateId(),
-              "Should return certificate id when exists"
-          ),
-          () -> assertNotNull(response.getBody().getVersion(),
-              "Should return certificate version when exists"
-          )
+          () -> assertTrue(decodeXml(response).contains("Läkare"),
+              () -> "Expected 'Läkare' to be part of xml: '%s'".formatted(decodeXml(response))),
+          () -> assertEquals(certificate(testCertificates).getMetadata().getId(),
+              certificateXmlReponse(response).getCertificateId()),
+          () -> assertEquals(certificate(testCertificates).getMetadata().getVersion(),
+              certificateXmlReponse(response).getVersion())
       );
     }
 
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.getCertificateXml(
+          customGetCertificateXmlRequest()
+              .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.getCertificateXml(
+          customGetCertificateXmlRequest()
+              .careUnit(ALFA_VARDCENTRAL_DTO)
+              .unit(ALFA_VARDCENTRAL_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7211 - Vårdadministratör - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403IfPatientIsProtectedPersonAndUserIsCareAdmin() {
+      final var testCertificates = testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .patient(ANONYMA_REACT_ATTILA_DTO)
+              .build()
+      );
+
+      final var response = api.getCertificateXml(
+          customGetCertificateXmlRequest()
+              .user(ALVA_VARDADMINISTRATOR_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7211 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det returneras")
+    void shallReturnCertificateIfPatientIsProtectedPersonAndUserIsDoctor() {
+      final var testCertificates = testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .patient(ANONYMA_REACT_ATTILA_DTO)
+              .build()
+      );
+
+      final var response = api.getCertificateXml(
+          defaultGetCertificateXmlRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertTrue(decodeXml(response).contains("Läkare"),
+              () -> "Expected 'Läkare' to be part of xml: '%s'".formatted(decodeXml(response))),
+          () -> assertEquals(certificate(testCertificates).getMetadata().getId(),
+              certificateXmlReponse(response).getCertificateId()),
+          () -> assertEquals(certificate(testCertificates).getMetadata().getVersion(),
+              certificateXmlReponse(response).getVersion())
+      );
+    }
   }
 }

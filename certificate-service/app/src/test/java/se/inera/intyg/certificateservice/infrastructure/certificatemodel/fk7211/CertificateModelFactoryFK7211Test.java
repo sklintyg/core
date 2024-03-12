@@ -161,7 +161,7 @@ class CertificateModelFactoryFK7211Test {
     @Nested
     class QuestionBeraknatNedkomstdatum {
 
-      private static final ElementId ELEMENT_ID = new ElementId("FRG_1");
+      private static final ElementId ELEMENT_ID = new ElementId("1");
 
       @Test
       void shallIncludeId() {
@@ -177,7 +177,7 @@ class CertificateModelFactoryFK7211Test {
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationDate.builder()
             .name("Beräknat nedkomstdatum")
-            .id(new FieldId("beraknatnedkomstdatum"))
+            .id(new FieldId("1.1"))
             .min(Period.ofDays(0))
             .max(Period.ofYears(1))
             .build();
@@ -193,10 +193,10 @@ class CertificateModelFactoryFK7211Test {
       void shallIncludeRules() {
         final var expectedRules = List.of(
             ElementRule.builder()
-                .id(new ElementId("FRG_1"))
+                .id(new ElementId("1"))
                 .type(ElementRuleType.MANDATORY)
                 .expression(
-                    new RuleExpression("$beraknatnedkomstdatum")
+                    new RuleExpression("$1.1")
                 )
                 .build()
         );
