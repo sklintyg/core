@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.integrationtest.util;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
@@ -99,6 +100,14 @@ public class ApiRequestUtil {
 
   public static DeleteCertificateRequestBuilder customDeleteCertificateRequest() {
     return DeleteCertificateRequestBuilder.create();
+  }
+
+  public static GetCertificateXmlRequest defaultGetCertificateXmlRequest() {
+    return GetCertificateXmlRequestBuilder.create().build();
+  }
+
+  public static GetCertificateXmlRequestBuilder customGetCertificateXmlRequest() {
+    return GetCertificateXmlRequestBuilder.create();
   }
 
   public static TestabilityCertificateRequestBuilder customTestabilityCertificateRequest(

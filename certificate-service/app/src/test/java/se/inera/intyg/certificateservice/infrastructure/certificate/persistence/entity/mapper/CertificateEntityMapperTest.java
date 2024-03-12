@@ -24,6 +24,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.patient.model.Deceased;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
@@ -68,9 +69,11 @@ class CertificateEntityMapperTest {
       .build();
 
   private static final LocalDate NOW = LocalDate.now();
+  private static final String DATE_ID = "dateId";
 
   private final static String JSON =
-      "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"date\":[" + NOW.getYear() + ","
+      "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"dateId\":\"dateId\",\"date\":["
+          + NOW.getYear() + ","
           + NOW.getMonthValue() + "," + NOW.getDayOfMonth() + "]}}]";
 
   // TODO: Create test factory for these to not copy paste
@@ -305,6 +308,7 @@ class CertificateEntityMapperTest {
               .value(ElementValueDate
                   .builder()
                   .date(NOW)
+                  .dateId(new FieldId(DATE_ID))
                   .build())
               .build()
       );

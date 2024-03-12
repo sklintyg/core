@@ -1,7 +1,11 @@
 package se.inera.intyg.certificateservice.domain.testdata;
 
-import se.inera.intyg.certificateservice.domain.staff.model.Blocked;
-import se.inera.intyg.certificateservice.domain.staff.model.Role;
+import java.util.Collections;
+import java.util.List;
+import se.inera.intyg.certificateservice.domain.common.model.Blocked;
+import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.common.model.Speciality;
 
 public class TestDataUserConstants {
 
@@ -13,6 +17,14 @@ public class TestDataUserConstants {
   public static final String AJLA_DOCTOR_LAST_NAME = "Doktor";
   public static final String AJLA_DOCTOR_FULLNAME = "Ajla Doktor";
   public static final Role AJLA_DOCTOR_ROLE = Role.DOCTOR;
+  public static final List<PaTitle> AJLA_DOCTOR_PA_TITLES = List.of(
+      new PaTitle("203090", "Läkare legitimerad, annan"),
+      new PaTitle("601010", "Kock")
+  );
+  public static final List<Speciality> AJLA_DOCTOR_SPECIALITIES = List.of(
+      new Speciality("Allmänmedicin"),
+      new Speciality("Psykiatri")
+  );
   public static final Blocked AJLA_DOCTOR_BLOCKED = BLOCKED_FALSE;
   public static final String ALVA_VARDADMINISTRATOR_HSA_ID = "TSTNMT2321000156-VAAA";
   public static final String ALVA_VARDADMINISTRATOR_FIRST_NAME = "Alva";
@@ -20,6 +32,8 @@ public class TestDataUserConstants {
   public static final String ALVA_VARDADMINISTRATOR_LAST_NAME = "Vardadministrator";
   public static final String ALVA_VARDADMINISTRATOR_FULL_NAME = "Alva Vardadministrator";
   public static final Role ALVA_VARDADMINISTRATOR_ROLE = Role.CARE_ADMIN;
+  public static final List<PaTitle> ALVA_VARDADMINISTRATOR_PA_TITLES = Collections.emptyList();
+  public static final List<Speciality> ALVA_VARDADMINISTRATOR_SPECIALITIES = Collections.emptyList();
   public static final Blocked ALVA_VARDADMINISTRATOR_BLOCKED = BLOCKED_FALSE;
 
 }

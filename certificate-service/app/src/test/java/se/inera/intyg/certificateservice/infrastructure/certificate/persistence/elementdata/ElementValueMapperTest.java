@@ -13,10 +13,12 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 class ElementValueMapperTest {
 
   private static final String ID = "id";
+  private static final String DATE_ID = "dateId";
 
   @Test
   void shallThrowExceptionIfUnknownDomainData() {
@@ -57,6 +59,7 @@ class ElementValueMapperTest {
         .value(
             MappedElementValueDate.builder()
                 .date(DATE)
+                .dateId(DATE_ID)
                 .build()
         )
         .build();
@@ -66,6 +69,7 @@ class ElementValueMapperTest {
         .value(
             ElementValueDate.builder()
                 .date(DATE)
+                .dateId(new FieldId(DATE_ID))
                 .build()
         )
         .build();

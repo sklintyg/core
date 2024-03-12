@@ -4,13 +4,15 @@ import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 
 public interface IssuingUnit {
 
-  public HsaId hsaId();
+  HsaId hsaId();
 
-  public UnitAddress address();
+  UnitAddress address();
 
-  public UnitName name();
+  UnitName name();
 
-  public UnitContactInfo contactInfo();
+  UnitContactInfo contactInfo();
 
-  public Inactive inactive();
+  WorkplaceCode workplaceCode();
+
+  Inactive inactive();
 }

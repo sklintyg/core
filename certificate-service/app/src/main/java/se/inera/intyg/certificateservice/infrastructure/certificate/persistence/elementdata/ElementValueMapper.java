@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 public class ElementValueMapper {
 
@@ -13,6 +14,7 @@ public class ElementValueMapper {
   public static ElementValue toDomain(MappedElementValue mappedValue) {
     if (mappedValue instanceof MappedElementValueDate valueDate) {
       return ElementValueDate.builder()
+          .dateId(new FieldId(valueDate.dateId))
           .date(valueDate.getDate())
           .build();
     }
@@ -31,6 +33,7 @@ public class ElementValueMapper {
   public static MappedElementValue toMapped(ElementValue value) {
     if (value instanceof ElementValueDate elementValueDate) {
       return MappedElementValueDate.builder()
+          .dateId(elementValueDate.dateId().value())
           .date(elementValueDate.date())
           .build();
     }

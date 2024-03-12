@@ -17,6 +17,9 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigCategory;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigDate;
+import se.inera.intyg.certificateservice.application.certificate.service.converter.ElementCertificateConverter;
+import se.inera.intyg.certificateservice.application.certificate.service.converter.ElementDataConverter;
+import se.inera.intyg.certificateservice.application.certificate.service.converter.ElementMetaDataConverter;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 
 @ExtendWith(MockitoExtension.class)

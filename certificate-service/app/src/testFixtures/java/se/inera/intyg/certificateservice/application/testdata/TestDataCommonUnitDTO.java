@@ -11,6 +11,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_INACTIVE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_PHONENUMBER;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_WORKPLACE_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ADDRESS;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_CITY;
@@ -19,6 +20,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_INACTIVE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_PHONENUMBER;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_WORKPLACE_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ADDRESS;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_CITY;
@@ -27,6 +29,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_INACTIVE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_WORKPLACE_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_ADDRESS;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_CITY;
@@ -35,6 +38,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_INACTIVE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_PHONENUMBER;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_WORKPLACE_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_ZIP_CODE;
 
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
@@ -63,6 +67,7 @@ public class TestDataCommonUnitDTO {
         .city(ALFA_MEDICINCENTRUM_CITY)
         .email(ALFA_MEDICINCENTRUM_EMAIL)
         .phoneNumber(ALFA_MEDICINCENTRUM_PHONENUMBER)
+        .workplaceCode(ALFA_MEDICINCENTRUM_WORKPLACE_CODE)
         .inactive(ALFA_MEDICINCENTRUM_INACTIVE.value());
   }
 
@@ -75,6 +80,7 @@ public class TestDataCommonUnitDTO {
         .city(ALFA_ALLERGIMOTTAGNINGEN_CITY)
         .email(ALFA_ALLERGIMOTTAGNINGEN_EMAIL)
         .phoneNumber(ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER)
+        .workplaceCode(ALFA_ALLERGIMOTTAGNINGEN_WORKPLACE_CODE)
         .inactive(ALFA_ALLERGIMOTTAGNINGEN_INACTIVE.value());
   }
 
@@ -87,6 +93,7 @@ public class TestDataCommonUnitDTO {
         .city(ALFA_HUDMOTTAGNINGEN_CITY)
         .email(ALFA_HUDMOTTAGNINGEN_EMAIL)
         .phoneNumber(ALFA_HUDMOTTAGNINGEN_PHONENUMBER)
+        .workplaceCode(ALFA_HUDMOTTAGNINGEN_WORKPLACE_CODE)
         .inactive(ALFA_HUDMOTTAGNINGEN_INACTIVE.value());
   }
 
@@ -99,6 +106,7 @@ public class TestDataCommonUnitDTO {
         .city(ALFA_VARDCENTRAL_CITY)
         .email(ALFA_VARDCENTRAL_EMAIL)
         .phoneNumber(ALFA_VARDCENTRAL_PHONENUMBER)
+        .workplaceCode(ALFA_VARDCENTRAL_WORKPLACE_CODE)
         .inactive(ALFA_VARDCENTRAL_INACTIVE.value());
   }
 

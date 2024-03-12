@@ -5,7 +5,9 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_MIDDLE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_PA_TITLES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_SPECIALITIES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_HSA_ID;
@@ -32,6 +34,8 @@ public class TestDataStaff {
                 .lastName(AJLA_DOCTOR_LAST_NAME)
                 .build()
         )
+        .paTitles(AJLA_DOCTOR_PA_TITLES)
+        .specialities(AJLA_DOCTOR_SPECIALITIES)
         .blocked(AJLA_DOCTOR_BLOCKED)
         .role(AJLA_DOCTOR_ROLE);
   }

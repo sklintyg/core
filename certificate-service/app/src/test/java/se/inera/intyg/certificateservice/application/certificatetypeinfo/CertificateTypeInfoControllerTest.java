@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.Cer
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoResponse;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetLatestCertificateTypeVersionResponse;
-import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.CertificateTypeInfoService;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.GetCertificateTypeInfoService;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.GetLatestCertificateTypeVersionService;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,7 +23,7 @@ class CertificateTypeInfoControllerTest {
   private static final String FK_7211 = "fk7211";
   private static final String VERSION = "1.0";
   @Mock
-  private CertificateTypeInfoService certificateTypeInfoService;
+  private GetCertificateTypeInfoService getCertificateTypeInfoService;
   @Mock
   private GetLatestCertificateTypeVersionService getLatestCertificateTypeVersionService;
   @InjectMocks
@@ -42,7 +42,7 @@ class CertificateTypeInfoControllerTest {
         )
         .build();
 
-    when(certificateTypeInfoService.getActiveCertificateTypeInfos(
+    when(getCertificateTypeInfoService.getActiveCertificateTypeInfos(
         certificateTypeInfoRequest)).thenReturn(expectedResult);
 
     final var result = certificateTypeInfoController.findActiveCertificateTypeInfos(

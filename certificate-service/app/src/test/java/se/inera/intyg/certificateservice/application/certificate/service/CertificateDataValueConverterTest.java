@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
+import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateDataValueConverter;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;

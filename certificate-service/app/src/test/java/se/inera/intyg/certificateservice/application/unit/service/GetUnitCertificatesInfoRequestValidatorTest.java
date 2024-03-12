@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoRequest.GetUnitCertificatesInfoRequestBuilder;
+import se.inera.intyg.certificateservice.application.unit.service.validator.GetUnitCertificatesInfoRequestValidator;
 
 class GetUnitCertificatesInfoRequestValidatorTest {
 
@@ -165,6 +166,23 @@ class GetUnitCertificatesInfoRequestValidatorTest {
           () -> getUnitCertificatesInfoRequestValidator.validate(request));
 
       assertEquals("Required parameter missing: Unit.id",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfWorkplaceCodeIsNull() {
+      final var request = requestBuilder
+          .unit(
+              alfaAllergimottagningenDtoBuilder()
+                  .workplaceCode(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getUnitCertificatesInfoRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: Unit.workplaceCode",
           illegalArgumentException.getMessage());
     }
 
