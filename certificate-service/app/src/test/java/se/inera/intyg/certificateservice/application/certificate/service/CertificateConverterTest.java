@@ -103,7 +103,95 @@ class CertificateConverterTest {
 
   @BeforeEach
   void setUp() {
-    certificate = getCertificate(Status.DRAFT);
+    certificateBuilder = Certificate.builder()
+        .id(new CertificateId(CERTIFICATE_ID))
+        .created(CREATED)
+        .revision(REVISION)
+        .status(Status.DRAFT)
+        .certificateModel(
+            CertificateModel.builder()
+                .id(
+                    CertificateModelId.builder()
+                        .type(new CertificateType(TYPE))
+                        .version(new CertificateVersion(VERSION))
+                        .build()
+                )
+                .name(TYPE_NAME)
+                .description(TYPE_DESCRIPTION)
+                .elementSpecifications(
+                    List.of(
+                        ElementSpecification.builder()
+                            .id(new ElementId(Q_1))
+                            .configuration(
+                                ElementConfigurationCategory.builder()
+                                    .name(NAME)
+                                    .build()
+                            )
+                            .children(
+                                List.of(
+                                    ElementSpecification.builder()
+                                        .id(new ElementId(ID))
+                                        .configuration(
+                                            ElementConfigurationDate.builder()
+                                                .id(new FieldId(ID))
+                                                .name(NAME)
+                                                .min(Period.ofDays(0))
+                                                .max(Period.ofYears(1))
+                                                .build()
+                                        )
+                                        .rules(
+                                            List.of(
+                                                ElementRule.builder()
+                                                    .id(new ElementId(ID))
+                                                    .type(ElementRuleType.MANDATORY)
+                                                    .expression(
+                                                        new RuleExpression(EXPRESSION))
+                                                    .build()
+                                            )
+                                        )
+                                        .validations(
+                                            List.of(
+                                                ElementValidationDate.builder()
+                                                    .mandatory(true)
+                                                    .min(Period.ofDays(0))
+                                                    .max(Period.ofYears(1))
+                                                    .build()
+                                            )
+                                        )
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                )
+                .build()
+        )
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .patient(ATHENA_REACT_ANDERSSON)
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                .careUnit(ALFA_MEDICINCENTRUM)
+                .careProvider(ALFA_REGIONEN)
+                .issuer(AJLA_DOKTOR)
+                .build()
+        )
+        .elementData(
+            List.of(
+                ElementData.builder()
+                    .id(new ElementId(Q_1))
+                    .value(null)
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId(ID))
+                    .value(
+                        ElementValueDate.builder()
+                            .date(DATE)
+                            .build()
+                    )
+                    .build()
+            )
+        );
+    certificate = certificateBuilder.build();
   }
 
   @Nested
@@ -402,7 +490,10 @@ class CertificateConverterTest {
     void shallConvertDraftToUnsigned() {
       assertEquals(
           CertificateStatusTypeDTO.UNSIGNED,
-          certificateConverter.convert(getCertificate(Status.DRAFT), resourceLinkDTOs)
+          certificateConverter.convert(
+                  certificate,
+                  resourceLinkDTOs
+              )
               .getMetadata()
               .getStatus()
       );
@@ -412,7 +503,10 @@ class CertificateConverterTest {
     void shallConvertDeletedDraftToUnsigned() {
       assertEquals(
           CertificateStatusTypeDTO.UNSIGNED,
-          certificateConverter.convert(getCertificate(Status.DELETED_DRAFT), resourceLinkDTOs)
+          certificateConverter.convert(
+                  certificateBuilder.status(Status.DELETED_DRAFT).build(),
+                  resourceLinkDTOs
+              )
               .getMetadata()
               .getStatus()
       );
@@ -422,12 +516,14 @@ class CertificateConverterTest {
     void shallConvertSignedToSigned() {
       assertEquals(
           CertificateStatusTypeDTO.SIGNED,
-          certificateConverter.convert(getCertificate(Status.SIGNED), resourceLinkDTOs)
+          certificateConverter.convert(
+                  certificateBuilder.status(Status.SIGNED).build(),
+                  resourceLinkDTOs
+              )
               .getMetadata()
               .getStatus()
       );
     }
-
   }
 
   @Nested
@@ -455,97 +551,5 @@ class CertificateConverterTest {
       assertEquals(expectedLinks,
           certificateConverter.convert(certificate, expectedLinks).getLinks());
     }
-  }
-
-  private Certificate getCertificate(Status status) {
-    certificateBuilder = Certificate.builder()
-        .id(new CertificateId(CERTIFICATE_ID))
-        .created(CREATED)
-        .revision(REVISION)
-        .status(status)
-        .certificateModel(
-            CertificateModel.builder()
-                .id(
-                    CertificateModelId.builder()
-                        .type(new CertificateType(TYPE))
-                        .version(new CertificateVersion(VERSION))
-                        .build()
-                )
-                .name(TYPE_NAME)
-                .description(TYPE_DESCRIPTION)
-                .elementSpecifications(
-                    List.of(
-                        ElementSpecification.builder()
-                            .id(new ElementId(Q_1))
-                            .configuration(
-                                ElementConfigurationCategory.builder()
-                                    .name(NAME)
-                                    .build()
-                            )
-                            .children(
-                                List.of(
-                                    ElementSpecification.builder()
-                                        .id(new ElementId(ID))
-                                        .configuration(
-                                            ElementConfigurationDate.builder()
-                                                .id(new FieldId(ID))
-                                                .name(NAME)
-                                                .min(Period.ofDays(0))
-                                                .max(Period.ofYears(1))
-                                                .build()
-                                        )
-                                        .rules(
-                                            List.of(
-                                                ElementRule.builder()
-                                                    .id(new ElementId(ID))
-                                                    .type(ElementRuleType.MANDATORY)
-                                                    .expression(
-                                                        new RuleExpression(EXPRESSION))
-                                                    .build()
-                                            )
-                                        )
-                                        .validations(
-                                            List.of(
-                                                ElementValidationDate.builder()
-                                                    .mandatory(true)
-                                                    .min(Period.ofDays(0))
-                                                    .max(Period.ofYears(1))
-                                                    .build()
-                                            )
-                                        )
-                                        .build()
-                                )
-                            )
-                            .build()
-                    )
-                )
-                .build()
-        )
-        .certificateMetaData(
-            CertificateMetaData.builder()
-                .patient(ATHENA_REACT_ANDERSSON)
-                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
-                .careUnit(ALFA_MEDICINCENTRUM)
-                .careProvider(ALFA_REGIONEN)
-                .issuer(AJLA_DOKTOR)
-                .build()
-        )
-        .elementData(
-            List.of(
-                ElementData.builder()
-                    .id(new ElementId(Q_1))
-                    .value(null)
-                    .build(),
-                ElementData.builder()
-                    .id(new ElementId(ID))
-                    .value(
-                        ElementValueDate.builder()
-                            .date(DATE)
-                            .build()
-                    )
-                    .build()
-            )
-        );
-    return certificateBuilder.build();
   }
 }
