@@ -345,6 +345,24 @@ class XmlGeneratorCertificateV4Test {
     );
   }
 
+  @Test
+  void shouldNotIncludeSigneringsTidpunktIfSignedIsNull() {
+    final var signedResponse = unmarshal(
+        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE)
+    ).getIntyg().getSigneringstidpunkt();
+
+    assertNull(signedResponse);
+  }
+
+  @Test
+  void shouldNotIncludeSkickatTidpunktIfSignedIsNull() {
+    final var sentResponse = unmarshal(
+        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE)
+    ).getIntyg().getSkickatTidpunkt();
+
+    assertNull(sentResponse);
+  }
+
   private RegisterCertificateType unmarshal(Xml response) {
     try {
       System.out.println(response.xml());
