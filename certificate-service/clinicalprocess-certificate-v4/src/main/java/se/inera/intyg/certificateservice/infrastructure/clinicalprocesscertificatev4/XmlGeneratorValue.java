@@ -12,7 +12,9 @@ public class XmlGeneratorValue {
   public List<Svar> generate(List<ElementData> elementData) {
     return elementData.stream()
         .map(data -> {
-          final var dateValue = (ElementValueDate) data.value();
+          if (!(data.value() instanceof ElementValueDate dateValue)) {
+            return null;
+          }
 
           if (dateValue.date() == null) {
             return null;

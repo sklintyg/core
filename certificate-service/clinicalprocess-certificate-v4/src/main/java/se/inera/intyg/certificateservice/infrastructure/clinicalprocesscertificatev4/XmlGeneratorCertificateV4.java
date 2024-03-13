@@ -3,11 +3,15 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 import static se.inera.intyg.certificateservice.domain.common.model.HsaId.OID;
 
 import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.w3._2000._09.xmldsig_.SignatureType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.Signature;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
@@ -22,6 +26,7 @@ import se.riv.clinicalprocess.healthcond.certificate.types.v3.IntygId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.PersonId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.Specialistkompetens;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.TypAvIntyg;
+import se.riv.clinicalprocess.healthcond.certificate.types.v3.UnderskriftType;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Enhet;
 import se.riv.clinicalprocess.healthcond.certificate.v3.HosPersonal;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Intyg;
@@ -40,6 +45,11 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
 
   @Override
   public Xml generate(Certificate certificate) {
+    return generate(certificate, null);
+  }
+
+  @Override
+  public Xml generate(Certificate certificate, Signature signature) {
     return marshall(
         registerCertificateType(
             intyg(
@@ -48,11 +58,11 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
                 typAvIntyg(certificate),
                 patient(certificate),
                 skapadAv(certificate),
-                svar(certificate)
+                svar(certificate),
+                underskriftType(signature)
             )
         )
     );
-
   }
 
   private static RegisterCertificateType registerCertificateType(Intyg intyg) {
@@ -62,7 +72,7 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
   }
 
   private static Intyg intyg(IntygId intygId, String version, TypAvIntyg typAvIntyg,
-      Patient patient, HosPersonal skapadAv, List<Svar> answers) {
+      Patient patient, HosPersonal skapadAv, List<Svar> answers, UnderskriftType underskriftType) {
     final var intyg = new Intyg();
     intyg.setIntygsId(intygId);
     intyg.setVersion(version);
@@ -70,6 +80,11 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
     intyg.setPatient(patient);
     intyg.setSkapadAv(skapadAv);
     intyg.getSvar().addAll(answers);
+
+    if (underskriftType != null) {
+      intyg.setUnderskrift(underskriftType);
+    }
+
     return intyg;
   }
 
@@ -194,6 +209,28 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
       return new Xml(writer.toString());
     } catch (Exception e) {
       throw new IllegalStateException(e);
+    }
+  }
+
+  private UnderskriftType underskriftType(Signature signature) {
+    if (signature == null) {
+      return null;
+    }
+    final var signatureType = unmarshal(signature);
+    final var underskriftType = new UnderskriftType();
+    underskriftType.setSignature(signatureType);
+    return underskriftType;
+  }
+
+  private SignatureType unmarshal(Signature response) {
+    try {
+      final var context = JAXBContext.newInstance(SignatureType.class);
+      final var unmarshaller = context.createUnmarshaller();
+      final var stringReader = new StringReader(response.value());
+      final var jaxbElement = (JAXBElement<SignatureType>) unmarshaller.unmarshal(stringReader);
+      return jaxbElement.getValue();
+    } catch (Exception ex) {
+      throw new IllegalStateException(ex);
     }
   }
 }

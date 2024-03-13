@@ -5,7 +5,8 @@ public enum CertificateEventType {
   CREATED("created-certificate", "creation"),
   UPDATED("updated-certificate", "change"),
   DELETED("deleted-certificate", "deletion"),
-  VALIDATED("validated-certificate", "accessed");
+  VALIDATED("validated-certificate", "accessed"),
+  SIGNED("sign-certificate", "change");
 
   private final String action;
   private final String actionType;

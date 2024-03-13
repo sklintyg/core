@@ -104,7 +104,9 @@ public class AppConfig {
 
   @Bean
   public SignCertificateDomainService signCertificateDomainService(
-      CertificateRepository certificateRepository) {
-    return new SignCertificateDomainService(certificateRepository);
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator) {
+    return new SignCertificateDomainService(certificateRepository, certificateEventDomainService,
+        xmlGenerator);
   }
 }

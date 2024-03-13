@@ -8,6 +8,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -18,6 +19,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.UnitRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateModelEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatus;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatusEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateXmlEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntityRepository;
 
@@ -33,7 +37,8 @@ public class CertificateEntityMapper {
   private final StaffRepository staffRepository;
 
   public Certificate toDomain(CertificateEntity certificateEntity) {
-    return toDomain(certificateEntity,
+    return toDomain(
+        certificateEntity,
         certificateModelRepository.getById(
             CertificateModelId.builder()
                 .type(
@@ -55,10 +60,19 @@ public class CertificateEntityMapper {
         .map(result -> {
               result.setRevision(certificate.revision().value());
               result.setModified(LocalDateTime.now());
+              result.setSigned(certificate.signed());
               return result;
             }
         )
         .orElse(toCertificateEntity(certificate));
+
+    final var certificateStatus = CertificateStatus.valueOf(certificate.status().name());
+    certificateEntity.setStatus(
+        CertificateStatusEntity.builder()
+            .key(certificateStatus.getKey())
+            .status(certificateStatus.name())
+            .build()
+    );
 
     final var certificateMetaData = certificate.certificateMetaData();
 
@@ -87,10 +101,18 @@ public class CertificateEntityMapper {
     );
 
     final var certificateDataEntity = CertificateDataEntityMapper.toEntity(
-        certificate.elementData());
+        certificate.elementData()
+    );
     certificateDataEntity.setKey(certificateEntity.getKey());
     certificateDataEntity.setCertificate(certificateEntity);
     certificateEntity.setData(certificateDataEntity);
+
+    if (certificate.xml() != null) {
+      final var certificateXmlEntity = new CertificateXmlEntity(certificate.xml().xml());
+      certificateXmlEntity.setKey(certificateEntity.getKey());
+      certificateXmlEntity.setCertificate(certificateEntity);
+      certificateEntity.setXml(certificateXmlEntity);
+    }
 
     return certificateEntity;
   }
@@ -105,10 +127,11 @@ public class CertificateEntityMapper {
         ));
   }
 
-  public CertificateEntity toCertificateEntity(Certificate certificate) {
+  private CertificateEntity toCertificateEntity(Certificate certificate) {
     return CertificateEntity.builder()
         .certificateId(certificate.id().id())
         .created(certificate.created())
+        .signed(certificate.signed())
         .revision(certificate.revision().value())
         .modified(LocalDateTime.now())
         .build();
@@ -118,7 +141,8 @@ public class CertificateEntityMapper {
     return Certificate.builder()
         .id(new CertificateId(certificateEntity.getCertificateId()))
         .created(certificateEntity.getCreated())
-        .status(Status.DRAFT)
+        .signed(certificateEntity.getSigned())
+        .status(Status.valueOf(certificateEntity.getStatus().getStatus()))
         .revision(new Revision(certificateEntity.getRevision()))
         .certificateModel(model)
         .certificateMetaData(
@@ -142,6 +166,11 @@ public class CertificateEntityMapper {
         )
         .elementData(
             CertificateDataEntityMapper.toDomain(certificateEntity.getData())
+        )
+        .xml(
+            certificateEntity.getXml() != null
+                ? new Xml(certificateEntity.getXml().getData())
+                : null
         )
         .build();
   }

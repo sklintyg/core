@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
+import jakarta.transaction.Transactional;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Signature;
 import se.inera.intyg.certificateservice.domain.certificate.service.SignCertificateDomainService;
 
-
 @Service
 @RequiredArgsConstructor
 public class SignCertificateService {
@@ -26,9 +26,10 @@ public class SignCertificateService {
   private final ResourceLinkConverter resourceLinkConverter;
   private final SignCertificateDomainService signCertificateDomainService;
 
+  @Transactional
   public SignCertificateResponse sign(SignCertificateRequest signCertificateRequest,
       String certificateId, Long version) {
-    signCertificateRequestValidator.validate(signCertificateRequest, certificateId);
+    signCertificateRequestValidator.validate(signCertificateRequest, certificateId, version);
 
     final var actionEvaluation = actionEvaluationFactory.create(
         signCertificateRequest.getUser(),

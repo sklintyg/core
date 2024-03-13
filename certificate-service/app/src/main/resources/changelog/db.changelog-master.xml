@@ -15,6 +15,9 @@
       <column name="certificate_model_key" type="integer unsigned">
         <constraints nullable="false"/>
       </column>
+      <column name="certificate_status_key" type="tinyint unsigned">
+        <constraints nullable="false"/>
+      </column>
       <column name="patient_key" type="integer unsigned">
         <constraints nullable="false"/>
       </column>
@@ -26,6 +29,9 @@
       </column>
       <column name="modified" type="datetime">
         <constraints nullable="false"/>
+      </column>
+      <column name="signed" type="datetime">
+        <constraints nullable="true"/>
       </column>
       <column name="issued_by_staff_key" type="integer unsigned">
         <constraints nullable="false"/>
@@ -43,6 +49,26 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
+
+    <createTable tableName="certificate_status">
+      <column name="key" type="tinyint unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="status" type="varchar(32)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_certificate_status_key"
+      baseTableName="certificate" baseColumnNames="certificate_status_key"
+      referencedTableName="certificate_status" referencedColumnNames="key"/>
+
+    <insert tableName="certificate_status">
+      <column name="status" value="DRAFT"/>
+    </insert>
+    <insert tableName="certificate_status">
+      <column name="status" value="SIGNED"/>
+    </insert>
 
     <createTable tableName="certificate_model">
       <column name="key" type="integer unsigned" autoIncrement="true">
@@ -62,6 +88,15 @@
     <addForeignKeyConstraint constraintName="fk_certificate_certificate_model_key"
       baseTableName="certificate" baseColumnNames="certificate_model_key"
       referencedTableName="certificate_model" referencedColumnNames="key"/>
+
+    <createTable tableName="certificate_xml">
+      <column name="key" type="bigint unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="data" type="mediumblob">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
 
     <createTable tableName="patient">
       <column name="key" type="integer unsigned" autoIncrement="true">
@@ -116,25 +151,6 @@
       baseTableName="certificate" baseColumnNames="care_provider_unit_key"
       referencedTableName="unit" referencedColumnNames="key"/>
 
-    <createTable tableName="staff">
-      <column name="key" type="integer unsigned" autoIncrement="true">
-        <constraints nullable="false" primaryKey="true" unique="true"/>
-      </column>
-      <column name="hsa_id" type="varchar(64)">
-        <constraints nullable="false" unique="true"/>
-      </column>
-      <column name="first_name" type="varchar(255)"/>
-      <column name="middle_name" type="varchar(255)"/>
-      <column name="last_name" type="varchar(255)"/>
-    </createTable>
-
-    <addForeignKeyConstraint constraintName="fk_certificate_created_by_staff_key"
-      baseTableName="certificate" baseColumnNames="created_by_staff_key"
-      referencedTableName="staff" referencedColumnNames="key"/>
-    <addForeignKeyConstraint constraintName="fk_certificate_issued_by_staff_key"
-      baseTableName="certificate" baseColumnNames="issued_by_staff_key"
-      referencedTableName="staff" referencedColumnNames="key"/>
-
     <createTable tableName="unit_type">
       <column name="key" type="tinyint unsigned" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
@@ -156,6 +172,55 @@
     </insert>
     <insert tableName="unit_type">
       <column name="type" value="SUB_UNIT"/>
+    </insert>
+
+    <createTable tableName="staff">
+      <column name="key" type="integer unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="hsa_id" type="varchar(64)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="first_name" type="varchar(255)"/>
+      <column name="middle_name" type="varchar(255)"/>
+      <column name="last_name" type="varchar(255)"/>
+      <column name="staff_role_key" type="tinyint unsigned"/>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_certificate_created_by_staff_key"
+      baseTableName="certificate" baseColumnNames="created_by_staff_key"
+      referencedTableName="staff" referencedColumnNames="key"/>
+    <addForeignKeyConstraint constraintName="fk_certificate_issued_by_staff_key"
+      baseTableName="certificate" baseColumnNames="issued_by_staff_key"
+      referencedTableName="staff" referencedColumnNames="key"/>
+
+    <createTable tableName="staff_role">
+      <column name="key" type="tinyint unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="role" type="varchar(32)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_staff_staff_role_key"
+      baseTableName="staff" baseColumnNames="staff_role_key"
+      referencedTableName="staff_role" referencedColumnNames="key"/>
+
+    <insert tableName="staff_role">
+      <column name="role" value="CARE_ADMIN"/>
+    </insert>
+    <insert tableName="staff_role">
+      <column name="role" value="DOCTOR"/>
+    </insert>
+    <insert tableName="staff_role">
+      <column name="role" value="DENTIST"/>
+    </insert>
+    <insert tableName="staff_role">
+      <column name="role" value="NURSE"/>
+    </insert>
+    <insert tableName="staff_role">
+      <column name="role" value="MIDWIFE"/>
     </insert>
 
     <createTable tableName="certificate_data">

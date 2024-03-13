@@ -107,6 +107,74 @@ class GetUnitCertificatesRequestValidatorTest {
     }
 
     @Test
+    void shallThrowIfFirstNameIsNull() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .firstName(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getUnitCertificatesRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: User.firstName",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfFirstNameIsEmpty() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .firstName("")
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getUnitCertificatesRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: User.firstName",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfLastNameIsNull() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .lastName(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getUnitCertificatesRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: User.lastName",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfLastNameIsEmpty() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .lastName("")
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getUnitCertificatesRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: User.lastName",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
     void shallThrowIfRoleIsNull() {
       final var request = requestBuilder
           .user(

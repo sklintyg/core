@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -40,6 +41,9 @@ import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatus;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatusEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateXmlEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientIdTypeEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
@@ -71,6 +75,7 @@ class CertificateEntityMapperTest {
   private static final LocalDate NOW = LocalDate.now();
   private static final String DATE_ID = "dateId";
 
+  private final static String XML = "<xml/>";
   private final static String JSON =
       "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"dateId\":\"dateId\",\"date\":["
           + NOW.getYear() + ","
@@ -79,10 +84,17 @@ class CertificateEntityMapperTest {
   // TODO: Create test factory for these to not copy paste
 
   public static final CertificateEntity CERTIFICATE_ENTITY = CertificateEntity.builder()
-      .revision(1L)
-      .modified(LocalDateTime.now())
       .certificateId("ID")
-      .created(LocalDateTime.now())
+      .status(
+          CertificateStatusEntity.builder()
+              .key(CertificateStatus.SIGNED.getKey())
+              .status(CertificateStatus.SIGNED.name())
+              .build()
+      )
+      .created(LocalDateTime.now().minusDays(1))
+      .modified(LocalDateTime.now())
+      .signed(LocalDateTime.now())
+      .revision(1L)
       .careProvider(
           UnitEntity.builder()
               .type(
@@ -145,24 +157,13 @@ class CertificateEntityMapperTest {
       .data(
           new CertificateDataEntity(JSON)
       )
+      .xml(
+          new CertificateXmlEntity(XML)
+      )
       .build();
 
   @Nested
   class ToEntity {
-
-    @Test
-    void shouldMapId() {
-      final var response = certificateEntityMapper.toCertificateEntity(CERTIFICATE);
-
-      assertEquals(CERTIFICATE.id().id(), response.getCertificateId());
-    }
-
-    @Test
-    void shouldMapCreated() {
-      final var response = certificateEntityMapper.toCertificateEntity(CERTIFICATE);
-
-      assertEquals(CERTIFICATE.created(), response.getCreated());
-    }
 
   }
 
@@ -177,10 +178,24 @@ class CertificateEntityMapperTest {
     }
 
     @Test
+    void shouldMapStatus() {
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+
+      assertEquals(Status.SIGNED, response.status());
+    }
+
+    @Test
     void shouldMapCreated() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
 
       assertEquals(CERTIFICATE_ENTITY.getCreated(), response.created());
+    }
+
+    @Test
+    void shouldMapSigned() {
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+
+      assertEquals(CERTIFICATE_ENTITY.getSigned(), response.signed());
     }
 
     @Test
@@ -317,6 +332,12 @@ class CertificateEntityMapperTest {
 
       assertEquals(expected, response.elementData());
     }
-  }
 
+    @Test
+    void shouldMapXml() {
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+
+      assertEquals(XML, response.xml().xml());
+    }
+  }
 }

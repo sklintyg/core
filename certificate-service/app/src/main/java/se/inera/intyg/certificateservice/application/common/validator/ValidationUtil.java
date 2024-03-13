@@ -64,6 +64,12 @@ public class ValidationUtil {
     if (user.getId() == null || user.getId().isBlank()) {
       throw new IllegalArgumentException("Required parameter missing: User.id");
     }
+    if (user.getFirstName() == null || user.getFirstName().isBlank()) {
+      throw new IllegalArgumentException("Required parameter missing: User.firstName");
+    }
+    if (user.getLastName() == null || user.getLastName().isBlank()) {
+      throw new IllegalArgumentException("Required parameter missing: User.lastName");
+    }
     if (user.getRole() == null) {
       throw new IllegalArgumentException("Required parameter missing: User.role");
     }

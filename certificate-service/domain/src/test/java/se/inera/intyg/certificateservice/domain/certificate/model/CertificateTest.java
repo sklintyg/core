@@ -28,6 +28,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.REVISION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.XML;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.DATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.dateElementDataBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementDataConstants.DATE_ELEMENT_VALUE_DATE;
@@ -1017,6 +1018,51 @@ class CertificateTest {
           .status(Status.DELETED_DRAFT)
           .build();
       assertFalse(certificateWithStatusDeleted.isDraft());
+    }
+  }
+
+  @Nested
+  class TestSign {
+
+    @Test
+    void shallThrowExceptionIfRevisionDontMatch() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var revision = new Revision(2);
+      final var concurrentModificationException = assertThrows(
+          ConcurrentModificationException.class,
+          () -> certificate.sign(XML, revision, actionEvaluation)
+      );
+      assertTrue(concurrentModificationException.getMessage().contains("Incorrect revision"),
+          () -> "Received message was: %s".formatted(concurrentModificationException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowExceptionIfStatusDoesntMatchDraft() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var deletedCertificate = certificateBuilder
+          .status(Status.DELETED_DRAFT)
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> deletedCertificate.sign(XML, REVISION, actionEvaluation)
+      );
+
+      assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+
+    @Test
+    void shallReturnStateSignedWhenSigned() {
+      certificate.sign(XML, REVISION, actionEvaluationBuilder.build());
+      assertEquals(Status.SIGNED, certificate.status());
+    }
+
+    @Test
+    void shallReturnXmlWhenSigned() {
+      certificate.sign(XML, REVISION, actionEvaluationBuilder.build());
+      assertEquals(XML, certificate.xml());
     }
   }
 }

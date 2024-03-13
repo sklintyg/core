@@ -78,7 +78,7 @@ class SignCertificateServiceTest {
   @Test
   void shallThrowIfRequestIsInvalid() {
     doThrow(IllegalArgumentException.class).when(signCertificateRequestValidator)
-        .validate(REQUEST, CERTIFICATE_ID);
+        .validate(REQUEST, CERTIFICATE_ID, VERSION);
 
     assertThrows(IllegalArgumentException.class,
         () -> signCertificateService.sign(REQUEST, CERTIFICATE_ID, VERSION)

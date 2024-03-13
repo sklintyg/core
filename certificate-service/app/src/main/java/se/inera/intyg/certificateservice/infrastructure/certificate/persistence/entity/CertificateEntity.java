@@ -32,10 +32,15 @@ public class CertificateEntity {
   private Long key;
   @Column(name = "certificate_id", unique = true)
   private String certificateId;
+  @ManyToOne
+  @JoinColumn(name = "certificate_status_key")
+  private CertificateStatusEntity status;
   @Column(name = "created")
   private LocalDateTime created;
   @Column(name = "modified")
   private LocalDateTime modified;
+  @Column(name = "signed")
+  private LocalDateTime signed;
   @Column(name = "revision")
   private Long revision;
   @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
@@ -61,4 +66,7 @@ public class CertificateEntity {
   @OneToOne(mappedBy = "certificate", cascade = CascadeType.ALL)
   @PrimaryKeyJoinColumn
   private CertificateDataEntity data;
+  @OneToOne(mappedBy = "certificate", cascade = CascadeType.ALL)
+  @PrimaryKeyJoinColumn
+  private CertificateXmlEntity xml;
 }
