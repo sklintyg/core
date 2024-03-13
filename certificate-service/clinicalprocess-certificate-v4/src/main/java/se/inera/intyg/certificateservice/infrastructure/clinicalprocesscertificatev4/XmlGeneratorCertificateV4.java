@@ -56,14 +56,8 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
     return marshall(
         registerCertificateType(
             intyg(
-                intygsId(certificate),
-                version(certificate),
-                typAvIntyg(certificate),
-                patient(certificate),
-                skapadAv(certificate),
-                signeringsTidpunkt(certificate),
-                svar(certificate),
-                underskriftType(signature)
+                certificate,
+                signature
             )
         )
     );
@@ -75,22 +69,34 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
     return registerCertificateType;
   }
 
-  private static Intyg intyg(IntygId intygId, String version, TypAvIntyg typAvIntyg,
-      Patient patient, HosPersonal skapadAv, XMLGregorianCalendar signeringsTidpunkt,
-      List<Svar> answers, UnderskriftType underskriftType) {
+  private Intyg intyg(Certificate certificate, Signature signature) {
     final var intyg = new Intyg();
-    intyg.setIntygsId(intygId);
-    intyg.setVersion(version);
-    intyg.setTyp(typAvIntyg);
-    intyg.setPatient(patient);
-    intyg.setSkapadAv(skapadAv);
-    intyg.getSvar().addAll(answers);
+    intyg.setIntygsId(
+        intygsId(certificate)
+    );
+    intyg.setVersion(
+        version(certificate)
+    );
+    intyg.setTyp(
+        typAvIntyg(certificate)
+    );
+    intyg.setPatient(
+        patient(certificate)
+    );
+    intyg.setSkapadAv(
+        skapadAv(certificate)
+    );
+    intyg.getSvar().addAll(
+        svar(certificate)
+    );
 
+    final var signeringsTidpunkt = signeringsTidpunkt(certificate);
     if (signeringsTidpunkt != null) {
       intyg.setSigneringstidpunkt(signeringsTidpunkt);
       intyg.setSkickatTidpunkt(signeringsTidpunkt);
     }
 
+    final var underskriftType = underskriftType(signature);
     if (underskriftType != null) {
       intyg.setUnderskrift(underskriftType);
     }
