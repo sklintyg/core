@@ -11,6 +11,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProv
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
@@ -31,6 +32,9 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
 import java.io.StringReader;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,6 +42,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Signature;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
 import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
@@ -347,20 +352,54 @@ class XmlGeneratorCertificateV4Test {
 
   @Test
   void shouldNotIncludeSigneringsTidpunktIfSignedIsNull() {
-    final var signedResponse = unmarshal(
+    final var signeringstidpunkt = unmarshal(
         xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE)
     ).getIntyg().getSigneringstidpunkt();
 
-    assertNull(signedResponse);
+    assertNull(signeringstidpunkt);
   }
 
   @Test
   void shouldNotIncludeSkickatTidpunktIfSignedIsNull() {
-    final var sentResponse = unmarshal(
+    final var skickatTidpunkt = unmarshal(
         xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE)
     ).getIntyg().getSkickatTidpunkt();
 
-    assertNull(sentResponse);
+    assertNull(skickatTidpunkt);
+  }
+
+  @Test
+  void shouldIncludeSigneringtidpunkt() {
+    final var signedCertificate = fk7211CertificateBuilder()
+        .status(Status.SIGNED)
+        .signed(LocalDateTime.now(ZoneId.systemDefault()))
+        .build();
+
+    final var signeringstidpunkt = unmarshal(
+        xmlGeneratorCertificateV4.generate(signedCertificate)
+    ).getIntyg().getSigneringstidpunkt();
+
+    assertEquals(
+        signedCertificate.signed().truncatedTo(ChronoUnit.SECONDS).toString(),
+        signeringstidpunkt.toString()
+    );
+  }
+
+  @Test
+  void shouldIncludeSkickatTidpunkt() {
+    final var signedCertificate = fk7211CertificateBuilder()
+        .status(Status.SIGNED)
+        .signed(LocalDateTime.now(ZoneId.systemDefault()))
+        .build();
+
+    final var skickatTidpunkt = unmarshal(
+        xmlGeneratorCertificateV4.generate(signedCertificate)
+    ).getIntyg().getSkickatTidpunkt();
+
+    assertEquals(
+        signedCertificate.signed().truncatedTo(ChronoUnit.SECONDS).toString(),
+        skickatTidpunkt.toString()
+    );
   }
 
   private RegisterCertificateType unmarshal(Xml response) {

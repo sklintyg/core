@@ -6,9 +6,10 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import lombok.RequiredArgsConstructor;
 import org.w3._2000._09.xmldsig_.SignatureType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
@@ -60,9 +61,9 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
                 typAvIntyg(certificate),
                 patient(certificate),
                 skapadAv(certificate),
+                signeringsTidpunkt(certificate),
                 svar(certificate),
-                underskriftType(signature),
-                certificate.signed()
+                underskriftType(signature)
             )
         )
     );
@@ -73,10 +74,10 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
     registerCertificateType.setIntyg(intyg);
     return registerCertificateType;
   }
-    
+
   private static Intyg intyg(IntygId intygId, String version, TypAvIntyg typAvIntyg,
-      Patient patient, HosPersonal skapadAv, List<Svar> answers, UnderskriftType underskriftType,
-      LocalDateTime signedDate) {
+      Patient patient, HosPersonal skapadAv, XMLGregorianCalendar signeringsTidpunkt,
+      List<Svar> answers, UnderskriftType underskriftType) {
     final var intyg = new Intyg();
     intyg.setIntygsId(intygId);
     intyg.setVersion(version);
@@ -85,16 +86,9 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
     intyg.setSkapadAv(skapadAv);
     intyg.getSvar().addAll(answers);
 
-    if (signedDate != null) {
-      try {
-        final var gregorianSigned = DatatypeFactory
-            .newInstance()
-            .newXMLGregorianCalendar(signedDate.toString());
-        intyg.setSigneringstidpunkt(gregorianSigned);
-        intyg.setSkickatTidpunkt(gregorianSigned);
-      } catch (Exception e) {
-        return null;
-      }
+    if (signeringsTidpunkt != null) {
+      intyg.setSigneringstidpunkt(signeringsTidpunkt);
+      intyg.setSkickatTidpunkt(signeringsTidpunkt);
     }
 
     if (underskriftType != null) {
@@ -215,16 +209,18 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
     return vardgivare;
   }
 
-  private static Xml marshall(RegisterCertificateType registerCertificateType) {
-    final var factory = new ObjectFactory();
-    final var element = factory.createRegisterCertificate(registerCertificateType);
+  private XMLGregorianCalendar signeringsTidpunkt(Certificate certificate) {
+    if (certificate.signed() == null) {
+      return null;
+    }
+
     try {
-      final var context = JAXBContext.newInstance(RegisterCertificateType.class);
-      final var writer = new StringWriter();
-      context.createMarshaller().marshal(element, writer);
-      return new Xml(writer.toString());
-    } catch (Exception e) {
-      throw new IllegalStateException(e);
+      return DatatypeFactory.newInstance()
+          .newXMLGregorianCalendar(
+              certificate.signed().truncatedTo(ChronoUnit.SECONDS).toString()
+          );
+    } catch (Exception ex) {
+      throw new IllegalStateException("Could not convert signed");
     }
   }
 
@@ -247,6 +243,19 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
       return jaxbElement.getValue();
     } catch (Exception ex) {
       throw new IllegalStateException(ex);
+    }
+  }
+
+  private static Xml marshall(RegisterCertificateType registerCertificateType) {
+    final var factory = new ObjectFactory();
+    final var element = factory.createRegisterCertificate(registerCertificateType);
+    try {
+      final var context = JAXBContext.newInstance(RegisterCertificateType.class);
+      final var writer = new StringWriter();
+      context.createMarshaller().marshal(element, writer);
+      return new Xml(writer.toString());
+    } catch (Exception e) {
+      throw new IllegalStateException(e);
     }
   }
 }
