@@ -15,6 +15,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 
 @Component
 @RequiredArgsConstructor
@@ -26,7 +27,6 @@ public class CertificateConverter {
   private static final boolean FORWARDED = false;
   private static final boolean LATEST_MAJOR_VERSION = true;
   private static final boolean SENT = false;
-  private static final CertificateStatusTypeDTO STATUS = CertificateStatusTypeDTO.UNSIGNED;
   private static final boolean TEST_CERTIFICATE = false;
   private static final CertificateRelationsDTO RELATIONS = CertificateRelationsDTO.builder()
       .build();
@@ -95,7 +95,7 @@ public class CertificateConverter {
                 .forwarded(FORWARDED)
                 .latestMajorVersion(LATEST_MAJOR_VERSION)
                 .sent(SENT)
-                .status(STATUS)
+                .status(toCertificateStatusTypeDTO(certificate.status()))
                 .testCertificate(TEST_CERTIFICATE)
                 .relations(RELATIONS)
                 .build()
@@ -130,5 +130,12 @@ public class CertificateConverter {
         .deceased(patient.deceased().value())
         .protectedPerson(patient.protectedPerson().value())
         .build();
+  }
+
+  private CertificateStatusTypeDTO toCertificateStatusTypeDTO(Status status) {
+    return switch (status) {
+      case DRAFT, DELETED_DRAFT -> CertificateStatusTypeDTO.UNSIGNED;
+      case SIGNED -> CertificateStatusTypeDTO.SIGNED;
+    };
   }
 }
