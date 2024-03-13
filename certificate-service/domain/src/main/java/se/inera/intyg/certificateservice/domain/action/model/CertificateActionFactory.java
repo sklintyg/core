@@ -35,7 +35,8 @@ public class CertificateActionFactory {
           .actionRules(
               List.of(
                   new ActionRuleWithinCareUnit(),
-                  new ActionRuleProtectedPerson()
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleStatus(List.of(Status.DRAFT))
               )
           )
           .build();

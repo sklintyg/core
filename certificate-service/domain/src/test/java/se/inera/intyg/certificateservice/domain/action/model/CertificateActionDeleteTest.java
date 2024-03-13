@@ -227,7 +227,7 @@ class CertificateActionDeleteTest {
 
     assertTrue(
         certificateActionDelete.evaluate(Optional.of(certificate), actionEvaluation),
-        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
 
