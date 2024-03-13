@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityCertificateRequest;
+import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO;
 
 public class TestabilityCertificateRequestBuilder {
 
@@ -26,6 +27,7 @@ public class TestabilityCertificateRequestBuilder {
   private UnitDTO careUnit = ALFA_MEDICINCENTRUM_DTO;
   private UserDTO user = AJLA_DOCTOR_DTO;
   private PatientDTO patient = ATHENA_REACT_ANDERSSON_DTO;
+  private TestabilityFillTypeDTO fillType = TestabilityFillTypeDTO.MINIMAL;
 
   public static TestabilityCertificateRequestBuilder create() {
     return new TestabilityCertificateRequestBuilder();
@@ -55,6 +57,11 @@ public class TestabilityCertificateRequestBuilder {
     return this;
   }
 
+  public TestabilityCertificateRequestBuilder fillType(TestabilityFillTypeDTO fillType) {
+    this.fillType = fillType;
+    return this;
+  }
+
   public TestabilityCertificateRequestBuilder certificateModelId(
       CertificateModelIdDTO certificateModelIdDTO) {
     this.certificateModelId = certificateModelIdDTO;
@@ -71,6 +78,7 @@ public class TestabilityCertificateRequestBuilder {
         .certificateModelId(
             certificateModelId
         )
+        .fillType(fillType)
         .build();
   }
 }

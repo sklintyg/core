@@ -5,7 +5,8 @@ Content-Type: application/json
 {
   "user": {
     "id": "TSTNMT2321000156-DRAA",
-    "name": "Alja Doctor",
+    "firstName": "Alja",
+    "lastName": "Doctor",
     "role": "DOCTOR",
     "paTitles": [],
     "specialities": [],
@@ -60,6 +61,8 @@ Content-Type: application/json
     "id": "TSTNMT2321000156-DRAA",
     "name": "Alja Doctor",
     "role": "DOCTOR",
+    "paTitles": [],
+    "specialities": [],
     "blocked": "false"
   },
   "unit": {
@@ -103,10 +106,10 @@ Content-Type: application/json
 }
 
 ### Certificate exists
-GET http://localhost:18030/api/certificate/87ee572b-f55d-4955-b7a0-cb60d5e7be45/exists
+GET http://localhost:18030/api/certificate/f1b89faf-d111-4a5a-ad55-ce14c474fbec/exists
 
 ### Get certificate
-POST http://localhost:18030/api/certificate/fb1bbc5d-27dd-4875-9eda-aecc7d2fdb5a
+POST http://localhost:18030/api/certificate/f1b89faf-d111-4a5a-ad55-ce14c474fbec
 Content-Type: application/json
 #x-trace-id: "thisIsTraceId"
 #x-session-id: "thisIsSessionId"
@@ -114,8 +117,11 @@ Content-Type: application/json
 {
   "user": {
     "id": "TSTNMT2321000156-DRAA",
-    "name": "Alja Doctor",
+    "firstName": "Ajla",
+    "lastName": "Doctor",
     "role": "DOCTOR",
+    "paTitles": [],
+    "specialities": [],
     "blocked": "false"
   },
   "unit": {
@@ -162,7 +168,8 @@ Content-Type: application/json
 {
   "user": {
     "id": "TSTNMT2321000156-VAAA",
-    "name": "Alva Vårdadministratör",
+    "firstName": "Alva",
+    "lastName": "Vårdadministratör",
     "role": "CARE_ADMIN",
     "paTitles": [],
     "specialities": [],
@@ -204,13 +211,14 @@ Content-Type: application/json
 }
 
 ### Update certificate
-PUT http://localhost:18030/api/certificate/fb1bbc5d-27dd-4875-9eda-aecc7d2fdb5a
+PUT http://localhost:18030/api/certificate/f1b89faf-d111-4a5a-ad55-ce14c474fbec
 Content-Type: application/json
 
 {
   "user": {
     "id": "TSTNMT2321000156-DRAA",
-    "name": "Alja Doctor",
+    "firstName": "Alja",
+    "lastName": "Doctor",
     "role": "DOCTOR",
     "paTitles": [],
     "specialities": [],
@@ -324,7 +332,7 @@ Content-Type: application/json
         "fullName": "Alja Doctor",
         "prescriptionCode": null
       },
-      "version": 1,
+      "version": 0,
       "latestMajorVersion": true,
       "readyForSign": null,
       "responsibleHospName": null,
@@ -583,13 +591,14 @@ Content-Type: application/json
 }
 
 ### Sign certificate - Hudmottagningen
-POST http://localhost:18030/api/certificate/fb1bbc5d-27dd-4875-9eda-aecc7d2fdb5a/sign/2
+POST http://localhost:18030/api/certificate/f1b89faf-d111-4a5a-ad55-ce14c474fbec/sign/1
 Content-Type: application/json
 
 {
   "user": {
     "id": "TSTNMT2321000156-DRAA",
-    "name": "Alja Doctor",
+    "firstName": "Alja",
+    "lastName": "Doctor",
     "role": "DOCTOR",
     "paTitles": [],
     "specialities": [],

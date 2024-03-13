@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
@@ -68,7 +69,6 @@ public class CertificateUtil {
     if (response == null || response.getCertificate() == null) {
       return null;
     }
-
     return response.getCertificate();
   }
 
@@ -76,8 +76,14 @@ public class CertificateUtil {
     if (response == null || response.getCertificate() == null) {
       return null;
     }
-
     return response.getCertificate();
+  }
+
+  public static CertificateDTO certificate(ResponseEntity<SignCertificateResponse> response) {
+    if (response.getBody() == null || response.getBody() == null) {
+      return null;
+    }
+    return response.getBody().getCertificate();
   }
 
   public static List<CertificateDTO> certificates(GetPatientCertificatesResponse response) {

@@ -23,6 +23,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
@@ -273,6 +275,47 @@ public class ApiUtil {
     );
   }
 
+  public ResponseEntity<GetCertificateXmlResponse> getCertificateXml(
+      GetCertificateXmlRequest request, String certificateId) {
+    final var requestUrl = "http://localhost:%s/api/certificate/%s/xml".formatted(
+        port,
+        certificateId
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<SignCertificateResponse> signCertificate(SignCertificateRequest request,
+      String certificateId, Long version) {
+    final var requestUrl = "http://localhost:%s/api/certificate/%s/sign/%s".formatted(
+        port,
+        certificateId,
+        version
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
   public void reset() {
     if (certificateIds.isEmpty()) {
       return;
@@ -301,25 +344,4 @@ public class ApiUtil {
       );
     }
   }
-
-  public ResponseEntity<GetCertificateXmlResponse> getCertificateXml(
-      GetCertificateXmlRequest request, String certificateId) {
-    final var requestUrl = "http://localhost:%s/api/certificate/%s/xml".formatted(
-        port,
-        certificateId
-    );
-
-    final var headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-
-    return this.restTemplate.exchange(
-        requestUrl,
-        HttpMethod.POST,
-        new HttpEntity<>(request, headers),
-        new ParameterizedTypeReference<>() {
-        },
-        Collections.emptyMap()
-    );
-  }
-
 }
