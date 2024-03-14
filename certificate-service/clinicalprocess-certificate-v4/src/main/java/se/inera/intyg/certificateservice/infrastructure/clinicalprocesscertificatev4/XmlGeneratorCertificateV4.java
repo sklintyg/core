@@ -3,11 +3,18 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 import static se.inera.intyg.certificateservice.domain.common.model.HsaId.OID;
 
 import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
+import java.io.StringReader;
 import java.io.StringWriter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import lombok.RequiredArgsConstructor;
+import org.w3._2000._09.xmldsig_.SignatureType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.Signature;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
@@ -22,6 +29,7 @@ import se.riv.clinicalprocess.healthcond.certificate.types.v3.IntygId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.PersonId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.Specialistkompetens;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.TypAvIntyg;
+import se.riv.clinicalprocess.healthcond.certificate.types.v3.UnderskriftType;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Enhet;
 import se.riv.clinicalprocess.healthcond.certificate.v3.HosPersonal;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Intyg;
@@ -40,19 +48,19 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
 
   @Override
   public Xml generate(Certificate certificate) {
+    return generate(certificate, null);
+  }
+
+  @Override
+  public Xml generate(Certificate certificate, Signature signature) {
     return marshall(
         registerCertificateType(
             intyg(
-                intygsId(certificate),
-                version(certificate),
-                typAvIntyg(certificate),
-                patient(certificate),
-                skapadAv(certificate),
-                svar(certificate)
+                certificate,
+                signature
             )
         )
     );
-
   }
 
   private static RegisterCertificateType registerCertificateType(Intyg intyg) {
@@ -61,15 +69,38 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
     return registerCertificateType;
   }
 
-  private static Intyg intyg(IntygId intygId, String version, TypAvIntyg typAvIntyg,
-      Patient patient, HosPersonal skapadAv, List<Svar> answers) {
+  private Intyg intyg(Certificate certificate, Signature signature) {
     final var intyg = new Intyg();
-    intyg.setIntygsId(intygId);
-    intyg.setVersion(version);
-    intyg.setTyp(typAvIntyg);
-    intyg.setPatient(patient);
-    intyg.setSkapadAv(skapadAv);
-    intyg.getSvar().addAll(answers);
+    intyg.setIntygsId(
+        intygsId(certificate)
+    );
+    intyg.setVersion(
+        version(certificate)
+    );
+    intyg.setTyp(
+        typAvIntyg(certificate)
+    );
+    intyg.setPatient(
+        patient(certificate)
+    );
+    intyg.setSkapadAv(
+        skapadAv(certificate)
+    );
+    intyg.getSvar().addAll(
+        svar(certificate)
+    );
+
+    final var signeringsTidpunkt = signeringsTidpunkt(certificate);
+    if (signeringsTidpunkt != null) {
+      intyg.setSigneringstidpunkt(signeringsTidpunkt);
+      intyg.setSkickatTidpunkt(signeringsTidpunkt);
+    }
+
+    final var underskriftType = underskriftType(signature);
+    if (underskriftType != null) {
+      intyg.setUnderskrift(underskriftType);
+    }
+
     return intyg;
   }
 
@@ -182,6 +213,43 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
     vardgivare.setVardgivareId(hsaId);
     vardgivare.setVardgivarnamn(careProvider.name().name());
     return vardgivare;
+  }
+
+  private XMLGregorianCalendar signeringsTidpunkt(Certificate certificate) {
+    if (certificate.signed() == null) {
+      return null;
+    }
+
+    try {
+      return DatatypeFactory.newInstance()
+          .newXMLGregorianCalendar(
+              certificate.signed().truncatedTo(ChronoUnit.SECONDS).toString()
+          );
+    } catch (Exception ex) {
+      throw new IllegalStateException("Could not convert signed");
+    }
+  }
+
+  private UnderskriftType underskriftType(Signature signature) {
+    if (signature == null) {
+      return null;
+    }
+    final var signatureType = unmarshal(signature);
+    final var underskriftType = new UnderskriftType();
+    underskriftType.setSignature(signatureType);
+    return underskriftType;
+  }
+
+  private SignatureType unmarshal(Signature response) {
+    try {
+      final var context = JAXBContext.newInstance(SignatureType.class);
+      final var unmarshaller = context.createUnmarshaller();
+      final var stringReader = new StringReader(response.value());
+      final var jaxbElement = (JAXBElement<SignatureType>) unmarshaller.unmarshal(stringReader);
+      return jaxbElement.getValue();
+    } catch (Exception ex) {
+      throw new IllegalStateException(ex);
+    }
   }
 
   private static Xml marshall(RegisterCertificateType registerCertificateType) {

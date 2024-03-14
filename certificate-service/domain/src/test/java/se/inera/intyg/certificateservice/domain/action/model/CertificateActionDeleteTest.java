@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
@@ -180,6 +181,48 @@ class CertificateActionDeleteTest {
                 .patient(ANONYMA_REACT_ATTILA)
                 .build()
         )
+        .build();
+
+    assertTrue(
+        certificateActionDelete.evaluate(Optional.of(certificate), actionEvaluation),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnFalseIfSigned() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .build();
+
+    assertFalse(
+        certificateActionDelete.evaluate(Optional.of(certificate), actionEvaluation),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnFalseIfDeletedDraft() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.DELETED_DRAFT)
+        .build();
+
+    assertFalse(
+        certificateActionDelete.evaluate(Optional.of(certificate), actionEvaluation),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfDraft() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.DRAFT)
         .build();
 
     assertTrue(

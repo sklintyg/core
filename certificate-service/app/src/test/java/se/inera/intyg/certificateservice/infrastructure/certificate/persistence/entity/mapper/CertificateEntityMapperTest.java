@@ -1,31 +1,42 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doReturn;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateEntity.CERTIFICATE_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_MEDICINCENTRUM_ENTITY;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7211_CERTIFICATE_MODEL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_MIDDLE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_MIDDLE_NAME;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
-import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.patient.model.Deceased;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
@@ -34,136 +45,91 @@ import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
-import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientIdTypeEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitTypeEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.PatientRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.StaffRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.UnitRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntityRepository;
+
 
 @ExtendWith(MockitoExtension.class)
 class CertificateEntityMapperTest {
 
   @InjectMocks
   private CertificateEntityMapper certificateEntityMapper;
+  @Mock
+  CertificateEntityRepository certificateEntityRepository;
 
-  private final static Certificate CERTIFICATE = Certificate.builder()
-      .id(new CertificateId("ID"))
-      .created(LocalDateTime.now().minusDays(2))
-      .revision(new Revision(3L))
-      .build();
+  @Mock
+  private PatientRepository patientRepository;
 
-  private final static CertificateModel MODEL = CertificateModel.builder()
-      .name("NAME")
-      .id(CertificateModelId.builder()
-          .version(new CertificateVersion("VERSION"))
-          .type(new CertificateType("TYPE"))
-          .build()
-      )
-      .build();
+  @Mock
+  private UnitRepository unitRepository;
+
+  @Mock
+  private StaffRepository staffRepository;
+
+  @Mock
+  private CertificateModelEntityRepository certificateModelEntityRepository;
 
   private static final LocalDate NOW = LocalDate.now();
   private static final String DATE_ID = "dateId";
-
-  private final static String JSON =
-      "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"dateId\":\"dateId\",\"date\":["
-          + NOW.getYear() + ","
-          + NOW.getMonthValue() + "," + NOW.getDayOfMonth() + "]}}]";
-
-  // TODO: Create test factory for these to not copy paste
-
-  public static final CertificateEntity CERTIFICATE_ENTITY = CertificateEntity.builder()
-      .revision(1L)
-      .modified(LocalDateTime.now())
-      .certificateId("ID")
-      .created(LocalDateTime.now())
-      .careProvider(
-          UnitEntity.builder()
-              .type(
-                  UnitTypeEntity.builder()
-                      .type(UnitType.CARE_PROVIDER.name())
-                      .key(UnitType.CARE_PROVIDER.getKey())
-                      .build()
-              )
-              .hsaId("HSA_ID_PROVIDER")
-              .name("NAME_PROVIDER")
-              .build()
-      )
-      .careUnit(
-          UnitEntity.builder()
-              .type(
-                  UnitTypeEntity.builder()
-                      .type(UnitType.CARE_UNIT.name())
-                      .key(UnitType.CARE_UNIT.getKey())
-                      .build()
-              )
-              .hsaId("HSA_ID_UNIT")
-              .name("NAME_UNIT")
-              .build()
-      )
-      .issuedOnUnit(
-          UnitEntity.builder()
-              .type(
-                  UnitTypeEntity.builder()
-                      .type(UnitType.SUB_UNIT.name())
-                      .key(UnitType.SUB_UNIT.getKey())
-                      .build()
-              )
-              .hsaId("HSA_ID_ISSUED")
-              .name("NAME_ISSUED")
-              .build()
-      )
-      .issuedBy(
-          StaffEntity.builder()
-              .hsaId(AJLA_DOCTOR_HSA_ID)
-              .firstName(AJLA_DOCTOR_FIRST_NAME)
-              .middleName(AJLA_DOCTOR_MIDDLE_NAME)
-              .lastName(AJLA_DOCTOR_LAST_NAME)
-              .build()
-      )
-      .patient(
-          PatientEntity.builder()
-              .id("ID")
-              .protectedPerson(false)
-              .testIndicated(false)
-              .deceased(false)
-              .type(PatientIdTypeEntity.builder()
-                  .type(PersonIdType.PERSONAL_IDENTITY_NUMBER.name())
-                  .key(1)
-                  .build())
-              .firstName("FIRST")
-              .middleName("MIDDLE")
-              .lastName("LAST")
-              .build()
-      )
-      .data(
-          new CertificateDataEntity(JSON)
-      )
-      .build();
+  private final static String XML = "<xml/>";
 
   @Nested
   class ToEntity {
 
-    @Test
-    void shouldMapId() {
-      final var response = certificateEntityMapper.toCertificateEntity(CERTIFICATE);
-
-      assertEquals(CERTIFICATE.id().id(), response.getCertificateId());
+    @BeforeEach
+    void setUp() {
+      doReturn(Optional.of(CERTIFICATE_ENTITY))
+          .when(certificateEntityRepository)
+          .findByCertificateId(FK7211_CERTIFICATE.id().id());
     }
 
     @Test
-    void shouldMapCreated() {
-      final var response = certificateEntityMapper.toCertificateEntity(CERTIFICATE);
+    void shouldMapPatient() {
+      final var response = certificateEntityMapper.toEntity(FK7211_CERTIFICATE);
 
-      assertEquals(CERTIFICATE.created(), response.getCreated());
+      assertEquals(CERTIFICATE_ENTITY.getPatient(), response.getPatient());
     }
 
+    @Test
+    void shouldMapCareProvider() {
+      final var response = certificateEntityMapper.toEntity(FK7211_CERTIFICATE);
+
+      assertEquals(CERTIFICATE_ENTITY.getCareProvider(), response.getCareProvider());
+    }
+
+    @Test
+    void shouldMapCareUnit() {
+      final var response = certificateEntityMapper.toEntity(FK7211_CERTIFICATE);
+
+      assertEquals(CERTIFICATE_ENTITY.getCareUnit(), response.getCareUnit());
+    }
+
+    @Test
+    void shouldMapIssuedOnUnit() {
+      final var response = certificateEntityMapper.toEntity(FK7211_CERTIFICATE);
+
+      assertEquals(CERTIFICATE_ENTITY.getIssuedOnUnit(), response.getIssuedOnUnit());
+    }
+
+    @Test
+    void shouldMapIssuedBy() {
+      final var response = certificateEntityMapper.toEntity(FK7211_CERTIFICATE);
+
+      assertEquals(CERTIFICATE_ENTITY.getIssuedBy(), response.getIssuedBy());
+    }
+
+    @Test
+    void shouldMapXmlIfXmlIsNotNull() {
+      final var response = certificateEntityMapper.toEntity(FK7211_CERTIFICATE);
+
+      assertEquals(CERTIFICATE_ENTITY.getXml(), response.getXml());
+    }
   }
 
   @Nested
@@ -171,52 +137,69 @@ class CertificateEntityMapperTest {
 
     @Test
     void shouldMapId() {
-      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
 
       assertEquals(CERTIFICATE_ENTITY.getCertificateId(), response.id().id());
     }
 
     @Test
+    void shouldMapStatus() {
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
+
+      assertEquals(Status.SIGNED, response.status());
+    }
+
+    @Test
     void shouldMapCreated() {
-      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
 
       assertEquals(CERTIFICATE_ENTITY.getCreated(), response.created());
     }
 
     @Test
+    void shouldMapSigned() {
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
+
+      assertEquals(CERTIFICATE_ENTITY.getSigned(), response.signed());
+    }
+
+    @Test
     void shouldMapRevision() {
-      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
 
       assertEquals(CERTIFICATE_ENTITY.getRevision(), response.revision().value());
     }
 
     @Test
     void shouldMapModel() {
-      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
 
-      assertEquals(MODEL, response.certificateModel());
+      assertEquals(FK7211_CERTIFICATE_MODEL, response.certificateModel());
     }
 
     @Test
     void shouldMapCareProvider() {
-      final var expected = CareProvider.builder()
-          .hsaId(new HsaId("HSA_ID_PROVIDER"))
-          .name(new UnitName("NAME_PROVIDER"))
-          .build();
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
 
-      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
-
-      assertEquals(expected, response.certificateMetaData().careProvider());
+      assertEquals(ALFA_REGIONEN, response.certificateMetaData().careProvider());
     }
 
     @Test
     void shouldMapCareUnit() {
       final var expected = CareUnit.builder()
-          .hsaId(new HsaId("HSA_ID_UNIT"))
-          .name(new UnitName("NAME_UNIT"))
+          .hsaId(new HsaId(ALFA_MEDICINCENTRUM_ID))
+          .name(new UnitName(ALFA_MEDICINCENTRUM_NAME))
           .build();
 
-      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
 
       assertEquals(expected, response.certificateMetaData().careUnit());
     }
@@ -224,36 +207,27 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapIssuedOnUnitAsSubUnit() {
       final var expected = SubUnit.builder()
-          .hsaId(new HsaId("HSA_ID_ISSUED"))
-          .name(new UnitName("NAME_ISSUED"))
+          .hsaId(new HsaId(ALFA_ALLERGIMOTTAGNINGEN_ID))
+          .name(new UnitName(ALFA_ALLERGIMOTTAGNINGEN_NAME))
           .build();
 
-      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
 
       assertEquals(expected, response.certificateMetaData().issuingUnit());
     }
 
     @Test
     void shouldMapIssuedOnUnitAsCareUnit() {
-      CERTIFICATE_ENTITY.setIssuedOnUnit(
-          UnitEntity.builder()
-              .type(
-                  UnitTypeEntity.builder()
-                      .type(UnitType.CARE_UNIT.name())
-                      .key(UnitType.CARE_UNIT.getKey())
-                      .build()
-              )
-              .hsaId("HSA_ID_ISSUED")
-              .name("NAME_ISSUED")
-              .build()
-      );
+      CERTIFICATE_ENTITY.setIssuedOnUnit(ALFA_MEDICINCENTRUM_ENTITY);
 
       final var expected = CareUnit.builder()
-          .hsaId(new HsaId("HSA_ID_ISSUED"))
-          .name(new UnitName("NAME_ISSUED"))
+          .hsaId(new HsaId(ALFA_MEDICINCENTRUM_ID))
+          .name(new UnitName(ALFA_MEDICINCENTRUM_NAME))
           .build();
 
-      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
 
       assertEquals(expected, response.certificateMetaData().issuingUnit());
     }
@@ -269,9 +243,11 @@ class CertificateEntityMapperTest {
                   .lastName(AJLA_DOCTOR_LAST_NAME)
                   .build()
           )
+          .role(Role.DOCTOR)
           .build();
 
-      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
 
       assertEquals(expected, response.certificateMetaData().issuer());
     }
@@ -280,14 +256,14 @@ class CertificateEntityMapperTest {
     void shouldMapPatient() {
       final var expected = Patient.builder()
           .id(PersonId.builder()
-              .id("ID")
+              .id(ATHENA_REACT_ANDERSSON_ID)
               .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
               .build())
           .name(
               Name.builder()
-                  .firstName("FIRST")
-                  .lastName("LAST")
-                  .middleName("MIDDLE")
+                  .firstName(ATHENA_REACT_ANDERSSON_FIRST_NAME)
+                  .lastName(ATHENA_REACT_ANDERSSON_LAST_NAME)
+                  .middleName(ATHENA_REACT_ANDERSSON_MIDDLE_NAME)
                   .build()
           )
           .protectedPerson(new ProtectedPerson(false))
@@ -295,7 +271,8 @@ class CertificateEntityMapperTest {
           .testIndicated(new TestIndicated(false))
           .build();
 
-      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
 
       assertEquals(expected, response.certificateMetaData().patient());
     }
@@ -313,10 +290,18 @@ class CertificateEntityMapperTest {
               .build()
       );
 
-      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, MODEL);
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
 
       assertEquals(expected, response.elementData());
     }
-  }
 
+    @Test
+    void shouldMapXml() {
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
+
+      assertEquals(XML, response.xml().xml());
+    }
+  }
 }

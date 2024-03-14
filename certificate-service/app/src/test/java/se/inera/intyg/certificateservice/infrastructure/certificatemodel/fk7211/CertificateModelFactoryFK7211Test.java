@@ -126,6 +126,18 @@ class CertificateModelFactoryFK7211Test {
         "Expected type: %s".formatted(expectedType));
   }
 
+  @Test
+  void shallIncludeCertificateActionSign() {
+    final var expectedType = CertificateActionType.SIGN;
+
+    final var certificateModel = certificateModelFactoryFK7211.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
   @Nested
   class CertificateSpecifications {
 

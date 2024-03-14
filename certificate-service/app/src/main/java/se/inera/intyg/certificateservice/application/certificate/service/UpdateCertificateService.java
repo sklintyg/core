@@ -46,7 +46,8 @@ public class UpdateCertificateService {
         new CertificateId(certificateId),
         elementData,
         actionEvaluation,
-        new Revision(updateCertificateRequest.getCertificate().getMetadata().getVersion()));
+        new Revision(updateCertificateRequest.getCertificate().getMetadata().getVersion())
+    );
 
     return UpdateCertificateResponse.builder()
         .certificate(certificateConverter.convert(

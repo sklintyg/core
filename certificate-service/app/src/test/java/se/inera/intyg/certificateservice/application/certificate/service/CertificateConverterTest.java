@@ -47,6 +47,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateDataConverter;
@@ -86,11 +87,10 @@ class CertificateConverterTest {
   private static final String Q_1 = "q1";
   private static final String ID = "valueId";
   private static final String EXPRESSION = "$beraknatnedkomstdatum";
-  private static final String Q_2 = "q2";
   private static final String NAME = "Beräknat nedkomstdatum";
   private static final String KEY = "key";
   private static final Revision REVISION = new Revision(3L);
-  private List<ResourceLinkDTO> resourceLinkDTOs = Collections.emptyList();
+  private final List<ResourceLinkDTO> resourceLinkDTOs = Collections.emptyList();
   @Mock
   private CertificateMetaDataUnitConverter certificateMetaDataUnitConverter;
   @Mock
@@ -480,6 +480,49 @@ class CertificateConverterTest {
                 .getFullName()
         );
       }
+    }
+  }
+
+  @Nested
+  class StatusConvert {
+
+    @Test
+    void shallConvertDraftToUnsigned() {
+      assertEquals(
+          CertificateStatusTypeDTO.UNSIGNED,
+          certificateConverter.convert(
+                  certificate,
+                  resourceLinkDTOs
+              )
+              .getMetadata()
+              .getStatus()
+      );
+    }
+
+    @Test
+    void shallConvertDeletedDraftToUnsigned() {
+      assertEquals(
+          CertificateStatusTypeDTO.UNSIGNED,
+          certificateConverter.convert(
+                  certificateBuilder.status(Status.DELETED_DRAFT).build(),
+                  resourceLinkDTOs
+              )
+              .getMetadata()
+              .getStatus()
+      );
+    }
+
+    @Test
+    void shallConvertSignedToSigned() {
+      assertEquals(
+          CertificateStatusTypeDTO.SIGNED,
+          certificateConverter.convert(
+                  certificateBuilder.status(Status.SIGNED).build(),
+                  resourceLinkDTOs
+              )
+              .getMetadata()
+              .getStatus()
+      );
     }
   }
 

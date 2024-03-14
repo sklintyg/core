@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
@@ -69,4 +70,17 @@ class XmlGeneratorValueTest {
     assertEquals(Collections.emptyList(), response);
   }
 
+  @Test
+  void shouldMapEmptyIfValueIsNotUnitContactDetails() {
+    final var data = ElementData.builder()
+        .value(ElementValueUnitContactInformation.builder()
+            .build()
+        )
+        .id(new ElementId(QUESTION_ID))
+        .build();
+
+    final var response = xmlGeneratorValue.generate(List.of(data));
+
+    assertEquals(Collections.emptyList(), response);
+  }
 }

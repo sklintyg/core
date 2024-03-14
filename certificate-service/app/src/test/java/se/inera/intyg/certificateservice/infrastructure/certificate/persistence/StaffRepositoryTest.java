@@ -15,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffRole;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffRoleEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntityRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,6 +32,10 @@ class StaffRepositoryTest {
       .firstName(AJLA_DOCTOR_FIRST_NAME)
       .middleName(AJLA_DOCTOR_MIDDLE_NAME)
       .lastName(AJLA_DOCTOR_LAST_NAME)
+      .role(StaffRoleEntity.builder()
+          .role(StaffRole.DOCTOR.name())
+          .key(StaffRole.DOCTOR.getKey())
+          .build())
       .build();
 
   @Test

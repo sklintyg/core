@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificate.model;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -23,12 +24,14 @@ public class Certificate {
   private final CertificateId id;
   private final CertificateModel certificateModel;
   private final LocalDateTime created;
+  private LocalDateTime signed;
   private CertificateMetaData certificateMetaData;
   @Builder.Default
   private List<ElementData> elementData = Collections.emptyList();
   private Revision revision;
   @Builder.Default
   private Status status = Status.DRAFT;
+  private Xml xml;
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
@@ -47,13 +50,6 @@ public class Certificate {
             certificateAction.evaluate(Optional.of(this), addPatientIfMissing(actionEvaluation))
         )
         .orElse(false);
-  }
-
-  private ActionEvaluation addPatientIfMissing(ActionEvaluation actionEvaluation) {
-    if (actionEvaluation.patient() != null) {
-      return actionEvaluation;
-    }
-    return actionEvaluation.withPatient(certificateMetaData.patient());
   }
 
   public void updateMetadata(ActionEvaluation actionEvaluation) {
@@ -97,6 +93,7 @@ public class Certificate {
       );
     }
     this.status = Status.DELETED_DRAFT;
+    this.revision = this.revision.increment();
   }
 
   public ValidationResult validate() {
@@ -116,6 +113,31 @@ public class Certificate {
         .build();
   }
 
+  public boolean isDraft() {
+    return status().equals(Status.DRAFT);
+  }
+
+  public void sign(Xml xml, Revision revision, ActionEvaluation actionEvaluation) {
+    throwIfConcurrentModification(revision, "sign", actionEvaluation);
+    if (this.status != Status.DRAFT) {
+      throw new IllegalStateException(
+          "Incorrect status '%s' - required status is '%s' to sign".formatted(this.status,
+              Status.DRAFT)
+      );
+    }
+    this.status = Status.SIGNED;
+    this.signed = LocalDateTime.now(ZoneId.systemDefault());
+    this.revision = this.revision.increment();
+    this.xml = xml;
+  }
+
+  private ActionEvaluation addPatientIfMissing(ActionEvaluation actionEvaluation) {
+    if (actionEvaluation.patient() != null) {
+      return actionEvaluation;
+    }
+    return actionEvaluation.withPatient(certificateMetaData.patient());
+  }
+
   private void throwIfConcurrentModification(Revision revision, String operation,
       ActionEvaluation actionEvaluation) {
     if (!this.revision.equals(revision)) {
@@ -126,10 +148,6 @@ public class Certificate {
           actionEvaluation.subUnit()
       );
     }
-  }
-
-  public boolean isDraft() {
-    return status().equals(Status.DRAFT);
   }
 }
 
