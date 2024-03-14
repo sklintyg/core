@@ -1,46 +1,29 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FIRST_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_LAST_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_MIDDLE_NAME;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.AJLA_DOKTOR_ENTITY;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ajlaDoctorBuilder;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.common.model.HsaId;
-import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
 
 class StaffEntityMapperTest {
 
-  private static final Staff STAFF = Staff.builder()
-      .hsaId(new HsaId(AJLA_DOCTOR_HSA_ID))
-      .name(
-          Name.builder()
-              .firstName(AJLA_DOCTOR_FIRST_NAME)
-              .middleName(AJLA_DOCTOR_MIDDLE_NAME)
-              .lastName(AJLA_DOCTOR_LAST_NAME)
-              .build()
-      )
+  private static final Staff AJLA_STAFF = ajlaDoctorBuilder()
+      .paTitles(null)
+      .specialities(null)
+      .blocked(null)
       .build();
 
-  private static final StaffEntity STAFF_ENTITY = StaffEntity.builder()
-      .hsaId(AJLA_DOCTOR_HSA_ID)
-      .firstName(AJLA_DOCTOR_FIRST_NAME)
-      .middleName(AJLA_DOCTOR_MIDDLE_NAME)
-      .lastName(AJLA_DOCTOR_LAST_NAME)
-      .build();
 
   @Nested
   class ToEntity {
 
     @Test
     void shouldMapStaff() {
-      assertEquals(STAFF_ENTITY,
-          StaffEntityMapper.toEntity(STAFF)
-      );
+      assertEquals(AJLA_DOKTOR_ENTITY, StaffEntityMapper.toEntity(AJLA_DOKTOR));
     }
   }
 
@@ -49,9 +32,7 @@ class StaffEntityMapperTest {
 
     @Test
     void shouldMapStaff() {
-      assertEquals(STAFF,
-          StaffEntityMapper.toDomain(STAFF_ENTITY)
-      );
+      assertEquals(AJLA_STAFF, StaffEntityMapper.toDomain(AJLA_DOKTOR_ENTITY));
     }
   }
 }
