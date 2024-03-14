@@ -8,6 +8,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataSta
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_ALLERGIMOTTAGNINGEN_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_MEDICINCENTRUM_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_REGIONEN_ENTITY;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateConstants.CERTIFICATE_ID;
 
 import java.time.LocalDateTime;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
@@ -18,7 +19,7 @@ public class TestDataCertificateEntity {
 
   public static CertificateEntity.CertificateEntityBuilder certificateEntityBuilder() {
     return CertificateEntity.builder()
-        .certificateId("CERTIFICATE_ID")
+        .certificateId(CERTIFICATE_ID)
         .status(STATUS_SIGNED_ENTITY)
         .created(LocalDateTime.now().minusDays(1))
         .modified(LocalDateTime.now())

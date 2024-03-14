@@ -11,9 +11,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 
 public class TestDataStaffEntity {
 
-  public static final StaffEntity AJLA_DOKTOR_ENTITY = ajlaDoctorBuilder().build();
+  public static final StaffEntity AJLA_DOKTOR_ENTITY = ajlaDoctorEntityBuilder().build();
 
-  public static StaffEntity.StaffEntityBuilder ajlaDoctorBuilder() {
+  public static StaffEntity.StaffEntityBuilder ajlaDoctorEntityBuilder() {
     return StaffEntity.builder()
         .hsaId(AJLA_DOCTOR_HSA_ID)
         .firstName(AJLA_DOCTOR_FIRST_NAME)

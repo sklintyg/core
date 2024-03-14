@@ -7,16 +7,8 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.aj
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 
 class StaffEntityMapperTest {
-
-  private static final Staff AJLA_STAFF = ajlaDoctorBuilder()
-      .paTitles(null)
-      .specialities(null)
-      .blocked(null)
-      .build();
-
 
   @Nested
   class ToEntity {
@@ -32,7 +24,14 @@ class StaffEntityMapperTest {
 
     @Test
     void shouldMapStaff() {
-      assertEquals(AJLA_STAFF, StaffEntityMapper.toDomain(AJLA_DOKTOR_ENTITY));
+
+      final var expectedStaff = ajlaDoctorBuilder()
+          .paTitles(null)
+          .specialities(null)
+          .blocked(null)
+          .build();
+
+      assertEquals(expectedStaff, StaffEntityMapper.toDomain(AJLA_DOKTOR_ENTITY));
     }
   }
 }
