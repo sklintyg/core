@@ -35,6 +35,17 @@ public class PrintCertificateService {
   public static final String FIELD_PATIENT_ID = "form1[0].#subform[0].flt_txtPersonNr[0]";
   public static final String FIELD_CHECKBOX = "form1[0].#subform[0].ksr_UndersokningPatient[0]";
   public static final String FIELD_DATE = "form1[0].#subform[0].flt_datumPatient[0]";
+  public static final String FIELD_TEXT_2 = "form1[0].#subform[0].flt_txtYrkeArbetsuppgifter[0]";
+  public static final String FIELD_TEXT_5 = "form1[0].Sida2[0].flt_txtBeskrivUndersokningsfynd[0]";
+  public static final String FIELD_TEXT_VALUE =
+      "Lorem ipsum dolor sit amet, consectetur adipiscing "
+          + "elit. Vivamus pellentesque, arcu sit amet dictum malesuada, dolor nibh rutrum ligula, "
+          + "ut interdum ipsum nibh iaculis magna. Pellentesque habitant morbi tristique senectus "
+          + "et netus et malesuada fames ac turpis egestas. Curabitur ullamcorper congue purus eu "
+          + "condimentum. Suspendisse id consectetur dui. Donec in posuere nisl, at tincidunt "
+          + "felis. Ut aliquet ex nec turpis ultricies faucibus. Sed enim mauris, feugiat a risus "
+          + "ut, ultricies cursus purus. Sed ultricies commodo lacus, nec dictum ante egestas sit "
+          + "amet.";
 
   public static final String NEW_PATIENT_ID = "20121212-1212";
 
@@ -73,7 +84,10 @@ public class PrintCertificateService {
 
     setField(FIELD_PATIENT_ID, NEW_PATIENT_ID, pdfDocument);
     setField(FIELD_CHECKBOX, "Off", pdfDocument);
+    setField(FIELD_CHECKBOX, "1", pdfDocument);
     setField(FIELD_DATE, "2024-02-02", pdfDocument);
+    setField(FIELD_TEXT_2, FIELD_TEXT_VALUE, pdfDocument);
+    setField(FIELD_TEXT_5, FIELD_TEXT_VALUE, pdfDocument);
 
     fillFooter(pdfDocument);
 
