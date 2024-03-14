@@ -19,6 +19,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.FK7211;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.VERSION;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.WRONG_VERSION;
@@ -48,6 +49,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateTypeInfoUtil.certificateTypeInfo;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateInternalXmlResponse;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateXmlReponse;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificates;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.decodeXml;
@@ -85,6 +87,7 @@ import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.Cer
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
 import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
+import se.inera.intyg.certificateservice.integrationtest.util.InternalApiUtil;
 import se.inera.intyg.certificateservice.integrationtest.util.StaffUtil;
 import se.inera.intyg.certificateservice.integrationtest.util.TestabilityApiUtil;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO;
@@ -102,8 +105,10 @@ class FK7211ActiveIT {
     registry.add("certificate.model.fk7211.v1_0.active.from", () -> "2024-01-01T00:00:00");
   }
 
+
   private final TestRestTemplate restTemplate;
   private ApiUtil api;
+  private InternalApiUtil internalApi;
   private TestabilityApiUtil testabilityApi;
 
   @Autowired
@@ -114,6 +119,7 @@ class FK7211ActiveIT {
   @BeforeEach
   void setUp() {
     this.api = new ApiUtil(restTemplate, port);
+    this.internalApi = new InternalApiUtil(restTemplate, port);
     this.testabilityApi = new TestabilityApiUtil(restTemplate, port);
   }
 
@@ -121,6 +127,7 @@ class FK7211ActiveIT {
   void tearDown() {
     testabilityApi.reset();
     api.reset();
+    internalApi.reset();
   }
 
   @Nested
@@ -1953,8 +1960,9 @@ class FK7211ActiveIT {
       );
 
       assertAll(
-          () -> assertTrue(decodeXml(response).contains("Läkare"),
-              () -> "Expected 'Läkare' to be part of xml: '%s'".formatted(decodeXml(response))),
+          () -> assertTrue(decodeXml(certificateXmlReponse(response).getXml()).contains("Läkare"),
+              () -> "Expected 'Läkare' to be part of xml: '%s'"
+                  .formatted(decodeXml(certificateXmlReponse(response).getXml()))),
           () -> assertEquals(certificate(testCertificates).getMetadata().getId(),
               certificateXmlReponse(response).getCertificateId()),
           () -> assertEquals(certificate(testCertificates).getMetadata().getVersion(),
@@ -1977,8 +1985,9 @@ class FK7211ActiveIT {
       );
 
       assertAll(
-          () -> assertTrue(decodeXml(response).contains("Läkare"),
-              () -> "Expected 'Läkare' to be part of xml: '%s'".formatted(decodeXml(response))),
+          () -> assertTrue(decodeXml(certificateXmlReponse(response).getXml()).contains("Läkare"),
+              () -> "Expected 'Läkare' to be part of xml: '%s'"
+                  .formatted(decodeXml(certificateXmlReponse(response).getXml()))),
           () -> assertEquals(certificate(testCertificates).getMetadata().getId(),
               certificateXmlReponse(response).getCertificateId()),
           () -> assertEquals(certificate(testCertificates).getMetadata().getVersion(),
@@ -2003,8 +2012,9 @@ class FK7211ActiveIT {
       );
 
       assertAll(
-          () -> assertTrue(decodeXml(response).contains("Läkare"),
-              () -> "Expected 'Läkare' to be part of xml: '%s'".formatted(decodeXml(response))),
+          () -> assertTrue(decodeXml(certificateXmlReponse(response).getXml()).contains("Läkare"),
+              () -> "Expected 'Läkare' to be part of xml: '%s'"
+                  .formatted(decodeXml(certificateXmlReponse(response).getXml()))),
           () -> assertEquals(certificate(testCertificates).getMetadata().getId(),
               certificateXmlReponse(response).getCertificateId()),
           () -> assertEquals(certificate(testCertificates).getMetadata().getVersion(),
@@ -2081,8 +2091,9 @@ class FK7211ActiveIT {
       );
 
       assertAll(
-          () -> assertTrue(decodeXml(response).contains("Läkare"),
-              () -> "Expected 'Läkare' to be part of xml: '%s'".formatted(decodeXml(response))),
+          () -> assertTrue(decodeXml(certificateXmlReponse(response).getXml()).contains("Läkare"),
+              () -> "Expected 'Läkare' to be part of xml: '%s'"
+                  .formatted(decodeXml(certificateXmlReponse(response).getXml()))),
           () -> assertEquals(certificate(testCertificates).getMetadata().getId(),
               certificateXmlReponse(response).getCertificateId()),
           () -> assertEquals(certificate(testCertificates).getMetadata().getVersion(),
@@ -2290,6 +2301,39 @@ class FK7211ActiveIT {
       );
 
       assertEquals(400, response.getStatusCode().value());
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7211 - Intern api för intygstjänsten")
+  class InternalApi {
+
+    @Test
+    @DisplayName("FK7211 - Signerat intyg skall gå att hämta från intern api:et")
+    void shallReturnSignedCertificate() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      api.signCertificate(
+          defaultSignCertificateRequest(),
+          certificateId(testCertificates),
+          version(testCertificates)
+      );
+
+      final var response = internalApi.getCertificateXml(certificateId(testCertificates));
+
+      assertAll(
+          () -> assertEquals(certificateId(testCertificates),
+              certificateInternalXmlResponse(response).getCertificateId()),
+          () -> assertEquals(FK7211, certificateInternalXmlResponse(response).getCertificateType()),
+          () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ID,
+              certificateInternalXmlResponse(response).getUnitId()),
+          () -> assertTrue(decodeXml(certificateInternalXmlResponse(response).getXml()).contains(
+                  certificateId(testCertificates)),
+              () -> "Expected 'Läkare' to be part of xml: '%s'"
+                  .formatted(decodeXml(certificateInternalXmlResponse(response).getXml())))
+      );
     }
   }
 }

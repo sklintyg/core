@@ -21,7 +21,7 @@ public class TestDataCertificate {
 
   }
 
-  public static final CertificateId CERTIFICATE_ID = new CertificateId("certificateId");
+  public static final CertificateId CERTIFICATE_ID = new CertificateId("CERTIFICATE_ID");
   public static final Revision REVISION = new Revision(0L);
   public static final Xml XML = new Xml("xml");
   public static final Certificate FK7211_CERTIFICATE = fk7211CertificateBuilder().build();

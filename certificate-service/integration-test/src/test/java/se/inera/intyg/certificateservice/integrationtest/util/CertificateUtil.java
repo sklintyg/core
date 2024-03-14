@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateResponse;
@@ -151,12 +152,17 @@ public class CertificateUtil {
     return response.getBody().getValidationErrors();
   }
 
-  public static String decodeXml(ResponseEntity<GetCertificateXmlResponse> response) {
+  public static GetCertificateInternalXmlResponse certificateInternalXmlResponse(
+      ResponseEntity<GetCertificateInternalXmlResponse> response) {
     if (response == null || response.getBody() == null) {
       throw new IllegalArgumentException("Missing response!");
     }
+    return response.getBody();
+  }
+
+  public static String decodeXml(String xml) {
     return new String(
-        Base64.getDecoder().decode(response.getBody().getXml()),
+        Base64.getDecoder().decode(xml),
         StandardCharsets.UTF_8
     );
   }
