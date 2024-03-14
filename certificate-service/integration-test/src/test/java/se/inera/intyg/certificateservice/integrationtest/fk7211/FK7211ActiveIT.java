@@ -2260,9 +2260,7 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Om signatur saknas skall felkod 400 (BAD_REQUEST) returneras")
     void shallReturn403IfSignatureNotValid() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7211, VERSION)
-              .fillType(TestabilityFillTypeDTO.EMPTY)
-              .build()
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
       final var response = api.signCertificate(
@@ -2280,9 +2278,7 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Om man försöker signera med en inaktuell revision skall felkod 400 (BAD_REQUEST) returneras")
     void shallReturn403IfVersionNotValid() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7211, VERSION)
-              .fillType(TestabilityFillTypeDTO.EMPTY)
-              .build()
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
       );
 
       final var response = api.signCertificate(
