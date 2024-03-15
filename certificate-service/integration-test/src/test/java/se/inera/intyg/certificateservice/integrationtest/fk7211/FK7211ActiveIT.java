@@ -1287,6 +1287,7 @@ class FK7211ActiveIT {
               .queryCriteria(
                   CertificatesQueryCriteriaDTO.builder()
                       .from(LocalDateTime.now().minusDays(1))
+                      .statuses(List.of(CertificateStatusTypeDTO.UNSIGNED))
                       .build()
               )
               .build()
@@ -1335,6 +1336,7 @@ class FK7211ActiveIT {
               .queryCriteria(
                   CertificatesQueryCriteriaDTO.builder()
                       .to(LocalDateTime.now().plusDays(1))
+                      .statuses(List.of(CertificateStatusTypeDTO.UNSIGNED))
                       .build()
               )
               .build()
@@ -1441,6 +1443,7 @@ class FK7211ActiveIT {
               .queryCriteria(
                   CertificatesQueryCriteriaDTO.builder()
                       .issuedByStaffId(AJLA_DOCTOR_DTO.getId())
+                      .statuses(List.of(CertificateStatusTypeDTO.UNSIGNED))
                       .build()
               )
               .build()
@@ -1489,6 +1492,36 @@ class FK7211ActiveIT {
               .queryCriteria(
                   CertificatesQueryCriteriaDTO.builder()
                       .statuses(List.of(CertificateStatusTypeDTO.LOCKED))
+                      .build()
+              )
+              .build()
+      );
+
+      assertEquals(0, certificates(response.getBody()).size(),
+          "Expect list to be empty but contains: '%s'".formatted(certificates(response.getBody()))
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Ej returnera utkast som har signerad status")
+    void shallNotReturnCertificatesWithSignedStatus() {
+      final var testCertificates = testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .fillType(TestabilityFillTypeDTO.MAXIMAL)
+              .build()
+      );
+
+      api.signCertificate(
+          defaultSignCertificateRequest(),
+          certificateId(testCertificates),
+          version(testCertificates)
+      );
+
+      final var response = api.getUnitCertificates(
+          customGetUnitCertificatesRequest()
+              .queryCriteria(
+                  CertificatesQueryCriteriaDTO.builder()
+                      .statuses(List.of(CertificateStatusTypeDTO.UNSIGNED))
                       .build()
               )
               .build()
