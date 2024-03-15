@@ -14,8 +14,8 @@ public class PatientEntitySpecification {
   public static Specification<CertificateEntity> equalsPatient(PersonId personId) {
     return (root, query, criteriaBuilder) ->
     {
-      Join<PatientEntity, CertificateEntity> certificateIssuedBy = root.join("patient");
-      return criteriaBuilder.equal(certificateIssuedBy.get("id"), personId.id());
+      Join<PatientEntity, CertificateEntity> patient = root.join("patient");
+      return criteriaBuilder.equal(patient.get("id"), personId.id());
     };
   }
 }

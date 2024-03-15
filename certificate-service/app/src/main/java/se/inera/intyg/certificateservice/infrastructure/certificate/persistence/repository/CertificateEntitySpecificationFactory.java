@@ -5,6 +5,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificate.persi
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.modifiedEqualsAndLesserThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntitySpecification.equalsPatient;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntitySpecification.equalsIssuedByStaff;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StatusEntitySpecification.containsStatus;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.equalsCareUnit;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.equalsIssuedOnUnit;
 
@@ -53,6 +54,13 @@ public class CertificateEntitySpecificationFactory {
           equalsPatient(certificatesRequest.personId())
       );
     }
+
+    if (certificatesRequest.statuses() != null && !certificatesRequest.statuses().isEmpty()) {
+      specification = specification.and(
+          containsStatus(certificatesRequest.statuses())
+      );
+    }
+
     return specification;
   }
 }
