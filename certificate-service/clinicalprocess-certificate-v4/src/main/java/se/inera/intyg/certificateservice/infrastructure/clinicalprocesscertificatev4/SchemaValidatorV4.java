@@ -14,47 +14,51 @@ import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchemaVal
 @RequiredArgsConstructor
 public class SchemaValidatorV4 implements XmlSchemaValidator {
 
-    private static final String XSD_PATH_V4 = "schemas/certificate/4.0/interactions/RegisterCertificateInteraction/RegisterCertificateResponder_3.1.xsd";
+  private static final String XSD_PATH_V4 = "schemas/certificate/4.0/interactions/RegisterCertificateInteraction/RegisterCertificateResponder_3.1.xsd";
 
-    @Override
-    public boolean validate(Certificate certificate) {
-        try {
-            final var certificateId = certificate.id().id();
-            final var factory = SchemaFactory.newDefaultInstance();
-            factory.setResourceResolver(new SchemaResourceResolverV4());
+  @Override
+  public boolean validate(Certificate certificate) {
+    try {
+      final var certificateId = certificate.id().id();
+      final var factory = SchemaFactory.newDefaultInstance();
+      factory.setResourceResolver(new SchemaResourceResolverV4());
 
-            final var schema = factory.newSchema(getFileStreamSource());
-            final var validator = schema.newValidator();
-            final var xsdErrorHandler = new SchemaValidatorErrorHandler();
-            validator.setErrorHandler(new SchemaValidatorErrorHandler());
-            validator.validate(new StreamSource(new ByteArrayInputStream(certificate.xml().xml().getBytes())));
-            return schemaValidationResult(xsdErrorHandler, certificateId);
+      final var schema = factory.newSchema(getFileStreamSource());
+      final var validator = schema.newValidator();
+      final var xsdErrorHandler = new SchemaValidatorErrorHandler();
+      validator.setErrorHandler(new SchemaValidatorErrorHandler());
+      validator.validate(
+          new StreamSource(new ByteArrayInputStream(certificate.xml().xml().getBytes())));
+      return schemaValidationResult(xsdErrorHandler, certificateId);
 
-        } catch (Exception e) {
-            log.error("Validation failed", e);
-            return false;
-        }
+    } catch (Exception e) {
+      log.error("Validation failed", e);
+      return false;
     }
+  }
 
-    private StreamSource getFileStreamSource() throws IOException {
-        final var classLoader = getClass().getClassLoader();
-        try (final var inputStream = classLoader.getResourceAsStream(XSD_PATH_V4)) {
-            return new StreamSource(new ByteArrayInputStream(Objects.requireNonNull(inputStream).readAllBytes()));
-        }
+  private StreamSource getFileStreamSource() throws IOException {
+    final var classLoader = getClass().getClassLoader();
+    try (final var inputStream = classLoader.getResourceAsStream(XSD_PATH_V4)) {
+      return new StreamSource(
+          new ByteArrayInputStream(Objects.requireNonNull(inputStream).readAllBytes()));
     }
+  }
 
-    private boolean schemaValidationResult(SchemaValidatorErrorHandler xsdErrorHandler, String certificateId) {
-        final var exceptions = xsdErrorHandler.getExceptions();
+  private boolean schemaValidationResult(SchemaValidatorErrorHandler xsdErrorHandler,
+      String certificateId) {
+    final var exceptions = xsdErrorHandler.getExceptions();
 
-        if (exceptions.isEmpty()) {
-            log.info("Schema validation passed for certificate id {}.", certificateId);
-            return true;
-        } else {
-            final var failures = exceptions.stream()
-                .map(e -> "Line number: %s, Column number: %s. %s".formatted(e.getLineNumber(), e.getColumnNumber(), e.getMessage()))
-                .toList();
-            log.warn("Schema validation failed for certificate id {}.\n{}", certificateId, failures);
-            return false;
-        }
+    if (exceptions.isEmpty()) {
+      log.info("Schema validation passed for certificate id {}.", certificateId);
+      return true;
+    } else {
+      final var failures = exceptions.stream()
+          .map(e -> "Line number: %s, Column number: %s. %s".formatted(e.getLineNumber(),
+              e.getColumnNumber(), e.getMessage()))
+          .toList();
+      log.warn("Schema validation failed for certificate id {}.\n{}", certificateId, failures);
+      return false;
     }
+  }
 }

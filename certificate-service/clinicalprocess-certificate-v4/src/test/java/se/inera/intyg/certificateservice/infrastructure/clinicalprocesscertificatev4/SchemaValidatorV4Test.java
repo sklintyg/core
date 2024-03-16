@@ -14,35 +14,35 @@ import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 
 class SchemaValidatorV4Test {
 
-    private SchemaValidatorV4 schemaValidatorV4;
+  private SchemaValidatorV4 schemaValidatorV4;
 
-    @BeforeEach
-    void setUp() {
-        schemaValidatorV4 = new SchemaValidatorV4();
-    }
+  @BeforeEach
+  void setUp() {
+    schemaValidatorV4 = new SchemaValidatorV4();
+  }
 
-    @Test
-    void name() {
-        final var element = ElementData.builder()
-            .id(new ElementId("1"))
-            .value(
-                ElementValueDate.builder()
-                    .dateId(new FieldId("1.1"))
-                    .date(LocalDate.now())
-                    .build()
-            ).build();
+  @Test
+  void name() {
+    final var element = ElementData.builder()
+        .id(new ElementId("1"))
+        .value(
+            ElementValueDate.builder()
+                .dateId(new FieldId("1.1"))
+                .date(LocalDate.now())
+                .build()
+        ).build();
 
-        final var certificate = TestDataCertificate.fk7211CertificateBuilder()
-            .elementData(List.of(element))
-            .build();
+    final var certificate = TestDataCertificate.fk7211CertificateBuilder()
+        .elementData(List.of(element))
+        .build();
 
-        final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
-        final var xml = generator.generate(certificate);
+    final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
+    final var xml = generator.generate(certificate);
 
-        final var certificate1 = TestDataCertificate.fk7211CertificateBuilder()
-            .xml(xml)
-            .build();
-        assertTrue(schemaValidatorV4.validate(certificate1));
-    }
+    final var certificate1 = TestDataCertificate.fk7211CertificateBuilder()
+        .xml(xml)
+        .build();
+    assertTrue(schemaValidatorV4.validate(certificate1));
+  }
 
 }

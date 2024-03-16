@@ -28,100 +28,101 @@ import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertifica
 @Configuration
 public class AppConfig {
 
-    @Bean
-    public CreateCertificateDomainService createCertificateDomainService(
-        CertificateModelRepository certificateModelRepository,
-        CertificateRepository certificateRepository,
-        CertificateEventDomainService certificateEventDomainService) {
-        return new CreateCertificateDomainService(certificateModelRepository, certificateRepository,
-            certificateEventDomainService);
-    }
+  @Bean
+  public CreateCertificateDomainService createCertificateDomainService(
+      CertificateModelRepository certificateModelRepository,
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new CreateCertificateDomainService(certificateModelRepository, certificateRepository,
+        certificateEventDomainService);
+  }
 
-    @Bean
-    public GetCertificateDomainService getCertificateDomainService(
-        CertificateRepository certificateRepository,
-        CertificateEventDomainService certificateEventDomainService) {
-        return new GetCertificateDomainService(certificateRepository, certificateEventDomainService);
-    }
+  @Bean
+  public GetCertificateDomainService getCertificateDomainService(
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new GetCertificateDomainService(certificateRepository, certificateEventDomainService);
+  }
 
-    @Bean
-    public UpdateCertificateDomainService updateCertificateDomainService(
-        CertificateRepository certificateRepository,
-        CertificateEventDomainService certificateEventDomainService) {
-        return new UpdateCertificateDomainService(certificateRepository, certificateEventDomainService);
-    }
+  @Bean
+  public UpdateCertificateDomainService updateCertificateDomainService(
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new UpdateCertificateDomainService(certificateRepository, certificateEventDomainService);
+  }
 
-    @Bean
-    public DeleteCertificateDomainService deleteCertificateDomainService(
-        CertificateRepository certificateRepository,
-        CertificateEventDomainService certificateEventDomainService) {
-        return new DeleteCertificateDomainService(certificateRepository, certificateEventDomainService);
-    }
+  @Bean
+  public DeleteCertificateDomainService deleteCertificateDomainService(
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new DeleteCertificateDomainService(certificateRepository, certificateEventDomainService);
+  }
 
-    @Bean
-    public ValidateCertificateDomainService validateCertificateDomainService(
-        CertificateRepository certificateRepository,
-        CertificateEventDomainService certificateEventDomainService) {
-        return new ValidateCertificateDomainService(certificateRepository,
-            certificateEventDomainService);
-    }
+  @Bean
+  public ValidateCertificateDomainService validateCertificateDomainService(
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new ValidateCertificateDomainService(certificateRepository,
+        certificateEventDomainService);
+  }
 
-    @Bean
-    public GetPatientCertificatesDomainService getPatientCertificatesDomainService(
-        CertificateRepository certificateRepository) {
-        return new GetPatientCertificatesDomainService(certificateRepository);
-    }
+  @Bean
+  public GetPatientCertificatesDomainService getPatientCertificatesDomainService(
+      CertificateRepository certificateRepository) {
+    return new GetPatientCertificatesDomainService(certificateRepository);
+  }
 
-    @Bean
-    public GetUnitCertificatesDomainService getUnitCertificatesDomainService(
-        CertificateRepository certificateRepository) {
-        return new GetUnitCertificatesDomainService(certificateRepository);
-    }
+  @Bean
+  public GetUnitCertificatesDomainService getUnitCertificatesDomainService(
+      CertificateRepository certificateRepository) {
+    return new GetUnitCertificatesDomainService(certificateRepository);
+  }
 
-    @Bean
-    public GetUnitCertificatesInfoDomainService getUnitCertificatesInfoDomainService(
-        CertificateRepository certificateRepository) {
-        return new GetUnitCertificatesInfoDomainService(certificateRepository);
-    }
+  @Bean
+  public GetUnitCertificatesInfoDomainService getUnitCertificatesInfoDomainService(
+      CertificateRepository certificateRepository) {
+    return new GetUnitCertificatesInfoDomainService(certificateRepository);
+  }
 
-    @Bean
-    public CertificateEventDomainService certificateEventDomainService(
-        List<CertificateEventSubscriber> subscribers) {
-        return new CertificateEventDomainService(subscribers);
-    }
+  @Bean
+  public CertificateEventDomainService certificateEventDomainService(
+      List<CertificateEventSubscriber> subscribers) {
+    return new CertificateEventDomainService(subscribers);
+  }
 
-    @Bean
-    public GetCertificateXmlDomainService getCertificateXmlDomainService(
-        CertificateRepository certificateRepository, XmlGenerator xmlGenerator) {
-        return new GetCertificateXmlDomainService(certificateRepository, xmlGenerator);
-    }
+  @Bean
+  public GetCertificateXmlDomainService getCertificateXmlDomainService(
+      CertificateRepository certificateRepository, XmlGenerator xmlGenerator) {
+    return new GetCertificateXmlDomainService(certificateRepository, xmlGenerator);
+  }
 
-    @Bean
-    public XmlGeneratorValue xmlGeneratorValue() {
-        return new XmlGeneratorValue();
-    }
+  @Bean
+  public XmlGeneratorValue xmlGeneratorValue() {
+    return new XmlGeneratorValue();
+  }
 
-    @Bean
-    public XmlGenerator xmlGenerator(XmlGeneratorValue xmlGeneratorValue) {
-        return new XmlGeneratorCertificateV4(xmlGeneratorValue);
-    }
+  @Bean
+  public XmlGenerator xmlGenerator(XmlGeneratorValue xmlGeneratorValue) {
+    return new XmlGeneratorCertificateV4(xmlGeneratorValue);
+  }
 
-    @Bean
-    public XmlSchematronValidator schematronValidator() {
-        return new SchematronValidator();
-    }
+  @Bean
+  public XmlSchematronValidator schematronValidator() {
+    return new SchematronValidator();
+  }
 
-    @Bean
-    public XmlSchemaValidator schemaValidator() {
-        return new SchemaValidatorV4();
-    }
+  @Bean
+  public XmlSchemaValidator schemaValidator() {
+    return new SchemaValidatorV4();
+  }
 
-    @Bean
-    public SignCertificateDomainService signCertificateDomainService(
-        CertificateRepository certificateRepository,
-        CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator,
-        XmlSchematronValidator schematronValidator, XmlSchemaValidator schemaValidator) {
-        return new SignCertificateDomainService(certificateRepository, certificateEventDomainService, xmlGenerator, schematronValidator,
-            schemaValidator);
-    }
+  @Bean
+  public SignCertificateDomainService signCertificateDomainService(
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator,
+      XmlSchematronValidator schematronValidator, XmlSchemaValidator schemaValidator) {
+    return new SignCertificateDomainService(certificateRepository, certificateEventDomainService,
+        xmlGenerator, schematronValidator,
+        schemaValidator);
+  }
 }

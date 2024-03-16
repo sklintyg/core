@@ -18,49 +18,49 @@ import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDo
 @RequiredArgsConstructor
 public class SignCertificateDomainService {
 
-    private final CertificateRepository certificateRepository;
-    private final CertificateEventDomainService certificateEventDomainService;
-    private final XmlGenerator xmlGenerator;
-    private final XmlSchematronValidator xmlSchematronValidator;
-    private final XmlSchemaValidator xmlSchemaValidator;
+  private final CertificateRepository certificateRepository;
+  private final CertificateEventDomainService certificateEventDomainService;
+  private final XmlGenerator xmlGenerator;
+  private final XmlSchematronValidator xmlSchematronValidator;
+  private final XmlSchemaValidator xmlSchemaValidator;
 
-    public Certificate sign(CertificateId certificateId, Revision revision, Signature signature,
-        ActionEvaluation actionEvaluation) {
-        final var start = LocalDateTime.now(ZoneId.systemDefault());
+  public Certificate sign(CertificateId certificateId, Revision revision, Signature signature,
+      ActionEvaluation actionEvaluation) {
+    final var start = LocalDateTime.now(ZoneId.systemDefault());
 
-        final var certificate = certificateRepository.getById(certificateId);
-        if (!certificate.allowTo(CertificateActionType.SIGN, actionEvaluation)) {
-            throw new CertificateActionForbidden(
-                "Not allowed to sign certificate with id %s".formatted(certificateId)
-            );
-        }
-
-        certificate.updateMetadata(actionEvaluation);
-
-        final var validationResult = certificate.validate();
-        if (validationResult.isInvalid()) {
-            throw new IllegalArgumentException(
-                "Certificate '%s' cannot be signed as it is not valid".formatted(certificateId.id())
-            );
-        }
-
-        final var xml = xmlGenerator.generate(certificate, signature);
-        certificate.sign(xml, revision, actionEvaluation);
-        xmlSchemaValidator.validate(certificate);
-        xmlSchematronValidator.validate(certificate);
-
-        final var signedCertificate = certificateRepository.save(certificate);
-
-        certificateEventDomainService.publish(
-            CertificateEvent.builder()
-                .type(CertificateEventType.SIGNED)
-                .start(start)
-                .end(LocalDateTime.now(ZoneId.systemDefault()))
-                .certificate(signedCertificate)
-                .actionEvaluation(actionEvaluation)
-                .build()
-        );
-
-        return signedCertificate;
+    final var certificate = certificateRepository.getById(certificateId);
+    if (!certificate.allowTo(CertificateActionType.SIGN, actionEvaluation)) {
+      throw new CertificateActionForbidden(
+          "Not allowed to sign certificate with id %s".formatted(certificateId)
+      );
     }
+
+    certificate.updateMetadata(actionEvaluation);
+
+    final var validationResult = certificate.validate();
+    if (validationResult.isInvalid()) {
+      throw new IllegalArgumentException(
+          "Certificate '%s' cannot be signed as it is not valid".formatted(certificateId.id())
+      );
+    }
+
+    final var xml = xmlGenerator.generate(certificate, signature);
+    certificate.sign(xml, revision, actionEvaluation);
+    xmlSchemaValidator.validate(certificate);
+    xmlSchematronValidator.validate(certificate);
+
+    final var signedCertificate = certificateRepository.save(certificate);
+
+    certificateEventDomainService.publish(
+        CertificateEvent.builder()
+            .type(CertificateEventType.SIGNED)
+            .start(start)
+            .end(LocalDateTime.now(ZoneId.systemDefault()))
+            .certificate(signedCertificate)
+            .actionEvaluation(actionEvaluation)
+            .build()
+    );
+
+    return signedCertificate;
+  }
 }
