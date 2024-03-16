@@ -5,6 +5,9 @@ plugins {
 dependencies {
     implementation project(':domain')
     implementation "jakarta.xml.ws:jakarta.xml.ws-api:${jakartaWsVersion}"
+    implementation "com.helger.schematron:ph-schematron-xslt:${schematronVersion}"
+    implementation "org.apache.cxf:cxf-core:${cxfVersion}"
+
     runtimeOnly "org.glassfish.jaxb:jaxb-runtime"
 
     compileOnly "org.projectlombok:lombok"
