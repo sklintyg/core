@@ -50,7 +50,7 @@ class GetUnitCertificatesInfoDomainServiceTest {
         .careProvider(ALFA_REGIONEN);
 
     certificatesRequestBuilder = CertificatesRequest.builder()
-        .statuses(Status.all())
+        .statuses(Status.unsigned())
         .issuedUnitId(ALFA_ALLERGIMOTTAGNINGEN.hsaId())
         .personId(ATHENA_REACT_ANDERSSON.id());
   }
