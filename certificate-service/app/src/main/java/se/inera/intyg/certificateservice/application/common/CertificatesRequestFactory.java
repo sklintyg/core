@@ -16,7 +16,7 @@ public class CertificatesRequestFactory {
 
   public CertificatesRequest create() {
     return CertificatesRequest.builder()
-        .statuses(Status.all())
+        .statuses(Status.unsigned())
         .build();
   }
 
@@ -53,7 +53,8 @@ public class CertificatesRequestFactory {
     return switch (status) {
       case UNSIGNED -> Status.DRAFT;
       case SIGNED -> Status.SIGNED;
-      case LOCKED, LOCKED_REVOKED, REVOKED -> null;
+      case LOCKED -> Status.LOCKED_DRAFT;
+      case LOCKED_REVOKED, REVOKED -> null;
     };
   }
 }

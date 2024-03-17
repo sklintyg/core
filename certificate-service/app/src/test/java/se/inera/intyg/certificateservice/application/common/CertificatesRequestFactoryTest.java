@@ -31,7 +31,7 @@ class CertificatesRequestFactoryTest {
   @Test
   void shallCreateDefaultCertificatesRequest() {
     final var expectedCertificateRequest = CertificatesRequest.builder()
-        .statuses(Status.all())
+        .statuses(Status.unsigned())
         .build();
 
     assertEquals(expectedCertificateRequest,
@@ -165,8 +165,8 @@ class CertificatesRequestFactoryTest {
     }
 
     @Test
-    void shallNotIncludeStatusSignedIfStatusesNotContainsUNSIGNED() {
-      final var expectedStatuses = Collections.emptyList();
+    void shallIncludeStatusLOCKED_DRAFTTIfStatusesContainsLOCKED() {
+      final var expectedStatuses = List.of(Status.LOCKED_DRAFT);
       final var queryCriteriaDTO = CertificatesQueryCriteriaDTO.builder()
           .statuses(List.of(CertificateStatusTypeDTO.LOCKED))
           .build();

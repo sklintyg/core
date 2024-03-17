@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
@@ -21,6 +22,7 @@ import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
+import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -46,6 +48,7 @@ public class TestabilityCertificateService {
   private final CertificateConverter certificateConverter;
   private final ResourceLinkConverter resourceLinkConverter;
   private final List<TestabilityCertificateFillService> testabilityCertificateFillServices;
+  private final XmlGenerator xmlGenerator;
 
   public CreateCertificateResponse create(
       TestabilityCertificateRequest testabilityCertificateRequest) {
@@ -92,6 +95,11 @@ public class TestabilityCertificateService {
         certificate.revision(),
         actionEvaluation
     );
+
+    if (CertificateStatusTypeDTO.SIGNED.equals(testabilityCertificateRequest.getStatus())) {
+      final var xml = xmlGenerator.generate(certificate);
+      certificate.sign(xml, certificate.revision(), actionEvaluation);
+    }
 
     testabilityCertificateRepository.insert(certificate);
 

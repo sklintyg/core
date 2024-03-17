@@ -15,7 +15,7 @@ public class PatientEntitySpecification {
     return (root, query, criteriaBuilder) ->
     {
       Join<PatientEntity, CertificateEntity> patient = root.join("patient");
-      return criteriaBuilder.equal(patient.get("id"), personId.id());
+      return criteriaBuilder.equal(patient.get("id"), personId.idWithoutDash());
     };
   }
 }

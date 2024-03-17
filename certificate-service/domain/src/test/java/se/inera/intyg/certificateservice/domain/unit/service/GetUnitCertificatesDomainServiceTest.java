@@ -23,7 +23,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest.CertificatesRequestBuilder;
@@ -51,7 +50,6 @@ class GetUnitCertificatesDomainServiceTest {
         .careProvider(ALFA_REGIONEN);
 
     certificatesRequestBuilder = CertificatesRequest.builder()
-        .statuses(Status.all())
         .issuedUnitId(ALFA_ALLERGIMOTTAGNINGEN.hsaId())
         .personId(ATHENA_REACT_ANDERSSON.id());
   }

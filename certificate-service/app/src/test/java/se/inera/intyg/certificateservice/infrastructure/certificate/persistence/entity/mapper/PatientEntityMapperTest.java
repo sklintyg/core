@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_FIRST_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_MIDDLE_NAME;
 
@@ -139,7 +139,7 @@ class PatientEntityMapperTest {
       boolean protectedPerson) {
     return Patient.builder()
         .id(PersonId.builder()
-            .id(ATHENA_REACT_ANDERSSON_ID)
+            .id(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH)
             .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
             .build())
         .name(
@@ -158,7 +158,7 @@ class PatientEntityMapperTest {
   private static PatientEntity getPatientEntity(boolean testIndicated, boolean isDeceased,
       boolean isProtectedPerson) {
     return PatientEntity.builder()
-        .id(ATHENA_REACT_ANDERSSON_ID)
+        .id(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH)
         .protectedPerson(isProtectedPerson)
         .testIndicated(testIndicated)
         .deceased(isDeceased)

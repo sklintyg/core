@@ -21,7 +21,7 @@ public class PatientEntityMapper {
     final var type = PersonEntityIdType.valueOf(patient.id().type().name());
 
     return PatientEntity.builder()
-        .id(patient.id().id())
+        .id(patient.id().idWithoutDash())
         .type(
             PatientIdTypeEntity.builder()
                 .key(type.getKey())
@@ -40,10 +40,12 @@ public class PatientEntityMapper {
   public static Patient toDomain(PatientEntity patientEntity) {
 
     return Patient.builder()
-        .id(PersonId.builder()
-            .id(patientEntity.getId())
-            .type(PersonIdType.valueOf(patientEntity.getType().getType()))
-            .build())
+        .id(
+            PersonId.builder()
+                .id(patientEntity.getId())
+                .type(PersonIdType.valueOf(patientEntity.getType().getType()))
+                .build()
+        )
         .protectedPerson(new ProtectedPerson(patientEntity.isProtectedPerson()))
         .name(
             Name.builder()
