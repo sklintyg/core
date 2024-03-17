@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.application.common;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Objects;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
@@ -16,7 +16,7 @@ public class CertificatesRequestFactory {
 
   public CertificatesRequest create() {
     return CertificatesRequest.builder()
-        .statuses(Status.all())
+        .statuses(Status.unsigned())
         .build();
   }
 
@@ -38,16 +38,23 @@ public class CertificatesRequestFactory {
                 : null
         )
         .statuses(
-            containsStatusToMapToDraft(queryCriteria.getStatuses())
-                ? List.of(Status.DRAFT)
-                : Collections.emptyList()
+            queryCriteria.getStatuses() == null ? Collections.emptyList() :
+                queryCriteria.getStatuses()
+                    .stream()
+                    .map(this::convertStatus)
+                    .filter(Objects::nonNull)
+                    .toList()
         )
         .validCertificates(queryCriteria.getValidForSign())
         .build();
   }
 
-  private static boolean containsStatusToMapToDraft(List<CertificateStatusTypeDTO> statuses) {
-    return statuses == null || statuses.isEmpty()
-        || statuses.contains(CertificateStatusTypeDTO.UNSIGNED);
+  private Status convertStatus(CertificateStatusTypeDTO status) {
+    return switch (status) {
+      case UNSIGNED -> Status.DRAFT;
+      case SIGNED -> Status.SIGNED;
+      case LOCKED -> Status.LOCKED_DRAFT;
+      case LOCKED_REVOKED, REVOKED -> null;
+    };
   }
 }

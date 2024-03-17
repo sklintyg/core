@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -90,10 +89,6 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
   @Override
   public List<Certificate> findByCertificatesRequest(CertificatesRequest request) {
-    if (request.statuses().isEmpty()) {
-      return Collections.emptyList();
-    }
-
     final var specification = certificateEntitySpecificationFactory.create(request);
 
     return certificateEntityRepository.findAll(specification).stream()

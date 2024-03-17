@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.integrationtest.util;
 
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
@@ -122,17 +123,13 @@ public class ApiRequestUtil {
   public static TestabilityCertificateRequestBuilder customTestabilityCertificateRequest(
       String type,
       String version) {
-    return TestabilityCertificateRequestBuilder.create()
-        .certificateModelId(
-            CertificateModelIdDTO.builder()
-                .type(type)
-                .version(version)
-                .build()
-        );
+    return customTestabilityCertificateRequest(type, version, CertificateStatusTypeDTO.UNSIGNED);
   }
 
-  public static TestabilityCertificateRequest defaultTestablilityCertificateRequest(
-      String type, String version) {
+  public static TestabilityCertificateRequestBuilder customTestabilityCertificateRequest(
+      String type,
+      String version,
+      CertificateStatusTypeDTO status) {
     return TestabilityCertificateRequestBuilder.create()
         .certificateModelId(
             CertificateModelIdDTO.builder()
@@ -140,6 +137,24 @@ public class ApiRequestUtil {
                 .version(version)
                 .build()
         )
+        .status(status);
+  }
+
+  public static TestabilityCertificateRequest defaultTestablilityCertificateRequest(
+      String type, String version) {
+    return defaultTestablilityCertificateRequest(type, version, CertificateStatusTypeDTO.UNSIGNED);
+  }
+
+  public static TestabilityCertificateRequest defaultTestablilityCertificateRequest(
+      String type, String version, CertificateStatusTypeDTO status) {
+    return TestabilityCertificateRequestBuilder.create()
+        .certificateModelId(
+            CertificateModelIdDTO.builder()
+                .type(type)
+                .version(version)
+                .build()
+        )
+        .status(status)
         .build();
   }
 }

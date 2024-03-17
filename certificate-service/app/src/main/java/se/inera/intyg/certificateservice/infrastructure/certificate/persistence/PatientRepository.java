@@ -14,7 +14,7 @@ public class PatientRepository {
   private final PatientEntityRepository patientEntityRepository;
 
   public PatientEntity patient(Patient patient) {
-    return patientEntityRepository.findById(patient.id().id())
+    return patientEntityRepository.findById(patient.id().idWithoutDash())
         .orElseGet(
             () -> patientEntityRepository.save(
                 PatientEntityMapper.toEntity(patient)
