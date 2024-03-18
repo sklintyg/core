@@ -9,6 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.DeleteCertif
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateXmlDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SignCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.SignCertificateWithoutSignatureDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ValidateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
@@ -108,5 +109,13 @@ public class AppConfig {
       CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator) {
     return new SignCertificateDomainService(certificateRepository, certificateEventDomainService,
         xmlGenerator);
+  }
+
+  @Bean
+  public SignCertificateWithoutSignatureDomainService signCertificateWithoutSignatureDomainService(
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator) {
+    return new SignCertificateWithoutSignatureDomainService(certificateRepository,
+        certificateEventDomainService, xmlGenerator);
   }
 }

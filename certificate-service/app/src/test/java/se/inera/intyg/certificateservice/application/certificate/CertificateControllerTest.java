@@ -21,6 +21,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateWithoutSignatureRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
@@ -31,6 +32,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.DeleteC
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateXmlService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateWithoutSignatureService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ValidateCertificateService;
 
@@ -56,6 +58,8 @@ class CertificateControllerTest {
   private GetCertificateXmlService getCertificateXmlService;
   @Mock
   private SignCertificateService signCertificateService;
+  @Mock
+  private SignCertificateWithoutSignatureService signCertificateWithoutSignatureService;
   @InjectMocks
   private CertificateController certificateController;
 
@@ -188,6 +192,21 @@ class CertificateControllerTest {
 
     final var actualResult = certificateController.signCertificate(request, CERTIFICATE_ID,
         VERSION);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnSignCertificateResponseWhenSigningWithoutSignature() {
+    final var request = SignCertificateWithoutSignatureRequest.builder().build();
+    final var expectedResult = SignCertificateResponse.builder()
+        .certificate(CertificateDTO.builder().build())
+        .build();
+    doReturn(expectedResult).when(signCertificateWithoutSignatureService)
+        .sign(request, CERTIFICATE_ID, VERSION);
+
+    final var actualResult = certificateController.signCertificateWithoutSignature(request,
+        CERTIFICATE_ID, VERSION);
 
     assertEquals(expectedResult, actualResult);
   }
