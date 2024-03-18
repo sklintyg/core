@@ -5,5 +5,6 @@ public enum Role {
   NURSE,
   MIDWIFE,
   CARE_ADMIN,
-  DENTIST
+  DENTIST,
+  PRIVATE_DOCTOR
 }

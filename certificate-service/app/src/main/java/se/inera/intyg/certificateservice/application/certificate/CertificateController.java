@@ -20,6 +20,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateWithoutSignatureRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
@@ -30,6 +31,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.DeleteC
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateXmlService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateWithoutSignatureService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ValidateCertificateService;
 
@@ -46,6 +48,7 @@ public class CertificateController {
   private final ValidateCertificateService validateCertificateService;
   private final GetCertificateXmlService getCertificateXmlService;
   private final SignCertificateService signCertificateService;
+  private final SignCertificateWithoutSignatureService signCertificateWithoutSignatureService;
 
   @PostMapping
   CreateCertificateResponse createCertificate(
@@ -93,11 +96,19 @@ public class CertificateController {
       @PathVariable("certificateId") String certificateId) {
     return getCertificateXmlService.get(getCertificateXmlRequest, certificateId);
   }
-  
+
   @PostMapping("/{certificateId}/sign/{version}")
   SignCertificateResponse signCertificate(
       @RequestBody SignCertificateRequest signCertificateRequest,
       @PathVariable("certificateId") String certificateId, @PathVariable("version") Long version) {
     return signCertificateService.sign(signCertificateRequest, certificateId, version);
+  }
+
+  @PostMapping("/{certificateId}/signwithoutsignature/{version}")
+  SignCertificateResponse signCertificateWithoutSignature(
+      @RequestBody SignCertificateWithoutSignatureRequest signCertificateRequest,
+      @PathVariable("certificateId") String certificateId, @PathVariable("version") Long version) {
+    return signCertificateWithoutSignatureService.sign(signCertificateRequest, certificateId,
+        version);
   }
 }

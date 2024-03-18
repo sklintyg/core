@@ -214,6 +214,9 @@
       <column name="role" value="DOCTOR"/>
     </insert>
     <insert tableName="staff_role">
+      <column name="role" value="PRIVATE_DOCTOR"/>
+    </insert>
+    <insert tableName="staff_role">
       <column name="role" value="DENTIST"/>
     </insert>
     <insert tableName="staff_role">
