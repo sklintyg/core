@@ -24,6 +24,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 
@@ -136,6 +137,24 @@ class CertificateModelFactoryFK7211Test {
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
         ),
         "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeAllowedRolesForCertificateActionSign() {
+    final var expectedType = CertificateActionType.SIGN;
+
+    final var certificateModel = certificateModelFactoryFK7211.create();
+    final var certificateActionSpecificationSign = certificateModel.certificateActionSpecifications()
+        .stream()
+        .filter(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType()))
+        .findFirst()
+        .orElseThrow();
+
+    assertEquals(
+        List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE),
+        certificateActionSpecificationSign.allowedRoles()
+    );
   }
 
   @Nested
