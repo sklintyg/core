@@ -7,6 +7,13 @@
   ],
   "commissionList": [
     {
+      "healthCareUnitHsaId": "TSTNMT2321000156-ALMC",
+      "commissionPurpose": [
+        "Vård och behandling",
+        "STATISTIK"
+      ]
+    },
+    {
       "healthCareUnitHsaId": "TSTNMT2321000156-ALVC",
       "commissionPurpose": [
         "Vård och behandling",
@@ -33,7 +40,7 @@
     "readOnly": true,
     "logins": [
       {
-        "forvaldEnhet": "TSTNMT2321000156-ALVC",
+        "forvaldEnhet": "TSTNMT2321000156-ALMC",
         "beskrivning": "Anna Sjuksköterska (Sjuksköterska | Alfa Regionen)"
       }
     ]
