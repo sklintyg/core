@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRecipientDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationsDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PatientDTO;
@@ -15,6 +16,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 
 @Component
@@ -94,7 +96,8 @@ public class CertificateConverter {
                 )
                 .forwarded(FORWARDED)
                 .latestMajorVersion(LATEST_MAJOR_VERSION)
-                .sent(SENT)
+                .sent(certificate.sent() != null)
+                .recipient(toCertificateRecipientDTO(certificate.sent()))
                 .status(toCertificateStatusTypeDTO(certificate.status()))
                 .testCertificate(TEST_CERTIFICATE)
                 .relations(RELATIONS)
@@ -107,6 +110,18 @@ public class CertificateConverter {
             )
         )
         .links(resourceLinks)
+        .build();
+  }
+
+  private CertificateRecipientDTO toCertificateRecipientDTO(Sent sent) {
+    if (sent == null) {
+      return null;
+    }
+
+    return CertificateRecipientDTO.builder()
+        .id(sent.recipient().id().id())
+        .name(sent.recipient().name())
+        .sent(sent.sent())
         .build();
   }
 

@@ -2,6 +2,8 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonWebcertUnitDTO.alfaMedicincentrumDtoBuilder;
@@ -11,6 +13,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProv
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_CITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_DECEASED;
@@ -59,6 +62,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
+import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
@@ -90,6 +94,11 @@ class CertificateConverterTest {
   private static final String NAME = "Beräknat nedkomstdatum";
   private static final String KEY = "key";
   private static final Revision REVISION = new Revision(3L);
+  private static final Sent SENT = Sent.builder()
+      .recipient(RECIPIENT)
+      .sent(LocalDateTime.now(ZoneId.systemDefault()))
+      .sentBy(AJLA_DOKTOR)
+      .build();
   private final List<ResourceLinkDTO> resourceLinkDTOs = Collections.emptyList();
   @Mock
   private CertificateMetaDataUnitConverter certificateMetaDataUnitConverter;
@@ -108,6 +117,7 @@ class CertificateConverterTest {
         .created(CREATED)
         .revision(REVISION)
         .status(Status.DRAFT)
+        .sent(SENT)
         .certificateModel(
             CertificateModel.builder()
                 .id(
@@ -478,6 +488,36 @@ class CertificateConverterTest {
         assertEquals(AJLA_DOCTOR_FULLNAME,
             certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getIssuedBy()
                 .getFullName()
+        );
+      }
+
+      @Test
+      void shallSetSentToTrueIfSentNotNull() {
+        assertTrue(
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().isSent()
+        );
+      }
+
+      @Test
+      void shallSetSentToFalseIfSentNull() {
+        final var certificate = certificateBuilder.sent(null).build();
+        assertFalse(
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().isSent()
+        );
+      }
+
+      @Test
+      void shallIncludeRecipientIfSentNotNull() {
+        assertNotNull(
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getRecipient()
+        );
+      }
+
+      @Test
+      void shallNotIncludeRecipientIfSentIsNull() {
+        final var certificate = certificateBuilder.sent(null).build();
+        assertNull(
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getRecipient()
         );
       }
     }
