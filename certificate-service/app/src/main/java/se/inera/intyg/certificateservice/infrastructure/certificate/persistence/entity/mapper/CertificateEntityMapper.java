@@ -7,6 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
+import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -114,6 +115,16 @@ public class CertificateEntityMapper {
       certificateEntity.setXml(certificateXmlEntity);
     }
 
+    if (certificate.sent() != null) {
+      certificateEntity.setSentBy(
+          staffRepository.staff(certificate.sent().sentBy())
+      );
+
+      certificateEntity.setSent(
+          certificate.sent().sent()
+      );
+    }
+
     return certificateEntity;
   }
 
@@ -171,6 +182,14 @@ public class CertificateEntityMapper {
             certificateEntity.getXml() != null
                 ? new Xml(certificateEntity.getXml().getData())
                 : null
+        )
+        .sent(
+            certificateEntity.getSent() != null
+                ? Sent.builder()
+                .sentBy(StaffEntityMapper.toDomain(certificateEntity.getSentBy()))
+                .sent(certificateEntity.getSent())
+                .recipient(model.recipient())
+                .build() : null
         )
         .build();
   }
