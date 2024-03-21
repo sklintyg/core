@@ -33,8 +33,14 @@
       <column name="signed" type="datetime">
         <constraints nullable="true"/>
       </column>
+      <column name="sent" type="datetime">
+        <constraints nullable="true"/>
+      </column>
       <column name="issued_by_staff_key" type="integer unsigned">
         <constraints nullable="false"/>
+      </column>
+      <column name="sent_by_staff_key" type="integer unsigned">
+        <constraints nullable="true"/>
       </column>
       <column name="issued_on_unit_key" type="integer unsigned">
         <constraints nullable="false"/>
