@@ -57,7 +57,7 @@ public class CertificateEntity {
   @JoinColumn(name = "issued_by_staff_key", referencedColumnName = "`key`", nullable = false)
   private StaffEntity issuedBy;
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-  @JoinColumn(name = "sent_by_staff_key", referencedColumnName = "`key`", nullable = false)
+  @JoinColumn(name = "sent_by_staff_key", referencedColumnName = "`key`")
   private StaffEntity sentBy;
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
   @JoinColumn(name = "issued_on_unit_key", referencedColumnName = "`key`", nullable = false)
