@@ -6,7 +6,8 @@ public enum CertificateEventType {
   UPDATED("updated-certificate", "change"),
   DELETED("deleted-certificate", "deletion"),
   VALIDATED("validated-certificate", "accessed"),
-  SIGNED("sign-certificate", "change");
+  SIGNED("sign-certificate", "change"),
+  SENT("sent-certificate", "change");
 
   private final String action;
   private final String actionType;

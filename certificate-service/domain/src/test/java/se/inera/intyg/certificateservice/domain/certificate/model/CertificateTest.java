@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.certificate.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -77,6 +78,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
+import se.inera.intyg.certificateservice.domain.common.model.Recipient;
+import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
 import se.inera.intyg.certificateservice.domain.validation.model.ErrorMessage;
@@ -1144,6 +1147,47 @@ class CertificateTest {
       doReturn(XML).when(xmlGenerator).generate(certificate);
       certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build());
       assertEquals(XML, certificate.xml());
+    }
+  }
+
+  @Nested
+  class TestSend {
+
+    private static final Recipient RECIPIENT = new Recipient(
+        new RecipientId("recipientId"),
+        "Recipient"
+    );
+
+    @BeforeEach
+    void setUp() {
+      doReturn(RECIPIENT).when(certificateModel).recipient();
+    }
+
+    @Test
+    void shallIncludeRecipientWhenSent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+
+      certificate.send(actionEvaluation);
+
+      assertEquals(RECIPIENT, certificate.sent().recipient());
+    }
+
+    @Test
+    void shallIncludeSentTimestampWhenSent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+
+      certificate.send(actionEvaluation);
+
+      assertNotNull(certificate.sent().sent());
+    }
+
+    @Test
+    void shallIncludeSentByWhenSent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+
+      certificate.send(actionEvaluation);
+
+      assertEquals(TestDataStaff.AJLA_DOKTOR, certificate.sent().sentBy());
     }
   }
 }

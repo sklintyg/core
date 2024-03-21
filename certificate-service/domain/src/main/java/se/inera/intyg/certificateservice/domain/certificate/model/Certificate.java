@@ -33,6 +33,7 @@ public class Certificate {
   @Builder.Default
   private Status status = Status.DRAFT;
   private Xml xml;
+  private Sent sent;
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
@@ -173,6 +174,14 @@ public class Certificate {
           actionEvaluation.subUnit()
       );
     }
+  }
+
+  public void send(ActionEvaluation actionEvaluation) {
+    this.sent = Sent.builder()
+        .recipient(certificateModel.recipient())
+        .sentBy(Staff.create(actionEvaluation.user()))
+        .sent(LocalDateTime.now(ZoneId.systemDefault()))
+        .build();
   }
 }
 
