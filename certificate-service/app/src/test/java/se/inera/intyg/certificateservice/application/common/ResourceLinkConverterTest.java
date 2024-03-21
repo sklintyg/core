@@ -17,6 +17,7 @@ class ResourceLinkConverterTest {
 
   private static final String NAME = "Skapa intyg";
   private static final String DESCRIPTION = "Skapa ett intygsutkast.";
+  private static final String BODY = "<p>Om du går vidare kommer intyget skickas direkt till Försäkringskassans system vilket ska göras i samråd med patienten.</p>";
   private ResourceLinkConverter resourceLinkConverter;
 
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION_CREATE =
@@ -26,6 +27,11 @@ class ResourceLinkConverterTest {
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION_READ =
       CertificateActionSpecification.builder()
           .certificateActionType(CertificateActionType.READ)
+          .build();
+
+  private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION_SEND =
+      CertificateActionSpecification.builder()
+          .certificateActionType(CertificateActionType.SEND)
           .build();
 
   @BeforeEach
@@ -86,6 +92,19 @@ class ResourceLinkConverterTest {
 
       final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
       assertEquals(resourceLinkDTO.getDescription(), actualResult.getDescription());
+    }
+
+    @Test
+    void shallConvertBody() {
+      final var resourceLinkDTO = ResourceLinkDTO.builder()
+          .body(BODY)
+          .build();
+
+      final var certificateActionCreate = CertificateActionFactory.create(
+          CERTIFICATE_ACTION_SPECIFICATION_SEND);
+
+      final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
+      assertEquals(resourceLinkDTO.getBody(), actualResult.getBody());
     }
 
     @Test

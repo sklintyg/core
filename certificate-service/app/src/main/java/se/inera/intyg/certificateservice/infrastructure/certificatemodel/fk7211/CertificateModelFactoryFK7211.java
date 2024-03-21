@@ -23,6 +23,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
+import se.inera.intyg.certificateservice.domain.common.model.Recipient;
+import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
@@ -65,6 +67,12 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         .name(NAME)
         .description(DESCRIPTION)
         .activeFrom(activeFrom)
+        .recipient(
+            new Recipient(
+                new RecipientId("FKASSA"),
+                "Försäkringskassan"
+            )
+        )
         .certificateActionSpecifications(
             List.of(
                 CertificateActionSpecification.builder()
@@ -81,6 +89,9 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.SIGN)
+                    .build(),
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.SEND)
                     .build()
             )
         )
