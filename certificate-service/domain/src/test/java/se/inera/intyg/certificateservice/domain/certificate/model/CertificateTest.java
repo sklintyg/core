@@ -1158,15 +1158,14 @@ class CertificateTest {
         "Recipient"
     );
 
-    @BeforeEach
-    void setUp() {
-      doReturn(RECIPIENT).when(certificateModel).recipient();
-    }
-
     @Test
     void shallIncludeRecipientWhenSent() {
       final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
 
+      doReturn(RECIPIENT).when(certificateModel).recipient();
       certificate.send(actionEvaluation);
 
       assertEquals(RECIPIENT, certificate.sent().recipient());
@@ -1175,7 +1174,11 @@ class CertificateTest {
     @Test
     void shallIncludeSentTimestampWhenSent() {
       final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
 
+      doReturn(RECIPIENT).when(certificateModel).recipient();
       certificate.send(actionEvaluation);
 
       assertNotNull(certificate.sent().sent());
@@ -1184,10 +1187,49 @@ class CertificateTest {
     @Test
     void shallIncludeSentByWhenSent() {
       final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
 
+      doReturn(RECIPIENT).when(certificateModel).recipient();
       certificate.send(actionEvaluation);
 
       assertEquals(TestDataStaff.AJLA_DOKTOR, certificate.sent().sentBy());
+    }
+
+    @Test
+    void shallThrowIfStatusIsNotSigned() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.send(actionEvaluation));
+
+      assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowIfCertificateAlreadyBeenSent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .sent(
+              Sent.builder()
+                  .recipient(RECIPIENT)
+                  .build()
+          )
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.send(actionEvaluation));
+
+      assertTrue(illegalStateException.getMessage().contains("has already been sent to"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
     }
   }
 }

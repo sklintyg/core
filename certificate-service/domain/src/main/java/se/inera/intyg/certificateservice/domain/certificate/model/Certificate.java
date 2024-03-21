@@ -177,6 +177,19 @@ public class Certificate {
   }
 
   public void send(ActionEvaluation actionEvaluation) {
+    if (this.status != Status.SIGNED) {
+      throw new IllegalStateException(
+          "Incorrect status '%s' - required status is '%s' to send".formatted(this.status,
+              Status.SIGNED)
+      );
+    }
+
+    if (this.sent != null) {
+      throw new IllegalStateException(
+          "'%s' has already been sent to '%s'.".formatted(id(), this.sent.recipient().name())
+      );
+    }
+    
     this.sent = Sent.builder()
         .recipient(certificateModel.recipient())
         .sentBy(Staff.create(actionEvaluation.user()))
