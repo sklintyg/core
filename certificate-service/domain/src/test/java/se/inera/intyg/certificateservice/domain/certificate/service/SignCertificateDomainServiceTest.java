@@ -11,7 +11,6 @@ import static se.inera.intyg.certificateservice.domain.action.model.CertificateA
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -27,8 +26,6 @@ import se.inera.intyg.certificateservice.domain.common.exception.CertificateActi
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
-import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
-import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
 @ExtendWith(MockitoExtension.class)
 class SignCertificateDomainServiceTest {
@@ -63,12 +60,10 @@ class SignCertificateDomainServiceTest {
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, ACTION_EVALUATION);
-    doReturn(ValidationResult.builder().build()).when(certificate).validate();
-    doReturn(XML).when(xmlGenerator).generate(certificate, SIGNATURE);
 
     signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, SIGNATURE, ACTION_EVALUATION);
 
-    verify(certificate).sign(XML, REVISION, ACTION_EVALUATION);
+    verify(certificate).sign(xmlGenerator, SIGNATURE, REVISION, ACTION_EVALUATION);
   }
 
   @Test
@@ -76,7 +71,6 @@ class SignCertificateDomainServiceTest {
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, ACTION_EVALUATION);
-    doReturn(ValidationResult.builder().build()).when(certificate).validate();
 
     signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, SIGNATURE, ACTION_EVALUATION);
 
@@ -90,7 +84,6 @@ class SignCertificateDomainServiceTest {
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, ACTION_EVALUATION);
-    doReturn(ValidationResult.builder().build()).when(certificate).validate();
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
 
     final var actualCertificate = signCertificateDomainService.sign(CERTIFICATE_ID, REVISION,
@@ -106,7 +99,6 @@ class SignCertificateDomainServiceTest {
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, ACTION_EVALUATION);
-    doReturn(ValidationResult.builder().build()).when(certificate).validate();
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
 
     signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, SIGNATURE, ACTION_EVALUATION);
@@ -120,19 +112,5 @@ class SignCertificateDomainServiceTest {
         () -> assertEquals(ACTION_EVALUATION, certificateEventCaptor.getValue().actionEvaluation()),
         () -> assertTrue(certificateEventCaptor.getValue().duration() >= 0)
     );
-  }
-
-  @Test
-  void shallThrowIllegalArgumentExceptionIfValidationResultIsInvalid() {
-    final var certificate = mock(Certificate.class);
-    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(SIGN, ACTION_EVALUATION);
-    doReturn(ValidationResult.builder()
-        .errors(List.of(ValidationError.builder().build()))
-        .build()).when(certificate).validate();
-
-    assertThrows(IllegalArgumentException.class,
-        () -> signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, SIGNATURE,
-            ACTION_EVALUATION));
   }
 }

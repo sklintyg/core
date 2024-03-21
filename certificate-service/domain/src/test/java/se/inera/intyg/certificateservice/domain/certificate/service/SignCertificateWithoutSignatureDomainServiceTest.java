@@ -13,7 +13,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.a
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,8 +30,6 @@ import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
-import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
-import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
 @ExtendWith(MockitoExtension.class)
 class SignCertificateWithoutSignatureDomainServiceTest {
@@ -77,12 +74,10 @@ class SignCertificateWithoutSignatureDomainServiceTest {
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, actionEvaluation);
-    doReturn(ValidationResult.builder().build()).when(certificate).validate();
-    doReturn(XML).when(xmlGenerator).generate(certificate);
 
     signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, actionEvaluation);
 
-    verify(certificate).sign(XML, REVISION, actionEvaluation);
+    verify(certificate).sign(xmlGenerator, REVISION, actionEvaluation);
   }
 
   @Test
@@ -90,7 +85,6 @@ class SignCertificateWithoutSignatureDomainServiceTest {
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, actionEvaluation);
-    doReturn(ValidationResult.builder().build()).when(certificate).validate();
 
     signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, actionEvaluation);
 
@@ -104,7 +98,6 @@ class SignCertificateWithoutSignatureDomainServiceTest {
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, actionEvaluation);
-    doReturn(ValidationResult.builder().build()).when(certificate).validate();
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
 
     final var actualCertificate = signCertificateDomainService.sign(CERTIFICATE_ID, REVISION,
@@ -120,7 +113,6 @@ class SignCertificateWithoutSignatureDomainServiceTest {
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, actionEvaluation);
-    doReturn(ValidationResult.builder().build()).when(certificate).validate();
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
 
     signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, actionEvaluation);
@@ -133,20 +125,6 @@ class SignCertificateWithoutSignatureDomainServiceTest {
         () -> assertEquals(expectedCertificate, certificateEventCaptor.getValue().certificate()),
         () -> assertEquals(actionEvaluation, certificateEventCaptor.getValue().actionEvaluation()),
         () -> assertTrue(certificateEventCaptor.getValue().duration() >= 0)
-    );
-  }
-
-  @Test
-  void shallThrowIllegalArgumentExceptionIfValidationResultIsInvalid() {
-    final var certificate = mock(Certificate.class);
-    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(SIGN, actionEvaluation);
-    doReturn(ValidationResult.builder()
-        .errors(List.of(ValidationError.builder().build()))
-        .build()).when(certificate).validate();
-
-    assertThrows(IllegalArgumentException.class,
-        () -> signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, actionEvaluation)
     );
   }
 
