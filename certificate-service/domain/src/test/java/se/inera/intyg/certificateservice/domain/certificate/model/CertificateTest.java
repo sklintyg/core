@@ -67,10 +67,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -88,6 +90,9 @@ class CertificateTest {
   private Certificate.CertificateBuilder certificateBuilder;
   private CertificateModel certificateModel;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
+
+  @Mock
+  private XmlGenerator xmlGenerator = mock(XmlGenerator.class);
 
   @BeforeEach
   void setUp() {
@@ -1024,13 +1029,15 @@ class CertificateTest {
   @Nested
   class TestSign {
 
+    private final Signature SIGNATURE = new Signature("Signature");
+
     @Test
     void shallThrowExceptionIfRevisionDontMatch() {
       final var actionEvaluation = actionEvaluationBuilder.build();
       final var revision = new Revision(2);
       final var concurrentModificationException = assertThrows(
           ConcurrentModificationException.class,
-          () -> certificate.sign(XML, revision, actionEvaluation)
+          () -> certificate.sign(xmlGenerator, SIGNATURE, revision, actionEvaluation)
       );
       assertTrue(concurrentModificationException.getMessage().contains("Incorrect revision"),
           () -> "Received message was: %s".formatted(concurrentModificationException.getMessage())
@@ -1045,7 +1052,80 @@ class CertificateTest {
           .build();
 
       final var illegalStateException = assertThrows(IllegalStateException.class,
-          () -> deletedCertificate.sign(XML, REVISION, actionEvaluation)
+          () -> deletedCertificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluation)
+      );
+
+      assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowExceptionIfSignatureIsNull() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificate.sign(xmlGenerator, null, REVISION, actionEvaluation)
+      );
+
+      assertTrue(illegalArgumentException.getMessage().contains("Incorrect signature"),
+          () -> "Received message was: %s".formatted(illegalArgumentException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowExceptionIfSignatureIsEmpty() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signatureEmpty = new Signature(" ");
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificate.sign(xmlGenerator, signatureEmpty, REVISION, actionEvaluation)
+      );
+
+      assertTrue(illegalArgumentException.getMessage().contains("Incorrect signature"),
+          () -> "Received message was: %s".formatted(illegalArgumentException.getMessage())
+      );
+    }
+
+    @Test
+    void shallReturnStateSignedWhenSigned() {
+      certificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluationBuilder.build());
+      assertEquals(Status.SIGNED, certificate.status());
+    }
+
+    @Test
+    void shallReturnXmlWhenSigned() {
+      doReturn(XML).when(xmlGenerator).generate(certificate, SIGNATURE);
+      certificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluationBuilder.build());
+      assertEquals(XML, certificate.xml());
+    }
+  }
+
+  @Nested
+  class TestSignWithoutSignature {
+
+    @Test
+    void shallThrowExceptionIfRevisionDontMatch() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var revision = new Revision(2);
+      final var concurrentModificationException = assertThrows(
+          ConcurrentModificationException.class,
+          () -> certificate.sign(xmlGenerator, revision, actionEvaluation)
+      );
+      assertTrue(concurrentModificationException.getMessage().contains("Incorrect revision"),
+          () -> "Received message was: %s".formatted(concurrentModificationException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowExceptionIfStatusDoesntMatchDraft() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var deletedCertificate = certificateBuilder
+          .status(Status.DELETED_DRAFT)
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> deletedCertificate.sign(xmlGenerator, REVISION, actionEvaluation)
       );
 
       assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
@@ -1055,13 +1135,14 @@ class CertificateTest {
 
     @Test
     void shallReturnStateSignedWhenSigned() {
-      certificate.sign(XML, REVISION, actionEvaluationBuilder.build());
+      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build());
       assertEquals(Status.SIGNED, certificate.status());
     }
 
     @Test
     void shallReturnXmlWhenSigned() {
-      certificate.sign(XML, REVISION, actionEvaluationBuilder.build());
+      doReturn(XML).when(xmlGenerator).generate(certificate);
+      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build());
       assertEquals(XML, certificate.xml());
     }
   }

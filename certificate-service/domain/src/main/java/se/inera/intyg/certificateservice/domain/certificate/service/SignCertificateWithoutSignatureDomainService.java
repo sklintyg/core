@@ -36,21 +36,13 @@ public class SignCertificateWithoutSignatureDomainService {
     if (!Role.PRIVATE_DOCTOR.equals(actionEvaluation.user().role())) {
       throw new CertificateActionForbidden(
           "Only '%s' is allowed to sign without signature! Cannot sign certificate '%s'!"
-              .formatted(Role.PRIVATE_DOCTOR.name(), certificateId)
+              .formatted(Role.PRIVATE_DOCTOR.name(), certificateId.id())
       );
     }
 
     certificate.updateMetadata(actionEvaluation);
 
-    final var validationResult = certificate.validate();
-    if (validationResult.isInvalid()) {
-      throw new IllegalArgumentException(
-          "Certificate '%s' cannot be signed as it is not valid".formatted(certificateId.id())
-      );
-    }
-
-    final var xml = xmlGenerator.generate(certificate);
-    certificate.sign(xml, revision, actionEvaluation);
+    certificate.sign(xmlGenerator, revision, actionEvaluation);
 
     final var signedCertificate = certificateRepository.save(certificate);
 
