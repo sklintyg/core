@@ -16,7 +16,6 @@ import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 
 @Component
@@ -97,7 +96,8 @@ public class CertificateConverter {
                 .forwarded(FORWARDED)
                 .latestMajorVersion(LATEST_MAJOR_VERSION)
                 .sent(certificate.sent() != null)
-                .recipient(toCertificateRecipientDTO(certificate.sent()))
+                .sentTo(certificate.sent() != null ? certificate.sent().recipient().name() : null)
+                .recipient(toCertificateRecipientDTO(certificate))
                 .status(toCertificateStatusTypeDTO(certificate.status()))
                 .testCertificate(TEST_CERTIFICATE)
                 .relations(RELATIONS)
@@ -113,9 +113,13 @@ public class CertificateConverter {
         .build();
   }
 
-  private CertificateRecipientDTO toCertificateRecipientDTO(Sent sent) {
+  private CertificateRecipientDTO toCertificateRecipientDTO(Certificate certificate) {
+    final var sent = certificate.sent();
     if (sent == null) {
-      return null;
+      return CertificateRecipientDTO.builder()
+          .id(certificate.certificateModel().recipient().id().id())
+          .name(certificate.certificateModel().recipient().name())
+          .build();
     }
 
     return CertificateRecipientDTO.builder()

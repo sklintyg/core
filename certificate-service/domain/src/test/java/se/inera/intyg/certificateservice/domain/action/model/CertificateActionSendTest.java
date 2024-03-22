@@ -23,6 +23,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
+import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 
 class CertificateActionSendTest {
@@ -43,6 +44,7 @@ class CertificateActionSendTest {
 
     certificateBuilder = Certificate.builder()
         .status(Status.SIGNED)
+        .sent(null)
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -208,6 +210,35 @@ class CertificateActionSendTest {
 
     final var certificate = certificateBuilder
         .status(Status.DRAFT)
+        .build();
+
+    assertFalse(
+        certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfNotSent() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .build();
+
+    assertTrue(
+        certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnFalseIfSent() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .sent(TestDataCertificate.SENT)
         .build();
 
     assertFalse(

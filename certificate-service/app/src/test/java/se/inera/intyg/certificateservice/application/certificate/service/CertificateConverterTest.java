@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
@@ -50,6 +49,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRecipientDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
@@ -128,6 +128,7 @@ class CertificateConverterTest {
                 )
                 .name(TYPE_NAME)
                 .description(TYPE_DESCRIPTION)
+                .recipient(RECIPIENT)
                 .elementSpecifications(
                     List.of(
                         ElementSpecification.builder()
@@ -490,36 +491,6 @@ class CertificateConverterTest {
                 .getFullName()
         );
       }
-
-      @Test
-      void shallSetSentToTrueIfSentNotNull() {
-        assertTrue(
-            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().isSent()
-        );
-      }
-
-      @Test
-      void shallSetSentToFalseIfSentNull() {
-        final var certificate = certificateBuilder.sent(null).build();
-        assertFalse(
-            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().isSent()
-        );
-      }
-
-      @Test
-      void shallIncludeRecipientIfSentNotNull() {
-        assertNotNull(
-            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getRecipient()
-        );
-      }
-
-      @Test
-      void shallNotIncludeRecipientIfSentIsNull() {
-        final var certificate = certificateBuilder.sent(null).build();
-        assertNull(
-            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getRecipient()
-        );
-      }
     }
   }
 
@@ -562,6 +533,67 @@ class CertificateConverterTest {
               )
               .getMetadata()
               .getStatus()
+      );
+    }
+  }
+
+  @Nested
+  class TestCertificateRecipient {
+
+    @Test
+    void shallSetSentTrueIfSentNotNull() {
+      assertTrue(
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().isSent()
+      );
+    }
+
+    @Test
+    void shallSetSentFalseIfSentNull() {
+      final var certificate = certificateBuilder.sent(null).build();
+      assertFalse(
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().isSent()
+      );
+    }
+
+    @Test
+    void shallIncludeSentToIfSentNotNull() {
+      assertEquals(RECIPIENT.name(),
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getSentTo()
+      );
+    }
+
+    @Test
+    void shallExcludeSentToIfSentNotNull() {
+      final var certificate = certificateBuilder.sent(null).build();
+
+      assertNull(
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getSentTo()
+      );
+    }
+
+    @Test
+    void shallIncludeRecipientWithSentDateTimeIfSentNotNull() {
+      final var expectedCertificateRecipient = CertificateRecipientDTO.builder()
+          .id(RECIPIENT.id().id())
+          .name(RECIPIENT.name())
+          .sent(SENT.sent())
+          .build();
+      assertEquals(expectedCertificateRecipient,
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getRecipient()
+      );
+    }
+
+    @Test
+    void shallIncludeRecipientWithoutSentDateIfSentIsNull() {
+      final var expectedCertificateRecipient = CertificateRecipientDTO.builder()
+          .id(RECIPIENT.id().id())
+          .name(RECIPIENT.name())
+          .build();
+
+      final var certificate = certificateBuilder.sent(null).build();
+
+      assertEquals(expectedCertificateRecipient,
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getRecipient()
       );
     }
   }

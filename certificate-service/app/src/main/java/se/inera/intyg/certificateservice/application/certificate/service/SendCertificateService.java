@@ -20,8 +20,7 @@ public class SendCertificateService {
   private final SendCertificateDomainService sendCertificateDomainService;
   private final CertificateConverter certificateConverter;
   private final ResourceLinkConverter resourceLinkConverter;
-
-
+  
   public SendCertificateResponse send(SendCertificateRequest request, String certificateId) {
     sendCertificateRequestValidator.validate(request, certificateId);
     final var actionEvaluation = actionEvaluationFactory.create(
