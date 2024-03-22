@@ -87,8 +87,10 @@ import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.Cer
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
 import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
+import se.inera.intyg.certificateservice.integrationtest.util.Containers;
 import se.inera.intyg.certificateservice.integrationtest.util.InternalApiUtil;
 import se.inera.intyg.certificateservice.integrationtest.util.StaffUtil;
+import se.inera.intyg.certificateservice.integrationtest.util.TestListener;
 import se.inera.intyg.certificateservice.integrationtest.util.TestabilityApiUtil;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO;
 
@@ -110,6 +112,7 @@ class FK7211ActiveIT {
   private ApiUtil api;
   private InternalApiUtil internalApi;
   private TestabilityApiUtil testabilityApi;
+  private TestListener testListener = new TestListener();
 
   @Autowired
   public FK7211ActiveIT(TestRestTemplate restTemplate) {
@@ -128,6 +131,7 @@ class FK7211ActiveIT {
     testabilityApi.reset();
     api.reset();
     internalApi.reset();
+    Containers.ensureRunning();
   }
 
   @Nested
@@ -2734,6 +2738,37 @@ class FK7211ActiveIT {
 
       assertEquals(400, response.getStatusCode().value());
     }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget signeras ska ett meddelande läggas på AMQn")
+    void shallSuccessfullyAddMessageOfSigningOnAMQ() {
+      final var testCertificates = testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build()
+      );
+
+      assertAll(
+          () -> assertEquals(0,
+              testListener.messages.size()
+          )
+      );
+
+      api.signCertificate(
+          customSignCertificateRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
+          certificateId(testCertificates),
+          version(testCertificates)
+      );
+
+      assertAll(
+          () -> assertEquals(1,
+              testListener.messages.size()
+          )
+      );
+    }
+
   }
 
   @Nested

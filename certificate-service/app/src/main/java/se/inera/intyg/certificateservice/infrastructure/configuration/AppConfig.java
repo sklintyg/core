@@ -1,6 +1,11 @@
 package se.inera.intyg.certificateservice.infrastructure.configuration;
 
 import java.util.List;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
@@ -24,6 +29,13 @@ import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertifica
 
 @Configuration
 public class AppConfig {
+
+  @Value("${certificate.service.amq.name}")
+  private String queueName;
+  @Value("${certificate.service.amq.exchange}")
+  private String queueExchange;
+  @Value("${certificate.service.amq.routing.key}")
+  private String routingKey;
 
   @Bean
   public CreateCertificateDomainService createCertificateDomainService(
@@ -118,4 +130,20 @@ public class AppConfig {
     return new SignCertificateWithoutSignatureDomainService(certificateRepository,
         certificateEventDomainService, xmlGenerator);
   }
+
+  @Bean
+  Queue queue() {
+    return new Queue(queueName, false);
+  }
+
+  @Bean
+  TopicExchange exchange() {
+    return new TopicExchange(queueExchange);
+  }
+
+  @Bean
+  Binding binding(Queue queue, TopicExchange exchange) {
+    return BindingBuilder.bind(queue).to(exchange).with(routingKey);
+  }
+
 }
