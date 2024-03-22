@@ -124,6 +124,7 @@ class FK7211ActiveIT {
     this.api = new ApiUtil(restTemplate, port);
     this.internalApi = new InternalApiUtil(restTemplate, port);
     this.testabilityApi = new TestabilityApiUtil(restTemplate, port);
+    Containers.ensureRunning();
   }
 
   @AfterEach
@@ -131,7 +132,6 @@ class FK7211ActiveIT {
     testabilityApi.reset();
     api.reset();
     internalApi.reset();
-    Containers.ensureRunning();
   }
 
   @Nested

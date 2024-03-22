@@ -23,8 +23,8 @@ public class Containers {
       AMQ_CONTAINER.start();
     }
 
-    System.setProperty("spring.data.redis.host", AMQ_CONTAINER.getHost());
-    System.setProperty("spring.data.redis.port", AMQ_CONTAINER.getMappedPort(5672).toString());
+    System.setProperty("spring.rabbitmq.host", AMQ_CONTAINER.getHost());
+    System.setProperty("spring.rabbitmq.port", AMQ_CONTAINER.getMappedPort(5672).toString());
   }
 
 }
