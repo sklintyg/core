@@ -14,6 +14,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.CreateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
@@ -28,6 +30,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.config.Vali
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.GetCertificatePdfService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateXmlService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateService;
@@ -49,6 +52,7 @@ public class CertificateController {
   private final GetCertificateXmlService getCertificateXmlService;
   private final SignCertificateService signCertificateService;
   private final SignCertificateWithoutSignatureService signCertificateWithoutSignatureService;
+  private final GetCertificatePdfService getCertificatePdfService;
 
   @PostMapping
   CreateCertificateResponse createCertificate(
@@ -110,5 +114,12 @@ public class CertificateController {
       @PathVariable("certificateId") String certificateId, @PathVariable("version") Long version) {
     return signCertificateWithoutSignatureService.sign(signCertificateRequest, certificateId,
         version);
+  }
+
+  @PostMapping("/{certificateId}/pdf")
+  GetCertificatePdfResponse getCertificatePdf(
+      @RequestBody GetCertificatePdfRequest getCertificatePdfRequest,
+      @PathVariable("certificateId") String certificateId) {
+    return getCertificatePdfService.get(getCertificatePdfRequest, certificateId);
   }
 }

@@ -22,6 +22,7 @@ public class CertificateModel {
   LocalDateTime activeFrom;
   List<CertificateActionSpecification> certificateActionSpecifications;
   List<ElementSpecification> elementSpecifications;
+  String pdfTemplatePath;
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()

@@ -14,6 +14,18 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_BLOCKED;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_MIDDLE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_BLOCKED;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_MIDDLE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_ROLE;
 
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
@@ -23,6 +35,8 @@ public class TestDataStaff {
 
   public static final Staff AJLA_DOKTOR = ajlaDoctorBuilder().build();
   public static final Staff ALVA_VARDADMINISTRATOR = alvaVardadmininstratorBuilder().build();
+  public static final Staff ANNA_SJUKSKOTERSKA = annaSjukskoterskaBuilder().build();
+  public static final Staff BARNMORSKA = barnmorskaBuilder().build();
 
   public static Staff.StaffBuilder ajlaDoctorBuilder() {
     return Staff.builder()
@@ -52,5 +66,33 @@ public class TestDataStaff {
         )
         .blocked(ALVA_VARDADMINISTRATOR_BLOCKED)
         .role(ALVA_VARDADMINISTRATOR_ROLE);
+  }
+
+  public static Staff.StaffBuilder annaSjukskoterskaBuilder() {
+    return Staff.builder()
+        .hsaId(new HsaId(ANNA_SJUKSKOTERSKA_HSA_ID))
+        .name(
+            Name.builder()
+                .firstName(ANNA_SJUKSKOTERSKA_FIRST_NAME)
+                .middleName(ANNA_SJUKSKOTERSKA_MIDDLE_NAME)
+                .lastName(ANNA_SJUKSKOTERSKA_LAST_NAME)
+                .build()
+        )
+        .blocked(ANNA_SJUKSKOTERSKA_BLOCKED)
+        .role(ANNA_SJUKSKOTERSKA_ROLE);
+  }
+
+  public static Staff.StaffBuilder barnmorskaBuilder() {
+    return Staff.builder()
+        .hsaId(new HsaId(BARNMORSKA_HSA_ID))
+        .name(
+            Name.builder()
+                .firstName(BARNMORSKA_FIRST_NAME)
+                .middleName(BARNMORSKA_MIDDLE_NAME)
+                .lastName(BARNMORSKA_LAST_NAME)
+                .build()
+        )
+        .blocked(BARNMORSKA_BLOCKED)
+        .role(BARNMORSKA_ROLE);
   }
 }

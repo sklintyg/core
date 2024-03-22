@@ -60,6 +60,15 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case PRINT -> CertificateActionPrint.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleWithinCareUnit(),
+                  new ActionRuleProtectedPerson()
+              )
+          )
+          .build();
     };
   }
 }

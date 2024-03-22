@@ -36,4 +36,24 @@ public class TestDataUserConstants {
   public static final List<Speciality> ALVA_VARDADMINISTRATOR_SPECIALITIES = Collections.emptyList();
   public static final Blocked ALVA_VARDADMINISTRATOR_BLOCKED = BLOCKED_FALSE;
 
+  public static final String ANNA_SJUKSKOTERSKA_HSA_ID = "TSTNMT2321000156-SKAA";
+  public static final String ANNA_SJUKSKOTERSKA_FIRST_NAME = "Anna";
+  public static final String ANNA_SJUKSKOTERSKA_MIDDLE_NAME = "";
+  public static final String ANNA_SJUKSKOTERSKA_LAST_NAME = "Sjuksköterska";
+  public static final String ANNA_SJUKSKOTERSKA_FULL_NAME = "Anna Sjuksköterska";
+  public static final Role ANNA_SJUKSKOTERSKA_ROLE = Role.NURSE;
+  public static final List<PaTitle> ANNA_SJUKSKOTERSKA_TITLES = Collections.emptyList();
+  public static final List<Speciality> ANNA_SJUKSKOTERSKA_SPECIALITIES = Collections.emptyList();
+  public static final Blocked ANNA_SJUKSKOTERSKA_BLOCKED = BLOCKED_FALSE;
+
+  public static final String BARNMORSKA_HSA_ID = "TSTNMT2321000156-SKAA";
+  public static final String BARNMORSKA_FIRST_NAME = "Barn";
+  public static final String BARNMORSKA_MIDDLE_NAME = "";
+  public static final String BARNMORSKA_LAST_NAME = "Morska";
+  public static final String BARNMORSKA_FULL_NAME = "Anna Sjuksköterska";
+  public static final Role BARNMORSKA_ROLE = Role.MIDWIFE;
+  public static final List<PaTitle> BARNMORSKA_TITLES = Collections.emptyList();
+  public static final List<Speciality> BARNMORSKA_SPECIALITIES = Collections.emptyList();
+  public static final Blocked BARNMORSKA_BLOCKED = BLOCKED_FALSE;
+
 }
