@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateservice.domain.certificate.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
@@ -15,7 +14,6 @@ public class GetCertificatePdfDomainService {
   private final CertificateRepository certificateRepository;
   private final PdfGenerator pdfGenerator;
 
-  @SneakyThrows //TODO lös bättre
   public Pdf get(CertificateId certificateId, ActionEvaluation actionEvaluation) {
     final var certificate = certificateRepository.getById(certificateId);
 
@@ -28,7 +26,6 @@ public class GetCertificatePdfDomainService {
     certificate.updateMetadata(actionEvaluation);
 
     return pdfGenerator.generate(certificate);
-
   }
 
 }

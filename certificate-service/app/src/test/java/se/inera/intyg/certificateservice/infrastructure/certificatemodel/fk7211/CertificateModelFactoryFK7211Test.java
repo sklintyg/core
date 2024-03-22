@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211.PDF_FK_7211_PDF;
 
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -136,6 +137,13 @@ class CertificateModelFactoryFK7211Test {
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
         ),
         "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludePdfTemplatePath() {
+    final var certificateModel = certificateModelFactoryFK7211.create();
+
+    assertEquals(PDF_FK_7211_PDF, certificateModel.pdfTemplatePath());
   }
 
   @Nested

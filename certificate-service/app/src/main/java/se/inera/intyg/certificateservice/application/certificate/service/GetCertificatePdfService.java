@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfResponse;
+import se.inera.intyg.certificateservice.application.certificate.service.validation.GetCertificatePdfRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificatePdfDomainService;
@@ -13,17 +14,18 @@ import se.inera.intyg.certificateservice.domain.certificate.service.GetCertifica
 public class GetCertificatePdfService {
 
   private final ActionEvaluationFactory actionEvaluationFactory;
+  private final GetCertificatePdfRequestValidator getCertificatePdfRequestValidator;
   private final GetCertificatePdfDomainService getCertificatePdfDomainService;
 
-  public GetCertificatePdfResponse get(GetCertificatePdfRequest getCertificatePdfRequest,
+  public GetCertificatePdfResponse get(GetCertificatePdfRequest request,
       String certificateId) {
-    //TODO evaluera pdf?
+    getCertificatePdfRequestValidator.validate(request, certificateId);
 
     final var actionEvaluation = actionEvaluationFactory.create(
-        getCertificatePdfRequest.getUser(),
-        getCertificatePdfRequest.getUnit(),
-        getCertificatePdfRequest.getCareUnit(),
-        getCertificatePdfRequest.getCareProvider()
+        request.getUser(),
+        request.getUnit(),
+        request.getCareUnit(),
+        request.getCareProvider()
     );
 
     final var certificatePdf = getCertificatePdfDomainService.get(
@@ -36,5 +38,4 @@ public class GetCertificatePdfService {
         .fileName(certificatePdf.fileName())
         .build();
   }
-
 }

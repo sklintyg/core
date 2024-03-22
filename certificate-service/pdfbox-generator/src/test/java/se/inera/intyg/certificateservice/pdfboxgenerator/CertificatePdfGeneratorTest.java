@@ -14,7 +14,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AN
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.BARNMORSKA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfConstants.CHECKED_BOX_VALUE;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfConstants.DIGITALLY_SIGNED;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfConstants.DIGITALLY_SIGNED_TEXT;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfConstants.PATIENT_ID_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfConstants.PATIENT_NAME_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfConstants.QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_DOCTOR_FIELD_ID;
@@ -106,7 +106,7 @@ class CertificatePdfGeneratorTest {
     @Test
     void shouldNotSetExpectedDeliveryDateIfDateIsNotProvided() throws IOException {
       final var pdfResponse = certificatePdfGenerator.generate(
-          buildCertificateWithoutData(AJLA_DOKTOR, Status.DRAFT));
+          buildCertificateWithoutData());
 
       final var field = getPdfField(pdfResponse,
           QUESTION_BERAKNAT_NEDKOMSTDATUM_DATE_FIELD_ID);
@@ -341,7 +341,7 @@ class CertificatePdfGeneratorTest {
   class ManuallySetValues {
 
     @Test
-    void shouldSetCorrectFileName() throws IOException {
+    void shouldSetCorrectFileName() {
       final var expected = "intyg_om_graviditet_" + LocalDateTime.now()
           .format((DateTimeFormatter.ofPattern("yy-MM-dd_HHmm")));
       final var pdfByteArray = certificatePdfGenerator.generate(
@@ -353,7 +353,7 @@ class CertificatePdfGeneratorTest {
     @Test
     void shouldAddDigitalSignatureTextIfCertificateIsSigned() throws IOException {
       buildCertificate(AJLA_DOKTOR, Status.SIGNED);
-      final var expected = DIGITALLY_SIGNED;
+      final var expected = DIGITALLY_SIGNED_TEXT;
       PDDocument document = Loader.loadPDF(new RandomAccessReadBufferedFile("fk7211_test.pdf"));
       PDFTextStripper textStripper = new PDFTextStripper();
       final var pdfText = textStripper.getText(document);
@@ -388,16 +388,16 @@ class CertificatePdfGeneratorTest {
         .build();
   }
 
-  private Certificate buildCertificateWithoutData(Staff staff, Status status) {
+  private Certificate buildCertificateWithoutData() {
     return fk7211CertificateBuilder()
         .certificateMetaData(CertificateMetaData.builder()
-            .issuer(staff)
+            .issuer(AJLA_DOKTOR)
             .patient(ATHENA_REACT_ANDERSSON)
             .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
             .careUnit(ALFA_MEDICINCENTRUM)
             .careProvider(ALFA_REGIONEN)
             .build())
-        .status(status)
+        .status(Status.DRAFT)
         .elementData(Collections.emptyList())
         .certificateModel(FK7211_CERTIFICATE_MODEL)
         .signed(SIGNED_DATE)

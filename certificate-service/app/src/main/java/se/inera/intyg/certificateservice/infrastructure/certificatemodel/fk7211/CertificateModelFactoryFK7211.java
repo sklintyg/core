@@ -50,7 +50,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
       "KAT_1");
   public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_ID = new ElementId("1");
   private static final String QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID = "1.1";
-  private static final String PDF_FK_7211_PDF = "/pdf/fk7211_v1.pdf";
+  public static final String PDF_FK_7211_PDF = "/pdf/fk7211_v1.pdf";
 
 
   @Override
@@ -97,9 +97,6 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         .pdfTemplatePath(PDF_FK_7211_PDF)
         .build();
   }
-
-//  File file = new File(classLoader.getResource("fk7804_ifylld_utan_hjalptext.pdf").getFile());
-//  final var pdfDocument = PDDocument.load(new File(String.valueOf(file)));
 
   private static ElementSpecification categoryBeraknatNedkomstdatum(
       ElementSpecification... children) {
