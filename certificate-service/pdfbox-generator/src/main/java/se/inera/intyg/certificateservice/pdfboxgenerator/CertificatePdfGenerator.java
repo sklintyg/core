@@ -15,6 +15,7 @@ import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfConstan
 import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfConstants.SIGNATURE_PA_TITLE_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfConstants.SIGNATURE_SPECIALITY_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfConstants.SIGNATURE_WORKPLACE_CODE_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfConstants.WATERMARK_DRAFT;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
@@ -25,15 +26,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
+import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.util.Matrix;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
 import se.inera.intyg.certificateservice.domain.common.model.Speciality;
@@ -43,7 +47,6 @@ public class CertificatePdfGenerator implements PdfGenerator {
   public final ClassLoader classLoader = getClass().getClassLoader();
 
   public Pdf generate(Certificate certificate) throws IOException {
-
     File pdfTemplate = new File(classLoader.getResource(
         certificate.certificateModel().pdfTemplatePath()).getFile());
 
@@ -52,34 +55,35 @@ public class CertificatePdfGenerator implements PdfGenerator {
     final var documentCatalog = fk7211Pdf.getDocumentCatalog();
     final var acroForm = documentCatalog.getAcroForm();
     final var page = fk7211Pdf.getPage(0);
-    final var contentStream = new PDPageContentStream(fk7211Pdf, page, AppendMode.APPEND,
-        true, true);
 
     setPatientInformation(acroForm, certificate);
     setExpectedDeliveryDate(acroForm, certificate);
     setIssuerRole(acroForm, certificate);
-    setSignedDate(acroForm, certificate);
-    setDigitalSignatureText(contentStream);
-    setIssuerFullName(acroForm, certificate);
-    setPaTitles(acroForm, certificate);
-    setSpeciality(acroForm, certificate);
-    setHsaId(acroForm, certificate);
-    setWorkplaceCode(acroForm, certificate);
     setContactInformation(acroForm, certificate);
-    setMarginText(contentStream, certificate);
-    //setWatermark(fk7211pdf); olika för olika statusar? hur noga är det att den ser lika ut?
-    //Personnummer - saknas i Staff, hur göra? PL får "fejk"-hsa från WC?
 
-    contentStream.endText();
-    contentStream.close();
+    if (certificate.status() == Status.SIGNED) {
+      setSignedDate(acroForm, certificate);
+      setDigitalSignatureText(fk7211Pdf, page);
+      setIssuerFullName(acroForm, certificate);
+      setPaTitles(acroForm, certificate);
+      setSpeciality(acroForm, certificate);
+      setHsaId(acroForm, certificate);
+      setWorkplaceCode(acroForm, certificate);
+      setMarginText(fk7211Pdf, page, certificate);
+    }
+
+    if (certificate.status() == Status.DRAFT) {
+      setDraftWatermark(fk7211Pdf, page);
+    }
+
     //acroForm.flatten();
 
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
     fk7211Pdf.save(byteArrayOutputStream);
     fk7211Pdf.save("fk7211_test.pdf");
     fk7211Pdf.close();
-
-    return new Pdf(byteArrayOutputStream.toByteArray(), setFileName(certificate));
+    final var fileName = setFileName(certificate);
+    return new Pdf(byteArrayOutputStream.toByteArray(), fileName);
   }
 
   private void setPatientInformation(PDAcroForm acroForm, Certificate certificate)
@@ -95,15 +99,17 @@ public class CertificatePdfGenerator implements PdfGenerator {
       throws IOException {
     final var expectedDeliveryDate = acroForm.getField(
         QUESTION_BERAKNAT_NEDKOMSTDATUM_DATE_FIELD_ID);
-    final var dateValue = certificate.elementData().get(0).value();
 
-    if (dateValue instanceof ElementValueDate elementValueDate) {
-      expectedDeliveryDate.setValue((elementValueDate).date().toString());
+    if (!certificate.elementData().isEmpty()) {
+      final var dateValue = certificate.elementData().get(0).value();
+
+      if (dateValue instanceof ElementValueDate elementValueDate) {
+        expectedDeliveryDate.setValue((elementValueDate).date().toString());
+      }
     }
   }
 
   private void setIssuerRole(PDAcroForm acroForm, Certificate certificate) throws IOException {
-    //Kolla upp hur göra med vårdadmin
     final var role = certificate.certificateMetaData().issuer().role();
 
     switch (role) {
@@ -132,13 +138,16 @@ public class CertificatePdfGenerator implements PdfGenerator {
     signedDate.setValue(certificate.signed().format(DateTimeFormatter.ISO_DATE));
   }
 
-  private void setDigitalSignatureText(PDPageContentStream contentStream) throws IOException {
+  private void setDigitalSignatureText(PDDocument fk7211Pdf, PDPage page) throws IOException {
+    final var contentStream = new PDPageContentStream(fk7211Pdf, page, AppendMode.APPEND,
+        true, true);
     contentStream.beginText();
     contentStream.newLineAtOffset(171, 522);
     contentStream.setNonStrokingColor(Color.gray);
     contentStream.setFont(new PDType1Font(FontName.HELVETICA_BOLD), 8);
     contentStream.showText(DIGITALLY_SIGNED);
     contentStream.endText();
+    contentStream.close();
   }
 
   private void setIssuerFullName(PDAcroForm acroForm, Certificate certificate) throws IOException {
@@ -205,8 +214,11 @@ public class CertificatePdfGenerator implements PdfGenerator {
     contactInformation.setValue(contactInfo);
   }
 
-  private void setMarginText(PDPageContentStream contentStream, Certificate certificate)
+  private void setMarginText(PDDocument fk7211Pdf, PDPage page, Certificate certificate)
       throws IOException {
+    final var contentStream = new PDPageContentStream(fk7211Pdf, page, AppendMode.APPEND,
+        true, true);
+
     final var certificateId = certificate.id().id();
     contentStream.transform(Matrix.getRotateInstance(Math.PI / 2, 607, 280));
     contentStream.beginText();
@@ -215,10 +227,41 @@ public class CertificatePdfGenerator implements PdfGenerator {
     contentStream.setFont(new PDType1Font(FontName.HELVETICA), 8);
     contentStream.showText(
         String.format("Intygsid: %s. Intyget är utskrivet från Webcert", certificateId));
+    contentStream.endText();
+    contentStream.close();
   }
 
-  private void setWatermark(PDDocument fk7211pdf) {
+  private void setDraftWatermark(PDDocument fk7211Pdf, PDPage page)
+      throws IOException {
+    final var contentStream = new PDPageContentStream(fk7211Pdf, page, AppendMode.APPEND,
+        true, true);
 
+    final var fontHeight = 105;
+    final var font = new PDType1Font(FontName.HELVETICA);
+
+    final var width = page.getMediaBox().getWidth();
+    float height = page.getMediaBox().getHeight();
+
+    final var stringWidth = font.getStringWidth(WATERMARK_DRAFT) / 1000 * fontHeight;
+    final var diagonalLength = (float) Math.sqrt(width * width + height * height);
+    final var angle = (float) Math.atan2(height, width);
+    final var x = (diagonalLength - stringWidth) / 2;
+    final var y = -fontHeight / 4;
+
+    contentStream.transform(Matrix.getRotateInstance(angle, 0, 0));
+    contentStream.setFont(font, fontHeight);
+
+    PDExtendedGraphicsState gs = new PDExtendedGraphicsState();
+    gs.setNonStrokingAlphaConstant(0.5f);
+    gs.setStrokingAlphaConstant(0.5f);
+    contentStream.setGraphicsStateParameters(gs);
+    contentStream.setNonStrokingColor(Color.gray);
+
+    contentStream.beginText();
+    contentStream.newLineAtOffset(x, y);
+    contentStream.showText(WATERMARK_DRAFT);
+    contentStream.endText();
+    contentStream.close();
   }
 
   private String setFileName(Certificate certificate) {

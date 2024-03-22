@@ -33,6 +33,7 @@ public class FK7211PdfConstants {
       "form1[0].#subform[0].flt_txtVardgivarensNamnAdressTelefon[0]";
   public static final String CHECKED_BOX_VALUE = "1";
   public static final String UNCHECKED_BOX_VALUE = "Off";
+  public static final String WATERMARK_DRAFT = "UTKAST";
 
   public static final String DIGITALLY_SIGNED =
       "Detta är en utskrift av ett elektroniskt intyg. "
