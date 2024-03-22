@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
@@ -20,7 +21,8 @@ public class SendCertificateService {
   private final SendCertificateDomainService sendCertificateDomainService;
   private final CertificateConverter certificateConverter;
   private final ResourceLinkConverter resourceLinkConverter;
-  
+
+  @Transactional
   public SendCertificateResponse send(SendCertificateRequest request, String certificateId) {
     sendCertificateRequestValidator.validate(request, certificateId);
     final var actionEvaluation = actionEvaluationFactory.create(

@@ -10,10 +10,12 @@ import org.springframework.http.ResponseEntity;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRecipientDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
@@ -85,6 +87,14 @@ public class CertificateUtil {
       return null;
     }
     return response.getBody().getCertificate();
+  }
+
+  public static CertificateRecipientDTO recipient(
+      ResponseEntity<SendCertificateResponse> response) {
+    if (response.getBody() == null || response.getBody() == null) {
+      return CertificateRecipientDTO.builder().build();
+    }
+    return response.getBody().getCertificate().getMetadata().getRecipient();
   }
 
   public static List<CertificateDTO> certificates(GetPatientCertificatesResponse response) {
