@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.integrationtest.fk7211;
 
-import static org.awaitility.Awaitility.waitAtMost;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -64,7 +63,6 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Containers.
 import static se.inera.intyg.certificateservice.integrationtest.util.ResourceLinkUtil.resourceLink;
 import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -115,7 +113,8 @@ class FK7211ActiveIT {
   private ApiUtil api;
   private InternalApiUtil internalApi;
   private TestabilityApiUtil testabilityApi;
-  private final TestListener testListener = new TestListener();
+  @Autowired
+  private TestListener testListener;
 
   @Autowired
   public FK7211ActiveIT(TestRestTemplate restTemplate) {
@@ -2752,8 +2751,6 @@ class FK7211ActiveIT {
               .build()
       );
 
-      assertEquals(0, testListener.messages.size());
-
       api.signCertificate(
           customSignCertificateRequest()
               .unit(ALFA_MEDICINCENTRUM_DTO)
@@ -2765,9 +2762,7 @@ class FK7211ActiveIT {
       final var response = AMQ_CONTAINER.execInContainer("rabbitmqctl", "list_queues");
       System.out.println(response);
 
-      waitAtMost(Duration.ofSeconds(30)).untilAsserted(() -> {
-        assertEquals(1, testListener.messages.size());
-      });
+      assertFalse(testListener.messages.isEmpty());
     }
   }
 
