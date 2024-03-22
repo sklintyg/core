@@ -22,7 +22,7 @@ public class AMQMessageService implements CertificateEventSubscriber {
   @Override
   public void event(CertificateEvent event) {
     if (event.type() == CertificateEventType.SIGNED) {
-      rabbitTemplate.convertAndSend(queueExchange, routingKey, event.type());
+      rabbitTemplate.convertAndSend(queueExchange, routingKey, "Test message");
     }
   }
 }

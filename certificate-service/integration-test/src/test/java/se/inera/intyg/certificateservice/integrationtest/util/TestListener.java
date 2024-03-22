@@ -2,17 +2,21 @@ package se.inera.intyg.certificateservice.integrationtest.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.amqp.rabbit.annotation.Queue;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.stereotype.Component;
 
+@Component
+@Slf4j
 public class TestListener {
 
   public final List<String> messages = new ArrayList<>();
 
-  @RabbitListener(queuesToDeclare = @Queue("certificate-service-event-queue"))
-  void listen(String data) {
-    this.messages.add(data);
+  @RabbitListener(queues = {"q.certificate-service-event-queue"})
+  public void log(String message) {
+    log.info("Certificate event received: {}", message);
+    System.out.println(message);
+    messages.add(message);
   }
-
 }
 

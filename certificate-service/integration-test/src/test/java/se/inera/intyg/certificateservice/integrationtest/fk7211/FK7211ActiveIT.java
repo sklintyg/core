@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.integrationtest.fk7211;
 
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -59,14 +60,17 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateUnit;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.validationErrors;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.version;
+import static se.inera.intyg.certificateservice.integrationtest.util.Containers.AMQ_CONTAINER;
 import static se.inera.intyg.certificateservice.integrationtest.util.ResourceLinkUtil.resourceLink;
 import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -107,12 +111,11 @@ class FK7211ActiveIT {
     registry.add("certificate.model.fk7211.v1_0.active.from", () -> "2024-01-01T00:00:00");
   }
 
-
   private final TestRestTemplate restTemplate;
   private ApiUtil api;
   private InternalApiUtil internalApi;
   private TestabilityApiUtil testabilityApi;
-  private TestListener testListener = new TestListener();
+  private final TestListener testListener = new TestListener();
 
   @Autowired
   public FK7211ActiveIT(TestRestTemplate restTemplate) {
@@ -2739,6 +2742,7 @@ class FK7211ActiveIT {
       assertEquals(400, response.getStatusCode().value());
     }
 
+    @SneakyThrows
     @Test
     @DisplayName("FK7211 - Om intyget signeras ska ett meddelande läggas på AMQn")
     void shallSuccessfullyAddMessageOfSigningOnAMQ() {
@@ -2748,11 +2752,7 @@ class FK7211ActiveIT {
               .build()
       );
 
-      assertAll(
-          () -> assertEquals(0,
-              testListener.messages.size()
-          )
-      );
+      assertEquals(0, testListener.messages.size());
 
       api.signCertificate(
           customSignCertificateRequest()
@@ -2762,17 +2762,17 @@ class FK7211ActiveIT {
           version(testCertificates)
       );
 
-      assertAll(
-          () -> assertEquals(1,
-              testListener.messages.size()
-          )
-      );
-    }
+      final var response = AMQ_CONTAINER.execInContainer("rabbitmqctl", "list_queues");
+      System.out.println(response);
 
+      waitAtMost(Duration.ofSeconds(30)).untilAsserted(() -> {
+        assertEquals(1, testListener.messages.size());
+      });
+    }
   }
 
   @Nested
-  @DisplayName("FK7211 - Intern api för intygstjänsten")
+  @DisplayName("FK7211 - Intern api för Intygstjänsten")
   class InternalApi {
 
     @Test

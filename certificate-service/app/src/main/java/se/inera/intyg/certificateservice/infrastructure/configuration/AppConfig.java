@@ -146,4 +146,5 @@ public class AppConfig {
     return BindingBuilder.bind(queue).to(exchange).with(routingKey);
   }
 
+  //TODO: https://stackoverflow.com/questions/77499442/spring-boot-rabbitmq-attempt-to-deserialize-unauthorized-class-exception
 }
