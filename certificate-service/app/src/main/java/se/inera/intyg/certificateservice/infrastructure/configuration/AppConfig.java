@@ -1,13 +1,14 @@
 package se.inera.intyg.certificateservice.infrastructure.configuration;
 
+import jakarta.jms.ConnectionFactory;
+import jakarta.jms.Queue;
 import java.util.List;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.core.JmsTemplate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.DeleteCertificateDomainService;
@@ -30,12 +31,8 @@ import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertifica
 @Configuration
 public class AppConfig {
 
-  @Value("${certificate.service.amq.name}")
-  private String queueName;
-  @Value("${certificate.service.amq.exchange}")
-  private String queueExchange;
-  @Value("${certificate.service.amq.routing.key}")
-  private String routingKey;
+  @Value("${certificate.event.queue.name}")
+  private String certificateEventQueuName;
 
   @Bean
   public CreateCertificateDomainService createCertificateDomainService(
@@ -132,18 +129,25 @@ public class AppConfig {
   }
 
   @Bean
-  Queue queue() {
-    return new Queue(queueName, false);
+  public Queue certificateEventQueue() {
+    return new ActiveMQQueue(certificateEventQueuName);
   }
 
   @Bean
-  TopicExchange exchange() {
-    return new TopicExchange(queueExchange);
+  public ConnectionFactory jmsConnectionFactory() {
+    return new ActiveMQConnectionFactory();
   }
 
   @Bean
-  Binding binding(Queue queue, TopicExchange exchange) {
-    return BindingBuilder.bind(queue).to(exchange).with(routingKey);
+  public JmsTemplate certificateEventJmsTemplate() {
+    return jmsTemplate(jmsConnectionFactory(), certificateEventQueue());
+  }
+
+  public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory, Queue queue) {
+    final var jmsTemplate = new JmsTemplate(connectionFactory);
+    jmsTemplate.setDefaultDestination(queue);
+    jmsTemplate.setSessionTransacted(true);
+    return jmsTemplate;
   }
 
 }
