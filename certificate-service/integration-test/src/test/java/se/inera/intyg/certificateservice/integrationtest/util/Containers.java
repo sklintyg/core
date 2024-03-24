@@ -1,11 +1,10 @@
 package se.inera.intyg.certificateservice.integrationtest.util;
 
-import org.testcontainers.containers.RabbitMQContainer;
-import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.activemq.ActiveMQContainer;
 
 public class Containers {
 
-  public static RabbitMQContainer AMQ_CONTAINER;
+  public static ActiveMQContainer AMQ_CONTAINER;
 
   public static void ensureRunning() {
     redisContainer();
@@ -13,9 +12,10 @@ public class Containers {
 
   private static void redisContainer() {
     if (AMQ_CONTAINER == null) {
-      AMQ_CONTAINER = new RabbitMQContainer(
-          DockerImageName.parse("rabbitmq:3.7.25-management-alpine")
-      ).withExposedPorts(5672).withPluginsEnabled("rabbitmq_management");
+      AMQ_CONTAINER = new ActiveMQContainer("apache/activemq-classic:5.18.3")
+          .withUser("activemqUser")
+          .withPassword("activemqPassword")
+          .withEnv("ANONYMOUS_LOGIN", "true");
     }
 
     if (!AMQ_CONTAINER.isRunning()) {
