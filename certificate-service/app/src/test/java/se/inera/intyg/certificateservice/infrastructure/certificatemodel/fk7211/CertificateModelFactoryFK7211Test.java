@@ -24,6 +24,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.domain.common.model.Recipient;
+import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 
@@ -79,6 +81,18 @@ class CertificateModelFactoryFK7211Test {
   }
 
   @Test
+  void shallIncludeRecipient() {
+    final var expectedRecipient = new Recipient(
+        new RecipientId("FKASSA"),
+        "Försäkringskassan"
+    );
+
+    final var certificateModel = certificateModelFactoryFK7211.create();
+
+    assertEquals(expectedRecipient, certificateModel.recipient());
+  }
+
+  @Test
   void shallIncludeCertificateActionCreate() {
     final var expectedType = CertificateActionType.CREATE;
 
@@ -129,6 +143,18 @@ class CertificateModelFactoryFK7211Test {
   @Test
   void shallIncludeCertificateActionSign() {
     final var expectedType = CertificateActionType.SIGN;
+
+    final var certificateModel = certificateModelFactoryFK7211.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionSend() {
+    final var expectedType = CertificateActionType.SEND;
 
     final var certificateModel = certificateModelFactoryFK7211.create();
 

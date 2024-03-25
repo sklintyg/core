@@ -7,6 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
+import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -74,6 +75,8 @@ public class CertificateEntityMapper {
             .build()
     );
 
+    final var staffMap = staffRepository.staffs(certificate);
+
     final var certificateMetaData = certificate.certificateMetaData();
 
     certificateEntity.setPatient(
@@ -89,7 +92,7 @@ public class CertificateEntityMapper {
         unitRepository.issuingUnit(certificateMetaData.issuingUnit())
     );
     certificateEntity.setIssuedBy(
-        staffRepository.staff(certificateMetaData.issuer())
+        staffMap.get(certificateMetaData.issuer().hsaId().id())
     );
 
     if (certificateEntity.getCreatedBy() == null) {
@@ -112,6 +115,16 @@ public class CertificateEntityMapper {
       certificateXmlEntity.setKey(certificateEntity.getKey());
       certificateXmlEntity.setCertificate(certificateEntity);
       certificateEntity.setXml(certificateXmlEntity);
+    }
+
+    if (certificate.sent() != null) {
+      certificateEntity.setSentBy(
+          staffMap.get(certificate.sent().sentBy().hsaId().id())
+      );
+
+      certificateEntity.setSent(
+          certificate.sent().sentAt()
+      );
     }
 
     return certificateEntity;
@@ -171,6 +184,14 @@ public class CertificateEntityMapper {
             certificateEntity.getXml() != null
                 ? new Xml(certificateEntity.getXml().getData())
                 : null
+        )
+        .sent(
+            certificateEntity.getSent() != null
+                ? Sent.builder()
+                .sentBy(StaffEntityMapper.toDomain(certificateEntity.getSentBy()))
+                .sentAt(certificateEntity.getSent())
+                .recipient(model.recipient())
+                .build() : null
         )
         .build();
   }

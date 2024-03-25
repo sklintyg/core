@@ -33,6 +33,7 @@ public class Certificate {
   @Builder.Default
   private Status status = Status.DRAFT;
   private Xml xml;
+  private Sent sent;
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
@@ -173,6 +174,27 @@ public class Certificate {
           actionEvaluation.subUnit()
       );
     }
+  }
+
+  public void send(ActionEvaluation actionEvaluation) {
+    if (this.status != Status.SIGNED) {
+      throw new IllegalStateException(
+          "Incorrect status '%s' - required status is '%s' to send".formatted(this.status,
+              Status.SIGNED)
+      );
+    }
+
+    if (this.sent != null) {
+      throw new IllegalStateException(
+          "'%s' has already been sent to '%s'.".formatted(id(), this.sent.recipient().name())
+      );
+    }
+
+    this.sent = Sent.builder()
+        .recipient(certificateModel.recipient())
+        .sentBy(Staff.create(actionEvaluation.user()))
+        .sentAt(LocalDateTime.now(ZoneId.systemDefault()))
+        .build();
   }
 }
 

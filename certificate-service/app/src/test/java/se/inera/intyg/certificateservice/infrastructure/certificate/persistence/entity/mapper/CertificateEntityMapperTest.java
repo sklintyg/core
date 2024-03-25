@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateEntity.CERTIFICATE_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_MEDICINCENTRUM_ENTITY;
@@ -129,6 +130,20 @@ class CertificateEntityMapperTest {
       final var response = certificateEntityMapper.toEntity(FK7211_CERTIFICATE);
 
       assertEquals(CERTIFICATE_ENTITY.getXml(), response.getXml());
+    }
+
+    @Test
+    void shouldMapSentByIfSentIsNotNull() {
+      final var response = certificateEntityMapper.toEntity(FK7211_CERTIFICATE);
+
+      assertEquals(CERTIFICATE_ENTITY.getSentBy(), response.getSentBy());
+    }
+
+    @Test
+    void shouldMapSentIfSentIsNotNull() {
+      final var response = certificateEntityMapper.toEntity(FK7211_CERTIFICATE);
+
+      assertEquals(CERTIFICATE_ENTITY.getSent(), response.getSent());
     }
   }
 
@@ -302,6 +317,34 @@ class CertificateEntityMapperTest {
           FK7211_CERTIFICATE_MODEL);
 
       assertEquals(XML, response.xml().xml());
+    }
+
+    @Test
+    void shouldMapSentBy() {
+      final var expected = Staff.builder()
+          .hsaId(new HsaId(AJLA_DOCTOR_HSA_ID))
+          .name(
+              Name.builder()
+                  .firstName(AJLA_DOCTOR_FIRST_NAME)
+                  .middleName(AJLA_DOCTOR_MIDDLE_NAME)
+                  .lastName(AJLA_DOCTOR_LAST_NAME)
+                  .build()
+          )
+          .role(Role.DOCTOR)
+          .build();
+
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
+
+      assertEquals(expected, response.sent().sentBy());
+    }
+
+    @Test
+    void shouldMapSent() {
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
+
+      assertNotNull(response.sent().sentAt());
     }
   }
 }
