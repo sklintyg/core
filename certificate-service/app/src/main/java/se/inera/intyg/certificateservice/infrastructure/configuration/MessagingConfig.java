@@ -15,6 +15,15 @@ public class MessagingConfig {
   @Value("${certificate.service.amq.name}")
   private String eventQueueName;
 
+  @Value("${spring.activemq.broker-url}")
+  private String brokerUrl;
+
+  @Value("${spring.activemq.user}")
+  private String amqUser;
+
+  @Value("${spring.activemq.password}")
+  private String amqPassword;
+
   @Bean
   public Queue eventQueue() {
     return new ActiveMQQueue(eventQueueName);
@@ -22,7 +31,7 @@ public class MessagingConfig {
 
   @Bean
   public ConnectionFactory jmsConnectionFactory() {
-    return new ActiveMQConnectionFactory();
+    return new ActiveMQConnectionFactory(amqUser, amqPassword, brokerUrl);
   }
 
   @Bean

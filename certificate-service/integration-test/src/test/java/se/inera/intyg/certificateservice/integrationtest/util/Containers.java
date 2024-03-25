@@ -14,9 +14,7 @@ public class Containers {
     if (AMQ_CONTAINER == null) {
       AMQ_CONTAINER = new ActiveMQContainer("apache/activemq-classic:5.18.3")
           .withUser("activemqUser")
-          .withPassword("activemqPassword")
-          .withEnv("ANONYMOUS_LOGIN", "true")
-          .withExposedPorts(5001);
+          .withPassword("activemqPassword");
     }
 
     if (!AMQ_CONTAINER.isRunning()) {
@@ -25,10 +23,7 @@ public class Containers {
 
     System.setProperty("spring.activemq.user", AMQ_CONTAINER.getUser());
     System.setProperty("spring.activemq.password", AMQ_CONTAINER.getPassword());
-    System.setProperty("spring.activemq.broker-url",
-        "tcp://localhost:" + AMQ_CONTAINER.getMappedPort(5001)
-    );
+    System.setProperty("spring.activemq.broker-url", AMQ_CONTAINER.getBrokerUrl());
   }
-
 }
 
