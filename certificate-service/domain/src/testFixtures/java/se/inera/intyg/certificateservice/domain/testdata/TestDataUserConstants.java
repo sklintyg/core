@@ -26,6 +26,21 @@ public class TestDataUserConstants {
       new Speciality("Psykiatri")
   );
   public static final Blocked AJLA_DOCTOR_BLOCKED = BLOCKED_FALSE;
+
+  public static final String ALF_DOKTOR_HSA_ID = "TSTNMT2321000156-DRAF";
+  public static final String ALF_DOKTOR_FIRST_NAME = "Alf";
+  public static final String ALF_DOKTOR_MIDDLE_NAME = "";
+  public static final String ALF_DOKTOR_LAST_NAME = "Doktor";
+  public static final String ALF_DOKTOR_FULLNAME = "Alf Doktor";
+  public static final Role ALF_DOKTOR_ROLE = Role.DOCTOR;
+  public static final List<PaTitle> ALF_DOKTOR_PA_TITLES = List.of(
+      new PaTitle("203090", "Läkare legitimerad, annan")
+  );
+  public static final List<Speciality> ALF_DOKTOR_SPECIALITIES = List.of(
+      new Speciality("Allmänmedicin")
+  );
+  public static final Blocked ALF_DOKTOR_BLOCKED = BLOCKED_FALSE;
+
   public static final String ALVA_VARDADMINISTRATOR_HSA_ID = "TSTNMT2321000156-VAAA";
   public static final String ALVA_VARDADMINISTRATOR_FIRST_NAME = "Alva";
   public static final String ALVA_VARDADMINISTRATOR_MIDDLE_NAME = "";

@@ -75,6 +75,8 @@ public class CertificateEntityMapper {
             .build()
     );
 
+    final var staffMap = staffRepository.staffs(certificate);
+
     final var certificateMetaData = certificate.certificateMetaData();
 
     certificateEntity.setPatient(
@@ -90,7 +92,7 @@ public class CertificateEntityMapper {
         unitRepository.issuingUnit(certificateMetaData.issuingUnit())
     );
     certificateEntity.setIssuedBy(
-        staffRepository.staff(certificateMetaData.issuer())
+        staffMap.get(certificateMetaData.issuer().hsaId().id())
     );
 
     if (certificateEntity.getCreatedBy() == null) {
@@ -117,7 +119,7 @@ public class CertificateEntityMapper {
 
     if (certificate.sent() != null) {
       certificateEntity.setSentBy(
-          staffRepository.staff(certificate.sent().sentBy())
+          staffMap.get(certificate.sent().sentBy().hsaId().id())
       );
 
       certificateEntity.setSent(
