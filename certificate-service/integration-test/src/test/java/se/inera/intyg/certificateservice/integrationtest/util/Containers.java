@@ -1,31 +1,26 @@
 package se.inera.intyg.certificateservice.integrationtest.util;
 
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.RabbitMQContainer;
-import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.activemq.ActiveMQContainer;
 
 public class Containers {
 
-  public static GenericContainer<?> AMQ_CONTAINER;
+  public static ActiveMQContainer AMQ_CONTAINER;
 
   public static void ensureRunning() {
-    redisContainer();
+    activemqContainer();
   }
 
-  private static void redisContainer() {
+  private static void activemqContainer() {
     if (AMQ_CONTAINER == null) {
-      AMQ_CONTAINER = new RabbitMQContainer(
-          DockerImageName.parse("rabbitmq:3.7.25-management-alpine")
-      ).withExposedPorts(5672);
+      AMQ_CONTAINER = new ActiveMQContainer("apache/activemq-classic:5.18.3");
     }
 
     if (!AMQ_CONTAINER.isRunning()) {
       AMQ_CONTAINER.start();
+      final var host = AMQ_CONTAINER.getHost();
+      final var port = AMQ_CONTAINER.getMappedPort(61616).toString();
+      System.setProperty("spring.activemq.broker-url", "tcp://" + host + ":" + port);
     }
-
-    System.setProperty("spring.rabbitmq.host", AMQ_CONTAINER.getHost());
-    System.setProperty("spring.rabbitmq.port", AMQ_CONTAINER.getMappedPort(5672).toString());
   }
-
 }
 

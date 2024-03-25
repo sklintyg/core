@@ -34,6 +34,16 @@ public class AppConfig {
   @Value("${certificate.event.queue.name}")
   private String certificateEventQueuName;
 
+  @Value("${spring.activemq.broker-url}")
+  private String jmsBrokerUrl;
+
+  @Value("${spring.activemq.user}")
+  private String brokerUsername;
+
+  @Value("${spring.activemq.password}")
+  private String brokerPassword;
+
+
   @Bean
   public CreateCertificateDomainService createCertificateDomainService(
       CertificateModelRepository certificateModelRepository,
@@ -135,7 +145,7 @@ public class AppConfig {
 
   @Bean
   public ConnectionFactory jmsConnectionFactory() {
-    return new ActiveMQConnectionFactory();
+    return new ActiveMQConnectionFactory(brokerUsername, brokerPassword, jmsBrokerUrl);
   }
 
   @Bean

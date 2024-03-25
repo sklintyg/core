@@ -1,11 +1,6 @@
 package se.inera.intyg.certificateservice.integrationtest.util;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.springframework.amqp.rabbit.annotation.Queue;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-
-public class TestListener {
+/*public class TestListener {
 
   public final List<String> messages = new ArrayList<>();
 
@@ -14,5 +9,5 @@ public class TestListener {
     this.messages.add(data);
   }
 
-}
+}*/
 
