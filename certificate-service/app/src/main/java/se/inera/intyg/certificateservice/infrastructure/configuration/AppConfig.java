@@ -143,9 +143,4 @@ public class AppConfig {
     return new CertificatePdfGenerator();
   }
 
-  @Bean
-  public CertificatePdfGenerator certificatePdfGenerator() {
-    return new CertificatePdfGenerator();
-  }
-
 }

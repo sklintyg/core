@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator;
 
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
+
 import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +16,7 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
 import se.inera.intyg.certificateservice.domain.common.model.Speciality;
@@ -58,10 +61,8 @@ public class FK7211PdfGenerator {
 
   private final PDDocument pdDocument;
   private final PDAcroForm acroForm;
-  private final Certificate certificate;
 
   public FK7211PdfGenerator(Certificate certificate) throws IOException {
-    this.certificate = certificate;
     String template = certificate.certificateModel().pdfTemplatePath();
     InputStream inputStream = getClass().getClassLoader().getResourceAsStream(template);
 
@@ -72,25 +73,24 @@ public class FK7211PdfGenerator {
     final var documentCatalog = pdDocument.getDocumentCatalog();
     acroForm = documentCatalog.getAcroForm();
 
-    setPatientInformation();
-    setExpectedDeliveryDate();
-    setIssuerRole();
-    setContactInformation();
+    setPatientInformation(certificate);
+    setExpectedDeliveryDate(certificate);
+    setIssuerRole(certificate);
+    setContactInformation(certificate);
 
     if (certificate.status() == Status.SIGNED) {
       setDigitalSignatureText();
-      setSignedDate();
-      setIssuerFullName();
-      setPaTitles();
-      setSpeciality();
-      setHsaId();
-      setWorkplaceCode();
+      setSignedDate(certificate);
+      setIssuerFullName(certificate);
+      setPaTitles(certificate);
+      setSpeciality(certificate);
+      setHsaId(certificate);
+      setWorkplaceCode(certificate);
     }
     inputStream.close();
-
   }
 
-  private void setPatientInformation() throws IOException {
+  private void setPatientInformation(Certificate certificate) throws IOException {
     final var patientNameField = acroForm.getField(PATIENT_NAME_FIELD_ID);
     patientNameField.setValue(certificate.certificateMetaData().patient().name().fullName());
 
@@ -98,7 +98,7 @@ public class FK7211PdfGenerator {
     patientIdField.setValue(certificate.certificateMetaData().patient().id().id());
   }
 
-  private void setExpectedDeliveryDate() throws IOException {
+  private void setExpectedDeliveryDate(Certificate certificate) throws IOException {
     final var expectedDeliveryDate = acroForm.getField(
         QUESTION_BERAKNAT_NEDKOMSTDATUM_DATE_FIELD_ID);
 
@@ -111,7 +111,7 @@ public class FK7211PdfGenerator {
     }
   }
 
-  private void setIssuerRole() throws IOException {
+  private void setIssuerRole(Certificate certificate) throws IOException {
     final var role = certificate.certificateMetaData().issuer().role();
 
     switch (role) {
@@ -135,17 +135,17 @@ public class FK7211PdfGenerator {
     }
   }
 
-  private void setSignedDate() throws IOException {
+  private void setSignedDate(Certificate certificate) throws IOException {
     final var signedDate = acroForm.getField(SIGNATURE_DATE_FIELD_ID);
     signedDate.setValue(certificate.signed().format(DateTimeFormatter.ISO_DATE));
   }
 
-  private void setIssuerFullName() throws IOException {
+  private void setIssuerFullName(Certificate certificate) throws IOException {
     final var signatureFullName = acroForm.getField(SIGNATURE_FULL_NAME_FIELD_ID);
     signatureFullName.setValue(certificate.certificateMetaData().issuer().name().fullName());
   }
 
-  private void setPaTitles() throws IOException {
+  private void setPaTitles(Certificate certificate) throws IOException {
     final var paTitles = certificate.certificateMetaData().issuer().paTitles();
     if (paTitles != null) {
 
@@ -157,7 +157,7 @@ public class FK7211PdfGenerator {
     }
   }
 
-  private void setSpeciality() throws IOException {
+  private void setSpeciality(Certificate certificate) throws IOException {
     final var specialities = certificate.certificateMetaData().issuer().specialities();
     if (specialities != null) {
 
@@ -169,7 +169,7 @@ public class FK7211PdfGenerator {
     }
   }
 
-  private void setHsaId() throws IOException {
+  private void setHsaId(Certificate certificate) throws IOException {
     final var hsaId = certificate.certificateMetaData().issuer().hsaId().id();
     if (hsaId != null) {
       final var signatureHsaId = acroForm.getField(SIGNATURE_HSA_ID_FIELD_ID);
@@ -177,7 +177,7 @@ public class FK7211PdfGenerator {
     }
   }
 
-  private void setWorkplaceCode() throws IOException {
+  private void setWorkplaceCode(Certificate certificate) throws IOException {
     final var workplaceCode = certificate.certificateMetaData().issuingUnit().workplaceCode()
         .code();
     if (workplaceCode != null) {
@@ -186,19 +186,18 @@ public class FK7211PdfGenerator {
     }
   }
 
-  private void setContactInformation() throws IOException {
-    final var unitName = certificate.certificateMetaData().issuingUnit().name().name();
-    final var address = certificate.certificateMetaData().issuingUnit().address().address();
-    final var zipCode = certificate.certificateMetaData().issuingUnit().address().zipCode();
-    final var city = certificate.certificateMetaData().issuingUnit().address().city();
-    final var phoneNumber = certificate.certificateMetaData().issuingUnit().contactInfo()
-        .phoneNumber();
+  private void setContactInformation(Certificate certificate) throws IOException {
+    final var elementData = certificate.elementData().stream()
+        .filter(data -> data.id().equals(UNIT_CONTACT_INFORMATION))
+        .findFirst();
 
-    final var contactInfo =
-        unitName + "\n"
-            + address + "\n"
-            + zipCode + " " + city + "\n"
-            + "Telefon: " + phoneNumber;
+    final var contactInfo = elementData.map(data -> {
+      final var elementValue = (ElementValueUnitContactInformation) data.value();
+      return certificate.certificateMetaData().issuingUnit().name().name() + "\n"
+          + elementValue.address() + "\n"
+          + elementValue.zipCode() + " " + elementValue.city() + "\n"
+          + "Telefon: " + elementValue.phoneNumber();
+    }).orElse("");
 
     final var contactInformation = acroForm.getField(
         SIGNATURE_CARE_UNIT_CONTACT_INFORMATION_FIELD_ID);

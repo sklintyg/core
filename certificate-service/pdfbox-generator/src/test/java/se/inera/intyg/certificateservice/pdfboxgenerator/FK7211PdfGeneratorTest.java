@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProv
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7211_CERTIFICATE_MODEL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.CONTACT_INFO;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.DATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
@@ -389,7 +390,7 @@ class FK7211PdfGeneratorTest {
             .careProvider(ALFA_REGIONEN)
             .build())
         .status(status)
-        .elementData(List.of(DATE))
+        .elementData(List.of(DATE, CONTACT_INFO))
         .certificateModel(FK7211_CERTIFICATE_MODEL)
         .signed(SIGNED_DATE)
         .build();

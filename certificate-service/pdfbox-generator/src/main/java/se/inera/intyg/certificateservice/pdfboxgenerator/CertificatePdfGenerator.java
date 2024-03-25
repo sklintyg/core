@@ -44,7 +44,6 @@ public class CertificatePdfGenerator implements PdfGenerator {
     }
   }
 
-
   private void setMarginText(PDDocument fk7211Pdf, Certificate certificate)
       throws IOException {
     final var contentStream = new PDPageContentStream(fk7211Pdf, fk7211Pdf.getPage(0),

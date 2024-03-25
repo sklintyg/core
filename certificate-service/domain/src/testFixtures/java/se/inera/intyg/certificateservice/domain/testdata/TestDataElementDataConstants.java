@@ -15,5 +15,6 @@ public class TestDataElementDataConstants {
 
   public static final String CATEGORY_ELEMENT_ID = "categoryElementId";
   public static final String CATEGORY_ELEMENT_NAME = "categoryElementName";
+  public static final String UNIT_ELEMENT_ID = "UNIT_CONTACT_INFORMATION";
 
 }
