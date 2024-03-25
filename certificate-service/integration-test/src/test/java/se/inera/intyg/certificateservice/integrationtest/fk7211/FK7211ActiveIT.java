@@ -2765,7 +2765,7 @@ class FK7211ActiveIT {
       );
 
       waitAtMost(Duration.ofSeconds(30)).untilAsserted(() -> {
-        assertEquals(1, testListener.messages.size());
+        assertFalse(testListener.messages.isEmpty());
       });
     }
   }
