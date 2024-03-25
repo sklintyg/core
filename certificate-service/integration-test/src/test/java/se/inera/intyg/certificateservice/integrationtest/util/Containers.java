@@ -19,7 +19,7 @@ public class Containers {
           .withExposedPorts(5001);
     }
 
-    System.setProperty("spring.activemq.user", "aactivemqUser");
+    System.setProperty("spring.activemq.user", "activemqUser");
     System.setProperty("spring.activemq.password", "activemqPassword");
 
     if (!AMQ_CONTAINER.isRunning()) {
