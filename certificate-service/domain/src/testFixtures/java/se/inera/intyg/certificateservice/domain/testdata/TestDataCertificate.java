@@ -33,7 +33,7 @@ public class TestDataCertificate {
   );
   public static final Sent SENT = Sent.builder()
       .recipient(RECIPIENT)
-      .sent(LocalDateTime.now(ZoneId.systemDefault()))
+      .sentAt(LocalDateTime.now(ZoneId.systemDefault()))
       .sentBy(AJLA_DOKTOR)
       .build();
   public static final Certificate FK7211_CERTIFICATE = fk7211CertificateBuilder().build();

@@ -189,11 +189,11 @@ public class Certificate {
           "'%s' has already been sent to '%s'.".formatted(id(), this.sent.recipient().name())
       );
     }
-    
+
     this.sent = Sent.builder()
         .recipient(certificateModel.recipient())
         .sentBy(Staff.create(actionEvaluation.user()))
-        .sent(LocalDateTime.now(ZoneId.systemDefault()))
+        .sentAt(LocalDateTime.now(ZoneId.systemDefault()))
         .build();
   }
 }

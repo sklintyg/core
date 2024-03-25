@@ -125,7 +125,7 @@ public class CertificateConverter {
     return CertificateRecipientDTO.builder()
         .id(sent.recipient().id().id())
         .name(sent.recipient().name())
-        .sent(sent.sent())
+        .sent(sent.sentAt())
         .build();
   }
 

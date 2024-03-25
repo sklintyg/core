@@ -123,7 +123,7 @@ public class CertificateEntityMapper {
       );
 
       certificateEntity.setSent(
-          certificate.sent().sent()
+          certificate.sent().sentAt()
       );
     }
 
@@ -189,7 +189,7 @@ public class CertificateEntityMapper {
             certificateEntity.getSent() != null
                 ? Sent.builder()
                 .sentBy(StaffEntityMapper.toDomain(certificateEntity.getSentBy()))
-                .sent(certificateEntity.getSent())
+                .sentAt(certificateEntity.getSent())
                 .recipient(model.recipient())
                 .build() : null
         )

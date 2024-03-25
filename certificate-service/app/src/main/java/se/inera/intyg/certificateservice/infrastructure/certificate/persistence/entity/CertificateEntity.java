@@ -74,4 +74,5 @@ public class CertificateEntity {
   @OneToOne(mappedBy = "certificate", cascade = CascadeType.ALL)
   @PrimaryKeyJoinColumn
   private CertificateXmlEntity xml;
+  
 }

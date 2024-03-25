@@ -11,6 +11,6 @@ import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 public class Sent {
 
   Recipient recipient;
-  LocalDateTime sent;
+  LocalDateTime sentAt;
   Staff sentBy;
 }

@@ -96,7 +96,7 @@ class CertificateConverterTest {
   private static final Revision REVISION = new Revision(3L);
   private static final Sent SENT = Sent.builder()
       .recipient(RECIPIENT)
-      .sent(LocalDateTime.now(ZoneId.systemDefault()))
+      .sentAt(LocalDateTime.now(ZoneId.systemDefault()))
       .sentBy(AJLA_DOKTOR)
       .build();
   private final List<ResourceLinkDTO> resourceLinkDTOs = Collections.emptyList();
@@ -576,7 +576,7 @@ class CertificateConverterTest {
       final var expectedCertificateRecipient = CertificateRecipientDTO.builder()
           .id(RECIPIENT.id().id())
           .name(RECIPIENT.name())
-          .sent(SENT.sent())
+          .sent(SENT.sentAt())
           .build();
       assertEquals(expectedCertificateRecipient,
           certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getRecipient()

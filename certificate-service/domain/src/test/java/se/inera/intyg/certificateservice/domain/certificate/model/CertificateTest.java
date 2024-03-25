@@ -1175,7 +1175,7 @@ class CertificateTest {
       doReturn(RECIPIENT).when(certificateModel).recipient();
       certificate.send(actionEvaluation);
 
-      assertNotNull(certificate.sent().sent());
+      assertNotNull(certificate.sent().sentAt());
     }
 
     @Test

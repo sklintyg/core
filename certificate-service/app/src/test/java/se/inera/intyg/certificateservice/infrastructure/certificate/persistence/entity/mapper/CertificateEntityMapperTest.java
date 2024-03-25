@@ -344,7 +344,7 @@ class CertificateEntityMapperTest {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
           FK7211_CERTIFICATE_MODEL);
 
-      assertNotNull(response.sent().sent());
+      assertNotNull(response.sent().sentAt());
     }
   }
 }
