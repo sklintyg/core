@@ -1,0 +1,18 @@
+package se.inera.intyg.certificateservice.domain.action.model;
+
+import java.util.Optional;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+
+public class ActionRuleSent implements ActionRule {
+
+  private final boolean sent;
+
+  public ActionRuleSent(boolean sent) {
+    this.sent = sent;
+  }
+
+  @Override
+  public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
+    return certificate.filter(value -> sent == (value.sent() != null)).isPresent();
+  }
+}

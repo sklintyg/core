@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRecipientDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationsDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PatientDTO;
@@ -94,7 +95,9 @@ public class CertificateConverter {
                 )
                 .forwarded(FORWARDED)
                 .latestMajorVersion(LATEST_MAJOR_VERSION)
-                .sent(SENT)
+                .sent(certificate.sent() != null)
+                .sentTo(certificate.sent() != null ? certificate.sent().recipient().name() : null)
+                .recipient(toCertificateRecipientDTO(certificate))
                 .status(toCertificateStatusTypeDTO(certificate.status()))
                 .testCertificate(TEST_CERTIFICATE)
                 .relations(RELATIONS)
@@ -107,6 +110,22 @@ public class CertificateConverter {
             )
         )
         .links(resourceLinks)
+        .build();
+  }
+
+  private CertificateRecipientDTO toCertificateRecipientDTO(Certificate certificate) {
+    final var sent = certificate.sent();
+    if (sent == null) {
+      return CertificateRecipientDTO.builder()
+          .id(certificate.certificateModel().recipient().id().id())
+          .name(certificate.certificateModel().recipient().name())
+          .build();
+    }
+
+    return CertificateRecipientDTO.builder()
+        .id(sent.recipient().id().id())
+        .name(sent.recipient().name())
+        .sent(sent.sentAt())
         .build();
   }
 

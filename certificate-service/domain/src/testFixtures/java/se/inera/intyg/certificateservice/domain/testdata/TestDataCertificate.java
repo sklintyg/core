@@ -13,7 +13,10 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
+import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
+import se.inera.intyg.certificateservice.domain.common.model.Recipient;
+import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 
 public class TestDataCertificate {
 
@@ -24,6 +27,15 @@ public class TestDataCertificate {
   public static final CertificateId CERTIFICATE_ID = new CertificateId("CERTIFICATE_ID");
   public static final Revision REVISION = new Revision(0L);
   public static final Xml XML = new Xml("xml");
+  public static final Recipient RECIPIENT = new Recipient(
+      new RecipientId("recipientId"),
+      "Recipient"
+  );
+  public static final Sent SENT = Sent.builder()
+      .recipient(RECIPIENT)
+      .sentAt(LocalDateTime.now(ZoneId.systemDefault()))
+      .sentBy(AJLA_DOKTOR)
+      .build();
   public static final Certificate FK7211_CERTIFICATE = fk7211CertificateBuilder().build();
 
   public static Certificate.CertificateBuilder fk7211CertificateBuilder() {
@@ -33,6 +45,7 @@ public class TestDataCertificate {
         .created(LocalDateTime.now(ZoneId.systemDefault()))
         .certificateModel(FK7211_CERTIFICATE_MODEL)
         .xml(XML)
+        .sent(SENT)
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuer(AJLA_DOKTOR)

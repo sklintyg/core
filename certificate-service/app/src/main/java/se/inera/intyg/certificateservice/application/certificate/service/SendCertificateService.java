@@ -2,40 +2,42 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
+import org.springframework.transaction.annotation.Transactional;
+import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
-import se.inera.intyg.certificateservice.application.certificate.service.validation.GetCertificateRequestValidator;
+import se.inera.intyg.certificateservice.application.certificate.service.validation.SendCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.SendCertificateDomainService;
 
 @Service
 @RequiredArgsConstructor
-public class GetCertificateService {
+public class SendCertificateService {
 
   private final ActionEvaluationFactory actionEvaluationFactory;
-  private final GetCertificateRequestValidator getCertificateRequestValidator;
-  private final GetCertificateDomainService getCertificateDomainService;
+  private final SendCertificateRequestValidator sendCertificateRequestValidator;
+  private final SendCertificateDomainService sendCertificateDomainService;
   private final CertificateConverter certificateConverter;
   private final ResourceLinkConverter resourceLinkConverter;
 
-  public GetCertificateResponse get(GetCertificateRequest getCertificateRequest,
-      String certificateId) {
-    getCertificateRequestValidator.validate(getCertificateRequest, certificateId);
+  @Transactional
+  public SendCertificateResponse send(SendCertificateRequest request, String certificateId) {
+    sendCertificateRequestValidator.validate(request, certificateId);
     final var actionEvaluation = actionEvaluationFactory.create(
-        getCertificateRequest.getUser(),
-        getCertificateRequest.getUnit(),
-        getCertificateRequest.getCareUnit(),
-        getCertificateRequest.getCareProvider()
+        request.getUser(),
+        request.getUnit(),
+        request.getCareUnit(),
+        request.getCareProvider()
     );
-    final var certificate = getCertificateDomainService.get(
+
+    final var certificate = sendCertificateDomainService.send(
         new CertificateId(certificateId),
         actionEvaluation
     );
 
-    return GetCertificateResponse.builder()
+    return SendCertificateResponse.builder()
         .certificate(certificateConverter.convert(
             certificate,
             certificate.actions(actionEvaluation).stream()

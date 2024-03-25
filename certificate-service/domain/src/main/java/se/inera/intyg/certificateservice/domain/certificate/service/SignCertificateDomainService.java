@@ -35,15 +35,7 @@ public class SignCertificateDomainService {
 
     certificate.updateMetadata(actionEvaluation);
 
-    final var validationResult = certificate.validate();
-    if (validationResult.isInvalid()) {
-      throw new IllegalArgumentException(
-          "Certificate '%s' cannot be signed as it is not valid".formatted(certificateId.id())
-      );
-    }
-
-    final var xml = xmlGenerator.generate(certificate, signature);
-    certificate.sign(xml, revision, actionEvaluation);
+    certificate.sign(xmlGenerator, signature, revision, actionEvaluation);
 
     final var signedCertificate = certificateRepository.save(certificate);
 

@@ -7,55 +7,42 @@ import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 
 @RequiredArgsConstructor
-public class SignCertificateWithoutSignatureDomainService {
+public class SendCertificateDomainService {
 
   private final CertificateRepository certificateRepository;
   private final CertificateEventDomainService certificateEventDomainService;
-  private final XmlGenerator xmlGenerator;
 
-  public Certificate sign(CertificateId certificateId, Revision revision,
-      ActionEvaluation actionEvaluation) {
+  public Certificate send(CertificateId certificateId, ActionEvaluation actionEvaluation) {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
 
     final var certificate = certificateRepository.getById(certificateId);
-    if (!certificate.allowTo(CertificateActionType.SIGN, actionEvaluation)) {
+    if (!certificate.allowTo(CertificateActionType.SEND, actionEvaluation)) {
       throw new CertificateActionForbidden(
-          "Not allowed to sign certificate with id %s".formatted(certificateId)
+          "Not allowed to send certificate for %s".formatted(certificateId)
       );
     }
 
-    if (!Role.PRIVATE_DOCTOR.equals(actionEvaluation.user().role())) {
-      throw new CertificateActionForbidden(
-          "Only '%s' is allowed to sign without signature! Cannot sign certificate '%s'!"
-              .formatted(Role.PRIVATE_DOCTOR.name(), certificateId.id())
-      );
-    }
+    certificate.send(actionEvaluation);
 
-    certificate.updateMetadata(actionEvaluation);
-
-    certificate.sign(xmlGenerator, revision, actionEvaluation);
-
-    final var signedCertificate = certificateRepository.save(certificate);
+    final var sentCertificate = certificateRepository.save(certificate);
 
     certificateEventDomainService.publish(
         CertificateEvent.builder()
-            .type(CertificateEventType.SIGNED)
+            .type(CertificateEventType.SENT)
             .start(start)
             .end(LocalDateTime.now(ZoneId.systemDefault()))
-            .certificate(signedCertificate)
+            .certificate(sentCertificate)
             .actionEvaluation(actionEvaluation)
             .build()
     );
 
-    return signedCertificate;
+    return sentCertificate;
   }
 }

@@ -13,6 +13,7 @@ public class ResourceLinkConverter {
         .type(ResourceLinkTypeDTO.toResourceLinkType(certificateAction.getType()))
         .name(certificateAction.getName())
         .description(certificateAction.getDescription())
+        .body(certificateAction.getBody())
         .enabled(certificateAction.isEnabled())
         .build();
   }

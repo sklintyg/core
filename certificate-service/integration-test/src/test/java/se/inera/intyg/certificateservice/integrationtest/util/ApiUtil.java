@@ -23,6 +23,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
@@ -301,6 +303,26 @@ public class ApiUtil {
         port,
         certificateId,
         version
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<SendCertificateResponse> sendCertificate(SendCertificateRequest request,
+      String certificateId) {
+    final var requestUrl = "http://localhost:%s/api/certificate/%s/send".formatted(
+        port,
+        certificateId
     );
 
     final var headers = new HttpHeaders();

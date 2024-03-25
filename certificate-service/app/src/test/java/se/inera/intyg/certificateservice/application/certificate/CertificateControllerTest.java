@@ -21,6 +21,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateWithoutSignatureRequest;
@@ -34,6 +36,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.DeleteC
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificatePdfService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateXmlService;
+import se.inera.intyg.certificateservice.application.certificate.service.SendCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateWithoutSignatureService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
@@ -61,6 +64,9 @@ class CertificateControllerTest {
   private GetCertificateXmlService getCertificateXmlService;
   @Mock
   private SignCertificateService signCertificateService;
+
+  @Mock
+  private SendCertificateService sendCertificateService;
   @Mock
   private SignCertificateWithoutSignatureService signCertificateWithoutSignatureService;
   @Mock
@@ -212,6 +218,19 @@ class CertificateControllerTest {
 
     final var actualResult = certificateController.signCertificateWithoutSignature(request,
         CERTIFICATE_ID, VERSION);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnSendCertificateResponse() {
+    final var request = SendCertificateRequest.builder().build();
+    final var expectedResult = SendCertificateResponse.builder()
+        .certificate(CertificateDTO.builder().build())
+        .build();
+
+    doReturn(expectedResult).when(sendCertificateService).send(request, CERTIFICATE_ID);
+    final var actualResult = certificateController.sendCertificate(request, CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
   }

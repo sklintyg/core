@@ -97,8 +97,7 @@ public class TestabilityCertificateService {
     );
 
     if (CertificateStatusTypeDTO.SIGNED.equals(testabilityCertificateRequest.getStatus())) {
-      final var xml = xmlGenerator.generate(certificate);
-      certificate.sign(xml, certificate.revision(), actionEvaluation);
+      certificate.sign(xmlGenerator, certificate.revision(), actionEvaluation);
     }
 
     testabilityCertificateRepository.insert(certificate);

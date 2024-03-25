@@ -10,6 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.GetCertifica
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificatePdfDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateXmlDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
+import se.inera.intyg.certificateservice.domain.certificate.service.SendCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SignCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SignCertificateWithoutSignatureDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertificateDomainService;
@@ -120,6 +121,14 @@ public class AppConfig {
       CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator) {
     return new SignCertificateWithoutSignatureDomainService(certificateRepository,
         certificateEventDomainService, xmlGenerator);
+  }
+
+  @Bean
+  public SendCertificateDomainService sendCertificateDomainService(
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new SendCertificateDomainService(certificateRepository,
+        certificateEventDomainService);
   }
 
   @Bean

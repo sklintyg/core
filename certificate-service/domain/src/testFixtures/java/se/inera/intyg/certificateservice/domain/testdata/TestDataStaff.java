@@ -8,6 +8,14 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_PA_TITLES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ROLE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_SPECIALITIES;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_BLOCKED;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_MIDDLE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_PA_TITLES;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_SPECIALITIES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_HSA_ID;
@@ -34,6 +42,7 @@ import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 public class TestDataStaff {
 
   public static final Staff AJLA_DOKTOR = ajlaDoctorBuilder().build();
+  public static final Staff ALF_DOKTOR = alfDoktorBuilder().build();
   public static final Staff ALVA_VARDADMINISTRATOR = alvaVardadmininstratorBuilder().build();
   public static final Staff ANNA_SJUKSKOTERSKA = annaSjukskoterskaBuilder().build();
   public static final Staff BARNMORSKA = barnmorskaBuilder().build();
@@ -52,6 +61,22 @@ public class TestDataStaff {
         .specialities(AJLA_DOCTOR_SPECIALITIES)
         .blocked(AJLA_DOCTOR_BLOCKED)
         .role(AJLA_DOCTOR_ROLE);
+  }
+
+  public static Staff.StaffBuilder alfDoktorBuilder() {
+    return Staff.builder()
+        .hsaId(new HsaId(ALF_DOKTOR_HSA_ID))
+        .name(
+            Name.builder()
+                .firstName(ALF_DOKTOR_FIRST_NAME)
+                .middleName(ALF_DOKTOR_MIDDLE_NAME)
+                .lastName(ALF_DOKTOR_LAST_NAME)
+                .build()
+        )
+        .blocked(ALF_DOKTOR_BLOCKED)
+        .paTitles(ALF_DOKTOR_PA_TITLES)
+        .specialities(ALF_DOKTOR_SPECIALITIES)
+        .role(ALF_DOKTOR_ROLE);
   }
 
   public static Staff.StaffBuilder alvaVardadmininstratorBuilder() {

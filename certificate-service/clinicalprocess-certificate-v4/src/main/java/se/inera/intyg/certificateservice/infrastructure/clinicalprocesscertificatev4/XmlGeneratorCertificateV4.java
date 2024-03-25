@@ -226,7 +226,7 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
               certificate.signed().truncatedTo(ChronoUnit.SECONDS).toString()
           );
     } catch (Exception ex) {
-      throw new IllegalStateException("Could not convert signed");
+      throw new IllegalStateException("Could not convert signed", ex);
     }
   }
 
