@@ -59,7 +59,6 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateUnit;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.validationErrors;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.version;
-import static se.inera.intyg.certificateservice.integrationtest.util.Containers.AMQ_CONTAINER;
 import static se.inera.intyg.certificateservice.integrationtest.util.ResourceLinkUtil.resourceLink;
 import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
 
@@ -69,6 +68,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -120,17 +120,15 @@ class FK7211ActiveIT {
     this.restTemplate = restTemplate;
   }
 
-  @DynamicPropertySource
-  static void replaceProperties(DynamicPropertyRegistry registry) {
-    registry.add("activemq.broker-url",
-        () -> "tcp://localhost:" + AMQ_CONTAINER.getMappedPort(5001));
-  }
-
   @BeforeEach
   void setUp() {
     this.api = new ApiUtil(restTemplate, port);
     this.internalApi = new InternalApiUtil(restTemplate, port);
     this.testabilityApi = new TestabilityApiUtil(restTemplate, port);
+  }
+
+  @BeforeAll
+  public static void beforeAll() {
     Containers.ensureRunning();
   }
 
