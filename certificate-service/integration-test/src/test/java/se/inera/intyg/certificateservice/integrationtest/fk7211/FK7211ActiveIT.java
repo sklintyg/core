@@ -52,6 +52,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateTypeInfoUtil.certificateTypeInfo;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateInternalPdfResponse;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateInternalXmlResponse;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateXmlReponse;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificates;
@@ -2944,5 +2945,22 @@ class FK7211ActiveIT {
                   .formatted(decodeXml(certificateInternalXmlResponse(response).getXml())))
       );
     }
+
+    @Test
+    @DisplayName("FK7211 - Intyget skall gå att hämta som PDF från intern api:et")
+    void shallReturnCertificatePdf() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = internalApi.getCertificatePdf(certificateId((testCertificates)));
+
+      assertAll(
+          () -> assertNotNull(certificateInternalPdfResponse(response).getPdfData()),
+          () -> assertTrue(certificateInternalPdfResponse(response).getFileName()
+              .contains("intyg_om_graviditet"))
+      );
+    }
   }
+
 }

@@ -12,6 +12,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRecipientDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalPdfResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
@@ -197,4 +198,13 @@ public class CertificateUtil {
         )
         .build();
   }
+
+  public static GetCertificateInternalPdfResponse certificateInternalPdfResponse(
+      ResponseEntity<GetCertificateInternalPdfResponse> response) {
+    if (response == null || response.getBody() == null) {
+      throw new IllegalArgumentException("Missing response!");
+    }
+    return response.getBody();
+  }
+
 }
