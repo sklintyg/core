@@ -24,7 +24,7 @@ public class CertificateInternalApiController {
     return getCertificateInternalXmlService.get(certificateId);
   }
 
-  @PostMapping("{certificateId}/pdf")
+  @PostMapping("/{certificateId}/pdf")
   GetCertificateInternalPdfResponse getCertificatePdf(
       @PathVariable("certificateId") String certificateId) {
     return getCertificateInternalPdfService.get(certificateId);
