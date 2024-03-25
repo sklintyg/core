@@ -68,7 +68,6 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -119,6 +118,12 @@ class FK7211ActiveIT {
   @Autowired
   public FK7211ActiveIT(TestRestTemplate restTemplate) {
     this.restTemplate = restTemplate;
+  }
+
+  @DynamicPropertySource
+  static void replaceProperties(DynamicPropertyRegistry registry) {
+    registry.add("activemq.broker-url",
+        () -> "tcp://localhost:" + AMQ_CONTAINER.getMappedPort(5001));
   }
 
   @BeforeEach
@@ -2741,7 +2746,6 @@ class FK7211ActiveIT {
       assertEquals(400, response.getStatusCode().value());
     }
 
-    @SneakyThrows
     @Test
     @DisplayName("FK7211 - Om intyget signeras ska ett meddelande läggas på AMQn")
     void shallSuccessfullyAddMessageOfSigningOnAMQ() {
@@ -2758,9 +2762,6 @@ class FK7211ActiveIT {
           certificateId(testCertificates),
           version(testCertificates)
       );
-
-      final var response = AMQ_CONTAINER.execInContainer("rabbitmqctl", "list_queues");
-      System.out.println(response);
 
       assertFalse(testListener.messages.isEmpty());
     }
