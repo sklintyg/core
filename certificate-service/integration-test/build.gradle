@@ -11,7 +11,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-test'
     testImplementation 'org.testcontainers:mysql:1.19.4'
-    testImplementation "org.testcontainers:activemq:1.19.7"
+    testImplementation 'org.testcontainers:activemq:1.19.7'
     testImplementation 'org.springframework.boot:spring-boot-starter-activemq'
     testImplementation testFixtures(project(":app"))
     testImplementation testFixtures(project(":domain"))
