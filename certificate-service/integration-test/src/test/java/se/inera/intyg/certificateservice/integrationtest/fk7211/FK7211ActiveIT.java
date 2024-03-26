@@ -3124,7 +3124,7 @@ class FK7211ActiveIT {
 
       assertNotNull(
           pdfData(response.getBody()),
-          "Should return signed certificate pdf data!"
+          "Should return sent certificate pdf data!"
       );
     }
   }
