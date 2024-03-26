@@ -3086,5 +3086,46 @@ class FK7211ActiveIT {
           "Should return certificate pdf data when exists!"
       );
     }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är signerat skall pdf returneras")
+    void shallReturnSignedCertificatePdf() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
+      );
+
+      final var response = api.getCertificatePdf(
+          defaultGetCertificatePdfRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertNotNull(
+          pdfData(response.getBody()),
+          "Should return signed certificate pdf data!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är signerat och skickat skall pdf returneras")
+    void shallReturnSentCertificatePdf() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.getCertificatePdf(
+          defaultGetCertificatePdfRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertNotNull(
+          pdfData(response.getBody()),
+          "Should return signed certificate pdf data!"
+      );
+    }
   }
 }
