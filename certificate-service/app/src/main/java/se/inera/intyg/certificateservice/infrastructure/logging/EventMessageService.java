@@ -28,7 +28,7 @@ public class EventMessageService implements CertificateEventSubscriber {
     }
   }
 
-  public void sendMessage(String certificateId, String eventType) {
+  private void sendMessage(String certificateId, String eventType) {
     try {
       jmsTemplate.send(session -> getMessage(certificateId, eventType, session));
     } catch (Exception e) {
