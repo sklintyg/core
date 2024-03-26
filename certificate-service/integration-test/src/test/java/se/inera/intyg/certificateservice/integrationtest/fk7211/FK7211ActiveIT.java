@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.waitAtMost;
+import static se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO.SIGNED;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ALVE_REACT_ALFREDSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ANONYMA_REACT_ATTILA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
@@ -32,6 +33,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetPatientCertificatesRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetUnitCertificatesInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetUnitCertificatesRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customSendCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customSignCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customUpdateCertificateRequest;
@@ -44,6 +46,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetPatientCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetUnitCertificatesInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetUnitCertificatesRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSendCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSignCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateModelIdUtil.certificateModelId;
@@ -56,6 +59,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.decodeXml;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.exists;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueFromData;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.recipient;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateDateValue;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateUnit;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.validationErrors;
@@ -1698,14 +1702,14 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Returnera lista med intyg som har utfärdats på mottagning")
     void shallReturnCertificatesOnTheSameSubUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7211, VERSION, CertificateStatusTypeDTO.SIGNED)
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
       );
 
       final var response = api.getUnitCertificates(
           customGetUnitCertificatesRequest()
               .queryCriteria(
                   CertificatesQueryCriteriaDTO.builder()
-                      .statuses(List.of(CertificateStatusTypeDTO.SIGNED))
+                      .statuses(List.of(SIGNED))
                       .build()
               )
               .build()
@@ -1724,7 +1728,7 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Returnera lista med intyg som har utfärdats på vårdenhet")
     void shallReturnCertificatesOnTheSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7211, VERSION, CertificateStatusTypeDTO.SIGNED)
+          customTestabilityCertificateRequest(FK7211, VERSION, SIGNED)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
@@ -1734,7 +1738,7 @@ class FK7211ActiveIT {
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .queryCriteria(
                   CertificatesQueryCriteriaDTO.builder()
-                      .statuses(List.of(CertificateStatusTypeDTO.SIGNED))
+                      .statuses(List.of(SIGNED))
                       .build()
               )
               .build()
@@ -1753,7 +1757,7 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Returnera lista med intyg som har utfärdats på mottagning inom vårdenhet")
     void shallReturnCertificatesIssuedOnSubUnitOnTheSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7211, VERSION, CertificateStatusTypeDTO.SIGNED)
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
       );
 
       final var response = api.getUnitCertificates(
@@ -1761,7 +1765,7 @@ class FK7211ActiveIT {
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .queryCriteria(
                   CertificatesQueryCriteriaDTO.builder()
-                      .statuses(List.of(CertificateStatusTypeDTO.SIGNED))
+                      .statuses(List.of(SIGNED))
                       .build()
               )
               .build()
@@ -1789,7 +1793,7 @@ class FK7211ActiveIT {
           customGetUnitCertificatesRequest()
               .queryCriteria(
                   CertificatesQueryCriteriaDTO.builder()
-                      .statuses(List.of(CertificateStatusTypeDTO.SIGNED))
+                      .statuses(List.of(SIGNED))
                       .build()
               )
               .build()
@@ -1815,7 +1819,7 @@ class FK7211ActiveIT {
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .queryCriteria(
                   CertificatesQueryCriteriaDTO.builder()
-                      .statuses(List.of(CertificateStatusTypeDTO.SIGNED))
+                      .statuses(List.of(SIGNED))
                       .build()
               )
               .build()
@@ -1840,7 +1844,7 @@ class FK7211ActiveIT {
               .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
               .queryCriteria(
                   CertificatesQueryCriteriaDTO.builder()
-                      .statuses(List.of(CertificateStatusTypeDTO.SIGNED))
+                      .statuses(List.of(SIGNED))
                       .build()
               )
               .build()
@@ -1855,7 +1859,7 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Returnera lista med intyg som har signerats datum efter från och med datum")
     void shallReturnCertificatesSavedAfterFrom() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7211, VERSION, CertificateStatusTypeDTO.SIGNED)
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
       );
 
       final var response = api.getUnitCertificates(
@@ -1863,7 +1867,7 @@ class FK7211ActiveIT {
               .queryCriteria(
                   CertificatesQueryCriteriaDTO.builder()
                       .from(LocalDateTime.now().minusDays(1))
-                      .statuses(List.of(CertificateStatusTypeDTO.SIGNED))
+                      .statuses(List.of(SIGNED))
                       .build()
               )
               .build()
@@ -1890,7 +1894,7 @@ class FK7211ActiveIT {
               .queryCriteria(
                   CertificatesQueryCriteriaDTO.builder()
                       .from(LocalDateTime.now().plusDays(1))
-                      .statuses(List.of(CertificateStatusTypeDTO.SIGNED))
+                      .statuses(List.of(SIGNED))
                       .build()
               )
               .build()
@@ -1905,7 +1909,7 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Returnera lista med intyg som har signerats datum före till och med datum")
     void shallReturnCertificatesSavedBeforeTo() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7211, VERSION, CertificateStatusTypeDTO.SIGNED)
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
       );
 
       final var response = api.getUnitCertificates(
@@ -1913,7 +1917,7 @@ class FK7211ActiveIT {
               .queryCriteria(
                   CertificatesQueryCriteriaDTO.builder()
                       .to(LocalDateTime.now().plusDays(1))
-                      .statuses(List.of(CertificateStatusTypeDTO.SIGNED))
+                      .statuses(List.of(SIGNED))
                       .build()
               )
               .build()
@@ -1940,7 +1944,7 @@ class FK7211ActiveIT {
               .queryCriteria(
                   CertificatesQueryCriteriaDTO.builder()
                       .to(LocalDateTime.now().minusDays(1))
-                      .statuses(List.of(CertificateStatusTypeDTO.SIGNED))
+                      .statuses(List.of(SIGNED))
                       .build()
               )
               .build()
@@ -1955,7 +1959,7 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Returnera lista med intyg som har utfärdats på patienten")
     void shallReturnCertificatesSavedOnPatient() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7211, VERSION, CertificateStatusTypeDTO.SIGNED)
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
       );
 
       final var response = api.getUnitCertificates(
@@ -1968,7 +1972,7 @@ class FK7211ActiveIT {
                               .type(ATHENA_REACT_ANDERSSON_DTO.getId().getType().name())
                               .build()
                       )
-                      .statuses(List.of(CertificateStatusTypeDTO.SIGNED))
+                      .statuses(List.of(SIGNED))
                       .build()
               )
               .build()
@@ -2000,7 +2004,7 @@ class FK7211ActiveIT {
                               .type(ALVE_REACT_ALFREDSSON_DTO.getId().getType().name())
                               .build()
                       )
-                      .statuses(List.of(CertificateStatusTypeDTO.SIGNED))
+                      .statuses(List.of(SIGNED))
                       .build()
               )
               .build()
@@ -2015,7 +2019,7 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Returnera lista med intyg som har signerats av vald användare")
     void shallReturnCertificatesSavedBySameStaff() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7211, VERSION, CertificateStatusTypeDTO.SIGNED)
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
       );
 
       final var response = api.getUnitCertificates(
@@ -2023,7 +2027,7 @@ class FK7211ActiveIT {
               .queryCriteria(
                   CertificatesQueryCriteriaDTO.builder()
                       .issuedByStaffId(AJLA_DOCTOR_DTO.getId())
-                      .statuses(List.of(CertificateStatusTypeDTO.SIGNED))
+                      .statuses(List.of(SIGNED))
                       .build()
               )
               .build()
@@ -2050,7 +2054,7 @@ class FK7211ActiveIT {
               .queryCriteria(
                   CertificatesQueryCriteriaDTO.builder()
                       .issuedByStaffId(ALVA_VARDADMINISTRATOR_DTO.getId())
-                      .statuses(List.of(CertificateStatusTypeDTO.SIGNED))
+                      .statuses(List.of(SIGNED))
                       .build()
               )
               .build()
@@ -2072,7 +2076,7 @@ class FK7211ActiveIT {
           customGetUnitCertificatesRequest()
               .queryCriteria(
                   CertificatesQueryCriteriaDTO.builder()
-                      .statuses(List.of(CertificateStatusTypeDTO.SIGNED))
+                      .statuses(List.of(SIGNED))
                       .build()
               )
               .build()
@@ -2564,7 +2568,7 @@ class FK7211ActiveIT {
       );
 
       assertAll(
-          () -> assertEquals(CertificateStatusTypeDTO.SIGNED,
+          () -> assertEquals(SIGNED,
               certificate(response).getMetadata().getStatus()
           )
       );
@@ -2586,7 +2590,7 @@ class FK7211ActiveIT {
       );
 
       assertAll(
-          () -> assertEquals(CertificateStatusTypeDTO.SIGNED,
+          () -> assertEquals(SIGNED,
               certificate(response).getMetadata().getStatus()
           )
       );
@@ -2610,7 +2614,7 @@ class FK7211ActiveIT {
       );
 
       assertAll(
-          () -> assertEquals(CertificateStatusTypeDTO.SIGNED,
+          () -> assertEquals(SIGNED,
               certificate(response).getMetadata().getStatus()
           )
       );
@@ -2687,8 +2691,7 @@ class FK7211ActiveIT {
       );
 
       assertAll(
-          () -> assertEquals(CertificateStatusTypeDTO.SIGNED,
-              certificate(response).getMetadata().getStatus()
+          () -> assertEquals(SIGNED, certificate(response).getMetadata().getStatus()
           )
       );
     }
@@ -2767,6 +2770,180 @@ class FK7211ActiveIT {
       waitAtMost(Duration.ofSeconds(30)).untilAsserted(() -> {
         assertFalse(testListener.messages.isEmpty());
       });
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7211 - Skicka")
+  class SendCertificate {
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på samma mottagning skall det gå att skicka")
+    void shallSuccessfullySendIfUnitIsSubUnitAndIssuedOnSameSubUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
+      );
+
+      final var response = api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertEquals("FKASSA", recipient(response).getId()),
+          () -> assertEquals("Försäkringskassan", recipient(response).getName()),
+          () -> assertNotNull(recipient(response).getSent())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det gå att skicka")
+    void shallSuccessfullySendIfUnitIsCareUnitAndOnSameCareUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
+      );
+
+      final var response = api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertEquals("FKASSA", recipient(response).getId()),
+          () -> assertEquals("Försäkringskassan", recipient(response).getName()),
+          () -> assertNotNull(recipient(response).getSent())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på samma vårdenhet skall det gå att skicka")
+    void shallSuccessfullySendIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7211, VERSION, SIGNED)
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build()
+      );
+
+      final var response = api.sendCertificate(
+          customSendCertificateRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertEquals("FKASSA", recipient(response).getId()),
+          () -> assertEquals("Försäkringskassan", recipient(response).getName()),
+          () -> assertNotNull(recipient(response).getSent())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
+      );
+
+      final var response = api.sendCertificate(
+          customSendCertificateRequest()
+              .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
+      );
+
+      final var response = api.sendCertificate(
+          customSendCertificateRequest()
+              .careUnit(ALFA_VARDCENTRAL_DTO)
+              .unit(ALFA_VARDCENTRAL_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7211 - Vårdadministratör - Felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403UserIsCareAdmin() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
+      );
+
+      final var response = api.sendCertificate(
+          customSendCertificateRequest()
+              .user(ALVA_VARDADMINISTRATOR_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7211 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det gå att skicka")
+    void shallSuccessfullySendIfPatientIsProtectedPersonAndUserIsDoctor() {
+      final var testCertificates = testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7211, VERSION, SIGNED)
+              .patient(ANONYMA_REACT_ATTILA_DTO)
+              .build()
+      );
+
+      final var response = api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertEquals("FKASSA", recipient(response).getId()),
+          () -> assertEquals("Försäkringskassan", recipient(response).getName()),
+          () -> assertNotNull(recipient(response).getSent())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget inte är signerat skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403IfCertificateNotSigned() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget redan är skickat skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403IfCertificateIsAlreadySent() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
     }
   }
 

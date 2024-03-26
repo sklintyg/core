@@ -18,6 +18,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateWithoutSignatureRequest;
@@ -30,6 +32,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.CreateC
 import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateXmlService;
+import se.inera.intyg.certificateservice.application.certificate.service.SendCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateWithoutSignatureService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
@@ -47,6 +50,7 @@ public class CertificateController {
   private final DeleteCertificateService deleteCertificateService;
   private final ValidateCertificateService validateCertificateService;
   private final GetCertificateXmlService getCertificateXmlService;
+  private final SendCertificateService sendCertificateService;
   private final SignCertificateService signCertificateService;
   private final SignCertificateWithoutSignatureService signCertificateWithoutSignatureService;
 
@@ -110,5 +114,12 @@ public class CertificateController {
       @PathVariable("certificateId") String certificateId, @PathVariable("version") Long version) {
     return signCertificateWithoutSignatureService.sign(signCertificateRequest, certificateId,
         version);
+  }
+
+  @PostMapping("/{certificateId}/send")
+  SendCertificateResponse sendCertificate(
+      @RequestBody SendCertificateRequest sendCertificateRequest,
+      @PathVariable("certificateId") String certificateId) {
+    return sendCertificateService.send(sendCertificateRequest, certificateId);
   }
 }

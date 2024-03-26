@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.certificate.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,6 +28,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_PHONENUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.REVISION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.XML;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.DATE;
@@ -1144,6 +1146,84 @@ class CertificateTest {
       doReturn(XML).when(xmlGenerator).generate(certificate);
       certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build());
       assertEquals(XML, certificate.xml());
+    }
+  }
+
+  @Nested
+  class TestSend {
+
+    @Test
+    void shallIncludeRecipientWhenSent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      doReturn(RECIPIENT).when(certificateModel).recipient();
+      certificate.send(actionEvaluation);
+
+      assertEquals(RECIPIENT, certificate.sent().recipient());
+    }
+
+    @Test
+    void shallIncludeSentTimestampWhenSent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      doReturn(RECIPIENT).when(certificateModel).recipient();
+      certificate.send(actionEvaluation);
+
+      assertNotNull(certificate.sent().sentAt());
+    }
+
+    @Test
+    void shallIncludeSentByWhenSent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      doReturn(RECIPIENT).when(certificateModel).recipient();
+      certificate.send(actionEvaluation);
+
+      assertEquals(TestDataStaff.AJLA_DOKTOR, certificate.sent().sentBy());
+    }
+
+    @Test
+    void shallThrowIfStatusIsNotSigned() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.send(actionEvaluation));
+
+      assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowIfCertificateAlreadyBeenSent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .sent(
+              Sent.builder()
+                  .recipient(RECIPIENT)
+                  .build()
+          )
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.send(actionEvaluation));
+
+      assertTrue(illegalStateException.getMessage().contains("has already been sent to"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
     }
   }
 }

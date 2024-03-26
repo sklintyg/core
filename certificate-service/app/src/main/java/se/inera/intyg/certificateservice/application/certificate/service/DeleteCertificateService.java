@@ -14,7 +14,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.service.DeleteCertificateDomainService;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class DeleteCertificateService {
 
@@ -24,6 +23,7 @@ public class DeleteCertificateService {
   private final CertificateConverter certificateConverter;
   private final ResourceLinkConverter resourceLinkConverter;
 
+  @Transactional
   public DeleteCertificateResponse delete(DeleteCertificateRequest deleteCertificateRequest,
       String certificateId, Long version) {
     deleteCertificateRequestValidator.validate(deleteCertificateRequest, certificateId, version);
