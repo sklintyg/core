@@ -137,7 +137,6 @@ public class AppConfig {
       CertificateEventDomainService certificateEventDomainService) {
     return new GetCertificatePdfDomainService(certificateRepository, pdfGenerator,
         certificateEventDomainService);
-
   }
 
   @Bean

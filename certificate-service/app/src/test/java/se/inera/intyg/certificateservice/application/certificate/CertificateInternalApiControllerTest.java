@@ -15,9 +15,6 @@ import se.inera.intyg.certificateservice.application.certificate.service.GetCert
 class CertificateInternalApiControllerTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
-  private static final String FILE_NAME = "fileName";
-  private static final byte[] PDF_DATA = "pdfData".getBytes();
-
   @Mock
   private GetCertificateInternalXmlService getCertificateInternalXmlService;
   @InjectMocks
