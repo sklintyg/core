@@ -26,7 +26,9 @@ public class CertificatePdfGenerator implements PdfGenerator {
     try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
       final var fk7211Pdf = new FK7211PdfGenerator(certificate).getDocument();
 
-      setMarginText(fk7211Pdf, certificate, additionalInfoText);
+      if (certificate.status() == Status.SIGNED) {
+        setMarginText(fk7211Pdf, certificate, additionalInfoText);
+      }
 
       if (certificate.status() == Status.DRAFT) {
         setDraftWatermark(fk7211Pdf);
@@ -50,7 +52,7 @@ public class CertificatePdfGenerator implements PdfGenerator {
         AppendMode.APPEND, true, true);
 
     final var certificateId = certificate.id().id();
-    contentStream.transform(Matrix.getRotateInstance(Math.PI / 2, 607, 280));
+    contentStream.transform(Matrix.getRotateInstance(Math.PI / 2, 600, 25));
     contentStream.beginText();
     contentStream.newLineAtOffset(30, 30);
     contentStream.setNonStrokingColor(Color.black);
