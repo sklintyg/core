@@ -5,7 +5,7 @@ import org.testcontainers.activemq.ActiveMQContainer;
 public class Containers {
 
   public static ActiveMQContainer AMQ_CONTAINER;
-
+  
   public static void ensureRunning() {
     amqContainer();
   }

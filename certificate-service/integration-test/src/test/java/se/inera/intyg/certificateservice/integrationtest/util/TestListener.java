@@ -11,12 +11,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TestListener {
 
-    public final List<TextMessage> messages = new ArrayList<>();
+  public final List<TextMessage> messages = new ArrayList<>();
 
-    @JmsListener(destination = "certificate-service-event-queue")
-    public void log(TextMessage message) {
-        log.debug("Certificate event received: {}", message);
-        messages.add(message);
-    }
+  @JmsListener(destination = "certificate-service-event-queue")
+  public void log(TextMessage message) {
+    log.debug("Certificate event received: {}", message);
+    messages.add(message);
+  }
 }
-
