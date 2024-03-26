@@ -14,6 +14,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalPdfResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateResponse;
@@ -81,6 +82,20 @@ public class CertificateUtil {
       return null;
     }
     return response.getCertificate();
+  }
+
+  public static byte[] pdfData(GetCertificatePdfResponse response) {
+    if (response == null || response.getPdfData() == null) {
+      return null;
+    }
+    return response.getPdfData();
+  }
+
+  public static String pdfFileName(GetCertificatePdfResponse response) {
+    if (response == null || response.getFileName() == null) {
+      return null;
+    }
+    return response.getFileName();
   }
 
   public static CertificateDTO certificate(ResponseEntity<SignCertificateResponse> response) {

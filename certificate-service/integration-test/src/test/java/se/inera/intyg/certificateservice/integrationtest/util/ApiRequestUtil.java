@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.integrationtest.util;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateRequest;
@@ -55,6 +56,14 @@ public class ApiRequestUtil {
 
   public static GetCertificateRequest defaultGetCertificateRequest() {
     return GetCertificateRequestBuilder.create().build();
+  }
+
+  public static GetCertificatePdfRequest defaultGetCertificatePdfRequest() {
+    return GetCertificatePdfRequestBuilder.create().build();
+  }
+
+  public static GetCertificatePdfRequestBuilder customGetCertificatePdfRequest() {
+    return GetCertificatePdfRequestBuilder.create();
   }
 
   public static GetPatientCertificatesRequest defaultGetPatientCertificateRequest() {

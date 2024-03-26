@@ -22,6 +22,7 @@ public class GetCertificatePdfService {
     getCertificatePdfRequestValidator.validate(request, certificateId);
 
     final var actionEvaluation = actionEvaluationFactory.create(
+        request.getPatient(),
         request.getUser(),
         request.getUnit(),
         request.getCareUnit(),

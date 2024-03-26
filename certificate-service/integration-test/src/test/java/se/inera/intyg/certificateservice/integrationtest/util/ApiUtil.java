@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
@@ -340,7 +341,7 @@ public class ApiUtil {
   }
 
   public ResponseEntity<GetCertificatePdfResponse> getCertificatePdf(
-      String certificateId) {
+      GetCertificatePdfRequest request, String certificateId) {
     final var requestUrl = "http://localhost:%s/api/certificate/%s/pdf".formatted(
         port,
         certificateId
@@ -352,7 +353,7 @@ public class ApiUtil {
     return this.restTemplate.exchange(
         requestUrl,
         HttpMethod.POST,
-        new HttpEntity<>(headers),
+        new HttpEntity<>(request, headers),
         new ParameterizedTypeReference<>() {
         },
         Collections.emptyMap()
