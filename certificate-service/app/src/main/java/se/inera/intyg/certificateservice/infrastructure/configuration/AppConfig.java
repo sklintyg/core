@@ -133,8 +133,10 @@ public class AppConfig {
 
   @Bean
   public GetCertificatePdfDomainService getCertificatePdfDomainService(
-      CertificateRepository certificateRepository, PdfGenerator pdfGenerator) {
-    return new GetCertificatePdfDomainService(certificateRepository, pdfGenerator);
+      CertificateRepository certificateRepository, PdfGenerator pdfGenerator,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new GetCertificatePdfDomainService(certificateRepository, pdfGenerator,
+        certificateEventDomainService);
 
   }
 
