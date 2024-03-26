@@ -20,7 +20,7 @@ public class EventMessageService implements CertificateEventSubscriber {
 
   @Override
   public void event(CertificateEvent event) {
-    if (event.type() == CertificateEventType.SIGNED) {
+    if (event.type() == CertificateEventType.SIGNED || event.type() == CertificateEventType.SENT) {
       sendMessage(
           event.certificate().id().id(),
           event.type().action()

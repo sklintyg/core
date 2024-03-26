@@ -34,6 +34,15 @@ class EventMessageServiceTest {
   }
 
   @Test
+  void shouldLogForSentEvent() {
+    final var event = createEvent(CertificateEventType.SENT);
+
+    eventMessageService.event(event);
+
+    verify(jmsTemplate, times(1)).send(any());
+  }
+
+  @Test
   void shouldNotLogForReadEvent() {
     final var event = createEvent(CertificateEventType.READ);
 
