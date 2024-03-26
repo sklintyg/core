@@ -12,6 +12,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 @Getter(AccessLevel.NONE)
 public class CertificateActionPrint implements CertificateAction {
 
+  private static final String NAME = "Skriv ut";
+  private static final String DESCRIPTION = "Öppnar ett fönster där du kan välja att skriva ut eller spara intygsutkastet som PDF.";
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
 
@@ -25,5 +27,15 @@ public class CertificateActionPrint implements CertificateAction {
     return actionRules.stream()
         .filter(value -> value.evaluate(certificate, actionEvaluation))
         .count() == actionRules.size();
+  }
+
+  @Override
+  public String getName() {
+    return NAME;
+  }
+
+  @Override
+  public String getDescription() {
+    return DESCRIPTION;
   }
 }

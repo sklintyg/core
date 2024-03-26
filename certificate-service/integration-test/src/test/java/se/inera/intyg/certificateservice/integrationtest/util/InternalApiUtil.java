@@ -38,25 +38,6 @@ public class InternalApiUtil {
     );
   }
 
-  public ResponseEntity<GetCertificateInternalPdfResponse> getCertificatePdf(String certificateId) {
-    final var requestUrl = "http://localhost:%s/internalapi/certificate/%s/pdf".formatted(
-        port,
-        certificateId
-    );
-
-    final var headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-
-    return this.restTemplate.exchange(
-        requestUrl,
-        HttpMethod.POST,
-        new HttpEntity<>(null, headers),
-        new ParameterizedTypeReference<>() {
-        },
-        Collections.emptyMap()
-    );
-  }
-
   public void reset() {
     // Nothing to reset right now...
   }

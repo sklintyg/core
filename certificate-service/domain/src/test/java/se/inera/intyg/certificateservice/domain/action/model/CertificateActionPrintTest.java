@@ -191,4 +191,15 @@ class CertificateActionPrintTest {
     );
   }
 
+  @Test
+  void shallReturnName() {
+    assertEquals("Skriv ut", certificateActionPrint.getName());
+  }
+
+  @Test
+  void shallReturnDescription() {
+    assertEquals(
+        "Öppnar ett fönster där du kan välja att skriva ut eller spara intygsutkastet som PDF.",
+        certificateActionPrint.getDescription());
+  }
 }

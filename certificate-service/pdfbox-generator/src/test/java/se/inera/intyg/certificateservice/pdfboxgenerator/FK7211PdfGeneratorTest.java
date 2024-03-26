@@ -59,7 +59,7 @@ class FK7211PdfGeneratorTest {
   class PatientInfo {
 
     @Test
-    void shouldSetPatientName() throws IOException {
+    void shouldSetPatientName() {
       final var expected = buildCertificate(AJLA_DOKTOR, Status.SIGNED).certificateMetaData()
           .patient().name().fullName();
 
@@ -72,7 +72,7 @@ class FK7211PdfGeneratorTest {
     }
 
     @Test
-    void shouldSetPatientId() throws IOException {
+    void shouldSetPatientId() {
       final var expected = buildCertificate(AJLA_DOKTOR, Status.SIGNED).certificateMetaData()
           .patient().id().id();
 
@@ -88,7 +88,7 @@ class FK7211PdfGeneratorTest {
   class PdfData {
 
     @Test
-    void shouldSetExpectedDeliveryDateIfDateIsProvided() throws IOException {
+    void shouldSetExpectedDeliveryDateIfDateIsProvided() {
       final var fk7211PdfGenerator = new FK7211PdfGenerator(
           buildCertificate(AJLA_DOKTOR, Status.SIGNED));
       final var field = getPdfField(fk7211PdfGenerator.getDocument(),
@@ -98,7 +98,7 @@ class FK7211PdfGeneratorTest {
     }
 
     @Test
-    void shouldNotSetExpectedDeliveryDateIfDateIsNotProvided() throws IOException {
+    void shouldNotSetExpectedDeliveryDateIfDateIsNotProvided() {
       final var fk7211PdfGenerator = new FK7211PdfGenerator(
           buildCertificateWithoutData());
 
@@ -109,7 +109,7 @@ class FK7211PdfGeneratorTest {
     }
 
     @Test
-    void shouldOnlySetDoctorAsCertifierIfIssuerIsDoctor() throws IOException {
+    void shouldOnlySetDoctorAsCertifierIfIssuerIsDoctor() {
       final var fk7211PdfGenerator = new FK7211PdfGenerator(
           buildCertificate(AJLA_DOKTOR, Status.SIGNED));
 
@@ -126,7 +126,7 @@ class FK7211PdfGeneratorTest {
     }
 
     @Test
-    void shouldOnlySetMidwifeAsCertifierIfIssuerIsMidwife() throws IOException {
+    void shouldOnlySetMidwifeAsCertifierIfIssuerIsMidwife() {
       final var fk7211PdfGenerator = new FK7211PdfGenerator(
           buildCertificate(BARNMORSKA, Status.SIGNED));
 
@@ -143,7 +143,7 @@ class FK7211PdfGeneratorTest {
     }
 
     @Test
-    void shouldOnlySetNurseAsCertifierIfIssuerIsNurse() throws IOException {
+    void shouldOnlySetNurseAsCertifierIfIssuerIsNurse() {
       final var fk7211PdfGenerator = new FK7211PdfGenerator(
           buildCertificate(ANNA_SJUKSKOTERSKA, Status.SIGNED));
 
@@ -160,7 +160,7 @@ class FK7211PdfGeneratorTest {
     }
 
     @Test
-    void shouldNotSetCertifierIfRoleIsAdmin() throws IOException {
+    void shouldNotSetCertifierIfRoleIsAdmin() {
       final var fk7211PdfGenerator = new FK7211PdfGenerator(
           buildCertificate(ALVA_VARDADMINISTRATOR, Status.SIGNED));
 
@@ -179,7 +179,7 @@ class FK7211PdfGeneratorTest {
   class Signed {
 
     @Test
-    void shouldSetSignatureDateIfCertificateIsSigned() throws IOException {
+    void shouldSetSignatureDateIfCertificateIsSigned() {
       final var expected = buildCertificate(AJLA_DOKTOR, Status.SIGNED).signed()
           .format(DateTimeFormatter.ISO_DATE);
 
@@ -193,7 +193,7 @@ class FK7211PdfGeneratorTest {
     }
 
     @Test
-    void shouldSetSignatureFullNameIfCertificateIsSigned() throws IOException {
+    void shouldSetSignatureFullNameIfCertificateIsSigned() {
       final var expected = buildCertificate(AJLA_DOKTOR, Status.SIGNED)
           .certificateMetaData().issuer().name().fullName();
 
@@ -207,7 +207,7 @@ class FK7211PdfGeneratorTest {
     }
 
     @Test
-    void shouldSetPaTitlesIfNotNullIfCertificateIsSigned() throws IOException {
+    void shouldSetPaTitlesIfNotNullIfCertificateIsSigned() {
       final var expected = "203090, 601010";
 
       final var fk7211PdfGenerator = new FK7211PdfGenerator(
@@ -220,7 +220,7 @@ class FK7211PdfGeneratorTest {
     }
 
     @Test
-    void shouldSetSpecialityIfNotNullIfCertificateIsSigned() throws IOException {
+    void shouldSetSpecialityIfNotNullIfCertificateIsSigned() {
       final var expected = "Allmänmedicin, Psykiatri";
 
       final var fk7211PdfGenerator = new FK7211PdfGenerator(
@@ -233,7 +233,7 @@ class FK7211PdfGeneratorTest {
     }
 
     @Test
-    void shouldSetHsaIdIfNotNullIfCertificateIsSigned() throws IOException {
+    void shouldSetHsaIdIfNotNullIfCertificateIsSigned() {
       final var expected = buildCertificate(AJLA_DOKTOR, Status.SIGNED).certificateMetaData()
           .issuer().hsaId()
           .id();
@@ -248,7 +248,7 @@ class FK7211PdfGeneratorTest {
     }
 
     @Test
-    void shouldSetWorkplaceCodeIfNotNullIfCertificateIsSigned() throws IOException {
+    void shouldSetWorkplaceCodeIfNotNullIfCertificateIsSigned() {
       final var expected = "1627";
 
       final var fk7211PdfGenerator = new FK7211PdfGenerator(
@@ -261,7 +261,7 @@ class FK7211PdfGeneratorTest {
     }
 
     @Test
-    void shouldSetContactInfoIfCertificateIsSigned() throws IOException {
+    void shouldSetContactInfoIfCertificateIsSigned() {
       final var expected = """
           Alfa Allergimottagningen
           Storgatan 1
@@ -296,7 +296,7 @@ class FK7211PdfGeneratorTest {
   class Draft {
 
     @Test
-    void shouldNotSetSignatureDateIfCertificateIsDraft() throws IOException {
+    void shouldNotSetSignatureDateIfCertificateIsDraft() {
       final var fk7211PdfGenerator = new FK7211PdfGenerator(
           buildCertificate(AJLA_DOKTOR, Status.DRAFT));
 
@@ -309,7 +309,7 @@ class FK7211PdfGeneratorTest {
     }
 
     @Test
-    void shouldNotSetSignatureFullNameIfCertificateIsDraft() throws IOException {
+    void shouldNotSetSignatureFullNameIfCertificateIsDraft() {
       final var fk7211PdfGenerator = new FK7211PdfGenerator(
           buildCertificate(AJLA_DOKTOR, Status.DRAFT));
 
@@ -322,7 +322,7 @@ class FK7211PdfGeneratorTest {
     }
 
     @Test
-    void shouldNotSetPaTitlesIfCertificateIsDraft() throws IOException {
+    void shouldNotSetPaTitlesIfCertificateIsDraft() {
       final var fk7211PdfGenerator = new FK7211PdfGenerator(
           buildCertificate(AJLA_DOKTOR, Status.DRAFT));
 
@@ -335,7 +335,7 @@ class FK7211PdfGeneratorTest {
     }
 
     @Test
-    void shouldNotSetSpecialityIfCertificateIsDraft() throws IOException {
+    void shouldNotSetSpecialityIfCertificateIsDraft() {
       final var fk7211PdfGenerator = new FK7211PdfGenerator(
           buildCertificate(AJLA_DOKTOR, Status.DRAFT));
 
@@ -348,7 +348,7 @@ class FK7211PdfGeneratorTest {
     }
 
     @Test
-    void shouldNotSetHsaIdIfCertificateIsDraft() throws IOException {
+    void shouldNotSetHsaIdIfCertificateIsDraft() {
       final var fk7211PdfGenerator = new FK7211PdfGenerator(
           buildCertificate(AJLA_DOKTOR, Status.DRAFT));
 
@@ -361,7 +361,7 @@ class FK7211PdfGeneratorTest {
     }
 
     @Test
-    void shouldNotSetWorkplaceCodeIfCertificateIsDraft() throws IOException {
+    void shouldNotSetWorkplaceCodeIfCertificateIsDraft() {
       final var fk7211PdfGenerator = new FK7211PdfGenerator(
           buildCertificate(AJLA_DOKTOR, Status.DRAFT));
 

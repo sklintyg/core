@@ -61,7 +61,7 @@ public class FK7211PdfGenerator {
   private final PDDocument pdDocument;
   private final PDAcroForm acroForm;
 
-  public FK7211PdfGenerator(Certificate certificate) throws IOException {
+  public FK7211PdfGenerator(Certificate certificate) {
     final var template = certificate.certificateModel().pdfTemplatePath();
     try (final var inputStream = getClass().getClassLoader().getResourceAsStream(template)) {
       if (inputStream == null) {
