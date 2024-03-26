@@ -34,7 +34,6 @@ public class CertificatePdfGenerator implements PdfGenerator {
 
       fk7211Pdf.getDocumentCatalog().getAcroForm().flatten();
       fk7211Pdf.save(byteArrayOutputStream);
-      fk7211Pdf.save("fk7211_test.pdf");
       fk7211Pdf.close();
 
       return new Pdf(byteArrayOutputStream.toByteArray(), setFileName(certificate));
