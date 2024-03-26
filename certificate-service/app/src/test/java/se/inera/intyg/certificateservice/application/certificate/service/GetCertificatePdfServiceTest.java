@@ -36,13 +36,14 @@ class GetCertificatePdfServiceTest {
   private static final byte[] PDF_DATA = "pdf".getBytes();
   private static final Pdf PDF = new Pdf(PDF_DATA, FILE_NAME);
 
+  private static final String ADDITIONAL_INFO_TEXT = "additionalInfoText";
   private static final GetCertificatePdfRequest REQUEST = GetCertificatePdfRequest.builder()
       .patient(ATHENA_REACT_ANDERSSON_DTO)
       .careProvider(ALFA_REGIONEN_DTO)
       .careUnit(ALFA_MEDICINCENTRUM_DTO)
       .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
       .user(AJLA_DOCTOR_DTO)
-      .additionalInfoText("additionalInfoText")
+      .additionalInfoText(ADDITIONAL_INFO_TEXT)
       .build();
 
   @Mock
@@ -84,7 +85,8 @@ class GetCertificatePdfServiceTest {
 
       doReturn(PDF).when(getCertificatePdfDomainService).get(
           new CertificateId(CERTIFICATE_ID),
-          actionEvaluation
+          actionEvaluation,
+          ADDITIONAL_INFO_TEXT
       );
     }
 

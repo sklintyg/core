@@ -166,6 +166,18 @@ class CertificateModelFactoryFK7211Test {
   }
 
   @Test
+  void shallIncludeCertificateActionPrint() {
+    final var expectedType = CertificateActionType.PRINT;
+
+    final var certificateModel = certificateModelFactoryFK7211.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
   void shallIncludePdfTemplatePath() {
     final var certificateModel = certificateModelFactoryFK7211.create();
 

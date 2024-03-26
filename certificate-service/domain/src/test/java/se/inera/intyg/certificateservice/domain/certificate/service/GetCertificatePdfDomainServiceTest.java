@@ -29,6 +29,7 @@ class GetCertificatePdfDomainServiceTest {
   private static final byte[] PDF_DATA = "pdfData".getBytes();
   private static final String FILE_NAME = "fileName";
   private static final Pdf PDF = new Pdf(PDF_DATA, FILE_NAME);
+  private static final String ADDITIONAL_INFO_TEXT = "additionalInfoText";
 
   @Mock
   private Certificate certificate;
@@ -56,21 +57,22 @@ class GetCertificatePdfDomainServiceTest {
 
     @Test
     void shallValidateIfAllowedToPrintCertificate() {
-      getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION);
+      getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION, ADDITIONAL_INFO_TEXT);
       verify(certificate).allowTo(CertificateActionType.PRINT, ACTION_EVALUATION);
     }
 
     @Test
     void shallUpdateCertificateMetadata() {
-      getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION);
+      getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION, ADDITIONAL_INFO_TEXT);
       verify(certificate).updateMetadata(ACTION_EVALUATION);
     }
 
     @Test
     void shallReturnResponseWithPdfFromGenerator() throws IOException {
-      doReturn(PDF).when(pdfGenerator).generate(certificate);
+      doReturn(PDF).when(pdfGenerator).generate(certificate, ADDITIONAL_INFO_TEXT);
 
-      final var response = getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION);
+      final var response = getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION,
+          ADDITIONAL_INFO_TEXT);
 
       assertEquals(PDF, response);
     }
@@ -83,7 +85,8 @@ class GetCertificatePdfDomainServiceTest {
     void shallThrowIfNotAllowedToPrint() {
       doReturn(false).when(certificate).allowTo(CertificateActionType.PRINT, ACTION_EVALUATION);
       assertThrows(CertificateActionForbidden.class,
-          () -> getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION)
+          () -> getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION,
+              ADDITIONAL_INFO_TEXT)
       );
     }
 

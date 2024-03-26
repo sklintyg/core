@@ -8,9 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalPdfResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
-import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalPdfService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalXmlService;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,8 +20,6 @@ class CertificateInternalApiControllerTest {
 
   @Mock
   private GetCertificateInternalXmlService getCertificateInternalXmlService;
-  @Mock
-  private GetCertificateInternalPdfService getCertificateInternalPdfService;
   @InjectMocks
   private CertificateInternalApiController certificateInternalApiController;
 
@@ -39,20 +35,5 @@ class CertificateInternalApiControllerTest {
     final var actualResult = certificateInternalApiController.getCertificateXml(CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
-  }
-
-  @Test
-  void shallReturnGetCertificatePdfResponse() {
-    final var expectedResult = GetCertificateInternalPdfResponse.builder()
-        .pdfData(PDF_DATA)
-        .fileName(FILE_NAME)
-        .build();
-
-    doReturn(expectedResult).when(getCertificateInternalPdfService).get(CERTIFICATE_ID);
-
-    final var actualResult = certificateInternalApiController.getCertificatePdf(CERTIFICATE_ID);
-
-    assertEquals(expectedResult, actualResult);
-
   }
 }

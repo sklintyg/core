@@ -26,6 +26,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 class CertificatePdfGeneratorTest {
 
   private static final LocalDateTime SIGNED_DATE = LocalDateTime.now();
+  private static final String ADDITIONAL_INFO_TEXT = "additionalInfoText";
 
   @InjectMocks
   CertificatePdfGenerator certificatePdfGenerator;
@@ -35,7 +36,7 @@ class CertificatePdfGeneratorTest {
     final var expected = "intyg_om_graviditet_" + LocalDateTime.now()
         .format((DateTimeFormatter.ofPattern("yy-MM-dd_HHmm")));
     final var pdfByteArray = certificatePdfGenerator.generate(
-        buildCertificate());
+        buildCertificate(), ADDITIONAL_INFO_TEXT);
 
     assertEquals(expected, pdfByteArray.fileName());
   }

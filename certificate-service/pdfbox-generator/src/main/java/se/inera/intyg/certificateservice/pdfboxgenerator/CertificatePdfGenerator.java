@@ -22,11 +22,11 @@ public class CertificatePdfGenerator implements PdfGenerator {
 
   private static final String WATERMARK_DRAFT = "UTKAST";
 
-  public Pdf generate(Certificate certificate) {
+  public Pdf generate(Certificate certificate, String additionalInfoText) {
     try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
       final var fk7211Pdf = new FK7211PdfGenerator(certificate).getDocument();
 
-      setMarginText(fk7211Pdf, certificate);
+      setMarginText(fk7211Pdf, certificate, additionalInfoText);
 
       if (certificate.status() == Status.DRAFT) {
         setDraftWatermark(fk7211Pdf);
@@ -44,7 +44,8 @@ public class CertificatePdfGenerator implements PdfGenerator {
     }
   }
 
-  private void setMarginText(PDDocument fk7211Pdf, Certificate certificate)
+  private void setMarginText(PDDocument fk7211Pdf, Certificate certificate,
+      String additionalInfoText)
       throws IOException {
     final var contentStream = new PDPageContentStream(fk7211Pdf, fk7211Pdf.getPage(0),
         AppendMode.APPEND, true, true);
@@ -55,8 +56,7 @@ public class CertificatePdfGenerator implements PdfGenerator {
     contentStream.newLineAtOffset(30, 30);
     contentStream.setNonStrokingColor(Color.black);
     contentStream.setFont(new PDType1Font(FontName.HELVETICA), 8);
-    contentStream.showText(
-        String.format("Intygsid: %s. Intyget är utskrivet från Webcert", certificateId));
+    contentStream.showText("Intygsid: %s. %s".formatted(certificateId, additionalInfoText));
     contentStream.endText();
     contentStream.close();
   }

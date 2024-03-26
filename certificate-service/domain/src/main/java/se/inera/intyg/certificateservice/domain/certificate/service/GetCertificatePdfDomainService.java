@@ -14,7 +14,8 @@ public class GetCertificatePdfDomainService {
   private final CertificateRepository certificateRepository;
   private final PdfGenerator pdfGenerator;
 
-  public Pdf get(CertificateId certificateId, ActionEvaluation actionEvaluation) {
+  public Pdf get(CertificateId certificateId, ActionEvaluation actionEvaluation,
+      String additionalInfoText) {
     final var certificate = certificateRepository.getById(certificateId);
 
     if (!certificate.allowTo(CertificateActionType.PRINT, actionEvaluation)) {
@@ -25,7 +26,7 @@ public class GetCertificatePdfDomainService {
 
     certificate.updateMetadata(actionEvaluation);
 
-    return pdfGenerator.generate(certificate);
+    return pdfGenerator.generate(certificate, additionalInfoText);
   }
 
 }

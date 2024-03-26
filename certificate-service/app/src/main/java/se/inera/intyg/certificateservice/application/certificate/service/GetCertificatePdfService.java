@@ -31,7 +31,8 @@ public class GetCertificatePdfService {
 
     final var certificatePdf = getCertificatePdfDomainService.get(
         new CertificateId(certificateId),
-        actionEvaluation
+        actionEvaluation,
+        request.getAdditionalInfoText()
     );
 
     return GetCertificatePdfResponse.builder()
