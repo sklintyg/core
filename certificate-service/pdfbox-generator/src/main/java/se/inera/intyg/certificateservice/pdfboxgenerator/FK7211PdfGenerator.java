@@ -4,7 +4,6 @@ import static se.inera.intyg.certificateservice.domain.certificatemodel.model.El
 
 import java.awt.Color;
 import java.io.IOException;
-import java.io.InputStream;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 import org.apache.pdfbox.Loader;
@@ -63,31 +62,32 @@ public class FK7211PdfGenerator {
   private final PDAcroForm acroForm;
 
   public FK7211PdfGenerator(Certificate certificate) throws IOException {
-    String template = certificate.certificateModel().pdfTemplatePath();
-    InputStream inputStream = getClass().getClassLoader().getResourceAsStream(template);
+    final var template = certificate.certificateModel().pdfTemplatePath();
+    try (final var inputStream = getClass().getClassLoader().getResourceAsStream(template)) {
+      if (inputStream == null) {
+        throw new IllegalArgumentException("Template not found: " + template);
+      }
+      pdDocument = Loader.loadPDF(inputStream.readAllBytes());
+      final var documentCatalog = pdDocument.getDocumentCatalog();
+      acroForm = documentCatalog.getAcroForm();
 
-    if (inputStream == null) {
-      throw new IllegalArgumentException("Template not found: " + template);
+      setPatientInformation(certificate);
+      setExpectedDeliveryDate(certificate);
+      setIssuerRole(certificate);
+      setContactInformation(certificate);
+
+      if (certificate.status() == Status.SIGNED) {
+        setDigitalSignatureText();
+        setSignedDate(certificate);
+        setIssuerFullName(certificate);
+        setPaTitles(certificate);
+        setSpeciality(certificate);
+        setHsaId(certificate);
+        setWorkplaceCode(certificate);
+      }
+    } catch (Exception e) {
+      throw new IllegalStateException("Could not create Pdf", e);
     }
-    pdDocument = Loader.loadPDF(inputStream.readAllBytes());
-    final var documentCatalog = pdDocument.getDocumentCatalog();
-    acroForm = documentCatalog.getAcroForm();
-
-    setPatientInformation(certificate);
-    setExpectedDeliveryDate(certificate);
-    setIssuerRole(certificate);
-    setContactInformation(certificate);
-
-    if (certificate.status() == Status.SIGNED) {
-      setDigitalSignatureText();
-      setSignedDate(certificate);
-      setIssuerFullName(certificate);
-      setPaTitles(certificate);
-      setSpeciality(certificate);
-      setHsaId(certificate);
-      setWorkplaceCode(certificate);
-    }
-    inputStream.close();
   }
 
   private void setPatientInformation(Certificate certificate) throws IOException {

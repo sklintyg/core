@@ -71,7 +71,7 @@ public class CertificatePdfGenerator implements PdfGenerator {
       final var font = new PDType1Font(FontName.HELVETICA);
 
       final var width = page.getMediaBox().getWidth();
-      float height = page.getMediaBox().getHeight();
+      final var height = page.getMediaBox().getHeight();
 
       final var stringWidth = font.getStringWidth(WATERMARK_DRAFT) / 1000 * fontHeight;
       final var diagonalLength = (float) Math.sqrt(width * width + height * height);
@@ -82,7 +82,7 @@ public class CertificatePdfGenerator implements PdfGenerator {
       contentStream.transform(Matrix.getRotateInstance(angle, 0, 0));
       contentStream.setFont(font, fontHeight);
 
-      PDExtendedGraphicsState gs = new PDExtendedGraphicsState();
+      final var gs = new PDExtendedGraphicsState();
       gs.setNonStrokingAlphaConstant(0.5f);
       gs.setStrokingAlphaConstant(0.5f);
       contentStream.setGraphicsStateParameters(gs);

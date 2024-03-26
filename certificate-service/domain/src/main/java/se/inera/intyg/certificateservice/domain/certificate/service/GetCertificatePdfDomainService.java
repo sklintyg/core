@@ -45,6 +45,7 @@ public class GetCertificatePdfDomainService {
             .actionEvaluation(actionEvaluation)
             .build()
     );
+    
     return generatedPdf;
   }
 }
