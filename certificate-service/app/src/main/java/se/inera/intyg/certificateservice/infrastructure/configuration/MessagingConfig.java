@@ -14,7 +14,7 @@ import org.springframework.jms.core.JmsTemplate;
 @Configuration
 public class MessagingConfig {
 
-  @Value("${certificate.service.amq.name}")
+  @Value("${certificate.event.queue.name}")
   private String eventQueueName;
 
   @Value("${spring.activemq.broker-url}")
