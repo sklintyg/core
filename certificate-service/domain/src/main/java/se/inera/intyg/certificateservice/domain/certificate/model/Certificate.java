@@ -14,6 +14,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
+import se.inera.intyg.certificateservice.domain.common.model.RevokeInformation;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
@@ -34,6 +35,7 @@ public class Certificate {
   private Status status = Status.DRAFT;
   private Xml xml;
   private Sent sent;
+  private Revoked revoked;
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
@@ -186,7 +188,8 @@ public class Certificate {
 
     if (this.sent != null) {
       throw new IllegalStateException(
-          "'%s' has already been sent to '%s'.".formatted(id(), this.sent.recipient().name())
+          "Certificate with id '%s' has already been sent to '%s'.".formatted(id(),
+              this.sent.recipient().name())
       );
     }
 
@@ -198,7 +201,26 @@ public class Certificate {
   }
 
   public void revoke(ActionEvaluation actionEvaluation, String revokeReason, String revokeMessage) {
+    if (this.status != Status.SIGNED) {
+      throw new IllegalStateException(
+          "Incorrect status '%s' - required status is '%s' or '%s' to revoke".formatted(this.status,
+              Status.SIGNED, Status.LOCKED_DRAFT)
+      );
+    }
 
+    if (this.revoked != null) {
+      throw new IllegalStateException(
+          "Certificate with id '%s' has already been revoked".formatted(id().id())
+      );
+    }
+
+    this.revoked = Revoked.builder()
+        .revokeInformation(
+            new RevokeInformation(revokeReason, revokeMessage)
+        )
+        .revokedBy(Staff.create(actionEvaluation.user()))
+        .revokedAt(LocalDateTime.now(ZoneId.systemDefault()))
+        .build();
   }
 }
 
