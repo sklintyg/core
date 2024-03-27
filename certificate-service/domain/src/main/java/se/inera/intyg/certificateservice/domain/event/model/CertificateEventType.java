@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.domain.event.model;
 
 public enum CertificateEventType {
+
   READ("read-certificate", Constants.ACTION_TYPE_ACCESSED),
   CREATED("created-certificate", Constants.ACTION_TYPE_CREATION),
   UPDATED("updated-certificate", Constants.ACTION_TYPE_CHANGE),
@@ -13,10 +14,12 @@ public enum CertificateEventType {
 
   private final String action;
   private final String actionType;
+  private final String messageType;
 
-  CertificateEventType(String action, String actionType) {
+  CertificateEventType(String action, String actionType, String messageType) {
     this.action = action;
     this.actionType = actionType;
+    this.messageType = messageType;
   }
 
   public String action() {
@@ -25,6 +28,14 @@ public enum CertificateEventType {
 
   public String actionType() {
     return actionType;
+  }
+
+  public String messageType() {
+    return messageType;
+  }
+
+  public boolean hasMessageType() {
+    return messageType != null;
   }
 
   private static class Constants {

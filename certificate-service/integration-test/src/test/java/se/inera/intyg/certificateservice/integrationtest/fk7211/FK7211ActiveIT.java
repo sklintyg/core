@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.integrationtest.fk7211;
 
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -69,12 +70,14 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.ResourceLinkUtil.resourceLink;
 import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -94,8 +97,10 @@ import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.Cer
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
 import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
+import se.inera.intyg.certificateservice.integrationtest.util.Containers;
 import se.inera.intyg.certificateservice.integrationtest.util.InternalApiUtil;
 import se.inera.intyg.certificateservice.integrationtest.util.StaffUtil;
+import se.inera.intyg.certificateservice.integrationtest.util.TestListener;
 import se.inera.intyg.certificateservice.integrationtest.util.TestabilityApiUtil;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO;
 
@@ -112,15 +117,17 @@ class FK7211ActiveIT {
     registry.add("certificate.model.fk7211.v1_0.active.from", () -> "2024-01-01T00:00:00");
   }
 
-
   private final TestRestTemplate restTemplate;
+  private final TestListener testListener;
+
   private ApiUtil api;
   private InternalApiUtil internalApi;
   private TestabilityApiUtil testabilityApi;
 
   @Autowired
-  public FK7211ActiveIT(TestRestTemplate restTemplate) {
+  public FK7211ActiveIT(TestRestTemplate restTemplate, TestListener testListener) {
     this.restTemplate = restTemplate;
+    this.testListener = testListener;
   }
 
   @BeforeEach
@@ -128,6 +135,12 @@ class FK7211ActiveIT {
     this.api = new ApiUtil(restTemplate, port);
     this.internalApi = new InternalApiUtil(restTemplate, port);
     this.testabilityApi = new TestabilityApiUtil(restTemplate, port);
+    testListener.emptyMessages();
+  }
+
+  @BeforeAll
+  public static void beforeAll() {
+    Containers.ensureRunning();
   }
 
   @AfterEach
@@ -2740,6 +2753,37 @@ class FK7211ActiveIT {
 
       assertEquals(400, response.getStatusCode().value());
     }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget signeras ska ett meddelande läggas på AMQn")
+    void shallSuccessfullyAddMessageOfSigningOnAMQ() {
+      final var testCertificates = testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7211, VERSION)
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build()
+      );
+
+      api.signCertificate(
+          customSignCertificateRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
+          certificateId(testCertificates),
+          version(testCertificates)
+      );
+
+      assertAll(
+          () -> waitAtMost(Duration.ofSeconds(5))
+              .untilAsserted(() -> assertEquals(1, testListener.messages.size())),
+          () -> assertEquals(
+              certificateId(testCertificates),
+              testListener.messages.get(0).getStringProperty("certificateId")
+          ),
+          () -> assertEquals(
+              "certificate-sign",
+              testListener.messages.get(0).getStringProperty("eventType")
+          )
+      );
+    }
   }
 
   @Nested
@@ -2804,6 +2848,36 @@ class FK7211ActiveIT {
           () -> assertEquals("FKASSA", recipient(response).getId()),
           () -> assertEquals("Försäkringskassan", recipient(response).getName()),
           () -> assertNotNull(recipient(response).getSent())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget skickas ska ett meddelande läggas på AMQn")
+    void shallSuccessfullyAddMessageToAMQWhenSendingCertificate() {
+      final var testCertificates = testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7211, VERSION, SIGNED)
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build()
+      );
+
+      api.sendCertificate(
+          customSendCertificateRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> waitAtMost(Duration.ofSeconds(5))
+              .untilAsserted(() -> assertEquals(1, testListener.messages.size())),
+          () -> assertEquals(
+              certificateId(testCertificates),
+              testListener.messages.get(0).getStringProperty("certificateId")
+          ),
+          () -> assertEquals(
+              "certificate-sent",
+              testListener.messages.get(0).getStringProperty("eventType")
+          )
       );
     }
 
@@ -2917,7 +2991,7 @@ class FK7211ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7211 - Intern api för intygstjänsten")
+  @DisplayName("FK7211 - Intern api för Intygstjänsten")
   class InternalApi {
 
     @Test
@@ -3084,6 +3158,47 @@ class FK7211ActiveIT {
       assertNotNull(
           pdfData(response.getBody()),
           "Should return certificate pdf data when exists!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är signerat skall pdf returneras")
+    void shallReturnSignedCertificatePdf() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
+      );
+
+      final var response = api.getCertificatePdf(
+          defaultGetCertificatePdfRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertNotNull(
+          pdfData(response.getBody()),
+          "Should return signed certificate pdf data!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är signerat och skickat skall pdf returneras")
+    void shallReturnSentCertificatePdf() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.getCertificatePdf(
+          defaultGetCertificatePdfRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertNotNull(
+          pdfData(response.getBody()),
+          "Should return sent certificate pdf data!"
       );
     }
   }
