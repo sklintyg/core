@@ -97,6 +97,12 @@ public class ValidationUtil {
     }
   }
 
+  public static void validateRevokeReason(String reason) {
+    if (reason == null || reason.isBlank()) {
+      throw new IllegalArgumentException("Required parameter missing: revoke.reason");
+    }
+  }
+
   public static void validateAdditonalInfoText(String additonalInfoText) {
     if (additonalInfoText == null || additonalInfoText.isBlank()) {
       throw new IllegalArgumentException("Required parameter missing: additionalInfoText");

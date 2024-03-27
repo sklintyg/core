@@ -20,6 +20,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateRequest;
@@ -35,6 +37,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.DeleteC
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificatePdfService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateXmlService;
+import se.inera.intyg.certificateservice.application.certificate.service.RevokeCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SendCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateWithoutSignatureService;
@@ -57,6 +60,7 @@ public class CertificateController {
   private final SignCertificateService signCertificateService;
   private final SignCertificateWithoutSignatureService signCertificateWithoutSignatureService;
   private final GetCertificatePdfService getCertificatePdfService;
+  private final RevokeCertificateService revokeCertificateService;
 
   @PostMapping
   CreateCertificateResponse createCertificate(
@@ -132,5 +136,12 @@ public class CertificateController {
       @RequestBody GetCertificatePdfRequest getCertificatePdfRequest,
       @PathVariable("certificateId") String certificateId) {
     return getCertificatePdfService.get(getCertificatePdfRequest, certificateId);
+  }
+
+  @PostMapping("/{certificateId}/revoke")
+  RevokeCertificateResponse revokeCertificate(
+      @RequestBody RevokeCertificateRequest revokeCertificateRequest,
+      @PathVariable("certificateId") String certificateId) {
+    return revokeCertificateService.revoke(revokeCertificateRequest, certificateId);
   }
 }
