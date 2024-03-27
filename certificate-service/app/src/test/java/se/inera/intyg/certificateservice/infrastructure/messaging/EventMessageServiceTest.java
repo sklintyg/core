@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.logging;
+package se.inera.intyg.certificateservice.infrastructure.messaging;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -14,7 +14,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
-import se.inera.intyg.certificateservice.infrastructure.messaging.EventMessageService;
 
 @ExtendWith(MockitoExtension.class)
 class EventMessageServiceTest {
