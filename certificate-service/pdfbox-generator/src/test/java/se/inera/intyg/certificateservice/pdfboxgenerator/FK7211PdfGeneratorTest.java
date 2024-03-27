@@ -17,7 +17,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.
 import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfGenerator.CHECKED_BOX_VALUE;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfGenerator.DIGITALLY_SIGNED_TEXT;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfGenerator.PATIENT_ID_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfGenerator.PATIENT_NAME_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfGenerator.QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_DOCTOR_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfGenerator.QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_MIDWIFE_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfGenerator.QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_NURSE_FIELD_ID;
@@ -57,19 +56,6 @@ class FK7211PdfGeneratorTest {
 
   @Nested
   class PatientInfo {
-
-    @Test
-    void shouldSetPatientName() {
-      final var expected = buildCertificate(AJLA_DOKTOR, Status.SIGNED).certificateMetaData()
-          .patient().name().fullName();
-
-      final var fk7211PdfGenerator = new FK7211PdfGenerator(
-          buildCertificate(AJLA_DOKTOR, Status.SIGNED));
-
-      final var field = getPdfField(fk7211PdfGenerator.getDocument(), PATIENT_NAME_FIELD_ID);
-
-      assertEquals(expected, field.getValueAsString());
-    }
 
     @Test
     void shouldSetPatientId() {

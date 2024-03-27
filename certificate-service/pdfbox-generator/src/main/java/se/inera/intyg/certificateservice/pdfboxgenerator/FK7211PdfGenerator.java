@@ -91,9 +91,6 @@ public class FK7211PdfGenerator {
   }
 
   private void setPatientInformation(Certificate certificate) throws IOException {
-    final var patientNameField = acroForm.getField(PATIENT_NAME_FIELD_ID);
-    patientNameField.setValue(certificate.certificateMetaData().patient().name().fullName());
-
     final var patientIdField = acroForm.getField(PATIENT_ID_FIELD_ID);
     patientIdField.setValue(certificate.certificateMetaData().patient().id().id());
   }

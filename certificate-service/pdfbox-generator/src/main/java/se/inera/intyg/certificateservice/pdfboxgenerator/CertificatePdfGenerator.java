@@ -27,12 +27,9 @@ public class CertificatePdfGenerator implements PdfGenerator {
       final var fk7211Pdf = new FK7211PdfGenerator(certificate).getDocument();
 
       setMarginText(fk7211Pdf, certificate, additionalInfoText);
+      setSentText(fk7211Pdf, certificate);
+      setDraftWatermark(fk7211Pdf, certificate);
 
-      if (certificate.status() == Status.DRAFT) {
-        setDraftWatermark(fk7211Pdf);
-      }
-
-      fk7211Pdf.getDocumentCatalog().getAcroForm().flatten();
       fk7211Pdf.save(byteArrayOutputStream);
       fk7211Pdf.close();
 
@@ -43,14 +40,39 @@ public class CertificatePdfGenerator implements PdfGenerator {
     }
   }
 
-  private void setMarginText(PDDocument fk7211Pdf, Certificate certificate,
+  private static void setSentText(PDDocument fk7211Pdf, Certificate certificate)
+      throws IOException {
+    if (certificate.sent() == null) {
+      return;
+    }
+
+    addText(
+        fk7211Pdf,
+        "Intyget har skickats digitalt till %s".formatted(certificate.sent().recipient().name()),
+        22,
+        Matrix.getTranslateInstance(40, 665)
+    );
+
+    addText(
+        fk7211Pdf,
+        "Du kan se intyget genom att logga in på 1177.se",
+        16,
+        Matrix.getTranslateInstance(40, 645)
+    );
+  }
+
+  private static void setMarginText(PDDocument fk7211Pdf, Certificate certificate,
       String additionalInfoText)
       throws IOException {
+    if (certificate.status() != Status.SIGNED) {
+      return;
+    }
+
     final var contentStream = new PDPageContentStream(fk7211Pdf, fk7211Pdf.getPage(0),
         AppendMode.APPEND, true, true);
 
     final var certificateId = certificate.id().id();
-    contentStream.transform(Matrix.getRotateInstance(Math.PI / 2, 607, 280));
+    contentStream.transform(Matrix.getRotateInstance(Math.PI / 2, 600, 25));
     contentStream.beginText();
     contentStream.newLineAtOffset(30, 30);
     contentStream.setNonStrokingColor(Color.black);
@@ -60,7 +82,12 @@ public class CertificatePdfGenerator implements PdfGenerator {
     contentStream.close();
   }
 
-  private void setDraftWatermark(PDDocument fk7211Pdf) throws IOException {
+  private static void setDraftWatermark(PDDocument fk7211Pdf, Certificate certificate)
+      throws IOException {
+    if (certificate.status() != Status.DRAFT) {
+      return;
+    }
+
     for (PDPage page : fk7211Pdf.getPages()) {
 
       final var contentStream = new PDPageContentStream(fk7211Pdf, page, AppendMode.APPEND,
@@ -108,5 +135,18 @@ public class CertificatePdfGenerator implements PdfGenerator {
         .replace("–", "")
         .replace("__", "_")
         .toLowerCase();
+  }
+
+  private static void addText(PDDocument fk7211Pdf, String text, int fontSize, Matrix matrix)
+      throws IOException {
+    final var contentStream = new PDPageContentStream(fk7211Pdf, fk7211Pdf.getPage(0),
+        AppendMode.APPEND, true, true);
+    contentStream.transform(matrix);
+    contentStream.beginText();
+    contentStream.setNonStrokingColor(Color.gray);
+    contentStream.setFont(new PDType1Font(FontName.HELVETICA), fontSize);
+    contentStream.showText(text);
+    contentStream.endText();
+    contentStream.close();
   }
 }
