@@ -53,7 +53,6 @@ import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.PatientRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.RevokedRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.StaffRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.UnitRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
@@ -65,8 +64,6 @@ class CertificateEntityMapperTest {
 
   @InjectMocks
   private CertificateEntityMapper certificateEntityMapper;
-  @Mock
-  RevokedRepository revokedRepository;
   @Mock
   CertificateEntityRepository certificateEntityRepository;
 
@@ -421,7 +418,7 @@ class CertificateEntityMapperTest {
 
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
           FK7211_CERTIFICATE_MODEL);
-      
+
       assertEquals(expectedRevokedInformation, response.revoked().revokedInformation());
     }
   }

@@ -156,6 +156,7 @@ public class CertificateConverter {
       case DRAFT, DELETED_DRAFT -> CertificateStatusTypeDTO.UNSIGNED;
       case LOCKED_DRAFT -> CertificateStatusTypeDTO.LOCKED;
       case SIGNED -> CertificateStatusTypeDTO.SIGNED;
+      case REVOKED -> CertificateStatusTypeDTO.REVOKED;
     };
   }
 }

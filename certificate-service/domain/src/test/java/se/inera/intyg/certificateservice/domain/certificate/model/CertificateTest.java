@@ -1235,6 +1235,19 @@ class CertificateTest {
     private static final String MESSAGE = "message";
 
     @Test
+    void shallSetStatusToRevoked() {
+      final var expectedRevokeInformation = Status.REVOKED;
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      certificate.revoke(actionEvaluation, REASON, MESSAGE);
+
+      assertEquals(expectedRevokeInformation, certificate.status());
+    }
+
+    @Test
     void shallIncludeRevokeInformationWhenRevoked() {
       final var expectedRevokeInformation = new RevokedInformation(REASON, MESSAGE);
       final var actionEvaluation = actionEvaluationBuilder.build();

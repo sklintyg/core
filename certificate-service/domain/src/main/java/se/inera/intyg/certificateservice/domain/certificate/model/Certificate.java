@@ -214,6 +214,7 @@ public class Certificate {
       );
     }
 
+    this.status = Status.REVOKED;
     this.revoked = Revoked.builder()
         .revokedInformation(
             new RevokedInformation(revokeReason, revokeMessage)

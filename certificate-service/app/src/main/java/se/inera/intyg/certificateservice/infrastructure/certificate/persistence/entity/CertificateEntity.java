@@ -80,7 +80,7 @@ public class CertificateEntity {
   @JoinColumn(name = "revoked_by_staff_key", referencedColumnName = "`key`")
   private StaffEntity revokedBy;
   @ManyToOne
-  @JoinColumn(name = "revoked_reason_key", referencedColumnName = "`key`")
+  @JoinColumn(name = "revoked_reason_key")
   private RevokedReasonEntity revokedReason;
   @Column(name = "revoked_message")
   private String revokedMessage;
