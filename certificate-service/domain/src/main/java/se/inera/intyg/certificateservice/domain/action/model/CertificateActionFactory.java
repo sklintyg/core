@@ -80,6 +80,17 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case REVOKE -> CertificateActionRevoke.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleWithinCareUnit(),
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleStatus(List.of(Status.SIGNED)),
+                  new ActionRuleRole(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE))
+              )
+          )
+          .build();
     };
   }
 }

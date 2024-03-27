@@ -24,6 +24,14 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_PA_TITLES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_ROLE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_SPECIALITIES;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_BLOCKED;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_MIDDLE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_SPECIALITIES;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_TITLES;
 
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
@@ -33,8 +41,27 @@ import se.inera.intyg.certificateservice.domain.user.model.User.UserBuilder;
 public class TestDataUser {
 
   public static final User AJLA_DOKTOR = ajlaDoctorBuilder().build();
+  public static final User ANNA_SJUKSKOTERKSA = annaSjukskoterska().build();
+
+
   public static final User ALF_DOKTOR = alfDoktorBuilder().build();
   public static final User ALVA_VARDADMINISTRATOR = alvaVardadministratorBuilder().build();
+
+  private static UserBuilder annaSjukskoterska() {
+    return User.builder()
+        .hsaId(new HsaId(ANNA_SJUKSKOTERSKA_HSA_ID))
+        .name(
+            Name.builder()
+                .firstName(ANNA_SJUKSKOTERSKA_FIRST_NAME)
+                .middleName(ANNA_SJUKSKOTERSKA_MIDDLE_NAME)
+                .lastName(ANNA_SJUKSKOTERSKA_LAST_NAME)
+                .build()
+        )
+        .blocked(ANNA_SJUKSKOTERSKA_BLOCKED)
+        .paTitles(ANNA_SJUKSKOTERSKA_TITLES)
+        .specialities(ANNA_SJUKSKOTERSKA_SPECIALITIES)
+        .role(ANNA_SJUKSKOTERSKA_ROLE);
+  }
 
   public static UserBuilder ajlaDoctorBuilder() {
     return User.builder()

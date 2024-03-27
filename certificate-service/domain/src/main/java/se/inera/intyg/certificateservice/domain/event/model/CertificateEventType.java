@@ -8,7 +8,8 @@ public enum CertificateEventType {
   VALIDATED("validated-certificate", Constants.ACTION_TYPE_ACCESSED),
   SIGNED("sign-certificate", Constants.ACTION_TYPE_CHANGE),
   SENT("sent-certificate", Constants.ACTION_TYPE_CHANGE),
-  PRINT("print-certificate", Constants.ACTION_TYPE_ACCESSED);
+  PRINT("print-certificate", Constants.ACTION_TYPE_ACCESSED),
+  REVOKED("revoked-certificate", Constants.ACTION_TYPE_CHANGE);
 
   private final String action;
   private final String actionType;

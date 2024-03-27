@@ -196,5 +196,9 @@ public class Certificate {
         .sentAt(LocalDateTime.now(ZoneId.systemDefault()))
         .build();
   }
+
+  public void revoke(ActionEvaluation actionEvaluation, String revokeReason, String revokeMessage) {
+
+  }
 }
 
