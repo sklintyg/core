@@ -14,6 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
+import se.inera.intyg.certificateservice.infrastructure.messaging.EventMessageService;
 
 @ExtendWith(MockitoExtension.class)
 class EventMessageServiceTest {

@@ -1,12 +1,12 @@
 package se.inera.intyg.certificateservice.integrationtest.fk7211;
 
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.testcontainers.shaded.org.awaitility.Awaitility.waitAtMost;
 import static se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO.SIGNED;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ALVE_REACT_ALFREDSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ANONYMA_REACT_ATTILA_DTO;
@@ -132,6 +132,7 @@ class FK7211ActiveIT {
     this.api = new ApiUtil(restTemplate, port);
     this.internalApi = new InternalApiUtil(restTemplate, port);
     this.testabilityApi = new TestabilityApiUtil(restTemplate, port);
+    testListener.emptyMessages();
   }
 
   @BeforeAll
@@ -2767,8 +2768,18 @@ class FK7211ActiveIT {
           version(testCertificates)
       );
 
-      waitAtMost(Duration.ofSeconds(30))
-          .untilAsserted(() -> assertFalse(testListener.messages.isEmpty()));
+      assertAll(
+          () -> waitAtMost(Duration.ofSeconds(5))
+              .untilAsserted(() -> assertEquals(1, testListener.messages.size())),
+          () -> assertEquals(
+              testCertificates.get(0).getCertificate().getMetadata().getId(),
+              testListener.messages.get(0).getStringProperty("certificateId")
+          ),
+          () -> assertEquals(
+              "sign-certificate",
+              testListener.messages.get(0).getStringProperty("eventType")
+          )
+      );
     }
   }
 
@@ -2834,6 +2845,36 @@ class FK7211ActiveIT {
           () -> assertEquals("FKASSA", recipient(response).getId()),
           () -> assertEquals("Försäkringskassan", recipient(response).getName()),
           () -> assertNotNull(recipient(response).getSent())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget skickas ska ett meddelande läggas på AMQn")
+    void shallSuccessfullyAddMessageToAMQWhenSendingCertificate() {
+      final var testCertificates = testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7211, VERSION, SIGNED)
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build()
+      );
+
+      api.sendCertificate(
+          customSendCertificateRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> waitAtMost(Duration.ofSeconds(5))
+              .untilAsserted(() -> assertEquals(1, testListener.messages.size())),
+          () -> assertEquals(
+              testCertificates.get(0).getCertificate().getMetadata().getId(),
+              testListener.messages.get(0).getStringProperty("certificateId")
+          ),
+          () -> assertEquals(
+              "sent-certificate",
+              testListener.messages.get(0).getStringProperty("eventType")
+          )
       );
     }
 

@@ -34,18 +34,17 @@ public class MessagingConfig {
   }
 
   @Bean
-  public ConnectionFactory amqConnectionFactory() {
-    return new ActiveMQConnectionFactory(amqUser, amqPassword, brokerUrl);
-  }
-
-  @Bean
   public ConnectionFactory cachingConnectionFactory() {
-    return new CachingConnectionFactory(amqConnectionFactory());
+    return new CachingConnectionFactory(
+        new ActiveMQConnectionFactory(amqUser, amqPassword, brokerUrl));
   }
 
   @Bean
   public JmsTemplate eventJmsTemplate() {
-    return jmsTemplate(cachingConnectionFactory(), eventQueue());
+    final var jmsTemplate = new JmsTemplate(cachingConnectionFactory());
+    jmsTemplate.setDefaultDestination(eventQueue());
+    jmsTemplate.setSessionTransacted(true);
+    return jmsTemplate;
   }
 
   @Bean
@@ -53,16 +52,8 @@ public class MessagingConfig {
     DefaultJmsListenerContainerFactory factory =
         new DefaultJmsListenerContainerFactory();
     factory
-        .setConnectionFactory(amqConnectionFactory());
+        .setConnectionFactory(new ActiveMQConnectionFactory(amqUser, amqPassword, brokerUrl));
 
     return factory;
   }
-
-  public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory, Queue queue) {
-    final var jmsTemplate = new JmsTemplate(connectionFactory);
-    jmsTemplate.setDefaultDestination(queue);
-    jmsTemplate.setSessionTransacted(true);
-    return jmsTemplate;
-  }
-
 }

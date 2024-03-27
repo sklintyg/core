@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.logging;
+package se.inera.intyg.certificateservice.infrastructure.messaging;
 
 import jakarta.jms.JMSException;
 import jakarta.jms.Session;
