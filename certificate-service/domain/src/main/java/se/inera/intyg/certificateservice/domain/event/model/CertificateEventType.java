@@ -2,15 +2,15 @@ package se.inera.intyg.certificateservice.domain.event.model;
 
 public enum CertificateEventType {
 
-  READ("read-certificate", Constants.ACTION_TYPE_ACCESSED),
-  CREATED("created-certificate", Constants.ACTION_TYPE_CREATION),
-  UPDATED("updated-certificate", Constants.ACTION_TYPE_CHANGE),
-  DELETED("deleted-certificate", Constants.ACTION_TYPE_DELETION),
-  VALIDATED("validated-certificate", Constants.ACTION_TYPE_ACCESSED),
-  SIGNED("sign-certificate", Constants.ACTION_TYPE_CHANGE),
-  SENT("sent-certificate", Constants.ACTION_TYPE_CHANGE),
-  PRINT("print-certificate", Constants.ACTION_TYPE_ACCESSED),
-  REVOKED("revoked-certificate", Constants.ACTION_TYPE_CHANGE);
+  READ("read-certificate", Constants.ACTION_TYPE_ACCESSED, null),
+  CREATED("created-certificate", Constants.ACTION_TYPE_CREATION, null),
+  UPDATED("updated-certificate", Constants.ACTION_TYPE_CHANGE, null),
+  DELETED("deleted-certificate", Constants.ACTION_TYPE_DELETION, null),
+  VALIDATED("validated-certificate", Constants.ACTION_TYPE_ACCESSED, null),
+  SIGNED("sign-certificate", Constants.ACTION_TYPE_CHANGE, "certificate-sign"),
+  PRINT("print-certificate", Constants.ACTION_TYPE_ACCESSED, null),
+  SENT("sent-certificate", Constants.ACTION_TYPE_CHANGE, "certificate-sent"),
+  REVOKED("revoked-certificate", Constants.ACTION_TYPE_CHANGE, "certificate-revoked");
 
   private final String action;
   private final String actionType;
