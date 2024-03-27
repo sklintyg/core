@@ -3019,6 +3019,35 @@ class FK7211ActiveIT {
           () -> assertEquals(FK7211, certificateInternalXmlResponse(response).getCertificateType()),
           () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ID,
               certificateInternalXmlResponse(response).getUnitId()),
+          () -> assertNull(certificateInternalXmlResponse(response).getRevoked()),
+          () -> assertTrue(decodeXml(certificateInternalXmlResponse(response).getXml()).contains(
+                  certificateId(testCertificates)),
+              () -> "Expected 'Läkare' to be part of xml: '%s'"
+                  .formatted(decodeXml(certificateInternalXmlResponse(response).getXml())))
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Makulerat intyg skall gå att hämta från intern api:et")
+    void shallReturnRevokedCertificate() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      api.revokeCertificate(
+          defaultRevokeCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var response = internalApi.getCertificateXml(certificateId(testCertificates));
+
+      assertAll(
+          () -> assertEquals(certificateId(testCertificates),
+              certificateInternalXmlResponse(response).getCertificateId()),
+          () -> assertEquals(FK7211, certificateInternalXmlResponse(response).getCertificateType()),
+          () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ID,
+              certificateInternalXmlResponse(response).getUnitId()),
+          () -> assertNotNull(certificateInternalXmlResponse(response).getRevoked()),
           () -> assertTrue(decodeXml(certificateInternalXmlResponse(response).getXml()).contains(
                   certificateId(testCertificates)),
               () -> "Expected 'Läkare' to be part of xml: '%s'"
