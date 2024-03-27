@@ -2,13 +2,13 @@ package se.inera.intyg.certificateservice.infrastructure.configuration;
 
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.Queue;
+import java.util.List;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
-import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.core.JmsTemplate;
 
@@ -35,8 +35,12 @@ public class MessagingConfig {
 
   @Bean
   public ConnectionFactory cachingConnectionFactory() {
-    return new CachingConnectionFactory(
-        new ActiveMQConnectionFactory(amqUser, amqPassword, brokerUrl));
+    final var activeMqConnectionFactory = new ActiveMQConnectionFactory(amqUser, amqPassword,
+        brokerUrl);
+    activeMqConnectionFactory.setTrustedPackages(
+        List.of("se.inera.intyg.certificateservice.infrastructure.messaging")
+    );
+    return new CachingConnectionFactory(activeMqConnectionFactory);
   }
 
   @Bean
@@ -45,15 +49,5 @@ public class MessagingConfig {
     jmsTemplate.setDefaultDestination(eventQueue());
     jmsTemplate.setSessionTransacted(true);
     return jmsTemplate;
-  }
-
-  @Bean
-  public DefaultJmsListenerContainerFactory jmsListenerContainerFactory() {
-    DefaultJmsListenerContainerFactory factory =
-        new DefaultJmsListenerContainerFactory();
-    factory
-        .setConnectionFactory(new ActiveMQConnectionFactory(amqUser, amqPassword, brokerUrl));
-
-    return factory;
   }
 }

@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
-import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventSubscriber;
 
 @Component
@@ -20,23 +19,16 @@ public class EventMessageService implements CertificateEventSubscriber {
 
   @Override
   public void event(CertificateEvent event) {
-    if (event.type() == CertificateEventType.SIGNED || event.type() == CertificateEventType.SENT) {
+    if (event.type().hasMessageType()) {
       sendMessage(
           event.certificate().id().id(),
-          event.type().action()
+          event.type().messageType()
       );
     }
   }
 
   private void sendMessage(String certificateId, String eventType) {
-    try {
-      jmsTemplate.send(session -> getMessage(certificateId, eventType, session));
-    } catch (Exception e) {
-      log.error(
-          "Failure sending event notification of type '{}' for certificate '{}'",
-          eventType, certificateId, e
-      );
-    }
+    jmsTemplate.send(session -> getMessage(certificateId, eventType, session));
   }
 
   private static TextMessage getMessage(String certificateId, String eventType, Session session)

@@ -2772,11 +2772,11 @@ class FK7211ActiveIT {
           () -> waitAtMost(Duration.ofSeconds(5))
               .untilAsserted(() -> assertEquals(1, testListener.messages.size())),
           () -> assertEquals(
-              testCertificates.get(0).getCertificate().getMetadata().getId(),
+              certificateId(testCertificates),
               testListener.messages.get(0).getStringProperty("certificateId")
           ),
           () -> assertEquals(
-              "sign-certificate",
+              "certificate-sign",
               testListener.messages.get(0).getStringProperty("eventType")
           )
       );
@@ -2868,11 +2868,11 @@ class FK7211ActiveIT {
           () -> waitAtMost(Duration.ofSeconds(5))
               .untilAsserted(() -> assertEquals(1, testListener.messages.size())),
           () -> assertEquals(
-              testCertificates.get(0).getCertificate().getMetadata().getId(),
+              certificateId(testCertificates),
               testListener.messages.get(0).getStringProperty("certificateId")
           ),
           () -> assertEquals(
-              "sent-certificate",
+              "certificate-sent",
               testListener.messages.get(0).getStringProperty("eventType")
           )
       );

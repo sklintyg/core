@@ -17,7 +17,7 @@ public class TestListener {
     messages = new ArrayList<>();
   }
 
-  @JmsListener(destination = "intygstjanst.certificate.event.queue")
+  @JmsListener(destination = "${certificate.event.queue.name}")
   public void log(TextMessage message) {
     log.debug("Certificate event received: {}", message);
     messages.add(message);
