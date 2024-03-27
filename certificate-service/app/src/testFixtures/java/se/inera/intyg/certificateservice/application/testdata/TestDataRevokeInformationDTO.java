@@ -4,7 +4,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.RevokeInfor
 
 public class TestDataRevokeInformationDTO {
 
-  private static final String REASON = "REVOKE_REASON";
+  private static final String REASON = "FEL_PATIENT";
   private static final String MESSAGE = "REVOKE_MESSAGE";
 
   private TestDataRevokeInformationDTO() {

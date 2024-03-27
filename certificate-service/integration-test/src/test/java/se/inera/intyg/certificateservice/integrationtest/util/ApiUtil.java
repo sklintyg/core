@@ -25,6 +25,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateRequest;
@@ -323,6 +325,27 @@ public class ApiUtil {
   public ResponseEntity<SendCertificateResponse> sendCertificate(SendCertificateRequest request,
       String certificateId) {
     final var requestUrl = "http://localhost:%s/api/certificate/%s/send".formatted(
+        port,
+        certificateId
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<RevokeCertificateResponse> revokeCertificate(
+      RevokeCertificateRequest request,
+      String certificateId) {
+    final var requestUrl = "http://localhost:%s/api/certificate/%s/revoke".formatted(
         port,
         certificateId
     );

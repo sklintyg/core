@@ -6,6 +6,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
@@ -132,6 +133,14 @@ public class ApiRequestUtil {
 
   public static SendCertificateRequest defaultSendCertificateRequest() {
     return SendCertificateRequestBuilder.create().build();
+  }
+
+  public static RevokeCertificateRequest defaultRevokeCertificateRequest() {
+    return RevokeCertificateRequestBuilder.create().build();
+  }
+
+  public static RevokeCertificateRequestBuilder customRevokeCertificateRequest() {
+    return RevokeCertificateRequestBuilder.create();
   }
 
   public static SendCertificateRequestBuilder customSendCertificateRequest() {
