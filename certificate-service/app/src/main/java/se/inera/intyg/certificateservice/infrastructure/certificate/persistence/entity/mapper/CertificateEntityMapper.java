@@ -142,14 +142,14 @@ public class CertificateEntityMapper {
 
   private static void handleRevoked(Certificate certificate, CertificateEntity certificateEntity,
       Map<String, StaffEntity> staffMap) {
-    final var revokedReason = RevokedReason.valueOf(
+    final var reason = RevokedReason.valueOf(
         certificate.revoked().revokedInformation().reason()
     );
 
     certificateEntity.setRevokedReason(
         RevokedReasonEntity.builder()
-            .key(revokedReason.getKey())
-            .reason(revokedReason.name())
+            .key(reason.getKey())
+            .reason(reason.name())
             .build()
     );
 
