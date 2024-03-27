@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.REVOKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.XML;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateConstants.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_TYPE;
@@ -37,6 +38,7 @@ class GetCertificateInternalXmlServiceTest {
         .certificateType(FK7211_TYPE.type())
         .unitId(ALFA_ALLERGIMOTTAGNINGEN_ID)
         .xml(XML_BASE64_ENCODED)
+        .revoked(REVOKED)
         .build();
 
     doReturn(FK7211_CERTIFICATE).when(certificateRepository)

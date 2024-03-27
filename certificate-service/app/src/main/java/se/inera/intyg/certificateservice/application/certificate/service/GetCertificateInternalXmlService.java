@@ -20,6 +20,7 @@ public class GetCertificateInternalXmlService {
         .certificateType(certificate.certificateModel().id().type().type())
         .unitId(certificate.certificateMetaData().issuingUnit().hsaId().id())
         .xml(certificate.xml().base64())
+        .revoked(certificate.revoked())
         .build();
   }
 }
