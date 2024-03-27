@@ -7,6 +7,8 @@ import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
+import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.core.JmsTemplate;
 
 @Configuration
@@ -30,13 +32,28 @@ public class MessagingConfig {
   }
 
   @Bean
-  public ConnectionFactory jmsConnectionFactory() {
+  public ConnectionFactory amqConnectionFactory() {
     return new ActiveMQConnectionFactory(amqUser, amqPassword, brokerUrl);
   }
 
   @Bean
+  public ConnectionFactory cachingConnectionFactory() {
+    return new CachingConnectionFactory(amqConnectionFactory());
+  }
+
+  @Bean
   public JmsTemplate eventJmsTemplate() {
-    return jmsTemplate(jmsConnectionFactory(), eventQueue());
+    return jmsTemplate(cachingConnectionFactory(), eventQueue());
+  }
+
+  @Bean
+  public DefaultJmsListenerContainerFactory jmsListenerContainerFactory() {
+    DefaultJmsListenerContainerFactory factory =
+        new DefaultJmsListenerContainerFactory();
+    factory
+        .setConnectionFactory(amqConnectionFactory());
+
+    return factory;
   }
 
   public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory, Queue queue) {
