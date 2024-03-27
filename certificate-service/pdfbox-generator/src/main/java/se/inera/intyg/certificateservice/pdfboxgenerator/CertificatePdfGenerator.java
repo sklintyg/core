@@ -45,31 +45,20 @@ public class CertificatePdfGenerator implements PdfGenerator {
     if (certificate.sent() == null) {
       return;
     }
-    var contentStream = new PDPageContentStream(fk7211Pdf, fk7211Pdf.getPage(0),
-        AppendMode.APPEND, true, true);
-    contentStream.transform(Matrix.getTranslateInstance(40, 665));
-    contentStream.beginText();
-    contentStream.setNonStrokingColor(Color.gray);
-    contentStream.setFont(new PDType1Font(FontName.HELVETICA), 22);
-    contentStream.showText(
-        "Intyget har skickats digitalt till %s".formatted(certificate.sent().recipient().name())
+
+    addText(
+        fk7211Pdf,
+        "Intyget har skickats digitalt till %s".formatted(certificate.sent().recipient().name()),
+        22,
+        Matrix.getTranslateInstance(40, 665)
     );
-    contentStream.endText();
-    contentStream.close();
 
-    contentStream = new PDPageContentStream(fk7211Pdf, fk7211Pdf.getPage(0),
-        AppendMode.APPEND, true, true);
-    contentStream.transform(Matrix.getTranslateInstance(40, 645));
-    contentStream.beginText();
-    contentStream.setNonStrokingColor(Color.gray);
-    contentStream.setFont(new PDType1Font(FontName.HELVETICA), 16);
-    contentStream.showText(
-        "Du kan se intyget genom att logga in på 1177.se"
+    addText(
+        fk7211Pdf,
+        "Du kan se intyget genom att logga in på 1177.se",
+        16,
+        Matrix.getTranslateInstance(40, 645)
     );
-    contentStream.endText();
-    contentStream.close();
-
-
   }
 
   private static void setMarginText(PDDocument fk7211Pdf, Certificate certificate,
@@ -146,5 +135,18 @@ public class CertificatePdfGenerator implements PdfGenerator {
         .replace("–", "")
         .replace("__", "_")
         .toLowerCase();
+  }
+
+  private static void addText(PDDocument fk7211Pdf, String text, int fontSize, Matrix matrix)
+      throws IOException {
+    final var contentStream = new PDPageContentStream(fk7211Pdf, fk7211Pdf.getPage(0),
+        AppendMode.APPEND, true, true);
+    contentStream.transform(matrix);
+    contentStream.beginText();
+    contentStream.setNonStrokingColor(Color.gray);
+    contentStream.setFont(new PDType1Font(FontName.HELVETICA), fontSize);
+    contentStream.showText(text);
+    contentStream.endText();
+    contentStream.close();
   }
 }
