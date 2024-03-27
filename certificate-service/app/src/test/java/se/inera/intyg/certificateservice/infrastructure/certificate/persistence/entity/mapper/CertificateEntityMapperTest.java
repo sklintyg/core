@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateEntity.CERTIFICATE_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRevokedEntity.REVOKED_MESSAGE;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_MEDICINCENTRUM_ENTITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
@@ -20,6 +21,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_MIDDLE_NAME;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason.FEL_PATIENT;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,6 +39,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
+import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.patient.model.Deceased;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
@@ -50,6 +53,7 @@ import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.PatientRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.RevokedRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.StaffRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.UnitRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
@@ -61,6 +65,8 @@ class CertificateEntityMapperTest {
 
   @InjectMocks
   private CertificateEntityMapper certificateEntityMapper;
+  @Mock
+  RevokedRepository revokedRepository;
   @Mock
   CertificateEntityRepository certificateEntityRepository;
 
@@ -144,6 +150,38 @@ class CertificateEntityMapperTest {
       final var response = certificateEntityMapper.toEntity(FK7211_CERTIFICATE);
 
       assertEquals(CERTIFICATE_ENTITY.getSent(), response.getSent());
+    }
+
+    @Nested
+    class RevokedIsNotNull {
+
+      @Test
+      void shouldMapRevokedBy() {
+        final var response = certificateEntityMapper.toEntity(FK7211_CERTIFICATE);
+
+        assertEquals(CERTIFICATE_ENTITY.getRevokedBy(), response.getRevokedBy());
+      }
+
+      @Test
+      void shouldMapRevoked() {
+        final var response = certificateEntityMapper.toEntity(FK7211_CERTIFICATE);
+
+        assertEquals(CERTIFICATE_ENTITY.getRevoked(), response.getRevoked());
+      }
+
+      @Test
+      void shouldMapRevokedReason() {
+        final var response = certificateEntityMapper.toEntity(FK7211_CERTIFICATE);
+
+        assertEquals(CERTIFICATE_ENTITY.getRevokedReason(), response.getRevokedReason());
+      }
+
+      @Test
+      void shouldMapRevokedMessage() {
+        final var response = certificateEntityMapper.toEntity(FK7211_CERTIFICATE);
+
+        assertEquals(CERTIFICATE_ENTITY.getRevokedMessage(), response.getRevokedMessage());
+      }
     }
   }
 
@@ -345,6 +383,46 @@ class CertificateEntityMapperTest {
           FK7211_CERTIFICATE_MODEL);
 
       assertNotNull(response.sent().sentAt());
+    }
+
+    @Test
+    void shouldMapRevokedAt() {
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
+      assertNotNull(response.revoked().revokedAt());
+    }
+
+    @Test
+    void shouldMapRevokedBy() {
+      final var expected = Staff.builder()
+          .hsaId(new HsaId(AJLA_DOCTOR_HSA_ID))
+          .name(
+              Name.builder()
+                  .firstName(AJLA_DOCTOR_FIRST_NAME)
+                  .middleName(AJLA_DOCTOR_MIDDLE_NAME)
+                  .lastName(AJLA_DOCTOR_LAST_NAME)
+                  .build()
+          )
+          .role(Role.DOCTOR)
+          .build();
+
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
+
+      assertEquals(expected, response.revoked().revokedBy());
+    }
+
+    @Test
+    void shouldMapRevokedInformation() {
+      final var expectedRevokedInformation = new RevokedInformation(
+          FEL_PATIENT.name(),
+          REVOKED_MESSAGE
+      );
+
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
+      
+      assertEquals(expectedRevokedInformation, response.revoked().revokedInformation());
     }
   }
 }

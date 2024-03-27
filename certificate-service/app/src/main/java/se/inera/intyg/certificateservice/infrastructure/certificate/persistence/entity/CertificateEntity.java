@@ -43,6 +43,8 @@ public class CertificateEntity {
   private LocalDateTime signed;
   @Column(name = "sent")
   private LocalDateTime sent;
+  @Column(name = "revoked")
+  private LocalDateTime revoked;
   @Column(name = "revision")
   private Long revision;
   @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
@@ -74,5 +76,12 @@ public class CertificateEntity {
   @OneToOne(mappedBy = "certificate", cascade = CascadeType.ALL)
   @PrimaryKeyJoinColumn
   private CertificateXmlEntity xml;
-  
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+  @JoinColumn(name = "revoked_by_staff_key", referencedColumnName = "`key`")
+  private StaffEntity revokedBy;
+  @ManyToOne
+  @JoinColumn(name = "revoked_reason_key", referencedColumnName = "`key`")
+  private RevokedReasonEntity revokedReason;
+  @Column(name = "revoked_message")
+  private String revokedMessage;
 }

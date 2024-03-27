@@ -22,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffRole;
@@ -175,6 +176,38 @@ class StaffRepositoryTest {
         .sent(
             Sent.builder()
                 .sentBy(ALF_DOKTOR)
+                .build()
+        )
+        .build();
+
+    doReturn(Collections.emptyList())
+        .when(staffEntityRepository)
+        .findStaffEntitiesByHsaIdIn(List.of(AJLA_DOCTOR_HSA_ID, ALF_DOKTOR_HSA_ID));
+
+    doReturn(AJLA_DOKTOR_ENTITY)
+        .when(staffEntityRepository)
+        .save(AJLA_DOKTOR_ENTITY);
+
+    doReturn(ALF_DOKTOR_ENTITY)
+        .when(staffEntityRepository)
+        .save(ALF_DOKTOR_ENTITY);
+
+    final var actualStaffs = staffRepository.staffs(certificate);
+
+    assertEquals(expectedStaffs, actualStaffs);
+  }
+
+  @Test
+  void shallIncludeRevokedStaffInMap() {
+    final var expectedStaffs = Map.of(
+        AJLA_DOKTOR_ENTITY.getHsaId(), AJLA_DOKTOR_ENTITY,
+        ALF_DOKTOR_ENTITY.getHsaId(), ALF_DOKTOR_ENTITY
+    );
+
+    final var certificate = fk7211CertificateBuilder()
+        .revoked(
+            Revoked.builder()
+                .revokedBy(ALF_DOKTOR)
                 .build()
         )
         .build();

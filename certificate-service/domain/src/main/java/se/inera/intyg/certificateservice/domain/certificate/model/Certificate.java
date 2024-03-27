@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
-import se.inera.intyg.certificateservice.domain.common.model.RevokeInformation;
+import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
@@ -215,8 +215,8 @@ public class Certificate {
     }
 
     this.revoked = Revoked.builder()
-        .revokeInformation(
-            new RevokeInformation(revokeReason, revokeMessage)
+        .revokedInformation(
+            new RevokedInformation(revokeReason, revokeMessage)
         )
         .revokedBy(Staff.create(actionEvaluation.user()))
         .revokedAt(LocalDateTime.now(ZoneId.systemDefault()))

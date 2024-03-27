@@ -79,7 +79,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
-import se.inera.intyg.certificateservice.domain.common.model.RevokeInformation;
+import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
 import se.inera.intyg.certificateservice.domain.validation.model.ErrorMessage;
@@ -1236,7 +1236,7 @@ class CertificateTest {
 
     @Test
     void shallIncludeRevokeInformationWhenRevoked() {
-      final var expectedRevokeInformation = new RevokeInformation(REASON, MESSAGE);
+      final var expectedRevokeInformation = new RevokedInformation(REASON, MESSAGE);
       final var actionEvaluation = actionEvaluationBuilder.build();
       final var certificate = certificateBuilder
           .status(Status.SIGNED)
@@ -1244,7 +1244,7 @@ class CertificateTest {
 
       certificate.revoke(actionEvaluation, REASON, MESSAGE);
 
-      assertEquals(expectedRevokeInformation, certificate.revoked().revokeInformation());
+      assertEquals(expectedRevokeInformation, certificate.revoked().revokedInformation());
     }
 
     @Test
