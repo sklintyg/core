@@ -31,6 +31,7 @@ public class CertificatePdfGenerator implements PdfGenerator {
       setDraftWatermark(fk7211Pdf, certificate);
 
       fk7211Pdf.getDocumentInformation().setTitle(setFileName(certificate));
+      fk7211Pdf.getDocumentCatalog().getAcroForm().flatten();
       fk7211Pdf.save(byteArrayOutputStream);
       fk7211Pdf.close();
 
