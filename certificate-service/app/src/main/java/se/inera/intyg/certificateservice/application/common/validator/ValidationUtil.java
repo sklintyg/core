@@ -97,6 +97,12 @@ public class ValidationUtil {
     }
   }
 
+  public static void validateAdditonalInfoText(String additonalInfoText) {
+    if (additonalInfoText == null || additonalInfoText.isBlank()) {
+      throw new IllegalArgumentException("Required parameter missing: additionalInfoText");
+    }
+  }
+
   public static void validateVersion(Long version) {
     if (version == null) {
       throw new IllegalArgumentException("Required parameter missing: version");

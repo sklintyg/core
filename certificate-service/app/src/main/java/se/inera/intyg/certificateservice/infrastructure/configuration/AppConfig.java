@@ -7,7 +7,9 @@ import se.inera.intyg.certificateservice.domain.certificate.repository.Certifica
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.DeleteCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificatePdfDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateXmlDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
 import se.inera.intyg.certificateservice.domain.certificate.service.SendCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SignCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SignCertificateWithoutSignatureDomainService;
@@ -22,6 +24,7 @@ import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificates
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesInfoDomainService;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorCertificateV4;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorValue;
+import se.inera.intyg.certificateservice.pdfboxgenerator.CertificatePdfGenerator;
 
 @Configuration
 public class AppConfig {
@@ -127,4 +130,18 @@ public class AppConfig {
     return new SendCertificateDomainService(certificateRepository,
         certificateEventDomainService);
   }
+
+  @Bean
+  public GetCertificatePdfDomainService getCertificatePdfDomainService(
+      CertificateRepository certificateRepository, PdfGenerator pdfGenerator,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new GetCertificatePdfDomainService(certificateRepository, pdfGenerator,
+        certificateEventDomainService);
+  }
+
+  @Bean
+  public PdfGenerator pdfGenerator() {
+    return new CertificatePdfGenerator();
+  }
+
 }

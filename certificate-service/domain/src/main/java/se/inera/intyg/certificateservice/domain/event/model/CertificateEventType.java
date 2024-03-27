@@ -7,6 +7,7 @@ public enum CertificateEventType {
   DELETED("deleted-certificate", Constants.ACTION_TYPE_DELETION, null),
   VALIDATED("validated-certificate", Constants.ACTION_TYPE_ACCESSED, null),
   SIGNED("sign-certificate", Constants.ACTION_TYPE_CHANGE, "certificate-sign"),
+  PRINT("print-certificate", Constants.ACTION_TYPE_ACCESSED, null),
   SENT("sent-certificate", Constants.ACTION_TYPE_CHANGE, "certificate-sent");
 
   private final String action;
