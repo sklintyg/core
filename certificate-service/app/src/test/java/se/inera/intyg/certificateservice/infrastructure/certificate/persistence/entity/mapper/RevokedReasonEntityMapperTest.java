@@ -31,7 +31,7 @@ class RevokedReasonEntityMapperTest {
   @Nested
   class MapOtherSeriousError {
 
-    private static final String REASON_OTHER_SERIOUS_ERROR = "ANNAT_ALLVARLIGT_FEL";
+    private static final String REASON_OTHER_SERIOUS_ERROR = OTHER_SERIOUS_ERROR.name();
 
     @Test
     void shallMapReasonToRevokedReasonEntity() {
