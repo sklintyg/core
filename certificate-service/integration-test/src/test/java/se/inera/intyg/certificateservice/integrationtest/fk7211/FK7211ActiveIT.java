@@ -2782,7 +2782,7 @@ class FK7211ActiveIT {
               testListener.messages().get(0).getStringProperty("certificateId")
           ),
           () -> assertEquals(
-              "certificate-sign",
+              "certificate-signed",
               testListener.messages().get(0).getStringProperty("eventType")
           )
       );
@@ -3030,7 +3030,7 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Makulerat intyg skall gå att hämta från intern api:et")
     void shallReturnRevokedCertificate() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7211, VERSION)
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
       );
 
       api.revokeCertificate(
@@ -3058,7 +3058,7 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Skickat intyg skall gå att hämta från intern api:et")
     void shallReturnSentCertificate() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7211, VERSION)
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
       );
 
       api.sendCertificate(
@@ -3314,7 +3314,9 @@ class FK7211ActiveIT {
       );
 
       final var response = api.revokeCertificate(
-          defaultRevokeCertificateRequest(),
+          customRevokeCertificateRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
           certificateId(testCertificates)
       );
 
@@ -3328,9 +3330,7 @@ class FK7211ActiveIT {
     @DisplayName("FK7211 - Om intyget makuleras ska ett meddelande läggas på AMQn")
     void shallSuccessfullyAddMessageToAMQWhenRevokingCertificate() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7211, VERSION, SIGNED)
-              .unit(ALFA_MEDICINCENTRUM_DTO)
-              .build()
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
       );
 
       api.revokeCertificate(
