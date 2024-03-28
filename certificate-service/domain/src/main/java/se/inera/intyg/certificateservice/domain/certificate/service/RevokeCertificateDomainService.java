@@ -27,7 +27,7 @@ public class RevokeCertificateDomainService {
     final var certificate = certificateRepository.getById(certificateId);
     if (!certificate.allowTo(CertificateActionType.REVOKE, actionEvaluation)) {
       throw new CertificateActionForbidden(
-          "Not allowed to send certificate for %s".formatted(certificateId)
+          "Not allowed to revoke certificate for %s".formatted(certificateId)
       );
     }
 
