@@ -7,7 +7,7 @@ public enum CertificateEventType {
   UPDATED("updated-certificate", Constants.ACTION_TYPE_CHANGE, null),
   DELETED("deleted-certificate", Constants.ACTION_TYPE_DELETION, null),
   VALIDATED("validated-certificate", Constants.ACTION_TYPE_ACCESSED, null),
-  SIGNED("sign-certificate", Constants.ACTION_TYPE_CHANGE, "certificate-sign"),
+  SIGNED("sign-certificate", Constants.ACTION_TYPE_CHANGE, "certificate-signed"),
   PRINT("print-certificate", Constants.ACTION_TYPE_ACCESSED, null),
   SENT("sent-certificate", Constants.ACTION_TYPE_CHANGE, "certificate-sent"),
   REVOKED("revoked-certificate", Constants.ACTION_TYPE_CHANGE, "certificate-revoked");
