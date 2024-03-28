@@ -1,10 +1,11 @@
 package se.inera.intyg.certificateservice.application.testdata;
 
 import se.inera.intyg.certificateservice.application.certificate.dto.RevokeInformationDTO;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason;
 
 public class TestDataRevokeInformationDTO {
 
-  private static final String REASON = "FEL_PATIENT";
+  private static final String REASON = RevokedReason.INCORRECT_PATIENT.name();
   private static final String MESSAGE = "REVOKE_MESSAGE";
 
   private TestDataRevokeInformationDTO() {

@@ -122,16 +122,15 @@ class FK7211ActiveIT {
   }
 
   private final TestRestTemplate restTemplate;
-  private final TestListener testListener;
+  private static final TestListener testListener = new TestListener();
 
   private ApiUtil api;
   private InternalApiUtil internalApi;
   private TestabilityApiUtil testabilityApi;
 
   @Autowired
-  public FK7211ActiveIT(TestRestTemplate restTemplate, TestListener testListener) {
+  public FK7211ActiveIT(TestRestTemplate restTemplate) {
     this.restTemplate = restTemplate;
-    this.testListener = testListener;
   }
 
   @BeforeEach
@@ -2777,14 +2776,14 @@ class FK7211ActiveIT {
 
       assertAll(
           () -> waitAtMost(Duration.ofSeconds(5))
-              .untilAsserted(() -> assertEquals(1, testListener.messages.size())),
+              .untilAsserted(() -> assertEquals(1, testListener.messages().size())),
           () -> assertEquals(
               certificateId(testCertificates),
-              testListener.messages.get(0).getStringProperty("certificateId")
+              testListener.messages().get(0).getStringProperty("certificateId")
           ),
           () -> assertEquals(
               "certificate-sign",
-              testListener.messages.get(0).getStringProperty("eventType")
+              testListener.messages().get(0).getStringProperty("eventType")
           )
       );
     }
@@ -2873,14 +2872,14 @@ class FK7211ActiveIT {
 
       assertAll(
           () -> waitAtMost(Duration.ofSeconds(5))
-              .untilAsserted(() -> assertEquals(1, testListener.messages.size())),
+              .untilAsserted(() -> assertEquals(1, testListener.messages().size())),
           () -> assertEquals(
               certificateId(testCertificates),
-              testListener.messages.get(0).getStringProperty("certificateId")
+              testListener.messages().get(0).getStringProperty("certificateId")
           ),
           () -> assertEquals(
               "certificate-sent",
-              testListener.messages.get(0).getStringProperty("eventType")
+              testListener.messages().get(0).getStringProperty("eventType")
           )
       );
     }
@@ -3048,6 +3047,35 @@ class FK7211ActiveIT {
           () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ID,
               certificateInternalXmlResponse(response).getUnitId()),
           () -> assertNotNull(certificateInternalXmlResponse(response).getRevoked()),
+          () -> assertTrue(decodeXml(certificateInternalXmlResponse(response).getXml()).contains(
+                  certificateId(testCertificates)),
+              () -> "Expected 'Läkare' to be part of xml: '%s'"
+                  .formatted(decodeXml(certificateInternalXmlResponse(response).getXml())))
+      );
+    }
+
+    @Test
+    @DisplayName("FK7211 - Skickat intyg skall gå att hämta från intern api:et")
+    void shallReturnSentCertificate() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var response = internalApi.getCertificateXml(certificateId(testCertificates));
+
+      assertAll(
+          () -> assertEquals(certificateId(testCertificates),
+              certificateInternalXmlResponse(response).getCertificateId()),
+          () -> assertEquals(FK7211, certificateInternalXmlResponse(response).getCertificateType()),
+          () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ID,
+              certificateInternalXmlResponse(response).getUnitId()),
+          () -> assertNotNull(certificateInternalXmlResponse(response).getRecipient()),
+          () -> assertNull(certificateInternalXmlResponse(response).getRevoked()),
           () -> assertTrue(decodeXml(certificateInternalXmlResponse(response).getXml()).contains(
                   certificateId(testCertificates)),
               () -> "Expected 'Läkare' to be part of xml: '%s'"
@@ -3312,14 +3340,14 @@ class FK7211ActiveIT {
 
       assertAll(
           () -> waitAtMost(Duration.ofSeconds(5))
-              .untilAsserted(() -> assertEquals(1, testListener.messages.size())),
+              .untilAsserted(() -> assertEquals(1, testListener.messages().size())),
           () -> assertEquals(
               certificateId(testCertificates),
-              testListener.messages.get(0).getStringProperty("certificateId")
+              testListener.messages().get(0).getStringProperty("certificateId")
           ),
           () -> assertEquals(
-              "certificate-sent",
-              testListener.messages.get(0).getStringProperty("eventType")
+              "certificate-revoked",
+              testListener.messages().get(0).getStringProperty("eventType")
           )
       );
     }

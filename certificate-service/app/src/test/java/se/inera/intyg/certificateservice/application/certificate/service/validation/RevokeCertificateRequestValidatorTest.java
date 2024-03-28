@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.RevokeInformationDTO;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason;
 
 class RevokeCertificateRequestValidatorTest {
 
@@ -401,7 +402,7 @@ class RevokeCertificateRequestValidatorTest {
   }
 
   @Nested
-  class RevokeReasonValidation {
+  class RevokeInformationValidation {
 
     @Test
     void shallThrowIfRevokeReasonIsNull() {
@@ -432,6 +433,40 @@ class RevokeCertificateRequestValidatorTest {
           () -> validator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: revoke.reason",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfRevokeReasonIsOtherSeriousErrorAndMessageIsNull() {
+      final var request = requestBuilder
+          .revoked(
+              RevokeInformationDTO.builder()
+                  .reason(RevokedReason.OTHER_SERIOUS_ERROR.name())
+                  .message(null)
+                  .build()
+          )
+          .build();
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> validator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: revoke.message",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfRevokeReasonIsOtherSeriousErrorAndMessageIsEmpty() {
+      final var request = requestBuilder
+          .revoked(
+              RevokeInformationDTO.builder()
+                  .reason(RevokedReason.OTHER_SERIOUS_ERROR.name())
+                  .message("")
+                  .build()
+          )
+          .build();
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> validator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: revoke.message",
           illegalArgumentException.getMessage());
     }
   }
