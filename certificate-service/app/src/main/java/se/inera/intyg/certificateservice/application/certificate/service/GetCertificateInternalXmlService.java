@@ -27,8 +27,8 @@ public class GetCertificateInternalXmlService {
         .certificateType(certificate.certificateModel().id().type().type())
         .unitId(certificate.certificateMetaData().issuingUnit().hsaId().id())
         .xml(certificate.xml().base64())
-        .revoked(convertRevoked(Optional.of(certificate.revoked())))
-        .recipient(convertRecipient(Optional.of(certificate.sent())))
+        .revoked(convertRevoked(Optional.ofNullable(certificate.revoked())))
+        .recipient(convertRecipient(Optional.ofNullable(certificate.sent())))
         .build();
   }
 
