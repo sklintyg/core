@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.application.testdata;
 
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonStaffDTO.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason.FEL_PATIENT;
 
 import java.time.LocalDateTime;

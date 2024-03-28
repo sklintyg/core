@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.application.certificate.dto.RevokedDTO.RevokedDTOBuilder;
-import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 
 @JsonDeserialize(builder = RevokedDTOBuilder.class)
 @Value
@@ -16,7 +15,7 @@ public class RevokedDTO {
   String reason;
   String message;
   LocalDateTime revokedAt;
-  Staff revokedBy;
+  StaffDTO revokedBy;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class RevokedDTOBuilder {
