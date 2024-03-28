@@ -32,7 +32,7 @@ public class CertificateConverter {
   private static final CertificateRelationsDTO RELATIONS = CertificateRelationsDTO.builder()
       .build();
   private final CertificateDataConverter certificateDataConverter;
-  private final CertificateMetaDataUnitConverter certificateMetaDataUnitConverter;
+  private final CertificateUnitConverter certificateUnitConverter;
 
   public CertificateDTO convert(Certificate certificate, List<ResourceLinkDTO> resourceLinks) {
     return CertificateDTO.builder()
@@ -51,7 +51,7 @@ public class CertificateConverter {
                     toPatientDTO(certificate)
                 )
                 .unit(
-                    certificateMetaDataUnitConverter.convert(
+                    certificateUnitConverter.convert(
                         certificate.certificateMetaData().issuingUnit(),
                         certificate.elementData().stream()
                             .filter(data -> data.id().equals(UNIT_CONTACT_INFORMATION))

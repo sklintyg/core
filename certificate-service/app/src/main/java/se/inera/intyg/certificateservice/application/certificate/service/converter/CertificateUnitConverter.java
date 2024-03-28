@@ -8,7 +8,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUn
 import se.inera.intyg.certificateservice.domain.unit.model.IssuingUnit;
 
 @Component
-public class CertificateMetaDataUnitConverter {
+public class CertificateUnitConverter {
 
 
   public UnitDTO convert(IssuingUnit issuingUnit, Optional<ElementData> elementData) {
