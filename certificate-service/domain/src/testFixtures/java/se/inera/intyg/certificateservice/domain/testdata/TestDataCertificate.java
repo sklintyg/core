@@ -39,7 +39,7 @@ public class TestDataCertificate {
       .sentBy(AJLA_DOKTOR)
       .build();
 
-  private static final String REASON = "FEL_PATIENT";
+  private static final String REASON = "INCORRECT_PATIENT";
   private static final String MESSAGE = "REVOKED_MESSAGE";
   public static final RevokedInformation REVOKED_INFORMATION = new RevokedInformation(REASON,
       MESSAGE);
