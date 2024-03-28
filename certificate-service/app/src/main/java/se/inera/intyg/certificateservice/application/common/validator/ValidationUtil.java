@@ -105,8 +105,8 @@ public class ValidationUtil {
     }
 
     if (RevokedReason.valueOf(revokeInformation.getReason())
-        .equals(RevokedReason.OTHER_SERIOUS_ERROR) && revokeInformation.getMessage() == null
-        || revokeInformation.getMessage().isBlank()) {
+        .equals(RevokedReason.OTHER_SERIOUS_ERROR) && (revokeInformation.getMessage() == null
+        || revokeInformation.getMessage().isBlank())) {
       throw new IllegalArgumentException("Required parameter missing: revoke.message");
     }
   }
