@@ -54,7 +54,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateDataConverter;
-import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateMetaDataUnitConverter;
+import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateUnitConverter;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
@@ -101,7 +101,7 @@ class CertificateConverterTest {
       .build();
   private final List<ResourceLinkDTO> resourceLinkDTOs = Collections.emptyList();
   @Mock
-  private CertificateMetaDataUnitConverter certificateMetaDataUnitConverter;
+  private CertificateUnitConverter certificateUnitConverter;
   @Mock
   private CertificateDataConverter certificateDataConverter;
   @InjectMocks
@@ -399,7 +399,7 @@ class CertificateConverterTest {
       @Test
       void shallIncludeUnit() {
         final var expectedUnit = alfaMedicincentrumDtoBuilder().build();
-        doReturn(expectedUnit).when(certificateMetaDataUnitConverter).convert(
+        doReturn(expectedUnit).when(certificateUnitConverter).convert(
             certificate.certificateMetaData().issuingUnit(),
             Optional.empty()
         );
