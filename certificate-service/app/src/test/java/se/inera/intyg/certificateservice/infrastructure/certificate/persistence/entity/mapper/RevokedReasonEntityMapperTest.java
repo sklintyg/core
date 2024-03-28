@@ -12,7 +12,7 @@ class RevokedReasonEntityMapperTest {
   @Nested
   class MapWrongPatient {
 
-    private static final String REASON_WRONG_PATIENT = "FEL_PATIENT";
+    private static final String REASON_WRONG_PATIENT = INCORRECT_PATIENT.name();
 
     @Test
     void shallMapReasonToRevokedReasonEntity() {
