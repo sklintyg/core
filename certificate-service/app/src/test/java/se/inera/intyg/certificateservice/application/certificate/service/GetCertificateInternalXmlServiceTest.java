@@ -1,9 +1,12 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.doReturn;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRecipientDTO.CERTIFICATE_RECIPIENT_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRevokedDTO.REVOKED_DTO;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.REVOKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.XML;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateConstants.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_TYPE;
@@ -38,7 +41,8 @@ class GetCertificateInternalXmlServiceTest {
         .certificateType(FK7211_TYPE.type())
         .unitId(ALFA_ALLERGIMOTTAGNINGEN_ID)
         .xml(XML_BASE64_ENCODED)
-        .revoked(REVOKED)
+        .revoked(REVOKED_DTO)
+        .recipient(CERTIFICATE_RECIPIENT_DTO)
         .build();
 
     doReturn(FK7211_CERTIFICATE).when(certificateRepository)
@@ -46,6 +50,14 @@ class GetCertificateInternalXmlServiceTest {
 
     final var actualResponse = getCertificateInternalXmlService.get(CERTIFICATE_ID);
 
-    assertEquals(expectedResponse, actualResponse);
+    assertAll(
+        () -> assertEquals(expectedResponse.getCertificateId(), actualResponse.getCertificateId()),
+        () -> assertEquals(expectedResponse.getCertificateType(),
+            actualResponse.getCertificateType()),
+        () -> assertEquals(expectedResponse.getUnitId(), actualResponse.getUnitId()),
+        () -> assertEquals(expectedResponse.getXml(), actualResponse.getXml()),
+        () -> assertEquals(expectedResponse.getRecipient(), actualResponse.getRecipient()),
+        () -> assertNotNull(actualResponse.getRevoked())
+    );
   }
 }

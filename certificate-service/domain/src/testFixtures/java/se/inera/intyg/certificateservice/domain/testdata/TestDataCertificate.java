@@ -40,7 +40,7 @@ public class TestDataCertificate {
       .build();
 
   private static final String REASON = "FEL_PATIENT";
-  private static final String MESSAGE = "message";
+  private static final String MESSAGE = "REVOKED_MESSAGE";
   public static final RevokedInformation REVOKED_INFORMATION = new RevokedInformation(REASON,
       MESSAGE);
   public static final Revoked REVOKED = Revoked.builder()
