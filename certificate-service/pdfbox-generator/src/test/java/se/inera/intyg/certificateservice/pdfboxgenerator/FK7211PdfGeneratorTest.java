@@ -248,11 +248,11 @@ class FK7211PdfGeneratorTest {
 
     @Test
     void shouldSetContactInfoIfCertificateIsSigned() {
-      final var expected = """
-          Alfa Allergimottagningen
-          Storgatan 1
-          12345 Småmåla
-          Telefon: 0101234567890""";
+      final var expected =
+          "Alfa Allergimottagningen" + "\n"
+              + "Storgatan 1" + " \n"
+              + "12345 Småmåla" + "\n"
+              + "Telefon: 0101234567890";
 
       final var fk7211PdfGenerator = new FK7211PdfGenerator(
           buildCertificate(AJLA_DOKTOR, Status.SIGNED));

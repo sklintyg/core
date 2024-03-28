@@ -191,7 +191,7 @@ public class FK7211PdfGenerator {
     final var contactInfo = elementData.map(data -> {
       final var elementValue = (ElementValueUnitContactInformation) data.value();
       return certificate.certificateMetaData().issuingUnit().name().name() + "\n"
-          + elementValue.address() + "\n"
+          + elementValue.address() + " \n"
           + elementValue.zipCode() + " " + elementValue.city() + "\n"
           + "Telefon: " + elementValue.phoneNumber();
     }).orElse("");
