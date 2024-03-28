@@ -1,8 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason.ANNAT_ALLVARLIGT_FEL;
-import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason.FEL_PATIENT;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason.INCORRECT_PATIENT;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason.OTHER_SERIOUS_ERROR;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,13 +17,13 @@ class RevokedReasonEntityMapperTest {
     @Test
     void shallMapReasonToRevokedReasonEntity() {
       final var entity = RevokedReasonEntityMapper.toEntity(REASON_WRONG_PATIENT);
-      assertEquals(FEL_PATIENT.name(), entity.getReason());
+      assertEquals(INCORRECT_PATIENT.name(), entity.getReason());
     }
 
     @Test
     void shallMapKeyToRevokedReasonEntity() {
       final var entity = RevokedReasonEntityMapper.toEntity(REASON_WRONG_PATIENT);
-      assertEquals(FEL_PATIENT.getKey(), entity.getKey());
+      assertEquals(INCORRECT_PATIENT.getKey(), entity.getKey());
     }
   }
 
@@ -36,13 +36,13 @@ class RevokedReasonEntityMapperTest {
     @Test
     void shallMapReasonToRevokedReasonEntity() {
       final var entity = RevokedReasonEntityMapper.toEntity(REASON_OTHER_SERIOUS_ERROR);
-      assertEquals(ANNAT_ALLVARLIGT_FEL.name(), entity.getReason());
+      assertEquals(OTHER_SERIOUS_ERROR.name(), entity.getReason());
     }
 
     @Test
     void shallMapKeyToRevokedReasonEntity() {
       final var entity = RevokedReasonEntityMapper.toEntity(REASON_OTHER_SERIOUS_ERROR);
-      assertEquals(ANNAT_ALLVARLIGT_FEL.getKey(), entity.getKey());
+      assertEquals(OTHER_SERIOUS_ERROR.getKey(), entity.getKey());
     }
   }
 }

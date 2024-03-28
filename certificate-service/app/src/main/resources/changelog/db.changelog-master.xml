@@ -205,10 +205,10 @@
     </insert>
 
     <insert tableName="revoked_reason">
-      <column name="reason" value="FEL_PATIENT"/>
+      <column name="reason" value="INCORRECT_PATIENT"/>
     </insert>
     <insert tableName="revoked_reason">
-      <column name="reason" value="ANNAT_ALLVARLIGT_FEL"/>
+      <column name="reason" value="OTHER_SERIOUS_ERROR"/>
     </insert>
 
     <createTable tableName="staff">

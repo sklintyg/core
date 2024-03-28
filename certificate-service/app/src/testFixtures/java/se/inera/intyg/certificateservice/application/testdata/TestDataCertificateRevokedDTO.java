@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.application.testdata;
 
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonStaffDTO.AJLA_DOKTOR;
-import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason.FEL_PATIENT;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason.INCORRECT_PATIENT;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -17,7 +17,7 @@ public class TestDataCertificateRevokedDTO {
   public static final RevokedDTO REVOKED_DTO = RevokedDTO.builder()
       .revokedBy(AJLA_DOKTOR)
       .revokedAt(LocalDateTime.now(ZoneId.systemDefault()))
-      .reason(FEL_PATIENT.name())
+      .reason(INCORRECT_PATIENT.name())
       .message(REVOKED_MESSAGE)
       .build();
 

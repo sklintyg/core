@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum RevokedReason {
-  FEL_PATIENT(1), ANNAT_ALLVARLIGT_FEL(2);
+  INCORRECT_PATIENT(1), OTHER_SERIOUS_ERROR(2);
 
   private final int key;
 

@@ -21,7 +21,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_MIDDLE_NAME;
-import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason.FEL_PATIENT;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason.INCORRECT_PATIENT;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -412,7 +412,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapRevokedInformation() {
       final var expectedRevokedInformation = new RevokedInformation(
-          FEL_PATIENT.name(),
+          INCORRECT_PATIENT.name(),
           REVOKED_MESSAGE
       );
 
