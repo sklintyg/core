@@ -19,7 +19,7 @@ public class GetCertificateInternalXmlResponse {
   String xml;
   RevokedDTO revoked;
   CertificateRecipientDTO recipient;
-  PersonIdDTO personId;
+  PersonIdDTO patientId;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class GetCertificateInternalXmlResponseBuilder {

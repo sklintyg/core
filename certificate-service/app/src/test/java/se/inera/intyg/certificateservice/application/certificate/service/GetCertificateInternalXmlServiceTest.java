@@ -51,7 +51,7 @@ class GetCertificateInternalXmlServiceTest {
         .xml(XML_BASE64_ENCODED)
         .revoked(REVOKED_DTO)
         .recipient(CERTIFICATE_RECIPIENT_DTO)
-        .personId(ATHENA_REACT_ANDERSSON_PERSON_ID_DTO)
+        .patientId(ATHENA_REACT_ANDERSSON_PERSON_ID_DTO)
         .build();
 
     doReturn(FK7211_CERTIFICATE).when(certificateRepository)
@@ -69,7 +69,7 @@ class GetCertificateInternalXmlServiceTest {
         () -> assertEquals(expectedResponse.getUnit(), actualResponse.getUnit()),
         () -> assertEquals(expectedResponse.getXml(), actualResponse.getXml()),
         () -> assertEquals(expectedResponse.getRecipient(), actualResponse.getRecipient()),
-        () -> assertEquals(expectedResponse.getPersonId(), actualResponse.getPersonId()),
+        () -> assertEquals(expectedResponse.getPatientId(), actualResponse.getPatientId()),
         () -> assertEquals(expectedResponse.getCareProvider(), actualResponse.getCareProvider()),
         () -> assertNotNull(actualResponse.getRevoked())
     );

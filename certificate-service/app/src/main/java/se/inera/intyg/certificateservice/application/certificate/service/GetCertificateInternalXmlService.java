@@ -49,7 +49,7 @@ public class GetCertificateInternalXmlService {
         .xml(certificate.xml().base64())
         .revoked(convertRevoked(Optional.ofNullable(certificate.revoked())))
         .recipient(convertRecipient(Optional.ofNullable(certificate.sent())))
-        .personId(convertPersonId(certificate.certificateMetaData().patient().id()))
+        .patientId(convertPersonId(certificate.certificateMetaData().patient().id()))
         .build();
   }
 
