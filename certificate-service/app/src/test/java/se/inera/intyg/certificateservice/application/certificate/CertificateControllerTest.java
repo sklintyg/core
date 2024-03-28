@@ -21,6 +21,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateRequest;
@@ -36,6 +38,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.DeleteC
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificatePdfService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateXmlService;
+import se.inera.intyg.certificateservice.application.certificate.service.RevokeCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SendCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateWithoutSignatureService;
@@ -71,6 +74,8 @@ class CertificateControllerTest {
   private SignCertificateWithoutSignatureService signCertificateWithoutSignatureService;
   @Mock
   private GetCertificatePdfService getCertificatePdfService;
+  @Mock
+  private RevokeCertificateService revokeCertificateService;
   @InjectMocks
   private CertificateController certificateController;
 
@@ -245,6 +250,17 @@ class CertificateControllerTest {
     doReturn(expectedResult).when(getCertificatePdfService).get(request, CERTIFICATE_ID);
 
     final var actualResult = certificateController.getCertificatePdf(request, CERTIFICATE_ID);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnRevokeCertificateResponse() {
+    final var request = RevokeCertificateRequest.builder().build();
+    final var expectedResult = RevokeCertificateResponse.builder().build();
+    doReturn(expectedResult).when(revokeCertificateService).revoke(request, CERTIFICATE_ID);
+
+    final var actualResult = certificateController.revokeCertificate(request, CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
   }

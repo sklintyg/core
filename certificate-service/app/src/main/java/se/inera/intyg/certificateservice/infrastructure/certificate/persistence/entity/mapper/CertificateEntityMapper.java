@@ -1,12 +1,14 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
@@ -15,6 +17,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.PatientRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.StaffRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.UnitRepository;
@@ -23,6 +26,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatus;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatusEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateXmlEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReasonEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntityRepository;
 
@@ -127,7 +133,37 @@ public class CertificateEntityMapper {
       );
     }
 
+    if (certificate.revoked() != null) {
+      handleRevoked(certificate, certificateEntity, staffMap);
+    }
+
     return certificateEntity;
+  }
+
+  private static void handleRevoked(Certificate certificate, CertificateEntity certificateEntity,
+      Map<String, StaffEntity> staffMap) {
+    final var reason = RevokedReason.valueOf(
+        certificate.revoked().revokedInformation().reason()
+    );
+
+    certificateEntity.setRevokedReason(
+        RevokedReasonEntity.builder()
+            .key(reason.getKey())
+            .reason(reason.name())
+            .build()
+    );
+
+    certificateEntity.setRevokedMessage(
+        certificate.revoked().revokedInformation().message()
+    );
+
+    certificateEntity.setRevokedBy(
+        staffMap.get(certificate.revoked().revokedBy().hsaId().id())
+    );
+
+    certificateEntity.setRevoked(
+        certificate.revoked().revokedAt()
+    );
   }
 
   private CertificateModelEntity certificateModel(CertificateModel certificateModel) {
@@ -191,6 +227,17 @@ public class CertificateEntityMapper {
                 .sentBy(StaffEntityMapper.toDomain(certificateEntity.getSentBy()))
                 .sentAt(certificateEntity.getSent())
                 .recipient(model.recipient())
+                .build() : null
+        )
+        .revoked(
+            certificateEntity.getRevoked() != null
+                ? Revoked.builder()
+                .revokedBy(StaffEntityMapper.toDomain(certificateEntity.getRevokedBy()))
+                .revokedAt(certificateEntity.getRevoked())
+                .revokedInformation(
+                    new RevokedInformation(certificateEntity.getRevokedReason().getReason(),
+                        certificateEntity.getRevokedMessage())
+                )
                 .build() : null
         )
         .build();

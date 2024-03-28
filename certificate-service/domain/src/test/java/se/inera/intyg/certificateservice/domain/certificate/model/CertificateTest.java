@@ -79,6 +79,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
+import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
 import se.inera.intyg.certificateservice.domain.validation.model.ErrorMessage;
@@ -1222,6 +1223,96 @@ class CertificateTest {
           () -> certificate.send(actionEvaluation));
 
       assertTrue(illegalStateException.getMessage().contains("has already been sent to"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+  }
+
+  @Nested
+  class TestRevoke {
+
+    private static final String MESSAGE = "message";
+    private static final String REASON = "reason";
+    private static final RevokedInformation REVOKED_INFORMATION = new RevokedInformation(REASON,
+        MESSAGE);
+
+    @Test
+    void shallSetStatusToRevoked() {
+      final var expectedRevokeInformation = Status.REVOKED;
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      certificate.revoke(actionEvaluation, REVOKED_INFORMATION);
+
+      assertEquals(expectedRevokeInformation, certificate.status());
+    }
+
+    @Test
+    void shallIncludeRevokeInformationWhenRevoked() {
+      final var expectedRevokeInformation = new RevokedInformation(REASON, MESSAGE);
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      certificate.revoke(actionEvaluation, REVOKED_INFORMATION);
+
+      assertEquals(expectedRevokeInformation, certificate.revoked().revokedInformation());
+    }
+
+    @Test
+    void shallIncludeRevokedTimestampWhenRevoked() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      certificate.revoke(actionEvaluation, REVOKED_INFORMATION);
+
+      assertNotNull(certificate.revoked().revokedAt());
+    }
+
+    @Test
+    void shallIncludeRevokedByWhenRevoked() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      certificate.revoke(actionEvaluation, REVOKED_INFORMATION);
+
+      assertEquals(TestDataStaff.AJLA_DOKTOR, certificate.revoked().revokedBy());
+    }
+
+    @Test
+    void shallThrowIfStatusIsNotSigned() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.revoke(actionEvaluation, REVOKED_INFORMATION));
+
+      assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowIfCertificateAlreadyBeenRevoked() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .revoked(Revoked.builder().build())
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.revoke(actionEvaluation, REVOKED_INFORMATION));
+
+      assertTrue(illegalStateException.getMessage().contains("has already been revoked"),
           () -> "Received message was: %s".formatted(illegalStateException.getMessage())
       );
     }

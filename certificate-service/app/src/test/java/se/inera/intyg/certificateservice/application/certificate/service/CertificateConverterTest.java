@@ -535,6 +535,19 @@ class CertificateConverterTest {
               .getStatus()
       );
     }
+
+    @Test
+    void shallConvertRevokedToRevoked() {
+      assertEquals(
+          CertificateStatusTypeDTO.REVOKED,
+          certificateConverter.convert(
+                  certificateBuilder.status(Status.REVOKED).build(),
+                  resourceLinkDTOs
+              )
+              .getMetadata()
+              .getStatus()
+      );
+    }
   }
 
   @Nested

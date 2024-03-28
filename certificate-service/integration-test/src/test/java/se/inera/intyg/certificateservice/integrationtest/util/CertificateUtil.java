@@ -11,11 +11,13 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRecipientDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
@@ -43,6 +45,13 @@ public class CertificateUtil {
       return null;
     }
     return certificate.getMetadata().getId();
+  }
+
+  public static CertificateStatusTypeDTO status(RevokeCertificateResponse responses) {
+    if (responses == null || responses.getCertificate() == null) {
+      return null;
+    }
+    return responses.getCertificate().getMetadata().getStatus();
   }
 
   public static long version(List<CreateCertificateResponse> responses) {
@@ -179,6 +188,14 @@ public class CertificateUtil {
 
   public static GetCertificateInternalXmlResponse certificateInternalXmlResponse(
       ResponseEntity<GetCertificateInternalXmlResponse> response) {
+    if (response == null || response.getBody() == null) {
+      throw new IllegalArgumentException("Missing response!");
+    }
+    return response.getBody();
+  }
+
+  public static RevokeCertificateResponse revokeCertificateResponse(
+      ResponseEntity<RevokeCertificateResponse> response) {
     if (response == null || response.getBody() == null) {
       throw new IllegalArgumentException("Missing response!");
     }

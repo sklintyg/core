@@ -15,6 +15,8 @@ public class GetCertificateInternalXmlResponse {
   String certificateType;
   String unitId;
   String xml;
+  RevokedDTO revoked;
+  CertificateRecipientDTO recipient;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class GetCertificateInternalXmlResponseBuilder {

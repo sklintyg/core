@@ -13,10 +13,12 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
+import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 
 public class TestDataCertificate {
 
@@ -36,6 +38,16 @@ public class TestDataCertificate {
       .sentAt(LocalDateTime.now(ZoneId.systemDefault()))
       .sentBy(AJLA_DOKTOR)
       .build();
+
+  private static final String REASON = "INCORRECT_PATIENT";
+  private static final String MESSAGE = "REVOKED_MESSAGE";
+  public static final RevokedInformation REVOKED_INFORMATION = new RevokedInformation(REASON,
+      MESSAGE);
+  public static final Revoked REVOKED = Revoked.builder()
+      .revokedBy(AJLA_DOKTOR)
+      .revokedAt(LocalDateTime.now(ZoneId.systemDefault()))
+      .revokedInformation(REVOKED_INFORMATION)
+      .build();
   public static final Certificate FK7211_CERTIFICATE = fk7211CertificateBuilder().build();
 
   public static Certificate.CertificateBuilder fk7211CertificateBuilder() {
@@ -46,6 +58,7 @@ public class TestDataCertificate {
         .certificateModel(FK7211_CERTIFICATE_MODEL)
         .xml(XML)
         .sent(SENT)
+        .revoked(REVOKED)
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuer(AJLA_DOKTOR)
