@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
+import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
@@ -29,6 +30,9 @@ class RevokeCertificateDomainServiceTest {
 
   private static final String REASON = "reason";
   private static final String MESSAGE = "message";
+  private static final RevokedInformation REVOKED_INFORMATION = new RevokedInformation(REASON,
+      MESSAGE);
+
   @Mock
   private CertificateRepository certificateRepository;
   @Mock
@@ -43,8 +47,8 @@ class RevokeCertificateDomainServiceTest {
     doReturn(false).when(certificate).allowTo(REVOKE, ACTION_EVALUATION);
 
     assertThrows(CertificateActionForbidden.class,
-        () -> revokeCertificateDomainService.revoke(CERTIFICATE_ID, ACTION_EVALUATION, REASON,
-            MESSAGE)
+        () -> revokeCertificateDomainService.revoke(CERTIFICATE_ID, ACTION_EVALUATION,
+            REVOKED_INFORMATION)
     );
   }
 
@@ -55,10 +59,9 @@ class RevokeCertificateDomainServiceTest {
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(REVOKE, ACTION_EVALUATION);
 
-    revokeCertificateDomainService.revoke(CERTIFICATE_ID, ACTION_EVALUATION, REASON,
-        MESSAGE);
+    revokeCertificateDomainService.revoke(CERTIFICATE_ID, ACTION_EVALUATION, REVOKED_INFORMATION);
 
-    verify(certificate).revoke(ACTION_EVALUATION, REASON, MESSAGE);
+    verify(certificate).revoke(ACTION_EVALUATION, REVOKED_INFORMATION);
   }
 
   @Test
@@ -71,7 +74,7 @@ class RevokeCertificateDomainServiceTest {
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
 
     final var actualCertificate = revokeCertificateDomainService.revoke(CERTIFICATE_ID,
-        ACTION_EVALUATION, REASON, MESSAGE);
+        ACTION_EVALUATION, REVOKED_INFORMATION);
 
     assertEquals(expectedCertificate, actualCertificate);
   }
@@ -85,7 +88,7 @@ class RevokeCertificateDomainServiceTest {
     doReturn(true).when(certificate).allowTo(REVOKE, ACTION_EVALUATION);
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
 
-    revokeCertificateDomainService.revoke(CERTIFICATE_ID, ACTION_EVALUATION, REASON, MESSAGE);
+    revokeCertificateDomainService.revoke(CERTIFICATE_ID, ACTION_EVALUATION, REVOKED_INFORMATION);
 
     final var certificateEventCaptor = ArgumentCaptor.forClass(CertificateEvent.class);
     verify(certificateEventDomainService).publish(certificateEventCaptor.capture());

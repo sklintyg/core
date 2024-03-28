@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.application.common.ActionEvaluationFact
 import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.service.RevokeCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 
 @Service
 @RequiredArgsConstructor
@@ -36,8 +37,7 @@ public class RevokeCertificateService {
     final var certificate = revokeCertificateDomainService.revoke(
         new CertificateId(certificateId),
         actionEvaluation,
-        request.getRevoked().getReason(),
-        request.getRevoked().getMessage()
+        new RevokedInformation(request.getRevoked().getReason(), request.getRevoked().getMessage())
     );
 
     return RevokeCertificateResponse.builder()

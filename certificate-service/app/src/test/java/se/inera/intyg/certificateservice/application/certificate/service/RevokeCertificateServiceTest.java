@@ -31,6 +31,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.service.RevokeCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
@@ -90,8 +91,10 @@ class RevokeCertificateServiceTest {
     doReturn(certificate).when(revokeCertificateDomainService).revoke(
         new CertificateId(CERTIFICATE_ID),
         actionEvaluation,
-        REVOKE_INFORMATION_DTO.getReason(),
-        REVOKE_INFORMATION_DTO.getMessage()
+        new RevokedInformation(
+            REVOKE_INFORMATION_DTO.getReason(),
+            REVOKE_INFORMATION_DTO.getMessage()
+        )
     );
 
     final var certificateAction = mock(CertificateAction.class);

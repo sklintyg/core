@@ -1231,8 +1231,10 @@ class CertificateTest {
   @Nested
   class TestRevoke {
 
-    private static final String REASON = "reason";
     private static final String MESSAGE = "message";
+    private static final String REASON = "reason";
+    private static final RevokedInformation REVOKED_INFORMATION = new RevokedInformation(REASON,
+        MESSAGE);
 
     @Test
     void shallSetStatusToRevoked() {
@@ -1242,7 +1244,7 @@ class CertificateTest {
           .status(Status.SIGNED)
           .build();
 
-      certificate.revoke(actionEvaluation, REASON, MESSAGE);
+      certificate.revoke(actionEvaluation, REVOKED_INFORMATION);
 
       assertEquals(expectedRevokeInformation, certificate.status());
     }
@@ -1255,7 +1257,7 @@ class CertificateTest {
           .status(Status.SIGNED)
           .build();
 
-      certificate.revoke(actionEvaluation, REASON, MESSAGE);
+      certificate.revoke(actionEvaluation, REVOKED_INFORMATION);
 
       assertEquals(expectedRevokeInformation, certificate.revoked().revokedInformation());
     }
@@ -1267,7 +1269,7 @@ class CertificateTest {
           .status(Status.SIGNED)
           .build();
 
-      certificate.revoke(actionEvaluation, REASON, MESSAGE);
+      certificate.revoke(actionEvaluation, REVOKED_INFORMATION);
 
       assertNotNull(certificate.revoked().revokedAt());
     }
@@ -1279,7 +1281,7 @@ class CertificateTest {
           .status(Status.SIGNED)
           .build();
 
-      certificate.revoke(actionEvaluation, REASON, MESSAGE);
+      certificate.revoke(actionEvaluation, REVOKED_INFORMATION);
 
       assertEquals(TestDataStaff.AJLA_DOKTOR, certificate.revoked().revokedBy());
     }
@@ -1292,7 +1294,7 @@ class CertificateTest {
           .build();
 
       final var illegalStateException = assertThrows(IllegalStateException.class,
-          () -> certificate.revoke(actionEvaluation, REASON, MESSAGE));
+          () -> certificate.revoke(actionEvaluation, REVOKED_INFORMATION));
 
       assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
           () -> "Received message was: %s".formatted(illegalStateException.getMessage())
@@ -1308,7 +1310,7 @@ class CertificateTest {
           .build();
 
       final var illegalStateException = assertThrows(IllegalStateException.class,
-          () -> certificate.revoke(actionEvaluation, REASON, MESSAGE));
+          () -> certificate.revoke(actionEvaluation, REVOKED_INFORMATION));
 
       assertTrue(illegalStateException.getMessage().contains("has already been revoked"),
           () -> "Received message was: %s".formatted(illegalStateException.getMessage())

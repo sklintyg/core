@@ -200,7 +200,7 @@ public class Certificate {
         .build();
   }
 
-  public void revoke(ActionEvaluation actionEvaluation, String revokeReason, String revokeMessage) {
+  public void revoke(ActionEvaluation actionEvaluation, RevokedInformation revokedInformation) {
     if (this.status != Status.SIGNED) {
       throw new IllegalStateException(
           "Incorrect status '%s' - required status is '%s' or '%s' to revoke".formatted(this.status,
@@ -216,9 +216,7 @@ public class Certificate {
 
     this.status = Status.REVOKED;
     this.revoked = Revoked.builder()
-        .revokedInformation(
-            new RevokedInformation(revokeReason, revokeMessage)
-        )
+        .revokedInformation(revokedInformation)
         .revokedBy(Staff.create(actionEvaluation.user()))
         .revokedAt(LocalDateTime.now(ZoneId.systemDefault()))
         .build();
