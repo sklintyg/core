@@ -90,7 +90,9 @@ public class CertificateActionFactory {
           .actionRules(
               List.of(
                   new ActionRuleWithinCareUnit(),
-                  new ActionRuleRole(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)),
+                  new ActionRuleRole(
+                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
+                  ),
                   new ActionRuleStatus(List.of(Status.SIGNED))
               )
           )
