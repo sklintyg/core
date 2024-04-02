@@ -219,6 +219,20 @@ class CertificateActionPrintTest {
   }
 
   @Test
+  void shallReturnTrueIfDraft() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.DRAFT)
+        .build();
+
+    assertTrue(
+        certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
   void shallReturnFalseIfDeletedDraft() {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
@@ -233,16 +247,16 @@ class CertificateActionPrintTest {
   }
 
   @Test
-  void shallReturnFalseIfDraft() {
+  void shallReturnFalseIfRevoked() {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     final var certificate = certificateBuilder
-        .status(Status.DRAFT)
+        .status(Status.REVOKED)
         .build();
 
-    assertTrue(
+    assertFalse(
         certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
-        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
 }
