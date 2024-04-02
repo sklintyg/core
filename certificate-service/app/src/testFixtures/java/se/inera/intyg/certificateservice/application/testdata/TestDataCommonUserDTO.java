@@ -16,6 +16,13 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_BLOCKED;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_FULL_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_MIDDLE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_ROLE;
 
 import java.util.Collections;
 import se.inera.intyg.certificateservice.application.common.dto.PaTitleDTO;
@@ -28,6 +35,7 @@ public class TestDataCommonUserDTO {
 
   public static final UserDTO AJLA_DOCTOR_DTO = ajlaDoktorDtoBuilder().build();
   public static final UserDTO ALVA_VARDADMINISTRATOR_DTO = alvaVardadministratorDtoBuilder().build();
+  public static final UserDTO BERTIL_BARNMORSKA_DTO = bertilBarnmorskaDtoBuilder().build();
 
   public static UserDTOBuilder ajlaDoktorDtoBuilder() {
     return UserDTO.builder()
@@ -66,5 +74,18 @@ public class TestDataCommonUserDTO {
         .paTitles(Collections.emptyList())
         .specialities(Collections.emptyList())
         .blocked(ALVA_VARDADMINISTRATOR_BLOCKED.value());
+  }
+
+  public static UserDTOBuilder bertilBarnmorskaDtoBuilder() {
+    return UserDTO.builder()
+        .id(BARNMORSKA_HSA_ID)
+        .firstName(BARNMORSKA_FIRST_NAME)
+        .middleName(BARNMORSKA_MIDDLE_NAME)
+        .lastName(BARNMORSKA_LAST_NAME)
+        .fullName(BARNMORSKA_FULL_NAME)
+        .role(RoleTypeDTO.toRoleType(BARNMORSKA_ROLE))
+        .paTitles(Collections.emptyList())
+        .specialities(Collections.emptyList())
+        .blocked(BARNMORSKA_BLOCKED.value());
   }
 }
