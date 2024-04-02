@@ -61,7 +61,7 @@ public class TestDataUserConstants {
   public static final List<Speciality> ANNA_SJUKSKOTERSKA_SPECIALITIES = Collections.emptyList();
   public static final Blocked ANNA_SJUKSKOTERSKA_BLOCKED = BLOCKED_FALSE;
 
-  public static final String BARNMORSKA_HSA_ID = "TSTNMT2321000156-SKAA";
+  public static final String BARNMORSKA_HSA_ID = "TSTNMT2321000156-BMBL";
   public static final String BARNMORSKA_FIRST_NAME = "Bertil";
   public static final String BARNMORSKA_MIDDLE_NAME = "";
   public static final String BARNMORSKA_LAST_NAME = "Barnmorska";
