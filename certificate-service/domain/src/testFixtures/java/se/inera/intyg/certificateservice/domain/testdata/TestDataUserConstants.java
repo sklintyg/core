@@ -61,11 +61,11 @@ public class TestDataUserConstants {
   public static final List<Speciality> ANNA_SJUKSKOTERSKA_SPECIALITIES = Collections.emptyList();
   public static final Blocked ANNA_SJUKSKOTERSKA_BLOCKED = BLOCKED_FALSE;
 
-  public static final String BARNMORSKA_HSA_ID = "TSTNMT2321000156-SKAA";
-  public static final String BARNMORSKA_FIRST_NAME = "Barn";
+  public static final String BARNMORSKA_HSA_ID = "TSTNMT2321000156-BMBL";
+  public static final String BARNMORSKA_FIRST_NAME = "Bertil";
   public static final String BARNMORSKA_MIDDLE_NAME = "";
-  public static final String BARNMORSKA_LAST_NAME = "Morska";
-  public static final String BARNMORSKA_FULL_NAME = "Anna Sjuksköterska";
+  public static final String BARNMORSKA_LAST_NAME = "Barnmorska";
+  public static final String BARNMORSKA_FULL_NAME = "Bertil Barnmorska";
   public static final Role BARNMORSKA_ROLE = Role.MIDWIFE;
   public static final List<PaTitle> BARNMORSKA_TITLES = Collections.emptyList();
   public static final List<Speciality> BARNMORSKA_SPECIALITIES = Collections.emptyList();

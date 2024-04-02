@@ -20,6 +20,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_VARDCENTRAL_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.FK7211;
@@ -2662,6 +2663,28 @@ class FK7211ActiveIT {
       );
 
       assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om användaren har rollen barnmorska ska intyget gå att signeras")
+    void shallSuccessfullySignIfRoleIsMidwife() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION)
+      );
+
+      final var response = api.signCertificate(
+          customSignCertificateRequest()
+              .user(BERTIL_BARNMORSKA_DTO)
+              .build(),
+          certificateId(testCertificates),
+          version(testCertificates)
+      );
+
+      assertAll(
+          () -> assertEquals(SIGNED,
+              certificate(response).getMetadata().getStatus()
+          )
+      );
     }
 
     @Test
