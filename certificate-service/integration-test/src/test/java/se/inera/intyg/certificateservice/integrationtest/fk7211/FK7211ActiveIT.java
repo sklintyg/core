@@ -3017,7 +3017,7 @@ class FK7211ActiveIT {
               certificateInternalXmlResponse(response).getCertificateId()),
           () -> assertEquals(FK7211, certificateInternalXmlResponse(response).getCertificateType()),
           () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ID,
-              certificateInternalXmlResponse(response).getUnitId()),
+              certificateInternalXmlResponse(response).getUnit().getUnitId()),
           () -> assertNull(certificateInternalXmlResponse(response).getRevoked()),
           () -> assertTrue(decodeXml(certificateInternalXmlResponse(response).getXml()).contains(
                   certificateId(testCertificates)),
@@ -3045,7 +3045,7 @@ class FK7211ActiveIT {
               certificateInternalXmlResponse(response).getCertificateId()),
           () -> assertEquals(FK7211, certificateInternalXmlResponse(response).getCertificateType()),
           () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ID,
-              certificateInternalXmlResponse(response).getUnitId()),
+              certificateInternalXmlResponse(response).getUnit().getUnitId()),
           () -> assertNotNull(certificateInternalXmlResponse(response).getRevoked()),
           () -> assertTrue(decodeXml(certificateInternalXmlResponse(response).getXml()).contains(
                   certificateId(testCertificates)),
@@ -3073,7 +3073,7 @@ class FK7211ActiveIT {
               certificateInternalXmlResponse(response).getCertificateId()),
           () -> assertEquals(FK7211, certificateInternalXmlResponse(response).getCertificateType()),
           () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ID,
-              certificateInternalXmlResponse(response).getUnitId()),
+              certificateInternalXmlResponse(response).getUnit().getUnitId()),
           () -> assertNotNull(certificateInternalXmlResponse(response).getRecipient()),
           () -> assertNull(certificateInternalXmlResponse(response).getRevoked()),
           () -> assertTrue(decodeXml(certificateInternalXmlResponse(response).getXml()).contains(

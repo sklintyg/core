@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
@@ -201,5 +202,61 @@ class CertificateActionPrintTest {
     assertEquals(
         "Öppnar ett fönster där du kan välja att skriva ut eller spara intygsutkastet som PDF.",
         certificateActionPrint.getDescription());
+  }
+
+  @Test
+  void shallReturnTrueIfSigned() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .build();
+
+    assertTrue(
+        certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfDraft() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.DRAFT)
+        .build();
+
+    assertTrue(
+        certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnFalseIfDeletedDraft() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.DELETED_DRAFT)
+        .build();
+
+    assertFalse(
+        certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnFalseIfRevoked() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.REVOKED)
+        .build();
+
+    assertFalse(
+        certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
   }
 }

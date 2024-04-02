@@ -3,14 +3,18 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRecipientDTO.CERTIFICATE_RECIPIENT_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRevokedDTO.REVOKED_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_PERSON_ID_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonWebcertUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonWebcertUnitDTO.ALFA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.XML;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateConstants.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_TYPE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -20,6 +24,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateUnitConverter;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 
@@ -31,6 +36,8 @@ class GetCertificateInternalXmlServiceTest {
 
   @Mock
   private CertificateRepository certificateRepository;
+  @Mock
+  private CertificateUnitConverter certificateUnitConverter;
   @InjectMocks
   private GetCertificateInternalXmlService getCertificateInternalXmlService;
 
@@ -39,14 +46,19 @@ class GetCertificateInternalXmlServiceTest {
     final var expectedResponse = GetCertificateInternalXmlResponse.builder()
         .certificateId(CERTIFICATE_ID)
         .certificateType(FK7211_TYPE.type())
-        .unitId(ALFA_ALLERGIMOTTAGNINGEN_ID)
+        .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
+        .careProvider(ALFA_REGIONEN_DTO)
         .xml(XML_BASE64_ENCODED)
         .revoked(REVOKED_DTO)
         .recipient(CERTIFICATE_RECIPIENT_DTO)
+        .patientId(ATHENA_REACT_ANDERSSON_PERSON_ID_DTO)
         .build();
 
     doReturn(FK7211_CERTIFICATE).when(certificateRepository)
         .getById(new CertificateId(CERTIFICATE_ID));
+    doReturn(ALFA_ALLERGIMOTTAGNINGEN_DTO).when(certificateUnitConverter).convert(
+        eq(FK7211_CERTIFICATE.certificateMetaData().issuingUnit()), any()
+    );
 
     final var actualResponse = getCertificateInternalXmlService.get(CERTIFICATE_ID);
 
@@ -54,9 +66,11 @@ class GetCertificateInternalXmlServiceTest {
         () -> assertEquals(expectedResponse.getCertificateId(), actualResponse.getCertificateId()),
         () -> assertEquals(expectedResponse.getCertificateType(),
             actualResponse.getCertificateType()),
-        () -> assertEquals(expectedResponse.getUnitId(), actualResponse.getUnitId()),
+        () -> assertEquals(expectedResponse.getUnit(), actualResponse.getUnit()),
         () -> assertEquals(expectedResponse.getXml(), actualResponse.getXml()),
         () -> assertEquals(expectedResponse.getRecipient(), actualResponse.getRecipient()),
+        () -> assertEquals(expectedResponse.getPatientId(), actualResponse.getPatientId()),
+        () -> assertEquals(expectedResponse.getCareProvider(), actualResponse.getCareProvider()),
         () -> assertNotNull(actualResponse.getRevoked())
     );
   }

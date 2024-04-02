@@ -9,6 +9,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
@@ -59,6 +60,7 @@ public class TestDataCertificate {
         .xml(XML)
         .sent(SENT)
         .revoked(REVOKED)
+        .elementData(Collections.emptyList())
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuer(AJLA_DOKTOR)
