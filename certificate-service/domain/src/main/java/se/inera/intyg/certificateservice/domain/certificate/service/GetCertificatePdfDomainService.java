@@ -32,8 +32,10 @@ public class GetCertificatePdfDomainService {
           "Not allowed to print certificate for %s".formatted(certificateId)
       );
     }
+    if (certificate.isDraft()) {
+      certificate.updateMetadata(actionEvaluation);
+    }
 
-    certificate.updateMetadata(actionEvaluation);
     final var generatedPdf = pdfGenerator.generate(certificate, additionalInfoText);
 
     certificateEventDomainService.publish(
@@ -45,7 +47,7 @@ public class GetCertificatePdfDomainService {
             .actionEvaluation(actionEvaluation)
             .build()
     );
-    
+
     return generatedPdf;
   }
 }

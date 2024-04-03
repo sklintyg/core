@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
-import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -70,13 +69,14 @@ class GetCertificatePdfDomainServiceTest {
     }
 
     @Test
-    void shallUpdateCertificateMetadata() {
+    void shallUpdateCertificateMetadataIfCertificateIsDraft() {
+      doReturn(true).when(certificate).isDraft();
       getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION, ADDITIONAL_INFO_TEXT);
       verify(certificate).updateMetadata(ACTION_EVALUATION);
     }
 
     @Test
-    void shallReturnResponseWithPdfFromGenerator() throws IOException {
+    void shallReturnResponseWithPdfFromGenerator() {
       doReturn(PDF).when(pdfGenerator).generate(certificate, ADDITIONAL_INFO_TEXT);
 
       final var response = getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION,
