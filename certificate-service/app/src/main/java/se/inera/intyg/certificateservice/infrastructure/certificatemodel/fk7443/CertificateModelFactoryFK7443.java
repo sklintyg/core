@@ -1,9 +1,8 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -14,7 +13,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
@@ -23,44 +22,48 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateRecipientFactory;
 
 @Component
-public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
+public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
 
-  @Value("${certificate.model.fk7211.v1_0.active.from}")
+  @Value("${certificate.model.fk7443.v1_0.active.from}")
   private LocalDateTime activeFrom;
-  private static final String FK_7211 = "fk7211";
+  private static final String TYPE = "fk7443";
   private static final String VERSION = "1.0";
-  private static final String NAME = "Intyg om graviditet";
+  private static final String NAME = "Intyg om Tillfällig föräldrapenning ";
   private static final String DESCRIPTION = """
-      När en patient är gravid ska hen få ett intyg om graviditet av hälso- och sjukvården. Intyget behövs om föräldern begär ersättning från Försäkringskassan innan barnet är fött.
-            
-      Patienten ska:
-      Be barnmorskan, läkaren eller sjuksköterskan om ett intyg om graviditet
-      Barnmorskan, läkaren eller sjuksköterskan ska:
-      Skriva ett intyg om graviditet och skicka in intyget om graviditet till Försäkringskassan digitalt.""";
-  public static final CertificateModelId FK7211_V1_0 = CertificateModelId.builder()
-      .type(new CertificateType(FK_7211))
+      <p className="iu-fw-heading">Vad är Intyg om tillfällig föräldrapenning?</p>
+      <p>När ett barn är sjukt kan den förälder som behöver avstå från sitt arbete för att vårda barnet få tillfällig föräldrapenning. Vårdperioden räknas från den första dagen man får tillfällig föräldrapenning för barnet.</p>
+      <p className="iu-fw-heading">Förutsättningar för att få tillfällig föräldrapenning:</p>
+      <p className="iu-fw-heading">Om barnet är under 12 år</p>
+      <p>Från den åttonde kalenderdagen i barnets vårdperiod behöver ett intyg från läkare eller sjuksköterska skickas till Försäkringskassan.</p>
+      <p className="iu-fw-heading">Om barnet har fyllt 12 men inte 16 år</p>
+      <p>När föräldern har ett förhandsbesked från Försäkringskassan behöver ett intyg från läkare eller sjuksköterska skickas till Föräkringskassan från och med den åttonde dagen i vårdperioden.\s
+      För barn som är 12-16 år krävs vanligtvis eller läkarutlåtande från första dagen i vårdperioden. Försäkringskassan kan besluta att föräldrar till ett barn som har ett utökat vård- eller tillsynsbehov inte behöver visa läkarutlåtande från första dagen. Det kallas för förhandsbeslut.</p>
+      <p className="iu-fw-heading">Om barnet har fyllt 16 men inte 21 år</p>
+      <p>För barn som omfattas av LSS (lagen om stöd och service till vissa funktionshindrade) behöver ett intyg från läkare eller sjuksköterska skickas till Försäkringskassan från och med den åttonde dagen i vårdperioden.\s
+      Intyget behövs vid tillkommande sjukdom eller en försämring av grundsjukdomen.</p>
+      """;
+  public static final CertificateModelId FK7443_V1_0 = CertificateModelId.builder()
+      .type(new CertificateType(TYPE))
       .version(new CertificateVersion(VERSION))
       .build();
-  public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_CATEGORY_ID = new ElementId(
+  public static final ElementId QUESTION_SYMPTOM_CATEGORY_ID = new ElementId(
       "KAT_1");
-  public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_ID = new ElementId("1");
-  private static final String QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID = "1.1";
-  public static final String PDF_FK_7211_PDF = "pdf/fk7211_v1.pdf";
-
+  public static final ElementId QUESTION_SYMPTOM_ID = new ElementId("1");
+  private static final String QUESTION_SYMPTOM_FIELD_ID = "1.1";
 
   @Override
   public CertificateModel create() {
     return CertificateModel.builder()
-        .id(FK7211_V1_0)
+        .id(FK7443_V1_0)
         .type(
             new Code(
-                "IGRAV",
+                "ITFP",
                 "b64ea353-e8f6-4832-b563-fc7d46f29548",
                 NAME
             )
@@ -99,23 +102,22 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         )
         .elementSpecifications(
             List.of(
-                categoryBeraknatNedkomstdatum(
-                    questionBeraknatNedkomstdatum()
+                categorySymptom(
+                    questionSymptom()
                 ),
                 issuingUnitContactInfo()
             )
         )
-        .pdfTemplatePath(PDF_FK_7211_PDF)
         .build();
   }
 
-  private static ElementSpecification categoryBeraknatNedkomstdatum(
+  private static ElementSpecification categorySymptom(
       ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_CATEGORY_ID)
+        .id(QUESTION_SYMPTOM_CATEGORY_ID)
         .configuration(
             ElementConfigurationCategory.builder()
-                .name("Beräknat nedkomstdatum")
+                .name("Barnets diagnos eller symtom")
                 .build()
         )
         .children(
@@ -124,34 +126,32 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         .build();
   }
 
-  private static ElementSpecification questionBeraknatNedkomstdatum() {
+  private static ElementSpecification questionSymptom() {
     return ElementSpecification.builder()
-        .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
+        .id(QUESTION_SYMPTOM_ID)
         .configuration(
-            ElementConfigurationDate.builder()
-                .name("Beräknat nedkomstdatum")
-                .id(new FieldId(QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID))
-                .min(Period.ofDays(0))
-                .max(Period.ofYears(1))
+            ElementConfigurationTextArea.builder()
+                .name("Symtom")
+                .id(new FieldId(QUESTION_SYMPTOM_FIELD_ID))
+                .limit(1000)
                 .build()
         )
         .rules(
             List.of(
                 ElementRule.builder()
-                    .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
+                    .id(QUESTION_SYMPTOM_ID)
                     .type(ElementRuleType.MANDATORY)
                     .expression(
-                        new RuleExpression("$" + QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID)
+                        new RuleExpression("$" + QUESTION_SYMPTOM_FIELD_ID)
                     )
                     .build()
             )
         )
         .validations(
             List.of(
-                ElementValidationDate.builder()
+                ElementValidationText.builder()
                     .mandatory(true)
-                    .min(Period.ofDays(0))
-                    .max(Period.ofYears(1))
+                    .limit(1000)
                     .build()
             )
         )
