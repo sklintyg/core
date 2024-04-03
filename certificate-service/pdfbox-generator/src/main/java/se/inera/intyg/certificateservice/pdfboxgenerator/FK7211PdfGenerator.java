@@ -175,11 +175,10 @@ public class FK7211PdfGenerator {
   }
 
   private void setWorkplaceCode(Certificate certificate) throws IOException {
-    final var workplaceCode = certificate.certificateMetaData().issuingUnit().workplaceCode()
-        .code();
+    final var workplaceCode = certificate.certificateMetaData().issuingUnit().workplaceCode();
     if (workplaceCode != null) {
       final var signatureWorkplaceCode = acroForm.getField(SIGNATURE_WORKPLACE_CODE_FIELD_ID);
-      signatureWorkplaceCode.setValue(workplaceCode);
+      signatureWorkplaceCode.setValue(workplaceCode.code());
     }
   }
 
