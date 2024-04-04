@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     property = "type")
 @JsonSubTypes({
     @Type(value = CertificateDataValueDate.class, name = "DATE"),
+    @Type(value = CertificateDataTextValue.class, name = "TEXT"),
 })
 public interface CertificateDataValue {
 
