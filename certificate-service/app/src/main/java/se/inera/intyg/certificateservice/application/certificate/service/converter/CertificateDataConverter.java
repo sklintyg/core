@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfig;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -27,8 +28,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 @RequiredArgsConstructor
 public class CertificateDataConverter {
 
+  private final List<CertificateDataConfigConverter> certificateDataConfigConverters;
+
   private final CertificateDataValueConverter certificateDataValueConverter;
-  private final CertificateDataConfigConverter certificateDataConfigConverter;
   private final CertificateDataValidationConverter certificateDataValidationConverter;
 
   public Map<String, CertificateDataElement> convert(CertificateModel certificateModel,
@@ -77,7 +79,7 @@ public class CertificateDataConverter {
         .id(questionId)
         .parent(childParentMap.getOrDefault(questionId, null))
         .index(index)
-        .config(certificateDataConfigConverter.convert(elementSpecification))
+        .config(getConfig(elementSpecification))
         .value(certificateDataValueConverter.convert(elementSpecification, value))
         .validation(certificateDataValidationConverter.convert(elementSpecification.rules()))
         .build();
@@ -86,6 +88,25 @@ public class CertificateDataConverter {
     certificateDataElementHashMap.putAll(collectStreamOfCertificateDataElementsToMap(children));
 
     return certificateDataElementHashMap;
+  }
+
+  private CertificateDataConfig getConfig(ElementSpecification elementSpecification) {
+    if (elementSpecification.configuration() == null) {
+      return null;
+    }
+
+    return certificateDataConfigConverters.stream()
+        .filter(
+            converter -> converter.getType().equals(elementSpecification.configuration().type())
+        )
+        .findFirst()
+        .map(converter -> converter.convert(elementSpecification))
+        .orElseThrow(() -> new IllegalStateException(
+                "Could not find converter for type '%s'".formatted(
+                    elementSpecification.configuration().type()
+                )
+            )
+        );
   }
 
   private static Map<String, CertificateDataElement> collectStreamOfCertificateDataElementsToMap(

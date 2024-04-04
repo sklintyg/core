@@ -2,19 +2,18 @@ package se.inera.intyg.certificateservice.application.certificate.dto.config;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigDate.CertificateDataConfigDateBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigTextArea.CertificateDataConfigTextAreaBuilder;
 
-@JsonDeserialize(builder = CertificateDataConfigDateBuilder.class)
+@JsonDeserialize(builder = CertificateDataConfigTextAreaBuilder.class)
 @Value
 @Builder
-public class CertificateDataConfigDate implements CertificateDataConfig {
+public class CertificateDataConfigTextArea implements CertificateDataConfig {
 
   @Getter(onMethod = @__(@Override))
-  CertificateDataConfigType type = CertificateDataConfigType.UE_DATE;
+  CertificateDataConfigType type = CertificateDataConfigType.UE_TEXTAREA;
   @Getter(onMethod = @__(@Override))
   String header;
   @Getter(onMethod = @__(@Override))
@@ -28,11 +27,9 @@ public class CertificateDataConfigDate implements CertificateDataConfig {
   @Getter(onMethod = @__(@Override))
   Accordion accordion;
   String id;
-  LocalDate minDate;
-  LocalDate maxDate;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class CertificateDataConfigDateBuilder {
+  public static class CertificateDataConfigTextAreaBuilder {
 
   }
 }
