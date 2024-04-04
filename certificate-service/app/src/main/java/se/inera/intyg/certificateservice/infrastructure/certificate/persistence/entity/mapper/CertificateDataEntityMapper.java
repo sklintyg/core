@@ -8,20 +8,22 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.elementdata.ElementDataMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.elementdata.MappedElementData;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
 
+@Component
+@RequiredArgsConstructor
 public class CertificateDataEntityMapper {
 
-  private CertificateDataEntityMapper() {
-    throw new IllegalStateException("Utility class");
-  }
+  private final ElementDataMapper elementDataMapper;
 
-  public static CertificateDataEntity toEntity(List<ElementData> elements) {
+  public CertificateDataEntity toEntity(List<ElementData> elements) {
     final var mappedElements = elements.stream()
-        .map(ElementDataMapper::toMapped)
+        .map(elementDataMapper::toMapped)
         .toList();
 
     try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
@@ -36,7 +38,7 @@ public class CertificateDataEntityMapper {
     }
   }
 
-  public static List<ElementData> toDomain(CertificateDataEntity entity) {
+  public List<ElementData> toDomain(CertificateDataEntity entity) {
     try {
       final var elements = objectMapper().readValue(
           entity.getData(),
@@ -45,7 +47,7 @@ public class CertificateDataEntityMapper {
       );
 
       return elements.stream()
-          .map(ElementDataMapper::toDomain)
+          .map(elementDataMapper::toDomain)
           .toList();
     } catch (JsonProcessingException e) {
       throw new IllegalStateException("Error when processing json to ElementData", e);

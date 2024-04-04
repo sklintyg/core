@@ -25,7 +25,6 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidationErrorDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
-import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesResponse;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesResponse;
 
@@ -170,12 +169,13 @@ public class CertificateUtil {
         .build();
   }
 
-  public static LocalDate getValueFromData(UpdateCertificateResponse response,
-      CertificateDataValueType type, String questionId) {
-    return switch (type) {
-      case DATE -> ((CertificateDataValueDate) response.getCertificate().getData().get(questionId)
-          .getValue()).getDate();
-    };
+  public static LocalDate getValueDate(ResponseEntity<UpdateCertificateResponse> response,
+      String questionId) {
+    if (response == null || response.getBody() == null) {
+      return null;
+    }
+    return ((CertificateDataValueDate) response.getBody().getCertificate().getData().get(questionId)
+        .getValue()).getDate();
   }
 
   public static List<ValidationErrorDTO> validationErrors(

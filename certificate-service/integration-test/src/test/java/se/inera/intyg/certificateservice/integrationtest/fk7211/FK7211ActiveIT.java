@@ -63,7 +63,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificates;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.decodeXml;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.exists;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueFromData;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueDate;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.pdfData;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.recipient;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.revokeCertificateResponse;
@@ -97,7 +97,6 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
-import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
@@ -615,7 +614,7 @@ class FK7211ActiveIT {
       );
 
       assertEquals(expectedDate,
-          getValueFromData(response.getBody(), CertificateDataValueType.DATE, questionId)
+          getValueDate(response, questionId)
       );
     }
 
@@ -667,7 +666,7 @@ class FK7211ActiveIT {
       );
 
       assertEquals(expectedDate,
-          getValueFromData(response.getBody(), CertificateDataValueType.DATE, questionId)
+          getValueDate(response, questionId)
       );
     }
 
@@ -696,7 +695,7 @@ class FK7211ActiveIT {
       );
 
       assertEquals(expectedDate,
-          getValueFromData(response.getBody(), CertificateDataValueType.DATE, questionId)
+          getValueDate(response, questionId)
       );
     }
 
@@ -728,7 +727,7 @@ class FK7211ActiveIT {
       );
 
       assertEquals(expectedDate,
-          getValueFromData(response.getBody(), CertificateDataValueType.DATE, questionId)
+          getValueDate(response, questionId)
       );
     }
 
