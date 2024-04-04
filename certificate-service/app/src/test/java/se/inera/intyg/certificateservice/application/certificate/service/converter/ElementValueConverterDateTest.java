@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
-class ElementValueDateConverterTest {
+class ElementValueConverterDateTest {
 
   private static final LocalDate DATE_VALUE = LocalDate.now();
   private static final String ID = "dateId";
@@ -22,37 +22,37 @@ class ElementValueDateConverterTest {
       .date(DATE_VALUE)
       .build();
   private static final FieldId DATE_ID = new FieldId(ID);
-  private ElementValueDateConverter elementValueDateConverter;
+  private ElementValueConverterDate elementValueConverterDate;
 
   @BeforeEach
   void setUp() {
-    elementValueDateConverter = new ElementValueDateConverter();
+    elementValueConverterDate = new ElementValueConverterDate();
   }
 
   @Test
   void shallThrowIfTypeIsNotCertificateDataValueDate() {
     final var certificateDataTextValue = CertificateDataTextValue.builder().build();
     final var illegalStateException = assertThrows(IllegalStateException.class,
-        () -> elementValueDateConverter.convert(certificateDataTextValue)
+        () -> elementValueConverterDate.convert(certificateDataTextValue)
     );
     assertTrue(illegalStateException.getMessage().contains("Invalid value type"));
   }
 
   @Test
   void shallReturnTypeDate() {
-    assertEquals(CertificateDataValueType.DATE, elementValueDateConverter.getType());
+    assertEquals(CertificateDataValueType.DATE, elementValueConverterDate.getType());
   }
 
   @Test
   void shallConvertId() {
-    final var result = elementValueDateConverter.convert(CERTIFICATE_DATA_VALUE_DATE);
+    final var result = elementValueConverterDate.convert(CERTIFICATE_DATA_VALUE_DATE);
     final var actualResult = (ElementValueDate) result;
     assertEquals(DATE_ID, actualResult.dateId());
   }
 
   @Test
   void shallConvertDate() {
-    final var result = elementValueDateConverter.convert(CERTIFICATE_DATA_VALUE_DATE);
+    final var result = elementValueConverterDate.convert(CERTIFICATE_DATA_VALUE_DATE);
     final var actualResult = (ElementValueDate) result;
     assertEquals(DATE_VALUE, actualResult.date());
   }
