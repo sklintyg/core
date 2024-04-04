@@ -57,7 +57,7 @@ class CertificateModelFactoryFK7443Test {
 
   @Test
   void shallIncludeName() {
-    final var expectedName = "Intyg om Tillfällig föräldrapenning";
+    final var expectedName = "Intyg om tillfällig föräldrapenning";
 
     final var certificateModel = certificateModelFactoryFK7443.create();
 

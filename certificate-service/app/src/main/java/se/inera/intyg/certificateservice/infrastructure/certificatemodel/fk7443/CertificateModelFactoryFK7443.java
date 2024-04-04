@@ -34,7 +34,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
   private LocalDateTime activeFrom;
   private static final String TYPE = "fk7443";
   private static final String VERSION = "1.0";
-  private static final String NAME = "Intyg om Tillfällig föräldrapenning";
+  private static final String NAME = "Intyg om tillfällig föräldrapenning";
   private static final String DESCRIPTION = """
       <p className="iu-fw-heading">Vad är Intyg om tillfällig föräldrapenning?</p>
       <p>När ett barn är sjukt kan den förälder som behöver avstå från sitt arbete för att vårda barnet få tillfällig föräldrapenning. Vårdperioden räknas från den första dagen man får tillfällig föräldrapenning för barnet.</p>
