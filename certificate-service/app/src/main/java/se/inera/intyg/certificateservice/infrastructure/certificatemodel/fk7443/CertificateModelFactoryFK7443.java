@@ -133,7 +133,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
             ElementConfigurationTextArea.builder()
                 .name("Symtom")
                 .id(new FieldId(QUESTION_SYMPTOM_FIELD_ID))
-                .limit(1000)
+                .limit(318)
                 .build()
         )
         .rules(
@@ -151,7 +151,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
             List.of(
                 ElementValidationText.builder()
                     .mandatory(true)
-                    .limit(1000)
+                    .limit(318)
                     .build()
             )
         )

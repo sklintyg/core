@@ -247,7 +247,7 @@ class CertificateModelFactoryFK7443Test {
         final var expectedConfiguration = ElementConfigurationTextArea.builder()
             .name("Symtom")
             .id(new FieldId("1.1"))
-            .limit(1000)
+            .limit(318)
             .build();
 
         final var certificateModel = certificateModelFactoryFK7443.create();
@@ -281,7 +281,7 @@ class CertificateModelFactoryFK7443Test {
         final var expectedValidations = List.of(
             ElementValidationText.builder()
                 .mandatory(true)
-                .limit(1000)
+                .limit(318)
                 .build()
         );
 
