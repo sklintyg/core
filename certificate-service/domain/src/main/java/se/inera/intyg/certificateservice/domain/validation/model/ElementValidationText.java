@@ -30,12 +30,16 @@ public class ElementValidationText implements ElementValidation {
     final var value = getValue(data.value());
 
     if (mandatory && value.text() == null) {
-      return errorMessage(data, value, categoryId, "Ange ett svar.");
+      return List.of(
+          ValidationUtil.errorMessage(data, value.textId(), categoryId, "Ange ett svar.")
+      );
     }
 
     if (value.text() != null && isWithinLimit(value.text())) {
-      return errorMessage(data, value, categoryId,
-          "Ange en text som inte är längre än %s.".formatted(limit)
+      return List.of(
+          ValidationUtil.errorMessage(data, value.textId(), categoryId,
+              "Ange en text som inte är längre än %s.".formatted(limit)
+          )
       );
     }
 
@@ -45,8 +49,6 @@ public class ElementValidationText implements ElementValidation {
   private boolean isWithinLimit(String value) {
     return limit != null && value.length() > limit;
   }
-
-  // TODO: Extract to common logic so not duplicated between validation date and text
 
   private ElementValueText getValue(ElementValue value) {
     if (value == null) {
@@ -61,20 +63,6 @@ public class ElementValidationText implements ElementValidation {
         "Element data value %s is of wrong type".formatted(value.getClass())
     );
 
-  }
-
-  // TODO: Extract to common logic so not duplicated between validation date and text
-
-  private static List<ValidationError> errorMessage(ElementData data, ElementValueText value,
-      Optional<ElementId> categoryId, String message) {
-    return List.of(
-        ValidationError.builder()
-            .elementId(data.id())
-            .fieldId(value.textId())
-            .categoryId(categoryId.orElse(null))
-            .message(new ErrorMessage(message))
-            .build()
-    );
   }
 
 }
