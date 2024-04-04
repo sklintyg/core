@@ -20,7 +20,7 @@ public class XmlGeneratorValue {
     return elementData.stream()
         .map(
             data -> converters
-                .get(data.value().getClass())
+                .getOrDefault(data.value().getClass(), new XmlGeneratorDefault())
                 .generate(data)
         )
         .filter(Objects::nonNull)
