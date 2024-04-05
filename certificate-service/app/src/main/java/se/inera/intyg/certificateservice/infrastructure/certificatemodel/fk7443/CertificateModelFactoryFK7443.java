@@ -132,7 +132,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
         .id(QUESTION_SYMPTOM_ID)
         .configuration(
             ElementConfigurationTextArea.builder()
-                .name("Symtom")
+                .name("Ange diagnos eller symtom")
                 .id(new FieldId(QUESTION_SYMPTOM_FIELD_ID))
                 .build()
         )

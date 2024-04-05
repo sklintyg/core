@@ -246,7 +246,7 @@ class CertificateModelFactoryFK7443Test {
       @Test
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationTextArea.builder()
-            .name("Symtom")
+            .name("Ange diagnos eller symtom")
             .id(new FieldId("1.1"))
             .build();
 
