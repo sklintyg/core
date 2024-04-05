@@ -19,7 +19,12 @@ public class CertificateDataDateConfigConverter implements CertificateDataConfig
   }
 
   public CertificateDataConfig convert(ElementSpecification elementSpecification) {
-    final var configuration = (ElementConfigurationDate) elementSpecification.configuration();
+    if (!(elementSpecification.configuration() instanceof ElementConfigurationDate configuration)) {
+      throw new IllegalStateException(
+          "Invalid value type. Type was '%s'".formatted(elementSpecification.configuration().type())
+      );
+    }
+
     return CertificateDataConfigDate.builder()
         .id(configuration.id().value())
         .text(configuration.name())

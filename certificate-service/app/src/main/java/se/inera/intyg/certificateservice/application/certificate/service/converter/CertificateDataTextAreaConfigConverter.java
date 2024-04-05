@@ -16,7 +16,12 @@ public class CertificateDataTextAreaConfigConverter implements CertificateDataCo
   }
 
   public CertificateDataConfig convert(ElementSpecification elementSpecification) {
-    final var configuration = (ElementConfigurationTextArea) elementSpecification.configuration();
+    if (!(elementSpecification.configuration() instanceof ElementConfigurationTextArea configuration)) {
+      throw new IllegalStateException(
+          "Invalid value type. Type was '%s'".formatted(elementSpecification.configuration().type())
+      );
+    }
+
     return CertificateDataConfigTextArea.builder()
         .id(configuration.id().value())
         .text(configuration.name())
