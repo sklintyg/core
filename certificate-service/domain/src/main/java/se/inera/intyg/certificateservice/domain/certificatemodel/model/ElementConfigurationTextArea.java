@@ -15,7 +15,6 @@ public class ElementConfigurationTextArea implements ElementConfiguration {
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.TEXT_AREA;
   FieldId id;
-  Integer limit;
 
   @Override
   public ElementValue emptyValue() {

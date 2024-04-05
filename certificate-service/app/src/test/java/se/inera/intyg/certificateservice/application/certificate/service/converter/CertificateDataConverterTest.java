@@ -19,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigDate;
-import se.inera.intyg.certificateservice.application.certificate.dto.validation.CertificateDataValidation;
 import se.inera.intyg.certificateservice.application.certificate.dto.validation.CertificateDataValidationMandatory;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -29,6 +28,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 
@@ -56,7 +56,7 @@ class CertificateDataConverterTest {
   private CertificateDataValueConverter certificateDataValueConverter;
 
   @Mock
-  private CertificateDataValidationConverter certificateDataValidationConverter;
+  private CertificateDataValidationMandatoryConverter certificateDataValidationMandatoryConverter;
 
   private CertificateDataConverter certificateDataConverter;
 
@@ -64,13 +64,13 @@ class CertificateDataConverterTest {
   void setup() {
     certificateDataConverter = new CertificateDataConverter(
         List.of(certificateDataDateConfigConverter),
-        certificateDataValueConverter,
-        certificateDataValidationConverter
+        List.of(certificateDataValidationMandatoryConverter),
+        certificateDataValueConverter
     );
   }
 
   @Nested
-  class ShouldConvertConfiguration {
+  class ShouldConvert {
 
     @BeforeEach
     void setUp() {
@@ -322,7 +322,9 @@ class CertificateDataConverterTest {
           )
           .rules(
               List.of(
-                  ElementRule.builder().build()
+                  ElementRule.builder()
+                      .type(ElementRuleType.MANDATORY)
+                      .build()
               )
           )
           .id(elementId)
@@ -336,9 +338,10 @@ class CertificateDataConverterTest {
           .elementSpecifications(elementSpecifications)
           .build();
 
-      doReturn(
-          new CertificateDataValidation[]{CertificateDataValidationMandatory.builder().build()})
-          .when(certificateDataValidationConverter).convert(elementSpecification.rules());
+      doReturn(CertificateDataValidationMandatory.builder().build())
+          .when(certificateDataValidationMandatoryConverter).convert(any(ElementRule.class));
+      when(certificateDataValidationMandatoryConverter.getType())
+          .thenReturn(ElementRuleType.MANDATORY);
 
       final var result = certificateDataConverter.convert(certificateModel,
           Collections.emptyList());

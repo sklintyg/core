@@ -21,6 +21,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
@@ -133,7 +134,6 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
             ElementConfigurationTextArea.builder()
                 .name("Symtom")
                 .id(new FieldId(QUESTION_SYMPTOM_FIELD_ID))
-                .limit(318)
                 .build()
         )
         .rules(
@@ -141,9 +141,14 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
                 ElementRule.builder()
                     .id(QUESTION_SYMPTOM_ID)
                     .type(ElementRuleType.MANDATORY)
-                    .expression(
+                    .rule(
                         new RuleExpression("$" + QUESTION_SYMPTOM_FIELD_ID)
                     )
+                    .build(),
+                ElementRule.builder()
+                    .id(QUESTION_SYMPTOM_ID)
+                    .type(ElementRuleType.TEXT_LIMIT)
+                    .rule(new RuleLimit(318))
                     .build()
             )
         )

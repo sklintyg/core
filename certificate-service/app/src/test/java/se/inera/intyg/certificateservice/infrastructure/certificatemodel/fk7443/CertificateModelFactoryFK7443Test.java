@@ -25,6 +25,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
@@ -247,7 +248,6 @@ class CertificateModelFactoryFK7443Test {
         final var expectedConfiguration = ElementConfigurationTextArea.builder()
             .name("Symtom")
             .id(new FieldId("1.1"))
-            .limit(318)
             .build();
 
         final var certificateModel = certificateModelFactoryFK7443.create();
@@ -263,9 +263,14 @@ class CertificateModelFactoryFK7443Test {
             ElementRule.builder()
                 .id(new ElementId("1"))
                 .type(ElementRuleType.MANDATORY)
-                .expression(
+                .rule(
                     new RuleExpression("$1.1")
                 )
+                .build(),
+            ElementRule.builder()
+                .id(new ElementId("1"))
+                .type(ElementRuleType.TEXT_LIMIT)
+                .rule(new RuleLimit(318))
                 .build()
         );
 

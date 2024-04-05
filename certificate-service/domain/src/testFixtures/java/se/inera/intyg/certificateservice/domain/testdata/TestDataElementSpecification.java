@@ -16,9 +16,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 
 public class TestDataElementSpecification {
 
@@ -41,7 +41,7 @@ public class TestDataElementSpecification {
                 ElementRule.builder()
                     .id(new ElementId(DATE_ELEMENT_ID))
                     .type(ElementRuleType.MANDATORY)
-                    .expression(new RuleExpression(DATE_ELEMENT_RULE_EXPRESSION))
+                    .rule(new RuleExpression(DATE_ELEMENT_RULE_EXPRESSION))
                     .build()
             )
         )

@@ -18,10 +18,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfig;
+import se.inera.intyg.certificateservice.application.certificate.dto.validation.CertificateDataValidation;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 
 @Component
@@ -29,9 +31,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 public class CertificateDataConverter {
 
   private final List<CertificateDataConfigConverter> certificateDataConfigConverters;
+  private final List<CertificateDataValidationConverter> certificateDataValidationConverters;
 
   private final CertificateDataValueConverter certificateDataValueConverter;
-  private final CertificateDataValidationConverter certificateDataValidationConverter;
 
   public Map<String, CertificateDataElement> convert(CertificateModel certificateModel,
       List<ElementData> elementData) {
@@ -81,13 +83,38 @@ public class CertificateDataConverter {
         .index(index)
         .config(getConfig(elementSpecification))
         .value(certificateDataValueConverter.convert(elementSpecification, value))
-        .validation(certificateDataValidationConverter.convert(elementSpecification.rules()))
+        .validation(getValidation(elementSpecification.rules()))
         .build();
 
     certificateDataElementHashMap.put(questionId, certificateDataElement);
     certificateDataElementHashMap.putAll(collectStreamOfCertificateDataElementsToMap(children));
 
     return certificateDataElementHashMap;
+  }
+
+  private CertificateDataValidation[] getValidation(List<ElementRule> rules) {
+    if (rules == null) {
+      return new CertificateDataValidation[0];
+    }
+
+    return rules.stream()
+        .map(this::getConvertedValidation)
+        .toArray(CertificateDataValidation[]::new);
+  }
+
+  private CertificateDataValidation getConvertedValidation(ElementRule rule) {
+    return certificateDataValidationConverters.stream()
+        .filter(
+            converter -> converter.getType().equals(rule.type())
+        )
+        .findFirst()
+        .map(converter -> converter.convert(rule))
+        .orElseThrow(() -> new IllegalStateException(
+                "Could not find converter for rule type '%s'".formatted(
+                    rule.type()
+                )
+            )
+        );
   }
 
   private CertificateDataConfig getConfig(ElementSpecification elementSpecification) {

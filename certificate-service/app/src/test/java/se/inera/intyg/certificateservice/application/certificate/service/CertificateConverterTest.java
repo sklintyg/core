@@ -155,7 +155,7 @@ class CertificateConverterTest {
                                                 ElementRule.builder()
                                                     .id(new ElementId(ID))
                                                     .type(ElementRuleType.MANDATORY)
-                                                    .expression(
+                                                    .rule(
                                                         new RuleExpression(EXPRESSION))
                                                     .build()
                                             )

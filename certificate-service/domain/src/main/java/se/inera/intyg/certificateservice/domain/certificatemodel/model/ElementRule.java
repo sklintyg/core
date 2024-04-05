@@ -9,5 +9,5 @@ public class ElementRule {
 
   ElementId id;
   ElementRuleType type;
-  RuleExpression expression;
+  Rule rule;
 }
