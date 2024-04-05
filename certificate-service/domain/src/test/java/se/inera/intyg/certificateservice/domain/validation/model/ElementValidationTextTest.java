@@ -160,6 +160,7 @@ class ElementValidationTextTest {
     @BeforeEach
     void setUp() {
       elementValidationText = ElementValidationText.builder()
+          .mandatory(false)
           .limit(10)
           .build();
     }

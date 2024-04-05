@@ -30,13 +30,13 @@ public class ElementValidationText implements ElementValidation {
 
     final var value = getValue(data.value());
 
-    if (mandatory && value.text() == null) {
+    if (mandatory && (value.text() == null || value.text().isBlank())) {
       return List.of(
           errorMessage(data, value.textId(), categoryId, "Ange ett svar.")
       );
     }
 
-    if (value.text() != null && isWithinLimit(value.text())) {
+    if (value.text() != null && isOverLimit(value.text())) {
       return List.of(
           errorMessage(data, value.textId(), categoryId,
               "Ange en text som inte är längre än %s.".formatted(limit)
@@ -60,7 +60,7 @@ public class ElementValidationText implements ElementValidation {
         .build();
   }
 
-  private boolean isWithinLimit(String value) {
+  private boolean isOverLimit(String value) {
     return limit != null && value.length() > limit;
   }
 
