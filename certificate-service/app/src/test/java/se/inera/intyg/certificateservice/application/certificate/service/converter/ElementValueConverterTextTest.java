@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataTextValue;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -16,7 +16,7 @@ class ElementValueConverterTextTest {
 
   private static final String TEXT_VALUE = "textValue";
   private static final String ID = "textId";
-  private static final CertificateDataTextValue CERTIFICATE_DATA_TEXT_VALUE = CertificateDataTextValue.builder()
+  private static final CertificateDataValueText CERTIFICATE_DATA_TEXT_VALUE = CertificateDataValueText.builder()
       .id(ID)
       .text(TEXT_VALUE)
       .build();

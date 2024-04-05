@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataTextValue;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -43,7 +43,7 @@ class CertificateDataValueConverterTextAreaTest {
 
     final var result = converter.convert(configuration, elementValueText);
 
-    assertInstanceOf(CertificateDataTextValue.class, result);
+    assertInstanceOf(CertificateDataValueText.class, result);
   }
 
   @Test
@@ -58,7 +58,7 @@ class CertificateDataValueConverterTextAreaTest {
 
     final var result = converter.convert(configuration, elementValueText);
 
-    assertEquals(FIELD_ID.value(), ((CertificateDataTextValue) result).getId());
+    assertEquals(FIELD_ID.value(), ((CertificateDataValueText) result).getId());
   }
 
   @Test
@@ -76,7 +76,7 @@ class CertificateDataValueConverterTextAreaTest {
 
     final var result = converter.convert(configuration, elementValueText);
 
-    assertEquals(TEST_TEXT, ((CertificateDataTextValue) result).getText());
+    assertEquals(TEST_TEXT, ((CertificateDataValueText) result).getText());
   }
 
   @Test
@@ -92,7 +92,7 @@ class CertificateDataValueConverterTextAreaTest {
 
     final var result = converter.convert(configuration, elementValueText);
 
-    assertNull(((CertificateDataTextValue) result).getText(),
+    assertNull(((CertificateDataValueText) result).getText(),
         "If no value is provided value should be null");
   }
 }

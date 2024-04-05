@@ -3,8 +3,8 @@ package se.inera.intyg.certificateservice.application.certificate.service.conver
 import static se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType.TEXT;
 
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataTextValue;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValue;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
@@ -20,7 +20,7 @@ public class ElementValueConverterText implements ElementValueConverter {
 
   @Override
   public ElementValue convert(CertificateDataValue value) {
-    if (!(value instanceof CertificateDataTextValue textValue)) {
+    if (!(value instanceof CertificateDataValueText textValue)) {
       throw new IllegalStateException(
           "Invalid value type. Type was '%s'".formatted(value.getType())
       );

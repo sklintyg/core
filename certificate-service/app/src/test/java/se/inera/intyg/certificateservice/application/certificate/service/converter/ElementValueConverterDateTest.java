@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataTextValue;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -31,7 +31,7 @@ class ElementValueConverterDateTest {
 
   @Test
   void shallThrowIfTypeIsNotCertificateDataValueDate() {
-    final var certificateDataTextValue = CertificateDataTextValue.builder().build();
+    final var certificateDataTextValue = CertificateDataValueText.builder().build();
     final var illegalStateException = assertThrows(IllegalStateException.class,
         () -> elementValueConverterDate.convert(certificateDataTextValue)
     );

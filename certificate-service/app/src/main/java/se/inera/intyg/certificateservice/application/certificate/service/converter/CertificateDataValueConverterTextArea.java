@@ -1,8 +1,8 @@
 package se.inera.intyg.certificateservice.application.certificate.service.converter;
 
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataTextValue;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValue;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
@@ -22,7 +22,7 @@ public class CertificateDataValueConverterTextArea implements CertificateDataVal
       ElementValue elementValue) {
     final var value = elementValue != null ? ((ElementValueText) elementValue).text() : null;
     final var configuration = (ElementConfigurationTextArea) elementSpecification.configuration();
-    return CertificateDataTextValue.builder()
+    return CertificateDataValueText.builder()
         .id(configuration.id().value())
         .text(value)
         .build();
