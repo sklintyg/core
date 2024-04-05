@@ -19,21 +19,22 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfig;
 import se.inera.intyg.certificateservice.application.certificate.dto.validation.CertificateDataValidation;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 
 @Component
 @RequiredArgsConstructor
 public class CertificateDataConverter {
 
   private final List<CertificateDataConfigConverter> certificateDataConfigConverters;
+  private final List<CertificateDataValueConverter> certificateDataValueConverter;
   private final List<CertificateDataValidationConverter> certificateDataValidationConverters;
-
-  private final CertificateDataValueConverter certificateDataValueConverter;
 
   public Map<String, CertificateDataElement> convert(CertificateModel certificateModel,
       List<ElementData> elementData) {
@@ -82,7 +83,7 @@ public class CertificateDataConverter {
         .parent(childParentMap.getOrDefault(questionId, null))
         .index(index)
         .config(getConfig(elementSpecification))
-        .value(certificateDataValueConverter.convert(elementSpecification, value))
+        .value(getValue(elementSpecification, value))
         .validation(getValidation(elementSpecification.rules()))
         .build();
 
@@ -118,10 +119,6 @@ public class CertificateDataConverter {
   }
 
   private CertificateDataConfig getConfig(ElementSpecification elementSpecification) {
-    if (elementSpecification.configuration() == null) {
-      return null;
-    }
-
     return certificateDataConfigConverters.stream()
         .filter(
             converter -> converter.getType().equals(elementSpecification.configuration().type())
@@ -129,7 +126,26 @@ public class CertificateDataConverter {
         .findFirst()
         .map(converter -> converter.convert(elementSpecification))
         .orElseThrow(() -> new IllegalStateException(
-                "Could not find converter for type '%s'".formatted(
+                "Could not find config converter for type '%s'".formatted(
+                    elementSpecification.configuration().type()
+                )
+            )
+        );
+  }
+
+  private CertificateDataValue getValue(ElementSpecification elementSpecification,
+      ElementValue elementValue) {
+    if (ElementType.CATEGORY.equals(elementSpecification.configuration().type())) {
+      return null;
+    }
+    return certificateDataValueConverter.stream()
+        .filter(
+            converter -> converter.getType().equals(elementSpecification.configuration().type())
+        )
+        .findFirst()
+        .map(converter -> converter.convert(elementSpecification, elementValue))
+        .orElseThrow(() -> new IllegalStateException(
+                "Could not find value converter for type '%s'".formatted(
                     elementSpecification.configuration().type()
                 )
             )
@@ -179,4 +195,5 @@ public class CertificateDataConverter {
   private static Predicate<ElementSpecification> removeIssuingUnitSpecifications() {
     return specification -> !(specification.configuration().type().equals(ISSUING_UNIT));
   }
+
 }

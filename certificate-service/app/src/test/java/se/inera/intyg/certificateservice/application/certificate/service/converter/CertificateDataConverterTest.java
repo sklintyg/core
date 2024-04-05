@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
@@ -24,7 +25,9 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
@@ -53,19 +56,20 @@ class CertificateDataConverterTest {
   private CertificateDataDateConfigConverter certificateDataDateConfigConverter;
 
   @Mock
-  private CertificateDataValueConverter certificateDataValueConverter;
-
-  @Mock
   private CertificateDataValidationMandatoryConverter certificateDataValidationMandatoryConverter;
 
+  @Mock
+  private CertificateDataValueConverterDate certificateDataValueConverterDate;
+
   private CertificateDataConverter certificateDataConverter;
+
 
   @BeforeEach
   void setup() {
     certificateDataConverter = new CertificateDataConverter(
         List.of(certificateDataDateConfigConverter),
-        List.of(certificateDataValidationMandatoryConverter),
-        certificateDataValueConverter
+        List.of(certificateDataValueConverterDate),
+        List.of(certificateDataValidationMandatoryConverter)
     );
   }
 
@@ -76,9 +80,15 @@ class CertificateDataConverterTest {
     void setUp() {
       when(certificateDataDateConfigConverter.getType())
           .thenReturn(ElementType.DATE);
+      when(certificateDataValueConverterDate.getType())
+          .thenReturn(ElementType.DATE);
       when(certificateDataDateConfigConverter.convert(any(ElementSpecification.class)))
           .thenReturn(
               CertificateDataConfigDate.builder().build()
+          );
+      when(certificateDataValueConverterDate.convert(any(), any()))
+          .thenReturn(
+              CertificateDataValueDate.builder().build()
           );
     }
 
@@ -177,6 +187,9 @@ class CertificateDataConverterTest {
 
       final var children = ElementSpecification.builder()
           .id(elementId3)
+          .configuration(
+              ElementConfigurationDate.builder().build()
+          )
           .build();
 
       final var elementSpecification1 = ElementSpecification.builder()
@@ -373,15 +386,92 @@ class CertificateDataConverterTest {
           .elementSpecifications(elementSpecifications)
           .build();
 
-      doReturn(CertificateDataValueDate.builder().build())
-          .when(certificateDataValueConverter).convert(elementSpecification, elementData.value());
-
       final var result = certificateDataConverter.convert(certificateModel, List.of(elementData));
 
       assertNotNull(result.get(ID_1).getValue(),
           "CertificateDataElement should contain value");
     }
   }
+
+  @Test
+  void shallThrowIfNoConverterFoundForElementValue() {
+    final var elementId = new ElementId(ID_1);
+    final var elementData = ElementData.builder()
+        .id(elementId)
+        .value(ElementValueDate.builder().build())
+        .build();
+
+    final var elementSpecification = ElementSpecification.builder()
+        .id(elementId)
+        .configuration(
+            ElementConfigurationTextArea.builder().build()
+        )
+        .build();
+
+    final var elementSpecifications = List.of(
+        elementSpecification
+    );
+
+    final var certificateModel = CertificateModel.builder()
+        .elementSpecifications(elementSpecifications)
+        .build();
+
+    when(certificateDataDateConfigConverter.getType())
+        .thenReturn(ElementType.TEXT_AREA);
+    when(certificateDataValueConverterDate.getType())
+        .thenReturn(ElementType.DATE);
+    when(certificateDataDateConfigConverter.convert(any(ElementSpecification.class)))
+        .thenReturn(
+            CertificateDataConfigDate.builder().build()
+        );
+
+    final var elementDataList = List.of(elementData);
+
+    final var illegalStateException = assertThrows(IllegalStateException.class,
+        () -> certificateDataConverter.convert(certificateModel, elementDataList));
+
+    assertTrue(illegalStateException.getMessage().contains("Could not find value converter"),
+        "Message was %s".formatted(illegalStateException.getMessage())
+    );
+  }
+
+  @Test
+  void shallReturnNullIfCategoryConfiguration() {
+    final var elementId = new ElementId(ID_1);
+    final var elementData = ElementData.builder()
+        .id(elementId)
+        .value(ElementValueDate.builder().build())
+        .build();
+
+    final var elementSpecification = ElementSpecification.builder()
+        .id(elementId)
+        .configuration(
+            ElementConfigurationCategory.builder().build()
+        )
+        .build();
+
+    final var elementSpecifications = List.of(
+        elementSpecification
+    );
+
+    final var certificateModel = CertificateModel.builder()
+        .elementSpecifications(elementSpecifications)
+        .build();
+
+    when(certificateDataDateConfigConverter.getType())
+        .thenReturn(ElementType.CATEGORY);
+
+    when(certificateDataDateConfigConverter.convert(any(ElementSpecification.class)))
+        .thenReturn(
+            CertificateDataConfigDate.builder().build()
+        );
+
+    final var result = certificateDataConverter.convert(certificateModel, List.of(elementData));
+
+    assertNull(result.get(ID_1).getValue(),
+        "CertificateDataElement should be null if category");
+  }
+
 
   @Test
   void shallNotConvertSpecificationsOfIssuingUnitTypeConfiguration() {
@@ -402,6 +492,6 @@ class CertificateDataConverterTest {
     final var result = certificateDataConverter.convert(certificateModel, Collections.emptyList());
 
     assertTrue(result.isEmpty(),
-        "Should not convert ELementConfigurationMetaData");
+        "Should not convert ElementConfigurationMetaData");
   }
 }
