@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Value
 @Getter(AccessLevel.NONE)
@@ -31,19 +32,32 @@ public class ElementValidationText implements ElementValidation {
 
     if (mandatory && value.text() == null) {
       return List.of(
-          ValidationUtil.errorMessage(data, value.textId(), categoryId, "Ange ett svar.")
+          errorMessage(data, value.textId(), categoryId, "Ange ett svar.")
       );
     }
 
     if (value.text() != null && isWithinLimit(value.text())) {
       return List.of(
-          ValidationUtil.errorMessage(data, value.textId(), categoryId,
+          errorMessage(data, value.textId(), categoryId,
               "Ange en text som inte är längre än %s.".formatted(limit)
           )
       );
     }
 
     return Collections.emptyList();
+  }
+
+  private static ValidationError errorMessage(
+      ElementData data,
+      FieldId fieldId,
+      Optional<ElementId> categoryId,
+      String message) {
+    return ValidationError.builder()
+        .elementId(data.id())
+        .fieldId(fieldId)
+        .categoryId(categoryId.orElse(null))
+        .message(new ErrorMessage(message))
+        .build();
   }
 
   private boolean isWithinLimit(String value) {
