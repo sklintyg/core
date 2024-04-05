@@ -25,6 +25,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidationErrorDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesResponse;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesResponse;
 
@@ -98,13 +99,6 @@ public class CertificateUtil {
     return response.getPdfData();
   }
 
-  public static String pdfFileName(GetCertificatePdfResponse response) {
-    if (response == null || response.getFileName() == null) {
-      return null;
-    }
-    return response.getFileName();
-  }
-
   public static CertificateDTO certificate(ResponseEntity<SignCertificateResponse> response) {
     if (response.getBody() == null || response.getBody() == null) {
       return null;
@@ -169,6 +163,23 @@ public class CertificateUtil {
         .build();
   }
 
+  public static CertificateDataElement updateTextValue(CertificateDTO certificateDTO,
+      String questionId, String newText) {
+    final var certificate = Objects.requireNonNull(certificateDTO.getData().get(questionId));
+    return CertificateDataElement.builder()
+        .id(certificate.getId())
+        .parent(certificate.getParent())
+        .config(certificate.getConfig())
+        .validation(certificate.getValidation())
+        .value(
+            CertificateDataValueText.builder()
+                .id(((CertificateDataValueText) certificate.getValue()).getId())
+                .text(newText)
+                .build()
+        )
+        .build();
+  }
+
   public static LocalDate getValueDate(ResponseEntity<UpdateCertificateResponse> response,
       String questionId) {
     if (response == null || response.getBody() == null) {
@@ -176,6 +187,15 @@ public class CertificateUtil {
     }
     return ((CertificateDataValueDate) response.getBody().getCertificate().getData().get(questionId)
         .getValue()).getDate();
+  }
+
+  public static String getValueText(ResponseEntity<UpdateCertificateResponse> response,
+      String questionId) {
+    if (response == null || response.getBody() == null) {
+      return null;
+    }
+    return ((CertificateDataValueText) response.getBody().getCertificate().getData().get(questionId)
+        .getValue()).getText();
   }
 
   public static List<ValidationErrorDTO> validationErrors(
