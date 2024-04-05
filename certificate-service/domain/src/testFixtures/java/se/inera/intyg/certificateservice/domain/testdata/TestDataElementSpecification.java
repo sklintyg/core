@@ -41,7 +41,7 @@ public class TestDataElementSpecification {
                 ElementRuleExpression.builder()
                     .id(new ElementId(DATE_ELEMENT_ID))
                     .type(ElementRuleType.MANDATORY)
-                    .rule(new RuleExpression(DATE_ELEMENT_RULE_EXPRESSION))
+                    .expression(new RuleExpression(DATE_ELEMENT_RULE_EXPRESSION))
                     .build()
             )
         )

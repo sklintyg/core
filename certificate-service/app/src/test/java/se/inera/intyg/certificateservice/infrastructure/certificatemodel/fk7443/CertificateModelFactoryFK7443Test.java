@@ -264,14 +264,14 @@ class CertificateModelFactoryFK7443Test {
             ElementRuleExpression.builder()
                 .id(new ElementId("1"))
                 .type(ElementRuleType.MANDATORY)
-                .rule(
+                .expression(
                     new RuleExpression("$1.1")
                 )
                 .build(),
             ElementRuleLimit.builder()
                 .id(new ElementId("1"))
                 .type(ElementRuleType.TEXT_LIMIT)
-                .rule(new RuleLimit((short) 318))
+                .limit(new RuleLimit((short) 318))
                 .build()
         );
 

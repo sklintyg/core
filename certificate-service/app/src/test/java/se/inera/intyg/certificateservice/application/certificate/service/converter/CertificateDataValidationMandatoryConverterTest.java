@@ -23,7 +23,7 @@ class CertificateDataValidationMandatoryConverterTest {
     final var mandatoryRule = ElementRuleExpression.builder()
         .type(ElementRuleType.MANDATORY)
         .id(new ElementId(QUESTION_ID))
-        .rule(new RuleExpression(EXPRESSION))
+        .expression(new RuleExpression(EXPRESSION))
         .build();
 
     final var result = converter.convert(mandatoryRule);
@@ -36,7 +36,7 @@ class CertificateDataValidationMandatoryConverterTest {
     final var mandatoryRule = ElementRuleExpression.builder()
         .type(ElementRuleType.MANDATORY)
         .id(new ElementId(QUESTION_ID))
-        .rule(new RuleExpression(EXPRESSION))
+        .expression(new RuleExpression(EXPRESSION))
         .build();
 
     final var result = converter.convert(mandatoryRule);
@@ -49,7 +49,7 @@ class CertificateDataValidationMandatoryConverterTest {
     final var mandatoryRule = ElementRuleExpression.builder()
         .type(ElementRuleType.MANDATORY)
         .id(new ElementId(QUESTION_ID))
-        .rule(new RuleExpression(EXPRESSION))
+        .expression(new RuleExpression(EXPRESSION))
         .build();
 
     final var result = converter.convert(mandatoryRule);

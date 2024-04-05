@@ -9,5 +9,10 @@ public class ElementRuleExpression implements ElementRule {
 
   ElementId id;
   ElementRuleType type;
-  RuleExpression rule;
+  RuleExpression expression;
+
+  @Override
+  public Rule rule() {
+    return expression;
+  }
 }

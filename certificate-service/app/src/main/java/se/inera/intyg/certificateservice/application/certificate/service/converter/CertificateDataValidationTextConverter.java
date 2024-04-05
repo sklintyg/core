@@ -17,10 +17,10 @@ public class CertificateDataValidationTextConverter implements
   }
 
   public CertificateDataValidation convert(ElementRule rule) {
-    if (rule instanceof ElementRuleLimit ruleLimit) {
+    if (rule instanceof ElementRuleLimit elementRuleLimit) {
       return CertificateDataValidationText.builder()
-          .id(ruleLimit.id().id())
-          .limit(ruleLimit.rule().value())
+          .id(elementRuleLimit.id().id())
+          .limit(elementRuleLimit.limit().value())
           .build();
     }
     throw new IllegalStateException(

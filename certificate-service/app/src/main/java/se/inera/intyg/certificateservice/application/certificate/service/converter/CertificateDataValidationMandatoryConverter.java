@@ -17,10 +17,10 @@ public class CertificateDataValidationMandatoryConverter implements
   }
 
   public CertificateDataValidation convert(ElementRule rule) {
-    if (rule instanceof ElementRuleExpression ruleExpression) {
+    if (rule instanceof ElementRuleExpression elementRuleExpression) {
       return CertificateDataValidationMandatory.builder()
-          .questionId(ruleExpression.id().id())
-          .expression(ruleExpression.rule().value())
+          .questionId(elementRuleExpression.id().id())
+          .expression(elementRuleExpression.expression().value())
           .build();
     }
     throw new IllegalStateException(

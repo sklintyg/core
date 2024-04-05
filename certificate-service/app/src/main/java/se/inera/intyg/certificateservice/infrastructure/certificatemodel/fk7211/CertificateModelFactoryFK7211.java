@@ -140,7 +140,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
                 ElementRuleExpression.builder()
                     .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
                     .type(ElementRuleType.MANDATORY)
-                    .rule(
+                    .expression(
                         new RuleExpression("$" + QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID)
                     )
                     .build()

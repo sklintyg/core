@@ -23,7 +23,7 @@ class CertificateDataValidationTextConverterTest {
     final var rule = ElementRuleLimit.builder()
         .type(ElementRuleType.TEXT_LIMIT)
         .id(new ElementId(ID))
-        .rule(new RuleLimit(LIMIT))
+        .limit(new RuleLimit(LIMIT))
         .build();
 
     final var result = converter.convert(rule);
@@ -36,7 +36,7 @@ class CertificateDataValidationTextConverterTest {
     final var rule = ElementRuleLimit.builder()
         .type(ElementRuleType.TEXT_LIMIT)
         .id(new ElementId(ID))
-        .rule(new RuleLimit(LIMIT))
+        .limit(new RuleLimit(LIMIT))
         .build();
 
     final var result = converter.convert(rule);
@@ -49,7 +49,7 @@ class CertificateDataValidationTextConverterTest {
     final var rule = ElementRuleLimit.builder()
         .type(ElementRuleType.TEXT_LIMIT)
         .id(new ElementId(ID))
-        .rule(new RuleLimit(LIMIT))
+        .limit(new RuleLimit(LIMIT))
         .build();
 
     final var result = converter.convert(rule);

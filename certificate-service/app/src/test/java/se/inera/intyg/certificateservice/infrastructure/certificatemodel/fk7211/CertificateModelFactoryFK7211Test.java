@@ -265,7 +265,7 @@ class CertificateModelFactoryFK7211Test {
             ElementRuleExpression.builder()
                 .id(new ElementId("1"))
                 .type(ElementRuleType.MANDATORY)
-                .rule(
+                .expression(
                     new RuleExpression("$1.1")
                 )
                 .build()

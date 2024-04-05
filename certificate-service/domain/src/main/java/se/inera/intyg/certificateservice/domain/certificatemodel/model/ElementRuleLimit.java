@@ -9,5 +9,10 @@ public class ElementRuleLimit implements ElementRule {
 
   ElementId id;
   ElementRuleType type;
-  RuleLimit rule;
+  RuleLimit limit;
+
+  @Override
+  public Rule rule() {
+    return limit;
+  }
 }

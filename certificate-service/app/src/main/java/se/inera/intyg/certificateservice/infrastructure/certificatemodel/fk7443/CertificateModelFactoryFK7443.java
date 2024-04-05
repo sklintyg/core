@@ -143,14 +143,14 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
                 ElementRuleExpression.builder()
                     .id(QUESTION_SYMPTOM_ID)
                     .type(ElementRuleType.MANDATORY)
-                    .rule(
+                    .expression(
                         new RuleExpression("$" + QUESTION_SYMPTOM_FIELD_ID)
                     )
                     .build(),
                 ElementRuleLimit.builder()
                     .id(QUESTION_SYMPTOM_ID)
                     .type(ElementRuleType.TEXT_LIMIT)
-                    .rule(new RuleLimit(LIMIT))
+                    .limit(new RuleLimit(LIMIT))
                     .build()
             )
         )
