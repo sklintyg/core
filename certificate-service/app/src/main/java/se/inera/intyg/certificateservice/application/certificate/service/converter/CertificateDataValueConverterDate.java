@@ -20,11 +20,16 @@ public class CertificateDataValueConverterDate implements CertificateDataValueCo
   @Override
   public CertificateDataValue convert(ElementSpecification elementSpecification,
       ElementValue elementValue) {
-    final var value = elementValue != null ? ((ElementValueDate) elementValue).date() : null;
+    if (!(elementValue instanceof ElementValueDate)) {
+      throw new IllegalStateException(
+          "Invalid value type. Type was '%s'".formatted(elementSpecification.configuration().type())
+      );
+    }
+
     final var configuration = (ElementConfigurationDate) elementSpecification.configuration();
     return CertificateDataValueDate.builder()
         .id(configuration.id().value())
-        .date(value)
+        .date(((ElementValueDate) elementValue).date())
         .build();
   }
 }

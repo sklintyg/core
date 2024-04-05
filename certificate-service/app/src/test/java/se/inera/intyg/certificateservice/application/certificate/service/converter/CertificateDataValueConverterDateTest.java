@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.application.certificate.service.conver
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,8 +12,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate.ElementConfigurationDateBuilder;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
@@ -31,6 +34,24 @@ class CertificateDataValueConverterDateTest {
   void setUp() {
     elementConfigurationDateBuilder = ElementConfigurationDate.builder()
         .id(FIELD_ID);
+  }
+
+  @Test
+  void shouldThrowExceptionIfWrongClass() {
+    final var configuration = ElementSpecification.builder()
+        .id(new ElementId(ELEMENT_ID))
+        .configuration(
+            ElementConfigurationTextArea.builder()
+                .id(FIELD_ID)
+                .build()
+        )
+        .build();
+
+    final var elementValueDate = ElementValueText.builder().build();
+
+    assertThrows(IllegalStateException.class,
+        () -> converter.convert(configuration, elementValueDate)
+    );
   }
 
   @Test

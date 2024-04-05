@@ -3,10 +3,13 @@ package se.inera.intyg.certificateservice.application.certificate.service.conver
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -26,6 +29,24 @@ class CertificateDataValueConverterTextAreaTest {
           .id(FIELD_ID)
           .name(NAME)
           .build();
+
+  @Test
+  void shouldThrowExceptionIfWrongClass() {
+    final var configuration = ElementSpecification.builder()
+        .id(new ElementId(ELEMENT_ID))
+        .configuration(
+            ElementConfigurationDate.builder()
+                .id(FIELD_ID)
+                .build()
+        )
+        .build();
+
+    final var elementValueDate = ElementValueDate.builder().build();
+
+    assertThrows(IllegalStateException.class,
+        () -> converter.convert(configuration, elementValueDate)
+    );
+  }
 
   @Test
   void shallReturnType() {

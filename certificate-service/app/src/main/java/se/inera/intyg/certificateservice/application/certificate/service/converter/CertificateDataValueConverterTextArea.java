@@ -20,11 +20,15 @@ public class CertificateDataValueConverterTextArea implements CertificateDataVal
   @Override
   public CertificateDataValue convert(ElementSpecification elementSpecification,
       ElementValue elementValue) {
-    final var value = elementValue != null ? ((ElementValueText) elementValue).text() : null;
+    if (!(elementValue instanceof ElementValueText)) {
+      throw new IllegalStateException(
+          "Invalid value type. Type was '%s'".formatted(elementSpecification.configuration().type())
+      );
+    }
     final var configuration = (ElementConfigurationTextArea) elementSpecification.configuration();
     return CertificateDataValueText.builder()
         .id(configuration.id().value())
-        .text(value)
+        .text(((ElementValueText) elementValue).text())
         .build();
   }
 }
