@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.validation.CertificateDataValidation;
 import se.inera.intyg.certificateservice.application.certificate.dto.validation.CertificateDataValidationMandatory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 
 @Component
 public class CertificateDataValidationMandatoryConverter implements
@@ -17,10 +17,14 @@ public class CertificateDataValidationMandatoryConverter implements
   }
 
   public CertificateDataValidation convert(ElementRule rule) {
-    final var value = (RuleExpression) rule.rule();
-    return CertificateDataValidationMandatory.builder()
-        .questionId(rule.id().id())
-        .expression(value.value())
-        .build();
+    if (rule instanceof ElementRuleExpression ruleExpression) {
+      return CertificateDataValidationMandatory.builder()
+          .questionId(ruleExpression.id().id())
+          .expression(ruleExpression.rule().value())
+          .build();
+    }
+    throw new IllegalStateException(
+        "Invalid rule type. Type was '%s'".formatted(rule.type())
+    );
   }
 }

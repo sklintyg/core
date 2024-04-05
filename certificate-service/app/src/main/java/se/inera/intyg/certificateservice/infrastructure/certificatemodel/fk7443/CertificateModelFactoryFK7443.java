@@ -16,7 +16,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -31,6 +32,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.Certifi
 @Component
 public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
 
+  private static final short LIMIT = 318;
   @Value("${certificate.model.fk7443.v1_0.active.from}")
   private LocalDateTime activeFrom;
   private static final String TYPE = "fk7443";
@@ -138,17 +140,17 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
         )
         .rules(
             List.of(
-                ElementRule.builder()
+                ElementRuleExpression.builder()
                     .id(QUESTION_SYMPTOM_ID)
                     .type(ElementRuleType.MANDATORY)
                     .rule(
                         new RuleExpression("$" + QUESTION_SYMPTOM_FIELD_ID)
                     )
                     .build(),
-                ElementRule.builder()
+                ElementRuleLimit.builder()
                     .id(QUESTION_SYMPTOM_ID)
                     .type(ElementRuleType.TEXT_LIMIT)
-                    .rule(new RuleLimit(318))
+                    .rule(new RuleLimit(LIMIT))
                     .build()
             )
         )

@@ -13,7 +13,7 @@ import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -38,7 +38,7 @@ public class TestDataElementSpecification {
         )
         .rules(
             List.of(
-                ElementRule.builder()
+                ElementRuleExpression.builder()
                     .id(new ElementId(DATE_ELEMENT_ID))
                     .type(ElementRuleType.MANDATORY)
                     .rule(new RuleExpression(DATE_ELEMENT_RULE_EXPRESSION))

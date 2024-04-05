@@ -21,7 +21,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
@@ -260,17 +261,17 @@ class CertificateModelFactoryFK7443Test {
       @Test
       void shallIncludeRules() {
         final var expectedRules = List.of(
-            ElementRule.builder()
+            ElementRuleExpression.builder()
                 .id(new ElementId("1"))
                 .type(ElementRuleType.MANDATORY)
                 .rule(
                     new RuleExpression("$1.1")
                 )
                 .build(),
-            ElementRule.builder()
+            ElementRuleLimit.builder()
                 .id(new ElementId("1"))
                 .type(ElementRuleType.TEXT_LIMIT)
-                .rule(new RuleLimit(318))
+                .rule(new RuleLimit((short) 318))
                 .build()
         );
 

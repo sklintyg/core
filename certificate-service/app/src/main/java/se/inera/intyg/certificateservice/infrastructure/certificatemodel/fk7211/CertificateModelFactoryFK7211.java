@@ -17,7 +17,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -137,7 +137,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         )
         .rules(
             List.of(
-                ElementRule.builder()
+                ElementRuleExpression.builder()
                     .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
                     .type(ElementRuleType.MANDATORY)
                     .rule(

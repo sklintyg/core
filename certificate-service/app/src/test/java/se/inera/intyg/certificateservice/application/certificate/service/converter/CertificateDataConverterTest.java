@@ -30,7 +30,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
@@ -335,7 +335,7 @@ class CertificateDataConverterTest {
           )
           .rules(
               List.of(
-                  ElementRule.builder()
+                  ElementRuleExpression.builder()
                       .type(ElementRuleType.MANDATORY)
                       .build()
               )
@@ -352,7 +352,8 @@ class CertificateDataConverterTest {
           .build();
 
       doReturn(CertificateDataValidationMandatory.builder().build())
-          .when(certificateDataValidationMandatoryConverter).convert(any(ElementRule.class));
+          .when(certificateDataValidationMandatoryConverter)
+          .convert(any(ElementRuleExpression.class));
       when(certificateDataValidationMandatoryConverter.getType())
           .thenReturn(ElementRuleType.MANDATORY);
 
