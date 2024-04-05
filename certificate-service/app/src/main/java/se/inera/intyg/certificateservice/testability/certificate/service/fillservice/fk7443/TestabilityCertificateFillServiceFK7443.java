@@ -34,7 +34,8 @@ public class TestabilityCertificateFillServiceFK7443 implements TestabilityCerti
     final var elementSpecification = certificateModel.elementSpecification(QUESTION_SYMPTOM_ID);
     final var elementValue = elementSpecification.configuration().emptyValue();
     if (elementValue instanceof ElementValueText elementValueText) {
-      final var symptom = elementValueText.withText("Exempel på svar");
+      final var symptom = elementValueText.withText(
+          "Barnet har hostat och haft feber i två veckor. Barnet har svårt att sova på grund av hostan och har därmed ingen energi. Symtomen tyder på vanlig influensa.");
       return List.of(
           ElementData.builder()
               .id(QUESTION_SYMPTOM_ID)
