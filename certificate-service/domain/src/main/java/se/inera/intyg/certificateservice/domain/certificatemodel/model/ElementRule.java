@@ -1,13 +1,8 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
-import lombok.Builder;
-import lombok.Value;
+public interface ElementRule {
 
-@Value
-@Builder
-public class ElementRule {
+  ElementRuleType type();
 
-  ElementId id;
-  ElementRuleType type;
-  RuleExpression expression;
+  Rule rule();
 }

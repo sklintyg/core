@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.config.Cert
 public class CertificateDataConfigCategory implements CertificateDataConfig {
 
   @Getter(onMethod = @__(@Override))
-  CertificateDataConfigTypes type = CertificateDataConfigTypes.CATEGORY;
+  CertificateDataConfigType type = CertificateDataConfigType.CATEGORY;
   @Getter(onMethod = @__(@Override))
   String header;
   @Getter(onMethod = @__(@Override))

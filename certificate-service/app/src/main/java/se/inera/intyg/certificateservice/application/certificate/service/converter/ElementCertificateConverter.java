@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
-import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigTypes;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigType;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 
 @Component
@@ -35,7 +35,7 @@ public class ElementCertificateConverter {
 
 
   private static Predicate<Entry<String, CertificateDataElement>> removeCategories() {
-    return entry -> !CertificateDataConfigTypes.CATEGORY.equals(
+    return entry -> !CertificateDataConfigType.CATEGORY.equals(
         entry.getValue().getConfig().getType());
   }
 }

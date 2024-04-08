@@ -17,17 +17,16 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
-import se.inera.intyg.certificateservice.domain.common.model.Recipient;
-import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateRecipientFactory;
 
 @Component
 public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
@@ -69,12 +68,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         .name(NAME)
         .description(DESCRIPTION)
         .activeFrom(activeFrom)
-        .recipient(
-            new Recipient(
-                new RecipientId("FKASSA"),
-                "Försäkringskassan"
-            )
-        )
+        .recipient(CertificateRecipientFactory.fkassa())
         .certificateActionSpecifications(
             List.of(
                 CertificateActionSpecification.builder()
@@ -143,7 +137,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         )
         .rules(
             List.of(
-                ElementRule.builder()
+                ElementRuleExpression.builder()
                     .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
                     .type(ElementRuleType.MANDATORY)
                     .expression(

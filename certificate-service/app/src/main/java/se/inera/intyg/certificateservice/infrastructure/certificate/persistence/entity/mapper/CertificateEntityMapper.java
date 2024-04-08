@@ -42,6 +42,7 @@ public class CertificateEntityMapper {
   private final PatientRepository patientRepository;
   private final UnitRepository unitRepository;
   private final StaffRepository staffRepository;
+  private final CertificateDataEntityMapper certificateDataEntityMapper;
 
   public Certificate toDomain(CertificateEntity certificateEntity) {
     return toDomain(
@@ -109,7 +110,7 @@ public class CertificateEntityMapper {
         certificateModel(certificate.certificateModel())
     );
 
-    final var certificateDataEntity = CertificateDataEntityMapper.toEntity(
+    final var certificateDataEntity = certificateDataEntityMapper.toEntity(
         certificate.elementData()
     );
     certificateDataEntity.setKey(certificateEntity.getKey());
@@ -214,7 +215,7 @@ public class CertificateEntityMapper {
                 .build()
         )
         .elementData(
-            CertificateDataEntityMapper.toDomain(certificateEntity.getData())
+            certificateDataEntityMapper.toDomain(certificateEntity.getData())
         )
         .xml(
             certificateEntity.getXml() != null

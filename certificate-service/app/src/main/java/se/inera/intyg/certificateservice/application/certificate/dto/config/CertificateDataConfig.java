@@ -10,10 +10,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
     @Type(value = CertificateDataConfigCategory.class, name = "CATEGORY"),
     @Type(value = CertificateDataConfigDate.class, name = "UE_DATE"),
+    @Type(value = CertificateDataConfigTextArea.class, name = "UE_TEXTAREA")
 })
 public interface CertificateDataConfig {
 
-  CertificateDataConfigTypes getType();
+  CertificateDataConfigType getType();
 
   String getHeader();
 

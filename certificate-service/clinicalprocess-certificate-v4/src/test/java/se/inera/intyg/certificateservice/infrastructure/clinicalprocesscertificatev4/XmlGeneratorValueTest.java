@@ -71,7 +71,7 @@ class XmlGeneratorValueTest {
   }
 
   @Test
-  void shouldMapEmptyIfValueIsNotUnitContactDetails() {
+  void shouldMapEmptyIfValueIsNotSupportedType() {
     final var data = ElementData.builder()
         .value(ElementValueUnitContactInformation.builder()
             .build()
