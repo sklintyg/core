@@ -20,9 +20,9 @@ public class CertificateDataValueConverterDate implements CertificateDataValueCo
   @Override
   public CertificateDataValue convert(ElementSpecification elementSpecification,
       ElementValue elementValue) {
-    if (!(elementValue instanceof ElementValueDate)) {
+    if (elementValue != null && !(elementValue instanceof ElementValueDate)) {
       throw new IllegalStateException(
-          "Invalid value type. Type was '%s'".formatted(elementSpecification.configuration().type())
+          "Invalid value type. Type was '%s'".formatted(elementValue.getClass())
       );
     }
 
@@ -35,7 +35,7 @@ public class CertificateDataValueConverterDate implements CertificateDataValueCo
 
     return CertificateDataValueDate.builder()
         .id(elementConfiguration.id().value())
-        .date(((ElementValueDate) elementValue).date())
+        .date(elementValue != null ? ((ElementValueDate) elementValue).date() : null)
         .build();
   }
 }

@@ -31,7 +31,7 @@ class CertificateDataValueConverterTextAreaTest {
           .build();
 
   @Test
-  void shouldThrowExceptionIfWrongClassOfValue() {
+  void shouldThrowExceptionIfWrongClassOfValueIfElementValueNotNull() {
     final var configuration = ElementSpecification.builder()
         .id(new ElementId(ELEMENT_ID))
         .configuration(
@@ -46,6 +46,21 @@ class CertificateDataValueConverterTextAreaTest {
     assertThrows(IllegalStateException.class,
         () -> converter.convert(configuration, elementValueDate)
     );
+  }
+
+  @Test
+  void shouldNotThrowExceptionIfWrongClassOfValueIfElementValueIsNull() {
+    final var configuration = ElementSpecification.builder()
+        .id(new ElementId(ELEMENT_ID))
+        .configuration(
+            ElementConfigurationTextArea.builder()
+                .id(FIELD_ID)
+                .build()
+        )
+        .build();
+
+    final var result = converter.convert(configuration, null);
+    assertNull(((CertificateDataValueText) result).getText());
   }
 
   @Test

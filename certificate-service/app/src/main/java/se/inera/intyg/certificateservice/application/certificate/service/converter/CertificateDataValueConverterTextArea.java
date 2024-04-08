@@ -20,9 +20,9 @@ public class CertificateDataValueConverterTextArea implements CertificateDataVal
   @Override
   public CertificateDataValue convert(ElementSpecification elementSpecification,
       ElementValue elementValue) {
-    if (!(elementValue instanceof ElementValueText)) {
+    if (elementValue != null && !(elementValue instanceof ElementValueText)) {
       throw new IllegalStateException(
-          "Invalid value type. Type was '%s'".formatted(elementSpecification.configuration().type())
+          "Invalid value type. Type was '%s'".formatted(elementValue.getClass())
       );
     }
 
@@ -35,7 +35,7 @@ public class CertificateDataValueConverterTextArea implements CertificateDataVal
 
     return CertificateDataValueText.builder()
         .id(elementConfiguration.id().value())
-        .text(((ElementValueText) elementValue).text())
+        .text(elementValue != null ? ((ElementValueText) elementValue).text() : null)
         .build();
   }
 }
