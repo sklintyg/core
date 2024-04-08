@@ -101,6 +101,7 @@ public class CertificateConverter {
                 .testCertificate(TEST_CERTIFICATE)
                 .relations(RELATIONS)
                 .signed(certificate.signed())
+                .modified(certificate.modified())
                 .build()
         )
         .data(

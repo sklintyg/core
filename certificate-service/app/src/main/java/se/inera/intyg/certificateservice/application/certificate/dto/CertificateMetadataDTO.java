@@ -36,6 +36,7 @@ public class CertificateMetadataDTO {
   boolean latestMajorVersion;
   LocalDateTime readyForSign;
   LocalDateTime signed;
+  LocalDateTime modified;
   String responsibleHospName;
   CertificateRecipientDTO recipient;
   CertificateSummaryDTO summary;
