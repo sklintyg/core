@@ -16,8 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.inera.intyg.certificateservice.application.certificate.dto.value;
 
-public enum CertificateDataValueType {
-  DATE, TEXT, DATE_RANGE, DATE_RANGE_LIST
+package se.inera.intyg.certificateservice.domain.certificate.model;
+
+import lombok.Builder;
+import lombok.Value;
+import lombok.With;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+
+@Value
+@Builder
+public class ElementValueDateRange implements ElementValue {
+
+  FieldId dateRangeId;
+  @With
+  ElementValueDate to;
+  ElementValueDate from;
+
 }

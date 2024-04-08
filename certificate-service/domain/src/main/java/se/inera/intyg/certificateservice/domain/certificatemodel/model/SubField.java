@@ -16,8 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.inera.intyg.certificateservice.application.certificate.dto.value;
 
-public enum CertificateDataValueType {
-  DATE, TEXT, DATE_RANGE, DATE_RANGE_LIST
+package se.inera.intyg.certificateservice.domain.certificatemodel.model;
+
+public record SubField(String id, String label) {
+
 }

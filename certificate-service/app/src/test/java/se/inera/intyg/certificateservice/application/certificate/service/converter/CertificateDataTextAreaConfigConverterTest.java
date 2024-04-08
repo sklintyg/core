@@ -37,7 +37,7 @@ class CertificateDataTextAreaConfigConverterTest {
   }
 
   @Test
-  void shouldReturnConvertedCategory() {
+  void shouldReturnConvertedConfig() {
     final var expected = CertificateDataConfigTextArea.builder()
         .id("ID")
         .text("NAME")

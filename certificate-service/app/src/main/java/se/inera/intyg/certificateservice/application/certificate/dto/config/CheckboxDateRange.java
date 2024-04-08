@@ -16,8 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.inera.intyg.certificateservice.application.certificate.dto.value;
+package se.inera.intyg.certificateservice.application.certificate.dto.config;
 
-public enum CertificateDataValueType {
-  DATE, TEXT, DATE_RANGE, DATE_RANGE_LIST
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import lombok.Builder;
+import lombok.Value;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.CheckboxDateRange.CheckboxDateRangeBuilder;
+
+@JsonDeserialize(builder = CheckboxDateRangeBuilder.class)
+@Value
+@Builder
+public class CheckboxDateRange {
+
+  String id;
+  String label;
+
+  @JsonPOJOBuilder(withPrefix = "")
+  public static class CheckboxDateRangeBuilder {
+
+  }
 }

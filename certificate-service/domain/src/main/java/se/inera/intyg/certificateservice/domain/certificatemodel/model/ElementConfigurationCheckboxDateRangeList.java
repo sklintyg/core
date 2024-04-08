@@ -16,8 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.inera.intyg.certificateservice.application.certificate.dto.value;
 
-public enum CertificateDataValueType {
-  DATE, TEXT, DATE_RANGE, DATE_RANGE_LIST
+package se.inera.intyg.certificateservice.domain.certificatemodel.model;
+
+import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Value;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+
+@Value
+@Builder
+public class ElementConfigurationCheckboxDateRangeList implements ElementConfiguration {
+
+  @Getter(onMethod = @__(@Override))
+  String name;
+  @Getter(onMethod = @__(@Override))
+  ElementType type = ElementType.CHECKBOX_DATE_RANGE_LIST;
+  FieldId id;
+  List<SubField> fields;
+
+  @Override
+  public ElementValue emptyValue() {
+    return ElementValueText.builder()
+        .textId(id)
+        .build();
+  }
 }
