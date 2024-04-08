@@ -25,9 +25,16 @@ public class CertificateDataValueConverterTextArea implements CertificateDataVal
           "Invalid value type. Type was '%s'".formatted(elementSpecification.configuration().type())
       );
     }
-    final var configuration = (ElementConfigurationTextArea) elementSpecification.configuration();
+
+    if (!(elementSpecification.configuration() instanceof ElementConfigurationTextArea elementConfiguration)) {
+      throw new IllegalStateException(
+          "Invalid configuration type. Type was '%s'".formatted(
+              elementSpecification.configuration().type())
+      );
+    }
+
     return CertificateDataValueText.builder()
-        .id(configuration.id().value())
+        .id(elementConfiguration.id().value())
         .text(((ElementValueText) elementValue).text())
         .build();
   }

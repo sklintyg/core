@@ -26,9 +26,15 @@ public class CertificateDataValueConverterDate implements CertificateDataValueCo
       );
     }
 
-    final var configuration = (ElementConfigurationDate) elementSpecification.configuration();
+    if (!(elementSpecification.configuration() instanceof ElementConfigurationDate elementConfiguration)) {
+      throw new IllegalStateException(
+          "Invalid configuration type. Type was '%s'".formatted(
+              elementSpecification.configuration().type())
+      );
+    }
+
     return CertificateDataValueDate.builder()
-        .id(configuration.id().value())
+        .id(elementConfiguration.id().value())
         .date(((ElementValueDate) elementValue).date())
         .build();
   }
