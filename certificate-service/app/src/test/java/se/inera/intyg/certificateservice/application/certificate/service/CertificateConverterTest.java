@@ -87,6 +87,7 @@ class CertificateConverterTest {
   private static final String TYPE_NAME = "typeName";
   private static final String TYPE_DESCRIPTION = "typeDescription";
   private static final LocalDateTime CREATED = LocalDateTime.now(ZoneId.systemDefault());
+  private static final LocalDateTime SIGNED = LocalDateTime.now(ZoneId.systemDefault());
   private static final LocalDate DATE = LocalDate.now().plusDays(1);
   private static final String Q_1 = "q1";
   private static final String ID = "valueId";
@@ -118,6 +119,7 @@ class CertificateConverterTest {
         .revision(REVISION)
         .status(Status.DRAFT)
         .sent(SENT)
+        .signed(SIGNED)
         .certificateModel(
             CertificateModel.builder()
                 .id(
@@ -389,6 +391,14 @@ class CertificateConverterTest {
         assertFalse(
             certificateConverter.convert(invalidCertificate, resourceLinkDTOs).getMetadata()
                 .isValidForSign()
+        );
+      }
+
+
+      @Test
+      void shallIncludeSigned() {
+        assertEquals(SIGNED,
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getSigned()
         );
       }
     }
