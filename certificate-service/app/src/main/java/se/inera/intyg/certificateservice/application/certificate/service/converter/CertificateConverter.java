@@ -27,7 +27,6 @@ public class CertificateConverter {
    */
   private static final boolean FORWARDED = false;
   private static final boolean LATEST_MAJOR_VERSION = true;
-  private static final boolean SENT = false;
   private static final boolean TEST_CERTIFICATE = false;
   private static final CertificateRelationsDTO RELATIONS = CertificateRelationsDTO.builder()
       .build();
@@ -101,6 +100,7 @@ public class CertificateConverter {
                 .status(toCertificateStatusTypeDTO(certificate.status()))
                 .testCertificate(TEST_CERTIFICATE)
                 .relations(RELATIONS)
+                .signed(certificate.signed())
                 .build()
         )
         .data(
