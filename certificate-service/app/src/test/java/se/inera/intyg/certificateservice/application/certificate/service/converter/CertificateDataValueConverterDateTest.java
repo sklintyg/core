@@ -37,7 +37,7 @@ class CertificateDataValueConverterDateTest {
   }
 
   @Test
-  void shouldThrowExceptionIfWrongClassOfValue() {
+  void shouldThrowExceptionIfWrongClassOfValueIfElementValueNotNull() {
     final var configuration = ElementSpecification.builder()
         .id(new ElementId(ELEMENT_ID))
         .configuration(
@@ -52,6 +52,21 @@ class CertificateDataValueConverterDateTest {
     assertThrows(IllegalStateException.class,
         () -> converter.convert(configuration, elementValueDate)
     );
+  }
+
+  @Test
+  void shouldNotThrowExceptionIfWrongClassOfValueIfElementValueIsNull() {
+    final var configuration = ElementSpecification.builder()
+        .id(new ElementId(ELEMENT_ID))
+        .configuration(
+            ElementConfigurationDate.builder()
+                .id(FIELD_ID)
+                .build()
+        )
+        .build();
+
+    final var result = converter.convert(configuration, null);
+    assertNull(((CertificateDataValueDate) result).getDate());
   }
 
   @Test

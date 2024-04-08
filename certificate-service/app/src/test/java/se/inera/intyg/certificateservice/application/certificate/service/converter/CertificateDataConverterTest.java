@@ -365,6 +365,31 @@ class CertificateDataConverterTest {
     }
 
     @Test
+    void shallConvertCertificateDataElementValidationToEmptyArrayIfRulesIsEmpty() {
+      final var elementId = new ElementId(ID_1);
+      final var elementSpecification = ElementSpecification.builder()
+          .configuration(
+              ElementConfigurationDate.builder().build()
+          )
+          .id(elementId)
+          .build();
+
+      final var elementSpecifications = List.of(
+          elementSpecification
+      );
+
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(elementSpecifications)
+          .build();
+
+      final var result = certificateDataConverter.convert(certificateModel,
+          Collections.emptyList());
+
+      assertEquals(0, result.get(ID_1).getValidation().length,
+          "CertificateDataElement should contain empty validation");
+    }
+
+    @Test
     void shallConvertCertificateDataElementValue() {
       final var elementId = new ElementId(ID_1);
       final var elementData = ElementData.builder()

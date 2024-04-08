@@ -94,7 +94,7 @@ public class CertificateDataConverter {
   }
 
   private CertificateDataValidation[] getValidation(List<ElementRule> rules) {
-    if (rules == null) {
+    if (rules.isEmpty()) {
       return new CertificateDataValidation[0];
     }
 
