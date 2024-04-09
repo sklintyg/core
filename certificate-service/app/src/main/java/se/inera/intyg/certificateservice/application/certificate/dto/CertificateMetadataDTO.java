@@ -45,4 +45,5 @@ public class CertificateMetadataDTO {
   public static class CertificateMetadataDTOBuilder {
 
   }
+
 }
