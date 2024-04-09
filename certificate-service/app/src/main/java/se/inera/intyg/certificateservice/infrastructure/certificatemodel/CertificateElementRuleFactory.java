@@ -25,8 +25,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.SubField;
 
 public class CertificateElementRuleFactory {
 
@@ -34,25 +34,27 @@ public class CertificateElementRuleFactory {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementRule mandatory(ElementId id, String fieldId) {
+  public static ElementRule mandatory(ElementId id, FieldId fieldId) {
     return ElementRuleExpression.builder()
         .id(id)
         .type(ElementRuleType.MANDATORY)
-        .rule(new RuleExpression(singleExpression(fieldId)))
+        .expression(new RuleExpression(singleExpression(fieldId.value())))
         .build();
   }
 
-  public static ElementRule mandatory(ElementId id, List<SubField> fieldIds) {
+  public static ElementRule mandatory(ElementId id, List<FieldId> fieldIds) {
     return ElementRuleExpression.builder()
         .id(id)
         .type(ElementRuleType.MANDATORY)
-        .rule(new RuleExpression(
-            multipleOrExpression(
-                (String[]) fieldIds.stream()
-                    .map(field -> singleExpression(field.id()))
-                    .toArray()
+        .expression(
+            new RuleExpression(
+                multipleOrExpression(
+                    fieldIds.stream()
+                        .map(field -> singleExpression(field.value()))
+                        .toArray(String[]::new)
+                )
             )
-        ))
+        )
         .build();
   }
 

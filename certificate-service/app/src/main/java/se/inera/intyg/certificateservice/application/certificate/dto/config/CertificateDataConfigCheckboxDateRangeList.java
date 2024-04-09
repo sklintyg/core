@@ -46,7 +46,8 @@ public class CertificateDataConfigCheckboxDateRangeList implements CertificateDa
   @Getter(onMethod = @__(@Override))
   Accordion accordion;
   String previousDateRangeText;
-  List<CheckboxDateRange> list;
+  boolean hideWorkingHours;
+  List<CheckboxDateRangeConfig> list;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class CertificateDataConfigCheckboxDateRangeListBuilder {

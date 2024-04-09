@@ -29,8 +29,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 @Builder
 public class ElementValueDateRangeList implements ElementValue {
 
-  FieldId dateRangeListId;
+  FieldId dateRangeListId; // TODO: This cant be converted because wc doesnt have id for dr list
   @With
-  List<ElementValueDateRange> dateRangeList;
+  List<DateRange> dateRangeList;
 
 }

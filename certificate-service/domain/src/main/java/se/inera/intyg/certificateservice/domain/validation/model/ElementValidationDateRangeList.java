@@ -26,11 +26,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
+import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Value
 @Getter(AccessLevel.NONE)
@@ -48,11 +50,36 @@ public class ElementValidationDateRangeList implements ElementValidation {
 
     final var dateRangeList = getValue(data.value());
 
+    final var childValidationErrors = getChildValidationErrors(data, categoryId, dateRangeList);
+    if (childValidationErrors != null && !childValidationErrors.isEmpty()) {
+      return childValidationErrors;
+    }
+
     if (mandatory && !isDateRangeListFilled(dateRangeList)) {
-      return errorMessage(data, dateRangeList, categoryId, "Ange ett datum.");
+      return List.of(
+          errorMessage(
+              data,
+              dateRangeList.dateRangeListId(),
+              categoryId,
+              "Välj minst ett alternativ."
+          )
+      );
     }
 
     return Collections.emptyList();
+  }
+
+  private List<ValidationError> getChildValidationErrors(ElementData data,
+      Optional<ElementId> categoryId, ElementValueDateRangeList dateRangeList) {
+    return dateRangeList.dateRangeList() == null
+        ? Collections.emptyList()
+        : dateRangeList.dateRangeList().stream()
+            .filter(dateRange -> !isDateRangeComplete(dateRange))
+            .map(dateRange -> errorMessage(
+                    data, getFieldIdOfIncompleteDateRange(dateRange), categoryId, "Ange ett datum."
+                )
+            )
+            .toList();
   }
 
   private ElementValueDateRangeList getValue(ElementValue value) {
@@ -71,26 +98,39 @@ public class ElementValidationDateRangeList implements ElementValidation {
   }
 
   private boolean isDateRangeListFilled(ElementValueDateRangeList value) {
+    if (value.dateRangeList() == null) {
+      return false;
+    }
+
     return value.dateRangeList().stream()
-        .noneMatch(this::isDateRangeComplete);
+        .anyMatch(this::isDateRangeComplete);
   }
 
-  private boolean isDateRangeComplete(ElementValueDateRange value) {
+  private boolean isDateRangeComplete(DateRange value) {
     return value.from() != null
         && value.to() != null;
   }
 
-  private static List<ValidationError> errorMessage(ElementData data,
-      ElementValueDateRangeList dateValue,
+  private FieldId getFieldIdOfIncompleteDateRange(DateRange dateRange) {
+    return dateRange.to() == null ?
+        getFieldId(dateRange.dateRangeId(), CheckboxDateRange.TO_SUFFIX)
+        : getFieldId(dateRange.dateRangeId(), CheckboxDateRange.FROM_SUFFIX);
+  }
+
+  private FieldId getFieldId(FieldId id, String suffix) {
+    return new FieldId(id.value() + suffix);
+  }
+
+  private static ValidationError errorMessage(ElementData data,
+      FieldId fieldId,
       Optional<ElementId> categoryId, String message) {
-    return List.of(
+    return
         ValidationError.builder()
             .elementId(data.id())
-            .fieldId(dateValue.dateRangeListId())
+            .fieldId(fieldId)
             .categoryId(categoryId.orElse(null))
             .message(new ErrorMessage(message))
-            .build()
-    );
+            .build();
   }
 
 }

@@ -17,20 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.inera.intyg.certificateservice.domain.certificate.model;
+package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
-import lombok.Builder;
-import lombok.Value;
-import lombok.With;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+public record CheckboxDateRange(FieldId id, String label) {
 
-@Value
-@Builder
-public class ElementValueDateRange implements ElementValue {
-
-  FieldId dateRangeId;
-  @With
-  ElementValueDate to;
-  ElementValueDate from;
-
+  public static String TO_SUFFIX = ".to";
+  public static String FROM_SUFFIX = ".from";
+  public static String RANGE_SUFFIX = ".range";
 }

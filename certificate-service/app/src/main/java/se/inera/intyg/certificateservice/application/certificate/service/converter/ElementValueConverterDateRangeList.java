@@ -19,26 +19,25 @@
 
 package se.inera.intyg.certificateservice.application.certificate.service.converter;
 
-import static se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType.TEXT;
+import static se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType.DATE_RANGE_LIST;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValue;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateRangeList;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType;
+import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Component
 @RequiredArgsConstructor
 public class ElementValueConverterDateRangeList implements ElementValueConverter {
 
-  private final ElementValueConverterDateRange elementValueConverterDateRange;
-
   @Override
   public CertificateDataValueType getType() {
-    return TEXT;
+    return DATE_RANGE_LIST;
   }
 
   @Override
@@ -50,10 +49,17 @@ public class ElementValueConverterDateRangeList implements ElementValueConverter
     }
 
     return ElementValueDateRangeList.builder()
+        .dateRangeListId(new FieldId("ID"))
         .dateRangeList(
             dateRangeListValue.getList().stream()
-                .map(elementValueConverterDateRange::convert)
-                .map(ElementValueDateRange.class::cast)
+                .map(dateRange ->
+                    DateRange.builder()
+                        .dateRangeId(new FieldId(dateRange.getId()))
+                        .from(dateRange.getFrom())
+                        .to(dateRange.getTo())
+                        .build()
+                )
+                .map(DateRange.class::cast)
                 .toList()
         )
         .build();

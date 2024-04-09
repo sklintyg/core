@@ -16,9 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package se.inera.intyg.certificateservice.application.certificate.dto.config;
 
-package se.inera.intyg.certificateservice.domain.certificatemodel.model;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import lombok.Builder;
+import lombok.Value;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.CheckboxDateRangeConfig.CheckboxDateRangeConfigBuilder;
 
-public record SubField(String id, String label) {
+@JsonDeserialize(builder = CheckboxDateRangeConfigBuilder.class)
+@Value
+@Builder
+public class CheckboxDateRangeConfig {
 
+  String id;
+  String label;
+
+  @JsonPOJOBuilder(withPrefix = "")
+  public static class CheckboxDateRangeConfigBuilder {
+
+  }
 }
