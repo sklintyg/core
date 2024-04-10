@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonWebcertUnitDTO.alfaMedicincentrumDtoBuilder;
@@ -11,6 +12,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProv
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_CITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_DECEASED;
@@ -47,11 +49,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRecipientDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateDataConverter;
-import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateMetaDataUnitConverter;
+import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateUnitConverter;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
@@ -59,6 +62,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
+import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
@@ -67,7 +71,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -83,6 +87,7 @@ class CertificateConverterTest {
   private static final String TYPE_NAME = "typeName";
   private static final String TYPE_DESCRIPTION = "typeDescription";
   private static final LocalDateTime CREATED = LocalDateTime.now(ZoneId.systemDefault());
+  private static final LocalDateTime SIGNED = LocalDateTime.now(ZoneId.systemDefault());
   private static final LocalDate DATE = LocalDate.now().plusDays(1);
   private static final String Q_1 = "q1";
   private static final String ID = "valueId";
@@ -90,9 +95,14 @@ class CertificateConverterTest {
   private static final String NAME = "Beräknat nedkomstdatum";
   private static final String KEY = "key";
   private static final Revision REVISION = new Revision(3L);
+  private static final Sent SENT = Sent.builder()
+      .recipient(RECIPIENT)
+      .sentAt(LocalDateTime.now(ZoneId.systemDefault()))
+      .sentBy(AJLA_DOKTOR)
+      .build();
   private final List<ResourceLinkDTO> resourceLinkDTOs = Collections.emptyList();
   @Mock
-  private CertificateMetaDataUnitConverter certificateMetaDataUnitConverter;
+  private CertificateUnitConverter certificateUnitConverter;
   @Mock
   private CertificateDataConverter certificateDataConverter;
   @InjectMocks
@@ -108,6 +118,8 @@ class CertificateConverterTest {
         .created(CREATED)
         .revision(REVISION)
         .status(Status.DRAFT)
+        .sent(SENT)
+        .signed(SIGNED)
         .certificateModel(
             CertificateModel.builder()
                 .id(
@@ -118,6 +130,7 @@ class CertificateConverterTest {
                 )
                 .name(TYPE_NAME)
                 .description(TYPE_DESCRIPTION)
+                .recipient(RECIPIENT)
                 .elementSpecifications(
                     List.of(
                         ElementSpecification.builder()
@@ -141,7 +154,7 @@ class CertificateConverterTest {
                                         )
                                         .rules(
                                             List.of(
-                                                ElementRule.builder()
+                                                ElementRuleExpression.builder()
                                                     .id(new ElementId(ID))
                                                     .type(ElementRuleType.MANDATORY)
                                                     .expression(
@@ -380,6 +393,14 @@ class CertificateConverterTest {
                 .isValidForSign()
         );
       }
+
+
+      @Test
+      void shallIncludeSigned() {
+        assertEquals(SIGNED,
+            certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getSigned()
+        );
+      }
     }
 
     @Nested
@@ -388,7 +409,7 @@ class CertificateConverterTest {
       @Test
       void shallIncludeUnit() {
         final var expectedUnit = alfaMedicincentrumDtoBuilder().build();
-        doReturn(expectedUnit).when(certificateMetaDataUnitConverter).convert(
+        doReturn(expectedUnit).when(certificateUnitConverter).convert(
             certificate.certificateMetaData().issuingUnit(),
             Optional.empty()
         );
@@ -522,6 +543,80 @@ class CertificateConverterTest {
               )
               .getMetadata()
               .getStatus()
+      );
+    }
+
+    @Test
+    void shallConvertRevokedToRevoked() {
+      assertEquals(
+          CertificateStatusTypeDTO.REVOKED,
+          certificateConverter.convert(
+                  certificateBuilder.status(Status.REVOKED).build(),
+                  resourceLinkDTOs
+              )
+              .getMetadata()
+              .getStatus()
+      );
+    }
+  }
+
+  @Nested
+  class TestCertificateRecipient {
+
+    @Test
+    void shallSetSentTrueIfSentNotNull() {
+      assertTrue(
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().isSent()
+      );
+    }
+
+    @Test
+    void shallSetSentFalseIfSentNull() {
+      final var certificate = certificateBuilder.sent(null).build();
+      assertFalse(
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().isSent()
+      );
+    }
+
+    @Test
+    void shallIncludeSentToIfSentNotNull() {
+      assertEquals(RECIPIENT.name(),
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getSentTo()
+      );
+    }
+
+    @Test
+    void shallExcludeSentToIfSentNotNull() {
+      final var certificate = certificateBuilder.sent(null).build();
+
+      assertNull(
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getSentTo()
+      );
+    }
+
+    @Test
+    void shallIncludeRecipientWithSentDateTimeIfSentNotNull() {
+      final var expectedCertificateRecipient = CertificateRecipientDTO.builder()
+          .id(RECIPIENT.id().id())
+          .name(RECIPIENT.name())
+          .sent(SENT.sentAt())
+          .build();
+      assertEquals(expectedCertificateRecipient,
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getRecipient()
+      );
+    }
+
+    @Test
+    void shallIncludeRecipientWithoutSentDateIfSentIsNull() {
+      final var expectedCertificateRecipient = CertificateRecipientDTO.builder()
+          .id(RECIPIENT.id().id())
+          .name(RECIPIENT.name())
+          .build();
+
+      final var certificate = certificateBuilder.sent(null).build();
+
+      assertEquals(expectedCertificateRecipient,
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getRecipient()
       );
     }
   }

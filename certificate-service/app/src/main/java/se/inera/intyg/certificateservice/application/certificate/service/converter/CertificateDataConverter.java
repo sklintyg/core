@@ -17,19 +17,24 @@ import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfig;
+import se.inera.intyg.certificateservice.application.certificate.dto.validation.CertificateDataValidation;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 
 @Component
 @RequiredArgsConstructor
 public class CertificateDataConverter {
 
-  private final CertificateDataValueConverter certificateDataValueConverter;
-  private final CertificateDataConfigConverter certificateDataConfigConverter;
-  private final CertificateDataValidationConverter certificateDataValidationConverter;
+  private final List<CertificateDataConfigConverter> certificateDataConfigConverters;
+  private final List<CertificateDataValueConverter> certificateDataValueConverter;
+  private final List<CertificateDataValidationConverter> certificateDataValidationConverters;
 
   public Map<String, CertificateDataElement> convert(CertificateModel certificateModel,
       List<ElementData> elementData) {
@@ -77,15 +82,74 @@ public class CertificateDataConverter {
         .id(questionId)
         .parent(childParentMap.getOrDefault(questionId, null))
         .index(index)
-        .config(certificateDataConfigConverter.convert(elementSpecification))
-        .value(certificateDataValueConverter.convert(elementSpecification, value))
-        .validation(certificateDataValidationConverter.convert(elementSpecification.rules()))
+        .config(getConfig(elementSpecification))
+        .value(getValue(elementSpecification, value))
+        .validation(getValidation(elementSpecification.rules()))
         .build();
 
     certificateDataElementHashMap.put(questionId, certificateDataElement);
     certificateDataElementHashMap.putAll(collectStreamOfCertificateDataElementsToMap(children));
 
     return certificateDataElementHashMap;
+  }
+
+  private CertificateDataValidation[] getValidation(List<ElementRule> rules) {
+    if (rules.isEmpty()) {
+      return new CertificateDataValidation[0];
+    }
+
+    return rules.stream()
+        .map(this::getConvertedValidation)
+        .toArray(CertificateDataValidation[]::new);
+  }
+
+  private CertificateDataValidation getConvertedValidation(ElementRule rule) {
+    return certificateDataValidationConverters.stream()
+        .filter(
+            converter -> converter.getType().equals(rule.type())
+        )
+        .findFirst()
+        .map(converter -> converter.convert(rule))
+        .orElseThrow(() -> new IllegalStateException(
+                "Could not find converter for rule type '%s'".formatted(
+                    rule.type()
+                )
+            )
+        );
+  }
+
+  private CertificateDataConfig getConfig(ElementSpecification elementSpecification) {
+    return certificateDataConfigConverters.stream()
+        .filter(
+            converter -> converter.getType().equals(elementSpecification.configuration().type())
+        )
+        .findFirst()
+        .map(converter -> converter.convert(elementSpecification))
+        .orElseThrow(() -> new IllegalStateException(
+                "Could not find config converter for type '%s'".formatted(
+                    elementSpecification.configuration().type()
+                )
+            )
+        );
+  }
+
+  private CertificateDataValue getValue(ElementSpecification elementSpecification,
+      ElementValue elementValue) {
+    if (ElementType.CATEGORY.equals(elementSpecification.configuration().type())) {
+      return null;
+    }
+    return certificateDataValueConverter.stream()
+        .filter(
+            converter -> converter.getType().equals(elementSpecification.configuration().type())
+        )
+        .findFirst()
+        .map(converter -> converter.convert(elementSpecification, elementValue))
+        .orElseThrow(() -> new IllegalStateException(
+                "Could not find value converter for type '%s'".formatted(
+                    elementSpecification.configuration().type()
+                )
+            )
+        );
   }
 
   private static Map<String, CertificateDataElement> collectStreamOfCertificateDataElementsToMap(
@@ -131,4 +195,5 @@ public class CertificateDataConverter {
   private static Predicate<ElementSpecification> removeIssuingUnitSpecifications() {
     return specification -> !(specification.configuration().type().equals(ISSUING_UNIT));
   }
+
 }

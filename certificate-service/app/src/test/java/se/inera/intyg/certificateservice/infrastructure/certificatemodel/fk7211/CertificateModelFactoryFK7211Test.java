@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211.PDF_FK_7211_PDF;
 
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -20,10 +21,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.domain.common.model.Recipient;
+import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 
@@ -76,6 +79,18 @@ class CertificateModelFactoryFK7211Test {
     final var certificateModel = certificateModelFactoryFK7211.create();
 
     assertEquals(expectedActiveFrom, certificateModel.activeFrom());
+  }
+
+  @Test
+  void shallIncludeRecipient() {
+    final var expectedRecipient = new Recipient(
+        new RecipientId("FKASSA"),
+        "Försäkringskassan"
+    );
+
+    final var certificateModel = certificateModelFactoryFK7211.create();
+
+    assertEquals(expectedRecipient, certificateModel.recipient());
   }
 
   @Test
@@ -136,6 +151,49 @@ class CertificateModelFactoryFK7211Test {
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
         ),
         "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionSend() {
+    final var expectedType = CertificateActionType.SEND;
+
+    final var certificateModel = certificateModelFactoryFK7211.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionPrint() {
+    final var expectedType = CertificateActionType.PRINT;
+
+    final var certificateModel = certificateModelFactoryFK7211.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionRevoke() {
+    final var expectedType = CertificateActionType.REVOKE;
+
+    final var certificateModel = certificateModelFactoryFK7211.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludePdfTemplatePath() {
+    final var certificateModel = certificateModelFactoryFK7211.create();
+
+    assertEquals(PDF_FK_7211_PDF, certificateModel.pdfTemplatePath());
   }
 
   @Nested
@@ -204,7 +262,7 @@ class CertificateModelFactoryFK7211Test {
       @Test
       void shallIncludeRules() {
         final var expectedRules = List.of(
-            ElementRule.builder()
+            ElementRuleExpression.builder()
                 .id(new ElementId("1"))
                 .type(ElementRuleType.MANDATORY)
                 .expression(

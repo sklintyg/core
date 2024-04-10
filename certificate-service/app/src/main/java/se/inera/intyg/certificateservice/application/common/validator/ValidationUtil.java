@@ -1,10 +1,12 @@
 package se.inera.intyg.certificateservice.application.common.validator;
 
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.RevokeInformationDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason;
 
 public class ValidationUtil {
 
@@ -94,6 +96,24 @@ public class ValidationUtil {
   public static void validateCertificateId(String certificateId) {
     if (certificateId == null || certificateId.isBlank()) {
       throw new IllegalArgumentException("Required parameter missing: certificateId");
+    }
+  }
+
+  public static void validateRevokeInformation(RevokeInformationDTO revokeInformation) {
+    if (revokeInformation.getReason() == null || revokeInformation.getReason().isBlank()) {
+      throw new IllegalArgumentException("Required parameter missing: revoke.reason");
+    }
+
+    if (RevokedReason.valueOf(revokeInformation.getReason())
+        .equals(RevokedReason.OTHER_SERIOUS_ERROR) && (revokeInformation.getMessage() == null
+        || revokeInformation.getMessage().isBlank())) {
+      throw new IllegalArgumentException("Required parameter missing: revoke.message");
+    }
+  }
+
+  public static void validateAdditonalInfoText(String additonalInfoText) {
+    if (additonalInfoText == null || additonalInfoText.isBlank()) {
+      throw new IllegalArgumentException("Required parameter missing: additionalInfoText");
     }
   }
 

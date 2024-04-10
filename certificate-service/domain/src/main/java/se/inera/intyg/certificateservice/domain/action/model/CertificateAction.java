@@ -21,6 +21,10 @@ public interface CertificateAction {
     return null;
   }
 
+  default String getBody() {
+    return null;
+  }
+
   default boolean isEnabled() {
     return true;
   }

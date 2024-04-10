@@ -26,6 +26,21 @@ public class TestDataUserConstants {
       new Speciality("Psykiatri")
   );
   public static final Blocked AJLA_DOCTOR_BLOCKED = BLOCKED_FALSE;
+
+  public static final String ALF_DOKTOR_HSA_ID = "TSTNMT2321000156-DRAF";
+  public static final String ALF_DOKTOR_FIRST_NAME = "Alf";
+  public static final String ALF_DOKTOR_MIDDLE_NAME = "";
+  public static final String ALF_DOKTOR_LAST_NAME = "Doktor";
+  public static final String ALF_DOKTOR_FULLNAME = "Alf Doktor";
+  public static final Role ALF_DOKTOR_ROLE = Role.DOCTOR;
+  public static final List<PaTitle> ALF_DOKTOR_PA_TITLES = List.of(
+      new PaTitle("203090", "Läkare legitimerad, annan")
+  );
+  public static final List<Speciality> ALF_DOKTOR_SPECIALITIES = List.of(
+      new Speciality("Allmänmedicin")
+  );
+  public static final Blocked ALF_DOKTOR_BLOCKED = BLOCKED_FALSE;
+
   public static final String ALVA_VARDADMINISTRATOR_HSA_ID = "TSTNMT2321000156-VAAA";
   public static final String ALVA_VARDADMINISTRATOR_FIRST_NAME = "Alva";
   public static final String ALVA_VARDADMINISTRATOR_MIDDLE_NAME = "";
@@ -35,5 +50,25 @@ public class TestDataUserConstants {
   public static final List<PaTitle> ALVA_VARDADMINISTRATOR_PA_TITLES = Collections.emptyList();
   public static final List<Speciality> ALVA_VARDADMINISTRATOR_SPECIALITIES = Collections.emptyList();
   public static final Blocked ALVA_VARDADMINISTRATOR_BLOCKED = BLOCKED_FALSE;
+
+  public static final String ANNA_SJUKSKOTERSKA_HSA_ID = "TSTNMT2321000156-SKAA";
+  public static final String ANNA_SJUKSKOTERSKA_FIRST_NAME = "Anna";
+  public static final String ANNA_SJUKSKOTERSKA_MIDDLE_NAME = "";
+  public static final String ANNA_SJUKSKOTERSKA_LAST_NAME = "Sjuksköterska";
+  public static final String ANNA_SJUKSKOTERSKA_FULL_NAME = "Anna Sjuksköterska";
+  public static final Role ANNA_SJUKSKOTERSKA_ROLE = Role.NURSE;
+  public static final List<PaTitle> ANNA_SJUKSKOTERSKA_TITLES = Collections.emptyList();
+  public static final List<Speciality> ANNA_SJUKSKOTERSKA_SPECIALITIES = Collections.emptyList();
+  public static final Blocked ANNA_SJUKSKOTERSKA_BLOCKED = BLOCKED_FALSE;
+
+  public static final String BARNMORSKA_HSA_ID = "TSTNMT2321000156-BMBL";
+  public static final String BARNMORSKA_FIRST_NAME = "Bertil";
+  public static final String BARNMORSKA_MIDDLE_NAME = "";
+  public static final String BARNMORSKA_LAST_NAME = "Barnmorska";
+  public static final String BARNMORSKA_FULL_NAME = "Bertil Barnmorska";
+  public static final Role BARNMORSKA_ROLE = Role.MIDWIFE;
+  public static final List<PaTitle> BARNMORSKA_TITLES = Collections.emptyList();
+  public static final List<Speciality> BARNMORSKA_SPECIALITIES = Collections.emptyList();
+  public static final Blocked BARNMORSKA_BLOCKED = BLOCKED_FALSE;
 
 }

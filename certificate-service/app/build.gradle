@@ -8,6 +8,7 @@ def applicationDir = "${rootProject.projectDir}/devops/dev"
 dependencies {
     implementation project(':domain')
     implementation project(':clinicalprocess-certificate-v4')
+    implementation project(path: ':pdfbox-generator')
 
     implementation "co.elastic.logging:logback-ecs-encoder:${logbackEcsEncoderVersion}"
     implementation "com.google.guava:guava:${guavaVersion}"
@@ -15,6 +16,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-activemq'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

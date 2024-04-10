@@ -15,12 +15,19 @@ import se.inera.intyg.certificateservice.application.certificate.dto.CreateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateWithoutSignatureRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
@@ -28,9 +35,13 @@ import se.inera.intyg.certificateservice.application.certificate.dto.config.Vali
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.GetCertificatePdfService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateXmlService;
+import se.inera.intyg.certificateservice.application.certificate.service.RevokeCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.SendCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateWithoutSignatureService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ValidateCertificateService;
 
@@ -56,6 +67,15 @@ class CertificateControllerTest {
   private GetCertificateXmlService getCertificateXmlService;
   @Mock
   private SignCertificateService signCertificateService;
+
+  @Mock
+  private SendCertificateService sendCertificateService;
+  @Mock
+  private SignCertificateWithoutSignatureService signCertificateWithoutSignatureService;
+  @Mock
+  private GetCertificatePdfService getCertificatePdfService;
+  @Mock
+  private RevokeCertificateService revokeCertificateService;
   @InjectMocks
   private CertificateController certificateController;
 
@@ -188,6 +208,59 @@ class CertificateControllerTest {
 
     final var actualResult = certificateController.signCertificate(request, CERTIFICATE_ID,
         VERSION);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnSignCertificateResponseWhenSigningWithoutSignature() {
+    final var request = SignCertificateWithoutSignatureRequest.builder().build();
+    final var expectedResult = SignCertificateResponse.builder()
+        .certificate(CertificateDTO.builder().build())
+        .build();
+    doReturn(expectedResult).when(signCertificateWithoutSignatureService)
+        .sign(request, CERTIFICATE_ID, VERSION);
+
+    final var actualResult = certificateController.signCertificateWithoutSignature(request,
+        CERTIFICATE_ID, VERSION);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnSendCertificateResponse() {
+    final var request = SendCertificateRequest.builder().build();
+    final var expectedResult = SendCertificateResponse.builder()
+        .certificate(CertificateDTO.builder().build())
+        .build();
+
+    doReturn(expectedResult).when(sendCertificateService).send(request, CERTIFICATE_ID);
+    final var actualResult = certificateController.sendCertificate(request, CERTIFICATE_ID);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnGetCertificatePdfResponse() {
+    final var request = GetCertificatePdfRequest.builder().build();
+    final var expectedResult = GetCertificatePdfResponse.builder()
+        .pdfData("pdf".getBytes())
+        .fileName("fileName")
+        .build();
+    doReturn(expectedResult).when(getCertificatePdfService).get(request, CERTIFICATE_ID);
+
+    final var actualResult = certificateController.getCertificatePdf(request, CERTIFICATE_ID);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnRevokeCertificateResponse() {
+    final var request = RevokeCertificateRequest.builder().build();
+    final var expectedResult = RevokeCertificateResponse.builder().build();
+    doReturn(expectedResult).when(revokeCertificateService).revoke(request, CERTIFICATE_ID);
+
+    final var actualResult = certificateController.revokeCertificate(request, CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
   }

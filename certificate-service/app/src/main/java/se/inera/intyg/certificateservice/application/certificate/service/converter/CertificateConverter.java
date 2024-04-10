@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRecipientDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationsDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PatientDTO;
@@ -26,12 +27,11 @@ public class CertificateConverter {
    */
   private static final boolean FORWARDED = false;
   private static final boolean LATEST_MAJOR_VERSION = true;
-  private static final boolean SENT = false;
   private static final boolean TEST_CERTIFICATE = false;
   private static final CertificateRelationsDTO RELATIONS = CertificateRelationsDTO.builder()
       .build();
   private final CertificateDataConverter certificateDataConverter;
-  private final CertificateMetaDataUnitConverter certificateMetaDataUnitConverter;
+  private final CertificateUnitConverter certificateUnitConverter;
 
   public CertificateDTO convert(Certificate certificate, List<ResourceLinkDTO> resourceLinks) {
     return CertificateDTO.builder()
@@ -50,7 +50,7 @@ public class CertificateConverter {
                     toPatientDTO(certificate)
                 )
                 .unit(
-                    certificateMetaDataUnitConverter.convert(
+                    certificateUnitConverter.convert(
                         certificate.certificateMetaData().issuingUnit(),
                         certificate.elementData().stream()
                             .filter(data -> data.id().equals(UNIT_CONTACT_INFORMATION))
@@ -94,10 +94,13 @@ public class CertificateConverter {
                 )
                 .forwarded(FORWARDED)
                 .latestMajorVersion(LATEST_MAJOR_VERSION)
-                .sent(SENT)
+                .sent(certificate.sent() != null)
+                .sentTo(certificate.sent() != null ? certificate.sent().recipient().name() : null)
+                .recipient(toCertificateRecipientDTO(certificate))
                 .status(toCertificateStatusTypeDTO(certificate.status()))
                 .testCertificate(TEST_CERTIFICATE)
                 .relations(RELATIONS)
+                .signed(certificate.signed())
                 .build()
         )
         .data(
@@ -107,6 +110,22 @@ public class CertificateConverter {
             )
         )
         .links(resourceLinks)
+        .build();
+  }
+
+  private CertificateRecipientDTO toCertificateRecipientDTO(Certificate certificate) {
+    final var sent = certificate.sent();
+    if (sent == null) {
+      return CertificateRecipientDTO.builder()
+          .id(certificate.certificateModel().recipient().id().id())
+          .name(certificate.certificateModel().recipient().name())
+          .build();
+    }
+
+    return CertificateRecipientDTO.builder()
+        .id(sent.recipient().id().id())
+        .name(sent.recipient().name())
+        .sent(sent.sentAt())
         .build();
   }
 
@@ -137,6 +156,7 @@ public class CertificateConverter {
       case DRAFT, DELETED_DRAFT -> CertificateStatusTypeDTO.UNSIGNED;
       case LOCKED_DRAFT -> CertificateStatusTypeDTO.LOCKED;
       case SIGNED -> CertificateStatusTypeDTO.SIGNED;
+      case REVOKED -> CertificateStatusTypeDTO.REVOKED;
     };
   }
 }

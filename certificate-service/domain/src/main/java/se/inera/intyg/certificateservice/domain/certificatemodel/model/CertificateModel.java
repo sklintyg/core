@@ -10,6 +10,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
+import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 
 @Value
 @Builder
@@ -19,9 +20,11 @@ public class CertificateModel {
   Code type;
   String name;
   String description;
+  Recipient recipient;
   LocalDateTime activeFrom;
   List<CertificateActionSpecification> certificateActionSpecifications;
   List<ElementSpecification> elementSpecifications;
+  String pdfTemplatePath;
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()

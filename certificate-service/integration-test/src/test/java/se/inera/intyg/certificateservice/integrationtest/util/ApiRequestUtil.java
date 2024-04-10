@@ -3,8 +3,11 @@ package se.inera.intyg.certificateservice.integrationtest.util;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
@@ -54,6 +57,14 @@ public class ApiRequestUtil {
 
   public static GetCertificateRequest defaultGetCertificateRequest() {
     return GetCertificateRequestBuilder.create().build();
+  }
+
+  public static GetCertificatePdfRequest defaultGetCertificatePdfRequest() {
+    return GetCertificatePdfRequestBuilder.create().build();
+  }
+
+  public static GetCertificatePdfRequestBuilder customGetCertificatePdfRequest() {
+    return GetCertificatePdfRequestBuilder.create();
   }
 
   public static GetPatientCertificatesRequest defaultGetPatientCertificateRequest() {
@@ -120,6 +131,22 @@ public class ApiRequestUtil {
     return SignCertificateRequestBuilder.create();
   }
 
+  public static SendCertificateRequest defaultSendCertificateRequest() {
+    return SendCertificateRequestBuilder.create().build();
+  }
+
+  public static RevokeCertificateRequest defaultRevokeCertificateRequest() {
+    return RevokeCertificateRequestBuilder.create().build();
+  }
+
+  public static RevokeCertificateRequestBuilder customRevokeCertificateRequest() {
+    return RevokeCertificateRequestBuilder.create();
+  }
+
+  public static SendCertificateRequestBuilder customSendCertificateRequest() {
+    return SendCertificateRequestBuilder.create();
+  }
+
   public static TestabilityCertificateRequestBuilder customTestabilityCertificateRequest(
       String type,
       String version) {
@@ -157,5 +184,6 @@ public class ApiRequestUtil {
         .status(status)
         .build();
   }
+
 }
 

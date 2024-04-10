@@ -17,4 +17,6 @@ public class TestDataCertificateModelConstants {
       "b64ea353-e8f6-4832-b563-fc7d46f29548",
       "Intyg om graviditet"
   );
+  public static final String FK7211_PDF_PATH = "fk7211_v1.pdf";
+  public static final String FK7211_NAME = "Intyg om graviditet";
 }

@@ -1,7 +1,12 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity;
 
 public enum StaffRole {
-  CARE_ADMIN(1), DOCTOR(2), DENTIST(3), NURSE(4), MIDWIFE(5);
+  CARE_ADMIN(1),
+  DOCTOR(2),
+  PRIVATE_DOCTOR(3),
+  DENTIST(4),
+  NURSE(5),
+  MIDWIFE(6);
 
   private final int key;
 

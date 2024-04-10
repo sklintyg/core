@@ -35,17 +35,12 @@ public class GetCertificateService {
         actionEvaluation
     );
 
-    final var resourceLinkDTOS = new java.util.ArrayList<>(
-        certificate.actions(actionEvaluation).stream()
-            .map(resourceLinkConverter::convert)
-            .toList()
-    );
-
     return GetCertificateResponse.builder()
         .certificate(certificateConverter.convert(
-                certificate,
-                resourceLinkDTOS
-            )
+            certificate,
+            certificate.actions(actionEvaluation).stream()
+                .map(resourceLinkConverter::convert)
+                .toList())
         )
         .build();
   }

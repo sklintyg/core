@@ -11,8 +11,10 @@ import lombok.Getter;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
+import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
@@ -32,6 +34,8 @@ public class Certificate {
   @Builder.Default
   private Status status = Status.DRAFT;
   private Xml xml;
+  private Sent sent;
+  private Revoked revoked;
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
@@ -117,7 +121,24 @@ public class Certificate {
     return status().equals(Status.DRAFT);
   }
 
-  public void sign(Xml xml, Revision revision, ActionEvaluation actionEvaluation) {
+  public void sign(XmlGenerator xmlGenerator, Revision revision,
+      ActionEvaluation actionEvaluation) {
+    sign(revision, actionEvaluation);
+    this.xml = xmlGenerator.generate(this);
+  }
+
+  public void sign(XmlGenerator xmlGenerator, Signature signature, Revision revision,
+      ActionEvaluation actionEvaluation) {
+    if (signature == null || signature.isEmpty()) {
+      throw new IllegalArgumentException(
+          "Incorrect signature '%s' - signature required to sign".formatted(signature)
+      );
+    }
+    sign(revision, actionEvaluation);
+    this.xml = xmlGenerator.generate(this, signature);
+  }
+
+  private void sign(Revision revision, ActionEvaluation actionEvaluation) {
     throwIfConcurrentModification(revision, "sign", actionEvaluation);
     if (this.status != Status.DRAFT) {
       throw new IllegalStateException(
@@ -125,10 +146,17 @@ public class Certificate {
               Status.DRAFT)
       );
     }
+
+    final var validationResult = validate();
+    if (validationResult.isInvalid()) {
+      throw new IllegalArgumentException(
+          "Certificate '%s' cannot be signed as it is not valid".formatted(id())
+      );
+    }
+
     this.status = Status.SIGNED;
     this.signed = LocalDateTime.now(ZoneId.systemDefault());
     this.revision = this.revision.increment();
-    this.xml = xml;
   }
 
   private ActionEvaluation addPatientIfMissing(ActionEvaluation actionEvaluation) {
@@ -148,6 +176,50 @@ public class Certificate {
           actionEvaluation.subUnit()
       );
     }
+  }
+
+  public void send(ActionEvaluation actionEvaluation) {
+    if (this.status != Status.SIGNED) {
+      throw new IllegalStateException(
+          "Incorrect status '%s' - required status is '%s' to send".formatted(this.status,
+              Status.SIGNED)
+      );
+    }
+
+    if (this.sent != null) {
+      throw new IllegalStateException(
+          "Certificate with id '%s' has already been sent to '%s'.".formatted(id(),
+              this.sent.recipient().name())
+      );
+    }
+
+    this.sent = Sent.builder()
+        .recipient(certificateModel.recipient())
+        .sentBy(Staff.create(actionEvaluation.user()))
+        .sentAt(LocalDateTime.now(ZoneId.systemDefault()))
+        .build();
+  }
+
+  public void revoke(ActionEvaluation actionEvaluation, RevokedInformation revokedInformation) {
+    if (this.status != Status.SIGNED) {
+      throw new IllegalStateException(
+          "Incorrect status '%s' - required status is '%s' or '%s' to revoke".formatted(this.status,
+              Status.SIGNED, Status.LOCKED_DRAFT)
+      );
+    }
+
+    if (this.revoked != null) {
+      throw new IllegalStateException(
+          "Certificate with id '%s' has already been revoked".formatted(id().id())
+      );
+    }
+
+    this.status = Status.REVOKED;
+    this.revoked = Revoked.builder()
+        .revokedInformation(revokedInformation)
+        .revokedBy(Staff.create(actionEvaluation.user()))
+        .revokedAt(LocalDateTime.now(ZoneId.systemDefault()))
+        .build();
   }
 }
 

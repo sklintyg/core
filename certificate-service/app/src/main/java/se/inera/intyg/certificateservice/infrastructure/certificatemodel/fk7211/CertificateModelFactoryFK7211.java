@@ -17,7 +17,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -26,6 +26,7 @@ import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateRecipientFactory;
 
 @Component
 public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
@@ -50,6 +51,8 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
       "KAT_1");
   public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_ID = new ElementId("1");
   private static final String QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID = "1.1";
+  public static final String PDF_FK_7211_PDF = "pdf/fk7211_v1.pdf";
+
 
   @Override
   public CertificateModel create() {
@@ -65,6 +68,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         .name(NAME)
         .description(DESCRIPTION)
         .activeFrom(activeFrom)
+        .recipient(CertificateRecipientFactory.fkassa())
         .certificateActionSpecifications(
             List.of(
                 CertificateActionSpecification.builder()
@@ -81,6 +85,15 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.SIGN)
+                    .build(),
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.SEND)
+                    .build(),
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.PRINT)
+                    .build(),
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.REVOKE)
                     .build()
             )
         )
@@ -92,6 +105,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
                 issuingUnitContactInfo()
             )
         )
+        .pdfTemplatePath(PDF_FK_7211_PDF)
         .build();
   }
 
@@ -123,7 +137,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         )
         .rules(
             List.of(
-                ElementRule.builder()
+                ElementRuleExpression.builder()
                     .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
                     .type(ElementRuleType.MANDATORY)
                     .expression(

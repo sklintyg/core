@@ -4,3 +4,5 @@ include 'app'
 include 'domain'
 include 'integration-test'
 include 'clinicalprocess-certificate-v4'
+include 'pdfbox-generator'
+

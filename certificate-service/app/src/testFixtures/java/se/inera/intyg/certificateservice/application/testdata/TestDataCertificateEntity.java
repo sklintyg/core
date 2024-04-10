@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.application.testdata;
 
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertdificateDataEntity.CERTIFICATE_DATA_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRevokedEntity.REVOKED_MESSAGE;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRevokedEntity.REVOKED_REASON_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateStatusEntity.STATUS_SIGNED_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateXmlEntity.CERTIFICATE_XML_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientEntity.ATHENA_REACT_ANDERSSON_ENTITY;
@@ -11,6 +13,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataUni
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateConstants.CERTIFICATE_ID;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 
 public class TestDataCertificateEntity {
@@ -31,8 +34,12 @@ public class TestDataCertificateEntity {
         .issuedBy(AJLA_DOKTOR_ENTITY)
         .patient(ATHENA_REACT_ANDERSSON_ENTITY)
         .data(CERTIFICATE_DATA_ENTITY)
-        .xml(CERTIFICATE_XML_ENTITY);
-
+        .xml(CERTIFICATE_XML_ENTITY)
+        .sent(LocalDateTime.now(ZoneId.systemDefault()))
+        .sentBy(AJLA_DOKTOR_ENTITY)
+        .revoked(LocalDateTime.now(ZoneId.systemDefault()))
+        .revokedBy(AJLA_DOKTOR_ENTITY)
+        .revokedReason(REVOKED_REASON_ENTITY)
+        .revokedMessage(REVOKED_MESSAGE);
   }
-
 }

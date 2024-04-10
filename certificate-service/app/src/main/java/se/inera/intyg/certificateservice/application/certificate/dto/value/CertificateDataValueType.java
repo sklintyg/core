@@ -19,5 +19,5 @@
 package se.inera.intyg.certificateservice.application.certificate.dto.value;
 
 public enum CertificateDataValueType {
-  DATE
+  DATE, TEXT
 }

@@ -10,6 +10,11 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_MIDDLE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_FULL_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_MIDDLE_NAME;
 
 import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO;
 
@@ -17,6 +22,7 @@ public class TestDataCommonStaffDTO {
 
   public static final StaffDTO AJLA_DOKTOR = ajlaDoctorBuilder().build();
   public static final StaffDTO ALVA_VARDADMINISTRATOR = alvaVardadmininstratorBuilder().build();
+  public static final StaffDTO BERTIL_BARNMORSKA = bertilBarnmorskaBuilder().build();
 
   public static StaffDTO.StaffDTOBuilder ajlaDoctorBuilder() {
     return StaffDTO.builder()
@@ -34,5 +40,14 @@ public class TestDataCommonStaffDTO {
         .middleName(ALVA_VARDADMINISTRATOR_MIDDLE_NAME)
         .lastName(ALVA_VARDADMINISTRATOR_LAST_NAME)
         .fullName(ALVA_VARDADMINISTRATOR_FULL_NAME);
+  }
+
+  public static StaffDTO.StaffDTOBuilder bertilBarnmorskaBuilder() {
+    return StaffDTO.builder()
+        .personId(BARNMORSKA_HSA_ID)
+        .firstName(BARNMORSKA_FIRST_NAME)
+        .middleName(BARNMORSKA_MIDDLE_NAME)
+        .lastName(BARNMORSKA_LAST_NAME)
+        .fullName(BARNMORSKA_FULL_NAME);
   }
 }

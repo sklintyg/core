@@ -33,8 +33,20 @@
       <column name="signed" type="datetime">
         <constraints nullable="true"/>
       </column>
+      <column name="sent" type="datetime">
+        <constraints nullable="true"/>
+      </column>
+      <column name="revoked" type="datetime">
+        <constraints nullable="true"/>
+      </column>
       <column name="issued_by_staff_key" type="integer unsigned">
         <constraints nullable="false"/>
+      </column>
+      <column name="sent_by_staff_key" type="integer unsigned">
+        <constraints nullable="true"/>
+      </column>
+      <column name="revoked_by_staff_key" type="integer unsigned">
+        <constraints nullable="true"/>
       </column>
       <column name="issued_on_unit_key" type="integer unsigned">
         <constraints nullable="false"/>
@@ -47,6 +59,12 @@
       </column>
       <column name="revision" type="bigint">
         <constraints nullable="false"/>
+      </column>
+      <column name="revoked_reason_key" type="tinyint unsigned">
+        <constraints nullable="true"/>
+      </column>
+      <column name="revoked_message" type="varchar(64)">
+        <constraints nullable="true"/>
       </column>
     </createTable>
 
@@ -68,6 +86,9 @@
     </insert>
     <insert tableName="certificate_status">
       <column name="status" value="SIGNED"/>
+    </insert>
+    <insert tableName="certificate_status">
+      <column name="status" value="REVOKED"/>
     </insert>
 
     <createTable tableName="certificate_model">
@@ -160,6 +181,15 @@
       </column>
     </createTable>
 
+    <createTable tableName="revoked_reason">
+      <column name="key" type="tinyint unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="reason" type="varchar(64)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
     <addForeignKeyConstraint constraintName="fk_unit_unit_type_key"
       baseTableName="unit" baseColumnNames="unit_type_key"
       referencedTableName="unit_type" referencedColumnNames="key"/>
@@ -172,6 +202,13 @@
     </insert>
     <insert tableName="unit_type">
       <column name="type" value="SUB_UNIT"/>
+    </insert>
+
+    <insert tableName="revoked_reason">
+      <column name="reason" value="INCORRECT_PATIENT"/>
+    </insert>
+    <insert tableName="revoked_reason">
+      <column name="reason" value="OTHER_SERIOUS_ERROR"/>
     </insert>
 
     <createTable tableName="staff">
@@ -212,6 +249,9 @@
     </insert>
     <insert tableName="staff_role">
       <column name="role" value="DOCTOR"/>
+    </insert>
+    <insert tableName="staff_role">
+      <column name="role" value="PRIVATE_DOCTOR"/>
     </insert>
     <insert tableName="staff_role">
       <column name="role" value="DENTIST"/>

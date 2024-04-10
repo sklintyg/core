@@ -21,8 +21,6 @@ public class SignCertificateDomainService {
   private final CertificateRepository certificateRepository;
   private final CertificateEventDomainService certificateEventDomainService;
   private final XmlGenerator xmlGenerator;
-  private final XmlSchematronValidator xmlSchematronValidator;
-  private final XmlSchemaValidator xmlSchemaValidator;
 
   public Certificate sign(CertificateId certificateId, Revision revision, Signature signature,
       ActionEvaluation actionEvaluation) {
@@ -37,17 +35,7 @@ public class SignCertificateDomainService {
 
     certificate.updateMetadata(actionEvaluation);
 
-    final var validationResult = certificate.validate();
-    if (validationResult.isInvalid()) {
-      throw new IllegalArgumentException(
-          "Certificate '%s' cannot be signed as it is not valid".formatted(certificateId.id())
-      );
-    }
-
-    final var xml = xmlGenerator.generate(certificate, signature);
-    certificate.sign(xml, revision, actionEvaluation);
-    xmlSchemaValidator.validate(certificate);
-    xmlSchematronValidator.validate(certificate);
+    certificate.sign(xmlGenerator, signature, revision, actionEvaluation);
 
     final var signedCertificate = certificateRepository.save(certificate);
 
