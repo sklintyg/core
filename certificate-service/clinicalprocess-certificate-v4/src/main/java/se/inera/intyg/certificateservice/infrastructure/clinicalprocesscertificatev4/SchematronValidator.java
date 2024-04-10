@@ -15,17 +15,13 @@ public class SchematronValidator implements XmlSchematronValidator {
   @Override
   public boolean validate(Certificate certificate) {
     final var certificateId = certificate.id().id();
-    final var type = certificate.certificateModel().id().type().type();
-    final var version = certificate.certificateModel().id().version().version();
-    final var dir = "schematron/%s/".formatted(type);
-    final var file = "%s.v%s.sch".formatted(type, version.replaceAll("\\.+.{0,10}", ""));
     final var xmlStream = new StreamSource(new StringReader(certificate.xml().xml()));
-    final var schematronResource = SchematronResourceSCH.fromClassPath(dir + file);
-
+    final var schematronResource = SchematronResourceSCH.fromClassPath(
+        certificate.certificateModel().schematronPath()
+    );
     try {
       final var schematronOutput = schematronResource.applySchematronValidationToSVRL(xmlStream);
       return schematronResult(schematronOutput, certificateId);
-
     } catch (Exception e) {
       log.error("Schematron validation of certificate id {} failed with an exception.",
           certificateId, e);

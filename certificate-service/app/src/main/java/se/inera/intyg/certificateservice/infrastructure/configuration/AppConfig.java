@@ -128,8 +128,7 @@ public class AppConfig {
       CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator,
       XmlSchematronValidator schematronValidator, XmlSchemaValidator schemaValidator) {
     return new SignCertificateDomainService(certificateRepository, certificateEventDomainService,
-        xmlGenerator, schematronValidator,
-        schemaValidator);
+        xmlGenerator, schematronValidator, schemaValidator);
   }
 
   @Bean

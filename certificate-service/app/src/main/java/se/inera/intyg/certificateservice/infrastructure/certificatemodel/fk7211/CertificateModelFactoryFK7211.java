@@ -51,7 +51,8 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
       "KAT_1");
   public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_ID = new ElementId("1");
   private static final String QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID = "1.1";
-  public static final String PDF_FK_7211_PDF = "pdf/fk7211_v1.pdf";
+  public static final String PDF_FK_7211_PDF = "fk7211/pdf/fk7211_v1.pdf";
+  public static final String SCHEMATRON_PATH = "fk7211/schematron/fk7211.v1.sch";
 
 
   @Override
@@ -106,6 +107,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
             )
         )
         .pdfTemplatePath(PDF_FK_7211_PDF)
+        .schematronPath(SCHEMATRON_PATH)
         .build();
   }
 

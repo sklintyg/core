@@ -25,6 +25,7 @@ public class CertificateModel {
   List<CertificateActionSpecification> certificateActionSpecifications;
   List<ElementSpecification> elementSpecifications;
   String pdfTemplatePath;
+  String schematronPath;
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()

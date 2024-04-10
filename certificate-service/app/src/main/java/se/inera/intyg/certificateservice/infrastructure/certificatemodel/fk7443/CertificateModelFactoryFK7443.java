@@ -59,6 +59,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
       "KAT_1");
   public static final ElementId QUESTION_SYMPTOM_ID = new ElementId("1");
   private static final String QUESTION_SYMPTOM_FIELD_ID = "1.1";
+  public static final String SCHEMATRON_PATH = "fk7443/schematron/fk7443.v1.sch";
 
   @Override
   public CertificateModel create() {
@@ -111,6 +112,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
                 issuingUnitContactInfo()
             )
         )
+        .schematronPath(SCHEMATRON_PATH)
         .build();
   }
 

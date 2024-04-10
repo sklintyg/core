@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443.CertificateModelFactoryFK7443.SCHEMATRON_PATH;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -195,6 +196,13 @@ class CertificateModelFactoryFK7443Test {
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
         ),
         "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeSchematronPath() {
+    final var certificateModel = certificateModelFactoryFK7443.create();
+
+    assertEquals(SCHEMATRON_PATH, certificateModel.schematronPath());
   }
 
   @Nested
