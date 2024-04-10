@@ -59,7 +59,6 @@ public class ElementValueConverterDateRangeList implements ElementValueConverter
                         .to(dateRange.getTo())
                         .build()
                 )
-                .map(DateRange.class::cast)
                 .toList()
         )
         .build();

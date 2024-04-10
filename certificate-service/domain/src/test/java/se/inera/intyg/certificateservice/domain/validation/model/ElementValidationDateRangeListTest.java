@@ -178,6 +178,113 @@ class ElementValidationDateRangeListTest {
     }
   }
 
+  @Nested
+  class NotMandatory {
+
+    @BeforeEach
+    void setUp() {
+      elementValidationDateRangeList = ElementValidationDateRangeList.builder()
+          .build();
+    }
+
+    @Test
+    void shouldNotReturnValidationErrorIfEmptyListAsRanges() {
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(Collections.emptyList())
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(Collections.emptyList(), actualResult);
+    }
+
+    @Test
+    void shouldNotReturnValidationErrorIfNullAsRanges() {
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(Collections.emptyList(), actualResult);
+    }
+
+    @Test
+    void shouldReturnValidationErrorIfOnlyToDate() {
+      final var expectedValidationError = getExpectedValidationError(
+          "Ange ett datum.",
+          new FieldId(FIELD_ID_RANGE.value() + ".from")
+      );
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .to(LocalDate.now())
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(expectedValidationError, actualResult);
+    }
+
+    @Test
+    void shouldReturnValidationErrorIfOnlyFromDate() {
+      final var expectedValidationError = getExpectedValidationError(
+          "Ange ett datum.",
+          new FieldId(FIELD_ID_RANGE.value() + ".to")
+      );
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now())
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(expectedValidationError, actualResult);
+    }
+  }
+
   private static List<ValidationError> getExpectedValidationError(String message, FieldId fieldId) {
     return List.of(
         ValidationError.builder()
