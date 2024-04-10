@@ -244,6 +244,6 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
   }
 
   private static CheckboxDateRange getDateRange(DateRangeType type) {
-    return new CheckboxDateRange(new FieldId(type.toString()), type.name());
+    return new CheckboxDateRange(new FieldId(type.toString()), type.label());
   }
 }

@@ -29,11 +29,11 @@ public enum DateRangeType {
   TRE_FJARDEDELAR("75 procent"),
   HELT_NEDSATT("100 procent");
 
-  private final String name;
+  private final String label;
   public static final String CODE_SYSTEM = "KV_FKMU_0003";
 
-  DateRangeType(String name) {
-    this.name = name;
+  DateRangeType(String label) {
+    this.label = label;
   }
 
 }
