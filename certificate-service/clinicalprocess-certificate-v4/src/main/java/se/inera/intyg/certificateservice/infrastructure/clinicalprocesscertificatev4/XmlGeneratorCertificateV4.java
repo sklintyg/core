@@ -24,6 +24,7 @@ import se.riv.clinicalprocess.healthcond.certificate.registerCertificate.v3.Obje
 import se.riv.clinicalprocess.healthcond.certificate.registerCertificate.v3.RegisterCertificateType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.ArbetsplatsKod;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.Befattning;
+import se.riv.clinicalprocess.healthcond.certificate.types.v3.DatePeriodType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.HsaId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.IntygId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.PersonId;
@@ -256,7 +257,10 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
     final var factory = new ObjectFactory();
     final var element = factory.createRegisterCertificate(registerCertificateType);
     try {
-      final var context = JAXBContext.newInstance(RegisterCertificateType.class);
+      final var context = JAXBContext.newInstance(
+          RegisterCertificateType.class,
+          DatePeriodType.class
+      );
       final var writer = new StringWriter();
       context.createMarshaller().marshal(element, writer);
       return new Xml(writer.toString());
