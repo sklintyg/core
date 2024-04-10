@@ -7,8 +7,10 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.DateRangeType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.DatePeriodType;
+import se.riv.clinicalprocess.healthcond.certificate.types.v3.ObjectFactory;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
@@ -23,6 +25,8 @@ public class XmlGeneratorDateRangeList implements XmlGeneratorElementData {
         || dateRangeListValue.dateRangeList().isEmpty()) {
       return Collections.emptyList();
     }
+
+    final var objectFactory = new ObjectFactory();
 
     return dateRangeListValue.dateRangeList().stream()
         .map(dateRange -> {
@@ -39,13 +43,15 @@ public class XmlGeneratorDateRangeList implements XmlGeneratorElementData {
           subAnswerDateRange.setId(getDateRangeId(data.id().id()));
           dateRangeType.setEnd(toXmlGregorianCalendar(dateRange.to()));
           dateRangeType.setStart(toXmlGregorianCalendar(dateRange.from()));
-          subAnswerDateRange.getContent().add(dateRangeType);
+          final var convertedDateRangeType = objectFactory.createDatePeriod(dateRangeType);
+          subAnswerDateRange.getContent().add(convertedDateRangeType);
 
           subAnswerCode.setId(getCvId(data.id().id()));
           cvType.setCode(dateRange.dateRangeId().value());
-          cvType.setCodeSystem("KV_FKMU_0003");
-          cvType.setDisplayName(""); // TODO: We need displayname here, from config
-          subAnswerCode.getContent().add(cvType);
+          cvType.setCodeSystem(DateRangeType.CODE_SYSTEM);
+          cvType.setDisplayName(DateRangeType.valueOf(dateRange.dateRangeId().value()).name());
+          final var convertedCvType = objectFactory.createCv(cvType);
+          subAnswerCode.getContent().add(convertedCvType);
 
           dateRangeAnswer.getDelsvar().add(subAnswerCode);
           dateRangeAnswer.getDelsvar().add(subAnswerDateRange);
