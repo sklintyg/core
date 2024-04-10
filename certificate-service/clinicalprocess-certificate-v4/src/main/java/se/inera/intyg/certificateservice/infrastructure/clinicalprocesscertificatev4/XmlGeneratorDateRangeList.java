@@ -47,19 +47,19 @@ public class XmlGeneratorDateRangeList implements XmlGeneratorElementData {
           cvType.setDisplayName(""); // TODO: We need displayname here, from config
           subAnswerCode.getContent().add(cvType);
 
-          dateRangeAnswer.getDelsvar().add(subAnswerDateRange);
           dateRangeAnswer.getDelsvar().add(subAnswerCode);
+          dateRangeAnswer.getDelsvar().add(subAnswerDateRange);
 
           return dateRangeAnswer;
         }).toList();
   }
 
   private static String getDateRangeId(String id) {
-    return id + ".1";
+    return id + ".2";
   }
 
   private static String getCvId(String id) {
-    return id + ".2";
+    return id + ".1";
   }
 
   private XMLGregorianCalendar toXmlGregorianCalendar(LocalDate date) {
