@@ -49,7 +49,7 @@ public class ElementValueConverterDateRangeList implements ElementValueConverter
     }
 
     return ElementValueDateRangeList.builder()
-        .dateRangeListId(new FieldId("ID"))
+        .dateRangeListId(new FieldId(dateRangeListValue.getId()))
         .dateRangeList(
             dateRangeListValue.getList().stream()
                 .map(dateRange ->
