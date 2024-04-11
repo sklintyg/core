@@ -37,7 +37,8 @@ public class SignCertificateDomainService {
 
     certificate.updateMetadata(actionEvaluation);
 
-    certificate.sign(xmlGenerator, signature, revision, actionEvaluation);
+    certificate.sign(xmlGenerator, signature, revision, actionEvaluation, xmlSchematronValidator,
+        xmlSchemaValidator);
 
     final var signedCertificate = certificateRepository.save(certificate);
 

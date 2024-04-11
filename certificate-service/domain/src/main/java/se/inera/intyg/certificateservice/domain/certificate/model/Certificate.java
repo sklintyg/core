@@ -12,6 +12,8 @@ import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
+import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchemaValidator;
+import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchematronValidator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
@@ -128,10 +130,17 @@ public class Certificate {
   }
 
   public void sign(XmlGenerator xmlGenerator, Signature signature, Revision revision,
-      ActionEvaluation actionEvaluation) {
+      ActionEvaluation actionEvaluation, XmlSchematronValidator xmlSchematronValidator,
+      XmlSchemaValidator xmlSchemaValidator) {
     if (signature == null || signature.isEmpty()) {
       throw new IllegalArgumentException(
           "Incorrect signature '%s' - signature required to sign".formatted(signature)
+      );
+    }
+
+    if (!xmlSchematronValidator.validate(this) || !xmlSchemaValidator.validate(this)) {
+      throw new IllegalStateException(
+          "Certificate did not pass schematron validation"
       );
     }
     sign(revision, actionEvaluation);
