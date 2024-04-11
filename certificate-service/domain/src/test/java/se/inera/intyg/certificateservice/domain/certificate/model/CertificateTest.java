@@ -1128,9 +1128,9 @@ class CertificateTest {
               xmlSchematronValidator, xmlSchemaValidator)
       );
 
-      assertEquals(
-          "Certificate did not pass schematron validation",
+      assertTrue(
           illegalStateException.getMessage()
+              .contains("Certificate did not pass schematron validation.")
       );
     }
 
@@ -1145,9 +1145,9 @@ class CertificateTest {
               xmlSchematronValidator, xmlSchemaValidator)
       );
 
-      assertEquals(
-          "Certificate did not pass schematron validation",
+      assertTrue(
           illegalStateException.getMessage()
+              .contains("Certificate did not pass schematron validation.")
       );
     }
   }

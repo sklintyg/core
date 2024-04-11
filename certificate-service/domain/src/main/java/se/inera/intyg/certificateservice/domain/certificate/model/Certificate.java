@@ -138,13 +138,20 @@ public class Certificate {
           "Incorrect signature '%s' - signature required to sign".formatted(signature)
       );
     }
-    
+
     sign(revision, actionEvaluation);
     this.xml = xmlGenerator.generate(this, signature);
 
-    if (!xmlSchematronValidator.validate(this) || !xmlSchemaValidator.validate(this)) {
+    final var schematronValidation = xmlSchematronValidator.validate(this);
+    final var schemaValidation = xmlSchemaValidator.validate(this);
+    if (!schematronValidation || !schemaValidation) {
       throw new IllegalStateException(
-          "Certificate did not pass schematron validation"
+          ("Certificate did not pass schematron validation."
+              + " Schematron validation result: '%s'. "
+              + "Schema validation result: '%s'"
+          ).formatted(
+              schematronValidation, schemaValidation
+          )
       );
     }
   }
