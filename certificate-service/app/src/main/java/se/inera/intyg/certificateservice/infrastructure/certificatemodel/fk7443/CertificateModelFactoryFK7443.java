@@ -23,11 +23,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
@@ -174,11 +171,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
                     QUESTION_SYMPTOM_ID,
                     QUESTION_SYMPTOM_FIELD_ID
                 ),
-                ElementRuleLimit.builder()
-                    .id(QUESTION_SYMPTOM_ID)
-                    .type(ElementRuleType.TEXT_LIMIT)
-                    .limit(new RuleLimit(LIMIT))
-                    .build()
+                CertificateElementRuleFactory.limit(QUESTION_SYMPTOM_ID, LIMIT)
             )
         )
         .validations(

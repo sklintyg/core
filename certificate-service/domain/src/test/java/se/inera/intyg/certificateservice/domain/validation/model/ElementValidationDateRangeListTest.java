@@ -454,7 +454,7 @@ class ElementValidationDateRangeListTest {
                           .to(LocalDate.now().plusDays(15))
                           .build(),
                       DateRange.builder()
-                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .dateRangeId(FIELD_ID_RANGE_3)
                           .from(LocalDate.now().plusDays(20))
                           .to(LocalDate.now().plusDays(25))
                           .build()
@@ -883,7 +883,7 @@ class ElementValidationDateRangeListTest {
                           .to(LocalDate.now().plusDays(15))
                           .build(),
                       DateRange.builder()
-                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .dateRangeId(FIELD_ID_RANGE_3)
                           .from(LocalDate.now().plusDays(20))
                           .to(LocalDate.now().plusDays(25))
                           .build()
