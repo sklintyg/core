@@ -225,6 +225,14 @@ class CertificateEntityMapperTest {
     }
 
     @Test
+    void shouldMapModified() {
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
+
+      assertEquals(CERTIFICATE_ENTITY.getModified(), response.modified());
+    }
+
+    @Test
     void shouldMapRevision() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
           FK7211_CERTIFICATE_MODEL);
@@ -348,7 +356,7 @@ class CertificateEntityMapperTest {
       );
 
       doReturn(expected).when(certificateDataEntityMapper).toDomain(any());
-      
+
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
           FK7211_CERTIFICATE_MODEL);
 

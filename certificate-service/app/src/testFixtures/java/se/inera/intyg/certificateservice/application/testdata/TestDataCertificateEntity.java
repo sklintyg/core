@@ -27,6 +27,7 @@ public class TestDataCertificateEntity {
         .created(LocalDateTime.now().minusDays(1))
         .modified(LocalDateTime.now())
         .signed(LocalDateTime.now())
+        .modified(LocalDateTime.now())
         .revision(1L)
         .careProvider(ALFA_REGIONEN_ENTITY)
         .careUnit(ALFA_MEDICINCENTRUM_ENTITY)

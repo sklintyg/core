@@ -192,6 +192,7 @@ public class CertificateEntityMapper {
         .id(new CertificateId(certificateEntity.getCertificateId()))
         .created(certificateEntity.getCreated())
         .signed(certificateEntity.getSigned())
+        .modified(certificateEntity.getModified())
         .status(Status.valueOf(certificateEntity.getStatus().getStatus()))
         .revision(new Revision(certificateEntity.getRevision()))
         .certificateModel(model)
