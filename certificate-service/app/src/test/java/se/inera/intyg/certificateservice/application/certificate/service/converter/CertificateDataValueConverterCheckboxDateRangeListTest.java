@@ -24,7 +24,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 class CertificateDataValueConverterCheckboxDateRangeListTest {
 
   private static final String ELEMENT_ID = "elementId";
-  private static final LocalDate TEST_DATE = LocalDate.of(2021, 5, 20);
   private static final FieldId FIELD_ID = new FieldId("fieldId");
   private final CertificateDataValueConverterCheckboxDateRangeList converter = new CertificateDataValueConverterCheckboxDateRangeList();
   private ElementConfigurationCheckboxDateRangeListBuilder elementConfigurationBuilder;

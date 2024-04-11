@@ -7,7 +7,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.DateRangeType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.DatePeriodType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.ObjectFactory;
@@ -48,8 +48,8 @@ public class XmlGeneratorDateRangeList implements XmlGeneratorElementData {
 
           subAnswerCode.setId(getCvId(data.id().id()));
           cvType.setCode(dateRange.dateRangeId().value());
-          cvType.setCodeSystem(DateRangeType.CODE_SYSTEM);
-          cvType.setDisplayName(DateRangeType.valueOf(dateRange.dateRangeId().value()).label());
+          cvType.setCodeSystem(WorkCapacityType.CODE_SYSTEM);
+          cvType.setDisplayName(WorkCapacityType.valueOf(dateRange.dateRangeId().value()).label());
           final var convertedCvType = objectFactory.createCv(cvType);
           subAnswerCode.getContent().add(convertedCvType);
 

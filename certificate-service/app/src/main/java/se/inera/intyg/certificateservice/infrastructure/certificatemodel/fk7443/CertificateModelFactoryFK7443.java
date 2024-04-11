@@ -1,11 +1,11 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443;
 
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.DateRangeType.EN_ATTANDEL;
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.DateRangeType.EN_FJARDEDEL;
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.DateRangeType.HALFTEN;
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.DateRangeType.HELT_NEDSATT;
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.DateRangeType.TRE_FJARDEDELAR;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.EN_ATTANDEL;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.EN_FJARDEDEL;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.HALFTEN;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.HELT_NEDSATT;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.TRE_FJARDEDELAR;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,7 +18,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.DateRangeType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
@@ -29,6 +28,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
@@ -243,7 +243,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
         .build();
   }
 
-  private static CheckboxDateRange getDateRange(DateRangeType type) {
+  private static CheckboxDateRange getDateRange(WorkCapacityType type) {
     return new CheckboxDateRange(new FieldId(type.toString()), type.label());
   }
 }
