@@ -125,9 +125,11 @@ public class Certificate {
   }
 
   public void sign(XmlGenerator xmlGenerator, Revision revision,
-      ActionEvaluation actionEvaluation) {
+      ActionEvaluation actionEvaluation, XmlSchematronValidator xmlSchematronValidator,
+      XmlSchemaValidator xmlSchemaValidator) {
     sign(revision, actionEvaluation);
     this.xml = xmlGenerator.generate(this);
+    performSchematronValidation(xmlSchematronValidator, xmlSchemaValidator);
   }
 
   public void sign(XmlGenerator xmlGenerator, Signature signature, Revision revision,
@@ -141,7 +143,11 @@ public class Certificate {
 
     sign(revision, actionEvaluation);
     this.xml = xmlGenerator.generate(this, signature);
+    performSchematronValidation(xmlSchematronValidator, xmlSchemaValidator);
+  }
 
+  private void performSchematronValidation(XmlSchematronValidator xmlSchematronValidator,
+      XmlSchemaValidator xmlSchemaValidator) {
     final var schematronValidation = xmlSchematronValidator.validate(this);
     final var schemaValidation = xmlSchemaValidator.validate(this);
     if (!schematronValidation || !schemaValidation) {

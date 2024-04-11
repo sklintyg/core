@@ -43,6 +43,10 @@ class SignCertificateWithoutSignatureDomainServiceTest {
   private CertificateEventDomainService certificateEventDomainService;
   @Mock
   private XmlGenerator xmlGenerator;
+  @Mock
+  private XmlSchematronValidator xmlSchematronValidator;
+  @Mock
+  private XmlSchemaValidator xmlSchemaValidator;
   @InjectMocks
   private SignCertificateWithoutSignatureDomainService signCertificateDomainService;
   private ActionEvaluation actionEvaluation;
@@ -77,7 +81,8 @@ class SignCertificateWithoutSignatureDomainServiceTest {
 
     signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, actionEvaluation);
 
-    verify(certificate).sign(xmlGenerator, REVISION, actionEvaluation);
+    verify(certificate).sign(xmlGenerator, REVISION, actionEvaluation, xmlSchematronValidator,
+        xmlSchemaValidator);
   }
 
   @Test

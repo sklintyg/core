@@ -21,6 +21,8 @@ public class SignCertificateWithoutSignatureDomainService {
   private final CertificateRepository certificateRepository;
   private final CertificateEventDomainService certificateEventDomainService;
   private final XmlGenerator xmlGenerator;
+  private final XmlSchematronValidator xmlSchematronValidator;
+  private final XmlSchemaValidator xmlSchemaValidator;
 
   public Certificate sign(CertificateId certificateId, Revision revision,
       ActionEvaluation actionEvaluation) {
@@ -42,7 +44,8 @@ public class SignCertificateWithoutSignatureDomainService {
 
     certificate.updateMetadata(actionEvaluation);
 
-    certificate.sign(xmlGenerator, revision, actionEvaluation);
+    certificate.sign(xmlGenerator, revision, actionEvaluation, xmlSchematronValidator,
+        xmlSchemaValidator);
 
     final var signedCertificate = certificateRepository.save(certificate);
 

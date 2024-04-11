@@ -1161,7 +1161,8 @@ class CertificateTest {
       final var revision = new Revision(2);
       final var concurrentModificationException = assertThrows(
           ConcurrentModificationException.class,
-          () -> certificate.sign(xmlGenerator, revision, actionEvaluation)
+          () -> certificate.sign(xmlGenerator, revision, actionEvaluation, xmlSchematronValidator,
+              xmlSchemaValidator)
       );
       assertTrue(concurrentModificationException.getMessage().contains("Incorrect revision"),
           () -> "Received message was: %s".formatted(concurrentModificationException.getMessage())
@@ -1176,7 +1177,8 @@ class CertificateTest {
           .build();
 
       final var illegalStateException = assertThrows(IllegalStateException.class,
-          () -> deletedCertificate.sign(xmlGenerator, REVISION, actionEvaluation)
+          () -> deletedCertificate.sign(xmlGenerator, REVISION, actionEvaluation,
+              xmlSchematronValidator, xmlSchemaValidator)
       );
 
       assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
@@ -1186,15 +1188,53 @@ class CertificateTest {
 
     @Test
     void shallReturnStateSignedWhenSigned() {
-      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build());
+      doReturn(true).when(xmlSchemaValidator).validate(certificate);
+      doReturn(true).when(xmlSchematronValidator).validate(certificate);
+      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build(),
+          xmlSchematronValidator, xmlSchemaValidator);
       assertEquals(Status.SIGNED, certificate.status());
     }
 
     @Test
     void shallReturnXmlWhenSigned() {
+      doReturn(true).when(xmlSchemaValidator).validate(certificate);
+      doReturn(true).when(xmlSchematronValidator).validate(certificate);
       doReturn(XML).when(xmlGenerator).generate(certificate);
-      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build());
+      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build(),
+          xmlSchematronValidator, xmlSchemaValidator);
       assertEquals(XML, certificate.xml());
+    }
+
+    @Test
+    void shallThrowIfXmlSchematronValidationIsFalse() {
+      doReturn(false).when(xmlSchematronValidator).validate(certificate);
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.sign(xmlGenerator, REVISION, actionEvaluation,
+              xmlSchematronValidator, xmlSchemaValidator)
+      );
+
+      assertTrue(
+          illegalStateException.getMessage()
+              .contains("Certificate did not pass schematron validation.")
+      );
+    }
+
+
+    @Test
+    void shallThrowIfXmlSchemaValidationIsFalse() {
+      doReturn(false).when(xmlSchemaValidator).validate(certificate);
+      doReturn(true).when(xmlSchematronValidator).validate(certificate);
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.sign(xmlGenerator, REVISION, actionEvaluation,
+              xmlSchematronValidator, xmlSchemaValidator)
+      );
+
+      assertTrue(
+          illegalStateException.getMessage()
+              .contains("Certificate did not pass schematron validation.")
+      );
     }
   }
 
