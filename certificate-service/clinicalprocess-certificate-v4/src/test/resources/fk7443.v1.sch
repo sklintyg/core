@@ -15,7 +15,10 @@
   <iso:pattern id="intyg">
     <iso:rule context="//rg:intyg">
       <iso:assert test="count(gn:svar[@id='1']) = 1">
-        Ett intyg måsta ange ett 'Barnets diagnos eller symtom' svar
+        Måsta ange ett 'Barnets diagnos eller symtom' svar
+      </iso:assert>
+      <iso:assert test="count(gn:svar[@id='2']) le 1">
+        Måste ange ett 'Prognos' svar
       </iso:assert>
     </iso:rule>
   </iso:pattern>
@@ -41,5 +44,7 @@
       </iso:assert>
     </iso:rule>
   </iso:pattern>
+
+  <!-- KV_FKMU_0003 -->
 
 </iso:schema>
