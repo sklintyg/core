@@ -43,13 +43,13 @@ class ElementValueMapperDateTest {
         .date(NOW)
         .build();
 
-    final var mappedElementValueIssuingUnit = MappedElementValueDate.builder()
+    final var mappedElementValueDate = MappedElementValueDate.builder()
         .dateId(ID)
         .date(NOW)
         .build();
 
     final var actualValue = elementValueMapperDate.toDomain(
-        mappedElementValueIssuingUnit
+        mappedElementValueDate
     );
 
     assertEquals(expectedValue, actualValue);
@@ -62,13 +62,13 @@ class ElementValueMapperDateTest {
         .date(NOW)
         .build();
 
-    final var elementValueUnitContactInformation = ElementValueDate.builder()
+    final var elementValueDate = ElementValueDate.builder()
         .dateId(new FieldId(ID))
         .date(NOW)
         .build();
 
     final var actualValue = elementValueMapperDate.toMapped(
-        elementValueUnitContactInformation
+        elementValueDate
     );
 
     assertEquals(expectedValue, actualValue);

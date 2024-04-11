@@ -10,7 +10,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
     @Type(value = CertificateDataConfigCategory.class, name = "CATEGORY"),
     @Type(value = CertificateDataConfigDate.class, name = "UE_DATE"),
-    @Type(value = CertificateDataConfigTextArea.class, name = "UE_TEXTAREA")
+    @Type(value = CertificateDataConfigTextArea.class, name = "UE_TEXTAREA"),
+    @Type(value = CertificateDataConfigCheckboxDateRangeList.class, name = "UE_CHECKBOX_DATE_RANGE_LIST")
 })
 public interface CertificateDataConfig {
 

@@ -1,6 +1,11 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.EN_ATTANDEL;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.EN_FJARDEDEL;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.HALFTEN;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.HELT_NEDSATT;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.TRE_FJARDEDELAR;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,20 +17,20 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateRecipientFactory;
 
@@ -58,7 +63,11 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
   public static final ElementId QUESTION_SYMPTOM_CATEGORY_ID = new ElementId(
       "KAT_1");
   public static final ElementId QUESTION_SYMPTOM_ID = new ElementId("1");
-  private static final String QUESTION_SYMPTOM_FIELD_ID = "1.1";
+  private static final FieldId QUESTION_SYMPTOM_FIELD_ID = new FieldId("1.1");
+
+  private static final ElementId QUESTION_PERIOD_CATEGORY_ID = new ElementId("KAT_2");
+  public static final ElementId QUESTION_PERIOD_ID = new ElementId("2");
+  private static final String QUESTION_PERIOD_FIELD_ID = "2.1";
 
   @Override
   public CertificateModel create() {
@@ -108,6 +117,9 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
                 categorySymptom(
                     questionSymptom()
                 ),
+                categoryPeriod(
+                    questionPeriod()
+                ),
                 issuingUnitContactInfo()
             )
         )
@@ -129,29 +141,37 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
         .build();
   }
 
+  private static ElementSpecification categoryPeriod(
+      ElementSpecification... children) {
+    return ElementSpecification.builder()
+        .id(QUESTION_PERIOD_CATEGORY_ID)
+        .configuration(
+            ElementConfigurationCategory.builder()
+                .name("Period som barnet inte bör vårdas i ordinarie tillsynsform")
+                .build()
+        )
+        .children(
+            List.of(children)
+        )
+        .build();
+  }
+
   private static ElementSpecification questionSymptom() {
     return ElementSpecification.builder()
         .id(QUESTION_SYMPTOM_ID)
         .configuration(
             ElementConfigurationTextArea.builder()
                 .name("Ange diagnos eller symtom")
-                .id(new FieldId(QUESTION_SYMPTOM_FIELD_ID))
+                .id(QUESTION_SYMPTOM_FIELD_ID)
                 .build()
         )
         .rules(
             List.of(
-                ElementRuleExpression.builder()
-                    .id(QUESTION_SYMPTOM_ID)
-                    .type(ElementRuleType.MANDATORY)
-                    .expression(
-                        new RuleExpression("$" + QUESTION_SYMPTOM_FIELD_ID)
-                    )
-                    .build(),
-                ElementRuleLimit.builder()
-                    .id(QUESTION_SYMPTOM_ID)
-                    .type(ElementRuleType.TEXT_LIMIT)
-                    .limit(new RuleLimit(LIMIT))
-                    .build()
+                CertificateElementRuleFactory.mandatory(
+                    QUESTION_SYMPTOM_ID,
+                    QUESTION_SYMPTOM_FIELD_ID
+                ),
+                CertificateElementRuleFactory.limit(QUESTION_SYMPTOM_ID, LIMIT)
             )
         )
         .validations(
@@ -159,6 +179,43 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
                 ElementValidationText.builder()
                     .mandatory(true)
                     .limit(318)
+                    .build()
+            )
+        )
+        .build();
+  }
+
+  private static ElementSpecification questionPeriod() {
+    final var dateRanges = List.of(
+        getDateRange(EN_ATTANDEL),
+        getDateRange(EN_FJARDEDEL),
+        getDateRange(HALFTEN),
+        getDateRange(TRE_FJARDEDELAR),
+        getDateRange(HELT_NEDSATT)
+    );
+
+    return ElementSpecification.builder()
+        .id(QUESTION_PERIOD_ID)
+        .configuration(
+            ElementConfigurationCheckboxDateRangeList.builder()
+                .name("Jag bedömer att barnet inte bör vårdas i ordinarie tillsynsform")
+                .id(new FieldId(QUESTION_PERIOD_FIELD_ID))
+                .dateRanges(dateRanges)
+                .hideWorkingHours(true)
+                .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.mandatory(
+                    QUESTION_PERIOD_ID,
+                    dateRanges.stream().map(CheckboxDateRange::id).toList()
+                )
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationDateRangeList.builder()
+                    .mandatory(true)
                     .build()
             )
         )
@@ -177,5 +234,9 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
             )
         )
         .build();
+  }
+
+  private static CheckboxDateRange getDateRange(WorkCapacityType type) {
+    return new CheckboxDateRange(new FieldId(type.toString()), type.label());
   }
 }

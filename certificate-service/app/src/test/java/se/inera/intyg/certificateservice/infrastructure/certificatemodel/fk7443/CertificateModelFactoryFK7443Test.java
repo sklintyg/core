@@ -17,7 +17,9 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -29,6 +31,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpre
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 
@@ -288,6 +291,111 @@ class CertificateModelFactoryFK7443Test {
             ElementValidationText.builder()
                 .mandatory(true)
                 .limit(318)
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK7443.create();
+
+        assertEquals(expectedValidations,
+            certificateModel.elementSpecification(ELEMENT_ID).validations()
+        );
+      }
+    }
+
+    @Nested
+    class CategoryPeriod {
+
+      private static final ElementId ELEMENT_ID = new ElementId("KAT_2");
+
+      @Test
+      void shallIncludeId() {
+        final var certificateModel = certificateModelFactoryFK7443.create();
+
+        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
+                certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeConfiguration() {
+        final var expectedConfiguration = ElementConfigurationCategory.builder()
+            .name("Period som barnet inte bör vårdas i ordinarie tillsynsform")
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK7443.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+    }
+
+    @Nested
+    class QuestionPrognos {
+
+      private static final ElementId ELEMENT_ID = new ElementId("2");
+
+      @Test
+      void shallIncludeId() {
+        final var certificateModel = certificateModelFactoryFK7443.create();
+
+        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
+                certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeConfiguration() {
+        final var expectedConfiguration = ElementConfigurationCheckboxDateRangeList.builder()
+            .name("Jag bedömer att barnet inte bör vårdas i ordinarie tillsynsform")
+            .id(new FieldId("2.1"))
+            .hideWorkingHours(true)
+            .dateRanges(
+                List.of(
+                    new CheckboxDateRange(new FieldId("EN_ATTANDEL"), "12,5 procent"),
+                    new CheckboxDateRange(new FieldId("EN_FJARDEDEL"), "25 procent"),
+                    new CheckboxDateRange(new FieldId("HALFTEN"), "50 procent"),
+                    new CheckboxDateRange(new FieldId("TRE_FJARDEDELAR"), "75 procent"),
+                    new CheckboxDateRange(new FieldId("HELT_NEDSATT"), "100 procent")
+                )
+            )
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK7443.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+
+      @Test
+      void shallIncludeRules() {
+        final var expectedRules = List.of(
+            ElementRuleExpression.builder()
+                .id(ELEMENT_ID)
+                .type(ElementRuleType.MANDATORY)
+                .expression(
+                    new RuleExpression(
+                        "$EN_ATTANDEL || $EN_FJARDEDEL || $HALFTEN || $TRE_FJARDEDELAR || $HELT_NEDSATT"
+                    )
+                )
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK7443.create();
+
+        assertEquals(expectedRules,
+            certificateModel.elementSpecification(ELEMENT_ID).rules()
+        );
+      }
+
+      @Test
+      void shallIncludeValidations() {
+        final var expectedValidations = List.of(
+            ElementValidationDateRangeList.builder()
+                .mandatory(true)
                 .build()
         );
 

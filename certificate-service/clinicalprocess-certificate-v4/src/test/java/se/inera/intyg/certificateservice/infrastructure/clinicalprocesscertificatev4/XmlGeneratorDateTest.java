@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
@@ -46,11 +46,11 @@ class XmlGeneratorDateTest {
     final var response = xmlGeneratorDate.generate(data);
 
     assertAll(
-        () -> assertEquals(expectedData.getId(), response.getId()),
+        () -> assertEquals(expectedData.getId(), response.get(0).getId()),
         () -> assertEquals(expectedData.getDelsvar().get(0).getId(),
-            response.getDelsvar().get(0).getId()),
+            response.get(0).getDelsvar().get(0).getId()),
         () -> assertEquals(expectedData.getDelsvar().get(0).getContent().get(0),
-            response.getDelsvar().get(0).getContent().get(0))
+            response.get(0).getDelsvar().get(0).getContent().get(0))
     );
   }
 
@@ -66,7 +66,7 @@ class XmlGeneratorDateTest {
 
     final var response = xmlGeneratorDate.generate(data);
 
-    assertNull(response);
+    assertTrue(response.isEmpty());
   }
 
   @Test
@@ -80,6 +80,6 @@ class XmlGeneratorDateTest {
 
     final var response = xmlGeneratorDate.generate(data);
 
-    assertNull(response);
+    assertTrue(response.isEmpty());
   }
 }

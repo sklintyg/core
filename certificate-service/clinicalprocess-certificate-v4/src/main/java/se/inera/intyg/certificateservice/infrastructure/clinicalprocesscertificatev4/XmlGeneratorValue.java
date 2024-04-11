@@ -6,6 +6,7 @@ import java.util.Objects;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
@@ -14,7 +15,8 @@ public class XmlGeneratorValue {
 
   private final Map<Class<? extends ElementValue>, XmlGeneratorElementData> converters = Map.of(
       ElementValueDate.class, new XmlGeneratorDate(),
-      ElementValueText.class, new XmlGeneratorText()
+      ElementValueText.class, new XmlGeneratorText(),
+      ElementValueDateRangeList.class, new XmlGeneratorDateRangeList()
   );
 
   public List<Svar> generate(List<ElementData> elementData) {
@@ -29,6 +31,7 @@ public class XmlGeneratorValue {
           }
           return converter.generate(data);
         })
+        .flatMap(List::stream)
         .filter(Objects::nonNull)
         .toList();
   }

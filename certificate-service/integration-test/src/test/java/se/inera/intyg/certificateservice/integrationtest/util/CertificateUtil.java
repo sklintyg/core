@@ -25,6 +25,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidationErrorDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateRange;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateRangeList;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesResponse;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesResponse;
@@ -180,6 +182,22 @@ public class CertificateUtil {
         .build();
   }
 
+  public static CertificateDataElement updateDateRangeListValue(CertificateDTO certificateDTO,
+      String questionId, List<CertificateDataValueDateRange> newList) {
+    final var certificate = Objects.requireNonNull(certificateDTO.getData().get(questionId));
+    return CertificateDataElement.builder()
+        .id(certificate.getId())
+        .parent(certificate.getParent())
+        .config(certificate.getConfig())
+        .validation(certificate.getValidation())
+        .value(
+            CertificateDataValueDateRangeList.builder()
+                .list(newList)
+                .build()
+        )
+        .build();
+  }
+
   public static LocalDate getValueDate(ResponseEntity<UpdateCertificateResponse> response,
       String questionId) {
     if (response == null || response.getBody() == null) {
@@ -196,6 +214,17 @@ public class CertificateUtil {
     }
     return ((CertificateDataValueText) response.getBody().getCertificate().getData().get(questionId)
         .getValue()).getText();
+  }
+
+  public static List<CertificateDataValueDateRange> getValueDateRangeList(
+      ResponseEntity<UpdateCertificateResponse> response,
+      String questionId) {
+    if (response == null || response.getBody() == null) {
+      return null;
+    }
+    return ((CertificateDataValueDateRangeList) response.getBody().getCertificate().getData()
+        .get(questionId)
+        .getValue()).getList();
   }
 
   public static List<ValidationErrorDTO> validationErrors(
