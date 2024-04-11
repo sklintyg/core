@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.validation.model;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -25,6 +26,7 @@ class ElementValidationDateRangeListTest {
   private static final ElementId ELEMENT_ID = new ElementId("elementId");
   private static final FieldId FIELD_ID = new FieldId("fieldId");
   private static final FieldId FIELD_ID_RANGE = new FieldId("date_range_1");
+  private static final FieldId FIELD_ID_RANGE_2 = new FieldId("date_range_2");
   private static final ElementId CATEGORY_ID = new ElementId("categoryId");
   private ElementValidationDateRangeList elementValidationDateRangeList;
 
@@ -206,6 +208,48 @@ class ElementValidationDateRangeListTest {
 
       assertEquals(expectedValidationError, actualResult);
     }
+
+    @Test
+    void shouldReturnSeveralValidationErrors() {
+      final var expectedValidationErrorIncorrect = getExpectedValidationError(
+          "Ange ett slutdatum som infaller efter startdatumet.",
+          new FieldId(FIELD_ID_RANGE.value() + ".range")
+      );
+      final var expectedValidationErrorIncomplete = getExpectedValidationError(
+          "Ange ett datum.",
+          new FieldId(FIELD_ID_RANGE_2.value() + ".to")
+      );
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().minusDays(5))
+                          .build(),
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .from(LocalDate.now())
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertAll(
+          () -> assertEquals(expectedValidationErrorIncomplete.get(0), actualResult.get(0)),
+          () -> assertEquals(expectedValidationErrorIncorrect.get(0), actualResult.get(1))
+      );
+    }
   }
 
   @Nested
@@ -312,6 +356,78 @@ class ElementValidationDateRangeListTest {
       );
 
       assertEquals(expectedValidationError, actualResult);
+    }
+
+    @Test
+    void shouldReturnValidationErrorIfToIsBeforeFrom() {
+      final var expectedValidationError = getExpectedValidationError(
+          "Ange ett slutdatum som infaller efter startdatumet.",
+          new FieldId(FIELD_ID_RANGE.value() + ".range")
+      );
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().minusDays(5))
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(expectedValidationError, actualResult);
+    }
+
+    @Test
+    void shouldReturnSeveralValidationErrors() {
+      final var expectedValidationErrorIncorrect = getExpectedValidationError(
+          "Ange ett slutdatum som infaller efter startdatumet.",
+          new FieldId(FIELD_ID_RANGE.value() + ".range")
+      );
+      final var expectedValidationErrorIncomplete = getExpectedValidationError(
+          "Ange ett datum.",
+          new FieldId(FIELD_ID_RANGE_2.value() + ".to")
+      );
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().minusDays(5))
+                          .build(),
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .from(LocalDate.now())
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertAll(
+          () -> assertEquals(expectedValidationErrorIncomplete.get(0), actualResult.get(0)),
+          () -> assertEquals(expectedValidationErrorIncorrect.get(0), actualResult.get(1))
+      );
     }
   }
 
