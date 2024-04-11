@@ -30,7 +30,6 @@ public class SchemaValidatorV4 implements XmlSchemaValidator {
       validator.validate(
           new StreamSource(new ByteArrayInputStream(certificate.xml().xml().getBytes())));
       return schemaValidationResult(xsdErrorHandler, certificateId);
-
     } catch (Exception e) {
       log.error("Validation failed", e);
       return false;
