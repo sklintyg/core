@@ -27,6 +27,7 @@ class ElementValidationDateRangeListTest {
   private static final FieldId FIELD_ID = new FieldId("fieldId");
   private static final FieldId FIELD_ID_RANGE = new FieldId("date_range_1");
   private static final FieldId FIELD_ID_RANGE_2 = new FieldId("date_range_2");
+  private static final FieldId FIELD_ID_RANGE_3 = new FieldId("date_range_3");
   private static final ElementId CATEGORY_ID = new ElementId("categoryId");
   private ElementValidationDateRangeList elementValidationDateRangeList;
 
@@ -250,6 +251,256 @@ class ElementValidationDateRangeListTest {
           () -> assertEquals(expectedValidationErrorIncorrect.get(0), actualResult.get(1))
       );
     }
+
+    @Nested
+    class OverlapError {
+
+      @Test
+      void shouldReturnErrorIfDateRangesHaveSameDayOnFrom() {
+        final var expectedValidationError = getExpectedValidationError(
+            "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+        );
+
+        final var elementData = ElementData.builder()
+            .id(ELEMENT_ID)
+            .value(
+                ElementValueDateRangeList.builder()
+                    .dateRangeListId(FIELD_ID)
+                    .dateRangeList(List.of(
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE)
+                            .from(LocalDate.now())
+                            .to(LocalDate.now().plusDays(1))
+                            .build(),
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE_2)
+                            .from(LocalDate.now())
+                            .to(LocalDate.now().plusDays(3))
+                            .build()
+                    ))
+                    .build()
+            )
+            .build();
+
+        final var actualResult = elementValidationDateRangeList.validate(
+            elementData,
+            Optional.of(CATEGORY_ID)
+        );
+
+        assertEquals(expectedValidationError, actualResult);
+      }
+
+      @Test
+      void shouldReturnErrorIfDateRangesHaveSameDayOnTo() {
+        final var expectedValidationError = getExpectedValidationError(
+            "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+        );
+
+        final var elementData = ElementData.builder()
+            .id(ELEMENT_ID)
+            .value(
+                ElementValueDateRangeList.builder()
+                    .dateRangeListId(FIELD_ID)
+                    .dateRangeList(List.of(
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE)
+                            .from(LocalDate.now().minusDays(1))
+                            .to(LocalDate.now())
+                            .build(),
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE_2)
+                            .from(LocalDate.now().minusDays(2))
+                            .to(LocalDate.now())
+                            .build()
+                    ))
+                    .build()
+            )
+            .build();
+
+        final var actualResult = elementValidationDateRangeList.validate(
+            elementData,
+            Optional.of(CATEGORY_ID)
+        );
+
+        assertEquals(expectedValidationError, actualResult);
+      }
+    }
+
+    @Test
+    void shouldReturnErrorIfDateRangesHaveOverlappingPeriods() {
+      final var expectedValidationError = getExpectedValidationError(
+          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+      );
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now().minusDays(1))
+                          .to(LocalDate.now().plusDays(10))
+                          .build(),
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusDays(5))
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(expectedValidationError, actualResult);
+    }
+
+    @Test
+    void shouldReturnErrorIfLowerOverlap() {
+      final var expectedValidationError = getExpectedValidationError(
+          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+      );
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now().minusDays(10))
+                          .to(LocalDate.now().plusDays(10))
+                          .build(),
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusDays(15))
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(expectedValidationError, actualResult);
+    }
+
+    @Test
+    void shouldReturnErrorIfUpperOverlap() {
+      final var expectedValidationError = getExpectedValidationError(
+          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+      );
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now().plusDays(1))
+                          .to(LocalDate.now().plusDays(20))
+                          .build(),
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusDays(15))
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(expectedValidationError, actualResult);
+    }
+
+    @Test
+    void shouldReturnErrorIfOneCorrectPeriodButTwoOverlap() {
+      final var expectedValidationError = getExpectedValidationError(
+          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+      );
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now().minusDays(10))
+                          .to(LocalDate.now().plusDays(10))
+                          .build(),
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusDays(15))
+                          .build(),
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .from(LocalDate.now().plusDays(20))
+                          .to(LocalDate.now().plusDays(25))
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(expectedValidationError, actualResult);
+    }
+
+    @Test
+    void shouldReturnNoValidationErrorsIfCorrectPeriodsWithNoOverlap() {
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusDays(15))
+                          .build(),
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .from(LocalDate.now().plusDays(20))
+                          .to(LocalDate.now().plusDays(25))
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(Collections.emptyList(), actualResult);
+    }
   }
 
   @Nested
@@ -428,6 +679,256 @@ class ElementValidationDateRangeListTest {
           () -> assertEquals(expectedValidationErrorIncomplete.get(0), actualResult.get(0)),
           () -> assertEquals(expectedValidationErrorIncorrect.get(0), actualResult.get(1))
       );
+    }
+
+    @Nested
+    class OverlapError {
+
+      @Test
+      void shouldReturnErrorIfDateRangesHaveSameDayOnFrom() {
+        final var expectedValidationError = getExpectedValidationError(
+            "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+        );
+
+        final var elementData = ElementData.builder()
+            .id(ELEMENT_ID)
+            .value(
+                ElementValueDateRangeList.builder()
+                    .dateRangeListId(FIELD_ID)
+                    .dateRangeList(List.of(
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE)
+                            .from(LocalDate.now())
+                            .to(LocalDate.now().plusDays(1))
+                            .build(),
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE_2)
+                            .from(LocalDate.now())
+                            .to(LocalDate.now().plusDays(3))
+                            .build()
+                    ))
+                    .build()
+            )
+            .build();
+
+        final var actualResult = elementValidationDateRangeList.validate(
+            elementData,
+            Optional.of(CATEGORY_ID)
+        );
+
+        assertEquals(expectedValidationError, actualResult);
+      }
+
+      @Test
+      void shouldReturnErrorIfDateRangesHaveSameDayOnTo() {
+        final var expectedValidationError = getExpectedValidationError(
+            "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+        );
+
+        final var elementData = ElementData.builder()
+            .id(ELEMENT_ID)
+            .value(
+                ElementValueDateRangeList.builder()
+                    .dateRangeListId(FIELD_ID)
+                    .dateRangeList(List.of(
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE)
+                            .from(LocalDate.now().minusDays(1))
+                            .to(LocalDate.now())
+                            .build(),
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE_2)
+                            .from(LocalDate.now().minusDays(2))
+                            .to(LocalDate.now())
+                            .build()
+                    ))
+                    .build()
+            )
+            .build();
+
+        final var actualResult = elementValidationDateRangeList.validate(
+            elementData,
+            Optional.of(CATEGORY_ID)
+        );
+
+        assertEquals(expectedValidationError, actualResult);
+      }
+    }
+
+    @Test
+    void shouldReturnErrorIfDateRangesHaveOverlappingPeriods() {
+      final var expectedValidationError = getExpectedValidationError(
+          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+      );
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now().minusDays(1))
+                          .to(LocalDate.now().plusDays(10))
+                          .build(),
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusDays(5))
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(expectedValidationError, actualResult);
+    }
+
+    @Test
+    void shouldReturnErrorIfLowerOverlap() {
+      final var expectedValidationError = getExpectedValidationError(
+          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+      );
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now().minusDays(10))
+                          .to(LocalDate.now().plusDays(10))
+                          .build(),
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusDays(15))
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(expectedValidationError, actualResult);
+    }
+
+    @Test
+    void shouldReturnErrorIfUpperOverlap() {
+      final var expectedValidationError = getExpectedValidationError(
+          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+      );
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now().plusDays(1))
+                          .to(LocalDate.now().plusDays(20))
+                          .build(),
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusDays(15))
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(expectedValidationError, actualResult);
+    }
+
+    @Test
+    void shouldReturnErrorIfOneCorrectPeriodButTwoOverlap() {
+      final var expectedValidationError = getExpectedValidationError(
+          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+      );
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now().minusDays(10))
+                          .to(LocalDate.now().plusDays(10))
+                          .build(),
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusDays(15))
+                          .build(),
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .from(LocalDate.now().plusDays(20))
+                          .to(LocalDate.now().plusDays(25))
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(expectedValidationError, actualResult);
+    }
+
+    @Test
+    void shouldReturnNoValidationErrorsIfCorrectPeriodsWithNoOverlap() {
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusDays(15))
+                          .build(),
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE_2)
+                          .from(LocalDate.now().plusDays(20))
+                          .to(LocalDate.now().plusDays(25))
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(Collections.emptyList(), actualResult);
     }
   }
 

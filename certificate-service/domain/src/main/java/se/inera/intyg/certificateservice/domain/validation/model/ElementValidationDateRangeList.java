@@ -58,6 +58,11 @@ public class ElementValidationDateRangeList implements ElementValidation {
       return childValidationErrors;
     }
 
+    final var overlappingErrors = getOverlappingErrors(data, categoryId, dateRangeList);
+    if (overlappingErrors != null && !overlappingErrors.isEmpty()) {
+      return overlappingErrors;
+    }
+
     if (mandatory && !isDateRangeListFilled(dateRangeList)) {
       return List.of(
           errorMessage(
@@ -84,6 +89,35 @@ public class ElementValidationDateRangeList implements ElementValidation {
     return Stream
         .concat(incompleteErrors.stream(), incorrectErrors.stream())
         .toList();
+  }
+
+  private List<ValidationError> getOverlappingErrors(ElementData data,
+      Optional<ElementId> categoryId, ElementValueDateRangeList dateRangeList) {
+    if (dateRangeList.dateRangeList() == null) {
+      return Collections.emptyList();
+    }
+
+    final var hasOverlap = dateRangeList.dateRangeList().stream()
+        .anyMatch(dateRange -> doesDateRangeHaveOverlap(dateRange, dateRangeList.dateRangeList()));
+
+    return !hasOverlap ? Collections.emptyList()
+        : List.of(
+            errorMessage(data, dateRangeList.dateRangeListId(), categoryId,
+                "Ange sjukskrivningsperioder som inte överlappar varandra.")
+        );
+  }
+
+  private boolean doesDateRangeHaveOverlap(DateRange dateRange, List<DateRange> list) {
+    return list.stream()
+        .filter(comparedDateRange -> comparedDateRange.dateRangeId() != dateRange.dateRangeId())
+        .anyMatch(comparedDateRange -> doesDateRangesOverlap(comparedDateRange, dateRange));
+  }
+
+  private boolean doesDateRangesOverlap(DateRange dateRange1, DateRange dateRange2) {
+    final var overlap = Math.min(dateRange1.to().toEpochDay(), dateRange2.to().toEpochDay()) -
+        Math.max(dateRange1.from().toEpochDay(), dateRange2.from().toEpochDay());
+
+    return overlap >= 0;
   }
 
   private List<ValidationError> getIncorrectDateRangeErrors(ElementData data,
