@@ -17,7 +17,7 @@
       <iso:assert test="count(gn:svar[@id='1']) = 1">
         Måsta ange ett 'Barnets diagnos eller symtom' svar
       </iso:assert>
-      <iso:assert test="count(gn:svar[@id='2']) le 1">
+      <iso:assert test="count(gn:svar[@id='2']) = 1">
         Måste ange ett 'Prognos' svar
       </iso:assert>
     </iso:rule>
