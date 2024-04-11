@@ -65,10 +65,10 @@ public class ElementValidationDateRangeList implements ElementValidation {
     }
 
     final var incompleteErrors = getIncompleteDateRangeErrors(data, categoryId, dateRangeList);
-    final var incorrectErrors = getIncorrectDateRangeErrors(data, categoryId, dateRangeList);
+    final var toBeforeFromErrors = getToBeforeFromDateRangeErrors(data, categoryId, dateRangeList);
 
     return Stream
-        .concat(incompleteErrors.stream(), incorrectErrors.stream())
+        .concat(incompleteErrors.stream(), toBeforeFromErrors.stream())
         .toList();
   }
 
@@ -106,7 +106,7 @@ public class ElementValidationDateRangeList implements ElementValidation {
     return overlap >= 0;
   }
 
-  private List<ValidationError> getIncorrectDateRangeErrors(ElementData data,
+  private List<ValidationError> getToBeforeFromDateRangeErrors(ElementData data,
       Optional<ElementId> categoryId,
       ElementValueDateRangeList dateRangeList) {
     return dateRangeList.dateRangeList().stream()
