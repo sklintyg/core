@@ -110,7 +110,7 @@ public class ElementValidationDateRangeList implements ElementValidation {
       Optional<ElementId> categoryId,
       ElementValueDateRangeList dateRangeList) {
     return dateRangeList.dateRangeList().stream()
-        .filter(this::isDateRangeIncorrect)
+        .filter(this::isToBeforeFrom)
         .map(dateRange -> errorMessage(
                 data, getFieldId(dateRange.dateRangeId(), RANGE_SUFFIX), categoryId,
                 "Ange ett slutdatum som infaller efter startdatumet."
@@ -159,11 +159,11 @@ public class ElementValidationDateRangeList implements ElementValidation {
         && value.to() != null;
   }
 
-  private boolean isDateRangeIncorrect(DateRange value) {
+  private boolean isToBeforeFrom(DateRange value) {
     if (value.from() == null || value.to() == null) {
       return false;
     }
-    return value.from().isAfter(value.to());
+    return value.to().isBefore(value.from());
   }
 
   private FieldId getFieldIdOfIncompleteDateRange(DateRange dateRange) {
