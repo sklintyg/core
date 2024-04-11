@@ -1042,8 +1042,6 @@ class CertificateTest {
 
     @Test
     void shallThrowExceptionIfRevisionDontMatch() {
-      doReturn(true).when(xmlSchematronValidator).validate(certificate);
-      doReturn(true).when(xmlSchemaValidator).validate(certificate);
       final var actionEvaluation = actionEvaluationBuilder.build();
       final var revision = new Revision(2);
       final var concurrentModificationException = assertThrows(
@@ -1062,9 +1060,6 @@ class CertificateTest {
       final var deletedCertificate = certificateBuilder
           .status(Status.DELETED_DRAFT)
           .build();
-
-      doReturn(true).when(xmlSchematronValidator).validate(deletedCertificate);
-      doReturn(true).when(xmlSchemaValidator).validate(deletedCertificate);
 
       final var illegalStateException = assertThrows(IllegalStateException.class,
           () -> deletedCertificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluation,
