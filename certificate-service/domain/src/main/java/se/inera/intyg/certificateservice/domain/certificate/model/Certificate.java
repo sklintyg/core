@@ -29,6 +29,7 @@ public class Certificate {
   private final CertificateModel certificateModel;
   private final LocalDateTime created;
   private LocalDateTime signed;
+  private LocalDateTime modified;
   private CertificateMetaData certificateMetaData;
   @Builder.Default
   private List<ElementData> elementData = Collections.emptyList();
