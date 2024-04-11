@@ -97,14 +97,19 @@ public class ElementValidationDateRangeList implements ElementValidation {
       return Collections.emptyList();
     }
 
-    final var hasOverlap = dateRangeList.dateRangeList().stream()
-        .anyMatch(dateRange -> doesDateRangeHaveOverlap(dateRange, dateRangeList.dateRangeList()));
+    return dateRangeList.dateRangeList().stream()
+        .filter(dateRange -> doesDateRangeHaveOverlap(dateRange, dateRangeList.dateRangeList()))
+        .findFirst()
+        .map(dateRange -> errorMessage(
+                data,
+                dateRangeList.dateRangeListId(),
+                categoryId,
+                "Ange sjukskrivningsperioder som inte överlappar varandra."
+            )
+        )
+        .stream().toList();
 
-    return !hasOverlap ? Collections.emptyList()
-        : List.of(
-            errorMessage(data, dateRangeList.dateRangeListId(), categoryId,
-                "Ange sjukskrivningsperioder som inte överlappar varandra.")
-        );
+
   }
 
   private boolean doesDateRangeHaveOverlap(DateRange dateRange, List<DateRange> list) {
