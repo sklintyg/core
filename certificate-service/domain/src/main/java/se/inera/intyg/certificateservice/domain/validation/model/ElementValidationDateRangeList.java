@@ -19,9 +19,12 @@
 
 package se.inera.intyg.certificateservice.domain.validation.model;
 
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange.RANGE_SUFFIX;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -71,15 +74,40 @@ public class ElementValidationDateRangeList implements ElementValidation {
 
   private List<ValidationError> getChildValidationErrors(ElementData data,
       Optional<ElementId> categoryId, ElementValueDateRangeList dateRangeList) {
-    return dateRangeList.dateRangeList() == null
-        ? Collections.emptyList()
-        : dateRangeList.dateRangeList().stream()
-            .filter(dateRange -> !isDateRangeComplete(dateRange))
-            .map(dateRange -> errorMessage(
-                    data, getFieldIdOfIncompleteDateRange(dateRange), categoryId, "Ange ett datum."
-                )
+    if (dateRangeList.dateRangeList() == null) {
+      return Collections.emptyList();
+    }
+
+    final var incompleteErrors = getIncompleteDateRangeErrors(data, categoryId, dateRangeList);
+    final var incorrectErrors = getIncorrectDateRangeErrors(data, categoryId, dateRangeList);
+
+    return Stream
+        .concat(incompleteErrors.stream(), incorrectErrors.stream())
+        .toList();
+  }
+
+  private List<ValidationError> getIncorrectDateRangeErrors(ElementData data,
+      Optional<ElementId> categoryId,
+      ElementValueDateRangeList dateRangeList) {
+    return dateRangeList.dateRangeList().stream()
+        .filter(this::isDateRangeIncorrect)
+        .map(dateRange -> errorMessage(
+                data, getFieldId(dateRange.dateRangeId(), RANGE_SUFFIX), categoryId,
+                "Ange ett slutdatum som infaller efter startdatumet."
             )
-            .toList();
+        )
+        .toList();
+  }
+
+  private List<ValidationError> getIncompleteDateRangeErrors(ElementData data,
+      Optional<ElementId> categoryId, ElementValueDateRangeList dateRangeList) {
+    return dateRangeList.dateRangeList().stream()
+        .filter(dateRange -> !isDateRangeComplete(dateRange))
+        .map(dateRange -> errorMessage(
+                data, getFieldIdOfIncompleteDateRange(dateRange), categoryId, "Ange ett datum."
+            )
+        )
+        .toList();
   }
 
   private ElementValueDateRangeList getValue(ElementValue value) {
@@ -109,6 +137,13 @@ public class ElementValidationDateRangeList implements ElementValidation {
   private boolean isDateRangeComplete(DateRange value) {
     return value.from() != null
         && value.to() != null;
+  }
+
+  private boolean isDateRangeIncorrect(DateRange value) {
+    if (value.from() == null || value.to() == null) {
+      return false;
+    }
+    return value.from().isAfter(value.to());
   }
 
   private FieldId getFieldIdOfIncompleteDateRange(DateRange dateRange) {

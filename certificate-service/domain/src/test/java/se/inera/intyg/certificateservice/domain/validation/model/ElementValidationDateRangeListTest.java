@@ -176,6 +176,36 @@ class ElementValidationDateRangeListTest {
 
       assertEquals(expectedValidationError, actualResult);
     }
+
+    @Test
+    void shouldReturnValidationErrorIfToIsBeforeFrom() {
+      final var expectedValidationError = getExpectedValidationError(
+          "Ange ett slutdatum som infaller efter startdatumet.",
+          new FieldId(FIELD_ID_RANGE.value() + ".range")
+      );
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().minusDays(5))
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(expectedValidationError, actualResult);
+    }
   }
 
   @Nested
