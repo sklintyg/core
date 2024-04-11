@@ -23,6 +23,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443.CertificateModelFactoryFK7443.QUESTION_PERIOD_ID;
 import static se.inera.intyg.certificateservice.integrationtest.fk7433.FK7443Constants.FK7443;
 import static se.inera.intyg.certificateservice.integrationtest.fk7433.FK7443Constants.VERSION;
 import static se.inera.intyg.certificateservice.integrationtest.fk7433.FK7443Constants.WRONG_VERSION;
@@ -61,10 +62,12 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificates;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.decodeXml;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.exists;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueDateRangeList;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueText;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.recipient;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.revokeCertificateResponse;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.status;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateDateRangeListValue;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateTextValue;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateUnit;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.validationErrors;
@@ -73,6 +76,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ResourceLin
 import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -93,6 +97,7 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateRange;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
@@ -718,6 +723,42 @@ class FK7443ActiveIT {
       );
 
       assertEquals(expectedText, getValueText(response, questionId));
+    }
+
+    @Test
+    @DisplayName("FK7443 - Om intyget får ett uppdaterat värde för period ska svarsalternativ uppdateras")
+    void shallUpdateDataForPeriod() {
+      final var testCertificates = testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7443, VERSION)
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build()
+      );
+
+      final var questionId = "2";
+      final var expectedData = List.of(
+          CertificateDataValueDateRange.builder()
+              .id("HALFTEN")
+              .to(LocalDate.now())
+              .from(LocalDate.now().minusDays(10))
+              .build()
+      );
+      final var certificate = certificate(testCertificates);
+
+      Objects.requireNonNull(
+          certificate.getData().put(
+              questionId,
+              updateDateRangeListValue(certificate, questionId, expectedData))
+      );
+
+      final var response = api.updateCertificate(
+          customUpdateCertificateRequest()
+              .certificate(certificate)
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(expectedData, getValueDateRangeList(response, questionId));
     }
 
     @Test
@@ -2163,7 +2204,7 @@ class FK7443ActiveIT {
 
     @Test
     @DisplayName("FK7443 - Om utkastet saknar 'symtom' skall valideringsfel returneras")
-    void shallReturnListOfErrorsIfDateIsAMissing() {
+    void shallReturnListOfErrorsIfTextOfSymtomIsMissing() {
       final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7443, VERSION)
       );
@@ -2191,6 +2232,87 @@ class FK7443ActiveIT {
           () -> assertTrue(validationErrors(response).get(0).getText()
                   .contains("Ange ett svar."),
               () -> "Expect to contain 'Ange ett svar.' but was '%s'"
+                  .formatted(validationErrors(response).get(0))
+          )
+      );
+    }
+
+    @Test
+    @DisplayName("FK7443 - Om utkastet saknar 'period' skall valideringsfel returneras")
+    void shallReturnListOfErrorsIfDateRangeListOfPeriodIsMissing() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7443, VERSION)
+      );
+
+      final var certificate = certificate(testCertificates);
+
+      Objects.requireNonNull(
+          certificate.getData().put(
+              QUESTION_PERIOD_ID.id(),
+              updateDateRangeListValue(certificate, QUESTION_PERIOD_ID.id(),
+                  Collections.emptyList()))
+      );
+
+      final var response = api.validateCertificate(
+          customValidateCertificateRequest()
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertEquals(1, validationErrors(response).size(),
+              () -> "Wrong number of errors '%s'".formatted(validationErrors(response))
+          ),
+          () -> assertTrue(validationErrors(response).get(0).getText()
+                  .contains("Välj minst ett alternativ."),
+              () -> "Expect to contain 'Välj minst ett alternativ.' but was '%s'"
+                  .formatted(validationErrors(response).get(0))
+          )
+      );
+    }
+
+    @Test
+    @DisplayName("FK7443 - Om utkastet har en icke komplett 'period' skall valideringsfel returneras")
+    void shallReturnListOfErrorsIfDateRangeListOfPeriodIsNotComplete() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7443, VERSION)
+      );
+
+      final var certificate = certificate(testCertificates);
+
+      Objects.requireNonNull(
+          certificate.getData().put(
+              QUESTION_PERIOD_ID.id(),
+              updateDateRangeListValue(certificate, QUESTION_PERIOD_ID.id(),
+                  List.of(
+                      CertificateDataValueDateRange.builder()
+                          .id("HALFTEN")
+                          .to(LocalDate.now())
+                          .build()
+                  )
+              ))
+      );
+
+      final var response = api.validateCertificate(
+          customValidateCertificateRequest()
+              .certificate(certificate)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertEquals(1, validationErrors(response).size(),
+              () -> "Wrong number of errors '%s'".formatted(validationErrors(response))
+          ),
+          () -> assertTrue(validationErrors(response).get(0).getText()
+                  .contains("Ange ett datum"),
+              () -> "Expect to contain 'Ange ett datum.' but was '%s'"
+                  .formatted(validationErrors(response).get(0))
+          ),
+          () -> assertTrue(validationErrors(response).get(0).getField()
+                  .contains("HALFTEN.from"),
+              () -> "Expect field to contain 'HALFTEN.from' but was '%s'"
                   .formatted(validationErrors(response).get(0))
           )
       );

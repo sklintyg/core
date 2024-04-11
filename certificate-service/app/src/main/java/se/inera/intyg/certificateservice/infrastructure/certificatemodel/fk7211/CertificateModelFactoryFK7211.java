@@ -17,14 +17,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateRecipientFactory;
 
@@ -50,7 +48,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
   public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_CATEGORY_ID = new ElementId(
       "KAT_1");
   public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_ID = new ElementId("1");
-  private static final String QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID = "1.1";
+  private static final FieldId QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID = new FieldId("1.1");
   public static final String PDF_FK_7211_PDF = "fk7211/pdf/fk7211_v1.pdf";
   public static final String SCHEMATRON_PATH = "fk7211/schematron/fk7211.v1.sch";
 
@@ -132,20 +130,17 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         .configuration(
             ElementConfigurationDate.builder()
                 .name("Beräknat nedkomstdatum")
-                .id(new FieldId(QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID))
+                .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID)
                 .min(Period.ofDays(0))
                 .max(Period.ofYears(1))
                 .build()
         )
         .rules(
             List.of(
-                ElementRuleExpression.builder()
-                    .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
-                    .type(ElementRuleType.MANDATORY)
-                    .expression(
-                        new RuleExpression("$" + QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID)
-                    )
-                    .build()
+                CertificateElementRuleFactory.mandatory(
+                    QUESTION_BERAKNAT_NEDKOMSTDATUM_ID,
+                    QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID
+                )
             )
         )
         .validations(

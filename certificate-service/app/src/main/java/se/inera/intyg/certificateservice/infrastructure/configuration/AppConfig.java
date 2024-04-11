@@ -134,9 +134,10 @@ public class AppConfig {
   @Bean
   public SignCertificateWithoutSignatureDomainService signCertificateWithoutSignatureDomainService(
       CertificateRepository certificateRepository,
-      CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator) {
+      CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator,
+      XmlSchematronValidator xmlSchematronValidator, XmlSchemaValidator schemaValidator) {
     return new SignCertificateWithoutSignatureDomainService(certificateRepository,
-        certificateEventDomainService, xmlGenerator);
+        certificateEventDomainService, xmlGenerator, xmlSchematronValidator, schemaValidator);
   }
 
   @Bean
