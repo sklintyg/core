@@ -190,4 +190,21 @@ class CertificateDataValueConverterCheckboxDateRangeListTest {
     assertTrue(((CertificateDataValueDateRangeList) result).getList().isEmpty(),
         "If no value is provided value should be empty list");
   }
+
+  @Test
+  void shallSetIdFromConfiguration() {
+    final var configuration = ElementSpecification.builder()
+        .id(new ElementId(ELEMENT_ID))
+        .configuration(
+            elementConfigurationBuilder.build()
+        )
+        .build();
+
+    final var elementValue = ElementValueDateRangeList.builder()
+        .build();
+
+    final var result = converter.convert(configuration, elementValue);
+
+    assertEquals(FIELD_ID.value(), ((CertificateDataValueDateRangeList) result).getId());
+  }
 }
