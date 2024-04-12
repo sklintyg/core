@@ -33,9 +33,7 @@
       <iso:let name="currDate" value="xs:date(current-date())"/>
       <iso:let name="currDatePlusOneYear" value="$currDate + xs:dayTimeDuration('P366D')"/>
       <iso:let name="expectedBirthDate" value="xs:date(.)"/>
-
       <iso:extends rule="date"/>
-
       <iso:assert test="$expectedBirthDate ge $currDate">
         Datum som anges som 'Beräknat nedkomstdatum' får inte vara tidigare än dagens datum.
       </iso:assert>
@@ -44,6 +42,18 @@
       </iso:assert>
     </iso:rule>
   </iso:pattern>
+
+   <iso:pattern id="q1.2">
+         <iso:rule context="//gn:delsvar[@id='1.2']">
+              <iso:extends rule="cv"/>
+              <iso:assert test="tp:cv/tp:codeSystem = 'KV_FKMU_0008'">
+                  'codeSystem' måste vara 'KV_FKMU_0008'.
+              </iso:assert>
+              <iso:assert test="matches(normalize-space(tp:cv/tp:code), '^(LÄKARE|BARNMORSKA|SJUKSKÖTERSKA)$')">
+                  'Intygsutfärdare' kan ha ett av värdena LÄKARE, BARNMORSKA eller SJUKSKÖTERSKA.
+              </iso:assert>
+          </iso:rule>
+</iso:pattern>
 
   <iso:pattern id="date-pattern">
     <iso:rule id="date" abstract="true">
