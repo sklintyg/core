@@ -63,7 +63,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
   public static final ElementId QUESTION_SYMPTOM_CATEGORY_ID = new ElementId(
       "KAT_1");
   public static final ElementId QUESTION_SYMPTOM_ID = new ElementId("1");
-  public static final String SCHEMATRON_PATH = "fk7443/schematron/fk7443.v1.sch";
+  public static final String SCHEMATRON_PATH = "fk7443/schematron/itfp.v1.sch";
   private static final FieldId QUESTION_SYMPTOM_FIELD_ID = new FieldId("1.1");
   private static final ElementId QUESTION_PERIOD_CATEGORY_ID = new ElementId("KAT_2");
   public static final ElementId QUESTION_PERIOD_ID = new ElementId("2");

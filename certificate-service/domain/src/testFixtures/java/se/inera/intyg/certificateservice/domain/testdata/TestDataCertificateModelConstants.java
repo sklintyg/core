@@ -24,8 +24,8 @@ public class TestDataCertificateModelConstants {
       "b64ea353-e8f6-4832-b563-fc7d46f29548",
       "Intyg om tillfällig föräldrapenning"
   );
-  public static final String FK7211_SCHEMATRON_PATH = "fk7211.v1.sch";
-  public static final String FK7443_SCHEMATRON_PATH = "fk7443.v1.sch";
+  public static final String FK7211_SCHEMATRON_PATH = "igrav.v1.sch";
+  public static final String FK7443_SCHEMATRON_PATH = "itfp.v1.sch";
   public static final String FK7211_PDF_PATH = "fk7211_v1.pdf";
   public static final String FK7443_PDF_PATH = "fk7443_v1.pdf";
   public static final String FK7211_NAME = "Intyg om graviditet";
