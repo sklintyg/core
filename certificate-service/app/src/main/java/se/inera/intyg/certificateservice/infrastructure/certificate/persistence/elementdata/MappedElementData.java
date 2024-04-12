@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MappedElementData {
 
-    String id;
-    MappedElementValue value;
+  String id;
+  MappedElementValue value;
 }

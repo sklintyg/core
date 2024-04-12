@@ -737,7 +737,7 @@ class FK7443ActiveIT {
       final var questionId = "2";
       final var expectedData = List.of(
           CertificateDataValueDateRange.builder()
-              .id("HALFTEN")
+              .id("HALVA")
               .to(LocalDate.now())
               .from(LocalDate.now().minusDays(10))
               .build()
@@ -2287,7 +2287,7 @@ class FK7443ActiveIT {
               updateDateRangeListValue(certificate, QUESTION_PERIOD_ID.id(),
                   List.of(
                       CertificateDataValueDateRange.builder()
-                          .id("HALFTEN")
+                          .id("HALVA")
                           .to(LocalDate.now())
                           .build()
                   )
@@ -2311,8 +2311,8 @@ class FK7443ActiveIT {
                   .formatted(validationErrors(response).get(0))
           ),
           () -> assertTrue(validationErrors(response).get(0).getField()
-                  .contains("HALFTEN.from"),
-              () -> "Expect field to contain 'HALFTEN.from' but was '%s'"
+                  .contains("HALVA.from"),
+              () -> "Expect field to contain 'HALVA.from' but was '%s'"
                   .formatted(validationErrors(response).get(0))
           )
       );
