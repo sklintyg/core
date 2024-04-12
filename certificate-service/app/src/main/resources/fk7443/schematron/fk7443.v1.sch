@@ -45,16 +45,16 @@
     </iso:rule>
   </iso:pattern>
 
-    <iso:pattern id="prognosisValidation">
+    <iso:pattern id="q.2">
         <iso:rule context="//gn:svar[@id='2']">
             <iso:assert test="count(gn:instans) = 1">
-                Svaret för frågan Period måste ha ett instansnummer.
+                Svaret för frågan "Period som barnet inte bör vårdas i ordinarie tillsynsform" måste ha ett instansnummer.
             </iso:assert>
             <iso:assert test="count(gn:delsvar[@id='2.1']) = 1">
-                Svaret för frågan Period måste ha en 'grad'.
+                Svaret för frågan "Period som barnet inte bör vårdas i ordinarie tillsynsform" måste ha en 'grad'.
             </iso:assert>
             <iso:assert test="count(gn:delsvar[@id='2.2']) = 1">
-                Svaret för frågan Period måste ha en 'period'.
+                Svaret för frågan "Period som barnet inte bör vårdas i ordinarie tillsynsform" måste ha en 'period'.
             </iso:assert>
             <iso:let name="cstart" value="normalize-space(gn:delsvar[@id='2.2']/tp:datePeriod/tp:start)"/>
             <iso:let name="cend" value="normalize-space(gn:delsvar[@id='2.2']/tp:datePeriod/tp:end)"/>
@@ -69,13 +69,13 @@
                 'codeSystem' måste vara 'KV_FKMU_0003'.
             </iso:assert>
             <iso:assert test="matches(normalize-space(tp:cv/tp:code), '^(EN_ATTANDEL|HELT_NEDSATT|TRE_FJARDEDEL|HALFTEN|EN_FJARDEDEL)$')">
-                'Period' kan ha ett av värdena EN_ATTANDEL, HELT_NEDSATT, TRE_FJARDEDEL, HALFTEN, EN_FJARDEDEL.
+                'Ordinarie tillsynsform' kan ha ett av värdena EN_ATTANDEL, HELT_NEDSATT, TRE_FJARDEDEL, HALFTEN, EN_FJARDEDEL.
             </iso:assert>
         </iso:rule>
 
         <iso:rule context="//gn:svar[@id='2']">
             <iso:assert test="not(preceding-sibling::gn:svar[@id='2']/gn:delsvar[@id='2.1']/tp:cv/tp:code/normalize-space() = normalize-space(gn:delsvar[@id='2.1']/tp:cv/tp:code))">
-                'Period' (2.1) får besvaras med flera olika koder (KV_FKMU_0003) men varje kod får bara förekomma en gång.
+                'Ordinarie tillsynsform' (2.1) får besvaras med flera olika koder (KV_FKMU_0003) men varje kod får bara förekomma en gång.
             </iso:assert>
         </iso:rule>
     </iso:pattern>
