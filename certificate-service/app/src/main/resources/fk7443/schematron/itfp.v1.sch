@@ -65,17 +65,17 @@
 
         <iso:rule context="//gn:delsvar[@id='2.1']">
             <iso:extends rule="cv"/>
-            <iso:assert test="tp:cv/tp:codeSystem = 'KV_FKMU_0003'">
-                'codeSystem' måste vara 'KV_FKMU_0003'.
+            <iso:assert test="tp:cv/tp:codeSystem = 'KV_FKMU_0009'">
+                'codeSystem' måste vara 'KV_FKMU_0009'.
             </iso:assert>
-            <iso:assert test="matches(normalize-space(tp:cv/tp:code), '^(EN_ATTANDEL|HELT_NEDSATT|TRE_FJARDEDEL|HALFTEN|EN_FJARDEDEL)$')">
-                'Ordinarie tillsynsform' kan ha ett av värdena EN_ATTANDEL, HELT_NEDSATT, TRE_FJARDEDEL, HALFTEN, EN_FJARDEDEL.
+            <iso:assert test="matches(normalize-space(tp:cv/tp:code), '^(EN_ATTANDEL|HELA|TRE_FJARDEDEL|HALVA|EN_FJARDEDEL)$')">
+                'Ordinarie tillsynsform' kan ha ett av värdena EN_ATTANDEL, HELA, TRE_FJARDEDEL, HALVA, EN_FJARDEDEL.
             </iso:assert>
         </iso:rule>
 
         <iso:rule context="//gn:svar[@id='2']">
             <iso:assert test="not(preceding-sibling::gn:svar[@id='2']/gn:delsvar[@id='2.1']/tp:cv/tp:code/normalize-space() = normalize-space(gn:delsvar[@id='2.1']/tp:cv/tp:code))">
-                'Ordinarie tillsynsform' (2.1) får besvaras med flera olika koder (KV_FKMU_0003) men varje kod får bara förekomma en gång.
+                'Ordinarie tillsynsform' (2.1) får besvaras med flera olika koder (KV_FKMU_0009) men varje kod får bara förekomma en gång.
             </iso:assert>
         </iso:rule>
     </iso:pattern>
