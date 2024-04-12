@@ -214,14 +214,15 @@ class CertificateModelFactoryFK7443Test {
     @Nested
     class CategorySymptom {
 
-      private static final ElementId ELEMENT_ID = new ElementId("KAT_1");
+      private static final ElementId ELEMENT_ID = new ElementId("KAT_2");
 
       @Test
       void shallIncludeId() {
         final var certificateModel = certificateModelFactoryFK7443.create();
 
         assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
                 certificateModel.elementSpecifications())
         );
       }
@@ -243,14 +244,15 @@ class CertificateModelFactoryFK7443Test {
     @Nested
     class QuestionSymptom {
 
-      private static final ElementId ELEMENT_ID = new ElementId("1");
+      private static final ElementId ELEMENT_ID = new ElementId("2");
 
       @Test
       void shallIncludeId() {
         final var certificateModel = certificateModelFactoryFK7443.create();
 
         assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
                 certificateModel.elementSpecifications())
         );
       }
@@ -259,7 +261,7 @@ class CertificateModelFactoryFK7443Test {
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationTextArea.builder()
             .name("Ange diagnos eller symtom")
-            .id(new FieldId("1.1"))
+            .id(new FieldId("2.1"))
             .build();
 
         final var certificateModel = certificateModelFactoryFK7443.create();
@@ -273,14 +275,14 @@ class CertificateModelFactoryFK7443Test {
       void shallIncludeRules() {
         final var expectedRules = List.of(
             ElementRuleExpression.builder()
-                .id(new ElementId("1"))
+                .id(new ElementId("2"))
                 .type(ElementRuleType.MANDATORY)
                 .expression(
-                    new RuleExpression("$1.1")
+                    new RuleExpression("$2.1")
                 )
                 .build(),
             ElementRuleLimit.builder()
-                .id(new ElementId("1"))
+                .id(new ElementId("2"))
                 .type(ElementRuleType.TEXT_LIMIT)
                 .limit(new RuleLimit((short) 318))
                 .build()
@@ -313,14 +315,15 @@ class CertificateModelFactoryFK7443Test {
     @Nested
     class CategoryPeriod {
 
-      private static final ElementId ELEMENT_ID = new ElementId("KAT_2");
+      private static final ElementId ELEMENT_ID = new ElementId("KAT_3");
 
       @Test
       void shallIncludeId() {
         final var certificateModel = certificateModelFactoryFK7443.create();
 
         assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
                 certificateModel.elementSpecifications())
         );
       }
@@ -342,14 +345,15 @@ class CertificateModelFactoryFK7443Test {
     @Nested
     class QuestionPrognos {
 
-      private static final ElementId ELEMENT_ID = new ElementId("2");
+      private static final ElementId ELEMENT_ID = new ElementId("3");
 
       @Test
       void shallIncludeId() {
         final var certificateModel = certificateModelFactoryFK7443.create();
 
         assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
                 certificateModel.elementSpecifications())
         );
       }
@@ -358,15 +362,15 @@ class CertificateModelFactoryFK7443Test {
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationCheckboxDateRangeList.builder()
             .name("Jag bedömer att barnet inte bör vårdas i ordinarie tillsynsform")
-            .id(new FieldId("2.1"))
+            .id(new FieldId("3.1"))
             .hideWorkingHours(true)
             .dateRanges(
                 List.of(
                     new CheckboxDateRange(new FieldId("EN_ATTANDEL"), "12,5 procent"),
                     new CheckboxDateRange(new FieldId("EN_FJARDEDEL"), "25 procent"),
-                    new CheckboxDateRange(new FieldId("HALFTEN"), "50 procent"),
+                    new CheckboxDateRange(new FieldId("HALVA"), "50 procent"),
                     new CheckboxDateRange(new FieldId("TRE_FJARDEDELAR"), "75 procent"),
-                    new CheckboxDateRange(new FieldId("HELT_NEDSATT"), "100 procent")
+                    new CheckboxDateRange(new FieldId("HELA"), "100 procent")
                 )
             )
             .build();
@@ -386,7 +390,7 @@ class CertificateModelFactoryFK7443Test {
                 .type(ElementRuleType.MANDATORY)
                 .expression(
                     new RuleExpression(
-                        "$EN_ATTANDEL || $EN_FJARDEDEL || $HALFTEN || $TRE_FJARDEDELAR || $HELT_NEDSATT"
+                        "$EN_ATTANDEL || $EN_FJARDEDEL || $HALVA || $TRE_FJARDEDELAR || $HELA"
                     )
                 )
                 .build()
@@ -425,7 +429,8 @@ class CertificateModelFactoryFK7443Test {
         final var certificateModel = certificateModelFactoryFK7443.create();
 
         assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
                 certificateModel.elementSpecifications())
         );
       }

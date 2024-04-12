@@ -596,7 +596,7 @@ class FK7443ActiveIT {
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
-      final var questionId = "1";
+      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
@@ -646,7 +646,7 @@ class FK7443ActiveIT {
           defaultTestablilityCertificateRequest(FK7443, VERSION)
       );
 
-      final var questionId = "1";
+      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
@@ -674,7 +674,7 @@ class FK7443ActiveIT {
           defaultTestablilityCertificateRequest(FK7443, VERSION)
       );
 
-      final var questionId = "1";
+      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
@@ -704,7 +704,7 @@ class FK7443ActiveIT {
               .build()
       );
 
-      final var questionId = "1";
+      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
@@ -734,10 +734,10 @@ class FK7443ActiveIT {
               .build()
       );
 
-      final var questionId = "2";
+      final var questionId = "3";
       final var expectedData = List.of(
           CertificateDataValueDateRange.builder()
-              .id("HALFTEN")
+              .id("HALVA")
               .to(LocalDate.now())
               .from(LocalDate.now().minusDays(10))
               .build()
@@ -1626,7 +1626,7 @@ class FK7443ActiveIT {
           defaultTestablilityCertificateRequest(FK7443, VERSION)
       );
 
-      final var questionId = "1";
+      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
@@ -1667,7 +1667,7 @@ class FK7443ActiveIT {
           defaultTestablilityCertificateRequest(FK7443, VERSION)
       );
 
-      final var questionId = "1";
+      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
@@ -2136,7 +2136,7 @@ class FK7443ActiveIT {
           defaultTestablilityCertificateRequest(FK7443, VERSION)
       );
 
-      final var questionId = "1";
+      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
@@ -2163,7 +2163,7 @@ class FK7443ActiveIT {
           defaultTestablilityCertificateRequest(FK7443, VERSION)
       );
 
-      final var questionId = "1";
+      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar. Ett nytt exempel på ett svar."
           + "Ett nytt exempel på ett svar.  Ett nytt exempel på ett svar."
           + "Ett nytt exempel på ett svar. Ett nytt exempel på ett svar."
@@ -2209,7 +2209,7 @@ class FK7443ActiveIT {
           defaultTestablilityCertificateRequest(FK7443, VERSION)
       );
 
-      final var questionId = "1";
+      final var questionId = "2";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
@@ -2287,7 +2287,7 @@ class FK7443ActiveIT {
               updateDateRangeListValue(certificate, QUESTION_PERIOD_ID.id(),
                   List.of(
                       CertificateDataValueDateRange.builder()
-                          .id("HALFTEN")
+                          .id("HALVA")
                           .to(LocalDate.now())
                           .build()
                   )
@@ -2311,8 +2311,8 @@ class FK7443ActiveIT {
                   .formatted(validationErrors(response).get(0))
           ),
           () -> assertTrue(validationErrors(response).get(0).getField()
-                  .contains("HALFTEN.from"),
-              () -> "Expect field to contain 'HALFTEN.from' but was '%s'"
+                  .contains("HALVA.from"),
+              () -> "Expect field to contain 'HALVA.from' but was '%s'"
                   .formatted(validationErrors(response).get(0))
           )
       );
@@ -2331,7 +2331,7 @@ class FK7443ActiveIT {
               .withAddress("")
       );
 
-      final var questionId = "1";
+      final var questionId = "2";
       Objects.requireNonNull(
           certificate.getData().put(
               questionId,
@@ -2372,7 +2372,7 @@ class FK7443ActiveIT {
               .withZipCode("")
       );
 
-      final var questionId = "1";
+      final var questionId = "2";
       Objects.requireNonNull(
           certificate.getData().put(
               questionId,
@@ -2413,7 +2413,7 @@ class FK7443ActiveIT {
               .withCity("")
       );
 
-      final var questionId = "1";
+      final var questionId = "2";
       Objects.requireNonNull(
           certificate.getData().put(
               questionId,
@@ -2454,7 +2454,7 @@ class FK7443ActiveIT {
               .withPhoneNumber("")
       );
 
-      final var questionId = "1";
+      final var questionId = "2";
       Objects.requireNonNull(
           certificate.getData().put(
               questionId,

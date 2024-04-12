@@ -60,7 +60,7 @@ public class TestabilityCertificateFillServiceFK7443 implements TestabilityCerti
       final var period = elementValueDateRangeList.withDateRangeList(
           List.of(
               DateRange.builder()
-                  .dateRangeId(new FieldId("HALFTEN"))
+                  .dateRangeId(new FieldId("HALVA"))
                   .from(LocalDate.now())
                   .to(LocalDate.now().plusDays(14))
                   .build()

@@ -3,8 +3,8 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.EN_ATTANDEL;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.EN_FJARDEDEL;
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.HALFTEN;
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.HELT_NEDSATT;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.HALVA;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.HELA;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.TRE_FJARDEDELAR;
 
 import java.time.LocalDateTime;
@@ -61,13 +61,14 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
       .version(new CertificateVersion(VERSION))
       .build();
   public static final ElementId QUESTION_SYMPTOM_CATEGORY_ID = new ElementId(
-      "KAT_1");
-  public static final ElementId QUESTION_SYMPTOM_ID = new ElementId("1");
+      "KAT_2");
+  public static final ElementId QUESTION_SYMPTOM_ID = new ElementId("2");
+  private static final FieldId QUESTION_SYMPTOM_FIELD_ID = new FieldId("2.1");
+
+  private static final ElementId QUESTION_PERIOD_CATEGORY_ID = new ElementId("KAT_3");
+  public static final ElementId QUESTION_PERIOD_ID = new ElementId("3");
+  private static final String QUESTION_PERIOD_FIELD_ID = "3.1";
   public static final String SCHEMATRON_PATH = "fk7443/schematron/itfp.v1.sch";
-  private static final FieldId QUESTION_SYMPTOM_FIELD_ID = new FieldId("1.1");
-  private static final ElementId QUESTION_PERIOD_CATEGORY_ID = new ElementId("KAT_2");
-  public static final ElementId QUESTION_PERIOD_ID = new ElementId("2");
-  private static final String QUESTION_PERIOD_FIELD_ID = "2.1";
 
   @Override
   public CertificateModel create() {
@@ -190,9 +191,9 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
     final var dateRanges = List.of(
         getDateRange(EN_ATTANDEL),
         getDateRange(EN_FJARDEDEL),
-        getDateRange(HALFTEN),
+        getDateRange(HALVA),
         getDateRange(TRE_FJARDEDELAR),
-        getDateRange(HELT_NEDSATT)
+        getDateRange(HELA)
     );
 
     return ElementSpecification.builder()

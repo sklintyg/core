@@ -6,12 +6,12 @@ import lombok.Getter;
 public enum WorkCapacityType {
   EN_ATTANDEL("12,5 procent"),
   EN_FJARDEDEL("25 procent"),
-  HALFTEN("50 procent"),
+  HALVA("50 procent"),
   TRE_FJARDEDELAR("75 procent"),
-  HELT_NEDSATT("100 procent");
+  HELA("100 procent");
 
   private final String label;
-  public static final String CODE_SYSTEM = "KV_FKMU_0003";
+  public static final String CODE_SYSTEM = "KV_FKMU_0009";
 
   WorkCapacityType(String label) {
     this.label = label;
