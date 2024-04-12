@@ -387,7 +387,7 @@ class CertificateModelFactoryFK7443Test {
                 )
                 .build()
         );
-
+        
         final var certificateModel = certificateModelFactoryFK7443.create();
 
         assertEquals(expectedRules,

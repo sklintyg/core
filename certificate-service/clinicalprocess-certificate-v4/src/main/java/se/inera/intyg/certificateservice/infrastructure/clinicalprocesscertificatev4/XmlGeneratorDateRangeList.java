@@ -15,7 +15,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
 public class XmlGeneratorDateRangeList implements XmlGeneratorElementData {
-
+  
   public List<Svar> generate(ElementData data) {
     if (!(data.value() instanceof ElementValueDateRangeList dateRangeListValue)) {
       return Collections.emptyList();
