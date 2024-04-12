@@ -87,7 +87,7 @@ class XmlGeneratorDateRangeListTest {
           () -> assertEquals(2, delsvar.size()),
           () -> assertEquals(QUESTION_ID + ".1", delsvarCode.getId()),
           () -> assertEquals(RANGE_ID, cvType.getCode()),
-          () -> assertEquals("KV_FKMU_0003", cvType.getCodeSystem()),
+          () -> assertEquals("KV_FKMU_0009", cvType.getCodeSystem()),
           () -> assertEquals("50 procent", cvType.getDisplayName())
       );
     }
@@ -104,7 +104,7 @@ class XmlGeneratorDateRangeListTest {
 
       assertAll(
           () -> assertEquals(2, delsvar.size()),
-          () -> assertEquals(QUESTION_ID + ".2", delsvarDateRange.getId()),
+          () -> assertEquals(QUESTION_ID + ".1", delsvarDateRange.getId()),
           () -> assertEquals(FROM, toLocalDate(dateRange.getStart())),
           () -> assertEquals(TO, toLocalDate(dateRange.getEnd()))
       );
@@ -175,7 +175,7 @@ class XmlGeneratorDateRangeListTest {
           () -> assertEquals(2, delsvar.size()),
           () -> assertEquals(QUESTION_ID + ".1", delsvarCode.getId()),
           () -> assertEquals(RANGE_ID, cvType.getCode()),
-          () -> assertEquals("KV_FKMU_0003", cvType.getCodeSystem()),
+          () -> assertEquals("KV_FKMU_0009", cvType.getCodeSystem()),
           () -> assertEquals("50 procent", cvType.getDisplayName())
       );
     }
@@ -193,7 +193,7 @@ class XmlGeneratorDateRangeListTest {
           () -> assertEquals(2, delsvar.size()),
           () -> assertEquals(QUESTION_ID + ".1", delsvarCode.getId()),
           () -> assertEquals(RANGE_ID_2, cvType.getCode()),
-          () -> assertEquals("KV_FKMU_0003", cvType.getCodeSystem()),
+          () -> assertEquals("KV_FKMU_0009", cvType.getCodeSystem()),
           () -> assertEquals("25 procent", cvType.getDisplayName())
       );
     }
@@ -210,7 +210,7 @@ class XmlGeneratorDateRangeListTest {
 
       assertAll(
           () -> assertEquals(2, delsvar.size()),
-          () -> assertEquals(QUESTION_ID + ".2", delsvarDateRange.getId()),
+          () -> assertEquals(QUESTION_ID + ".1", delsvarDateRange.getId()),
           () -> assertEquals(FROM, toLocalDate(dateRange.getStart())),
           () -> assertEquals(TO, toLocalDate(dateRange.getEnd()))
       );
@@ -228,7 +228,7 @@ class XmlGeneratorDateRangeListTest {
 
       assertAll(
           () -> assertEquals(2, delsvar.size()),
-          () -> assertEquals(QUESTION_ID + ".2", delsvarDateRange.getId()),
+          () -> assertEquals(QUESTION_ID + ".1", delsvarDateRange.getId()),
           () -> assertEquals(FROM_2, toLocalDate(dateRange.getStart())),
           () -> assertEquals(TO_2, toLocalDate(dateRange.getEnd()))
       );
