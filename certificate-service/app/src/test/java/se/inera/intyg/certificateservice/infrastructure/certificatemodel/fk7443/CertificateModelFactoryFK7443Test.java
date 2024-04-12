@@ -213,7 +213,8 @@ class CertificateModelFactoryFK7443Test {
         final var certificateModel = certificateModelFactoryFK7443.create();
 
         assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
                 certificateModel.elementSpecifications())
         );
       }
@@ -242,7 +243,8 @@ class CertificateModelFactoryFK7443Test {
         final var certificateModel = certificateModelFactoryFK7443.create();
 
         assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
                 certificateModel.elementSpecifications())
         );
       }
@@ -312,7 +314,8 @@ class CertificateModelFactoryFK7443Test {
         final var certificateModel = certificateModelFactoryFK7443.create();
 
         assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
                 certificateModel.elementSpecifications())
         );
       }
@@ -341,7 +344,8 @@ class CertificateModelFactoryFK7443Test {
         final var certificateModel = certificateModelFactoryFK7443.create();
 
         assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
                 certificateModel.elementSpecifications())
         );
       }
@@ -356,9 +360,9 @@ class CertificateModelFactoryFK7443Test {
                 List.of(
                     new CheckboxDateRange(new FieldId("EN_ATTANDEL"), "12,5 procent"),
                     new CheckboxDateRange(new FieldId("EN_FJARDEDEL"), "25 procent"),
-                    new CheckboxDateRange(new FieldId("HALFTEN"), "50 procent"),
+                    new CheckboxDateRange(new FieldId("HALVA"), "50 procent"),
                     new CheckboxDateRange(new FieldId("TRE_FJARDEDELAR"), "75 procent"),
-                    new CheckboxDateRange(new FieldId("HELT_NEDSATT"), "100 procent")
+                    new CheckboxDateRange(new FieldId("HELA"), "100 procent")
                 )
             )
             .build();
@@ -378,7 +382,7 @@ class CertificateModelFactoryFK7443Test {
                 .type(ElementRuleType.MANDATORY)
                 .expression(
                     new RuleExpression(
-                        "$EN_ATTANDEL || $EN_FJARDEDEL || $HALFTEN || $TRE_FJARDEDELAR || $HELT_NEDSATT"
+                        "$EN_ATTANDEL || $EN_FJARDEDEL || $HALVA || $TRE_FJARDEDELAR || $HELA"
                     )
                 )
                 .build()
@@ -417,7 +421,8 @@ class CertificateModelFactoryFK7443Test {
         final var certificateModel = certificateModelFactoryFK7443.create();
 
         assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
                 certificateModel.elementSpecifications())
         );
       }
