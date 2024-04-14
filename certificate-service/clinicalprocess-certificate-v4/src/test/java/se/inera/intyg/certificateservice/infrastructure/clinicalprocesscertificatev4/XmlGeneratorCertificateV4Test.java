@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_NAME;
@@ -46,6 +47,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Signature;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
 import se.riv.clinicalprocess.healthcond.certificate.registerCertificate.v3.RegisterCertificateType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.ArbetsplatsKod;
@@ -342,11 +344,9 @@ class XmlGeneratorCertificateV4Test {
         xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE)
     ).getIntyg().getSvar();
 
-    assertAll(
-        () -> assertEquals("1.2", answers.get(0).getDelsvar().get(1))
-    );
+    verify(xmlGeneratorIntygsgivare).generate(any(Role.class));
+    assertEquals("1.2", answers.get(0).getDelsvar().get(1).getId());
   }
-
 
   @Test
   void shouldNotIncludeUnderskrift() {
