@@ -24,6 +24,7 @@ import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertif
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesInfoDomainService;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorCertificateV4;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorIntygsgivare;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorValue;
 import se.inera.intyg.certificateservice.pdfboxgenerator.CertificatePdfGenerator;
 
@@ -104,8 +105,14 @@ public class AppConfig {
   }
 
   @Bean
-  public XmlGenerator xmlGenerator(XmlGeneratorValue xmlGeneratorValue) {
-    return new XmlGeneratorCertificateV4(xmlGeneratorValue);
+  public XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare() {
+    return new XmlGeneratorIntygsgivare();
+  }
+
+  @Bean
+  public XmlGenerator xmlGenerator(XmlGeneratorValue xmlGeneratorValue,
+      XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare) {
+    return new XmlGeneratorCertificateV4(xmlGeneratorValue, xmlGeneratorIntygsgivare);
   }
 
   @Bean

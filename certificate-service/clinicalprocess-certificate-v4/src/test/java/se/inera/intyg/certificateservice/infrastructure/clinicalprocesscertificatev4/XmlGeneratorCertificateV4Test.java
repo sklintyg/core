@@ -40,6 +40,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Signature;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
@@ -69,6 +70,8 @@ class XmlGeneratorCertificateV4Test {
 
   @Mock
   XmlGeneratorValue xmlGeneratorValue;
+  @Spy
+  XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare;
 
   @InjectMocks
   XmlGeneratorCertificateV4 xmlGeneratorCertificateV4;
@@ -325,6 +328,27 @@ class XmlGeneratorCertificateV4Test {
   }
 
   @Test
+  void shouldIncludeIntygsgivare() {
+    final var answer = new Svar();
+    final var subAnswer = new Delsvar();
+    subAnswer.setId(SUB_ANSWER_ID);
+    answer.setId(ANSWER_ID);
+    answer.getDelsvar().add(subAnswer);
+    final var expectedAnswers = List.of(answer);
+    when(xmlGeneratorValue.generate(any()))
+        .thenReturn(expectedAnswers);
+
+    final var answers = unmarshal(
+        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE)
+    ).getIntyg().getSvar();
+
+    assertAll(
+        () -> assertEquals("1.2", answers.get(0).getDelsvar().get(1))
+    );
+  }
+
+
+  @Test
   void shouldNotIncludeUnderskrift() {
     final var underskrift = unmarshal(
         xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE)
@@ -401,6 +425,7 @@ class XmlGeneratorCertificateV4Test {
         skickatTidpunkt.toString()
     );
   }
+
 
   private RegisterCertificateType unmarshal(Xml response) {
     try {
