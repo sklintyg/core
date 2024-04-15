@@ -44,8 +44,10 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
   private static final String EMPTY = "";
   private static final String NOT_APPLICABLE = "N/A";
   private static final String PRESCRIPTION_CODE_MASKED = "0000000";
+  private static final String CERTIFICATE_TYPE_IGRAV = "IGRAV";
 
   private final XmlGeneratorValue xmlGeneratorValue;
+  private final XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare;
 
   @Override
   public Xml generate(Certificate certificate) {
@@ -106,7 +108,16 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
   }
 
   private List<Svar> svar(Certificate certificate) {
-    return xmlGeneratorValue.generate(certificate.elementData());
+    final var svar = xmlGeneratorValue.generate(certificate.elementData());
+
+    if (!svar.isEmpty() && certificate.certificateModel().type().code()
+        .equals(CERTIFICATE_TYPE_IGRAV)) {
+      final var role = certificate.certificateMetaData().issuer().role();
+      final var intygsgivare = xmlGeneratorIntygsgivare.generate(role);
+      svar.get(0).getDelsvar().add(intygsgivare);
+    }
+
+    return svar;
   }
 
   private static IntygId intygsId(Certificate certificate) {
