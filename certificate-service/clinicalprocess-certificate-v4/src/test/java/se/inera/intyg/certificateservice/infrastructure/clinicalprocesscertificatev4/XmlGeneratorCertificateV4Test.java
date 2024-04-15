@@ -7,10 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK443_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_CODE_TYPE;
@@ -346,6 +348,24 @@ class XmlGeneratorCertificateV4Test {
 
     verify(xmlGeneratorIntygsgivare).generate(any(Role.class));
     assertEquals("1.2", answers.get(0).getDelsvar().get(1).getId());
+  }
+
+  @Test
+  void shouldNotCallXmlGeneratorIntygsgivare() {
+    final var answer = new Svar();
+    final var subAnswer = new Delsvar();
+    subAnswer.setId(SUB_ANSWER_ID);
+    answer.setId(ANSWER_ID);
+    answer.getDelsvar().add(subAnswer);
+    final var expectedAnswers = List.of(answer);
+    when(xmlGeneratorValue.generate(any()))
+        .thenReturn(expectedAnswers);
+
+    unmarshal(
+        xmlGeneratorCertificateV4.generate(FK443_CERTIFICATE)
+    ).getIntyg().getSvar();
+
+    verifyNoInteractions(xmlGeneratorIntygsgivare);
   }
 
   @Test

@@ -28,6 +28,9 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:mysql'
     testImplementation testFixtures(project(":domain"))
+
+    testFixturesCompileOnly 'com.fasterxml.jackson.core:jackson-annotations'
+    testFixturesCompileOnly 'jakarta.persistence:jakarta.persistence-api'
     testFixturesImplementation testFixtures(project(":domain"))
 }
 
