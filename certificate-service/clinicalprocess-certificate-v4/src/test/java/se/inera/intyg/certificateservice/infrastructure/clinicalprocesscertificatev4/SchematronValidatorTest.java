@@ -22,6 +22,10 @@ import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 class SchematronValidatorTest {
 
   private SchematronValidator schematronValidator;
+  private final XmlGeneratorCertificateV4 generator = new XmlGeneratorCertificateV4(
+      new XmlGeneratorValue(),
+      new XmlGeneratorIntygsgivare()
+  );
 
   @BeforeEach
   void setUp() {
@@ -46,7 +50,6 @@ class SchematronValidatorTest {
           .elementData(List.of(element))
           .build();
 
-      final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
       final var xml = generator.generate(certificate);
 
       final var certificate1 = TestDataCertificate.fk7211CertificateBuilder()
@@ -73,7 +76,6 @@ class SchematronValidatorTest {
             .elementData(List.of(element))
             .build();
 
-        final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
         final var xml = generator.generate(certificate);
 
         final var certificate1 = TestDataCertificate.fk7211CertificateBuilder()
@@ -98,7 +100,6 @@ class SchematronValidatorTest {
             .elementData(List.of(element))
             .build();
 
-        final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
         final var xml = generator.generate(certificate);
 
         final var certificate1 = TestDataCertificate.fk7211CertificateBuilder()
@@ -123,7 +124,6 @@ class SchematronValidatorTest {
             .elementData(List.of(element))
             .build();
 
-        final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
         final var xml = generator.generate(certificate);
 
         final var certificate1 = TestDataCertificate.fk7211CertificateBuilder()
@@ -145,7 +145,6 @@ class SchematronValidatorTest {
             .elementData(List.of(element))
             .build();
 
-        final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
         final var xml = generator.generate(certificate);
 
         final var certificate1 = TestDataCertificate.fk7211CertificateBuilder()
@@ -164,16 +163,16 @@ class SchematronValidatorTest {
     void shallReturnTrueIfAllFieldsHaveValues() {
       final var element = List.of(
           ElementData.builder()
-              .id(new ElementId("1"))
+              .id(new ElementId("2"))
               .value(
                   ElementValueText.builder()
-                      .textId(new FieldId("1.1"))
+                      .textId(new FieldId("2.1"))
                       .text("text")
                       .build()
               )
               .build(),
           ElementData.builder()
-              .id(new ElementId("2"))
+              .id(new ElementId("3"))
               .value(
                   ElementValueDateRangeList.builder()
                       .dateRangeList(
@@ -185,7 +184,7 @@ class SchematronValidatorTest {
                                   .build()
                           )
                       )
-                      .dateRangeListId(new FieldId("2.1"))
+                      .dateRangeListId(new FieldId("3.2"))
                       .build())
               .build()
       );
@@ -194,7 +193,6 @@ class SchematronValidatorTest {
           .elementData(element)
           .build();
 
-      final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
       final var xml = generator.generate(certificate);
 
       final var certificate1 = TestDataCertificate.fk443CertificateBuilder()
@@ -230,7 +228,6 @@ class SchematronValidatorTest {
             .elementData(List.of(QUESTION_PERIOD))
             .build();
 
-        final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
         final var xml = generator.generate(certificate);
 
         final var certificate1 = TestDataCertificate.fk443CertificateBuilder()
@@ -254,7 +251,6 @@ class SchematronValidatorTest {
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
-        final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
         final var xml = generator.generate(certificate);
 
         final var certificate1 = TestDataCertificate.fk443CertificateBuilder()
@@ -279,7 +275,6 @@ class SchematronValidatorTest {
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
-        final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
         final var xml = generator.generate(certificate);
 
         final var certificate1 = TestDataCertificate.fk443CertificateBuilder()
@@ -313,7 +308,6 @@ class SchematronValidatorTest {
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
-        final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
         final var xml = generator.generate(certificate);
 
         final var certificate1 = TestDataCertificate.fk443CertificateBuilder()
@@ -334,7 +328,6 @@ class SchematronValidatorTest {
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
-        final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
         final var xml = generator.generate(certificate);
 
         final var certificate1 = TestDataCertificate.fk443CertificateBuilder()
@@ -368,7 +361,6 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
         final var xml = generator.generate(certificate);
 
         final var certificate1 = TestDataCertificate.fk443CertificateBuilder()
@@ -398,7 +390,6 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
         final var xml = generator.generate(certificate);
 
         final var certificate1 = TestDataCertificate.fk443CertificateBuilder()
@@ -439,7 +430,6 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
         final var xml = generator.generate(certificate);
 
         final var certificate1 = TestDataCertificate.fk443CertificateBuilder()
@@ -480,7 +470,6 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
         final var xml = generator.generate(certificate);
 
         final var certificate1 = TestDataCertificate.fk443CertificateBuilder()
@@ -515,7 +504,6 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
         final var xml = generator.generate(certificate);
 
         final var certificate1 = TestDataCertificate.fk443CertificateBuilder()
@@ -551,7 +539,6 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
         final var xml = generator.generate(certificate);
 
         final var certificate1 = TestDataCertificate.fk443CertificateBuilder()

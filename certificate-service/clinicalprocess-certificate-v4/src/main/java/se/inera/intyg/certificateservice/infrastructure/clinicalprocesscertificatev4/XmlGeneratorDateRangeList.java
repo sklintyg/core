@@ -61,7 +61,7 @@ public class XmlGeneratorDateRangeList implements XmlGeneratorElementData {
   }
 
   private static String getDateRangeId(String id) {
-    return id + ".1";
+    return id + ".2";
   }
 
   private static String getCvId(String id) {

@@ -18,7 +18,10 @@ class SchemaValidatorV4Test {
   @Test
   void shallValidateSchema() {
     final var certificate = TestDataCertificate.fk7211CertificateBuilder().build();
-    final var generator = new XmlGeneratorCertificateV4(new XmlGeneratorValue());
+    final var generator = new XmlGeneratorCertificateV4(
+        new XmlGeneratorValue(),
+        new XmlGeneratorIntygsgivare()
+    );
     final var xml = generator.generate(certificate);
     assertTrue(
         schemaValidatorV4.validate(
