@@ -49,7 +49,6 @@ public class TestDataCertificateModel {
         .type(FK7443_CODE_TYPE)
         .pdfTemplatePath(FK7443_PDF_PATH)
         .schematronPath(FK7443_SCHEMATRON_PATH);
-
+        .pdfTemplatePath(FK7211_PDF_PATH);
   }
-
 }

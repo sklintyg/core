@@ -63,7 +63,7 @@
       <column name="revoked_reason_key" type="tinyint unsigned">
         <constraints nullable="true"/>
       </column>
-      <column name="revoked_message" type="varchar(64)">
+      <column name="revoked_message" type="varchar(3600)">
         <constraints nullable="true"/>
       </column>
     </createTable>

@@ -73,7 +73,10 @@ public class TestDataCertificate {
         );
   }
 
-  public static Certificate.CertificateBuilder fk443CertificateBuilder() {
+
+  public static final Certificate FK443_CERTIFICATE = fk7443CertificateBuilder().build();
+
+  public static Certificate.CertificateBuilder fk7443CertificateBuilder() {
     return Certificate.builder()
         .id(CERTIFICATE_ID)
         .revision(REVISION)
