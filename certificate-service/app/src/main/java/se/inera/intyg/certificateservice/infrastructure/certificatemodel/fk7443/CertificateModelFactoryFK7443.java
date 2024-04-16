@@ -25,6 +25,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
@@ -68,7 +69,8 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
   private static final ElementId QUESTION_PERIOD_CATEGORY_ID = new ElementId("KAT_3");
   public static final ElementId QUESTION_PERIOD_ID = new ElementId("3");
   private static final String QUESTION_PERIOD_FIELD_ID = "3.1";
-  public static final String SCHEMATRON_PATH = "fk7443/schematron/itfp.v1.sch";
+  public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
+      "fk7443/schematron/itfp.v1.sch");
 
   @Override
   public CertificateModel create() {

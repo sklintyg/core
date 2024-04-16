@@ -174,7 +174,8 @@ class SchematronValidatorTest {
 
       final var xml = generator.generate(certificate);
       assertTrue(schematronValidator.validate(certificate.id(), xml,
-          CertificateModelFactoryFK7443.SCHEMATRON_PATH));
+          CertificateModelFactoryFK7443.SCHEMATRON_PATH)
+      );
     }
 
     @Nested

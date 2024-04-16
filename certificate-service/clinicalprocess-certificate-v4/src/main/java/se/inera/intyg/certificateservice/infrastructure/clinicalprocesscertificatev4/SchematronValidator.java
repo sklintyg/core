@@ -9,15 +9,16 @@ import lombok.extern.slf4j.Slf4j;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchematronValidator;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 
 @Slf4j
 public class SchematronValidator implements XmlSchematronValidator {
 
   @Override
-  public boolean validate(CertificateId certificateId, Xml xml, String schematronPath) {
+  public boolean validate(CertificateId certificateId, Xml xml, SchematronPath schematronPath) {
     final var xmlStream = new StreamSource(new StringReader(xml.xml()));
     final var schematronResource = SchematronResourceSCH.fromClassPath(
-        schematronPath
+        schematronPath.value()
     );
     try {
       final var schematronOutput = schematronResource.applySchematronValidationToSVRL(xmlStream);

@@ -5,6 +5,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchemaValidator;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchematronValidator;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 
 @RequiredArgsConstructor
 public class XmlValidationService {
@@ -12,7 +13,7 @@ public class XmlValidationService {
   private final XmlSchematronValidator xmlSchematronValidator;
   private final XmlSchemaValidator xmlSchemaValidator;
 
-  public void validate(Xml xml, String schematronPath, CertificateId certificateId) {
+  public void validate(Xml xml, SchematronPath schematronPath, CertificateId certificateId) {
     validateParameters(xml, schematronPath, certificateId);
     final var schemaValidation = xmlSchemaValidator.validate(certificateId, xml);
     final var schematronValidation = xmlSchematronValidator.validate(
@@ -33,13 +34,14 @@ public class XmlValidationService {
     }
   }
 
-  private void validateParameters(Xml xml, String schematronPath, CertificateId certificateId) {
+  private void validateParameters(Xml xml, SchematronPath schematronPath,
+      CertificateId certificateId) {
     if (xml == null || xml.xml() == null || xml.xml().isBlank()) {
       throw new IllegalArgumentException(
           "Missing required parameter xml: '%s'".formatted(xml)
       );
     }
-    if (schematronPath == null || schematronPath.isBlank()) {
+    if (schematronPath == null || schematronPath.value().isBlank()) {
       throw new IllegalArgumentException(
           "Missing required parameter schematronPath: '%s'".formatted(schematronPath)
       );

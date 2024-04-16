@@ -16,11 +16,12 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchemaValidator;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchematronValidator;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 
 @ExtendWith(MockitoExtension.class)
 class XmlValidationServiceTest {
 
-  private static final String SCHEMATRON_PATH = "schematronPath";
+  private static final SchematronPath SCHEMATRON_PATH = new SchematronPath("schematronPath");
   private static final CertificateId CERTIFICATE_ID = new CertificateId("certificateId");
   private static final Xml XML = new Xml("xml");
   @Mock
@@ -87,7 +88,7 @@ class XmlValidationServiceTest {
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
           () -> xmlValidationService.validate(
               XML,
-              "",
+              new SchematronPath(""),
               CERTIFICATE_ID)
       );
       assertTrue(illegalArgumentException.getMessage()
