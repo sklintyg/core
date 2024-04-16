@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchemaValidator;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchematronValidator;
@@ -19,7 +21,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchematro
 class XmlValidationServiceTest {
 
   private static final String SCHEMATRON_PATH = "schematronPath";
-  private static final String CERTIFICATE_ID = "certificateId";
+  private static final CertificateId CERTIFICATE_ID = new CertificateId("certificateId");
   private static final Xml XML = new Xml("xml");
   @Mock
   private XmlSchematronValidator xmlSchematronValidator;
@@ -112,7 +114,7 @@ class XmlValidationServiceTest {
           () -> xmlValidationService.validate(
               XML,
               SCHEMATRON_PATH,
-              "")
+              new CertificateId(""))
       );
       assertTrue(illegalArgumentException.getMessage()
           .contains("Missing required parameter certificateId")
@@ -149,13 +151,11 @@ class XmlValidationServiceTest {
   }
 
   @Test
-  void shallReturnXmlIfValid() {
+  void shallNotThrowIfXmlIsValid() {
     doReturn(true).when(xmlSchemaValidator).validate(CERTIFICATE_ID, XML);
     doReturn(true).when(xmlSchematronValidator).validate(CERTIFICATE_ID, XML, SCHEMATRON_PATH);
-    
-    final var validXml = xmlValidationService.validate(XML, SCHEMATRON_PATH, CERTIFICATE_ID);
 
-    assertEquals(XML, validXml);
+    assertDoesNotThrow(() -> xmlValidationService.validate(XML, SCHEMATRON_PATH, CERTIFICATE_ID));
   }
 
   private static String getExpectedMessage(boolean expectedSchematronResult,

@@ -6,6 +6,7 @@ import com.helger.schematron.svrl.jaxb.SchematronOutputType;
 import java.io.StringReader;
 import javax.xml.transform.stream.StreamSource;
 import lombok.extern.slf4j.Slf4j;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchematronValidator;
 
@@ -13,14 +14,14 @@ import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchematro
 public class SchematronValidator implements XmlSchematronValidator {
 
   @Override
-  public boolean validate(String certificateId, Xml xml, String schematronPath) {
+  public boolean validate(CertificateId certificateId, Xml xml, String schematronPath) {
     final var xmlStream = new StreamSource(new StringReader(xml.xml()));
     final var schematronResource = SchematronResourceSCH.fromClassPath(
         schematronPath
     );
     try {
       final var schematronOutput = schematronResource.applySchematronValidationToSVRL(xmlStream);
-      return schematronResult(schematronOutput, certificateId);
+      return schematronResult(schematronOutput, certificateId.id());
     } catch (Exception e) {
       log.error("Schematron validation of certificate id {} failed with an exception.",
           certificateId, e);

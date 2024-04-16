@@ -58,7 +58,7 @@ class SchematronValidatorTest {
 
       final var xml = generator.generate(certificate);
 
-      assertTrue(schematronValidator.validate(certificate.id().id(), xml,
+      assertTrue(schematronValidator.validate(certificate.id(), xml,
           CertificateModelFactoryFK7211.SCHEMATRON_PATH));
     }
 
@@ -173,7 +173,7 @@ class SchematronValidatorTest {
           .build();
 
       final var xml = generator.generate(certificate);
-      assertTrue(schematronValidator.validate(certificate.id().id(), xml,
+      assertTrue(schematronValidator.validate(certificate.id(), xml,
           CertificateModelFactoryFK7443.SCHEMATRON_PATH));
     }
 

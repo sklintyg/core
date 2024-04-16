@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4;
 
 import lombok.RequiredArgsConstructor;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchemaValidator;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchematronValidator;
@@ -11,7 +12,7 @@ public class XmlValidationService {
   private final XmlSchematronValidator xmlSchematronValidator;
   private final XmlSchemaValidator xmlSchemaValidator;
 
-  public Xml validate(Xml xml, String schematronPath, String certificateId) {
+  public void validate(Xml xml, String schematronPath, CertificateId certificateId) {
     validateParameters(xml, schematronPath, certificateId);
     final var schemaValidation = xmlSchemaValidator.validate(certificateId, xml);
     final var schematronValidation = xmlSchematronValidator.validate(
@@ -19,7 +20,7 @@ public class XmlValidationService {
         xml,
         schematronPath
     );
-    
+
     if (!schematronValidation || !schemaValidation) {
       throw new IllegalStateException(
           ("Certificate did not pass schematron validation."
@@ -30,10 +31,9 @@ public class XmlValidationService {
           )
       );
     }
-    return xml;
   }
 
-  private void validateParameters(Xml xml, String schematronPath, String certificateId) {
+  private void validateParameters(Xml xml, String schematronPath, CertificateId certificateId) {
     if (xml == null || xml.xml() == null || xml.xml().isBlank()) {
       throw new IllegalArgumentException(
           "Missing required parameter xml: '%s'".formatted(xml)
@@ -44,7 +44,7 @@ public class XmlValidationService {
           "Missing required parameter schematronPath: '%s'".formatted(schematronPath)
       );
     }
-    if (certificateId == null || certificateId.isBlank()) {
+    if (certificateId == null || certificateId.id().isBlank()) {
       throw new IllegalArgumentException(
           "Missing required parameter certificateId: '%s'".formatted(certificateId)
       );

@@ -65,12 +65,14 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
             )
         )
     );
-    
-    return xmlValidationService.validate(
+
+    xmlValidationService.validate(
         xml,
         certificate.certificateModel().schematronPath(),
-        certificate.id().id()
+        certificate.id()
     );
+
+    return xml;
   }
 
   private static RegisterCertificateType registerCertificateType(Intyg intyg) {

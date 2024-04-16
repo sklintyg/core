@@ -7,6 +7,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchemaValidator;
 
@@ -17,7 +18,7 @@ public class SchemaValidatorV4 implements XmlSchemaValidator {
   private static final String XSD_PATH_V4 = "schemas/certificate/4.0/interactions/RegisterCertificateInteraction/RegisterCertificateResponder_3.1.xsd";
 
   @Override
-  public boolean validate(String certificateId, Xml xml) {
+  public boolean validate(CertificateId certificateId, Xml xml) {
     try {
       final var factory = SchemaFactory.newDefaultInstance();
       factory.setResourceResolver(new SchemaResourceResolverV4());
@@ -29,7 +30,7 @@ public class SchemaValidatorV4 implements XmlSchemaValidator {
       validator.validate(
           new StreamSource(new ByteArrayInputStream(xml.xml().getBytes()))
       );
-      return schemaValidationResult(xsdErrorHandler, certificateId);
+      return schemaValidationResult(xsdErrorHandler, certificateId.id());
     } catch (Exception e) {
       log.error("Validation failed", e);
       return false;
