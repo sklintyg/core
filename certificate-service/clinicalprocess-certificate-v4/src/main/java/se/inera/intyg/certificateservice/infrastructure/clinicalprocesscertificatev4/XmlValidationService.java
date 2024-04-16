@@ -13,7 +13,24 @@ public class XmlValidationService {
 
   public Xml validate(Xml xml, String schematronPath, String certificateId) {
     validateParameters(xml, schematronPath, certificateId);
-    return null;
+    final var schemaValidation = xmlSchemaValidator.validate(certificateId, xml);
+    final var schematronValidation = xmlSchematronValidator.validate(
+        certificateId,
+        xml,
+        schematronPath
+    );
+    
+    if (!schematronValidation || !schemaValidation) {
+      throw new IllegalStateException(
+          ("Certificate did not pass schematron validation."
+              + " Schematron validation result: '%s'. "
+              + "Schema validation result: '%s'"
+          ).formatted(
+              schematronValidation, schemaValidation
+          )
+      );
+    }
+    return xml;
   }
 
   private void validateParameters(Xml xml, String schematronPath, String certificateId) {

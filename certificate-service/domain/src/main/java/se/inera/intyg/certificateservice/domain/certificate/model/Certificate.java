@@ -12,8 +12,6 @@ import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
-import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchemaValidator;
-import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchematronValidator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
@@ -142,21 +140,6 @@ public class Certificate {
     this.xml = xmlGenerator.generate(this, signature);
   }
 
-  private void performSchematronValidation(XmlSchematronValidator xmlSchematronValidator,
-      XmlSchemaValidator xmlSchemaValidator) {
-    final var schematronValidation = xmlSchematronValidator.validate(this);
-    final var schemaValidation = xmlSchemaValidator.validate(this);
-    if (!schematronValidation || !schemaValidation) {
-      throw new IllegalStateException(
-          ("Certificate did not pass schematron validation."
-              + " Schematron validation result: '%s'. "
-              + "Schema validation result: '%s'"
-          ).formatted(
-              schematronValidation, schemaValidation
-          )
-      );
-    }
-  }
 
   private void sign(Revision revision, ActionEvaluation actionEvaluation) {
     throwIfConcurrentModification(revision, "sign", actionEvaluation);

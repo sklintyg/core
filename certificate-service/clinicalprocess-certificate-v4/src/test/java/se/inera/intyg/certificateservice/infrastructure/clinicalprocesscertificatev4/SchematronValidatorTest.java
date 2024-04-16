@@ -18,6 +18,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueTe
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443.CertificateModelFactoryFK7443;
 
 class SchematronValidatorTest {
 
@@ -52,11 +54,8 @@ class SchematronValidatorTest {
 
       final var xml = generator.generate(certificate);
 
-      final var certificate1 = TestDataCertificate.fk7211CertificateBuilder()
-          .xml(xml)
-          .build();
-
-      assertTrue(schematronValidator.validate(certificate1));
+      assertTrue(schematronValidator.validate(certificate.id().id(), xml,
+          CertificateModelFactoryFK7211.SCHEMATRON_PATH));
     }
 
     @Nested
@@ -78,11 +77,10 @@ class SchematronValidatorTest {
 
         final var xml = generator.generate(certificate);
 
-        final var certificate1 = TestDataCertificate.fk7211CertificateBuilder()
-            .xml(xml)
-            .build();
-
-        assertFalse(schematronValidator.validate(certificate1));
+        assertFalse(
+            schematronValidator.validate(certificate.id().id(), xml,
+                CertificateModelFactoryFK7211.SCHEMATRON_PATH)
+        );
       }
 
       @Test
@@ -102,11 +100,8 @@ class SchematronValidatorTest {
 
         final var xml = generator.generate(certificate);
 
-        final var certificate1 = TestDataCertificate.fk7211CertificateBuilder()
-            .xml(xml)
-            .build();
-
-        assertFalse(schematronValidator.validate(certificate1));
+        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
+            CertificateModelFactoryFK7211.SCHEMATRON_PATH));
       }
 
       @Test
@@ -126,11 +121,8 @@ class SchematronValidatorTest {
 
         final var xml = generator.generate(certificate);
 
-        final var certificate1 = TestDataCertificate.fk7211CertificateBuilder()
-            .xml(xml)
-            .build();
-
-        assertFalse(schematronValidator.validate(certificate1));
+        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
+            CertificateModelFactoryFK7211.SCHEMATRON_PATH));
       }
 
       @Test
@@ -147,11 +139,8 @@ class SchematronValidatorTest {
 
         final var xml = generator.generate(certificate);
 
-        final var certificate1 = TestDataCertificate.fk7211CertificateBuilder()
-            .xml(xml)
-            .build();
-
-        assertFalse(schematronValidator.validate(certificate1));
+        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
+            CertificateModelFactoryFK7211.SCHEMATRON_PATH));
       }
     }
   }
@@ -195,11 +184,8 @@ class SchematronValidatorTest {
 
       final var xml = generator.generate(certificate);
 
-      final var certificate1 = TestDataCertificate.fk7443CertificateBuilder()
-          .xml(xml)
-          .build();
-
-      assertTrue(schematronValidator.validate(certificate1));
+      assertTrue(schematronValidator.validate(certificate.id().id(), xml,
+          CertificateModelFactoryFK7443.SCHEMATRON_PATH));
     }
 
     @Nested
@@ -230,11 +216,8 @@ class SchematronValidatorTest {
 
         final var xml = generator.generate(certificate);
 
-        final var certificate1 = TestDataCertificate.fk7443CertificateBuilder()
-            .xml(xml)
-            .build();
-
-        assertFalse(schematronValidator.validate(certificate1));
+        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
+            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
       }
 
       @Test
@@ -253,11 +236,8 @@ class SchematronValidatorTest {
 
         final var xml = generator.generate(certificate);
 
-        final var certificate1 = TestDataCertificate.fk7443CertificateBuilder()
-            .xml(xml)
-            .build();
-
-        assertFalse(schematronValidator.validate(certificate1));
+        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
+            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
       }
 
       @Test
@@ -277,11 +257,8 @@ class SchematronValidatorTest {
 
         final var xml = generator.generate(certificate);
 
-        final var certificate1 = TestDataCertificate.fk7443CertificateBuilder()
-            .xml(xml)
-            .build();
-
-        assertFalse(schematronValidator.validate(certificate1));
+        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
+            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
       }
 
       @Test
@@ -310,11 +287,8 @@ class SchematronValidatorTest {
 
         final var xml = generator.generate(certificate);
 
-        final var certificate1 = TestDataCertificate.fk7443CertificateBuilder()
-            .xml(xml)
-            .build();
-
-        assertFalse(schematronValidator.validate(certificate1));
+        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
+            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
       }
 
       @Test
@@ -330,11 +304,8 @@ class SchematronValidatorTest {
 
         final var xml = generator.generate(certificate);
 
-        final var certificate1 = TestDataCertificate.fk7443CertificateBuilder()
-            .xml(xml)
-            .build();
-
-        assertFalse(schematronValidator.validate(certificate1));
+        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
+            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
       }
     }
 
@@ -363,11 +334,8 @@ class SchematronValidatorTest {
 
         final var xml = generator.generate(certificate);
 
-        final var certificate1 = TestDataCertificate.fk7443CertificateBuilder()
-            .xml(xml)
-            .build();
-
-        assertFalse(schematronValidator.validate(certificate1));
+        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
+            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
       }
 
       @Test
@@ -392,11 +360,8 @@ class SchematronValidatorTest {
 
         final var xml = generator.generate(certificate);
 
-        final var certificate1 = TestDataCertificate.fk7443CertificateBuilder()
-            .xml(xml)
-            .build();
-
-        assertFalse(schematronValidator.validate(certificate1));
+        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
+            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
       }
 
       @Test
@@ -432,11 +397,8 @@ class SchematronValidatorTest {
 
         final var xml = generator.generate(certificate);
 
-        final var certificate1 = TestDataCertificate.fk7443CertificateBuilder()
-            .xml(xml)
-            .build();
-
-        assertFalse(schematronValidator.validate(certificate1));
+        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
+            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
       }
 
       @Test
@@ -472,11 +434,8 @@ class SchematronValidatorTest {
 
         final var xml = generator.generate(certificate);
 
-        final var certificate1 = TestDataCertificate.fk7443CertificateBuilder()
-            .xml(xml)
-            .build();
-
-        assertFalse(schematronValidator.validate(certificate1));
+        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
+            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
       }
 
       @Test
@@ -506,11 +465,8 @@ class SchematronValidatorTest {
 
         final var xml = generator.generate(certificate);
 
-        final var certificate1 = TestDataCertificate.fk7443CertificateBuilder()
-            .xml(xml)
-            .build();
-
-        assertFalse(schematronValidator.validate(certificate1));
+        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
+            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
       }
 
 
@@ -541,11 +497,8 @@ class SchematronValidatorTest {
 
         final var xml = generator.generate(certificate);
 
-        final var certificate1 = TestDataCertificate.fk7443CertificateBuilder()
-            .xml(xml)
-            .build();
-
-        assertFalse(schematronValidator.validate(certificate1));
+        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
+            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
       }
     }
   }

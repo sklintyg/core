@@ -1,7 +1,9 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doReturn;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -116,5 +118,52 @@ class XmlValidationServiceTest {
           .contains("Missing required parameter certificateId")
       );
     }
+  }
+
+  @Test
+  void shallThrowIfSchemaValidationIsFalse() {
+    doReturn(false).when(xmlSchemaValidator).validate(CERTIFICATE_ID, XML);
+    doReturn(true).when(xmlSchematronValidator).validate(CERTIFICATE_ID, XML, SCHEMATRON_PATH);
+    final var illegalStateException = assertThrows(IllegalStateException.class,
+        () -> xmlValidationService.validate(XML, SCHEMATRON_PATH, CERTIFICATE_ID)
+    );
+
+    assertEquals(
+        getExpectedMessage(true, false),
+        illegalStateException.getMessage()
+    );
+  }
+
+  @Test
+  void shallThrowIfSchematronValidationIsFalse() {
+    doReturn(true).when(xmlSchemaValidator).validate(CERTIFICATE_ID, XML);
+    doReturn(false).when(xmlSchematronValidator).validate(CERTIFICATE_ID, XML, SCHEMATRON_PATH);
+    final var illegalStateException = assertThrows(IllegalStateException.class,
+        () -> xmlValidationService.validate(XML, SCHEMATRON_PATH, CERTIFICATE_ID)
+    );
+
+    assertEquals(
+        getExpectedMessage(false, true),
+        illegalStateException.getMessage()
+    );
+  }
+
+  @Test
+  void shallReturnXmlIfValid() {
+    doReturn(true).when(xmlSchemaValidator).validate(CERTIFICATE_ID, XML);
+    doReturn(true).when(xmlSchematronValidator).validate(CERTIFICATE_ID, XML, SCHEMATRON_PATH);
+    
+    final var validXml = xmlValidationService.validate(XML, SCHEMATRON_PATH, CERTIFICATE_ID);
+
+    assertEquals(XML, validXml);
+  }
+
+  private static String getExpectedMessage(boolean expectedSchematronResult,
+      boolean expectedSchemaResult) {
+    return "Certificate did not pass schematron validation."
+        + " Schematron validation result: '%s'. Schema validation result: '%s'".formatted(
+        expectedSchematronResult,
+        expectedSchemaResult
+    );
   }
 }

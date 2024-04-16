@@ -25,9 +25,8 @@ class SchemaValidatorV4Test {
     final var xml = generator.generate(certificate);
     assertTrue(
         schemaValidatorV4.validate(
-            TestDataCertificate.fk7211CertificateBuilder()
-                .xml(xml)
-                .build()
+            certificate.id().id(),
+            xml
         )
     );
   }
