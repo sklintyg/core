@@ -23,8 +23,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
-import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchemaValidator;
-import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchematronValidator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -51,8 +49,6 @@ public class TestabilityCertificateService {
   private final ResourceLinkConverter resourceLinkConverter;
   private final List<TestabilityCertificateFillService> testabilityCertificateFillServices;
   private final XmlGenerator xmlGenerator;
-  private final XmlSchematronValidator xmlSchematronValidator;
-  private final XmlSchemaValidator xmlSchemaValidator;
 
   public CreateCertificateResponse create(
       TestabilityCertificateRequest testabilityCertificateRequest) {
@@ -101,8 +97,7 @@ public class TestabilityCertificateService {
     );
 
     if (CertificateStatusTypeDTO.SIGNED.equals(testabilityCertificateRequest.getStatus())) {
-      certificate.sign(xmlGenerator, certificate.revision(), actionEvaluation
-      );
+      certificate.sign(xmlGenerator, certificate.revision(), actionEvaluation);
     }
 
     testabilityCertificateRepository.insert(certificate);

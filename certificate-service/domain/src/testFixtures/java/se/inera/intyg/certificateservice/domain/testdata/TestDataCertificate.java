@@ -8,16 +8,24 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Collections;
+import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
@@ -61,7 +69,18 @@ public class TestDataCertificate {
         .xml(XML)
         .sent(SENT)
         .revoked(REVOKED)
-        .elementData(Collections.emptyList())
+        .elementData(
+            List.of(
+                ElementData.builder()
+                    .id(new ElementId("1"))
+                    .value(
+                        ElementValueDate.builder()
+                            .dateId(new FieldId("1.1"))
+                            .date(LocalDate.now())
+                            .build()
+                    ).build()
+            )
+        )
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuer(AJLA_DOKTOR)
@@ -85,7 +104,35 @@ public class TestDataCertificate {
         .xml(XML)
         .sent(SENT)
         .revoked(REVOKED)
-        .elementData(Collections.emptyList())
+        .elementData(
+            List.of(
+                ElementData.builder()
+                    .id(new ElementId("2"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("2.1"))
+                            .text("text")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("3"))
+                    .value(
+                        ElementValueDateRangeList.builder()
+                            .dateRangeList(
+                                List.of(
+                                    DateRange.builder()
+                                        .dateRangeId(new FieldId("EN_ATTANDEL"))
+                                        .from(LocalDate.now())
+                                        .to(LocalDate.now().plusDays(1))
+                                        .build()
+                                )
+                            )
+                            .dateRangeListId(new FieldId("3.2"))
+                            .build())
+                    .build()
+            )
+        )
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuer(AJLA_DOKTOR)
