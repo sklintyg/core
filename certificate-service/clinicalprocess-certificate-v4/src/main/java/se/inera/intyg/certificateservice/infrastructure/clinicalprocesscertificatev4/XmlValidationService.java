@@ -12,6 +12,25 @@ public class XmlValidationService {
   private final XmlSchemaValidator xmlSchemaValidator;
 
   public Xml validate(Xml xml, String schematronPath, String certificateId) {
+    validateParameters(xml, schematronPath, certificateId);
     return null;
+  }
+
+  private void validateParameters(Xml xml, String schematronPath, String certificateId) {
+    if (xml == null || xml.xml() == null || xml.xml().isBlank()) {
+      throw new IllegalArgumentException(
+          "Missing required parameter xml: '%s'".formatted(xml)
+      );
+    }
+    if (schematronPath == null || schematronPath.isBlank()) {
+      throw new IllegalArgumentException(
+          "Missing required parameter schematronPath: '%s'".formatted(schematronPath)
+      );
+    }
+    if (certificateId == null || certificateId.isBlank()) {
+      throw new IllegalArgumentException(
+          "Missing required parameter certificateId: '%s'".formatted(certificateId)
+      );
+    }
   }
 }
