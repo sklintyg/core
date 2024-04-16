@@ -77,6 +77,9 @@ class XmlGeneratorCertificateV4Test {
   @Spy
   XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare;
 
+  @Mock
+  XmlValidationService xmlValidationService;
+
   @InjectMocks
   XmlGeneratorCertificateV4 xmlGeneratorCertificateV4;
 

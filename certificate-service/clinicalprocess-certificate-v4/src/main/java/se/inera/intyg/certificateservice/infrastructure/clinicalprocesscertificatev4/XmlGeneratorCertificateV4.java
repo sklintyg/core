@@ -48,6 +48,7 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
 
   private final XmlGeneratorValue xmlGeneratorValue;
   private final XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare;
+  private final XmlValidationService xmlValidationService;
 
   @Override
   public Xml generate(Certificate certificate) {
@@ -56,13 +57,19 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
 
   @Override
   public Xml generate(Certificate certificate, Signature signature) {
-    return marshall(
+    final var xml = marshall(
         registerCertificateType(
             intyg(
                 certificate,
                 signature
             )
         )
+    );
+    
+    return xmlValidationService.validate(
+        xml,
+        certificate.certificateModel().schematronPath(),
+        certificate.id().id()
     );
   }
 

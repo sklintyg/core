@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4;
 
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
@@ -26,7 +26,11 @@ class SchematronValidatorTest {
   private SchematronValidator schematronValidator;
   private final XmlGeneratorCertificateV4 generator = new XmlGeneratorCertificateV4(
       new XmlGeneratorValue(),
-      new XmlGeneratorIntygsgivare()
+      new XmlGeneratorIntygsgivare(),
+      new XmlValidationService(
+          new SchematronValidator(),
+          new SchemaValidatorV4()
+      )
   );
 
   @BeforeEach
@@ -75,12 +79,7 @@ class SchematronValidatorTest {
             .elementData(List.of(element))
             .build();
 
-        final var xml = generator.generate(certificate);
-
-        assertFalse(
-            schematronValidator.validate(certificate.id().id(), xml,
-                CertificateModelFactoryFK7211.SCHEMATRON_PATH)
-        );
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
       }
 
       @Test
@@ -98,10 +97,7 @@ class SchematronValidatorTest {
             .elementData(List.of(element))
             .build();
 
-        final var xml = generator.generate(certificate);
-
-        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
-            CertificateModelFactoryFK7211.SCHEMATRON_PATH));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
       }
 
       @Test
@@ -119,10 +115,7 @@ class SchematronValidatorTest {
             .elementData(List.of(element))
             .build();
 
-        final var xml = generator.generate(certificate);
-
-        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
-            CertificateModelFactoryFK7211.SCHEMATRON_PATH));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
       }
 
       @Test
@@ -137,10 +130,7 @@ class SchematronValidatorTest {
             .elementData(List.of(element))
             .build();
 
-        final var xml = generator.generate(certificate);
-
-        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
-            CertificateModelFactoryFK7211.SCHEMATRON_PATH));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
       }
     }
   }
@@ -183,7 +173,6 @@ class SchematronValidatorTest {
           .build();
 
       final var xml = generator.generate(certificate);
-
       assertTrue(schematronValidator.validate(certificate.id().id(), xml,
           CertificateModelFactoryFK7443.SCHEMATRON_PATH));
     }
@@ -214,10 +203,7 @@ class SchematronValidatorTest {
             .elementData(List.of(QUESTION_PERIOD))
             .build();
 
-        final var xml = generator.generate(certificate);
-
-        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
-            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
       }
 
       @Test
@@ -234,10 +220,7 @@ class SchematronValidatorTest {
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
-        final var xml = generator.generate(certificate);
-
-        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
-            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
       }
 
       @Test
@@ -255,10 +238,7 @@ class SchematronValidatorTest {
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
-        final var xml = generator.generate(certificate);
-
-        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
-            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
       }
 
       @Test
@@ -285,10 +265,7 @@ class SchematronValidatorTest {
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
-        final var xml = generator.generate(certificate);
-
-        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
-            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
       }
 
       @Test
@@ -302,10 +279,7 @@ class SchematronValidatorTest {
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
-        final var xml = generator.generate(certificate);
-
-        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
-            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
       }
     }
 
@@ -332,10 +306,7 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        final var xml = generator.generate(certificate);
-
-        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
-            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
       }
 
       @Test
@@ -358,10 +329,7 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        final var xml = generator.generate(certificate);
-
-        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
-            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
       }
 
       @Test
@@ -395,10 +363,7 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        final var xml = generator.generate(certificate);
-
-        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
-            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
       }
 
       @Test
@@ -432,10 +397,7 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        final var xml = generator.generate(certificate);
-
-        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
-            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
       }
 
       @Test
@@ -463,10 +425,7 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        final var xml = generator.generate(certificate);
-
-        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
-            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
       }
 
 
@@ -495,10 +454,7 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        final var xml = generator.generate(certificate);
-
-        assertFalse(schematronValidator.validate(certificate.id().id(), xml,
-            CertificateModelFactoryFK7443.SCHEMATRON_PATH));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
       }
     }
   }

@@ -116,8 +116,10 @@ public class AppConfig {
 
   @Bean
   public XmlGenerator xmlGenerator(XmlGeneratorValue xmlGeneratorValue,
-      XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare) {
-    return new XmlGeneratorCertificateV4(xmlGeneratorValue, xmlGeneratorIntygsgivare);
+      XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare,
+      XmlValidationService xmlValidationService) {
+    return new XmlGeneratorCertificateV4(xmlGeneratorValue, xmlGeneratorIntygsgivare,
+        xmlValidationService);
   }
 
   @Bean
