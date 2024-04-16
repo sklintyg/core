@@ -199,6 +199,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
         .configuration(
             ElementConfigurationCheckboxDateRangeList.builder()
                 .name("Jag bedömer att barnet inte bör vårdas i ordinarie tillsynsform")
+                .label("Period av den ordinarie tiden:")
                 .id(new FieldId(QUESTION_PERIOD_FIELD_ID))
                 .dateRanges(dateRanges)
                 .hideWorkingHours(true)

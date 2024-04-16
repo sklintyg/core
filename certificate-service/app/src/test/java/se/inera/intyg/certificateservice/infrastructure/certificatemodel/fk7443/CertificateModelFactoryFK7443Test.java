@@ -354,6 +354,7 @@ class CertificateModelFactoryFK7443Test {
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationCheckboxDateRangeList.builder()
             .name("Jag bedömer att barnet inte bör vårdas i ordinarie tillsynsform")
+            .label("Period av den ordinarie tiden:")
             .id(new FieldId("3.1"))
             .hideWorkingHours(true)
             .dateRanges(
