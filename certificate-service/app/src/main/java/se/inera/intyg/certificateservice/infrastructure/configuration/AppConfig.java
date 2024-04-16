@@ -30,6 +30,7 @@ import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertifica
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorCertificateV4;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorIntygsgivare;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorValue;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlValidationService;
 import se.inera.intyg.certificateservice.pdfboxgenerator.CertificatePdfGenerator;
 
 @Configuration
@@ -132,19 +133,17 @@ public class AppConfig {
   @Bean
   public SignCertificateDomainService signCertificateDomainService(
       CertificateRepository certificateRepository,
-      CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator,
-      XmlSchematronValidator schematronValidator, XmlSchemaValidator schemaValidator) {
+      CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator) {
     return new SignCertificateDomainService(certificateRepository, certificateEventDomainService,
-        xmlGenerator, schematronValidator, schemaValidator);
+        xmlGenerator);
   }
 
   @Bean
   public SignCertificateWithoutSignatureDomainService signCertificateWithoutSignatureDomainService(
       CertificateRepository certificateRepository,
-      CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator,
-      XmlSchematronValidator xmlSchematronValidator, XmlSchemaValidator schemaValidator) {
+      CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator) {
     return new SignCertificateWithoutSignatureDomainService(certificateRepository,
-        certificateEventDomainService, xmlGenerator, xmlSchematronValidator, schemaValidator);
+        certificateEventDomainService, xmlGenerator);
   }
 
   @Bean
@@ -176,4 +175,9 @@ public class AppConfig {
     return new CertificatePdfGenerator();
   }
 
+  @Bean
+  public XmlValidationService xmlValidationService(XmlSchemaValidator xmlSchemaValidator,
+      XmlSchematronValidator xmlSchematronValidator) {
+    return new XmlValidationService(xmlSchematronValidator, xmlSchemaValidator);
+  }
 }

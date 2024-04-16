@@ -67,8 +67,8 @@ class SignCertificateDomainServiceTest {
 
     signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, SIGNATURE, ACTION_EVALUATION);
 
-    verify(certificate).sign(xmlGenerator, SIGNATURE, REVISION, ACTION_EVALUATION,
-        xmlSchematronValidator, xmlSchemaValidator);
+    verify(certificate).sign(xmlGenerator, SIGNATURE, REVISION, ACTION_EVALUATION
+    );
   }
 
   @Test

@@ -125,16 +125,13 @@ public class Certificate {
   }
 
   public void sign(XmlGenerator xmlGenerator, Revision revision,
-      ActionEvaluation actionEvaluation, XmlSchematronValidator xmlSchematronValidator,
-      XmlSchemaValidator xmlSchemaValidator) {
+      ActionEvaluation actionEvaluation) {
     sign(revision, actionEvaluation);
     this.xml = xmlGenerator.generate(this);
-    performSchematronValidation(xmlSchematronValidator, xmlSchemaValidator);
   }
 
   public void sign(XmlGenerator xmlGenerator, Signature signature, Revision revision,
-      ActionEvaluation actionEvaluation, XmlSchematronValidator xmlSchematronValidator,
-      XmlSchemaValidator xmlSchemaValidator) {
+      ActionEvaluation actionEvaluation) {
     if (signature == null || signature.isEmpty()) {
       throw new IllegalArgumentException(
           "Incorrect signature '%s' - signature required to sign".formatted(signature)
@@ -143,7 +140,6 @@ public class Certificate {
 
     sign(revision, actionEvaluation);
     this.xml = xmlGenerator.generate(this, signature);
-    performSchematronValidation(xmlSchematronValidator, xmlSchemaValidator);
   }
 
   private void performSchematronValidation(XmlSchematronValidator xmlSchematronValidator,
