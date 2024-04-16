@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.pdfboxgenerator;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.CHECKED_BOX_VALUE;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.PATIENT_ID_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIGNATURE_CARE_UNIT_CONTACT_INFORMATION_FIELD_ID;
 
 import java.io.IOException;
@@ -20,6 +19,13 @@ public class PdfGeneratorValueToolkit {
       throws IOException {
     if (value != null) {
       final var field = acroForm.getField(fieldId);
+
+      if (field == null) {
+        throw new IllegalStateException(
+            String.format("Field is null when getting field of id '%s'", fieldId)
+        );
+      }
+
       field.setValue(value);
     }
   }
@@ -30,10 +36,10 @@ public class PdfGeneratorValueToolkit {
     field.setValue(CHECKED_BOX_VALUE);
   }
 
-  public static void setPatientInformation(PDAcroForm acroForm, Certificate certificate)
+  public static void setPatientInformation(PDAcroForm acroForm, Certificate certificate, String id)
       throws IOException {
     final var patientId = certificate.certificateMetaData().patient().id().id();
-    PdfGeneratorValueToolkit.setValue(acroForm, PATIENT_ID_FIELD_ID, patientId);
+    PdfGeneratorValueToolkit.setValue(acroForm, id, patientId);
   }
 
   public static void setContactInformation(PDAcroForm acroForm, Certificate certificate)

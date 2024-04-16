@@ -7,7 +7,10 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 
 
-public class FK7211PdfGenerator implements PdfCertificateValueGenerator {
+public class FK7211PdfGenerator implements PdfCertificateFillService {
+
+  public static final String PATIENT_ID_FIELD_ID =
+      "form1[0].#subform[0].flt_pnr[0]";
 
   public static final String QUESTION_BERAKNAT_NEDKOMSTDATUM_DATE_FIELD_ID =
       "form1[0].#subform[0].flt_dat[0]";
@@ -18,12 +21,14 @@ public class FK7211PdfGenerator implements PdfCertificateValueGenerator {
   public static final String QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_NURSE_FIELD_ID =
       "form1[0].#subform[0].ksr_kryssruta[2]";
 
-  public static final float SIGNATURE_SIGNATURE_POSITION_X = 171;
-  public static final float SIGNATURE_SIGNATURE_POSITION_Y = 522;
-
   @Override
   public CertificateType getType() {
     return new CertificateType("fk7211");
+  }
+
+  @Override
+  public String getPatientIdFormId() {
+    return PATIENT_ID_FIELD_ID;
   }
 
   @Override
@@ -34,14 +39,15 @@ public class FK7211PdfGenerator implements PdfCertificateValueGenerator {
 
   private void setExpectedDeliveryDate(PDAcroForm acroForm, Certificate certificate)
       throws IOException {
-    final var expectedDeliveryDate = acroForm.getField(
-        QUESTION_BERAKNAT_NEDKOMSTDATUM_DATE_FIELD_ID);
-
     if (!certificate.elementData().isEmpty()) {
       final var dateValue = certificate.elementData().get(0).value();
 
       if (dateValue instanceof ElementValueDate elementValueDate) {
-        expectedDeliveryDate.setValue((elementValueDate).date().toString());
+        PdfGeneratorValueToolkit.setValue(
+            acroForm,
+            QUESTION_BERAKNAT_NEDKOMSTDATUM_DATE_FIELD_ID,
+            elementValueDate.date().toString())
+        ;
       }
     }
   }

@@ -6,11 +6,6 @@ public class PdfConstants {
   public static final String WATERMARK_DRAFT = "UTKAST";
 
   // COMMON FIELD IDS
-  // PATIENT
-  public static final String PATIENT_NAME_FIELD_ID =
-      "form1[0].#subform[0].flt_txtNormal[0]";
-  public static final String PATIENT_ID_FIELD_ID =
-      "form1[0].#subform[0].flt_pnr[0]";
 
   // SIGNATURE
   public static final String SIGNATURE_FULL_NAME_FIELD_ID =

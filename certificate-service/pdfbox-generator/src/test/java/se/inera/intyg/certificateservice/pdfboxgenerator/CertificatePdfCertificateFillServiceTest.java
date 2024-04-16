@@ -23,7 +23,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 
 
 @ExtendWith(MockitoExtension.class)
-class CertificatePdfGeneratorTest {
+class CertificatePdfCertificateFillServiceTest {
 
   private static final LocalDateTime SIGNED_DATE = LocalDateTime.now();
   private static final String ADDITIONAL_INFO_TEXT = "additionalInfoText";

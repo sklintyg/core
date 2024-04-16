@@ -15,11 +15,12 @@ import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator
 
 public class CertificatePdfGenerator implements PdfGenerator {
 
-  private final List<PdfCertificateValueGenerator> pdfValueGenerators = List.of(
-      new FK7211PdfGenerator()
+  private final List<PdfCertificateFillService> pdfValueGenerators = List.of(
+      new FK7211PdfGenerator(),
+      new FK7443PdfGenerator()
   );
 
-  private final GeneralPdfGenerator generalPdfGenerator = new GeneralPdfGenerator();
+  private final CertificatePdfFillService certificatePdfFillService = new CertificatePdfFillService();
 
   public Pdf generate(Certificate certificate, String additionalInfoText) {
     try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
@@ -35,7 +36,7 @@ public class CertificatePdfGenerator implements PdfGenerator {
               )
           );
 
-      final var filledPdf = generalPdfGenerator.fillDocument(certificate, pdfValueGenerator);
+      final var filledPdf = certificatePdfFillService.fillDocument(certificate, pdfValueGenerator);
 
       setMarginText(filledPdf, certificate, additionalInfoText);
       setSentText(filledPdf, certificate);

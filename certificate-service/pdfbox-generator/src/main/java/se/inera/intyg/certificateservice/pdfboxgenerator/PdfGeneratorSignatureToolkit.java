@@ -25,9 +25,9 @@ public class PdfGeneratorSignatureToolkit {
   }
 
   public static void setSignedValues(PDDocument document, PDAcroForm acroForm,
-      Certificate certificate, float x, float y)
+      Certificate certificate)
       throws IOException {
-    setDigitalSignatureText(document, x, y);
+    setDigitalSignatureText(document, acroForm);
     setSignedDate(acroForm, certificate);
     setIssuerFullName(acroForm, certificate);
     setPaTitles(acroForm, certificate);
@@ -99,7 +99,7 @@ public class PdfGeneratorSignatureToolkit {
     );
   }
 
-  private static void setDigitalSignatureText(PDDocument pdDocument, float offsetX, float offsetY)
+  private static void setDigitalSignatureText(PDDocument pdDocument, PDAcroForm acroForm)
       throws IOException {
     PdfGeneratorTextToolkit.addText(
         pdDocument,
@@ -107,9 +107,21 @@ public class PdfGeneratorSignatureToolkit {
         8,
         null,
         Color.gray,
-        offsetX,
-        offsetY,
+        getSignatureOffsetX(acroForm),
+        getSignatureOffsetY(acroForm),
         true
     );
+  }
+
+  private static float getSignatureOffsetY(PDAcroForm acroForm) {
+    final var signedDate = acroForm.getField(SIGNATURE_DATE_FIELD_ID);
+    final var rectangle = signedDate.getWidgets().get(0).getRectangle();
+    return rectangle.getLowerLeftY();
+  }
+
+  private static float getSignatureOffsetX(PDAcroForm acroForm) {
+    final var signedDate = acroForm.getField(SIGNATURE_DATE_FIELD_ID);
+    final var rectangle = signedDate.getWidgets().get(0).getRectangle();
+    return rectangle.getUpperRightX();
   }
 }

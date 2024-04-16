@@ -69,6 +69,8 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
   public static final ElementId QUESTION_PERIOD_ID = new ElementId("3");
   private static final String QUESTION_PERIOD_FIELD_ID = "3.1";
 
+  public static final String PDF_FK_7443_PDF = "pdf/fk7443_v1.pdf";
+
   @Override
   public CertificateModel create() {
     return CertificateModel.builder()
@@ -123,6 +125,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
                 issuingUnitContactInfo()
             )
         )
+        .pdfTemplatePath(PDF_FK_7443_PDF)
         .build();
   }
 
