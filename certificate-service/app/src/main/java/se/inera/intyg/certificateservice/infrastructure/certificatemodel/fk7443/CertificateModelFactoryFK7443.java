@@ -8,6 +8,7 @@ import static se.inera.intyg.certificateservice.domain.certificatemodel.model.Wo
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.TRE_FJARDEDELAR;
 
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -215,6 +216,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
         .validations(
             List.of(
                 ElementValidationDateRangeList.builder()
+                    .min(Period.ofMonths(1))
                     .mandatory(true)
                     .build()
             )

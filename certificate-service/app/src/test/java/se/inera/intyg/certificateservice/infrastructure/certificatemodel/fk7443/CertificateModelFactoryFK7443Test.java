@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.ZoneId;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -399,6 +400,7 @@ class CertificateModelFactoryFK7443Test {
       void shallIncludeValidations() {
         final var expectedValidations = List.of(
             ElementValidationDateRangeList.builder()
+                .min(Period.ofMonths(1))
                 .mandatory(true)
                 .build()
         );

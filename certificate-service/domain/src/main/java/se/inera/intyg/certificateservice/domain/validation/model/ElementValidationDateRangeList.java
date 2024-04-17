@@ -1,7 +1,11 @@
 package se.inera.intyg.certificateservice.domain.validation.model;
 
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange.FROM_SUFFIX;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange.RANGE_SUFFIX;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.TemporalAmount;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +28,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 public class ElementValidationDateRangeList implements ElementValidation {
 
   boolean mandatory;
+  TemporalAmount min;
 
   @Override
   public List<ValidationError> validate(ElementData data,
@@ -64,12 +69,15 @@ public class ElementValidationDateRangeList implements ElementValidation {
       return Collections.emptyList();
     }
 
+    final var fromBeforeMinErrors = getFromBeforeMinErrors(data, categoryId, dateRangeList);
     final var incompleteErrors = getIncompleteDateRangeErrors(data, categoryId, dateRangeList);
     final var toBeforeFromErrors = getToBeforeFromDateRangeErrors(data, categoryId, dateRangeList);
 
-    return Stream
-        .concat(incompleteErrors.stream(), toBeforeFromErrors.stream())
-        .toList();
+    final var errors = Stream.concat(
+        Stream.concat(fromBeforeMinErrors.stream(), incompleteErrors.stream()),
+        toBeforeFromErrors.stream());
+
+    return errors.toList();
   }
 
   private List<ValidationError> getOverlappingErrors(ElementData data,
@@ -100,8 +108,8 @@ public class ElementValidationDateRangeList implements ElementValidation {
   }
 
   private boolean doesDateRangesOverlap(DateRange dateRange1, DateRange dateRange2) {
-    final var overlap = Math.min(dateRange1.to().toEpochDay(), dateRange2.to().toEpochDay()) -
-        Math.max(dateRange1.from().toEpochDay(), dateRange2.from().toEpochDay());
+    final var overlap = Math.min(dateRange1.to().toEpochDay(), dateRange2.to().toEpochDay())
+        - Math.max(dateRange1.from().toEpochDay(), dateRange2.from().toEpochDay());
 
     return overlap >= 0;
   }
@@ -130,6 +138,18 @@ public class ElementValidationDateRangeList implements ElementValidation {
         .toList();
   }
 
+  private List<ValidationError> getFromBeforeMinErrors(ElementData data,
+      Optional<ElementId> categoryId, ElementValueDateRangeList dateRangeList) {
+    return dateRangeList.dateRangeList().stream()
+        .filter(this::isBeforeMin)
+        .map(dateRange -> errorMessage(
+                data, getFieldId(dateRange.dateRangeId(), FROM_SUFFIX), categoryId,
+                "Ange ett datum som är tidigast %s.".formatted(minDate())
+            )
+        )
+        .toList();
+  }
+
   private ElementValueDateRangeList getValue(ElementValue value) {
     if (value == null) {
       throw new IllegalArgumentException("Element data value is null");
@@ -143,6 +163,10 @@ public class ElementValidationDateRangeList implements ElementValidation {
         "Element data value %s is of wrong type".formatted(value.getClass())
     );
 
+  }
+
+  private boolean isBeforeMin(DateRange value) {
+    return value.from() != null && min != null && value.from().isBefore(minDate());
   }
 
   private boolean isDateRangeListFilled(ElementValueDateRangeList value) {
@@ -167,9 +191,9 @@ public class ElementValidationDateRangeList implements ElementValidation {
   }
 
   private FieldId getFieldIdOfIncompleteDateRange(DateRange dateRange) {
-    return dateRange.to() == null ?
-        getFieldId(dateRange.dateRangeId(), CheckboxDateRange.TO_SUFFIX)
-        : getFieldId(dateRange.dateRangeId(), CheckboxDateRange.FROM_SUFFIX);
+    return dateRange.to() == null
+        ? getFieldId(dateRange.dateRangeId(), CheckboxDateRange.TO_SUFFIX)
+        : getFieldId(dateRange.dateRangeId(), FROM_SUFFIX);
   }
 
   private FieldId getFieldId(FieldId id, String suffix) {
@@ -188,4 +212,7 @@ public class ElementValidationDateRangeList implements ElementValidation {
             .build();
   }
 
+  private LocalDate minDate() {
+    return LocalDate.now(ZoneId.systemDefault()).minus(min);
+  }
 }
