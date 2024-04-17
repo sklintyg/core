@@ -848,7 +848,7 @@ class ElementValidationDateRangeListTest {
         assertEquals(expectedValidationError, actualResult);
       }
     }
-
+    
     @Test
     void shouldReturnErrorIfDateRangesHaveOverlappingPeriods() {
       final var expectedValidationError = getExpectedValidationError(
@@ -1028,15 +1028,12 @@ class ElementValidationDateRangeListTest {
     @Nested
     class BeforeMinDate {
 
-      @BeforeEach
-      void setUp() {
+      @Test
+      void shouldReturnValidationErrorIfFromIsBeforeMinValue() {
         elementValidationDateRangeList = ElementValidationDateRangeList.builder()
             .min(Period.ofMonths(1))
             .build();
-      }
 
-      @Test
-      void shouldReturnValidationErrorIfFromIsBeforeMinValue() {
         final var expectedValidationError = getExpectedValidationError(
             "Ange ett datum som är tidigast %s.".formatted(LocalDate.now().minusMonths(1)),
             new FieldId(FIELD_ID_RANGE.value() + ".from")
@@ -1067,6 +1064,11 @@ class ElementValidationDateRangeListTest {
 
       @Test
       void shouldReturnNoValidationErrorIfFromIsOnMinValue() {
+
+        elementValidationDateRangeList = ElementValidationDateRangeList.builder()
+            .min(Period.ofMonths(1))
+            .build();
+
         final var elementData = ElementData.builder()
             .id(ELEMENT_ID)
             .value(
@@ -1090,32 +1092,88 @@ class ElementValidationDateRangeListTest {
 
         assertEquals(Collections.emptyList(), actualResult);
       }
-    }
 
-    @Test
-    void shouldReturnNoValidationErrorIfFromIsAfterMinValue() {
-      final var elementData = ElementData.builder()
-          .id(ELEMENT_ID)
-          .value(
-              ElementValueDateRangeList.builder()
-                  .dateRangeListId(FIELD_ID)
-                  .dateRangeList(List.of(
-                      DateRange.builder()
-                          .dateRangeId(FIELD_ID_RANGE)
-                          .from(LocalDate.now())
-                          .to(LocalDate.now())
-                          .build()
-                  ))
-                  .build()
-          )
-          .build();
+      @Test
+      void shouldReturnNoValidationErrorIfFromIsAfterMinValue() {
+        final var elementData = ElementData.builder()
+            .id(ELEMENT_ID)
+            .value(
+                ElementValueDateRangeList.builder()
+                    .dateRangeListId(FIELD_ID)
+                    .dateRangeList(List.of(
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE)
+                            .from(LocalDate.now())
+                            .to(LocalDate.now())
+                            .build()
+                    ))
+                    .build()
+            )
+            .build();
 
-      final var actualResult = elementValidationDateRangeList.validate(
-          elementData,
-          Optional.of(CATEGORY_ID)
-      );
+        final var actualResult = elementValidationDateRangeList.validate(
+            elementData,
+            Optional.of(CATEGORY_ID)
+        );
 
-      assertEquals(Collections.emptyList(), actualResult);
+        assertEquals(Collections.emptyList(), actualResult);
+      }
+
+      @Test
+      void shouldReturnNoValidationErrorIfMinIsNull() {
+        elementValidationDateRangeList = ElementValidationDateRangeList.builder()
+            .min(null)
+            .build();
+        final var elementData = ElementData.builder()
+            .id(ELEMENT_ID)
+            .value(
+                ElementValueDateRangeList.builder()
+                    .dateRangeListId(FIELD_ID)
+                    .dateRangeList(List.of(
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE)
+                            .from(LocalDate.now())
+                            .to(LocalDate.now())
+                            .build()
+                    ))
+                    .build()
+            )
+            .build();
+
+        final var actualResult = elementValidationDateRangeList.validate(
+            elementData,
+            Optional.of(CATEGORY_ID)
+        );
+
+        assertEquals(Collections.emptyList(), actualResult);
+      }
+
+      @Test
+      void shouldReturnNoValidationErrorIfMinIsNotSet() {
+        elementValidationDateRangeList = ElementValidationDateRangeList.builder().build();
+        final var elementData = ElementData.builder()
+            .id(ELEMENT_ID)
+            .value(
+                ElementValueDateRangeList.builder()
+                    .dateRangeListId(FIELD_ID)
+                    .dateRangeList(List.of(
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE)
+                            .from(LocalDate.now())
+                            .to(LocalDate.now())
+                            .build()
+                    ))
+                    .build()
+            )
+            .build();
+
+        final var actualResult = elementValidationDateRangeList.validate(
+            elementData,
+            Optional.of(CATEGORY_ID)
+        );
+
+        assertEquals(Collections.emptyList(), actualResult);
+      }
     }
   }
 
