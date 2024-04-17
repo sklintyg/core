@@ -26,8 +26,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.SubText;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.SubTextType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionTextType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionTexts;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
@@ -202,7 +202,8 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
         .configuration(
             ElementConfigurationCheckboxDateRangeList.builder()
                 .name("Jag bedömer att barnet inte bör vårdas i ordinarie tillsynsform")
-                .subText(new SubText(Map.of(SubTextType.LABEL, "Period av den ordinarie tiden:")))
+                .texts(new QuestionTexts(
+                    Map.of(QuestionTextType.LABEL, "Period av den ordinarie tiden:")))
                 .id(new FieldId(QUESTION_PERIOD_FIELD_ID))
                 .dateRanges(dateRanges)
                 .hideWorkingHours(true)

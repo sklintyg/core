@@ -1,5 +1,5 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
-public enum SubTextType {
+public enum QuestionTextType {
   LABEL
 }

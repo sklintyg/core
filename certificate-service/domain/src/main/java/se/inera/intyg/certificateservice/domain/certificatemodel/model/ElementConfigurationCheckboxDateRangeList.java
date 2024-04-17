@@ -15,7 +15,7 @@ public class ElementConfigurationCheckboxDateRangeList implements ElementConfigu
   @Getter(onMethod = @__(@Override))
   String name;
   @Getter(onMethod = @__(@Override))
-  SubText subText;
+  QuestionTexts texts;
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.CHECKBOX_DATE_RANGE_LIST;
   FieldId id;

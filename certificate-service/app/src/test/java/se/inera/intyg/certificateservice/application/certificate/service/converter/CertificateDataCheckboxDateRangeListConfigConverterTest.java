@@ -14,8 +14,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.SubText;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.SubTextType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionTextType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionTexts;
 
 class CertificateDataCheckboxDateRangeListConfigConverterTest {
 
@@ -66,7 +66,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
                     .hideWorkingHours(true)
                     .previousDateRangeText("TEST TEST")
                     .name("NAME")
-                    .subText(new SubText(Map.of(SubTextType.LABEL, "LABEL")))
+                    .texts(new QuestionTexts(Map.of(QuestionTextType.LABEL, "LABEL")))
                     .dateRanges(
                         List.of(
                             new CheckboxDateRange(new FieldId("ID"), "LABEL"),
