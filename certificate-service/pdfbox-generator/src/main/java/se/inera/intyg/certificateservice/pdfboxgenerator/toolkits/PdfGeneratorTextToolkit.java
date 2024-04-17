@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator;
+package se.inera.intyg.certificateservice.pdfboxgenerator.toolkits;
 
 import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.WATERMARK_DRAFT;
 

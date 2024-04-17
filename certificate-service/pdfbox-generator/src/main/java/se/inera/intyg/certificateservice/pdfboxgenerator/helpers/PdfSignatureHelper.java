@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator;
+package se.inera.intyg.certificateservice.pdfboxgenerator.helpers;
 
 import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.DIGITALLY_SIGNED_TEXT;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIGNATURE_DATE_FIELD_ID;
@@ -17,10 +17,12 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
 import se.inera.intyg.certificateservice.domain.common.model.Speciality;
+import se.inera.intyg.certificateservice.pdfboxgenerator.toolkits.PdfGeneratorTextToolkit;
+import se.inera.intyg.certificateservice.pdfboxgenerator.toolkits.PdfGeneratorValueToolkit;
 
-public class PdfGeneratorSignatureToolkit {
+public class PdfSignatureHelper {
 
-  private PdfGeneratorSignatureToolkit() {
+  private PdfSignatureHelper() {
     throw new IllegalStateException("Utility class!");
   }
 

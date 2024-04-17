@@ -4,6 +4,8 @@ import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.pdfboxgenerator.helpers.PdfSignatureHelper;
+import se.inera.intyg.certificateservice.pdfboxgenerator.toolkits.PdfGeneratorValueToolkit;
 
 
 public class CertificatePdfFillService {
@@ -28,7 +30,7 @@ public class CertificatePdfFillService {
       certificateValueGenerator.fillDocument(acroForm, certificate);
 
       if (certificate.status() == Status.SIGNED) {
-        PdfGeneratorSignatureToolkit.setSignedValues(pdDocument, acroForm, certificate);
+        PdfSignatureHelper.setSignedValues(pdDocument, acroForm, certificate);
       }
 
       return pdDocument;
