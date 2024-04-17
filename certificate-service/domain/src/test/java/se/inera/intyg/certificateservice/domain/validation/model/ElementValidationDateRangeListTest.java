@@ -848,7 +848,7 @@ class ElementValidationDateRangeListTest {
         assertEquals(expectedValidationError, actualResult);
       }
     }
-    
+
     @Test
     void shouldReturnErrorIfDateRangesHaveOverlappingPeriods() {
       final var expectedValidationError = getExpectedValidationError(
@@ -1028,12 +1028,15 @@ class ElementValidationDateRangeListTest {
     @Nested
     class BeforeMinDate {
 
-      @Test
-      void shouldReturnValidationErrorIfFromIsBeforeMinValue() {
+      @BeforeEach
+      void Setup() {
         elementValidationDateRangeList = ElementValidationDateRangeList.builder()
             .min(Period.ofMonths(1))
             .build();
+      }
 
+      @Test
+      void shouldReturnValidationErrorIfFromIsBeforeMinValue() {
         final var expectedValidationError = getExpectedValidationError(
             "Ange ett datum som är tidigast %s.".formatted(LocalDate.now().minusMonths(1)),
             new FieldId(FIELD_ID_RANGE.value() + ".from")
@@ -1064,11 +1067,6 @@ class ElementValidationDateRangeListTest {
 
       @Test
       void shouldReturnNoValidationErrorIfFromIsOnMinValue() {
-
-        elementValidationDateRangeList = ElementValidationDateRangeList.builder()
-            .min(Period.ofMonths(1))
-            .build();
-
         final var elementData = ElementData.builder()
             .id(ELEMENT_ID)
             .value(
@@ -1118,6 +1116,10 @@ class ElementValidationDateRangeListTest {
 
         assertEquals(Collections.emptyList(), actualResult);
       }
+    }
+
+    @Nested
+    class MinNotSet {
 
       @Test
       void shouldReturnNoValidationErrorIfMinIsNull() {
