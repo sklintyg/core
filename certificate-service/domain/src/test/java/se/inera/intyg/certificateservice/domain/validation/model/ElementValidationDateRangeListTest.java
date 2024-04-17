@@ -1117,67 +1117,68 @@ class ElementValidationDateRangeListTest {
         assertEquals(Collections.emptyList(), actualResult);
       }
     }
+  }
 
-    @Nested
-    class MinNotSet {
+  @Nested
+  class MinNotSet {
 
-      @Test
-      void shouldReturnNoValidationErrorIfMinIsNull() {
-        elementValidationDateRangeList = ElementValidationDateRangeList.builder()
-            .min(null)
-            .build();
-        final var elementData = ElementData.builder()
-            .id(ELEMENT_ID)
-            .value(
-                ElementValueDateRangeList.builder()
-                    .dateRangeListId(FIELD_ID)
-                    .dateRangeList(List.of(
-                        DateRange.builder()
-                            .dateRangeId(FIELD_ID_RANGE)
-                            .from(LocalDate.now())
-                            .to(LocalDate.now())
-                            .build()
-                    ))
-                    .build()
-            )
-            .build();
+    @Test
+    void shouldReturnNoValidationErrorIfMinIsNull() {
+      elementValidationDateRangeList = ElementValidationDateRangeList.builder()
+          .min(null)
+          .build();
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now())
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
 
-        final var actualResult = elementValidationDateRangeList.validate(
-            elementData,
-            Optional.of(CATEGORY_ID)
-        );
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
 
-        assertEquals(Collections.emptyList(), actualResult);
-      }
+      assertEquals(Collections.emptyList(), actualResult);
+    }
 
-      @Test
-      void shouldReturnNoValidationErrorIfMinIsNotSet() {
-        elementValidationDateRangeList = ElementValidationDateRangeList.builder().build();
-        final var elementData = ElementData.builder()
-            .id(ELEMENT_ID)
-            .value(
-                ElementValueDateRangeList.builder()
-                    .dateRangeListId(FIELD_ID)
-                    .dateRangeList(List.of(
-                        DateRange.builder()
-                            .dateRangeId(FIELD_ID_RANGE)
-                            .from(LocalDate.now())
-                            .to(LocalDate.now())
-                            .build()
-                    ))
-                    .build()
-            )
-            .build();
+    @Test
+    void shouldReturnNoValidationErrorIfMinIsNotSet() {
+      elementValidationDateRangeList = ElementValidationDateRangeList.builder().build();
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now())
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
 
-        final var actualResult = elementValidationDateRangeList.validate(
-            elementData,
-            Optional.of(CATEGORY_ID)
-        );
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
 
-        assertEquals(Collections.emptyList(), actualResult);
-      }
+      assertEquals(Collections.emptyList(), actualResult);
     }
   }
+
 
   private static List<ValidationError> getExpectedValidationError(String message, FieldId fieldId) {
     return List.of(
