@@ -7,6 +7,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.config.Chec
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SubTextType;
 
 @Component
 public class CertificateDataCheckboxDateRangeListConfigConverter implements
@@ -25,7 +26,7 @@ public class CertificateDataCheckboxDateRangeListConfigConverter implements
     }
     return CertificateDataConfigCheckboxDateRangeList.builder()
         .text(configuration.name())
-        .label(configuration.label())
+        .label(configuration.subText().value().getOrDefault(SubTextType.LABEL, null))
         .hideWorkingHours(configuration.hideWorkingHours())
         .previousDateRangeText(configuration.previousDateRangeText())
         .list(

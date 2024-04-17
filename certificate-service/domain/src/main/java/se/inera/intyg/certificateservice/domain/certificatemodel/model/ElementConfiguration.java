@@ -8,7 +8,7 @@ public interface ElementConfiguration {
     return null;
   }
 
-  default String label() {
+  default SubText subText() {
     return null;
   }
 

@@ -9,6 +9,7 @@ import static se.inera.intyg.certificateservice.domain.certificatemodel.model.Wo
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -25,6 +26,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SubText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SubTextType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
@@ -199,7 +202,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
         .configuration(
             ElementConfigurationCheckboxDateRangeList.builder()
                 .name("Jag bedömer att barnet inte bör vårdas i ordinarie tillsynsform")
-                .label("Period av den ordinarie tiden:")
+                .subText(new SubText(Map.of(SubTextType.LABEL, "Period av den ordinarie tiden:")))
                 .id(new FieldId(QUESTION_PERIOD_FIELD_ID))
                 .dateRanges(dateRanges)
                 .hideWorkingHours(true)

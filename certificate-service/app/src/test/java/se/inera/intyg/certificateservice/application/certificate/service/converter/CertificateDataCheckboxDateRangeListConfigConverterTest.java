@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigCheckboxDateRangeList;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CheckboxDateRangeConfig;
@@ -13,6 +14,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SubText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SubTextType;
 
 class CertificateDataCheckboxDateRangeListConfigConverterTest {
 
@@ -63,7 +66,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
                     .hideWorkingHours(true)
                     .previousDateRangeText("TEST TEST")
                     .name("NAME")
-                    .label("LABEL")
+                    .subText(new SubText(Map.of(SubTextType.LABEL, "LABEL")))
                     .dateRanges(
                         List.of(
                             new CheckboxDateRange(new FieldId("ID"), "LABEL"),
