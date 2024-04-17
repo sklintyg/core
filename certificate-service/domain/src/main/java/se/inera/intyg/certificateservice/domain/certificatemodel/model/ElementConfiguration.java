@@ -8,7 +8,7 @@ public interface ElementConfiguration {
     return null;
   }
 
-  default QuestionTexts subText() {
+  default QuestionTexts texts() {
     return null;
   }
 
