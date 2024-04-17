@@ -85,7 +85,7 @@ public class ElementValidationDateRangeList implements ElementValidation {
                 data,
                 dateRangeList.dateRangeListId(),
                 categoryId,
-                "Ange sjukskrivningsperioder som inte överlappar varandra."
+                "Ange perioder som inte överlappar varandra."
             )
         )
         .stream().toList();

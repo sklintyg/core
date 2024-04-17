@@ -258,7 +258,7 @@ class ElementValidationDateRangeListTest {
       @Test
       void shouldReturnErrorIfDateRangesHaveSameDayOnFrom() {
         final var expectedValidationError = getExpectedValidationError(
-            "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+            "Ange perioder som inte överlappar varandra.", FIELD_ID
         );
 
         final var elementData = ElementData.builder()
@@ -293,7 +293,7 @@ class ElementValidationDateRangeListTest {
       @Test
       void shouldReturnErrorIfDateRangesHaveSameDayOnTo() {
         final var expectedValidationError = getExpectedValidationError(
-            "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+            "Ange perioder som inte överlappar varandra.", FIELD_ID
         );
 
         final var elementData = ElementData.builder()
@@ -329,7 +329,7 @@ class ElementValidationDateRangeListTest {
     @Test
     void shouldReturnErrorIfDateRangesHaveOverlappingPeriods() {
       final var expectedValidationError = getExpectedValidationError(
-          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+          "Ange perioder som inte överlappar varandra.", FIELD_ID
       );
 
       final var elementData = ElementData.builder()
@@ -364,7 +364,7 @@ class ElementValidationDateRangeListTest {
     @Test
     void shouldReturnErrorIfLowerOverlap() {
       final var expectedValidationError = getExpectedValidationError(
-          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+          "Ange perioder som inte överlappar varandra.", FIELD_ID
       );
 
       final var elementData = ElementData.builder()
@@ -399,7 +399,7 @@ class ElementValidationDateRangeListTest {
     @Test
     void shouldReturnErrorIfUpperOverlap() {
       final var expectedValidationError = getExpectedValidationError(
-          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+          "Ange perioder som inte överlappar varandra.", FIELD_ID
       );
 
       final var elementData = ElementData.builder()
@@ -434,7 +434,7 @@ class ElementValidationDateRangeListTest {
     @Test
     void shouldReturnErrorIfOneCorrectPeriodButTwoOverlap() {
       final var expectedValidationError = getExpectedValidationError(
-          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+          "Ange perioder som inte överlappar varandra.", FIELD_ID
       );
 
       final var elementData = ElementData.builder()
@@ -687,7 +687,7 @@ class ElementValidationDateRangeListTest {
       @Test
       void shouldReturnErrorIfDateRangesHaveSameDayOnFrom() {
         final var expectedValidationError = getExpectedValidationError(
-            "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+            "Ange perioder som inte överlappar varandra.", FIELD_ID
         );
 
         final var elementData = ElementData.builder()
@@ -722,7 +722,7 @@ class ElementValidationDateRangeListTest {
       @Test
       void shouldReturnErrorIfDateRangesHaveSameDayOnTo() {
         final var expectedValidationError = getExpectedValidationError(
-            "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+            "Ange perioder som inte överlappar varandra.", FIELD_ID
         );
 
         final var elementData = ElementData.builder()
@@ -758,7 +758,7 @@ class ElementValidationDateRangeListTest {
     @Test
     void shouldReturnErrorIfDateRangesHaveOverlappingPeriods() {
       final var expectedValidationError = getExpectedValidationError(
-          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+          "Ange perioder som inte överlappar varandra.", FIELD_ID
       );
 
       final var elementData = ElementData.builder()
@@ -793,7 +793,7 @@ class ElementValidationDateRangeListTest {
     @Test
     void shouldReturnErrorIfLowerOverlap() {
       final var expectedValidationError = getExpectedValidationError(
-          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+          "Ange perioder som inte överlappar varandra.", FIELD_ID
       );
 
       final var elementData = ElementData.builder()
@@ -828,7 +828,7 @@ class ElementValidationDateRangeListTest {
     @Test
     void shouldReturnErrorIfUpperOverlap() {
       final var expectedValidationError = getExpectedValidationError(
-          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+          "Ange perioder som inte överlappar varandra.", FIELD_ID
       );
 
       final var elementData = ElementData.builder()
@@ -863,7 +863,7 @@ class ElementValidationDateRangeListTest {
     @Test
     void shouldReturnErrorIfOneCorrectPeriodButTwoOverlap() {
       final var expectedValidationError = getExpectedValidationError(
-          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+          "Ange perioder som inte överlappar varandra.", FIELD_ID
       );
 
       final var elementData = ElementData.builder()
