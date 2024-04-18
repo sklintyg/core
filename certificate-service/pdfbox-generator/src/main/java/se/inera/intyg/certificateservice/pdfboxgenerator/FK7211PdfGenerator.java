@@ -24,14 +24,8 @@ public class FK7211PdfGenerator implements PdfCertificateFillService {
       "form1[0].#subform[0].ksr_kryssruta[2]";
   public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_ID = new ElementId("1");
 
-  private final PdfGeneratorValueToolkit pdfGeneratorValueToolkit;
-  private final PdfDateValueGenerator pdfDateValueGenerator;
-
-  public FK7211PdfGenerator(PdfGeneratorValueToolkit pdfGeneratorValueToolkit,
-      PdfDateValueGenerator pdfDateValueGenerator) {
-    this.pdfGeneratorValueToolkit = pdfGeneratorValueToolkit;
-    this.pdfDateValueGenerator = pdfDateValueGenerator;
-  }
+  private PdfGeneratorValueToolkit pdfGeneratorValueToolkit;
+  private PdfDateValueGenerator pdfDateValueGenerator;
 
   @Override
   public CertificateType getType() {
@@ -45,6 +39,8 @@ public class FK7211PdfGenerator implements PdfCertificateFillService {
 
   @Override
   public void fillDocument(PDAcroForm acroForm, Certificate certificate) throws IOException {
+    pdfDateValueGenerator = new PdfDateValueGenerator();
+    pdfGeneratorValueToolkit = new PdfGeneratorValueToolkit();
     setExpectedDeliveryDate(acroForm, certificate);
     setIssuerRole(acroForm, certificate);
   }

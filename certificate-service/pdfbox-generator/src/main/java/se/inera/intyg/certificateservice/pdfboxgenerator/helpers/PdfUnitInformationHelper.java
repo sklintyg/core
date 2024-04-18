@@ -26,8 +26,11 @@ public class PdfUnitInformationHelper {
         .map(data -> buildAddress(certificate, data.value()))
         .orElse("");
 
-    pdfGeneratorValueToolkit.setValue(acroForm, SIGNATURE_CARE_UNIT_CONTACT_INFORMATION_FIELD_ID,
-        contactInfo);
+    pdfGeneratorValueToolkit.setValue(
+        acroForm,
+        SIGNATURE_CARE_UNIT_CONTACT_INFORMATION_FIELD_ID,
+        contactInfo
+    );
   }
 
   private static String buildAddress(Certificate certificate,

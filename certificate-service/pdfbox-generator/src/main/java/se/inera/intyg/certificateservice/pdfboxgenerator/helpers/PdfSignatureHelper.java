@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.helpers;
 
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.DIGITALLY_SIGNED_TEXT;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIGNATURE_DATE_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIGNATURE_FULL_NAME_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIGNATURE_HSA_ID_FIELD_ID;
@@ -8,7 +7,6 @@ import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIG
 import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIGNATURE_SPECIALITY_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIGNATURE_WORKPLACE_CODE_FIELD_ID;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
@@ -23,15 +21,18 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.toolkits.PdfGeneratorVa
 public class PdfSignatureHelper {
 
   private final PdfGeneratorValueToolkit pdfGeneratorValueToolkit;
+  private final PdfGeneratorTextToolkit pdfGeneratorTextToolkit;
 
-  public PdfSignatureHelper(PdfGeneratorValueToolkit pdfGeneratorValueToolkit) {
+  public PdfSignatureHelper(PdfGeneratorValueToolkit pdfGeneratorValueToolkit,
+      PdfGeneratorTextToolkit pdfGeneratorTextToolkit) {
     this.pdfGeneratorValueToolkit = pdfGeneratorValueToolkit;
+    this.pdfGeneratorTextToolkit = pdfGeneratorTextToolkit;
   }
 
   public void setSignedValues(PDDocument document, PDAcroForm acroForm,
       Certificate certificate)
       throws IOException {
-    setDigitalSignatureText(document, acroForm);
+    pdfGeneratorTextToolkit.setDigitalSignatureText(document, acroForm);
     setSignedDate(acroForm, certificate);
     setIssuerFullName(acroForm, certificate);
     setPaTitles(acroForm, certificate);
@@ -101,31 +102,5 @@ public class PdfSignatureHelper {
         SIGNATURE_WORKPLACE_CODE_FIELD_ID,
         workplaceCode.code()
     );
-  }
-
-  private void setDigitalSignatureText(PDDocument pdDocument, PDAcroForm acroForm)
-      throws IOException {
-    PdfGeneratorTextToolkit.addText(
-        pdDocument,
-        DIGITALLY_SIGNED_TEXT,
-        8,
-        null,
-        Color.gray,
-        getSignatureOffsetX(acroForm),
-        getSignatureOffsetY(acroForm),
-        true
-    );
-  }
-
-  private float getSignatureOffsetY(PDAcroForm acroForm) {
-    final var signedDate = acroForm.getField(SIGNATURE_DATE_FIELD_ID);
-    final var rectangle = signedDate.getWidgets().get(0).getRectangle();
-    return rectangle.getLowerLeftY();
-  }
-
-  private float getSignatureOffsetX(PDAcroForm acroForm) {
-    final var signedDate = acroForm.getField(SIGNATURE_DATE_FIELD_ID);
-    final var rectangle = signedDate.getWidgets().get(0).getRectangle();
-    return rectangle.getUpperRightX();
   }
 }

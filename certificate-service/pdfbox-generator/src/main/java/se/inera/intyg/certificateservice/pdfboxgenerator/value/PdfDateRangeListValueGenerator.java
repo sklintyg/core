@@ -16,9 +16,12 @@ public class PdfDateRangeListValueGenerator implements PdfElementValueGenerator 
   private static final String DATE_TO_PERIOD_PREFIX_ID = ".flt_datLangstTillMed";
   private static final String PERIOD_SUFFIX_ID = "[0]";
 
+  private PdfGeneratorValueToolkit pdfGeneratorValueToolkit;
+
   @Override
   public void generate(PDAcroForm acroForm, Certificate certificate, ElementId questionId,
-      String fieldName) throws IOException {
+      String fieldName) {
+    pdfGeneratorValueToolkit = new PdfGeneratorValueToolkit();
     final var question = certificate.getElementDataById(questionId);
 
     if (question.isEmpty()) {
@@ -47,18 +50,18 @@ public class PdfDateRangeListValueGenerator implements PdfElementValueGenerator 
 
   private void fillPeriod(PDAcroForm acroForm, DateRange dateRange, String fieldName)
       throws IOException {
-    PdfGeneratorValueToolkit.setCheckedBoxValue(
+    pdfGeneratorValueToolkit.setCheckedBoxValue(
         acroForm,
         getPeriodCheckboxId(dateRange, fieldName)
     );
 
-    PdfGeneratorValueToolkit.setValue(
+    pdfGeneratorValueToolkit.setValue(
         acroForm,
         getPeriodFromId(dateRange, fieldName),
         dateRange.from().toString()
     );
 
-    PdfGeneratorValueToolkit.setValue(
+    pdfGeneratorValueToolkit.setValue(
         acroForm,
         getPeriodToId(dateRange, fieldName),
         dateRange.to().toString()

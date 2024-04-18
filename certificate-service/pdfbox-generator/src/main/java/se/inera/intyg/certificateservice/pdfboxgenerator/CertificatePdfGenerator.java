@@ -1,38 +1,34 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator;
 
-import java.awt.Color;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.util.Matrix;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
-import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.helpers.PdfPatientInformationHelper;
 import se.inera.intyg.certificateservice.pdfboxgenerator.helpers.PdfSignatureHelper;
+import se.inera.intyg.certificateservice.pdfboxgenerator.helpers.PdfTextInformationHelper;
 import se.inera.intyg.certificateservice.pdfboxgenerator.helpers.PdfUnitInformationHelper;
 import se.inera.intyg.certificateservice.pdfboxgenerator.toolkits.PdfGeneratorTextToolkit;
 import se.inera.intyg.certificateservice.pdfboxgenerator.toolkits.PdfGeneratorValueToolkit;
-import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfDateValueGenerator;
 
 public class CertificatePdfGenerator implements PdfGenerator {
 
   private final List<PdfCertificateFillService> pdfValueGenerators = List.of(
-      new FK7211PdfGenerator(new PdfGeneratorValueToolkit(), new PdfDateValueGenerator()),
+      new FK7211PdfGenerator(),
       new FK7443PdfGenerator()
   );
 
   public Pdf generate(Certificate certificate, String additionalInfoText) {
     final var pdfGeneratorValueToolkit = new PdfGeneratorValueToolkit();
+    final var pdfGeneratorTextToolkit = new PdfGeneratorTextToolkit();
     final var certificatePdfFillService = new CertificatePdfFillService(
         new PdfUnitInformationHelper(pdfGeneratorValueToolkit),
         new PdfPatientInformationHelper(pdfGeneratorValueToolkit),
-        new PdfSignatureHelper(pdfGeneratorValueToolkit)
-    );
+        new PdfSignatureHelper(pdfGeneratorValueToolkit, pdfGeneratorTextToolkit),
+        new PdfTextInformationHelper(pdfGeneratorTextToolkit));
 
     try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
       final var pdfValueGenerator = pdfValueGenerators.stream()
@@ -47,11 +43,11 @@ public class CertificatePdfGenerator implements PdfGenerator {
               )
           );
 
-      final var filledPdf = certificatePdfFillService.fillDocument(certificate, pdfValueGenerator);
-
-      setMarginText(filledPdf, certificate, additionalInfoText);
-      setSentText(filledPdf, certificate);
-      setDraftWatermark(filledPdf, certificate);
+      final var filledPdf = certificatePdfFillService.fillDocument(
+          certificate,
+          additionalInfoText,
+          pdfValueGenerator
+      );
 
       filledPdf.getDocumentInformation().setTitle(setFileName(certificate));
       filledPdf.getDocumentCatalog().getAcroForm().flatten();
@@ -63,45 +59,6 @@ public class CertificatePdfGenerator implements PdfGenerator {
     } catch (Exception e) {
       throw new IllegalStateException("Could not create Pdf", e);
     }
-  }
-
-  private static void setSentText(PDDocument fk7211Pdf, Certificate certificate)
-      throws IOException {
-    if (certificate.sent() == null) {
-      return;
-    }
-
-    PdfGeneratorTextToolkit.addSentText(fk7211Pdf, certificate);
-    PdfGeneratorTextToolkit.addSentVisibilityText(fk7211Pdf);
-  }
-
-  private static void setMarginText(PDDocument fk7211Pdf, Certificate certificate,
-      String additionalInfoText)
-      throws IOException {
-
-    if (certificate.status() != Status.SIGNED) {
-      return;
-    }
-
-    PdfGeneratorTextToolkit.addText(
-        fk7211Pdf,
-        "Intygsid: %s. %s".formatted(certificate.id().id(), additionalInfoText),
-        8,
-        Matrix.getRotateInstance(Math.PI / 2, 600, 25),
-        Color.black,
-        30F,
-        30F,
-        false
-    );
-  }
-
-  private static void setDraftWatermark(PDDocument fk7211Pdf, Certificate certificate)
-      throws IOException {
-    if (certificate.status() != Status.DRAFT) {
-      return;
-    }
-
-    PdfGeneratorTextToolkit.addDraftWatermark(fk7211Pdf);
   }
 
   private String setFileName(Certificate certificate) {

@@ -12,6 +12,7 @@ public class PdfTextValueGenerator implements PdfElementValueGenerator {
   @Override
   public void generate(PDAcroForm acroForm, Certificate certificate, ElementId questionId,
       String fieldName) throws IOException {
+    final var pdfGeneratorValueToolkit = new PdfGeneratorValueToolkit();
     final var question = certificate.getElementDataById(questionId);
 
     if (question.isEmpty()) {
@@ -28,6 +29,6 @@ public class PdfTextValueGenerator implements PdfElementValueGenerator {
       );
     }
 
-    PdfGeneratorValueToolkit.setValue(acroForm, fieldName, elementValueText.text());
+    pdfGeneratorValueToolkit.setValue(acroForm, fieldName, elementValueText.text());
   }
 }

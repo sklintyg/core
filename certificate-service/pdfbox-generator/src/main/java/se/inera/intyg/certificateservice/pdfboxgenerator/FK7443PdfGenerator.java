@@ -17,8 +17,8 @@ public class FK7443PdfGenerator implements PdfCertificateFillService {
   private static final String PATIENT_ID = "form1[0].#subform[0].flt_txtPersonNrBarn[0]";
   private static final String DIAGNOSIS_FIELD_NAME = "form1[0].#subform[0]";
 
-  private final PdfTextValueGenerator pdfTextValueGenerator = new PdfTextValueGenerator();
-  private final PdfDateRangeListValueGenerator pdfDateRangeListValueGenerator = new PdfDateRangeListValueGenerator();
+  private PdfTextValueGenerator pdfTextValueGenerator;
+  private PdfDateRangeListValueGenerator pdfDateRangeListValueGenerator;
 
   @Override
   public CertificateType getType() {
@@ -32,11 +32,13 @@ public class FK7443PdfGenerator implements PdfCertificateFillService {
 
   @Override
   public void fillDocument(PDAcroForm acroForm, Certificate certificate) throws IOException {
+    pdfTextValueGenerator = new PdfTextValueGenerator();
+    pdfDateRangeListValueGenerator = new PdfDateRangeListValueGenerator();
     fillDiagnosisQuestion(acroForm, certificate);
     fillPeriodQuestion(acroForm, certificate);
   }
 
-  private void fillPeriodQuestion(PDAcroForm acroForm, Certificate certificate) throws IOException {
+  private void fillPeriodQuestion(PDAcroForm acroForm, Certificate certificate) {
     pdfDateRangeListValueGenerator.generate(
         acroForm, certificate, QUESTION_PERIOD_ID, DIAGNOSIS_FIELD_NAME
     );

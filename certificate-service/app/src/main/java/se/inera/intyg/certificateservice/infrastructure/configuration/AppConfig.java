@@ -159,5 +159,4 @@ public class AppConfig {
   public PdfGenerator pdfGenerator() {
     return new CertificatePdfGenerator();
   }
-
 }
