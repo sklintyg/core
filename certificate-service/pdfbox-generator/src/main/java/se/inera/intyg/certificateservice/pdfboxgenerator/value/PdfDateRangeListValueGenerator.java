@@ -21,6 +21,10 @@ public class PdfDateRangeListValueGenerator implements PdfElementValueGenerator 
   @Override
   public void generate(PDAcroForm acroForm, Certificate certificate, ElementId questionId,
       String fieldName) {
+    if (certificate.elementData().isEmpty()) {
+      return;
+    }
+
     pdfGeneratorValueToolkit = new PdfGeneratorValueToolkit();
     final var question = certificate.getElementDataById(questionId);
 

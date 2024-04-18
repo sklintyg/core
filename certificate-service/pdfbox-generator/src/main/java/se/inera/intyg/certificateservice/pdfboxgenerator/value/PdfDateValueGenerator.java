@@ -9,11 +9,15 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.toolkits.PdfGeneratorVa
 
 public class PdfDateValueGenerator implements PdfElementValueGenerator {
 
-  private final PdfGeneratorValueToolkit pdfGeneratorValueToolkit = new PdfGeneratorValueToolkit();
-
   @Override
   public void generate(PDAcroForm acroForm, Certificate certificate, ElementId questionId,
       String fieldName) throws IOException {
+    PdfGeneratorValueToolkit pdfGeneratorValueToolkit = new PdfGeneratorValueToolkit();
+
+    if (certificate.elementData().isEmpty()) {
+      return;
+    }
+
     final var question = certificate.getElementDataById(questionId);
 
     if (question.isEmpty()) {

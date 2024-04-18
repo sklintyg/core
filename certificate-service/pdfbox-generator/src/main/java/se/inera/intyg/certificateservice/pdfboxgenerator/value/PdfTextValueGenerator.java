@@ -12,6 +12,10 @@ public class PdfTextValueGenerator implements PdfElementValueGenerator {
   @Override
   public void generate(PDAcroForm acroForm, Certificate certificate, ElementId questionId,
       String fieldName) throws IOException {
+    if (certificate.elementData().isEmpty()) {
+      return;
+    }
+
     final var pdfGeneratorValueToolkit = new PdfGeneratorValueToolkit();
     final var question = certificate.getElementDataById(questionId);
 
