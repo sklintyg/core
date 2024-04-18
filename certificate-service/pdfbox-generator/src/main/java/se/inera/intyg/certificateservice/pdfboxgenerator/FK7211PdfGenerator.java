@@ -3,9 +3,10 @@ package se.inera.intyg.certificateservice.pdfboxgenerator;
 import java.io.IOException;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.pdfboxgenerator.toolkits.PdfGeneratorValueToolkit;
+import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfDateValueGenerator;
 
 
 public class FK7211PdfGenerator implements PdfCertificateFillService {
@@ -21,6 +22,16 @@ public class FK7211PdfGenerator implements PdfCertificateFillService {
       "form1[0].#subform[0].ksr_kryssruta[1]";
   public static final String QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_NURSE_FIELD_ID =
       "form1[0].#subform[0].ksr_kryssruta[2]";
+  public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_ID = new ElementId("1");
+
+  private final PdfGeneratorValueToolkit pdfGeneratorValueToolkit;
+  private final PdfDateValueGenerator pdfDateValueGenerator;
+
+  public FK7211PdfGenerator(PdfGeneratorValueToolkit pdfGeneratorValueToolkit,
+      PdfDateValueGenerator pdfDateValueGenerator) {
+    this.pdfGeneratorValueToolkit = pdfGeneratorValueToolkit;
+    this.pdfDateValueGenerator = pdfDateValueGenerator;
+  }
 
   @Override
   public CertificateType getType() {
@@ -40,32 +51,26 @@ public class FK7211PdfGenerator implements PdfCertificateFillService {
 
   private void setExpectedDeliveryDate(PDAcroForm acroForm, Certificate certificate)
       throws IOException {
-    if (!certificate.elementData().isEmpty()) {
-      final var dateValue = certificate.elementData().get(0).value();
-
-      if (dateValue instanceof ElementValueDate elementValueDate) {
-        PdfGeneratorValueToolkit.setValue(
-            acroForm,
-            QUESTION_BERAKNAT_NEDKOMSTDATUM_DATE_FIELD_ID,
-            elementValueDate.date().toString())
-        ;
-      }
-    }
+    pdfDateValueGenerator.generate(acroForm,
+        certificate,
+        QUESTION_BERAKNAT_NEDKOMSTDATUM_ID,
+        QUESTION_BERAKNAT_NEDKOMSTDATUM_DATE_FIELD_ID
+    );
   }
 
   private void setIssuerRole(PDAcroForm acroForm, Certificate certificate) throws IOException {
     final var role = certificate.certificateMetaData().issuer().role();
 
     switch (role) {
-      case DOCTOR, PRIVATE_DOCTOR, DENTIST -> PdfGeneratorValueToolkit.setCheckedBoxValue(
+      case DOCTOR, PRIVATE_DOCTOR, DENTIST -> pdfGeneratorValueToolkit.setCheckedBoxValue(
           acroForm,
           QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_DOCTOR_FIELD_ID
       );
-      case MIDWIFE -> PdfGeneratorValueToolkit.setCheckedBoxValue(
+      case MIDWIFE -> pdfGeneratorValueToolkit.setCheckedBoxValue(
           acroForm,
           QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_MIDWIFE_FIELD_ID
       );
-      case NURSE -> PdfGeneratorValueToolkit.setCheckedBoxValue(
+      case NURSE -> pdfGeneratorValueToolkit.setCheckedBoxValue(
           acroForm,
           QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_NURSE_FIELD_ID
       );

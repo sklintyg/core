@@ -12,18 +12,28 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.helpers.PdfPatientInformationHelper;
+import se.inera.intyg.certificateservice.pdfboxgenerator.helpers.PdfSignatureHelper;
+import se.inera.intyg.certificateservice.pdfboxgenerator.helpers.PdfUnitInformationHelper;
 import se.inera.intyg.certificateservice.pdfboxgenerator.toolkits.PdfGeneratorTextToolkit;
+import se.inera.intyg.certificateservice.pdfboxgenerator.toolkits.PdfGeneratorValueToolkit;
+import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfDateValueGenerator;
 
 public class CertificatePdfGenerator implements PdfGenerator {
 
   private final List<PdfCertificateFillService> pdfValueGenerators = List.of(
-      new FK7211PdfGenerator(),
+      new FK7211PdfGenerator(new PdfGeneratorValueToolkit(), new PdfDateValueGenerator()),
       new FK7443PdfGenerator()
   );
 
-  private final CertificatePdfFillService certificatePdfFillService = new CertificatePdfFillService();
-
   public Pdf generate(Certificate certificate, String additionalInfoText) {
+    final var pdfGeneratorValueToolkit = new PdfGeneratorValueToolkit();
+    final var certificatePdfFillService = new CertificatePdfFillService(
+        new PdfUnitInformationHelper(pdfGeneratorValueToolkit),
+        new PdfPatientInformationHelper(pdfGeneratorValueToolkit),
+        new PdfSignatureHelper(pdfGeneratorValueToolkit)
+    );
+
     try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
       final var pdfValueGenerator = pdfValueGenerators.stream()
           .filter(

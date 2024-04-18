@@ -22,11 +22,13 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.toolkits.PdfGeneratorVa
 
 public class PdfSignatureHelper {
 
-  private PdfSignatureHelper() {
-    throw new IllegalStateException("Utility class!");
+  private final PdfGeneratorValueToolkit pdfGeneratorValueToolkit;
+
+  public PdfSignatureHelper(PdfGeneratorValueToolkit pdfGeneratorValueToolkit) {
+    this.pdfGeneratorValueToolkit = pdfGeneratorValueToolkit;
   }
 
-  public static void setSignedValues(PDDocument document, PDAcroForm acroForm,
+  public void setSignedValues(PDDocument document, PDAcroForm acroForm,
       Certificate certificate)
       throws IOException {
     setDigitalSignatureText(document, acroForm);
@@ -38,55 +40,55 @@ public class PdfSignatureHelper {
     setWorkplaceCode(acroForm, certificate);
   }
 
-  private static void setSignedDate(PDAcroForm acroForm, Certificate certificate)
+  private void setSignedDate(PDAcroForm acroForm, Certificate certificate)
       throws IOException {
-    PdfGeneratorValueToolkit.setValue(acroForm,
+    pdfGeneratorValueToolkit.setValue(acroForm,
         SIGNATURE_DATE_FIELD_ID,
         certificate.signed().format(DateTimeFormatter.ISO_DATE)
     );
   }
 
-  private static void setIssuerFullName(PDAcroForm acroForm, Certificate certificate)
+  private void setIssuerFullName(PDAcroForm acroForm, Certificate certificate)
       throws IOException {
-    PdfGeneratorValueToolkit.setValue(acroForm, SIGNATURE_FULL_NAME_FIELD_ID,
+    pdfGeneratorValueToolkit.setValue(acroForm, SIGNATURE_FULL_NAME_FIELD_ID,
         certificate.certificateMetaData().issuer().name().fullName());
   }
 
-  private static void setPaTitles(PDAcroForm acroForm, Certificate certificate) throws IOException {
+  private void setPaTitles(PDAcroForm acroForm, Certificate certificate) throws IOException {
     final var paTitles = certificate.certificateMetaData().issuer().paTitles();
     if (paTitles != null) {
       final var paTitleCodes = paTitles.stream()
           .map(PaTitle::code)
           .collect(Collectors.joining(", "));
 
-      PdfGeneratorValueToolkit.setValue(acroForm, SIGNATURE_PA_TITLE_FIELD_ID, paTitleCodes);
+      pdfGeneratorValueToolkit.setValue(acroForm, SIGNATURE_PA_TITLE_FIELD_ID, paTitleCodes);
     }
   }
 
-  private static void setSpeciality(PDAcroForm acroForm, Certificate certificate)
+  private void setSpeciality(PDAcroForm acroForm, Certificate certificate)
       throws IOException {
     final var specialities = certificate.certificateMetaData().issuer().specialities();
     if (specialities != null) {
       final var mappedSpecialities = specialities.stream().map(Speciality::value)
           .collect(Collectors.joining(", "));
 
-      PdfGeneratorValueToolkit.setValue(
+      pdfGeneratorValueToolkit.setValue(
           acroForm,
           SIGNATURE_SPECIALITY_FIELD_ID,
           mappedSpecialities);
     }
   }
 
-  private static void setHsaId(PDAcroForm acroForm, Certificate certificate) throws IOException {
+  private void setHsaId(PDAcroForm acroForm, Certificate certificate) throws IOException {
     final var hsaId = certificate.certificateMetaData().issuer().hsaId().id();
-    PdfGeneratorValueToolkit.setValue(
+    pdfGeneratorValueToolkit.setValue(
         acroForm,
         SIGNATURE_HSA_ID_FIELD_ID,
         hsaId
     );
   }
 
-  private static void setWorkplaceCode(PDAcroForm acroForm, Certificate certificate)
+  private void setWorkplaceCode(PDAcroForm acroForm, Certificate certificate)
       throws IOException {
     final var workplaceCode = certificate.certificateMetaData().issuingUnit().workplaceCode();
 
@@ -94,14 +96,14 @@ public class PdfSignatureHelper {
       return;
     }
 
-    PdfGeneratorValueToolkit.setValue(
+    pdfGeneratorValueToolkit.setValue(
         acroForm,
         SIGNATURE_WORKPLACE_CODE_FIELD_ID,
         workplaceCode.code()
     );
   }
 
-  private static void setDigitalSignatureText(PDDocument pdDocument, PDAcroForm acroForm)
+  private void setDigitalSignatureText(PDDocument pdDocument, PDAcroForm acroForm)
       throws IOException {
     PdfGeneratorTextToolkit.addText(
         pdDocument,
@@ -115,13 +117,13 @@ public class PdfSignatureHelper {
     );
   }
 
-  private static float getSignatureOffsetY(PDAcroForm acroForm) {
+  private float getSignatureOffsetY(PDAcroForm acroForm) {
     final var signedDate = acroForm.getField(SIGNATURE_DATE_FIELD_ID);
     final var rectangle = signedDate.getWidgets().get(0).getRectangle();
     return rectangle.getLowerLeftY();
   }
 
-  private static float getSignatureOffsetX(PDAcroForm acroForm) {
+  private float getSignatureOffsetX(PDAcroForm acroForm) {
     final var signedDate = acroForm.getField(SIGNATURE_DATE_FIELD_ID);
     final var rectangle = signedDate.getWidgets().get(0).getRectangle();
     return rectangle.getUpperRightX();
