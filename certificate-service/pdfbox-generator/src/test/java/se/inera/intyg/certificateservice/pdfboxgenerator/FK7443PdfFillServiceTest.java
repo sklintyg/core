@@ -135,17 +135,17 @@ class FK7443PdfFillServiceTest {
         assertAll(
             () -> assertEquals(
                 "1",
-                pdAcroForm.getField(PERIOD_FIELD_ID_PREFIX + ".ksr_kryssruta2[0]")
+                pdAcroForm.getField(PERIOD_FIELD_ID_PREFIX + ".ksr_kryssruta3[0]")
                     .getValueAsString()
             ),
             () -> assertEquals(
                 DATE_RANGE.from().toString(),
-                pdAcroForm.getField(PERIOD_FIELD_ID_PREFIX + ".flt_datFranMed2[0]")
+                pdAcroForm.getField(PERIOD_FIELD_ID_PREFIX + ".flt_datFranMed3[0]")
                     .getValueAsString()
             ),
             () -> assertEquals(
                 DATE_RANGE.to().toString(),
-                pdAcroForm.getField(PERIOD_FIELD_ID_PREFIX + ".flt_datLangstTillMed2[0]")
+                pdAcroForm.getField(PERIOD_FIELD_ID_PREFIX + ".flt_datLangstTillMed3[0]")
                     .getValueAsString()
             )
         );

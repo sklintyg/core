@@ -59,17 +59,21 @@ public class PdfDateRangeListValueGenerator implements PdfElementValueGenerator 
         getPeriodCheckboxId(dateRange, fieldName)
     );
 
-    pdfGeneratorValueToolkit.setValue(
-        acroForm,
-        getPeriodFromId(dateRange, fieldName),
-        dateRange.from().toString()
-    );
+    if (dateRange.from() != null) {
+      pdfGeneratorValueToolkit.setValue(
+          acroForm,
+          getPeriodFromId(dateRange, fieldName),
+          dateRange.from().toString()
+      );
+    }
 
-    pdfGeneratorValueToolkit.setValue(
-        acroForm,
-        getPeriodToId(dateRange, fieldName),
-        dateRange.to().toString()
-    );
+    if (dateRange.to() != null) {
+      pdfGeneratorValueToolkit.setValue(
+          acroForm,
+          getPeriodToId(dateRange, fieldName),
+          dateRange.to().toString()
+      );
+    }
   }
 
   private String getPeriodCheckboxId(DateRange dateRange, String fieldName) {
@@ -97,10 +101,10 @@ public class PdfDateRangeListValueGenerator implements PdfElementValueGenerator 
         return "4";
       }
       case HALVA -> {
-        return "2";
+        return "3";
       }
       case TRE_FJARDEDELAR -> {
-        return "1";
+        return "2";
       }
       case HELA -> {
         return "";

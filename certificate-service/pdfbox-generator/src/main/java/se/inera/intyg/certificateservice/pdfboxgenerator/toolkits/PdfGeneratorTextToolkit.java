@@ -9,6 +9,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
@@ -16,6 +17,8 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.util.Matrix;
 
 public class PdfGeneratorTextToolkit {
+
+  public static final int SIGNATURE_X_PADDING = 60;
 
   public void addText(PDDocument pdf, String text, int fontSize, Matrix matrix,
       Color strokingColor)
@@ -106,14 +109,17 @@ public class PdfGeneratorTextToolkit {
   }
 
   private float getSignatureOffsetY(PDAcroForm acroForm) {
-    final var signedDate = acroForm.getField(SIGNATURE_DATE_FIELD_ID);
-    final var rectangle = signedDate.getWidgets().get(0).getRectangle();
+    final var rectangle = getSignedDateRectangle(acroForm);
     return rectangle.getLowerLeftY();
   }
 
   private float getSignatureOffsetX(PDAcroForm acroForm) {
+    final var rectangle = getSignedDateRectangle(acroForm);
+    return rectangle.getUpperRightX() + SIGNATURE_X_PADDING;
+  }
+
+  private static PDRectangle getSignedDateRectangle(PDAcroForm acroForm) {
     final var signedDate = acroForm.getField(SIGNATURE_DATE_FIELD_ID);
-    final var rectangle = signedDate.getWidgets().get(0).getRectangle();
-    return rectangle.getUpperRightX();
+    return signedDate.getWidgets().get(0).getRectangle();
   }
 }
