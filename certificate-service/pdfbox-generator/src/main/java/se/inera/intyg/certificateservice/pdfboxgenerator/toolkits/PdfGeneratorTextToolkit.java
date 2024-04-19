@@ -91,7 +91,7 @@ public class PdfGeneratorTextToolkit {
     }
   }
 
-  public void setDigitalSignatureText(PDDocument pdDocument, PDAcroForm acroForm)
+  public void addDigitalSignatureText(PDDocument pdDocument, PDAcroForm acroForm)
       throws IOException {
     addText(
         pdDocument,

@@ -32,7 +32,7 @@ public class PdfSignatureHelper {
   public void setSignedValues(PDDocument document, PDAcroForm acroForm,
       Certificate certificate)
       throws IOException {
-    pdfGeneratorTextToolkit.setDigitalSignatureText(document, acroForm);
+    pdfGeneratorTextToolkit.addDigitalSignatureText(document, acroForm);
     setSignedDate(acroForm, certificate);
     setIssuerFullName(acroForm, certificate);
     setPaTitles(acroForm, certificate);

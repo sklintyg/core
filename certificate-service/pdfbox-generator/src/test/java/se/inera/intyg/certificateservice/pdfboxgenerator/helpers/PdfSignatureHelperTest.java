@@ -51,7 +51,7 @@ class PdfSignatureHelperTest {
 
     pdfSignatureHelper.setSignedValues(document, acroForm, certificate);
 
-    verify(pdfGeneratorTextToolkit).setDigitalSignatureText(document, acroForm);
+    verify(pdfGeneratorTextToolkit).addDigitalSignatureText(document, acroForm);
   }
 
   @Test

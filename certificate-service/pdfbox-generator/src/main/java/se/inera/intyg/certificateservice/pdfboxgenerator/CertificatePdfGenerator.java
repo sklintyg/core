@@ -38,7 +38,7 @@ public class CertificatePdfGenerator implements PdfGenerator {
           .findFirst().orElseThrow(() -> new IllegalStateException(
                   String.format(
                       "Could not find pdf generator for certificate with type: '%s'",
-                      certificate.certificateModel().type().code()
+                      certificate.certificateModel().id().type().type()
                   )
               )
           );

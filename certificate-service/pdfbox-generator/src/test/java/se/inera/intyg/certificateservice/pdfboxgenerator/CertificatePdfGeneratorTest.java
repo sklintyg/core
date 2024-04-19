@@ -14,6 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -26,7 +29,17 @@ class CertificatePdfGeneratorTest {
 
   @Test
   void shouldThrowErrorIfNoPdfGeneratorForCertificateType() {
-    final var certificate = Certificate.builder().build();
+    final var certificate = Certificate.builder()
+        .certificateModel(
+            CertificateModel.builder()
+                .id(
+                    CertificateModelId.builder()
+                        .type(new CertificateType("NOT_IT"))
+                        .build()
+                )
+                .build()
+        )
+        .build();
 
     assertThrows(
         IllegalStateException.class,

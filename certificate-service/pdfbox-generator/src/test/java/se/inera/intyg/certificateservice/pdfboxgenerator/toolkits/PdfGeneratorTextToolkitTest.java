@@ -53,6 +53,20 @@ class PdfGeneratorTextToolkitTest {
     );
   }
 
+  @Test
+  void shouldAddSignatureToDocument() throws IOException {
+    final var expected = "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren.";
+    pdfGeneratorTextToolkit.addDigitalSignatureText(document, pdAcroForm);
+
+    final var pdfText = getTextForDocument();
+    assertTrue(pdfText.contains(
+            expected),
+        String.format(
+            "Expect to find text '%s' in pdf but pdf text does not contain it '%s'",
+            expected, pdfText)
+    );
+  }
+
   private String getTextForDocument() throws IOException {
     final var textStripper = new PDFTextStripper();
     return textStripper.getText(document);
