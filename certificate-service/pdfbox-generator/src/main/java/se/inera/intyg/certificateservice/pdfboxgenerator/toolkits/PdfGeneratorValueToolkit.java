@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.toolkits;
 
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.CHECKED_BOX_VALUE;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.util.PdfConstants.CHECKED_BOX_VALUE;
 
 import java.io.IOException;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;

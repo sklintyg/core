@@ -11,11 +11,11 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfTextValueGener
 
 public class FK7443PdfGenerator implements PdfCertificateFillService {
 
-  private static final String DIAGNOSIS_ID = "form1[0].#subform[0].flt_txtDiagnos[0]";
-  private static final ElementId QUESTION_SYMPTOM_ID = new ElementId("2");
-  private static final ElementId QUESTION_PERIOD_ID = new ElementId("3");
-  private static final String PATIENT_ID = "form1[0].#subform[0].flt_txtPersonNrBarn[0]";
-  private static final String DIAGNOSIS_FIELD_NAME = "form1[0].#subform[0]";
+  public static final String DIAGNOSIS_FIELD_ID = "form1[0].#subform[0].flt_txtDiagnos[0]";
+  public static final ElementId QUESTION_SYMPTOM_ID = new ElementId("2");
+  public static final ElementId QUESTION_PERIOD_ID = new ElementId("3");
+  public static final String PATIENT_ID = "form1[0].#subform[0].flt_txtPersonNrBarn[0]";
+  public static final String PERIOD_FIELD_NAME_PREFIX = "form1[0].#subform[0]";
 
   private PdfTextValueGenerator pdfTextValueGenerator;
   private PdfDateRangeListValueGenerator pdfDateRangeListValueGenerator;
@@ -40,13 +40,13 @@ public class FK7443PdfGenerator implements PdfCertificateFillService {
 
   private void fillPeriodQuestion(PDAcroForm acroForm, Certificate certificate) {
     pdfDateRangeListValueGenerator.generate(
-        acroForm, certificate, QUESTION_PERIOD_ID, DIAGNOSIS_FIELD_NAME
+        acroForm, certificate, QUESTION_PERIOD_ID, PERIOD_FIELD_NAME_PREFIX
     );
   }
 
   private void fillDiagnosisQuestion(PDAcroForm acroForm, Certificate certificate)
       throws IOException {
-    pdfTextValueGenerator.generate(acroForm, certificate, QUESTION_SYMPTOM_ID, DIAGNOSIS_ID);
+    pdfTextValueGenerator.generate(acroForm, certificate, QUESTION_SYMPTOM_ID, DIAGNOSIS_FIELD_ID);
   }
 
 

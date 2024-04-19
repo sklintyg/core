@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.helpers;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIGNATURE_CARE_UNIT_CONTACT_INFORMATION_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.util.PdfConstants.SIGNATURE_CARE_UNIT_CONTACT_INFORMATION_FIELD_ID;
 
 import java.io.IOException;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;

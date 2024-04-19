@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.toolkits;
 
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.DIGITALLY_SIGNED_TEXT;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIGNATURE_DATE_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.util.PdfConstants.DIGITALLY_SIGNED_TEXT;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.util.PdfConstants.SIGNATURE_DATE_FIELD_ID;
 
 import java.awt.Color;
 import java.io.IOException;

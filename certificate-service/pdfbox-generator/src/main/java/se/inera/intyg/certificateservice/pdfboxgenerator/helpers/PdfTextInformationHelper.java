@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.helpers;
 
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.WATERMARK_DRAFT;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.util.PdfConstants.WATERMARK_DRAFT;
 
 import java.awt.Color;
 import java.io.IOException;
