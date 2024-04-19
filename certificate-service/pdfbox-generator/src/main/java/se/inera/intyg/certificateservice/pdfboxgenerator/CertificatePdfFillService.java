@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.pdfboxgenerator;
 import java.io.IOException;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.pdfboxgenerator.helpers.PdfPatientInformationHelper;
@@ -50,10 +51,7 @@ public class CertificatePdfFillService {
       setMarginText(document, certificate, additionalInfoText);
       setSentText(document, certificate);
       setDraftWatermark(document, certificate);
-
-      if (certificate.status() == Status.SIGNED) {
-        pdfSignatureHelper.setSignedValues(document, acroForm, certificate);
-      }
+      setSignatureAndSignedValues(certificate, document, acroForm);
 
       return document;
     } catch (Exception e) {
@@ -61,9 +59,17 @@ public class CertificatePdfFillService {
     }
   }
 
+  private void setSignatureAndSignedValues(Certificate certificate, PDDocument document,
+      PDAcroForm acroForm)
+      throws IOException {
+    if (certificate.status() == Status.SIGNED) {
+      pdfSignatureHelper.setSignedValues(document, acroForm, certificate);
+    }
+  }
+
   private void setSentText(PDDocument document, Certificate certificate)
       throws IOException {
-    if (certificate.sent() == null) {
+    if (certificate.sent() == null || certificate.sent().sentAt() == null) {
       return;
     }
 
