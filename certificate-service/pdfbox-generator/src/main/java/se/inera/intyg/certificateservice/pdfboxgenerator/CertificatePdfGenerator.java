@@ -16,9 +16,9 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.toolkits.PdfGeneratorVa
 
 public class CertificatePdfGenerator implements PdfGenerator {
 
-  private final List<PdfCertificateFillService> pdfValueGenerators = List.of(
-      new FK7211PdfGenerator(),
-      new FK7443PdfGenerator()
+  private final List<CertificateTypePdfFillService> certificateTypePdfFillServices = List.of(
+      new FK7211PdfFillService(),
+      new FK7443PdfFillService()
   );
 
   public Pdf generate(Certificate certificate, String additionalInfoText) {
@@ -31,22 +31,14 @@ public class CertificatePdfGenerator implements PdfGenerator {
         new PdfTextInformationHelper(pdfGeneratorTextToolkit));
 
     try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-      final var pdfValueGenerator = pdfValueGenerators.stream()
-          .filter(
-              generator -> generator.getType().equals(certificate.certificateModel().id().type())
-          )
-          .findFirst().orElseThrow(() -> new IllegalStateException(
-                  String.format(
-                      "Could not find pdf generator for certificate with type: '%s'",
-                      certificate.certificateModel().id().type().type()
-                  )
-              )
-          );
+      final var certificateTypeSpecificFillService = certificateTypePdfFillServices.stream()
+          .filter(generator -> isCertificateTypeEqual(certificate, generator))
+          .findFirst().orElseThrow(() -> throwPdfFillServiceDoesNotExistForType(certificate));
 
       final var filledPdf = certificatePdfFillService.fillDocument(
           certificate,
           additionalInfoText,
-          pdfValueGenerator
+          certificateTypeSpecificFillService
       );
 
       filledPdf.getDocumentInformation().setTitle(setFileName(certificate));
@@ -59,6 +51,21 @@ public class CertificatePdfGenerator implements PdfGenerator {
     } catch (Exception e) {
       throw new IllegalStateException("Could not create Pdf", e);
     }
+  }
+
+  private static IllegalStateException throwPdfFillServiceDoesNotExistForType(
+      Certificate certificate) {
+    return new IllegalStateException(
+        String.format(
+            "Could not find pdf fill service for certificate type: '%s'",
+            certificate.certificateModel().id().type().type()
+        )
+    );
+  }
+
+  private static boolean isCertificateTypeEqual(Certificate certificate,
+      CertificateTypePdfFillService generator) {
+    return generator.getType().equals(certificate.certificateModel().id().type());
   }
 
   private String setFileName(Certificate certificate) {

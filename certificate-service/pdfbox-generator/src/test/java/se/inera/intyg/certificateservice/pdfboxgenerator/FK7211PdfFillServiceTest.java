@@ -11,11 +11,11 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AL
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ANNA_SJUKSKOTERSKA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.BARNMORSKA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfGenerator.QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_DOCTOR_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfGenerator.QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_MIDWIFE_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfGenerator.QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_NURSE_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfGenerator.QUESTION_BERAKNAT_NEDKOMSTDATUM_DATE_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfGenerator.QUESTION_BERAKNAT_NEDKOMSTDATUM_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfFillService.BERAKNAT_NEDKOMSTDATUM_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfFillService.CERTIFIER_DOCTOR_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfFillService.CERTIFIER_MIDWIFE_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfFillService.CERTIFIER_NURSE_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfFillService.QUESTION_BERAKNAT_NEDKOMSTDATUM_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.util.PdfConstants.CHECKED_BOX_VALUE;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.util.PdfConstants.UNCHECKED_BOX_VALUE;
 
@@ -39,7 +39,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 
 @ExtendWith(MockitoExtension.class)
-class FK7211PdfGeneratorTest {
+class FK7211PdfFillServiceTest {
 
   private static final LocalDate DELIVERY_DATE = LocalDate.now();
   private static final ElementData BERAKNAT_NEDKOMST_DATUM_ELEMENT_DATA = ElementData.builder()
@@ -54,18 +54,18 @@ class FK7211PdfGeneratorTest {
   private PDAcroForm pdAcroForm;
 
   @InjectMocks
-  private FK7211PdfGenerator fk7211PdfGenerator;
+  private FK7211PdfFillService fk7211PdfFillService;
 
   @Test
   void shouldReturnPatientIdFormId() {
-    assertEquals("form1[0].#subform[0].flt_pnr[0]", fk7211PdfGenerator.getPatientIdFormId());
+    assertEquals("form1[0].#subform[0].flt_pnr[0]", fk7211PdfFillService.getPatientIdFieldId());
   }
 
   @Test
   void shouldReturnGeneratorType() {
     assertEquals(
         fk7211CertificateBuilder().build().certificateModel().id().type(),
-        fk7211PdfGenerator.getType()
+        fk7211PdfFillService.getType()
     );
   }
 
@@ -86,28 +86,28 @@ class FK7211PdfGeneratorTest {
 
       @Test
       void shouldSetExpectedDeliveryDateIfDateIsProvided() throws IOException {
-        fk7211PdfGenerator.fillDocument(
+        fk7211PdfFillService.fillDocument(
             pdAcroForm,
             buildCertificate(List.of(BERAKNAT_NEDKOMST_DATUM_ELEMENT_DATA))
         );
 
         assertEquals(
             DELIVERY_DATE.toString(),
-            pdAcroForm.getField(QUESTION_BERAKNAT_NEDKOMSTDATUM_DATE_FIELD_ID).getValueAsString()
+            pdAcroForm.getField(BERAKNAT_NEDKOMSTDATUM_FIELD_ID).getValueAsString()
         );
       }
 
 
       @Test
       void shouldNotSetExpectedDeliveryDateIfDateIsNotProvided() throws IOException {
-        fk7211PdfGenerator.fillDocument(
+        fk7211PdfFillService.fillDocument(
             pdAcroForm,
             buildCertificate(Collections.emptyList())
         );
 
         assertEquals(
             "",
-            pdAcroForm.getField(QUESTION_BERAKNAT_NEDKOMSTDATUM_DATE_FIELD_ID).getValueAsString()
+            pdAcroForm.getField(BERAKNAT_NEDKOMSTDATUM_FIELD_ID).getValueAsString()
         );
       }
     }
@@ -117,28 +117,28 @@ class FK7211PdfGeneratorTest {
 
       @Test
       void shouldOnlySetDoctorAsCertifierIfIssuerIsDoctor() throws IOException {
-        fk7211PdfGenerator.fillDocument(
+        fk7211PdfFillService.fillDocument(
             pdAcroForm,
-            buildCertificate(AJLA_DOKTOR, Status.SIGNED)
+            buildCertificate(AJLA_DOKTOR)
         );
 
         assertAll(
             () -> assertEquals(
                 CHECKED_BOX_VALUE,
                 pdAcroForm
-                    .getField(QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_DOCTOR_FIELD_ID)
+                    .getField(CERTIFIER_DOCTOR_FIELD_ID)
                     .getValueAsString()
             ),
             () -> assertEquals(
                 UNCHECKED_BOX_VALUE,
                 pdAcroForm
-                    .getField(QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_NURSE_FIELD_ID)
+                    .getField(CERTIFIER_NURSE_FIELD_ID)
                     .getValueAsString()
             ),
             () -> assertEquals(
                 UNCHECKED_BOX_VALUE,
                 pdAcroForm
-                    .getField(QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_MIDWIFE_FIELD_ID)
+                    .getField(CERTIFIER_MIDWIFE_FIELD_ID)
                     .getValueAsString()
             )
         );
@@ -146,28 +146,28 @@ class FK7211PdfGeneratorTest {
 
       @Test
       void shouldOnlySetMidwifeAsCertifierIfIssuerIsMidwife() throws IOException {
-        fk7211PdfGenerator.fillDocument(
+        fk7211PdfFillService.fillDocument(
             pdAcroForm,
-            buildCertificate(BARNMORSKA, Status.SIGNED)
+            buildCertificate(BARNMORSKA)
         );
 
         assertAll(
             () -> assertEquals(
                 UNCHECKED_BOX_VALUE,
                 pdAcroForm
-                    .getField(QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_DOCTOR_FIELD_ID)
+                    .getField(CERTIFIER_DOCTOR_FIELD_ID)
                     .getValueAsString()
             ),
             () -> assertEquals(
                 UNCHECKED_BOX_VALUE,
                 pdAcroForm
-                    .getField(QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_NURSE_FIELD_ID)
+                    .getField(CERTIFIER_NURSE_FIELD_ID)
                     .getValueAsString()
             ),
             () -> assertEquals(
                 CHECKED_BOX_VALUE,
                 pdAcroForm
-                    .getField(QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_MIDWIFE_FIELD_ID)
+                    .getField(CERTIFIER_MIDWIFE_FIELD_ID)
                     .getValueAsString()
             )
         );
@@ -175,28 +175,28 @@ class FK7211PdfGeneratorTest {
 
       @Test
       void shouldOnlySetNurseAsCertifierIfIssuerIsNurse() throws IOException {
-        fk7211PdfGenerator.fillDocument(
+        fk7211PdfFillService.fillDocument(
             pdAcroForm,
-            buildCertificate(ANNA_SJUKSKOTERSKA, Status.SIGNED)
+            buildCertificate(ANNA_SJUKSKOTERSKA)
         );
 
         assertAll(
             () -> assertEquals(
                 UNCHECKED_BOX_VALUE,
                 pdAcroForm
-                    .getField(QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_DOCTOR_FIELD_ID)
+                    .getField(CERTIFIER_DOCTOR_FIELD_ID)
                     .getValueAsString()
             ),
             () -> assertEquals(
                 CHECKED_BOX_VALUE,
                 pdAcroForm
-                    .getField(QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_NURSE_FIELD_ID)
+                    .getField(CERTIFIER_NURSE_FIELD_ID)
                     .getValueAsString()
             ),
             () -> assertEquals(
                 UNCHECKED_BOX_VALUE,
                 pdAcroForm
-                    .getField(QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_MIDWIFE_FIELD_ID)
+                    .getField(CERTIFIER_MIDWIFE_FIELD_ID)
                     .getValueAsString()
             )
         );
@@ -204,28 +204,28 @@ class FK7211PdfGeneratorTest {
 
       @Test
       void shouldNotSetCertifierIfRoleIsAdmin() throws IOException {
-        fk7211PdfGenerator.fillDocument(
+        fk7211PdfFillService.fillDocument(
             pdAcroForm,
-            buildCertificate(ALVA_VARDADMINISTRATOR, Status.SIGNED)
+            buildCertificate(ALVA_VARDADMINISTRATOR)
         );
 
         assertAll(
             () -> assertEquals(
                 UNCHECKED_BOX_VALUE,
                 pdAcroForm
-                    .getField(QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_DOCTOR_FIELD_ID)
+                    .getField(CERTIFIER_DOCTOR_FIELD_ID)
                     .getValueAsString()
             ),
             () -> assertEquals(
                 UNCHECKED_BOX_VALUE,
                 pdAcroForm
-                    .getField(QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_NURSE_FIELD_ID)
+                    .getField(CERTIFIER_NURSE_FIELD_ID)
                     .getValueAsString()
             ),
             () -> assertEquals(
                 UNCHECKED_BOX_VALUE,
                 pdAcroForm
-                    .getField(QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_MIDWIFE_FIELD_ID)
+                    .getField(CERTIFIER_MIDWIFE_FIELD_ID)
                     .getValueAsString()
             )
         );
@@ -239,7 +239,7 @@ class FK7211PdfGeneratorTest {
         .build();
   }
 
-  private Certificate buildCertificate(Staff staff, Status status) {
+  private Certificate buildCertificate(Staff staff) {
     return fk7211CertificateBuilder()
         .certificateMetaData(CertificateMetaData.builder()
             .issuer(staff)
@@ -248,7 +248,7 @@ class FK7211PdfGeneratorTest {
             .careUnit(ALFA_MEDICINCENTRUM)
             .careProvider(ALFA_REGIONEN)
             .build())
-        .status(status)
+        .status(Status.SIGNED)
         .build();
   }
 }

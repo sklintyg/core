@@ -29,20 +29,19 @@ public class CertificatePdfFillService {
   }
 
   public PDDocument fillDocument(Certificate certificate, String additionalInfoText,
-      PdfCertificateFillService certificateValueGenerator) {
+      CertificateTypePdfFillService certificateValueGenerator) {
     final var template = certificate.certificateModel().pdfTemplatePath();
     try (final var inputStream = getClass().getClassLoader().getResourceAsStream(template)) {
       if (inputStream == null) {
         throw new IllegalArgumentException("Template not found: " + template);
       }
       final var document = Loader.loadPDF(inputStream.readAllBytes());
-      final var documentCatalog = document.getDocumentCatalog();
-      final var acroForm = documentCatalog.getAcroForm();
+      final var acroForm = document.getDocumentCatalog().getAcroForm();
 
       pdfPatientInformationHelper.setPatientInformation(
           acroForm,
           certificate,
-          certificateValueGenerator.getPatientIdFormId()
+          certificateValueGenerator.getPatientIdFieldId()
       );
 
       pdfUnitInformationHelper.setContactInformation(acroForm, certificate);
@@ -69,35 +68,28 @@ public class CertificatePdfFillService {
 
   private void setSentText(PDDocument document, Certificate certificate)
       throws IOException {
-    if (certificate.sent() == null || certificate.sent().sentAt() == null) {
-      return;
+    if (certificate.sent() != null && certificate.sent().sentAt() != null) {
+      pdfTextInformationHelper.addSentText(document, certificate);
+      pdfTextInformationHelper.addSentVisibilityText(document);
     }
-
-    pdfTextInformationHelper.addSentText(document, certificate);
-    pdfTextInformationHelper.addSentVisibilityText(document);
   }
 
   private void setMarginText(PDDocument document, Certificate certificate,
       String additionalInfoText)
       throws IOException {
-
-    if (certificate.status() != Status.SIGNED) {
-      return;
+    if (certificate.status() == Status.SIGNED) {
+      pdfTextInformationHelper.addMarginAdditionalInfoText(
+          document,
+          certificate.id().id(),
+          additionalInfoText
+      );
     }
-
-    pdfTextInformationHelper.addMarginAdditionalInfoText(
-        document,
-        certificate.id().id(),
-        additionalInfoText
-    );
   }
 
   private void setDraftWatermark(PDDocument document, Certificate certificate)
       throws IOException {
-    if (certificate.status() != Status.DRAFT) {
-      return;
+    if (certificate.status() == Status.DRAFT) {
+      pdfTextInformationHelper.addDraftWatermark(document);
     }
-
-    pdfTextInformationHelper.addDraftWatermark(document);
   }
 }

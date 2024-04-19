@@ -52,7 +52,8 @@ public class PdfSignatureHelper {
   private void setIssuerFullName(PDAcroForm acroForm, Certificate certificate)
       throws IOException {
     pdfGeneratorValueToolkit.setValue(acroForm, SIGNATURE_FULL_NAME_FIELD_ID,
-        certificate.certificateMetaData().issuer().name().fullName());
+        certificate.certificateMetaData().issuer().name().fullName()
+    );
   }
 
   private void setPaTitles(PDAcroForm acroForm, Certificate certificate) throws IOException {
@@ -70,7 +71,8 @@ public class PdfSignatureHelper {
       throws IOException {
     final var specialities = certificate.certificateMetaData().issuer().specialities();
     if (specialities != null) {
-      final var mappedSpecialities = specialities.stream().map(Speciality::value)
+      final var mappedSpecialities = specialities.stream()
+          .map(Speciality::value)
           .collect(Collectors.joining(", "));
 
       pdfGeneratorValueToolkit.setValue(
@@ -92,15 +94,12 @@ public class PdfSignatureHelper {
   private void setWorkplaceCode(PDAcroForm acroForm, Certificate certificate)
       throws IOException {
     final var workplaceCode = certificate.certificateMetaData().issuingUnit().workplaceCode();
-
-    if (workplaceCode == null) {
-      return;
+    if (workplaceCode != null) {
+      pdfGeneratorValueToolkit.setValue(
+          acroForm,
+          SIGNATURE_WORKPLACE_CODE_FIELD_ID,
+          workplaceCode.code()
+      );
     }
-
-    pdfGeneratorValueToolkit.setValue(
-        acroForm,
-        SIGNATURE_WORKPLACE_CODE_FIELD_ID,
-        workplaceCode.code()
-    );
   }
 }

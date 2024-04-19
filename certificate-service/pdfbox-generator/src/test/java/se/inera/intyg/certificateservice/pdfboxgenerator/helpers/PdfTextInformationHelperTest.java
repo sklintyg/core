@@ -99,7 +99,7 @@ class PdfTextInformationHelperTest {
 
     pdfTextInformationHelper.addDraftWatermark(document);
 
-    verify(pdfGeneratorTextToolkit).addWaterMark(any(PDDocument.class), captor.capture());
+    verify(pdfGeneratorTextToolkit).addWatermark(any(PDDocument.class), captor.capture());
     assertEquals("UTKAST", captor.getValue());
   }
 

@@ -22,13 +22,13 @@ public class PdfDateValueGenerator implements PdfElementValueGenerator {
 
     if (question.isEmpty()) {
       throw new IllegalStateException(
-          "Could not find question with id: " + certificate.elementData().get(0).id().id());
+          "Could not find question with id: %s".formatted(questionId));
     }
 
     if (!(question.get().value() instanceof ElementValueDate elementValueDate)) {
       throw new IllegalStateException(
           String.format(
-              "Expected class ElementValueText but was: '%s'",
+              "Expected class ElementValueDate but was: '%s'",
               question.get().value().getClass()
           )
       );

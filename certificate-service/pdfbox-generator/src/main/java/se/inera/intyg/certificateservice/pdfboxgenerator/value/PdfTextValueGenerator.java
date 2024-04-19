@@ -21,7 +21,7 @@ public class PdfTextValueGenerator implements PdfElementValueGenerator {
 
     if (question.isEmpty()) {
       throw new IllegalStateException(
-          "Could not find question with id: " + certificate.elementData().get(0).id().id());
+          "Could not find question with id: %s".formatted(questionId));
     }
 
     if (!(question.get().value() instanceof ElementValueText elementValueText)) {

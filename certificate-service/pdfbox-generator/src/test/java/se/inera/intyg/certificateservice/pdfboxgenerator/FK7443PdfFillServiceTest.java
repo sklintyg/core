@@ -4,11 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7443CertificateBuilder;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7443PdfGenerator.DIAGNOSIS_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7443PdfGenerator.PATIENT_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7443PdfGenerator.PERIOD_FIELD_NAME_PREFIX;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7443PdfGenerator.QUESTION_PERIOD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7443PdfGenerator.QUESTION_SYMPTOM_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7443PdfFillService.DIAGNOSIS_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7443PdfFillService.PATIENT_ID_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7443PdfFillService.PERIOD_FIELD_ID_PREFIX;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7443PdfFillService.QUESTION_PERIOD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7443PdfFillService.QUESTION_SYMPTOM_ID;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -31,7 +31,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
 
 @ExtendWith(MockitoExtension.class)
-class FK7443PdfGeneratorTest {
+class FK7443PdfFillServiceTest {
 
   private static final String TEXT = "Ett exempel på en diagnos, J10, och även symtom: hosta och feber.";
   private static final ElementData SYMPTOM_ELEMENT_DATA = ElementData.builder()
@@ -64,18 +64,18 @@ class FK7443PdfGeneratorTest {
   private PDAcroForm pdAcroForm;
 
   @InjectMocks
-  private FK7443PdfGenerator fk7443PdfGenerator;
+  private FK7443PdfFillService fk7443PdfFillService;
 
   @Test
   void shouldReturnPatientIdFormId() {
-    assertEquals(PATIENT_ID, fk7443PdfGenerator.getPatientIdFormId());
+    assertEquals(PATIENT_ID_FIELD_ID, fk7443PdfFillService.getPatientIdFieldId());
   }
 
   @Test
   void shouldReturnGeneratorType() {
     assertEquals(
         fk7443CertificateBuilder().build().certificateModel().id().type(),
-        fk7443PdfGenerator.getType()
+        fk7443PdfFillService.getType()
     );
   }
 
@@ -96,7 +96,7 @@ class FK7443PdfGeneratorTest {
 
       @Test
       void shouldSetValueIfProvided() throws IOException {
-        fk7443PdfGenerator.fillDocument(
+        fk7443PdfFillService.fillDocument(
             pdAcroForm,
             buildCertificate(List.of(SYMPTOM_ELEMENT_DATA, PERIOD_ELEMENT_DATA))
         );
@@ -110,7 +110,7 @@ class FK7443PdfGeneratorTest {
 
       @Test
       void shouldNotSetValueIfNotProvided() throws IOException {
-        fk7443PdfGenerator.fillDocument(
+        fk7443PdfFillService.fillDocument(
             pdAcroForm,
             buildCertificate(Collections.emptyList())
         );
@@ -127,7 +127,7 @@ class FK7443PdfGeneratorTest {
 
       @Test
       void shouldSetValueIfProvided() throws IOException {
-        fk7443PdfGenerator.fillDocument(
+        fk7443PdfFillService.fillDocument(
             pdAcroForm,
             buildCertificate(List.of(SYMPTOM_ELEMENT_DATA, PERIOD_ELEMENT_DATA))
         );
@@ -135,17 +135,17 @@ class FK7443PdfGeneratorTest {
         assertAll(
             () -> assertEquals(
                 "1",
-                pdAcroForm.getField(PERIOD_FIELD_NAME_PREFIX + ".ksr_kryssruta2[0]")
+                pdAcroForm.getField(PERIOD_FIELD_ID_PREFIX + ".ksr_kryssruta2[0]")
                     .getValueAsString()
             ),
             () -> assertEquals(
                 DATE_RANGE.from().toString(),
-                pdAcroForm.getField(PERIOD_FIELD_NAME_PREFIX + ".flt_datFranMed2[0]")
+                pdAcroForm.getField(PERIOD_FIELD_ID_PREFIX + ".flt_datFranMed2[0]")
                     .getValueAsString()
             ),
             () -> assertEquals(
                 DATE_RANGE.to().toString(),
-                pdAcroForm.getField(PERIOD_FIELD_NAME_PREFIX + ".flt_datLangstTillMed2[0]")
+                pdAcroForm.getField(PERIOD_FIELD_ID_PREFIX + ".flt_datLangstTillMed2[0]")
                     .getValueAsString()
             )
         );
@@ -154,7 +154,7 @@ class FK7443PdfGeneratorTest {
 
       @Test
       void shouldNotSetValueIfNotProvided() throws IOException {
-        fk7443PdfGenerator.fillDocument(
+        fk7443PdfFillService.fillDocument(
             pdAcroForm,
             buildCertificate(Collections.emptyList())
         );
@@ -162,17 +162,17 @@ class FK7443PdfGeneratorTest {
         assertAll(
             () -> assertEquals(
                 "Off",
-                pdAcroForm.getField(PERIOD_FIELD_NAME_PREFIX + ".ksr_kryssruta2[0]")
+                pdAcroForm.getField(PERIOD_FIELD_ID_PREFIX + ".ksr_kryssruta2[0]")
                     .getValueAsString()
             ),
             () -> assertEquals(
                 "",
-                pdAcroForm.getField(PERIOD_FIELD_NAME_PREFIX + ".flt_datFranMed2[0]")
+                pdAcroForm.getField(PERIOD_FIELD_ID_PREFIX + ".flt_datFranMed2[0]")
                     .getValueAsString()
             ),
             () -> assertEquals(
                 "",
-                pdAcroForm.getField(PERIOD_FIELD_NAME_PREFIX + ".flt_datLangstTillMed2[0]")
+                pdAcroForm.getField(PERIOD_FIELD_ID_PREFIX + ".flt_datLangstTillMed2[0]")
                     .getValueAsString()
             )
         );

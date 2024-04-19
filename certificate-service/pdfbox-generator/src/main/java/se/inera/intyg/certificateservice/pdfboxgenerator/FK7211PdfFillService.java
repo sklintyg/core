@@ -9,19 +9,14 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.toolkits.PdfGeneratorVa
 import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfDateValueGenerator;
 
 
-public class FK7211PdfGenerator implements PdfCertificateFillService {
+public class FK7211PdfFillService implements CertificateTypePdfFillService {
 
-  public static final String PATIENT_ID_FIELD_ID =
-      "form1[0].#subform[0].flt_pnr[0]";
+  public static final String PATIENT_ID_FIELD_ID = "form1[0].#subform[0].flt_pnr[0]";
 
-  public static final String QUESTION_BERAKNAT_NEDKOMSTDATUM_DATE_FIELD_ID =
-      "form1[0].#subform[0].flt_dat[0]";
-  public static final String QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_DOCTOR_FIELD_ID =
-      "form1[0].#subform[0].ksr_kryssruta[0]";
-  public static final String QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_MIDWIFE_FIELD_ID =
-      "form1[0].#subform[0].ksr_kryssruta[1]";
-  public static final String QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_NURSE_FIELD_ID =
-      "form1[0].#subform[0].ksr_kryssruta[2]";
+  public static final String BERAKNAT_NEDKOMSTDATUM_FIELD_ID = "form1[0].#subform[0].flt_dat[0]";
+  public static final String CERTIFIER_DOCTOR_FIELD_ID = "form1[0].#subform[0].ksr_kryssruta[0]";
+  public static final String CERTIFIER_MIDWIFE_FIELD_ID = "form1[0].#subform[0].ksr_kryssruta[1]";
+  public static final String CERTIFIER_NURSE_FIELD_ID = "form1[0].#subform[0].ksr_kryssruta[2]";
   public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_ID = new ElementId("1");
 
   private PdfGeneratorValueToolkit pdfGeneratorValueToolkit;
@@ -33,7 +28,7 @@ public class FK7211PdfGenerator implements PdfCertificateFillService {
   }
 
   @Override
-  public String getPatientIdFormId() {
+  public String getPatientIdFieldId() {
     return PATIENT_ID_FIELD_ID;
   }
 
@@ -50,7 +45,7 @@ public class FK7211PdfGenerator implements PdfCertificateFillService {
     pdfDateValueGenerator.generate(acroForm,
         certificate,
         QUESTION_BERAKNAT_NEDKOMSTDATUM_ID,
-        QUESTION_BERAKNAT_NEDKOMSTDATUM_DATE_FIELD_ID
+        BERAKNAT_NEDKOMSTDATUM_FIELD_ID
     );
   }
 
@@ -60,15 +55,15 @@ public class FK7211PdfGenerator implements PdfCertificateFillService {
     switch (role) {
       case DOCTOR, PRIVATE_DOCTOR, DENTIST -> pdfGeneratorValueToolkit.setCheckedBoxValue(
           acroForm,
-          QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_DOCTOR_FIELD_ID
+          CERTIFIER_DOCTOR_FIELD_ID
       );
       case MIDWIFE -> pdfGeneratorValueToolkit.setCheckedBoxValue(
           acroForm,
-          QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_MIDWIFE_FIELD_ID
+          CERTIFIER_MIDWIFE_FIELD_ID
       );
       case NURSE -> pdfGeneratorValueToolkit.setCheckedBoxValue(
           acroForm,
-          QUESTION_BERAKNAT_NEDKOMSTDATUM_CERTIFIER_NURSE_FIELD_ID
+          CERTIFIER_NURSE_FIELD_ID
       );
       default -> {
       }

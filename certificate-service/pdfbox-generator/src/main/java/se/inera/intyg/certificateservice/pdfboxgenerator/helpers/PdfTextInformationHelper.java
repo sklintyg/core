@@ -52,6 +52,6 @@ public class PdfTextInformationHelper {
   }
 
   public void addDraftWatermark(PDDocument document) throws IOException {
-    pdfGeneratorTextToolkit.addWaterMark(document, WATERMARK_DRAFT);
+    pdfGeneratorTextToolkit.addWatermark(document, WATERMARK_DRAFT);
   }
 }

@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443.CertificateModelFactoryFK7443.PDF_FK_7443_PDF;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -74,6 +75,13 @@ class CertificateModelFactoryFK7443Test {
     final var certificateModel = certificateModelFactoryFK7443.create();
 
     assertFalse(certificateModel.description().isBlank());
+  }
+
+  @Test
+  void shallIncludePdfTemplatePath() {
+    final var certificateModel = certificateModelFactoryFK7443.create();
+
+    assertEquals(PDF_FK_7443_PDF, certificateModel.pdfTemplatePath());
   }
 
   @Test

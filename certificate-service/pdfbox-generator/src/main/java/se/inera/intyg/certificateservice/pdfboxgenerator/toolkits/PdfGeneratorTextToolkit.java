@@ -56,7 +56,7 @@ public class PdfGeneratorTextToolkit {
     contentStream.close();
   }
 
-  public void addWaterMark(PDDocument document, String text) throws IOException {
+  public void addWatermark(PDDocument document, String text) throws IOException {
     for (PDPage page : document.getPages()) {
 
       final var contentStream = new PDPageContentStream(document, page, AppendMode.APPEND,

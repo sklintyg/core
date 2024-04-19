@@ -30,13 +30,13 @@ public class PdfDateRangeListValueGenerator implements PdfElementValueGenerator 
 
     if (question.isEmpty()) {
       throw new IllegalStateException(
-          "Could not find question with id: " + certificate.elementData().get(0).id().id());
+          "Could not find question with id: %s".formatted(questionId));
     }
 
     if (!(question.get().value() instanceof ElementValueDateRangeList elementValueDateRangeList)) {
       throw new IllegalStateException(
           String.format(
-              "Expected ElementValueText but was: '%s'",
+              "Expected ElementValueDateRangeList but was: '%s'",
               question.get().value().getClass()
           )
       );

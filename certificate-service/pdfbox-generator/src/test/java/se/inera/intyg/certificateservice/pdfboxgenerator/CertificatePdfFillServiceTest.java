@@ -47,7 +47,7 @@ class CertificatePdfFillServiceTest {
   PdfTextInformationHelper pdfTextInformationHelper;
 
   @Mock
-  FK7443PdfGenerator fk7443PdfGenerator;
+  FK7443PdfFillService fk7443PdfFillService;
 
   @InjectMocks
   CertificatePdfFillService certificatePdfFillService;
@@ -56,7 +56,7 @@ class CertificatePdfFillServiceTest {
 
   @BeforeEach
   void setup() {
-    when(fk7443PdfGenerator.getPatientIdFormId())
+    when(fk7443PdfFillService.getPatientIdFieldId())
         .thenReturn(PATIENT_ID);
   }
 
@@ -70,7 +70,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldNotSetMarginText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfTextInformationHelper, times(0))
           .addMarginAdditionalInfoText(any(), anyString(), anyString());
@@ -78,7 +78,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldSetDraftWatermark() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfTextInformationHelper, times(1))
           .addDraftWatermark(any());
@@ -86,7 +86,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldNotSetSentText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfTextInformationHelper, times(0))
           .addSentText(any(), any());
@@ -94,7 +94,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldSetSentVisibilityText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfTextInformationHelper, times(0))
           .addSentVisibilityText(any());
@@ -102,7 +102,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldNotSetSignedValues() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfSignatureHelper, times(0))
           .setSignedValues(any(PDDocument.class), any(PDAcroForm.class), any(Certificate.class));
@@ -111,7 +111,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetPatientValues() throws IOException {
       final var captor = ArgumentCaptor.forClass(String.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfPatientInformationHelper, times(1))
           .setPatientInformation(any(PDAcroForm.class), any(Certificate.class), captor.capture());
@@ -121,7 +121,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetUnitContactInformation() throws IOException {
       final var captor = ArgumentCaptor.forClass(Certificate.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfUnitInformationHelper, times(1))
           .setContactInformation(any(PDAcroForm.class), captor.capture());
@@ -131,9 +131,9 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldFillPdfWithCertificateTypeSpecificValues() throws IOException {
       final var captor = ArgumentCaptor.forClass(Certificate.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
-      verify(fk7443PdfGenerator, times(1))
+      verify(fk7443PdfFillService, times(1))
           .fillDocument(any(PDAcroForm.class), captor.capture());
       assertEquals(certificate, captor.getValue());
     }
@@ -150,7 +150,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetMarginText() throws IOException {
       final var captor = ArgumentCaptor.forClass(String.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfTextInformationHelper, times(1))
           .addMarginAdditionalInfoText(any(), anyString(), captor.capture());
@@ -160,7 +160,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldNotSetDraftWatermark() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfTextInformationHelper, times(0))
           .addDraftWatermark(any());
@@ -168,7 +168,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldNotSetSentText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfTextInformationHelper, times(0))
           .addSentText(any(), any());
@@ -176,7 +176,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldNotSetSentVisibilityText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfTextInformationHelper, times(0))
           .addSentVisibilityText(any());
@@ -184,7 +184,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldSetSignedValues() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfSignatureHelper, times(1))
           .setSignedValues(any(PDDocument.class), any(PDAcroForm.class), any(Certificate.class));
@@ -193,7 +193,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetPatientValues() throws IOException {
       final var captor = ArgumentCaptor.forClass(String.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfPatientInformationHelper, times(1))
           .setPatientInformation(any(PDAcroForm.class), any(Certificate.class), captor.capture());
@@ -203,7 +203,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetUnitContactInformation() throws IOException {
       final var captor = ArgumentCaptor.forClass(Certificate.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfUnitInformationHelper, times(1))
           .setContactInformation(any(PDAcroForm.class), captor.capture());
@@ -213,9 +213,9 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldFillPdfWithCertificateTypeSpecificValues() throws IOException {
       final var captor = ArgumentCaptor.forClass(Certificate.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
-      verify(fk7443PdfGenerator, times(1))
+      verify(fk7443PdfFillService, times(1))
           .fillDocument(any(PDAcroForm.class), captor.capture());
       assertEquals(certificate, captor.getValue());
     }
@@ -232,7 +232,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetMarginText() throws IOException {
       final var captor = ArgumentCaptor.forClass(String.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfTextInformationHelper, times(1))
           .addMarginAdditionalInfoText(any(), anyString(), captor.capture());
@@ -242,7 +242,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldNotSetDraftWatermark() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfTextInformationHelper, times(0))
           .addDraftWatermark(any());
@@ -250,7 +250,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldSetSentText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfTextInformationHelper, times(1))
           .addSentText(any(), any());
@@ -258,7 +258,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldSetSentVisibilityText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfTextInformationHelper, times(1))
           .addSentVisibilityText(any());
@@ -266,7 +266,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldSetSignedValues() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfSignatureHelper, times(1))
           .setSignedValues(any(PDDocument.class), any(PDAcroForm.class), any(Certificate.class));
@@ -275,7 +275,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetPatientValues() throws IOException {
       final var captor = ArgumentCaptor.forClass(String.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfPatientInformationHelper, times(1))
           .setPatientInformation(any(PDAcroForm.class), any(Certificate.class), captor.capture());
@@ -285,7 +285,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetUnitContactInformation() throws IOException {
       final var captor = ArgumentCaptor.forClass(Certificate.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfUnitInformationHelper, times(1))
           .setContactInformation(any(PDAcroForm.class), captor.capture());
@@ -295,9 +295,9 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldFillPdfWithCertificateTypeSpecificValues() throws IOException {
       final var captor = ArgumentCaptor.forClass(Certificate.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfGenerator);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
-      verify(fk7443PdfGenerator, times(1))
+      verify(fk7443PdfFillService, times(1))
           .fillDocument(any(PDAcroForm.class), captor.capture());
       assertEquals(certificate, captor.getValue());
     }
