@@ -14,7 +14,7 @@ public class PdfDateValueGenerator implements PdfElementValueGenerator {
       String fieldName) throws IOException {
     PdfGeneratorValueToolkit pdfGeneratorValueToolkit = new PdfGeneratorValueToolkit();
 
-    if (certificate.elementData().isEmpty()) {
+    if (certificate.elementData() == null || certificate.elementData().isEmpty()) {
       return;
     }
 

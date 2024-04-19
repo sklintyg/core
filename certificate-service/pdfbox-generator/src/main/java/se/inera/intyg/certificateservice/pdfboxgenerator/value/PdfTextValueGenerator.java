@@ -12,7 +12,7 @@ public class PdfTextValueGenerator implements PdfElementValueGenerator {
   @Override
   public void generate(PDAcroForm acroForm, Certificate certificate, ElementId questionId,
       String fieldName) throws IOException {
-    if (certificate.elementData().isEmpty()) {
+    if (certificate.elementData() == null || certificate.elementData().isEmpty()) {
       return;
     }
 
