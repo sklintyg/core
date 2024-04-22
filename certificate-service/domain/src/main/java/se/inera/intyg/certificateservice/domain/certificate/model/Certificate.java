@@ -135,9 +135,11 @@ public class Certificate {
           "Incorrect signature '%s' - signature required to sign".formatted(signature)
       );
     }
+
     sign(revision, actionEvaluation);
     this.xml = xmlGenerator.generate(this, signature);
   }
+
 
   private void sign(Revision revision, ActionEvaluation actionEvaluation) {
     throwIfConcurrentModification(revision, "sign", actionEvaluation);

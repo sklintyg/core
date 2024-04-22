@@ -1040,7 +1040,8 @@ class CertificateTest {
       final var revision = new Revision(2);
       final var concurrentModificationException = assertThrows(
           ConcurrentModificationException.class,
-          () -> certificate.sign(xmlGenerator, SIGNATURE, revision, actionEvaluation)
+          () -> certificate.sign(xmlGenerator, SIGNATURE, revision, actionEvaluation
+          )
       );
       assertTrue(concurrentModificationException.getMessage().contains("Incorrect revision"),
           () -> "Received message was: %s".formatted(concurrentModificationException.getMessage())
@@ -1055,7 +1056,8 @@ class CertificateTest {
           .build();
 
       final var illegalStateException = assertThrows(IllegalStateException.class,
-          () -> deletedCertificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluation)
+          () -> deletedCertificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluation
+          )
       );
 
       assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
@@ -1068,7 +1070,8 @@ class CertificateTest {
       final var actionEvaluation = actionEvaluationBuilder.build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> certificate.sign(xmlGenerator, null, REVISION, actionEvaluation)
+          () -> certificate.sign(xmlGenerator, null, REVISION, actionEvaluation
+          )
       );
 
       assertTrue(illegalArgumentException.getMessage().contains("Incorrect signature"),
@@ -1082,7 +1085,8 @@ class CertificateTest {
       final var signatureEmpty = new Signature(" ");
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> certificate.sign(xmlGenerator, signatureEmpty, REVISION, actionEvaluation)
+          () -> certificate.sign(xmlGenerator, signatureEmpty, REVISION, actionEvaluation
+          )
       );
 
       assertTrue(illegalArgumentException.getMessage().contains("Incorrect signature"),
@@ -1092,14 +1096,16 @@ class CertificateTest {
 
     @Test
     void shallReturnStateSignedWhenSigned() {
-      certificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluationBuilder.build());
+      certificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluationBuilder.build()
+      );
       assertEquals(Status.SIGNED, certificate.status());
     }
 
     @Test
     void shallReturnXmlWhenSigned() {
       doReturn(XML).when(xmlGenerator).generate(certificate, SIGNATURE);
-      certificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluationBuilder.build());
+      certificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluationBuilder.build()
+      );
       assertEquals(XML, certificate.xml());
     }
   }
@@ -1113,7 +1119,8 @@ class CertificateTest {
       final var revision = new Revision(2);
       final var concurrentModificationException = assertThrows(
           ConcurrentModificationException.class,
-          () -> certificate.sign(xmlGenerator, revision, actionEvaluation)
+          () -> certificate.sign(xmlGenerator, revision, actionEvaluation
+          )
       );
       assertTrue(concurrentModificationException.getMessage().contains("Incorrect revision"),
           () -> "Received message was: %s".formatted(concurrentModificationException.getMessage())
@@ -1128,7 +1135,8 @@ class CertificateTest {
           .build();
 
       final var illegalStateException = assertThrows(IllegalStateException.class,
-          () -> deletedCertificate.sign(xmlGenerator, REVISION, actionEvaluation)
+          () -> deletedCertificate.sign(xmlGenerator, REVISION, actionEvaluation
+          )
       );
 
       assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
@@ -1138,14 +1146,16 @@ class CertificateTest {
 
     @Test
     void shallReturnStateSignedWhenSigned() {
-      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build());
+      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build()
+      );
       assertEquals(Status.SIGNED, certificate.status());
     }
 
     @Test
     void shallReturnXmlWhenSigned() {
       doReturn(XML).when(xmlGenerator).generate(certificate);
-      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build());
+      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build()
+      );
       assertEquals(XML, certificate.xml());
     }
   }

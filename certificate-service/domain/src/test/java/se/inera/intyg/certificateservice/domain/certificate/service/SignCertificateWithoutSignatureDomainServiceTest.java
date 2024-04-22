@@ -77,7 +77,8 @@ class SignCertificateWithoutSignatureDomainServiceTest {
 
     signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, actionEvaluation);
 
-    verify(certificate).sign(xmlGenerator, REVISION, actionEvaluation);
+    verify(certificate).sign(xmlGenerator, REVISION, actionEvaluation
+    );
   }
 
   @Test

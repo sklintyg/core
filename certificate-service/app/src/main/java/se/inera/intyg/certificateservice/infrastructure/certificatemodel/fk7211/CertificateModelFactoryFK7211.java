@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
@@ -49,7 +50,9 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
       "KAT_1");
   public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_ID = new ElementId("1");
   private static final FieldId QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID = new FieldId("1.1");
-  public static final String PDF_FK_7211_PDF = "pdf/fk7211_v1.pdf";
+  public static final String PDF_FK_7211_PDF = "fk7211/pdf/fk7211_v1.pdf";
+  public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
+      "fk7211/schematron/igrav.v1.sch");
 
 
   @Override
@@ -104,6 +107,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
             )
         )
         .pdfTemplatePath(PDF_FK_7211_PDF)
+        .schematronPath(SCHEMATRON_PATH)
         .build();
   }
 
