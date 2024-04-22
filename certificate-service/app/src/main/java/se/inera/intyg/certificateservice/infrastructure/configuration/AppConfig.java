@@ -23,9 +23,14 @@ import se.inera.intyg.certificateservice.domain.event.service.CertificateEventSu
 import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesInfoDomainService;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.SchemaValidatorV4;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.SchematronValidator;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorCertificateV4;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorIntygsgivare;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorValue;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlSchemaValidator;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlSchematronValidator;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlValidationService;
 import se.inera.intyg.certificateservice.pdfboxgenerator.CertificatePdfGenerator;
 
 @Configuration
@@ -111,8 +116,20 @@ public class AppConfig {
 
   @Bean
   public XmlGenerator xmlGenerator(XmlGeneratorValue xmlGeneratorValue,
-      XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare) {
-    return new XmlGeneratorCertificateV4(xmlGeneratorValue, xmlGeneratorIntygsgivare);
+      XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare,
+      XmlValidationService xmlValidationService) {
+    return new XmlGeneratorCertificateV4(xmlGeneratorValue, xmlGeneratorIntygsgivare,
+        xmlValidationService);
+  }
+
+  @Bean
+  public XmlSchematronValidator schematronValidator() {
+    return new SchematronValidator();
+  }
+
+  @Bean
+  public XmlSchemaValidator schemaValidator() {
+    return new SchemaValidatorV4();
   }
 
   @Bean
@@ -160,4 +177,9 @@ public class AppConfig {
     return new CertificatePdfGenerator();
   }
 
+  @Bean
+  public XmlValidationService xmlValidationService(XmlSchemaValidator xmlSchemaValidator,
+      XmlSchematronValidator xmlSchematronValidator) {
+    return new XmlValidationService(xmlSchematronValidator, xmlSchemaValidator);
+  }
 }

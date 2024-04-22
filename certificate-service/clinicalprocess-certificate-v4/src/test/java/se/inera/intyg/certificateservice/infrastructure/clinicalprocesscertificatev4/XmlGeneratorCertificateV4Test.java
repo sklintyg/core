@@ -77,6 +77,9 @@ class XmlGeneratorCertificateV4Test {
   @Spy
   XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare;
 
+  @Mock
+  XmlValidationService xmlValidationService;
+
   @InjectMocks
   XmlGeneratorCertificateV4 xmlGeneratorCertificateV4;
 
@@ -446,6 +449,15 @@ class XmlGeneratorCertificateV4Test {
     );
   }
 
+  @Test
+  void shouldValidateXml() {
+    final var xml = xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE);
+    verify(xmlValidationService).validate(
+        xml,
+        FK7211_CERTIFICATE.certificateModel().schematronPath(),
+        FK7211_CERTIFICATE.id()
+    );
+  }
 
   private RegisterCertificateType unmarshal(Xml response) {
     try {

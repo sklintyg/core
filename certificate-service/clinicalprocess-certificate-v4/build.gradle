@@ -5,6 +5,9 @@ plugins {
 dependencies {
     implementation project(':domain')
     implementation "jakarta.xml.ws:jakarta.xml.ws-api:${jakartaWsVersion}"
+    implementation "com.helger.schematron:ph-schematron-xslt:${schematronVersion}"
+    implementation "org.apache.cxf:cxf-core:${cxfVersion}"
+
     runtimeOnly "org.glassfish.jaxb:jaxb-runtime"
 
     compileOnly "org.projectlombok:lombok"
@@ -19,6 +22,7 @@ dependencies {
     testImplementation "org.mockito:mockito-junit-jupiter"
     testImplementation testFixtures(project(":domain"))
     testRuntimeOnly "org.slf4j:slf4j-simple"
+    testImplementation project(':app')
 }
 
 tasks.named('test') {
