@@ -42,7 +42,16 @@ class GlobalExceptionHandlerControllerTest {
     final var response = globalExceptionHandlerController.handleCertificateActionForbidden(
         new CertificateActionForbidden("Error!", expectedReason)
     );
-    assertEquals(expectedReason, response.getBody());
+    assertEquals(expectedReason.get(0), response.getBody());
+  }
+
+  @Test
+  void shallIncludeMultipleReasonsForCertificateActionForbidden() {
+    final var expectedReason = List.of("expectedReason", "expectedReason");
+    final var response = globalExceptionHandlerController.handleCertificateActionForbidden(
+        new CertificateActionForbidden("Error!", expectedReason)
+    );
+    assertEquals("expectedReason expectedReason", response.getBody());
   }
 
   @Test
