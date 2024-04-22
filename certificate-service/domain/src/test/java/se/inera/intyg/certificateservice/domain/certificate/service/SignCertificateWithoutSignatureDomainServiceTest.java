@@ -43,10 +43,6 @@ class SignCertificateWithoutSignatureDomainServiceTest {
   private CertificateEventDomainService certificateEventDomainService;
   @Mock
   private XmlGenerator xmlGenerator;
-  @Mock
-  private XmlSchematronValidator xmlSchematronValidator;
-  @Mock
-  private XmlSchemaValidator xmlSchemaValidator;
   @InjectMocks
   private SignCertificateWithoutSignatureDomainService signCertificateDomainService;
   private ActionEvaluation actionEvaluation;
