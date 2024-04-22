@@ -7,6 +7,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProv
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
@@ -241,5 +242,32 @@ class CertificateActionRevokeTest {
   void shallReturnDescription() {
     assertEquals("Öppnar ett fönster där du kan välja att makulera intyget.",
         certificateActionRevoke.getDescription());
+  }
+
+
+  @Test
+  void shallReturnReasonNotAllowedIfEvaluateReturnsFalse() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ANONYMA_REACT_ATTILA)
+        .user(ALVA_VARDADMINISTRATOR)
+        .build();
+
+    final var actualResult = certificateActionRevoke.reasonNotAllowed(actionEvaluation);
+
+    assertFalse(actualResult.isEmpty());
+  }
+
+  @Test
+  void shallReturnEmptyListIfEvaluateReturnsTrue() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .build();
+
+    final var actualResult = certificateActionRevoke.reasonNotAllowed(Optional.of(certificate),
+        actionEvaluation);
+
+    assertTrue(actualResult.isEmpty());
   }
 }

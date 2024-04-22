@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.application.testdata;
 
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertdificateDataEntity.CERTIFICATE_DATA_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateExternalReferenceEntity.EXTERNAL_REFERENCE;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRevokedEntity.REVOKED_MESSAGE;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRevokedEntity.REVOKED_REASON_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateStatusEntity.STATUS_SIGNED_ENTITY;
@@ -19,6 +20,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 public class TestDataCertificateEntity {
 
   public static final CertificateEntity CERTIFICATE_ENTITY = certificateEntityBuilder().build();
+
 
   public static CertificateEntity.CertificateEntityBuilder certificateEntityBuilder() {
     return CertificateEntity.builder()
@@ -41,6 +43,7 @@ public class TestDataCertificateEntity {
         .revoked(LocalDateTime.now(ZoneId.systemDefault()))
         .revokedBy(AJLA_DOKTOR_ENTITY)
         .revokedReason(REVOKED_REASON_ENTITY)
-        .revokedMessage(REVOKED_MESSAGE);
+        .revokedMessage(REVOKED_MESSAGE)
+        .externalReference(EXTERNAL_REFERENCE);
   }
 }

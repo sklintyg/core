@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
@@ -187,5 +188,31 @@ class CertificateActionReadTest {
         certificateActionRead.evaluate(Optional.of(certificate), actionEvaluation),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
+  }
+
+  @Test
+  void shallReturnReasonNotAllowedIfEvaluateReturnsFalse() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ANONYMA_REACT_ATTILA)
+        .user(ALVA_VARDADMINISTRATOR)
+        .build();
+
+    final var actualResult = certificateActionRead.reasonNotAllowed(actionEvaluation);
+
+    assertFalse(actualResult.isEmpty());
+  }
+
+  @Test
+  void shallReturnEmptyListIfEvaluateReturnsTrue() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.DRAFT)
+        .build();
+
+    final var actualResult = certificateActionRead.reasonNotAllowed(Optional.of(certificate),
+        actionEvaluation);
+
+    assertTrue(actualResult.isEmpty());
   }
 }

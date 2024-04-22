@@ -8,6 +8,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -120,6 +121,17 @@ class CreateCertificateDomainServiceTest {
       assertThrows(CertificateActionForbidden.class,
           () -> createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION)
       );
+    }
+
+    @Test
+    void shallIncludeReasonNotAllowedToException() {
+      final var expectedReason = List.of("expectedReason");
+      doReturn(expectedReason).when(certificateModel)
+          .reasonNotAllowed(CertificateActionType.CREATE, ACTION_EVALUATION);
+      final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
+          () -> createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION)
+      );
+      assertEquals(expectedReason, certificateActionForbidden.reason());
     }
   }
 }

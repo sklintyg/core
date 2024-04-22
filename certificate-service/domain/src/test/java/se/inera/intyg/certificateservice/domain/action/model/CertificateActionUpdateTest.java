@@ -230,4 +230,30 @@ class CertificateActionUpdateTest {
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
+
+  @Test
+  void shallReturnReasonNotAllowedIfEvaluateReturnsFalse() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ANONYMA_REACT_ATTILA)
+        .user(ALVA_VARDADMINISTRATOR)
+        .build();
+
+    final var actualResult = certificateActionUpdate.reasonNotAllowed(actionEvaluation);
+
+    assertFalse(actualResult.isEmpty());
+  }
+
+  @Test
+  void shallReturnEmptyListIfEvaluateReturnsTrue() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.DRAFT)
+        .build();
+
+    final var actualResult = certificateActionUpdate.reasonNotAllowed(Optional.of(certificate),
+        actionEvaluation);
+
+    assertTrue(actualResult.isEmpty());
+  }
 }

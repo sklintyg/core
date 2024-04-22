@@ -84,4 +84,7 @@ public class CertificateEntity {
   private RevokedReasonEntity revokedReason;
   @Column(name = "revoked_message")
   private String revokedMessage;
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+  @JoinColumn(name = "external_reference_key")
+  private ExternalReferenceEntity externalReference;
 }

@@ -143,4 +143,28 @@ class CertificateActionCreateTest {
 
     assertFalse(actualResult);
   }
+
+  @Test
+  void shallReturnReasonNotAllowedIfEvaluateReturnsFalse() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ANONYMA_REACT_ATTILA)
+        .user(ALVA_VARDADMINISTRATOR)
+        .build();
+
+    final var actualResult = certificateActionCreate.reasonNotAllowed(actionEvaluation);
+
+    assertFalse(actualResult.isEmpty());
+  }
+
+  @Test
+  void shallReturnEmptyListIfEvaluateReturnsTrue() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ANONYMA_REACT_ATTILA)
+        .user(AJLA_DOKTOR)
+        .build();
+
+    final var actualResult = certificateActionCreate.reasonNotAllowed(actionEvaluation);
+
+    assertTrue(actualResult.isEmpty());
+  }
 }

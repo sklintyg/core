@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
 
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandlerController {
 
@@ -30,7 +30,7 @@ public class GlobalExceptionHandlerController {
 
     return ResponseEntity
         .status(HttpStatus.FORBIDDEN)
-        .build();
+        .body(String.join(", ", exception.reason()));
   }
 
   @ExceptionHandler(ConcurrentModificationException.class)

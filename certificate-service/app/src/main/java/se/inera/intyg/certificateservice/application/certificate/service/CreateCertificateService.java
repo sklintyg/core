@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertif
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.user.model.ExternalReference;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +37,11 @@ public class CreateCertificateService {
     );
     final var certificate = createCertificateDomainService.create(
         certificateModelId(createCertificateRequest),
-        actionEvaluation
+        actionEvaluation.withExternalReference(
+            createCertificateRequest.getExternalReference() != null
+                ? new ExternalReference(createCertificateRequest.getExternalReference())
+                : null
+        )
     );
     return CreateCertificateResponse.builder()
         .certificate(certificateConverter.convert(

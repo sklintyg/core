@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -82,6 +83,7 @@ import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModif
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
+import se.inera.intyg.certificateservice.domain.user.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.validation.model.ErrorMessage;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
@@ -89,6 +91,8 @@ import se.inera.intyg.certificateservice.domain.validation.model.ValidationResul
 @ExtendWith(MockitoExtension.class)
 class CertificateTest {
 
+  private static final String EXTERNAL_REF = "externalRef";
+  private static final ExternalReference EXTERNAL_REFERENCE = new ExternalReference(EXTERNAL_REF);
   private Certificate certificate;
   private Certificate.CertificateBuilder certificateBuilder;
   private CertificateModel certificateModel;
@@ -113,6 +117,7 @@ class CertificateTest {
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
                 .careUnit(ALFA_MEDICINCENTRUM)
                 .careProvider(ALFA_REGIONEN)
+                .externalReference(EXTERNAL_REFERENCE)
                 .build()
         )
         .elementData(
@@ -126,7 +131,8 @@ class CertificateTest {
         .user(AJLA_DOKTOR)
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .careUnit(ALFA_MEDICINCENTRUM)
-        .careProvider(ALFA_REGIONEN);
+        .careProvider(ALFA_REGIONEN)
+        .externalReference(EXTERNAL_REFERENCE);
   }
 
   @Nested
@@ -675,6 +681,28 @@ class CertificateTest {
         );
 
         assertTrue(certificate.certificateMetaData().issuingUnit().inactive().value());
+      }
+    }
+
+    @Nested
+    class ExternalReference {
+
+      @Test
+      void shallUpdateExternalReference() {
+        certificate.updateMetadata(
+            actionEvaluationBuilder.build()
+        );
+
+        assertEquals(EXTERNAL_REF, certificate.certificateMetaData().externalReference().value());
+      }
+
+      @Test
+      void shallSetExternalReferenceToNull() {
+        certificate.updateMetadata(
+            actionEvaluationBuilder.externalReference(null).build()
+        );
+
+        assertNull(certificate.certificateMetaData().externalReference());
       }
     }
   }

@@ -41,6 +41,7 @@ public class CertificateMetadataDTO {
   CertificateRecipientDTO recipient;
   CertificateSummaryDTO summary;
   boolean validForSign;
+  String externalReference;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class CertificateMetadataDTOBuilder {

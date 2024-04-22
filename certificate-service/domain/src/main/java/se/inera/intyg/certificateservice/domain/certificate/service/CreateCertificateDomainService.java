@@ -28,7 +28,8 @@ public class CreateCertificateDomainService {
     final var certificateModel = certificateModelRepository.getById(certificateModelId);
     if (!certificateModel.allowTo(CertificateActionType.CREATE, actionEvaluation)) {
       throw new CertificateActionForbidden(
-          "Not allowed to create certificate for %s".formatted(certificateModelId)
+          "Not allowed to create certificate for %s".formatted(certificateModelId),
+          certificateModel.reasonNotAllowed(CertificateActionType.CREATE, actionEvaluation)
       );
     }
 
@@ -46,7 +47,7 @@ public class CreateCertificateDomainService {
             .actionEvaluation(actionEvaluation)
             .build()
     );
-    
+
     return savedCertificate;
   }
 }

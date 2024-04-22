@@ -19,6 +19,15 @@ public class CertificateActionSend implements CertificateAction {
   private final List<ActionRule> actionRules;
 
   @Override
+  public List<String> reasonNotAllowed(Optional<Certificate> certificate,
+      ActionEvaluation actionEvaluation) {
+    return actionRules.stream()
+        .filter(value -> !value.evaluate(certificate, actionEvaluation))
+        .map(ActionRule::getErrorMessage)
+        .toList();
+  }
+
+  @Override
   public CertificateActionType getType() {
     return certificateActionSpecification.certificateActionType();
   }

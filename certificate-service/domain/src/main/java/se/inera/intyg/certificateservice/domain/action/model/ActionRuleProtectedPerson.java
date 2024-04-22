@@ -24,6 +24,13 @@ public class ActionRuleProtectedPerson implements ActionRule {
         .isPresent();
   }
 
+  @Override
+  public String getErrorMessage() {
+    return "Du saknar behörighet för den begärda åtgärden."
+        + " Det krävs särskilda rättigheter eller en specifik befattning"
+        + " för att hantera patienter med skyddade personuppgifter.";
+  }
+
   private static boolean ifPatientIsProtectedUserMustNotBeCareAdmin(
       ActionEvaluation actionEvaluation, Patient patient) {
     return !patient.protectedPerson().value()
