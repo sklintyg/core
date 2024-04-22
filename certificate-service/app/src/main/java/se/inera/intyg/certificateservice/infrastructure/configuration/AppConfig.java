@@ -17,8 +17,6 @@ import se.inera.intyg.certificateservice.domain.certificate.service.SignCertific
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ValidateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
-import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchemaValidator;
-import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchematronValidator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventSubscriber;
@@ -30,6 +28,8 @@ import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertifica
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorCertificateV4;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorIntygsgivare;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorValue;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlSchemaValidator;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlSchematronValidator;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlValidationService;
 import se.inera.intyg.certificateservice.pdfboxgenerator.CertificatePdfGenerator;
 

@@ -8,7 +8,6 @@ import javax.xml.transform.stream.StreamSource;
 import lombok.extern.slf4j.Slf4j;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
-import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchematronValidator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 
 @Slf4j

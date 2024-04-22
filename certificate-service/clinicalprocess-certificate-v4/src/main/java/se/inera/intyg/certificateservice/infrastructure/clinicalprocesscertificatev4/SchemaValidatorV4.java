@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
-import se.inera.intyg.certificateservice.domain.certificate.service.XmlSchemaValidator;
 
 @Slf4j
 @RequiredArgsConstructor
