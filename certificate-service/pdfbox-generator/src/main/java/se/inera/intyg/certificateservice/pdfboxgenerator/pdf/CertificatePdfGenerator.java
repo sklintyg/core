@@ -4,33 +4,20 @@ import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService;
-import se.inera.intyg.certificateservice.pdfboxgenerator.text.PdfAdditionalInformationTextGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.text.PdfTextGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfPatientValueGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfSignatureValueGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfUnitValueGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfValueGenerator;
 
+@Service
+@RequiredArgsConstructor
 public class CertificatePdfGenerator implements PdfGenerator {
 
-  private final List<CertificateTypePdfFillService> certificateTypePdfFillServices = List.of(
-      new FK7211PdfFillService(),
-      new FK7443PdfFillService()
-  );
+  private final List<CertificateTypePdfFillService> certificateTypePdfFillServices;
+  private final CertificatePdfFillService certificatePdfFillService;
 
   public Pdf generate(Certificate certificate, String additionalInfoText) {
-    final var pdfGeneratorValueToolkit = new PdfValueGenerator();
-    final var pdfGeneratorTextToolkit = new PdfTextGenerator();
-    final var certificatePdfFillService = new CertificatePdfFillService(
-        new PdfUnitValueGenerator(pdfGeneratorValueToolkit),
-        new PdfPatientValueGenerator(pdfGeneratorValueToolkit),
-        new PdfSignatureValueGenerator(pdfGeneratorValueToolkit, pdfGeneratorTextToolkit),
-        new PdfAdditionalInformationTextGenerator(pdfGeneratorTextToolkit));
 
     try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
       final var certificateTypeSpecificFillService = certificateTypePdfFillServices.stream()
