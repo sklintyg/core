@@ -65,14 +65,13 @@ public class CertificatePdfFillService {
 
   private void setFieldValues(PDDocument document, List<PdfField> fields) {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
-    fields.stream()
-        .forEach(field -> {
-          try {
-            setFieldValue(acroForm, field.getValue(), field.getId());
-          } catch (IOException e) {
-            throw new RuntimeException(e);
-          }
-        });
+    fields.forEach(field -> {
+      try {
+        setFieldValue(acroForm, field.getValue(), field.getId());
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    });
   }
 
   private void setSentText(PDDocument document, Certificate certificate)
@@ -99,8 +98,9 @@ public class CertificatePdfFillService {
       throws IOException {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
     if (certificate.status() == Status.SIGNED) {
-      pdfAdditionalInformationTextGenerator.addDigitalSignatureText(document, acroForm,
-          getSignatureOffsetX(acroForm), getSignatureOffsetY(acroForm));
+      pdfAdditionalInformationTextGenerator.addDigitalSignatureText(
+          document, getSignatureOffsetX(acroForm), getSignatureOffsetY(acroForm)
+      );
     }
   }
 
