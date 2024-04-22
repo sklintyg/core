@@ -30,7 +30,7 @@ public class GlobalExceptionHandlerController {
 
     return ResponseEntity
         .status(HttpStatus.FORBIDDEN)
-        .body(String.join(", ", exception.reason()));
+        .body(String.join(" ", exception.reason()));
   }
 
   @ExceptionHandler(ConcurrentModificationException.class)
