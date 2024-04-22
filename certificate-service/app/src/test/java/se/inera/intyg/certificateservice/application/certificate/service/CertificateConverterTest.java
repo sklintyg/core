@@ -12,6 +12,8 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProv
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REF;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REFERENCE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_CITY;
@@ -205,6 +207,9 @@ class CertificateConverterTest {
                     )
                     .build()
             )
+        )
+        .externalReference(
+            EXTERNAL_REFERENCE
         );
     certificate = certificateBuilder.build();
   }
@@ -509,6 +514,14 @@ class CertificateConverterTest {
                 .getFullName()
         );
       }
+    }
+
+    @Test
+    void shallIncludeExternalReference() {
+      assertEquals(EXTERNAL_REF,
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata()
+              .getExternalReference()
+      );
     }
   }
 
