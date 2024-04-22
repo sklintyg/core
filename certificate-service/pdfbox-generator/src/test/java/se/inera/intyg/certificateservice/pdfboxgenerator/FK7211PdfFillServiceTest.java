@@ -1,7 +1,11 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
@@ -9,35 +13,34 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ANNA_SJUKSKOTERSKA;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.BARNMORSKA;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.BERTIL_BARNMORSKA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.CHECKED_BOX_VALUE;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.UNCHECKED_BOX_VALUE;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService.BERAKNAT_NEDKOMSTDATUM_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService.CERTIFIER_DOCTOR_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService.CERTIFIER_MIDWIFE_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService.CERTIFIER_NURSE_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService.QUESTION_BERAKNAT_NEDKOMSTDATUM_ID;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
-import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService;
+import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfDateValueGenerator;
 
 @ExtendWith(MockitoExtension.class)
 class FK7211PdfFillServiceTest {
@@ -51,8 +54,14 @@ class FK7211PdfFillServiceTest {
               .build()
       )
       .build();
+  private static final String DATE = "DATE";
+  private static final PdfField DATE_FIELD = PdfField.builder()
+      .id(DATE)
+      .value(DELIVERY_DATE.toString())
+      .build();
 
-  private PDAcroForm pdAcroForm;
+  @Mock
+  PdfDateValueGenerator pdfDateValueGenerator;
 
   @InjectMocks
   private FK7211PdfFillService fk7211PdfFillService;
@@ -74,42 +83,33 @@ class FK7211PdfFillServiceTest {
   class PdfData {
 
     @BeforeEach
-    void setup() throws IOException {
-      ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-      final var inputStream = classloader.getResourceAsStream("fk7211_v1.pdf");
-      final var document = Loader.loadPDF(inputStream.readAllBytes());
-      final var documentCatalog = document.getDocumentCatalog();
-      pdAcroForm = documentCatalog.getAcroForm();
+    void setUp() {
+      when(pdfDateValueGenerator.generate(any(Certificate.class), any(ElementId.class),
+          anyString())).thenReturn(List.of(DATE_FIELD));
     }
+
 
     @Nested
     class ExpectedDeliveryDate {
 
       @Test
-      void shouldSetExpectedDeliveryDateIfDateIsProvided() throws IOException {
-        fk7211PdfFillService.getFields(
-            pdAcroForm,
+      void shouldReturnExpectedDeliveryDateIfDateIsProvided() {
+        final var result = fk7211PdfFillService.getFields(
             buildCertificate(List.of(BERAKNAT_NEDKOMST_DATUM_ELEMENT_DATA))
         );
 
-        assertEquals(
-            DELIVERY_DATE.toString(),
-            pdAcroForm.getField(BERAKNAT_NEDKOMSTDATUM_FIELD_ID).getValueAsString()
-        );
+        assertTrue(result.contains(DATE_FIELD), "Expected date field to be included in result");
       }
 
 
       @Test
-      void shouldNotSetExpectedDeliveryDateIfDateIsNotProvided() throws IOException {
-        fk7211PdfFillService.getFields(
-            pdAcroForm,
+      void shouldNotSetExpectedDeliveryDateIfDateIsNotProvided() {
+        final var result = fk7211PdfFillService.getFields(
             buildCertificate(Collections.emptyList())
         );
 
-        assertEquals(
-            "",
-            pdAcroForm.getField(BERAKNAT_NEDKOMSTDATUM_FIELD_ID).getValueAsString()
-        );
+        assertFalse(result.contains(DATE_FIELD),
+            "Expected date field not to be included in result");
       }
     }
 
@@ -117,119 +117,68 @@ class FK7211PdfFillServiceTest {
     class Issuer {
 
       @Test
-      void shouldOnlySetDoctorAsCertifierIfIssuerIsDoctor() throws IOException {
-        fk7211PdfFillService.getFields(
-            pdAcroForm,
+      void shouldSetDoctorAsCertifierIfIssuerIsDoctor() {
+        final var expected = PdfField.builder()
+            .id(CERTIFIER_DOCTOR_FIELD_ID)
+            .value(CHECKED_BOX_VALUE)
+            .build();
+
+        final var result = fk7211PdfFillService.getFields(
             buildCertificate(AJLA_DOKTOR)
         );
 
-        assertAll(
-            () -> assertEquals(
-                CHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_DOCTOR_FIELD_ID)
-                    .getValueAsString()
-            ),
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_NURSE_FIELD_ID)
-                    .getValueAsString()
-            ),
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_MIDWIFE_FIELD_ID)
-                    .getValueAsString()
-            )
-        );
+        assertTrue(result.contains(expected),
+            "Expected issuer doctor field to be included in result");
       }
 
       @Test
-      void shouldOnlySetMidwifeAsCertifierIfIssuerIsMidwife() throws IOException {
-        fk7211PdfFillService.getFields(
-            pdAcroForm,
-            buildCertificate(BARNMORSKA)
+      void shouldSetMidwifeAsCertifierIfIssuerIsMidwife() {
+        final var expected = PdfField.builder()
+            .id(CERTIFIER_MIDWIFE_FIELD_ID)
+            .value(CHECKED_BOX_VALUE)
+            .build();
+
+        final var result = fk7211PdfFillService.getFields(
+            buildCertificate(BERTIL_BARNMORSKA)
         );
 
-        assertAll(
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_DOCTOR_FIELD_ID)
-                    .getValueAsString()
-            ),
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_NURSE_FIELD_ID)
-                    .getValueAsString()
-            ),
-            () -> assertEquals(
-                CHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_MIDWIFE_FIELD_ID)
-                    .getValueAsString()
-            )
-        );
+        assertTrue(result.contains(expected),
+            "Expected issuer midwife field to be included in result");
       }
 
       @Test
-      void shouldOnlySetNurseAsCertifierIfIssuerIsNurse() throws IOException {
-        fk7211PdfFillService.getFields(
-            pdAcroForm,
+      void shouldOnlySetNurseAsCertifierIfIssuerIsNurse() {
+        final var expected = PdfField.builder()
+            .id(CERTIFIER_NURSE_FIELD_ID)
+            .value(CHECKED_BOX_VALUE)
+            .build();
+
+        final var result = fk7211PdfFillService.getFields(
             buildCertificate(ANNA_SJUKSKOTERSKA)
         );
 
-        assertAll(
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_DOCTOR_FIELD_ID)
-                    .getValueAsString()
-            ),
-            () -> assertEquals(
-                CHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_NURSE_FIELD_ID)
-                    .getValueAsString()
-            ),
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_MIDWIFE_FIELD_ID)
-                    .getValueAsString()
-            )
-        );
+        assertTrue(result.contains(expected),
+            "Expected issuer nurse field to be included in result");
       }
 
       @Test
-      void shouldNotSetCertifierIfRoleIsAdmin() throws IOException {
-        fk7211PdfFillService.getFields(
-            pdAcroForm,
+      void shouldNotSetCertifierIfRoleIsAdmin() {
+        final var result = fk7211PdfFillService.getFields(
             buildCertificate(ALVA_VARDADMINISTRATOR)
         );
 
-        assertAll(
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_DOCTOR_FIELD_ID)
-                    .getValueAsString()
-            ),
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_NURSE_FIELD_ID)
-                    .getValueAsString()
-            ),
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_MIDWIFE_FIELD_ID)
-                    .getValueAsString()
-            )
+        assertEquals(1, result.size(),
+            "Expected issuer admin to not be included in result");
+      }
+
+      @Test
+      void shouldOnlySetOneIssuerRole() {
+        final var result = fk7211PdfFillService.getFields(
+            buildCertificate(AJLA_DOKTOR)
         );
+
+        assertEquals(2, result.size(),
+            "Expected issuer admin to not be included in result");
       }
     }
   }

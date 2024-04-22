@@ -61,14 +61,14 @@ public class TestDataUserConstants {
   public static final List<Speciality> ANNA_SJUKSKOTERSKA_SPECIALITIES = Collections.emptyList();
   public static final Blocked ANNA_SJUKSKOTERSKA_BLOCKED = BLOCKED_FALSE;
 
-  public static final String BARNMORSKA_HSA_ID = "TSTNMT2321000156-BMBL";
-  public static final String BARNMORSKA_FIRST_NAME = "Bertil";
-  public static final String BARNMORSKA_MIDDLE_NAME = "";
-  public static final String BARNMORSKA_LAST_NAME = "Barnmorska";
-  public static final String BARNMORSKA_FULL_NAME = "Bertil Barnmorska";
-  public static final Role BARNMORSKA_ROLE = Role.MIDWIFE;
-  public static final List<PaTitle> BARNMORSKA_TITLES = Collections.emptyList();
-  public static final List<Speciality> BARNMORSKA_SPECIALITIES = Collections.emptyList();
-  public static final Blocked BARNMORSKA_BLOCKED = BLOCKED_FALSE;
+  public static final String BERTIL_BARNMORSKA_HSA_ID = "TSTNMT2321000156-BMBL";
+  public static final String BERTIL_BARNMORSKA_FIRST_NAME = "Bertil";
+  public static final String BERTIL_BARNMORSKA_MIDDLE_NAME = "";
+  public static final String BERTIL_BARNMORSKA_LAST_NAME = "Barnmorska";
+  public static final String BERTIL_BARNMORSKA_FULL_NAME = "Bertil Barnmorska";
+  public static final Role BERTIL_BARNMORSKA_ROLE = Role.MIDWIFE;
+  public static final List<PaTitle> BERTIL_BARNMORSKA_TITLES = Collections.emptyList();
+  public static final List<Speciality> BERTIL_BARNMORSKA_SPECIALITIES = Collections.emptyList();
+  public static final Blocked BERTIL_BARNMORSKA_BLOCKED = BLOCKED_FALSE;
 
 }

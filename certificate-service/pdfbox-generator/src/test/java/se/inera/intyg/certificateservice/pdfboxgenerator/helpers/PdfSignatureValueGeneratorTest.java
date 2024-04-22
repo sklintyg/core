@@ -1,24 +1,17 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.helpers;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 import se.inera.intyg.certificateservice.pdfboxgenerator.text.PdfTextGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfSignatureValueGenerator;
 
@@ -33,148 +26,78 @@ class PdfSignatureValueGeneratorTest {
   @InjectMocks
   PdfSignatureValueGenerator pdfSignatureValueGenerator;
 
-  @Mock
-  PDDocument document;
-
-  @Mock
-  PDAcroForm acroForm;
 
   @Test
-  void shouldAddDigitalSignature() throws IOException {
-    final var signed = LocalDateTime.now();
-    final var certificate = fk7211CertificateBuilder()
-        .signed(signed)
+  void shouldAddSignedDate() {
+    final var certificate = getCertificate();
+    final var expected = PdfField.builder()
+        .id("form1[0].#subform[0].flt_datUnderskrift[0]")
+        .value(SIGNED.format(DateTimeFormatter.ISO_DATE))
         .build();
 
-    pdfSignatureValueGenerator.generate(document, acroForm, certificate);
+    final var result = pdfSignatureValueGenerator.generate(certificate);
 
-    verify(pdfTextGenerator).addDigitalSignatureText(document, acroForm);
+    assertTrue(result.contains(expected), "Expected signed date to be included in result");
   }
 
   @Test
-  void shouldAddSignedDate() throws IOException {
+  void shouldAddIssuerName() {
     final var certificate = getCertificate();
-    final var captor = ArgumentCaptor.forClass(String.class);
-    final var idCaptor = ArgumentCaptor.forClass(String.class);
+    final var expected = PdfField.builder()
+        .id("form1[0].#subform[0].flt_txtNamnfortydligande[0]")
+        .value(certificate.certificateMetaData().issuer().name().fullName())
+        .build();
 
-    pdfSignatureValueGenerator.generate(document, acroForm, certificate);
-
-    verify(pdfValueGenerator, times(6)).setValue(eq(acroForm), idCaptor.capture(),
-        captor.capture());
-
-    assertAll(
-        () -> assertTrue(
-            idCaptor.getAllValues().contains("form1[0].#subform[0].flt_datUnderskrift[0]")
-        ),
-        () -> assertTrue(captor.getAllValues().contains(SIGNED.format(DateTimeFormatter.ISO_DATE)))
-    );
+    final var result = pdfSignatureValueGenerator.generate(certificate);
+    assertTrue(result.contains(expected), "Expected signature to be included in result");
   }
 
   @Test
-  void shouldAddIssuerName() throws IOException {
+  void shouldAddIssuerHsaId() {
     final var certificate = getCertificate();
-    final var captor = ArgumentCaptor.forClass(String.class);
-    final var idCaptor = ArgumentCaptor.forClass(String.class);
+    final var expected = PdfField.builder()
+        .id("form1[0].#subform[0].flt_txtLakarensHSA-ID[0]")
+        .value(certificate.certificateMetaData().issuer().hsaId().id())
+        .build();
 
-    pdfSignatureValueGenerator.generate(document, acroForm, certificate);
-
-    verify(pdfValueGenerator, times(6)).setValue(eq(acroForm), idCaptor.capture(),
-        captor.capture());
-
-    assertAll(
-        () -> assertTrue(
-            idCaptor.getAllValues().contains("form1[0].#subform[0].flt_txtNamnfortydligande[0]")
-        ),
-        () -> assertTrue(captor.getAllValues()
-            .contains(certificate.certificateMetaData().issuer().name().fullName())
-        )
-    );
+    final var result = pdfSignatureValueGenerator.generate(certificate);
+    assertTrue(result.contains(expected), "Expected signature to be included in result");
   }
 
   @Test
-  void shouldAddIssuerHsaId() throws IOException {
+  void shouldSetPaTitles() {
     final var certificate = getCertificate();
-    final var captor = ArgumentCaptor.forClass(String.class);
-    final var idCaptor = ArgumentCaptor.forClass(String.class);
+    final var expected = PdfField.builder()
+        .id("form1[0].#subform[0].flt_txtBefattning[0]")
+        .value("203090, 601010")
+        .build();
 
-    pdfSignatureValueGenerator.generate(document, acroForm, certificate);
-
-    verify(pdfValueGenerator, times(6)).setValue(eq(acroForm), idCaptor.capture(),
-        captor.capture());
-
-    assertAll(
-        () -> assertTrue(
-            idCaptor.getAllValues().contains("form1[0].#subform[0].flt_txtLakarensHSA-ID[0]")
-        ),
-        () -> assertTrue(captor.getAllValues()
-            .contains(certificate.certificateMetaData().issuer().hsaId().id())
-        )
-    );
+    final var result = pdfSignatureValueGenerator.generate(certificate);
+    assertTrue(result.contains(expected), "Expected PA-titles to be included in result");
   }
 
   @Test
-  void shouldSetPaTitles() throws IOException {
+  void shouldSetSpeciality() {
     final var certificate = getCertificate();
-    final var captor = ArgumentCaptor.forClass(String.class);
-    final var idCaptor = ArgumentCaptor.forClass(String.class);
+    final var expected = PdfField.builder()
+        .id("form1[0].#subform[0].flt_txtEventuellSpecialistkompetens[0]")
+        .value("Allmänmedicin, Psykiatri")
+        .build();
 
-    pdfSignatureValueGenerator.generate(document, acroForm, certificate);
-
-    verify(pdfValueGenerator, times(6)).setValue(eq(acroForm), idCaptor.capture(),
-        captor.capture());
-
-    assertAll(
-        () -> assertTrue(
-            idCaptor.getAllValues().contains("form1[0].#subform[0].flt_txtBefattning[0]")
-        ),
-        () -> assertTrue(captor.getAllValues()
-            .contains("203090, 601010")
-        )
-    );
+    final var result = pdfSignatureValueGenerator.generate(certificate);
+    assertTrue(result.contains(expected), "Expected speciality to be included in result");
   }
 
   @Test
-  void shouldSetSpeciality() throws IOException {
+  void shouldSetWorkplaceCode() {
     final var certificate = getCertificate();
-    final var captor = ArgumentCaptor.forClass(String.class);
-    final var idCaptor = ArgumentCaptor.forClass(String.class);
+    final var expected = PdfField.builder()
+        .id("form1[0].#subform[0].flt_txtArbetsplatskod[0]")
+        .value("1627")
+        .build();
 
-    pdfSignatureValueGenerator.generate(document, acroForm, certificate);
-
-    verify(pdfValueGenerator, times(6)).setValue(eq(acroForm), idCaptor.capture(),
-        captor.capture());
-
-    assertAll(
-        () -> assertTrue(
-            idCaptor.getAllValues()
-                .contains("form1[0].#subform[0].flt_txtEventuellSpecialistkompetens[0]")
-        ),
-        () -> assertTrue(captor.getAllValues()
-            .contains("Allmänmedicin, Psykiatri")
-        )
-    );
-  }
-
-  @Test
-  void shouldSetWorkplaceCode() throws IOException {
-    final var certificate = getCertificate();
-    final var captor = ArgumentCaptor.forClass(String.class);
-    final var idCaptor = ArgumentCaptor.forClass(String.class);
-
-    pdfSignatureValueGenerator.generate(document, acroForm, certificate);
-
-    verify(pdfValueGenerator, times(6)).setValue(eq(acroForm), idCaptor.capture(),
-        captor.capture());
-
-    assertAll(
-        () -> assertTrue(
-            idCaptor.getAllValues()
-                .contains("form1[0].#subform[0].flt_txtArbetsplatskod[0]")
-        ),
-        () -> assertTrue(captor.getAllValues()
-            .contains("1627")
-        )
-    );
+    final var result = pdfSignatureValueGenerator.generate(certificate);
+    assertTrue(result.contains(expected), "Expected speciality to be included in result");
   }
 
   private static Certificate getCertificate() {
@@ -182,5 +105,4 @@ class PdfSignatureValueGeneratorTest {
         .signed(SIGNED)
         .build();
   }
-
 }

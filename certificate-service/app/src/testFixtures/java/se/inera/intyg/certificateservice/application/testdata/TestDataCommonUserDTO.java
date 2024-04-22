@@ -16,13 +16,13 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_ROLE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_BLOCKED;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_FIRST_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_FULL_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_HSA_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_LAST_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_MIDDLE_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_BLOCKED;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_FULL_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_MIDDLE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_ROLE;
 
 import java.util.Collections;
 import se.inera.intyg.certificateservice.application.common.dto.PaTitleDTO;
@@ -78,14 +78,14 @@ public class TestDataCommonUserDTO {
 
   public static UserDTOBuilder bertilBarnmorskaDtoBuilder() {
     return UserDTO.builder()
-        .id(BARNMORSKA_HSA_ID)
-        .firstName(BARNMORSKA_FIRST_NAME)
-        .middleName(BARNMORSKA_MIDDLE_NAME)
-        .lastName(BARNMORSKA_LAST_NAME)
-        .fullName(BARNMORSKA_FULL_NAME)
-        .role(RoleTypeDTO.toRoleType(BARNMORSKA_ROLE))
+        .id(BERTIL_BARNMORSKA_HSA_ID)
+        .firstName(BERTIL_BARNMORSKA_FIRST_NAME)
+        .middleName(BERTIL_BARNMORSKA_MIDDLE_NAME)
+        .lastName(BERTIL_BARNMORSKA_LAST_NAME)
+        .fullName(BERTIL_BARNMORSKA_FULL_NAME)
+        .role(RoleTypeDTO.toRoleType(BERTIL_BARNMORSKA_ROLE))
         .paTitles(Collections.emptyList())
         .specialities(Collections.emptyList())
-        .blocked(BARNMORSKA_BLOCKED.value());
+        .blocked(BERTIL_BARNMORSKA_BLOCKED.value());
   }
 }
