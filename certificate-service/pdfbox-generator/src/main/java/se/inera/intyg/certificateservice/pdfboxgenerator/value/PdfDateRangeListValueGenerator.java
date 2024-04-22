@@ -7,109 +7,108 @@ import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
-import se.inera.intyg.certificateservice.pdfboxgenerator.toolkits.PdfGeneratorValueToolkit;
 
 public class PdfDateRangeListValueGenerator implements PdfElementValueGenerator {
 
-  private static final String CHECKBOX_PERIOD_PREFIX_ID = ".ksr_kryssruta";
-  private static final String DATE_FROM_PERIOD_PREFIX_ID = ".flt_datFranMed";
-  private static final String DATE_TO_PERIOD_PREFIX_ID = ".flt_datLangstTillMed";
-  private static final String PERIOD_SUFFIX_ID = "[0]";
+    private static final String CHECKBOX_PERIOD_PREFIX_ID = ".ksr_kryssruta";
+    private static final String DATE_FROM_PERIOD_PREFIX_ID = ".flt_datFranMed";
+    private static final String DATE_TO_PERIOD_PREFIX_ID = ".flt_datLangstTillMed";
+    private static final String PERIOD_SUFFIX_ID = "[0]";
 
-  private PdfGeneratorValueToolkit pdfGeneratorValueToolkit;
+    private PdfValueGenerator pdfValueGenerator;
 
-  @Override
-  public void generate(PDAcroForm acroForm, Certificate certificate, ElementId questionId,
-      String fieldName) {
-    if (certificate.elementData() == null || certificate.elementData().isEmpty()) {
-      return;
+    @Override
+    public void generate(PDAcroForm acroForm, Certificate certificate, ElementId questionId,
+        String fieldName) {
+        if (certificate.elementData() == null || certificate.elementData().isEmpty()) {
+            return;
+        }
+
+        pdfValueGenerator = new PdfValueGenerator();
+        final var question = certificate.getElementDataById(questionId);
+
+        if (question.isEmpty()) {
+            throw new IllegalStateException(
+                "Could not find question with id: %s".formatted(questionId));
+        }
+
+        if (!(question.get().value() instanceof ElementValueDateRangeList elementValueDateRangeList)) {
+            throw new IllegalStateException(
+                String.format(
+                    "Expected ElementValueDateRangeList but was: '%s'",
+                    question.get().value().getClass()
+                )
+            );
+        }
+
+        elementValueDateRangeList.dateRangeList()
+            .forEach(dateRange -> {
+                try {
+                    fillPeriod(acroForm, dateRange, fieldName);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
     }
 
-    pdfGeneratorValueToolkit = new PdfGeneratorValueToolkit();
-    final var question = certificate.getElementDataById(questionId);
+    private void fillPeriod(PDAcroForm acroForm, DateRange dateRange, String fieldName)
+        throws IOException {
+        pdfValueGenerator.setCheckedBoxValue(
+            acroForm,
+            getPeriodCheckboxId(dateRange, fieldName)
+        );
 
-    if (question.isEmpty()) {
-      throw new IllegalStateException(
-          "Could not find question with id: %s".formatted(questionId));
+        if (dateRange.from() != null) {
+            pdfValueGenerator.setValue(
+                acroForm,
+                getPeriodFromId(dateRange, fieldName),
+                dateRange.from().toString()
+            );
+        }
+
+        if (dateRange.to() != null) {
+            pdfValueGenerator.setValue(
+                acroForm,
+                getPeriodToId(dateRange, fieldName),
+                dateRange.to().toString()
+            );
+        }
     }
 
-    if (!(question.get().value() instanceof ElementValueDateRangeList elementValueDateRangeList)) {
-      throw new IllegalStateException(
-          String.format(
-              "Expected ElementValueDateRangeList but was: '%s'",
-              question.get().value().getClass()
-          )
-      );
+    private String getPeriodCheckboxId(DateRange dateRange, String fieldName) {
+        return fieldName + CHECKBOX_PERIOD_PREFIX_ID + getFieldSuffixFromDateRange(dateRange)
+            + PERIOD_SUFFIX_ID;
     }
 
-    elementValueDateRangeList.dateRangeList()
-        .forEach(dateRange -> {
-          try {
-            fillPeriod(acroForm, dateRange, fieldName);
-          } catch (IOException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  private void fillPeriod(PDAcroForm acroForm, DateRange dateRange, String fieldName)
-      throws IOException {
-    pdfGeneratorValueToolkit.setCheckedBoxValue(
-        acroForm,
-        getPeriodCheckboxId(dateRange, fieldName)
-    );
-
-    if (dateRange.from() != null) {
-      pdfGeneratorValueToolkit.setValue(
-          acroForm,
-          getPeriodFromId(dateRange, fieldName),
-          dateRange.from().toString()
-      );
+    private String getPeriodToId(DateRange dateRange, String fieldName) {
+        return fieldName + DATE_TO_PERIOD_PREFIX_ID + getFieldSuffixFromDateRange(dateRange)
+            + PERIOD_SUFFIX_ID;
     }
 
-    if (dateRange.to() != null) {
-      pdfGeneratorValueToolkit.setValue(
-          acroForm,
-          getPeriodToId(dateRange, fieldName),
-          dateRange.to().toString()
-      );
+    private String getPeriodFromId(DateRange dateRange, String fieldName) {
+        return fieldName + DATE_FROM_PERIOD_PREFIX_ID + getFieldSuffixFromDateRange(dateRange)
+            + PERIOD_SUFFIX_ID;
     }
-  }
 
-  private String getPeriodCheckboxId(DateRange dateRange, String fieldName) {
-    return fieldName + CHECKBOX_PERIOD_PREFIX_ID + getFieldSuffixFromDateRange(dateRange)
-        + PERIOD_SUFFIX_ID;
-  }
-
-  private String getPeriodToId(DateRange dateRange, String fieldName) {
-    return fieldName + DATE_TO_PERIOD_PREFIX_ID + getFieldSuffixFromDateRange(dateRange)
-        + PERIOD_SUFFIX_ID;
-  }
-
-  private String getPeriodFromId(DateRange dateRange, String fieldName) {
-    return fieldName + DATE_FROM_PERIOD_PREFIX_ID + getFieldSuffixFromDateRange(dateRange)
-        + PERIOD_SUFFIX_ID;
-  }
-
-  private String getFieldSuffixFromDateRange(DateRange dateRange) {
-    final var workCapacityType = WorkCapacityType.valueOf(dateRange.dateRangeId().value());
-    switch (workCapacityType) {
-      case EN_ATTANDEL -> {
-        return "5";
-      }
-      case EN_FJARDEDEL -> {
-        return "4";
-      }
-      case HALVA -> {
-        return "3";
-      }
-      case TRE_FJARDEDELAR -> {
-        return "2";
-      }
-      case HELA -> {
+    private String getFieldSuffixFromDateRange(DateRange dateRange) {
+        final var workCapacityType = WorkCapacityType.valueOf(dateRange.dateRangeId().value());
+        switch (workCapacityType) {
+            case EN_ATTANDEL -> {
+                return "5";
+            }
+            case EN_FJARDEDEL -> {
+                return "4";
+            }
+            case HALVA -> {
+                return "3";
+            }
+            case TRE_FJARDEDELAR -> {
+                return "2";
+            }
+            case HELA -> {
+                return "";
+            }
+        }
         return "";
-      }
     }
-    return "";
-  }
 }

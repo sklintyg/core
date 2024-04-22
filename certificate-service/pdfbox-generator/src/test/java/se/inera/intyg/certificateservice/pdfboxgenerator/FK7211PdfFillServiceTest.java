@@ -16,8 +16,8 @@ import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfFillSer
 import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfFillService.CERTIFIER_MIDWIFE_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfFillService.CERTIFIER_NURSE_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfFillService.QUESTION_BERAKNAT_NEDKOMSTDATUM_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.util.PdfConstants.CHECKED_BOX_VALUE;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.util.PdfConstants.UNCHECKED_BOX_VALUE;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.CHECKED_BOX_VALUE;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.UNCHECKED_BOX_VALUE;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -41,214 +41,214 @@ import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 @ExtendWith(MockitoExtension.class)
 class FK7211PdfFillServiceTest {
 
-  private static final LocalDate DELIVERY_DATE = LocalDate.now();
-  private static final ElementData BERAKNAT_NEDKOMST_DATUM_ELEMENT_DATA = ElementData.builder()
-      .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
-      .value(
-          ElementValueDate.builder()
-              .date(DELIVERY_DATE)
-              .build()
-      )
-      .build();
+    private static final LocalDate DELIVERY_DATE = LocalDate.now();
+    private static final ElementData BERAKNAT_NEDKOMST_DATUM_ELEMENT_DATA = ElementData.builder()
+        .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
+        .value(
+            ElementValueDate.builder()
+                .date(DELIVERY_DATE)
+                .build()
+        )
+        .build();
 
-  private PDAcroForm pdAcroForm;
+    private PDAcroForm pdAcroForm;
 
-  @InjectMocks
-  private FK7211PdfFillService fk7211PdfFillService;
+    @InjectMocks
+    private FK7211PdfFillService fk7211PdfFillService;
 
-  @Test
-  void shouldReturnPatientIdFormId() {
-    assertEquals("form1[0].#subform[0].flt_pnr[0]", fk7211PdfFillService.getPatientIdFieldId());
-  }
+    @Test
+    void shouldReturnPatientIdFormId() {
+        assertEquals("form1[0].#subform[0].flt_pnr[0]", fk7211PdfFillService.getPatientIdFieldId());
+    }
 
-  @Test
-  void shouldReturnGeneratorType() {
-    assertEquals(
-        fk7211CertificateBuilder().build().certificateModel().id().type(),
-        fk7211PdfFillService.getType()
-    );
-  }
-
-  @Nested
-  class PdfData {
-
-    @BeforeEach
-    void setup() throws IOException {
-      ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-      final var inputStream = classloader.getResourceAsStream("fk7211_v1.pdf");
-      final var document = Loader.loadPDF(inputStream.readAllBytes());
-      final var documentCatalog = document.getDocumentCatalog();
-      pdAcroForm = documentCatalog.getAcroForm();
+    @Test
+    void shouldReturnGeneratorType() {
+        assertEquals(
+            fk7211CertificateBuilder().build().certificateModel().id().type(),
+            fk7211PdfFillService.getType()
+        );
     }
 
     @Nested
-    class ExpectedDeliveryDate {
+    class PdfData {
 
-      @Test
-      void shouldSetExpectedDeliveryDateIfDateIsProvided() throws IOException {
-        fk7211PdfFillService.fillDocument(
-            pdAcroForm,
-            buildCertificate(List.of(BERAKNAT_NEDKOMST_DATUM_ELEMENT_DATA))
-        );
+        @BeforeEach
+        void setup() throws IOException {
+            ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+            final var inputStream = classloader.getResourceAsStream("fk7211_v1.pdf");
+            final var document = Loader.loadPDF(inputStream.readAllBytes());
+            final var documentCatalog = document.getDocumentCatalog();
+            pdAcroForm = documentCatalog.getAcroForm();
+        }
 
-        assertEquals(
-            DELIVERY_DATE.toString(),
-            pdAcroForm.getField(BERAKNAT_NEDKOMSTDATUM_FIELD_ID).getValueAsString()
-        );
-      }
+        @Nested
+        class ExpectedDeliveryDate {
+
+            @Test
+            void shouldSetExpectedDeliveryDateIfDateIsProvided() throws IOException {
+                fk7211PdfFillService.fillDocument(
+                    pdAcroForm,
+                    buildCertificate(List.of(BERAKNAT_NEDKOMST_DATUM_ELEMENT_DATA))
+                );
+
+                assertEquals(
+                    DELIVERY_DATE.toString(),
+                    pdAcroForm.getField(BERAKNAT_NEDKOMSTDATUM_FIELD_ID).getValueAsString()
+                );
+            }
 
 
-      @Test
-      void shouldNotSetExpectedDeliveryDateIfDateIsNotProvided() throws IOException {
-        fk7211PdfFillService.fillDocument(
-            pdAcroForm,
-            buildCertificate(Collections.emptyList())
-        );
+            @Test
+            void shouldNotSetExpectedDeliveryDateIfDateIsNotProvided() throws IOException {
+                fk7211PdfFillService.fillDocument(
+                    pdAcroForm,
+                    buildCertificate(Collections.emptyList())
+                );
 
-        assertEquals(
-            "",
-            pdAcroForm.getField(BERAKNAT_NEDKOMSTDATUM_FIELD_ID).getValueAsString()
-        );
-      }
+                assertEquals(
+                    "",
+                    pdAcroForm.getField(BERAKNAT_NEDKOMSTDATUM_FIELD_ID).getValueAsString()
+                );
+            }
+        }
+
+        @Nested
+        class Issuer {
+
+            @Test
+            void shouldOnlySetDoctorAsCertifierIfIssuerIsDoctor() throws IOException {
+                fk7211PdfFillService.fillDocument(
+                    pdAcroForm,
+                    buildCertificate(AJLA_DOKTOR)
+                );
+
+                assertAll(
+                    () -> assertEquals(
+                        CHECKED_BOX_VALUE,
+                        pdAcroForm
+                            .getField(CERTIFIER_DOCTOR_FIELD_ID)
+                            .getValueAsString()
+                    ),
+                    () -> assertEquals(
+                        UNCHECKED_BOX_VALUE,
+                        pdAcroForm
+                            .getField(CERTIFIER_NURSE_FIELD_ID)
+                            .getValueAsString()
+                    ),
+                    () -> assertEquals(
+                        UNCHECKED_BOX_VALUE,
+                        pdAcroForm
+                            .getField(CERTIFIER_MIDWIFE_FIELD_ID)
+                            .getValueAsString()
+                    )
+                );
+            }
+
+            @Test
+            void shouldOnlySetMidwifeAsCertifierIfIssuerIsMidwife() throws IOException {
+                fk7211PdfFillService.fillDocument(
+                    pdAcroForm,
+                    buildCertificate(BARNMORSKA)
+                );
+
+                assertAll(
+                    () -> assertEquals(
+                        UNCHECKED_BOX_VALUE,
+                        pdAcroForm
+                            .getField(CERTIFIER_DOCTOR_FIELD_ID)
+                            .getValueAsString()
+                    ),
+                    () -> assertEquals(
+                        UNCHECKED_BOX_VALUE,
+                        pdAcroForm
+                            .getField(CERTIFIER_NURSE_FIELD_ID)
+                            .getValueAsString()
+                    ),
+                    () -> assertEquals(
+                        CHECKED_BOX_VALUE,
+                        pdAcroForm
+                            .getField(CERTIFIER_MIDWIFE_FIELD_ID)
+                            .getValueAsString()
+                    )
+                );
+            }
+
+            @Test
+            void shouldOnlySetNurseAsCertifierIfIssuerIsNurse() throws IOException {
+                fk7211PdfFillService.fillDocument(
+                    pdAcroForm,
+                    buildCertificate(ANNA_SJUKSKOTERSKA)
+                );
+
+                assertAll(
+                    () -> assertEquals(
+                        UNCHECKED_BOX_VALUE,
+                        pdAcroForm
+                            .getField(CERTIFIER_DOCTOR_FIELD_ID)
+                            .getValueAsString()
+                    ),
+                    () -> assertEquals(
+                        CHECKED_BOX_VALUE,
+                        pdAcroForm
+                            .getField(CERTIFIER_NURSE_FIELD_ID)
+                            .getValueAsString()
+                    ),
+                    () -> assertEquals(
+                        UNCHECKED_BOX_VALUE,
+                        pdAcroForm
+                            .getField(CERTIFIER_MIDWIFE_FIELD_ID)
+                            .getValueAsString()
+                    )
+                );
+            }
+
+            @Test
+            void shouldNotSetCertifierIfRoleIsAdmin() throws IOException {
+                fk7211PdfFillService.fillDocument(
+                    pdAcroForm,
+                    buildCertificate(ALVA_VARDADMINISTRATOR)
+                );
+
+                assertAll(
+                    () -> assertEquals(
+                        UNCHECKED_BOX_VALUE,
+                        pdAcroForm
+                            .getField(CERTIFIER_DOCTOR_FIELD_ID)
+                            .getValueAsString()
+                    ),
+                    () -> assertEquals(
+                        UNCHECKED_BOX_VALUE,
+                        pdAcroForm
+                            .getField(CERTIFIER_NURSE_FIELD_ID)
+                            .getValueAsString()
+                    ),
+                    () -> assertEquals(
+                        UNCHECKED_BOX_VALUE,
+                        pdAcroForm
+                            .getField(CERTIFIER_MIDWIFE_FIELD_ID)
+                            .getValueAsString()
+                    )
+                );
+            }
+        }
     }
 
-    @Nested
-    class Issuer {
-
-      @Test
-      void shouldOnlySetDoctorAsCertifierIfIssuerIsDoctor() throws IOException {
-        fk7211PdfFillService.fillDocument(
-            pdAcroForm,
-            buildCertificate(AJLA_DOKTOR)
-        );
-
-        assertAll(
-            () -> assertEquals(
-                CHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_DOCTOR_FIELD_ID)
-                    .getValueAsString()
-            ),
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_NURSE_FIELD_ID)
-                    .getValueAsString()
-            ),
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_MIDWIFE_FIELD_ID)
-                    .getValueAsString()
-            )
-        );
-      }
-
-      @Test
-      void shouldOnlySetMidwifeAsCertifierIfIssuerIsMidwife() throws IOException {
-        fk7211PdfFillService.fillDocument(
-            pdAcroForm,
-            buildCertificate(BARNMORSKA)
-        );
-
-        assertAll(
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_DOCTOR_FIELD_ID)
-                    .getValueAsString()
-            ),
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_NURSE_FIELD_ID)
-                    .getValueAsString()
-            ),
-            () -> assertEquals(
-                CHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_MIDWIFE_FIELD_ID)
-                    .getValueAsString()
-            )
-        );
-      }
-
-      @Test
-      void shouldOnlySetNurseAsCertifierIfIssuerIsNurse() throws IOException {
-        fk7211PdfFillService.fillDocument(
-            pdAcroForm,
-            buildCertificate(ANNA_SJUKSKOTERSKA)
-        );
-
-        assertAll(
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_DOCTOR_FIELD_ID)
-                    .getValueAsString()
-            ),
-            () -> assertEquals(
-                CHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_NURSE_FIELD_ID)
-                    .getValueAsString()
-            ),
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_MIDWIFE_FIELD_ID)
-                    .getValueAsString()
-            )
-        );
-      }
-
-      @Test
-      void shouldNotSetCertifierIfRoleIsAdmin() throws IOException {
-        fk7211PdfFillService.fillDocument(
-            pdAcroForm,
-            buildCertificate(ALVA_VARDADMINISTRATOR)
-        );
-
-        assertAll(
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_DOCTOR_FIELD_ID)
-                    .getValueAsString()
-            ),
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_NURSE_FIELD_ID)
-                    .getValueAsString()
-            ),
-            () -> assertEquals(
-                UNCHECKED_BOX_VALUE,
-                pdAcroForm
-                    .getField(CERTIFIER_MIDWIFE_FIELD_ID)
-                    .getValueAsString()
-            )
-        );
-      }
+    private Certificate buildCertificate(List<ElementData> elementData) {
+        return fk7211CertificateBuilder()
+            .elementData(elementData)
+            .build();
     }
-  }
 
-  private Certificate buildCertificate(List<ElementData> elementData) {
-    return fk7211CertificateBuilder()
-        .elementData(elementData)
-        .build();
-  }
-
-  private Certificate buildCertificate(Staff staff) {
-    return fk7211CertificateBuilder()
-        .certificateMetaData(CertificateMetaData.builder()
-            .issuer(staff)
-            .patient(ATHENA_REACT_ANDERSSON)
-            .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
-            .careUnit(ALFA_MEDICINCENTRUM)
-            .careProvider(ALFA_REGIONEN)
-            .build())
-        .status(Status.SIGNED)
-        .build();
-  }
+    private Certificate buildCertificate(Staff staff) {
+        return fk7211CertificateBuilder()
+            .certificateMetaData(CertificateMetaData.builder()
+                .issuer(staff)
+                .patient(ATHENA_REACT_ANDERSSON)
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                .careUnit(ALFA_MEDICINCENTRUM)
+                .careProvider(ALFA_REGIONEN)
+                .build())
+            .status(Status.SIGNED)
+            .build();
+    }
 }
