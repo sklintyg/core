@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.value;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIGNATURE_CARE_UNIT_CONTACT_INFORMATION_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_CARE_UNIT_CONTACT_INFORMATION_FIELD_ID;
 
 import java.util.List;
 import org.springframework.stereotype.Component;

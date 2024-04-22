@@ -26,7 +26,7 @@ import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificates
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorCertificateV4;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorIntygsgivare;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorValue;
-import se.inera.intyg.certificateservice.pdfboxgenerator.CertificatePdfGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CertificatePdfGenerator;
 
 @Configuration
 public class AppConfig {

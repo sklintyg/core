@@ -11,13 +11,13 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AL
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ANNA_SJUKSKOTERSKA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.BARNMORSKA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfFillService.BERAKNAT_NEDKOMSTDATUM_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfFillService.CERTIFIER_DOCTOR_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfFillService.CERTIFIER_MIDWIFE_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfFillService.CERTIFIER_NURSE_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7211PdfFillService.QUESTION_BERAKNAT_NEDKOMSTDATUM_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.CHECKED_BOX_VALUE;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.UNCHECKED_BOX_VALUE;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.CHECKED_BOX_VALUE;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.UNCHECKED_BOX_VALUE;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService.BERAKNAT_NEDKOMSTDATUM_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService.CERTIFIER_DOCTOR_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService.CERTIFIER_MIDWIFE_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService.CERTIFIER_NURSE_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService.QUESTION_BERAKNAT_NEDKOMSTDATUM_ID;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -37,6 +37,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService;
 
 @ExtendWith(MockitoExtension.class)
 class FK7211PdfFillServiceTest {

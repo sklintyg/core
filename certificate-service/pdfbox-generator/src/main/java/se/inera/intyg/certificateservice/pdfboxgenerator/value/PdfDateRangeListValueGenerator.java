@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.value;
 
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.CHECKED_BOX_VALUE;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.CHECKED_BOX_VALUE;
 
 import java.util.ArrayList;
 import java.util.Collection;

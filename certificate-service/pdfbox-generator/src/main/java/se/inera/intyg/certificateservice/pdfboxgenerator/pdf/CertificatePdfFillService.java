@@ -1,6 +1,6 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIGNATURE_DATE_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_DATE_FIELD_ID;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,7 +13,6 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 import se.inera.intyg.certificateservice.pdfboxgenerator.text.PdfAdditionalInformationTextGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfPatientValueGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfSignatureValueGenerator;

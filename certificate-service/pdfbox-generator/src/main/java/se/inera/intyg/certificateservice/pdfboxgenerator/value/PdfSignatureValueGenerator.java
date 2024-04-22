@@ -1,11 +1,11 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.value;
 
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIGNATURE_DATE_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIGNATURE_FULL_NAME_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIGNATURE_HSA_ID_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIGNATURE_PA_TITLE_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIGNATURE_SPECIALITY_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.SIGNATURE_WORKPLACE_CODE_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_DATE_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_FULL_NAME_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_HSA_ID_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_PA_TITLE_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_SPECIALITY_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_WORKPLACE_CODE_FIELD_ID;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;

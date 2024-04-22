@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.text;
 
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.DIGITALLY_SIGNED_TEXT;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.PdfConstants.WATERMARK_DRAFT;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.DIGITALLY_SIGNED_TEXT;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.WATERMARK_DRAFT;
 
 import java.awt.Color;
 import java.io.IOException;

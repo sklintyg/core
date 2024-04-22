@@ -4,11 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7443CertificateBuilder;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7443PdfFillService.DIAGNOSIS_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7443PdfFillService.PATIENT_ID_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7443PdfFillService.PERIOD_FIELD_ID_PREFIX;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7443PdfFillService.QUESTION_PERIOD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.FK7443PdfFillService.QUESTION_SYMPTOM_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService.DIAGNOSIS_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService.PATIENT_ID_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService.PERIOD_FIELD_ID_PREFIX;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService.QUESTION_PERIOD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService.QUESTION_SYMPTOM_ID;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -29,6 +29,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService;
 
 @ExtendWith(MockitoExtension.class)
 class FK7443PdfFillServiceTest {
