@@ -1,14 +1,19 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator;
 
-import java.io.IOException;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
+import java.util.List;
+import java.util.stream.Stream;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfDateRangeListValueGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfTextValueGenerator;
 
 
+@Service
+@RequiredArgsConstructor
 public class FK7443PdfFillService implements CertificateTypePdfFillService {
 
   public static final String DIAGNOSIS_FIELD_ID = "form1[0].#subform[0].flt_txtDiagnos[0]";
@@ -17,8 +22,8 @@ public class FK7443PdfFillService implements CertificateTypePdfFillService {
   public static final String PATIENT_ID_FIELD_ID = "form1[0].#subform[0].flt_txtPersonNrBarn[0]";
   public static final String PERIOD_FIELD_ID_PREFIX = "form1[0].#subform[0]";
 
-  private PdfTextValueGenerator pdfTextValueGenerator;
-  private PdfDateRangeListValueGenerator pdfDateRangeListValueGenerator;
+  private final PdfTextValueGenerator pdfTextValueGenerator;
+  private final PdfDateRangeListValueGenerator pdfDateRangeListValueGenerator;
 
   @Override
   public CertificateType getType() {
@@ -31,21 +36,20 @@ public class FK7443PdfFillService implements CertificateTypePdfFillService {
   }
 
   @Override
-  public void fillDocument(PDAcroForm acroForm, Certificate certificate) throws IOException {
-    pdfTextValueGenerator = new PdfTextValueGenerator();
-    pdfDateRangeListValueGenerator = new PdfDateRangeListValueGenerator();
-    fillDiagnosisQuestion(acroForm, certificate);
-    fillPeriodQuestion(acroForm, certificate);
+  public List<PdfField> getFields(Certificate certificate) {
+    final var diagnosis = fillDiagnosisQuestion(certificate);
+    final var period = fillPeriodQuestion(certificate);
+
+    return Stream.concat(diagnosis.stream(), period.stream()).toList();
   }
 
-  private void fillPeriodQuestion(PDAcroForm acroForm, Certificate certificate) {
-    pdfDateRangeListValueGenerator.generate(
-        acroForm, certificate, QUESTION_PERIOD_ID, PERIOD_FIELD_ID_PREFIX
+  private List<PdfField> fillPeriodQuestion(Certificate certificate) {
+    return pdfDateRangeListValueGenerator.generate(
+        certificate, QUESTION_PERIOD_ID, PERIOD_FIELD_ID_PREFIX
     );
   }
 
-  private void fillDiagnosisQuestion(PDAcroForm acroForm, Certificate certificate)
-      throws IOException {
-    pdfTextValueGenerator.generate(acroForm, certificate, QUESTION_SYMPTOM_ID, DIAGNOSIS_FIELD_ID);
+  private List<PdfField> fillDiagnosisQuestion(Certificate certificate) {
+    return pdfTextValueGenerator.generate(certificate, QUESTION_SYMPTOM_ID, DIAGNOSIS_FIELD_ID);
   }
 }

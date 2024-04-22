@@ -17,30 +17,30 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfValueGenerator
 @ExtendWith(MockitoExtension.class)
 class PdfPatientValueGeneratorTest {
 
-    private static final String FIELD_ID = "FIELD_ID";
+  private static final String FIELD_ID = "FIELD_ID";
 
-    @Mock
-    PdfValueGenerator pdfValueGenerator;
+  @Mock
+  PdfValueGenerator pdfValueGenerator;
 
-    @InjectMocks
-    PdfPatientValueGenerator patientInformationHelper;
+  @InjectMocks
+  PdfPatientValueGenerator patientInformationHelper;
 
-    PDAcroForm pdAcroForm;
+  PDAcroForm pdAcroForm;
 
-    @Test
-    void shouldSetPatientIdToField() throws IOException {
-        final var certificate = buildCertificate();
-        patientInformationHelper.setPatientInformation(pdAcroForm, certificate, FIELD_ID);
+  @Test
+  void shouldSetPatientIdToField() throws IOException {
+    final var certificate = buildCertificate();
+    patientInformationHelper.generate(pdAcroForm, certificate, FIELD_ID);
 
-        verify(pdfValueGenerator).setValue(
-            pdAcroForm,
-            FIELD_ID,
-            certificate.certificateMetaData().patient().id().id()
-        );
-    }
+    verify(pdfValueGenerator).setValue(
+        pdAcroForm,
+        FIELD_ID,
+        certificate.certificateMetaData().patient().id().id()
+    );
+  }
 
-    private Certificate buildCertificate() {
-        return fk7211CertificateBuilder().build();
-    }
+  private Certificate buildCertificate() {
+    return fk7211CertificateBuilder().build();
+  }
 
 }

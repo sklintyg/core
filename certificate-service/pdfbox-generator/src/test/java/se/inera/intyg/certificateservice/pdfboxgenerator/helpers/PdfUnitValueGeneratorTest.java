@@ -21,40 +21,40 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfValueGenerator
 @ExtendWith(MockitoExtension.class)
 class PdfUnitValueGeneratorTest {
 
-    @Mock
-    PdfValueGenerator pdfValueGenerator;
+  @Mock
+  PdfValueGenerator pdfValueGenerator;
 
-    @InjectMocks
-    PdfUnitValueGenerator pdfUnitValueGenerator;
+  @InjectMocks
+  PdfUnitValueGenerator pdfUnitValueGenerator;
 
-    @Mock
-    PDAcroForm pdAcroForm;
+  @Mock
+  PDAcroForm pdAcroForm;
 
-    @Test
-    void shouldSetContactInformationOfUnitToField() throws IOException {
-        final var certificate = buildCertificate();
-        final var unit = certificate.certificateMetaData().issuingUnit();
-        final var elementData = certificate.getElementDataById(
-            new ElementId("UNIT_CONTACT_INFORMATION")
-        );
-        final var unitValue = (ElementValueUnitContactInformation) elementData.get().value();
-        final var expectedAddress =
-            unit.name().name() + "\n" + unitValue.address() + "\n" + unitValue.zipCode() + " "
-                + unitValue.city() + "\nTelefon: " + unitValue.phoneNumber();
+  @Test
+  void shouldSetContactInformationOfUnitToField() throws IOException {
+    final var certificate = buildCertificate();
+    final var unit = certificate.certificateMetaData().issuingUnit();
+    final var elementData = certificate.getElementDataById(
+        new ElementId("UNIT_CONTACT_INFORMATION")
+    );
+    final var unitValue = (ElementValueUnitContactInformation) elementData.get().value();
+    final var expectedAddress =
+        unit.name().name() + "\n" + unitValue.address() + "\n" + unitValue.zipCode() + " "
+            + unitValue.city() + "\nTelefon: " + unitValue.phoneNumber();
 
-        pdfUnitValueGenerator.setContactInformation(pdAcroForm, certificate);
+    pdfUnitValueGenerator.generate(pdAcroForm, certificate);
 
-        verify(pdfValueGenerator).setValue(
-            pdAcroForm,
-            "form1[0].#subform[0].flt_txtVardgivarensNamnAdressTelefon[0]",
-            expectedAddress
-        );
-    }
+    verify(pdfValueGenerator).setValue(
+        pdAcroForm,
+        "form1[0].#subform[0].flt_txtVardgivarensNamnAdressTelefon[0]",
+        expectedAddress
+    );
+  }
 
-    private Certificate buildCertificate() {
-        return fk7211CertificateBuilder()
-            .elementData(List.of(contactInfoElementDataBuilder().build()))
-            .build();
-    }
+  private Certificate buildCertificate() {
+    return fk7211CertificateBuilder()
+        .elementData(List.of(contactInfoElementDataBuilder().build()))
+        .build();
+  }
 
 }
