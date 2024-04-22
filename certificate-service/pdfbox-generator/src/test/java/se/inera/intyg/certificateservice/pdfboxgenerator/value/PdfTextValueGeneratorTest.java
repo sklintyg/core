@@ -5,13 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7443CertificateBuilder;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
-import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
@@ -19,25 +15,16 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 class PdfTextValueGeneratorTest {
 
-  private static final String FIELD_EXISTS = "form1[0].#subform[0].flt_txtDiagnos[0]";
+  private static final String FIELD_ID = "form1[0].#subform[0].flt_txtDiagnos[0]";
   private static final String VALUE = "Diagnos är okänd men symtomen är hosta.";
   private static final ElementId QUESTION_SYMPTOM_ID = new ElementId("2");
 
-  PDAcroForm pdAcroForm;
 
   private static final PdfTextValueGenerator pdfTextValueGenerator = new PdfTextValueGenerator();
-
-  @BeforeEach
-  void setup() throws IOException {
-    ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-    final var inputStream = classloader.getResourceAsStream("fk7443_v1.pdf");
-    final var document = Loader.loadPDF(inputStream.readAllBytes());
-    final var documentCatalog = document.getDocumentCatalog();
-    pdAcroForm = documentCatalog.getAcroForm();
-  }
 
   @Nested
   class NoElementData {
@@ -47,17 +34,17 @@ class PdfTextValueGeneratorTest {
       final var certificate = buildCertificate(null);
 
       assertDoesNotThrow(
-          () -> pdfTextValueGenerator.generate(pdAcroForm, certificate, QUESTION_SYMPTOM_ID,
-              FIELD_EXISTS));
+          () -> pdfTextValueGenerator.generate(certificate, QUESTION_SYMPTOM_ID, FIELD_ID)
+      );
     }
 
     @Test
-    void shouldNotSetValueIfElementDataIsNull() throws IOException {
+    void shouldNotSetValueIfElementDataIsNull() {
       final var certificate = buildCertificate(null);
 
-      pdfTextValueGenerator.generate(pdAcroForm, certificate, QUESTION_SYMPTOM_ID, FIELD_EXISTS);
+      final var result = pdfTextValueGenerator.generate(certificate, QUESTION_SYMPTOM_ID, FIELD_ID);
 
-      assertEquals("", pdAcroForm.getField(FIELD_EXISTS).getValueAsString());
+      assertEquals(Collections.emptyList(), result);
     }
 
     @Test
@@ -65,17 +52,17 @@ class PdfTextValueGeneratorTest {
       final var certificate = buildCertificate(Collections.emptyList());
 
       assertDoesNotThrow(
-          () -> pdfTextValueGenerator.generate(pdAcroForm, certificate, QUESTION_SYMPTOM_ID,
-              FIELD_EXISTS));
+          () -> pdfTextValueGenerator.generate(certificate, QUESTION_SYMPTOM_ID, FIELD_ID)
+      );
     }
 
     @Test
-    void shouldNotSetValueIfElementDataIsEmpty() throws IOException {
+    void shouldNotSetValueIfElementDataIsEmpty() {
       final var certificate = buildCertificate(Collections.emptyList());
 
-      pdfTextValueGenerator.generate(pdAcroForm, certificate, QUESTION_SYMPTOM_ID, FIELD_EXISTS);
+      final var result = pdfTextValueGenerator.generate(certificate, QUESTION_SYMPTOM_ID, FIELD_ID);
 
-      assertEquals("", pdAcroForm.getField(FIELD_EXISTS).getValueAsString());
+      assertEquals(Collections.emptyList(), result);
     }
   }
 
@@ -83,7 +70,13 @@ class PdfTextValueGeneratorTest {
   class ElementDataExists {
 
     @Test
-    void shouldSetValueIfElementDataWithTextValue() throws IOException {
+    void shouldSetValueIfElementDataWithTextValue() {
+      final var expected = List.of(
+          PdfField.builder()
+              .id(FIELD_ID)
+              .value(VALUE)
+              .build()
+      );
       final var certificate = buildCertificate(
           List.of(
               ElementData.builder()
@@ -97,13 +90,13 @@ class PdfTextValueGeneratorTest {
           )
       );
 
-      pdfTextValueGenerator.generate(pdAcroForm, certificate, QUESTION_SYMPTOM_ID, FIELD_EXISTS);
+      final var result = pdfTextValueGenerator.generate(certificate, QUESTION_SYMPTOM_ID, FIELD_ID);
 
-      assertEquals(VALUE, pdAcroForm.getField(FIELD_EXISTS).getValueAsString());
+      assertEquals(expected, result);
     }
 
     @Test
-    void shouldThrowExceptionIfElementDataWithNotTextValue() throws IOException {
+    void shouldThrowExceptionIfElementDataWithNotTextValue() {
       final var certificate = buildCertificate(
           List.of(
               ElementData.builder()
@@ -120,12 +113,12 @@ class PdfTextValueGeneratorTest {
       assertThrows(
           IllegalStateException.class,
           () -> pdfTextValueGenerator
-              .generate(pdAcroForm, certificate, QUESTION_SYMPTOM_ID, FIELD_EXISTS)
+              .generate(certificate, QUESTION_SYMPTOM_ID, FIELD_ID)
       );
     }
 
     @Test
-    void shouldThrowExceptionIfGivenQuestionIdIsNotInElementData() throws IOException {
+    void shouldThrowExceptionIfGivenQuestionIdIsNotInElementData() {
       final var certificate = buildCertificate(
           List.of(
               ElementData.builder()
@@ -142,7 +135,7 @@ class PdfTextValueGeneratorTest {
       assertThrows(
           IllegalStateException.class,
           () -> pdfTextValueGenerator
-              .generate(pdAcroForm, certificate, QUESTION_SYMPTOM_ID, FIELD_EXISTS)
+              .generate(certificate, QUESTION_SYMPTOM_ID, FIELD_ID)
       );
     }
   }

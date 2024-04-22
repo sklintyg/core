@@ -5,13 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7443CertificateBuilder;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
-import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
@@ -19,25 +15,16 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 class PdfDateValueGeneratorTest {
 
-  private static final String FIELD_EXISTS = "form1[0].#subform[0].flt_dat[0]";
+  private static final String FIELD_ID = "form1[0].#subform[0].flt_dat[0]";
   private static final LocalDate VALUE = LocalDate.now();
   private static final ElementId QUESTION_ID = new ElementId("1");
 
-  PDAcroForm pdAcroForm;
 
   private static final PdfDateValueGenerator pdfDateValueGenerator = new PdfDateValueGenerator();
-
-  @BeforeEach
-  void setup() throws IOException {
-    ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-    final var inputStream = classloader.getResourceAsStream("fk7211_v1.pdf");
-    final var document = Loader.loadPDF(inputStream.readAllBytes());
-    final var documentCatalog = document.getDocumentCatalog();
-    pdAcroForm = documentCatalog.getAcroForm();
-  }
 
   @Nested
   class NoElementData {
@@ -47,17 +34,16 @@ class PdfDateValueGeneratorTest {
       final var certificate = buildCertificate(null);
 
       assertDoesNotThrow(
-          () -> pdfDateValueGenerator.generate(pdAcroForm, certificate, QUESTION_ID,
-              FIELD_EXISTS));
+          () -> pdfDateValueGenerator.generate(certificate, QUESTION_ID, FIELD_ID));
     }
 
     @Test
-    void shouldNotSetValueIfElementDataIsNull() throws IOException {
+    void shouldReturnEmptyListIfElementDataIsNull() {
       final var certificate = buildCertificate(null);
 
-      pdfDateValueGenerator.generate(pdAcroForm, certificate, QUESTION_ID, FIELD_EXISTS);
+      final var response = pdfDateValueGenerator.generate(certificate, QUESTION_ID, FIELD_ID);
 
-      assertEquals("", pdAcroForm.getField(FIELD_EXISTS).getValueAsString());
+      assertEquals(Collections.emptyList(), response);
     }
 
     @Test
@@ -65,17 +51,16 @@ class PdfDateValueGeneratorTest {
       final var certificate = buildCertificate(Collections.emptyList());
 
       assertDoesNotThrow(
-          () -> pdfDateValueGenerator.generate(pdAcroForm, certificate, QUESTION_ID,
-              FIELD_EXISTS));
+          () -> pdfDateValueGenerator.generate(certificate, QUESTION_ID, FIELD_ID));
     }
 
     @Test
-    void shouldNotSetValueIfElementDataIsEmpty() throws IOException {
+    void shouldNotSetValueIfElementDataIsEmpty() {
       final var certificate = buildCertificate(Collections.emptyList());
 
-      pdfDateValueGenerator.generate(pdAcroForm, certificate, QUESTION_ID, FIELD_EXISTS);
+      final var response = pdfDateValueGenerator.generate(certificate, QUESTION_ID, FIELD_ID);
 
-      assertEquals("", pdAcroForm.getField(FIELD_EXISTS).getValueAsString());
+      assertEquals(Collections.emptyList(), response);
     }
   }
 
@@ -83,7 +68,14 @@ class PdfDateValueGeneratorTest {
   class ElementDataExists {
 
     @Test
-    void shouldSetValueIfElementDataWithDateValue() throws IOException {
+    void shouldSetValueIfElementDataWithDateValue() {
+      final var expected = List.of(
+          PdfField.builder()
+              .id(FIELD_ID)
+              .value(VALUE.toString())
+              .build()
+      );
+
       final var certificate = buildCertificate(
           List.of(
               ElementData.builder()
@@ -97,13 +89,13 @@ class PdfDateValueGeneratorTest {
           )
       );
 
-      pdfDateValueGenerator.generate(pdAcroForm, certificate, QUESTION_ID, FIELD_EXISTS);
+      final var result = pdfDateValueGenerator.generate(certificate, QUESTION_ID, FIELD_ID);
 
-      assertEquals(VALUE.toString(), pdAcroForm.getField(FIELD_EXISTS).getValueAsString());
+      assertEquals(expected, result);
     }
 
     @Test
-    void shouldThrowExceptionIfElementDataWithNotDateValue() throws IOException {
+    void shouldThrowExceptionIfElementDataWithNotDateValue() {
       final var certificate = buildCertificate(
           List.of(
               ElementData.builder()
@@ -120,12 +112,12 @@ class PdfDateValueGeneratorTest {
       assertThrows(
           IllegalStateException.class,
           () -> pdfDateValueGenerator
-              .generate(pdAcroForm, certificate, QUESTION_ID, FIELD_EXISTS)
+              .generate(certificate, QUESTION_ID, FIELD_ID)
       );
     }
 
     @Test
-    void shouldThrowExceptionIfGivenQuestionIdIsNotInElementData() throws IOException {
+    void shouldThrowExceptionIfGivenQuestionIdIsNotInElementData() {
       final var certificate = buildCertificate(
           List.of(
               ElementData.builder()
@@ -142,7 +134,7 @@ class PdfDateValueGeneratorTest {
       assertThrows(
           IllegalStateException.class,
           () -> pdfDateValueGenerator
-              .generate(pdAcroForm, certificate, QUESTION_ID, FIELD_EXISTS)
+              .generate(certificate, QUESTION_ID, FIELD_ID)
       );
     }
   }

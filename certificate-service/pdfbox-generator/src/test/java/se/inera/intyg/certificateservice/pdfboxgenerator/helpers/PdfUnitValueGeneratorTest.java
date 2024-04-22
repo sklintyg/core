@@ -1,37 +1,28 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.helpers;
 
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.contactInfoElementDataBuilder;
 
-import java.io.IOException;
 import java.util.List;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfUnitValueGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfValueGenerator;
 
 @ExtendWith(MockitoExtension.class)
 class PdfUnitValueGeneratorTest {
 
-  @Mock
-  PdfValueGenerator pdfValueGenerator;
-
   @InjectMocks
   PdfUnitValueGenerator pdfUnitValueGenerator;
 
-  @Mock
-  PDAcroForm pdAcroForm;
-
   @Test
-  void shouldSetContactInformationOfUnitToField() throws IOException {
+  void shouldSetContactInformationOfUnitToField() {
     final var certificate = buildCertificate();
     final var unit = certificate.certificateMetaData().issuingUnit();
     final var elementData = certificate.getElementDataById(
@@ -39,16 +30,19 @@ class PdfUnitValueGeneratorTest {
     );
     final var unitValue = (ElementValueUnitContactInformation) elementData.get().value();
     final var expectedAddress =
-        unit.name().name() + "\n" + unitValue.address() + "\n" + unitValue.zipCode() + " "
+        unit.name().name() + "\n" + unitValue.address() + " \n" + unitValue.zipCode() + " "
             + unitValue.city() + "\nTelefon: " + unitValue.phoneNumber();
 
-    pdfUnitValueGenerator.generate(pdAcroForm, certificate);
-
-    verify(pdfValueGenerator).setValue(
-        pdAcroForm,
-        "form1[0].#subform[0].flt_txtVardgivarensNamnAdressTelefon[0]",
-        expectedAddress
+    final var expected = List.of(
+        PdfField.builder()
+            .id("form1[0].#subform[0].flt_txtVardgivarensNamnAdressTelefon[0]")
+            .value(expectedAddress)
+            .build()
     );
+
+    final var result = pdfUnitValueGenerator.generate(certificate);
+
+    assertEquals(expected, result);
   }
 
   private Certificate buildCertificate() {
