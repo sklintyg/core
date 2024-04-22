@@ -41,12 +41,12 @@ public class CertificatePdfGenerator implements PdfGenerator {
           certificateTypeSpecificFillService
       );
 
-      filledPdf.getDocumentInformation().setTitle(setFileName(certificate));
+      filledPdf.getDocumentInformation().setTitle(getFileName(certificate));
       filledPdf.getDocumentCatalog().getAcroForm().flatten();
       filledPdf.save(byteArrayOutputStream);
       filledPdf.close();
 
-      return new Pdf(byteArrayOutputStream.toByteArray(), setFileName(certificate));
+      return new Pdf(byteArrayOutputStream.toByteArray(), getFileName(certificate));
 
     } catch (Exception e) {
       throw new IllegalStateException("Could not create Pdf", e);
@@ -68,7 +68,7 @@ public class CertificatePdfGenerator implements PdfGenerator {
     return generator.getType().equals(certificate.certificateModel().id().type());
   }
 
-  private String setFileName(Certificate certificate) {
+  private String getFileName(Certificate certificate) {
     final var certificateName = certificate.certificateModel().name();
     final var timestamp = LocalDateTime.now()
         .format((DateTimeFormatter.ofPattern("yy-MM-dd_HHmm")));
