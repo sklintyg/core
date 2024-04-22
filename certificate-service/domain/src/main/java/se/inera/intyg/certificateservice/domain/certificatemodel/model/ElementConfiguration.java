@@ -8,7 +8,7 @@ public interface ElementConfiguration {
     return null;
   }
 
-  default QuestionTexts texts() {
+  default String label() {
     return null;
   }
 

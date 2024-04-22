@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -30,8 +29,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionTextType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionTexts;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
@@ -366,8 +363,7 @@ class CertificateModelFactoryFK7443Test {
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationCheckboxDateRangeList.builder()
             .name("Jag bedömer att barnet inte bör vårdas i ordinarie tillsynsform")
-            .texts(
-                new QuestionTexts(Map.of(QuestionTextType.LABEL, "Andel av ordninarie tid:")))
+            .label("Andel av ordninarie tid:")
             .id(new FieldId("3.1"))
             .hideWorkingHours(true)
             .dateRanges(
