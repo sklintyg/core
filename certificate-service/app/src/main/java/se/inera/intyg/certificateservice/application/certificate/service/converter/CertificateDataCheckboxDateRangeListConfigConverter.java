@@ -25,6 +25,7 @@ public class CertificateDataCheckboxDateRangeListConfigConverter implements
     }
     return CertificateDataConfigCheckboxDateRangeList.builder()
         .text(configuration.name())
+        .label(configuration.label())
         .hideWorkingHours(configuration.hideWorkingHours())
         .previousDateRangeText(configuration.previousDateRangeText())
         .list(

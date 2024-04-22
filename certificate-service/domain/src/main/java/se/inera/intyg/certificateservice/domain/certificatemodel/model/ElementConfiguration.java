@@ -8,6 +8,10 @@ public interface ElementConfiguration {
     return null;
   }
 
+  default String label() {
+    return null;
+  }
+
   ElementType type();
 
   ElementValue emptyValue();
