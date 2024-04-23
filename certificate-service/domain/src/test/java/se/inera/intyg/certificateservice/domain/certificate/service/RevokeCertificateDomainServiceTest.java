@@ -11,12 +11,14 @@ import static se.inera.intyg.certificateservice.domain.action.model.CertificateA
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
@@ -99,5 +101,21 @@ class RevokeCertificateDomainServiceTest {
         () -> assertEquals(ACTION_EVALUATION, certificateEventCaptor.getValue().actionEvaluation()),
         () -> assertTrue(certificateEventCaptor.getValue().duration() >= 0)
     );
+  }
+
+  @Test
+  void shallIncludeReasonNotAllowedToException() {
+    final var certificate = mock(Certificate.class);
+    final var expectedReason = List.of("expectedReason");
+    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
+    doReturn(false).when(certificate).allowTo(CertificateActionType.REVOKE, ACTION_EVALUATION);
+    doReturn(expectedReason).when(certificate)
+        .reasonNotAllowed(CertificateActionType.REVOKE, ACTION_EVALUATION);
+
+    final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
+        () -> revokeCertificateDomainService.revoke(CERTIFICATE_ID, ACTION_EVALUATION,
+            REVOKED_INFORMATION));
+
+    assertEquals(expectedReason, certificateActionForbidden.reason());
   }
 }

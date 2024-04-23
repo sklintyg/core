@@ -18,6 +18,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
+import se.inera.intyg.certificateservice.domain.user.model.ExternalReference;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.PatientRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.StaffRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.UnitRepository;
@@ -26,6 +27,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatus;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatusEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateXmlEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.ExternalReferenceEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReasonEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
@@ -138,6 +140,16 @@ public class CertificateEntityMapper {
       handleRevoked(certificate, certificateEntity, staffMap);
     }
 
+    if (certificate.externalReference() != null) {
+      certificateEntity.setExternalReference(
+          ExternalReferenceEntity.builder()
+              .key(certificateEntity.getKey())
+              .certificate(certificateEntity)
+              .reference(certificate.externalReference().value())
+              .build()
+      );
+    }
+
     return certificateEntity;
   }
 
@@ -241,6 +253,11 @@ public class CertificateEntityMapper {
                         certificateEntity.getRevokedMessage())
                 )
                 .build() : null
+        )
+        .externalReference(
+            certificateEntity.getExternalReference() != null
+                ? new ExternalReference(certificateEntity.getExternalReference().getReference())
+                : null
         )
         .build();
   }

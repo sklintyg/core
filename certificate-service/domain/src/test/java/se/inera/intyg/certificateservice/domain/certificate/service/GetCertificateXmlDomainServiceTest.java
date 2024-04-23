@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -88,5 +89,18 @@ class GetCertificateXmlDomainServiceTest {
     assertThrows(CertificateActionForbidden.class,
         () -> getCertificateXmlDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION)
     );
+  }
+
+  @Test
+  void shallIncludeReasonNotAllowedToException() {
+    final var expectedReason = List.of("expectedReason");
+    doReturn(false).when(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
+    doReturn(expectedReason).when(certificate)
+        .reasonNotAllowed(CertificateActionType.READ, ACTION_EVALUATION);
+
+    final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
+        () -> getCertificateXmlDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION));
+
+    assertEquals(expectedReason, certificateActionForbidden.reason());
   }
 }

@@ -301,6 +301,74 @@ class CertificateModelTest {
   }
 
   @Nested
+  class TestReasonNotAllowed {
+
+    @Test
+    void shallReturnEmptyList() {
+      final var certificateActionSpecification = CertificateActionSpecification.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+
+      final var certificateModel = CertificateModel.builder()
+          .certificateActionSpecifications(
+              List.of(
+                  certificateActionSpecification
+              )
+          )
+          .build();
+
+      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
+          CertificateActionFactory.class)) {
+
+        certificateActionFactory
+            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
+            .thenReturn(certificateAction);
+
+        doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
+        doReturn(Collections.emptyList()).when(certificateAction)
+            .reasonNotAllowed(actionEvaluation);
+
+        final var actualResult = certificateModel.reasonNotAllowed(CertificateActionType.CREATE,
+            actionEvaluation);
+
+        assertTrue(actualResult.isEmpty(), "Expected reasonNotAllowed to return empty list");
+      }
+    }
+
+    @Test
+    void shallReturnReasons() {
+      final var expectedReasons = List.of("expectedReasons");
+      final var certificateActionSpecification = CertificateActionSpecification.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+
+      final var certificateModel = CertificateModel.builder()
+          .certificateActionSpecifications(
+              List.of(
+                  certificateActionSpecification
+              )
+          )
+          .build();
+
+      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
+          CertificateActionFactory.class)) {
+
+        certificateActionFactory
+            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
+            .thenReturn(certificateAction);
+
+        doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
+        doReturn(expectedReasons).when(certificateAction).reasonNotAllowed(actionEvaluation);
+
+        final var actualResult = certificateModel.reasonNotAllowed(CertificateActionType.CREATE,
+            actionEvaluation);
+
+        assertEquals(expectedReasons, actualResult);
+      }
+    }
+  }
+
+  @Nested
   class TestElementSpecificationExists {
 
     @Test

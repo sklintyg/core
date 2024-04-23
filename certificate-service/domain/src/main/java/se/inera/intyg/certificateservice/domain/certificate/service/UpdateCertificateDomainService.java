@@ -29,7 +29,8 @@ public class UpdateCertificateDomainService {
     final var certificate = certificateRepository.getById(certificateId);
     if (!certificate.allowTo(CertificateActionType.UPDATE, actionEvaluation)) {
       throw new CertificateActionForbidden(
-          "Not allowed to update certificate for %s".formatted(certificateId)
+          "Not allowed to update certificate for %s".formatted(certificateId),
+          certificate.reasonNotAllowed(CertificateActionType.UPDATE, actionEvaluation)
       );
     }
 

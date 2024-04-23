@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import lombok.Builder;
@@ -47,6 +48,15 @@ public class CertificateModel {
         .findFirst()
         .map(certificateAction -> certificateAction.evaluate(actionEvaluation))
         .orElse(false);
+  }
+
+  public List<String> reasonNotAllowed(CertificateActionType certificateActionType,
+      ActionEvaluation actionEvaluation) {
+    return actions().stream()
+        .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
+        .findFirst()
+        .map(certificateAction -> certificateAction.reasonNotAllowed(actionEvaluation))
+        .orElse(Collections.emptyList());
   }
 
   public boolean elementSpecificationExists(ElementId id) {

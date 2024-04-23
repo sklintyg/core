@@ -11,6 +11,7 @@ import static se.inera.intyg.certificateservice.domain.action.model.CertificateA
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -92,5 +93,20 @@ class SendCertificateDomainServiceTest {
         () -> assertEquals(ACTION_EVALUATION, certificateEventCaptor.getValue().actionEvaluation()),
         () -> assertTrue(certificateEventCaptor.getValue().duration() >= 0)
     );
+  }
+
+  @Test
+  void shallIncludeReasonNotAllowedToException() {
+    final var certificate = mock(Certificate.class);
+    final var expectedReason = List.of("expectedReason");
+    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
+    doReturn(false).when(certificate).allowTo(SEND, ACTION_EVALUATION);
+    doReturn(expectedReason).when(certificate)
+        .reasonNotAllowed(SEND, ACTION_EVALUATION);
+
+    final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
+        () -> sendCertificateDomainService.send(CERTIFICATE_ID, ACTION_EVALUATION));
+
+    assertEquals(expectedReason, certificateActionForbidden.reason());
   }
 }

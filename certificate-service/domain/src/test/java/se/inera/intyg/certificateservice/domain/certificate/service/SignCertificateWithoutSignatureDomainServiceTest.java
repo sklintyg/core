@@ -13,6 +13,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.a
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -138,5 +139,22 @@ class SignCertificateWithoutSignatureDomainServiceTest {
     assertThrows(CertificateActionForbidden.class,
         () -> signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, ACTION_EVALUATION)
     );
+  }
+
+
+  @Test
+  void shallIncludeReasonNotAllowedToException() {
+    final var certificate = mock(Certificate.class);
+    final var expectedReason = List.of("expectedReason");
+    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
+    doReturn(false).when(certificate).allowTo(SIGN, ACTION_EVALUATION);
+    doReturn(expectedReason).when(certificate)
+        .reasonNotAllowed(SIGN, ACTION_EVALUATION);
+
+    final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
+        () -> signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, ACTION_EVALUATION)
+    );
+
+    assertEquals(expectedReason, certificateActionForbidden.reason());
   }
 }

@@ -10,6 +10,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataUni
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REF;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7211_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_FIRST_NAME;
@@ -53,6 +54,7 @@ import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
+import se.inera.intyg.certificateservice.domain.user.model.ExternalReference;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.PatientRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.StaffRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.UnitRepository;
@@ -186,6 +188,12 @@ class CertificateEntityMapperTest {
 
         assertEquals(CERTIFICATE_ENTITY.getRevokedMessage(), response.getRevokedMessage());
       }
+    }
+
+    @Test
+    void shouldMapExternalReference() {
+      final var response = certificateEntityMapper.toEntity(FK7211_CERTIFICATE);
+      assertEquals(CERTIFICATE_ENTITY.getExternalReference(), response.getExternalReference());
     }
   }
 
@@ -437,6 +445,16 @@ class CertificateEntityMapperTest {
           FK7211_CERTIFICATE_MODEL);
 
       assertEquals(expectedRevokedInformation, response.revoked().revokedInformation());
+    }
+
+    @Test
+    void shouldMapExternalReference() {
+      final var expectedRef = new ExternalReference(EXTERNAL_REF);
+
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
+      
+      assertEquals(expectedRef, response.externalReference());
     }
   }
 }

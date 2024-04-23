@@ -29,8 +29,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
+import se.inera.intyg.certificateservice.domain.user.model.ExternalReference;
 
 public class TestDataCertificate {
+
+  public static final String EXTERNAL_REF = "externalRef";
+  public static final ExternalReference EXTERNAL_REFERENCE = new ExternalReference(EXTERNAL_REF);
 
   private TestDataCertificate() {
 
@@ -69,6 +73,7 @@ public class TestDataCertificate {
         .xml(XML)
         .sent(SENT)
         .revoked(REVOKED)
+        .externalReference(EXTERNAL_REFERENCE)
         .elementData(
             List.of(
                 ElementData.builder()

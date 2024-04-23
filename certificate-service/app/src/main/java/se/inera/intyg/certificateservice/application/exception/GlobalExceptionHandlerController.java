@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
 
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandlerController {
 
@@ -24,25 +24,31 @@ public class GlobalExceptionHandlerController {
   }
 
   @ExceptionHandler(CertificateActionForbidden.class)
-  public ResponseEntity<String> handleCertificateActionForbidden(
+  public ResponseEntity<ApiError> handleCertificateActionForbidden(
       CertificateActionForbidden exception) {
     log.warn("Forbidden", exception);
 
     return ResponseEntity
         .status(HttpStatus.FORBIDDEN)
-        .build();
+        .body(
+            ApiError.builder()
+                .message(String.join(" ", exception.reason()))
+                .build()
+        );
   }
 
   @ExceptionHandler(ConcurrentModificationException.class)
-  public ResponseEntity<String> handleConcurrentModificationException(
+  public ResponseEntity<ApiError> handleConcurrentModificationException(
       ConcurrentModificationException exception) {
     log.warn("Conflict", exception);
     return ResponseEntity
         .status(HttpStatus.CONFLICT)
-        .body("%s på enheten %s".formatted(
-                exception.user().name().fullName(),
-                exception.unit().name().name()
-            )
+        .body(
+            ApiError.builder()
+                .message(String.join(" ", "%s på enheten %s".formatted(
+                    exception.user().name().fullName(),
+                    exception.unit().name().name())))
+                .build()
         );
   }
 }

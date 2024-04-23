@@ -28,7 +28,8 @@ public class ValidateCertificateDomainService {
     final var certificate = certificateRepository.getById(certificateId);
     if (!certificate.allowTo(CertificateActionType.READ, actionEvaluation)) {
       throw new CertificateActionForbidden(
-          "Not allowed to validate certificate for %s".formatted(certificateId)
+          "Not allowed to validate certificate for %s".formatted(certificateId),
+          certificate.reasonNotAllowed(CertificateActionType.READ, actionEvaluation)
       );
     }
 

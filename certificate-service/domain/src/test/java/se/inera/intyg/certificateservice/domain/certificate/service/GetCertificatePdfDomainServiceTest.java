@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -114,5 +115,20 @@ class GetCertificatePdfDomainServiceTest {
         () -> assertEquals(ACTION_EVALUATION, certificateEventCaptor.getValue().actionEvaluation()),
         () -> assertTrue(certificateEventCaptor.getValue().duration() >= 0)
     );
+  }
+
+  @Test
+  void shallIncludeReasonNotAllowedToException() {
+    final var expectedReason = List.of("expectedReason");
+    doReturn(false).when(certificate).allowTo(CertificateActionType.PRINT, ACTION_EVALUATION);
+    doReturn(expectedReason).when(certificate)
+        .reasonNotAllowed(CertificateActionType.PRINT, ACTION_EVALUATION);
+
+    final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
+        () -> getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION,
+            ADDITIONAL_INFO_TEXT)
+    );
+
+    assertEquals(expectedReason, certificateActionForbidden.reason());
   }
 }

@@ -16,6 +16,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
+import se.inera.intyg.certificateservice.domain.user.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
 @Getter
@@ -37,6 +38,7 @@ public class Certificate {
   private Xml xml;
   private Sent sent;
   private Revoked revoked;
+  private ExternalReference externalReference;
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
@@ -55,6 +57,16 @@ public class Certificate {
             certificateAction.evaluate(Optional.of(this), addPatientIfMissing(actionEvaluation))
         )
         .orElse(false);
+  }
+
+
+  public List<String> reasonNotAllowed(CertificateActionType certificateActionType,
+      ActionEvaluation actionEvaluation) {
+    return certificateModel.actions().stream()
+        .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
+        .findFirst()
+        .map(certificateAction -> certificateAction.reasonNotAllowed(actionEvaluation))
+        .orElse(Collections.emptyList());
   }
 
   public void updateMetadata(ActionEvaluation actionEvaluation) {
@@ -223,6 +235,14 @@ public class Certificate {
         .revokedBy(Staff.create(actionEvaluation.user()))
         .revokedAt(LocalDateTime.now(ZoneId.systemDefault()))
         .build();
+  }
+
+  public void setExternalReference(ExternalReference externalReference) {
+    if (this.externalReference != null) {
+      throw new IllegalStateException(
+          "Certificate with id '%s' already has an external reference".formatted(id().id()));
+    }
+    this.externalReference = externalReference;
   }
 }
 
