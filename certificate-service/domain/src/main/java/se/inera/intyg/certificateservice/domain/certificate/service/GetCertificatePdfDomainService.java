@@ -29,7 +29,8 @@ public class GetCertificatePdfDomainService {
 
     if (!certificate.allowTo(CertificateActionType.PRINT, actionEvaluation)) {
       throw new CertificateActionForbidden(
-          "Not allowed to print certificate for %s".formatted(certificateId)
+          "Not allowed to print certificate for %s".formatted(certificateId),
+          certificate.reasonNotAllowed(CertificateActionType.PRINT, actionEvaluation)
       );
     }
     if (certificate.isDraft()) {

@@ -23,11 +23,12 @@ public class DeleteCertificateDomainService {
   public Certificate delete(CertificateId certificateId, Revision revision,
       ActionEvaluation actionEvaluation) {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
-    
+
     final var certificate = certificateRepository.getById(certificateId);
     if (!certificate.allowTo(CertificateActionType.DELETE, actionEvaluation)) {
       throw new CertificateActionForbidden(
-          "Not allowed to delete certificate for %s".formatted(certificateId)
+          "Not allowed to delete certificate for %s".formatted(certificateId),
+          certificate.reasonNotAllowed(CertificateActionType.DELETE, actionEvaluation)
       );
     }
 

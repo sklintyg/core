@@ -25,7 +25,8 @@ public class GetCertificateDomainService {
     final var certificate = certificateRepository.getById(certificateId);
     if (!certificate.allowTo(CertificateActionType.READ, actionEvaluation)) {
       throw new CertificateActionForbidden(
-          "Not allowed to read certificate for %s".formatted(certificateId)
+          "Not allowed to read certificate for %s".formatted(certificateId),
+          certificate.reasonNotAllowed(CertificateActionType.READ, actionEvaluation)
       );
     }
 

@@ -59,6 +59,16 @@ public class Certificate {
         .orElse(false);
   }
 
+
+  public List<String> reasonNotAllowed(CertificateActionType certificateActionType,
+      ActionEvaluation actionEvaluation) {
+    return certificateModel.actions().stream()
+        .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
+        .findFirst()
+        .map(certificateAction -> certificateAction.reasonNotAllowed(actionEvaluation))
+        .orElse(Collections.emptyList());
+  }
+
   public void updateMetadata(ActionEvaluation actionEvaluation) {
     certificateMetaData = CertificateMetaData.builder()
         .patient(
@@ -70,7 +80,6 @@ public class Certificate {
         .careUnit(actionEvaluation.careUnit())
         .careProvider(actionEvaluation.careProvider())
         .issuingUnit(actionEvaluation.subUnit())
-        .externalReference(actionEvaluation.externalReference())
         .build();
   }
 
@@ -226,6 +235,14 @@ public class Certificate {
         .revokedBy(Staff.create(actionEvaluation.user()))
         .revokedAt(LocalDateTime.now(ZoneId.systemDefault()))
         .build();
+  }
+
+  public void setExternalReference(ExternalReference externalReference) {
+    if (this.externalReference != null) {
+      throw new IllegalStateException(
+          "Certificate with id '%s' already has an external reference".formatted(id().id()));
+    }
+    this.externalReference = externalReference;
   }
 }
 

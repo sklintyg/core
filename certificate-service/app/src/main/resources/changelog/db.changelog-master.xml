@@ -66,9 +66,6 @@
       <column name="revoked_message" type="varchar(3600)">
         <constraints nullable="true"/>
       </column>
-      <column name="external_reference_key" type="integer unsigned">
-        <constraints nullable="true"/>
-      </column>
     </createTable>
 
     <createTable tableName="certificate_status">
@@ -194,7 +191,7 @@
     </createTable>
 
     <createTable tableName="external_reference">
-      <column name="key" type="integer unsigned" autoIncrement="true">
+      <column name="key" type="bigint unsigned" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
       </column>
       <column name="reference" type="varchar(255)">

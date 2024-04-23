@@ -130,4 +130,22 @@ class UpdateCertificateDomainServiceTest {
         () -> assertTrue(certificateEventCaptor.getValue().duration() >= 0)
     );
   }
+
+  @Test
+  void shallIncludeReasonNotAllowedToException() {
+    final var data = List.of(DATE);
+    final var certificate = mock(Certificate.class);
+    final var expectedReason = List.of("expectedReason");
+    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
+    doReturn(false).when(certificate).allowTo(UPDATE, ACTION_EVALUATION);
+    doReturn(expectedReason).when(certificate)
+        .reasonNotAllowed(UPDATE, ACTION_EVALUATION);
+
+    final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
+        () -> updateCertificateDomainService.update(CERTIFICATE_ID, data, ACTION_EVALUATION,
+            new Revision(0))
+    );
+
+    assertEquals(expectedReason, certificateActionForbidden.reason());
+  }
 }

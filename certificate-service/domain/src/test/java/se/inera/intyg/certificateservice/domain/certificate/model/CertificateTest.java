@@ -4,13 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.patient.model.PersonIdType.COORDINATION_NUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
@@ -29,6 +29,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_PHONENUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REFERENCE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.REVISION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.XML;
@@ -71,11 +72,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
+import se.inera.intyg.certificateservice.domain.action.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -83,7 +87,6 @@ import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModif
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
-import se.inera.intyg.certificateservice.domain.user.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.validation.model.ErrorMessage;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
@@ -91,8 +94,6 @@ import se.inera.intyg.certificateservice.domain.validation.model.ValidationResul
 @ExtendWith(MockitoExtension.class)
 class CertificateTest {
 
-  private static final String EXTERNAL_REF = "externalRef";
-  private static final ExternalReference EXTERNAL_REFERENCE = new ExternalReference(EXTERNAL_REF);
   private Certificate certificate;
   private Certificate.CertificateBuilder certificateBuilder;
   private CertificateModel certificateModel;
@@ -110,6 +111,7 @@ class CertificateTest {
         .certificateModel(certificateModel)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
         .status(Status.DRAFT)
+        .externalReference(EXTERNAL_REFERENCE)
         .certificateMetaData(
             CertificateMetaData.builder()
                 .patient(ATHENA_REACT_ANDERSSON)
@@ -117,7 +119,6 @@ class CertificateTest {
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
                 .careUnit(ALFA_MEDICINCENTRUM)
                 .careProvider(ALFA_REGIONEN)
-                .externalReference(EXTERNAL_REFERENCE)
                 .build()
         )
         .elementData(
@@ -131,8 +132,7 @@ class CertificateTest {
         .user(AJLA_DOKTOR)
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .careUnit(ALFA_MEDICINCENTRUM)
-        .careProvider(ALFA_REGIONEN)
-        .externalReference(EXTERNAL_REFERENCE);
+        .careProvider(ALFA_REGIONEN);
   }
 
   @Nested
@@ -681,28 +681,6 @@ class CertificateTest {
         );
 
         assertTrue(certificate.certificateMetaData().issuingUnit().inactive().value());
-      }
-    }
-
-    @Nested
-    class ExternalReference {
-
-      @Test
-      void shallUpdateExternalReference() {
-        certificate.updateMetadata(
-            actionEvaluationBuilder.build()
-        );
-
-        assertEquals(EXTERNAL_REF, certificate.certificateMetaData().externalReference().value());
-      }
-
-      @Test
-      void shallSetExternalReferenceToNull() {
-        certificate.updateMetadata(
-            actionEvaluationBuilder.externalReference(null).build()
-        );
-
-        assertNull(certificate.certificateMetaData().externalReference());
       }
     }
   }
@@ -1353,6 +1331,84 @@ class CertificateTest {
       assertTrue(illegalStateException.getMessage().contains("has already been revoked"),
           () -> "Received message was: %s".formatted(illegalStateException.getMessage())
       );
+    }
+  }
+
+  @Nested
+  class ExternalReference {
+
+    @Test
+    void shallSetExternalReference() {
+      final var certificateWithoutExternalReference = certificateBuilder
+          .externalReference(null)
+          .build();
+
+      certificateWithoutExternalReference.setExternalReference(EXTERNAL_REFERENCE);
+      assertEquals(EXTERNAL_REFERENCE, certificateWithoutExternalReference.externalReference());
+    }
+
+    @Test
+    void shallThrowIfExternalReferenceIfAlreadySet() {
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.setExternalReference(EXTERNAL_REFERENCE));
+
+      assertTrue(illegalStateException.getMessage().contains("already has an external reference"));
+    }
+  }
+
+  @Nested
+  class TestReasonNotAllowed {
+
+    @Test
+    void shallReturnEmptyList() {
+      final var certificateActionSpecification = CertificateActionSpecification.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var actions = List.of(certificateAction);
+
+      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
+          CertificateActionFactory.class)) {
+
+        certificateActionFactory
+            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
+            .thenReturn(certificateAction);
+
+        doReturn(actions).when(certificate.certificateModel()).actions();
+        doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
+        doReturn(Collections.emptyList()).when(certificateAction)
+            .reasonNotAllowed(actionEvaluation);
+
+        final var actualResult = certificate.reasonNotAllowed(CertificateActionType.CREATE,
+            actionEvaluation);
+
+        assertTrue(actualResult.isEmpty(), "Expected reasonNotAllowed to return empty list");
+      }
+    }
+
+    @Test
+    void shallReturnReasons() {
+      final var expectedReasons = List.of("expectedReasons");
+      final var certificateActionSpecification = CertificateActionSpecification.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var actions = List.of(certificateAction);
+
+      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
+          CertificateActionFactory.class)) {
+
+        certificateActionFactory
+            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
+            .thenReturn(certificateAction);
+
+        doReturn(actions).when(certificate.certificateModel()).actions();
+        doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
+        doReturn(expectedReasons).when(certificateAction).reasonNotAllowed(actionEvaluation);
+
+        final var actualResult = certificate.reasonNotAllowed(CertificateActionType.CREATE,
+            actionEvaluation);
+
+        assertEquals(expectedReasons, actualResult);
+      }
     }
   }
 }

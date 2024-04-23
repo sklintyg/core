@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.common.exception.CertificateActi
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
+import se.inera.intyg.certificateservice.domain.user.model.ExternalReference;
 
 @RequiredArgsConstructor
 public class CreateCertificateDomainService {
@@ -22,7 +23,7 @@ public class CreateCertificateDomainService {
   private final CertificateEventDomainService certificateEventDomainService;
 
   public Certificate create(CertificateModelId certificateModelId,
-      ActionEvaluation actionEvaluation) {
+      ActionEvaluation actionEvaluation, ExternalReference externalReference) {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
 
     final var certificateModel = certificateModelRepository.getById(certificateModelId);
@@ -35,6 +36,7 @@ public class CreateCertificateDomainService {
 
     final var certificate = certificateRepository.create(certificateModel);
     certificate.updateMetadata(actionEvaluation);
+    certificate.setExternalReference(externalReference);
 
     final var savedCertificate = certificateRepository.save(certificate);
 

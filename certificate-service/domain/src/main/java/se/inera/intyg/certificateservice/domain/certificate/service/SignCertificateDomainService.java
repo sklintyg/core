@@ -29,7 +29,8 @@ public class SignCertificateDomainService {
     final var certificate = certificateRepository.getById(certificateId);
     if (!certificate.allowTo(CertificateActionType.SIGN, actionEvaluation)) {
       throw new CertificateActionForbidden(
-          "Not allowed to sign certificate with id %s".formatted(certificateId)
+          "Not allowed to sign certificate with id %s".formatted(certificateId),
+          certificate.reasonNotAllowed(CertificateActionType.SIGN, actionEvaluation)
       );
     }
 

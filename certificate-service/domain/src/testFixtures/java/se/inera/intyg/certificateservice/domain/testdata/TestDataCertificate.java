@@ -73,6 +73,7 @@ public class TestDataCertificate {
         .xml(XML)
         .sent(SENT)
         .revoked(REVOKED)
+        .externalReference(EXTERNAL_REFERENCE)
         .elementData(
             List.of(
                 ElementData.builder()
@@ -92,7 +93,6 @@ public class TestDataCertificate {
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
                 .careUnit(ALFA_MEDICINCENTRUM)
                 .careProvider(ALFA_REGIONEN)
-                .externalReference(EXTERNAL_REFERENCE)
                 .build()
         );
   }

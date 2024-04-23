@@ -35,14 +35,15 @@ public class CreateCertificateService {
         createCertificateRequest.getCareUnit(),
         createCertificateRequest.getCareProvider()
     );
+
     final var certificate = createCertificateDomainService.create(
         certificateModelId(createCertificateRequest),
-        actionEvaluation.withExternalReference(
-            createCertificateRequest.getExternalReference() != null
-                ? new ExternalReference(createCertificateRequest.getExternalReference())
-                : null
-        )
+        actionEvaluation,
+        createCertificateRequest.getExternalReference() != null
+            ? new ExternalReference(createCertificateRequest.getExternalReference())
+            : null
     );
+    
     return CreateCertificateResponse.builder()
         .certificate(certificateConverter.convert(
             certificate,

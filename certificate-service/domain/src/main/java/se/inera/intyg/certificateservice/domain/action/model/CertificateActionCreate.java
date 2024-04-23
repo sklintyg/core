@@ -28,7 +28,7 @@ public class CertificateActionCreate implements CertificateAction {
       ActionEvaluation actionEvaluation) {
     return actionRules.stream()
         .filter(value -> !value.evaluate(actionEvaluation))
-        .map(ActionRule::getErrorMessage)
+        .map(ActionRule::getReasonForPermissionDenied)
         .toList();
   }
 

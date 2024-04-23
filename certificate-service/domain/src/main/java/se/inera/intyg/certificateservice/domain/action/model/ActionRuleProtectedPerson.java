@@ -25,7 +25,7 @@ public class ActionRuleProtectedPerson implements ActionRule {
   }
 
   @Override
-  public String getErrorMessage() {
+  public String getReasonForPermissionDenied() {
     return "Du saknar behörighet för den begärda åtgärden."
         + " Det krävs särskilda rättigheter eller en specifik befattning"
         + " för att hantera patienter med skyddade personuppgifter.";

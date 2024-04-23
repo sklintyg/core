@@ -517,7 +517,7 @@ class CertificateConverterTest {
     }
 
     @Test
-    void shallIncludeExternalReference() {
+    void shallIncludeExternalSetExternalReference() {
       assertEquals(EXTERNAL_REF,
           certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata()
               .getExternalReference()

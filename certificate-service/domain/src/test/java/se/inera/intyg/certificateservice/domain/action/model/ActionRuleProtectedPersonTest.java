@@ -20,7 +20,7 @@ class ActionRuleProtectedPersonTest {
         "Du saknar behörighet för den begärda åtgärden."
             + " Det krävs särskilda rättigheter eller en specifik befattning"
             + " för att hantera patienter med skyddade personuppgifter.",
-        actionRuleProtectedPerson.getErrorMessage()
+        actionRuleProtectedPerson.getReasonForPermissionDenied()
     );
   }
 }

@@ -140,10 +140,12 @@ public class CertificateEntityMapper {
       handleRevoked(certificate, certificateEntity, staffMap);
     }
 
-    if (certificateMetaData.externalReference() != null) {
+    if (certificate.externalReference() != null) {
       certificateEntity.setExternalReference(
           ExternalReferenceEntity.builder()
-              .reference(certificateMetaData.externalReference().value())
+              .key(certificateEntity.getKey())
+              .certificate(certificateEntity)
+              .reference(certificate.externalReference().value())
               .build()
       );
     }

@@ -7,7 +7,6 @@ import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
-import se.inera.intyg.certificateservice.domain.user.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
 @Value
@@ -20,8 +19,6 @@ public class ActionEvaluation {
   SubUnit subUnit;
   CareUnit careUnit;
   CareProvider careProvider;
-  @With
-  ExternalReference externalReference;
 
 
   public boolean isIssuingUnitCareUnit() {
