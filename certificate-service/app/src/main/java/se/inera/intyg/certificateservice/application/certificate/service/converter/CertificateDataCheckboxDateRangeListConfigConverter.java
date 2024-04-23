@@ -28,6 +28,8 @@ public class CertificateDataCheckboxDateRangeListConfigConverter implements
         .label(configuration.label())
         .hideWorkingHours(configuration.hideWorkingHours())
         .previousDateRangeText(configuration.previousDateRangeText())
+        .min(configuration.min())
+        .max(configuration.max())
         .list(
             configuration.dateRanges().stream()
                 .map(dateRange ->
