@@ -24,84 +24,101 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.text.PdfTextGenerator;
 @ExtendWith(MockitoExtension.class)
 class PdfAdditionalInformationTextGeneratorTest {
 
-    @Mock
-    PdfTextGenerator pdfTextGenerator;
+  @Mock
+  PdfTextGenerator pdfTextGenerator;
 
-    @InjectMocks
-    PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
+  @InjectMocks
+  PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
 
-    @Mock
-    PDDocument document;
+  @Mock
+  PDDocument document;
 
-    @Test
-    void shouldSetSentText() throws IOException {
-        final var captor = ArgumentCaptor.forClass(String.class);
-        final var certificate = fk7211CertificateBuilder().build();
-        pdfAdditionalInformationTextGenerator.addSentText(document, certificate);
+  @Test
+  void shouldSetSentText() throws IOException {
+    final var captor = ArgumentCaptor.forClass(String.class);
+    final var certificate = fk7211CertificateBuilder().build();
+    pdfAdditionalInformationTextGenerator.addSentText(document, certificate);
 
-        verify(pdfTextGenerator).addText(
-            any(PDDocument.class),
-            captor.capture(),
-            anyInt(),
-            any(Matrix.class),
-            any(Color.class)
-        );
+    verify(pdfTextGenerator).addText(
+        any(PDDocument.class),
+        captor.capture(),
+        anyInt(),
+        any(Matrix.class),
+        any(Color.class)
+    );
 
-        assertEquals(
-            "Intyget har skickats digitalt till " + certificate.sent().recipient().name(),
-            captor.getValue()
-        );
-    }
+    assertEquals(
+        "Intyget har skickats digitalt till " + certificate.sent().recipient().name(),
+        captor.getValue()
+    );
+  }
 
-    @Test
-    void shouldSetSenVisibilityText() throws IOException {
-        final var captor = ArgumentCaptor.forClass(String.class);
-        pdfAdditionalInformationTextGenerator.addSentVisibilityText(document);
+  @Test
+  void shouldSetSenVisibilityText() throws IOException {
+    final var captor = ArgumentCaptor.forClass(String.class);
+    pdfAdditionalInformationTextGenerator.addSentVisibilityText(document);
 
-        verify(pdfTextGenerator).addText(
-            any(PDDocument.class),
-            captor.capture(),
-            anyInt(),
-            any(Matrix.class),
-            any(Color.class)
-        );
+    verify(pdfTextGenerator).addText(
+        any(PDDocument.class),
+        captor.capture(),
+        anyInt(),
+        any(Matrix.class),
+        any(Color.class)
+    );
 
-        assertEquals(
-            "Du kan se intyget genom att logga in på 1177.se",
-            captor.getValue()
-        );
-    }
+    assertEquals(
+        "Du kan se intyget genom att logga in på 1177.se",
+        captor.getValue()
+    );
+  }
 
-    @Test
-    void shouldSetMarginText() throws IOException {
-        final var captor = ArgumentCaptor.forClass(String.class);
-        pdfAdditionalInformationTextGenerator.addMarginAdditionalInfoText(document, "ID", "Additional info.");
+  @Test
+  void shouldSetMarginText() throws IOException {
+    final var captor = ArgumentCaptor.forClass(String.class);
+    pdfAdditionalInformationTextGenerator.addMarginAdditionalInfoText(document, "ID",
+        "Additional info.");
 
-        verify(pdfTextGenerator).addText(
-            any(PDDocument.class),
-            captor.capture(),
-            anyInt(),
-            any(Matrix.class),
-            any(Color.class),
-            anyFloat(),
-            anyFloat(),
-            anyBoolean()
-        );
+    verify(pdfTextGenerator).addText(
+        any(PDDocument.class),
+        captor.capture(),
+        anyInt(),
+        any(Matrix.class),
+        any(Color.class),
+        anyFloat(),
+        anyFloat(),
+        anyBoolean()
+    );
 
-        assertEquals(
-            "Intygsid: ID. Additional info.",
-            captor.getValue()
-        );
-    }
+    assertEquals(
+        "Intygsid: ID. Additional info.",
+        captor.getValue()
+    );
+  }
 
-    @Test
-    void shouldSetDraftWatermark() throws IOException {
-        final var captor = ArgumentCaptor.forClass(String.class);
+  @Test
+  void shouldSetDigitalSignature() throws IOException {
+    pdfAdditionalInformationTextGenerator.addDigitalSignatureText(document, 10F, 20F);
 
-        pdfAdditionalInformationTextGenerator.addDraftWatermark(document);
+    verify(pdfTextGenerator).addText(
+        document,
+        "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren.",
+        8,
+        null,
+        Color.gray,
+        10F,
+        20F,
+        true
+    );
+  }
 
-        verify(pdfTextGenerator).addWatermark(any(PDDocument.class), captor.capture());
-        assertEquals("UTKAST", captor.getValue());
-    }
+  @Test
+  void shouldSetDraftWatermark() throws IOException {
+    final var captor = ArgumentCaptor.forClass(String.class);
+
+    pdfAdditionalInformationTextGenerator.addDraftWatermark(document);
+
+    verify(pdfTextGenerator).addWatermark(any(PDDocument.class), captor.capture());
+    assertEquals("UTKAST", captor.getValue());
+  }
 
 }

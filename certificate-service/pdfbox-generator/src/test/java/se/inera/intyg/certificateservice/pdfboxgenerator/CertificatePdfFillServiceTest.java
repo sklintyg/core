@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.pdfboxgenerator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyFloat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -116,6 +117,14 @@ class CertificatePdfFillServiceTest {
     }
 
     @Test
+    void shouldNotSetSignatureText() throws IOException {
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+
+      verify(pdfAdditionalInformationTextGenerator, times(0))
+          .addDigitalSignatureText(any(), anyFloat(), anyFloat());
+    }
+
+    @Test
     void shouldSetDraftWatermark() throws IOException {
       certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
@@ -199,6 +208,14 @@ class CertificatePdfFillServiceTest {
     }
 
     @Test
+    void shouldSetSignatureText() throws IOException {
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+
+      verify(pdfAdditionalInformationTextGenerator, times(1))
+          .addDigitalSignatureText(any(), anyFloat(), anyFloat());
+    }
+
+    @Test
     void shouldNotSetDraftWatermark() throws IOException {
       certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
@@ -278,6 +295,14 @@ class CertificatePdfFillServiceTest {
           .addMarginAdditionalInfoText(any(), anyString(), captor.capture());
 
       assertEquals(TEXT, captor.getValue());
+    }
+
+    @Test
+    void shouldSetSignatureText() throws IOException {
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+
+      verify(pdfAdditionalInformationTextGenerator, times(1))
+          .addDigitalSignatureText(any(), anyFloat(), anyFloat());
     }
 
     @Test
