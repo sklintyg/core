@@ -89,6 +89,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
         .name(NAME)
         .description(DESCRIPTION)
         .activeFrom(activeFrom)
+        .availableForCitizen(false)
         .recipient(CertificateRecipientFactory.fkassa())
         .certificateActionSpecifications(
             List.of(

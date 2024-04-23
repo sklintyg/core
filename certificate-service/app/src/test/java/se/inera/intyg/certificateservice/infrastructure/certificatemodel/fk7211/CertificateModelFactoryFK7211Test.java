@@ -83,6 +83,13 @@ class CertificateModelFactoryFK7211Test {
   }
 
   @Test
+  void shallIncludeAvailableForCitizen() {
+    final var certificateModel = certificateModelFactoryFK7211.create();
+
+    assertTrue(certificateModel.availableForCitizen());
+  }
+
+  @Test
   void shallIncludeRecipient() {
     final var expectedRecipient = new Recipient(
         new RecipientId("FKASSA"),

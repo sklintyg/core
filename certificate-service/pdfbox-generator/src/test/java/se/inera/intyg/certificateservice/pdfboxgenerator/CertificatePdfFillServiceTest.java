@@ -322,10 +322,18 @@ class CertificatePdfFillServiceTest {
     }
 
     @Test
-    void shouldSetSentVisibilityText() throws IOException {
+    void shouldNotSetSentVisibilityTextIfNotAvailableForCitizen() throws IOException {
       certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
-      verify(pdfAdditionalInformationTextGenerator, times(1))
+      verify(pdfAdditionalInformationTextGenerator, times(0))
+          .addSentVisibilityText(any());
+    }
+
+    @Test
+    void shouldSetSentVisibilityTextIfAvailableForCitizen() throws IOException {
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+
+      verify(pdfAdditionalInformationTextGenerator, times(0))
           .addSentVisibilityText(any());
     }
 

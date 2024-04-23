@@ -4,6 +4,7 @@ import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -60,20 +61,25 @@ public class CertificatePdfFillService {
 
   private void setFieldValues(PDDocument document, List<PdfField> fields) {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
-    fields.forEach(field -> {
-      try {
-        setFieldValue(acroForm, field.getId(), field.getValue());
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-    });
+    fields
+        .stream()
+        .filter(Objects::nonNull)
+        .forEach(field -> {
+          try {
+            setFieldValue(acroForm, field.getId(), field.getValue());
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
+        });
   }
 
   private void setSentText(PDDocument document, Certificate certificate)
       throws IOException {
     if (certificate.sent() != null && certificate.sent().sentAt() != null) {
       pdfAdditionalInformationTextGenerator.addSentText(document, certificate);
-      pdfAdditionalInformationTextGenerator.addSentVisibilityText(document);
+      if (Boolean.TRUE.equals(certificate.certificateModel().availableForCitizen())) {
+        pdfAdditionalInformationTextGenerator.addSentVisibilityText(document);
+      }
     }
   }
 
