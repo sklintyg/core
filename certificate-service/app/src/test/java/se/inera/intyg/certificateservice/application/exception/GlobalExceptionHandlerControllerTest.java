@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class GlobalExceptionHandlerControllerTest {
   @Test
   void shallReturnStatusCode403ForCertificateActionForbidden() {
     final var response = globalExceptionHandlerController.handleCertificateActionForbidden(
-        new CertificateActionForbidden("Error!")
+        new CertificateActionForbidden("Error!", Collections.emptyList())
     );
     assertEquals(HttpStatusCode.valueOf(403), response.getStatusCode());
   }
