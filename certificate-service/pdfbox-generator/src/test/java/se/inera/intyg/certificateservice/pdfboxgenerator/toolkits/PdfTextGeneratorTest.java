@@ -24,7 +24,7 @@ class PdfTextGeneratorTest {
 
   @BeforeEach
   void setup() throws IOException {
-    ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+    ClassLoader classloader = getClass().getClassLoader();
     final var inputStream = classloader.getResourceAsStream("fk7211_v1.pdf");
     document = Loader.loadPDF(inputStream.readAllBytes());
     final var documentCatalog = document.getDocumentCatalog();

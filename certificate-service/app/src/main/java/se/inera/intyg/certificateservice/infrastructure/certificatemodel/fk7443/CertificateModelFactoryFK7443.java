@@ -73,7 +73,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk7443/schematron/itfp.v1.sch");
 
-  public static final String PDF_FK_7443_PDF = "pdf/fk7443_v1.pdf";
+  public static final String PDF_FK_7443_PDF = "fk7443/pdf/fk7443_v1.pdf";
 
   @Override
   public CertificateModel create() {

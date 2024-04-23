@@ -54,8 +54,8 @@ class CertificatePdfGeneratorTest {
 
   @BeforeEach
   void setup() {
-    final var classloader = Thread.currentThread().getContextClassLoader();
-    final var inputStream = classloader.getResourceAsStream("fk7443_v1.pdf");
+    final var classloader = getClass().getClassLoader();
+    final var inputStream = classloader.getResourceAsStream("fk7211/pdf/fk7211_v1.pdf");
 
     try {
       document = Loader.loadPDF(inputStream.readAllBytes());
