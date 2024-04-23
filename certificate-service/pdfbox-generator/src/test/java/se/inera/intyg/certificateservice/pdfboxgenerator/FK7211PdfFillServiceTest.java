@@ -79,6 +79,16 @@ class FK7211PdfFillServiceTest {
     );
   }
 
+  @Test
+  void shouldNotSetExpectedDeliveryDateIfDateIsNotProvided() {
+    final var result = fk7211PdfFillService.getFields(
+        buildCertificate(Collections.emptyList())
+    );
+
+    assertFalse(result.contains(DATE_FIELD),
+        "Expected date field not to be included in result");
+  }
+
   @Nested
   class PdfData {
 
@@ -101,17 +111,8 @@ class FK7211PdfFillServiceTest {
         assertTrue(result.contains(DATE_FIELD), "Expected date field to be included in result");
       }
 
-
-      @Test
-      void shouldNotSetExpectedDeliveryDateIfDateIsNotProvided() {
-        final var result = fk7211PdfFillService.getFields(
-            buildCertificate(Collections.emptyList())
-        );
-
-        assertFalse(result.contains(DATE_FIELD),
-            "Expected date field not to be included in result");
-      }
     }
+
 
     @Nested
     class Issuer {

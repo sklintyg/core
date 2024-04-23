@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211;
 
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.CHECKED_BOX_VALUE;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -59,12 +60,13 @@ public class FK7211PdfFillService implements CertificateTypePdfFillService {
     final var role = certificate.certificateMetaData().issuer().role();
     final var id = getIssuerId(role);
 
-    return List.of(
-        PdfField.builder()
-            .id(id)
-            .value(CHECKED_BOX_VALUE)
-            .build()
-    );
+    return id.isEmpty() ? Collections.emptyList() :
+        List.of(
+            PdfField.builder()
+                .id(id)
+                .value(CHECKED_BOX_VALUE)
+                .build()
+        );
   }
 
   private String getIssuerId(Role role) {

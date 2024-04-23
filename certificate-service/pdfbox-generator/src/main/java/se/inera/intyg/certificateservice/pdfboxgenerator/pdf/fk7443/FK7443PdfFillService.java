@@ -17,7 +17,7 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfTextValueGener
 @RequiredArgsConstructor
 public class FK7443PdfFillService implements CertificateTypePdfFillService {
 
-  public static final String DIAGNOSIS_FIELD_ID = "form1[0].#subform[0].flt_txtDiagnos[0]";
+  public static final String SYMPTOM_FIELD_ID = "form1[0].#subform[0].flt_txtDiagnos[0]";
   public static final ElementId QUESTION_SYMPTOM_ID = new ElementId("2");
   public static final ElementId QUESTION_PERIOD_ID = new ElementId("3");
   public static final String PATIENT_ID_FIELD_ID = "form1[0].#subform[0].flt_txtPersonNrBarn[0]";
@@ -51,6 +51,6 @@ public class FK7443PdfFillService implements CertificateTypePdfFillService {
   }
 
   private List<PdfField> fillDiagnosisQuestion(Certificate certificate) {
-    return pdfTextValueGenerator.generate(certificate, QUESTION_SYMPTOM_ID, DIAGNOSIS_FIELD_ID);
+    return pdfTextValueGenerator.generate(certificate, QUESTION_SYMPTOM_ID, SYMPTOM_FIELD_ID);
   }
 }

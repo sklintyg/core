@@ -3,15 +3,22 @@ package se.inera.intyg.certificateservice.pdfboxgenerator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7443CertificateBuilder;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_CARE_UNIT_CONTACT_INFORMATION_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_DATE_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService.PATIENT_ID_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService.SYMPTOM_FIELD_ID;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
+import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,6 +31,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CertificatePdfFillService;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService;
 import se.inera.intyg.certificateservice.pdfboxgenerator.text.PdfAdditionalInformationTextGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfPatientValueGenerator;
@@ -34,7 +42,27 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfUnitValueGener
 class CertificatePdfFillServiceTest {
 
   private static final String TEXT = "TEXT";
-  private static final String PATIENT_ID = "PATIENT_ID";
+
+  private static final PdfField SIGNED_DATE_FIELD = PdfField.builder()
+      .id(SIGNATURE_DATE_FIELD_ID)
+      .value(LocalDate.now().toString())
+      .build();
+
+  private static final PdfField PATIENT_FIELD = PdfField.builder()
+      .id(PATIENT_ID_FIELD_ID)
+      .value("191212121212")
+      .build();
+
+  private static final PdfField UNIT_FIELD = PdfField.builder()
+      .id(SIGNATURE_CARE_UNIT_CONTACT_INFORMATION_FIELD_ID)
+      .value("Contact information")
+      .build();
+
+  private static final PdfField SYMPTOM_FIELD = PdfField.builder()
+      .id(SYMPTOM_FIELD_ID)
+      .value("Symptom")
+      .build();
+
 
   @Mock
   PdfUnitValueGenerator pdfUnitValueGenerator;
@@ -59,7 +87,16 @@ class CertificatePdfFillServiceTest {
   @BeforeEach
   void setup() {
     when(fk7443PdfFillService.getPatientIdFieldId())
-        .thenReturn(PATIENT_ID);
+        .thenReturn(PATIENT_ID_FIELD_ID);
+
+    when(pdfPatientValueGenerator.generate(any(Certificate.class), eq(PATIENT_ID_FIELD_ID)))
+        .thenReturn(List.of(PATIENT_FIELD));
+
+    when(pdfUnitValueGenerator.generate(any(Certificate.class)))
+        .thenReturn(List.of(UNIT_FIELD));
+
+    when(fk7443PdfFillService.getFields(any(Certificate.class)))
+        .thenReturn(List.of(SYMPTOM_FIELD));
   }
 
   @Nested
@@ -103,44 +140,42 @@ class CertificatePdfFillServiceTest {
     }
 
     @Test
-    void shouldNotSetSignedValues() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+    void shouldNotSetSignedValues() {
+      final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
+          fk7443PdfFillService);
+      final var field = getField(document, SIGNED_DATE_FIELD.getId());
 
-      verify(pdfSignatureValueGenerator, times(0))
-          .generate(any(PDDocument.class), any(PDAcroForm.class),
-              any(Certificate.class));
+      assertEquals("", field.getValueAsString());
     }
 
     @Test
-    void shouldSetPatientValues() throws IOException {
-      final var captor = ArgumentCaptor.forClass(String.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+    void shouldSetPatientValues() {
+      final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
+          fk7443PdfFillService);
+      final var field = getField(document, PATIENT_FIELD.getId());
 
-      verify(pdfPatientValueGenerator, times(1))
-          .generate(any(PDAcroForm.class), any(Certificate.class), captor.capture());
-      assertEquals(PATIENT_ID, captor.getValue());
+      assertEquals(PATIENT_FIELD.getValue(), field.getValueAsString());
     }
 
     @Test
-    void shouldSetUnitContactInformation() throws IOException {
-      final var captor = ArgumentCaptor.forClass(Certificate.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+    void shouldSetUnitContactInformation() {
+      final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
+          fk7443PdfFillService);
+      final var field = getField(document, UNIT_FIELD.getId());
 
-      verify(pdfUnitValueGenerator, times(1))
-          .generate(any(PDAcroForm.class), captor.capture());
-      assertEquals(certificate, captor.getValue());
+      assertEquals(UNIT_FIELD.getValue(), field.getValueAsString());
     }
 
     @Test
-    void shouldFillPdfWithCertificateTypeSpecificValues() throws IOException {
-      final var captor = ArgumentCaptor.forClass(Certificate.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+    void shouldFillPdfWithCertificateTypeSpecificValues() {
+      final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
+          fk7443PdfFillService);
+      final var field = getField(document, SYMPTOM_FIELD.getId());
 
-      verify(fk7443PdfFillService, times(1))
-          .fillDocument(any(PDAcroForm.class), captor.capture());
-      assertEquals(certificate, captor.getValue());
+      assertEquals(SYMPTOM_FIELD.getValue(), field.getValueAsString());
     }
   }
+
 
   @Nested
   class SignedCertificate {
@@ -148,6 +183,8 @@ class CertificatePdfFillServiceTest {
     @BeforeEach
     void setup() {
       certificate = getCertificate();
+      when(pdfSignatureValueGenerator.generate(any(Certificate.class)))
+          .thenReturn(List.of(SIGNED_DATE_FIELD));
     }
 
     @Test
@@ -186,42 +223,39 @@ class CertificatePdfFillServiceTest {
     }
 
     @Test
-    void shouldSetSignedValues() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+    void shouldSetSignedValues() {
+      final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
+          fk7443PdfFillService);
+      final var field = getField(document, SIGNED_DATE_FIELD.getId());
 
-      verify(pdfSignatureValueGenerator, times(1))
-          .generate(any(PDDocument.class), any(PDAcroForm.class),
-              any(Certificate.class));
+      assertEquals(SIGNED_DATE_FIELD.getValue(), field.getValueAsString());
     }
 
     @Test
-    void shouldSetPatientValues() throws IOException {
-      final var captor = ArgumentCaptor.forClass(String.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+    void shouldSetPatientValues() {
+      final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
+          fk7443PdfFillService);
+      final var field = getField(document, PATIENT_FIELD.getId());
 
-      verify(pdfPatientValueGenerator, times(1))
-          .generate(any(PDAcroForm.class), any(Certificate.class), captor.capture());
-      assertEquals(PATIENT_ID, captor.getValue());
+      assertEquals(PATIENT_FIELD.getValue(), field.getValueAsString());
     }
 
     @Test
-    void shouldSetUnitContactInformation() throws IOException {
-      final var captor = ArgumentCaptor.forClass(Certificate.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+    void shouldSetUnitContactInformation() {
+      final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
+          fk7443PdfFillService);
+      final var field = getField(document, UNIT_FIELD.getId());
 
-      verify(pdfUnitValueGenerator, times(1))
-          .generate(any(PDAcroForm.class), captor.capture());
-      assertEquals(certificate, captor.getValue());
+      assertEquals(UNIT_FIELD.getValue(), field.getValueAsString());
     }
 
     @Test
-    void shouldFillPdfWithCertificateTypeSpecificValues() throws IOException {
-      final var captor = ArgumentCaptor.forClass(Certificate.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+    void shouldFillPdfWithCertificateTypeSpecificValues() {
+      final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
+          fk7443PdfFillService);
+      final var field = getField(document, SYMPTOM_FIELD.getId());
 
-      verify(fk7443PdfFillService, times(1))
-          .fillDocument(any(PDAcroForm.class), captor.capture());
-      assertEquals(certificate, captor.getValue());
+      assertEquals(SYMPTOM_FIELD.getValue(), field.getValueAsString());
     }
   }
 
@@ -231,6 +265,8 @@ class CertificatePdfFillServiceTest {
     @BeforeEach
     void setup() {
       certificate = getSentCertificate();
+      when(pdfSignatureValueGenerator.generate(any(Certificate.class)))
+          .thenReturn(List.of(SIGNED_DATE_FIELD));
     }
 
     @Test
@@ -269,42 +305,39 @@ class CertificatePdfFillServiceTest {
     }
 
     @Test
-    void shouldSetSignedValues() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+    void shouldSetSignedValues() {
+      final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
+          fk7443PdfFillService);
+      final var field = getField(document, SIGNED_DATE_FIELD.getId());
 
-      verify(pdfSignatureValueGenerator, times(1))
-          .generate(any(PDDocument.class), any(PDAcroForm.class),
-              any(Certificate.class));
+      assertEquals(SIGNED_DATE_FIELD.getValue(), field.getValueAsString());
     }
 
     @Test
-    void shouldSetPatientValues() throws IOException {
-      final var captor = ArgumentCaptor.forClass(String.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+    void shouldSetPatientValues() {
+      final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
+          fk7443PdfFillService);
+      final var field = getField(document, PATIENT_FIELD.getId());
 
-      verify(pdfPatientValueGenerator, times(1))
-          .generate(any(PDAcroForm.class), any(Certificate.class), captor.capture());
-      assertEquals(PATIENT_ID, captor.getValue());
+      assertEquals(PATIENT_FIELD.getValue(), field.getValueAsString());
     }
 
     @Test
-    void shouldSetUnitContactInformation() throws IOException {
-      final var captor = ArgumentCaptor.forClass(Certificate.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+    void shouldSetUnitContactInformation() {
+      final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
+          fk7443PdfFillService);
+      final var field = getField(document, UNIT_FIELD.getId());
 
-      verify(pdfUnitValueGenerator, times(1))
-          .generate(any(PDAcroForm.class), captor.capture());
-      assertEquals(certificate, captor.getValue());
+      assertEquals(UNIT_FIELD.getValue(), field.getValueAsString());
     }
 
     @Test
-    void shouldFillPdfWithCertificateTypeSpecificValues() throws IOException {
-      final var captor = ArgumentCaptor.forClass(Certificate.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+    void shouldFillPdfWithCertificateTypeSpecificValues() {
+      final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
+          fk7443PdfFillService);
+      final var field = getField(document, SYMPTOM_FIELD.getId());
 
-      verify(fk7443PdfFillService, times(1))
-          .fillDocument(any(PDAcroForm.class), captor.capture());
-      assertEquals(certificate, captor.getValue());
+      assertEquals(SYMPTOM_FIELD.getValue(), field.getValueAsString());
     }
   }
 
@@ -334,5 +367,9 @@ class CertificatePdfFillServiceTest {
         .sent(null)
         .signed(null)
         .build();
+  }
+
+  private static PDField getField(PDDocument document, String fieldId) {
+    return document.getDocumentCatalog().getAcroForm().getField(fieldId);
   }
 }

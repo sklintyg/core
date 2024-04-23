@@ -39,18 +39,13 @@ public class CertificatePdfFillService {
       }
       final var document = Loader.loadPDF(inputStream.readAllBytes());
 
-      final var patientValues = pdfPatientValueGenerator.generate(
-          certificate,
-          certificateValueGenerator.getPatientIdFieldId()
-      );
-      final var unitValues = pdfUnitValueGenerator.generate(certificate);
-      final var signatureValues = pdfSignatureValueGenerator.generate(certificate);
-      final var certificateQuestionFields = certificateValueGenerator.getFields(certificate);
-
-      setFieldValues(document, patientValues);
-      setFieldValues(document, unitValues);
-      setFieldValues(document, signatureValues);
-      setFieldValues(document, certificateQuestionFields);
+      if (certificate.status() == Status.SIGNED) {
+        setFieldValues(document, pdfSignatureValueGenerator.generate(certificate));
+      }
+      setFieldValues(document, certificateValueGenerator.getFields(certificate));
+      setFieldValues(document, pdfUnitValueGenerator.generate(certificate));
+      setFieldValues(document, pdfPatientValueGenerator.generate(certificate,
+          certificateValueGenerator.getPatientIdFieldId()));
 
       setMarginText(document, certificate, additionalInfoText);
       setSentText(document, certificate);
@@ -67,7 +62,7 @@ public class CertificatePdfFillService {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
     fields.forEach(field -> {
       try {
-        setFieldValue(acroForm, field.getValue(), field.getId());
+        setFieldValue(acroForm, field.getId(), field.getValue());
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
