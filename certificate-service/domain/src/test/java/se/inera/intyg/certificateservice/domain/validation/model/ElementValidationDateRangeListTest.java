@@ -504,17 +504,17 @@ class ElementValidationDateRangeListTest {
     }
 
     @Nested
-    class BeforeMinDate {
+    class NegativeMinDate {
 
       @BeforeEach
       void setUp() {
         elementValidationDateRangeList = ElementValidationDateRangeList.builder()
-            .min(Period.ofMonths(1))
+            .min(Period.ofMonths(-1))
             .build();
       }
 
       @Test
-      void shouldReturnValidationErrorIfFromIsBeforeMinValue() {
+      void shouldReturnValidationErrorIfFromIsBeforeMinValueWhenMinIsNegative() {
         final var expectedValidationError = getExpectedValidationError(
             "Ange ett datum som är tidigast %s.".formatted(LocalDate.now().minusMonths(1)),
             new FieldId(FIELD_ID_RANGE.value() + ".from")
@@ -544,6 +544,110 @@ class ElementValidationDateRangeListTest {
       }
 
       @Test
+      void shouldReturnValidationErrorIfToIsBeforeMinValueWhenMinIsNegative() {
+        final var expectedValidationError = List.of(
+            getBeforeMinValidationError(".from", -1),
+            getBeforeMinValidationError(".to", -1)
+        );
+
+        final var elementData = ElementData.builder()
+            .id(ELEMENT_ID)
+            .value(
+                ElementValueDateRangeList.builder()
+                    .dateRangeListId(FIELD_ID)
+                    .dateRangeList(List.of(
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE)
+                            .from(LocalDate.now().minusMonths(2))
+                            .to(LocalDate.now().minusMonths(1).minusDays(1))
+                            .build()
+                    ))
+                    .build()
+            )
+            .build();
+
+        final var actualResult = elementValidationDateRangeList.validate(
+            elementData,
+            Optional.of(CATEGORY_ID)
+        );
+
+        assertEquals(expectedValidationError, actualResult);
+      }
+    }
+
+    @Nested
+    class BeforeMinDate {
+
+      @BeforeEach
+      void setUp() {
+        elementValidationDateRangeList = ElementValidationDateRangeList.builder()
+            .min(Period.ofMonths(1))
+            .build();
+      }
+
+      @Test
+      void shouldReturnValidationErrorIfFromIsBeforeMinValue() {
+        final var expectedValidationError = getExpectedValidationError(
+            "Ange ett datum som är tidigast %s.".formatted(LocalDate.now().plusMonths(1)),
+            new FieldId(FIELD_ID_RANGE.value() + ".from")
+        );
+        final var elementData = ElementData.builder()
+            .id(ELEMENT_ID)
+            .value(
+                ElementValueDateRangeList.builder()
+                    .dateRangeListId(FIELD_ID)
+                    .dateRangeList(List.of(
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE)
+                            .from(LocalDate.now().plusMonths(1).minusDays(1))
+                            .to(LocalDate.now().plusMonths(2))
+                            .build()
+                    ))
+                    .build()
+            )
+            .build();
+
+        final var actualResult = elementValidationDateRangeList.validate(
+            elementData,
+            Optional.of(CATEGORY_ID)
+        );
+
+        assertEquals(expectedValidationError, actualResult);
+      }
+
+      @Test
+      void shouldReturnValidationErrorIfToIsBeforeMinValueWhenMinIsNegative() {
+        final var expectedValidationError = List.of(
+            getBeforeMinValidationError(".from", 1),
+            getBeforeMinValidationError(".to", 1)
+        );
+
+        final var elementData = ElementData.builder()
+            .id(ELEMENT_ID)
+            .value(
+                ElementValueDateRangeList.builder()
+                    .dateRangeListId(FIELD_ID)
+                    .dateRangeList(List.of(
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE)
+                            .from(LocalDate.now())
+                            .to(LocalDate.now().plusMonths(1).minusDays(1))
+                            .build()
+                    ))
+                    .build()
+            )
+            .build();
+
+        final var actualResult = elementValidationDateRangeList.validate(
+            elementData,
+            Optional.of(CATEGORY_ID)
+        );
+
+        assertEquals(expectedValidationError, actualResult);
+      }
+
+
+      @Test
       void shouldReturnNoValidationErrorIfFromIsOnMinValue() {
         final var elementData = ElementData.builder()
             .id(ELEMENT_ID)
@@ -553,8 +657,8 @@ class ElementValidationDateRangeListTest {
                     .dateRangeList(List.of(
                         DateRange.builder()
                             .dateRangeId(FIELD_ID_RANGE)
-                            .from(LocalDate.now().minusMonths(1))
-                            .to(LocalDate.now())
+                            .from(LocalDate.now().plusMonths(1))
+                            .to(LocalDate.now().plusMonths(2))
                             .build()
                     ))
                     .build()
@@ -1038,7 +1142,7 @@ class ElementValidationDateRangeListTest {
       @Test
       void shouldReturnValidationErrorIfFromIsBeforeMinValue() {
         final var expectedValidationError = getExpectedValidationError(
-            "Ange ett datum som är tidigast %s.".formatted(LocalDate.now().minusMonths(1)),
+            "Ange ett datum som är tidigast %s.".formatted(LocalDate.now().plusMonths(1)),
             new FieldId(FIELD_ID_RANGE.value() + ".from")
         );
         final var elementData = ElementData.builder()
@@ -1049,8 +1153,39 @@ class ElementValidationDateRangeListTest {
                     .dateRangeList(List.of(
                         DateRange.builder()
                             .dateRangeId(FIELD_ID_RANGE)
-                            .from(LocalDate.now().minusMonths(1).minusDays(1))
-                            .to(LocalDate.now())
+                            .from(LocalDate.now().plusMonths(1).minusDays(1))
+                            .to(LocalDate.now().plusMonths(2))
+                            .build()
+                    ))
+                    .build()
+            )
+            .build();
+
+        final var actualResult = elementValidationDateRangeList.validate(
+            elementData,
+            Optional.of(CATEGORY_ID)
+        );
+
+        assertEquals(expectedValidationError, actualResult);
+      }
+
+      @Test
+      void shouldReturnValidationErrorIfToIsBeforeMinValueWhenMinIsNegative() {
+        final var expectedValidationError = List.of(
+            getBeforeMinValidationError(".from", 1),
+            getBeforeMinValidationError(".to", 1)
+        );
+
+        final var elementData = ElementData.builder()
+            .id(ELEMENT_ID)
+            .value(
+                ElementValueDateRangeList.builder()
+                    .dateRangeListId(FIELD_ID)
+                    .dateRangeList(List.of(
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE)
+                            .from(LocalDate.now())
+                            .to(LocalDate.now().plusMonths(1).minusDays(1))
                             .build()
                     ))
                     .build()
@@ -1075,8 +1210,8 @@ class ElementValidationDateRangeListTest {
                     .dateRangeList(List.of(
                         DateRange.builder()
                             .dateRangeId(FIELD_ID_RANGE)
-                            .from(LocalDate.now().minusMonths(1))
-                            .to(LocalDate.now())
+                            .from(LocalDate.now().plusMonths(1))
+                            .to(LocalDate.now().plusMonths(2))
                             .build()
                     ))
                     .build()
@@ -1101,8 +1236,8 @@ class ElementValidationDateRangeListTest {
                     .dateRangeList(List.of(
                         DateRange.builder()
                             .dateRangeId(FIELD_ID_RANGE)
-                            .from(LocalDate.now())
-                            .to(LocalDate.now())
+                            .from(LocalDate.now().plusMonths(1).plusDays(1))
+                            .to(LocalDate.now().plusMonths(2))
                             .build()
                     ))
                     .build()
@@ -1193,5 +1328,15 @@ class ElementValidationDateRangeListTest {
 
   private static List<ValidationError> getExpectedValidationErrorForMandatory() {
     return getExpectedValidationError("Välj minst ett alternativ.", FIELD_ID);
+  }
+
+  private static ValidationError getBeforeMinValidationError(String suffix, Integer min) {
+    return ValidationError.builder()
+        .elementId(ELEMENT_ID)
+        .fieldId(new FieldId(FIELD_ID_RANGE.value() + suffix))
+        .categoryId(CATEGORY_ID)
+        .message(new ErrorMessage(
+            "Ange ett datum som är tidigast %s.".formatted(LocalDate.now().plusMonths(min))))
+        .build();
   }
 }

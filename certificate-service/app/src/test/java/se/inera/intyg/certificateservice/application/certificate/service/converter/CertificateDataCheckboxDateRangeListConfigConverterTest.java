@@ -42,7 +42,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
         .label("LABEL")
         .hideWorkingHours(true)
         .previousDateRangeText("TEST TEST")
-        .min(Period.ofMonths(1))
+        .min(Period.ofMonths(-1))
         .max(Period.ofMonths(2))
         .list(
             List.of(
@@ -67,7 +67,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
                     .previousDateRangeText("TEST TEST")
                     .name("NAME")
                     .label("LABEL")
-                    .min(Period.ofMonths(1))
+                    .min(Period.ofMonths(-1))
                     .max(Period.ofMonths(2))
                     .dateRanges(
                         List.of(

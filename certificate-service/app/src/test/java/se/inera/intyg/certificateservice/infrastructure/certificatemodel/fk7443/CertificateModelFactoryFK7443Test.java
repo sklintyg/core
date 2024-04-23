@@ -366,7 +366,7 @@ class CertificateModelFactoryFK7443Test {
             .label("Andel av ordninarie tid:")
             .id(new FieldId("3.1"))
             .hideWorkingHours(true)
-            .min(Period.ofMonths(1))
+            .min(Period.ofMonths(-1))
             .dateRanges(
                 List.of(
                     new CheckboxDateRange(new FieldId("EN_ATTANDEL"), "12,5 procent"),
