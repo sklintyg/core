@@ -8,6 +8,7 @@ import static se.inera.intyg.certificateservice.domain.certificatemodel.model.Wo
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.TRE_FJARDEDELAR;
 
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
@@ -68,6 +70,8 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
   private static final ElementId QUESTION_PERIOD_CATEGORY_ID = new ElementId("KAT_3");
   public static final ElementId QUESTION_PERIOD_ID = new ElementId("3");
   private static final String QUESTION_PERIOD_FIELD_ID = "3.1";
+  public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
+      "fk7443/schematron/itfp.v1.sch");
 
   public static final String PDF_FK_7443_PDF = "pdf/fk7443_v1.pdf";
 
@@ -126,6 +130,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
             )
         )
         .pdfTemplatePath(PDF_FK_7443_PDF)
+        .schematronPath(SCHEMATRON_PATH)
         .build();
   }
 
@@ -202,6 +207,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
         .configuration(
             ElementConfigurationCheckboxDateRangeList.builder()
                 .name("Jag bedömer att barnet inte bör vårdas i ordinarie tillsynsform")
+                .label("Andel av ordninarie tid:")
                 .id(new FieldId(QUESTION_PERIOD_FIELD_ID))
                 .dateRanges(dateRanges)
                 .hideWorkingHours(true)
@@ -218,6 +224,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
         .validations(
             List.of(
                 ElementValidationDateRangeList.builder()
+                    .min(Period.ofMonths(1))
                     .mandatory(true)
                     .build()
             )

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -258,7 +259,7 @@ class ElementValidationDateRangeListTest {
       @Test
       void shouldReturnErrorIfDateRangesHaveSameDayOnFrom() {
         final var expectedValidationError = getExpectedValidationError(
-            "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+            "Ange perioder som inte överlappar varandra.", FIELD_ID
         );
 
         final var elementData = ElementData.builder()
@@ -293,7 +294,7 @@ class ElementValidationDateRangeListTest {
       @Test
       void shouldReturnErrorIfDateRangesHaveSameDayOnTo() {
         final var expectedValidationError = getExpectedValidationError(
-            "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+            "Ange perioder som inte överlappar varandra.", FIELD_ID
         );
 
         final var elementData = ElementData.builder()
@@ -329,7 +330,7 @@ class ElementValidationDateRangeListTest {
     @Test
     void shouldReturnErrorIfDateRangesHaveOverlappingPeriods() {
       final var expectedValidationError = getExpectedValidationError(
-          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+          "Ange perioder som inte överlappar varandra.", FIELD_ID
       );
 
       final var elementData = ElementData.builder()
@@ -364,7 +365,7 @@ class ElementValidationDateRangeListTest {
     @Test
     void shouldReturnErrorIfLowerOverlap() {
       final var expectedValidationError = getExpectedValidationError(
-          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+          "Ange perioder som inte överlappar varandra.", FIELD_ID
       );
 
       final var elementData = ElementData.builder()
@@ -399,7 +400,7 @@ class ElementValidationDateRangeListTest {
     @Test
     void shouldReturnErrorIfUpperOverlap() {
       final var expectedValidationError = getExpectedValidationError(
-          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+          "Ange perioder som inte överlappar varandra.", FIELD_ID
       );
 
       final var elementData = ElementData.builder()
@@ -434,7 +435,7 @@ class ElementValidationDateRangeListTest {
     @Test
     void shouldReturnErrorIfOneCorrectPeriodButTwoOverlap() {
       final var expectedValidationError = getExpectedValidationError(
-          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+          "Ange perioder som inte överlappar varandra.", FIELD_ID
       );
 
       final var elementData = ElementData.builder()
@@ -488,6 +489,99 @@ class ElementValidationDateRangeListTest {
                           .dateRangeId(FIELD_ID_RANGE_2)
                           .from(LocalDate.now().plusDays(20))
                           .to(LocalDate.now().plusDays(25))
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(Collections.emptyList(), actualResult);
+    }
+
+    @Nested
+    class BeforeMinDate {
+
+      @BeforeEach
+      void setUp() {
+        elementValidationDateRangeList = ElementValidationDateRangeList.builder()
+            .min(Period.ofMonths(1))
+            .build();
+      }
+
+      @Test
+      void shouldReturnValidationErrorIfFromIsBeforeMinValue() {
+        final var expectedValidationError = getExpectedValidationError(
+            "Ange ett datum som är tidigast %s.".formatted(LocalDate.now().minusMonths(1)),
+            new FieldId(FIELD_ID_RANGE.value() + ".from")
+        );
+        final var elementData = ElementData.builder()
+            .id(ELEMENT_ID)
+            .value(
+                ElementValueDateRangeList.builder()
+                    .dateRangeListId(FIELD_ID)
+                    .dateRangeList(List.of(
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE)
+                            .from(LocalDate.now().minusMonths(1).minusDays(1))
+                            .to(LocalDate.now())
+                            .build()
+                    ))
+                    .build()
+            )
+            .build();
+
+        final var actualResult = elementValidationDateRangeList.validate(
+            elementData,
+            Optional.of(CATEGORY_ID)
+        );
+
+        assertEquals(expectedValidationError, actualResult);
+      }
+
+      @Test
+      void shouldReturnNoValidationErrorIfFromIsOnMinValue() {
+        final var elementData = ElementData.builder()
+            .id(ELEMENT_ID)
+            .value(
+                ElementValueDateRangeList.builder()
+                    .dateRangeListId(FIELD_ID)
+                    .dateRangeList(List.of(
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE)
+                            .from(LocalDate.now().minusMonths(1))
+                            .to(LocalDate.now())
+                            .build()
+                    ))
+                    .build()
+            )
+            .build();
+
+        final var actualResult = elementValidationDateRangeList.validate(
+            elementData,
+            Optional.of(CATEGORY_ID)
+        );
+
+        assertEquals(Collections.emptyList(), actualResult);
+      }
+    }
+
+    @Test
+    void shouldReturnNoValidationErrorIfFromIsAfterMinValue() {
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now())
                           .build()
                   ))
                   .build()
@@ -687,7 +781,7 @@ class ElementValidationDateRangeListTest {
       @Test
       void shouldReturnErrorIfDateRangesHaveSameDayOnFrom() {
         final var expectedValidationError = getExpectedValidationError(
-            "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+            "Ange perioder som inte överlappar varandra.", FIELD_ID
         );
 
         final var elementData = ElementData.builder()
@@ -722,7 +816,7 @@ class ElementValidationDateRangeListTest {
       @Test
       void shouldReturnErrorIfDateRangesHaveSameDayOnTo() {
         final var expectedValidationError = getExpectedValidationError(
-            "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+            "Ange perioder som inte överlappar varandra.", FIELD_ID
         );
 
         final var elementData = ElementData.builder()
@@ -758,7 +852,7 @@ class ElementValidationDateRangeListTest {
     @Test
     void shouldReturnErrorIfDateRangesHaveOverlappingPeriods() {
       final var expectedValidationError = getExpectedValidationError(
-          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+          "Ange perioder som inte överlappar varandra.", FIELD_ID
       );
 
       final var elementData = ElementData.builder()
@@ -793,7 +887,7 @@ class ElementValidationDateRangeListTest {
     @Test
     void shouldReturnErrorIfLowerOverlap() {
       final var expectedValidationError = getExpectedValidationError(
-          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+          "Ange perioder som inte överlappar varandra.", FIELD_ID
       );
 
       final var elementData = ElementData.builder()
@@ -828,7 +922,7 @@ class ElementValidationDateRangeListTest {
     @Test
     void shouldReturnErrorIfUpperOverlap() {
       final var expectedValidationError = getExpectedValidationError(
-          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+          "Ange perioder som inte överlappar varandra.", FIELD_ID
       );
 
       final var elementData = ElementData.builder()
@@ -863,7 +957,7 @@ class ElementValidationDateRangeListTest {
     @Test
     void shouldReturnErrorIfOneCorrectPeriodButTwoOverlap() {
       final var expectedValidationError = getExpectedValidationError(
-          "Ange sjukskrivningsperioder som inte överlappar varandra.", FIELD_ID
+          "Ange perioder som inte överlappar varandra.", FIELD_ID
       );
 
       final var elementData = ElementData.builder()
@@ -930,7 +1024,161 @@ class ElementValidationDateRangeListTest {
 
       assertEquals(Collections.emptyList(), actualResult);
     }
+
+    @Nested
+    class BeforeMinDate {
+
+      @BeforeEach
+      void Setup() {
+        elementValidationDateRangeList = ElementValidationDateRangeList.builder()
+            .min(Period.ofMonths(1))
+            .build();
+      }
+
+      @Test
+      void shouldReturnValidationErrorIfFromIsBeforeMinValue() {
+        final var expectedValidationError = getExpectedValidationError(
+            "Ange ett datum som är tidigast %s.".formatted(LocalDate.now().minusMonths(1)),
+            new FieldId(FIELD_ID_RANGE.value() + ".from")
+        );
+        final var elementData = ElementData.builder()
+            .id(ELEMENT_ID)
+            .value(
+                ElementValueDateRangeList.builder()
+                    .dateRangeListId(FIELD_ID)
+                    .dateRangeList(List.of(
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE)
+                            .from(LocalDate.now().minusMonths(1).minusDays(1))
+                            .to(LocalDate.now())
+                            .build()
+                    ))
+                    .build()
+            )
+            .build();
+
+        final var actualResult = elementValidationDateRangeList.validate(
+            elementData,
+            Optional.of(CATEGORY_ID)
+        );
+
+        assertEquals(expectedValidationError, actualResult);
+      }
+
+      @Test
+      void shouldReturnNoValidationErrorIfFromIsOnMinValue() {
+        final var elementData = ElementData.builder()
+            .id(ELEMENT_ID)
+            .value(
+                ElementValueDateRangeList.builder()
+                    .dateRangeListId(FIELD_ID)
+                    .dateRangeList(List.of(
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE)
+                            .from(LocalDate.now().minusMonths(1))
+                            .to(LocalDate.now())
+                            .build()
+                    ))
+                    .build()
+            )
+            .build();
+
+        final var actualResult = elementValidationDateRangeList.validate(
+            elementData,
+            Optional.of(CATEGORY_ID)
+        );
+
+        assertEquals(Collections.emptyList(), actualResult);
+      }
+
+      @Test
+      void shouldReturnNoValidationErrorIfFromIsAfterMinValue() {
+        final var elementData = ElementData.builder()
+            .id(ELEMENT_ID)
+            .value(
+                ElementValueDateRangeList.builder()
+                    .dateRangeListId(FIELD_ID)
+                    .dateRangeList(List.of(
+                        DateRange.builder()
+                            .dateRangeId(FIELD_ID_RANGE)
+                            .from(LocalDate.now())
+                            .to(LocalDate.now())
+                            .build()
+                    ))
+                    .build()
+            )
+            .build();
+
+        final var actualResult = elementValidationDateRangeList.validate(
+            elementData,
+            Optional.of(CATEGORY_ID)
+        );
+
+        assertEquals(Collections.emptyList(), actualResult);
+      }
+    }
   }
+
+  @Nested
+  class MinNotSet {
+
+    @Test
+    void shouldReturnNoValidationErrorIfMinIsNull() {
+      elementValidationDateRangeList = ElementValidationDateRangeList.builder()
+          .min(null)
+          .build();
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now())
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(Collections.emptyList(), actualResult);
+    }
+
+    @Test
+    void shouldReturnNoValidationErrorIfMinIsNotSet() {
+      elementValidationDateRangeList = ElementValidationDateRangeList.builder().build();
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now())
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(Collections.emptyList(), actualResult);
+    }
+  }
+
 
   private static List<ValidationError> getExpectedValidationError(String message, FieldId fieldId) {
     return List.of(

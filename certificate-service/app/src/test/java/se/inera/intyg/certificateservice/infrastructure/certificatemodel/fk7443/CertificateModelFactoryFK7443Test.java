@@ -4,8 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443.CertificateModelFactoryFK7443.PDF_FK_7443_PDF;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443.CertificateModelFactoryFK7443.SCHEMATRON_PATH;
 
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.ZoneId;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -208,6 +210,13 @@ class CertificateModelFactoryFK7443Test {
         "Expected type: %s".formatted(expectedType));
   }
 
+  @Test
+  void shallIncludeSchematronPath() {
+    final var certificateModel = certificateModelFactoryFK7443.create();
+
+    assertEquals(SCHEMATRON_PATH, certificateModel.schematronPath());
+  }
+
   @Nested
   class CertificateSpecifications {
 
@@ -362,6 +371,7 @@ class CertificateModelFactoryFK7443Test {
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationCheckboxDateRangeList.builder()
             .name("Jag bedömer att barnet inte bör vårdas i ordinarie tillsynsform")
+            .label("Andel av ordninarie tid:")
             .id(new FieldId("3.1"))
             .hideWorkingHours(true)
             .dateRanges(
@@ -407,6 +417,7 @@ class CertificateModelFactoryFK7443Test {
       void shallIncludeValidations() {
         final var expectedValidations = List.of(
             ElementValidationDateRangeList.builder()
+                .min(Period.ofMonths(1))
                 .mandatory(true)
                 .build()
         );

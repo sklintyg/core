@@ -78,12 +78,14 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.ResourceLinkUtil.resourceLink;
 import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
 
+import java.io.FileOutputStream;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -3394,6 +3396,7 @@ class FK7443ActiveIT {
   @DisplayName("FK7443 - Hämta intygspdf")
   class GetCertificatePdf {
 
+    @SneakyThrows
     @Test
     @DisplayName("FK7443 - Om intyget är utfärdat på samma mottagning skall pdf returneras")
     void shallReturnCertificatePdfIfUnitIsSubUnitAndOnSameUnit() {
@@ -3410,6 +3413,10 @@ class FK7443ActiveIT {
           pdfData(response.getBody()),
           "Should return certificate pdf data when exists!"
       );
+
+      try (FileOutputStream fos = new FileOutputStream("my_pdf")) {
+        fos.write(response.getBody().getPdfData());
+      }
     }
 
     @Test
