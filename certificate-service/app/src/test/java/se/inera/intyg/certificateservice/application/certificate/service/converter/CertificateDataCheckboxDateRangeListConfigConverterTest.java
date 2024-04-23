@@ -38,6 +38,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
   void shouldReturnConvertedConfig() {
     final var expected = CertificateDataConfigCheckboxDateRangeList.builder()
         .text("NAME")
+        .label("LABEL")
         .hideWorkingHours(true)
         .previousDateRangeText("TEST TEST")
         .list(
@@ -62,6 +63,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
                     .hideWorkingHours(true)
                     .previousDateRangeText("TEST TEST")
                     .name("NAME")
+                    .label("LABEL")
                     .dateRanges(
                         List.of(
                             new CheckboxDateRange(new FieldId("ID"), "LABEL"),
