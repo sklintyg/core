@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJL
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatusCode;
@@ -43,7 +44,7 @@ class GlobalExceptionHandlerControllerTest {
     final var response = globalExceptionHandlerController.handleCertificateActionForbidden(
         new CertificateActionForbidden("Error!", expectedReason)
     );
-    assertEquals(expectedReason.get(0), response.getBody());
+    assertEquals(expectedReason.get(0), Objects.requireNonNull(response.getBody()).getMessage());
   }
 
   @Test
@@ -52,7 +53,8 @@ class GlobalExceptionHandlerControllerTest {
     final var response = globalExceptionHandlerController.handleCertificateActionForbidden(
         new CertificateActionForbidden("Error!", expectedReason)
     );
-    assertEquals("expectedReason expectedReason", response.getBody());
+    assertEquals("expectedReason expectedReason",
+        Objects.requireNonNull(response.getBody()).getMessage());
   }
 
   @Test

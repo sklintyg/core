@@ -24,25 +24,31 @@ public class GlobalExceptionHandlerController {
   }
 
   @ExceptionHandler(CertificateActionForbidden.class)
-  public ResponseEntity<String> handleCertificateActionForbidden(
+  public ResponseEntity<ApiError> handleCertificateActionForbidden(
       CertificateActionForbidden exception) {
     log.warn("Forbidden", exception);
 
     return ResponseEntity
         .status(HttpStatus.FORBIDDEN)
-        .body(String.join(" ", exception.reason()));
+        .body(
+            ApiError.builder()
+                .message(String.join(" ", exception.reason()))
+                .build()
+        );
   }
 
   @ExceptionHandler(ConcurrentModificationException.class)
-  public ResponseEntity<String> handleConcurrentModificationException(
+  public ResponseEntity<ApiError> handleConcurrentModificationException(
       ConcurrentModificationException exception) {
     log.warn("Conflict", exception);
     return ResponseEntity
         .status(HttpStatus.CONFLICT)
-        .body("%s på enheten %s".formatted(
-                exception.user().name().fullName(),
-                exception.unit().name().name()
-            )
+        .body(
+            ApiError.builder()
+                .message(String.join(" ", "%s på enheten %s".formatted(
+                    exception.user().name().fullName(),
+                    exception.unit().name().name())))
+                .build()
         );
   }
 }
