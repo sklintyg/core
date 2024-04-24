@@ -702,6 +702,138 @@ class ElementValidationDateRangeListTest {
   }
 
   @Nested
+  class AfterMaxDate {
+
+    @BeforeEach
+    void setUp() {
+      elementValidationDateRangeList = ElementValidationDateRangeList.builder()
+          .max(Period.ofMonths(1))
+          .build();
+    }
+
+    @Test
+    void shouldReturnValidationErrorIfToIsAfterMaxValue() {
+      final var expectedValidationError = getExpectedValidationError(
+          "Ange ett datum som är senast %s.".formatted(LocalDate.now().plusMonths(1)),
+          new FieldId(FIELD_ID_RANGE.value() + ".to")
+      );
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusMonths(1).plusDays(1))
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(expectedValidationError, actualResult);
+    }
+
+    @Test
+    void shouldReturnValidationErrorIfFromIsAfterMaxValueAndToIsMissingDate() {
+      final var expectedValidationErrorAfterMax = getExpectedValidationError(
+          "Ange ett datum som är senast %s.".formatted(LocalDate.now().plusMonths(1)),
+          new FieldId(FIELD_ID_RANGE.value() + ".from")
+      );
+      final var expectedValidationErrorIncomplete = getExpectedValidationError(
+          "Ange ett datum.",
+          new FieldId(FIELD_ID_RANGE.value() + ".to")
+      );
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now().plusMonths(1).plusDays(1))
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertAll(
+          () -> assertEquals(expectedValidationErrorIncomplete.get(0), actualResult.get(0)),
+          () -> assertEquals(expectedValidationErrorAfterMax.get(0), actualResult.get(1))
+      );
+    }
+
+    @Test
+    void shouldReturnNoValidationErrorIfFromIsOnMaxValue() {
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusMonths(1))
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(Collections.emptyList(), actualResult);
+    }
+
+    @Test
+    void shouldReturnNoValidationErrorIfFromIsBeforeMaxValue() {
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID_RANGE)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusMonths(1))
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRangeList.validate(
+          elementData,
+          Optional.of(CATEGORY_ID)
+      );
+
+      assertEquals(Collections.emptyList(), actualResult);
+    }
+
+  }
+
+
+  @Nested
   class NotMandatory {
 
     @BeforeEach

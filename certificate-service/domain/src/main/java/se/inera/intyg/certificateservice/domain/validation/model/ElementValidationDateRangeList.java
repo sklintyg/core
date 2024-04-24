@@ -30,6 +30,7 @@ public class ElementValidationDateRangeList implements ElementValidation {
 
   boolean mandatory;
   TemporalAmount min;
+  TemporalAmount max;
 
   @Override
   public List<ValidationError> validate(ElementData data,
@@ -71,11 +72,14 @@ public class ElementValidationDateRangeList implements ElementValidation {
     }
 
     final var fromBeforeMinErrors = getFromBeforeMinErrors(data, categoryId, dateRangeList);
-    final var toBeforeMinErrors = getToBeforeMinErrors(data, categoryId, dateRangeList);
     final var incompleteErrors = getIncompleteDateRangeErrors(data, categoryId, dateRangeList);
+    final var toBeforeMinErrors = getToBeforeMinErrors(data, categoryId, dateRangeList);
+    final var fromAfterMaxErrors = getFromAfterMaxErrors(data, categoryId, dateRangeList);
+    final var toAfterMaxErrors = getToAfterMaxErrors(data, categoryId, dateRangeList);
     final var toBeforeFromErrors = getToBeforeFromDateRangeErrors(data, categoryId, dateRangeList);
 
-    return Stream.of(fromBeforeMinErrors, toBeforeMinErrors, incompleteErrors, toBeforeFromErrors)
+    return Stream.of(fromBeforeMinErrors, incompleteErrors, toBeforeMinErrors, toBeforeFromErrors,
+            fromAfterMaxErrors, toAfterMaxErrors)
         .flatMap(List::stream)
         .toList();
   }
@@ -162,6 +166,30 @@ public class ElementValidationDateRangeList implements ElementValidation {
         .toList();
   }
 
+  private List<ValidationError> getFromAfterMaxErrors(ElementData data,
+      Optional<ElementId> categoryId, ElementValueDateRangeList dateRangeList) {
+    return dateRangeList.dateRangeList().stream()
+        .filter(dateRange -> isAfterMax(dateRange.from()))
+        .map(dateRange -> errorMessage(
+                data, getFieldId(dateRange.dateRangeId(), FROM_SUFFIX), categoryId,
+                "Ange ett datum som är senast %s.".formatted(maxDate())
+            )
+        )
+        .toList();
+  }
+
+  private List<ValidationError> getToAfterMaxErrors(ElementData data,
+      Optional<ElementId> categoryId, ElementValueDateRangeList dateRangeList) {
+    return dateRangeList.dateRangeList().stream()
+        .filter(dateRange -> isAfterMax(dateRange.to()))
+        .map(dateRange -> errorMessage(
+                data, getFieldId(dateRange.dateRangeId(), TO_SUFFIX), categoryId,
+                "Ange ett datum som är senast %s.".formatted(maxDate())
+            )
+        )
+        .toList();
+  }
+
   private ElementValueDateRangeList getValue(ElementValue value) {
     if (value == null) {
       throw new IllegalArgumentException("Element data value is null");
@@ -179,6 +207,10 @@ public class ElementValidationDateRangeList implements ElementValidation {
 
   private boolean isBeforeMin(LocalDate value) {
     return value != null && min != null && value.isBefore(minDate());
+  }
+
+  private boolean isAfterMax(LocalDate value) {
+    return value != null && max != null && value.isAfter(maxDate());
   }
 
   private boolean isDateRangeListFilled(ElementValueDateRangeList value) {
@@ -226,5 +258,9 @@ public class ElementValidationDateRangeList implements ElementValidation {
 
   private LocalDate minDate() {
     return LocalDate.now(ZoneId.systemDefault()).plus(min);
+  }
+
+  private LocalDate maxDate() {
+    return LocalDate.now(ZoneId.systemDefault()).plus(max);
   }
 }
