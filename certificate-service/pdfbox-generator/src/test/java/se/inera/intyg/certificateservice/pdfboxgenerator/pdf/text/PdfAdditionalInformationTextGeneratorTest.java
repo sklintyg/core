@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.helpers;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -18,8 +18,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.pdfboxgenerator.text.PdfAdditionalInformationTextGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.text.PdfTextGenerator;
 
 @ExtendWith(MockitoExtension.class)
 class PdfAdditionalInformationTextGeneratorTest {

@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,13 +31,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CertificatePdfFillService;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService;
-import se.inera.intyg.certificateservice.pdfboxgenerator.text.PdfAdditionalInformationTextGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfPatientValueGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfSignatureValueGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfUnitValueGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAdditionalInformationTextGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfPatientValueGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfSignatureValueGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfUnitValueGenerator;
 
 @ExtendWith(MockitoExtension.class)
 class CertificatePdfFillServiceTest {

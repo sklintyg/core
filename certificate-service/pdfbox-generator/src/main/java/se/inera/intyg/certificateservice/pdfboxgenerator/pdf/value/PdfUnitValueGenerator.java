@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.value;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_CARE_UNIT_CONTACT_INFORMATION_FIELD_ID;

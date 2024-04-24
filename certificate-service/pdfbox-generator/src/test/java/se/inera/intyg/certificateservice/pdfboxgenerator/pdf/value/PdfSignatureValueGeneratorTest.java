@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.helpers;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
@@ -12,8 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
-import se.inera.intyg.certificateservice.pdfboxgenerator.text.PdfTextGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfSignatureValueGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfTextGenerator;
 
 @ExtendWith(MockitoExtension.class)
 class PdfSignatureValueGeneratorTest {

@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -39,8 +39,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService;
-import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfDateValueGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfDateValueGenerator;
 
 @ExtendWith(MockitoExtension.class)
 class FK7211PdfFillServiceTest {

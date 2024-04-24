@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.value;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,14 +17,14 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueTe
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
-class PdfTextValueGeneratorTest {
+class PdfDateValueGeneratorTest {
 
-  private static final String FIELD_ID = "form1[0].#subform[0].flt_txtDiagnos[0]";
-  private static final String VALUE = "Diagnos är okänd men symtomen är hosta.";
-  private static final ElementId QUESTION_SYMPTOM_ID = new ElementId("2");
+  private static final String FIELD_ID = "form1[0].#subform[0].flt_dat[0]";
+  private static final LocalDate VALUE = LocalDate.now();
+  private static final ElementId QUESTION_ID = new ElementId("1");
 
 
-  private static final PdfTextValueGenerator pdfTextValueGenerator = new PdfTextValueGenerator();
+  private static final PdfDateValueGenerator pdfDateValueGenerator = new PdfDateValueGenerator();
 
   @Nested
   class NoElementData {
@@ -34,17 +34,16 @@ class PdfTextValueGeneratorTest {
       final var certificate = buildCertificate(null);
 
       assertDoesNotThrow(
-          () -> pdfTextValueGenerator.generate(certificate, QUESTION_SYMPTOM_ID, FIELD_ID)
-      );
+          () -> pdfDateValueGenerator.generate(certificate, QUESTION_ID, FIELD_ID));
     }
 
     @Test
-    void shouldNotSetValueIfElementDataIsNull() {
+    void shouldReturnEmptyListIfElementDataIsNull() {
       final var certificate = buildCertificate(null);
 
-      final var result = pdfTextValueGenerator.generate(certificate, QUESTION_SYMPTOM_ID, FIELD_ID);
+      final var response = pdfDateValueGenerator.generate(certificate, QUESTION_ID, FIELD_ID);
 
-      assertEquals(Collections.emptyList(), result);
+      assertEquals(Collections.emptyList(), response);
     }
 
     @Test
@@ -52,17 +51,16 @@ class PdfTextValueGeneratorTest {
       final var certificate = buildCertificate(Collections.emptyList());
 
       assertDoesNotThrow(
-          () -> pdfTextValueGenerator.generate(certificate, QUESTION_SYMPTOM_ID, FIELD_ID)
-      );
+          () -> pdfDateValueGenerator.generate(certificate, QUESTION_ID, FIELD_ID));
     }
 
     @Test
     void shouldNotSetValueIfElementDataIsEmpty() {
       final var certificate = buildCertificate(Collections.emptyList());
 
-      final var result = pdfTextValueGenerator.generate(certificate, QUESTION_SYMPTOM_ID, FIELD_ID);
+      final var response = pdfDateValueGenerator.generate(certificate, QUESTION_ID, FIELD_ID);
 
-      assertEquals(Collections.emptyList(), result);
+      assertEquals(Collections.emptyList(), response);
     }
   }
 
@@ -70,37 +68,60 @@ class PdfTextValueGeneratorTest {
   class ElementDataExists {
 
     @Test
-    void shouldSetValueIfElementDataWithTextValue() {
+    void shouldSetValueIfElementDataWithDateValue() {
       final var expected = List.of(
           PdfField.builder()
               .id(FIELD_ID)
-              .value(VALUE)
+              .value(VALUE.toString())
               .build()
       );
+
       final var certificate = buildCertificate(
           List.of(
               ElementData.builder()
-                  .id(QUESTION_SYMPTOM_ID)
+                  .id(QUESTION_ID)
                   .value(
-                      ElementValueText.builder()
-                          .text(VALUE)
+                      ElementValueDate.builder()
+                          .date(VALUE)
                           .build()
                   )
                   .build()
           )
       );
 
-      final var result = pdfTextValueGenerator.generate(certificate, QUESTION_SYMPTOM_ID, FIELD_ID);
+      final var result = pdfDateValueGenerator.generate(certificate, QUESTION_ID, FIELD_ID);
 
       assertEquals(expected, result);
     }
 
     @Test
-    void shouldThrowExceptionIfElementDataWithNotTextValue() {
+    void shouldThrowExceptionIfElementDataWithNotDateValue() {
       final var certificate = buildCertificate(
           List.of(
               ElementData.builder()
-                  .id(QUESTION_SYMPTOM_ID)
+                  .id(QUESTION_ID)
+                  .value(
+                      ElementValueText.builder()
+                          .text("TEXT")
+                          .build()
+                  )
+                  .build()
+          )
+      );
+
+      assertThrows(
+          IllegalStateException.class,
+          () -> pdfDateValueGenerator
+              .generate(certificate, QUESTION_ID, FIELD_ID)
+      );
+    }
+
+    @Test
+    void shouldThrowExceptionIfGivenQuestionIdIsNotInElementData() {
+      final var certificate = buildCertificate(
+          List.of(
+              ElementData.builder()
+                  .id(new ElementId("NOT_IT"))
                   .value(
                       ElementValueDate.builder()
                           .date(LocalDate.now())
@@ -112,30 +133,8 @@ class PdfTextValueGeneratorTest {
 
       assertThrows(
           IllegalStateException.class,
-          () -> pdfTextValueGenerator
-              .generate(certificate, QUESTION_SYMPTOM_ID, FIELD_ID)
-      );
-    }
-
-    @Test
-    void shouldThrowExceptionIfGivenQuestionIdIsNotInElementData() {
-      final var certificate = buildCertificate(
-          List.of(
-              ElementData.builder()
-                  .id(new ElementId("NOT_IT"))
-                  .value(
-                      ElementValueText.builder()
-                          .text(VALUE)
-                          .build()
-                  )
-                  .build()
-          )
-      );
-
-      assertThrows(
-          IllegalStateException.class,
-          () -> pdfTextValueGenerator
-              .generate(certificate, QUESTION_SYMPTOM_ID, FIELD_ID)
+          () -> pdfDateValueGenerator
+              .generate(certificate, QUESTION_ID, FIELD_ID)
       );
     }
   }

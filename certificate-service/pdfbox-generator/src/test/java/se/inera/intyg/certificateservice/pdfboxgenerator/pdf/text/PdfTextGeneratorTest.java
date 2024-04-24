@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.toolkits;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -10,7 +10,6 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.pdfboxgenerator.text.PdfTextGenerator;
 
 class PdfTextGeneratorTest {
 

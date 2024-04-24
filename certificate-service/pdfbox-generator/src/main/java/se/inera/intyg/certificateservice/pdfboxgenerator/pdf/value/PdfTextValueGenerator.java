@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.value;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
 import java.util.Collections;
 import java.util.List;

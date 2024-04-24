@@ -14,10 +14,10 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
-import se.inera.intyg.certificateservice.pdfboxgenerator.text.PdfAdditionalInformationTextGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfPatientValueGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfSignatureValueGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfUnitValueGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAdditionalInformationTextGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfPatientValueGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfSignatureValueGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfUnitValueGenerator;
 
 
 @Service

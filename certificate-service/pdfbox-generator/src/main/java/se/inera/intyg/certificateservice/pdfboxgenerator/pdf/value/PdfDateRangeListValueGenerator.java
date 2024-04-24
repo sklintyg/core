@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.value;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.CHECKED_BOX_VALUE;
 

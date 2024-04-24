@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.text;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text;
 
 import java.awt.Color;
 import java.io.IOException;

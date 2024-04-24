@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CertificateTypePdfFillService;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
-import se.inera.intyg.certificateservice.pdfboxgenerator.value.PdfDateValueGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfDateValueGenerator;
 
 
 @Service

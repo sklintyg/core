@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -25,9 +25,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CertificatePdfFillService;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CertificatePdfGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CertificateTypePdfFillService;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService;
 

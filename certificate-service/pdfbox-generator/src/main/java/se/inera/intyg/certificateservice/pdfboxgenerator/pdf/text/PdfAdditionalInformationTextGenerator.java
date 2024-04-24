@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.text;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text;
 
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.DIGITALLY_SIGNED_TEXT;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.WATERMARK_DRAFT;
