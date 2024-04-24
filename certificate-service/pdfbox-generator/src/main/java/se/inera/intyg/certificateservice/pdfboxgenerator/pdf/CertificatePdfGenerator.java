@@ -5,12 +5,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
 
-@Service
 @RequiredArgsConstructor
 public class CertificatePdfGenerator implements PdfGenerator {
 
