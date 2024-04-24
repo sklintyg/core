@@ -84,4 +84,7 @@ public class CertificateEntity {
   private RevokedReasonEntity revokedReason;
   @Column(name = "revoked_message")
   private String revokedMessage;
+  @OneToOne(mappedBy = "certificate", cascade = CascadeType.ALL)
+  @PrimaryKeyJoinColumn
+  private ExternalReferenceEntity externalReference;
 }

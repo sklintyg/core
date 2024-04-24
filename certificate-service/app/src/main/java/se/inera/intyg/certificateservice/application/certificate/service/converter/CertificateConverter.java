@@ -102,6 +102,9 @@ public class CertificateConverter {
                 .relations(RELATIONS)
                 .signed(certificate.signed())
                 .modified(certificate.modified())
+                .externalReference(
+                    certificate.externalReference() != null ? certificate.externalReference()
+                        .value() : null)
                 .build()
         )
         .data(

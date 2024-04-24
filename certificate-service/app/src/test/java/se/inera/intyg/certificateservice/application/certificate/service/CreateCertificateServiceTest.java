@@ -10,6 +10,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REF;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertif
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.user.model.ExternalReference;
 
 @ExtendWith(MockitoExtension.class)
 class CreateCertificateServiceTest {
@@ -64,6 +66,7 @@ class CreateCertificateServiceTest {
       .careUnit(ALFA_MEDICINCENTRUM_DTO)
       .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
       .patient(ATHENA_REACT_ANDERSSON_DTO)
+      .externalReference(EXTERNAL_REF)
       .build();
 
   @Test
@@ -104,7 +107,8 @@ class CreateCertificateServiceTest {
             .type(new CertificateType(TYPE))
             .version(new CertificateVersion(VERSION))
             .build(),
-        actionEvaluation
+        actionEvaluation,
+        new ExternalReference(EXTERNAL_REF)
     );
 
     final var certificateAction = mock(CertificateAction.class);

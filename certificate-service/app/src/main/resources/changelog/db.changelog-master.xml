@@ -190,6 +190,15 @@
       </column>
     </createTable>
 
+    <createTable tableName="external_reference">
+      <column name="key" type="bigint unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="reference" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
     <addForeignKeyConstraint constraintName="fk_unit_unit_type_key"
       baseTableName="unit" baseColumnNames="unit_type_key"
       referencedTableName="unit_type" referencedColumnNames="key"/>

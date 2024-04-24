@@ -19,14 +19,15 @@ public class GetCertificateXmlDomainService {
 
     if (!certificate.allowTo(CertificateActionType.READ, actionEvaluation)) {
       throw new CertificateActionForbidden(
-          "Not allowed to read certificate for %s so cannot get XML".formatted(certificateId)
+          "Not allowed to read certificate for %s so cannot get XML".formatted(certificateId),
+          certificate.reasonNotAllowed(CertificateActionType.READ, actionEvaluation)
       );
     }
 
     certificate.updateMetadata(actionEvaluation);
 
     final var xml = xmlGenerator.generate(certificate);
-    
+
     return CertificateXml.builder()
         .certificateId(certificate.id())
         .revision(certificate.revision())

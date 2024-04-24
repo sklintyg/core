@@ -25,7 +25,8 @@ public class SendCertificateDomainService {
     final var certificate = certificateRepository.getById(certificateId);
     if (!certificate.allowTo(CertificateActionType.SEND, actionEvaluation)) {
       throw new CertificateActionForbidden(
-          "Not allowed to send certificate for %s".formatted(certificateId)
+          "Not allowed to send certificate for %s".formatted(certificateId),
+          certificate.reasonNotAllowed(CertificateActionType.SEND, actionEvaluation)
       );
     }
 

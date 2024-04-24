@@ -24,16 +24,23 @@ public class CertificateActionCreate implements CertificateAction {
   }
 
   @Override
+  public List<String> reasonNotAllowed(Optional<Certificate> certificate,
+      ActionEvaluation actionEvaluation) {
+    return actionRules.stream()
+        .filter(value -> !value.evaluate(actionEvaluation))
+        .map(ActionRule::getReasonForPermissionDenied)
+        .toList();
+  }
+
+  @Override
   public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
     if (actionEvaluation.patient() == null || actionEvaluation.user() == null) {
       return false;
     }
 
-    final var evaluated = actionRules.stream()
+    return actionRules.stream()
         .filter(value -> value.evaluate(actionEvaluation))
         .count() == actionRules.size();
-
-    return evaluated && isPatientAlive(actionEvaluation) && isUserNotBlocked(actionEvaluation);
   }
 
   @Override
@@ -44,13 +51,5 @@ public class CertificateActionCreate implements CertificateAction {
   @Override
   public String getDescription() {
     return DESCRIPTION;
-  }
-
-  private static boolean isUserNotBlocked(ActionEvaluation actionEvaluation) {
-    return !actionEvaluation.user().blocked().value();
-  }
-
-  private static boolean isPatientAlive(ActionEvaluation actionEvaluation) {
-    return !actionEvaluation.patient().deceased().value();
   }
 }

@@ -29,14 +29,16 @@ public class SignCertificateWithoutSignatureDomainService {
     final var certificate = certificateRepository.getById(certificateId);
     if (!certificate.allowTo(CertificateActionType.SIGN, actionEvaluation)) {
       throw new CertificateActionForbidden(
-          "Not allowed to sign certificate with id %s".formatted(certificateId)
+          "Not allowed to sign certificate with id %s".formatted(certificateId),
+          certificate.reasonNotAllowed(CertificateActionType.SIGN, actionEvaluation)
       );
     }
 
     if (!Role.PRIVATE_DOCTOR.equals(actionEvaluation.user().role())) {
       throw new CertificateActionForbidden(
           "Only '%s' is allowed to sign without signature! Cannot sign certificate '%s'!"
-              .formatted(Role.PRIVATE_DOCTOR.name(), certificateId.id())
+              .formatted(Role.PRIVATE_DOCTOR.name(), certificateId.id()),
+          certificate.reasonNotAllowed(CertificateActionType.SIGN, actionEvaluation)
       );
     }
 

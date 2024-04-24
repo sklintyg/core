@@ -10,7 +10,9 @@ import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.DELETE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.REVISION;
 
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -111,5 +113,21 @@ class DeleteCertificateDomainServiceTest {
         () -> assertEquals(ACTION_EVALUATION, certificateEventCaptor.getValue().actionEvaluation()),
         () -> assertTrue(certificateEventCaptor.getValue().duration() >= 0)
     );
+  }
+
+  @Test
+  void shallIncludeReasonNotAllowedToException() {
+    final var certificate = mock(Certificate.class);
+    final var expectedReason = List.of("expectedReason");
+    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
+    doReturn(false).when(certificate).allowTo(DELETE, ACTION_EVALUATION);
+    doReturn(expectedReason).when(certificate)
+        .reasonNotAllowed(DELETE, ACTION_EVALUATION);
+
+    final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
+        () -> deleteCertificateDomainService.delete(CERTIFICATE_ID, REVISION, ACTION_EVALUATION)
+    );
+
+    assertEquals(expectedReason, certificateActionForbidden.reason());
   }
 }
