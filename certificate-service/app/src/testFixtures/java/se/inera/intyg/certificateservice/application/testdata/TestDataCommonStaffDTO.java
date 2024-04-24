@@ -10,11 +10,11 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_MIDDLE_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_FIRST_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_FULL_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_HSA_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_LAST_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_MIDDLE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_FULL_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_MIDDLE_NAME;
 
 import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO;
 
@@ -44,10 +44,10 @@ public class TestDataCommonStaffDTO {
 
   public static StaffDTO.StaffDTOBuilder bertilBarnmorskaBuilder() {
     return StaffDTO.builder()
-        .personId(BARNMORSKA_HSA_ID)
-        .firstName(BARNMORSKA_FIRST_NAME)
-        .middleName(BARNMORSKA_MIDDLE_NAME)
-        .lastName(BARNMORSKA_LAST_NAME)
-        .fullName(BARNMORSKA_FULL_NAME);
+        .personId(BERTIL_BARNMORSKA_HSA_ID)
+        .firstName(BERTIL_BARNMORSKA_FIRST_NAME)
+        .middleName(BERTIL_BARNMORSKA_MIDDLE_NAME)
+        .lastName(BERTIL_BARNMORSKA_LAST_NAME)
+        .fullName(BERTIL_BARNMORSKA_FULL_NAME);
   }
 }

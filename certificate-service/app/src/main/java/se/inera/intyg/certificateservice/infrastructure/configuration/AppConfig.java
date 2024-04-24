@@ -31,7 +31,9 @@ import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertifica
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlSchemaValidator;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlSchematronValidator;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlValidationService;
-import se.inera.intyg.certificateservice.pdfboxgenerator.CertificatePdfGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CertificatePdfFillService;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CertificatePdfGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CertificateTypePdfFillService;
 
 @Configuration
 public class AppConfig {
@@ -173,8 +175,10 @@ public class AppConfig {
   }
 
   @Bean
-  public PdfGenerator pdfGenerator() {
-    return new CertificatePdfGenerator();
+  public PdfGenerator pdfGenerator(
+      List<CertificateTypePdfFillService> certificateTypePdfFillServices,
+      CertificatePdfFillService certificatePdfFillService) {
+    return new CertificatePdfGenerator(certificateTypePdfFillServices, certificatePdfFillService);
   }
 
   @Bean

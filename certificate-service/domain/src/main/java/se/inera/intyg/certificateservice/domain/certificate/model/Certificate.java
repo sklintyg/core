@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
@@ -243,6 +244,12 @@ public class Certificate {
           "Certificate with id '%s' already has an external reference".formatted(id().id()));
     }
     this.externalReference = externalReference;
+  }
+
+  public Optional<ElementData> getElementDataById(ElementId id) {
+    return elementData.stream()
+        .filter(data -> id.id().equals(data.id().id()))
+        .findFirst();
   }
 }
 

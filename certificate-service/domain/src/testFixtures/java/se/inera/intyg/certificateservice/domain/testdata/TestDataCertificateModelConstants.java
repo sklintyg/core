@@ -29,8 +29,8 @@ public class TestDataCertificateModelConstants {
       "fk7211/schematron/igrav.v1.sch");
   public static final SchematronPath FK7443_SCHEMATRON_PATH = new SchematronPath(
       "fk7443/schematron/itfp.v1.sch");
-  public static final String FK7211_PDF_PATH = "fk7211_v1.pdf";
-  public static final String FK7443_PDF_PATH = "fk7443_v1.pdf";
+  public static final String FK7211_PDF_PATH = "fk7211/pdf/fk7211_v1.pdf";
+  public static final String FK7443_PDF_PATH = "fk7443/pdf/fk7443_v1.pdf";
   public static final String FK7211_NAME = "Intyg om graviditet";
   public static final String FK7443_NAME = "Intyg om tillfällig föräldrapenning";
 }

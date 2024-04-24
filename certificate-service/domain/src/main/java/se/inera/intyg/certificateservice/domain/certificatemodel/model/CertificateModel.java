@@ -23,6 +23,7 @@ public class CertificateModel {
   String description;
   Recipient recipient;
   LocalDateTime activeFrom;
+  Boolean availableForCitizen;
   List<CertificateActionSpecification> certificateActionSpecifications;
   List<ElementSpecification> elementSpecifications;
   String pdfTemplatePath;

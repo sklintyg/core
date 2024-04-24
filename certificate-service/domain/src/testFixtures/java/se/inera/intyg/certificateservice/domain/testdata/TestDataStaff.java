@@ -28,12 +28,12 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_ROLE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_BLOCKED;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_FIRST_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_HSA_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_LAST_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_MIDDLE_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BARNMORSKA_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_BLOCKED;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_MIDDLE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_ROLE;
 
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
@@ -45,7 +45,7 @@ public class TestDataStaff {
   public static final Staff ALF_DOKTOR = alfDoktorBuilder().build();
   public static final Staff ALVA_VARDADMINISTRATOR = alvaVardadmininstratorBuilder().build();
   public static final Staff ANNA_SJUKSKOTERSKA = annaSjukskoterskaBuilder().build();
-  public static final Staff BARNMORSKA = barnmorskaBuilder().build();
+  public static final Staff BERTIL_BARNMORSKA = bertilBarnmorskaBuilder().build();
 
   public static Staff.StaffBuilder ajlaDoctorBuilder() {
     return Staff.builder()
@@ -107,17 +107,17 @@ public class TestDataStaff {
         .role(ANNA_SJUKSKOTERSKA_ROLE);
   }
 
-  public static Staff.StaffBuilder barnmorskaBuilder() {
+  public static Staff.StaffBuilder bertilBarnmorskaBuilder() {
     return Staff.builder()
-        .hsaId(new HsaId(BARNMORSKA_HSA_ID))
+        .hsaId(new HsaId(BERTIL_BARNMORSKA_HSA_ID))
         .name(
             Name.builder()
-                .firstName(BARNMORSKA_FIRST_NAME)
-                .middleName(BARNMORSKA_MIDDLE_NAME)
-                .lastName(BARNMORSKA_LAST_NAME)
+                .firstName(BERTIL_BARNMORSKA_FIRST_NAME)
+                .middleName(BERTIL_BARNMORSKA_MIDDLE_NAME)
+                .lastName(BERTIL_BARNMORSKA_LAST_NAME)
                 .build()
         )
-        .blocked(BARNMORSKA_BLOCKED)
-        .role(BARNMORSKA_ROLE);
+        .blocked(BERTIL_BARNMORSKA_BLOCKED)
+        .role(BERTIL_BARNMORSKA_ROLE);
   }
 }

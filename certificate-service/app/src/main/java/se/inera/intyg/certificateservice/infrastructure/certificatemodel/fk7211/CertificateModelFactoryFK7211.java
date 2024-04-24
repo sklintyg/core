@@ -69,6 +69,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         .name(NAME)
         .description(DESCRIPTION)
         .activeFrom(activeFrom)
+        .availableForCitizen(true)
         .recipient(CertificateRecipientFactory.fkassa())
         .certificateActionSpecifications(
             List.of(

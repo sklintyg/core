@@ -31,6 +31,7 @@ public class TestDataCertificateModel {
         )
         .name(FK7211_NAME)
         .type(FK7211_CODE_TYPE)
+        .availableForCitizen(true)
         .pdfTemplatePath(FK7211_PDF_PATH)
         .schematronPath(FK7211_SCHEMATRON_PATH);
 
@@ -47,6 +48,7 @@ public class TestDataCertificateModel {
         )
         .name(FK7443_NAME)
         .type(FK7443_CODE_TYPE)
+        .availableForCitizen(false)
         .pdfTemplatePath(FK7443_PDF_PATH)
         .schematronPath(FK7443_SCHEMATRON_PATH);
   }

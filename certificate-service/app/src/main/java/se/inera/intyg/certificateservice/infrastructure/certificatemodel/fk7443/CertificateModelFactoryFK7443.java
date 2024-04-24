@@ -73,6 +73,8 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk7443/schematron/itfp.v1.sch");
 
+  public static final String PDF_FK_7443_PDF = "fk7443/pdf/fk7443_v1.pdf";
+
   @Override
   public CertificateModel create() {
     return CertificateModel.builder()
@@ -87,6 +89,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
         .name(NAME)
         .description(DESCRIPTION)
         .activeFrom(activeFrom)
+        .availableForCitizen(false)
         .recipient(CertificateRecipientFactory.fkassa())
         .certificateActionSpecifications(
             List.of(
@@ -127,6 +130,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
                 issuingUnitContactInfo()
             )
         )
+        .pdfTemplatePath(PDF_FK_7443_PDF)
         .schematronPath(SCHEMATRON_PATH)
         .build();
   }

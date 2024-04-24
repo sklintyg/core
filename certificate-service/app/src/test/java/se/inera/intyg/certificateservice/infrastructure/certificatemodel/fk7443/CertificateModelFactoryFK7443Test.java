@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443.CertificateModelFactoryFK7443.PDF_FK_7443_PDF;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443.CertificateModelFactoryFK7443.SCHEMATRON_PATH;
 
 import java.time.LocalDateTime;
@@ -79,6 +80,13 @@ class CertificateModelFactoryFK7443Test {
   }
 
   @Test
+  void shallIncludePdfTemplatePath() {
+    final var certificateModel = certificateModelFactoryFK7443.create();
+
+    assertEquals(PDF_FK_7443_PDF, certificateModel.pdfTemplatePath());
+  }
+
+  @Test
   void shallIncludeActiveFrom() {
     final var expectedActiveFrom = LocalDateTime.now(ZoneId.systemDefault());
     ReflectionTestUtils.setField(
@@ -90,6 +98,13 @@ class CertificateModelFactoryFK7443Test {
     final var certificateModel = certificateModelFactoryFK7443.create();
 
     assertEquals(expectedActiveFrom, certificateModel.activeFrom());
+  }
+
+  @Test
+  void shallIncludeAvailableForCitizen() {
+    final var certificateModel = certificateModelFactoryFK7443.create();
+
+    assertFalse(certificateModel.availableForCitizen());
   }
 
   @Test
