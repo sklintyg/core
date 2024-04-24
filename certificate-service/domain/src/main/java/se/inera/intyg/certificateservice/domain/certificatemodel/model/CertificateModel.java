@@ -16,52 +16,52 @@ import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 @Builder
 public class CertificateModel {
 
-    CertificateModelId id;
-    Code type;
-    String name;
-    String description;
-    Recipient recipient;
-    LocalDateTime activeFrom;
-    Boolean availableForCitizen;
-    List<CertificateActionSpecification> certificateActionSpecifications;
-    List<ElementSpecification> elementSpecifications;
-    String pdfTemplatePath;
-    SchematronPath schematronPath;
+  CertificateModelId id;
+  Code type;
+  String name;
+  String description;
+  Recipient recipient;
+  LocalDateTime activeFrom;
+  Boolean availableForCitizen;
+  List<CertificateActionSpecification> certificateActionSpecifications;
+  List<ElementSpecification> elementSpecifications;
+  String pdfTemplatePath;
+  SchematronPath schematronPath;
 
-    public List<CertificateAction> actions() {
-        return certificateActionSpecifications.stream()
-            .map(CertificateActionFactory::create)
-            .filter(Objects::nonNull)
-            .toList();
-    }
+  public List<CertificateAction> actions() {
+    return certificateActionSpecifications.stream()
+        .map(CertificateActionFactory::create)
+        .filter(Objects::nonNull)
+        .toList();
+  }
 
-    public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
-        return actions().stream()
-            .filter(certificateAction -> certificateAction.evaluate(actionEvaluation))
-            .toList();
-    }
+  public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
+    return actions().stream()
+        .filter(certificateAction -> certificateAction.evaluate(actionEvaluation))
+        .toList();
+  }
 
-    public boolean allowTo(CertificateActionType certificateActionType,
-        ActionEvaluation actionEvaluation) {
-        return actions().stream()
-            .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
-            .findFirst()
-            .map(certificateAction -> certificateAction.evaluate(actionEvaluation))
-            .orElse(false);
-    }
+  public boolean allowTo(CertificateActionType certificateActionType,
+      ActionEvaluation actionEvaluation) {
+    return actions().stream()
+        .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
+        .findFirst()
+        .map(certificateAction -> certificateAction.evaluate(actionEvaluation))
+        .orElse(false);
+  }
 
-    public boolean elementSpecificationExists(ElementId id) {
-        return elementSpecifications.stream()
-            .anyMatch(elementSpecification -> elementSpecification.exists(id));
-    }
+  public boolean elementSpecificationExists(ElementId id) {
+    return elementSpecifications.stream()
+        .anyMatch(elementSpecification -> elementSpecification.exists(id));
+  }
 
-    public ElementSpecification elementSpecification(ElementId id) {
-        return elementSpecifications.stream()
-            .filter(elementSpecification -> elementSpecification.exists(id))
-            .map(elementSpecification -> elementSpecification.elementSpecification(id))
-            .findAny()
-            .orElseThrow(
-                () -> new IllegalArgumentException("No element with id '%s' exists".formatted(id))
-            );
-    }
+  public ElementSpecification elementSpecification(ElementId id) {
+    return elementSpecifications.stream()
+        .filter(elementSpecification -> elementSpecification.exists(id))
+        .map(elementSpecification -> elementSpecification.elementSpecification(id))
+        .findAny()
+        .orElseThrow(
+            () -> new IllegalArgumentException("No element with id '%s' exists".formatted(id))
+        );
+  }
 }
