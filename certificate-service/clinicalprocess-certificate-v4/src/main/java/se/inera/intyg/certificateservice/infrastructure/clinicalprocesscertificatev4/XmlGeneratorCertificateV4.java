@@ -66,11 +66,13 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
         )
     );
 
-    xmlValidationService.validate(
-        xml,
-        certificate.certificateModel().schematronPath(),
-        certificate.id()
-    );
+    if (!certificate.isDraft()) {
+      xmlValidationService.validate(
+          xml,
+          certificate.certificateModel().schematronPath(),
+          certificate.id()
+      );
+    }
 
     return xml;
   }

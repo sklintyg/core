@@ -450,14 +450,24 @@ class XmlGeneratorCertificateV4Test {
   }
 
   @Test
-  void shouldValidateXml() {
-    final var xml = xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE);
+  void shouldValidateXmlIfCertificateIsNotDraft() {
+    final var certificate = fk7211CertificateBuilder().status(Status.SIGNED).build();
+    final var xml = xmlGeneratorCertificateV4.generate(certificate);
     verify(xmlValidationService).validate(
         xml,
         FK7211_CERTIFICATE.certificateModel().schematronPath(),
         FK7211_CERTIFICATE.id()
     );
   }
+
+  @Test
+  void shouldNotValidateXmlIfCertificateIsDraft() {
+    final var certificate = fk7211CertificateBuilder().status(Status.DRAFT).build();
+    xmlGeneratorCertificateV4.generate(certificate);
+    verifyNoInteractions(xmlValidationService);
+
+  }
+
 
   private RegisterCertificateType unmarshal(Xml response) {
     try {
