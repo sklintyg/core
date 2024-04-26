@@ -99,6 +99,16 @@ class FK7443PdfFillServiceTest {
   }
 
   @Test
+  void shouldReturnAvailableMcid() {
+    assertEquals(100, fk7443PdfFillService.getAvailableMcid());
+  }
+
+  @Test
+  void shouldReturnSignedTagIndex() {
+    assertEquals(34, fk7443PdfFillService.getSignatureTagIndex());
+  }
+
+  @Test
   void shouldReturnGeneratorType() {
     assertEquals(
         fk7443CertificateBuilder().build().certificateModel().id().type(),
