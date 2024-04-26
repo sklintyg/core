@@ -14,4 +14,5 @@ public interface CertificateTypePdfFillService {
 
   int getAvailableMcid();
 
+  int getSignatureTagIndex();
 }

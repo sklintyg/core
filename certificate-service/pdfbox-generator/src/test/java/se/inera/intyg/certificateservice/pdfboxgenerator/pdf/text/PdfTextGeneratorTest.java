@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -16,14 +17,14 @@ import org.junit.jupiter.api.Test;
 
 class PdfTextGeneratorTest {
 
-  private static final String VALUE = "This is an example text";
+  private static final String VALUE = "VALUE";
 
   private static final PdfTextGenerator pdfTextGenerator = new PdfTextGenerator();
 
   PDAcroForm pdAcroForm;
   PDDocument document;
 
-  /*Nested
+  @Nested
   class FK7211 {
 
     @BeforeEach
@@ -35,9 +36,9 @@ class PdfTextGeneratorTest {
       pdAcroForm = documentCatalog.getAcroForm();
     }
 
-   @Test
-    void shouldAddTextToDocument() throws IOException {
-      pdfTextGenerator.addText(document, VALUE, 10, null, Color.gray, 100);
+    @Test
+    void shouldAddTopWatermarkToDocument() throws IOException {
+      pdfTextGenerator.addTopWatermark(document, VALUE, 10, 100);
 
       final var pdfText = getTextForDocument();
       assertTrue(pdfText.contains(VALUE),
@@ -48,30 +49,81 @@ class PdfTextGeneratorTest {
     }
 
     @Test
-    void shouldAddTextTag() throws IOException {
-      final var root = (PDStructureElement) document.getDocumentCatalog().getStructureTreeRoot()
-          .getKids().get(0);
-      final var section = (PDStructureElement) root.getKids().get(0);
-      final var lastDiv = (PDStructureElement) section.getKids().get(1);
+    void shouldAddNewDivForTopWatermarkText() throws IOException {
+      final var pageTag = getPageTag();
+      final var divsInPageBefore = pageTag.getKids().size();
+      pdfTextGenerator.addTopWatermark(document, VALUE, 10, 100);
+
+      assertEquals(divsInPageBefore + 1, pageTag.getKids().size());
+    }
+
+    @Test
+    void shouldAddTopWatermarkTagInFirstDiv() throws IOException {
+      pdfTextGenerator.addTopWatermark(document, VALUE, 8, 100);
+      final var firstDiv = getFirstDiv();
+      final var addedTag = (PDStructureElement) firstDiv.getKids()
+          .get(firstDiv.getKids().size() - 1);
+
+      assertAll(
+          () -> assertEquals(1, firstDiv.getKids().size()),
+          () -> assertEquals(VALUE, addedTag.getActualText())
+      );
+    }
+
+    @Test
+    void shouldAddMarginText() throws IOException {
+      pdfTextGenerator.addMarginText(document, VALUE, 100);
+
+      final var pdfText = getTextForDocument();
+      assertAll(
+          () -> assertTrue(pdfText.contains("V")),
+          () -> assertTrue(pdfText.contains("A")),
+          () -> assertTrue(pdfText.contains("L")),
+          () -> assertTrue(pdfText.contains("U")),
+          () -> assertTrue(pdfText.contains("E"))
+      );
+    }
+
+    @Test
+    void shouldAddMarginTagInLastDiv() throws IOException {
+      final var lastDiv = getLastDivInTree();
       final var kidsOfLastDivBeforeAddedText = lastDiv.getKids().size();
 
-      pdfTextGenerator.addText(document, VALUE, 10, null, Color.gray, 100);
-      final var addedTag = (PDStructureElement) lastDiv.getKids().get(lastDiv.getKids().size() - 1);
+      pdfTextGenerator.addMarginText(document, VALUE, 100);
+      final var addedTag = (PDStructureElement) lastDiv.getKids()
+          .get(lastDiv.getKids().size() - 1);
 
       assertEquals(kidsOfLastDivBeforeAddedText + 1, lastDiv.getKids().size());
       assertEquals(VALUE, addedTag.getActualText());
     }
 
     @Test
-    void shouldAddTextWithOffsetToDocument() throws IOException {
-      pdfTextGenerator.addText(document, VALUE, 10, null, Color.gray, 10F, 10F, false, 100);
-
-      final var pdfText = getTextForDocument();
-      assertTrue(pdfText.contains(VALUE),
-          String.format(
-              "Expect to find text '%s' in pdf but pdf text does not contain it '%s'",
-              VALUE, pdfText)
+    void shouldThrowErrorIfTryingToPlaceSignatureInIndexThatDoesntExist() {
+      assertThrows(
+          IllegalStateException.class,
+          () -> pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 500)
       );
+    }
+
+    @Test
+    void shouldAddSignatureInCorrectDiv() throws IOException {
+      pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 18);
+
+      final var pageTag = getPageTag();
+      final var questionDiv = (PDStructureElement) pageTag.getKids().get(0);
+      final var signatureDiv = (PDStructureElement) questionDiv.getKids().get(18);
+      assertEquals(2, signatureDiv.getKids().size());
+    }
+
+    @Test
+    void shouldAddSignatureTextInCorrectDiv() throws IOException {
+      pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 18);
+
+      final var pageTag = getPageTag();
+      final var questionDiv = (PDStructureElement) pageTag.getKids().get(0);
+      final var signatureDiv = (PDStructureElement) questionDiv.getKids().get(18);
+      final var signatureValue = (PDStructureElement) signatureDiv.getKids().get(1);
+      assertEquals(VALUE, signatureValue.getActualText());
     }
 
     @Test
@@ -89,24 +141,14 @@ class PdfTextGeneratorTest {
 
     @Test
     void shouldAddWatermarkTag() throws IOException {
-      final var root = (PDStructureElement) document.getDocumentCatalog().getStructureTreeRoot()
-          .getKids().get(0);
-      final var section = (PDStructureElement) root.getKids().get(0);
-      final var lastDiv = (PDStructureElement) section.getKids().get(1);
-      final var kidsOfLastDivBeforeAddedText = lastDiv.getKids().size();
-
       pdfTextGenerator.addWatermark(document, "UTKAST", 100);
-      final var addedTag = (PDStructureElement) lastDiv.getKids().get(lastDiv.getKids().size() - 1);
+      final var firstDiv = getFirstDiv();
+      final var addedTag = (PDStructureElement) firstDiv.getKids()
+          .get(firstDiv.getKids().size() - 1);
 
-      assertEquals(kidsOfLastDivBeforeAddedText + 1, lastDiv.getKids().size());
-      assertEquals("UTKAST", addedTag.getActualText());
+      assertEquals("Detta är ett utkast", addedTag.getActualText());
     }
-
-    private String getTextForDocument() throws IOException {
-      final var textStripper = new PDFTextStripper();
-      return textStripper.getText(document);
-    }
-  }*/
+  }
 
   @Nested
   class FK7443 {
@@ -134,26 +176,46 @@ class PdfTextGeneratorTest {
 
     @Test
     void shouldAddNewDivForTopWatermarkText() throws IOException {
+      final var pageTag = getPageTag();
+      final var divsInPageBefore = pageTag.getKids().size();
       pdfTextGenerator.addTopWatermark(document, VALUE, 10, 100);
 
-      final var pdfText = getTextForDocument();
-
-      final var documentTag = (PDStructureElement) document.getDocumentCatalog()
-          .getStructureTreeRoot()
-          .getKids().get(0);
-      final var pageTag = (PDStructureElement) documentTag.getKids().get(0);
-      assertEquals(3, pageTag.getKids().size());
+      assertEquals(divsInPageBefore + 1, pageTag.getKids().size());
     }
 
-   /* @Test
-    void shouldAddTextTag() throws IOException {
-      final var root = (PDStructureElement) document.getDocumentCatalog().getStructureTreeRoot()
-          .getKids().get(0);
-      final var section = (PDStructureElement) root.getKids().get(0);
-      final var lastDiv = (PDStructureElement) section.getKids().get(1);
+    @Test
+    void shouldAddTopWatermarkTagInFirstDiv() throws IOException {
+      pdfTextGenerator.addTopWatermark(document, VALUE, 8, 100);
+      final var firstDiv = getFirstDiv();
+      final var addedTag = (PDStructureElement) firstDiv.getKids()
+          .get(firstDiv.getKids().size() - 1);
+
+      assertAll(
+          () -> assertEquals(1, firstDiv.getKids().size()),
+          () -> assertEquals(VALUE, addedTag.getActualText())
+      );
+    }
+
+    @Test
+    void shouldAddMarginText() throws IOException {
+      pdfTextGenerator.addMarginText(document, VALUE, 100);
+
+      final var pdfText = getTextForDocument();
+      assertAll(
+          () -> assertTrue(pdfText.contains("V")),
+          () -> assertTrue(pdfText.contains("A")),
+          () -> assertTrue(pdfText.contains("L")),
+          () -> assertTrue(pdfText.contains("U")),
+          () -> assertTrue(pdfText.contains("E"))
+      );
+    }
+
+    @Test
+    void shouldAddMarginTagInLastDiv() throws IOException {
+      final var lastDiv = getLastDivInTree();
       final var kidsOfLastDivBeforeAddedText = lastDiv.getKids().size();
 
-      pdfTextGenerator.addText(document, VALUE, 10, null, Color.gray, 100);
+      pdfTextGenerator.addMarginText(document, VALUE, 100);
       final var addedTag = (PDStructureElement) lastDiv.getKids()
           .get(lastDiv.getKids().size() - 1);
 
@@ -162,8 +224,16 @@ class PdfTextGeneratorTest {
     }
 
     @Test
-    void shouldAddTextWithOffsetToDocument() throws IOException {
-      pdfTextGenerator.addText(document, VALUE, 10, null, Color.gray, 10F, 10F, false, 100);
+    void shouldThrowErrorIfTryingToPlaceSignatureInIndexThatDoesntExist() {
+      assertThrows(
+          IllegalStateException.class,
+          () -> pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 500)
+      );
+    }
+
+    @Test
+    void shouldAddSignatureToDocument() throws IOException {
+      pdfTextGenerator.addDigitalSignatureText(document, VALUE, 10F, 10F, 100, 34);
 
       final var pdfText = getTextForDocument();
       assertTrue(pdfText.contains(VALUE),
@@ -171,7 +241,28 @@ class PdfTextGeneratorTest {
               "Expect to find text '%s' in pdf but pdf text does not contain it '%s'",
               VALUE, pdfText)
       );
-    }*/
+    }
+
+    @Test
+    void shouldAddSignatureInCorrectDiv() throws IOException {
+      pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 34);
+
+      final var pageTag = getPageTag();
+      final var questionDiv = (PDStructureElement) pageTag.getKids().get(0);
+      final var signatureDiv = (PDStructureElement) questionDiv.getKids().get(34);
+      assertEquals(2, signatureDiv.getKids().size());
+    }
+
+    @Test
+    void shouldAddSignatureTextInCorrectDiv() throws IOException {
+      pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 34);
+
+      final var pageTag = getPageTag();
+      final var questionDiv = (PDStructureElement) pageTag.getKids().get(0);
+      final var signatureDiv = (PDStructureElement) questionDiv.getKids().get(34);
+      final var signatureValue = (PDStructureElement) signatureDiv.getKids().get(1);
+      assertEquals(VALUE, signatureValue.getActualText());
+    }
 
     @Test
     void shouldAddWatermark() throws IOException {
@@ -188,23 +279,35 @@ class PdfTextGeneratorTest {
 
     @Test
     void shouldAddWatermarkTag() throws IOException {
-      final var root = (PDStructureElement) document.getDocumentCatalog().getStructureTreeRoot()
-          .getKids().get(0);
-      final var section = (PDStructureElement) root.getKids().get(0);
-      final var lastDiv = (PDStructureElement) section.getKids().get(1);
-      final var kidsOfLastDivBeforeAddedText = lastDiv.getKids().size();
-
       pdfTextGenerator.addWatermark(document, "UTKAST", 100);
-      final var addedTag = (PDStructureElement) lastDiv.getKids()
-          .get(lastDiv.getKids().size() - 1);
+      final var firstDiv = getFirstDiv();
+      final var addedTag = (PDStructureElement) firstDiv.getKids()
+          .get(firstDiv.getKids().size() - 1);
 
-      assertEquals(kidsOfLastDivBeforeAddedText + 1, lastDiv.getKids().size());
-      assertEquals("UTKAST", addedTag.getActualText());
-    }
-
-    private String getTextForDocument() throws IOException {
-      final var textStripper = new PDFTextStripper();
-      return textStripper.getText(document);
+      assertEquals("Detta är ett utkast", addedTag.getActualText());
     }
   }
+
+  private String getTextForDocument() throws IOException {
+    final var textStripper = new PDFTextStripper();
+    return textStripper.getText(document);
+  }
+
+  private PDStructureElement getFirstDiv() {
+    return (PDStructureElement) getPageTag().getKids().get(0);
+  }
+
+  private PDStructureElement getPageTag() {
+    final var documentTag = (PDStructureElement) document.getDocumentCatalog()
+        .getStructureTreeRoot()
+        .getKids().get(0);
+    final var pageTag = (PDStructureElement) documentTag.getKids().get(0);
+    return pageTag;
+  }
+
+  private PDStructureElement getLastDivInTree() {
+    final var section = getPageTag();
+    return (PDStructureElement) section.getKids().get(section.getKids().size() - 1);
+  }
+
 }

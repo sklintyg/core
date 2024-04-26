@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
@@ -10,6 +11,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureElement;
+import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureNode;
 import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureTreeRoot;
 import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDMarkedContent;
 import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyList;
@@ -97,7 +99,7 @@ public class PdfTextGenerator {
   }
 
   public void addDigitalSignatureText(PDDocument pdDocument, String text, Float xPosition,
-      Float yPosition, int mcid)
+      Float yPosition, int mcid, int index)
       throws IOException {
     addText(
         pdDocument,
@@ -109,13 +111,13 @@ public class PdfTextGenerator {
         yPosition,
         true,
         mcid,
-        getLastSection(pdDocument)
+        getDivInQuestionSection(pdDocument, index)
     );
   }
 
   public void addWatermark(PDDocument document, String text, int mcid) throws IOException {
     for (PDPage page : document.getPages()) {
-      final var section = getLastSection(document);
+      final var section = createNewDivOnTop(document);
       final var contentStream = createContentStream(document, page);
 
       final var fontHeight = 105;
@@ -146,7 +148,7 @@ public class PdfTextGenerator {
       contentStream.endMarkedContent();
       contentStream.endText();
       addContentToCurrentSection(page, markedContentDictionary, section, COSName.P,
-          StandardStructureTypes.P, text);
+          StandardStructureTypes.P, "Detta är ett " + text.toLowerCase());
 
       contentStream.close();
     }
@@ -176,6 +178,27 @@ public class PdfTextGenerator {
     }
 
     return (PDStructureElement) pageTag.getKids().get(pageTag.getKids().size() - 1);
+  }
+
+  private static PDStructureElement getDivInQuestionSection(PDDocument pdf, int index) {
+    final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
+
+    final var pageTag = getPageTag(structuredTree);
+
+    if (pageTag.getKids().isEmpty()) {
+      return pageTag;
+    }
+
+    final var divWithMostKids = pageTag.getKids().stream()
+        .map(PDStructureElement.class::cast)
+        .map(PDStructureNode::getKids)
+        .max(Comparator.comparing(List::size));
+
+    if (divWithMostKids.isEmpty() || divWithMostKids.get().size() - 1 < index) {
+      throw new IllegalStateException("Doesnt exist div to place signed tag in");
+    }
+
+    return (PDStructureElement) divWithMostKids.get().get(index);
   }
 
   private static PDStructureElement getPageTag(PDStructureTreeRoot structuredTree) {

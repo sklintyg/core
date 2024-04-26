@@ -44,6 +44,11 @@ public class FK7443PdfFillService implements CertificateTypePdfFillService {
   }
 
   @Override
+  public int getSignatureTagIndex() {
+    return 34;
+  }
+
+  @Override
   public List<PdfField> getFields(Certificate certificate) {
     final var diagnosis = fillDiagnosisQuestion(certificate);
     final var period = fillPeriodQuestion(certificate);

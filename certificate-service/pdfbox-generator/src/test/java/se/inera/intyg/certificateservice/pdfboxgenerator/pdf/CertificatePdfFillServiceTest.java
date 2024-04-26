@@ -120,7 +120,7 @@ class CertificatePdfFillServiceTest {
       certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(0))
-          .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt());
+          .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt());
     }
 
     @Test
@@ -211,7 +211,7 @@ class CertificatePdfFillServiceTest {
       certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(1))
-          .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt());
+          .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt());
     }
 
     @Test
@@ -301,7 +301,7 @@ class CertificatePdfFillServiceTest {
       certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(1))
-          .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt());
+          .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt());
     }
 
     @Test

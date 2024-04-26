@@ -38,26 +38,41 @@ public class CertificatePdfFillService {
       if (inputStream == null) {
         throw new IllegalArgumentException("Template not found: " + template);
       }
+
       final var document = Loader.loadPDF(inputStream.readAllBytes());
-
-      if (certificate.status() == Status.SIGNED) {
-        setFieldValues(document, pdfSignatureValueGenerator.generate(certificate));
-      }
-      setFieldValues(document, certificateValueGenerator.getFields(certificate));
-      setFieldValues(document, pdfUnitValueGenerator.generate(certificate));
-      setFieldValues(document, pdfPatientValueGenerator.generate(certificate,
-          certificateValueGenerator.getPatientIdFieldId()));
-
-      setDraftWatermark(document, certificate, certificateValueGenerator.getAvailableMcid());
-      setSignatureText(document, certificate, certificateValueGenerator.getAvailableMcid());
-      setSentText(document, certificate, certificateValueGenerator.getAvailableMcid());
-      setMarginText(document, certificate, additionalInfoText,
-          certificateValueGenerator.getAvailableMcid());
+      setFields(certificate, certificateValueGenerator, document);
+      addTexts(certificate, additionalInfoText, certificateValueGenerator, document);
 
       return document;
     } catch (Exception e) {
       throw new IllegalStateException("Could not create Pdf", e);
     }
+  }
+
+  private void setFields(Certificate certificate,
+      CertificateTypePdfFillService certificateValueGenerator, PDDocument document) {
+    if (certificate.status() == Status.SIGNED) {
+      setFieldValues(document, pdfSignatureValueGenerator.generate(certificate));
+    }
+    setFieldValues(document, certificateValueGenerator.getFields(certificate));
+    setFieldValues(document, pdfUnitValueGenerator.generate(certificate));
+    setFieldValues(document, pdfPatientValueGenerator.generate(certificate,
+        certificateValueGenerator.getPatientIdFieldId()));
+  }
+
+  private void addTexts(Certificate certificate, String additionalInfoText,
+      CertificateTypePdfFillService certificateValueGenerator, PDDocument document)
+      throws IOException {
+    setDraftWatermark(document, certificate, certificateValueGenerator.getAvailableMcid());
+    setSignatureText(
+        document,
+        certificate,
+        certificateValueGenerator.getAvailableMcid(),
+        certificateValueGenerator.getSignatureTagIndex()
+    );
+    setSentText(document, certificate, certificateValueGenerator.getAvailableMcid());
+    setMarginText(document, certificate, additionalInfoText,
+        certificateValueGenerator.getAvailableMcid());
   }
 
   private void setFieldValues(PDDocument document, List<PdfField> fields) {
@@ -97,12 +112,12 @@ public class CertificatePdfFillService {
     }
   }
 
-  private void setSignatureText(PDDocument document, Certificate certificate, int mcid)
+  private void setSignatureText(PDDocument document, Certificate certificate, int mcid, int index)
       throws IOException {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
     if (certificate.status() == Status.SIGNED) {
       pdfAdditionalInformationTextGenerator.addDigitalSignatureText(
-          document, getSignatureOffsetX(acroForm), getSignatureOffsetY(acroForm), mcid
+          document, getSignatureOffsetX(acroForm), getSignatureOffsetY(acroForm), mcid, index
       );
     }
   }

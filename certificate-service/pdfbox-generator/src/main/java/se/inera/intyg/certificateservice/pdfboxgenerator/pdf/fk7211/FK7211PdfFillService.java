@@ -43,6 +43,11 @@ public class FK7211PdfFillService implements CertificateTypePdfFillService {
   }
 
   @Override
+  public int getSignatureTagIndex() {
+    return 18;
+  }
+
+  @Override
   public String getPatientIdFieldId() {
     return PATIENT_ID_FIELD_ID;
   }

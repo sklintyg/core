@@ -84,14 +84,15 @@ class PdfAdditionalInformationTextGeneratorTest {
 
   @Test
   void shouldSetDigitalSignature() throws IOException {
-    pdfAdditionalInformationTextGenerator.addDigitalSignatureText(document, 10F, 20F, 100);
+    pdfAdditionalInformationTextGenerator.addDigitalSignatureText(document, 10F, 20F, 100, 34);
 
     verify(pdfTextGenerator).addDigitalSignatureText(
         document,
         "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren.",
         10F,
         20F,
-        100
+        100,
+        34
     );
   }
 
