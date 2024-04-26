@@ -9,6 +9,5 @@ public interface XmlGenerator {
 
   Xml generate(Certificate certificate, boolean validate);
 
-  // Per default skall validera
   Xml generate(Certificate certificate, Signature signature);
 }
