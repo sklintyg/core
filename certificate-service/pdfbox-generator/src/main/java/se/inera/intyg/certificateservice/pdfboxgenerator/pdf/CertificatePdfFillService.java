@@ -63,16 +63,14 @@ public class CertificatePdfFillService {
   private void addTexts(Certificate certificate, String additionalInfoText,
       CertificateTypePdfFillService certificateValueGenerator, PDDocument document)
       throws IOException {
-    setDraftWatermark(document, certificate, certificateValueGenerator.getAvailableMcid());
+    setDraftWatermark(document, certificate, certificateValueGenerator);
     setSignatureText(
         document,
         certificate,
-        certificateValueGenerator.getAvailableMcid(),
-        certificateValueGenerator.getSignatureTagIndex()
+        certificateValueGenerator
     );
-    setSentText(document, certificate, certificateValueGenerator.getAvailableMcid());
-    setMarginText(document, certificate, additionalInfoText,
-        certificateValueGenerator.getAvailableMcid());
+    setSentText(document, certificate, certificateValueGenerator);
+    setMarginText(document, certificate, additionalInfoText, certificateValueGenerator);
   }
 
   private void setFieldValues(PDDocument document, List<PdfField> fields) {
@@ -89,43 +87,50 @@ public class CertificatePdfFillService {
         });
   }
 
-  private void setSentText(PDDocument document, Certificate certificate, int mcid)
+  private void setSentText(PDDocument document, Certificate certificate,
+      CertificateTypePdfFillService fillService)
       throws IOException {
     if (certificate.sent() != null && certificate.sent().sentAt() != null) {
-      pdfAdditionalInformationTextGenerator.addSentText(document, certificate, mcid);
+      pdfAdditionalInformationTextGenerator.addSentText(document, certificate,
+          fillService.getAvailableMcid());
       if (Boolean.TRUE.equals(certificate.certificateModel().availableForCitizen())) {
-        pdfAdditionalInformationTextGenerator.addSentVisibilityText(document, mcid);
+        pdfAdditionalInformationTextGenerator.addSentVisibilityText(document,
+            fillService.getAvailableMcid());
       }
     }
   }
 
   private void setMarginText(PDDocument document, Certificate certificate,
-      String additionalInfoText, int mcid)
+      String additionalInfoText, CertificateTypePdfFillService pdfFillService)
       throws IOException {
     if (certificate.status() == Status.SIGNED) {
       pdfAdditionalInformationTextGenerator.addMarginAdditionalInfoText(
           document,
           certificate.id().id(),
           additionalInfoText,
-          mcid
+          pdfFillService.getAvailableMcid()
       );
     }
   }
 
-  private void setSignatureText(PDDocument document, Certificate certificate, int mcid, int index)
+  private void setSignatureText(PDDocument document, Certificate certificate,
+      CertificateTypePdfFillService pdfFillService)
       throws IOException {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
     if (certificate.status() == Status.SIGNED) {
       pdfAdditionalInformationTextGenerator.addDigitalSignatureText(
-          document, getSignatureOffsetX(acroForm), getSignatureOffsetY(acroForm), mcid, index
+          document, getSignatureOffsetX(acroForm), getSignatureOffsetY(acroForm),
+          pdfFillService.getAvailableMcid(), pdfFillService.getSignatureTagIndex()
       );
     }
   }
 
-  private void setDraftWatermark(PDDocument document, Certificate certificate, int mcid)
+  private void setDraftWatermark(PDDocument document, Certificate certificate,
+      CertificateTypePdfFillService pdfFillService)
       throws IOException {
     if (certificate.status() == Status.DRAFT) {
-      pdfAdditionalInformationTextGenerator.addDraftWatermark(document, mcid);
+      pdfAdditionalInformationTextGenerator.addDraftWatermark(document,
+          pdfFillService.getAvailableMcid());
     }
   }
 

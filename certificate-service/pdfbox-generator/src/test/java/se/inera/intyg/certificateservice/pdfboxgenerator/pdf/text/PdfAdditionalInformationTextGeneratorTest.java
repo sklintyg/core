@@ -2,12 +2,14 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
 
 import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.util.Matrix;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -36,8 +38,10 @@ class PdfAdditionalInformationTextGeneratorTest {
     verify(pdfTextGenerator).addTopWatermark(
         any(PDDocument.class),
         captor.capture(),
+        any(Matrix.class),
         anyInt(),
-        anyInt()
+        anyInt(),
+        anyBoolean()
     );
 
     assertEquals(
@@ -54,8 +58,10 @@ class PdfAdditionalInformationTextGeneratorTest {
     verify(pdfTextGenerator).addTopWatermark(
         any(PDDocument.class),
         captor.capture(),
+        any(Matrix.class),
         anyInt(),
-        anyInt()
+        anyInt(),
+        anyBoolean()
     );
 
     assertEquals(

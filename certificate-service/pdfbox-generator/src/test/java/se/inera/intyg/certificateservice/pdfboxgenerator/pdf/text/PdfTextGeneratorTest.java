@@ -11,6 +11,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureElement;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.util.Matrix;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,8 @@ class PdfTextGeneratorTest {
 
     @Test
     void shouldAddTopWatermarkToDocument() throws IOException {
-      pdfTextGenerator.addTopWatermark(document, VALUE, 10, 100);
+      pdfTextGenerator.addTopWatermark(document, VALUE, Matrix.getTranslateInstance(40, 665), 10,
+          100, false);
 
       final var pdfText = getTextForDocument();
       assertTrue(pdfText.contains(VALUE),
@@ -52,14 +54,41 @@ class PdfTextGeneratorTest {
     void shouldAddNewDivForTopWatermarkText() throws IOException {
       final var pageTag = getPageTag();
       final var divsInPageBefore = pageTag.getKids().size();
-      pdfTextGenerator.addTopWatermark(document, VALUE, 10, 100);
+      pdfTextGenerator.addTopWatermark(document, VALUE, Matrix.getTranslateInstance(40, 665), 10,
+          100, false);
 
       assertEquals(divsInPageBefore + 1, pageTag.getKids().size());
     }
 
     @Test
-    void shouldAddTopWatermarkTagInFirstDiv() throws IOException {
-      pdfTextGenerator.addTopWatermark(document, VALUE, 8, 100);
+    void shouldNotAddNewDivForTopWatermarkTextIfBooleanIsTrue() throws IOException {
+      final var pageTag = getPageTag();
+      final var divsInPageBefore = pageTag.getKids().size();
+      pdfTextGenerator.addTopWatermark(document, VALUE, Matrix.getTranslateInstance(40, 665), 10,
+          100, true);
+
+      assertEquals(divsInPageBefore, pageTag.getKids().size());
+    }
+
+    @Test
+    void shouldAddTopWatermarkTagInFirstOriginalDiv() throws IOException {
+      final var firstDiv = getFirstDiv();
+      final var nbrOfKidsBeforeAddedText = firstDiv.getKids().size();
+      pdfTextGenerator.addTopWatermark(document, VALUE, Matrix.getTranslateInstance(40, 665), 8,
+          100, true);
+      final var addedTag = (PDStructureElement) firstDiv.getKids()
+          .get(firstDiv.getKids().size() - 1);
+
+      assertAll(
+          () -> assertEquals(nbrOfKidsBeforeAddedText + 1, firstDiv.getKids().size()),
+          () -> assertEquals(VALUE, addedTag.getActualText())
+      );
+    }
+
+    @Test
+    void shouldAddTopWatermarkTagInNewlyCreatedDiv() throws IOException {
+      pdfTextGenerator.addTopWatermark(document, VALUE, Matrix.getTranslateInstance(40, 665), 8,
+          100, false);
       final var firstDiv = getFirstDiv();
       final var addedTag = (PDStructureElement) firstDiv.getKids()
           .get(firstDiv.getKids().size() - 1);
@@ -164,7 +193,8 @@ class PdfTextGeneratorTest {
 
     @Test
     void shouldAddTopWatermarkToDocument() throws IOException {
-      pdfTextGenerator.addTopWatermark(document, VALUE, 10, 100);
+      pdfTextGenerator.addTopWatermark(document, VALUE, Matrix.getTranslateInstance(40, 665), 10,
+          100, false);
 
       final var pdfText = getTextForDocument();
       assertTrue(pdfText.contains(VALUE),
@@ -178,14 +208,41 @@ class PdfTextGeneratorTest {
     void shouldAddNewDivForTopWatermarkText() throws IOException {
       final var pageTag = getPageTag();
       final var divsInPageBefore = pageTag.getKids().size();
-      pdfTextGenerator.addTopWatermark(document, VALUE, 10, 100);
+      pdfTextGenerator.addTopWatermark(document, VALUE, Matrix.getTranslateInstance(40, 665), 10,
+          100, false);
 
       assertEquals(divsInPageBefore + 1, pageTag.getKids().size());
     }
 
     @Test
-    void shouldAddTopWatermarkTagInFirstDiv() throws IOException {
-      pdfTextGenerator.addTopWatermark(document, VALUE, 8, 100);
+    void shouldNotAddNewDivForTopWatermarkTextIfBooleanIsTrue() throws IOException {
+      final var pageTag = getPageTag();
+      final var divsInPageBefore = pageTag.getKids().size();
+      pdfTextGenerator.addTopWatermark(document, VALUE, Matrix.getTranslateInstance(40, 665), 10,
+          100, true);
+
+      assertEquals(divsInPageBefore, pageTag.getKids().size());
+    }
+
+    @Test
+    void shouldAddTopWatermarkTagInFirstOriginalDiv() throws IOException {
+      final var firstDiv = getFirstDiv();
+      final var nbrOfKidsBeforeAddedText = firstDiv.getKids().size();
+      pdfTextGenerator.addTopWatermark(document, VALUE, Matrix.getTranslateInstance(40, 665), 8,
+          100, true);
+      final var addedTag = (PDStructureElement) firstDiv.getKids()
+          .get(firstDiv.getKids().size() - 1);
+
+      assertAll(
+          () -> assertEquals(nbrOfKidsBeforeAddedText + 1, firstDiv.getKids().size()),
+          () -> assertEquals(VALUE, addedTag.getActualText())
+      );
+    }
+
+    @Test
+    void shouldAddTopWatermarkTagInNewlyCreatedDiv() throws IOException {
+      pdfTextGenerator.addTopWatermark(document, VALUE, Matrix.getTranslateInstance(40, 665), 8,
+          100, false);
       final var firstDiv = getFirstDiv();
       final var addedTag = (PDStructureElement) firstDiv.getKids()
           .get(firstDiv.getKids().size() - 1);
@@ -301,8 +358,7 @@ class PdfTextGeneratorTest {
     final var documentTag = (PDStructureElement) document.getDocumentCatalog()
         .getStructureTreeRoot()
         .getKids().get(0);
-    final var pageTag = (PDStructureElement) documentTag.getKids().get(0);
-    return pageTag;
+    return (PDStructureElement) documentTag.getKids().get(0);
   }
 
   private PDStructureElement getLastDivInTree() {

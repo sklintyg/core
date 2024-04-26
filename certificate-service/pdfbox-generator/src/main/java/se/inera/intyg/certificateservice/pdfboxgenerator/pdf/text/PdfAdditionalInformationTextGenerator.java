@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.util.Matrix;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 
@@ -20,8 +21,10 @@ public class PdfAdditionalInformationTextGenerator {
     pdfTextGenerator.addTopWatermark(
         document,
         "Intyget har skickats digitalt till %s".formatted(certificate.sent().recipient().name()),
+        Matrix.getTranslateInstance(40, 665),
         22,
-        mcid
+        mcid,
+        false
     );
   }
 
@@ -29,8 +32,10 @@ public class PdfAdditionalInformationTextGenerator {
     pdfTextGenerator.addTopWatermark(
         document,
         "Du kan se intyget genom att logga in på 1177.se",
+        Matrix.getTranslateInstance(40, 645),
         16,
-        mcid
+        mcid,
+        true
     );
   }
 

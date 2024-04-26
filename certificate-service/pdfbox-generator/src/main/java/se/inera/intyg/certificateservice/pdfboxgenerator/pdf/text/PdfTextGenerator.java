@@ -70,16 +70,17 @@ public class PdfTextGenerator {
     contentStream.close();
   }
 
-  public void addTopWatermark(PDDocument document, String text, int fontSize, int mcid)
+  public void addTopWatermark(PDDocument document, String text, Matrix matrix, int fontSize,
+      int mcid, boolean addInExistingTopTag)
       throws IOException {
     addText(
         document,
         text,
         fontSize,
-        Matrix.getTranslateInstance(40, 665),
+        matrix,
         Color.gray,
         mcid,
-        createNewDivOnTop(document)
+        addInExistingTopTag ? getFirstDiv(document) : createNewDivOnTop(document)
     );
   }
 
@@ -94,7 +95,7 @@ public class PdfTextGenerator {
         30F,
         false,
         mcid,
-        getLastSection(document)
+        getLastDiv(document)
     );
   }
 
@@ -168,7 +169,19 @@ public class PdfTextGenerator {
     return newDiv;
   }
 
-  private static PDStructureElement getLastSection(PDDocument pdf) {
+  private static PDStructureElement getFirstDiv(PDDocument pdf) {
+    final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
+
+    final var pageTag = getPageTag(structuredTree);
+
+    if (pageTag.getKids().isEmpty()) {
+      return pageTag;
+    }
+
+    return (PDStructureElement) pageTag.getKids().get(0);
+  }
+
+  private static PDStructureElement getLastDiv(PDDocument pdf) {
     final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
 
     final var pageTag = getPageTag(structuredTree);
