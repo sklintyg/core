@@ -28,11 +28,18 @@ public class FK7211PdfFillService implements CertificateTypePdfFillService {
   public static final String CERTIFIER_NURSE_FIELD_ID = "form1[0].#subform[0].ksr_kryssruta[2]";
   public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_ID = new ElementId("1");
 
+  private int mcid = 100;
+
   private final PdfDateValueGenerator pdfDateValueGenerator;
 
   @Override
   public CertificateType getType() {
     return new CertificateType("fk7211");
+  }
+
+  @Override
+  public int getAvailableMcid() {
+    return mcid++;
   }
 
   @Override

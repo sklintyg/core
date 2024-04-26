@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
 public class GetCertificatePdfRequestBuilder {
 
-  private static final String ADDITIONAL_INFO = "ADDITIONAL_INFO";
+  private static final String ADDITIONAL_INFO = "Intyget är utskrivet från Webcert.";
   private UnitDTO unit = ALFA_ALLERGIMOTTAGNINGEN_DTO;
   private UnitDTO careUnit = ALFA_MEDICINCENTRUM_DTO;
   private UserDTO user = AJLA_DOCTOR_DTO;
