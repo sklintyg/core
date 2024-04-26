@@ -203,16 +203,16 @@ public class PdfTextGenerator {
       return pageTag;
     }
 
-    final var divWithMostKids = pageTag.getKids().stream()
+    final var containerWithMostKids = pageTag.getKids().stream()
         .map(PDStructureElement.class::cast)
         .map(PDStructureNode::getKids)
         .max(Comparator.comparing(List::size));
 
-    if (divWithMostKids.isEmpty() || divWithMostKids.get().size() - 1 < index) {
+    if (containerWithMostKids.isEmpty() || containerWithMostKids.get().size() - 1 < index) {
       throw new IllegalStateException("Doesnt exist div to place signed tag in");
     }
 
-    return (PDStructureElement) divWithMostKids.get().get(index);
+    return (PDStructureElement) containerWithMostKids.get().get(index);
   }
 
   private static PDStructureElement getPageTag(PDStructureTreeRoot structuredTree) {
