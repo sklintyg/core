@@ -57,9 +57,10 @@ public class PdfTextGenerator {
     }
 
     contentStream.setNonStrokingColor(strokingColor);
-    contentStream.setFont(new PDType1Font(isBold
-        ? FontName.HELVETICA
-        : FontName.HELVETICA_BOLD
+    contentStream.setFont(new PDType1Font(
+        isBold
+            ? FontName.HELVETICA_BOLD
+            : FontName.HELVETICA
     ), fontSize);
     final var dictionary = beginMarkedContent(contentStream, COSName.P, mcid);
     contentStream.showText(text);

@@ -25,6 +25,7 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfUnitValueG
 public class CertificatePdfFillService {
 
   public static final int SIGNATURE_X_PADDING = 60;
+  public static final int SIGNATURE_Y_PADDING = 2;
 
   private final PdfUnitValueGenerator pdfUnitValueGenerator;
   private final PdfPatientValueGenerator pdfPatientValueGenerator;
@@ -136,7 +137,7 @@ public class CertificatePdfFillService {
 
   private float getSignatureOffsetY(PDAcroForm acroForm) {
     final var rectangle = getSignedDateRectangle(acroForm);
-    return rectangle.getLowerLeftY();
+    return rectangle.getLowerLeftY() + SIGNATURE_Y_PADDING;
   }
 
   private float getSignatureOffsetX(PDAcroForm acroForm) {
