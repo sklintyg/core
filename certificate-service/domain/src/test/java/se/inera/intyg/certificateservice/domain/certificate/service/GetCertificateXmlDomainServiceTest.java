@@ -70,7 +70,7 @@ class GetCertificateXmlDomainServiceTest {
 
     @Test
     void shallReturnResponseWithXMLFromGeneratorIfXmlInCertificateIsNull() {
-      doReturn(XML).when(xmlGenerator).generate(certificate);
+      doReturn(XML).when(xmlGenerator).generate(certificate, false);
 
       final var response = getCertificateXmlDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION);
 

@@ -27,7 +27,7 @@ public class GetCertificateXmlDomainService {
     certificate.updateMetadata(actionEvaluation);
 
     final var xml = certificate.xml() != null ? certificate.xml()
-        : xmlGenerator.generate(certificate);
+        : xmlGenerator.generate(certificate, false);
 
     return CertificateXml.builder()
         .certificateId(certificate.id())

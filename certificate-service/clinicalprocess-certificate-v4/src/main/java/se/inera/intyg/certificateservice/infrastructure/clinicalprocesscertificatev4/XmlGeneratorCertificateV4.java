@@ -51,12 +51,16 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
   private final XmlValidationService xmlValidationService;
 
   @Override
-  public Xml generate(Certificate certificate) {
-    return generate(certificate, null);
+  public Xml generate(Certificate certificate, boolean validate) {
+    return generate(certificate, null, validate);
   }
 
   @Override
   public Xml generate(Certificate certificate, Signature signature) {
+    return generate(certificate, signature, true);
+  }
+
+  private Xml generate(Certificate certificate, Signature signature, boolean validate) {
     final var xml = marshall(
         registerCertificateType(
             intyg(
@@ -66,7 +70,7 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
         )
     );
 
-    if (!certificate.isDraft()) {
+    if (validate) {
       xmlValidationService.validate(
           xml,
           certificate.certificateModel().schematronPath(),
