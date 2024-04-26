@@ -425,7 +425,7 @@ class CertificateModelFactoryFK7443Test {
       void shallIncludeValidations() {
         final var expectedValidations = List.of(
             ElementValidationDateRangeList.builder()
-                .min(Period.ofMonths(1))
+                .min(Period.ofMonths(-1))
                 .mandatory(true)
                 .build()
         );
