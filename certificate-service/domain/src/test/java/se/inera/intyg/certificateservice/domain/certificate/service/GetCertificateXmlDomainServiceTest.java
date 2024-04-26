@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,12 +69,22 @@ class GetCertificateXmlDomainServiceTest {
     }
 
     @Test
-    void shallReturnResponseWithXMLFromGenerator() {
-      doReturn(XML).when(xmlGenerator).generate(certificate);
+    void shallReturnResponseWithXMLFromGeneratorIfXmlInCertificateIsNull() {
+      doReturn(XML).when(xmlGenerator).generate(certificate, false);
 
       final var response = getCertificateXmlDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION);
 
       assertEquals(CERTIFICATE_XML, response);
+    }
+
+    @Test
+    void shallReturnResponseWithXMLFromCertificateIfXmlInCertificateIsNotNull() {
+      doReturn(XML).when(certificate).xml();
+
+      final var response = getCertificateXmlDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION);
+
+      assertEquals(CERTIFICATE_XML, response);
+      verifyNoInteractions(xmlGenerator);
     }
 
     @Test

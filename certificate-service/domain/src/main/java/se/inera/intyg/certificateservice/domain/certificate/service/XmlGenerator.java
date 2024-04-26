@@ -6,7 +6,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 
 public interface XmlGenerator {
 
-  Xml generate(Certificate certificate);
+
+  Xml generate(Certificate certificate, boolean validate);
 
   Xml generate(Certificate certificate, Signature signature);
 }

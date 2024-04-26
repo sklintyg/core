@@ -138,7 +138,7 @@ public class Certificate {
   public void sign(XmlGenerator xmlGenerator, Revision revision,
       ActionEvaluation actionEvaluation) {
     sign(revision, actionEvaluation);
-    this.xml = xmlGenerator.generate(this);
+    this.xml = xmlGenerator.generate(this, true);
   }
 
   public void sign(XmlGenerator xmlGenerator, Signature signature, Revision revision,

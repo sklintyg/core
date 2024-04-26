@@ -1159,7 +1159,7 @@ class CertificateTest {
 
     @Test
     void shallReturnXmlWhenSigned() {
-      doReturn(XML).when(xmlGenerator).generate(certificate);
+      doReturn(XML).when(xmlGenerator).generate(certificate, true);
       certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build()
       );
       assertEquals(XML, certificate.xml());

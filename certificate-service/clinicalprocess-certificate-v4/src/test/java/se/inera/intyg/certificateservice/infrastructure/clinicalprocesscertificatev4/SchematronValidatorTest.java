@@ -56,7 +56,7 @@ class SchematronValidatorTest {
           .elementData(List.of(element))
           .build();
 
-      final var xml = generator.generate(certificate);
+      final var xml = generator.generate(certificate, true);
 
       assertTrue(schematronValidator.validate(certificate.id(), xml,
           CertificateModelFactoryFK7211.SCHEMATRON_PATH));
@@ -79,7 +79,7 @@ class SchematronValidatorTest {
             .elementData(List.of(element))
             .build();
 
-        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate, true));
       }
 
       @Test
@@ -97,7 +97,7 @@ class SchematronValidatorTest {
             .elementData(List.of(element))
             .build();
 
-        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate, true));
       }
 
       @Test
@@ -115,7 +115,7 @@ class SchematronValidatorTest {
             .elementData(List.of(element))
             .build();
 
-        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate, true));
       }
 
       @Test
@@ -130,7 +130,7 @@ class SchematronValidatorTest {
             .elementData(List.of(element))
             .build();
 
-        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate, true));
       }
     }
   }
@@ -172,7 +172,7 @@ class SchematronValidatorTest {
           .elementData(element)
           .build();
 
-      final var xml = generator.generate(certificate);
+      final var xml = generator.generate(certificate, true);
       assertTrue(schematronValidator.validate(certificate.id(), xml,
           CertificateModelFactoryFK7443.SCHEMATRON_PATH)
       );
@@ -204,7 +204,7 @@ class SchematronValidatorTest {
             .elementData(List.of(QUESTION_PERIOD))
             .build();
 
-        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate, true));
       }
 
       @Test
@@ -221,7 +221,7 @@ class SchematronValidatorTest {
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
-        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate, true));
       }
 
       @Test
@@ -239,7 +239,7 @@ class SchematronValidatorTest {
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
-        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate, true));
       }
 
       @Test
@@ -266,7 +266,7 @@ class SchematronValidatorTest {
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
-        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate, true));
       }
 
       @Test
@@ -280,7 +280,7 @@ class SchematronValidatorTest {
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
-        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate, true));
       }
     }
 
@@ -307,7 +307,7 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate, true));
       }
 
       @Test
@@ -330,7 +330,7 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate, true));
       }
 
       @Test
@@ -364,7 +364,7 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate, true));
       }
 
       @Test
@@ -398,7 +398,7 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate, true));
       }
 
       @Test
@@ -426,7 +426,7 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate, true));
       }
 
 
@@ -455,7 +455,7 @@ class SchematronValidatorTest {
             .elementData(element)
             .build();
 
-        assertThrows(IllegalStateException.class, () -> generator.generate(certificate));
+        assertThrows(IllegalStateException.class, () -> generator.generate(certificate, true));
       }
     }
   }
