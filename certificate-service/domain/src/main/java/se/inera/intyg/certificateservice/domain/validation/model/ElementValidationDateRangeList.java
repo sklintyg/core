@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.validation.model;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange.FROM_SUFFIX;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange.RANGE_SUFFIX;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange.TO_SUFFIX;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -29,6 +30,7 @@ public class ElementValidationDateRangeList implements ElementValidation {
 
   boolean mandatory;
   TemporalAmount min;
+  TemporalAmount max;
 
   @Override
   public List<ValidationError> validate(ElementData data,
@@ -71,13 +73,15 @@ public class ElementValidationDateRangeList implements ElementValidation {
 
     final var fromBeforeMinErrors = getFromBeforeMinErrors(data, categoryId, dateRangeList);
     final var incompleteErrors = getIncompleteDateRangeErrors(data, categoryId, dateRangeList);
+    final var toBeforeMinErrors = getToBeforeMinErrors(data, categoryId, dateRangeList);
+    final var fromAfterMaxErrors = getFromAfterMaxErrors(data, categoryId, dateRangeList);
+    final var toAfterMaxErrors = getToAfterMaxErrors(data, categoryId, dateRangeList);
     final var toBeforeFromErrors = getToBeforeFromDateRangeErrors(data, categoryId, dateRangeList);
 
-    final var errors = Stream.concat(
-        Stream.concat(fromBeforeMinErrors.stream(), incompleteErrors.stream()),
-        toBeforeFromErrors.stream());
-
-    return errors.toList();
+    return Stream.of(fromBeforeMinErrors, incompleteErrors, toBeforeMinErrors, toBeforeFromErrors,
+            fromAfterMaxErrors, toAfterMaxErrors)
+        .flatMap(List::stream)
+        .toList();
   }
 
   private List<ValidationError> getOverlappingErrors(ElementData data,
@@ -141,10 +145,46 @@ public class ElementValidationDateRangeList implements ElementValidation {
   private List<ValidationError> getFromBeforeMinErrors(ElementData data,
       Optional<ElementId> categoryId, ElementValueDateRangeList dateRangeList) {
     return dateRangeList.dateRangeList().stream()
-        .filter(this::isBeforeMin)
+        .filter(dateRange -> isBeforeMin(dateRange.from()))
         .map(dateRange -> errorMessage(
                 data, getFieldId(dateRange.dateRangeId(), FROM_SUFFIX), categoryId,
                 "Ange ett datum som är tidigast %s.".formatted(minDate())
+            )
+        )
+        .toList();
+  }
+
+  private List<ValidationError> getToBeforeMinErrors(ElementData data,
+      Optional<ElementId> categoryId, ElementValueDateRangeList dateRangeList) {
+    return dateRangeList.dateRangeList().stream()
+        .filter(dateRange -> isBeforeMin(dateRange.to()))
+        .map(dateRange -> errorMessage(
+                data, getFieldId(dateRange.dateRangeId(), TO_SUFFIX), categoryId,
+                "Ange ett datum som är tidigast %s.".formatted(minDate())
+            )
+        )
+        .toList();
+  }
+
+  private List<ValidationError> getFromAfterMaxErrors(ElementData data,
+      Optional<ElementId> categoryId, ElementValueDateRangeList dateRangeList) {
+    return dateRangeList.dateRangeList().stream()
+        .filter(dateRange -> isAfterMax(dateRange.from()))
+        .map(dateRange -> errorMessage(
+                data, getFieldId(dateRange.dateRangeId(), FROM_SUFFIX), categoryId,
+                "Ange ett datum som är senast %s.".formatted(maxDate())
+            )
+        )
+        .toList();
+  }
+
+  private List<ValidationError> getToAfterMaxErrors(ElementData data,
+      Optional<ElementId> categoryId, ElementValueDateRangeList dateRangeList) {
+    return dateRangeList.dateRangeList().stream()
+        .filter(dateRange -> isAfterMax(dateRange.to()))
+        .map(dateRange -> errorMessage(
+                data, getFieldId(dateRange.dateRangeId(), TO_SUFFIX), categoryId,
+                "Ange ett datum som är senast %s.".formatted(maxDate())
             )
         )
         .toList();
@@ -165,8 +205,12 @@ public class ElementValidationDateRangeList implements ElementValidation {
 
   }
 
-  private boolean isBeforeMin(DateRange value) {
-    return value.from() != null && min != null && value.from().isBefore(minDate());
+  private boolean isBeforeMin(LocalDate value) {
+    return value != null && min != null && value.isBefore(minDate());
+  }
+
+  private boolean isAfterMax(LocalDate value) {
+    return value != null && max != null && value.isAfter(maxDate());
   }
 
   private boolean isDateRangeListFilled(ElementValueDateRangeList value) {
@@ -213,6 +257,10 @@ public class ElementValidationDateRangeList implements ElementValidation {
   }
 
   private LocalDate minDate() {
-    return LocalDate.now(ZoneId.systemDefault()).minus(min);
+    return LocalDate.now(ZoneId.systemDefault()).plus(min);
+  }
+
+  private LocalDate maxDate() {
+    return LocalDate.now(ZoneId.systemDefault()).plus(max);
   }
 }

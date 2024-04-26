@@ -3,6 +3,8 @@ package se.inera.intyg.certificateservice.application.certificate.service.conver
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigCheckboxDateRangeList;
@@ -41,6 +43,8 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
         .label("LABEL")
         .hideWorkingHours(true)
         .previousDateRangeText("TEST TEST")
+        .min(LocalDate.now().plusMonths(-1))
+        .max(LocalDate.now().plusMonths(2))
         .list(
             List.of(
                 CheckboxDateRangeConfig.builder()
@@ -64,6 +68,8 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
                     .previousDateRangeText("TEST TEST")
                     .name("NAME")
                     .label("LABEL")
+                    .min(Period.ofMonths(-1))
+                    .max(Period.ofMonths(2))
                     .dateRanges(
                         List.of(
                             new CheckboxDateRange(new FieldId("ID"), "LABEL"),

@@ -211,6 +211,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
                 .label("Andel av ordinarie tid:")
                 .id(new FieldId(QUESTION_PERIOD_FIELD_ID))
                 .dateRanges(dateRanges)
+                .min(Period.ofMonths(-1))
                 .hideWorkingHours(true)
                 .build()
         )
@@ -225,7 +226,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
         .validations(
             List.of(
                 ElementValidationDateRangeList.builder()
-                    .min(Period.ofMonths(1))
+                    .min(Period.ofMonths(-1))
                     .mandatory(true)
                     .build()
             )

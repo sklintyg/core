@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
+import java.time.Period;
 import java.util.Collections;
 import java.util.List;
 import lombok.Builder;
@@ -22,6 +23,8 @@ public class ElementConfigurationCheckboxDateRangeList implements ElementConfigu
   String previousDateRangeText;
   boolean hideWorkingHours;
   List<CheckboxDateRange> dateRanges;
+  Period min;
+  Period max;
 
   @Override
   public ElementValue emptyValue() {

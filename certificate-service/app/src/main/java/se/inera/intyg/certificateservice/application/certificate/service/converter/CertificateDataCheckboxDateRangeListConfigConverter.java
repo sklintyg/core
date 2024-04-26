@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateservice.application.certificate.service.converter;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfig;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigCheckboxDateRangeList;
@@ -28,6 +31,8 @@ public class CertificateDataCheckboxDateRangeListConfigConverter implements
         .label(configuration.label())
         .hideWorkingHours(configuration.hideWorkingHours())
         .previousDateRangeText(configuration.previousDateRangeText())
+        .min(date(configuration.min()))
+        .max(date(configuration.max()))
         .list(
             configuration.dateRanges().stream()
                 .map(dateRange ->
@@ -39,5 +44,9 @@ public class CertificateDataCheckboxDateRangeListConfigConverter implements
                 .toList()
         )
         .build();
+  }
+
+  private static LocalDate date(Period period) {
+    return period == null ? null : LocalDate.now(ZoneId.systemDefault()).plus(period);
   }
 }
