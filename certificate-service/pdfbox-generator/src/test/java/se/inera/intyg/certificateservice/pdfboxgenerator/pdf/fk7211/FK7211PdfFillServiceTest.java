@@ -79,6 +79,16 @@ class FK7211PdfFillServiceTest {
   }
 
   @Test
+  void shouldReturnAvailableMcid() {
+    assertEquals(100, fk7211PdfFillService.getAvailableMcid());
+  }
+
+  @Test
+  void shouldReturnSignedTagIndex() {
+    assertEquals(18, fk7211PdfFillService.getSignatureTagIndex());
+  }
+
+  @Test
   void shouldNotSetExpectedDeliveryDateIfDateIsNotProvided() {
     final var result = fk7211PdfFillService.getFields(
         buildCertificate(Collections.emptyList())
