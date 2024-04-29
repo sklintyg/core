@@ -23,8 +23,6 @@ public class FK7443PdfFillService implements CertificateTypePdfFillService {
   public static final String PATIENT_ID_FIELD_ID = "form1[0].#subform[0].flt_txtPersonNrBarn[0]";
   public static final String PERIOD_FIELD_ID_PREFIX = "form1[0].#subform[0]";
 
-  private int mcid = 100;
-
   private final PdfTextValueGenerator pdfTextValueGenerator;
   private final PdfDateRangeListValueGenerator pdfDateRangeListValueGenerator;
 
@@ -40,7 +38,7 @@ public class FK7443PdfFillService implements CertificateTypePdfFillService {
 
   @Override
   public int getAvailableMcid() {
-    return mcid++;
+    return 100;
   }
 
   @Override
