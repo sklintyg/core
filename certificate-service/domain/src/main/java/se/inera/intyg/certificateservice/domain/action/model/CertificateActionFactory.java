@@ -19,7 +19,8 @@ public class CertificateActionFactory {
               List.of(
                   new ActionRuleProtectedPerson(),
                   new ActionRulePatientAlive(),
-                  new ActionRuleUserNotBlocked()
+                  new ActionRuleUserNotBlocked(),
+                  new ActionRuleInactiveUnit()
               )
           )
           .build();
