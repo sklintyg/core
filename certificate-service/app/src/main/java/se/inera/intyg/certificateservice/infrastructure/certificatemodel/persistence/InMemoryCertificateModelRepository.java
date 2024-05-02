@@ -15,6 +15,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateModelRepository;
 
@@ -42,6 +43,18 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
 
     return getCertificateModelMap().values().stream()
         .filter(certificateModel -> certificateType.equals(certificateModel.id().type()))
+        .filter(filterActiveCertificateModels())
+        .max(Comparator.comparing(CertificateModel::activeFrom));
+  }
+
+  @Override
+  public Optional<CertificateModel> findLatestActiveByExternalType(Code code) {
+    if (code == null) {
+      throw new IllegalArgumentException("Code is null!");
+    }
+
+    return getCertificateModelMap().values().stream()
+        .filter(certificateModel -> code.equals(certificateModel.type()))
         .filter(filterActiveCertificateModels())
         .max(Comparator.comparing(CertificateModel::activeFrom));
   }
