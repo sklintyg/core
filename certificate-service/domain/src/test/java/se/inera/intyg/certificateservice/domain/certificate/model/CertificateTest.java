@@ -1348,14 +1348,14 @@ class CertificateTest {
           .externalReference(null)
           .build();
 
-      certificateWithoutExternalReference.setExternalReference(EXTERNAL_REFERENCE);
+      certificateWithoutExternalReference.externalReference(EXTERNAL_REFERENCE);
       assertEquals(EXTERNAL_REFERENCE, certificateWithoutExternalReference.externalReference());
     }
 
     @Test
     void shallThrowIfExternalReferenceIfAlreadySet() {
       final var illegalStateException = assertThrows(IllegalStateException.class,
-          () -> certificate.setExternalReference(EXTERNAL_REFERENCE));
+          () -> certificate.externalReference(EXTERNAL_REFERENCE));
 
       assertTrue(illegalStateException.getMessage().contains("already has an external reference"));
     }

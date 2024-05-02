@@ -241,7 +241,7 @@ public class Certificate {
         .build();
   }
 
-  public void setExternalReference(ExternalReference externalReference) {
+  public void externalReference(ExternalReference externalReference) {
     if (this.externalReference != null) {
       throw new IllegalStateException(
           "Certificate with id '%s' already has an external reference".formatted(id().id()));
