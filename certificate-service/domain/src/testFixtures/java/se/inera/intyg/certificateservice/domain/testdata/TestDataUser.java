@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.testdata;
 
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ACCESS_SCOPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
@@ -76,7 +77,8 @@ public class TestDataUser {
         .blocked(AJLA_DOCTOR_BLOCKED)
         .paTitles(AJLA_DOCTOR_PA_TITLES)
         .specialities(AJLA_DOCTOR_SPECIALITIES)
-        .role(AJLA_DOCTOR_ROLE);
+        .role(AJLA_DOCTOR_ROLE)
+        .accessScope(AJLA_DOCTOR_ACCESS_SCOPE);
   }
 
   public static UserBuilder alfDoktorBuilder() {

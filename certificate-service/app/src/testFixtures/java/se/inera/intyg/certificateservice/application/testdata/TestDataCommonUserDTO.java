@@ -25,6 +25,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_ROLE;
 
 import java.util.Collections;
+import se.inera.intyg.certificateservice.application.common.dto.AccessScopeTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PaTitleDTO;
 import se.inera.intyg.certificateservice.application.common.dto.RoleTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
@@ -60,7 +61,8 @@ public class TestDataCommonUserDTO {
                 .map(Speciality::value)
                 .toList()
         )
-        .blocked(AJLA_DOCTOR_BLOCKED.value());
+        .blocked(AJLA_DOCTOR_BLOCKED.value())
+        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER);
   }
 
   public static UserDTOBuilder alvaVardadministratorDtoBuilder() {

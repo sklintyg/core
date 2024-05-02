@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.testdata;
 
 import java.util.Collections;
 import java.util.List;
+import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.common.model.Blocked;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
@@ -26,6 +27,7 @@ public class TestDataUserConstants {
       new Speciality("Psykiatri")
   );
   public static final Blocked AJLA_DOCTOR_BLOCKED = BLOCKED_FALSE;
+  public static final AccessScope AJLA_DOCTOR_ACCESS_SCOPE = AccessScope.WITHIN_CARE_UNIT;
 
   public static final String ALF_DOKTOR_HSA_ID = "TSTNMT2321000156-DRAF";
   public static final String ALF_DOKTOR_FIRST_NAME = "Alf";
