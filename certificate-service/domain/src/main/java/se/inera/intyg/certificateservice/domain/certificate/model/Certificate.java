@@ -5,6 +5,7 @@ import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -40,6 +41,8 @@ public class Certificate {
   private Sent sent;
   private Revoked revoked;
   private ExternalReference externalReference;
+  private Relation parent;
+  private List<Relation> children;
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
@@ -250,6 +253,29 @@ public class Certificate {
     return elementData.stream()
         .filter(data -> id.id().equals(data.id().id()))
         .findFirst();
+  }
+
+  public Certificate replace(ActionEvaluation actionEvaluation) {
+    final var newCertificate = Certificate.builder()
+        .id(new CertificateId(UUID.randomUUID().toString()))
+        .created(LocalDateTime.now(ZoneId.systemDefault()))
+        .certificateModel(this.certificateModel())
+        .revision(new Revision(0))
+        .build();
+
+    newCertificate.certificateMetaData = this.certificateMetaData();
+    newCertificate.updateMetadata(actionEvaluation);
+
+    newCertificate.parent = Relation.builder()
+        .certificateId(this.id())
+        .type(RelationType.REPLACE)
+        .status(this.status())
+        .created(newCertificate.created())
+        .build();
+
+    newCertificate.elementData = this.elementData().stream().toList();
+
+    return newCertificate;
   }
 }
 
