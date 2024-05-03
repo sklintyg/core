@@ -8,6 +8,5 @@ public class ActionRuleInactiveUnit implements ActionRule {
   @Override
   public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
     return !actionEvaluation.subUnit().inactive().value();
-
   }
 }

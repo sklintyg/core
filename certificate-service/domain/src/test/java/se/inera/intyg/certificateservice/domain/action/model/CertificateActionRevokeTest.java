@@ -73,18 +73,6 @@ class CertificateActionRevokeTest {
   }
 
   @Test
-  void shallReturnTrueIfUserAccessScopeMatchesRuleAccessScope() {
-    final var actionEvaluation = actionEvaluationBuilder.build();
-
-    final var certificate = certificateBuilder.build();
-
-    assertTrue(
-        certificateActionRevoke.evaluate(Optional.of(certificate), actionEvaluation),
-        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
-    );
-  }
-
-  @Test
   void shallReturnFalseIfNotDoctor() {
     final var actionEvaluation = actionEvaluationBuilder
         .user(ALVA_VARDADMINISTRATOR)

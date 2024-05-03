@@ -63,7 +63,7 @@ public class ActionEvaluationFactory {
                         .map(Speciality::new)
                         .toList()
                 )
-                .accessScope(user.getAccessScope().toRole())
+                .accessScope(user.getAccessScope().toDomain())
                 .build()
         )
         .subUnit(

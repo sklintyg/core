@@ -7,7 +7,7 @@ public enum AccessScopeTypeDTO {
   WITHIN_CARE_PROVIDER,
   ALL_CARE_PROVIDERS;
 
-  public AccessScope toRole() {
+  public AccessScope toDomain() {
     return switch (this) {
       case WITHIN_CARE_UNIT -> AccessScope.WITHIN_CARE_UNIT;
       case WITHIN_CARE_PROVIDER -> AccessScope.WITHIN_CARE_PROVIDER;

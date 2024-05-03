@@ -20,8 +20,7 @@ public class ActionRuleWithinAccessScope implements ActionRule {
       case WITHIN_CARE_UNIT -> {
         return certificate
             .filter(value ->
-                isIssuingUnitMatchingSubUnit(actionEvaluation, value)
-                    || isCareUnitMatchingSubUnit(actionEvaluation, value)
+                isWithinCareUnit(actionEvaluation, value)
             )
             .isPresent();
       }
@@ -58,6 +57,11 @@ public class ActionRuleWithinAccessScope implements ActionRule {
     }
 
     return AccessScope.ALL_CARE_PROVIDERS;
+  }
+
+  private static boolean isWithinCareUnit(ActionEvaluation actionEvaluation, Certificate value) {
+    return isIssuingUnitMatchingSubUnit(actionEvaluation, value)
+        || isCareUnitMatchingSubUnit(actionEvaluation, value);
   }
 
   private static boolean isWithinCareProvider(ActionEvaluation actionEvaluation,
