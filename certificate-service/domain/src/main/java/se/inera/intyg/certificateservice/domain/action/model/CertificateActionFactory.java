@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.domain.action.model;
 
 import java.util.List;
+import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
@@ -107,7 +108,8 @@ public class CertificateActionFactory {
                   new ActionRuleRole(
                       List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
                   ),
-                  new ActionRuleStatus(List.of(Status.SIGNED))
+                  new ActionRuleStatus(List.of(Status.SIGNED)),
+                  new ActionRuleChildRelation(List.of(RelationType.REPLACE))
               )
           )
           .build();
