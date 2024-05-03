@@ -28,6 +28,7 @@ public class ActionRuleChildRelation implements ActionRule {
 
   @Override
   public String getReasonForPermissionDenied() {
-    return null;
+    return "Du saknar behörighet för den begärda åtgärden eftersom intyget redan har relation med typ: %s"
+        .formatted(relationTypes);
   }
 }

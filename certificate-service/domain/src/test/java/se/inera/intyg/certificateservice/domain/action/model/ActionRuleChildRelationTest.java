@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.action.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
@@ -79,6 +80,16 @@ class ActionRuleChildRelationTest {
 
     assertTrue(
         actionRuleChildRelation.evaluate(Optional.of(certificate), ACTION_EVALUATION)
+    );
+  }
+
+  @Test
+  void shallReturnReason() {
+    final var actionRuleChildRelation = new ActionRuleChildRelation(List.of(RelationType.REPLACE));
+
+    assertEquals(
+        "Du saknar behörighet för den begärda åtgärden eftersom intyget redan har relation med typ: [REPLACE]",
+        actionRuleChildRelation.getReasonForPermissionDenied()
     );
   }
 }
