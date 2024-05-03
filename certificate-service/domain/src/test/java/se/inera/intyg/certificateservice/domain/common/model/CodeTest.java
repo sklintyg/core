@@ -16,6 +16,12 @@ class CodeTest {
   }
 
   @Test
+  void shallReturnTrueIfCodeSystemMatchAndCodeMatchButDisplayNameDontMatch() {
+    final var code = new Code("code", "codeSystem", DISPLAY_NAME);
+    assertTrue(code.matches(new Code("code", "codeSystem", "otherDisplayName")));
+  }
+
+  @Test
   void shallReturnFalseIfCodeSystemDontMatchAndCodeMatch() {
     final var code = new Code("code", "anotherCodeSystem", DISPLAY_NAME);
     assertFalse(code.matches(new Code("code", "codeSystem", DISPLAY_NAME)));
