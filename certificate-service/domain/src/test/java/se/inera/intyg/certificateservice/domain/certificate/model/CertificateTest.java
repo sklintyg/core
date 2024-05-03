@@ -1609,5 +1609,32 @@ class CertificateTest {
 
       assertEquals(expectedElementData, actualCertificate.elementData());
     }
+
+    @Test
+    void shallUpdateReplacedCertificateWithNewCertificateAsChild() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var newCertificate = signedCertificate.replace(actionEvaluation);
+
+      final var expectedRelation = Relation.builder()
+          .certificateId(newCertificate.id())
+          .type(RelationType.REPLACE)
+          .status(Status.DRAFT)
+          .created(LocalDateTime.now(ZoneId.systemDefault()))
+          .build();
+
+      assertAll(
+          () -> assertEquals(expectedRelation.certificateId(),
+              signedCertificate.children().get(0).certificateId()),
+          () -> assertEquals(expectedRelation.type(),
+              signedCertificate.children().get(0).type()),
+          () -> assertEquals(expectedRelation.status(),
+              signedCertificate.children().get(0).status()),
+          () -> assertEquals(expectedRelation.created().toLocalDate(),
+              signedCertificate.children().get(0).created().toLocalDate())
+      );
+    }
   }
 }

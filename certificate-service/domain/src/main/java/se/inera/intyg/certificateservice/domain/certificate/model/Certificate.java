@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -42,7 +43,8 @@ public class Certificate {
   private Revoked revoked;
   private ExternalReference externalReference;
   private Relation parent;
-  private List<Relation> children;
+  @Builder.Default
+  private List<Relation> children = Collections.emptyList();
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
@@ -272,6 +274,18 @@ public class Certificate {
         .status(this.status())
         .created(newCertificate.created())
         .build();
+
+    this.children = Stream.concat(
+        this.children().stream(),
+        Stream.of(
+            Relation.builder()
+                .certificateId(newCertificate.id())
+                .type(RelationType.REPLACE)
+                .status(newCertificate.status())
+                .created(newCertificate.parent().created())
+                .build()
+        )
+    ).toList();
 
     newCertificate.elementData = this.elementData().stream().toList();
 
