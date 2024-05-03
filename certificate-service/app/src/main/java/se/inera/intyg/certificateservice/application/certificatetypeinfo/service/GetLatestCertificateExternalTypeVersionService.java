@@ -15,7 +15,7 @@ public class GetLatestCertificateExternalTypeVersionService {
 
   public GetLatestCertificateExternalTypeVersionResponse get(
       String codeSystem, String code) {
-    validateRequest(codeSystem, code);
+    validateParameters(codeSystem, code);
 
     return certificateModelRepository.findLatestActiveByExternalType(
             new Code(code, codeSystem, null)
@@ -35,7 +35,7 @@ public class GetLatestCertificateExternalTypeVersionService {
         );
   }
 
-  private static void validateRequest(String codeSystem, String code) {
+  private static void validateParameters(String codeSystem, String code) {
     if (codeSystem == null || codeSystem.isBlank()) {
       throw new IllegalArgumentException("Required parameter missing: 'codeSystem'");
     }
