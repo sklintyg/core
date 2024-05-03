@@ -1,17 +1,17 @@
-package se.inera.intyg.certificateservice.application.certificateexternaltypeinfo.dto;
+package se.inera.intyg.certificateservice.application.certificatetypeinfo.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificateexternaltypeinfo.dto.GetLatestCertificateExternalTypeVersionRequest.GetLatestCertificateExternalTypeVersionResponseBuilder;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetLatestCertificateExternalTypeVersionResponse.GetLatestCertificateExternalTypeVersionResponseBuilder;
 
 @JsonDeserialize(builder = GetLatestCertificateExternalTypeVersionResponseBuilder.class)
 @Value
 @Builder
-public class GetLatestCertificateExternalTypeVersionRequest {
+public class GetLatestCertificateExternalTypeVersionResponse {
 
-  CodeDTO code;
+  CertificateModelIdDTO certificateModelId;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class GetLatestCertificateExternalTypeVersionResponseBuilder {

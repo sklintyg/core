@@ -1,10 +1,9 @@
-package se.inera.intyg.certificateservice.application.certificateexternaltypeinfo.service;
+package se.inera.intyg.certificateservice.application.certificatetypeinfo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.certificateservice.application.certificateexternaltypeinfo.dto.GetLatestCertificateExternalTypeVersionRequest;
-import se.inera.intyg.certificateservice.application.certificateexternaltypeinfo.dto.GetLatestCertificateExternalTypeVersionResponse;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetLatestCertificateExternalTypeVersionResponse;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 
@@ -15,15 +14,11 @@ public class GetLatestCertificateExternalTypeVersionService {
   private final CertificateModelRepository certificateModelRepository;
 
   public GetLatestCertificateExternalTypeVersionResponse get(
-      GetLatestCertificateExternalTypeVersionRequest request) {
-    validateRequest(request);
+      String codeSystem, String code) {
+    validateRequest(codeSystem, code);
 
     return certificateModelRepository.findLatestActiveByExternalType(
-            new Code(
-                request.getCode().getCode(),
-                request.getCode().getCodeSystem(),
-                null
-            )
+            new Code(code, codeSystem, null)
         )
         .map(certificateModel ->
             GetLatestCertificateExternalTypeVersionResponse.builder()
@@ -40,20 +35,12 @@ public class GetLatestCertificateExternalTypeVersionService {
         );
   }
 
-  private static void validateRequest(GetLatestCertificateExternalTypeVersionRequest request) {
-    if (request == null) {
-      throw new IllegalArgumentException("Request was null");
-    }
-
-    if (request.getCode() == null) {
-      throw new IllegalArgumentException("Required parameter missing: 'codeDTO'");
-    }
-
-    if (request.getCode().getCodeSystem() == null || request.getCode().getCodeSystem().isBlank()) {
+  private static void validateRequest(String codeSystem, String code) {
+    if (codeSystem == null || codeSystem.isBlank()) {
       throw new IllegalArgumentException("Required parameter missing: 'codeSystem'");
     }
 
-    if (request.getCode().getCode() == null || request.getCode().getCode().isBlank()) {
+    if (code == null || code.isBlank()) {
       throw new IllegalArgumentException("Required parameter missing: 'code'");
     }
   }

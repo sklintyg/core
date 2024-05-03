@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.application.certificateexternaltypeinfo.service;
+package se.inera.intyg.certificateservice.application.certificatetypeinfo.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -14,9 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.application.certificateexternaltypeinfo.dto.CodeDTO;
-import se.inera.intyg.certificateservice.application.certificateexternaltypeinfo.dto.GetLatestCertificateExternalTypeVersionRequest;
-import se.inera.intyg.certificateservice.application.certificateexternaltypeinfo.dto.GetLatestCertificateExternalTypeVersionResponse;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetLatestCertificateExternalTypeVersionResponse;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
@@ -27,14 +25,6 @@ class GetLatestCertificateExternalTypeVersionServiceTest {
 
   private static final String CODE = "code";
   private static final String CODE_SYSTEM = "codeSystem";
-  private static final GetLatestCertificateExternalTypeVersionRequest VALID_REQUEST = GetLatestCertificateExternalTypeVersionRequest.builder()
-      .code(
-          CodeDTO.builder()
-              .codeSystem(CODE_SYSTEM)
-              .code(CODE)
-              .build()
-      )
-      .build();
   private static final CertificateModel CERTIFICATE_MODEL = CertificateModel.builder()
       .id(
           CertificateModelId.builder()
@@ -53,33 +43,9 @@ class GetLatestCertificateExternalTypeVersionServiceTest {
   class ValidateRequestTests {
 
     @Test
-    void shallThrowIfRequestIsNull() {
-      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> getLatestCertificateExternalTypeVersionService.get(null));
-      assertTrue(illegalArgumentException.getMessage().contains("Request was null"));
-    }
-
-    @Test
-    void shallThrowIfCodeDTOIsNull() {
-      final var request = GetLatestCertificateExternalTypeVersionRequest.builder().build();
-      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> getLatestCertificateExternalTypeVersionService.get(request));
-      assertTrue(
-          illegalArgumentException.getMessage().contains("Required parameter missing: 'codeDTO'")
-      );
-    }
-
-    @Test
     void shallThrowIfCodeSystemIsNull() {
-      final var request = GetLatestCertificateExternalTypeVersionRequest.builder()
-          .code(
-              CodeDTO.builder()
-                  .code(CODE)
-                  .build()
-          )
-          .build();
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> getLatestCertificateExternalTypeVersionService.get(request));
+          () -> getLatestCertificateExternalTypeVersionService.get(null, CODE));
       assertTrue(
           illegalArgumentException.getMessage().contains("Required parameter missing: 'codeSystem'")
       );
@@ -87,16 +53,8 @@ class GetLatestCertificateExternalTypeVersionServiceTest {
 
     @Test
     void shallThrowIfCodeSystemIsBlank() {
-      final var request = GetLatestCertificateExternalTypeVersionRequest.builder()
-          .code(
-              CodeDTO.builder()
-                  .code(CODE)
-                  .codeSystem(" ")
-                  .build()
-          )
-          .build();
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> getLatestCertificateExternalTypeVersionService.get(request));
+          () -> getLatestCertificateExternalTypeVersionService.get("", CODE));
       assertTrue(
           illegalArgumentException.getMessage().contains("Required parameter missing: 'codeSystem'")
       );
@@ -104,15 +62,8 @@ class GetLatestCertificateExternalTypeVersionServiceTest {
 
     @Test
     void shallThrowIfCodeIsNull() {
-      final var request = GetLatestCertificateExternalTypeVersionRequest.builder()
-          .code(
-              CodeDTO.builder()
-                  .codeSystem(CODE_SYSTEM)
-                  .build()
-          )
-          .build();
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> getLatestCertificateExternalTypeVersionService.get(request));
+          () -> getLatestCertificateExternalTypeVersionService.get(CODE_SYSTEM, null));
       assertTrue(
           illegalArgumentException.getMessage().contains("Required parameter missing: 'code'")
       );
@@ -120,16 +71,8 @@ class GetLatestCertificateExternalTypeVersionServiceTest {
 
     @Test
     void shallThrowIfCodeIsBlank() {
-      final var request = GetLatestCertificateExternalTypeVersionRequest.builder()
-          .code(
-              CodeDTO.builder()
-                  .codeSystem(CODE_SYSTEM)
-                  .code(" ")
-                  .build()
-          )
-          .build();
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> getLatestCertificateExternalTypeVersionService.get(request));
+          () -> getLatestCertificateExternalTypeVersionService.get(CODE_SYSTEM, ""));
       assertTrue(
           illegalArgumentException.getMessage().contains("Required parameter missing: 'code'")
       );
@@ -141,7 +84,7 @@ class GetLatestCertificateExternalTypeVersionServiceTest {
     doReturn(Optional.of(CERTIFICATE_MODEL)).when(certificateModelRepository)
         .findLatestActiveByExternalType(new Code(CODE, CODE_SYSTEM, null));
 
-    final var response = getLatestCertificateExternalTypeVersionService.get(VALID_REQUEST);
+    final var response = getLatestCertificateExternalTypeVersionService.get(CODE_SYSTEM, CODE);
     assertEquals(FK7211_TYPE.type(), response.getCertificateModelId().getType());
   }
 
@@ -152,7 +95,7 @@ class GetLatestCertificateExternalTypeVersionServiceTest {
     doReturn(Optional.empty()).when(certificateModelRepository)
         .findLatestActiveByExternalType(new Code(CODE, CODE_SYSTEM, null));
 
-    final var response = getLatestCertificateExternalTypeVersionService.get(VALID_REQUEST);
+    final var response = getLatestCertificateExternalTypeVersionService.get(CODE_SYSTEM, CODE);
     assertEquals(expectedResponse, response);
   }
 }
