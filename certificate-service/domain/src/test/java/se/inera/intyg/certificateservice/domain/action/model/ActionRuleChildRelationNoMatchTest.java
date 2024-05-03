@@ -20,7 +20,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 
-class ActionRuleChildRelationTest {
+class ActionRuleChildRelationNoMatchTest {
 
   private Certificate.CertificateBuilder certificateBuilder;
 
@@ -44,7 +44,8 @@ class ActionRuleChildRelationTest {
 
   @Test
   void shallReturnFalseIfRelationTypeMatches() {
-    final var actionRuleChildRelation = new ActionRuleChildRelation(List.of(RelationType.REPLACE));
+    final var actionRuleChildRelation = new ActionRuleChildRelationNoMatch(
+        List.of(RelationType.REPLACE));
 
     final var certificate = certificateBuilder.build();
 
@@ -55,7 +56,8 @@ class ActionRuleChildRelationTest {
 
   @Test
   void shallReturnTrueIfRelationTypeDoesntMatch() {
-    final var actionRuleChildRelation = new ActionRuleChildRelation(List.of(RelationType.RENEW));
+    final var actionRuleChildRelation = new ActionRuleChildRelationNoMatch(
+        List.of(RelationType.RENEW));
 
     final var certificate = certificateBuilder.build();
 
@@ -66,7 +68,8 @@ class ActionRuleChildRelationTest {
 
   @Test
   void shallReturnTrueIfRelationTypeMatchesButIsRevoked() {
-    final var actionRuleChildRelation = new ActionRuleChildRelation(List.of(RelationType.REPLACE));
+    final var actionRuleChildRelation = new ActionRuleChildRelationNoMatch(
+        List.of(RelationType.REPLACE));
 
     final var certificate = certificateBuilder
         .children(
@@ -85,7 +88,8 @@ class ActionRuleChildRelationTest {
 
   @Test
   void shallReturnReason() {
-    final var actionRuleChildRelation = new ActionRuleChildRelation(List.of(RelationType.REPLACE));
+    final var actionRuleChildRelation = new ActionRuleChildRelationNoMatch(
+        List.of(RelationType.REPLACE));
 
     assertEquals(
         "Du saknar behörighet för den begärda åtgärden eftersom intyget redan har relation med typ: [REPLACE]",

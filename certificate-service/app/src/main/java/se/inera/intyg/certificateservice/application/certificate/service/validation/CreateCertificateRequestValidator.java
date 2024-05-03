@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate.service.validation;
 
+import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateCertificateModelId;
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validatePatient;
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateUnit;
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateUnitExtended;
@@ -7,7 +8,6 @@ import static se.inera.intyg.certificateservice.application.common.validator.Val
 
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
-import se.inera.intyg.certificateservice.application.common.validator.ValidationUtil;
 
 @Component
 public class CreateCertificateRequestValidator {
@@ -18,6 +18,6 @@ public class CreateCertificateRequestValidator {
     validateUnit(createCertificateRequest.getCareUnit(), "CareUnit");
     validateUnit(createCertificateRequest.getCareProvider(), "CareProvider");
     validatePatient(createCertificateRequest.getPatient());
-    ValidationUtil.validateCertificateModelId(createCertificateRequest.getCertificateModelId());
+    validateCertificateModelId(createCertificateRequest.getCertificateModelId());
   }
 }

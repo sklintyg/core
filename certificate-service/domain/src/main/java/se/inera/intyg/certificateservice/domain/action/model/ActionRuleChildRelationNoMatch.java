@@ -6,11 +6,11 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 
-public class ActionRuleChildRelation implements ActionRule {
+public class ActionRuleChildRelationNoMatch implements ActionRule {
 
   private final List<RelationType> relationTypes;
 
-  public ActionRuleChildRelation(List<RelationType> relationTypes) {
+  public ActionRuleChildRelationNoMatch(List<RelationType> relationTypes) {
     this.relationTypes = relationTypes;
   }
 
