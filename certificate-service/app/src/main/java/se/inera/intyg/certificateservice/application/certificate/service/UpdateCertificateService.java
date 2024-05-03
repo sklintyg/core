@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.application.common.converter.ResourceLi
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.user.model.ExternalReference;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +47,10 @@ public class UpdateCertificateService {
         new CertificateId(certificateId),
         elementData,
         actionEvaluation,
-        new Revision(updateCertificateRequest.getCertificate().getMetadata().getVersion())
+        new Revision(updateCertificateRequest.getCertificate().getMetadata().getVersion()),
+        updateCertificateRequest.getExternalReference() != null
+            ? new ExternalReference(updateCertificateRequest.getExternalReference())
+            : null
     );
 
     return UpdateCertificateResponse.builder()

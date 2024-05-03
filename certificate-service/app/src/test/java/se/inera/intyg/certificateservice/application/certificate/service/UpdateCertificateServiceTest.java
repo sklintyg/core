@@ -119,7 +119,7 @@ class UpdateCertificateServiceTest {
 
     doReturn(certificate).when(updateCertificateDomainService).update(
         new CertificateId(CERTIFICATE_ID), elementDataList, actionEvaluation,
-        new Revision(0));
+        new Revision(0), null);
 
     final var certificateAction = mock(CertificateAction.class);
     final List<CertificateAction> certificateActions = List.of(certificateAction);
