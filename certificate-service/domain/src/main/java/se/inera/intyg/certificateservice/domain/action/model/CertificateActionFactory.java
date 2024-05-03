@@ -29,7 +29,7 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
-                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleWithinAccessScope(AccessScope.ALL_CARE_PROVIDERS),
                   new ActionRuleProtectedPerson()
               )
           )
@@ -83,7 +83,7 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
-                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_PROVIDER),
                   new ActionRuleProtectedPerson(),
                   new ActionRuleStatus(List.of(Status.SIGNED, Status.DRAFT))
               )

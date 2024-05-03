@@ -62,7 +62,7 @@ public class TestDataCommonUserDTO {
                 .toList()
         )
         .blocked(AJLA_DOCTOR_BLOCKED.value())
-        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER);
+        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT);
   }
 
   public static UserDTOBuilder alvaVardadministratorDtoBuilder() {
@@ -75,7 +75,8 @@ public class TestDataCommonUserDTO {
         .role(RoleTypeDTO.toRoleType(ALVA_VARDADMINISTRATOR_ROLE))
         .paTitles(Collections.emptyList())
         .specialities(Collections.emptyList())
-        .blocked(ALVA_VARDADMINISTRATOR_BLOCKED.value());
+        .blocked(ALVA_VARDADMINISTRATOR_BLOCKED.value())
+        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT);
   }
 
   public static UserDTOBuilder bertilBarnmorskaDtoBuilder() {
@@ -88,6 +89,7 @@ public class TestDataCommonUserDTO {
         .role(RoleTypeDTO.toRoleType(BERTIL_BARNMORSKA_ROLE))
         .paTitles(Collections.emptyList())
         .specialities(Collections.emptyList())
-        .blocked(BERTIL_BARNMORSKA_BLOCKED.value());
+        .blocked(BERTIL_BARNMORSKA_BLOCKED.value())
+        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT);
   }
 }
