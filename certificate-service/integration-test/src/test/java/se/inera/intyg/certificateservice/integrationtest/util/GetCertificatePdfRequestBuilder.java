@@ -16,6 +16,7 @@ public class GetCertificatePdfRequestBuilder {
   private static final String ADDITIONAL_INFO = "ADDITIONAL_INFO";
   private UnitDTO unit = ALFA_ALLERGIMOTTAGNINGEN_DTO;
   private UnitDTO careUnit = ALFA_MEDICINCENTRUM_DTO;
+  private UnitDTO careProvider = ALFA_REGIONEN_DTO;
   private UserDTO user = AJLA_DOCTOR_DTO;
   private PatientDTO patient = ATHENA_REACT_ANDERSSON_DTO;
 
@@ -43,6 +44,11 @@ public class GetCertificatePdfRequestBuilder {
     return this;
   }
 
+  public GetCertificatePdfRequestBuilder careProvider(UnitDTO careProvider) {
+    this.careProvider = careProvider;
+    return this;
+  }
+
   public GetCertificatePdfRequestBuilder user(UserDTO user) {
     this.user = user;
     return this;
@@ -51,7 +57,7 @@ public class GetCertificatePdfRequestBuilder {
   public GetCertificatePdfRequest build() {
     return GetCertificatePdfRequest.builder()
         .user(user)
-        .careProvider(ALFA_REGIONEN_DTO)
+        .careProvider(careProvider)
         .unit(unit)
         .careUnit(careUnit)
         .additionalInfoText(ADDITIONAL_INFO)
