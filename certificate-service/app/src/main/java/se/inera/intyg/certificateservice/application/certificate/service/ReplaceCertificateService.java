@@ -45,11 +45,13 @@ public class ReplaceCertificateService {
     );
 
     return ReplaceCertificateResponse.builder()
-        .certificate(certificateConverter.convert(
-            certificate,
-            certificate.actions(actionEvaluation).stream()
-                .map(resourceLinkConverter::convert)
-                .toList())
+        .certificate(
+            certificateConverter.convert(
+                certificate,
+                certificate.actions(actionEvaluation).stream()
+                    .map(resourceLinkConverter::convert)
+                    .toList()
+            )
         )
         .build();
   }

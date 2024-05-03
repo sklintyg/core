@@ -219,16 +219,16 @@ class CertificateActionSendTest {
   }
 
   @Test
-  void shallReturnTrueIfRevoked() {
+  void shallReturnFalseIfRevoked() {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     final var certificate = certificateBuilder
         .status(Status.REVOKED)
         .build();
 
-    assertTrue(
+    assertFalse(
         certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
-        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
 
