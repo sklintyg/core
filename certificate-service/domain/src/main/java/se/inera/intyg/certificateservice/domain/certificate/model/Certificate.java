@@ -40,6 +40,9 @@ public class Certificate {
   private Sent sent;
   private Revoked revoked;
   private ExternalReference externalReference;
+  private Relation parent;
+  @Builder.Default
+  private List<Relation> children = Collections.emptyList();
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
