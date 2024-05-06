@@ -4,6 +4,7 @@ import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 
 public class CertificateActionFactory {
@@ -20,7 +21,8 @@ public class CertificateActionFactory {
               List.of(
                   new ActionRuleProtectedPerson(),
                   new ActionRulePatientAlive(),
-                  new ActionRuleUserNotBlocked()
+                  new ActionRuleUserNotBlocked(),
+                  new ActionRuleInactiveUnit()
               )
           )
           .build();
@@ -28,7 +30,7 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
-                  new ActionRuleWithinCareUnit(),
+                  new ActionRuleWithinAccessScope(AccessScope.ALL_CARE_PROVIDERS),
                   new ActionRuleProtectedPerson()
               )
           )
@@ -37,7 +39,7 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
-                  new ActionRuleWithinCareUnit(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleProtectedPerson(),
                   new ActionRuleStatus(List.of(Status.DRAFT))
               )
@@ -47,7 +49,7 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
-                  new ActionRuleWithinCareUnit(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleProtectedPerson(),
                   new ActionRuleStatus(List.of(Status.DRAFT))
               )
@@ -57,7 +59,7 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
-                  new ActionRuleWithinCareUnit(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleRole(
                       List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
                   ),
@@ -69,7 +71,7 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
-                  new ActionRuleWithinCareUnit(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleRole(
                       List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
                   ),
@@ -82,7 +84,7 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
-                  new ActionRuleWithinCareUnit(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_PROVIDER),
                   new ActionRuleProtectedPerson(),
                   new ActionRuleStatus(List.of(Status.SIGNED, Status.DRAFT))
               )
@@ -92,7 +94,7 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
-                  new ActionRuleWithinCareUnit(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleRole(
                       List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
                   ),

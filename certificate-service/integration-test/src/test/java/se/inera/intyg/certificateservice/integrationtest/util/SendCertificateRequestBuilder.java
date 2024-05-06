@@ -13,6 +13,7 @@ public class SendCertificateRequestBuilder {
 
   private UnitDTO unit = ALFA_ALLERGIMOTTAGNINGEN_DTO;
   private UnitDTO careUnit = ALFA_MEDICINCENTRUM_DTO;
+  private UnitDTO careProvider = ALFA_REGIONEN_DTO;
   private UserDTO user = AJLA_DOCTOR_DTO;
 
   public static SendCertificateRequestBuilder create() {
@@ -33,6 +34,11 @@ public class SendCertificateRequestBuilder {
     return this;
   }
 
+  public SendCertificateRequestBuilder careProvider(UnitDTO careProvider) {
+    this.careProvider = careProvider;
+    return this;
+  }
+
   public SendCertificateRequestBuilder user(UserDTO user) {
     this.user = user;
     return this;
@@ -41,7 +47,7 @@ public class SendCertificateRequestBuilder {
   public SendCertificateRequest build() {
     return SendCertificateRequest.builder()
         .user(user)
-        .careProvider(ALFA_REGIONEN_DTO)
+        .careProvider(careProvider)
         .unit(unit)
         .careUnit(careUnit)
         .build();

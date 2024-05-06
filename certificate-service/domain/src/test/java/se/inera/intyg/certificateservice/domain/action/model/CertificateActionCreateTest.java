@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
@@ -51,6 +52,7 @@ class CertificateActionCreateTest {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(ATLAS_REACT_ABRAHAMSSON)
         .user(AJLA_DOKTOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
     final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
@@ -63,6 +65,7 @@ class CertificateActionCreateTest {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(ATHENA_REACT_ANDERSSON)
         .user(AJLA_DOKTOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
     final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
@@ -79,6 +82,7 @@ class CertificateActionCreateTest {
                 .blocked(BLOCKED_TRUE)
                 .build()
         )
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
     final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
@@ -91,6 +95,7 @@ class CertificateActionCreateTest {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(ATHENA_REACT_ANDERSSON)
         .user(AJLA_DOKTOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
     final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
@@ -103,6 +108,7 @@ class CertificateActionCreateTest {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(ANONYMA_REACT_ATTILA)
         .user(ALVA_VARDADMINISTRATOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
     final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
@@ -115,6 +121,7 @@ class CertificateActionCreateTest {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(ANONYMA_REACT_ATTILA)
         .user(AJLA_DOKTOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
     final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
@@ -149,6 +156,7 @@ class CertificateActionCreateTest {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(ANONYMA_REACT_ATTILA)
         .user(ALVA_VARDADMINISTRATOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
     final var actualResult = certificateActionCreate.reasonNotAllowed(actionEvaluation);
@@ -161,6 +169,7 @@ class CertificateActionCreateTest {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(ANONYMA_REACT_ATTILA)
         .user(AJLA_DOKTOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
     final var actualResult = certificateActionCreate.reasonNotAllowed(actionEvaluation);

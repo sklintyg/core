@@ -18,6 +18,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_HUDMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_VARDCENTRAL_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.BETA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
@@ -102,6 +103,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateRange;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
+import se.inera.intyg.certificateservice.application.common.dto.AccessScopeTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
 import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
@@ -3567,6 +3569,145 @@ class FK7443ActiveIT {
           pdfData(response.getBody()),
           "Should return sent certificate pdf data!"
       );
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7443 - Utökad behörighet vid djupintegration utan SVOD")
+  class AccessLevelsDeepIntegration {
+
+    @Test
+    @DisplayName("FK7443 - Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall det gå att läsa intyget")
+    void shallReturnCertificateIfOnDifferentUnitButSameCareProvider() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+      );
+
+      final var response = api.getCertificate(
+          customGetCertificateRequest()
+              .user(ajlaDoktorDtoBuilder()
+                  .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
+                  .build())
+              .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertNotNull(
+          certificate(response.getBody()),
+          "Should return certificate when exists!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7443 - Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall det gå att hämta PDF")
+    void shallReturnPdfIfOnDifferentUnitButSameCareProvider() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+      );
+
+      final var response = api.getCertificatePdf(
+          customGetCertificatePdfRequest()
+              .user(ajlaDoktorDtoBuilder()
+                  .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
+                  .build())
+              .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertNotNull(
+          pdfData(response.getBody()),
+          "Should return pdf when exists!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7443 - Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall felkod 403 (FORBIDDEN) returneras vid skickande av intyg")
+    void shallNotAllowToSendOnDifferentUnitButSameCareProvider() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+      );
+
+      final var response = api.sendCertificate(
+          customSendCertificateRequest()
+              .user(ajlaDoktorDtoBuilder()
+                  .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
+                  .build())
+              .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7443 - Utökad behörighet vid djupintegration och SVOD (sjf=true)")
+  class AccessLevelsSVOD {
+
+    @Test
+    @DisplayName("FK7443 - Om intyget är utfärdat inom en annan vårdgivare skall det gå att läsa intyget")
+    void shallReturnCertificateIfOnDifferentUnitButSameCareProvider() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+      );
+
+      final var response = api.getCertificate(
+          customGetCertificateRequest()
+              .user(ajlaDoktorDtoBuilder()
+                  .accessScope(AccessScopeTypeDTO.ALL_CARE_PROVIDERS)
+                  .build())
+              .careProvider(BETA_REGIONEN_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertNotNull(
+          certificate(response.getBody()),
+          "Should return certificate when exists!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7443 - Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall felkod 403 (FORBIDDEN) returneras vid hämtning av PDF")
+    void shallReturnPdfIfOnDifferentUnitButSameCareProvider() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+      );
+
+      final var response = api.getCertificatePdf(
+          customGetCertificatePdfRequest()
+              .user(ajlaDoktorDtoBuilder()
+                  .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
+                  .build())
+              .careProvider(BETA_REGIONEN_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7443 - Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall felkod 403 (FORBIDDEN) returneras vid skickande av intyg")
+    void shallNotAllowToSendOnDifferentUnitButSameCareProvider() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+      );
+
+      final var response = api.sendCertificate(
+          customSendCertificateRequest()
+              .user(ajlaDoktorDtoBuilder()
+                  .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
+                  .build())
+              .careProvider(BETA_REGIONEN_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
     }
   }
 }
