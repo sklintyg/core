@@ -10,6 +10,7 @@ public enum CertificateEventType {
   SIGNED("sign-certificate", Constants.ACTION_TYPE_CHANGE, "certificate-signed"),
   PRINT("print-certificate", Constants.ACTION_TYPE_ACCESSED, null),
   SENT("sent-certificate", Constants.ACTION_TYPE_CHANGE, "certificate-sent"),
+  REPLACE("replace-certificate", Constants.ACTION_TYPE_CREATION, null),
   REVOKED("revoked-certificate", Constants.ACTION_TYPE_CHANGE, "certificate-revoked");
 
   private final String action;

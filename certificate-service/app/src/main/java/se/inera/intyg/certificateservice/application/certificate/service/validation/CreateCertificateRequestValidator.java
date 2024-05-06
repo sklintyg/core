@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate.service.validation;
 
-import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateCertificateId;
+import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateCertificateModelId;
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validatePatient;
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateUnit;
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateUnitExtended;
@@ -18,6 +18,6 @@ public class CreateCertificateRequestValidator {
     validateUnit(createCertificateRequest.getCareUnit(), "CareUnit");
     validateUnit(createCertificateRequest.getCareProvider(), "CareProvider");
     validatePatient(createCertificateRequest.getPatient());
-    validateCertificateId(createCertificateRequest.getCertificateModelId());
+    validateCertificateModelId(createCertificateRequest.getCertificateModelId());
   }
 }

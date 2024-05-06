@@ -5,6 +5,8 @@ import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -40,6 +42,9 @@ public class Certificate {
   private Sent sent;
   private Revoked revoked;
   private ExternalReference externalReference;
+  private Relation parent;
+  @Builder.Default
+  private List<Relation> children = Collections.emptyList();
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
@@ -238,7 +243,7 @@ public class Certificate {
         .build();
   }
 
-  public void setExternalReference(ExternalReference externalReference) {
+  public void externalReference(ExternalReference externalReference) {
     if (this.externalReference != null) {
       throw new IllegalStateException(
           "Certificate with id '%s' already has an external reference".formatted(id().id()));
@@ -250,6 +255,41 @@ public class Certificate {
     return elementData.stream()
         .filter(data -> id.id().equals(data.id().id()))
         .findFirst();
+  }
+
+  public Certificate replace(ActionEvaluation actionEvaluation) {
+    final var newCertificate = Certificate.builder()
+        .id(new CertificateId(UUID.randomUUID().toString()))
+        .created(LocalDateTime.now(ZoneId.systemDefault()))
+        .certificateModel(this.certificateModel())
+        .revision(new Revision(0))
+        .build();
+
+    newCertificate.certificateMetaData = this.certificateMetaData();
+    newCertificate.updateMetadata(actionEvaluation);
+
+    newCertificate.parent = Relation.builder()
+        .certificateId(this.id())
+        .type(RelationType.REPLACE)
+        .status(this.status())
+        .created(newCertificate.created())
+        .build();
+
+    this.children = Stream.concat(
+        this.children().stream(),
+        Stream.of(
+            Relation.builder()
+                .certificateId(newCertificate.id())
+                .type(RelationType.REPLACE)
+                .status(newCertificate.status())
+                .created(newCertificate.parent().created())
+                .build()
+        )
+    ).toList();
+
+    newCertificate.elementData = this.elementData().stream().toList();
+
+    return newCertificate;
   }
 }
 

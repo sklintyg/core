@@ -52,6 +52,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRecipientDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationTypeDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationsDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
@@ -63,6 +66,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
+import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
@@ -666,6 +671,117 @@ class CertificateConverterTest {
       final var expectedLinks = List.of(resourceLinkDTO);
       assertEquals(expectedLinks,
           certificateConverter.convert(certificate, expectedLinks).getLinks());
+    }
+  }
+
+  @Nested
+  class TestCertificateRelation {
+
+    private Relation.RelationBuilder relationBuilder;
+    private Relation relation;
+
+    @BeforeEach
+    void setUp() {
+      relationBuilder = Relation.builder()
+          .certificateId(new CertificateId(CERTIFICATE_ID))
+          .status(Status.DRAFT)
+          .created(LocalDateTime.now(ZoneId.systemDefault()))
+          .type(RelationType.REPLACE);
+
+      relation = relationBuilder.build();
+    }
+
+    @Test
+    void shallIncludeParentRelationIfReplacingCertificate() {
+      final var expectedValue = CertificateRelationsDTO.builder()
+          .parent(
+              CertificateRelationDTO.builder()
+                  .certificateId(CERTIFICATE_ID)
+                  .type(CertificateRelationTypeDTO.REPLACED)
+                  .created(relation.created())
+                  .status(CertificateStatusTypeDTO.UNSIGNED)
+                  .build()
+          )
+          .children(Collections.emptyList())
+          .build();
+
+      final var replacedCertificate = certificateBuilder
+          .parent(relation)
+          .build();
+
+      assertEquals(expectedValue,
+          certificateConverter.convert(replacedCertificate, resourceLinkDTOs)
+              .getMetadata().getRelations()
+      );
+    }
+
+    @Test
+    void shallIncludeChildRelationIfReplaced() {
+      final var expectedValue = CertificateRelationsDTO.builder()
+          .children(
+              List.of(
+                  CertificateRelationDTO.builder()
+                      .certificateId(CERTIFICATE_ID)
+                      .type(CertificateRelationTypeDTO.REPLACED)
+                      .created(relation.created())
+                      .status(CertificateStatusTypeDTO.UNSIGNED)
+                      .build()
+              )
+          )
+          .build();
+
+      final var replacedCertificate = certificateBuilder
+          .children(List.of(relation))
+          .build();
+
+      assertEquals(expectedValue,
+          certificateConverter.convert(replacedCertificate, resourceLinkDTOs)
+              .getMetadata().getRelations()
+      );
+    }
+
+    @Test
+    void shallNotIncludeChildRelationIfReplacedIsRevoked() {
+      final var expectedValue = CertificateRelationsDTO.builder()
+          .children(
+              Collections.emptyList()
+          )
+          .build();
+
+      final var replacedCertificate = certificateBuilder
+          .children(
+              List.of(
+                  relationBuilder
+                      .status(Status.REVOKED)
+                      .build()
+              )
+          )
+          .build();
+
+      assertEquals(expectedValue,
+          certificateConverter.convert(replacedCertificate, resourceLinkDTOs)
+              .getMetadata().getRelations()
+      );
+    }
+
+    @Test
+    void shallNotIncludeChildRelationThatIsNull() {
+      final var expectedValue = CertificateRelationsDTO.builder()
+          .children(
+              Collections.emptyList()
+          )
+          .build();
+
+      final var replacedCertificate = certificateBuilder
+          .children(
+              Collections.singletonList(null)
+          )
+          .build();
+
+      assertEquals(expectedValue,
+          certificateConverter.convert(replacedCertificate, resourceLinkDTOs)
+              .getMetadata().getRelations()
+      );
     }
   }
 }
