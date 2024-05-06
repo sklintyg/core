@@ -119,6 +119,9 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.REPLACE)
+                    .build(),
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.REPLACE_CONTINUE)
                     .build()
             )
         )
