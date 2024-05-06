@@ -79,7 +79,7 @@ class UpdateCertificateDomainServiceTest {
     updateCertificateDomainService.update(CERTIFICATE_ID, data, ACTION_EVALUATION, new Revision(0),
         EXTERNAL_REFERENCE);
 
-    verify(certificate).setExternalReference(EXTERNAL_REFERENCE);
+    verify(certificate).externalReference(EXTERNAL_REFERENCE);
   }
 
   @Test
@@ -90,12 +90,12 @@ class UpdateCertificateDomainServiceTest {
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(UPDATE, ACTION_EVALUATION);
 
-    certificate.setExternalReference(EXTERNAL_REFERENCE);
+    certificate.externalReference(EXTERNAL_REFERENCE);
 
     updateCertificateDomainService.update(CERTIFICATE_ID, data, ACTION_EVALUATION, new Revision(0),
         EXTERNAL_REFERENCE);
 
-    verify(certificate, never()).setExternalReference(null);
+    verify(certificate, never()).externalReference(null);
   }
 
   @Test

@@ -39,7 +39,7 @@ public class UpdateCertificateDomainService {
     certificate.updateMetadata(actionEvaluation);
 
     if (certificate.externalReference() == null) {
-      certificate.setExternalReference(externalReference);
+      certificate.externalReference(externalReference);
     }
 
     final var updatedCertificate = certificateRepository.save(certificate);
