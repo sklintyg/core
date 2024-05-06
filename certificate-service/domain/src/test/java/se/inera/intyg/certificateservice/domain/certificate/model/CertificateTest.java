@@ -1637,4 +1637,234 @@ class CertificateTest {
       );
     }
   }
+
+  @Nested
+  class TestRenew {
+
+    @Test
+    void shallReturnNewCertificateWithId() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertNotNull(actualCertificate.id());
+      assertNotEquals(signedCertificate.id(), actualCertificate.id());
+    }
+
+    @Test
+    void shallReturnNewCertificateWithCreated() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(
+          LocalDateTime.now(ZoneId.systemDefault()).toLocalDate(),
+          actualCertificate.created().toLocalDate()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithRevision() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(new Revision(0), actualCertificate.revision());
+    }
+
+    @Test
+    void shallReturnNewCertificateWithSameModel() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(signedCertificate.certificateModel(), actualCertificate.certificateModel());
+    }
+
+    @Test
+    void shallReturnNewCertificateWithSamePatient() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .patient(null)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(
+          signedCertificate.certificateMetaData().patient(),
+          actualCertificate.certificateMetaData().patient()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewPatient() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .patient(ALVE_REACT_ALFREDSSON)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(
+          actionEvaluation.patient(),
+          actualCertificate.certificateMetaData().patient()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewSubUnit() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .subUnit(ALFA_HUDMOTTAGNINGEN)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(
+          actionEvaluation.subUnit(),
+          actualCertificate.certificateMetaData().issuingUnit()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewCareUnit() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .careUnit(ALFA_VARDCENTRAL)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(
+          actionEvaluation.careUnit(),
+          actualCertificate.certificateMetaData().careUnit()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewCareProvider() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .careProvider(BETA_REGIONEN)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(
+          actionEvaluation.careProvider(),
+          actualCertificate.certificateMetaData().careProvider()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewStaff() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .user(ALF_DOKTOR)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(
+          Staff.create(actionEvaluation.user()),
+          actualCertificate.certificateMetaData().issuer()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithRenewedCertificateAsParent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var expectedRelation = Relation.builder()
+          .certificateId(signedCertificate.id())
+          .type(RelationType.RENEW)
+          .status(Status.SIGNED)
+          .created(LocalDateTime.now(ZoneId.systemDefault()))
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertAll(
+          () -> assertEquals(expectedRelation.certificateId(),
+              actualCertificate.parent().certificateId()),
+          () -> assertEquals(expectedRelation.type(), actualCertificate.parent().type()),
+          () -> assertEquals(expectedRelation.status(), actualCertificate.parent().status()),
+          () -> assertEquals(expectedRelation.created().toLocalDate(),
+              actualCertificate.parent().created().toLocalDate())
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithValuesThatShouldBeKept() {
+      final var expectedElementData = List.of(
+          CONTACT_INFO
+      );
+
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder
+          .elementData(
+              List.of(DATE, CONTACT_INFO)
+          )
+          .status(Status.SIGNED)
+          .build();
+
+      final var specification = mock(ElementSpecification.class);
+      doReturn(true).when(certificateModel).elementSpecificationExists(DATE.id());
+      doReturn(specification).when(certificateModel).elementSpecification(DATE.id());
+      doReturn(false).when(specification).includeWhenRenewing();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(expectedElementData, actualCertificate.elementData());
+    }
+
+    @Test
+    void shallUpdateReplacedCertificateWithNewCertificateAsChild() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var newCertificate = signedCertificate.renew(actionEvaluation);
+
+      final var expectedRelation = Relation.builder()
+          .certificateId(newCertificate.id())
+          .type(RelationType.RENEW)
+          .status(Status.DRAFT)
+          .created(LocalDateTime.now(ZoneId.systemDefault()))
+          .build();
+
+      assertAll(
+          () -> assertEquals(expectedRelation.certificateId(),
+              signedCertificate.children().get(0).certificateId()),
+          () -> assertEquals(expectedRelation.type(),
+              signedCertificate.children().get(0).type()),
+          () -> assertEquals(expectedRelation.status(),
+              signedCertificate.children().get(0).status()),
+          () -> assertEquals(expectedRelation.created().toLocalDate(),
+              signedCertificate.children().get(0).created().toLocalDate())
+      );
+    }
+  }
 }

@@ -258,6 +258,28 @@ public class Certificate {
   }
 
   public Certificate replace(ActionEvaluation actionEvaluation) {
+    final var newCertificate = createCertificate(actionEvaluation, RelationType.REPLACE);
+
+    newCertificate.elementData = this.elementData().stream().toList();
+
+    return newCertificate;
+  }
+
+  public Certificate renew(ActionEvaluation actionEvaluation) {
+    final var newCertificate = createCertificate(actionEvaluation, RelationType.RENEW);
+
+    newCertificate.elementData = this.elementData().stream()
+        .filter(data ->
+            !certificateModel.elementSpecificationExists(data.id())
+                || certificateModel.elementSpecification(data.id()).includeWhenRenewing()
+        )
+        .toList();
+
+    return newCertificate;
+  }
+
+  private Certificate createCertificate(ActionEvaluation actionEvaluation,
+      RelationType relationType) {
     final var newCertificate = Certificate.builder()
         .id(new CertificateId(UUID.randomUUID().toString()))
         .created(LocalDateTime.now(ZoneId.systemDefault()))
@@ -270,7 +292,7 @@ public class Certificate {
 
     newCertificate.parent = Relation.builder()
         .certificateId(this.id())
-        .type(RelationType.REPLACE)
+        .type(relationType)
         .status(this.status())
         .created(newCertificate.created())
         .build();
@@ -280,14 +302,12 @@ public class Certificate {
         Stream.of(
             Relation.builder()
                 .certificateId(newCertificate.id())
-                .type(RelationType.REPLACE)
+                .type(relationType)
                 .status(newCertificate.status())
                 .created(newCertificate.parent().created())
                 .build()
         )
     ).toList();
-
-    newCertificate.elementData = this.elementData().stream().toList();
 
     return newCertificate;
   }
