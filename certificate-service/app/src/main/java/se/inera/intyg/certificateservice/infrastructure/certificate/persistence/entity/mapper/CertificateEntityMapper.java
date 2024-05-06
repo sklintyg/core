@@ -1,14 +1,12 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
-import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
@@ -26,9 +24,6 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.UnitRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateModelEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateRelationEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateRelationType;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateRelationTypeEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatus;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatusEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateXmlEntity;
@@ -38,7 +33,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntityRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
 
 @Component
 @RequiredArgsConstructor
@@ -51,7 +46,7 @@ public class CertificateEntityMapper {
   private final UnitRepository unitRepository;
   private final StaffRepository staffRepository;
   private final CertificateDataEntityMapper certificateDataEntityMapper;
-  private final CertificateRelationEntityRepository certificateRelationEntityRepository;
+  private final CertificateRelationRepository certificateRelationRepository;
 
   public Certificate toDomain(CertificateEntity certificateEntity) {
     return toDomain(
@@ -157,37 +152,6 @@ public class CertificateEntityMapper {
       );
     }
 
-    if (certificate.parent() != null) {
-      final var relationType = CertificateRelationType.valueOf(
-          certificate.parent().type().name()
-      );
-
-      certificateEntity.setCertificateRelation(
-          certificateEntityRepository.findByCertificateId(
-                  certificate.parent().certificateId().id()
-              )
-              .map(parent ->
-                  CertificateRelationEntity.builder()
-                      .parentCertificate(parent)
-                      .childCertificate(certificateEntity)
-                      .certificateRelationType(
-                          CertificateRelationTypeEntity.builder()
-                              .key(relationType.getKey())
-                              .type(relationType.name())
-                              .build()
-                      )
-                      .created(
-                          certificate.parent().created()
-                      )
-                      .build()
-              )
-              .orElseThrow(
-                  () -> new IllegalStateException("Parent certificate with id '%s' not found"
-                      .formatted(certificate.parent().certificateId().id()))
-              )
-      );
-    }
-
     return certificateEntity;
   }
 
@@ -238,6 +202,7 @@ public class CertificateEntityMapper {
   }
 
   public Certificate toDomain(CertificateEntity certificateEntity, CertificateModel model) {
+    final var relations = certificateRelationRepository.relations(certificateEntity);
     return Certificate.builder()
         .id(new CertificateId(certificateEntity.getCertificateId()))
         .created(certificateEntity.getCreated())
@@ -298,42 +263,23 @@ public class CertificateEntityMapper {
                 : null
         )
         .parent(
-            certificateEntity.getCertificateRelation() != null
-                ?
-                RelationEntityMapper.toDomain(
-                    certificateEntity.getCertificateRelation().getParentCertificate()
-                        .getCertificateId(),
-                    RelationType.valueOf(
-                        certificateEntity.getCertificateRelation().getCertificateRelationType()
-                            .getType()),
-                    Status.valueOf(
-                        certificateEntity.getCertificateRelation().getParentCertificate()
-                            .getStatus()
-                            .getStatus()),
-                    certificateEntity.getCertificateRelation().getCreated()
+            relations.stream()
+                .filter(entity -> entity.getChildCertificate().getCertificateId()
+                    .equals(certificateEntity.getCertificateId())
                 )
-                : null
+                .findFirst()
+                .map(RelationEntityMapper::parentToDomain)
+                .orElse(null)
         )
         .children(
-            certificateEntity.getCertificateRelation() != null
-                ? certificateRelationEntityRepository.findByParentCertificate(
-                    certificateEntity
+            relations.stream()
+                .filter(entity -> entity.getParentCertificate().getCertificateId()
+                    .equals(certificateEntity.getCertificateId())
                 )
-                .stream()
-                .map(
-                    relationEntity ->
-                        RelationEntityMapper.toDomain(
-                            relationEntity.getChildCertificate().getCertificateId(),
-                            RelationType.valueOf(certificateEntity.getCertificateRelation()
-                                .getCertificateRelationType().getType()),
-                            Status.valueOf(
-                                relationEntity.getChildCertificate().getStatus().getStatus()),
-                            relationEntity.getCreated()
-                        )
-                )
+                .map(RelationEntityMapper::childToDomain)
                 .toList()
-                : Collections.emptyList()
         )
         .build();
   }
+
 }

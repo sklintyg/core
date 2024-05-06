@@ -66,9 +66,6 @@
       <column name="revoked_message" type="varchar(3600)">
         <constraints nullable="true"/>
       </column>
-      <column name="certificate_relation_key" type="integer unsigned">
-        <constraints nullable="true"/>
-      </column>
     </createTable>
 
     <createTable tableName="certificate_status">

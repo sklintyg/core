@@ -1,7 +1,9 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,11 +29,11 @@ public class CertificateRelationEntity {
   @Column(name = "`key`")
   private Long key;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "child_certificate_key", referencedColumnName = "`key`")
   private CertificateEntity childCertificate;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "parent_certificate_key", referencedColumnName = "`key`")
   private CertificateEntity parentCertificate;
 

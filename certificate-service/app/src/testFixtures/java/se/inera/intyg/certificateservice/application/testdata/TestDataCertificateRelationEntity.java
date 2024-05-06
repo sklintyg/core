@@ -14,11 +14,20 @@ public class TestDataCertificateRelationEntity {
   }
 
   public static final CertificateRelationEntity CERTIFICATE_RELATION_ENTITY = certificateRelationEntityBuilder().build();
+  public static final CertificateRelationEntity CERTIFICATE_PARENT_RELATION_ENTITY = certificateParentRelationEntityBuilder().build();
 
   public static CertificateRelationEntity.CertificateRelationEntityBuilder certificateRelationEntityBuilder() {
     return CertificateRelationEntity.builder()
         .parentCertificate(PARENT_CERTIFICATE_ENTITY)
         .childCertificate(CERTIFICATE_ENTITY)
+        .created(LocalDateTime.now())
+        .certificateRelationType(CERTIFICATE_RELATION_TYPE_ENTITY);
+  }
+
+  public static CertificateRelationEntity.CertificateRelationEntityBuilder certificateParentRelationEntityBuilder() {
+    return CertificateRelationEntity.builder()
+        .parentCertificate(CERTIFICATE_ENTITY)
+        .childCertificate(PARENT_CERTIFICATE_ENTITY)
         .created(LocalDateTime.now())
         .certificateRelationType(CERTIFICATE_RELATION_TYPE_ENTITY);
   }
