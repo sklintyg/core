@@ -3485,7 +3485,7 @@ class FK7211ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7211 - Utökad behörighet vid djupintegration")
+  @DisplayName("FK7211 - Utökad behörighet vid djupintegration utan SVOD")
   class AccessLevelsDeepIntegration {
 
     @Test
@@ -3556,7 +3556,7 @@ class FK7211ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7211 - Utökad behörighet vid SVOD")
+  @DisplayName("FK7211 - Utökad behörighet vid djpintegration och SVOD (sjf=true)")
   class AccessLevelsSVOD {
 
     @Test

@@ -673,7 +673,7 @@ class ActionEvaluationFactoryTest {
     @Test
     void shallIncludeUserAccessScopeWithinCareUnit() {
       final var user = ajlaDoktorDtoBuilder()
-          .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
+          .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
           .build();
 
       final var actionEvaluation = actionEvaluationFactory.create(
@@ -684,7 +684,7 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertEquals(AccessScope.WITHIN_CARE_UNIT, actionEvaluation.user().accessScope());
+      assertEquals(AccessScope.WITHIN_CARE_PROVIDER, actionEvaluation.user().accessScope());
     }
 
     @Test
@@ -719,6 +719,23 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(AccessScope.ALL_CARE_PROVIDERS, actionEvaluation.user().accessScope());
+    }
+
+    @Test
+    void shallSetDefaultAccessScopeWithinCareUnitIfNull() {
+      final var user = ajlaDoktorDtoBuilder()
+          .accessScope(null)
+          .build();
+
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          user,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(AccessScope.WITHIN_CARE_UNIT, actionEvaluation.user().accessScope());
     }
   }
 }

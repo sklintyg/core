@@ -3573,7 +3573,7 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Utökad behörighet vid djupintegration")
+  @DisplayName("FK7443 - Utökad behörighet vid djupintegration utan SVOD")
   class AccessLevelsDeepIntegration {
 
     @Test
@@ -3644,7 +3644,7 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Utökad behörighet vid SVOD")
+  @DisplayName("FK7443 - Utökad behörighet vid djupintegration och SVOD (sjf=true)")
   class AccessLevelsSVOD {
 
     @Test
