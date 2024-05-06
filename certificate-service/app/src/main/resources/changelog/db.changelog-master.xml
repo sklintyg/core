@@ -66,6 +66,9 @@
       <column name="revoked_message" type="varchar(3600)">
         <constraints nullable="true"/>
       </column>
+      <column name="certificate_relation_key" type="integer unsigned">
+        <constraints nullable="true"/>
+      </column>
     </createTable>
 
     <createTable tableName="certificate_status">
@@ -190,6 +193,49 @@
       </column>
     </createTable>
 
+    <createTable tableName="certificate_relation_type">
+      <column name="key" type="tinyint unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="type" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="certificate_relation">
+      <column name="key" type="bigint unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="child_certificate_key" type="bigint unsigned">
+        <constraints nullable="true"/>
+      </column>
+      <column name="parent_certificate_key" type="bigint unsigned">
+        <constraints nullable="true"/>
+      </column>
+      <column name="created" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="certificate_relation_type_key" type="tinyint unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_certificate_relation_child_certificate"
+      baseTableName="certificate_relation"
+      baseColumnNames="child_certificate_key"
+      referencedTableName="certificate"
+      referencedColumnNames="key"
+      onDelete="CASCADE"
+      onUpdate="RESTRICT"/>
+
+    <addForeignKeyConstraint constraintName="fk_certificate_relation_parent_certificate"
+      baseTableName="certificate_relation"
+      baseColumnNames="parent_certificate_key"
+      referencedTableName="certificate"
+      referencedColumnNames="key"
+      onDelete="CASCADE"
+      onUpdate="RESTRICT"/>
+
     <createTable tableName="external_reference">
       <column name="key" type="bigint unsigned" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
@@ -218,6 +264,13 @@
     </insert>
     <insert tableName="revoked_reason">
       <column name="reason" value="OTHER_SERIOUS_ERROR"/>
+    </insert>
+
+    <insert tableName="certificate_relation_type">
+      <column name="type" value="REPLACE"/>
+    </insert>
+    <insert tableName="certificate_relation_type">
+      <column name="type" value="RENEW"/>
     </insert>
 
     <createTable tableName="staff">

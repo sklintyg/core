@@ -87,4 +87,7 @@ public class CertificateEntity {
   @OneToOne(mappedBy = "certificate", cascade = CascadeType.ALL)
   @PrimaryKeyJoinColumn
   private ExternalReferenceEntity externalReference;
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinColumn(name = "certificate_relation_key")
+  private CertificateRelationEntity certificateRelation;
 }

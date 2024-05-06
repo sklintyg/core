@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateEntity.CERTIFICATE_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateEntity.PARENT_CERTIFICATE_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRevokedEntity.REVOKED_MESSAGE;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_MEDICINCENTRUM_ENTITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
@@ -98,6 +99,9 @@ class CertificateEntityMapperTest {
       doReturn(Optional.of(CERTIFICATE_ENTITY))
           .when(certificateEntityRepository)
           .findByCertificateId(FK7211_CERTIFICATE.id().id());
+      doReturn(Optional.of(PARENT_CERTIFICATE_ENTITY))
+          .when(certificateEntityRepository)
+          .findByCertificateId(FK7211_CERTIFICATE.parent().certificateId().id());
       doReturn(CertificateDataEntity.builder().build())
           .when(certificateDataEntityMapper).toEntity(any());
     }
@@ -194,6 +198,12 @@ class CertificateEntityMapperTest {
     void shouldMapExternalReference() {
       final var response = certificateEntityMapper.toEntity(FK7211_CERTIFICATE);
       assertEquals(CERTIFICATE_ENTITY.getExternalReference(), response.getExternalReference());
+    }
+
+    @Test
+    void shouldMapCertificateRelation() {
+      final var response = certificateEntityMapper.toEntity(FK7211_CERTIFICATE);
+      assertEquals(CERTIFICATE_ENTITY.getCertificateRelation(), response.getCertificateRelation());
     }
   }
 
@@ -453,7 +463,7 @@ class CertificateEntityMapperTest {
 
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
           FK7211_CERTIFICATE_MODEL);
-      
+
       assertEquals(expectedRef, response.externalReference());
     }
   }
