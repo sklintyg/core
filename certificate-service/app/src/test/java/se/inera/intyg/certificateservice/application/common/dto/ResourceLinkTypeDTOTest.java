@@ -88,6 +88,13 @@ class ResourceLinkTypeDTOTest {
           ResourceLinkTypeDTO.REPLACE_CERTIFICATE_CONTINUE.toCertificateActionType()
       );
     }
+
+    @Test
+    void shallReturnCertificateActionTypeRenew() {
+      assertEquals(CertificateActionType.RENEW,
+          ResourceLinkTypeDTO.RENEW_CERTIFICATE.toCertificateActionType()
+      );
+    }
   }
 
   @Nested
@@ -160,6 +167,13 @@ class ResourceLinkTypeDTOTest {
     void shallReturnResourceLinkTypeDTOReplaceCertificateContinue() {
       assertEquals(ResourceLinkTypeDTO.REPLACE_CERTIFICATE_CONTINUE,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.REPLACE_CONTINUE)
+      );
+    }
+
+    @Test
+    void shallReturnResourceLinkTypeDTORenewCertificate() {
+      assertEquals(ResourceLinkTypeDTO.RENEW_CERTIFICATE,
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.RENEW)
       );
     }
   }
