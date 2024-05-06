@@ -673,7 +673,7 @@ class ActionEvaluationFactoryTest {
     @Test
     void shallIncludeUserAccessScopeWithinCareUnit() {
       final var user = ajlaDoktorDtoBuilder()
-          .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
+          .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
           .build();
 
       final var actionEvaluation = actionEvaluationFactory.create(
@@ -684,7 +684,7 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertEquals(AccessScope.WITHIN_CARE_PROVIDER, actionEvaluation.user().accessScope());
+      assertEquals(AccessScope.WITHIN_CARE_UNIT, actionEvaluation.user().accessScope());
     }
 
     @Test
