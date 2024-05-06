@@ -10,6 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.GetCertifica
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificatePdfDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateXmlDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
+import se.inera.intyg.certificateservice.domain.certificate.service.ReplaceCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.RevokeCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SendCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SignCertificateDomainService;
@@ -185,5 +186,13 @@ public class AppConfig {
   public XmlValidationService xmlValidationService(XmlSchemaValidator xmlSchemaValidator,
       XmlSchematronValidator xmlSchematronValidator) {
     return new XmlValidationService(xmlSchematronValidator, xmlSchemaValidator);
+  }
+
+  @Bean
+  public ReplaceCertificateDomainService replaceCertificateDomainService(
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new ReplaceCertificateDomainService(certificateRepository,
+        certificateEventDomainService);
   }
 }

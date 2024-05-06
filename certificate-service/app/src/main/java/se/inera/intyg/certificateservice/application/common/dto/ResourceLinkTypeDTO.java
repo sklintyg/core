@@ -4,6 +4,7 @@ import static se.inera.intyg.certificateservice.domain.action.model.CertificateA
 import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.DELETE;
 import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.PRINT;
 import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.READ;
+import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.REPLACE;
 import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.REVOKE;
 import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.SEND;
 import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.SIGN;
@@ -71,6 +72,7 @@ public enum ResourceLinkTypeDTO {
       case SEND -> SEND_CERTIFICATE;
       case PRINT -> PRINT_CERTIFICATE;
       case REVOKE -> REVOKE_CERTIFICATE;
+      case REPLACE -> REPLACE_CERTIFICATE;
     };
   }
 
@@ -84,6 +86,7 @@ public enum ResourceLinkTypeDTO {
       case SEND_CERTIFICATE -> SEND;
       case PRINT_CERTIFICATE -> PRINT;
       case REVOKE_CERTIFICATE -> REVOKE;
+      case REPLACE_CERTIFICATE -> REPLACE;
       default -> throw new IllegalArgumentException(
           "Cannot convert %s to certificate action type!".formatted(this)
       );

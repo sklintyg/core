@@ -80,7 +80,7 @@ public class ValidationUtil {
     }
   }
 
-  public static void validateCertificateId(CertificateModelIdDTO certificateModelIdDTO) {
+  public static void validateCertificateModelId(CertificateModelIdDTO certificateModelIdDTO) {
     if (certificateModelIdDTO == null) {
       throw new IllegalArgumentException("Required parameter missing: CertificateModelId");
     }

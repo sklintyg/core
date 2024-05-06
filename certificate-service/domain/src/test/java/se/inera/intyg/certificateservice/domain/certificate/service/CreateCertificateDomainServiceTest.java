@@ -104,7 +104,7 @@ class CreateCertificateDomainServiceTest {
     void shallSetExternalReference() {
       createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION,
           EXTERNAL_REFERENCE);
-      verify(certificate).setExternalReference(EXTERNAL_REFERENCE);
+      verify(certificate).externalReference(EXTERNAL_REFERENCE);
     }
 
     @Test

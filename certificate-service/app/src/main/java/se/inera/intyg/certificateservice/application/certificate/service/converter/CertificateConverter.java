@@ -3,11 +3,14 @@ package se.inera.intyg.certificateservice.application.certificate.service.conver
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRecipientDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationsDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PatientDTO;
@@ -16,6 +19,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 
 @Component
@@ -103,8 +107,12 @@ public class CertificateConverter {
                 .signed(certificate.signed())
                 .modified(certificate.modified())
                 .externalReference(
-                    certificate.externalReference() != null ? certificate.externalReference()
-                        .value() : null)
+                    certificate.externalReference() != null
+                        ? certificate.externalReference().value() : null
+                )
+                .relations(
+                    toRelations(certificate.parent(), certificate.children())
+                )
                 .build()
         )
         .data(
@@ -114,6 +122,34 @@ public class CertificateConverter {
             )
         )
         .links(resourceLinks)
+        .build();
+  }
+
+  private CertificateRelationsDTO toRelations(Relation parent, List<Relation> children) {
+    return CertificateRelationsDTO.builder()
+        .parent(
+            toRelation(parent)
+        )
+        .children(
+            children.stream()
+                .filter(Objects::nonNull)
+                .filter(relation -> !Status.REVOKED.equals(relation.status()))
+                .map(this::toRelation)
+                .toList()
+        )
+        .build();
+  }
+
+  private CertificateRelationDTO toRelation(Relation relation) {
+    if (relation == null) {
+      return null;
+    }
+
+    return CertificateRelationDTO.builder()
+        .certificateId(relation.certificateId().id())
+        .type(CertificateRelationTypeDTO.toType(relation.type()))
+        .status(toCertificateStatusTypeDTO(relation.status()))
+        .created(relation.created())
         .build();
   }
 

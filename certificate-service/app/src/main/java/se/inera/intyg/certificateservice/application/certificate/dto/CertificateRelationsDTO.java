@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.certificate.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationsDTO.CertificateRelationsDTOBuilder;
@@ -12,7 +13,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 public class CertificateRelationsDTO {
 
   CertificateRelationDTO parent;
-  CertificateRelationDTO[] children;
+  List<CertificateRelationDTO> children;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class CertificateRelationsDTOBuilder {
