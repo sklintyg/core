@@ -114,6 +114,19 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case REPLACE_CONTINUE -> CertificateActionReplaceContinue.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleWithinCareUnit(),
+                  new ActionRuleRole(
+                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
+                  ),
+                  new ActionRuleStatus(List.of(Status.SIGNED)),
+                  new ActionRuleChildRelationMatch(List.of(RelationType.REPLACE))
+              )
+          )
+          .build();
       case RENEW -> CertificateActionRenew.builder()
           .certificateActionSpecification(actionSpecification)
           .actionRules(
