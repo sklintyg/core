@@ -7,7 +7,6 @@ import lombok.Value;
 import lombok.With;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
-import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 
 @Value
 @Builder

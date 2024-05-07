@@ -6,10 +6,11 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 @Component
 public class CitizenCertificateConverter {
 
-  public CitizenCertificateDTO convert(Certificate certificate) {
-    return CitizenCertificateDTO.builder().build();
-
-    final var x = CertificateDTO
+  public CertificateDTO convert(Certificate certificate) {
+    return CertificateDTO.builder()
+        .data(certificate.elementData())
+        .metadata()
+        .build();
   }
 
 }
