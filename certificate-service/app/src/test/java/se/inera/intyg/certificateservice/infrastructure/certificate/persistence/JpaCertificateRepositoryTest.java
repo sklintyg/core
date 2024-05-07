@@ -38,10 +38,13 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateModelEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
 
 @ExtendWith(MockitoExtension.class)
 class JpaCertificateRepositoryTest {
 
+  @Mock
+  CertificateRelationRepository certificateRelationRepository;
   @Mock
   CertificateEntityRepository certificateEntityRepository;
   @Mock
@@ -214,7 +217,20 @@ class JpaCertificateRepositoryTest {
       final var actualResult = jpaCertificateRepository.save(expectedResult);
 
       verify(certificateEntityRepository).delete(CERTIFICATE_ENTITY);
+      verify(certificateRelationRepository).deleteRelations(CERTIFICATE_ENTITY);
       assertEquals(expectedResult, actualResult);
+    }
+
+    @Test
+    void shouldSaveCertificateRelations() {
+      final var certificate = Certificate.builder().build();
+
+      doReturn(CERTIFICATE_ENTITY).when(certificateEntityMapper).toEntity(certificate);
+      doReturn(CERTIFICATE_ENTITY).when(certificateEntityRepository).save(CERTIFICATE_ENTITY);
+      doReturn(certificate).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
+
+      jpaCertificateRepository.save(certificate);
+      verify(certificateRelationRepository).save(certificate, CERTIFICATE_ENTITY);
     }
   }
 
@@ -287,6 +303,16 @@ class JpaCertificateRepositoryTest {
       final var actualCertificate = jpaCertificateRepository.insert(CERTIFICATE);
 
       assertEquals(CERTIFICATE, actualCertificate);
+    }
+
+    @Test
+    void shouldSaveCertificateRelations() {
+      doReturn(CERTIFICATE_ENTITY).when(certificateEntityMapper).toEntity(CERTIFICATE);
+      doReturn(CERTIFICATE_ENTITY).when(certificateEntityRepository).save(CERTIFICATE_ENTITY);
+      doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
+
+      jpaCertificateRepository.insert(CERTIFICATE);
+      verify(certificateRelationRepository).save(CERTIFICATE, CERTIFICATE_ENTITY);
     }
 
     @Test
