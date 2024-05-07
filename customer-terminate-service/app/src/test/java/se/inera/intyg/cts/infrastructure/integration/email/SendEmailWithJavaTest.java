@@ -6,12 +6,12 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import jakarta.mail.Message.RecipientType;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Session;
+import jakarta.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.Properties;
-import javax.mail.Message.RecipientType;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,16 +49,17 @@ class SendEmailWithJavaTest {
   }
 
   @Test
-  public void shouldSetEmailToAddress() throws MessagingException {
+  void shouldSetEmailToAddress() throws MessagingException {
     sendEmailWithJava.sendEmail(EMAIL_TO_ADDRESS, EMAIL_CONTENT, EMAIL_SUBJECT);
 
     verify(mailSender, times(1)).send(messageCaptor.capture());
     assertEquals(1, messageCaptor.getValue().getRecipients(RecipientType.TO).length);
-    assertEquals(EMAIL_TO_ADDRESS, messageCaptor.getValue().getRecipients(RecipientType.TO)[0].toString());
+    assertEquals(EMAIL_TO_ADDRESS,
+        messageCaptor.getValue().getRecipients(RecipientType.TO)[0].toString());
   }
 
   @Test
-  public void shouldSetEmailFromAddress() throws MessagingException {
+  void shouldSetEmailFromAddress() throws MessagingException {
     sendEmailWithJava.sendEmail(EMAIL_TO_ADDRESS, EMAIL_CONTENT, EMAIL_SUBJECT);
 
     verify(mailSender, times(1)).send(messageCaptor.capture());
@@ -67,7 +68,7 @@ class SendEmailWithJavaTest {
   }
 
   @Test
-  public void shouldSetEmailSubject() throws MessagingException {
+  void shouldSetEmailSubject() throws MessagingException {
     sendEmailWithJava.sendEmail(EMAIL_TO_ADDRESS, EMAIL_CONTENT, EMAIL_SUBJECT);
 
     verify(mailSender, times(1)).send(messageCaptor.capture());
@@ -75,7 +76,7 @@ class SendEmailWithJavaTest {
   }
 
   @Test
-  public void shouldSetEmailContent() throws MessagingException, IOException {
+  void shouldSetEmailContent() throws MessagingException, IOException {
     sendEmailWithJava.sendEmail(EMAIL_TO_ADDRESS, EMAIL_CONTENT, EMAIL_SUBJECT);
 
     verify(mailSender, times(1)).send(messageCaptor.capture());

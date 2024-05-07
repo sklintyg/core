@@ -4,7 +4,6 @@ import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.cts.integrationtest.TestData.ORG_NO;
 
 import io.restassured.RestAssured;
 import java.io.File;
@@ -17,7 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-public class ExportIT {
+class ExportIT {
 
   private TestData testData;
 
@@ -103,7 +102,7 @@ public class ExportIT {
         .then()
         .statusCode(HttpStatus.OK.value());
 
-    assertTrue(getUploadedFileAsBytes(ORG_NO).length > 0,
+    assertTrue(getUploadedFileAsBytes().length > 0,
         "Uploaded file should be larger than zero bytes");
   }
 
@@ -123,19 +122,20 @@ public class ExportIT {
         .then()
         .statusCode(HttpStatus.OK.value());
 
-    final var uploadedFile = getUploadedFile(ORG_NO);
+    final var uploadedFile = getUploadedFile();
     final var password = getPassword(testData.terminationIds().get(0));
 
     assertDoesNotThrow(() -> extractUploadedFile(uploadedFile, password),
         () -> String.format("Could not extract uploaded file with password: %s", password));
   }
 
-  private File getUploadedFile(String organizationNumber) {
+  private File getUploadedFile() {
     try {
-      final var uploadedFileAsBytes = getUploadedFileAsBytes(organizationNumber);
-      final var uploadedFile = File.createTempFile(organizationNumber, ".zip");
-      final var fos = new FileOutputStream(uploadedFile);
-      fos.write(uploadedFileAsBytes);
+      final var uploadedFileAsBytes = getUploadedFileAsBytes();
+      final var uploadedFile = File.createTempFile(TestData.ORG_NO, ".zip");
+      try (final var fos = new FileOutputStream(uploadedFile)) {
+        fos.write(uploadedFileAsBytes);
+      }
       return uploadedFile;
     } catch (Exception ex) {
       throw new RuntimeException("Failed to download and create uploaded file", ex);
@@ -153,14 +153,15 @@ public class ExportIT {
   }
 
   private void extractUploadedFile(File uploadedFile, String password) throws IOException {
-    new ZipFile(uploadedFile.getPath(), password.toCharArray())
-        .extractAll(Files.createTempDirectory("tmpDirPrefix").toFile().getAbsolutePath());
+    try (final var zipFIle = new ZipFile(uploadedFile.getPath(), password.toCharArray())) {
+      zipFIle.extractAll(Files.createTempDirectory("tmpDirPrefix").toFile().getAbsolutePath());
+    }
   }
 
-  private byte[] getUploadedFileAsBytes(String organizationNumber) {
+  private byte[] getUploadedFileAsBytes() {
     return given()
         .baseUri("http://localhost:18000")
-        .pathParam("organizationNumber", organizationNumber)
+        .pathParam("organizationNumber", TestData.ORG_NO)
         .when()
         .get("/testability-sjut/v1/files/{organizationNumber}")
         .then()

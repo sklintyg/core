@@ -101,7 +101,7 @@ public class TestData {
   }
 
   public TestData setup() {
-    if (terminationDTOs.size() > 0) {
+    if (!terminationDTOs.isEmpty()) {
       for (TestabilityTerminationDTO testabilityTerminationDTO : terminationDTOs) {
         given()
             .contentType(ContentType.JSON)

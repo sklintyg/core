@@ -18,6 +18,8 @@ public class SendPackagePasswordImpl implements SendPackagePassword {
 
   /**
    * Send the password
+   * <p>
+   *
    * @param termination to send the password for
    * @return updated termination
    */
@@ -41,14 +43,18 @@ public class SendPackagePasswordImpl implements SendPackagePassword {
   @Override
   public Termination resendPassword(Termination termination) {
 
-    if(termination.status().equals(TerminationStatus.PASSWORD_SENT) || termination.status().equals(TerminationStatus.PASSWORD_RESENT)){
+    if (termination.status().equals(TerminationStatus.PASSWORD_SENT) || termination.status()
+        .equals(TerminationStatus.PASSWORD_RESENT)) {
       if (sendPassword.sendPassword(termination)) {
         termination.passwordResent();
         terminationRepository.store(termination);
         return terminationRepository.findByTerminationId(termination.terminationId()).get();
       }
-      throw new RuntimeException(String.format("Could not store status %s for %t", TerminationStatus.PASSWORD_RESENT, termination.terminationId().id()));
-     }
-    throw new IllegalArgumentException(String.format("Invalid status: %s to resend password.", termination.status()));
+      throw new RuntimeException(
+          "Could not store status %s for %s".formatted(TerminationStatus.PASSWORD_RESENT,
+              termination.terminationId().id()));
+    }
+    throw new IllegalArgumentException(
+        String.format("Invalid status: %s to resend password.", termination.status()));
   }
 }

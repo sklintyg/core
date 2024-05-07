@@ -17,7 +17,7 @@ import se.inera.intyg.css.testability.service.EmailTestabilityService;
 @RequestMapping("/testability-email/v1")
 public class EmailTestabilityController {
 
-  private final static Logger LOG = LoggerFactory.getLogger(EmailTestabilityController.class);
+  private static final Logger LOG = LoggerFactory.getLogger(EmailTestabilityController.class);
 
   private final EmailTestabilityService emailTestabilityService;
 
@@ -33,7 +33,7 @@ public class EmailTestabilityController {
 
   @GetMapping(value = "/{emailAddress}", produces = MediaType.APPLICATION_JSON_VALUE)
   public List<Map<String, List<String>>> getEmailsForAddress(@PathVariable String emailAddress) {
-    LOG.info(String.format("Get emails for address: %s", emailAddress));
+    LOG.info("Get emails for address: {}", emailAddress);
     return emailTestabilityService.getEmailsForAddress(emailAddress);
   }
 
