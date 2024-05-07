@@ -274,9 +274,13 @@ class CertificateActionSendTest {
 
   @Test
   void shallReturnBody() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+    final var certificate = certificateBuilder.build();
+
     assertEquals(
         "<p>Om du går vidare kommer intyget skickas direkt till Försäkringskassans system vilket ska göras i samråd med patienten.</p>",
-        certificateActionSend.getBody());
+        certificateActionSend.getBody(Optional.of(certificate), actionEvaluation)
+    );
   }
 
 

@@ -2,15 +2,16 @@ package se.inera.intyg.certificateservice.domain.action.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_HUDMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
@@ -277,8 +278,28 @@ class CertificateActionRenewTest {
   }
 
   @Test
-  void shallReturnBody() {
-    assertNotNull(certificateActionRenew.getBody());
+  void shallReturnBodyWhenOnSameUnit() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+    final var certificate = certificateBuilder.build();
+
+    assertTrue(
+        certificateActionRenew.getBody(Optional.of(certificate), actionEvaluation)
+            .contains("Eventuell kompletteringsbegäran kommer att klarmarkeras.")
+    );
+  }
+
+  @Test
+  void shallReturnBodyWhenOnDifferentUnit() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .subUnit(ALFA_HUDMOTTAGNINGEN)
+        .careUnit(ALFA_VARDCENTRAL)
+        .build();
+    final var certificate = certificateBuilder.build();
+
+    assertTrue(
+        certificateActionRenew.getBody(Optional.of(certificate), actionEvaluation)
+            .contains("Eventuell kompletteringsbegäran kommer inte att klarmarkeras.")
+    );
   }
 
   @Test

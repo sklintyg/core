@@ -2,7 +2,10 @@ package se.inera.intyg.certificateservice.application.common;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
 
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -51,7 +54,8 @@ class ResourceLinkConverterTest {
       final var certificateActionCreate = CertificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION_CREATE);
 
-      final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
+      final var actualResult = resourceLinkConverter.convert(certificateActionCreate,
+          Optional.empty(), ACTION_EVALUATION);
       assertEquals(resourceLinkDTO.getType(), actualResult.getType());
     }
 
@@ -64,7 +68,8 @@ class ResourceLinkConverterTest {
       final var certificateActionCreate = CertificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION_READ);
 
-      final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
+      final var actualResult = resourceLinkConverter.convert(certificateActionCreate,
+          Optional.of(FK7211_CERTIFICATE), ACTION_EVALUATION);
       assertEquals(resourceLinkDTO.getType(), actualResult.getType());
     }
 
@@ -77,7 +82,8 @@ class ResourceLinkConverterTest {
       final var certificateActionCreate = CertificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION_CREATE);
 
-      final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
+      final var actualResult = resourceLinkConverter.convert(certificateActionCreate,
+          Optional.empty(), ACTION_EVALUATION);
       assertEquals(resourceLinkDTO.getName(), actualResult.getName());
     }
 
@@ -90,7 +96,8 @@ class ResourceLinkConverterTest {
       final var certificateActionCreate = CertificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION_CREATE);
 
-      final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
+      final var actualResult = resourceLinkConverter.convert(certificateActionCreate,
+          Optional.of(FK7211_CERTIFICATE), ACTION_EVALUATION);
       assertEquals(resourceLinkDTO.getDescription(), actualResult.getDescription());
     }
 
@@ -103,7 +110,8 @@ class ResourceLinkConverterTest {
       final var certificateActionCreate = CertificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION_SEND);
 
-      final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
+      final var actualResult = resourceLinkConverter.convert(certificateActionCreate,
+          Optional.of(FK7211_CERTIFICATE), ACTION_EVALUATION);
       assertEquals(resourceLinkDTO.getBody(), actualResult.getBody());
     }
 
@@ -116,7 +124,8 @@ class ResourceLinkConverterTest {
       final var certificateActionCreate = CertificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION_CREATE);
 
-      final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
+      final var actualResult = resourceLinkConverter.convert(certificateActionCreate,
+          Optional.empty(), ACTION_EVALUATION);
       assertEquals(resourceLinkDTO.isEnabled(), actualResult.isEnabled());
     }
 
@@ -132,7 +141,8 @@ class ResourceLinkConverterTest {
       final var certificateActionCreate = CertificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION_CREATE);
 
-      final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
+      final var actualResult = resourceLinkConverter.convert(certificateActionCreate,
+          Optional.empty(), ACTION_EVALUATION);
       assertEquals(resourceLinkDTO, actualResult);
     }
   }

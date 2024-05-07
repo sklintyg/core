@@ -13,6 +13,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -125,7 +126,8 @@ class UpdateCertificateServiceTest {
     final List<CertificateAction> certificateActions = List.of(certificateAction);
     doReturn(certificateActions).when(certificate).actions(actionEvaluation);
 
-    doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction);
+    doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction,
+        Optional.of(certificate), actionEvaluation);
     doReturn(expectedCertificateDTO).when(certificateConverter)
         .convert(certificate, List.of(resourceLinkDTO));
 

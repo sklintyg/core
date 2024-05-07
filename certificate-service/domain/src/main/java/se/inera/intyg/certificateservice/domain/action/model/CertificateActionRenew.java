@@ -14,11 +14,25 @@ public class CertificateActionRenew implements CertificateAction {
 
   private static final String NAME = "Förnya";
   private static final String DESCRIPTION = "Skapar en redigerbar kopia av intyget på den enhet som du är inloggad på.";
-  private static final String BODY =
+  private static final String BODY_PART_1 =
       """
           Förnya intyg innebär att ett nytt intygsutkast skapas med delvis samma information som i det ursprungliga intyget.<br><br>
           Uppgifterna i det nya intygsutkastet går att ändra innan det signeras.<br><br>
           I de fall patienten har ändrat namn eller adress så uppdateras den informationen.<br><br>
+          """;
+
+  private static final String BODY_PART_2_SAME_UNIT =
+      """
+          Eventuell kompletteringsbegäran kommer att klarmarkeras.
+          """;
+
+  private static final String BODY_PART_2_OTHER_UNIT =
+      """
+          Eventuell kompletteringsbegäran kommer inte att klarmarkeras.
+          """;
+
+  private static final String BODY_PART_3 =
+      """
           Det nya utkastet skapas på den enhet du är inloggad på.
           """;
 
@@ -57,7 +71,36 @@ public class CertificateActionRenew implements CertificateAction {
   }
 
   @Override
-  public String getBody() {
-    return BODY;
+  public String getBody(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
+    if (certificate.isEmpty()) {
+      return BODY_PART_1 + BODY_PART_3;
+    }
+
+    final var stringBuilder = new StringBuilder();
+    stringBuilder.append(BODY_PART_1);
+    if (isCareUnitMatchingSubUnit(actionEvaluation, certificate.get()) ||
+        isIssuingUnitMatchingSubUnit(actionEvaluation, certificate.get())) {
+      stringBuilder.append(BODY_PART_2_SAME_UNIT);
+    } else {
+      stringBuilder.append(BODY_PART_2_OTHER_UNIT);
+    }
+
+    stringBuilder.append(BODY_PART_3);
+
+    return stringBuilder.toString();
+  }
+
+  private static boolean isCareUnitMatchingSubUnit(ActionEvaluation actionEvaluation,
+      Certificate value) {
+    return value.certificateMetaData().careUnit().hsaId().equals(
+        actionEvaluation.subUnit().hsaId()
+    );
+  }
+
+  private static boolean isIssuingUnitMatchingSubUnit(ActionEvaluation actionEvaluation,
+      Certificate value) {
+    return value.certificateMetaData().issuingUnit().hsaId().equals(
+        actionEvaluation.subUnit().hsaId()
+    );
   }
 }

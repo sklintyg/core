@@ -29,7 +29,7 @@ public interface CertificateAction {
     return null;
   }
 
-  default String getBody() {
+  default String getBody(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
     return null;
   }
 
