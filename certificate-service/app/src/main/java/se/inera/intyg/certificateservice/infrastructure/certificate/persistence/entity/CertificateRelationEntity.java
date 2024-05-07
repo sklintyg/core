@@ -29,11 +29,11 @@ public class CertificateRelationEntity {
   @Column(name = "`key`")
   private Long key;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
   @JoinColumn(name = "child_certificate_key", referencedColumnName = "`key`")
   private CertificateEntity childCertificate;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
   @JoinColumn(name = "parent_certificate_key", referencedColumnName = "`key`")
   private CertificateEntity parentCertificate;
 
