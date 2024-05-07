@@ -92,7 +92,7 @@ class CertificateRelationRepositoryTest {
     void shallReturnListOfRelations() {
       final var expectedResult = List.of(CertificateRelationEntity.builder().build());
       final var certificateEntity = CertificateEntity.builder().build();
-      doReturn(Optional.of(expectedResult)).when(relationEntityRepository)
+      doReturn(expectedResult).when(relationEntityRepository)
           .findByParentCertificateOrChildCertificate(
               certificateEntity, certificateEntity
           );
@@ -104,13 +104,29 @@ class CertificateRelationRepositoryTest {
     @Test
     void shallReturnEmptyListOfRelations() {
       final var certificateEntity = CertificateEntity.builder().build();
-      doReturn(Optional.empty()).when(relationEntityRepository)
+      doReturn(Collections.emptyList()).when(relationEntityRepository)
           .findByParentCertificateOrChildCertificate(
               certificateEntity, certificateEntity
           );
 
       final var actualResult = certificateRelationRepository.relations(certificateEntity);
       assertEquals(Collections.emptyList(), actualResult);
+    }
+  }
+
+  @Nested
+  class DeleteRelationsTests {
+
+    @Test
+    void shallDeleteRelatedRelations() {
+      final var certificateEntity = CertificateEntity.builder().build();
+      final var relationEntityList = List.of(CertificateRelationEntity.builder().build());
+
+      doReturn(relationEntityList).when(relationEntityRepository)
+          .findByParentCertificateOrChildCertificate(certificateEntity, certificateEntity);
+
+      certificateRelationRepository.deleteRelations(certificateEntity);
+      verify(relationEntityRepository).deleteAll(relationEntityList);
     }
   }
 }

@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository;
 
 
-import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -51,10 +50,13 @@ public class CertificateRelationRepository {
 
   public List<CertificateRelationEntity> relations(CertificateEntity certificateEntity) {
     return relationEntityRepository.findByParentCertificateOrChildCertificate(
-            certificateEntity,
-            certificateEntity
-        )
-        .orElseGet(Collections::emptyList);
+        certificateEntity,
+        certificateEntity
+    );
+  }
+
+  public void deleteRelations(CertificateEntity certificateEntity) {
+    relationEntityRepository.deleteAll(relations(certificateEntity));
   }
 
   private CertificateEntity getParentEntity(Certificate certificate) {

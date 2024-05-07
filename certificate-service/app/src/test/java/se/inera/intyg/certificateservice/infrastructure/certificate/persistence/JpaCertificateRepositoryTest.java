@@ -217,6 +217,7 @@ class JpaCertificateRepositoryTest {
       final var actualResult = jpaCertificateRepository.save(expectedResult);
 
       verify(certificateEntityRepository).delete(CERTIFICATE_ENTITY);
+      verify(certificateRelationRepository).deleteRelations(CERTIFICATE_ENTITY);
       assertEquals(expectedResult, actualResult);
     }
 

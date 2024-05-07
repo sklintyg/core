@@ -51,7 +51,11 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
     if (Status.DELETED_DRAFT.equals(certificate.status())) {
       certificateEntityRepository.findByCertificateId(certificate.id().id())
-          .ifPresent(certificateEntityRepository::delete);
+          .ifPresent(entity -> {
+                certificateRelationRepository.deleteRelations(entity);
+                certificateEntityRepository.delete(entity);
+              }
+          );
       return certificate;
     }
 

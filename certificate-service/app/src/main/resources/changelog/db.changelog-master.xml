@@ -221,17 +221,13 @@
       baseTableName="certificate_relation"
       baseColumnNames="child_certificate_key"
       referencedTableName="certificate"
-      referencedColumnNames="key"
-      onDelete="CASCADE"
-      onUpdate="RESTRICT"/>
+      referencedColumnNames="key"/>
 
     <addForeignKeyConstraint constraintName="fk_certificate_relation_parent_certificate"
       baseTableName="certificate_relation"
       baseColumnNames="parent_certificate_key"
       referencedTableName="certificate"
-      referencedColumnNames="key"
-      onDelete="CASCADE"
-      onUpdate="RESTRICT"/>
+      referencedColumnNames="key"/>
 
     <createTable tableName="external_reference">
       <column name="key" type="bigint unsigned" autoIncrement="true">
