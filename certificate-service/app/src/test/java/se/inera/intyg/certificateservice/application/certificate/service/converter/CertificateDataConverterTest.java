@@ -102,7 +102,7 @@ class CertificateDataConverterTest {
       final var result = certificateDataConverter.convert(certificateModel,
           Collections.emptyList());
       assertInstanceOf(CertificateDataElement.class, result.get(ID_1),
-          "Should return map of CertificateDataElement"
+          "Should return map of CertificateDataElementDTO"
       );
     }
 
@@ -323,7 +323,8 @@ class CertificateDataConverterTest {
       final var result = certificateDataConverter.convert(certificateModel,
           Collections.emptyList());
 
-      assertNotNull(result.get(ID_1).getConfig(), "CertificateDataElement should contain config");
+      assertNotNull(result.get(ID_1).getConfig(),
+          "CertificateDataElementDTO should contain config");
     }
 
     @Test
@@ -361,7 +362,7 @@ class CertificateDataConverterTest {
           Collections.emptyList());
 
       assertNotNull(result.get(ID_1).getValidation(),
-          "CertificateDataElement should contain validation");
+          "CertificateDataElementDTO should contain validation");
     }
 
     @Test
@@ -386,7 +387,7 @@ class CertificateDataConverterTest {
           Collections.emptyList());
 
       assertEquals(0, result.get(ID_1).getValidation().length,
-          "CertificateDataElement should contain empty validation");
+          "CertificateDataElementDTO should contain empty validation");
     }
 
     @Test
@@ -415,7 +416,7 @@ class CertificateDataConverterTest {
       final var result = certificateDataConverter.convert(certificateModel, List.of(elementData));
 
       assertNotNull(result.get(ID_1).getValue(),
-          "CertificateDataElement should contain value");
+          "CertificateDataElementDTO should contain value");
     }
   }
 
@@ -495,7 +496,7 @@ class CertificateDataConverterTest {
     final var result = certificateDataConverter.convert(certificateModel, List.of(elementData));
 
     assertNull(result.get(ID_1).getValue(),
-        "CertificateDataElement should be null if category");
+        "CertificateDataElementDTO should be null if category");
   }
 
 
