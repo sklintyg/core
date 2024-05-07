@@ -2,16 +2,18 @@ package se.inera.intyg.css.testability.configuration;
 
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetupTest;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Configuration;
 
+@Getter
 @Configuration
 public class MailServerConfig implements InitializingBean, DisposableBean {
 
-  private final static Logger LOG = LoggerFactory.getLogger(MailServerConfig.class);
+  private static final Logger LOG = LoggerFactory.getLogger(MailServerConfig.class);
 
   private GreenMail greenMail;
 
@@ -26,10 +28,6 @@ public class MailServerConfig implements InitializingBean, DisposableBean {
   @Override
   public void destroy() {
     greenMail.stop();
-  }
-
-  public GreenMail getGreenMail() {
-    return greenMail;
   }
 
   public void restartGreenMail() {

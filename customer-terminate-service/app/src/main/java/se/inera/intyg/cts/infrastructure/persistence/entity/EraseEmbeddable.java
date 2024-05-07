@@ -1,8 +1,8 @@
 package se.inera.intyg.cts.infrastructure.persistence.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

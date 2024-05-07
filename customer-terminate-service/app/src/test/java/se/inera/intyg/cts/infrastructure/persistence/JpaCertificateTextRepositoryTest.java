@@ -7,7 +7,7 @@ import static se.inera.intyg.cts.testutil.CertificateTextTestDataBuilder.certifi
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTermination;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTerminationEntity;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,8 @@ class JpaCertificateTextRepositoryTest {
   @Transactional
   void shallReturnCertificateTextsForExistingTermination() {
     terminationEntityRepository.save(terminationEntity);
-    TerminationEntity savedTerminationEntity = terminationEntityRepository.findByTerminationId(terminationEntity.getTerminationId()).get();
+    TerminationEntity savedTerminationEntity = terminationEntityRepository.findByTerminationId(
+        terminationEntity.getTerminationId()).get();
     certificateTextEntityRepository.saveAll(certificateTextEntities(savedTerminationEntity, 3));
 
     assertEquals(3, jpaCertificateTextRepository.get(termination).size());
@@ -64,7 +65,8 @@ class JpaCertificateTextRepositoryTest {
   @Test
   void shallRemoveCertificateTextsForExistingTermination() {
     terminationEntityRepository.save(terminationEntity);
-    TerminationEntity savedTerminationEntity = terminationEntityRepository.findByTerminationId(terminationEntity.getTerminationId()).get();
+    TerminationEntity savedTerminationEntity = terminationEntityRepository.findByTerminationId(
+        terminationEntity.getTerminationId()).get();
 
     certificateTextEntityRepository.saveAll(certificateTextEntities(savedTerminationEntity, 3));
 

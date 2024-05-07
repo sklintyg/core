@@ -76,7 +76,7 @@ class TerminationControllerTest {
         terminationController.create(request));
 
     verify(terminationService, times(1)).create(request);
-    assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
+    assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
   }
 
   @Test
@@ -109,11 +109,12 @@ class TerminationControllerTest {
     when(terminationService.update(terminationDTO.terminationId(), updateTerminationDTO))
         .thenThrow(IllegalArgumentException.class);
 
-    final var exception = assertThrows(
-        ResponseStatusException.class, () ->
-            terminationController.update(terminationDTO.terminationId(), updateTerminationDTO));
+    final var id = terminationDTO.terminationId();
+    final var exception = assertThrows(ResponseStatusException.class, () ->
+        terminationController.update(id, updateTerminationDTO)
+    );
 
-    assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
+    assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
   }
 
   @Test
@@ -136,7 +137,7 @@ class TerminationControllerTest {
         terminationController.findById(uuid));
 
     verify(terminationService, times(1)).findById(uuid);
-    assertEquals(exception.getStatus(), HttpStatus.NOT_FOUND);
+    assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
   }
 
   @Test
@@ -162,14 +163,16 @@ class TerminationControllerTest {
   void eraseBadRequest() {
     when(eraseService.initiateErase(terminationId)).thenThrow(new IllegalArgumentException());
 
+    final var id = terminationId.id();
     final var exception = assertThrows(ResponseStatusException.class, () ->
-        terminationController.startErase(terminationId.id()));
+        terminationController.startErase(id));
 
-    assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
+    assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
   }
 
   @Nested
   class ResendKey {
+
     @Test
     void resendKey() {
       when(terminationService.resendPassword(terminationId.id())).thenReturn(terminationDTO);
@@ -182,24 +185,27 @@ class TerminationControllerTest {
 
     @Test
     void resendKeyNotFoundException() {
-      when(terminationService.resendPassword(terminationId.id())).thenThrow(new NoSuchElementException ());
+      when(terminationService.resendPassword(terminationId.id())).thenThrow(
+          new NoSuchElementException());
 
+      final var id = terminationId.id();
       final var exception = assertThrows(ResponseStatusException.class, () ->
-          terminationController.resendPassword(terminationId.id()));
+          terminationController.resendPassword(id));
 
       verify(terminationService, times(1)).resendPassword(terminationId.id());
-      assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
+      assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
     }
 
     @Test
     void resendKeyIllegalArgumentException() {
-      when(terminationService.resendPassword(terminationId.id())).thenThrow(new IllegalArgumentException());
-
+      when(terminationService.resendPassword(terminationId.id())).thenThrow(
+          new IllegalArgumentException());
+      final var id = terminationId.id();
       final var exception = assertThrows(ResponseStatusException.class, () ->
-          terminationController.resendPassword(terminationId.id()));
+          terminationController.resendPassword(id));
 
       verify(terminationService, times(1)).resendPassword(terminationId.id());
-      assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
+      assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
     }
   }
 }
