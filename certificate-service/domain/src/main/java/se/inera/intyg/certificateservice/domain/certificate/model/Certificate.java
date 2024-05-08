@@ -291,9 +291,8 @@ public class Certificate {
     newCertificate.updateMetadata(actionEvaluation);
 
     newCertificate.parent = Relation.builder()
-        .certificateId(this.id())
+        .certificate(this)
         .type(relationType)
-        .status(this.status())
         .created(newCertificate.created())
         .build();
 
@@ -301,9 +300,8 @@ public class Certificate {
         this.children().stream(),
         Stream.of(
             Relation.builder()
-                .certificateId(newCertificate.id())
+                .certificate(newCertificate)
                 .type(relationType)
-                .status(newCertificate.status())
                 .created(newCertificate.parent().created())
                 .build()
         )

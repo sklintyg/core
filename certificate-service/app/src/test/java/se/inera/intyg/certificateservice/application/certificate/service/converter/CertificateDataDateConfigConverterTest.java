@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.certificate.service.conver
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -34,7 +35,7 @@ class CertificateDataDateConfigConverterTest {
         .build();
 
     assertThrows(IllegalStateException.class,
-        () -> certificateDataDateConfigConverter.convert(elementSpecification)
+        () -> certificateDataDateConfigConverter.convert(elementSpecification, FK7211_CERTIFICATE)
     );
   }
 
@@ -47,7 +48,8 @@ class CertificateDataDateConfigConverterTest {
                 .build())
         .build();
 
-    final var result = certificateDataDateConfigConverter.convert(elementSpecification);
+    final var result = certificateDataDateConfigConverter.convert(elementSpecification,
+        FK7211_CERTIFICATE);
 
     assertEquals("ID", ((CertificateDataConfigDate) result).getId());
   }
@@ -62,7 +64,8 @@ class CertificateDataDateConfigConverterTest {
                 .build())
         .build();
 
-    final var result = certificateDataDateConfigConverter.convert(elementSpecification);
+    final var result = certificateDataDateConfigConverter.convert(elementSpecification,
+        FK7211_CERTIFICATE);
 
     assertEquals("NAME", result.getText());
   }
@@ -77,7 +80,8 @@ class CertificateDataDateConfigConverterTest {
                 .build())
         .build();
 
-    final var result = certificateDataDateConfigConverter.convert(elementSpecification);
+    final var result = certificateDataDateConfigConverter.convert(elementSpecification,
+        FK7211_CERTIFICATE);
 
     assertEquals(MIN_DATE, ((CertificateDataConfigDate) result).getMinDate());
   }
@@ -92,7 +96,8 @@ class CertificateDataDateConfigConverterTest {
                 .build())
         .build();
 
-    final var result = certificateDataDateConfigConverter.convert(elementSpecification);
+    final var result = certificateDataDateConfigConverter.convert(elementSpecification,
+        FK7211_CERTIFICATE);
 
     assertEquals(MAX_DATE, ((CertificateDataConfigDate) result).getMaxDate());
   }

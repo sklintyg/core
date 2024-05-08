@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.certificate.model;
 
+import java.util.Comparator;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
@@ -14,4 +15,13 @@ public class ElementValueDateRangeList implements ElementValue {
   @With
   List<DateRange> dateRangeList;
 
+  public DateRange lastRange() {
+    if (dateRangeList == null) {
+      return null;
+    }
+    
+    return dateRangeList.stream()
+        .max(Comparator.comparing(DateRange::to))
+        .orElse(null);
+  }
 }

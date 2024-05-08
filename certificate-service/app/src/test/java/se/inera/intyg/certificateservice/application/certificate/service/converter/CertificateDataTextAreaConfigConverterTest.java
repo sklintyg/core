@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.certificate.service.conver
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +28,8 @@ class CertificateDataTextAreaConfigConverterTest {
         .build();
 
     assertThrows(IllegalStateException.class,
-        () -> certificateDataTextAreaConfigConverter.convert(elementSpecification)
+        () -> certificateDataTextAreaConfigConverter.convert(elementSpecification,
+            FK7211_CERTIFICATE)
     );
   }
 
@@ -50,7 +52,8 @@ class CertificateDataTextAreaConfigConverterTest {
                     .id(new FieldId("ID"))
                     .name("NAME")
                     .build()
-            ).build()
+            ).build(),
+        FK7211_CERTIFICATE
     );
 
     assertEquals(expected, response);

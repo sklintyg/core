@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 import java.time.Period;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
@@ -20,7 +21,6 @@ public class ElementConfigurationCheckboxDateRangeList implements ElementConfigu
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.CHECKBOX_DATE_RANGE_LIST;
   FieldId id;
-  String previousDateRangeText;
   boolean hideWorkingHours;
   List<CheckboxDateRange> dateRanges;
   Period min;
@@ -32,5 +32,15 @@ public class ElementConfigurationCheckboxDateRangeList implements ElementConfigu
         .dateRangeListId(id)
         .dateRangeList(Collections.emptyList())
         .build();
+  }
+
+  public Optional<CheckboxDateRange> checkboxDateRange(FieldId id) {
+    if (dateRanges == null) {
+      return Optional.empty();
+    }
+    
+    return dateRanges.stream()
+        .filter(dateRange -> dateRange.id().equals(id))
+        .findFirst();
   }
 }

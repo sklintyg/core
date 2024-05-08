@@ -1576,20 +1576,18 @@ class CertificateTest {
       final var signedCertificate = certificateBuilder.status(Status.SIGNED)
           .build();
 
+      final var actualCertificate = signedCertificate.replace(actionEvaluation);
+
       final var expectedRelation = Relation.builder()
-          .certificateId(signedCertificate.id())
+          .certificate(signedCertificate)
           .type(RelationType.REPLACE)
-          .status(Status.SIGNED)
           .created(LocalDateTime.now(ZoneId.systemDefault()))
           .build();
 
-      final var actualCertificate = signedCertificate.replace(actionEvaluation);
-
       assertAll(
-          () -> assertEquals(expectedRelation.certificateId(),
-              actualCertificate.parent().certificateId()),
+          () -> assertEquals(expectedRelation.certificate(),
+              actualCertificate.parent().certificate()),
           () -> assertEquals(expectedRelation.type(), actualCertificate.parent().type()),
-          () -> assertEquals(expectedRelation.status(), actualCertificate.parent().status()),
           () -> assertEquals(expectedRelation.created().toLocalDate(),
               actualCertificate.parent().created().toLocalDate())
       );
@@ -1619,19 +1617,16 @@ class CertificateTest {
       final var newCertificate = signedCertificate.replace(actionEvaluation);
 
       final var expectedRelation = Relation.builder()
-          .certificateId(newCertificate.id())
+          .certificate(newCertificate)
           .type(RelationType.REPLACE)
-          .status(Status.DRAFT)
           .created(LocalDateTime.now(ZoneId.systemDefault()))
           .build();
 
       assertAll(
-          () -> assertEquals(expectedRelation.certificateId(),
-              signedCertificate.children().get(0).certificateId()),
+          () -> assertEquals(expectedRelation.certificate(),
+              signedCertificate.children().get(0).certificate()),
           () -> assertEquals(expectedRelation.type(),
               signedCertificate.children().get(0).type()),
-          () -> assertEquals(expectedRelation.status(),
-              signedCertificate.children().get(0).status()),
           () -> assertEquals(expectedRelation.created().toLocalDate(),
               signedCertificate.children().get(0).created().toLocalDate())
       );
@@ -1797,20 +1792,18 @@ class CertificateTest {
       final var signedCertificate = certificateBuilder.status(Status.SIGNED)
           .build();
 
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
       final var expectedRelation = Relation.builder()
-          .certificateId(signedCertificate.id())
+          .certificate(signedCertificate)
           .type(RelationType.RENEW)
-          .status(Status.SIGNED)
           .created(LocalDateTime.now(ZoneId.systemDefault()))
           .build();
 
-      final var actualCertificate = signedCertificate.renew(actionEvaluation);
-
       assertAll(
-          () -> assertEquals(expectedRelation.certificateId(),
-              actualCertificate.parent().certificateId()),
+          () -> assertEquals(expectedRelation.certificate(),
+              actualCertificate.parent().certificate()),
           () -> assertEquals(expectedRelation.type(), actualCertificate.parent().type()),
-          () -> assertEquals(expectedRelation.status(), actualCertificate.parent().status()),
           () -> assertEquals(expectedRelation.created().toLocalDate(),
               actualCertificate.parent().created().toLocalDate())
       );
@@ -1849,19 +1842,16 @@ class CertificateTest {
       final var newCertificate = signedCertificate.renew(actionEvaluation);
 
       final var expectedRelation = Relation.builder()
-          .certificateId(newCertificate.id())
+          .certificate(newCertificate)
           .type(RelationType.RENEW)
-          .status(Status.DRAFT)
           .created(LocalDateTime.now(ZoneId.systemDefault()))
           .build();
 
       assertAll(
-          () -> assertEquals(expectedRelation.certificateId(),
-              signedCertificate.children().get(0).certificateId()),
+          () -> assertEquals(expectedRelation.certificate(),
+              signedCertificate.children().get(0).certificate()),
           () -> assertEquals(expectedRelation.type(),
               signedCertificate.children().get(0).type()),
-          () -> assertEquals(expectedRelation.status(),
-              signedCertificate.children().get(0).status()),
           () -> assertEquals(expectedRelation.created().toLocalDate(),
               signedCertificate.children().get(0).created().toLocalDate())
       );
