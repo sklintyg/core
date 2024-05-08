@@ -3,8 +3,13 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211.FK_NAME;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211.LINK_FK_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211.PDF_FK_7211_PDF;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211.PREAMBLE_TEXT;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211.QUESTION_BERAKNAT_NEDKOMSTDATUM_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211.SCHEMATRON_PATH;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211.URL_FK;
 
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -16,6 +21,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummary;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummaryType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
@@ -26,6 +33,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
@@ -235,6 +245,37 @@ class CertificateModelFactoryFK7211Test {
     assertEquals(SCHEMATRON_PATH, certificateModel.schematronPath());
   }
 
+  @Test
+  void shallIncludeCertificateSummary() {
+    final var expectedSummary = CertificateSummary.builder()
+        .label("Gäller intygsperiod")
+        .type(CertificateSummaryType.ISSUED_PERIOD)
+        .elementId(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
+        .build();
+
+    final var certificateModel = certificateModelFactoryFK7211.create();
+
+    assertEquals(expectedSummary, certificateModel.summary());
+  }
+
+  @Test
+  void shallIncludeCertificateText() {
+    final var expectedText = CertificateText.builder()
+        .text(PREAMBLE_TEXT)
+        .type(CertificateTextType.PREAMBLE_TEXT)
+        .links(List.of(CertificateLink.builder()
+            .url(URL_FK)
+            .id(LINK_FK_ID)
+            .name(FK_NAME)
+            .build()
+        ))
+        .build();
+
+    final var certificateModel = certificateModelFactoryFK7211.create();
+
+    assertEquals(List.of(expectedText), certificateModel.texts());
+  }
+
   @Nested
   class CertificateSpecifications {
 
@@ -376,4 +417,5 @@ class CertificateModelFactoryFK7211Test {
       }
     }
   }
+
 }

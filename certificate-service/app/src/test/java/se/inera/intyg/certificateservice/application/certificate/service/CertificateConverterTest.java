@@ -39,6 +39,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +57,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationsDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateSummaryDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateDataConverter;
@@ -73,6 +75,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummary;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummaryType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
@@ -186,6 +190,11 @@ class CertificateConverterTest {
                             .build()
                     )
                 )
+                .summary(CertificateSummary.builder()
+                    .elementId(new ElementId(ID))
+                    .label("Gäller intygsperiod")
+                    .type(CertificateSummaryType.ISSUED_PERIOD)
+                    .build())
                 .build()
         )
         .certificateMetaData(
@@ -277,6 +286,19 @@ class CertificateConverterTest {
     void shallIncludeVersion() {
       assertEquals(REVISION.value(),
           certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getVersion()
+      );
+    }
+
+    @Test
+    void shallIncludeCertificateSummary() {
+      final var certificateSummary = CertificateSummaryDTO.builder()
+          .label("Gäller intygsperiod")
+          .value(SIGNED.format(DateTimeFormatter.ISO_DATE) + " - " + DATE.format(
+              DateTimeFormatter.ISO_DATE))
+          .build();
+
+      assertEquals(certificateSummary,
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getSummary()
       );
     }
 

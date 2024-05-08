@@ -11,6 +11,8 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummary;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummaryType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
@@ -33,6 +35,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.Certifi
 @Component
 public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
 
+  private static final String CERTIFICATE_SUMMARY_LABEL = "Gäller intygsperiod";
   @Value("${certificate.model.fk7211.v1_0.active.from}")
   private LocalDateTime activeFrom;
   private static final String FK_7211 = "fk7211";
@@ -56,13 +59,13 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
   public static final String PDF_FK_7211_PDF = "fk7211/pdf/fk7211_v1.pdf";
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk7211/schematron/igrav.v1.sch");
-  private static final String LINK_FK_ID = "LINK_FK";
+  public static final String LINK_FK_ID = "LINK_FK";
   public static final String PREAMBLE_TEXT =
       "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
           + "Har du frågor kontaktar du den som skrivit ditt intyg. Om du vill ansöka om föräldrapenning, gör du det på {"
           + LINK_FK_ID + "}. \nDen externa länken leder till forsakringskassan.se";
-  private static final String URL_FK = "https://www.forsakringskassan.se/";
-  private static final String FK_NAME = "Försäkringskassan";
+  public static final String URL_FK = "https://www.forsakringskassan.se/";
+  public static final String FK_NAME = "Försäkringskassan";
 
 
   @Override
@@ -125,6 +128,11 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         )
         .pdfTemplatePath(PDF_FK_7211_PDF)
         .schematronPath(SCHEMATRON_PATH)
+        .summary(CertificateSummary.builder()
+            .elementId(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
+            .label(CERTIFICATE_SUMMARY_LABEL)
+            .type(CertificateSummaryType.ISSUED_PERIOD)
+            .build())
         .texts(List.of(CertificateText.builder()
             .text(PREAMBLE_TEXT)
             .type(CertificateTextType.PREAMBLE_TEXT)

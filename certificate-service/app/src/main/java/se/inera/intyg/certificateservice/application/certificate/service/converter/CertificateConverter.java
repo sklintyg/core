@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.certificate.service.conver
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -13,14 +14,17 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationsDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateSummaryDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummaryType;
 
 @Component
 @RequiredArgsConstructor
@@ -113,6 +117,10 @@ public class CertificateConverter {
                 .relations(
                     toRelations(certificate.parent(), certificate.children())
                 )
+                .summary(CertificateSummaryDTO.builder()
+                    .label(certificate.certificateModel().summary().label())
+                    .value(getCertificateSummaryValue(certificate))
+                    .build())
                 .build()
         )
         .data(
@@ -123,6 +131,32 @@ public class CertificateConverter {
         )
         .links(resourceLinks)
         .build();
+  }
+
+  private String getCertificateSummaryValue(Certificate certificate) {
+    if (certificate.certificateModel().summary().type() == CertificateSummaryType.ISSUED_PERIOD) {
+      final var elementDataDate = certificate.elementData()
+          .stream()
+          .filter(
+              elementData -> elementData.id().id().equals(certificate.certificateModel().summary()
+                  .elementId().id()))
+          .findFirst();
+
+      if (elementDataDate.isEmpty()) {
+        return "";
+      }
+
+      if (!(elementDataDate.get().value() instanceof ElementValueDate elementValueDate)) {
+        throw new IllegalStateException(
+            "Invalid value type. Type was '%s'".formatted(elementDataDate.get().value())
+        );
+      }
+
+      return certificate.signed().format(DateTimeFormatter.ISO_DATE) + " - "
+          + elementValueDate.date().format(DateTimeFormatter.ISO_DATE);
+    }
+
+    return "";
   }
 
   private CertificateRelationsDTO toRelations(Relation parent, List<Relation> children) {
