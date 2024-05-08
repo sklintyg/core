@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateEntity.CERTIFICATE_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRelationEntity.CERTIFICATE_PARENT_RELATION_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRelationEntity.CERTIFICATE_RELATION_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRevokedEntity.REVOKED_MESSAGE;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_MEDICINCENTRUM_ENTITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
@@ -12,6 +14,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REF;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.PARENT_CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7211_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
@@ -26,6 +29,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason.INCORRECT_PATIENT;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,6 +41,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
+import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -61,6 +67,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -82,6 +89,9 @@ class CertificateEntityMapperTest {
 
   @Mock
   private CertificateModelEntityRepository certificateModelEntityRepository;
+
+  @Mock
+  private CertificateRelationRepository certificateRelationRepository;
 
   @Mock
   private CertificateDataEntityMapper certificateDataEntityMapper;
@@ -455,6 +465,48 @@ class CertificateEntityMapperTest {
           FK7211_CERTIFICATE_MODEL);
 
       assertEquals(expectedRef, response.externalReference());
+    }
+
+    @Test
+    void shouldMapRelationForChildren() {
+      final var expectedChild = Relation.builder()
+          .certificateId(PARENT_CERTIFICATE_ID)
+          .status(Status.SIGNED)
+          .type(RelationType.REPLACE)
+          .created(LocalDateTime.now())
+          .build();
+
+      doReturn(List.of(CERTIFICATE_PARENT_RELATION_ENTITY)).when(certificateRelationRepository)
+          .relations(CERTIFICATE_ENTITY);
+
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
+
+      assertEquals(expectedChild.certificateId(), response.children().get(0).certificateId());
+      assertEquals(expectedChild.status(), response.children().get(0).status());
+      assertEquals(expectedChild.type(), response.children().get(0).type());
+      assertNotNull(response.children().get(0).created());
+    }
+
+    @Test
+    void shouldMapRelationForParent() {
+      final var expectedParent = Relation.builder()
+          .certificateId(PARENT_CERTIFICATE_ID)
+          .status(Status.SIGNED)
+          .type(RelationType.REPLACE)
+          .created(LocalDateTime.now())
+          .build();
+
+      doReturn(List.of(CERTIFICATE_RELATION_ENTITY)).when(certificateRelationRepository)
+          .relations(CERTIFICATE_ENTITY);
+
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7211_CERTIFICATE_MODEL);
+
+      assertEquals(expectedParent.certificateId(), response.parent().certificateId());
+      assertEquals(expectedParent.status(), response.parent().status());
+      assertEquals(expectedParent.type(), response.parent().type());
+      assertNotNull(response.parent().created());
     }
   }
 }

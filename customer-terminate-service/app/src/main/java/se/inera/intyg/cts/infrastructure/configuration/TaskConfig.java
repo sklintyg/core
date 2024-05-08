@@ -1,8 +1,8 @@
 package se.inera.intyg.cts.infrastructure.configuration;
 
+import jakarta.annotation.Resource;
 import java.time.Duration;
 import java.util.List;
-import javax.annotation.Resource;
 import net.javacrumbs.shedlock.core.LockProvider;
 import net.javacrumbs.shedlock.provider.redis.spring.RedisLockProvider;
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
@@ -25,7 +25,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableSchedulerLock(defaultLockAtMostFor = "PT30S")
 public class TaskConfig {
 
-  private final static Logger LOG = LoggerFactory.getLogger(TaskConfig.class);
+  private static final Logger LOG = LoggerFactory.getLogger(TaskConfig.class);
   private static final String ENVIRONMENT = "cts";
 
   @Value("${redis.host}")
@@ -47,7 +47,7 @@ public class TaskConfig {
   private String redisClusterReadTimeout;
 
   @Resource
-  Environment environment;
+  Environment env;
 
   @Bean
   public LockProvider lockProvider(RedisConnectionFactory jedisConnectionFactory) {
@@ -56,7 +56,7 @@ public class TaskConfig {
 
   @Bean
   public JedisConnectionFactory jedisConnectionFactory() {
-    final var activeProfiles = List.of(environment.getActiveProfiles());
+    final var activeProfiles = List.of(env.getActiveProfiles());
     if (activeProfiles.contains("redis-cluster")) {
       return clusterConnectionFactory();
     }

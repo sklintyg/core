@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.6'
+    id 'org.springframework.boot' version '3.2.5'
 }
 
 dependencies {
@@ -21,8 +21,9 @@ dependencies {
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    runtimeOnly 'mysql:mysql-connector-java'
-    runtimeOnly("io.netty:netty-all")
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'io.netty:netty-all'
+    runtimeOnly 'org.eclipse.angus:jakarta.mail'
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'

@@ -1,11 +1,12 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.6'
+    id 'org.springframework.boot' version '3.2.5'
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "com.icegreen:greenmail:${greenMailVersion}"
 
+    runtimeOnly 'org.eclipse.angus:jakarta.mail'
     compileOnly 'org.projectlombok:lombok'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

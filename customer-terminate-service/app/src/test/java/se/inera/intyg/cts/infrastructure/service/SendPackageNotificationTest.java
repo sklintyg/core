@@ -11,7 +11,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.defaultTermination;
 import static se.inera.intyg.cts.testutil.TerminationTestDataBuilder.terminationWithEmailAddress;
 
-import javax.mail.MessagingException;
+import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,8 @@ class SendPackageNotificationTest {
   private static final String NOTIFICATION_SUBJECT = "notificationSubject";
 
   private static final Termination TERMINATION = defaultTermination();
-  private static final TellusTalkResponseDTO MESSAGE_RESPONSE = new TellusTalkResponseDTO("jobId","logHref");
+  private static final TellusTalkResponseDTO MESSAGE_RESPONSE = new TellusTalkResponseDTO("jobId",
+      "logHref");
   private static final Exception BAD_REQUEST = new HttpClientErrorException(HttpStatus.BAD_REQUEST);
 
   @Nested
@@ -68,7 +69,7 @@ class SendPackageNotificationTest {
     }
 
     @Test
-    public void shouldReturnTrueWhenNotificationSmsAndEmailSentSuccessfully()
+    void shouldReturnTrueWhenNotificationSmsAndEmailSentSuccessfully()
         throws MessagingException {
       setSmsMock(MESSAGE_RESPONSE);
 
@@ -81,7 +82,7 @@ class SendPackageNotificationTest {
     }
 
     @Test
-    public void shouldReturnTrueWhenNotificationSmsSuccessAndEmailFailure()
+    void shouldReturnTrueWhenNotificationSmsSuccessAndEmailFailure()
         throws MessagingException {
       setSmsMock(MESSAGE_RESPONSE);
       setEmailMockToThrow();
@@ -95,7 +96,7 @@ class SendPackageNotificationTest {
     }
 
     @Test
-    public void shouldReturnTrueWhenNotificationSmsFailureAndEmailSuccess()
+    void shouldReturnTrueWhenNotificationSmsFailureAndEmailSuccess()
         throws MessagingException {
       setSmsMock(BAD_REQUEST);
 
@@ -108,7 +109,7 @@ class SendPackageNotificationTest {
     }
 
     @Test
-    public void shouldReturnFalseWhenNotificationSmsFailureAndEmailFailure()
+    void shouldReturnFalseWhenNotificationSmsFailureAndEmailFailure()
         throws MessagingException {
       setSmsMock(BAD_REQUEST);
       setEmailMockToThrow();
@@ -121,7 +122,6 @@ class SendPackageNotificationTest {
       assertFalse(response);
     }
   }
-
 
 
   @Nested
@@ -138,10 +138,11 @@ class SendPackageNotificationTest {
     }
 
     @Test
-    public void shouldReturnTrueWhenReminderSmsAndEmailSentSuccessfully() throws MessagingException {
+    void shouldReturnTrueWhenReminderSmsAndEmailSentSuccessfully()
+        throws MessagingException {
       setSmsMock(MESSAGE_RESPONSE);
 
-      final var  response = sendPackageNotification.sendReminder(TERMINATION);
+      final var response = sendPackageNotification.sendReminder(TERMINATION);
 
       verify(sendSMS, times(1)).sendSMS(FORMATTED_PHONE, REMINDER_SMS_CONTENT);
       verify(sendEmail, times(1)).sendEmail(EMAIL_ADDRESS, REMINDER_EMAIL_CONTENT,
@@ -150,11 +151,11 @@ class SendPackageNotificationTest {
     }
 
     @Test
-    public void shouldReturnTrueWhenReminderSmsSuccessAndEmailFailure() throws MessagingException {
+    void shouldReturnTrueWhenReminderSmsSuccessAndEmailFailure() throws MessagingException {
       setSmsMock(MESSAGE_RESPONSE);
       setEmailMockToThrow();
 
-      final var  response = sendPackageNotification.sendReminder(TERMINATION);
+      final var response = sendPackageNotification.sendReminder(TERMINATION);
 
       verify(sendSMS, times(1)).sendSMS(FORMATTED_PHONE, REMINDER_SMS_CONTENT);
       verify(sendEmail, times(1)).sendEmail(EMAIL_ADDRESS, REMINDER_EMAIL_CONTENT,
@@ -163,10 +164,10 @@ class SendPackageNotificationTest {
     }
 
     @Test
-    public void shouldReturnTrueWhenReminderSmsFailureAndEmailSuccess() throws MessagingException {
+    void shouldReturnTrueWhenReminderSmsFailureAndEmailSuccess() throws MessagingException {
       setSmsMock(BAD_REQUEST);
 
-      final var  response = sendPackageNotification.sendReminder(TERMINATION);
+      final var response = sendPackageNotification.sendReminder(TERMINATION);
 
       verify(sendSMS, times(1)).sendSMS(FORMATTED_PHONE, REMINDER_SMS_CONTENT);
       verify(sendEmail, times(1)).sendEmail(EMAIL_ADDRESS, REMINDER_EMAIL_CONTENT,
@@ -175,11 +176,11 @@ class SendPackageNotificationTest {
     }
 
     @Test
-    public void shouldReturnFalseWhenReminderSmsFailureAndEmailFailure() throws MessagingException {
+    void shouldReturnFalseWhenReminderSmsFailureAndEmailFailure() throws MessagingException {
       setSmsMock(BAD_REQUEST);
       setEmailMockToThrow();
 
-      final var  response = sendPackageNotification.sendReminder(TERMINATION);
+      final var response = sendPackageNotification.sendReminder(TERMINATION);
 
       verify(sendSMS, times(1)).sendSMS(FORMATTED_PHONE, REMINDER_SMS_CONTENT);
       verify(sendEmail, times(1)).sendEmail(EMAIL_ADDRESS, REMINDER_EMAIL_CONTENT,
@@ -197,34 +198,37 @@ class SendPackageNotificationTest {
           NOTIFICATION_SMS_CONTENT);
       ReflectionTestUtils.setField(sendPackageNotification, NOTIFICATION_EMAIL_CONTENT,
           NOTIFICATION_EMAIL_CONTENT);
-      ReflectionTestUtils.setField(sendPackageNotification, NOTIFICATION_SUBJECT, NOTIFICATION_SUBJECT);
+      ReflectionTestUtils.setField(sendPackageNotification, NOTIFICATION_SUBJECT,
+          NOTIFICATION_SUBJECT);
       doReturn(FORMATTED_PHONE).when(smsPhoneNumberFormatter).formatPhoneNumber(any(String.class));
     }
 
     @Test
-    public void shouldSendNotificationWhenValidAddress1() throws MessagingException {
+    void shouldSendNotificationWhenValidAddress1() throws MessagingException {
       final var termination = terminationWithEmailAddress("no-reply.example@address.name.se");
       setSmsMock(MESSAGE_RESPONSE);
 
       sendPackageNotification.sendNotification(termination);
 
-      verify(sendEmail, times(1)).sendEmail("no-reply.example@address.name.se", NOTIFICATION_EMAIL_CONTENT,
+      verify(sendEmail, times(1)).sendEmail("no-reply.example@address.name.se",
+          NOTIFICATION_EMAIL_CONTENT,
           NOTIFICATION_SUBJECT);
     }
 
     @Test
-    public void shouldSendNotificationWhenValidAddress2() throws MessagingException {
+    void shouldSendNotificationWhenValidAddress2() throws MessagingException {
       final var termination = terminationWithEmailAddress("example@test-name.address.se");
       setSmsMock(MESSAGE_RESPONSE);
 
       sendPackageNotification.sendNotification(termination);
 
-      verify(sendEmail, times(1)).sendEmail("example@test-name.address.se", NOTIFICATION_EMAIL_CONTENT,
+      verify(sendEmail, times(1)).sendEmail("example@test-name.address.se",
+          NOTIFICATION_EMAIL_CONTENT,
           NOTIFICATION_SUBJECT);
     }
 
     @Test
-    public void shouldNotSendNotificationEmailWhenInvalidAddress1() {
+    void shouldNotSendNotificationEmailWhenInvalidAddress1() {
       final var termination = terminationWithEmailAddress("exam:ple@address.se");
       setSmsMock(MESSAGE_RESPONSE);
 
@@ -234,7 +238,7 @@ class SendPackageNotificationTest {
     }
 
     @Test
-    public void shouldNotSendNotificationEmailWhenInvalidAddress2() {
+    void shouldNotSendNotificationEmailWhenInvalidAddress2() {
       final var termination = terminationWithEmailAddress("example@addressse");
       setSmsMock(MESSAGE_RESPONSE);
 
@@ -244,7 +248,7 @@ class SendPackageNotificationTest {
     }
 
     @Test
-    public void shouldNotSendNotificationEmailWhenInvalidAddress3() {
+    void shouldNotSendNotificationEmailWhenInvalidAddress3() {
       final var termination = terminationWithEmailAddress("exa..mple@address.se");
       setSmsMock(MESSAGE_RESPONSE);
 
@@ -263,7 +267,8 @@ class SendPackageNotificationTest {
   }
 
   private void setEmailMockToThrow() throws MessagingException {
-      doThrow(MessagingException.class).when(sendEmail).sendEmail(any(String.class), any(String.class),
-          any(String.class));
+    doThrow(MessagingException.class).when(sendEmail)
+        .sendEmail(any(String.class), any(String.class),
+            any(String.class));
   }
 }

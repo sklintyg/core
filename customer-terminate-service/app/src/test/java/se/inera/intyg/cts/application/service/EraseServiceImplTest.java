@@ -51,7 +51,7 @@ class EraseServiceImplTest {
 
     when(terminationRepository.findByStatuses(
         Arrays.asList(TerminationStatus.START_ERASE, TerminationStatus.ERASE_IN_PROGRESS)
-    )).thenReturn(Arrays.asList(termination));
+    )).thenReturn(Collections.singletonList(termination));
 
     eraseService.erase();
 
@@ -66,7 +66,7 @@ class EraseServiceImplTest {
 
     when(terminationRepository.findByStatuses(
         Arrays.asList(TerminationStatus.START_ERASE, TerminationStatus.ERASE_IN_PROGRESS)
-    )).thenReturn(Arrays.asList(termination));
+    )).thenReturn(Collections.singletonList(termination));
 
     eraseService.erase();
 
@@ -97,9 +97,8 @@ class EraseServiceImplTest {
     when(terminationRepository.findByTerminationId(termination.terminationId()))
         .thenReturn(Optional.empty());
 
-    assertThrows(IllegalArgumentException.class,
-        () -> eraseService.initiateErase(termination.terminationId())
-    );
+    final var id = termination.terminationId();
+    assertThrows(IllegalArgumentException.class, () -> eraseService.initiateErase(id));
 
     verify(terminationRepository, times(0)).store(termination);
   }

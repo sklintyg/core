@@ -51,9 +51,12 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.application.common.dto.AccessScopeTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
+import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
+import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
 
 class ActionEvaluationFactoryTest {
 
@@ -666,6 +669,74 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(AJLA_DOCTOR_ROLE, actionEvaluation.user().role());
+    }
+
+    @Test
+    void shallIncludeUserAccessScopeWithinCareUnit() {
+      final var user = ajlaDoktorDtoBuilder()
+          .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
+          .build();
+
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          user,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(AccessScope.WITHIN_CARE_UNIT, actionEvaluation.user().accessScope());
+    }
+
+    @Test
+    void shallIncludeUserAccessScopeWithinCareProvider() {
+      final var user = ajlaDoktorDtoBuilder()
+          .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
+          .build();
+
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          user,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(AccessScope.WITHIN_CARE_PROVIDER, actionEvaluation.user().accessScope());
+    }
+
+    @Test
+    void shallIncludeUserAccessScopeAllCareProviders() {
+      final var user = ajlaDoktorDtoBuilder()
+          .accessScope(AccessScopeTypeDTO.ALL_CARE_PROVIDERS)
+          .build();
+
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          user,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(AccessScope.ALL_CARE_PROVIDERS, actionEvaluation.user().accessScope());
+    }
+
+    @Test
+    void shallSetDefaultAccessScopeWithinCareUnitIfNull() {
+      final var user = ajlaDoktorDtoBuilder()
+          .accessScope(null)
+          .build();
+
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          user,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(AccessScope.WITHIN_CARE_UNIT, actionEvaluation.user().accessScope());
     }
   }
 }

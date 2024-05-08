@@ -47,7 +47,8 @@ public class CollectExportContentImpl implements CollectExportContent {
   private Termination getTermination(TerminationId terminationId) {
     return terminationRepository.findByTerminationId(terminationId)
         .orElseThrow(() ->
-            new IllegalArgumentException(String.format("Termination with id: '%s' doesn't exist!"))
+            new IllegalArgumentException("Termination with id: '%s' doesn't exist!"
+                .formatted(terminationId))
         );
   }
 }

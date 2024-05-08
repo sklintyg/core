@@ -24,7 +24,7 @@ import se.inera.intyg.cts.infrastructure.integration.sjut.dto.PackageMetadata;
 @Service
 public class UploadPackageToSjut implements UploadPackage {
 
-  private final static Logger LOG = LoggerFactory.getLogger(UploadPackageToSjut.class);
+  private static final Logger LOG = LoggerFactory.getLogger(UploadPackageToSjut.class);
 
   public static final String FILE_PREFIX = "file:";
   public static final String FILE_PART = "file";
@@ -110,7 +110,7 @@ public class UploadPackageToSjut implements UploadPackage {
 
     final var message = String.format(
         "Could not upload file for termination '%s' to Sjut. Received status code '%s'.",
-        termination.terminationId().id(), clientResponse.rawStatusCode());
+        termination.terminationId().id(), clientResponse.statusCode());
     LOG.error(message);
     throw new ServiceException(message);
   }

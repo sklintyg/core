@@ -1,9 +1,9 @@
 package se.inera.intyg.cts.infrastructure.integration.email;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -25,9 +25,9 @@ public class SendEmailWithJava implements SendEmail {
   @Override
   public void sendEmail(String emailAddress, String emailBody, String emailSubject)
       throws MessagingException {
-      final var message = createMessage(emailAddress, emailSubject, emailBody);
-      message.saveChanges();
-      mailSender.send(message);
+    final var message = createMessage(emailAddress, emailSubject, emailBody);
+    message.saveChanges();
+    mailSender.send(message);
   }
 
   private MimeMessage createMessage(String emailAddress, String emailSubject, String emailBody)

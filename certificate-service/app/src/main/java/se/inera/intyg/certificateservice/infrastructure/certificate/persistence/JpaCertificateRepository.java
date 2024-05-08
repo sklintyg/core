@@ -15,6 +15,7 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateRepository;
 
 @Repository
@@ -24,6 +25,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   private final CertificateEntityRepository certificateEntityRepository;
   private final CertificateEntityMapper certificateEntityMapper;
   private final CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;
+  private final CertificateRelationRepository certificateRelationRepository;
 
   @Override
   public Certificate create(CertificateModel certificateModel) {
@@ -49,12 +51,20 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
     if (Status.DELETED_DRAFT.equals(certificate.status())) {
       certificateEntityRepository.findByCertificateId(certificate.id().id())
-          .ifPresent(certificateEntityRepository::delete);
+          .ifPresent(entity -> {
+                certificateRelationRepository.deleteRelations(entity);
+                certificateEntityRepository.delete(entity);
+              }
+          );
       return certificate;
     }
 
     final var savedEntity = certificateEntityRepository.save(
         certificateEntityMapper.toEntity(certificate)
+    );
+
+    certificateRelationRepository.save(
+        certificate, savedEntity
     );
 
     return certificateEntityMapper.toDomain(savedEntity);
@@ -100,6 +110,10 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   public Certificate insert(Certificate certificate) {
     final var savedEntity = certificateEntityRepository.save(
         certificateEntityMapper.toEntity(certificate)
+    );
+
+    certificateRelationRepository.save(
+        certificate, savedEntity
     );
 
     return certificateEntityMapper.toDomain(savedEntity);

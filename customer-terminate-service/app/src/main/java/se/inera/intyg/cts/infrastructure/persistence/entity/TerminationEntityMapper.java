@@ -1,6 +1,5 @@
 package se.inera.intyg.cts.infrastructure.persistence.entity;
 
-import java.util.stream.Collectors;
 import se.inera.intyg.cts.domain.model.EraseService;
 import se.inera.intyg.cts.domain.model.ServiceId;
 import se.inera.intyg.cts.domain.model.Termination;
@@ -8,6 +7,10 @@ import se.inera.intyg.cts.domain.model.TerminationBuilder;
 import se.inera.intyg.cts.domain.model.TerminationStatus;
 
 public class TerminationEntityMapper {
+
+  private TerminationEntityMapper() {
+    throw new IllegalStateException("Mapper class");
+  }
 
   public static TerminationEntity toEntity(Termination termination) {
     return new TerminationEntity(
@@ -39,7 +42,7 @@ public class TerminationEntityMapper {
                     eraseService.serviceId().id(),
                     eraseService.erased())
             )
-            .collect(Collectors.toList())
+            .toList()
     );
   }
 
@@ -71,7 +74,7 @@ public class TerminationEntityMapper {
                         new ServiceId(eraseEmbeddable.getServiceId()),
                         eraseEmbeddable.isErased()
                     ))
-                .collect(Collectors.toList())
+                .toList()
         )
         .create();
   }
