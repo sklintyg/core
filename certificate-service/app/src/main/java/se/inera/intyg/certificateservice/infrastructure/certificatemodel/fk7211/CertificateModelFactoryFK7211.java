@@ -20,6 +20,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
@@ -53,6 +55,13 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
   public static final String PDF_FK_7211_PDF = "fk7211/pdf/fk7211_v1.pdf";
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk7211/schematron/igrav.v1.sch");
+  private static final String LINK_FK_ID = "LINK_FK";
+  public static final String PREAMBLE_TEXT =
+      "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
+          + "Har du frågor kontaktar du den som skrivit ditt intyg. Om du vill ansöka om föräldrapenning, gör du det på {"
+          + LINK_FK_ID + "}. \nDen externa länken leder till forsakringskassan.se";
+  private static final String URL_FK = "https://www.forsakringskassan.se/";
+  private static final String FK_NAME = "Försäkringskassan";
 
 
   @Override
@@ -115,6 +124,14 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         )
         .pdfTemplatePath(PDF_FK_7211_PDF)
         .schematronPath(SCHEMATRON_PATH)
+        .texts(List.of(CertificateText.builder()
+            .text(PREAMBLE_TEXT)
+            .links(List.of(CertificateLink.builder()
+                .url(URL_FK)
+                .id(LINK_FK_ID)
+                .name(FK_NAME)
+                .build()))
+            .build()))
         .build();
   }
 

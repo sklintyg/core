@@ -16,6 +16,7 @@ public class GetCitizenCertificateResponse {
 
   CertificateDTO certificate;
   List<AvailableFunctionDTO> availableFunctions;
+  List<CertificateTextDTO> texts;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class GetCertificateResponseBuilder {

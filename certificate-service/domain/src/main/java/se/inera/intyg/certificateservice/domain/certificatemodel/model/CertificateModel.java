@@ -10,6 +10,7 @@ import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 
@@ -28,6 +29,7 @@ public class CertificateModel {
   List<ElementSpecification> elementSpecifications;
   String pdfTemplatePath;
   SchematronPath schematronPath;
+  List<CertificateText> texts;
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateRequest;
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateResponse;
+import se.inera.intyg.certificateservice.application.citizen.service.converter.CertificateTextConverter;
 import se.inera.intyg.certificateservice.application.citizen.validation.CitizenCertificateRequestValidator;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.citizen.service.GetCitizenCertificateDomainService;
@@ -18,6 +19,7 @@ public class GetCitizenCertificateService {
   private final GetCitizenCertificateDomainService getCitizenCertificateDomainService;
   private final CertificateConverter certificateConverter;
   private final CitizenCertificateRequestValidator citizenCertificateRequestValidator;
+  private final CertificateTextConverter certificateTextConverter;
 
 
   public GetCitizenCertificateResponse get(
@@ -35,6 +37,10 @@ public class GetCitizenCertificateService {
 
     return GetCitizenCertificateResponse.builder()
         .certificate(certificateConverter.convert(certificate, Collections.emptyList()))
+        .texts(certificate.certificateModel().texts().stream()
+            .map(certificateTextConverter::convert)
+            .toList()
+        )
         .build();
   }
 }

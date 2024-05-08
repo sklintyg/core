@@ -5,6 +5,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,13 +14,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
+import se.inera.intyg.certificateservice.application.citizen.dto.CertificateTextDTO;
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateRequest;
+import se.inera.intyg.certificateservice.application.citizen.service.converter.CertificateTextConverter;
 import se.inera.intyg.certificateservice.application.citizen.validation.CitizenCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.citizen.service.GetCitizenCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 
@@ -27,8 +32,15 @@ import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 class GetCitizenCertificateServiceTest {
 
   private static final String CERTIFICATE_ID = "CERTIFICATE_ID";
-  private static final Certificate CERTIFICATE = Certificate.builder().build();
   private static final CertificateDTO CONVERTED_CERTIFICATE = CertificateDTO.builder().build();
+  private static final CertificateText CERTIFICATE_TEXT = CertificateText.builder().build();
+  private static final CertificateTextDTO CONVERTED_TEXT =
+      CertificateTextDTO.builder().build();
+  private static final Certificate CERTIFICATE = Certificate.builder()
+      .certificateModel(CertificateModel.builder()
+          .texts(List.of(CERTIFICATE_TEXT))
+          .build())
+      .build();
   private static final String PERSON_ID = "PERSON_ID";
   private static final GetCitizenCertificateRequest REQUEST = GetCitizenCertificateRequest.builder()
       .personId(
@@ -52,6 +64,9 @@ class GetCitizenCertificateServiceTest {
   @Mock
   CitizenCertificateRequestValidator citizenCertificateRequestValidator;
 
+  @Mock
+  CertificateTextConverter certificateTextConverter;
+
   @InjectMocks
   GetCitizenCertificateService getCitizenCertificateService;
 
@@ -63,6 +78,9 @@ class GetCitizenCertificateServiceTest {
 
     when(certificateConverter.convert(CERTIFICATE, Collections.emptyList()))
         .thenReturn(CONVERTED_CERTIFICATE);
+
+    when(certificateTextConverter.convert(CERTIFICATE_TEXT))
+        .thenReturn(CONVERTED_TEXT);
   }
 
   @Test
@@ -77,5 +95,12 @@ class GetCitizenCertificateServiceTest {
     final var result = getCitizenCertificateService.get(REQUEST, CERTIFICATE_ID);
 
     assertEquals(CONVERTED_CERTIFICATE, result.getCertificate());
+  }
+
+  @Test
+  void shouldReturnConvertedText() {
+    final var result = getCitizenCertificateService.get(REQUEST, CERTIFICATE_ID);
+
+    assertEquals(List.of(CONVERTED_TEXT), result.getTexts());
   }
 }
