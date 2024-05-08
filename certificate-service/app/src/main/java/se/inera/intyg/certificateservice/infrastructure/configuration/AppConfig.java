@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertif
 import se.inera.intyg.certificateservice.domain.certificate.service.ValidateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.domain.citizen.service.GetCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventSubscriber;
 import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
@@ -194,5 +195,11 @@ public class AppConfig {
       CertificateEventDomainService certificateEventDomainService) {
     return new ReplaceCertificateDomainService(certificateRepository,
         certificateEventDomainService);
+  }
+
+  @Bean
+  public GetCitizenCertificateDomainService getCitizenCertificateDomainService(
+      CertificateRepository certificateRepository) {
+    return new GetCitizenCertificateDomainService(certificateRepository);
   }
 }

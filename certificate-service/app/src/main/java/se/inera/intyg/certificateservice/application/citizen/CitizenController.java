@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import se.inera.intyg.certificateservice.application.citizen.dto.CertificateExistsResponse;
-import se.inera.intyg.certificateservice.application.citizen.dto.GetCertificateRequest;
-import se.inera.intyg.certificateservice.application.citizen.dto.GetCertificateResponse;
-import se.inera.intyg.certificateservice.application.citizen.service.CertificateExistsService;
-import se.inera.intyg.certificateservice.application.citizen.service.GetCertificateService;
+import se.inera.intyg.certificateservice.application.citizen.dto.CitizenCertificateExistsResponse;
+import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateRequest;
+import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateResponse;
+import se.inera.intyg.certificateservice.application.citizen.service.CitizenCertificateExistsService;
+import se.inera.intyg.certificateservice.application.citizen.service.GetCitizenCertificateService;
 
 
 @RequiredArgsConstructor
@@ -19,20 +19,20 @@ import se.inera.intyg.certificateservice.application.citizen.service.GetCertific
 @RequestMapping("/api/citizen")
 public class CitizenController {
 
-  private final CertificateExistsService certificateExistsService;
-  private final GetCertificateService getCertificateService;
+  private final CitizenCertificateExistsService citizenCertificateExistsService;
+  private final GetCitizenCertificateService getCitizenCertificateService;
 
   @GetMapping("/{certificateId}/exists")
-  CertificateExistsResponse findExistingCertificate(
+  CitizenCertificateExistsResponse findExistingCertificate(
       @PathVariable("certificateId") String certificateId) {
-    return certificateExistsService.exist(certificateId);
+    return citizenCertificateExistsService.exist(certificateId);
   }
 
   @PostMapping("/{certificateId}")
-  GetCertificateResponse getCertificate(
-      @RequestBody GetCertificateRequest getCertificateRequest,
+  GetCitizenCertificateResponse getCertificate(
+      @RequestBody GetCitizenCertificateRequest getCitizenCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
-    return getCertificateService.get(getCertificateRequest, certificateId);
+    return getCitizenCertificateService.get(getCitizenCertificateRequest, certificateId);
   }
 
 }

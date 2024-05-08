@@ -5,7 +5,7 @@ import static se.inera.intyg.certificateservice.application.common.validator.Val
 import org.springframework.stereotype.Component;
 
 @Component
-public class GetCertificateRequestValidator {
+public class CitizenCertificateRequestValidator {
 
   public void validate(String certificateId) {
     validateCertificateId(certificateId);

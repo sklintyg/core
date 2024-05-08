@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateservice.application.common;
 
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateservice.application.citizen.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
@@ -33,15 +32,6 @@ public class ActionEvaluationFactory {
   public ActionEvaluation create(UserDTO user, UnitDTO unit, UnitDTO careUnit,
       UnitDTO careProvider) {
     return create(null, user, unit, careUnit, careProvider);
-  }
-
-  public ActionEvaluation create(PersonIdDTO citizen) {
-    return ActionEvaluation.builder()
-        .citizen(PersonId.builder()
-            .id(citizen.getId())
-//            .type(PersonId)
-            .build())
-        .build();
   }
 
   public ActionEvaluation create(PatientDTO patient, UserDTO user, UnitDTO unit, UnitDTO careUnit,

@@ -668,28 +668,4 @@ class ActionEvaluationFactoryTest {
       assertEquals(AJLA_DOCTOR_ROLE, actionEvaluation.user().role());
     }
   }
-
-  @Nested
-  class IncludeCitizen {
-
-    private static final se.inera.intyg.certificateservice.application.citizen.dto.PersonIdDTO CITIZEN =
-        se.inera.intyg.certificateservice.application.citizen.dto.PersonIdDTO.builder()
-            .id(ATHENA_REACT_ANDERSSON_ID)
-            .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER.toString())
-            .build();
-
-    @Test
-    void shallIncludeCitizenId() {
-      final var actionEvaluation = actionEvaluationFactory.create(CITIZEN);
-
-      assertEquals(CITIZEN.getId(), actionEvaluation.citizen().id());
-    }
-
-    @Test
-    void shallIncludeCitizenIdType() {
-      final var actionEvaluation = actionEvaluationFactory.create(CITIZEN);
-
-      assertEquals(CITIZEN.getType(), actionEvaluation.citizen().type());
-    }
-  }
 }
