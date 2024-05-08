@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -121,6 +122,12 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
   @Override
   public void remove(List<CertificateId> certificateIds) {
+    certificateIds.stream()
+        .map(certificateId -> certificateEntityRepository.findByCertificateId(certificateId.id()))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .forEach(certificateRelationRepository::deleteRelations);
+
     certificateEntityRepository.deleteAllByCertificateIdIn(
         certificateIds.stream()
             .map(CertificateId::id)
