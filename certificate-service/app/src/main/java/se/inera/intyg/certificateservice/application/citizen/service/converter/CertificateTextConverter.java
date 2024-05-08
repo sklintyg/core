@@ -1,10 +1,12 @@
 package se.inera.intyg.certificateservice.application.citizen.service.converter;
 
+import java.util.Objects;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.citizen.dto.CertificateLinkDTO;
 import se.inera.intyg.certificateservice.application.citizen.dto.CertificateTextDTO;
 import se.inera.intyg.certificateservice.application.citizen.dto.CertificateTextTypeDTO;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 
 @Component()
 public class CertificateTextConverter {
@@ -12,7 +14,7 @@ public class CertificateTextConverter {
   public CertificateTextDTO convert(CertificateText certificateText) {
     return CertificateTextDTO.builder()
         .text(certificateText.text())
-        .type(CertificateTextTypeDTO.valueOf(certificateText.type().name()))
+        .type(convertCertificateTextType(certificateText.type()))
         .links(certificateText.links().stream()
             .map(link -> CertificateLinkDTO.builder()
                 .url(link.url())
@@ -21,5 +23,14 @@ public class CertificateTextConverter {
                 .build())
             .toList())
         .build();
+  }
+
+  private CertificateTextTypeDTO convertCertificateTextType(
+      CertificateTextType certificateTextType) {
+
+    if (Objects.requireNonNull(certificateTextType) == CertificateTextType.PREAMBLE_TEXT) {
+      return CertificateTextTypeDTO.PREAMBLE_TEXT;
+    }
+    return null;
   }
 }

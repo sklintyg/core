@@ -22,6 +22,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
@@ -126,6 +127,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         .schematronPath(SCHEMATRON_PATH)
         .texts(List.of(CertificateText.builder()
             .text(PREAMBLE_TEXT)
+            .type(CertificateTextType.PREAMBLE_TEXT)
             .links(List.of(CertificateLink.builder()
                 .url(URL_FK)
                 .id(LINK_FK_ID)

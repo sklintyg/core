@@ -6,10 +6,10 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
-import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateResponse.GetCertificateResponseBuilder;
+import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateResponse.GetCitizenCertificateResponseBuilder;
 import se.inera.intyg.certificateservice.application.common.dto.AvailableFunctionDTO;
 
-@JsonDeserialize(builder = GetCertificateResponseBuilder.class)
+@JsonDeserialize(builder = GetCitizenCertificateResponseBuilder.class)
 @Value
 @Builder
 public class GetCitizenCertificateResponse {
@@ -19,7 +19,7 @@ public class GetCitizenCertificateResponse {
   List<CertificateTextDTO> texts;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class GetCertificateResponseBuilder {
+  public static class GetCitizenCertificateResponseBuilder {
 
   }
 }

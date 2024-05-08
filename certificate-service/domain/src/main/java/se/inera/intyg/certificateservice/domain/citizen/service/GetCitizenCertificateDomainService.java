@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.common.exception.CitizenCertificateForbidden;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 
 @RequiredArgsConstructor
@@ -15,7 +16,7 @@ public class GetCitizenCertificateDomainService {
     final var certificate = certificateRepository.getById(certificateId);
 
     if (!isCertificateIssuedOnPatient(citizen, certificate)) {
-      throw new IllegalStateException(
+      throw new CitizenCertificateForbidden(
           "Citizen is trying to access certificate with id '%s', but it is not issued on citizen"
               .formatted(certificateId)
       );
@@ -26,6 +27,7 @@ public class GetCitizenCertificateDomainService {
 
   private static boolean isCertificateIssuedOnPatient(PersonId citizen,
       Certificate certificate) {
-    return certificate.certificateMetaData().patient().id().id().equals(citizen.id());
+    return certificate.certificateMetaData().patient().id().idWithoutDash()
+        .equals(citizen.idWithoutDash());
   }
 }

@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.citizen.dto.CitizenCertificateExistsResponse.CertificateExistsResponseBuilder;
+import se.inera.intyg.certificateservice.application.citizen.dto.CitizenCertificateExistsResponse.CitizenCertificateExistsResponseBuilder;
 
-@JsonDeserialize(builder = CertificateExistsResponseBuilder.class)
+@JsonDeserialize(builder = CitizenCertificateExistsResponseBuilder.class)
 @Value
 @Builder
 public class CitizenCertificateExistsResponse {
@@ -14,7 +14,7 @@ public class CitizenCertificateExistsResponse {
   boolean exists;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class CertificateExistsResponseBuilder {
+  public static class CitizenCertificateExistsResponseBuilder {
 
   }
 }

@@ -22,13 +22,13 @@ public class CitizenController {
   private final CitizenCertificateExistsService citizenCertificateExistsService;
   private final GetCitizenCertificateService getCitizenCertificateService;
 
-  @GetMapping("/{certificateId}/exists")
+  @GetMapping("/certificate/{certificateId}/exists")
   CitizenCertificateExistsResponse findExistingCertificate(
       @PathVariable("certificateId") String certificateId) {
     return citizenCertificateExistsService.exist(certificateId);
   }
 
-  @PostMapping("/{certificateId}")
+  @PostMapping("/certificate/{certificateId}")
   GetCitizenCertificateResponse getCertificate(
       @RequestBody GetCitizenCertificateRequest getCitizenCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
