@@ -33,6 +33,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
 
 @Component
 @RequiredArgsConstructor
@@ -45,6 +46,7 @@ public class CertificateEntityMapper {
   private final UnitRepository unitRepository;
   private final StaffRepository staffRepository;
   private final CertificateDataEntityMapper certificateDataEntityMapper;
+  private final CertificateRelationRepository certificateRelationRepository;
 
   public Certificate toDomain(CertificateEntity certificateEntity) {
     return toDomain(
@@ -200,6 +202,7 @@ public class CertificateEntityMapper {
   }
 
   public Certificate toDomain(CertificateEntity certificateEntity, CertificateModel model) {
+    final var relations = certificateRelationRepository.relations(certificateEntity);
     return Certificate.builder()
         .id(new CertificateId(certificateEntity.getCertificateId()))
         .created(certificateEntity.getCreated())
@@ -259,6 +262,24 @@ public class CertificateEntityMapper {
                 ? new ExternalReference(certificateEntity.getExternalReference().getReference())
                 : null
         )
+        .parent(
+            relations.stream()
+                .filter(entity -> entity.getChildCertificate().getCertificateId()
+                    .equals(certificateEntity.getCertificateId())
+                )
+                .findFirst()
+                .map(RelationEntityMapper::parentToDomain)
+                .orElse(null)
+        )
+        .children(
+            relations.stream()
+                .filter(entity -> entity.getParentCertificate().getCertificateId()
+                    .equals(certificateEntity.getCertificateId())
+                )
+                .map(RelationEntityMapper::childToDomain)
+                .toList()
+        )
         .build();
   }
+
 }

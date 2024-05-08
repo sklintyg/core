@@ -24,7 +24,7 @@ import se.inera.intyg.cts.testability.service.TestabilityTerminationService;
 @RequestMapping("/testability/v1/terminations")
 public class TestabilityTerminationController {
 
-  private final static Logger LOG = LoggerFactory.getLogger(TestabilityTerminationController.class);
+  private static final Logger LOG = LoggerFactory.getLogger(TestabilityTerminationController.class);
 
   private final TestabilityTerminationService testabilityTerminationService;
 
@@ -35,50 +35,48 @@ public class TestabilityTerminationController {
 
   @PostMapping
   void create(@RequestBody TestabilityTerminationDTO testabilityTerminationDTO) {
-    LOG.info(String.format("Create termination '%s'", testabilityTerminationDTO));
+    LOG.info("Create termination '{}'", testabilityTerminationDTO);
     testabilityTerminationService.createTermination(testabilityTerminationDTO);
   }
 
   @PostMapping("/{terminationId}/certificates")
   void saveCertificates(@PathVariable UUID terminationId,
       @RequestBody List<CertificateXmlDTO> certificateXmlDTOList) {
-    LOG.info(String.format("Save '%s' certificates for termination '%s'",
-        certificateXmlDTOList.size(), terminationId));
+    LOG.info("Save '{}' certificates for termination '{}'", certificateXmlDTOList.size(),
+        terminationId);
     testabilityTerminationService.saveCertificates(terminationId, certificateXmlDTOList);
   }
 
   @PostMapping("/{terminationId}/certificatetexts")
   void saveCertificateTexts(@PathVariable UUID terminationId,
       @RequestBody List<CertificateTextDTO> certificateTextDTOList) {
-    LOG.info(String.format("Save '%s' certificate texts for termination '%s'",
-        certificateTextDTOList.size(), terminationId));
+    LOG.info("Save '{}' certificate texts for termination '{}'", certificateTextDTOList.size(),
+        terminationId);
     testabilityTerminationService.saveCertificateTexts(terminationId, certificateTextDTOList);
   }
 
   @PostMapping("/{terminationId}/upload")
   void setAsUploaded(@PathVariable UUID terminationId, @RequestBody String password) {
-    LOG.info(String.format("Set termination '%s' as uploaded with password '%s'",
-        terminationId, password));
+    LOG.info("Set termination '{}' as uploaded with password '{}'", terminationId, password);
     testabilityTerminationService.setAsUploaded(terminationId, password);
   }
 
   @PostMapping("/{terminationId}/sendNotification")
   void setAsNotificationSent(@PathVariable UUID terminationId,
       @RequestBody LocalDateTime notificationTime) {
-    LOG.info(String.format("Set termination '%s' to notification sent at '%s'",
-        terminationId, notificationTime));
+    LOG.info("Set termination '{}' to notification sent at '{}'", terminationId, notificationTime);
     testabilityTerminationService.setAsNotificationSent(terminationId, notificationTime);
   }
 
   @PostMapping("/{terminationId}/receipt")
   void setAsReceiptRecieved(@PathVariable UUID terminationId) {
-    LOG.info(String.format("Set status for termination '%s' to receipt received", terminationId));
+    LOG.info("Set status for termination '{}' to receipt received", terminationId);
     testabilityTerminationService.setAsReceiptReceived(terminationId);
   }
 
   @DeleteMapping("/{terminationId}")
   void delete(@PathVariable UUID terminationId) {
-    LOG.info(String.format("Delete termination '%s'", terminationId));
+    LOG.info("Delete termination '{}'", terminationId);
     testabilityTerminationService.deleteTermination(terminationId);
   }
 
@@ -89,25 +87,25 @@ public class TestabilityTerminationController {
 
   @GetMapping("/{terminationId}/certificatesCount")
   int getCertificatesCount(@PathVariable UUID terminationId) {
-    LOG.info(String.format("Get certificates count for termination '%s'", terminationId));
+    LOG.info("Get certificates count for termination '{}'", terminationId);
     return testabilityTerminationService.getCertificatesCount(terminationId);
   }
 
   @GetMapping("/{terminationId}/certificateTextsCount")
   int getCertificateTextCount(@PathVariable UUID terminationId) {
-    LOG.info(String.format("Get certificate texts count for termination '%s'", terminationId));
+    LOG.info("Get certificate texts count for termination '{}'", terminationId);
     return testabilityTerminationService.getCertificateTextsCount(terminationId);
   }
 
   @GetMapping("/{terminationId}/password")
   String getPassword(@PathVariable UUID terminationId) {
-    LOG.info(String.format("Get package password for termination '%s'", terminationId));
+    LOG.info("Get package password for termination '{}'", terminationId);
     return testabilityTerminationService.getPassword(terminationId);
   }
 
   @GetMapping("/{terminationId}/status")
   String getStatus(@PathVariable UUID terminationId) {
-    LOG.info(String.format("Get status for termination '%s'", terminationId));
+    LOG.info("Get status for termination '{}'", terminationId);
     return testabilityTerminationService.getStatus(terminationId);
   }
 }

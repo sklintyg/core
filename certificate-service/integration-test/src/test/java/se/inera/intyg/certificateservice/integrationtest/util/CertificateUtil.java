@@ -11,12 +11,14 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRecipientDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationsDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.ReplaceCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateResponse;
@@ -41,6 +43,14 @@ public class CertificateUtil {
     return certificate.getMetadata().getId();
   }
 
+  public static String certificateId(ReplaceCertificateResponse response) {
+    final var certificate = certificate(response);
+    if (certificate == null || certificate.getMetadata() == null) {
+      return null;
+    }
+    return certificate.getMetadata().getId();
+  }
+
   public static String certificateId(List<CreateCertificateResponse> responses) {
     final var certificate = certificate(responses);
     if (certificate == null || certificate.getMetadata() == null) {
@@ -54,6 +64,13 @@ public class CertificateUtil {
       return null;
     }
     return responses.getCertificate().getMetadata().getStatus();
+  }
+
+  public static CertificateRelationsDTO relation(ReplaceCertificateResponse response) {
+    if (response == null || response.getCertificate() == null) {
+      return null;
+    }
+    return response.getCertificate().getMetadata().getRelations();
   }
 
   public static long version(List<CreateCertificateResponse> responses) {
@@ -86,6 +103,14 @@ public class CertificateUtil {
     }
     return response.getCertificate();
   }
+
+  public static CertificateDTO certificate(ReplaceCertificateResponse response) {
+    if (response == null || response.getCertificate() == null) {
+      return null;
+    }
+    return response.getCertificate();
+  }
+
 
   public static CertificateDTO certificate(GetCertificateResponse response) {
     if (response == null || response.getCertificate() == null) {
@@ -245,6 +270,14 @@ public class CertificateUtil {
 
   public static RevokeCertificateResponse revokeCertificateResponse(
       ResponseEntity<RevokeCertificateResponse> response) {
+    if (response == null || response.getBody() == null) {
+      throw new IllegalArgumentException("Missing response!");
+    }
+    return response.getBody();
+  }
+
+  public static ReplaceCertificateResponse replaceCertificateResponse(
+      ResponseEntity<ReplaceCertificateResponse> response) {
     if (response == null || response.getBody() == null) {
       throw new IllegalArgumentException("Missing response!");
     }

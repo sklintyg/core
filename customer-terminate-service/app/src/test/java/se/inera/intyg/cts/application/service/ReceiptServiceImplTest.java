@@ -35,8 +35,9 @@ class ReceiptServiceImplTest {
   private ReceiptServiceImpl receiptServiceImpl;
 
   @Test
-  public void testHandleReceipt() {
-    when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(Optional.of(termination));
+  void testHandleReceipt() {
+    when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(
+        Optional.of(termination));
 
     receiptServiceImpl.handleReceipt(TERMINATION_UUID);
 
@@ -46,13 +47,13 @@ class ReceiptServiceImplTest {
   }
 
   @Test()
-  public void testHandleTerminationNotFound() {
-    when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(Optional.empty());
+  void testHandleTerminationNotFound() {
+    when(terminationRepository.findByTerminationId(any(TerminationId.class))).thenReturn(
+        Optional.empty());
 
-    ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-      receiptServiceImpl.handleReceipt(TERMINATION_UUID);
-    });
+    ResponseStatusException exception = assertThrows(ResponseStatusException.class, () ->
+        receiptServiceImpl.handleReceipt(TERMINATION_UUID));
 
-    assertEquals(exception.getStatus(), HttpStatus.NOT_FOUND);
- }
+    assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+  }
 }

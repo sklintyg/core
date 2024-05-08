@@ -13,6 +13,7 @@ public class GetCertificateRequestBuilder {
 
   private UnitDTO unit = ALFA_ALLERGIMOTTAGNINGEN_DTO;
   private UnitDTO careUnit = ALFA_MEDICINCENTRUM_DTO;
+  private UnitDTO careProvider = ALFA_REGIONEN_DTO;
   private UserDTO user = AJLA_DOCTOR_DTO;
 
   public static GetCertificateRequestBuilder create() {
@@ -33,6 +34,11 @@ public class GetCertificateRequestBuilder {
     return this;
   }
 
+  public GetCertificateRequestBuilder careProvider(UnitDTO careProvider) {
+    this.careProvider = careProvider;
+    return this;
+  }
+
   public GetCertificateRequestBuilder user(UserDTO user) {
     this.user = user;
     return this;
@@ -41,7 +47,7 @@ public class GetCertificateRequestBuilder {
   public GetCertificateRequest build() {
     return GetCertificateRequest.builder()
         .user(user)
-        .careProvider(ALFA_REGIONEN_DTO)
+        .careProvider(careProvider)
         .unit(unit)
         .careUnit(careUnit)
         .build();

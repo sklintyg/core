@@ -25,6 +25,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_ROLE;
 
 import java.util.Collections;
+import se.inera.intyg.certificateservice.application.common.dto.AccessScopeTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PaTitleDTO;
 import se.inera.intyg.certificateservice.application.common.dto.RoleTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
@@ -60,7 +61,8 @@ public class TestDataCommonUserDTO {
                 .map(Speciality::value)
                 .toList()
         )
-        .blocked(AJLA_DOCTOR_BLOCKED.value());
+        .blocked(AJLA_DOCTOR_BLOCKED.value())
+        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT);
   }
 
   public static UserDTOBuilder alvaVardadministratorDtoBuilder() {
@@ -73,7 +75,8 @@ public class TestDataCommonUserDTO {
         .role(RoleTypeDTO.toRoleType(ALVA_VARDADMINISTRATOR_ROLE))
         .paTitles(Collections.emptyList())
         .specialities(Collections.emptyList())
-        .blocked(ALVA_VARDADMINISTRATOR_BLOCKED.value());
+        .blocked(ALVA_VARDADMINISTRATOR_BLOCKED.value())
+        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT);
   }
 
   public static UserDTOBuilder bertilBarnmorskaDtoBuilder() {
@@ -86,6 +89,7 @@ public class TestDataCommonUserDTO {
         .role(RoleTypeDTO.toRoleType(BERTIL_BARNMORSKA_ROLE))
         .paTitles(Collections.emptyList())
         .specialities(Collections.emptyList())
-        .blocked(BERTIL_BARNMORSKA_BLOCKED.value());
+        .blocked(BERTIL_BARNMORSKA_BLOCKED.value())
+        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT);
   }
 }

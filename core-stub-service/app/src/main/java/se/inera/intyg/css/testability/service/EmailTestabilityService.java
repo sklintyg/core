@@ -1,14 +1,13 @@
 package se.inera.intyg.css.testability.service;
 
+import jakarta.mail.Address;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import javax.mail.Address;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.css.testability.configuration.MailServerConfig;
 
@@ -18,13 +17,13 @@ public record EmailTestabilityService(MailServerConfig mailServerConfig) {
   public List<Map<String, List<String>>> getAllEmails() {
     final var greenMail = mailServerConfig.getGreenMail();
     return Arrays.stream(greenMail.getReceivedMessages()).map(this::getMailProperties)
-        .collect(Collectors.toList());
+        .toList();
   }
 
   public List<Map<String, List<String>>> getEmailsForAddress(String emailAddress) {
     final var greenMail = mailServerConfig.getGreenMail();
     return Arrays.stream(greenMail.getReceivedMessagesForDomain(emailAddress))
-        .map(this::getMailProperties).collect(Collectors.toList());
+        .map(this::getMailProperties).toList();
   }
 
   public void deleteEmails() {
@@ -41,7 +40,7 @@ public record EmailTestabilityService(MailServerConfig mailServerConfig) {
 
       return Map.of(
           "subject", subject,
-          "senders",senders,
+          "senders", senders,
           "recipients", recipents,
           "content", content);
 

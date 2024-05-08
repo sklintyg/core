@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -15,6 +16,7 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateRepository;
 
 @Repository
@@ -24,6 +26,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   private final CertificateEntityRepository certificateEntityRepository;
   private final CertificateEntityMapper certificateEntityMapper;
   private final CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;
+  private final CertificateRelationRepository certificateRelationRepository;
 
   @Override
   public Certificate create(CertificateModel certificateModel) {
@@ -49,12 +52,20 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
     if (Status.DELETED_DRAFT.equals(certificate.status())) {
       certificateEntityRepository.findByCertificateId(certificate.id().id())
-          .ifPresent(certificateEntityRepository::delete);
+          .ifPresent(entity -> {
+                certificateRelationRepository.deleteRelations(entity);
+                certificateEntityRepository.delete(entity);
+              }
+          );
       return certificate;
     }
 
     final var savedEntity = certificateEntityRepository.save(
         certificateEntityMapper.toEntity(certificate)
+    );
+
+    certificateRelationRepository.save(
+        certificate, savedEntity
     );
 
     return certificateEntityMapper.toDomain(savedEntity);
@@ -102,11 +113,21 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
         certificateEntityMapper.toEntity(certificate)
     );
 
+    certificateRelationRepository.save(
+        certificate, savedEntity
+    );
+
     return certificateEntityMapper.toDomain(savedEntity);
   }
 
   @Override
   public void remove(List<CertificateId> certificateIds) {
+    certificateIds.stream()
+        .map(certificateId -> certificateEntityRepository.findByCertificateId(certificateId.id()))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .forEach(certificateRelationRepository::deleteRelations);
+
     certificateEntityRepository.deleteAllByCertificateIdIn(
         certificateIds.stream()
             .map(CertificateId::id)
