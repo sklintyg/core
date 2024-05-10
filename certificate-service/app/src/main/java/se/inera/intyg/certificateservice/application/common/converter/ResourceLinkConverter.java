@@ -1,19 +1,23 @@
 package se.inera.intyg.certificateservice.application.common.converter;
 
+import java.util.Optional;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
+import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 
 @Component
 public class ResourceLinkConverter {
 
-  public ResourceLinkDTO convert(CertificateAction certificateAction) {
+  public ResourceLinkDTO convert(CertificateAction certificateAction,
+      Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
     return ResourceLinkDTO.builder()
         .type(ResourceLinkTypeDTO.toResourceLinkType(certificateAction.getType()))
         .name(certificateAction.getName())
         .description(certificateAction.getDescription())
-        .body(certificateAction.getBody())
+        .body(certificateAction.getBody(certificate, actionEvaluation))
         .enabled(certificateAction.isEnabled())
         .build();
   }

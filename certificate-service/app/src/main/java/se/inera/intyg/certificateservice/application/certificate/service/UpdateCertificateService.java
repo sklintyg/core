@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,7 +58,13 @@ public class UpdateCertificateService {
         .certificate(certificateConverter.convert(
             updatedCertificate,
             updatedCertificate.actions(actionEvaluation).stream()
-                .map(resourceLinkConverter::convert)
+                .map(certificateAction ->
+                    resourceLinkConverter.convert(
+                        certificateAction,
+                        Optional.of(updatedCertificate),
+                        actionEvaluation
+                    )
+                )
                 .toList())
         )
         .build();

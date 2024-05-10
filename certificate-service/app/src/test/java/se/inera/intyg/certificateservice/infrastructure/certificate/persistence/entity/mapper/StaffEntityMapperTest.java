@@ -29,6 +29,7 @@ class StaffEntityMapperTest {
           .paTitles(null)
           .specialities(null)
           .blocked(null)
+          .allowCopy(null)
           .build();
 
       assertEquals(expectedStaff, StaffEntityMapper.toDomain(AJLA_DOKTOR_ENTITY));

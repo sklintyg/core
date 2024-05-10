@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -107,7 +108,13 @@ public class TestabilityCertificateService {
             certificateConverter.convert(
                 certificate,
                 certificate.actions(actionEvaluation).stream()
-                    .map(resourceLinkConverter::convert)
+                    .map(certificateAction ->
+                        resourceLinkConverter.convert(
+                            certificateAction,
+                            Optional.of(certificate),
+                            actionEvaluation
+                        )
+                    )
                     .toList())
         )
         .build();

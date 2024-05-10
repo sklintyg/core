@@ -104,10 +104,10 @@ class GetCertificateTypeInfoServiceTest {
     )).thenReturn(ACTION_EVALUATION);
     when(certificateModelRepository.findAllActive()).thenReturn(certificateModels);
     when(certificateTypeInfoConverter.convert(certificateModels.get(0),
-        CERTIFICATE_ACTIONS)).thenReturn(
+        CERTIFICATE_ACTIONS, ACTION_EVALUATION)).thenReturn(
         certificateTypeInfoDTO1);
     when(certificateTypeInfoConverter.convert(certificateModels.get(1),
-        CERTIFICATE_ACTIONS)).thenReturn(
+        CERTIFICATE_ACTIONS, ACTION_EVALUATION)).thenReturn(
         certificateTypeInfoDTO2);
 
     final var result = getCertificateTypeInfoService.getActiveCertificateTypeInfos(

@@ -21,6 +21,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.RenewCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.RenewCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ReplaceCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ReplaceCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateRequest;
@@ -40,6 +42,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.DeleteC
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificatePdfService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateXmlService;
+import se.inera.intyg.certificateservice.application.certificate.service.RenewCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ReplaceCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.RevokeCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SendCertificateService;
@@ -81,6 +84,8 @@ class CertificateControllerTest {
   private RevokeCertificateService revokeCertificateService;
   @Mock
   private ReplaceCertificateService replaceCertificateService;
+  @Mock
+  private RenewCertificateService renewCertificateService;
   @InjectMocks
   private CertificateController certificateController;
 
@@ -277,6 +282,17 @@ class CertificateControllerTest {
     doReturn(expectedResult).when(replaceCertificateService).replace(request, CERTIFICATE_ID);
 
     final var actualResult = certificateController.replaceCertificate(request, CERTIFICATE_ID);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnRenewCertificateResponse() {
+    final var request = RenewCertificateRequest.builder().build();
+    final var expectedResult = RenewCertificateResponse.builder().build();
+    doReturn(expectedResult).when(renewCertificateService).renew(request, CERTIFICATE_ID);
+
+    final var actualResult = certificateController.renewCertificate(request, CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
   }

@@ -7,6 +7,7 @@ import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.common.model.AllowCopy;
 import se.inera.intyg.certificateservice.domain.common.model.Blocked;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
@@ -52,6 +53,7 @@ public class ActionEvaluationFactory {
                         .build()
                 )
                 .blocked(new Blocked(user.getBlocked()))
+                .allowCopy(new AllowCopy(user.getAllowCopy()))
                 .role(user.getRole().toRole())
                 .paTitles(
                     user.getPaTitles().stream()
@@ -66,7 +68,8 @@ public class ActionEvaluationFactory {
                         .toList()
                 )
                 .accessScope(user.getAccessScope() == null ? WITHIN_CARE_UNIT
-                    : user.getAccessScope().toDomain())
+                    : user.getAccessScope().toDomain()
+                )
                 .build()
         )
         .subUnit(

@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.patient.service;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
@@ -39,7 +40,13 @@ public class GetPatientCertificateService {
             .map(certificate -> certificateConverter.convert(
                     certificate,
                     certificate.actions(actionEvaluation).stream()
-                        .map(resourceLinkConverter::convert)
+                        .map(certificateAction ->
+                            resourceLinkConverter.convert(
+                                certificateAction,
+                                Optional.of(certificate),
+                                actionEvaluation
+                            )
+                        )
                         .toList()
                 )
             )

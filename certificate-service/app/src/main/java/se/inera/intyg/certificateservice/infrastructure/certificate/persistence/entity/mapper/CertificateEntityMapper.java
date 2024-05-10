@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.UnitRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateModelEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateRelationEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatus;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatusEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateXmlEntity;
@@ -49,6 +52,10 @@ public class CertificateEntityMapper {
   private final CertificateRelationRepository certificateRelationRepository;
 
   public Certificate toDomain(CertificateEntity certificateEntity) {
+    return toDomain(certificateEntity, true);
+  }
+
+  public Certificate toDomain(CertificateEntity certificateEntity, boolean includeRelations) {
     return toDomain(
         certificateEntity,
         certificateModelRepository.getById(
@@ -62,7 +69,8 @@ public class CertificateEntityMapper {
                     )
                 )
                 .build()
-        )
+        ),
+        includeRelations
     );
   }
 
@@ -202,7 +210,12 @@ public class CertificateEntityMapper {
   }
 
   public Certificate toDomain(CertificateEntity certificateEntity, CertificateModel model) {
-    final var relations = certificateRelationRepository.relations(certificateEntity);
+    return toDomain(certificateEntity, model, true);
+  }
+
+  public Certificate toDomain(CertificateEntity certificateEntity, CertificateModel model,
+      boolean includeRelations) {
+    final var relations = getRelations(certificateEntity, includeRelations);
     return Certificate.builder()
         .id(new CertificateId(certificateEntity.getCertificateId()))
         .created(certificateEntity.getCreated())
@@ -268,7 +281,12 @@ public class CertificateEntityMapper {
                     .equals(certificateEntity.getCertificateId())
                 )
                 .findFirst()
-                .map(RelationEntityMapper::parentToDomain)
+                .map(relation ->
+                    RelationEntityMapper.parentToDomain(
+                        relation,
+                        toDomain(relation.getParentCertificate(), false)
+                    )
+                )
                 .orElse(null)
         )
         .children(
@@ -276,10 +294,23 @@ public class CertificateEntityMapper {
                 .filter(entity -> entity.getParentCertificate().getCertificateId()
                     .equals(certificateEntity.getCertificateId())
                 )
-                .map(RelationEntityMapper::childToDomain)
+                .map(relation ->
+                    RelationEntityMapper.childToDomain(
+                        relation,
+                        toDomain(relation.getChildCertificate(), false)
+                    )
+                )
                 .toList()
         )
         .build();
+  }
+
+  private List<CertificateRelationEntity> getRelations(CertificateEntity certificateEntity,
+      boolean includeRelations) {
+    if (includeRelations) {
+      return certificateRelationRepository.relations(certificateEntity);
+    }
+    return Collections.emptyList();
   }
 
 }
