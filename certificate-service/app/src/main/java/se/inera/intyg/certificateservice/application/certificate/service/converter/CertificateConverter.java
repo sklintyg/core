@@ -117,10 +117,7 @@ public class CertificateConverter {
                 .relations(
                     toRelations(certificate.parent(), certificate.children())
                 )
-                .summary(CertificateSummaryDTO.builder()
-                    .label(certificate.certificateModel().summary().label())
-                    .value(getCertificateSummaryValue(certificate))
-                    .build())
+                .summary(convertSummary(certificate))
                 .build()
         )
         .data(
@@ -133,8 +130,23 @@ public class CertificateConverter {
         .build();
   }
 
+  private CertificateSummaryDTO convertSummary(Certificate certificate) {
+    if (certificate.certificateModel().summary() == null) {
+      return null;
+    }
+
+    return CertificateSummaryDTO.builder()
+        .label(certificate.certificateModel().summary().label())
+        .value(getCertificateSummaryValue(certificate))
+        .build();
+  }
+
   private String getCertificateSummaryValue(Certificate certificate) {
     if (certificate.certificateModel().summary().type() == CertificateSummaryType.ISSUED_PERIOD) {
+      if (certificate.signed() == null) {
+        return "";
+      }
+
       final var elementDataDate = certificate.elementData()
           .stream()
           .filter(
