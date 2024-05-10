@@ -25,6 +25,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.ReplaceCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.ReplaceCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateRequest;
@@ -383,6 +385,33 @@ public class ApiUtil {
         },
         Collections.emptyMap()
     );
+  }
+
+  public ResponseEntity<ReplaceCertificateResponse> replaceCertificate(
+      ReplaceCertificateRequest request,
+      String certificateId) {
+    final var requestUrl = "http://localhost:%s/api/certificate/%s/replace".formatted(
+        port,
+        certificateId
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    final var response = this.restTemplate.<ReplaceCertificateResponse>exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+
+    if (certificateId(response.getBody()) != null) {
+      certificateIds.add(certificateId(response.getBody()));
+    }
+
+    return response;
   }
 
   public ResponseEntity<GetCertificatePdfResponse> getCertificatePdf(

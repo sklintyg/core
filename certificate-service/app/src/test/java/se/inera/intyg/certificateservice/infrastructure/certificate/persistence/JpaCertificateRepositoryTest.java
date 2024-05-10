@@ -325,5 +325,17 @@ class JpaCertificateRepositoryTest {
 
       verify(certificateEntityRepository).deleteAllByCertificateIdIn(ids);
     }
+
+    @Test
+    void shouldRemoveCertificatesRelations() {
+      doReturn(Optional.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository)
+          .findByCertificateId("ID1");
+
+      jpaCertificateRepository.remove(
+          List.of(new CertificateId("ID1"), new CertificateId("ID2"))
+      );
+
+      verify(certificateRelationRepository).deleteRelations(CERTIFICATE_ENTITY);
+    }
   }
 }
