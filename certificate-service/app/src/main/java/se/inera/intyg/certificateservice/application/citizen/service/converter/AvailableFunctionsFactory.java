@@ -76,7 +76,7 @@ public class AvailableFunctionsFactory {
 
     return certificate.children().stream()
         .noneMatch(relation -> relation.type() == RelationType.REPLACE
-            && relation.status() == Status.SIGNED
+            && relation.certificate().status() == Status.SIGNED
         );
   }
 
