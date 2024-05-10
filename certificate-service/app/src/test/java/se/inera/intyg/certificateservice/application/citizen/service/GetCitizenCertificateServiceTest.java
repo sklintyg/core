@@ -16,8 +16,10 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
 import se.inera.intyg.certificateservice.application.citizen.dto.CertificateTextDTO;
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateRequest;
+import se.inera.intyg.certificateservice.application.citizen.service.converter.AvailableFunctionsFactory;
 import se.inera.intyg.certificateservice.application.citizen.service.converter.CertificateTextConverter;
 import se.inera.intyg.certificateservice.application.citizen.validation.CitizenCertificateRequestValidator;
+import se.inera.intyg.certificateservice.application.common.dto.AvailableFunctionDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
@@ -54,6 +56,8 @@ class GetCitizenCertificateServiceTest {
       .id(PERSON_ID)
       .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
       .build();
+  private static final List<AvailableFunctionDTO> AVAILABLE_FUNCTIONS = List.of(
+      AvailableFunctionDTO.builder().build());
 
   @Mock
   GetCitizenCertificateDomainService getCitizenCertificateDomainService;
@@ -66,6 +70,9 @@ class GetCitizenCertificateServiceTest {
 
   @Mock
   CertificateTextConverter certificateTextConverter;
+
+  @Mock
+  AvailableFunctionsFactory availableFunctionsFactory;
 
   @InjectMocks
   GetCitizenCertificateService getCitizenCertificateService;
@@ -81,6 +88,9 @@ class GetCitizenCertificateServiceTest {
 
     when(certificateTextConverter.convert(CERTIFICATE_TEXT))
         .thenReturn(CONVERTED_TEXT);
+
+    when(availableFunctionsFactory.get(CERTIFICATE))
+        .thenReturn(AVAILABLE_FUNCTIONS);
   }
 
   @Test
@@ -102,5 +112,12 @@ class GetCitizenCertificateServiceTest {
     final var result = getCitizenCertificateService.get(REQUEST, CERTIFICATE_ID);
 
     assertEquals(List.of(CONVERTED_TEXT), result.getTexts());
+  }
+
+  @Test
+  void shouldReturnAvailableFunctions() {
+    final var result = getCitizenCertificateService.get(REQUEST, CERTIFICATE_ID);
+
+    assertEquals(AVAILABLE_FUNCTIONS, result.getAvailableFunctions());
   }
 }
