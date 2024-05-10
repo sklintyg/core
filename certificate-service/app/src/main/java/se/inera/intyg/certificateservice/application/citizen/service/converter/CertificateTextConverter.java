@@ -20,14 +20,14 @@ public class CertificateTextConverter {
                 .url(link.url())
                 .id(link.id())
                 .name(link.name())
-                .build())
+                .build()
+            )
             .toList())
         .build();
   }
 
   private CertificateTextTypeDTO convertCertificateTextType(
       CertificateTextType certificateTextType) {
-
     if (Objects.requireNonNull(certificateTextType) == CertificateTextType.PREAMBLE_TEXT) {
       return CertificateTextTypeDTO.PREAMBLE_TEXT;
     }

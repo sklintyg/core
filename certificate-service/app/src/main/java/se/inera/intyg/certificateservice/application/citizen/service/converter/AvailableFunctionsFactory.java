@@ -25,8 +25,8 @@ public class AvailableFunctionsFactory {
   public List<AvailableFunctionDTO> get(Certificate certificate) {
     return Stream.of(
             getSendAvailableFunction(certificate),
-            getPrintAvailableFunction(certificate))
-        .filter(Optional::isPresent)
+            getPrintAvailableFunction(certificate)
+        ).filter(Optional::isPresent)
         .map(Optional::get)
         .toList();
   }
@@ -49,10 +49,14 @@ public class AvailableFunctionsFactory {
         AvailableFunctionDTO.builder()
             .name(AVAILABLE_FUNCTION_PRINT_NAME)
             .type(AvailableFunctionType.PRINT_CERTIFICATE)
-            .information(List.of(InformationDTO.builder()
-                .type(InformationType.FILENAME)
-                .text(getFileName(certificate))
-                .build()))
+            .information(
+                List.of(
+                    InformationDTO.builder()
+                        .type(InformationType.FILENAME)
+                        .text(getFileName(certificate))
+                        .build()
+                )
+            )
             .build()
     );
   }
@@ -72,7 +76,8 @@ public class AvailableFunctionsFactory {
 
     return certificate.children().stream()
         .noneMatch(relation -> relation.type() == RelationType.REPLACE
-            && relation.status() == Status.SIGNED);
+            && relation.status() == Status.SIGNED
+        );
   }
 
   private String getFileName(Certificate certificate) {

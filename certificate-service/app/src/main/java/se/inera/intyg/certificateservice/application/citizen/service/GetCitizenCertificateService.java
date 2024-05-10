@@ -37,9 +37,10 @@ public class GetCitizenCertificateService {
 
     return GetCitizenCertificateResponse.builder()
         .certificate(certificateConverter.convert(certificate, Collections.emptyList()))
-        .texts(certificate.certificateModel().texts().stream()
-            .map(certificateTextConverter::convert)
-            .toList()
+        .texts(
+            certificate.certificateModel().texts().stream()
+                .map(certificateTextConverter::convert)
+                .toList()
         )
         .build();
   }
