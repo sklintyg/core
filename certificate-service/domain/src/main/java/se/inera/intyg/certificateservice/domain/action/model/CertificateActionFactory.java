@@ -139,7 +139,7 @@ public class CertificateActionFactory {
                   ),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleUserNotBlocked(),
-                  new ActionRuleAllowCopy()
+                  new ActionRuleUserAllowCopy()
               )
           )
           .build();
