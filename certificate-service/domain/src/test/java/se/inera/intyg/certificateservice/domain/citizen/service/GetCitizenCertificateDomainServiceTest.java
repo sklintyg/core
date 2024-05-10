@@ -14,6 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.common.exception.CitizenCertificateForbidden;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
@@ -48,7 +49,7 @@ class GetCitizenCertificateDomainServiceTest {
 
   @Test
   void shouldThrowIfPatientIdDoesNotMatchCitizen() {
-    assertThrows(IllegalStateException.class,
+    assertThrows(CitizenCertificateForbidden.class,
         () -> getCitizenCertificateDomainService.get(CERTIFICATE_ID, LILLTOLVAN_PERSON_ID)
     );
   }
