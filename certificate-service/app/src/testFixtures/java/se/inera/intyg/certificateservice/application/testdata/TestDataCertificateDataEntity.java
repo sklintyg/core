@@ -3,7 +3,7 @@ package se.inera.intyg.certificateservice.application.testdata;
 import java.time.LocalDateTime;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
 
-public class TestDataCertdificateDataEntity {
+public class TestDataCertificateDataEntity {
 
   private final static String JSON =
       "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"dateId\":\"dateId\",\"date\":["

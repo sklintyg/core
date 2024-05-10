@@ -384,7 +384,6 @@ class CertificateActionReplaceContinueTest {
           .children(
               List.of(
                   relationReplaceBuilder()
-                      .status(Status.DRAFT)
                       .build()
               )
           );

@@ -13,9 +13,9 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -118,9 +118,6 @@ class UpdateCertificateServiceTest {
           )
           .build();
 
-      final var certificateAction = mock(CertificateAction.class);
-      final List<CertificateAction> certificateActions = List.of(certificateAction);
-
       expectedCertificateDTO = CertificateDTO.builder().build();
 
       doReturn(actionEvaluation).when(actionEvaluationFactory).create(
@@ -134,17 +131,12 @@ class UpdateCertificateServiceTest {
       doReturn(elementDataList).when(elementCertificateConverter)
           .convert(certificateDTO);
 
-      final var certificate = mock(Certificate.class);
-
-      doReturn(certificate).when(updateCertificateDomainService).update(
-          new CertificateId(CERTIFICATE_ID), elementDataList, actionEvaluation,
-          new Revision(0));
-
       final var certificateAction = mock(CertificateAction.class);
       final List<CertificateAction> certificateActions = List.of(certificateAction);
       doReturn(certificateActions).when(certificate).actions(actionEvaluation);
 
-      doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction);
+      doReturn(resourceLinkDTO).when(resourceLinkConverter)
+          .convert(certificateAction, Optional.of(certificate), actionEvaluation);
       doReturn(expectedCertificateDTO).when(certificateConverter)
           .convert(certificate, List.of(resourceLinkDTO));
     }

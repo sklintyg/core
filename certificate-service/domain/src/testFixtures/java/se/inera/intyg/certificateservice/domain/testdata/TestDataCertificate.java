@@ -20,12 +20,9 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
-import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
-import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
-import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -98,14 +95,6 @@ public class TestDataCertificate {
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
                 .careUnit(ALFA_MEDICINCENTRUM)
                 .careProvider(ALFA_REGIONEN)
-                .build()
-        )
-        .parent(
-            Relation.builder()
-                .certificateId(PARENT_CERTIFICATE_ID)
-                .created(LocalDateTime.now(ZoneId.systemDefault()))
-                .status(Status.SIGNED)
-                .type(RelationType.REPLACE)
                 .build()
         );
   }

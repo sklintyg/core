@@ -61,9 +61,9 @@ public class CertificateRelationRepository {
 
   private CertificateEntity getParentEntity(Certificate certificate) {
     return certificateEntityRepository.findByCertificateId(
-            certificate.parent().certificateId().id())
+            certificate.parent().certificate().id().id())
         .orElseThrow(() -> new IllegalStateException("Parent certificate with id '%s' not found"
-                .formatted(certificate.parent().certificateId().id())
+                .formatted(certificate.parent().certificate().id().id())
             )
         );
   }
