@@ -49,7 +49,8 @@ public class CertificateDataCheckboxDateRangeListConfigConverter implements
                 .toList()
         )
         .previousDateRangeText(
-            previousDateRangeText(elementSpecification, configuration, certificate))
+            previousDateRangeText(elementSpecification, configuration, certificate)
+        )
         .build();
   }
 

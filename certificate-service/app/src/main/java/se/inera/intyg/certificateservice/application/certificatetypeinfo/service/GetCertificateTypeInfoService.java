@@ -36,7 +36,8 @@ public class GetCertificateTypeInfoService {
                     certificateTypeInfoConverter.convert(
                         certificateModel,
                         certificateModel.actions(actionEvaluation),
-                        actionEvaluation)
+                        actionEvaluation
+                    )
                 )
                 .toList()
         )

@@ -138,7 +138,8 @@ public class CertificateActionFactory {
                       List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
                   ),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
-                  new ActionRuleUserNotBlocked()
+                  new ActionRuleUserNotBlocked(),
+                  new ActionRuleAllowCopy()
               )
           )
           .build();

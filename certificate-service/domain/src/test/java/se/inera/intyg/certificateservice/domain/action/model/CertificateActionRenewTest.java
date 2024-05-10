@@ -17,6 +17,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALLOW_COPY_FALSE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
 import java.util.Optional;
@@ -255,6 +256,36 @@ class CertificateActionRenewTest {
 
   @Test
   void shallReturnTrueIfUserIsNotBlocked() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder.build();
+
+    assertTrue(
+        certificateActionRenew.evaluate(Optional.of(certificate), actionEvaluation),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnFalseIfUserHasAllowCopyFalse() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .user(
+            ajlaDoctorBuilder()
+                .allowCopy(ALLOW_COPY_FALSE)
+                .build()
+        )
+        .build();
+
+    final var certificate = certificateBuilder.build();
+
+    assertFalse(
+        certificateActionRenew.evaluate(Optional.of(certificate), actionEvaluation),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfUserHasAllowCopyTrue() {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     final var certificate = certificateBuilder.build();

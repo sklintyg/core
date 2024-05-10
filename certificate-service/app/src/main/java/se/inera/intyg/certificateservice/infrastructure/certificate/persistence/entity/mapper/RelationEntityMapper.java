@@ -11,16 +11,15 @@ public class RelationEntityMapper {
     throw new IllegalStateException("Utility class");
   }
 
-  public static Relation parentToDomain(CertificateRelationEntity certificateRelationEntity,
-      Certificate certificate) {
+  public static Relation parentToDomain(CertificateRelationEntity entity, Certificate certificate) {
     return Relation.builder()
         .certificate(certificate)
         .type(
             RelationType.valueOf(
-                certificateRelationEntity.getCertificateRelationType().getType()
+                entity.getCertificateRelationType().getType()
             )
         )
-        .created(certificateRelationEntity.getCreated())
+        .created(entity.getCreated())
         .build();
   }
 
