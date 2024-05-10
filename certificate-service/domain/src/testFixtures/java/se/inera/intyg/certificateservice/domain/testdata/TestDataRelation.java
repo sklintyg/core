@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateservice.domain.testdata;
 
-import static se.inera.intyg.certificateservice.domain.certificate.model.Status.SIGNED;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -18,9 +17,8 @@ public class TestDataRelation {
 
   public static Relation.RelationBuilder relationReplaceBuilder() {
     return Relation.builder()
-        .certificateId(CERTIFICATE_ID)
+        .certificate(FK7211_CERTIFICATE)
         .type(RelationType.REPLACE)
-        .created(LocalDateTime.now(ZoneId.systemDefault()))
-        .status(SIGNED);
+        .created(LocalDateTime.now(ZoneId.systemDefault()));
   }
 }

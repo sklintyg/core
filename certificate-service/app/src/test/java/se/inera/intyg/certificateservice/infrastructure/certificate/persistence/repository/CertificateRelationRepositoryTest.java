@@ -65,7 +65,11 @@ class CertificateRelationRepositoryTest {
       final var certificate = Certificate.builder()
           .parent(
               Relation.builder()
-                  .certificateId(new CertificateId(ID))
+                  .certificate(
+                      Certificate.builder()
+                          .id(new CertificateId(ID))
+                          .build()
+                  )
                   .type(RelationType.REPLACE)
                   .build())
           .build();

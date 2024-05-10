@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
 import jakarta.transaction.Transactional;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateResponse;
@@ -48,7 +49,13 @@ public class SignCertificateWithoutSignatureService {
             certificateConverter.convert(
                 signedCertificate,
                 signedCertificate.actions(actionEvaluation).stream()
-                    .map(resourceLinkConverter::convert)
+                    .map(certificateAction ->
+                        resourceLinkConverter.convert(
+                            certificateAction,
+                            Optional.of(signedCertificate),
+                            actionEvaluation
+                        )
+                    )
                     .toList()
             )
         )

@@ -11,6 +11,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -103,7 +104,8 @@ class SignCertificateWithoutSignatureServiceTest {
           .type(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
           .build();
 
-      doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction);
+      doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction,
+          Optional.of(CERTIFICATE), actionEvaluation);
       doReturn(CERTIFICATE_DTO).when(certificateConverter)
           .convert(CERTIFICATE, List.of(resourceLinkDTO));
     }

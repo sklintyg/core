@@ -50,7 +50,7 @@ public class CertificateActionSend implements CertificateAction {
   }
 
   @Override
-  public String getBody() {
+  public String getBody(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
     return BODY;
   }
 }

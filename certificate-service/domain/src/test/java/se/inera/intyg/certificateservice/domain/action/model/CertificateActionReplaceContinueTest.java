@@ -9,6 +9,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.BETA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.relationReplaceBuilder;
@@ -64,7 +65,6 @@ class CertificateActionReplaceContinueTest {
         .children(
             List.of(
                 relationReplaceBuilder()
-                    .status(Status.DRAFT)
                     .build()
             )
         );
@@ -283,7 +283,11 @@ class CertificateActionReplaceContinueTest {
         .children(
             List.of(
                 relationReplaceBuilder()
-                    .status(Status.SIGNED)
+                    .certificate(
+                        fk7211CertificateBuilder()
+                            .status(Status.SIGNED)
+                            .build()
+                    )
                     .build()
             )
         )
@@ -303,7 +307,11 @@ class CertificateActionReplaceContinueTest {
         .children(
             List.of(
                 relationReplaceBuilder()
-                    .status(Status.REVOKED)
+                    .certificate(
+                        fk7211CertificateBuilder()
+                            .status(Status.REVOKED)
+                            .build()
+                    )
                     .build()
             )
         )
@@ -376,7 +384,6 @@ class CertificateActionReplaceContinueTest {
           .children(
               List.of(
                   relationReplaceBuilder()
-                      .status(Status.DRAFT)
                       .build()
               )
           );

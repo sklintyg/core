@@ -12,6 +12,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataRevokeInformationDTO.REVOKE_INFORMATION_DTO;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -101,7 +102,8 @@ class RevokeCertificateServiceTest {
     final List<CertificateAction> certificateActions = List.of(certificateAction);
     doReturn(certificateActions).when(certificate).actions(actionEvaluation);
 
-    doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction);
+    doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction,
+        Optional.of(certificate), actionEvaluation);
     doReturn(certificateDTO).when(certificateConverter)
         .convert(certificate, List.of(resourceLinkDTO));
 

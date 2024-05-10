@@ -189,6 +189,23 @@ class GetPatientCertificatesRequestValidatorTest {
       assertEquals("Required parameter missing: User.blocked",
           illegalArgumentException.getMessage());
     }
+
+    @Test
+    void shallThrowIfAllowCopyIsNull() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .allowCopy(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getPatientCertificatesRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: User.allowCopy",
+          illegalArgumentException.getMessage());
+    }
   }
 
   @Nested

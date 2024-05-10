@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.testdata;
 
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
@@ -17,6 +18,10 @@ public class TestDataCertificateModelConstants {
   public static final CertificateType FK7443_TYPE = new CertificateType("fk7443");
   public static final CertificateVersion FK7211_VERSION = new CertificateVersion("1.0");
   public static final CertificateVersion FK7443_VERSION = new CertificateVersion("1.0");
+  public static final CertificateModelId FK7211_ID = CertificateModelId.builder()
+      .type(FK7211_TYPE)
+      .version(FK7211_VERSION)
+      .build();
   public static final Code FK7211_CODE_TYPE = new Code(
       "IGRAV",
       "b64ea353-e8f6-4832-b563-fc7d46f29548",

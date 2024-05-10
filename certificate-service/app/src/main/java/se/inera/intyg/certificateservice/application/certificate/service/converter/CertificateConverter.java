@@ -121,10 +121,7 @@ public class CertificateConverter {
                 .build()
         )
         .data(
-            certificateDataConverter.convert(
-                certificate.certificateModel(),
-                certificate.elementData()
-            )
+            certificateDataConverter.convert(certificate)
         )
         .links(resourceLinks)
         .build();
@@ -179,7 +176,7 @@ public class CertificateConverter {
         .children(
             children.stream()
                 .filter(Objects::nonNull)
-                .filter(relation -> !Status.REVOKED.equals(relation.status()))
+                .filter(relation -> !Status.REVOKED.equals(relation.certificate().status()))
                 .map(this::toRelation)
                 .toList()
         )
@@ -192,9 +189,9 @@ public class CertificateConverter {
     }
 
     return CertificateRelationDTO.builder()
-        .certificateId(relation.certificateId().id())
+        .certificateId(relation.certificate().id().id())
         .type(CertificateRelationTypeDTO.toType(relation.type()))
-        .status(toCertificateStatusTypeDTO(relation.status()))
+        .status(toCertificateStatusTypeDTO(relation.certificate().status()))
         .created(relation.created())
         .build();
   }

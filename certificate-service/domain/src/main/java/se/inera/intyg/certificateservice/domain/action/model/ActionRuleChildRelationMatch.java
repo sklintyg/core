@@ -22,7 +22,8 @@ public class ActionRuleChildRelationMatch implements ActionRule {
   private boolean matchRelationType(Certificate certificate) {
     return certificate.children().stream()
         .anyMatch(relation ->
-            relationTypes.contains(relation.type()) && Status.DRAFT.equals(relation.status())
+            relationTypes.contains(relation.type())
+                && Status.DRAFT.equals(relation.certificate().status())
         );
   }
 

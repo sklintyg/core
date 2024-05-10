@@ -10,6 +10,5 @@ public class Relation {
 
   RelationType type;
   LocalDateTime created;
-  CertificateId certificateId;
-  Status status;
+  Certificate certificate;
 }

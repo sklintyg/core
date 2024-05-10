@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.testdata;
 
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FULLNAME;
@@ -9,6 +10,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_PA_TITLES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ROLE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_SPECIALITIES;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_FULL_NAME;
@@ -16,6 +18,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_FULL_NAME;
@@ -62,6 +65,7 @@ public class TestDataCommonUserDTO {
                 .toList()
         )
         .blocked(AJLA_DOCTOR_BLOCKED.value())
+        .allowCopy(AJLA_DOCTOR_ALLOW_COPY.value())
         .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT);
   }
 
@@ -76,6 +80,7 @@ public class TestDataCommonUserDTO {
         .paTitles(Collections.emptyList())
         .specialities(Collections.emptyList())
         .blocked(ALVA_VARDADMINISTRATOR_BLOCKED.value())
+        .allowCopy(ALVA_VARDADMINISTRATOR_ALLOW_COPY.value())
         .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT);
   }
 
@@ -90,6 +95,7 @@ public class TestDataCommonUserDTO {
         .paTitles(Collections.emptyList())
         .specialities(Collections.emptyList())
         .blocked(BERTIL_BARNMORSKA_BLOCKED.value())
+        .allowCopy(BERTIL_BARNMORSKA_ALLOW_COPY.value())
         .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT);
   }
 }

@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
 import jakarta.transaction.Transactional;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
@@ -45,7 +46,13 @@ public class DeleteCertificateService {
         .certificate(certificateConverter.convert(
             certificate,
             certificate.actions(actionEvaluation).stream()
-                .map(resourceLinkConverter::convert)
+                .map(certificateAction ->
+                    resourceLinkConverter.convert(
+                        certificateAction,
+                        Optional.of(certificate),
+                        actionEvaluation
+                    )
+                )
                 .toList())
         )
         .build();

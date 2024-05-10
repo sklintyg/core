@@ -15,7 +15,9 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REF;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.PARENT_CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7211_CERTIFICATE_MODEL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_LAST_NAME;
@@ -46,6 +48,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
@@ -73,11 +76,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 @ExtendWith(MockitoExtension.class)
 class CertificateEntityMapperTest {
 
-  @InjectMocks
-  private CertificateEntityMapper certificateEntityMapper;
   @Mock
   CertificateEntityRepository certificateEntityRepository;
-
   @Mock
   private PatientRepository patientRepository;
 
@@ -91,10 +91,16 @@ class CertificateEntityMapperTest {
   private CertificateModelEntityRepository certificateModelEntityRepository;
 
   @Mock
+  private CertificateModelRepository certificateModelRepository;
+
+  @Mock
   private CertificateRelationRepository certificateRelationRepository;
 
   @Mock
   private CertificateDataEntityMapper certificateDataEntityMapper;
+
+  @InjectMocks
+  private CertificateEntityMapper certificateEntityMapper;
 
   private static final LocalDate NOW = LocalDate.now();
   private static final String DATE_ID = "dateId";
@@ -470,8 +476,12 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapRelationForChildren() {
       final var expectedChild = Relation.builder()
-          .certificateId(PARENT_CERTIFICATE_ID)
-          .status(Status.SIGNED)
+          .certificate(
+              fk7211CertificateBuilder()
+                  .id(PARENT_CERTIFICATE_ID)
+                  .status(Status.SIGNED)
+                  .build()
+          )
           .type(RelationType.REPLACE)
           .created(LocalDateTime.now())
           .build();
@@ -479,11 +489,12 @@ class CertificateEntityMapperTest {
       doReturn(List.of(CERTIFICATE_PARENT_RELATION_ENTITY)).when(certificateRelationRepository)
           .relations(CERTIFICATE_ENTITY);
 
+      doReturn(FK7211_CERTIFICATE_MODEL).when(certificateModelRepository).getById(FK7211_ID);
+
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
           FK7211_CERTIFICATE_MODEL);
 
-      assertEquals(expectedChild.certificateId(), response.children().get(0).certificateId());
-      assertEquals(expectedChild.status(), response.children().get(0).status());
+      assertEquals(expectedChild.certificate().id(), response.children().get(0).certificate().id());
       assertEquals(expectedChild.type(), response.children().get(0).type());
       assertNotNull(response.children().get(0).created());
     }
@@ -491,8 +502,12 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapRelationForParent() {
       final var expectedParent = Relation.builder()
-          .certificateId(PARENT_CERTIFICATE_ID)
-          .status(Status.SIGNED)
+          .certificate(
+              fk7211CertificateBuilder()
+                  .id(PARENT_CERTIFICATE_ID)
+                  .status(Status.SIGNED)
+                  .build()
+          )
           .type(RelationType.REPLACE)
           .created(LocalDateTime.now())
           .build();
@@ -500,11 +515,12 @@ class CertificateEntityMapperTest {
       doReturn(List.of(CERTIFICATE_RELATION_ENTITY)).when(certificateRelationRepository)
           .relations(CERTIFICATE_ENTITY);
 
+      doReturn(FK7211_CERTIFICATE_MODEL).when(certificateModelRepository).getById(FK7211_ID);
+
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
           FK7211_CERTIFICATE_MODEL);
 
-      assertEquals(expectedParent.certificateId(), response.parent().certificateId());
-      assertEquals(expectedParent.status(), response.parent().status());
+      assertEquals(expectedParent.certificate().id(), response.parent().certificate().id());
       assertEquals(expectedParent.type(), response.parent().type());
       assertNotNull(response.parent().created());
     }

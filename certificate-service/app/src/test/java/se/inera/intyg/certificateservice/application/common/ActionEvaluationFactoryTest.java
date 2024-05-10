@@ -43,9 +43,11 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.INACTIVE_TRUE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALLOW_COPY_FALSE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -642,6 +644,36 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(BLOCKED_TRUE.value(), actionEvaluation.user().blocked().value());
+    }
+
+    @Test
+    void shallIncludeUserAllowCopyFalse() {
+      final var user = ajlaDoktorDtoBuilder()
+          .allowCopy(true)
+          .build();
+
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          user,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(ALLOW_COPY_FALSE.value(), actionEvaluation.user().blocked().value());
+    }
+
+    @Test
+    void shallIncludeUserAllowCopyTrue() {
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          AJLA_DOCTOR_DTO,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(AJLA_DOCTOR_ALLOW_COPY.value(), actionEvaluation.user().allowCopy().value());
     }
 
     @Test
