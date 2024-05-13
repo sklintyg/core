@@ -22,7 +22,8 @@ public class ActionRuleChildRelationNoMatch implements ActionRule {
   private boolean doesntMatchRelationType(Certificate certificate) {
     return certificate.children().stream()
         .noneMatch(relation ->
-            relationTypes.contains(relation.type()) && !Status.REVOKED.equals(relation.status())
+            relationTypes.contains(relation.type())
+                && !Status.REVOKED.equals(relation.certificate().status())
         );
   }
 

@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 import jakarta.transaction.Transactional;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateRequest;
@@ -55,7 +56,13 @@ public class SignCertificateService {
             certificateConverter.convert(
                 signedCertificate,
                 signedCertificate.actions(actionEvaluation).stream()
-                    .map(resourceLinkConverter::convert)
+                    .map(certificateAction ->
+                        resourceLinkConverter.convert(
+                            certificateAction,
+                            Optional.of(signedCertificate),
+                            actionEvaluation
+                        )
+                    )
                     .toList()
             )
         )

@@ -20,9 +20,9 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfig;
 import se.inera.intyg.certificateservice.application.certificate.dto.validation.CertificateDataValidation;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -36,16 +36,16 @@ public class CertificateDataConverter {
   private final List<CertificateDataValueConverter> certificateDataValueConverter;
   private final List<CertificateDataValidationConverter> certificateDataValidationConverters;
 
-  public Map<String, CertificateDataElement> convert(CertificateModel certificateModel,
-      List<ElementData> elementData) {
-    final var childParentMap = certificateModel.elementSpecifications().stream()
+  public Map<String, CertificateDataElement> convert(Certificate certificate) {
+    final var childParentMap = certificate.certificateModel().elementSpecifications().stream()
         .flatMap(this::mapChildrenToParents)
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-    final var elementIdElementValueMap = elementData.stream()
+    final var elementIdElementValueMap = certificate.elementData().stream()
         .collect(Collectors.toMap(ElementData::id, ElementData::value));
 
-    final var elementSpecifications = certificateModel.elementSpecifications().stream()
+    final var elementSpecifications = certificate.certificateModel().elementSpecifications()
+        .stream()
         .filter(removeIssuingUnitSpecifications())
         .toList();
 
@@ -55,17 +55,17 @@ public class CertificateDataConverter {
         elementSpecifications,
         elementIdElementValueMap,
         atomicInteger,
-        childParentMap
+        childParentMap,
+        certificate
     );
 
     return collectStreamOfCertificateDataElementsToMap(certificateDataElementStream);
   }
 
-
   private Map<String, CertificateDataElement> convertData(
       Map<ElementId, ElementValue> elementIdElementValueMap,
       ElementSpecification elementSpecification, AtomicInteger atomicInteger,
-      Map<String, String> childParentMap) {
+      Map<String, String> childParentMap, Certificate certificate) {
     final var certificateDataElementHashMap = new HashMap<String, CertificateDataElement>();
     final var questionId = elementSpecification.id().id();
     final var value = elementIdElementValueMap.getOrDefault(elementSpecification.id(), null);
@@ -75,14 +75,15 @@ public class CertificateDataConverter {
         elementSpecification.children(),
         elementIdElementValueMap,
         atomicInteger,
-        childParentMap
+        childParentMap,
+        certificate
     );
 
     final var certificateDataElement = CertificateDataElement.builder()
         .id(questionId)
         .parent(childParentMap.getOrDefault(questionId, null))
         .index(index)
-        .config(getConfig(elementSpecification))
+        .config(getConfig(elementSpecification, certificate))
         .value(getValue(elementSpecification, value))
         .validation(getValidation(elementSpecification.rules()))
         .build();
@@ -118,13 +119,14 @@ public class CertificateDataConverter {
         );
   }
 
-  private CertificateDataConfig getConfig(ElementSpecification elementSpecification) {
+  private CertificateDataConfig getConfig(ElementSpecification elementSpecification,
+      Certificate certificate) {
     return certificateDataConfigConverters.stream()
         .filter(
             converter -> converter.getType().equals(elementSpecification.configuration().type())
         )
         .findFirst()
-        .map(converter -> converter.convert(elementSpecification))
+        .map(converter -> converter.convert(elementSpecification, certificate))
         .orElseThrow(() -> new IllegalStateException(
                 "Could not find config converter for type '%s'".formatted(
                     elementSpecification.configuration().type()
@@ -163,7 +165,7 @@ public class CertificateDataConverter {
   private Stream<Set<Entry<String, CertificateDataElement>>> toCertificateDataElementMap(
       List<ElementSpecification> elementSpecification,
       Map<ElementId, ElementValue> elementIdElementValueMap, AtomicInteger atomicInteger,
-      Map<String, String> childParentMap) {
+      Map<String, String> childParentMap, Certificate certificate) {
     return elementSpecification.stream()
         .flatMap(
             specification -> {
@@ -171,7 +173,8 @@ public class CertificateDataConverter {
                   elementIdElementValueMap,
                   specification,
                   atomicInteger,
-                  childParentMap
+                  childParentMap,
+                  certificate
               );
               return Stream.of(dataElementMap.entrySet());
             }
@@ -195,5 +198,4 @@ public class CertificateDataConverter {
   private static Predicate<ElementSpecification> removeIssuingUnitSpecifications() {
     return specification -> !(specification.configuration().type().equals(ISSUING_UNIT));
   }
-
 }

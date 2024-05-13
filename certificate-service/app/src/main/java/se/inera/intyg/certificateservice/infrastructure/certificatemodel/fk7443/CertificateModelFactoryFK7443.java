@@ -122,6 +122,9 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.REPLACE_CONTINUE)
+                    .build(),
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.RENEW)
                     .build()
             )
         )
@@ -211,6 +214,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
 
     return ElementSpecification.builder()
         .id(QUESTION_PERIOD_ID)
+        .includeWhenRenewing(false)
         .configuration(
             ElementConfigurationCheckboxDateRangeList.builder()
                 .name("Jag bedömer att barnet inte bör vårdas i ordinarie tillsynsform")

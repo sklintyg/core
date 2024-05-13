@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.staff.model;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
+import se.inera.intyg.certificateservice.domain.common.model.AllowCopy;
 import se.inera.intyg.certificateservice.domain.common.model.Blocked;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
@@ -21,6 +22,7 @@ public class Staff {
   List<PaTitle> paTitles;
   List<Speciality> specialities;
   Blocked blocked;
+  AllowCopy allowCopy;
 
   public static Staff create(User user) {
     return Staff.builder()
@@ -30,6 +32,7 @@ public class Staff {
         .paTitles(user.paTitles().stream().toList())
         .specialities(user.specialities().stream().toList())
         .blocked(user.blocked())
+        .allowCopy(user.allowCopy())
         .build();
   }
 }

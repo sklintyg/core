@@ -15,6 +15,8 @@ import se.inera.intyg.certificateservice.domain.validation.model.ValidationError
 public class ElementSpecification {
 
   ElementId id;
+  @Builder.Default
+  boolean includeWhenRenewing = Boolean.TRUE;
   ElementConfiguration configuration;
   @Builder.Default
   List<ElementRule> rules = Collections.emptyList();

@@ -242,6 +242,18 @@ class CertificateModelFactoryFK7443Test {
   }
 
   @Test
+  void shallIncludeCertificateActionRenew() {
+    final var expectedType = CertificateActionType.RENEW;
+
+    final var certificateModel = certificateModelFactoryFK7443.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
   void shallIncludeSchematronPath() {
     final var certificateModel = certificateModelFactoryFK7443.create();
 
@@ -348,6 +360,15 @@ class CertificateModelFactoryFK7443Test {
 
         assertEquals(expectedValidations,
             certificateModel.elementSpecification(ELEMENT_ID).validations()
+        );
+      }
+
+      @Test
+      void shallIncludeWhenRenewingTrue() {
+        final var certificateModel = certificateModelFactoryFK7443.create();
+
+        assertEquals(Boolean.TRUE,
+            certificateModel.elementSpecification(ELEMENT_ID).includeWhenRenewing()
         );
       }
     }
@@ -458,6 +479,15 @@ class CertificateModelFactoryFK7443Test {
 
         assertEquals(expectedValidations,
             certificateModel.elementSpecification(ELEMENT_ID).validations()
+        );
+      }
+      
+      @Test
+      void shallIncludeWhenRenewingFalse() {
+        final var certificateModel = certificateModelFactoryFK7443.create();
+
+        assertEquals(Boolean.FALSE,
+            certificateModel.elementSpecification(ELEMENT_ID).includeWhenRenewing()
         );
       }
     }

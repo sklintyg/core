@@ -15,6 +15,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REF;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REFERENCE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.RECIPIENT;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7443CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_CITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_DECEASED;
@@ -655,7 +656,7 @@ class CertificateConverterTest {
       final var expectedValue = Map.of(KEY, CertificateDataElement.builder().build());
 
       doReturn(expectedValue).when(certificateDataConverter)
-          .convert(certificate.certificateModel(), certificate.elementData());
+          .convert(certificate);
 
       assertEquals(expectedValue,
           certificateConverter.convert(certificate, resourceLinkDTOs).getData());
@@ -682,9 +683,13 @@ class CertificateConverterTest {
 
     @BeforeEach
     void setUp() {
-      relationBuilder = Relation.builder()
-          .certificateId(new CertificateId(CERTIFICATE_ID))
+      final var certificate = fk7443CertificateBuilder()
+          .id(new CertificateId(CERTIFICATE_ID))
           .status(Status.DRAFT)
+          .build();
+
+      relationBuilder = Relation.builder()
+          .certificate(certificate)
           .created(LocalDateTime.now(ZoneId.systemDefault()))
           .type(RelationType.REPLACE);
 
@@ -752,7 +757,12 @@ class CertificateConverterTest {
           .children(
               List.of(
                   relationBuilder
-                      .status(Status.REVOKED)
+                      .certificate(
+                          fk7443CertificateBuilder()
+                              .id(new CertificateId(CERTIFICATE_ID))
+                              .status(Status.REVOKED)
+                              .build()
+                      )
                       .build()
               )
           )

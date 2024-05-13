@@ -1,7 +1,8 @@
 package se.inera.intyg.certificateservice.application.testdata;
 
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCertdificateDataEntity.CERTIFICATE_DATA_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateDataEntity.CERTIFICATE_DATA_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateExternalReferenceEntity.EXTERNAL_REFERENCE;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateModelEntity.CERTIFICATE_MODEL_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRevokedEntity.REVOKED_MESSAGE;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRevokedEntity.REVOKED_REASON_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateStatusEntity.STATUS_SIGNED_ENTITY;
@@ -45,7 +46,8 @@ public class TestDataCertificateEntity {
         .revokedBy(AJLA_DOKTOR_ENTITY)
         .revokedReason(REVOKED_REASON_ENTITY)
         .revokedMessage(REVOKED_MESSAGE)
-        .externalReference(EXTERNAL_REFERENCE);
+        .externalReference(EXTERNAL_REFERENCE)
+        .certificateModel(CERTIFICATE_MODEL_ENTITY);
   }
 
   public static CertificateEntity.CertificateEntityBuilder certificateParentEntityBuilder() {
@@ -70,6 +72,7 @@ public class TestDataCertificateEntity {
         .revokedBy(AJLA_DOKTOR_ENTITY)
         .revokedReason(REVOKED_REASON_ENTITY)
         .revokedMessage(REVOKED_MESSAGE)
-        .externalReference(EXTERNAL_REFERENCE);
+        .externalReference(EXTERNAL_REFERENCE)
+        .certificateModel(CERTIFICATE_MODEL_ENTITY);
   }
 }

@@ -13,6 +13,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -117,9 +118,6 @@ class UpdateCertificateServiceTest {
           )
           .build();
 
-      final var certificateAction = mock(CertificateAction.class);
-      final List<CertificateAction> certificateActions = List.of(certificateAction);
-
       expectedCertificateDTO = CertificateDTO.builder().build();
 
       doReturn(actionEvaluation).when(actionEvaluationFactory).create(
@@ -133,8 +131,12 @@ class UpdateCertificateServiceTest {
       doReturn(elementDataList).when(elementCertificateConverter)
           .convert(certificateDTO);
 
+      final var certificateAction = mock(CertificateAction.class);
+      final List<CertificateAction> certificateActions = List.of(certificateAction);
       doReturn(certificateActions).when(certificate).actions(actionEvaluation);
-      doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction);
+
+      doReturn(resourceLinkDTO).when(resourceLinkConverter)
+          .convert(certificateAction, Optional.of(certificate), actionEvaluation);
       doReturn(expectedCertificateDTO).when(certificateConverter)
           .convert(certificate, List.of(resourceLinkDTO));
     }

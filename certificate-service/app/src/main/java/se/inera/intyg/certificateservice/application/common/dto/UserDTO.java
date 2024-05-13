@@ -21,6 +21,7 @@ public class UserDTO {
   List<PaTitleDTO> paTitles;
   List<String> specialities;
   Boolean blocked;
+  Boolean allowCopy;
   AccessScopeTypeDTO accessScope;
 
   @JsonPOJOBuilder(withPrefix = "")

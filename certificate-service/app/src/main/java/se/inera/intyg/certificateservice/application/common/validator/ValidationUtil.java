@@ -78,6 +78,9 @@ public class ValidationUtil {
     if (user.getBlocked() == null) {
       throw new IllegalArgumentException("Required parameter missing: User.blocked");
     }
+    if (user.getAllowCopy() == null) {
+      throw new IllegalArgumentException("Required parameter missing: User.allowCopy");
+    }
   }
 
   public static void validateCertificateModelId(CertificateModelIdDTO certificateModelIdDTO) {

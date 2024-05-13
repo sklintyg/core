@@ -3,8 +3,10 @@ package se.inera.intyg.certificateservice.application.certificatetypeinfo.servic
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,19 +56,22 @@ class CertificateTypeInfoConverterTest {
 
   @Test
   void shallIncludeType() {
-    final var result = certificateTypeInfoConverter.convert(certificateModel, CERTIFICATE_ACTIONS);
+    final var result = certificateTypeInfoConverter.convert(certificateModel, CERTIFICATE_ACTIONS,
+        ACTION_EVALUATION);
     assertEquals(TYPE, result.getType());
   }
 
   @Test
   void shallIncludeName() {
-    final var result = certificateTypeInfoConverter.convert(certificateModel, CERTIFICATE_ACTIONS);
+    final var result = certificateTypeInfoConverter.convert(certificateModel, CERTIFICATE_ACTIONS,
+        ACTION_EVALUATION);
     assertEquals(NAME, result.getName());
   }
 
   @Test
   void shallIncludeDescription() {
-    final var result = certificateTypeInfoConverter.convert(certificateModel, CERTIFICATE_ACTIONS);
+    final var result = certificateTypeInfoConverter.convert(certificateModel, CERTIFICATE_ACTIONS,
+        ACTION_EVALUATION);
     assertEquals(DESCRIPTION, result.getDescription());
   }
 
@@ -74,8 +79,10 @@ class CertificateTypeInfoConverterTest {
   void shallIncludeLinks() {
     final var link = ResourceLinkDTO.builder().build();
     final var expectedLinks = List.of(link);
-    doReturn(link).when(resourceLinkConverter).convert(CERTIFICATE_ACTION);
-    final var result = certificateTypeInfoConverter.convert(certificateModel, CERTIFICATE_ACTIONS);
+    doReturn(link).when(resourceLinkConverter).convert(CERTIFICATE_ACTION, Optional.empty(),
+        ACTION_EVALUATION);
+    final var result = certificateTypeInfoConverter.convert(certificateModel, CERTIFICATE_ACTIONS,
+        ACTION_EVALUATION);
     assertEquals(expectedLinks, result.getLinks());
   }
 }

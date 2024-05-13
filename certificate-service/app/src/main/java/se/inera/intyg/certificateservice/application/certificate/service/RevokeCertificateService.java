@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +45,13 @@ public class RevokeCertificateService {
         .certificate(certificateConverter.convert(
             certificate,
             certificate.actions(actionEvaluation).stream()
-                .map(resourceLinkConverter::convert)
+                .map(certificateAction ->
+                    resourceLinkConverter.convert(
+                        certificateAction,
+                        Optional.of(certificate),
+                        actionEvaluation
+                    )
+                )
                 .toList())
         )
         .build();
