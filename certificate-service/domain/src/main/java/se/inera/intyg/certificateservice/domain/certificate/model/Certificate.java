@@ -49,7 +49,7 @@ public class Certificate {
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()
         .filter(
-            certificateAction -> certificateAction.evaluate(Optional.of(this), actionEvaluation)
+            certificateAction -> certificateAction.include(Optional.of(this), actionEvaluation)
         )
         .toList();
   }

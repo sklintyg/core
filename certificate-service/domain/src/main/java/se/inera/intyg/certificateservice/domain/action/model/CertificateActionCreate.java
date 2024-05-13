@@ -14,7 +14,6 @@ public class CertificateActionCreate implements CertificateAction {
 
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
-  private boolean enabled;
 
   private static final String NAME = "Skapa intyg";
   private static final String DESCRIPTION = "Skapa ett intygsutkast.";
@@ -39,11 +38,9 @@ public class CertificateActionCreate implements CertificateAction {
       return false;
     }
 
-    enabled = actionRules.stream()
+    return actionRules.stream()
         .filter(value -> value.evaluate(actionEvaluation))
         .count() == actionRules.size();
-
-    return true;
   }
 
   @Override
@@ -57,7 +54,8 @@ public class CertificateActionCreate implements CertificateAction {
   }
 
   @Override
-  public boolean isEnabled() {
-    return enabled;
+  public boolean include(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
+    return true;
   }
+
 }
