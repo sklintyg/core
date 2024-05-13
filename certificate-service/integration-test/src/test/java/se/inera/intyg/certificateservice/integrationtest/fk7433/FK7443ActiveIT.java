@@ -37,6 +37,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetPatientCertificatesRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetUnitCertificatesInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetUnitCertificatesRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customRenewCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customReplaceCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customRevokeCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customSendCertificateRequest;
@@ -53,6 +54,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetPatientCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetUnitCertificatesInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetUnitCertificatesRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultRenewCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultReplaceCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultRevokeCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSendCertificateRequest;
@@ -72,6 +74,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.pdfData;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.recipient;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.relation;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.renewCertificateResponse;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.replaceCertificateResponse;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.revokeCertificateResponse;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.status;
@@ -3915,6 +3918,215 @@ class FK7443ActiveIT {
       );
 
       assertEquals(403, response.getStatusCode().value());
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7443 - Förnya")
+  class RenewCertificate {
+
+    @Test
+    @DisplayName("FK7443 - Om intyget är utfärdat på samma mottagning skall det gå att förnya")
+    void shallSuccessfullyRenewIfUnitIsSubUnitAndIssuedOnSameSubUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+      );
+
+      final var response = api.renewCertificate(
+          defaultRenewCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertNotNull(
+              relation(renewCertificateResponse(response)).getParent()
+              , "Should add parent to renewed certificate"),
+          () -> assertEquals(certificateId(testCertificates),
+              relation(renewCertificateResponse(response)).getParent().getCertificateId())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7443 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det gå att förnya")
+    void shallSuccessfullyRenewIfUnitIsCareUnitAndOnSameCareUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+      );
+
+      final var response = api.renewCertificate(
+          defaultRenewCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertNotNull(
+              relation(renewCertificateResponse(response)).getParent()
+              , "Should add parent to renewed certificate"),
+          () -> assertEquals(certificateId(testCertificates),
+              relation(renewCertificateResponse(response)).getParent().getCertificateId())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7443 - Om intyget är utfärdat på samma vårdenhet skall det gå att förnya")
+    void shallSuccessfullyRenewIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build()
+      );
+
+      final var response = api.renewCertificate(
+          customRenewCertificateRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertNotNull(
+              relation(renewCertificateResponse(response)).getParent()
+              , "Should add parent to renewed certificate"),
+          () -> assertEquals(certificateId(testCertificates),
+              relation(renewCertificateResponse(response)).getParent().getCertificateId())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7443 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+      );
+
+      final var response = api.renewCertificate(
+          customRenewCertificateRequest()
+              .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7443 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+      );
+
+      final var response = api.renewCertificate(
+          customRenewCertificateRequest()
+              .careUnit(ALFA_VARDCENTRAL_DTO)
+              .unit(ALFA_VARDCENTRAL_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7443 - Vårdadministratör - Felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403UserIsCareAdmin() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+      );
+
+      final var response = api.renewCertificate(
+          customRenewCertificateRequest()
+              .user(ALVA_VARDADMINISTRATOR_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7443 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det gå att förnya")
+    void shallSuccessfullyRenewIfPatientIsProtectedPersonAndUserIsDoctor() {
+      final var testCertificates = testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+              .patient(ANONYMA_REACT_ATTILA_DTO)
+              .build()
+      );
+
+      final var response = api.renewCertificate(
+          defaultRenewCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertNotNull(
+              relation(renewCertificateResponse(response)).getParent()
+              , "Should add parent to renewed certificate"),
+          () -> assertEquals(certificateId(testCertificates),
+              relation(renewCertificateResponse(response)).getParent().getCertificateId())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7443 - Om intyget inte är signerat skall felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403IfCertificateNotSigned() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+      );
+
+      final var response = api.renewCertificate(
+          defaultRenewCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7443 - Om användaren är blockerad ska inte 'Förnya intyg' vara tillgänglig")
+    void shallReturn403IfUserIsBlocked() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+      );
+
+      final var response = api.renewCertificate(
+          customRenewCertificateRequest()
+              .user(
+                  ajlaDoktorDtoBuilder()
+                      .blocked(Boolean.TRUE)
+                      .build()
+              )
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7443 - Om intyget redan förnyats så ska det gå att förnya pånytt")
+    void shallSuccessfullyRenewIfAlreadyRenewed() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+      );
+
+      api.renewCertificate(
+          defaultRenewCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.renewCertificate(
+          defaultRenewCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertNotNull(
+              relation(renewCertificateResponse(response)).getParent()
+              , "Should add parent to renewed certificate"),
+          () -> assertEquals(certificateId(testCertificates),
+              relation(renewCertificateResponse(response)).getParent().getCertificateId())
+      );
     }
   }
 }
