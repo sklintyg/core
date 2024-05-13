@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.application.certificate.service.conver
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +20,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummaryType;
 
 @Component
 @RequiredArgsConstructor
@@ -128,44 +125,17 @@ public class CertificateConverter {
   }
 
   private CertificateSummaryDTO convertSummary(Certificate certificate) {
-    if (certificate.certificateModel().summary() == null) {
+    if (certificate.certificateModel().summaryProvider() == null) {
       return null;
     }
 
+    final var certificateSummary = certificate.certificateModel().summaryProvider()
+        .summaryOf(certificate);
+
     return CertificateSummaryDTO.builder()
-        .label(certificate.certificateModel().summary().label())
-        .value(getCertificateSummaryValue(certificate))
+        .label(certificateSummary.label())
+        .value(certificateSummary.value())
         .build();
-  }
-
-  private String getCertificateSummaryValue(Certificate certificate) {
-    if (certificate.certificateModel().summary().type() == CertificateSummaryType.ISSUED_PERIOD) {
-      if (certificate.signed() == null) {
-        return "";
-      }
-
-      final var elementDataDate = certificate.elementData()
-          .stream()
-          .filter(
-              elementData -> elementData.id().id().equals(certificate.certificateModel().summary()
-                  .elementId().id()))
-          .findFirst();
-
-      if (elementDataDate.isEmpty()) {
-        return "";
-      }
-
-      if (!(elementDataDate.get().value() instanceof ElementValueDate elementValueDate)) {
-        throw new IllegalStateException(
-            "Invalid value type. Type was '%s'".formatted(elementDataDate.get().value())
-        );
-      }
-
-      return certificate.signed().format(DateTimeFormatter.ISO_DATE) + " - "
-          + elementValueDate.date().format(DateTimeFormatter.ISO_DATE);
-    }
-
-    return "";
   }
 
   private CertificateRelationsDTO toRelations(Relation parent, List<Relation> children) {

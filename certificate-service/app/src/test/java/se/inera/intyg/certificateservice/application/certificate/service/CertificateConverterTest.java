@@ -76,8 +76,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummary;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummaryType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
@@ -86,6 +84,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FK7211CertificateSummaryProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
@@ -103,7 +102,7 @@ class CertificateConverterTest {
   private static final LocalDateTime MODIFIED = LocalDateTime.now(ZoneId.systemDefault());
   private static final LocalDate DATE = LocalDate.now().plusDays(1);
   private static final String Q_1 = "q1";
-  private static final String ID = "valueId";
+  private static final String ID = "1";
   private static final String EXPRESSION = "$beraknatnedkomstdatum";
   private static final String NAME = "Beräknat nedkomstdatum";
   private static final String KEY = "key";
@@ -191,11 +190,7 @@ class CertificateConverterTest {
                             .build()
                     )
                 )
-                .summary(CertificateSummary.builder()
-                    .elementId(new ElementId(ID))
-                    .label("Gäller intygsperiod")
-                    .type(CertificateSummaryType.ISSUED_PERIOD)
-                    .build())
+                .summaryProvider(new FK7211CertificateSummaryProvider())
                 .build()
         )
         .certificateMetaData(

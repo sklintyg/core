@@ -11,8 +11,6 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummary;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummaryType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
@@ -20,6 +18,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FK7211CertificateSummaryProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
@@ -35,7 +34,6 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.Certifi
 @Component
 public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
 
-  private static final String CERTIFICATE_SUMMARY_LABEL = "Gäller intygsperiod";
   @Value("${certificate.model.fk7211.v1_0.active.from}")
   private LocalDateTime activeFrom;
   private static final String FK_7211 = "fk7211";
@@ -128,11 +126,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
         )
         .pdfTemplatePath(PDF_FK_7211_PDF)
         .schematronPath(SCHEMATRON_PATH)
-        .summary(CertificateSummary.builder()
-            .elementId(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
-            .label(CERTIFICATE_SUMMARY_LABEL)
-            .type(CertificateSummaryType.ISSUED_PERIOD)
-            .build())
+        .summaryProvider(new FK7211CertificateSummaryProvider())
         .texts(List.of(CertificateText.builder()
             .text(PREAMBLE_TEXT)
             .type(CertificateTextType.PREAMBLE_TEXT)

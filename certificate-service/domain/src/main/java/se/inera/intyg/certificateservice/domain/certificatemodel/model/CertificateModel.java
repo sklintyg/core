@@ -30,7 +30,7 @@ public class CertificateModel {
   String pdfTemplatePath;
   SchematronPath schematronPath;
   List<CertificateText> texts;
-  CertificateSummary summary;
+  CertificateSummaryProvider summaryProvider;
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()

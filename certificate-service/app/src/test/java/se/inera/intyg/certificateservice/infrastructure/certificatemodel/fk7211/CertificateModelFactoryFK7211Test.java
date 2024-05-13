@@ -7,7 +7,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211.LINK_FK_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211.PDF_FK_7211_PDF;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211.PREAMBLE_TEXT;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211.QUESTION_BERAKNAT_NEDKOMSTDATUM_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211.SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211.URL_FK;
 
@@ -21,8 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummary;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummaryType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
@@ -31,6 +28,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FK7211CertificateSummaryProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
@@ -246,16 +244,11 @@ class CertificateModelFactoryFK7211Test {
   }
 
   @Test
-  void shallIncludeCertificateSummary() {
-    final var expectedSummary = CertificateSummary.builder()
-        .label("Gäller intygsperiod")
-        .type(CertificateSummaryType.ISSUED_PERIOD)
-        .elementId(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
-        .build();
-
+  void shallIncludeCertificateSummaryProvider() {
     final var certificateModel = certificateModelFactoryFK7211.create();
 
-    assertEquals(expectedSummary, certificateModel.summary());
+    assertEquals(FK7211CertificateSummaryProvider.class,
+        certificateModel.summaryProvider().getClass());
   }
 
   @Test

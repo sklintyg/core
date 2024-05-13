@@ -7,7 +7,7 @@ import lombok.Value;
 @Builder
 public class CertificateSummary {
 
-  CertificateSummaryType type;
   String label;
-  ElementId elementId;
+  String value;
+
 }
