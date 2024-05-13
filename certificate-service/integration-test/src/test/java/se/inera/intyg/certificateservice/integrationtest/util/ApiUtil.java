@@ -25,6 +25,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.RenewCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.RenewCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ReplaceCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ReplaceCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateRequest;
@@ -377,6 +379,33 @@ public class ApiUtil {
     headers.setContentType(MediaType.APPLICATION_JSON);
 
     final var response = this.restTemplate.<ReplaceCertificateResponse>exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+
+    if (certificateId(response.getBody()) != null) {
+      certificateIds.add(certificateId(response.getBody()));
+    }
+
+    return response;
+  }
+
+  public ResponseEntity<RenewCertificateResponse> renewCertificate(
+      RenewCertificateRequest request,
+      String certificateId) {
+    final var requestUrl = "http://localhost:%s/api/certificate/%s/renew".formatted(
+        port,
+        certificateId
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    final var response = this.restTemplate.<RenewCertificateResponse>exchange(
         requestUrl,
         HttpMethod.POST,
         new HttpEntity<>(request, headers),
