@@ -44,13 +44,12 @@ class GetCitizenCertificateServiceTest {
           .build())
       .build();
   private static final String PERSON_ID = "PERSON_ID";
+  private static final PersonIdDTO PERSON_ID_DTO = PersonIdDTO.builder()
+      .id(PERSON_ID)
+      .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
+      .build();
   private static final GetCitizenCertificateRequest REQUEST = GetCitizenCertificateRequest.builder()
-      .personId(
-          PersonIdDTO.builder()
-              .id(PERSON_ID)
-              .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
-              .build()
-      )
+      .personId(PERSON_ID_DTO)
       .build();
   private static final PersonId CONVERTED_PERSON_ID = PersonId.builder()
       .id(PERSON_ID)
@@ -97,7 +96,7 @@ class GetCitizenCertificateServiceTest {
   void shouldValidateCertificateId() {
     getCitizenCertificateService.get(REQUEST, CERTIFICATE_ID);
 
-    verify(citizenCertificateRequestValidator).validate(CERTIFICATE_ID);
+    verify(citizenCertificateRequestValidator).validate(CERTIFICATE_ID, PERSON_ID_DTO);
   }
 
   @Test

@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.application.citizen.service.converter;
 
-import java.util.Objects;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.citizen.dto.CertificateLinkDTO;
 import se.inera.intyg.certificateservice.application.citizen.dto.CertificateTextDTO;
@@ -28,9 +27,10 @@ public class CertificateTextConverter {
 
   private CertificateTextTypeDTO convertCertificateTextType(
       CertificateTextType certificateTextType) {
-    if (Objects.requireNonNull(certificateTextType) == CertificateTextType.PREAMBLE_TEXT) {
+    if (certificateTextType == CertificateTextType.PREAMBLE_TEXT) {
       return CertificateTextTypeDTO.PREAMBLE_TEXT;
     }
-    return null;
+    throw new IllegalArgumentException(
+        "Certificate text type '%s' is not supported".formatted(certificateTextType));
   }
 }

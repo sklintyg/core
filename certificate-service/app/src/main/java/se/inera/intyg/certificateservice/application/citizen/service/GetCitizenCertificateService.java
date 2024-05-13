@@ -27,7 +27,8 @@ public class GetCitizenCertificateService {
   public GetCitizenCertificateResponse get(
       GetCitizenCertificateRequest getCitizenCertificateRequest,
       String certificateId) {
-    citizenCertificateRequestValidator.validate(certificateId);
+    citizenCertificateRequestValidator.validate(certificateId,
+        getCitizenCertificateRequest.getPersonId());
 
     final var certificate = getCitizenCertificateDomainService.get(
         new CertificateId(certificateId),

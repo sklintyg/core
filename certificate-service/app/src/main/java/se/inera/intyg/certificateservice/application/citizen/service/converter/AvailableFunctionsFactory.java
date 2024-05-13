@@ -9,8 +9,6 @@ import se.inera.intyg.certificateservice.application.common.dto.AvailableFunctio
 import se.inera.intyg.certificateservice.application.common.dto.InformationDTO;
 import se.inera.intyg.certificateservice.application.common.dto.InformationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
-import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 
 @Component
 public class AvailableFunctionsFactory {
@@ -32,7 +30,7 @@ public class AvailableFunctionsFactory {
   }
 
   private Optional<AvailableFunctionDTO> getSendAvailableFunction(Certificate certificate) {
-    return isSendActive(certificate) ?
+    return certificate.isSendActiveForCitizen() ?
         Optional.of(
             AvailableFunctionDTO.builder()
                 .title(SEND_CERTIFICATE_TITLE)
@@ -61,24 +59,6 @@ public class AvailableFunctionsFactory {
     );
   }
 
-  private boolean isSendActive(Certificate certificate) {
-    if (certificate.status() != Status.SIGNED) {
-      return false;
-    }
-
-    if (certificate.certificateModel().recipient() == null) {
-      return false;
-    }
-
-    if (certificate.sent() != null && certificate.sent().sentAt() != null) {
-      return false;
-    }
-
-    return certificate.children().stream()
-        .noneMatch(relation -> relation.type() == RelationType.REPLACE
-            && relation.certificate().status() == Status.SIGNED
-        );
-  }
 
   private String getFileName(Certificate certificate) {
     return certificate.certificateModel().name()

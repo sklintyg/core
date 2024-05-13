@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.citizen.service.converter;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,21 @@ class CertificateTextConverterTest {
           .url(URL)
           .build()))
       .build();
+
+  @Test
+  void shouldThrowIllegalArgumentExceptionIfTextTypeIsNull() {
+    final var text = CertificateText.builder()
+        .text(TEXT)
+        .links(List.of(CertificateLink.builder()
+            .name(NAME)
+            .id(ID)
+            .url(URL)
+            .build()))
+        .build();
+
+    assertThrows(IllegalArgumentException.class,
+        () -> certificateTextConverter.convert(text));
+  }
 
   @Test
   void shouldConvertText() {

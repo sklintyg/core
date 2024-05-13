@@ -34,6 +34,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.REVISION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.XML;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.CONTACT_INFO;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.DATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.dateElementDataBuilder;
@@ -1855,6 +1856,118 @@ class CertificateTest {
           () -> assertEquals(expectedRelation.created().toLocalDate(),
               signedCertificate.children().get(0).created().toLocalDate())
       );
+    }
+  }
+
+  @Nested
+  class SendActiveForCitizen {
+
+    @Test
+    void shouldNotReturnSendIfNoRecipient() {
+      final var certificate =
+          fk7211CertificateBuilder()
+              .sent(null)
+              .status(Status.SIGNED)
+              .certificateModel(CertificateModel.builder()
+                  .name("Intyg om graviditet")
+                  .build())
+              .build();
+
+      assertFalse(certificate.isSendActiveForCitizen());
+    }
+
+    @Test
+    void shouldNotReturnSendIfDraft() {
+      final var certificate =
+          fk7211CertificateBuilder()
+              .sent(null)
+              .status(Status.DRAFT)
+              .build();
+
+      assertFalse(certificate.isSendActiveForCitizen());
+    }
+
+    @Test
+    void shouldNotReturnSendIfAlreadySent() {
+      final var certificate =
+          fk7211CertificateBuilder()
+              .status(Status.SIGNED)
+              .sent(Sent.builder()
+                  .sentAt(LocalDateTime.now())
+                  .build())
+              .build();
+
+      assertFalse(certificate.isSendActiveForCitizen());
+    }
+
+    @Test
+    void shouldNotReturnSendIfReplacedBySignedCertificate() {
+      final var certificate =
+          fk7211CertificateBuilder()
+              .sent(null)
+              .status(Status.SIGNED)
+              .children(List.of(
+                  Relation.builder()
+                      .certificate(
+                          Certificate.builder()
+                              .status(Status.SIGNED)
+                              .build()
+                      )
+                      .type(RelationType.REPLACE)
+                      .build()
+              ))
+              .build();
+
+      assertFalse(certificate.isSendActiveForCitizen());
+    }
+
+    @Test
+    void shouldReturnSendIfReplacedByDraft() {
+      final var certificate =
+          fk7211CertificateBuilder()
+              .sent(null)
+              .status(Status.SIGNED)
+              .children(List.of(
+                  Relation.builder()
+                      .certificate(Certificate.builder()
+                          .status(Status.DRAFT)
+                          .build())
+                      .type(RelationType.REPLACE)
+                      .build()
+              ))
+              .build();
+
+      assertTrue(certificate.isSendActiveForCitizen());
+    }
+
+    @Test
+    void shouldReturnSendIfRenewed() {
+      final var certificate =
+          fk7211CertificateBuilder()
+              .sent(null)
+              .status(Status.SIGNED)
+              .children(List.of(
+                  Relation.builder()
+                      .certificate(Certificate.builder()
+                          .status(Status.SIGNED)
+                          .build())
+                      .type(RelationType.RENEW)
+                      .build()
+              ))
+              .build();
+
+      assertTrue(certificate.isSendActiveForCitizen());
+    }
+
+    @Test
+    void shouldReturnSendIfAllConditionsAreMet() {
+      final var certificate =
+          fk7211CertificateBuilder()
+              .sent(null)
+              .status(Status.SIGNED)
+              .build();
+
+      assertTrue(certificate.isSendActiveForCitizen());
     }
   }
 }

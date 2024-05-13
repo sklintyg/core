@@ -309,5 +309,24 @@ public class Certificate {
 
     return newCertificate;
   }
+
+  public boolean isSendActiveForCitizen() {
+    if (this.status() != Status.SIGNED) {
+      return false;
+    }
+
+    if (this.certificateModel().recipient() == null) {
+      return false;
+    }
+
+    if (this.sent() != null && this.sent().sentAt() != null) {
+      return false;
+    }
+
+    return this.children().stream()
+        .noneMatch(relation -> relation.type() == RelationType.REPLACE
+            && relation.certificate().status() == Status.SIGNED
+        );
+  }
 }
 
