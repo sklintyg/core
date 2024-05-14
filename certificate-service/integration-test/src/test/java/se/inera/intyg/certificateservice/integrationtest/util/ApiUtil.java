@@ -40,6 +40,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.config.Vali
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoResponse;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetLatestCertificateTypeVersionResponse;
+import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateListRequest;
+import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateListResponse;
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateRequest;
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateResponse;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
@@ -121,6 +123,23 @@ public class ApiUtil {
         port,
         certificateId
     );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<GetCitizenCertificateListResponse> getCitizenCertificateList(
+      GetCitizenCertificateListRequest request) {
+    final var requestUrl = "http://localhost:%s/api/citizen/certificate".formatted(port);
 
     final var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);

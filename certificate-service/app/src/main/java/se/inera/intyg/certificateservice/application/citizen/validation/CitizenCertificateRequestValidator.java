@@ -17,4 +17,8 @@ public class CitizenCertificateRequestValidator {
     validateCertificateId(certificateId);
     validateCitizenId(personId);
   }
+
+  public void validate(PersonIdDTO personId) {
+    validateCitizenId(personId);
+  }
 }

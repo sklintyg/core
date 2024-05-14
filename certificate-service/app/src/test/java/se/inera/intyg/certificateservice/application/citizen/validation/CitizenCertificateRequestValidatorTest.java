@@ -19,7 +19,12 @@ class CitizenCertificateRequestValidatorTest {
 
     @Test
     void shouldThrowIfCertificateIdIsNull() {
-      assertThrows(IllegalArgumentException.class, () -> validator.validate(null));
+      final var personId = PersonIdDTO.builder()
+          .id(PERSON_ID)
+          .build();
+
+      assertThrows(IllegalArgumentException.class,
+          () -> validator.validate(null, personId));
     }
 
     @Test
@@ -31,10 +36,15 @@ class CitizenCertificateRequestValidatorTest {
     void shouldThrowIfCertificateIdIsBlank() {
       assertThrows(IllegalArgumentException.class, () -> validator.validate("   "));
     }
+
+    @Test
+    void shouldNotThrowIfAllConditionsAreMet() {
+      assertDoesNotThrow(() -> validator.validate(CERTIFICATE_ID));
+    }
   }
 
   @Nested
-  class PersonId {
+  class PersonIdAndCertificateId {
 
     @Test
     void shouldThrowIfPersonIdIsNull() {
@@ -84,6 +94,48 @@ class CitizenCertificateRequestValidatorTest {
           .build();
 
       assertDoesNotThrow(() -> validator.validate(CERTIFICATE_ID, personId));
+    }
+  }
+
+  @Nested
+  class PersonId {
+
+    @Test
+    void shouldThrowIfPersonIdIdIsNull() {
+      final var personId = PersonIdDTO.builder()
+          .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
+          .build();
+
+      assertThrows(IllegalArgumentException.class, () -> validator.validate(personId));
+    }
+
+    @Test
+    void shouldThrowIfPersonIdIdIsEmpty() {
+      final var personId = PersonIdDTO.builder()
+          .id("")
+          .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
+          .build();
+
+      assertThrows(IllegalArgumentException.class, () -> validator.validate(personId));
+    }
+
+    @Test
+    void shouldThrowIfPersonIdTypeIsNull() {
+      final var personId = PersonIdDTO.builder()
+          .id(PERSON_ID)
+          .build();
+
+      assertThrows(IllegalArgumentException.class, () -> validator.validate(personId));
+    }
+
+    @Test
+    void shouldNotThrowIfAllConditionsAreMet() {
+      final var personId = PersonIdDTO.builder()
+          .id(PERSON_ID)
+          .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
+          .build();
+
+      assertDoesNotThrow(() -> validator.validate(personId));
     }
   }
 }

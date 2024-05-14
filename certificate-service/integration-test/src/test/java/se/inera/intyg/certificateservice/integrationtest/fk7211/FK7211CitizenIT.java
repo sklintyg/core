@@ -7,6 +7,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.FK7211;
 import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.VERSION;
+import static se.inera.intyg.certificateservice.integrationtest.fk7433.FK7443Constants.FK7443;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
 import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
@@ -25,6 +26,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateListRequest;
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateRequest;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
@@ -80,7 +82,7 @@ class FK7211CitizenIT {
 
   @Nested
   @DisplayName("FK7211 - Hämta intyg för invånare")
-  class GetCertificateTypeInfo {
+  class GetCitizenCertificate {
 
     @Test
     @DisplayName("FK7211 - Om intyget är utfärdat på invånaren ska intyget returneras")
@@ -119,6 +121,49 @@ class FK7211CitizenIT {
       );
 
       assertEquals(403, response.getStatusCode().value());
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7211 - Hämta intygslista för invånare")
+  class GetCitizenCertificateList {
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på invånaren ska intyget returneras")
+    void shallReturnListOfCertificatesIfAvailableForCitizen() {
+      testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED),
+          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED),
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
+      );
+
+      final var response = api.getCitizenCertificateList(
+          GetCitizenCertificateListRequest.builder()
+              .personId(PersonIdDTO.builder()
+                  .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
+                  .id(ATHENA_REACT_ANDERSSON_ID)
+                  .build())
+              .build()
+      );
+
+      assertEquals(2, response.getBody().getCitizenCertificates().size(),
+          "Should return list of certificates available for citizen.");
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om invånaren inte har några intyg ska en tom lista returneras")
+    void shallReturnEmptyListIfNoCertificatesIssuedOnCitizen() {
+      final var response = api.getCitizenCertificateList(
+          GetCitizenCertificateListRequest.builder()
+              .personId(PersonIdDTO.builder()
+                  .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
+                  .id(ATHENA_REACT_ANDERSSON_ID)
+                  .build())
+              .build()
+      );
+
+      assertEquals(0, response.getBody().getCitizenCertificates().size(),
+          "Should return empty list of certificates.");
     }
   }
 }
