@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 @Builder
 public class PrintCitizenCertificateRequest {
 
-  PersonIdDTO citizen;
+  PersonIdDTO personId;
   String additionalInfo;
 
   @JsonPOJOBuilder(withPrefix = "")

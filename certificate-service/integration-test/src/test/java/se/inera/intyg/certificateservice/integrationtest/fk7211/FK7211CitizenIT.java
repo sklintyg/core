@@ -28,6 +28,7 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateListRequest;
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateRequest;
+import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateRequest;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
@@ -164,6 +165,52 @@ class FK7211CitizenIT {
 
       assertEquals(0, response.getBody().getCitizenCertificates().size(),
           "Should return empty list of certificates.");
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7211 - Skriv ut intyg för invånare")
+  class PrintCitizenCertificate {
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på invånaren ska intyget skrivas ut")
+    void shallReturnFK7211IfIssuedOnCitizen() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
+      );
+
+      final var response = api.printCitizenCertificate(
+          PrintCitizenCertificateRequest.builder()
+              .personId(PersonIdDTO.builder()
+                  .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
+                  .id(ATHENA_REACT_ANDERSSON_ID)
+                  .build())
+              .additionalInfo("Intyget är utskrivet från 1177 Intyg.")
+              .build(), certificateId(testCertificates)
+      );
+
+      assertNotNull(response.getBody().getPdfData(),
+          "Should return pdf of certificate of patient.");
+    }
+
+    @Test
+    @DisplayName("FK7211 - Om intyget är utfärdat på en annan invånare ska felkod 403 (FORBIDDEN) returneras")
+    void shallReturn403IfNotIssuedOnCitizen() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
+      );
+
+      final var response = api.printCitizenCertificate(
+          PrintCitizenCertificateRequest.builder()
+              .personId(PersonIdDTO.builder()
+                  .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
+                  .id(ALVE_REACT_ALFREDSSON_ID)
+                  .build())
+              .additionalInfo("Intyget är utskrivet från 1177 Intyg.")
+              .build(), certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
     }
   }
 }

@@ -44,6 +44,8 @@ import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCerti
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateListResponse;
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateRequest;
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateResponse;
+import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateRequest;
+import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateResponse;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesResponse;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoRequest;
@@ -140,6 +142,24 @@ public class ApiUtil {
   public ResponseEntity<GetCitizenCertificateListResponse> getCitizenCertificateList(
       GetCitizenCertificateListRequest request) {
     final var requestUrl = "http://localhost:%s/api/citizen/certificate".formatted(port);
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<PrintCitizenCertificateResponse> printCitizenCertificate(
+      PrintCitizenCertificateRequest request, String certificateId) {
+    final var requestUrl = "http://localhost:%s/api/citizen/certificate/%s/print".formatted(port,
+        certificateId);
 
     final var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);

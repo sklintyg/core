@@ -20,8 +20,8 @@ public class PrintCitizenCertificateService {
     final var pdf = printCitizenCertificateDomainService.get(
         new CertificateId(certificateId),
         PersonId.builder()
-            .id(request.getCitizen().getId())
-            .type(request.getCitizen().getType().toPersonIdType())
+            .id(request.getPersonId().getId())
+            .type(request.getPersonId().getType().toPersonIdType())
             .build(),
         request.getAdditionalInfo()
     );

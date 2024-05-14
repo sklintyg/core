@@ -30,7 +30,7 @@ class PrintCitizenCertificateServiceTest {
   private static final Pdf PDF = new Pdf("pdfData".getBytes(), "fileName");
   private static final PrintCitizenCertificateRequest REQUEST = PrintCitizenCertificateRequest.builder()
       .additionalInfo(ADDITIONAL_INFO_TEXT)
-      .citizen(PERSON_ID_DTO)
+      .personId(PERSON_ID_DTO)
       .build();
 
   @Mock
