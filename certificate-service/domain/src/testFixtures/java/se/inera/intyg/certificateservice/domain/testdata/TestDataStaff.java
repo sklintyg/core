@@ -10,6 +10,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_PA_TITLES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ROLE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_SPECIALITIES;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_FIRST_NAME;
@@ -31,6 +32,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_HEALTH_CARE_PROFESSIONAL_LICENCES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_MIDDLE_NAME;
@@ -48,6 +50,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_ROLE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_SPECIALITIES;
 
+import java.util.Collections;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
@@ -92,7 +95,8 @@ public class TestDataStaff {
         .allowCopy(ALF_DOKTOR_ALLOW_COPY)
         .paTitles(ALF_DOKTOR_PA_TITLES)
         .specialities(ALF_DOKTOR_SPECIALITIES)
-        .role(ALF_DOKTOR_ROLE);
+        .role(ALF_DOKTOR_ROLE)
+        .healthCareProfessionalLicence(ALF_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES);
   }
 
   public static Staff.StaffBuilder alvaVardadmininstratorBuilder() {
@@ -109,7 +113,8 @@ public class TestDataStaff {
         .allowCopy(ALVA_VARDADMINISTRATOR_ALLOW_COPY)
         .paTitles(ALVA_VARDADMINISTRATOR_PA_TITLES)
         .specialities(ALVA_VARDADMINISTRATOR_SPECIALITIES)
-        .role(ALVA_VARDADMINISTRATOR_ROLE);
+        .role(ALVA_VARDADMINISTRATOR_ROLE)
+        .healthCareProfessionalLicence(Collections.emptyList());
   }
 
   public static Staff.StaffBuilder annaSjukskoterskaBuilder() {
@@ -126,7 +131,8 @@ public class TestDataStaff {
         .allowCopy(ANNA_SJUKSKOTERSKA_ALLOW_COPY)
         .paTitles(ANNA_SJUKSKOTERSKA_PA_TITLES)
         .specialities(ANNA_SJUKSKOTERSKA_SPECIALITIES)
-        .role(ANNA_SJUKSKOTERSKA_ROLE);
+        .role(ANNA_SJUKSKOTERSKA_ROLE)
+        .healthCareProfessionalLicence(ANNA_SJUKSKOTERSKA_HEALTH_CARE_PROFESSIONAL_LICENCES);
   }
 
   public static Staff.StaffBuilder bertilBarnmorskaBuilder() {
