@@ -28,6 +28,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_WORKPLACE_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FULLNAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_PA_TITLES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_SPECIALITIES;
@@ -56,6 +57,7 @@ import se.riv.clinicalprocess.healthcond.certificate.types.v3.ArbetsplatsKod;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.Befattning;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.HsaId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.IntygId;
+import se.riv.clinicalprocess.healthcond.certificate.types.v3.LegitimeratYrkeType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.PersonId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.Specialistkompetens;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.TypAvIntyg;
@@ -241,6 +243,23 @@ class XmlGeneratorCertificateV4Test {
         () -> assertEquals(expectedTwo.getCode(), specialistkompetens.get(1).getCode()),
         () -> assertEquals(expectedTwo.getDisplayName(),
             specialistkompetens.get(1).getDisplayName())
+    );
+  }
+
+  @Test
+  void shouldIncludeHoSPersonalLegitimeratYrke() {
+    final var expectedOne = new LegitimeratYrkeType();
+    expectedOne.setCode("N/A");
+    expectedOne.setDisplayName(AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES.get(0).value());
+
+    final var legitimeradeYrken = unmarshal(
+        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)
+    ).getIntyg().getSkapadAv().getLegitimeratYrke();
+
+    assertAll(
+        () -> assertEquals(expectedOne.getCode(), legitimeradeYrken.get(0).getCode()),
+        () -> assertEquals(expectedOne.getDisplayName(),
+            legitimeradeYrken.get(0).getDisplayName())
     );
   }
 

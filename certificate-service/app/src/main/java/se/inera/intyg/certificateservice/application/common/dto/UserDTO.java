@@ -23,6 +23,7 @@ public class UserDTO {
   Boolean blocked;
   Boolean allowCopy;
   AccessScopeTypeDTO accessScope;
+  List<String> healthCareProfessionalLicence;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class UserDTOBuilder {

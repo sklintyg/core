@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.application.common.ActionEvaluationFact
 import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.service.ReplaceCertificateDomainService;
-import se.inera.intyg.certificateservice.domain.user.model.ExternalReference;
+import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 
 @Service
 @RequiredArgsConstructor

@@ -17,10 +17,10 @@ import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
+import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
-import se.inera.intyg.certificateservice.domain.user.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
 @Getter

@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.testdata;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_MIDDLE_NAME;
@@ -39,6 +40,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_HEALTH_CARE_PROFESSIONAL_LICENCES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_MIDDLE_NAME;
@@ -72,7 +74,8 @@ public class TestDataStaff {
         .specialities(AJLA_DOCTOR_SPECIALITIES)
         .blocked(AJLA_DOCTOR_BLOCKED)
         .allowCopy(AJLA_DOCTOR_ALLOW_COPY)
-        .role(AJLA_DOCTOR_ROLE);
+        .role(AJLA_DOCTOR_ROLE)
+        .healthCareProfessionalLicence(AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES);
   }
 
   public static Staff.StaffBuilder alfDoktorBuilder() {
@@ -140,6 +143,7 @@ public class TestDataStaff {
         .allowCopy(BERTIL_BARNMORSKA_ALLOW_COPY)
         .paTitles(BERTIL_BARNMORSKA_PA_TITLES)
         .specialities(BERTIL_BARNMORSKA_SPECIALITIES)
-        .role(BERTIL_BARNMORSKA_ROLE);
+        .role(BERTIL_BARNMORSKA_ROLE)
+        .healthCareProfessionalLicence(BERTIL_BARNMORSKA_HEALTH_CARE_PROFESSIONAL_LICENCES);
   }
 }

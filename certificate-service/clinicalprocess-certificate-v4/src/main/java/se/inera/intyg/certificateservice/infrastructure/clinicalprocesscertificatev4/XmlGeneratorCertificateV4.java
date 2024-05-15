@@ -27,6 +27,7 @@ import se.riv.clinicalprocess.healthcond.certificate.types.v3.Befattning;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.DatePeriodType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.HsaId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.IntygId;
+import se.riv.clinicalprocess.healthcond.certificate.types.v3.LegitimeratYrkeType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.PersonId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.Specialistkompetens;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.TypAvIntyg;
@@ -198,6 +199,18 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
         )
         .forEach(
             specialistkompetens -> hosPersonal.getSpecialistkompetens().add(specialistkompetens)
+        );
+
+    certificate.certificateMetaData().issuer().healthCareProfessionalLicence().stream()
+        .map(professionalRole -> {
+              final var legitimeratYrkeType = new LegitimeratYrkeType();
+              legitimeratYrkeType.setCode(NOT_APPLICABLE);
+              legitimeratYrkeType.setDisplayName(professionalRole.value());
+              return legitimeratYrkeType;
+            }
+        )
+        .forEach(
+            legitimeratYrke -> hosPersonal.getLegitimeratYrke().add(legitimeratYrke)
         );
 
     hosPersonal.setEnhet(
