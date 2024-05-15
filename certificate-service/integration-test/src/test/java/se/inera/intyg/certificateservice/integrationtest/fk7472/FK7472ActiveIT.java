@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.integrationtest.fk7433;
+package se.inera.intyg.certificateservice.integrationtest.fk7472;
 
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -24,10 +24,10 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443.CertificateModelFactoryFK7443.QUESTION_PERIOD_ID;
-import static se.inera.intyg.certificateservice.integrationtest.fk7433.FK7443Constants.FK7443;
-import static se.inera.intyg.certificateservice.integrationtest.fk7433.FK7443Constants.VERSION;
-import static se.inera.intyg.certificateservice.integrationtest.fk7433.FK7443Constants.WRONG_VERSION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.QUESTION_PERIOD_ID;
+import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.FK7472;
+import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.VERSION;
+import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.WRONG_VERSION;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCertificateTypeInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customDeleteCertificateRequest;
@@ -124,14 +124,14 @@ import se.inera.intyg.certificateservice.testability.certificate.dto.Testability
 
 @ActiveProfiles({"integration-test", TESTABILITY_PROFILE})
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class FK7443ActiveIT {
+class FK7472ActiveIT {
 
   @LocalServerPort
   private int port;
 
   @DynamicPropertySource
   static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.fk7443.v1_0.active.from", () -> "2024-01-01T00:00:00");
+    registry.add("certificate.model.fk7472.v1_0.active.from", () -> "2024-01-01T00:00:00");
   }
 
   private final TestRestTemplate restTemplate;
@@ -142,7 +142,7 @@ class FK7443ActiveIT {
   private TestabilityApiUtil testabilityApi;
 
   @Autowired
-  public FK7443ActiveIT(TestRestTemplate restTemplate) {
+  public FK7472ActiveIT(TestRestTemplate restTemplate) {
     this.restTemplate = restTemplate;
   }
 
@@ -167,24 +167,24 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Hämta intygstyp när den är aktiv")
+  @DisplayName("FK7472 - Hämta intygstyp när den är aktiv")
   class GetCertificateTypeInfo {
 
     @Test
-    @DisplayName("FK7443 - Om aktiverad ska intygstypen returneras i listan av tillgängliga intygstyper")
-    void shallReturnFK7443WhenActive() {
+    @DisplayName("FK7472 - Om aktiverad ska intygstypen returneras i listan av tillgängliga intygstyper")
+    void shallReturnFK7472WhenActive() {
       final var response = api.certificateTypeInfo(
           defaultCertificateTypeInfoRequest()
       );
 
       assertNotNull(
-          certificateTypeInfo(response.getBody(), FK7443),
-          "Should contain %s as it is active!".formatted(FK7443)
+          certificateTypeInfo(response.getBody(), FK7472),
+          "Should contain %s as it is active!".formatted(FK7472)
       );
     }
 
     @Test
-    @DisplayName("FK7443 - Om aktiverad ska 'Skapa utkast' vara tillgänglig")
+    @DisplayName("FK7472 - Om aktiverad ska 'Skapa utkast' vara tillgänglig")
     void shallReturnResourceLinkCreateCertificate() {
       final var response = api.certificateTypeInfo(
           defaultCertificateTypeInfoRequest()
@@ -192,7 +192,7 @@ class FK7443ActiveIT {
 
       assertNotNull(
           resourceLink(
-              certificateTypeInfo(response.getBody(), FK7443),
+              certificateTypeInfo(response.getBody(), FK7472),
               ResourceLinkTypeDTO.CREATE_CERTIFICATE
           ),
           "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
@@ -200,7 +200,7 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om patienten är avliden ska inte 'Skapa utkast' vara tillgänglig")
+    @DisplayName("FK7472 - Om patienten är avliden ska inte 'Skapa utkast' vara tillgänglig")
     void shallNotReturnResourceLinkCreateCertificateIfPatientIsDeceased() {
       final var response = api.certificateTypeInfo(
           customCertificateTypeInfoRequest()
@@ -210,7 +210,7 @@ class FK7443ActiveIT {
 
       assertNull(
           resourceLink(
-              certificateTypeInfo(response.getBody(), FK7443),
+              certificateTypeInfo(response.getBody(), FK7472),
               ResourceLinkTypeDTO.CREATE_CERTIFICATE
           ),
           "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
@@ -218,7 +218,7 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om användaren är blockerad ska inte 'Skapa utkast' vara tillgänglig")
+    @DisplayName("FK7472 - Om användaren är blockerad ska inte 'Skapa utkast' vara tillgänglig")
     void shallNotReturnResourceLinkCreateCertificateIfUserIsBlocked() {
       final var response = api.certificateTypeInfo(
           customCertificateTypeInfoRequest()
@@ -232,7 +232,7 @@ class FK7443ActiveIT {
 
       assertNull(
           resourceLink(
-              certificateTypeInfo(response.getBody(), FK7443),
+              certificateTypeInfo(response.getBody(), FK7472),
               ResourceLinkTypeDTO.CREATE_CERTIFICATE
           ),
           "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
@@ -240,7 +240,7 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om användaren är blockerad och patienten avliden ska inte 'Skapa utkast' vara tillgänglig")
+    @DisplayName("FK7472 - Om användaren är blockerad och patienten avliden ska inte 'Skapa utkast' vara tillgänglig")
     void shallNotReturnResourceLinkCreateCertificateIfUserIsBlockedAndPatientIsDeceased() {
       final var response = api.certificateTypeInfo(
           customCertificateTypeInfoRequest()
@@ -255,7 +255,7 @@ class FK7443ActiveIT {
 
       assertNull(
           resourceLink(
-              certificateTypeInfo(response.getBody(), FK7443),
+              certificateTypeInfo(response.getBody(), FK7472),
               ResourceLinkTypeDTO.CREATE_CERTIFICATE
           ),
           "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
@@ -263,7 +263,7 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Vårdadmininstratör - Om patienten har skyddade personuppgifter ska inte 'Skapa utkast' vara tillgänglig")
+    @DisplayName("FK7472 - Vårdadmininstratör - Om patienten har skyddade personuppgifter ska inte 'Skapa utkast' vara tillgänglig")
     void shallNotReturnResourceLinkCreateCertificateIfUserIsCareAdminAndPatientIsProtected() {
       final var response = api.certificateTypeInfo(
           customCertificateTypeInfoRequest()
@@ -274,7 +274,7 @@ class FK7443ActiveIT {
 
       assertNull(
           resourceLink(
-              certificateTypeInfo(response.getBody(), FK7443),
+              certificateTypeInfo(response.getBody(), FK7472),
               ResourceLinkTypeDTO.CREATE_CERTIFICATE
           ),
           "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
@@ -282,7 +282,7 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Läkare - Om patienten har skyddade personuppgifter ska 'Skapa utkast' vara tillgänglig")
+    @DisplayName("FK7472 - Läkare - Om patienten har skyddade personuppgifter ska 'Skapa utkast' vara tillgänglig")
     void shallReturnResourceLinkCreateCertificateIfUserIsDoctorAndPatientIsProtected() {
       final var response = api.certificateTypeInfo(
           customCertificateTypeInfoRequest()
@@ -293,7 +293,7 @@ class FK7443ActiveIT {
 
       assertNotNull(
           resourceLink(
-              certificateTypeInfo(response.getBody(), FK7443),
+              certificateTypeInfo(response.getBody(), FK7472),
               ResourceLinkTypeDTO.CREATE_CERTIFICATE
           ),
           "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
@@ -302,18 +302,18 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Aktiva versioner")
+  @DisplayName("FK7472 - Aktiva versioner")
   class ExistsCertificateTypeInfo {
 
     @Test
-    @DisplayName("FK7443 - Aktiv version skall vara 1.0")
+    @DisplayName("FK7472 - Aktiv version skall vara 1.0")
     void shallReturnLatestVersionWhenTypeExists() {
       final var expectedCertificateModelId = CertificateModelIdDTO.builder()
-          .type(FK7443)
+          .type(FK7472)
           .version(VERSION)
           .build();
 
-      final var response = api.findLatestCertificateTypeVersion(FK7443);
+      final var response = api.findLatestCertificateTypeVersion(FK7472);
 
       assertEquals(
           expectedCertificateModelId,
@@ -323,14 +323,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Skapa utkast")
+  @DisplayName("FK7472 - Skapa utkast")
   class CreateCertificate {
 
     @Test
-    @DisplayName("FK7443 - Om utkastet framgångsrikt skapats skall utkastet returneras")
+    @DisplayName("FK7472 - Om utkastet framgångsrikt skapats skall utkastet returneras")
     void shallReturnCertificateWhenActive() {
       final var response = api.createCertificate(
-          defaultCreateCertificateRequest(FK7443, VERSION)
+          defaultCreateCertificateRequest(FK7472, VERSION)
       );
 
       assertNotNull(
@@ -340,10 +340,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om patienten är avliden skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om patienten är avliden skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403PatientIsDeceased() {
       final var response = api.createCertificate(
-          customCreateCertificateRequest(FK7443, VERSION)
+          customCreateCertificateRequest(FK7472, VERSION)
               .patient(ATLAS_REACT_ABRAHAMSSON_DTO)
               .build()
       );
@@ -352,10 +352,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om användaren är blockerad skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om användaren är blockerad skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403UserIsBlocked() {
       final var response = api.createCertificate(
-          customCreateCertificateRequest(FK7443, VERSION)
+          customCreateCertificateRequest(FK7472, VERSION)
               .user(
                   ajlaDoktorDtoBuilder()
                       .blocked(Boolean.TRUE)
@@ -368,10 +368,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om patient är avliden och användaren är blockerad skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om patient är avliden och användaren är blockerad skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403PatientIsDeceasedAndUserIsBlocked() {
       final var response = api.createCertificate(
-          customCreateCertificateRequest(FK7443, VERSION)
+          customCreateCertificateRequest(FK7472, VERSION)
               .patient(ATLAS_REACT_ABRAHAMSSON_DTO)
               .user(
                   ajlaDoktorDtoBuilder()
@@ -385,10 +385,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Läkare - Om patienten har skyddade personuppgifter skall utkastet returneras")
+    @DisplayName("FK7472 - Läkare - Om patienten har skyddade personuppgifter skall utkastet returneras")
     void shallReturnCertificateIfPatientIsProtectedPersonAndUserDoctor() {
       final var response = api.createCertificate(
-          customCreateCertificateRequest(FK7443, VERSION)
+          customCreateCertificateRequest(FK7472, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .user(AJLA_DOCTOR_DTO)
               .build()
@@ -401,10 +401,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Vårdadministratör - Om patienten har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Vårdadministratör - Om patienten har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403PatientIsProtectedPersonAndUserDoctor() {
       final var response = api.createCertificate(
-          customCreateCertificateRequest(FK7443, VERSION)
+          customCreateCertificateRequest(FK7472, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .user(ALVA_VARDADMINISTRATOR_DTO)
               .build()
@@ -414,10 +414,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om den efterfrågade versionen inte stöds skall felkod 400 (BAD_REQUEST) returneras")
+    @DisplayName("FK7472 - Om den efterfrågade versionen inte stöds skall felkod 400 (BAD_REQUEST) returneras")
     void shallReturn400IfVersionNotSupported() {
       final var response = api.createCertificate(
-          defaultCreateCertificateRequest(FK7443, WRONG_VERSION)
+          defaultCreateCertificateRequest(FK7472, WRONG_VERSION)
       );
 
       assertEquals(400, response.getStatusCode().value());
@@ -425,14 +425,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Finns intyget i tjänsten")
+  @DisplayName("FK7472 - Finns intyget i tjänsten")
   class ExistsCertificate {
 
     @Test
-    @DisplayName("FK7443 - Om intyget finns så returneras true")
+    @DisplayName("FK7472 - Om intyget finns så returneras true")
     void shallReturnTrueIfCertificateExists() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.certificateExists(
@@ -446,7 +446,7 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget inte finns lagrat så returneras false")
+    @DisplayName("FK7472 - Om intyget inte finns lagrat så returneras false")
     void shallReturnFalseIfCertificateDoesnt() {
       final var response = api.certificateExists("certificate-not-exists");
 
@@ -458,14 +458,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Hämta intyg")
+  @DisplayName("FK7472 - Hämta intyg")
   class GetCertificate {
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma mottagning skall det returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma mottagning skall det returneras")
     void shallReturnCertificateIfUnitIsSubUnitAndOnSameUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getCertificate(
@@ -480,10 +480,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det returneras")
     void shallReturnCertificateIfUnitIsCareUnitAndOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getCertificate(
@@ -500,10 +500,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma vårdenhet skall det returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma vårdenhet skall det returneras")
     void shallReturnCertificateIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
@@ -522,10 +522,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getCertificate(
@@ -537,10 +537,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getCertificate(
@@ -555,10 +555,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Vårdadministratör - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Vårdadministratör - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfPatientIsProtectedPersonAndUserIsCareAdmin() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
@@ -574,10 +574,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det returneras")
+    @DisplayName("FK7472 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det returneras")
     void shallReturnCertificateIfPatientIsProtectedPersonAndUserIsDoctor() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
@@ -597,14 +597,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Uppdatera svarsalternativ")
+  @DisplayName("FK7472 - Uppdatera svarsalternativ")
   class UpdateCertificate {
 
     @Test
-    @DisplayName("FK7443 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall svarsalternativ uppdateras")
+    @DisplayName("FK7472 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall svarsalternativ uppdateras")
     void shallUpdateDataIfUserIsDoctorAndPatientIsProtectedPerson() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
@@ -630,10 +630,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Vårdadmin - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Vårdadmin - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
     void shallNotUpdateDataIfUserIsCareAdminAndPatientIsProtectedPerson() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
@@ -652,10 +652,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall svarsalternativ uppdateras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall svarsalternativ uppdateras")
     void shallUpdateDataIfUnitIsCareUnitAndOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var questionId = "2";
@@ -680,10 +680,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma mottagning skall svarsalternativ uppdateras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma mottagning skall svarsalternativ uppdateras")
     void shallUpdateDataIfUnitIsSubUnitAndOnSameUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var questionId = "2";
@@ -708,10 +708,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma vårdenhet skall svarsalternativ uppdateras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma vårdenhet skall svarsalternativ uppdateras")
     void shallUpdateDataIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
@@ -738,10 +738,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget får ett uppdaterat värde för period ska svarsalternativ uppdateras")
+    @DisplayName("FK7472 - Om intyget får ett uppdaterat värde för period ska svarsalternativ uppdateras")
     void shallUpdateDataForPeriod() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
@@ -774,10 +774,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var certificate = certificate(testCertificates);
@@ -794,10 +794,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var certificate = certificate(testCertificates);
@@ -814,10 +814,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om utkastet sparas med en inaktuell revision av utkastet skall felkod 409 (CONFLICT) returneras")
+    @DisplayName("FK7472 - Om utkastet sparas med en inaktuell revision av utkastet skall felkod 409 (CONFLICT) returneras")
     void shallNotUpdateDataIfUserIsTryingToSaveWithAnOldRevision() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var certificate = certificate(testCertificates);
@@ -841,14 +841,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Ta bort utkast")
+  @DisplayName("FK7472 - Ta bort utkast")
   class DeleteCertificate {
 
     @Test
-    @DisplayName("FK7443 - Om utkastet är skapat på samma mottagning skall det gå att tas bort")
+    @DisplayName("FK7472 - Om utkastet är skapat på samma mottagning skall det gå att tas bort")
     void shallDeleteCertificateIfCertificateIsOnSameSubUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var certificateId = certificateId(testCertificates);
@@ -864,10 +864,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om utkastet är skapat på samma vårdenhet skall det gå att tas bort")
+    @DisplayName("FK7472 - Om utkastet är skapat på samma vårdenhet skall det gå att tas bort")
     void shallDeleteCertificateIfCertificateIsOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var certificateId = certificateId(testCertificates);
@@ -885,10 +885,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om utkastet är skapat på annan mottagning skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om utkastet är skapat på annan mottagning skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsSubUnitAndNotOnSameSubUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var certificateId = certificateId(testCertificates);
@@ -904,10 +904,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om utkastet är skapat på annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om utkastet är skapat på annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsCareUnitAndNotOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var certificateId = certificateId(testCertificates);
@@ -924,10 +924,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Vårdadmin - Om utkastet är skapat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Vårdadmin - Om utkastet är skapat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
     void shallNotDeleteDataIfUserIsCareAdminAndPatientIsProtectedPerson() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
@@ -946,18 +946,18 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Hämta tidigare intyg för patient")
+  @DisplayName("FK7472 - Hämta tidigare intyg för patient")
   class GetPatientCertificates {
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma mottagning skall det returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma mottagning skall det returneras")
     void shallReturnCertificateIfUnitIsSubUnitAndOnSameUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .patient(ALVE_REACT_ALFREDSSON_DTO)
               .build()
       );
@@ -975,16 +975,16 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma vårdenhet skall det returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma vårdenhet skall det returneras")
     void shallReturnCertificateIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
 
       testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .patient(ALVE_REACT_ALFREDSSON_DTO)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
@@ -1005,14 +1005,14 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det returneras")
     void shallReturnCertificateIfUnitIsCareUnitAndOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .patient(ALVE_REACT_ALFREDSSON_DTO)
               .build()
       );
@@ -1032,10 +1032,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det returneras")
+    @DisplayName("FK7472 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det returneras")
     void shallReturnCertificateIfPatientIsProtectedPersonAndUserIsDoctor() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
@@ -1056,10 +1056,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Vårdadministratör - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Vårdadministratör - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfPatientIsProtectedPersonAndUserIsCareAdmin() {
       testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
@@ -1075,10 +1075,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
       testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getPatientCertificates(
@@ -1093,16 +1093,16 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Hämta ej signerade utkast sökkriterier")
+  @DisplayName("FK7472 - Hämta ej signerade utkast sökkriterier")
   class GetUnitCertificatesInfo {
 
     @Test
-    @DisplayName("FK7443 - Returnera lista av personal som har sparat utkast på mottagning")
+    @DisplayName("FK7472 - Returnera lista av personal som har sparat utkast på mottagning")
     void shallReturnAListOfStaffOnTheSameSubUnit() {
       testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION),
-          defaultTestablilityCertificateRequest(FK7443, VERSION),
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION),
+          defaultTestablilityCertificateRequest(FK7472, VERSION),
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .user(ALVA_VARDADMINISTRATOR_DTO)
               .build()
       );
@@ -1123,16 +1123,16 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Returnera lista av personal som har sparat utkast på vårdenhet")
+    @DisplayName("FK7472 - Returnera lista av personal som har sparat utkast på vårdenhet")
     void shallReturnAListOfStaffOnTheSameCareUnit() {
       testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build(),
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build(),
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .user(ALVA_VARDADMINISTRATOR_DTO)
               .build()
@@ -1156,11 +1156,11 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Inkludera inte personal som har sparat utkast på annan mottagning")
+    @DisplayName("FK7472 - Inkludera inte personal som har sparat utkast på annan mottagning")
     void shallReturnAListOfStaffNotIncludingStaffOnDifferentSubUnit() {
       testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION),
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION),
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_HUDMOTTAGNINGEN_DTO)
               .user(ALVA_VARDADMINISTRATOR_DTO)
               .build()
@@ -1182,11 +1182,11 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Inkludera inte personal som har sparat utkast på annan vårdenhet")
+    @DisplayName("FK7472 - Inkludera inte personal som har sparat utkast på annan vårdenhet")
     void shallReturnAListOfStaffNotIncludingStaffOnDifferentCareUnit() {
       testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION),
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION),
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .careUnit(ALFA_VARDCENTRAL_DTO)
               .unit(ALFA_VARDCENTRAL_DTO)
               .user(ALVA_VARDADMINISTRATOR_DTO)
@@ -1212,14 +1212,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Hämta ej signerade utkast")
+  @DisplayName("FK7472 - Hämta ej signerade utkast")
   class GetUnitCertificates {
 
     @Test
-    @DisplayName("FK7443 - Returnera lista med utkast som har sparats på mottagning")
+    @DisplayName("FK7472 - Returnera lista med utkast som har sparats på mottagning")
     void shallReturnCertificatesOnTheSameSubUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getUnitCertificates(
@@ -1236,10 +1236,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Returnera lista med utkast som har sparats på vårdenhet")
+    @DisplayName("FK7472 - Returnera lista med utkast som har sparats på vårdenhet")
     void shallReturnCertificatesOnTheSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
@@ -1260,10 +1260,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Returnera lista med utkast som har sparats på mottagning inom vårdenhet")
+    @DisplayName("FK7472 - Returnera lista med utkast som har sparats på mottagning inom vårdenhet")
     void shallReturnCertificatesIssuedOnSubUnitOnTheSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getUnitCertificates(
@@ -1282,10 +1282,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera utkast som sparats på annan mottagning")
+    @DisplayName("FK7472 - Ej returnera utkast som sparats på annan mottagning")
     void shallNotReturnCertificatesOnDifferentSubUnit() {
       testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_HUDMOTTAGNINGEN_DTO)
               .build()
       );
@@ -1300,10 +1300,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera utkast som sparats på annan vårdenhet")
+    @DisplayName("FK7472 - Ej returnera utkast som sparats på annan vårdenhet")
     void shallNotReturnCertificatesOnDifferentCareUnit() {
       testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_VARDCENTRAL_DTO)
               .careUnit(ALFA_VARDCENTRAL_DTO)
               .build()
@@ -1321,10 +1321,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera utkast som sparats på vårdenheten när man är på mottagningen")
+    @DisplayName("FK7472 - Ej returnera utkast som sparats på vårdenheten när man är på mottagningen")
     void shallNotReturnCertificatesOnCareUnitWhenOnSubUnit() {
       testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
@@ -1341,10 +1341,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Returnera lista med utkast som har sparats datum efter från och med datum")
+    @DisplayName("FK7472 - Returnera lista med utkast som har sparats datum efter från och med datum")
     void shallReturnCertificatesSavedAfterFrom() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getUnitCertificates(
@@ -1368,10 +1368,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera utkast som har sparats datum före från och med datum")
+    @DisplayName("FK7472 - Ej returnera utkast som har sparats datum före från och med datum")
     void shallNotReturnCertificatesSavedBeforeFrom() {
       testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getUnitCertificates(
@@ -1391,10 +1391,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Returnera lista med utkast som har sparat datum före till och med datum")
+    @DisplayName("FK7472 - Returnera lista med utkast som har sparat datum före till och med datum")
     void shallReturnCertificatesSavedBeforeTo() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getUnitCertificates(
@@ -1418,10 +1418,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera utkast som har sparats datum efter till och med datum")
+    @DisplayName("FK7472 - Ej returnera utkast som har sparats datum efter till och med datum")
     void shallNotReturnCertificatesSavedAfterTo() {
       testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getUnitCertificates(
@@ -1441,10 +1441,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Returnera lista med utkast som har sparats på patienten")
+    @DisplayName("FK7472 - Returnera lista med utkast som har sparats på patienten")
     void shallReturnCertificatesSavedOnPatient() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getUnitCertificates(
@@ -1473,10 +1473,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera utkast som har sparats på annan patient")
+    @DisplayName("FK7472 - Ej returnera utkast som har sparats på annan patient")
     void shallNotReturnCertificatesSavedOnDifferentPatient() {
       testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getUnitCertificates(
@@ -1501,10 +1501,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Returnera lista med utkast som har sparats av vald användare")
+    @DisplayName("FK7472 - Returnera lista med utkast som har sparats av vald användare")
     void shallReturnCertificatesSavedBySameStaff() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getUnitCertificates(
@@ -1528,10 +1528,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera utkast som har sparats av annan användare")
+    @DisplayName("FK7472 - Ej returnera utkast som har sparats av annan användare")
     void shallNotReturnCertificatesSavedByDifferentStaff() {
       testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getUnitCertificates(
@@ -1551,10 +1551,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera utkast som har annan status")
+    @DisplayName("FK7472 - Ej returnera utkast som har annan status")
     void shallNotReturnCertificatesWithDifferentStatus() {
       testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getUnitCertificates(
@@ -1573,10 +1573,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera utkast som har signerad status")
+    @DisplayName("FK7472 - Ej returnera utkast som har signerad status")
     void shallNotReturnCertificatesWithSignedStatus() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .fillType(TestabilityFillTypeDTO.MAXIMAL)
               .build()
       );
@@ -1603,10 +1603,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Returnera utkast som inte är färdiga för signering när man söker på ej färdiga")
+    @DisplayName("FK7472 - Returnera utkast som inte är färdiga för signering när man söker på ej färdiga")
     void shallReturnDraftsWhichAreNotValid() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .fillType(TestabilityFillTypeDTO.EMPTY)
               .build()
       );
@@ -1632,10 +1632,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera utkast som är färdiga för signering när man söker på ej färdiga")
+    @DisplayName("FK7472 - Ej returnera utkast som är färdiga för signering när man söker på ej färdiga")
     void shallNotReturnDraftsWhichAreValidWhenQueryingInvalid() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var questionId = "2";
@@ -1673,10 +1673,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Returnera utkast som är färdiga för signering när man söker på färdiga")
+    @DisplayName("FK7472 - Returnera utkast som är färdiga för signering när man söker på färdiga")
     void shallReturnDraftsWhichAreValid() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var questionId = "2";
@@ -1718,10 +1718,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera utkast som är inte är färdig för signering när man söker på färdiga")
+    @DisplayName("FK7472 - Ej returnera utkast som är inte är färdig för signering när man söker på färdiga")
     void shallNotReturnDraftsWhichAreInvalidWhenQueryingValid() {
       testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .fillType(TestabilityFillTypeDTO.EMPTY)
               .build()
       );
@@ -1744,14 +1744,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Hämta signerade intyg")
+  @DisplayName("FK7472 - Hämta signerade intyg")
   class GetUnitCertificatesWhenSigned {
 
     @Test
-    @DisplayName("FK7443 - Returnera lista med intyg som har utfärdats på mottagning")
+    @DisplayName("FK7472 - Returnera lista med intyg som har utfärdats på mottagning")
     void shallReturnCertificatesOnTheSameSubUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       final var response = api.getUnitCertificates(
@@ -1774,10 +1774,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Returnera lista med intyg som har utfärdats på vårdenhet")
+    @DisplayName("FK7472 - Returnera lista med intyg som har utfärdats på vårdenhet")
     void shallReturnCertificatesOnTheSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION, SIGNED)
+          customTestabilityCertificateRequest(FK7472, VERSION, SIGNED)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
@@ -1803,10 +1803,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Returnera lista med intyg som har utfärdats på mottagning inom vårdenhet")
+    @DisplayName("FK7472 - Returnera lista med intyg som har utfärdats på mottagning inom vårdenhet")
     void shallReturnCertificatesIssuedOnSubUnitOnTheSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       final var response = api.getUnitCertificates(
@@ -1830,10 +1830,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera intyg som utfärdats på annan mottagning")
+    @DisplayName("FK7472 - Ej returnera intyg som utfärdats på annan mottagning")
     void shallNotReturnCertificatesOnDifferentSubUnit() {
       testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_HUDMOTTAGNINGEN_DTO)
               .build()
       );
@@ -1854,10 +1854,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera intyg som utfärdats på annan vårdenhet")
+    @DisplayName("FK7472 - Ej returnera intyg som utfärdats på annan vårdenhet")
     void shallNotReturnCertificatesOnDifferentCareUnit() {
       testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_VARDCENTRAL_DTO)
               .careUnit(ALFA_VARDCENTRAL_DTO)
               .build()
@@ -1880,10 +1880,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera intyg som utfärdats på vårdenheten när man är på mottagningen")
+    @DisplayName("FK7472 - Ej returnera intyg som utfärdats på vårdenheten när man är på mottagningen")
     void shallNotReturnCertificatesOnCareUnitWhenOnSubUnit() {
       testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
@@ -1905,10 +1905,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Returnera lista med intyg som har signerats datum efter från och med datum")
+    @DisplayName("FK7472 - Returnera lista med intyg som har signerats datum efter från och med datum")
     void shallReturnCertificatesSavedAfterFrom() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       final var response = api.getUnitCertificates(
@@ -1932,10 +1932,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera intyg som har signerats datum före från och med datum")
+    @DisplayName("FK7472 - Ej returnera intyg som har signerats datum före från och med datum")
     void shallNotReturnCertificatesSavedBeforeFrom() {
       testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getUnitCertificates(
@@ -1955,10 +1955,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Returnera lista med intyg som har signerats datum före till och med datum")
+    @DisplayName("FK7472 - Returnera lista med intyg som har signerats datum före till och med datum")
     void shallReturnCertificatesSavedBeforeTo() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       final var response = api.getUnitCertificates(
@@ -1982,10 +1982,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera intyg som har signerats datum efter till och med datum")
+    @DisplayName("FK7472 - Ej returnera intyg som har signerats datum efter till och med datum")
     void shallNotReturnCertificatesSavedAfterTo() {
       testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getUnitCertificates(
@@ -2005,10 +2005,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Returnera lista med intyg som har utfärdats på patienten")
+    @DisplayName("FK7472 - Returnera lista med intyg som har utfärdats på patienten")
     void shallReturnCertificatesSavedOnPatient() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       final var response = api.getUnitCertificates(
@@ -2037,10 +2037,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera intyg som har utfärdats på annan patient")
+    @DisplayName("FK7472 - Ej returnera intyg som har utfärdats på annan patient")
     void shallNotReturnCertificatesSavedOnDifferentPatient() {
       testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getUnitCertificates(
@@ -2065,10 +2065,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Returnera lista med intyg som har signerats av vald användare")
+    @DisplayName("FK7472 - Returnera lista med intyg som har signerats av vald användare")
     void shallReturnCertificatesSavedBySameStaff() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       final var response = api.getUnitCertificates(
@@ -2092,10 +2092,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera intyg som har signerats av annan användare")
+    @DisplayName("FK7472 - Ej returnera intyg som har signerats av annan användare")
     void shallNotReturnCertificatesSavedByDifferentStaff() {
       testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getUnitCertificates(
@@ -2115,10 +2115,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Ej returnera intyg som inte har signerats")
+    @DisplayName("FK7472 - Ej returnera intyg som inte har signerats")
     void shallNotReturnCertificatesWithDifferentStatus() {
       testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getUnitCertificates(
@@ -2138,14 +2138,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Validera utkast")
+  @DisplayName("FK7472 - Validera utkast")
   class ValidateCertificate {
 
     @Test
-    @DisplayName("FK7443 - Om utkastet innehåller korrekta värden skall utkastet vara klar för signering")
+    @DisplayName("FK7472 - Om utkastet innehåller korrekta värden skall utkastet vara klar för signering")
     void shallReturnEmptyListOfErrorsIfDateIsCorrect() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var questionId = "2";
@@ -2169,10 +2169,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om utkastet innehåller 'symtom' längre än 318 tecken ska ett valideringsmeddelande visas.")
+    @DisplayName("FK7472 - Om utkastet innehåller 'symtom' längre än 318 tecken ska ett valideringsmeddelande visas.")
     void shallReturnListOfErrorsIfSymtomIsLongerThanLimit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var questionId = "2";
@@ -2215,10 +2215,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om utkastet saknar 'symtom' skall valideringsfel returneras")
+    @DisplayName("FK7472 - Om utkastet saknar 'symtom' skall valideringsfel returneras")
     void shallReturnListOfErrorsIfTextOfSymtomIsMissing() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var questionId = "2";
@@ -2250,10 +2250,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om utkastet saknar 'period' skall valideringsfel returneras")
+    @DisplayName("FK7472 - Om utkastet saknar 'period' skall valideringsfel returneras")
     void shallReturnListOfErrorsIfDateRangeListOfPeriodIsMissing() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var certificate = certificate(testCertificates);
@@ -2285,10 +2285,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om utkastet har en icke komplett 'period' skall valideringsfel returneras")
+    @DisplayName("FK7472 - Om utkastet har en icke komplett 'period' skall valideringsfel returneras")
     void shallReturnListOfErrorsIfDateRangeListOfPeriodIsNotComplete() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var certificate = certificate(testCertificates);
@@ -2331,10 +2331,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om utkastet saknar 'Vårdenhetens adress' skall valideringsfel returneras")
+    @DisplayName("FK7472 - Om utkastet saknar 'Vårdenhetens adress' skall valideringsfel returneras")
     void shallReturnListOfErrorsIfMissingUnitContactAddress() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var certificate = updateUnit(
@@ -2372,10 +2372,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om utkastet saknar 'Vårdenhetens postnummer' skall valideringsfel returneras")
+    @DisplayName("FK7472 - Om utkastet saknar 'Vårdenhetens postnummer' skall valideringsfel returneras")
     void shallReturnListOfErrorsIfMissingUnitContactZipCode() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var certificate = updateUnit(
@@ -2413,10 +2413,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om utkastet saknar 'Vårdenhetens postort' skall valideringsfel returneras")
+    @DisplayName("FK7472 - Om utkastet saknar 'Vårdenhetens postort' skall valideringsfel returneras")
     void shallReturnListOfErrorsIfMissingUnitContactCity() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var certificate = updateUnit(
@@ -2454,10 +2454,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om utkastet saknar 'Vårdenhetens telefonnummer' skall valideringsfel returneras")
+    @DisplayName("FK7472 - Om utkastet saknar 'Vårdenhetens telefonnummer' skall valideringsfel returneras")
     void shallReturnListOfErrorsIfMissingUnitContactPhoneNumber() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var certificate = updateUnit(
@@ -2496,14 +2496,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Hämta intygsxml")
+  @DisplayName("FK7472 - Hämta intygsxml")
   class GetCertificateXml {
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma mottagning skall det returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma mottagning skall det returneras")
     void shallReturnCertificateXMLIfUnitIsSubUnitAndIssuedOnSameSubUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getCertificateXml(
@@ -2523,10 +2523,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det returneras")
     void shallReturnCertificateXMLIfUnitIsCareUnitAndOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getCertificateXml(
@@ -2548,10 +2548,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma vårdenhet skall det returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma vårdenhet skall det returneras")
     void shallReturnCertificateXMLIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
@@ -2575,10 +2575,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getCertificateXml(
@@ -2592,10 +2592,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.getCertificateXml(
@@ -2610,10 +2610,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Vårdadministratör - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Vårdadministratör - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfPatientIsProtectedPersonAndUserIsCareAdmin() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
@@ -2629,10 +2629,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det returneras")
+    @DisplayName("FK7472 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det returneras")
     void shallReturnCertificateXMLIfPatientIsProtectedPersonAndUserIsDoctor() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
@@ -2655,14 +2655,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Signera")
+  @DisplayName("FK7472 - Signera")
   class SignCertificate {
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma mottagning skall det gå att signera")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma mottagning skall det gå att signera")
     void shallSuccessfullySignIfUnitIsSubUnitAndIssuedOnSameSubUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.signCertificate(
@@ -2679,10 +2679,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det gå att signera")
+    @DisplayName("FK7472 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det gå att signera")
     void shallSuccessfullySignIfUnitIsCareUnitAndOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.signCertificate(
@@ -2701,10 +2701,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma vårdenhet skall det gå att signera")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma vårdenhet skall det gå att signera")
     void shallSuccessfullySignIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
@@ -2725,10 +2725,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.signCertificate(
@@ -2743,10 +2743,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.signCertificate(
@@ -2762,10 +2762,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om användaren har rollen barnmorska ska intyget gå att signeras")
+    @DisplayName("FK7472 - Om användaren har rollen barnmorska ska intyget gå att signeras")
     void shallSuccessfullySignIfRoleIsMidwife() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.signCertificate(
@@ -2784,10 +2784,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Vårdadministratör - Felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Vårdadministratör - Felkod 403 (FORBIDDEN) returneras")
     void shallReturn403UserIsCareAdmin() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.signCertificate(
@@ -2802,10 +2802,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det returneras")
+    @DisplayName("FK7472 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det returneras")
     void shallSuccessfullySignIfPatientIsProtectedPersonAndUserIsDoctor() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
@@ -2823,10 +2823,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget inte är klart för signering skall felkod 400 (BAD_REQUEST) returneras")
+    @DisplayName("FK7472 - Om intyget inte är klart för signering skall felkod 400 (BAD_REQUEST) returneras")
     void shallReturn403IfCertificateNotValid() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .fillType(TestabilityFillTypeDTO.EMPTY)
               .build()
       );
@@ -2841,10 +2841,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om signatur saknas skall felkod 400 (BAD_REQUEST) returneras")
+    @DisplayName("FK7472 - Om signatur saknas skall felkod 400 (BAD_REQUEST) returneras")
     void shallReturn403IfSignatureNotValid() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.signCertificate(
@@ -2859,10 +2859,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om man försöker signera med en inaktuell revision skall felkod 400 (BAD_REQUEST) returneras")
+    @DisplayName("FK7472 - Om man försöker signera med en inaktuell revision skall felkod 400 (BAD_REQUEST) returneras")
     void shallReturn403IfVersionNotValid() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.signCertificate(
@@ -2877,10 +2877,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget signeras ska ett meddelande läggas på AMQn")
+    @DisplayName("FK7472 - Om intyget signeras ska ett meddelande läggas på AMQn")
     void shallSuccessfullyAddMessageOfSigningOnAMQ() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION)
+          customTestabilityCertificateRequest(FK7472, VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
@@ -2909,14 +2909,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Skicka")
+  @DisplayName("FK7472 - Skicka")
   class SendCertificate {
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma mottagning skall det gå att skicka")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma mottagning skall det gå att skicka")
     void shallSuccessfullySendIfUnitIsSubUnitAndIssuedOnSameSubUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       final var response = api.sendCertificate(
@@ -2932,10 +2932,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det gå att skicka")
+    @DisplayName("FK7472 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det gå att skicka")
     void shallSuccessfullySendIfUnitIsCareUnitAndOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       final var response = api.sendCertificate(
@@ -2951,10 +2951,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma vårdenhet skall det gå att skicka")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma vårdenhet skall det gå att skicka")
     void shallSuccessfullySendIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION, SIGNED)
+          customTestabilityCertificateRequest(FK7472, VERSION, SIGNED)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
@@ -2974,10 +2974,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget skickas ska ett meddelande läggas på AMQn")
+    @DisplayName("FK7472 - Om intyget skickas ska ett meddelande läggas på AMQn")
     void shallSuccessfullyAddMessageToAMQWhenSendingCertificate() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION, SIGNED)
+          customTestabilityCertificateRequest(FK7472, VERSION, SIGNED)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
@@ -3004,10 +3004,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       final var response = api.sendCertificate(
@@ -3021,10 +3021,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       final var response = api.sendCertificate(
@@ -3039,10 +3039,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Vårdadministratör - Felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Vårdadministratör - Felkod 403 (FORBIDDEN) returneras")
     void shallReturn403UserIsCareAdmin() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       final var response = api.sendCertificate(
@@ -3056,10 +3056,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det gå att skicka")
+    @DisplayName("FK7472 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det gå att skicka")
     void shallSuccessfullySendIfPatientIsProtectedPersonAndUserIsDoctor() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION, SIGNED)
+          customTestabilityCertificateRequest(FK7472, VERSION, SIGNED)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
@@ -3077,10 +3077,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget inte är signerat skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget inte är signerat skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfCertificateNotSigned() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.sendCertificate(
@@ -3092,10 +3092,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget redan är skickat skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget redan är skickat skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfCertificateIsAlreadySent() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       api.sendCertificate(
@@ -3113,14 +3113,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Intern api för Intygstjänsten")
+  @DisplayName("FK7472 - Intern api för Intygstjänsten")
   class InternalApi {
 
     @Test
-    @DisplayName("FK7443 - Signerat intyg skall gå att hämta från intern api:et")
+    @DisplayName("FK7472 - Signerat intyg skall gå att hämta från intern api:et")
     void shallReturnSignedCertificate() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       api.signCertificate(
@@ -3134,7 +3134,7 @@ class FK7443ActiveIT {
       assertAll(
           () -> assertEquals(certificateId(testCertificates),
               certificateInternalXmlResponse(response).getCertificateId()),
-          () -> assertEquals(FK7443, certificateInternalXmlResponse(response).getCertificateType()),
+          () -> assertEquals(FK7472, certificateInternalXmlResponse(response).getCertificateType()),
           () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ID,
               certificateInternalXmlResponse(response).getUnit().getUnitId()),
           () -> assertNull(certificateInternalXmlResponse(response).getRevoked()),
@@ -3146,10 +3146,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Makulerat intyg skall gå att hämta från intern api:et")
+    @DisplayName("FK7472 - Makulerat intyg skall gå att hämta från intern api:et")
     void shallReturnRevokedCertificate() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       api.revokeCertificate(
@@ -3162,7 +3162,7 @@ class FK7443ActiveIT {
       assertAll(
           () -> assertEquals(certificateId(testCertificates),
               certificateInternalXmlResponse(response).getCertificateId()),
-          () -> assertEquals(FK7443, certificateInternalXmlResponse(response).getCertificateType()),
+          () -> assertEquals(FK7472, certificateInternalXmlResponse(response).getCertificateType()),
           () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ID,
               certificateInternalXmlResponse(response).getUnit().getUnitId()),
           () -> assertNotNull(certificateInternalXmlResponse(response).getRevoked()),
@@ -3174,10 +3174,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Skickat intyg skall gå att hämta från intern api:et")
+    @DisplayName("FK7472 - Skickat intyg skall gå att hämta från intern api:et")
     void shallReturnSentCertificate() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       api.sendCertificate(
@@ -3190,7 +3190,7 @@ class FK7443ActiveIT {
       assertAll(
           () -> assertEquals(certificateId(testCertificates),
               certificateInternalXmlResponse(response).getCertificateId()),
-          () -> assertEquals(FK7443, certificateInternalXmlResponse(response).getCertificateType()),
+          () -> assertEquals(FK7472, certificateInternalXmlResponse(response).getCertificateType()),
           () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ID,
               certificateInternalXmlResponse(response).getUnit().getUnitId()),
           () -> assertNotNull(certificateInternalXmlResponse(response).getRecipient()),
@@ -3204,14 +3204,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Makulera")
+  @DisplayName("FK7472 - Makulera")
   class RevokeCertificate {
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma mottagning skall det gå att makulera")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma mottagning skall det gå att makulera")
     void shallSuccessfullyRevokeIfUnitIsSubUnitAndIssuedOnSameSubUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       final var response = api.revokeCertificate(
@@ -3226,10 +3226,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det gå att makulera")
+    @DisplayName("FK7472 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det gå att makulera")
     void shallSuccessfullyRevokeIfUnitIsCareUnitAndOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       final var response = api.revokeCertificate(
@@ -3244,10 +3244,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma vårdenhet skall det gå att makulera")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma vårdenhet skall det gå att makulera")
     void shallSuccessfullyRevokeIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION, SIGNED)
+          customTestabilityCertificateRequest(FK7472, VERSION, SIGNED)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
@@ -3266,10 +3266,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget makuleras ska ett meddelande läggas på AMQn")
+    @DisplayName("FK7472 - Om intyget makuleras ska ett meddelande läggas på AMQn")
     void shallSuccessfullyAddMessageToAMQWhenRevokingCertificate() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       api.revokeCertificate(
@@ -3292,10 +3292,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       final var response = api.revokeCertificate(
@@ -3309,10 +3309,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       final var response = api.revokeCertificate(
@@ -3327,10 +3327,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Vårdadministratör - Felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Vårdadministratör - Felkod 403 (FORBIDDEN) returneras")
     void shallReturn403UserIsCareAdmin() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
       final var response = api.revokeCertificate(
@@ -3344,10 +3344,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det gå att makulera")
+    @DisplayName("FK7472 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det gå att makulera")
     void shallSuccessfullyRevokeIfPatientIsProtectedPersonAndUserIsDoctor() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, VERSION, SIGNED)
+          customTestabilityCertificateRequest(FK7472, VERSION, SIGNED)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
@@ -3364,10 +3364,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget inte är signerat skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget inte är signerat skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfCertificateNotSigned() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       final var response = api.revokeCertificate(
@@ -3379,10 +3379,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget redan är makulerat skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget redan är makulerat skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfCertificateIsAlreadyRevoked() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, VERSION)
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
       api.revokeCertificate(
@@ -3400,14 +3400,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Hämta intygspdf")
+  @DisplayName("FK7472 - Hämta intygspdf")
   class GetCertificatePdf {
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma mottagning skall pdf returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma mottagning skall pdf returneras")
     void shallReturnCertificatePdfIfUnitIsSubUnitAndOnSameUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION)
       );
 
       final var response = api.getCertificatePdf(
@@ -3422,10 +3422,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall pdf returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall pdf returneras")
     void shallReturnCertificatePdfIfUnitIsCareUnitAndOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION)
       );
 
       final var response = api.getCertificatePdf(
@@ -3442,10 +3442,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma vårdenhet skall pdf returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma vårdenhet skall pdf returneras")
     void shallReturnCertificatePdfIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+          customTestabilityCertificateRequest(FK7472, FK7472Constants.VERSION)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
@@ -3464,10 +3464,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION)
       );
 
       final var response = api.getCertificatePdf(
@@ -3479,10 +3479,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION)
       );
 
       final var response = api.getCertificatePdf(
@@ -3497,10 +3497,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Vårdadministratör - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Vårdadministratör - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfPatientIsProtectedPersonAndUserIsCareAdmin() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+          customTestabilityCertificateRequest(FK7472, FK7472Constants.VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
@@ -3516,10 +3516,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall pdf returneras")
+    @DisplayName("FK7472 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall pdf returneras")
     void shallReturnCertificatePdfIfPatientIsProtectedPersonAndUserIsDoctor() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+          customTestabilityCertificateRequest(FK7472, FK7472Constants.VERSION)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
@@ -3538,10 +3538,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är signerat skall pdf returneras")
+    @DisplayName("FK7472 - Om intyget är signerat skall pdf returneras")
     void shallReturnSignedCertificatePdf() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
       final var response = api.getCertificatePdf(
@@ -3556,10 +3556,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är signerat och skickat skall pdf returneras")
+    @DisplayName("FK7472 - Om intyget är signerat och skickat skall pdf returneras")
     void shallReturnSentCertificatePdf() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
       api.sendCertificate(
@@ -3580,14 +3580,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Utökad behörighet vid djupintegration utan SVOD")
+  @DisplayName("FK7472 - Utökad behörighet vid djupintegration utan SVOD")
   class AccessLevelsDeepIntegration {
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall det gå att läsa intyget")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall det gå att läsa intyget")
     void shallReturnCertificateIfOnDifferentUnitButSameCareProvider() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION)
       );
 
       final var response = api.getCertificate(
@@ -3607,10 +3607,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall det gå att hämta PDF")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall det gå att hämta PDF")
     void shallReturnPdfIfOnDifferentUnitButSameCareProvider() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION)
       );
 
       final var response = api.getCertificatePdf(
@@ -3630,10 +3630,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall felkod 403 (FORBIDDEN) returneras vid skickande av intyg")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall felkod 403 (FORBIDDEN) returneras vid skickande av intyg")
     void shallNotAllowToSendOnDifferentUnitButSameCareProvider() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION)
       );
 
       final var response = api.sendCertificate(
@@ -3651,14 +3651,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Utökad behörighet vid djupintegration och SVOD (sjf=true)")
+  @DisplayName("FK7472 - Utökad behörighet vid djupintegration och SVOD (sjf=true)")
   class AccessLevelsSVOD {
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat inom en annan vårdgivare skall det gå att läsa intyget")
+    @DisplayName("FK7472 - Om intyget är utfärdat inom en annan vårdgivare skall det gå att läsa intyget")
     void shallReturnCertificateIfOnDifferentUnitButSameCareProvider() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION)
       );
 
       final var response = api.getCertificate(
@@ -3678,10 +3678,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall felkod 403 (FORBIDDEN) returneras vid hämtning av PDF")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall felkod 403 (FORBIDDEN) returneras vid hämtning av PDF")
     void shallReturnPdfIfOnDifferentUnitButSameCareProvider() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION)
       );
 
       final var response = api.getCertificatePdf(
@@ -3698,10 +3698,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall felkod 403 (FORBIDDEN) returneras vid skickande av intyg")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall felkod 403 (FORBIDDEN) returneras vid skickande av intyg")
     void shallNotAllowToSendOnDifferentUnitButSameCareProvider() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION)
       );
 
       final var response = api.sendCertificate(
@@ -3719,14 +3719,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Ersätta")
+  @DisplayName("FK7472 - Ersätta")
   class ReplaceCertificate {
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma mottagning skall det gå att ersätta")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma mottagning skall det gå att ersätta")
     void shallSuccessfullyReplaceIfUnitIsSubUnitAndIssuedOnSameSubUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
       final var response = api.replaceCertificate(
@@ -3744,10 +3744,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det gå att ersätta")
+    @DisplayName("FK7472 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det gå att ersätta")
     void shallSuccessfullyReplaceIfUnitIsCareUnitAndOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
       final var response = api.replaceCertificate(
@@ -3765,10 +3765,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma vårdenhet skall det gå att ersätta")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma vårdenhet skall det gå att ersätta")
     void shallSuccessfullyReplaceIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          customTestabilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
@@ -3790,10 +3790,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
       final var response = api.replaceCertificate(
@@ -3807,10 +3807,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
       final var response = api.replaceCertificate(
@@ -3825,10 +3825,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Vårdadministratör - Felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Vårdadministratör - Felkod 403 (FORBIDDEN) returneras")
     void shallReturn403UserIsCareAdmin() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
       final var response = api.replaceCertificate(
@@ -3842,10 +3842,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det gå att ersätta")
+    @DisplayName("FK7472 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det gå att ersätta")
     void shallSuccessfullyRevokeIfPatientIsProtectedPersonAndUserIsDoctor() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          customTestabilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
@@ -3865,10 +3865,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget inte är signerat skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget inte är signerat skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfCertificateNotSigned() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION)
       );
 
       final var response = api.replaceCertificate(
@@ -3880,10 +3880,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om användaren är blockerad ska inte 'Ersätt intyg' vara tillgänglig")
+    @DisplayName("FK7472 - Om användaren är blockerad ska inte 'Ersätt intyg' vara tillgänglig")
     void shallReturn403IfUserIsBlocked() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
       final var response = api.replaceCertificate(
@@ -3901,10 +3901,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget redan ersatts så ska felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget redan ersatts så ska felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfCertificateAlreadyIsReplaced() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
       api.replaceCertificate(
@@ -3922,14 +3922,14 @@ class FK7443ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7443 - Förnya")
+  @DisplayName("FK7472 - Förnya")
   class RenewCertificate {
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma mottagning skall det gå att förnya")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma mottagning skall det gå att förnya")
     void shallSuccessfullyRenewIfUnitIsSubUnitAndIssuedOnSameSubUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
       final var response = api.renewCertificate(
@@ -3947,10 +3947,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det gå att förnya")
+    @DisplayName("FK7472 - Om intyget är utfärdat på mottagning men på samma vårdenhet skall det gå att förnya")
     void shallSuccessfullyRenewIfUnitIsCareUnitAndOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
       final var response = api.renewCertificate(
@@ -3968,10 +3968,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på samma vårdenhet skall det gå att förnya")
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma vårdenhet skall det gå att förnya")
     void shallSuccessfullyRenewIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          customTestabilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
               .unit(ALFA_MEDICINCENTRUM_DTO)
               .build()
       );
@@ -3993,10 +3993,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
       final var response = api.renewCertificate(
@@ -4010,10 +4010,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
       final var response = api.renewCertificate(
@@ -4028,10 +4028,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Vårdadministratör - Felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Vårdadministratör - Felkod 403 (FORBIDDEN) returneras")
     void shallReturn403UserIsCareAdmin() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
       final var response = api.renewCertificate(
@@ -4045,10 +4045,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det gå att förnya")
+    @DisplayName("FK7472 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det gå att förnya")
     void shallSuccessfullyRenewIfPatientIsProtectedPersonAndUserIsDoctor() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          customTestabilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
@@ -4068,10 +4068,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget inte är signerat skall felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7472 - Om intyget inte är signerat skall felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfCertificateNotSigned() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION)
       );
 
       final var response = api.renewCertificate(
@@ -4083,10 +4083,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om användaren är blockerad ska inte 'Förnya intyg' vara tillgänglig")
+    @DisplayName("FK7472 - Om användaren är blockerad ska inte 'Förnya intyg' vara tillgänglig")
     void shallReturn403IfUserIsBlocked() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
       final var response = api.renewCertificate(
@@ -4104,10 +4104,10 @@ class FK7443ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7443 - Om intyget redan förnyats så ska det gå att förnya pånytt")
+    @DisplayName("FK7472 - Om intyget redan förnyats så ska det gå att förnya pånytt")
     void shallSuccessfullyRenewIfAlreadyRenewed() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7443, FK7443Constants.VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
       api.renewCertificate(

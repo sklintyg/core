@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -7,13 +7,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7443CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7472CertificateBuilder;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.CHECKED_BOX_VALUE;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService.PATIENT_ID_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService.PERIOD_FIELD_ID_PREFIX;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService.QUESTION_PERIOD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService.QUESTION_SYMPTOM_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService.SYMPTOM_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.FK7472PdfFillService.PATIENT_ID_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.FK7472PdfFillService.PERIOD_FIELD_ID_PREFIX;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.FK7472PdfFillService.QUESTION_PERIOD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.FK7472PdfFillService.QUESTION_SYMPTOM_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.FK7472PdfFillService.SYMPTOM_FIELD_ID;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -38,7 +38,7 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfDateRangeL
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfTextValueGenerator;
 
 @ExtendWith(MockitoExtension.class)
-class FK7443PdfFillServiceTest {
+class FK7472PdfFillServiceTest {
 
   private static final String TEXT = "Ett exempel på en diagnos, J10, och även symtom: hosta och feber.";
   private static final PdfField SYMPTOM_FIELD = PdfField.builder()
@@ -91,34 +91,34 @@ class FK7443PdfFillServiceTest {
   PdfDateRangeListValueGenerator pdfDateRangeListValueGenerator;
 
   @InjectMocks
-  private FK7443PdfFillService fk7443PdfFillService;
+  private FK7472PdfFillService fk7472PdfFillService;
 
   @Test
   void shouldReturnPatientIdFormId() {
-    assertEquals(PATIENT_ID_FIELD_ID, fk7443PdfFillService.getPatientIdFieldId());
+    assertEquals(PATIENT_ID_FIELD_ID, fk7472PdfFillService.getPatientIdFieldId());
   }
 
   @Test
   void shouldReturnAvailableMcid() {
-    assertEquals(100, fk7443PdfFillService.getAvailableMcid());
+    assertEquals(100, fk7472PdfFillService.getAvailableMcid());
   }
 
   @Test
   void shouldReturnSignedTagIndex() {
-    assertEquals(34, fk7443PdfFillService.getSignatureTagIndex());
+    assertEquals(34, fk7472PdfFillService.getSignatureTagIndex());
   }
 
   @Test
   void shouldReturnGeneratorType() {
     assertEquals(
-        fk7443CertificateBuilder().build().certificateModel().id().type(),
-        fk7443PdfFillService.getType()
+        fk7472CertificateBuilder().build().certificateModel().id().type(),
+        fk7472PdfFillService.getType()
     );
   }
 
   @Test
   void shouldNotSetValueIfNotProvided() {
-    final var result = fk7443PdfFillService.getFields(
+    final var result = fk7472PdfFillService.getFields(
         buildCertificate(Collections.emptyList())
     );
 
@@ -146,7 +146,7 @@ class FK7443PdfFillServiceTest {
 
       @Test
       void shouldSetValueIfProvided() {
-        final var result = fk7443PdfFillService.getFields(
+        final var result = fk7472PdfFillService.getFields(
             buildCertificate(List.of(SYMPTOM_ELEMENT_DATA, PERIOD_ELEMENT_DATA))
         );
 
@@ -160,7 +160,7 @@ class FK7443PdfFillServiceTest {
 
       @Test
       void shouldSetValueIfProvided() {
-        final var result = fk7443PdfFillService.getFields(
+        final var result = fk7472PdfFillService.getFields(
             buildCertificate(List.of(SYMPTOM_ELEMENT_DATA, PERIOD_ELEMENT_DATA))
         );
 
@@ -174,7 +174,7 @@ class FK7443PdfFillServiceTest {
 
       @Test
       void shouldNotSetValueIfNotProvided() {
-        final var result = fk7443PdfFillService.getFields(
+        final var result = fk7472PdfFillService.getFields(
             buildCertificate(Collections.emptyList())
         );
 

@@ -7,7 +7,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
 import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.FK7210;
 import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.VERSION;
-import static se.inera.intyg.certificateservice.integrationtest.fk7433.FK7443Constants.FK7443;
+import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.FK7472;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
 import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
@@ -134,7 +134,7 @@ class FK7210CitizenIT {
     void shallReturnListOfCertificatesIfAvailableForCitizen() {
       testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7210, VERSION, SIGNED),
-          defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED),
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED),
           defaultTestablilityCertificateRequest(FK7210, VERSION, SIGNED)
       );
 

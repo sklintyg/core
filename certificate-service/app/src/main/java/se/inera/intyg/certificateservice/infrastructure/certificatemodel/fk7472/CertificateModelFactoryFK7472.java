@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.EN_ATTANDEL;
@@ -37,12 +37,12 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.Certifi
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateRecipientFactory;
 
 @Component
-public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
+public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
 
   private static final short LIMIT = 318;
-  @Value("${certificate.model.fk7443.v1_0.active.from}")
+  @Value("${certificate.model.fk7472.v1_0.active.from}")
   private LocalDateTime activeFrom;
-  private static final String TYPE = "fk7443";
+  private static final String TYPE = "fk7472";
   private static final String VERSION = "1.0";
   private static final String NAME = "Intyg om tillfällig föräldrapenning";
   private static final String DESCRIPTION = """
@@ -58,7 +58,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
       <p>För barn som omfattas av LSS (lagen om stöd och service till vissa funktionshindrade) behöver ett intyg från läkare eller sjuksköterska skickas till Försäkringskassan från och med den åttonde dagen i vårdperioden.\s
       Intyget behövs vid tillkommande sjukdom eller en försämring av grundsjukdomen.</p>
       """;
-  public static final CertificateModelId FK7443_V1_0 = CertificateModelId.builder()
+  public static final CertificateModelId FK7472_V1_0 = CertificateModelId.builder()
       .type(new CertificateType(TYPE))
       .version(new CertificateVersion(VERSION))
       .build();
@@ -71,14 +71,14 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
   public static final ElementId QUESTION_PERIOD_ID = new ElementId("3");
   private static final String QUESTION_PERIOD_FIELD_ID = "3.1";
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
-      "fk7443/schematron/itfp.v1.sch");
+      "fk7472/schematron/itfp.v1.sch");
 
-  public static final String PDF_FK_7443_PDF = "fk7443/pdf/fk7443_v1.pdf";
+  public static final String PDF_FK_7472_PDF = "fk7472/pdf/fk7472_v1.pdf";
 
   @Override
   public CertificateModel create() {
     return CertificateModel.builder()
-        .id(FK7443_V1_0)
+        .id(FK7472_V1_0)
         .type(
             new Code(
                 "ITFP",
@@ -139,7 +139,7 @@ public class CertificateModelFactoryFK7443 implements CertificateModelFactory {
                 issuingUnitContactInfo()
             )
         )
-        .pdfTemplatePath(PDF_FK_7443_PDF)
+        .pdfTemplatePath(PDF_FK_7472_PDF)
         .schematronPath(SCHEMATRON_PATH)
         .build();
   }

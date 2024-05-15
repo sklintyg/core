@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -15,7 +15,7 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfTextValueG
 
 @Service
 @RequiredArgsConstructor
-public class FK7443PdfFillService implements CertificateTypePdfFillService {
+public class FK7472PdfFillService implements CertificateTypePdfFillService {
 
   public static final String SYMPTOM_FIELD_ID = "form1[0].#subform[0].flt_txtDiagnos[0]";
   public static final ElementId QUESTION_SYMPTOM_ID = new ElementId("2");
@@ -28,7 +28,7 @@ public class FK7443PdfFillService implements CertificateTypePdfFillService {
 
   @Override
   public CertificateType getType() {
-    return new CertificateType("fk7443");
+    return new CertificateType("fk7472");
   }
 
   @Override

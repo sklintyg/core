@@ -9,11 +9,11 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7443CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7472CertificateBuilder;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_CARE_UNIT_CONTACT_INFORMATION_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_DATE_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService.PATIENT_ID_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService.SYMPTOM_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.FK7472PdfFillService.PATIENT_ID_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.FK7472PdfFillService.SYMPTOM_FIELD_ID;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -32,7 +32,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.FK7472PdfFillService;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAdditionalInformationTextGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfPatientValueGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfSignatureValueGenerator;
@@ -77,7 +77,7 @@ class CertificatePdfFillServiceTest {
   PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
 
   @Mock
-  FK7443PdfFillService fk7443PdfFillService;
+  FK7472PdfFillService fk7472PdfFillService;
 
   @InjectMocks
   CertificatePdfFillService certificatePdfFillService;
@@ -86,7 +86,7 @@ class CertificatePdfFillServiceTest {
 
   @BeforeEach
   void setup() {
-    when(fk7443PdfFillService.getPatientIdFieldId())
+    when(fk7472PdfFillService.getPatientIdFieldId())
         .thenReturn(PATIENT_ID_FIELD_ID);
 
     when(pdfPatientValueGenerator.generate(any(Certificate.class), eq(PATIENT_ID_FIELD_ID)))
@@ -95,7 +95,7 @@ class CertificatePdfFillServiceTest {
     when(pdfUnitValueGenerator.generate(any(Certificate.class)))
         .thenReturn(List.of(UNIT_FIELD));
 
-    when(fk7443PdfFillService.getFields(any(Certificate.class)))
+    when(fk7472PdfFillService.getFields(any(Certificate.class)))
         .thenReturn(List.of(SYMPTOM_FIELD));
   }
 
@@ -109,7 +109,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldNotSetMarginText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7472PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(0))
           .addMarginAdditionalInfoText(any(), anyString(), anyString(), anyInt());
@@ -117,7 +117,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldNotSetSignatureText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7472PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(0))
           .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt());
@@ -125,7 +125,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldSetDraftWatermark() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7472PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(1))
           .addDraftWatermark(any(), anyInt());
@@ -133,7 +133,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldNotSetSentText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7472PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(0))
           .addSentText(any(), any(), anyInt());
@@ -141,7 +141,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldSetSentVisibilityText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7472PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(0))
           .addSentVisibilityText(any(), anyInt());
@@ -150,7 +150,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldNotSetSignedValues() {
       final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
-          fk7443PdfFillService);
+          fk7472PdfFillService);
       final var field = getField(document, SIGNED_DATE_FIELD.getId());
 
       assertEquals("", field.getValueAsString());
@@ -159,7 +159,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetPatientValues() {
       final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
-          fk7443PdfFillService);
+          fk7472PdfFillService);
       final var field = getField(document, PATIENT_FIELD.getId());
 
       assertEquals(PATIENT_FIELD.getValue(), field.getValueAsString());
@@ -168,7 +168,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetUnitContactInformation() {
       final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
-          fk7443PdfFillService);
+          fk7472PdfFillService);
       final var field = getField(document, UNIT_FIELD.getId());
 
       assertEquals(UNIT_FIELD.getValue(), field.getValueAsString());
@@ -177,7 +177,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldFillPdfWithCertificateTypeSpecificValues() {
       final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
-          fk7443PdfFillService);
+          fk7472PdfFillService);
       final var field = getField(document, SYMPTOM_FIELD.getId());
 
       assertEquals(SYMPTOM_FIELD.getValue(), field.getValueAsString());
@@ -198,7 +198,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetMarginText() throws IOException {
       final var captor = ArgumentCaptor.forClass(String.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7472PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(1))
           .addMarginAdditionalInfoText(any(), anyString(), captor.capture(), anyInt());
@@ -208,7 +208,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldSetSignatureText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7472PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(1))
           .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt());
@@ -216,7 +216,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldNotSetDraftWatermark() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7472PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(0))
           .addDraftWatermark(any(), anyInt());
@@ -224,7 +224,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldNotSetSentText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7472PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(0))
           .addSentText(any(), any(), anyInt());
@@ -232,7 +232,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldNotSetSentVisibilityText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7472PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(0))
           .addSentVisibilityText(any(), anyInt());
@@ -241,7 +241,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetSignedValues() {
       final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
-          fk7443PdfFillService);
+          fk7472PdfFillService);
       final var field = getField(document, SIGNED_DATE_FIELD.getId());
 
       assertEquals(SIGNED_DATE_FIELD.getValue(), field.getValueAsString());
@@ -250,7 +250,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetPatientValues() {
       final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
-          fk7443PdfFillService);
+          fk7472PdfFillService);
       final var field = getField(document, PATIENT_FIELD.getId());
 
       assertEquals(PATIENT_FIELD.getValue(), field.getValueAsString());
@@ -259,7 +259,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetUnitContactInformation() {
       final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
-          fk7443PdfFillService);
+          fk7472PdfFillService);
       final var field = getField(document, UNIT_FIELD.getId());
 
       assertEquals(UNIT_FIELD.getValue(), field.getValueAsString());
@@ -268,7 +268,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldFillPdfWithCertificateTypeSpecificValues() {
       final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
-          fk7443PdfFillService);
+          fk7472PdfFillService);
       final var field = getField(document, SYMPTOM_FIELD.getId());
 
       assertEquals(SYMPTOM_FIELD.getValue(), field.getValueAsString());
@@ -288,7 +288,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetMarginText() throws IOException {
       final var captor = ArgumentCaptor.forClass(String.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7472PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(1))
           .addMarginAdditionalInfoText(any(), anyString(), captor.capture(), anyInt());
@@ -298,7 +298,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldSetSignatureText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7472PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(1))
           .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt());
@@ -306,7 +306,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldNotSetDraftWatermark() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7472PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(0))
           .addDraftWatermark(any(), anyInt());
@@ -314,7 +314,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldSetSentText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7472PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(1))
           .addSentText(any(), any(), anyInt());
@@ -322,7 +322,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldNotSetSentVisibilityTextIfNotAvailableForCitizen() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7472PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(0))
           .addSentVisibilityText(any(), anyInt());
@@ -330,7 +330,7 @@ class CertificatePdfFillServiceTest {
 
     @Test
     void shouldSetSentVisibilityTextIfAvailableForCitizen() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, fk7443PdfFillService);
+      certificatePdfFillService.fillDocument(certificate, TEXT, fk7472PdfFillService);
 
       verify(pdfAdditionalInformationTextGenerator, times(0))
           .addSentVisibilityText(any(), anyInt());
@@ -339,7 +339,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetSignedValues() {
       final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
-          fk7443PdfFillService);
+          fk7472PdfFillService);
       final var field = getField(document, SIGNED_DATE_FIELD.getId());
 
       assertEquals(SIGNED_DATE_FIELD.getValue(), field.getValueAsString());
@@ -348,7 +348,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetPatientValues() {
       final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
-          fk7443PdfFillService);
+          fk7472PdfFillService);
       final var field = getField(document, PATIENT_FIELD.getId());
 
       assertEquals(PATIENT_FIELD.getValue(), field.getValueAsString());
@@ -357,7 +357,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldSetUnitContactInformation() {
       final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
-          fk7443PdfFillService);
+          fk7472PdfFillService);
       final var field = getField(document, UNIT_FIELD.getId());
 
       assertEquals(UNIT_FIELD.getValue(), field.getValueAsString());
@@ -366,7 +366,7 @@ class CertificatePdfFillServiceTest {
     @Test
     void shouldFillPdfWithCertificateTypeSpecificValues() {
       final var document = certificatePdfFillService.fillDocument(certificate, TEXT,
-          fk7443PdfFillService);
+          fk7472PdfFillService);
       final var field = getField(document, SYMPTOM_FIELD.getId());
 
       assertEquals(SYMPTOM_FIELD.getValue(), field.getValueAsString());
@@ -374,7 +374,7 @@ class CertificatePdfFillServiceTest {
   }
 
   private static Certificate getSentCertificate() {
-    return fk7443CertificateBuilder()
+    return fk7472CertificateBuilder()
         .signed(LocalDateTime.now())
         .status(Status.SIGNED)
         .sent(
@@ -386,7 +386,7 @@ class CertificatePdfFillServiceTest {
   }
 
   private static Certificate getCertificate() {
-    return fk7443CertificateBuilder()
+    return fk7472CertificateBuilder()
         .signed(LocalDateTime.now())
         .status(Status.SIGNED)
         .sent(null)
@@ -394,7 +394,7 @@ class CertificatePdfFillServiceTest {
   }
 
   private static Certificate getDraft() {
-    return fk7443CertificateBuilder()
+    return fk7472CertificateBuilder()
         .status(Status.DRAFT)
         .sent(null)
         .signed(null)

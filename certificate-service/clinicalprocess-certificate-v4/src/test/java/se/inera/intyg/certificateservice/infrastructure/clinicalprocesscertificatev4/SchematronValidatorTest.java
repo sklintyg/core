@@ -19,7 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443.CertificateModelFactoryFK7443;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472;
 
 class SchematronValidatorTest {
 
@@ -136,7 +136,7 @@ class SchematronValidatorTest {
   }
 
   @Nested
-  class FK7443Validation {
+  class FK7472Validation {
 
     @Test
     void shallReturnTrueIfAllFieldsHaveValues() {
@@ -168,13 +168,13 @@ class SchematronValidatorTest {
               .build()
       );
 
-      final var certificate = TestDataCertificate.fk7443CertificateBuilder()
+      final var certificate = TestDataCertificate.fk7472CertificateBuilder()
           .elementData(element)
           .build();
 
       final var xml = generator.generate(certificate, true);
       assertTrue(schematronValidator.validate(certificate.id(), xml,
-          CertificateModelFactoryFK7443.SCHEMATRON_PATH)
+          CertificateModelFactoryFK7472.SCHEMATRON_PATH)
       );
     }
 
@@ -200,7 +200,7 @@ class SchematronValidatorTest {
 
       @Test
       void shallReturnQuestionMissing() {
-        final var certificate = TestDataCertificate.fk7443CertificateBuilder()
+        final var certificate = TestDataCertificate.fk7472CertificateBuilder()
             .elementData(List.of(QUESTION_PERIOD))
             .build();
 
@@ -217,7 +217,7 @@ class SchematronValidatorTest {
                     .build()
             ).build();
 
-        final var certificate = TestDataCertificate.fk7443CertificateBuilder()
+        final var certificate = TestDataCertificate.fk7472CertificateBuilder()
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
@@ -235,7 +235,7 @@ class SchematronValidatorTest {
                     .build()
             ).build();
 
-        final var certificate = TestDataCertificate.fk7443CertificateBuilder()
+        final var certificate = TestDataCertificate.fk7472CertificateBuilder()
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
@@ -262,7 +262,7 @@ class SchematronValidatorTest {
                     .build()
             ).build();
 
-        final var certificate = TestDataCertificate.fk7443CertificateBuilder()
+        final var certificate = TestDataCertificate.fk7472CertificateBuilder()
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
@@ -276,7 +276,7 @@ class SchematronValidatorTest {
             .value(ElementValueText.builder().build())
             .build();
 
-        final var certificate = TestDataCertificate.fk7443CertificateBuilder()
+        final var certificate = TestDataCertificate.fk7472CertificateBuilder()
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
@@ -303,7 +303,7 @@ class SchematronValidatorTest {
             QUESTION_SYMTOM
         );
 
-        final var certificate = TestDataCertificate.fk7443CertificateBuilder()
+        final var certificate = TestDataCertificate.fk7472CertificateBuilder()
             .elementData(element)
             .build();
 
@@ -326,7 +326,7 @@ class SchematronValidatorTest {
                 .build()
         );
 
-        final var certificate = TestDataCertificate.fk7443CertificateBuilder()
+        final var certificate = TestDataCertificate.fk7472CertificateBuilder()
             .elementData(element)
             .build();
 
@@ -360,7 +360,7 @@ class SchematronValidatorTest {
                 .build()
         );
 
-        final var certificate = TestDataCertificate.fk7443CertificateBuilder()
+        final var certificate = TestDataCertificate.fk7472CertificateBuilder()
             .elementData(element)
             .build();
 
@@ -394,7 +394,7 @@ class SchematronValidatorTest {
                 .build()
         );
 
-        final var certificate = TestDataCertificate.fk7443CertificateBuilder()
+        final var certificate = TestDataCertificate.fk7472CertificateBuilder()
             .elementData(element)
             .build();
 
@@ -422,7 +422,7 @@ class SchematronValidatorTest {
                 .build()
         );
 
-        final var certificate = TestDataCertificate.fk7443CertificateBuilder()
+        final var certificate = TestDataCertificate.fk7472CertificateBuilder()
             .elementData(element)
             .build();
 
@@ -451,7 +451,7 @@ class SchematronValidatorTest {
                 .build()
         );
 
-        final var certificate = TestDataCertificate.fk7443CertificateBuilder()
+        final var certificate = TestDataCertificate.fk7472CertificateBuilder()
             .elementData(element)
             .build();
 

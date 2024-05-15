@@ -1,10 +1,10 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443.CertificateModelFactoryFK7443.PDF_FK_7443_PDF;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443.CertificateModelFactoryFK7443.SCHEMATRON_PATH;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.PDF_FK_7472_PDF;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.SCHEMATRON_PATH;
 
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -39,15 +39,15 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 
 @ExtendWith(MockitoExtension.class)
-class CertificateModelFactoryFK7443Test {
+class CertificateModelFactoryFK7472Test {
 
-  private static final String TYPE = "fk7443";
+  private static final String TYPE = "fk7472";
   private static final String VERSION = "1.0";
-  private CertificateModelFactoryFK7443 certificateModelFactoryFK7443;
+  private CertificateModelFactoryFK7472 certificateModelFactoryFK7472;
 
   @BeforeEach
   void setUp() {
-    certificateModelFactoryFK7443 = new CertificateModelFactoryFK7443();
+    certificateModelFactoryFK7472 = new CertificateModelFactoryFK7472();
   }
 
   @Test
@@ -58,7 +58,7 @@ class CertificateModelFactoryFK7443Test {
             .version(new CertificateVersion(VERSION))
             .build();
 
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertEquals(expectedId, certificateModel.id());
   }
@@ -67,42 +67,42 @@ class CertificateModelFactoryFK7443Test {
   void shallIncludeName() {
     final var expectedName = "Intyg om tillfällig föräldrapenning";
 
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertEquals(expectedName, certificateModel.name());
   }
 
   @Test
   void shallIncludeDescription() {
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertFalse(certificateModel.description().isBlank());
   }
 
   @Test
   void shallIncludePdfTemplatePath() {
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
-    assertEquals(PDF_FK_7443_PDF, certificateModel.pdfTemplatePath());
+    assertEquals(PDF_FK_7472_PDF, certificateModel.pdfTemplatePath());
   }
 
   @Test
   void shallIncludeActiveFrom() {
     final var expectedActiveFrom = LocalDateTime.now(ZoneId.systemDefault());
     ReflectionTestUtils.setField(
-        certificateModelFactoryFK7443,
+        certificateModelFactoryFK7472,
         "activeFrom",
         expectedActiveFrom
     );
 
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertEquals(expectedActiveFrom, certificateModel.activeFrom());
   }
 
   @Test
   void shallIncludeAvailableForCitizen() {
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertFalse(certificateModel.availableForCitizen());
   }
@@ -114,7 +114,7 @@ class CertificateModelFactoryFK7443Test {
         "Försäkringskassan"
     );
 
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertEquals(expectedRecipient, certificateModel.recipient());
   }
@@ -123,7 +123,7 @@ class CertificateModelFactoryFK7443Test {
   void shallIncludeCertificateActionCreate() {
     final var expectedType = CertificateActionType.CREATE;
 
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream()
         .anyMatch(actionSpecification ->
@@ -136,7 +136,7 @@ class CertificateModelFactoryFK7443Test {
   void shallIncludeCertificateActionRead() {
     final var expectedType = CertificateActionType.READ;
 
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream()
         .anyMatch(actionSpecification ->
@@ -149,7 +149,7 @@ class CertificateModelFactoryFK7443Test {
   void shallIncludeCertificateActionUpdate() {
     final var expectedType = CertificateActionType.UPDATE;
 
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
@@ -161,7 +161,7 @@ class CertificateModelFactoryFK7443Test {
   void shallIncludeCertificateActionDelete() {
     final var expectedType = CertificateActionType.DELETE;
 
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
@@ -173,7 +173,7 @@ class CertificateModelFactoryFK7443Test {
   void shallIncludeCertificateActionSign() {
     final var expectedType = CertificateActionType.SIGN;
 
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
@@ -185,7 +185,7 @@ class CertificateModelFactoryFK7443Test {
   void shallIncludeCertificateActionSend() {
     final var expectedType = CertificateActionType.SEND;
 
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
@@ -197,7 +197,7 @@ class CertificateModelFactoryFK7443Test {
   void shallIncludeCertificateActionPrint() {
     final var expectedType = CertificateActionType.PRINT;
 
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
@@ -209,7 +209,7 @@ class CertificateModelFactoryFK7443Test {
   void shallIncludeCertificateActionRevoke() {
     final var expectedType = CertificateActionType.REVOKE;
 
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
@@ -221,7 +221,7 @@ class CertificateModelFactoryFK7443Test {
   void shallIncludeCertificateActionReplace() {
     final var expectedType = CertificateActionType.REPLACE;
 
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
@@ -233,7 +233,7 @@ class CertificateModelFactoryFK7443Test {
   void shallIncludeCertificateActionReplaceContinue() {
     final var expectedType = CertificateActionType.REPLACE_CONTINUE;
 
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
@@ -245,7 +245,7 @@ class CertificateModelFactoryFK7443Test {
   void shallIncludeCertificateActionRenew() {
     final var expectedType = CertificateActionType.RENEW;
 
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
@@ -255,7 +255,7 @@ class CertificateModelFactoryFK7443Test {
 
   @Test
   void shallIncludeSchematronPath() {
-    final var certificateModel = certificateModelFactoryFK7443.create();
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertEquals(SCHEMATRON_PATH, certificateModel.schematronPath());
   }
@@ -270,7 +270,7 @@ class CertificateModelFactoryFK7443Test {
 
       @Test
       void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7443.create();
+        final var certificateModel = certificateModelFactoryFK7472.create();
 
         assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
             "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
@@ -285,7 +285,7 @@ class CertificateModelFactoryFK7443Test {
             .name("Barnets diagnos eller symtom")
             .build();
 
-        final var certificateModel = certificateModelFactoryFK7443.create();
+        final var certificateModel = certificateModelFactoryFK7472.create();
 
         assertEquals(expectedConfiguration,
             certificateModel.elementSpecification(ELEMENT_ID).configuration()
@@ -300,7 +300,7 @@ class CertificateModelFactoryFK7443Test {
 
       @Test
       void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7443.create();
+        final var certificateModel = certificateModelFactoryFK7472.create();
 
         assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
             "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
@@ -316,7 +316,7 @@ class CertificateModelFactoryFK7443Test {
             .id(new FieldId("2.1"))
             .build();
 
-        final var certificateModel = certificateModelFactoryFK7443.create();
+        final var certificateModel = certificateModelFactoryFK7472.create();
 
         assertEquals(expectedConfiguration,
             certificateModel.elementSpecification(ELEMENT_ID).configuration()
@@ -340,7 +340,7 @@ class CertificateModelFactoryFK7443Test {
                 .build()
         );
 
-        final var certificateModel = certificateModelFactoryFK7443.create();
+        final var certificateModel = certificateModelFactoryFK7472.create();
 
         assertEquals(expectedRules,
             certificateModel.elementSpecification(ELEMENT_ID).rules()
@@ -356,7 +356,7 @@ class CertificateModelFactoryFK7443Test {
                 .build()
         );
 
-        final var certificateModel = certificateModelFactoryFK7443.create();
+        final var certificateModel = certificateModelFactoryFK7472.create();
 
         assertEquals(expectedValidations,
             certificateModel.elementSpecification(ELEMENT_ID).validations()
@@ -365,7 +365,7 @@ class CertificateModelFactoryFK7443Test {
 
       @Test
       void shallIncludeWhenRenewingTrue() {
-        final var certificateModel = certificateModelFactoryFK7443.create();
+        final var certificateModel = certificateModelFactoryFK7472.create();
 
         assertEquals(Boolean.TRUE,
             certificateModel.elementSpecification(ELEMENT_ID).includeWhenRenewing()
@@ -380,7 +380,7 @@ class CertificateModelFactoryFK7443Test {
 
       @Test
       void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7443.create();
+        final var certificateModel = certificateModelFactoryFK7472.create();
 
         assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
             "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
@@ -395,7 +395,7 @@ class CertificateModelFactoryFK7443Test {
             .name("Period som barnet inte bör vårdas i ordinarie tillsynsform")
             .build();
 
-        final var certificateModel = certificateModelFactoryFK7443.create();
+        final var certificateModel = certificateModelFactoryFK7472.create();
 
         assertEquals(expectedConfiguration,
             certificateModel.elementSpecification(ELEMENT_ID).configuration()
@@ -410,7 +410,7 @@ class CertificateModelFactoryFK7443Test {
 
       @Test
       void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7443.create();
+        final var certificateModel = certificateModelFactoryFK7472.create();
 
         assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
             "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
@@ -438,7 +438,7 @@ class CertificateModelFactoryFK7443Test {
             )
             .build();
 
-        final var certificateModel = certificateModelFactoryFK7443.create();
+        final var certificateModel = certificateModelFactoryFK7472.create();
 
         assertEquals(expectedConfiguration,
             certificateModel.elementSpecification(ELEMENT_ID).configuration()
@@ -459,7 +459,7 @@ class CertificateModelFactoryFK7443Test {
                 .build()
         );
 
-        final var certificateModel = certificateModelFactoryFK7443.create();
+        final var certificateModel = certificateModelFactoryFK7472.create();
 
         assertEquals(expectedRules,
             certificateModel.elementSpecification(ELEMENT_ID).rules()
@@ -475,16 +475,16 @@ class CertificateModelFactoryFK7443Test {
                 .build()
         );
 
-        final var certificateModel = certificateModelFactoryFK7443.create();
+        final var certificateModel = certificateModelFactoryFK7472.create();
 
         assertEquals(expectedValidations,
             certificateModel.elementSpecification(ELEMENT_ID).validations()
         );
       }
-      
+
       @Test
       void shallIncludeWhenRenewingFalse() {
-        final var certificateModel = certificateModelFactoryFK7443.create();
+        final var certificateModel = certificateModelFactoryFK7472.create();
 
         assertEquals(Boolean.FALSE,
             certificateModel.elementSpecification(ELEMENT_ID).includeWhenRenewing()
@@ -499,7 +499,7 @@ class CertificateModelFactoryFK7443Test {
 
       @Test
       void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7443.create();
+        final var certificateModel = certificateModelFactoryFK7472.create();
 
         assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
             "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
@@ -513,7 +513,7 @@ class CertificateModelFactoryFK7443Test {
         final var expectedConfiguration = ElementConfigurationUnitContactInformation.builder()
             .build();
 
-        final var certificateModel = certificateModelFactoryFK7443.create();
+        final var certificateModel = certificateModelFactoryFK7472.create();
 
         assertEquals(expectedConfiguration,
             certificateModel.elementSpecification(ELEMENT_ID).configuration()
@@ -526,7 +526,7 @@ class CertificateModelFactoryFK7443Test {
             ElementValidationUnitContactInformation.builder().build()
         );
 
-        final var certificateModel = certificateModelFactoryFK7443.create();
+        final var certificateModel = certificateModelFactoryFK7472.create();
 
         assertEquals(expectedValidation,
             certificateModel.elementSpecification(ELEMENT_ID).validations()

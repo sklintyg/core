@@ -3,7 +3,7 @@ package se.inera.intyg.certificateservice.domain.testdata;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7210_CERTIFICATE_MODEL;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7443_CERTIFICATE_MODEL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7472_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
@@ -100,14 +100,14 @@ public class TestDataCertificate {
   }
 
 
-  public static final Certificate FK443_CERTIFICATE = fk7443CertificateBuilder().build();
+  public static final Certificate FK443_CERTIFICATE = fk7472CertificateBuilder().build();
 
-  public static Certificate.CertificateBuilder fk7443CertificateBuilder() {
+  public static Certificate.CertificateBuilder fk7472CertificateBuilder() {
     return Certificate.builder()
         .id(CERTIFICATE_ID)
         .revision(REVISION)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
-        .certificateModel(FK7443_CERTIFICATE_MODEL)
+        .certificateModel(FK7472_CERTIFICATE_MODEL)
         .xml(XML)
         .sent(SENT)
         .revoked(REVOKED)

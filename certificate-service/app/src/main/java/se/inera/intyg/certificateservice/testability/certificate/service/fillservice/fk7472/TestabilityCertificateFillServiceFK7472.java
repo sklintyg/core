@@ -1,8 +1,8 @@
-package se.inera.intyg.certificateservice.testability.certificate.service.fillservice.fk7443;
+package se.inera.intyg.certificateservice.testability.certificate.service.fillservice.fk7472;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443.CertificateModelFactoryFK7443.FK7443_V1_0;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443.CertificateModelFactoryFK7443.QUESTION_PERIOD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7443.CertificateModelFactoryFK7443.QUESTION_SYMPTOM_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.FK7472_V1_0;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.QUESTION_PERIOD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.QUESTION_SYMPTOM_ID;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,11 +20,11 @@ import se.inera.intyg.certificateservice.testability.certificate.dto.Testability
 import se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityCertificateFillService;
 
 @Component
-public class TestabilityCertificateFillServiceFK7443 implements TestabilityCertificateFillService {
+public class TestabilityCertificateFillServiceFK7472 implements TestabilityCertificateFillService {
 
   @Override
   public List<CertificateModelId> certificateModelIds() {
-    return List.of(FK7443_V1_0);
+    return List.of(FK7472_V1_0);
   }
 
   @Override
