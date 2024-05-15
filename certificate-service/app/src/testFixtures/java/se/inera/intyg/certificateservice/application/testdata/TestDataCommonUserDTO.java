@@ -4,6 +4,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FULLNAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_MIDDLE_NAME;
@@ -22,6 +23,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_FULL_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_HEALTH_CARE_PROFESSIONAL_LICENCES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_MIDDLE_NAME;
@@ -33,6 +35,7 @@ import se.inera.intyg.certificateservice.application.common.dto.PaTitleDTO;
 import se.inera.intyg.certificateservice.application.common.dto.RoleTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO.UserDTOBuilder;
+import se.inera.intyg.certificateservice.domain.common.model.HealthCareProfessionalLicence;
 import se.inera.intyg.certificateservice.domain.common.model.Speciality;
 
 public class TestDataCommonUserDTO {
@@ -66,7 +69,12 @@ public class TestDataCommonUserDTO {
         )
         .blocked(AJLA_DOCTOR_BLOCKED.value())
         .allowCopy(AJLA_DOCTOR_ALLOW_COPY.value())
-        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT);
+        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
+        .healthCareProfessionalLicence(
+            AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES.stream()
+                .map(HealthCareProfessionalLicence::value)
+                .toList()
+        );
   }
 
   public static UserDTOBuilder alvaVardadministratorDtoBuilder() {
@@ -81,7 +89,8 @@ public class TestDataCommonUserDTO {
         .specialities(Collections.emptyList())
         .blocked(ALVA_VARDADMINISTRATOR_BLOCKED.value())
         .allowCopy(ALVA_VARDADMINISTRATOR_ALLOW_COPY.value())
-        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT);
+        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
+        .healthCareProfessionalLicence(Collections.emptyList());
   }
 
   public static UserDTOBuilder bertilBarnmorskaDtoBuilder() {
@@ -96,6 +105,11 @@ public class TestDataCommonUserDTO {
         .specialities(Collections.emptyList())
         .blocked(BERTIL_BARNMORSKA_BLOCKED.value())
         .allowCopy(BERTIL_BARNMORSKA_ALLOW_COPY.value())
-        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT);
+        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
+        .healthCareProfessionalLicence(
+            BERTIL_BARNMORSKA_HEALTH_CARE_PROFESSIONAL_LICENCES.stream()
+                .map(HealthCareProfessionalLicence::value)
+                .toList()
+        );
   }
 }

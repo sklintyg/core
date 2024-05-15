@@ -214,6 +214,23 @@ class CreateCertificateRequestValidatorTest {
       assertEquals("Required parameter missing: User.allowCopy",
           illegalArgumentException.getMessage());
     }
+
+    @Test
+    void shallThrowIfHealthCareProfessionalLicenceIsNull() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .healthCareProfessionalLicence(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> createCertificateRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: User.healthCareProfessionalLicence",
+          illegalArgumentException.getMessage());
+    }
   }
 
   @Nested

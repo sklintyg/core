@@ -7,13 +7,13 @@ import jakarta.xml.bind.JAXBElement;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import lombok.RequiredArgsConstructor;
 import org.w3._2000._09.xmldsig_.SignatureType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Signature;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
@@ -27,15 +27,16 @@ import se.riv.clinicalprocess.healthcond.certificate.types.v3.Befattning;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.DatePeriodType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.HsaId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.IntygId;
+import se.riv.clinicalprocess.healthcond.certificate.types.v3.LegitimeratYrkeType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.PersonId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.Specialistkompetens;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.TypAvIntyg;
+import se.riv.clinicalprocess.healthcond.certificate.types.v3.TypAvRelation;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.UnderskriftType;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Enhet;
 import se.riv.clinicalprocess.healthcond.certificate.v3.HosPersonal;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Intyg;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Patient;
-import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Vardgivare;
 
 @RequiredArgsConstructor
@@ -44,10 +45,9 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
   private static final String EMPTY = "";
   private static final String NOT_APPLICABLE = "N/A";
   private static final String PRESCRIPTION_CODE_MASKED = "0000000";
-  private static final String CERTIFICATE_TYPE_IGRAV = "IGRAV";
+  public static final String KV_RELATION_CODE_SYSTEM = "c2362fcd-eda0-4f9a-bd13-b3bbaf7f2146";
 
   private final XmlGeneratorValue xmlGeneratorValue;
-  private final XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare;
   private final XmlValidationService xmlValidationService;
 
   @Override
@@ -105,8 +105,10 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
         skapadAv(certificate)
     );
     intyg.getSvar().addAll(
-        svar(certificate)
+        xmlGeneratorValue.generate(certificate.elementData())
     );
+
+    relation(intyg, certificate.parent());
 
     final var signeringsTidpunkt = signeringsTidpunkt(certificate);
     if (signeringsTidpunkt != null) {
@@ -122,17 +124,25 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
     return intyg;
   }
 
-  private List<Svar> svar(Certificate certificate) {
-    final var svar = xmlGeneratorValue.generate(certificate.elementData());
-
-    if (!svar.isEmpty() && certificate.certificateModel().type().code()
-        .equals(CERTIFICATE_TYPE_IGRAV)) {
-      final var role = certificate.certificateMetaData().issuer().role();
-      final var intygsgivare = xmlGeneratorIntygsgivare.generate(role);
-      svar.get(0).getDelsvar().add(intygsgivare);
+  private static void relation(Intyg intyg, Relation parent) {
+    if (parent == null) {
+      return;
     }
+    final var relation = new se.riv.clinicalprocess.healthcond.certificate.v3.Relation();
 
-    return svar;
+    final var intygId = new IntygId();
+    intygId.setRoot(parent.certificate().certificateMetaData().issuingUnit().hsaId().id());
+    intygId.setExtension(parent.certificate().id().id());
+
+    final var typAvRelation = new TypAvRelation();
+    typAvRelation.setCodeSystem(KV_RELATION_CODE_SYSTEM);
+    typAvRelation.setCode(parent.type().toRelationKod());
+    typAvRelation.setDisplayName(parent.type().toRelationKodText());
+
+    relation.setIntygsId(intygId);
+    relation.setTyp(typAvRelation);
+
+    intyg.getRelation().add(relation);
   }
 
   private static IntygId intygsId(Certificate certificate) {
@@ -199,6 +209,16 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
         .forEach(
             specialistkompetens -> hosPersonal.getSpecialistkompetens().add(specialistkompetens)
         );
+
+    certificate.certificateMetaData().issuer().healthCareProfessionalLicence().stream()
+        .map(professionalLicence -> {
+              final var legitimeratYrkeType = new LegitimeratYrkeType();
+              legitimeratYrkeType.setCode(NOT_APPLICABLE);
+              legitimeratYrkeType.setDisplayName(professionalLicence.value());
+              return legitimeratYrkeType;
+            }
+        )
+        .forEach(legitimeratYrke -> hosPersonal.getLegitimeratYrke().add(legitimeratYrke));
 
     hosPersonal.setEnhet(
         enhet(certificate.certificateMetaData())

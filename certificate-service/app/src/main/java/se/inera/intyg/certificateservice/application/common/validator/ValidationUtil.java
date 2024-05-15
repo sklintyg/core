@@ -82,6 +82,11 @@ public class ValidationUtil {
     if (user.getAllowCopy() == null) {
       throw new IllegalArgumentException("Required parameter missing: User.allowCopy");
     }
+    if (user.getHealthCareProfessionalLicence() == null) {
+      throw new IllegalArgumentException(
+          "Required parameter missing: User.healthCareProfessionalLicence"
+      );
+    }
   }
 
   public static void validateCertificateModelId(CertificateModelIdDTO certificateModelIdDTO) {

@@ -5,6 +5,7 @@ import java.util.List;
 import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.common.model.AllowCopy;
 import se.inera.intyg.certificateservice.domain.common.model.Blocked;
+import se.inera.intyg.certificateservice.domain.common.model.HealthCareProfessionalLicence;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.common.model.Speciality;
@@ -32,6 +33,10 @@ public class TestDataUserConstants {
   public static final Blocked AJLA_DOCTOR_BLOCKED = BLOCKED_FALSE;
   public static final AllowCopy AJLA_DOCTOR_ALLOW_COPY = ALLOW_COPY_TRUE;
   public static final AccessScope AJLA_DOCTOR_ACCESS_SCOPE = AccessScope.WITHIN_CARE_UNIT;
+  public static final List<HealthCareProfessionalLicence> AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES = List.of(
+      new HealthCareProfessionalLicence("LÄKARE"));
+  public static final List<HealthCareProfessionalLicence> ALF_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES = List.of(
+      new HealthCareProfessionalLicence("LÄKARE"));
 
   public static final String ALF_DOKTOR_HSA_ID = "TSTNMT2321000156-DRAF";
   public static final String ALF_DOKTOR_FIRST_NAME = "Alf";
@@ -65,6 +70,9 @@ public class TestDataUserConstants {
   public static final String ANNA_SJUKSKOTERSKA_LAST_NAME = "Sjuksköterska";
   public static final String ANNA_SJUKSKOTERSKA_FULL_NAME = "Anna Sjuksköterska";
   public static final Role ANNA_SJUKSKOTERSKA_ROLE = Role.NURSE;
+  public static final List<HealthCareProfessionalLicence> ANNA_SJUKSKOTERSKA_HEALTH_CARE_PROFESSIONAL_LICENCES = List.of(
+      new HealthCareProfessionalLicence("SJUKSKÖTERSKA")
+  );
   public static final List<PaTitle> ANNA_SJUKSKOTERSKA_PA_TITLES = Collections.emptyList();
   public static final List<Speciality> ANNA_SJUKSKOTERSKA_SPECIALITIES = Collections.emptyList();
   public static final Blocked ANNA_SJUKSKOTERSKA_BLOCKED = BLOCKED_FALSE;
@@ -80,5 +88,9 @@ public class TestDataUserConstants {
   public static final List<Speciality> BERTIL_BARNMORSKA_SPECIALITIES = Collections.emptyList();
   public static final Blocked BERTIL_BARNMORSKA_BLOCKED = BLOCKED_FALSE;
   public static final AllowCopy BERTIL_BARNMORSKA_ALLOW_COPY = ALLOW_COPY_TRUE;
+  public static final List<HealthCareProfessionalLicence> BERTIL_BARNMORSKA_HEALTH_CARE_PROFESSIONAL_LICENCES = List.of(
+      new HealthCareProfessionalLicence("SJUKSKÖTERSKA"),
+      new HealthCareProfessionalLicence("BARNMORSKA")
+  );
 
 }

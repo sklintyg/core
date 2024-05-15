@@ -20,7 +20,6 @@ class SchemaValidatorV4Test {
     final var certificate = TestDataCertificate.fk7210CertificateBuilder().build();
     final var generator = new XmlGeneratorCertificateV4(
         new XmlGeneratorValue(),
-        new XmlGeneratorIntygsgivare(),
         new XmlValidationService(
             new SchematronValidator(),
             new SchemaValidatorV4()

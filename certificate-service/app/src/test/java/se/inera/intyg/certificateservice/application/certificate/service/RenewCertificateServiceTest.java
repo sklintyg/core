@@ -32,7 +32,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.service.RenewCertificateDomainService;
-import se.inera.intyg.certificateservice.domain.user.model.ExternalReference;
+import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 
 @ExtendWith(MockitoExtension.class)
 class RenewCertificateServiceTest {

@@ -35,7 +35,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertif
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.user.model.ExternalReference;
+import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 
 @ExtendWith(MockitoExtension.class)
 class CreateCertificateServiceTest {

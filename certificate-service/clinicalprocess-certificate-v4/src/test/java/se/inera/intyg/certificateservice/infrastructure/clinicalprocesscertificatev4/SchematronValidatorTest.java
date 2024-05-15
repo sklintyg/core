@@ -26,7 +26,6 @@ class SchematronValidatorTest {
   private SchematronValidator schematronValidator;
   private final XmlGeneratorCertificateV4 generator = new XmlGeneratorCertificateV4(
       new XmlGeneratorValue(),
-      new XmlGeneratorIntygsgivare(),
       new XmlValidationService(
           new SchematronValidator(),
           new SchemaValidatorV4()

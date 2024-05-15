@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -12,7 +13,6 @@ import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK443_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_CODE_TYPE;
@@ -28,6 +28,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_WORKPLACE_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FULLNAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_PA_TITLES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_SPECIALITIES;
@@ -43,19 +44,20 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
+import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Signature;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
 import se.riv.clinicalprocess.healthcond.certificate.registerCertificate.v3.RegisterCertificateType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.ArbetsplatsKod;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.Befattning;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.HsaId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.IntygId;
+import se.riv.clinicalprocess.healthcond.certificate.types.v3.LegitimeratYrkeType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.PersonId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.Specialistkompetens;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.TypAvIntyg;
@@ -74,12 +76,8 @@ class XmlGeneratorCertificateV4Test {
 
   @Mock
   XmlGeneratorValue xmlGeneratorValue;
-  @Spy
-  XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare;
-
   @Mock
   XmlValidationService xmlValidationService;
-
   @InjectMocks
   XmlGeneratorCertificateV4 xmlGeneratorCertificateV4;
 
@@ -245,6 +243,23 @@ class XmlGeneratorCertificateV4Test {
   }
 
   @Test
+  void shouldIncludeHoSPersonalLegitimeratYrke() {
+    final var expectedOne = new LegitimeratYrkeType();
+    expectedOne.setCode("N/A");
+    expectedOne.setDisplayName(AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES.get(0).value());
+
+    final var legitimeradeYrken = unmarshal(
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
+    ).getIntyg().getSkapadAv().getLegitimeratYrke();
+
+    assertAll(
+        () -> assertEquals(expectedOne.getCode(), legitimeradeYrken.get(0).getCode()),
+        () -> assertEquals(expectedOne.getDisplayName(),
+            legitimeradeYrken.get(0).getDisplayName())
+    );
+  }
+
+  @Test
   void shouldIncludeHoSPersonalUnit() {
     final var expected = new Enhet();
     final var hsaId = new HsaId();
@@ -332,43 +347,6 @@ class XmlGeneratorCertificateV4Test {
         () -> assertEquals(ANSWER_ID, answers.get(0).getId()),
         () -> assertEquals(SUB_ANSWER_ID, answers.get(0).getDelsvar().get(0).getId())
     );
-  }
-
-  @Test
-  void shouldIncludeIntygsgivare() {
-    final var answer = new Svar();
-    final var subAnswer = new Delsvar();
-    subAnswer.setId(SUB_ANSWER_ID);
-    answer.setId(ANSWER_ID);
-    answer.getDelsvar().add(subAnswer);
-    final var expectedAnswers = List.of(answer);
-    when(xmlGeneratorValue.generate(any()))
-        .thenReturn(expectedAnswers);
-
-    final var answers = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
-    ).getIntyg().getSvar();
-
-    verify(xmlGeneratorIntygsgivare).generate(any(Role.class));
-    assertEquals("1.2", answers.get(0).getDelsvar().get(1).getId());
-  }
-
-  @Test
-  void shouldNotCallXmlGeneratorIntygsgivare() {
-    final var answer = new Svar();
-    final var subAnswer = new Delsvar();
-    subAnswer.setId(SUB_ANSWER_ID);
-    answer.setId(ANSWER_ID);
-    answer.getDelsvar().add(subAnswer);
-    final var expectedAnswers = List.of(answer);
-    when(xmlGeneratorValue.generate(any()))
-        .thenReturn(expectedAnswers);
-
-    unmarshal(
-        xmlGeneratorCertificateV4.generate(FK443_CERTIFICATE, true)
-    ).getIntyg().getSvar();
-
-    verifyNoInteractions(xmlGeneratorIntygsgivare);
   }
 
   @Test
@@ -466,6 +444,37 @@ class XmlGeneratorCertificateV4Test {
 
   }
 
+  @Test
+  void shouldNotIncludeRelationIfParentIsMissing() {
+    final var relation = unmarshal(
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)).getIntyg().getRelation();
+    assertTrue(relation.isEmpty());
+  }
+
+  @Test
+  void shouldIncludeRelationIfParentIsPresent() {
+    final var parentCertificate = FK7210_CERTIFICATE;
+    final var certificate = fk7210CertificateBuilder()
+        .parent(
+            Relation.builder()
+                .type(RelationType.REPLACE)
+                .certificate(parentCertificate)
+                .build()
+        )
+        .build();
+
+    final var relation = unmarshal(
+        xmlGeneratorCertificateV4.generate(certificate, true)).getIntyg().getRelation();
+
+    assertAll(
+        () -> assertEquals("c2362fcd-eda0-4f9a-bd13-b3bbaf7f2146",
+            relation.get(0).getTyp().getCodeSystem()),
+        () -> assertEquals("ERSATT", relation.get(0).getTyp().getCode()),
+        () -> assertEquals("Ersätter", relation.get(0).getTyp().getDisplayName()),
+        () -> assertEquals(parentCertificate.id().id(),
+            relation.get(0).getIntygsId().getExtension())
+    );
+  }
 
   private RegisterCertificateType unmarshal(Xml response) {
     try {
@@ -481,5 +490,4 @@ class XmlGeneratorCertificateV4Test {
       throw new IllegalStateException(ex);
     }
   }
-
 }
