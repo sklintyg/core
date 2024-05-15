@@ -35,6 +35,8 @@ public class TestDataUserConstants {
   public static final AccessScope AJLA_DOCTOR_ACCESS_SCOPE = AccessScope.WITHIN_CARE_UNIT;
   public static final List<HealthCareProfessionalLicence> AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES = List.of(
       new HealthCareProfessionalLicence("LÄKARE"));
+  public static final List<HealthCareProfessionalLicence> ALF_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES = List.of(
+      new HealthCareProfessionalLicence("LÄKARE"));
 
   public static final String ALF_DOKTOR_HSA_ID = "TSTNMT2321000156-DRAF";
   public static final String ALF_DOKTOR_FIRST_NAME = "Alf";
@@ -68,6 +70,9 @@ public class TestDataUserConstants {
   public static final String ANNA_SJUKSKOTERSKA_LAST_NAME = "Sjuksköterska";
   public static final String ANNA_SJUKSKOTERSKA_FULL_NAME = "Anna Sjuksköterska";
   public static final Role ANNA_SJUKSKOTERSKA_ROLE = Role.NURSE;
+  public static final List<HealthCareProfessionalLicence> ANNA_SJUKSKOTERSKA_HEALTH_CARE_PROFESSIONAL_LICENCES = List.of(
+      new HealthCareProfessionalLicence("SJUKSKÖTERSKA")
+  );
   public static final List<PaTitle> ANNA_SJUKSKOTERSKA_PA_TITLES = Collections.emptyList();
   public static final List<Speciality> ANNA_SJUKSKOTERSKA_SPECIALITIES = Collections.emptyList();
   public static final Blocked ANNA_SJUKSKOTERSKA_BLOCKED = BLOCKED_FALSE;
