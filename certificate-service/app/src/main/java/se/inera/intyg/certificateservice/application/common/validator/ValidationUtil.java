@@ -84,7 +84,7 @@ public class ValidationUtil {
     }
     if (user.getHealthCareProfessionalLicence() == null) {
       throw new IllegalArgumentException(
-          "Required parameter missing: User.getHealthCareProfessionalLicence"
+          "Required parameter missing: User.healthCareProfessionalLicence"
       );
     }
   }
