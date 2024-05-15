@@ -59,7 +59,7 @@ class PrintCitizenCertificateServiceTest {
   }
 
   @Test
-  void shouldValidateCertificateId() {
+  void shouldValidateCertificateIdAndPersonId() {
     printCitizenCertificateService.get(REQUEST, CERTIFICATE_ID.id());
 
     verify(citizenCertificateRequestValidator).validate(CERTIFICATE_ID.id(), PERSON_ID_DTO);
