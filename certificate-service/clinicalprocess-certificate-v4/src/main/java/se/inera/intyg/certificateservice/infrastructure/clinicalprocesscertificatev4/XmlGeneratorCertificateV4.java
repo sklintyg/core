@@ -130,7 +130,7 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
     }
     final var relation = new se.riv.clinicalprocess.healthcond.certificate.v3.Relation();
 
-    IntygId intygId = new IntygId();
+    final var intygId = new IntygId();
     intygId.setRoot(parent.certificate().certificateMetaData().issuingUnit().hsaId().id());
     intygId.setExtension(parent.certificate().id().id());
 
