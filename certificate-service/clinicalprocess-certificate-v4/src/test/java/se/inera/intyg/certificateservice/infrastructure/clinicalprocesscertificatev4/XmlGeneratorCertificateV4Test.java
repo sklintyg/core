@@ -75,7 +75,6 @@ class XmlGeneratorCertificateV4Test {
   XmlGeneratorValue xmlGeneratorValue;
   @Mock
   XmlValidationService xmlValidationService;
-
   @InjectMocks
   XmlGeneratorCertificateV4 xmlGeneratorCertificateV4;
 

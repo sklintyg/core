@@ -192,9 +192,7 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
               return legitimeratYrkeType;
             }
         )
-        .forEach(
-            legitimeratYrke -> hosPersonal.getLegitimeratYrke().add(legitimeratYrke)
-        );
+        .forEach(legitimeratYrke -> hosPersonal.getLegitimeratYrke().add(legitimeratYrke));
 
     hosPersonal.setEnhet(
         enhet(certificate.certificateMetaData())
