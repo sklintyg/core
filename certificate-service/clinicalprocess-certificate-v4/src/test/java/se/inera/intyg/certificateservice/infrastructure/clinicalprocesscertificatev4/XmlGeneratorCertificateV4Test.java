@@ -411,6 +411,24 @@ class XmlGeneratorCertificateV4Test {
   }
 
   @Test
+  void shouldIncludeSigneringtidpunktOnExactMinute() {
+    final var expectedValue = "2024-04-01T12:30:00";
+    final var signedCertificate = fk7210CertificateBuilder()
+        .status(Status.SIGNED)
+        .signed(LocalDateTime.parse(expectedValue))
+        .build();
+
+    final var signeringstidpunkt = unmarshal(
+        xmlGeneratorCertificateV4.generate(signedCertificate, true)
+    ).getIntyg().getSigneringstidpunkt();
+
+    assertEquals(
+        expectedValue,
+        signeringstidpunkt.toString()
+    );
+  }
+
+  @Test
   void shouldIncludeSkickatTidpunkt() {
     final var signedCertificate = fk7210CertificateBuilder()
         .status(Status.SIGNED)
