@@ -13,7 +13,6 @@ import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK443_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_CODE_TYPE;
@@ -250,7 +249,7 @@ class XmlGeneratorCertificateV4Test {
     expectedOne.setDisplayName(AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES.get(0).value());
 
     final var legitimeradeYrken = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
     ).getIntyg().getSkapadAv().getLegitimeratYrke();
 
     assertAll(
@@ -448,14 +447,14 @@ class XmlGeneratorCertificateV4Test {
   @Test
   void shouldNotIncludeRelationIfParentIsMissing() {
     final var relation = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)).getIntyg().getRelation();
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)).getIntyg().getRelation();
     assertTrue(relation.isEmpty());
   }
 
   @Test
   void shouldIncludeRelationIfParentIsPresent() {
-    final var parentCertificate = FK7211_CERTIFICATE;
-    final var certificate = fk7211CertificateBuilder()
+    final var parentCertificate = FK7210_CERTIFICATE;
+    final var certificate = fk7210CertificateBuilder()
         .parent(
             Relation.builder()
                 .type(RelationType.REPLACE)
@@ -463,7 +462,7 @@ class XmlGeneratorCertificateV4Test {
                 .build()
         )
         .build();
-    
+
     final var relation = unmarshal(
         xmlGeneratorCertificateV4.generate(certificate, true)).getIntyg().getRelation();
 
@@ -491,5 +490,4 @@ class XmlGeneratorCertificateV4Test {
       throw new IllegalStateException(ex);
     }
   }
-
 }
