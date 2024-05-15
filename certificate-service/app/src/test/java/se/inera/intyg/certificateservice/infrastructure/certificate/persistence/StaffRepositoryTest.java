@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.AJLA_DOKTOR_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.ALF_DOKTOR_ENTITY;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ALF_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FIRST_NAME;
@@ -72,7 +72,7 @@ class StaffRepositoryTest {
   @Test
   void shallReturnMapOfOneStaffWhenOneUniqueStaffExists() {
     final var expectedStaffs = Map.of(AJLA_DOKTOR_ENTITY.getHsaId(), AJLA_DOKTOR_ENTITY);
-    final var certificate = fk7211CertificateBuilder()
+    final var certificate = fk7210CertificateBuilder()
         .sent(
             Sent.builder()
                 .sentBy(AJLA_DOKTOR)
@@ -92,7 +92,7 @@ class StaffRepositoryTest {
   @Test
   void shallReturnMapOfOneStaffWhenOneUniqueStaffDontExists() {
     final var expectedStaffs = Map.of(AJLA_DOKTOR_ENTITY.getHsaId(), AJLA_DOKTOR_ENTITY);
-    final var certificate = fk7211CertificateBuilder()
+    final var certificate = fk7210CertificateBuilder()
         .sent(
             Sent.builder()
                 .sentBy(AJLA_DOKTOR)
@@ -120,7 +120,7 @@ class StaffRepositoryTest {
         ALF_DOKTOR_ENTITY.getHsaId(), ALF_DOKTOR_ENTITY
     );
 
-    final var certificate = fk7211CertificateBuilder()
+    final var certificate = fk7210CertificateBuilder()
         .sent(
             Sent.builder()
                 .sentBy(ALF_DOKTOR)
@@ -144,7 +144,7 @@ class StaffRepositoryTest {
         ALF_DOKTOR_ENTITY.getHsaId(), ALF_DOKTOR_ENTITY
     );
 
-    final var certificate = fk7211CertificateBuilder()
+    final var certificate = fk7210CertificateBuilder()
         .sent(
             Sent.builder()
                 .sentBy(ALF_DOKTOR)
@@ -172,7 +172,7 @@ class StaffRepositoryTest {
         ALF_DOKTOR_ENTITY.getHsaId(), ALF_DOKTOR_ENTITY
     );
 
-    final var certificate = fk7211CertificateBuilder()
+    final var certificate = fk7210CertificateBuilder()
         .sent(
             Sent.builder()
                 .sentBy(ALF_DOKTOR)
@@ -204,7 +204,7 @@ class StaffRepositoryTest {
         ALF_DOKTOR_ENTITY.getHsaId(), ALF_DOKTOR_ENTITY
     );
 
-    final var certificate = fk7211CertificateBuilder()
+    final var certificate = fk7210CertificateBuilder()
         .revoked(
             Revoked.builder()
                 .revokedBy(ALF_DOKTOR)

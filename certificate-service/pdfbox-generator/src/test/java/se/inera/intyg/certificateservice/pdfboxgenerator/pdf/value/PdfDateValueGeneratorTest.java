@@ -3,7 +3,7 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7443CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7472CertificateBuilder;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -140,7 +140,7 @@ class PdfDateValueGeneratorTest {
   }
 
   private Certificate buildCertificate(List<ElementData> elementData) {
-    return fk7443CertificateBuilder()
+    return fk7472CertificateBuilder()
         .elementData(elementData)
         .build();
   }

@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ class PdfPatientValueGeneratorTest {
   }
 
   private Certificate buildCertificate() {
-    return fk7211CertificateBuilder().build();
+    return fk7210CertificateBuilder().build();
   }
 
 }

@@ -5,7 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 
 import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -32,7 +32,7 @@ class PdfAdditionalInformationTextGeneratorTest {
   @Test
   void shouldSetSentText() throws IOException {
     final var captor = ArgumentCaptor.forClass(String.class);
-    final var certificate = fk7211CertificateBuilder().build();
+    final var certificate = fk7210CertificateBuilder().build();
     pdfAdditionalInformationTextGenerator.addSentText(document, certificate, 100);
 
     verify(pdfTextGenerator).addTopWatermark(

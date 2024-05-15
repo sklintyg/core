@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7443CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7472CertificateBuilder;
 
 import java.util.Collections;
 import java.util.List;
@@ -49,8 +49,8 @@ class GetCitizenCertificateListServiceTest {
       )
       .statuses(List.of(Status.SIGNED))
       .build();
-  private static final Certificate FK7211 = fk7211CertificateBuilder().build();
-  private static final Certificate FK7443 = fk7443CertificateBuilder().build();
+  private static final Certificate FK7210 = fk7210CertificateBuilder().build();
+  private static final Certificate FK7472 = fk7472CertificateBuilder().build();
   private static final CertificateDTO CONVERTED_CERTIFICATE = CertificateDTO.builder().build();
 
   @Mock
@@ -68,9 +68,9 @@ class GetCitizenCertificateListServiceTest {
   @BeforeEach
   void setUp() {
     when(certificateRepository.findByCertificatesRequest(CERTIFICATES_REQUEST))
-        .thenReturn(List.of(FK7211, FK7443));
+        .thenReturn(List.of(FK7210, FK7472));
 
-    when(certificateConverter.convert(FK7211, Collections.emptyList()))
+    when(certificateConverter.convert(FK7210, Collections.emptyList()))
         .thenReturn(CONVERTED_CERTIFICATE);
   }
 

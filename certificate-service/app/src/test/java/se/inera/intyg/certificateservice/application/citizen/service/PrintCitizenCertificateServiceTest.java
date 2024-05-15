@@ -68,7 +68,7 @@ class PrintCitizenCertificateServiceTest {
   @Test
   void shouldReturnPrintCitizenCertificateResponse() {
     final var expected = PrintCitizenCertificateResponse.builder()
-        .fileName(PDF.fileName())
+        .filename(PDF.fileName())
         .pdfData(PDF.pdfData())
         .build();
 

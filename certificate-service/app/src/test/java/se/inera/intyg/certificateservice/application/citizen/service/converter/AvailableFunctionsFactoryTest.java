@@ -6,7 +6,7 @@ import static se.inera.intyg.certificateservice.application.citizen.service.conv
 import static se.inera.intyg.certificateservice.application.citizen.service.converter.AvailableFunctionsFactory.SEND_CERTIFICATE_BODY;
 import static se.inera.intyg.certificateservice.application.citizen.service.converter.AvailableFunctionsFactory.SEND_CERTIFICATE_NAME;
 import static se.inera.intyg.certificateservice.application.citizen.service.converter.AvailableFunctionsFactory.SEND_CERTIFICATE_TITLE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -61,7 +61,7 @@ class AvailableFunctionsFactoryTest {
     @Test
     void shouldNotReturnSendIfNoRecipient() {
       final var result = availableFunctionsFactory.get(
-          fk7211CertificateBuilder()
+          fk7210CertificateBuilder()
               .sent(null)
               .status(Status.SIGNED)
               .certificateModel(CertificateModel.builder()
@@ -76,7 +76,7 @@ class AvailableFunctionsFactoryTest {
     @Test
     void shouldNotReturnSendIfDraft() {
       final var result = availableFunctionsFactory.get(
-          fk7211CertificateBuilder()
+          fk7210CertificateBuilder()
               .sent(null)
               .status(Status.DRAFT)
               .build()
@@ -88,7 +88,7 @@ class AvailableFunctionsFactoryTest {
     @Test
     void shouldNotReturnSendIfAlreadySent() {
       final var result = availableFunctionsFactory.get(
-          fk7211CertificateBuilder()
+          fk7210CertificateBuilder()
               .status(Status.SIGNED)
               .sent(Sent.builder()
                   .sentAt(LocalDateTime.now())
@@ -102,7 +102,7 @@ class AvailableFunctionsFactoryTest {
     @Test
     void shouldNotReturnSendIfReplacedBySignedCertificate() {
       final var result = availableFunctionsFactory.get(
-          fk7211CertificateBuilder()
+          fk7210CertificateBuilder()
               .sent(null)
               .status(Status.SIGNED)
               .children(List.of(
@@ -124,7 +124,7 @@ class AvailableFunctionsFactoryTest {
     @Test
     void shouldReturnSendIfReplacedByDraft() {
       final var result = availableFunctionsFactory.get(
-          fk7211CertificateBuilder()
+          fk7210CertificateBuilder()
               .sent(null)
               .status(Status.SIGNED)
               .children(List.of(
@@ -144,7 +144,7 @@ class AvailableFunctionsFactoryTest {
     @Test
     void shouldReturnSendIfRenewed() {
       final var result = availableFunctionsFactory.get(
-          fk7211CertificateBuilder()
+          fk7210CertificateBuilder()
               .sent(null)
               .status(Status.SIGNED)
               .children(List.of(
@@ -164,7 +164,7 @@ class AvailableFunctionsFactoryTest {
     @Test
     void shouldReturnSendIfAllConditionsAreMet() {
       final var result = availableFunctionsFactory.get(
-          fk7211CertificateBuilder()
+          fk7210CertificateBuilder()
               .sent(null)
               .status(Status.SIGNED)
               .build()
@@ -179,7 +179,7 @@ class AvailableFunctionsFactoryTest {
 
     @Test
     void shouldReturnAvailableFunctionPrint() {
-      final var result = availableFunctionsFactory.get(fk7211CertificateBuilder().build());
+      final var result = availableFunctionsFactory.get(fk7210CertificateBuilder().build());
 
       assertTrue(result.contains(EXPECTED_PRINT));
     }

@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7443CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7472CertificateBuilder;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -25,8 +25,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7443.FK7443PdfFillService;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7210.FK7210PdfFillService;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.FK7472PdfFillService;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -35,10 +35,10 @@ class CertificatePdfGeneratorTest {
   private static final String ADDITIONAL_INFO_TEXT = "additionalInfoText";
 
   @Mock
-  FK7443PdfFillService fk7443PdfFillService;
+  FK7472PdfFillService fk7472PdfFillService;
 
   @Mock
-  FK7211PdfFillService fk7211PdfFillService;
+  FK7210PdfFillService fk7210PdfFillService;
 
   @Mock
   CertificatePdfFillService certificatePdfFillService;
@@ -52,7 +52,7 @@ class CertificatePdfGeneratorTest {
   @BeforeEach
   void setup() {
     final var classloader = getClass().getClassLoader();
-    final var inputStream = classloader.getResourceAsStream("fk7211/pdf/fk7211_v1.pdf");
+    final var inputStream = classloader.getResourceAsStream("fk7210/pdf/fk7210_v1.pdf");
 
     try {
       document = Loader.loadPDF(inputStream.readAllBytes());
@@ -60,10 +60,10 @@ class CertificatePdfGeneratorTest {
       throw new RuntimeException(e);
     }
 
-    when(fk7211PdfFillService.getType())
-        .thenReturn(new CertificateType("fk7211"));
+    when(fk7210PdfFillService.getType())
+        .thenReturn(new CertificateType("fk7210"));
 
-    certificateTypePdfFillServiceList = List.of(fk7211PdfFillService, fk7443PdfFillService);
+    certificateTypePdfFillServiceList = List.of(fk7210PdfFillService, fk7472PdfFillService);
     certificatePdfGenerator = new CertificatePdfGenerator(certificateTypePdfFillServiceList,
         certificatePdfFillService);
   }
@@ -99,12 +99,12 @@ class CertificatePdfGeneratorTest {
     }
 
     @Nested
-    class Fk7211 {
+    class Fk7210 {
 
       @Test
       void shouldReturnPDF() {
         final var pdf = certificatePdfGenerator.generate(
-            buildFK7211Certificate(),
+            buildFK7210Certificate(),
             ADDITIONAL_INFO_TEXT
         );
 
@@ -117,7 +117,7 @@ class CertificatePdfGeneratorTest {
             .format((DateTimeFormatter.ofPattern("yy-MM-dd_HHmm")));
 
         final var pdf = certificatePdfGenerator.generate(
-            buildFK7211Certificate(),
+            buildFK7210Certificate(),
             ADDITIONAL_INFO_TEXT
         );
 
@@ -126,18 +126,18 @@ class CertificatePdfGeneratorTest {
     }
 
     @Nested
-    class Fk7443 {
+    class Fk7472 {
 
       @BeforeEach
       void setup() {
-        when(fk7443PdfFillService.getType())
-            .thenReturn(new CertificateType("fk7443"));
+        when(fk7472PdfFillService.getType())
+            .thenReturn(new CertificateType("fk7472"));
       }
 
       @Test
       void shouldReturnPDF() {
         final var pdf = certificatePdfGenerator.generate(
-            buildFK7443Certificate(),
+            buildFK7472Certificate(),
             ADDITIONAL_INFO_TEXT
         );
 
@@ -150,7 +150,7 @@ class CertificatePdfGeneratorTest {
             .format((DateTimeFormatter.ofPattern("yy-MM-dd_HHmm")));
 
         final var pdf = certificatePdfGenerator.generate(
-            buildFK7443Certificate(),
+            buildFK7472Certificate(),
             ADDITIONAL_INFO_TEXT
         );
 
@@ -159,13 +159,13 @@ class CertificatePdfGeneratorTest {
     }
   }
 
-  private Certificate buildFK7211Certificate() {
-    return fk7211CertificateBuilder()
+  private Certificate buildFK7210Certificate() {
+    return fk7210CertificateBuilder()
         .build();
   }
 
-  private Certificate buildFK7443Certificate() {
-    return fk7443CertificateBuilder()
+  private Certificate buildFK7472Certificate() {
+    return fk7472CertificateBuilder()
         .build();
   }
 }

@@ -15,7 +15,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REF;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REFERENCE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.RECIPIENT;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7443CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7472CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_CITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_DECEASED;
@@ -88,7 +88,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.FK7211CertificateSummaryProvider;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.FK7210CertificateSummaryProvider;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateConverterTest {
@@ -190,7 +190,7 @@ class CertificateConverterTest {
                             .build()
                     )
                 )
-                .summaryProvider(new FK7211CertificateSummaryProvider())
+                .summaryProvider(new FK7210CertificateSummaryProvider())
                 .build()
         )
         .certificateMetaData(
@@ -700,7 +700,7 @@ class CertificateConverterTest {
 
     @BeforeEach
     void setUp() {
-      final var certificate = fk7443CertificateBuilder()
+      final var certificate = fk7472CertificateBuilder()
           .id(new CertificateId(CERTIFICATE_ID))
           .status(Status.DRAFT)
           .build();
@@ -775,7 +775,7 @@ class CertificateConverterTest {
               List.of(
                   relationBuilder
                       .certificate(
-                          fk7443CertificateBuilder()
+                          fk7472CertificateBuilder()
                               .id(new CertificateId(CERTIFICATE_ID))
                               .status(Status.REVOKED)
                               .build()
