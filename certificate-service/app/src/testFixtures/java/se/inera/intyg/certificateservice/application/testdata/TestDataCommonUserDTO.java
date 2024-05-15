@@ -89,7 +89,8 @@ public class TestDataCommonUserDTO {
         .specialities(Collections.emptyList())
         .blocked(ALVA_VARDADMINISTRATOR_BLOCKED.value())
         .allowCopy(ALVA_VARDADMINISTRATOR_ALLOW_COPY.value())
-        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT);
+        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
+        .healthCareProfessionalLicence(Collections.emptyList());
   }
 
   public static UserDTOBuilder bertilBarnmorskaDtoBuilder() {
