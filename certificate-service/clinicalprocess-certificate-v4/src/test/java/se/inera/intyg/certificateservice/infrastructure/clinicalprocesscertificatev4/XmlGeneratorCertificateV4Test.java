@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -44,6 +45,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
+import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Signature;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
@@ -441,6 +444,37 @@ class XmlGeneratorCertificateV4Test {
 
   }
 
+  @Test
+  void shouldNotIncludeRelationIfParentIsMissing() {
+    final var relation = unmarshal(
+        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)).getIntyg().getRelation();
+    assertTrue(relation.isEmpty());
+  }
+
+  @Test
+  void shouldIncludeRelationIfParentIsPresent() {
+    final var parentCertificate = FK7211_CERTIFICATE;
+    final var certificate = fk7211CertificateBuilder()
+        .parent(
+            Relation.builder()
+                .type(RelationType.REPLACE)
+                .certificate(parentCertificate)
+                .build()
+        )
+        .build();
+    
+    final var relation = unmarshal(
+        xmlGeneratorCertificateV4.generate(certificate, true)).getIntyg().getRelation();
+
+    assertAll(
+        () -> assertEquals("c2362fcd-eda0-4f9a-bd13-b3bbaf7f2146",
+            relation.get(0).getTyp().getCodeSystem()),
+        () -> assertEquals("ERSATT", relation.get(0).getTyp().getCode()),
+        () -> assertEquals("Ersätter", relation.get(0).getTyp().getDisplayName()),
+        () -> assertEquals(parentCertificate.id().id(),
+            relation.get(0).getIntygsId().getExtension())
+    );
+  }
 
   private RegisterCertificateType unmarshal(Xml response) {
     try {

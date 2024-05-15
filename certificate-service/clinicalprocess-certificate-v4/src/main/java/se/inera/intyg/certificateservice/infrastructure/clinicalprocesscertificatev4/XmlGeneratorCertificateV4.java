@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.w3._2000._09.xmldsig_.SignatureType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Signature;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
@@ -30,6 +31,7 @@ import se.riv.clinicalprocess.healthcond.certificate.types.v3.LegitimeratYrkeTyp
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.PersonId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.Specialistkompetens;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.TypAvIntyg;
+import se.riv.clinicalprocess.healthcond.certificate.types.v3.TypAvRelation;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.UnderskriftType;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Enhet;
 import se.riv.clinicalprocess.healthcond.certificate.v3.HosPersonal;
@@ -43,6 +45,7 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
   private static final String EMPTY = "";
   private static final String NOT_APPLICABLE = "N/A";
   private static final String PRESCRIPTION_CODE_MASKED = "0000000";
+  public static final String KV_RELATION_CODE_SYSTEM = "c2362fcd-eda0-4f9a-bd13-b3bbaf7f2146";
 
   private final XmlGeneratorValue xmlGeneratorValue;
   private final XmlValidationService xmlValidationService;
@@ -105,6 +108,8 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
         xmlGeneratorValue.generate(certificate.elementData())
     );
 
+    relation(intyg, certificate.parent());
+
     final var signeringsTidpunkt = signeringsTidpunkt(certificate);
     if (signeringsTidpunkt != null) {
       intyg.setSigneringstidpunkt(signeringsTidpunkt);
@@ -117,6 +122,27 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
     }
 
     return intyg;
+  }
+
+  private static void relation(Intyg intyg, Relation parent) {
+    if (parent == null) {
+      return;
+    }
+    final var relation = new se.riv.clinicalprocess.healthcond.certificate.v3.Relation();
+
+    IntygId intygId = new IntygId();
+    intygId.setRoot(parent.certificate().certificateMetaData().issuingUnit().hsaId().id());
+    intygId.setExtension(parent.certificate().id().id());
+
+    final var typAvRelation = new TypAvRelation();
+    typAvRelation.setCodeSystem(KV_RELATION_CODE_SYSTEM);
+    typAvRelation.setCode(parent.type().toRelationKod());
+    typAvRelation.setDisplayName(parent.type().toRelationKodText());
+
+    relation.setIntygsId(intygId);
+    relation.setTyp(typAvRelation);
+
+    intyg.getRelation().add(relation);
   }
 
   private static IntygId intygsId(Certificate certificate) {
