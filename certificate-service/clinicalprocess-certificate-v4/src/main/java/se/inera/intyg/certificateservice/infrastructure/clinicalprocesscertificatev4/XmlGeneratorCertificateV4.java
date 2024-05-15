@@ -185,10 +185,10 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
         );
 
     certificate.certificateMetaData().issuer().healthCareProfessionalLicence().stream()
-        .map(professionalRole -> {
+        .map(professionalLicence -> {
               final var legitimeratYrkeType = new LegitimeratYrkeType();
               legitimeratYrkeType.setCode(NOT_APPLICABLE);
-              legitimeratYrkeType.setDisplayName(professionalRole.value());
+              legitimeratYrkeType.setDisplayName(professionalLicence.value());
               return legitimeratYrkeType;
             }
         )
