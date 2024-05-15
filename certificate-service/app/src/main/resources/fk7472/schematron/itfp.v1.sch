@@ -5,7 +5,7 @@
     queryBinding='xslt2'
     schemaVersion='ISO19757-3'>
 
-  <iso:title>Schematron file for "Intyg om tillfällig föräldrapenning 7443" - Version 1.</iso:title>
+  <iso:title>Schematron file for "Intyg om tillfällig föräldrapenning FK7472" - Version 1.</iso:title>
 
   <iso:ns prefix="xs" uri="http://www.w3.org/2001/XMLSchema"/>
   <iso:ns prefix="rg" uri="urn:riv:clinicalprocess:healthcond:certificate:RegisterCertificateResponder:3"/>

@@ -24,6 +24,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.QUESTION_BERAKNAT_FODELSEDATUM_ID;
 import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.FK7210;
 import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.VERSION;
 import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.WRONG_VERSION;
@@ -601,14 +602,14 @@ class FK7210ActiveIT {
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
-      final var questionId = "1";
+
       final var expectedDate = LocalDate.now().plusDays(5);
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateDateValue(certificate, questionId, expectedDate))
+              QUESTION_BERAKNAT_FODELSEDATUM_ID.id(),
+              updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), expectedDate))
       );
 
       final var response = api.updateCertificate(
@@ -620,7 +621,7 @@ class FK7210ActiveIT {
       );
 
       assertEquals(expectedDate,
-          getValueDate(response, questionId)
+          getValueDate(response, QUESTION_BERAKNAT_FODELSEDATUM_ID.id())
       );
     }
 
@@ -653,14 +654,13 @@ class FK7210ActiveIT {
           defaultTestablilityCertificateRequest(FK7210, VERSION)
       );
 
-      final var questionId = "1";
       final var expectedDate = LocalDate.now().plusDays(5);
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateDateValue(certificate, questionId, expectedDate))
+              QUESTION_BERAKNAT_FODELSEDATUM_ID.id(),
+              updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), expectedDate))
       );
 
       final var response = api.updateCertificate(
@@ -672,7 +672,7 @@ class FK7210ActiveIT {
       );
 
       assertEquals(expectedDate,
-          getValueDate(response, questionId)
+          getValueDate(response, QUESTION_BERAKNAT_FODELSEDATUM_ID.id())
       );
     }
 
@@ -683,14 +683,13 @@ class FK7210ActiveIT {
           defaultTestablilityCertificateRequest(FK7210, VERSION)
       );
 
-      final var questionId = "1";
       final var expectedDate = LocalDate.now().plusDays(5);
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateDateValue(certificate, questionId, expectedDate))
+              QUESTION_BERAKNAT_FODELSEDATUM_ID.id(),
+              updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), expectedDate))
       );
 
       final var response = api.updateCertificate(
@@ -701,7 +700,7 @@ class FK7210ActiveIT {
       );
 
       assertEquals(expectedDate,
-          getValueDate(response, questionId)
+          getValueDate(response, QUESTION_BERAKNAT_FODELSEDATUM_ID.id())
       );
     }
 
@@ -714,14 +713,13 @@ class FK7210ActiveIT {
               .build()
       );
 
-      final var questionId = "1";
       final var expectedDate = LocalDate.now().plusDays(5);
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateDateValue(certificate, questionId, expectedDate))
+              QUESTION_BERAKNAT_FODELSEDATUM_ID.id(),
+              updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), expectedDate))
       );
 
       final var response = api.updateCertificate(
@@ -733,7 +731,7 @@ class FK7210ActiveIT {
       );
 
       assertEquals(expectedDate,
-          getValueDate(response, questionId)
+          getValueDate(response, QUESTION_BERAKNAT_FODELSEDATUM_ID.id())
       );
     }
 
@@ -1602,14 +1600,13 @@ class FK7210ActiveIT {
           defaultTestablilityCertificateRequest(FK7210, VERSION)
       );
 
-      final var questionId = "1";
       final var expectedDate = LocalDate.now().plusDays(5);
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateDateValue(certificate, questionId, expectedDate))
+              QUESTION_BERAKNAT_FODELSEDATUM_ID.id(),
+              updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), expectedDate))
       );
 
       api.updateCertificate(
@@ -1643,14 +1640,13 @@ class FK7210ActiveIT {
           defaultTestablilityCertificateRequest(FK7210, VERSION)
       );
 
-      final var questionId = "1";
       final var expectedDate = LocalDate.now().plusDays(5);
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateDateValue(certificate, questionId, expectedDate))
+              QUESTION_BERAKNAT_FODELSEDATUM_ID.id(),
+              updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), expectedDate))
       );
 
       api.updateCertificate(
@@ -2112,14 +2108,13 @@ class FK7210ActiveIT {
           defaultTestablilityCertificateRequest(FK7210, VERSION)
       );
 
-      final var questionId = "1";
       final var date = LocalDate.now().plusDays(5);
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateDateValue(certificate, questionId, date))
+              QUESTION_BERAKNAT_FODELSEDATUM_ID.id(),
+              updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), date))
       );
 
       final var response = api.validateCertificate(
@@ -2139,14 +2134,13 @@ class FK7210ActiveIT {
           defaultTestablilityCertificateRequest(FK7210, VERSION)
       );
 
-      final var questionId = "1";
       final var date = LocalDate.now().minusDays(1);
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateDateValue(certificate, questionId, date))
+              QUESTION_BERAKNAT_FODELSEDATUM_ID.id(),
+              updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), date))
       );
 
       final var response = api.validateCertificate(
@@ -2175,14 +2169,13 @@ class FK7210ActiveIT {
           defaultTestablilityCertificateRequest(FK7210, VERSION)
       );
 
-      final var questionId = "1";
       final var date = LocalDate.now().plusYears(1).plusDays(1);
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateDateValue(certificate, questionId, date))
+              QUESTION_BERAKNAT_FODELSEDATUM_ID.id(),
+              updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), date))
       );
 
       final var response = api.validateCertificate(
@@ -2211,13 +2204,12 @@ class FK7210ActiveIT {
           defaultTestablilityCertificateRequest(FK7210, VERSION)
       );
 
-      final var questionId = "1";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateDateValue(certificate, questionId, null))
+              QUESTION_BERAKNAT_FODELSEDATUM_ID.id(),
+              updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), null))
       );
 
       final var response = api.validateCertificate(
@@ -2252,11 +2244,10 @@ class FK7210ActiveIT {
               .withAddress("")
       );
 
-      final var questionId = "1";
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateDateValue(certificate, questionId, LocalDate.now()
+              QUESTION_BERAKNAT_FODELSEDATUM_ID.id(),
+              updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), LocalDate.now()
               )
           )
       );
@@ -2293,12 +2284,10 @@ class FK7210ActiveIT {
               .withZipCode("")
       );
 
-      final var questionId = "1";
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateDateValue(certificate, questionId, LocalDate.now()
-              )
+              QUESTION_BERAKNAT_FODELSEDATUM_ID.id(),
+              updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), LocalDate.now())
           )
       );
 
@@ -2334,11 +2323,10 @@ class FK7210ActiveIT {
               .withCity("")
       );
 
-      final var questionId = "1";
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateDateValue(certificate, questionId, LocalDate.now()
+              QUESTION_BERAKNAT_FODELSEDATUM_ID.id(),
+              updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), LocalDate.now()
               )
           )
       );
@@ -2375,12 +2363,10 @@ class FK7210ActiveIT {
               .withPhoneNumber("")
       );
 
-      final var questionId = "1";
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateDateValue(certificate, questionId, LocalDate.now()
-              )
+              QUESTION_BERAKNAT_FODELSEDATUM_ID.id(),
+              updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), LocalDate.now())
           )
       );
 

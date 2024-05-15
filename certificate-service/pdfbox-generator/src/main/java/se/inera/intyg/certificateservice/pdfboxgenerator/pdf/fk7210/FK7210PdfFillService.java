@@ -26,7 +26,7 @@ public class FK7210PdfFillService implements CertificateTypePdfFillService {
   public static final String CERTIFIER_DOCTOR_FIELD_ID = "form1[0].#subform[0].ksr_kryssruta[0]";
   public static final String CERTIFIER_MIDWIFE_FIELD_ID = "form1[0].#subform[0].ksr_kryssruta[1]";
   public static final String CERTIFIER_NURSE_FIELD_ID = "form1[0].#subform[0].ksr_kryssruta[2]";
-  public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_ID = new ElementId("1");
+  public static final ElementId QUESTION_BERAKNAT_FODELSEDATUM_ID = new ElementId("54");
 
   private final PdfDateValueGenerator pdfDateValueGenerator;
 
@@ -61,7 +61,7 @@ public class FK7210PdfFillService implements CertificateTypePdfFillService {
   private List<PdfField> setExpectedDeliveryDate(Certificate certificate) {
     return pdfDateValueGenerator.generate(
         certificate,
-        QUESTION_BERAKNAT_NEDKOMSTDATUM_ID,
+        QUESTION_BERAKNAT_FODELSEDATUM_ID,
         BERAKNAT_NEDKOMSTDATUM_FIELD_ID
     );
   }

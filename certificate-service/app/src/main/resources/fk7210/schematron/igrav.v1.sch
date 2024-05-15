@@ -14,31 +14,31 @@
 
   <iso:pattern id="intyg">
     <iso:rule context="//rg:intyg">
-      <iso:assert test="count(gn:svar[@id='1']) = 1">
-        Ett intyg måsta ha ett 'Beräknat nedkomstdatum' svar
+      <iso:assert test="count(gn:svar[@id='54']) = 1">
+        Ett intyg måsta ha ett 'Beräknat födelsedatum' svar
       </iso:assert>
     </iso:rule>
   </iso:pattern>
 
   <iso:pattern id="q1">
     <iso:rule context="//gn:svar[@id='1']">
-      <iso:assert test="count(gn:delsvar[@id='1.1']) = 1">
-        Ett 'Beräknat nedkomstdatum' svar måste ha ett delsvar
+      <iso:assert test="count(gn:delsvar[@id='54.1']) = 1">
+        Ett 'Beräknat födelsedatum' svar måste ha ett delsvar
       </iso:assert>
     </iso:rule>
   </iso:pattern>
 
-  <iso:pattern id="q1.1">
-    <iso:rule context="//gn:delsvar[@id='1.1']">
+  <iso:pattern id="q54.1">
+    <iso:rule context="//gn:delsvar[@id='54.1']">
       <iso:let name="currDate" value="xs:date(current-date())"/>
       <iso:let name="currDatePlusOneYear" value="$currDate + xs:dayTimeDuration('P366D')"/>
       <iso:let name="expectedBirthDate" value="xs:date(.)"/>
       <iso:extends rule="date"/>
       <iso:assert test="$expectedBirthDate ge $currDate">
-        Datum som anges som 'Beräknat nedkomstdatum' får inte vara tidigare än dagens datum.
+        Datum som anges som 'Beräknat födelsedatum' får inte vara tidigare än dagens datum.
       </iso:assert>
       <iso:assert test="$expectedBirthDate le $currDatePlusOneYear">
-        Datum som anges som 'Beräknat nedkomstdatum' får inte vara längre än 366 dagar framåt i tiden.
+        Datum som anges som 'Beräknat födelsedatum' får inte vara längre än 366 dagar framåt i tiden.
       </iso:assert>
     </iso:rule>
   </iso:pattern>

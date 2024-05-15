@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.QUESTION_BERAKNAT_FODELSEDATUM_ID;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummary;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
 class FK7210CertificateSummaryProviderTest {
 
@@ -23,7 +23,7 @@ class FK7210CertificateSummaryProviderTest {
     final var certificate = fk7210CertificateBuilder()
         .signed(SIGNED)
         .elementData(List.of(ElementData.builder()
-            .id(new ElementId("1"))
+            .id(QUESTION_BERAKNAT_FODELSEDATUM_ID)
             .value(ElementValueDate.builder()
                 .date(DATE)
                 .build())

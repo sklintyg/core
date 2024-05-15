@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.QUESTION_BERAKNAT_FODELSEDATUM_ID;
+
 import java.time.format.DateTimeFormatter;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
@@ -24,7 +26,7 @@ public class FK7210CertificateSummaryProvider implements CertificateSummaryProvi
     final var elementDataDate = certificate.elementData()
         .stream()
         .filter(
-            elementData -> elementData.id().id().equals("1")
+            elementData -> QUESTION_BERAKNAT_FODELSEDATUM_ID.equals(elementData.id())
         )
         .findFirst();
 

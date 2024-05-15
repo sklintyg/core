@@ -102,7 +102,7 @@ class CertificateConverterTest {
   private static final LocalDateTime MODIFIED = LocalDateTime.now(ZoneId.systemDefault());
   private static final LocalDate DATE = LocalDate.now().plusDays(1);
   private static final String Q_1 = "q1";
-  private static final String ID = "1";
+  private static final String ID = "54";
   private static final String EXPRESSION = "$beraknatnedkomstdatum";
   private static final String NAME = "Beräknat nedkomstdatum";
   private static final String KEY = "key";

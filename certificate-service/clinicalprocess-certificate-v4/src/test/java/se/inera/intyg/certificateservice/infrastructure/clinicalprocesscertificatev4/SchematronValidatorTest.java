@@ -43,10 +43,10 @@ class SchematronValidatorTest {
     @Test
     void shallReturnTrueForValidCertificate() {
       final var element = ElementData.builder()
-          .id(new ElementId("1"))
+          .id(new ElementId("54"))
           .value(
               ElementValueDate.builder()
-                  .dateId(new FieldId("1.1"))
+                  .dateId(new FieldId("54.1"))
                   .date(LocalDate.now())
                   .build()
           ).build();
