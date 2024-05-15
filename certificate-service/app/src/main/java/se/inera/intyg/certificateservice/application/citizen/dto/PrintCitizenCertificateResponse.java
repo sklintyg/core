@@ -11,7 +11,7 @@ import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCer
 @Builder
 public class PrintCitizenCertificateResponse {
 
-  String fileName;
+  String filename;
   byte[] pdfData;
 
   @JsonPOJOBuilder(withPrefix = "")

@@ -37,7 +37,7 @@ public class GetCertificatePdfService {
 
     return GetCertificatePdfResponse.builder()
         .pdfData(certificatePdf.pdfData())
-        .filename(certificatePdf.fileName())
+        .fileName(certificatePdf.fileName())
         .build();
   }
 }

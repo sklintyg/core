@@ -255,7 +255,7 @@ class CertificateControllerTest {
     final var request = GetCertificatePdfRequest.builder().build();
     final var expectedResult = GetCertificatePdfResponse.builder()
         .pdfData("pdf".getBytes())
-        .filename("fileName")
+        .fileName("fileName")
         .build();
     doReturn(expectedResult).when(getCertificatePdfService).get(request, CERTIFICATE_ID);
 
