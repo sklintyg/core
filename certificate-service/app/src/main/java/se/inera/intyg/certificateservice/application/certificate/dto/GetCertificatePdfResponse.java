@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 public class GetCertificatePdfResponse {
 
   byte[] pdfData;
-  String fileName;
+  String filename;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class GetCertificatePdfResponseBuilder {

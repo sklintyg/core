@@ -93,7 +93,7 @@ class GetCertificatePdfServiceTest {
     @Test
     void shallReturnResponseWithPdf() {
       final var expectedResponse = GetCertificatePdfResponse.builder()
-          .fileName(FILE_NAME)
+          .filename(FILE_NAME)
           .pdfData(PDF_DATA)
           .build();
 
