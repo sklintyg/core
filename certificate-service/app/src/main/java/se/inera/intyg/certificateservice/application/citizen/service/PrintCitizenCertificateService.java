@@ -29,7 +29,7 @@ public class PrintCitizenCertificateService {
     );
 
     return PrintCitizenCertificateResponse.builder()
-        .fileName(pdf.fileName())
+        .filename(pdf.fileName())
         .pdfData(pdf.pdfData())
         .build();
   }

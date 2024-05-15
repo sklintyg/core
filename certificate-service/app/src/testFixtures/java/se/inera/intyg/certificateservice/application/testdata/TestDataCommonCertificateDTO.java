@@ -21,8 +21,8 @@ public class TestDataCommonCertificateDTO {
   }
 
   private static final String QUESTION_ID = "questionId";
-  private static final String FK7211_CONFIG_ID = "beraknatnedkomstdatum";
-  private static final String FK7211_CONFIG_TEXT = "Beräknat nedkomstdatum";
+  private static final String FK7210_CONFIG_ID = "beraknatnedkomstdatum";
+  private static final String FK7210_CONFIG_TEXT = "Beräknat nedkomstdatum";
   public static final CertificateMetadataDTO METADATA = certificateMetadata().build();
 
   public static CertificateMetadataDTO.CertificateMetadataDTOBuilder certificateMetadata() {
@@ -34,7 +34,7 @@ public class TestDataCommonCertificateDTO {
         .issuedBy(AJLA_DOKTOR);
   }
 
-  public static CertificateDTOBuilder fk7211Certificate() {
+  public static CertificateDTOBuilder fk7210Certificate() {
     return CertificateDTO.builder()
         .data(
             Map.of(
@@ -42,15 +42,15 @@ public class TestDataCommonCertificateDTO {
                 CertificateDataElement.builder()
                     .config(
                         CertificateDataConfigDate.builder()
-                            .id(FK7211_CONFIG_ID)
+                            .id(FK7210_CONFIG_ID)
                             .maxDate(LocalDate.MAX)
                             .minDate(LocalDate.MIN)
-                            .text(FK7211_CONFIG_TEXT)
+                            .text(FK7210_CONFIG_TEXT)
                             .build()
                     )
                     .value(
                         CertificateDataValueDate.builder()
-                            .id(FK7211_CONFIG_ID)
+                            .id(FK7210_CONFIG_ID)
                             .date(LocalDate.now())
                             .build()
                     )

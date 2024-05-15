@@ -6,9 +6,9 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.A
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_TYPE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_VERSION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_TYPE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
@@ -72,7 +72,7 @@ class CertificateEventLogServiceTest {
         .start(now.minusSeconds(1))
         .end(now)
         .type(CertificateEventType.READ)
-        .certificate(FK7211_CERTIFICATE)
+        .certificate(FK7210_CERTIFICATE)
         .actionEvaluation(ACTION_EVALUATION)
         .build();
   }
@@ -138,13 +138,13 @@ class CertificateEventLogServiceTest {
   @Test
   void shallIncludeCertificateTypeInMDC() {
     certificateEventLogService.event(certificateEvent);
-    assertEquals(FK7211_TYPE.type(), getValueFromMDC(EVENT_CERTIFICATE_TYPE));
+    assertEquals(FK7210_TYPE.type(), getValueFromMDC(EVENT_CERTIFICATE_TYPE));
   }
 
   @Test
   void shallIncludeCertificateVersionInMDC() {
     certificateEventLogService.event(certificateEvent);
-    assertEquals(FK7211_VERSION.version(), getValueFromMDC(EVENT_CERTIFICATE_VERSION));
+    assertEquals(FK7210_VERSION.version(), getValueFromMDC(EVENT_CERTIFICATE_VERSION));
   }
 
   @Test

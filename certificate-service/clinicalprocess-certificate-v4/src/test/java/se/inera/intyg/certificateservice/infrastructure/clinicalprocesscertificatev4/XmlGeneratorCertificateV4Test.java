@@ -13,10 +13,11 @@ import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_CODE_TYPE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_VERSION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK443_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_CODE_TYPE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ADDRESS;
@@ -83,7 +84,7 @@ class XmlGeneratorCertificateV4Test {
 
   @Test
   void shouldReturnXmlThatCanBeSuccessfullyUnmarshalled() {
-    final var response = xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true);
+    final var response = xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true);
 
     assertDoesNotThrow(
         () -> unmarshal(response), () -> "Could not unmarshall xml '%s'".formatted(response)
@@ -97,7 +98,7 @@ class XmlGeneratorCertificateV4Test {
     expected.setRoot(ALFA_ALLERGIMOTTAGNINGEN.hsaId().id());
 
     final var intyg = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
     ).getIntyg();
 
     assertAll(
@@ -109,12 +110,12 @@ class XmlGeneratorCertificateV4Test {
   @Test
   void shouldIncludeTypAvIntyg() {
     final var expected = new TypAvIntyg();
-    expected.setCode(FK7211_CODE_TYPE.code());
-    expected.setCodeSystem(FK7211_CODE_TYPE.codeSystem());
-    expected.setDisplayName(FK7211_CODE_TYPE.displayName());
+    expected.setCode(FK7210_CODE_TYPE.code());
+    expected.setCodeSystem(FK7210_CODE_TYPE.codeSystem());
+    expected.setDisplayName(FK7210_CODE_TYPE.displayName());
 
     final var typAvIntyg = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
     ).getIntyg().getTyp();
 
     assertAll(
@@ -129,10 +130,10 @@ class XmlGeneratorCertificateV4Test {
 
   @Test
   void shouldIncludeVersion() {
-    final var expectedVersion = FK7211_VERSION.version();
+    final var expectedVersion = FK7210_VERSION.version();
 
     final var intyg = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
     ).getIntyg();
 
     assertAll(
@@ -154,7 +155,7 @@ class XmlGeneratorCertificateV4Test {
     expected.setPostort("");
 
     final var patient = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
     ).getIntyg().getPatient();
 
     assertAll(
@@ -182,7 +183,7 @@ class XmlGeneratorCertificateV4Test {
     expected.setFullstandigtNamn(AJLA_DOCTOR_FULLNAME);
 
     final var skapadAv = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
     ).getIntyg().getSkapadAv();
 
     assertAll(
@@ -206,7 +207,7 @@ class XmlGeneratorCertificateV4Test {
     expectedTwo.setDisplayName(AJLA_DOCTOR_PA_TITLES.get(1).description());
 
     final var befattningar = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
     ).getIntyg().getSkapadAv().getBefattning();
 
     assertAll(
@@ -229,7 +230,7 @@ class XmlGeneratorCertificateV4Test {
     expectedTwo.setDisplayName(AJLA_DOCTOR_SPECIALITIES.get(1).value());
 
     final var specialistkompetens = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
     ).getIntyg().getSkapadAv().getSpecialistkompetens();
 
     assertAll(
@@ -274,7 +275,7 @@ class XmlGeneratorCertificateV4Test {
     expected.setEpost(ALFA_ALLERGIMOTTAGNINGEN_EMAIL);
 
     final var enhet = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
     ).getIntyg().getSkapadAv().getEnhet();
 
     assertAll(
@@ -297,7 +298,7 @@ class XmlGeneratorCertificateV4Test {
     expected.setExtension(ALFA_ALLERGIMOTTAGNINGEN_WORKPLACE_CODE);
 
     final var arbetsplatskod = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
     ).getIntyg().getSkapadAv().getEnhet().getArbetsplatskod();
 
     assertAll(
@@ -316,7 +317,7 @@ class XmlGeneratorCertificateV4Test {
     expected.setVardgivarnamn(ALFA_REGIONEN_NAME);
 
     final var vardgivare = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
     ).getIntyg().getSkapadAv().getEnhet().getVardgivare();
 
     assertAll(
@@ -340,7 +341,7 @@ class XmlGeneratorCertificateV4Test {
         .thenReturn(expectedAnswers);
 
     final var answers = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
     ).getIntyg().getSvar();
 
     assertAll(
@@ -352,7 +353,7 @@ class XmlGeneratorCertificateV4Test {
   @Test
   void shouldNotIncludeUnderskrift() {
     final var underskrift = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
     ).getIntyg().getUnderskrift();
 
     assertAll(
@@ -367,7 +368,7 @@ class XmlGeneratorCertificateV4Test {
     );
 
     final var underskrift = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, signature)
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, signature)
     ).getIntyg().getUnderskrift();
 
     assertAll(
@@ -378,7 +379,7 @@ class XmlGeneratorCertificateV4Test {
   @Test
   void shouldNotIncludeSigneringsTidpunktIfSignedIsNull() {
     final var signeringstidpunkt = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
     ).getIntyg().getSigneringstidpunkt();
 
     assertNull(signeringstidpunkt);
@@ -387,7 +388,7 @@ class XmlGeneratorCertificateV4Test {
   @Test
   void shouldNotIncludeSkickatTidpunktIfSignedIsNull() {
     final var skickatTidpunkt = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)
+        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
     ).getIntyg().getSkickatTidpunkt();
 
     assertNull(skickatTidpunkt);
@@ -395,7 +396,7 @@ class XmlGeneratorCertificateV4Test {
 
   @Test
   void shouldIncludeSigneringtidpunkt() {
-    final var signedCertificate = fk7211CertificateBuilder()
+    final var signedCertificate = fk7210CertificateBuilder()
         .status(Status.SIGNED)
         .signed(LocalDateTime.now(ZoneId.systemDefault()))
         .build();
@@ -412,7 +413,7 @@ class XmlGeneratorCertificateV4Test {
 
   @Test
   void shouldIncludeSkickatTidpunkt() {
-    final var signedCertificate = fk7211CertificateBuilder()
+    final var signedCertificate = fk7210CertificateBuilder()
         .status(Status.SIGNED)
         .signed(LocalDateTime.now(ZoneId.systemDefault()))
         .build();
@@ -429,17 +430,17 @@ class XmlGeneratorCertificateV4Test {
 
   @Test
   void shouldValidateXmlIfValidateIsTrue() {
-    final var xml = xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true);
+    final var xml = xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true);
     verify(xmlValidationService).validate(
         xml,
-        FK7211_CERTIFICATE.certificateModel().schematronPath(),
-        FK7211_CERTIFICATE.id()
+        FK7210_CERTIFICATE.certificateModel().schematronPath(),
+        FK7210_CERTIFICATE.id()
     );
   }
 
   @Test
   void shouldNotValidateXmlIfValidateIsFalse() {
-    xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, false);
+    xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, false);
     verifyNoInteractions(xmlValidationService);
 
   }

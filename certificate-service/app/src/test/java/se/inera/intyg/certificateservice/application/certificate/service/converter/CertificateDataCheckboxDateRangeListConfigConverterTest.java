@@ -3,8 +3,8 @@ package se.inera.intyg.certificateservice.application.certificate.service.conver
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7443CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7472CertificateBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -76,7 +76,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
         .build();
 
     assertThrows(IllegalStateException.class,
-        () -> converter.convert(elementSpecification, FK7211_CERTIFICATE)
+        () -> converter.convert(elementSpecification, FK7210_CERTIFICATE)
     );
   }
 
@@ -104,7 +104,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
 
     final var response = converter.convert(
         elementSpecification,
-        FK7211_CERTIFICATE
+        FK7210_CERTIFICATE
     );
 
     assertEquals(expected, response);
@@ -116,7 +116,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
     final var expected = "På det ursprungliga intyget var slutdatumet för den sista perioden %s och omfattningen var %s."
         .formatted(previousEndDate, RANGE_LABEL_TWO);
 
-    final var previousCertificate = fk7443CertificateBuilder()
+    final var previousCertificate = fk7472CertificateBuilder()
         .id(new CertificateId("PreviousCertificateId"))
         .elementData(
             List.of(
@@ -145,7 +145,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
         )
         .build();
 
-    final var certificate = fk7443CertificateBuilder()
+    final var certificate = fk7472CertificateBuilder()
         .status(Status.DRAFT)
         .parent(
             Relation.builder()
@@ -170,7 +170,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
     final var expected = "På det ursprungliga intyget var slutdatumet för den sista perioden %s och omfattningen var <saknas>."
         .formatted(previousEndDate);
 
-    final var previousCertificate = fk7443CertificateBuilder()
+    final var previousCertificate = fk7472CertificateBuilder()
         .id(new CertificateId("PreviousCertificateId"))
         .elementData(
             List.of(
@@ -199,7 +199,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
         )
         .build();
 
-    final var certificate = fk7443CertificateBuilder()
+    final var certificate = fk7472CertificateBuilder()
         .status(Status.DRAFT)
         .parent(
             Relation.builder()
@@ -220,11 +220,11 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
 
   @Test
   void shallNotIncludePreviousDateRangeTextIfParentNotRenew() {
-    final var previousCertificate = fk7443CertificateBuilder()
+    final var previousCertificate = fk7472CertificateBuilder()
         .id(new CertificateId("PreviousCertificateId"))
         .build();
 
-    final var certificate = fk7443CertificateBuilder()
+    final var certificate = fk7472CertificateBuilder()
         .status(Status.DRAFT)
         .parent(
             Relation.builder()
@@ -245,7 +245,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
 
   @Test
   void shallNotIncludePreviousDateRangeTextIfNoParent() {
-    final var certificate = fk7443CertificateBuilder()
+    final var certificate = fk7472CertificateBuilder()
         .status(Status.DRAFT)
         .build();
 
@@ -261,7 +261,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
   void shallNotIncludePreviousDateRangeTextIfNotDraft() {
     final var previousEndDate = LocalDate.parse("2024-04-15");
 
-    final var previousCertificate = fk7443CertificateBuilder()
+    final var previousCertificate = fk7472CertificateBuilder()
         .id(new CertificateId("PreviousCertificateId"))
         .elementData(
             List.of(
@@ -290,7 +290,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
         )
         .build();
 
-    final var certificate = fk7443CertificateBuilder()
+    final var certificate = fk7472CertificateBuilder()
         .status(Status.SIGNED)
         .parent(
             Relation.builder()
@@ -311,11 +311,11 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
 
   @Test
   void shallNotIncludePreviousDateRangeTextIfNoPreviousValue() {
-    final var previousCertificate = fk7443CertificateBuilder()
+    final var previousCertificate = fk7472CertificateBuilder()
         .id(new CertificateId("PreviousCertificateId"))
         .build();
 
-    final var certificate = fk7443CertificateBuilder()
+    final var certificate = fk7472CertificateBuilder()
         .status(Status.DRAFT)
         .parent(
             Relation.builder()
@@ -336,7 +336,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
 
   @Test
   void shallNotIncludePreviousDateRangeTextIfNoDateRanges() {
-    final var previousCertificate = fk7443CertificateBuilder()
+    final var previousCertificate = fk7472CertificateBuilder()
         .id(new CertificateId("PreviousCertificateId"))
         .elementData(
             List.of(
@@ -352,7 +352,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
         )
         .build();
 
-    final var certificate = fk7443CertificateBuilder()
+    final var certificate = fk7472CertificateBuilder()
         .status(Status.DRAFT)
         .parent(
             Relation.builder()

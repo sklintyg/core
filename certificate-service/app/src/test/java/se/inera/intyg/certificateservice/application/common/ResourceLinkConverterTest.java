@@ -3,7 +3,7 @@ package se.inera.intyg.certificateservice.application.common;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,7 +69,7 @@ class ResourceLinkConverterTest {
           CERTIFICATE_ACTION_SPECIFICATION_READ);
 
       final var actualResult = resourceLinkConverter.convert(certificateActionCreate,
-          Optional.of(FK7211_CERTIFICATE), ACTION_EVALUATION);
+          Optional.of(FK7210_CERTIFICATE), ACTION_EVALUATION);
       assertEquals(resourceLinkDTO.getType(), actualResult.getType());
     }
 
@@ -97,7 +97,7 @@ class ResourceLinkConverterTest {
           CERTIFICATE_ACTION_SPECIFICATION_CREATE);
 
       final var actualResult = resourceLinkConverter.convert(certificateActionCreate,
-          Optional.of(FK7211_CERTIFICATE), ACTION_EVALUATION);
+          Optional.of(FK7210_CERTIFICATE), ACTION_EVALUATION);
       assertEquals(resourceLinkDTO.getDescription(), actualResult.getDescription());
     }
 
@@ -111,7 +111,7 @@ class ResourceLinkConverterTest {
           CERTIFICATE_ACTION_SPECIFICATION_SEND);
 
       final var actualResult = resourceLinkConverter.convert(certificateActionCreate,
-          Optional.of(FK7211_CERTIFICATE), ACTION_EVALUATION);
+          Optional.of(FK7210_CERTIFICATE), ACTION_EVALUATION);
       assertEquals(resourceLinkDTO.getBody(), actualResult.getBody());
     }
 

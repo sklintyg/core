@@ -34,7 +34,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.REVISION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.XML;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.CONTACT_INFO;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.DATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.dateElementDataBuilder;
@@ -1865,7 +1865,7 @@ class CertificateTest {
     @Test
     void shouldNotReturnSendIfNoRecipient() {
       final var certificate =
-          fk7211CertificateBuilder()
+          fk7210CertificateBuilder()
               .sent(null)
               .status(Status.SIGNED)
               .certificateModel(CertificateModel.builder()
@@ -1879,7 +1879,7 @@ class CertificateTest {
     @Test
     void shouldNotReturnSendIfDraft() {
       final var certificate =
-          fk7211CertificateBuilder()
+          fk7210CertificateBuilder()
               .sent(null)
               .status(Status.DRAFT)
               .build();
@@ -1890,7 +1890,7 @@ class CertificateTest {
     @Test
     void shouldNotReturnSendIfAlreadySent() {
       final var certificate =
-          fk7211CertificateBuilder()
+          fk7210CertificateBuilder()
               .status(Status.SIGNED)
               .sent(Sent.builder()
                   .sentAt(LocalDateTime.now())
@@ -1903,7 +1903,7 @@ class CertificateTest {
     @Test
     void shouldNotReturnSendIfReplacedBySignedCertificate() {
       final var certificate =
-          fk7211CertificateBuilder()
+          fk7210CertificateBuilder()
               .sent(null)
               .status(Status.SIGNED)
               .children(List.of(
@@ -1924,7 +1924,7 @@ class CertificateTest {
     @Test
     void shouldReturnSendIfReplacedByDraft() {
       final var certificate =
-          fk7211CertificateBuilder()
+          fk7210CertificateBuilder()
               .sent(null)
               .status(Status.SIGNED)
               .children(List.of(
@@ -1943,7 +1943,7 @@ class CertificateTest {
     @Test
     void shouldReturnSendIfRenewed() {
       final var certificate =
-          fk7211CertificateBuilder()
+          fk7210CertificateBuilder()
               .sent(null)
               .status(Status.SIGNED)
               .children(List.of(
@@ -1962,7 +1962,7 @@ class CertificateTest {
     @Test
     void shouldReturnSendIfAllConditionsAreMet() {
       final var certificate =
-          fk7211CertificateBuilder()
+          fk7210CertificateBuilder()
               .sent(null)
               .status(Status.SIGNED)
               .build();

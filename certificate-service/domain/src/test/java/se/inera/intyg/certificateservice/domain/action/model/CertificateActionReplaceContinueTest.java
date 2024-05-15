@@ -9,7 +9,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.BETA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.relationReplaceBuilder;
@@ -284,7 +284,7 @@ class CertificateActionReplaceContinueTest {
             List.of(
                 relationReplaceBuilder()
                     .certificate(
-                        fk7211CertificateBuilder()
+                        fk7210CertificateBuilder()
                             .status(Status.SIGNED)
                             .build()
                     )
@@ -308,7 +308,7 @@ class CertificateActionReplaceContinueTest {
             List.of(
                 relationReplaceBuilder()
                     .certificate(
-                        fk7211CertificateBuilder()
+                        fk7210CertificateBuilder()
                             .status(Status.REVOKED)
                             .build()
                     )
