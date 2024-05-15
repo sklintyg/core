@@ -7,7 +7,6 @@ import jakarta.xml.bind.JAXBElement;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +35,6 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Enhet;
 import se.riv.clinicalprocess.healthcond.certificate.v3.HosPersonal;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Intyg;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Patient;
-import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Vardgivare;
 
 @RequiredArgsConstructor
@@ -45,10 +43,8 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
   private static final String EMPTY = "";
   private static final String NOT_APPLICABLE = "N/A";
   private static final String PRESCRIPTION_CODE_MASKED = "0000000";
-  private static final String CERTIFICATE_TYPE_IGRAV = "IGRAV";
 
   private final XmlGeneratorValue xmlGeneratorValue;
-  private final XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare;
   private final XmlValidationService xmlValidationService;
 
   @Override
@@ -106,7 +102,7 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
         skapadAv(certificate)
     );
     intyg.getSvar().addAll(
-        svar(certificate)
+        xmlGeneratorValue.generate(certificate.elementData())
     );
 
     final var signeringsTidpunkt = signeringsTidpunkt(certificate);
@@ -121,19 +117,6 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
     }
 
     return intyg;
-  }
-
-  private List<Svar> svar(Certificate certificate) {
-    final var svar = xmlGeneratorValue.generate(certificate.elementData());
-
-    if (!svar.isEmpty() && certificate.certificateModel().type().code()
-        .equals(CERTIFICATE_TYPE_IGRAV)) {
-      final var role = certificate.certificateMetaData().issuer().role();
-      final var intygsgivare = xmlGeneratorIntygsgivare.generate(role);
-      svar.get(0).getDelsvar().add(intygsgivare);
-    }
-
-    return svar;
   }
 
   private static IntygId intygsId(Certificate certificate) {

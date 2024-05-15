@@ -30,7 +30,6 @@ import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificates
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.SchemaValidatorV4;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.SchematronValidator;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorCertificateV4;
-import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorIntygsgivare;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorValue;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlSchemaValidator;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlSchematronValidator;
@@ -116,16 +115,9 @@ public class AppConfig {
   }
 
   @Bean
-  public XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare() {
-    return new XmlGeneratorIntygsgivare();
-  }
-
-  @Bean
   public XmlGenerator xmlGenerator(XmlGeneratorValue xmlGeneratorValue,
-      XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare,
       XmlValidationService xmlValidationService) {
-    return new XmlGeneratorCertificateV4(xmlGeneratorValue, xmlGeneratorIntygsgivare,
-        xmlValidationService);
+    return new XmlGeneratorCertificateV4(xmlGeneratorValue, xmlValidationService);
   }
 
   @Bean

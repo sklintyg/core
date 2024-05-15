@@ -12,7 +12,6 @@ import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK443_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_CODE_TYPE;
@@ -44,13 +43,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Signature;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
 import se.riv.clinicalprocess.healthcond.certificate.registerCertificate.v3.RegisterCertificateType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.ArbetsplatsKod;
@@ -76,9 +73,6 @@ class XmlGeneratorCertificateV4Test {
 
   @Mock
   XmlGeneratorValue xmlGeneratorValue;
-  @Spy
-  XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare;
-
   @Mock
   XmlValidationService xmlValidationService;
 
@@ -351,43 +345,6 @@ class XmlGeneratorCertificateV4Test {
         () -> assertEquals(ANSWER_ID, answers.get(0).getId()),
         () -> assertEquals(SUB_ANSWER_ID, answers.get(0).getDelsvar().get(0).getId())
     );
-  }
-
-  @Test
-  void shouldIncludeIntygsgivare() {
-    final var answer = new Svar();
-    final var subAnswer = new Delsvar();
-    subAnswer.setId(SUB_ANSWER_ID);
-    answer.setId(ANSWER_ID);
-    answer.getDelsvar().add(subAnswer);
-    final var expectedAnswers = List.of(answer);
-    when(xmlGeneratorValue.generate(any()))
-        .thenReturn(expectedAnswers);
-
-    final var answers = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7211_CERTIFICATE, true)
-    ).getIntyg().getSvar();
-
-    verify(xmlGeneratorIntygsgivare).generate(any(Role.class));
-    assertEquals("1.2", answers.get(0).getDelsvar().get(1).getId());
-  }
-
-  @Test
-  void shouldNotCallXmlGeneratorIntygsgivare() {
-    final var answer = new Svar();
-    final var subAnswer = new Delsvar();
-    subAnswer.setId(SUB_ANSWER_ID);
-    answer.setId(ANSWER_ID);
-    answer.getDelsvar().add(subAnswer);
-    final var expectedAnswers = List.of(answer);
-    when(xmlGeneratorValue.generate(any()))
-        .thenReturn(expectedAnswers);
-
-    unmarshal(
-        xmlGeneratorCertificateV4.generate(FK443_CERTIFICATE, true)
-    ).getIntyg().getSvar();
-
-    verifyNoInteractions(xmlGeneratorIntygsgivare);
   }
 
   @Test
