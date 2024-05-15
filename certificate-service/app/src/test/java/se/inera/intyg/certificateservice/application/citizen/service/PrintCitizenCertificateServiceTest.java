@@ -1,8 +1,10 @@
 package se.inera.intyg.certificateservice.application.citizen.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -10,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateRequest;
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateResponse;
+import se.inera.intyg.certificateservice.application.citizen.validation.CitizenCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
@@ -36,16 +39,14 @@ class PrintCitizenCertificateServiceTest {
   @Mock
   PrintCitizenCertificateDomainService printCitizenCertificateDomainService;
 
+  @Mock
+  CitizenCertificateRequestValidator citizenCertificateRequestValidator;
+
   @InjectMocks
   PrintCitizenCertificateService printCitizenCertificateService;
 
-  @Test
-  void shouldReturnPrintCitizenCertificateResponse() {
-    final var expected = PrintCitizenCertificateResponse.builder()
-        .fileName(PDF.fileName())
-        .pdfData(PDF.pdfData())
-        .build();
-
+  @BeforeEach
+  void setup() {
     when(printCitizenCertificateDomainService.get(
             CERTIFICATE_ID,
             PersonId.builder()
@@ -55,6 +56,21 @@ class PrintCitizenCertificateServiceTest {
             ADDITIONAL_INFO_TEXT
         )
     ).thenReturn(PDF);
+  }
+
+  @Test
+  void shouldValidateCertificateId() {
+    printCitizenCertificateService.get(REQUEST, CERTIFICATE_ID.id());
+
+    verify(citizenCertificateRequestValidator).validate(CERTIFICATE_ID.id(), PERSON_ID_DTO);
+  }
+
+  @Test
+  void shouldReturnPrintCitizenCertificateResponse() {
+    final var expected = PrintCitizenCertificateResponse.builder()
+        .fileName(PDF.fileName())
+        .pdfData(PDF.pdfData())
+        .build();
 
     final var response = printCitizenCertificateService.get(REQUEST, CERTIFICATE_ID.id());
 

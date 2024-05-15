@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.domain.certificatemodel.model;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
@@ -10,6 +10,8 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummary;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
 class FK7211CertificateSummaryProviderTest {
 

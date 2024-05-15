@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateRequest;
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateResponse;
+import se.inera.intyg.certificateservice.application.citizen.validation.CitizenCertificateRequestValidator;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.citizen.service.PrintCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
@@ -13,10 +14,11 @@ import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 public class PrintCitizenCertificateService {
 
   private final PrintCitizenCertificateDomainService printCitizenCertificateDomainService;
+  private final CitizenCertificateRequestValidator citizenCertificateRequestValidator;
 
   public PrintCitizenCertificateResponse get(PrintCitizenCertificateRequest request,
       String certificateId) {
-
+    citizenCertificateRequestValidator.validate(certificateId, request.getPersonId());
     final var pdf = printCitizenCertificateDomainService.get(
         new CertificateId(certificateId),
         PersonId.builder()

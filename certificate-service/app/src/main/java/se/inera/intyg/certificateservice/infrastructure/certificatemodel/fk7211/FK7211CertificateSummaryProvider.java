@@ -1,8 +1,10 @@
-package se.inera.intyg.certificateservice.domain.certificatemodel.model;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211;
 
 import java.time.format.DateTimeFormatter;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummary;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummaryProvider;
 
 public class FK7211CertificateSummaryProvider implements CertificateSummaryProvider {
 

@@ -84,11 +84,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.FK7211CertificateSummaryProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.FK7211CertificateSummaryProvider;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateConverterTest {
