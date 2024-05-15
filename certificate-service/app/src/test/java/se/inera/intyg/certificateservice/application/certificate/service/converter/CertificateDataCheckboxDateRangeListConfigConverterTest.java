@@ -3,7 +3,7 @@ package se.inera.intyg.certificateservice.application.certificate.service.conver
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7443CertificateBuilder;
 
 import java.time.LocalDate;
@@ -76,7 +76,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
         .build();
 
     assertThrows(IllegalStateException.class,
-        () -> converter.convert(elementSpecification, FK7211_CERTIFICATE)
+        () -> converter.convert(elementSpecification, FK7210_CERTIFICATE)
     );
   }
 
@@ -104,7 +104,7 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
 
     final var response = converter.convert(
         elementSpecification,
-        FK7211_CERTIFICATE
+        FK7210_CERTIFICATE
     );
 
     assertEquals(expected, response);

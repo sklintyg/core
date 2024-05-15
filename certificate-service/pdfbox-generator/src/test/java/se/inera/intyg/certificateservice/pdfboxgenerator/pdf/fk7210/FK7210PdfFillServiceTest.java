@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7210;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -8,7 +8,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ALVA_VARDADMINISTRATOR;
@@ -16,10 +16,10 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AN
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.BERTIL_BARNMORSKA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.CHECKED_BOX_VALUE;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService.CERTIFIER_DOCTOR_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService.CERTIFIER_MIDWIFE_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService.CERTIFIER_NURSE_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211.FK7211PdfFillService.QUESTION_BERAKNAT_NEDKOMSTDATUM_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7210.FK7210PdfFillService.CERTIFIER_DOCTOR_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7210.FK7210PdfFillService.CERTIFIER_MIDWIFE_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7210.FK7210PdfFillService.CERTIFIER_NURSE_FIELD_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7210.FK7210PdfFillService.QUESTION_BERAKNAT_NEDKOMSTDATUM_ID;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -42,7 +42,7 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfDateValueGenerator;
 
 @ExtendWith(MockitoExtension.class)
-class FK7211PdfFillServiceTest {
+class FK7210PdfFillServiceTest {
 
   private static final LocalDate DELIVERY_DATE = LocalDate.now();
   private static final ElementData BERAKNAT_NEDKOMST_DATUM_ELEMENT_DATA = ElementData.builder()
@@ -63,34 +63,34 @@ class FK7211PdfFillServiceTest {
   PdfDateValueGenerator pdfDateValueGenerator;
 
   @InjectMocks
-  private FK7211PdfFillService fk7211PdfFillService;
+  private FK7210PdfFillService fk7210PdfFillService;
 
   @Test
   void shouldReturnPatientIdFormId() {
-    assertEquals("form1[0].#subform[0].flt_pnr[0]", fk7211PdfFillService.getPatientIdFieldId());
+    assertEquals("form1[0].#subform[0].flt_pnr[0]", fk7210PdfFillService.getPatientIdFieldId());
   }
 
   @Test
   void shouldReturnGeneratorType() {
     assertEquals(
-        fk7211CertificateBuilder().build().certificateModel().id().type(),
-        fk7211PdfFillService.getType()
+        fk7210CertificateBuilder().build().certificateModel().id().type(),
+        fk7210PdfFillService.getType()
     );
   }
 
   @Test
   void shouldReturnAvailableMcid() {
-    assertEquals(100, fk7211PdfFillService.getAvailableMcid());
+    assertEquals(100, fk7210PdfFillService.getAvailableMcid());
   }
 
   @Test
   void shouldReturnSignedTagIndex() {
-    assertEquals(18, fk7211PdfFillService.getSignatureTagIndex());
+    assertEquals(18, fk7210PdfFillService.getSignatureTagIndex());
   }
 
   @Test
   void shouldNotSetExpectedDeliveryDateIfDateIsNotProvided() {
-    final var result = fk7211PdfFillService.getFields(
+    final var result = fk7210PdfFillService.getFields(
         buildCertificate(Collections.emptyList())
     );
 
@@ -113,7 +113,7 @@ class FK7211PdfFillServiceTest {
 
       @Test
       void shouldReturnExpectedDeliveryDateIfDateIsProvided() {
-        final var result = fk7211PdfFillService.getFields(
+        final var result = fk7210PdfFillService.getFields(
             buildCertificate(List.of(BERAKNAT_NEDKOMST_DATUM_ELEMENT_DATA))
         );
 
@@ -133,7 +133,7 @@ class FK7211PdfFillServiceTest {
             .value(CHECKED_BOX_VALUE)
             .build();
 
-        final var result = fk7211PdfFillService.getFields(
+        final var result = fk7210PdfFillService.getFields(
             buildCertificate(AJLA_DOKTOR)
         );
 
@@ -148,7 +148,7 @@ class FK7211PdfFillServiceTest {
             .value(CHECKED_BOX_VALUE)
             .build();
 
-        final var result = fk7211PdfFillService.getFields(
+        final var result = fk7210PdfFillService.getFields(
             buildCertificate(BERTIL_BARNMORSKA)
         );
 
@@ -163,7 +163,7 @@ class FK7211PdfFillServiceTest {
             .value(CHECKED_BOX_VALUE)
             .build();
 
-        final var result = fk7211PdfFillService.getFields(
+        final var result = fk7210PdfFillService.getFields(
             buildCertificate(ANNA_SJUKSKOTERSKA)
         );
 
@@ -173,7 +173,7 @@ class FK7211PdfFillServiceTest {
 
       @Test
       void shouldNotSetCertifierIfRoleIsAdmin() {
-        final var result = fk7211PdfFillService.getFields(
+        final var result = fk7210PdfFillService.getFields(
             buildCertificate(ALVA_VARDADMINISTRATOR)
         );
 
@@ -183,7 +183,7 @@ class FK7211PdfFillServiceTest {
 
       @Test
       void shouldOnlySetOneIssuerRole() {
-        final var result = fk7211PdfFillService.getFields(
+        final var result = fk7210PdfFillService.getFields(
             buildCertificate(AJLA_DOKTOR)
         );
 
@@ -194,13 +194,13 @@ class FK7211PdfFillServiceTest {
   }
 
   private Certificate buildCertificate(List<ElementData> elementData) {
-    return fk7211CertificateBuilder()
+    return fk7210CertificateBuilder()
         .elementData(elementData)
         .build();
   }
 
   private Certificate buildCertificate(Staff staff) {
-    return fk7211CertificateBuilder()
+    return fk7210CertificateBuilder()
         .certificateMetaData(CertificateMetaData.builder()
             .issuer(staff)
             .patient(ATHENA_REACT_ANDERSSON)

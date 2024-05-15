@@ -39,7 +39,7 @@ Content-Type: application/json
     "testIndicated": "false"
   },
   "certificateModelId": {
-    "type": "fk7211",
+    "type": "fk7210",
     "version": "1.0"
   }
 }

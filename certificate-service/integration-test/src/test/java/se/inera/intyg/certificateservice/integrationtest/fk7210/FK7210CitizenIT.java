@@ -1,12 +1,12 @@
-package se.inera.intyg.certificateservice.integrationtest.fk7211;
+package se.inera.intyg.certificateservice.integrationtest.fk7210;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO.SIGNED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ALVE_REACT_ALFREDSSON_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
-import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.FK7211;
-import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.VERSION;
+import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.FK7210;
+import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.VERSION;
 import static se.inera.intyg.certificateservice.integrationtest.fk7433.FK7443Constants.FK7443;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
@@ -39,14 +39,14 @@ import se.inera.intyg.certificateservice.integrationtest.util.TestabilityApiUtil
 
 @ActiveProfiles({"integration-test", TESTABILITY_PROFILE})
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class FK7211CitizenIT {
+class FK7210CitizenIT {
 
   @LocalServerPort
   private int port;
 
   @DynamicPropertySource
   static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.fk7211.v1_0.active.from", () -> "2024-01-01T00:00:00");
+    registry.add("certificate.model.fk7210.v1_0.active.from", () -> "2024-01-01T00:00:00");
   }
 
   private final TestRestTemplate restTemplate;
@@ -57,7 +57,7 @@ class FK7211CitizenIT {
   private TestabilityApiUtil testabilityApi;
 
   @Autowired
-  public FK7211CitizenIT(TestRestTemplate restTemplate) {
+  public FK7210CitizenIT(TestRestTemplate restTemplate) {
     this.restTemplate = restTemplate;
   }
 
@@ -82,14 +82,14 @@ class FK7211CitizenIT {
   }
 
   @Nested
-  @DisplayName("FK7211 - Hämta intyg för invånare")
+  @DisplayName("FK7210 - Hämta intyg för invånare")
   class GetCitizenCertificate {
 
     @Test
-    @DisplayName("FK7211 - Om intyget är utfärdat på invånaren ska intyget returneras")
-    void shallReturnFK7211IfIssuedOnCitizen() {
+    @DisplayName("FK7210 - Om intyget är utfärdat på invånaren ska intyget returneras")
+    void shallReturnFK7210IfIssuedOnCitizen() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7210, VERSION, SIGNED)
       );
 
       final var response = api.getCitizenCertificate(
@@ -106,10 +106,10 @@ class FK7211CitizenIT {
     }
 
     @Test
-    @DisplayName("FK7211 - Om intyget är utfärdat på en annan invånare ska felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7210 - Om intyget är utfärdat på en annan invånare ska felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfNotIssuedOnCitizen() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7210, VERSION, SIGNED)
       );
 
       final var response = api.getCitizenCertificate(
@@ -126,16 +126,16 @@ class FK7211CitizenIT {
   }
 
   @Nested
-  @DisplayName("FK7211 - Hämta intygslista för invånare")
+  @DisplayName("FK7210 - Hämta intygslista för invånare")
   class GetCitizenCertificateList {
 
     @Test
-    @DisplayName("FK7211 - Om intyget är utfärdat på invånaren ska intyget returneras")
+    @DisplayName("FK7210 - Om intyget är utfärdat på invånaren ska intyget returneras")
     void shallReturnListOfCertificatesIfAvailableForCitizen() {
       testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED),
+          defaultTestablilityCertificateRequest(FK7210, VERSION, SIGNED),
           defaultTestablilityCertificateRequest(FK7443, VERSION, SIGNED),
-          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7210, VERSION, SIGNED)
       );
 
       final var response = api.getCitizenCertificateList(
@@ -152,7 +152,7 @@ class FK7211CitizenIT {
     }
 
     @Test
-    @DisplayName("FK7211 - Om invånaren inte har några intyg ska en tom lista returneras")
+    @DisplayName("FK7210 - Om invånaren inte har några intyg ska en tom lista returneras")
     void shallReturnEmptyListIfNoCertificatesIssuedOnCitizen() {
       final var response = api.getCitizenCertificateList(
           GetCitizenCertificateListRequest.builder()
@@ -169,14 +169,14 @@ class FK7211CitizenIT {
   }
 
   @Nested
-  @DisplayName("FK7211 - Skriv ut intyg för invånare")
+  @DisplayName("FK7210 - Skriv ut intyg för invånare")
   class PrintCitizenCertificate {
 
     @Test
-    @DisplayName("FK7211 - Om intyget är utfärdat på invånaren ska intyget skrivas ut")
-    void shallReturnFK7211IfIssuedOnCitizen() {
+    @DisplayName("FK7210 - Om intyget är utfärdat på invånaren ska intyget skrivas ut")
+    void shallReturnFK7210IfIssuedOnCitizen() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7210, VERSION, SIGNED)
       );
 
       final var response = api.printCitizenCertificate(
@@ -194,10 +194,10 @@ class FK7211CitizenIT {
     }
 
     @Test
-    @DisplayName("FK7211 - Om intyget är utfärdat på en annan invånare ska felkod 403 (FORBIDDEN) returneras")
+    @DisplayName("FK7210 - Om intyget är utfärdat på en annan invånare ska felkod 403 (FORBIDDEN) returneras")
     void shallReturn403IfNotIssuedOnCitizen() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7211, VERSION, SIGNED)
+          defaultTestablilityCertificateRequest(FK7210, VERSION, SIGNED)
       );
 
       final var response = api.printCitizenCertificate(

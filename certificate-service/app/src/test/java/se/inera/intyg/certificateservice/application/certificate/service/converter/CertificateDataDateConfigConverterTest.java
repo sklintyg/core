@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.application.certificate.service.conver
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -35,7 +35,7 @@ class CertificateDataDateConfigConverterTest {
         .build();
 
     assertThrows(IllegalStateException.class,
-        () -> certificateDataDateConfigConverter.convert(elementSpecification, FK7211_CERTIFICATE)
+        () -> certificateDataDateConfigConverter.convert(elementSpecification, FK7210_CERTIFICATE)
     );
   }
 
@@ -49,7 +49,7 @@ class CertificateDataDateConfigConverterTest {
         .build();
 
     final var result = certificateDataDateConfigConverter.convert(elementSpecification,
-        FK7211_CERTIFICATE);
+        FK7210_CERTIFICATE);
 
     assertEquals("ID", ((CertificateDataConfigDate) result).getId());
   }
@@ -65,7 +65,7 @@ class CertificateDataDateConfigConverterTest {
         .build();
 
     final var result = certificateDataDateConfigConverter.convert(elementSpecification,
-        FK7211_CERTIFICATE);
+        FK7210_CERTIFICATE);
 
     assertEquals("NAME", result.getText());
   }
@@ -81,7 +81,7 @@ class CertificateDataDateConfigConverterTest {
         .build();
 
     final var result = certificateDataDateConfigConverter.convert(elementSpecification,
-        FK7211_CERTIFICATE);
+        FK7210_CERTIFICATE);
 
     assertEquals(MIN_DATE, ((CertificateDataConfigDate) result).getMinDate());
   }
@@ -97,7 +97,7 @@ class CertificateDataDateConfigConverterTest {
         .build();
 
     final var result = certificateDataDateConfigConverter.convert(elementSpecification,
-        FK7211_CERTIFICATE);
+        FK7210_CERTIFICATE);
 
     assertEquals(MAX_DATE, ((CertificateDataConfigDate) result).getMaxDate());
   }

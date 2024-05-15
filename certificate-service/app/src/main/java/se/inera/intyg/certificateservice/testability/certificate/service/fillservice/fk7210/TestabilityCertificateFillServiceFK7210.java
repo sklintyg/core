@@ -1,7 +1,7 @@
-package se.inera.intyg.certificateservice.testability.certificate.service.fillservice.fk7211;
+package se.inera.intyg.certificateservice.testability.certificate.service.fillservice.fk7210;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211.FK7211_V1_0;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.CertificateModelFactoryFK7211.QUESTION_BERAKNAT_NEDKOMSTDATUM_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.FK7210_V1_0;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.QUESTION_BERAKNAT_NEDKOMSTDATUM_ID;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -16,11 +16,11 @@ import se.inera.intyg.certificateservice.testability.certificate.dto.Testability
 import se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityCertificateFillService;
 
 @Component
-public class TestabilityCertificateFillServiceFK7211 implements TestabilityCertificateFillService {
+public class TestabilityCertificateFillServiceFK7210 implements TestabilityCertificateFillService {
 
   @Override
   public List<CertificateModelId> certificateModelIds() {
-    return List.of(FK7211_V1_0);
+    return List.of(FK7210_V1_0);
   }
 
   @Override

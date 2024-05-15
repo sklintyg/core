@@ -26,12 +26,12 @@ class PdfTextGeneratorTest {
   PDDocument document;
 
   @Nested
-  class FK7211 {
+  class FK7210 {
 
     @BeforeEach
     void setup() throws IOException {
       ClassLoader classloader = getClass().getClassLoader();
-      final var inputStream = classloader.getResourceAsStream("fk7211/pdf/fk7211_v1.pdf");
+      final var inputStream = classloader.getResourceAsStream("fk7210/pdf/fk7210_v1.pdf");
       document = Loader.loadPDF(inputStream.readAllBytes());
       final var documentCatalog = document.getDocumentCatalog();
       pdAcroForm = documentCatalog.getAcroForm();

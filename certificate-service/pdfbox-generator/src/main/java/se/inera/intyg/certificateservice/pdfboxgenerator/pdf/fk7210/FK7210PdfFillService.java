@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7211;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7210;
 
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.CHECKED_BOX_VALUE;
 
@@ -18,7 +18,7 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfDateValueG
 
 @Service
 @RequiredArgsConstructor
-public class FK7211PdfFillService implements CertificateTypePdfFillService {
+public class FK7210PdfFillService implements CertificateTypePdfFillService {
 
   public static final String PATIENT_ID_FIELD_ID = "form1[0].#subform[0].flt_pnr[0]";
 
@@ -32,7 +32,7 @@ public class FK7211PdfFillService implements CertificateTypePdfFillService {
 
   @Override
   public CertificateType getType() {
-    return new CertificateType("fk7211");
+    return new CertificateType("fk7210");
   }
 
   @Override

@@ -5,7 +5,7 @@
     queryBinding='xslt2'
     schemaVersion='ISO19757-3'>
 
-  <iso:title>Schematron file for "Intyg om graviditet FK7211" - Version 1.</iso:title>
+  <iso:title>Schematron file for "Intyg om graviditet FK7210" - Version 1.</iso:title>
 
   <iso:ns prefix="xs" uri="http://www.w3.org/2001/XMLSchema"/>
   <iso:ns prefix="rg" uri="urn:riv:clinicalprocess:healthcond:certificate:RegisterCertificateResponder:3"/>

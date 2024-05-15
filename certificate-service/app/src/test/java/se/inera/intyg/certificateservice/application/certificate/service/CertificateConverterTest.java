@@ -88,7 +88,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.FK7211CertificateSummaryProvider;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.FK7210CertificateSummaryProvider;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateConverterTest {
@@ -190,7 +190,7 @@ class CertificateConverterTest {
                             .build()
                     )
                 )
-                .summaryProvider(new FK7211CertificateSummaryProvider())
+                .summaryProvider(new FK7210CertificateSummaryProvider())
                 .build()
         )
         .certificateMetaData(

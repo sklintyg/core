@@ -22,7 +22,7 @@ import se.inera.intyg.certificateservice.application.certificatetypeinfo.service
 @ExtendWith(MockitoExtension.class)
 class CertificateTypeInfoControllerTest {
 
-  private static final String FK_7211 = "fk7211";
+  private static final String FK_7210 = "fk7210";
   private static final String VERSION = "1.0";
   private static final String CODE_SYSTEM = "codeSystem";
   private static final String CODE = "code";
@@ -62,15 +62,15 @@ class CertificateTypeInfoControllerTest {
     final var expectedResult = GetLatestCertificateTypeVersionResponse.builder()
         .certificateModelId(
             CertificateModelIdDTO.builder()
-                .type(FK_7211)
+                .type(FK_7210)
                 .version(VERSION)
                 .build()
         )
         .build();
 
-    when(getLatestCertificateTypeVersionService.get(FK_7211)).thenReturn(expectedResult);
+    when(getLatestCertificateTypeVersionService.get(FK_7210)).thenReturn(expectedResult);
 
-    final var result = certificateTypeInfoController.findLatestCertificateTypeVersion(FK_7211);
+    final var result = certificateTypeInfoController.findLatestCertificateTypeVersion(FK_7210);
 
     assertEquals(expectedResult, result);
   }
@@ -80,7 +80,7 @@ class CertificateTypeInfoControllerTest {
     final var expectedResult = GetLatestCertificateExternalTypeVersionResponse.builder()
         .certificateModelId(
             CertificateModelIdDTO.builder()
-                .type(FK_7211)
+                .type(FK_7210)
                 .version(VERSION)
                 .build()
         )

@@ -1,7 +1,7 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,14 +13,14 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummary;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
-class FK7211CertificateSummaryProviderTest {
+class FK7210CertificateSummaryProviderTest {
 
   private static final LocalDateTime SIGNED = LocalDateTime.now();
   private static final LocalDate DATE = LocalDate.now().plusMonths(1);
 
   @Test
   void shallIncludeCertificateSummary() {
-    final var certificate = fk7211CertificateBuilder()
+    final var certificate = fk7210CertificateBuilder()
         .signed(SIGNED)
         .elementData(List.of(ElementData.builder()
             .id(new ElementId("1"))
@@ -37,7 +37,7 @@ class FK7211CertificateSummaryProviderTest {
         .build();
 
     assertEquals(certificateSummary,
-        new FK7211CertificateSummaryProvider().summaryOf(certificate)
+        new FK7210CertificateSummaryProvider().summaryOf(certificate)
     );
   }
 

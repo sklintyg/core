@@ -10,7 +10,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 
 import java.util.Collections;
 import java.util.List;
@@ -71,7 +71,7 @@ class CertificateDataConverterTest {
 
   @BeforeEach
   void setup() {
-    certificateBuilder = fk7211CertificateBuilder()
+    certificateBuilder = fk7210CertificateBuilder()
         .elementData(Collections.emptyList());
 
     certificateDataConverter = new CertificateDataConverter(

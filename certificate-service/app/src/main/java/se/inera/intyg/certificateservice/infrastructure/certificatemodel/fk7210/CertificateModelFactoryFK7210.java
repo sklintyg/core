@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 
@@ -31,11 +31,11 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.Certifi
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateRecipientFactory;
 
 @Component
-public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
+public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
 
-  @Value("${certificate.model.fk7211.v1_0.active.from}")
+  @Value("${certificate.model.fk7210.v1_0.active.from}")
   private LocalDateTime activeFrom;
-  private static final String FK_7211 = "fk7211";
+  private static final String FK_7210 = "fk7210";
   private static final String VERSION = "1.0";
   private static final String NAME = "Intyg om graviditet";
   private static final String DESCRIPTION = """
@@ -45,17 +45,17 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
       Be barnmorskan, läkaren eller sjuksköterskan om ett intyg om graviditet
       Barnmorskan, läkaren eller sjuksköterskan ska:
       Skriva ett intyg om graviditet och skicka in intyget om graviditet till Försäkringskassan digitalt.""";
-  public static final CertificateModelId FK7211_V1_0 = CertificateModelId.builder()
-      .type(new CertificateType(FK_7211))
+  public static final CertificateModelId FK7210_V1_0 = CertificateModelId.builder()
+      .type(new CertificateType(FK_7210))
       .version(new CertificateVersion(VERSION))
       .build();
   public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_CATEGORY_ID = new ElementId(
       "KAT_1");
   public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_ID = new ElementId("1");
   private static final FieldId QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID = new FieldId("1.1");
-  public static final String PDF_FK_7211_PDF = "fk7211/pdf/fk7211_v1.pdf";
+  public static final String PDF_FK_7210_PDF = "fk7210/pdf/fk7210_v1.pdf";
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
-      "fk7211/schematron/igrav.v1.sch");
+      "fk7210/schematron/igrav.v1.sch");
   public static final String LINK_FK_ID = "LINK_FK";
   public static final String PREAMBLE_TEXT =
       "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
@@ -68,7 +68,7 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
   @Override
   public CertificateModel create() {
     return CertificateModel.builder()
-        .id(FK7211_V1_0)
+        .id(FK7210_V1_0)
         .type(
             new Code(
                 "IGRAV",
@@ -123,9 +123,9 @@ public class CertificateModelFactoryFK7211 implements CertificateModelFactory {
                 issuingUnitContactInfo()
             )
         )
-        .pdfTemplatePath(PDF_FK_7211_PDF)
+        .pdfTemplatePath(PDF_FK_7210_PDF)
         .schematronPath(SCHEMATRON_PATH)
-        .summaryProvider(new FK7211CertificateSummaryProvider())
+        .summaryProvider(new FK7210CertificateSummaryProvider())
         .texts(List.of(CertificateText.builder()
             .text(PREAMBLE_TEXT)
             .type(CertificateTextType.PREAMBLE_TEXT)

@@ -47,7 +47,7 @@ Content-Type: application/json
     "testIndicated": "false"
   },
   "certificateModelId": {
-    "type": "fk7211",
+    "type": "fk7210",
     "version": "1.0"
   }
 }
@@ -101,7 +101,7 @@ Content-Type: application/json
     "testIndicated": "false"
   },
   "certificateModelId": {
-    "type": "fk7211",
+    "type": "fk7210",
     "version": "1.0"
   }
 }
@@ -261,9 +261,9 @@ Content-Type: application/json
   "certificate": {
     "metadata": {
       "id": "5246e783-cfaa-4604-8d56-8923228ad096",
-      "type": "fk7211",
+      "type": "fk7210",
       "typeVersion": "1.0",
-      "typeName": "fk7211",
+      "typeName": "fk7210",
       "name": "Intyg om graviditet",
       "description": "Intyg om graviditet Ungefär i vecka 20 får du ett intyg om graviditet av barnmorskan. Intyget anger också datum för beräknad förlossning. Intyget skickar du till Försäkringskassan, som ger besked om kommande föräldrapenning.",
       "created": "2024-02-14T08:37:07",
@@ -465,9 +465,9 @@ Content-Type: application/json
   "certificate": {
     "metadata": {
       "id": "5246e783-cfaa-4604-8d56-8923228ad096",
-      "type": "fk7211",
+      "type": "fk7210",
       "typeVersion": "1.0",
-      "typeName": "fk7211",
+      "typeName": "fk7210",
       "name": "Intyg om graviditet",
       "description": "Intyg om graviditet Ungefär i vecka 20 får du ett intyg om graviditet av barnmorskan. Intyget anger också datum för beräknad förlossning. Intyget skickar du till Försäkringskassan, som ger besked om kommande föräldrapenning.",
       "created": "2024-02-14T08:37:07",

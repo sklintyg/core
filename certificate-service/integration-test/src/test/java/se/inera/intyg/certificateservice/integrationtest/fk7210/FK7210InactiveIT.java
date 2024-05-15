@@ -1,9 +1,9 @@
-package se.inera.intyg.certificateservice.integrationtest.fk7211;
+package se.inera.intyg.certificateservice.integrationtest.fk7210;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.FK7211;
-import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.VERSION;
+import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.FK7210;
+import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.VERSION;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCertificateTypeInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateModelIdUtil.certificateModelId;
@@ -29,21 +29,21 @@ import se.inera.intyg.certificateservice.integrationtest.util.Containers;
 
 @ActiveProfiles({"integration-test", TESTABILITY_PROFILE})
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class FK7211InactiveIT {
+class FK7210InactiveIT {
 
   @LocalServerPort
   private int port;
 
   @DynamicPropertySource
   static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.fk7211.v1_0.active.from", () -> "2099-01-01T00:00:00");
+    registry.add("certificate.model.fk7210.v1_0.active.from", () -> "2099-01-01T00:00:00");
   }
 
   private final TestRestTemplate restTemplate;
   private ApiUtil api;
 
   @Autowired
-  public FK7211InactiveIT(TestRestTemplate restTemplate) {
+  public FK7210InactiveIT(TestRestTemplate restTemplate) {
     this.restTemplate = restTemplate;
   }
 
@@ -63,31 +63,31 @@ class FK7211InactiveIT {
   }
 
   @Nested
-  @DisplayName("FK7211 - Hämta intygstyp när den är inte är aktiv")
+  @DisplayName("FK7210 - Hämta intygstyp när den är inte är aktiv")
   class GetCertificateTypeInfo {
 
     @Test
-    @DisplayName("FK7211 - Om inte aktiverad ska intygstypen inte vara med i listan av tillgängliga intygstyper")
-    void shallNotReturnFK7211WhenInactive() {
+    @DisplayName("FK7210 - Om inte aktiverad ska intygstypen inte vara med i listan av tillgängliga intygstyper")
+    void shallNotReturnFK7210WhenInactive() {
       final var response = api.certificateTypeInfo(
           defaultCertificateTypeInfoRequest()
       );
 
       assertNull(
-          certificateTypeInfo(response.getBody(), FK7211),
-          "Should not contain %s as it is not active!".formatted(FK7211)
+          certificateTypeInfo(response.getBody(), FK7210),
+          "Should not contain %s as it is not active!".formatted(FK7210)
       );
     }
   }
 
   @Nested
-  @DisplayName("FK7211 - Aktiva versioner för inaktiv intygstyp")
+  @DisplayName("FK7210 - Aktiva versioner för inaktiv intygstyp")
   class ExistsCertificateTypeInfo {
 
     @Test
-    @DisplayName("FK7211 - Om typen inte är aktiverad skall ingen version returneras")
+    @DisplayName("FK7210 - Om typen inte är aktiverad skall ingen version returneras")
     void shallReturnEmptyWhenTypeIsNotActive() {
-      final var response = api.findLatestCertificateTypeVersion(FK7211);
+      final var response = api.findLatestCertificateTypeVersion(FK7210);
 
       assertNull(
           certificateModelId(response.getBody()),
@@ -98,14 +98,14 @@ class FK7211InactiveIT {
   }
 
   @Nested
-  @DisplayName("FK7211 - Skapa utkast")
+  @DisplayName("FK7210 - Skapa utkast")
   class CreateCertificate {
 
     @Test
-    @DisplayName("FK7211 - Om typen inte är aktiverad skall felkod 400 (BAD_REQUEST) returneras")
+    @DisplayName("FK7210 - Om typen inte är aktiverad skall felkod 400 (BAD_REQUEST) returneras")
     void shallReturn400WhenTypeIsNotActive() {
       final var response = api.createCertificate(
-          defaultCreateCertificateRequest(FK7211, VERSION)
+          defaultCreateCertificateRequest(FK7210, VERSION)
       );
 
       assertEquals(400, response.getStatusCode().value());
