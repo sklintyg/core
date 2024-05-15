@@ -5,6 +5,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
+import se.inera.intyg.certificateservice.domain.common.model.Recipient;
+import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 
 public class TestDataCertificateModelConstants {
 
@@ -38,4 +40,6 @@ public class TestDataCertificateModelConstants {
   public static final String FK7443_PDF_PATH = "fk7443/pdf/fk7443_v1.pdf";
   public static final String FK7211_NAME = "Intyg om graviditet";
   public static final String FK7443_NAME = "Intyg om tillfällig föräldrapenning";
+  public static final Recipient FK7211_RECIPIENT = new Recipient(
+      new RecipientId("FKASSA"), "Försäkringskassan");
 }

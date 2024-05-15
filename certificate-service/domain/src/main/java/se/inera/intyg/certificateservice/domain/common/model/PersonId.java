@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.domain.patient.model;
+package se.inera.intyg.certificateservice.domain.common.model;
 
 import lombok.Builder;
 import lombok.Value;

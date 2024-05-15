@@ -114,7 +114,7 @@ class CertificateDataConverterTest {
 
       final var result = certificateDataConverter.convert(certificate);
       assertInstanceOf(CertificateDataElement.class, result.get(ID_1),
-          "Should return map of CertificateDataElement"
+          "Should return map of CertificateDataElementDTO"
       );
     }
 
@@ -359,7 +359,8 @@ class CertificateDataConverterTest {
 
       final var result = certificateDataConverter.convert(certificate);
 
-      assertNotNull(result.get(ID_1).getConfig(), "CertificateDataElement should contain config");
+      assertNotNull(result.get(ID_1).getConfig(),
+          "CertificateDataElementDTO should contain config");
     }
 
     @Test
@@ -400,7 +401,7 @@ class CertificateDataConverterTest {
       final var result = certificateDataConverter.convert(certificate);
 
       assertNotNull(result.get(ID_1).getValidation(),
-          "CertificateDataElement should contain validation");
+          "CertificateDataElementDTO should contain validation");
     }
 
     @Test
@@ -428,7 +429,7 @@ class CertificateDataConverterTest {
       final var result = certificateDataConverter.convert(certificate);
 
       assertEquals(0, result.get(ID_1).getValidation().length,
-          "CertificateDataElement should contain empty validation");
+          "CertificateDataElementDTO should contain empty validation");
     }
 
     @Test
@@ -462,7 +463,7 @@ class CertificateDataConverterTest {
       final var result = certificateDataConverter.convert(certificate);
 
       assertNotNull(result.get(ID_1).getValue(),
-          "CertificateDataElement should contain value");
+          "CertificateDataElementDTO should contain value");
     }
   }
 
@@ -554,7 +555,7 @@ class CertificateDataConverterTest {
     final var result = certificateDataConverter.convert(certificate);
 
     assertNull(result.get(ID_1).getValue(),
-        "CertificateDataElement should be null if category");
+        "CertificateDataElementDTO should be null if category");
   }
 
 

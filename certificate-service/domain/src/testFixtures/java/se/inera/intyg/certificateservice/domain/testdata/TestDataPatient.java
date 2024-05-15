@@ -1,10 +1,10 @@
 package se.inera.intyg.certificateservice.domain.testdata;
 
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
+import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonAddress;
-import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
-import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
 
 public class TestDataPatient {
 

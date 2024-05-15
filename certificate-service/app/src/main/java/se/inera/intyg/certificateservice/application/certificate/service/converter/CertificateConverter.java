@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationsDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateSummaryDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO;
@@ -113,12 +114,27 @@ public class CertificateConverter {
                 .relations(
                     toRelations(certificate.parent(), certificate.children())
                 )
+                .summary(convertSummary(certificate))
                 .build()
         )
         .data(
             certificateDataConverter.convert(certificate)
         )
         .links(resourceLinks)
+        .build();
+  }
+
+  private CertificateSummaryDTO convertSummary(Certificate certificate) {
+    if (certificate.certificateModel().summaryProvider() == null) {
+      return null;
+    }
+
+    final var certificateSummary = certificate.certificateModel().summaryProvider()
+        .summaryOf(certificate);
+
+    return CertificateSummaryDTO.builder()
+        .label(certificateSummary.label())
+        .value(certificateSummary.value())
         .build();
   }
 

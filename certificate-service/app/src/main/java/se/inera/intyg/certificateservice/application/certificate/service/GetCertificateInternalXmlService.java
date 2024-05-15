@@ -17,7 +17,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
-import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 
 @Service

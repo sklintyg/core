@@ -40,6 +40,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +58,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationsDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateSummaryDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateDataConverter;
@@ -84,8 +86,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
-import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
+import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7211.FK7211CertificateSummaryProvider;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateConverterTest {
@@ -99,7 +102,7 @@ class CertificateConverterTest {
   private static final LocalDateTime MODIFIED = LocalDateTime.now(ZoneId.systemDefault());
   private static final LocalDate DATE = LocalDate.now().plusDays(1);
   private static final String Q_1 = "q1";
-  private static final String ID = "valueId";
+  private static final String ID = "1";
   private static final String EXPRESSION = "$beraknatnedkomstdatum";
   private static final String NAME = "Beräknat nedkomstdatum";
   private static final String KEY = "key";
@@ -187,6 +190,7 @@ class CertificateConverterTest {
                             .build()
                     )
                 )
+                .summaryProvider(new FK7211CertificateSummaryProvider())
                 .build()
         )
         .certificateMetaData(
@@ -278,6 +282,19 @@ class CertificateConverterTest {
     void shallIncludeVersion() {
       assertEquals(REVISION.value(),
           certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getVersion()
+      );
+    }
+
+    @Test
+    void shallIncludeCertificateSummary() {
+      final var certificateSummary = CertificateSummaryDTO.builder()
+          .label("Gäller intygsperiod")
+          .value(SIGNED.format(DateTimeFormatter.ISO_DATE) + " - " + DATE.format(
+              DateTimeFormatter.ISO_DATE))
+          .build();
+
+      assertEquals(certificateSummary,
+          certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getSummary()
       );
     }
 

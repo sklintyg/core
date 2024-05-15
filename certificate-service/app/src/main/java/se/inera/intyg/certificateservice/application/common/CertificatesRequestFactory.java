@@ -8,8 +8,8 @@ import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryC
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
-import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
-import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
+import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 
 @Component
 public class CertificatesRequestFactory {

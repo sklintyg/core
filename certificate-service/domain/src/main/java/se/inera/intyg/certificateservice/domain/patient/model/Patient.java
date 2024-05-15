@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.patient.model;
 
 import lombok.Builder;
 import lombok.Value;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 
 @Value
 @Builder

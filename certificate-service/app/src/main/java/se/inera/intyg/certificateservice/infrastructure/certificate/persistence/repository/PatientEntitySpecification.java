@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
-import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
 

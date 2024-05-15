@@ -4,6 +4,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.RevokeInformationDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
+import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason;
@@ -136,6 +137,18 @@ public class ValidationUtil {
 
     if (certificateDTO.getData() == null) {
       throw new IllegalArgumentException("Required parameter missing: Certificate.data");
+    }
+  }
+
+  public static void validateCitizenId(PersonIdDTO citizenId) {
+    if (citizenId == null) {
+      throw new IllegalArgumentException("Required parameter missing: CitizenId");
+    }
+    if (citizenId.getId() == null || citizenId.getId().isBlank()) {
+      throw new IllegalArgumentException("Required parameter missing: CitizenId.id");
+    }
+    if (citizenId.getType() == null) {
+      throw new IllegalArgumentException("Required parameter missing: CitizenId.type");
     }
   }
 }

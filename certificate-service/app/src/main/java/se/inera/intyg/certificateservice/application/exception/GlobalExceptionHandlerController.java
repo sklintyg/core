@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
+import se.inera.intyg.certificateservice.domain.common.exception.CitizenCertificateForbidden;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
 
 @Slf4j
@@ -48,6 +49,20 @@ public class GlobalExceptionHandlerController {
                 .message(String.join(" ", "%s på enheten %s".formatted(
                     exception.user().name().fullName(),
                     exception.unit().name().name())))
+                .build()
+        );
+  }
+
+  @ExceptionHandler(CitizenCertificateForbidden.class)
+  public ResponseEntity<ApiError> handleCitizenCertificateForbidden(
+      CitizenCertificateForbidden exception) {
+    log.warn("Forbidden", exception);
+
+    return ResponseEntity
+        .status(HttpStatus.FORBIDDEN)
+        .body(
+            ApiError.builder()
+                .message(exception.getMessage())
                 .build()
         );
   }

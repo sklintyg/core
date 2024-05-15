@@ -17,6 +17,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.user.model.ExternalReference;
@@ -308,6 +309,30 @@ public class Certificate {
     ).toList();
 
     return newCertificate;
+  }
+
+  public boolean isSendActiveForCitizen() {
+    if (this.status() != Status.SIGNED) {
+      return false;
+    }
+
+    if (this.certificateModel().recipient() == null) {
+      return false;
+    }
+
+    if (this.sent() != null && this.sent().sentAt() != null) {
+      return false;
+    }
+
+    return this.children().stream()
+        .noneMatch(relation -> relation.type() == RelationType.REPLACE
+            && relation.certificate().status() == Status.SIGNED
+        );
+  }
+
+  public boolean isCertificateIssuedOnPatient(PersonId citizen) {
+    return this.certificateMetaData().patient().id().idWithoutDash()
+        .equals(citizen.idWithoutDash());
   }
 }
 

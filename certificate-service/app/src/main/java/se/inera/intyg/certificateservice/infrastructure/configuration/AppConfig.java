@@ -20,6 +20,8 @@ import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertif
 import se.inera.intyg.certificateservice.domain.certificate.service.ValidateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.domain.citizen.service.GetCitizenCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.citizen.service.PrintCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventSubscriber;
 import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
@@ -198,9 +200,21 @@ public class AppConfig {
   }
 
   @Bean
+  public GetCitizenCertificateDomainService getCitizenCertificateDomainService(
+      CertificateRepository certificateRepository) {
+    return new GetCitizenCertificateDomainService(certificateRepository);
+  }
+
+  @Bean
   public RenewCertificateDomainService renewCertificateDomainService(
       CertificateRepository certificateRepository,
       CertificateEventDomainService certificateEventDomainService) {
     return new RenewCertificateDomainService(certificateRepository, certificateEventDomainService);
+  }
+
+  @Bean
+  public PrintCitizenCertificateDomainService printCitizenCertificateDomainService(
+      CertificateRepository certificateRepository, PdfGenerator pdfGenerator) {
+    return new PrintCitizenCertificateDomainService(certificateRepository, pdfGenerator);
   }
 }

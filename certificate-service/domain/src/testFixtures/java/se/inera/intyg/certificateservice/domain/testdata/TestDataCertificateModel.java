@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.testdata;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_PDF_PATH;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_VERSION;
@@ -33,8 +34,8 @@ public class TestDataCertificateModel {
         .type(FK7211_CODE_TYPE)
         .availableForCitizen(true)
         .pdfTemplatePath(FK7211_PDF_PATH)
-        .schematronPath(FK7211_SCHEMATRON_PATH);
-
+        .schematronPath(FK7211_SCHEMATRON_PATH)
+        .recipient(FK7211_RECIPIENT);
   }
 
 
