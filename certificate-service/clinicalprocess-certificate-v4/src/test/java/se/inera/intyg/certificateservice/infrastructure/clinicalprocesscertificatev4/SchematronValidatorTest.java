@@ -62,7 +62,7 @@ class SchematronValidatorTest {
     }
 
     @Nested
-    class QuestionNedkomstdatum {
+    class QuestionFodelsedatum {
 
       @Test
       void shallReturnFalseIfValueIsNull() {

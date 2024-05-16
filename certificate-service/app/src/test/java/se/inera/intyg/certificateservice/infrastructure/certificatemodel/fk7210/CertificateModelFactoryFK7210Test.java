@@ -272,7 +272,7 @@ class CertificateModelFactoryFK7210Test {
   class CertificateSpecifications {
 
     @Nested
-    class CategoryBeraknatNedkomstdatum {
+    class CategoryBeraknatFodelsedatum {
 
       private static final ElementId ELEMENT_ID = new ElementId("KAT_1");
 
@@ -301,7 +301,7 @@ class CertificateModelFactoryFK7210Test {
     }
 
     @Nested
-    class QuestionBeraknatNedkomstdatum {
+    class QuestionBeraknatFodelsedatum {
 
       private static final ElementId ELEMENT_ID = new ElementId("54");
 

@@ -114,8 +114,8 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
         )
         .elementSpecifications(
             List.of(
-                categoryBeraknatNedkomstdatum(
-                    questionBeraknatNedkomstdatum()
+                categoryBeraknatFodelsedatum(
+                    questionBeraknatFodelsedatum()
                 ),
                 issuingUnitContactInfo()
             )
@@ -135,7 +135,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
         .build();
   }
 
-  private static ElementSpecification categoryBeraknatNedkomstdatum(
+  private static ElementSpecification categoryBeraknatFodelsedatum(
       ElementSpecification... children) {
     return ElementSpecification.builder()
         .id(QUESTION_BERAKNAT_FODELSEDATUM_CATEGORY_ID)
@@ -150,7 +150,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
         .build();
   }
 
-  private static ElementSpecification questionBeraknatNedkomstdatum() {
+  private static ElementSpecification questionBeraknatFodelsedatum() {
     return ElementSpecification.builder()
         .id(QUESTION_BERAKNAT_FODELSEDATUM_ID)
         .configuration(

@@ -2102,7 +2102,7 @@ class FK7210ActiveIT {
   class ValidateCertificate {
 
     @Test
-    @DisplayName("FK7210 - Om utkastet innehåller korrekt 'beräknad nedkomst' skall utkastet vara klar för signering")
+    @DisplayName("FK7210 - Om utkastet innehåller korrekt 'beräknad fodelsedatum' skall utkastet vara klar för signering")
     void shallReturnEmptyListOfErrorsIfDateIsCorrect() {
       final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7210, VERSION)
@@ -2128,7 +2128,7 @@ class FK7210ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7210 - Om utkastet innehåller 'beräknad nedkomst' före dagens datum skall valideringsfel returneras")
+    @DisplayName("FK7210 - Om utkastet innehåller 'beräknad fodelsedatum' före dagens datum skall valideringsfel returneras")
     void shallReturnListOfErrorsIfDateIsBeforeTodaysDate() {
       final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7210, VERSION)
@@ -2163,7 +2163,7 @@ class FK7210ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7210 - Om utkastet innehåller 'beräknad nedkomst' längre än ett år fram skall valideringsfel returneras")
+    @DisplayName("FK7210 - Om utkastet innehåller 'beräknad födelsedatum' längre än ett år fram skall valideringsfel returneras")
     void shallReturnListOfErrorsIfDateIsAfterOneYearInFuture() {
       final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7210, VERSION)
@@ -2198,7 +2198,7 @@ class FK7210ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7210 - Om utkastet saknar 'beräknad nedkomst' skall valideringsfel returneras")
+    @DisplayName("FK7210 - Om utkastet saknar 'beräknad födelsedatum' skall valideringsfel returneras")
     void shallReturnListOfErrorsIfDateIsAMissing() {
       final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7210, VERSION)

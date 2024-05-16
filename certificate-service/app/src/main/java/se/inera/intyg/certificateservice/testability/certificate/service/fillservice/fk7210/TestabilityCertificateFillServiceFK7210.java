@@ -37,12 +37,12 @@ public class TestabilityCertificateFillServiceFK7210 implements TestabilityCerti
         QUESTION_BERAKNAT_FODELSEDATUM_ID);
     final var elementValue = elementSpecification.configuration().emptyValue();
     if (elementValue instanceof ElementValueDate elementValueDate) {
-      final var beraknatNedkomstdatum = elementValueDate
+      final var beraknatFodelsedatum = elementValueDate
           .withDate(LocalDate.now(ZoneId.systemDefault()).plusMonths(6));
       return List.of(
           ElementData.builder()
               .id(QUESTION_BERAKNAT_FODELSEDATUM_ID)
-              .value(beraknatNedkomstdatum)
+              .value(beraknatFodelsedatum)
               .build()
       );
     }
