@@ -147,7 +147,8 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
-                  new ActionRuleStatus(List.of(Status.SIGNED))
+                  new ActionRuleStatus(List.of(Status.SIGNED)),
+                  new ActionRuleSent(false)
               )
           )
           .build();

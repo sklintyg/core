@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 
@@ -67,6 +68,13 @@ class CertificateActionSendAfterSignTest {
   @Test
   void shallReturnFalseIfCertificateIsNotSigned() {
     final var certificate = certificateBuilder.status(Status.DRAFT).build();
+    final var actionEvaluation = actionEvaluationBuilder.build();
+    assertFalse(certificateActionSign.evaluate(Optional.of(certificate), actionEvaluation));
+  }
+
+  @Test
+  void shallReturnFalseIfCertificateAlreadyIsSent() {
+    final var certificate = certificateBuilder.sent(Sent.builder().build()).build();
     final var actionEvaluation = actionEvaluationBuilder.build();
     assertFalse(certificateActionSign.evaluate(Optional.of(certificate), actionEvaluation));
   }
