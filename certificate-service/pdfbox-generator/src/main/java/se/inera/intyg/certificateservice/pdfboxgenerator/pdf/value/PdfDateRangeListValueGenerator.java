@@ -99,7 +99,7 @@ public class PdfDateRangeListValueGenerator implements PdfElementValueGenerator 
   private String getFieldSuffixFromDateRange(DateRange dateRange) {
     final var workCapacityType = WorkCapacityType.valueOf(dateRange.dateRangeId().value());
     switch (workCapacityType) {
-      case EN_ATTANDEL -> {
+      case EN_ATTONDEL -> {
         return "5";
       }
       case EN_FJARDEDEL -> {

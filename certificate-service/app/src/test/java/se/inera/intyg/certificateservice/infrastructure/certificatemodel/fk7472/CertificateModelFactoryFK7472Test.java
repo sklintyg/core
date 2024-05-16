@@ -429,7 +429,7 @@ class CertificateModelFactoryFK7472Test {
             .min(Period.ofMonths(-1))
             .dateRanges(
                 List.of(
-                    new CheckboxDateRange(new FieldId("EN_ATTANDEL"), "12,5 procent"),
+                    new CheckboxDateRange(new FieldId("EN_ATTONDEL"), "12,5 procent"),
                     new CheckboxDateRange(new FieldId("EN_FJARDEDEL"), "25 procent"),
                     new CheckboxDateRange(new FieldId("HALVA"), "50 procent"),
                     new CheckboxDateRange(new FieldId("TRE_FJARDEDELAR"), "75 procent"),
@@ -453,7 +453,7 @@ class CertificateModelFactoryFK7472Test {
                 .type(ElementRuleType.MANDATORY)
                 .expression(
                     new RuleExpression(
-                        "$EN_ATTANDEL || $EN_FJARDEDEL || $HALVA || $TRE_FJARDEDELAR || $HELA"
+                        "$EN_ATTONDEL || $EN_FJARDEDEL || $HALVA || $TRE_FJARDEDELAR || $HELA"
                     )
                 )
                 .build()

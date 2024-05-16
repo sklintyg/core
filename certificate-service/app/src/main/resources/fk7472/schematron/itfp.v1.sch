@@ -66,8 +66,8 @@
             <iso:assert test="tp:cv/tp:codeSystem = 'KV_FKMU_0009'">
                 'codeSystem' måste vara 'KV_FKMU_0009'.
             </iso:assert>
-            <iso:assert test="matches(normalize-space(tp:cv/tp:code), '^(EN_ATTANDEL|HELA|TRE_FJARDEDELAR|HALVA|EN_FJARDEDEL)$')">
-                'Ordinarie tillsynsform' kan ha ett av värdena EN_ATTANDEL, HELA, TRE_FJARDEDELAR, HALVA, EN_FJARDEDEL.
+            <iso:assert test="matches(normalize-space(tp:cv/tp:code), '^(EN_ATTONDEL|HELA|TRE_FJARDEDELAR|HALVA|EN_FJARDEDEL)$')">
+                'Ordinarie tillsynsform' kan ha ett av värdena EN_ATTONDEL, HELA, TRE_FJARDEDELAR, HALVA, EN_FJARDEDEL.
             </iso:assert>
         </iso:rule>
 
