@@ -20,6 +20,8 @@ import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertif
 import se.inera.intyg.certificateservice.domain.certificate.service.ValidateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.domain.citizen.service.GetCitizenCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.citizen.service.PrintCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventSubscriber;
 import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
@@ -28,7 +30,6 @@ import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificates
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.SchemaValidatorV4;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.SchematronValidator;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorCertificateV4;
-import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorIntygsgivare;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlGeneratorValue;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlSchemaValidator;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.XmlSchematronValidator;
@@ -114,16 +115,9 @@ public class AppConfig {
   }
 
   @Bean
-  public XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare() {
-    return new XmlGeneratorIntygsgivare();
-  }
-
-  @Bean
   public XmlGenerator xmlGenerator(XmlGeneratorValue xmlGeneratorValue,
-      XmlGeneratorIntygsgivare xmlGeneratorIntygsgivare,
       XmlValidationService xmlValidationService) {
-    return new XmlGeneratorCertificateV4(xmlGeneratorValue, xmlGeneratorIntygsgivare,
-        xmlValidationService);
+    return new XmlGeneratorCertificateV4(xmlGeneratorValue, xmlValidationService);
   }
 
   @Bean
@@ -198,9 +192,21 @@ public class AppConfig {
   }
 
   @Bean
+  public GetCitizenCertificateDomainService getCitizenCertificateDomainService(
+      CertificateRepository certificateRepository) {
+    return new GetCitizenCertificateDomainService(certificateRepository);
+  }
+
+  @Bean
   public RenewCertificateDomainService renewCertificateDomainService(
       CertificateRepository certificateRepository,
       CertificateEventDomainService certificateEventDomainService) {
     return new RenewCertificateDomainService(certificateRepository, certificateEventDomainService);
+  }
+
+  @Bean
+  public PrintCitizenCertificateDomainService printCitizenCertificateDomainService(
+      CertificateRepository certificateRepository, PdfGenerator pdfGenerator) {
+    return new PrintCitizenCertificateDomainService(certificateRepository, pdfGenerator);
   }
 }

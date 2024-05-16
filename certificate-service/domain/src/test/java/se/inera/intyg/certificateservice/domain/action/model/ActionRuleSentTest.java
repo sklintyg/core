@@ -25,7 +25,7 @@ class ActionRuleSentTest {
     @Test
     void shallReturnTrueIfSent() {
       final var certificate = Optional.of(
-          TestDataCertificate.fk7211CertificateBuilder()
+          TestDataCertificate.fk7210CertificateBuilder()
               .sent(TestDataCertificate.SENT)
               .build()
       );
@@ -38,7 +38,7 @@ class ActionRuleSentTest {
     @Test
     void shallReturnFalseIfNotSent() {
       final var certificate = Optional.of(
-          TestDataCertificate.fk7211CertificateBuilder()
+          TestDataCertificate.fk7210CertificateBuilder()
               .sent(null)
               .build()
       );
@@ -62,7 +62,7 @@ class ActionRuleSentTest {
     @Test
     void shallReturnFalseIfSent() {
       final var certificate = Optional.of(
-          TestDataCertificate.fk7211CertificateBuilder()
+          TestDataCertificate.fk7210CertificateBuilder()
               .sent(TestDataCertificate.SENT)
               .build()
       );
@@ -75,7 +75,7 @@ class ActionRuleSentTest {
     @Test
     void shallReturnTrueIfNotSent() {
       final var certificate = Optional.of(
-          TestDataCertificate.fk7211CertificateBuilder()
+          TestDataCertificate.fk7210CertificateBuilder()
               .sent(null)
               .build()
       );

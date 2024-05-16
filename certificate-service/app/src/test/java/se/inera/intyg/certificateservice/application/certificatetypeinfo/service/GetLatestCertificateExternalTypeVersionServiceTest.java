@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_TYPE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_VERSION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_TYPE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_VERSION;
 
 import java.util.Optional;
 import org.junit.jupiter.api.Nested;
@@ -28,8 +28,8 @@ class GetLatestCertificateExternalTypeVersionServiceTest {
   private static final CertificateModel CERTIFICATE_MODEL = CertificateModel.builder()
       .id(
           CertificateModelId.builder()
-              .type(FK7211_TYPE)
-              .version(FK7211_VERSION)
+              .type(FK7210_TYPE)
+              .version(FK7210_VERSION)
               .build()
       )
       .build();
@@ -85,7 +85,7 @@ class GetLatestCertificateExternalTypeVersionServiceTest {
         .findLatestActiveByExternalType(new Code(CODE, CODE_SYSTEM, null));
 
     final var response = getLatestCertificateExternalTypeVersionService.get(CODE_SYSTEM, CODE);
-    assertEquals(FK7211_TYPE.type(), response.getCertificateModelId().getType());
+    assertEquals(FK7210_TYPE.type(), response.getCertificateModelId().getType());
   }
 
 

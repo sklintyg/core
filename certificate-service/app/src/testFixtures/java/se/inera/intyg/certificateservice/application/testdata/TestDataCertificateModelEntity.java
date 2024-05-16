@@ -5,5 +5,5 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 public class TestDataCertificateModelEntity {
 
   public static final CertificateModelEntity CERTIFICATE_MODEL_ENTITY
-      = new CertificateModelEntity(1, "fk7211", "1.0", "Intyg om graviditet");
+      = new CertificateModelEntity(1, "fk7210", "1.0", "Intyg om graviditet");
 }

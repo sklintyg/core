@@ -2,8 +2,8 @@ package se.inera.intyg.certificateservice.domain.testdata;
 
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7211_CERTIFICATE_MODEL;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7443_CERTIFICATE_MODEL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7210_CERTIFICATE_MODEL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7472_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
@@ -26,10 +26,10 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
-import se.inera.intyg.certificateservice.domain.user.model.ExternalReference;
 
 public class TestDataCertificate {
 
@@ -64,14 +64,14 @@ public class TestDataCertificate {
       .revokedAt(LocalDateTime.now(ZoneId.systemDefault()))
       .revokedInformation(REVOKED_INFORMATION)
       .build();
-  public static final Certificate FK7211_CERTIFICATE = fk7211CertificateBuilder().build();
+  public static final Certificate FK7210_CERTIFICATE = fk7210CertificateBuilder().build();
 
-  public static Certificate.CertificateBuilder fk7211CertificateBuilder() {
+  public static Certificate.CertificateBuilder fk7210CertificateBuilder() {
     return Certificate.builder()
         .id(CERTIFICATE_ID)
         .revision(REVISION)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
-        .certificateModel(FK7211_CERTIFICATE_MODEL)
+        .certificateModel(FK7210_CERTIFICATE_MODEL)
         .xml(XML)
         .sent(SENT)
         .revoked(REVOKED)
@@ -79,10 +79,10 @@ public class TestDataCertificate {
         .elementData(
             List.of(
                 ElementData.builder()
-                    .id(new ElementId("1"))
+                    .id(new ElementId("54"))
                     .value(
                         ElementValueDate.builder()
-                            .dateId(new FieldId("1.1"))
+                            .dateId(new FieldId("54.1"))
                             .date(LocalDate.now())
                             .build()
                     ).build()
@@ -100,14 +100,14 @@ public class TestDataCertificate {
   }
 
 
-  public static final Certificate FK443_CERTIFICATE = fk7443CertificateBuilder().build();
+  public static final Certificate FK443_CERTIFICATE = fk7472CertificateBuilder().build();
 
-  public static Certificate.CertificateBuilder fk7443CertificateBuilder() {
+  public static Certificate.CertificateBuilder fk7472CertificateBuilder() {
     return Certificate.builder()
         .id(CERTIFICATE_ID)
         .revision(REVISION)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
-        .certificateModel(FK7443_CERTIFICATE_MODEL)
+        .certificateModel(FK7472_CERTIFICATE_MODEL)
         .xml(XML)
         .sent(SENT)
         .revoked(REVOKED)
@@ -129,7 +129,7 @@ public class TestDataCertificate {
                             .dateRangeList(
                                 List.of(
                                     DateRange.builder()
-                                        .dateRangeId(new FieldId("EN_ATTANDEL"))
+                                        .dateRangeId(new FieldId("EN_ATTONDEL"))
                                         .from(LocalDate.now())
                                         .to(LocalDate.now().plusDays(1))
                                         .build()

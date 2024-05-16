@@ -203,6 +203,22 @@ class DeleteCertificateRequestValidatorTest {
           illegalArgumentException.getMessage());
     }
 
+    @Test
+    void shallThrowIfHealthCareProfessionalLicenceIsNull() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .healthCareProfessionalLicence(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> deleteCertificateRequestValidator.validate(request, CERTIFICATE_ID, VERSION));
+
+      assertEquals("Required parameter missing: User.healthCareProfessionalLicence",
+          illegalArgumentException.getMessage());
+    }
   }
 
   @Nested

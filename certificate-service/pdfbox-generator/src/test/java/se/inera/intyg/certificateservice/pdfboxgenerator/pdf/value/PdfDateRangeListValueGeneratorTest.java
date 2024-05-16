@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7443CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7472CertificateBuilder;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -45,7 +45,7 @@ class PdfDateRangeListValueGeneratorTest {
       .build();
 
   private static final DateRange DATE_RANGE_ONLY_FROM = DateRange.builder()
-      .dateRangeId(new FieldId(WorkCapacityType.EN_ATTANDEL.toString()))
+      .dateRangeId(new FieldId(WorkCapacityType.EN_ATTONDEL.toString()))
       .from(LocalDate.now().minusDays(1))
       .build();
 
@@ -336,7 +336,7 @@ class PdfDateRangeListValueGeneratorTest {
   }
 
   private Certificate buildCertificate(List<ElementData> elementData) {
-    return fk7443CertificateBuilder()
+    return fk7472CertificateBuilder()
         .elementData(elementData)
         .build();
   }

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.common.model.AllowCopy;
 import se.inera.intyg.certificateservice.domain.common.model.Blocked;
+import se.inera.intyg.certificateservice.domain.common.model.HealthCareProfessionalLicence;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
@@ -23,6 +24,7 @@ public class Staff {
   List<Speciality> specialities;
   Blocked blocked;
   AllowCopy allowCopy;
+  List<HealthCareProfessionalLicence> healthCareProfessionalLicence;
 
   public static Staff create(User user) {
     return Staff.builder()
@@ -33,6 +35,7 @@ public class Staff {
         .specialities(user.specialities().stream().toList())
         .blocked(user.blocked())
         .allowCopy(user.allowCopy())
+        .healthCareProfessionalLicence(user.healthCareProfessionalLicence().stream().toList())
         .build();
   }
 }

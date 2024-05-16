@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.contactInfoElementDataBuilder;
 
 import java.util.List;
@@ -45,7 +45,7 @@ class PdfUnitValueGeneratorTest {
   }
 
   private Certificate buildCertificate() {
-    return fk7211CertificateBuilder()
+    return fk7210CertificateBuilder()
         .elementData(List.of(contactInfoElementDataBuilder().build()))
         .build();
   }

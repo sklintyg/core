@@ -9,14 +9,15 @@ import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.common.model.AllowCopy;
 import se.inera.intyg.certificateservice.domain.common.model.Blocked;
+import se.inera.intyg.certificateservice.domain.common.model.HealthCareProfessionalLicence;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.Speciality;
 import se.inera.intyg.certificateservice.domain.patient.model.Deceased;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.patient.model.PersonAddress;
-import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
 import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
@@ -69,6 +70,11 @@ public class ActionEvaluationFactory {
                 )
                 .accessScope(user.getAccessScope() == null ? WITHIN_CARE_UNIT
                     : user.getAccessScope().toDomain()
+                )
+                .healthCareProfessionalLicence(
+                    user.getHealthCareProfessionalLicence().stream()
+                        .map(HealthCareProfessionalLicence::new)
+                        .toList()
                 )
                 .build()
         )

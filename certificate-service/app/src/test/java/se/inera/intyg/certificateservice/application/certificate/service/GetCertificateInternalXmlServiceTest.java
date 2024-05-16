@@ -11,10 +11,10 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCer
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_PERSON_ID_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonWebcertUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonWebcertUnitDTO.ALFA_REGIONEN_DTO;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.XML;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateConstants.CERTIFICATE_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_TYPE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_TYPE;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -45,7 +45,7 @@ class GetCertificateInternalXmlServiceTest {
   void shallReturnResponse() {
     final var expectedResponse = GetCertificateInternalXmlResponse.builder()
         .certificateId(CERTIFICATE_ID)
-        .certificateType(FK7211_TYPE.type())
+        .certificateType(FK7210_TYPE.type())
         .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
         .careProvider(ALFA_REGIONEN_DTO)
         .xml(XML_BASE64_ENCODED)
@@ -54,10 +54,10 @@ class GetCertificateInternalXmlServiceTest {
         .patientId(ATHENA_REACT_ANDERSSON_PERSON_ID_DTO)
         .build();
 
-    doReturn(FK7211_CERTIFICATE).when(certificateRepository)
+    doReturn(FK7210_CERTIFICATE).when(certificateRepository)
         .getById(new CertificateId(CERTIFICATE_ID));
     doReturn(ALFA_ALLERGIMOTTAGNINGEN_DTO).when(certificateUnitConverter).convert(
-        eq(FK7211_CERTIFICATE.certificateMetaData().issuingUnit()), any()
+        eq(FK7210_CERTIFICATE.certificateMetaData().issuingUnit()), any()
     );
 
     final var actualResponse = getCertificateInternalXmlService.get(CERTIFICATE_ID);

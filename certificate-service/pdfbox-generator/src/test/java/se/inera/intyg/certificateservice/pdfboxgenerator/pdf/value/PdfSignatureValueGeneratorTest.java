@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7211CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -100,7 +100,7 @@ class PdfSignatureValueGeneratorTest {
   }
 
   private static Certificate getCertificate() {
-    return fk7211CertificateBuilder()
+    return fk7210CertificateBuilder()
         .signed(SIGNED)
         .build();
   }
