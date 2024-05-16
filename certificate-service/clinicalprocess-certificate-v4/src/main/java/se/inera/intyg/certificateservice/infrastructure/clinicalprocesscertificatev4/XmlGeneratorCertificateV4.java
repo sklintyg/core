@@ -17,6 +17,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Signature;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
+import se.inera.intyg.certificateservice.domain.common.model.HealthCareProfessionalLicence;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
 import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
@@ -213,10 +214,12 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
         );
 
     certificate.certificateMetaData().issuer().healthCareProfessionalLicence().stream()
-        .map(professionalLicence -> {
+        .map(HealthCareProfessionalLicence::code)
+        .map(code -> {
               final var legitimeratYrkeType = new LegitimeratYrkeType();
-              legitimeratYrkeType.setCode(NOT_APPLICABLE);
-              legitimeratYrkeType.setDisplayName(professionalLicence.value());
+              legitimeratYrkeType.setCode(code.code());
+              legitimeratYrkeType.setDisplayName(code.displayName());
+              legitimeratYrkeType.setCodeSystem(code.codeSystem());
               return legitimeratYrkeType;
             }
         )
