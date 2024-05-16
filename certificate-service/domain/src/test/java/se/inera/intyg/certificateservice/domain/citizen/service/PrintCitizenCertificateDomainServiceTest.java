@@ -76,7 +76,7 @@ class PrintCitizenCertificateDomainServiceTest {
 
     @Test
     void shouldReturnPdfIfPatientIdMatchesCitizen() {
-      when(pdfGenerator.generate(CERTIFICATE, ADDITIONAL_INFO_TEXT)).thenReturn(PDF);
+      when(pdfGenerator.generate(CERTIFICATE, ADDITIONAL_INFO_TEXT, true)).thenReturn(PDF);
 
       final var response = printCitizenCertificateDomainService.get(CERTIFICATE_ID,
           TOLVAN_PERSON_ID, ADDITIONAL_INFO_TEXT);

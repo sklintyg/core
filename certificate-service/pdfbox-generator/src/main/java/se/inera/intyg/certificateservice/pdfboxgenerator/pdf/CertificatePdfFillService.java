@@ -34,8 +34,8 @@ public class CertificatePdfFillService {
   private final PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
 
   public PDDocument fillDocument(Certificate certificate, String additionalInfoText,
-      CertificateTypePdfFillService certificateValueGenerator) {
-    final var template = certificate.certificateModel().pdfTemplatePath();
+      CertificateTypePdfFillService certificateValueGenerator, boolean isCitizenFormat) {
+    final var template = getTemplatePath(certificate, isCitizenFormat);
     try (final var inputStream = getClass().getClassLoader().getResourceAsStream(template)) {
       if (inputStream == null) {
         throw new IllegalArgumentException("Template not found: " + template);
@@ -49,6 +49,19 @@ public class CertificatePdfFillService {
     } catch (Exception e) {
       throw new IllegalStateException("Could not create Pdf", e);
     }
+  }
+
+  private static String getTemplatePath(Certificate certificate, boolean isCitizenFormat) {
+    if (isCitizenFormat) {
+      return certificate.certificateModel().pdfNoAddressTemplatePath();
+    }
+
+    if (certificate.sent() != null && certificate.sent().sentAt() != null) {
+      return certificate.certificateModel().pdfNoAddressTemplatePath() != null
+          ? certificate.certificateModel().pdfNoAddressTemplatePath()
+          : certificate.certificateModel().pdfTemplatePath();
+    }
+    return certificate.certificateModel().pdfTemplatePath();
   }
 
   private void setFields(Certificate certificate,

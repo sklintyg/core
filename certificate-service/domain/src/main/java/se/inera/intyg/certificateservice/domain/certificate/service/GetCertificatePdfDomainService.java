@@ -37,7 +37,7 @@ public class GetCertificatePdfDomainService {
       certificate.updateMetadata(actionEvaluation);
     }
 
-    final var generatedPdf = pdfGenerator.generate(certificate, additionalInfoText);
+    final var generatedPdf = pdfGenerator.generate(certificate, additionalInfoText, false);
 
     certificateEventDomainService.publish(
         CertificateEvent.builder()
