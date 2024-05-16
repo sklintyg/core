@@ -45,7 +45,7 @@ class PdfDateRangeListValueGeneratorTest {
       .build();
 
   private static final DateRange DATE_RANGE_ONLY_FROM = DateRange.builder()
-      .dateRangeId(new FieldId(WorkCapacityType.EN_ATTANDEL.toString()))
+      .dateRangeId(new FieldId(WorkCapacityType.EN_ATTONDEL.toString()))
       .from(LocalDate.now().minusDays(1))
       .build();
 

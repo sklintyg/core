@@ -129,7 +129,7 @@ public class TestDataCertificate {
                             .dateRangeList(
                                 List.of(
                                     DateRange.builder()
-                                        .dateRangeId(new FieldId("EN_ATTANDEL"))
+                                        .dateRangeId(new FieldId("EN_ATTONDEL"))
                                         .from(LocalDate.now())
                                         .to(LocalDate.now().plusDays(1))
                                         .build()

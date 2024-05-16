@@ -266,7 +266,7 @@ class CertificateModelFactoryFK7472Test {
     @Nested
     class CategorySymptom {
 
-      private static final ElementId ELEMENT_ID = new ElementId("KAT_2");
+      private static final ElementId ELEMENT_ID = new ElementId("KAT_1");
 
       @Test
       void shallIncludeId() {
@@ -296,7 +296,7 @@ class CertificateModelFactoryFK7472Test {
     @Nested
     class QuestionSymptom {
 
-      private static final ElementId ELEMENT_ID = new ElementId("2");
+      private static final ElementId ELEMENT_ID = new ElementId("55");
 
       @Test
       void shallIncludeId() {
@@ -313,7 +313,7 @@ class CertificateModelFactoryFK7472Test {
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationTextArea.builder()
             .name("Ange diagnos eller symtom")
-            .id(new FieldId("2.1"))
+            .id(new FieldId("55.1"))
             .build();
 
         final var certificateModel = certificateModelFactoryFK7472.create();
@@ -327,14 +327,14 @@ class CertificateModelFactoryFK7472Test {
       void shallIncludeRules() {
         final var expectedRules = List.of(
             ElementRuleExpression.builder()
-                .id(new ElementId("2"))
+                .id(new ElementId("55"))
                 .type(ElementRuleType.MANDATORY)
                 .expression(
-                    new RuleExpression("$2.1")
+                    new RuleExpression("$55.1")
                 )
                 .build(),
             ElementRuleLimit.builder()
-                .id(new ElementId("2"))
+                .id(new ElementId("55"))
                 .type(ElementRuleType.TEXT_LIMIT)
                 .limit(new RuleLimit((short) 318))
                 .build()
@@ -376,7 +376,7 @@ class CertificateModelFactoryFK7472Test {
     @Nested
     class CategoryPeriod {
 
-      private static final ElementId ELEMENT_ID = new ElementId("KAT_3");
+      private static final ElementId ELEMENT_ID = new ElementId("KAT_2");
 
       @Test
       void shallIncludeId() {
@@ -406,7 +406,7 @@ class CertificateModelFactoryFK7472Test {
     @Nested
     class QuestionPrognos {
 
-      private static final ElementId ELEMENT_ID = new ElementId("3");
+      private static final ElementId ELEMENT_ID = new ElementId("56");
 
       @Test
       void shallIncludeId() {
@@ -422,14 +422,14 @@ class CertificateModelFactoryFK7472Test {
       @Test
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationCheckboxDateRangeList.builder()
-            .name("Jag bedömer att barnet inte bör vårdas i ordinarie tillsynsform")
+            .name("Jag bedömer att barnet inte ska vårdas i ordinarie tillsynsform")
             .label("Andel av ordinarie tid:")
-            .id(new FieldId("3.1"))
+            .id(new FieldId("56.1"))
             .hideWorkingHours(true)
             .min(Period.ofMonths(-1))
             .dateRanges(
                 List.of(
-                    new CheckboxDateRange(new FieldId("EN_ATTANDEL"), "12,5 procent"),
+                    new CheckboxDateRange(new FieldId("EN_ATTONDEL"), "12,5 procent"),
                     new CheckboxDateRange(new FieldId("EN_FJARDEDEL"), "25 procent"),
                     new CheckboxDateRange(new FieldId("HALVA"), "50 procent"),
                     new CheckboxDateRange(new FieldId("TRE_FJARDEDELAR"), "75 procent"),
@@ -453,7 +453,7 @@ class CertificateModelFactoryFK7472Test {
                 .type(ElementRuleType.MANDATORY)
                 .expression(
                     new RuleExpression(
-                        "$EN_ATTANDEL || $EN_FJARDEDEL || $HALVA || $TRE_FJARDEDELAR || $HELA"
+                        "$EN_ATTONDEL || $EN_FJARDEDEL || $HALVA || $TRE_FJARDEDELAR || $HELA"
                     )
                 )
                 .build()
