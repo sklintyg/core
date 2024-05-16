@@ -21,11 +21,11 @@ public interface CertificateAction {
 
   boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation);
 
-  default String getName() {
+  default String getName(Optional<Certificate> certificate) {
     return null;
   }
 
-  default String getDescription() {
+  default String getDescription(Optional<Certificate> certificate) {
     return null;
   }
 

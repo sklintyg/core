@@ -163,13 +163,13 @@ class CertificateActionRevokeTest {
 
   @Test
   void shallReturnName() {
-    assertEquals("Makulera", certificateActionRevoke.getName());
+    assertEquals("Makulera", certificateActionRevoke.getName(Optional.empty()));
   }
 
   @Test
   void shallReturnDescription() {
     assertEquals("Öppnar ett fönster där du kan välja att makulera intyget.",
-        certificateActionRevoke.getDescription());
+        certificateActionRevoke.getDescription(Optional.empty()));
   }
 
 

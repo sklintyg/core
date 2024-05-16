@@ -61,12 +61,12 @@ public class CertificateActionRenew implements CertificateAction {
   }
 
   @Override
-  public String getName() {
+  public String getName(Optional<Certificate> certificate) {
     return NAME;
   }
 
   @Override
-  public String getDescription() {
+  public String getDescription(Optional<Certificate> certificate) {
     return DESCRIPTION;
   }
 

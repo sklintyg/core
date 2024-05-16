@@ -191,13 +191,13 @@ class CertificateActionSendTest {
 
   @Test
   void shallReturnName() {
-    assertEquals("Skicka till Försäkringskassan", certificateActionSend.getName());
+    assertEquals("Skicka till Försäkringskassan", certificateActionSend.getName(Optional.empty()));
   }
 
   @Test
   void shallReturnDescription() {
     assertEquals("Öppnar ett fönster där du kan välja att skicka intyget till Försäkringskassan.",
-        certificateActionSend.getDescription());
+        certificateActionSend.getDescription(Optional.empty()));
   }
 
   @Test

@@ -12,6 +12,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALV
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
@@ -34,7 +35,7 @@ class CertificateActionCreateTest {
 
   @Test
   void shallReturnName() {
-    assertEquals("Skapa intyg", certificateActionCreate.getName());
+    assertEquals("Skapa intyg", certificateActionCreate.getName(Optional.empty()));
   }
 
   @Test
@@ -44,7 +45,8 @@ class CertificateActionCreateTest {
 
   @Test
   void shallReturnDescription() {
-    assertEquals("Skapa ett intygsutkast.", certificateActionCreate.getDescription());
+    assertEquals("Skapa ett intygsutkast.",
+        certificateActionCreate.getDescription(Optional.empty()));
   }
 
   @Test

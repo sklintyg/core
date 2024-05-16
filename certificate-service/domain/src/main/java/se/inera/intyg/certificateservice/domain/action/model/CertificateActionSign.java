@@ -12,8 +12,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 @Getter(AccessLevel.NONE)
 public class CertificateActionSign implements CertificateAction {
 
-  private static final String NAME = "Signera intyget";
-  private static final String DESCRIPTION = "Intyget signeras.";
+  private static final String SIGN = "Signera intyget";
+  private static final String SIGN_AND_SEND = "Signera och skicka";
+  private static final String SIGN_AND_SEND_DESCRIPTION = "Intyget skickas direkt till %s.";
+  private static final String SIGN_DESCRIPTION = "Intyget signeras.";
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
 
@@ -39,12 +41,35 @@ public class CertificateActionSign implements CertificateAction {
   }
 
   @Override
-  public String getName() {
-    return NAME;
+  public String getName(Optional<Certificate> optionalCertificate) {
+    return optionalCertificate.map(
+            certificate -> {
+              final var hasSignAfterSendAction = isSignAfterSendActionSpecificationPresent(certificate);
+              return hasSignAfterSendAction ? SIGN_AND_SEND : SIGN;
+            }
+        )
+        .orElse(SIGN);
   }
 
   @Override
-  public String getDescription() {
-    return DESCRIPTION;
+  public String getDescription(Optional<Certificate> optionalCertificate) {
+    return optionalCertificate.map(
+            certificate -> {
+              final var hasSignAfterSendAction = isSignAfterSendActionSpecificationPresent(certificate);
+              return hasSignAfterSendAction
+                  ? SIGN_AND_SEND_DESCRIPTION.formatted(
+                  certificate.certificateModel().recipient().name())
+                  : SIGN_DESCRIPTION;
+            }
+        )
+        .orElse(SIGN_DESCRIPTION);
+  }
+
+  private static boolean isSignAfterSendActionSpecificationPresent(Certificate certificate) {
+    return certificate.certificateModel()
+        .certificateActionSpecifications()
+        .stream()
+        .anyMatch(specification -> specification.certificateActionType()
+            .equals(CertificateActionType.SEND_AFTER_SIGN));
   }
 }

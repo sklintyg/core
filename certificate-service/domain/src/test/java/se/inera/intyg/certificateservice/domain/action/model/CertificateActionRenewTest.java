@@ -298,14 +298,14 @@ class CertificateActionRenewTest {
 
   @Test
   void shallReturnName() {
-    assertEquals("Förnya", certificateActionRenew.getName());
+    assertEquals("Förnya", certificateActionRenew.getName(Optional.empty()));
   }
 
 
   @Test
   void shallReturnDescription() {
     assertEquals("Skapar en redigerbar kopia av intyget på den enhet som du är inloggad på.",
-        certificateActionRenew.getDescription());
+        certificateActionRenew.getDescription(Optional.empty()));
   }
 
   @Test

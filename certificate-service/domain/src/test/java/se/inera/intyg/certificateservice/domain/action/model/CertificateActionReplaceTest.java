@@ -316,13 +316,13 @@ class CertificateActionReplaceTest {
 
   @Test
   void shallReturnName() {
-    assertEquals("Ersätt", certificateActionReplace.getName());
+    assertEquals("Ersätt", certificateActionReplace.getName(Optional.empty()));
   }
 
   @Test
   void shallReturnDescription() {
     assertEquals("Skapar en kopia av detta intyg som du kan redigera.",
-        certificateActionReplace.getDescription());
+        certificateActionReplace.getDescription(Optional.empty()));
   }
 
   @Test
