@@ -243,7 +243,8 @@ class XmlGeneratorCertificateV4Test {
   @Test
   void shouldIncludeHoSPersonalLegitimeratYrke() {
     final var expectedOne = new LegitimeratYrkeType();
-    expectedOne.setCode("N/A");
+    expectedOne.setCodeSystem("1.2.752.29.23.1.6");
+    expectedOne.setCode("LK");
     expectedOne.setDisplayName(AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES.get(0).value());
 
     final var legitimeradeYrken = unmarshal(
@@ -252,8 +253,8 @@ class XmlGeneratorCertificateV4Test {
 
     assertAll(
         () -> assertEquals(expectedOne.getCode(), legitimeradeYrken.get(0).getCode()),
-        () -> assertEquals(expectedOne.getDisplayName(),
-            legitimeradeYrken.get(0).getDisplayName())
+        () -> assertEquals(expectedOne.getDisplayName(), legitimeradeYrken.get(0).getDisplayName()),
+        () -> assertEquals(expectedOne.getCodeSystem(), legitimeradeYrken.get(0).getCodeSystem())
     );
   }
 
