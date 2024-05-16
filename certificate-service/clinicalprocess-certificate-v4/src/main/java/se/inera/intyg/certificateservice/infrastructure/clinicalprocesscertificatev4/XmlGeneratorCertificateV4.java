@@ -6,7 +6,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.time.temporal.ChronoUnit;
+import java.time.format.DateTimeFormatter;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,9 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
   private static final String EMPTY = "";
   private static final String NOT_APPLICABLE = "N/A";
   private static final String PRESCRIPTION_CODE_MASKED = "0000000";
-  public static final String KV_RELATION_CODE_SYSTEM = "c2362fcd-eda0-4f9a-bd13-b3bbaf7f2146";
+  private static final String KV_RELATION_CODE_SYSTEM = "c2362fcd-eda0-4f9a-bd13-b3bbaf7f2146";
+  private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(
+      "yyyy-MM-dd'T'HH:mm:ss");
 
   private final XmlGeneratorValue xmlGeneratorValue;
   private final XmlValidationService xmlValidationService;
@@ -270,7 +272,7 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
     try {
       return DatatypeFactory.newInstance()
           .newXMLGregorianCalendar(
-              certificate.signed().truncatedTo(ChronoUnit.SECONDS).toString()
+              DATE_TIME_FORMATTER.format(certificate.signed())
           );
     } catch (Exception ex) {
       throw new IllegalStateException("Could not convert signed", ex);

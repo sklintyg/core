@@ -39,20 +39,17 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
   private static final String VERSION = "1.0";
   private static final String NAME = "Intyg om graviditet";
   private static final String DESCRIPTION = """
-      När en patient är gravid ska hen få ett intyg om graviditet av hälso- och sjukvården. Intyget behövs om föräldern begär ersättning från Försäkringskassan innan barnet är fött.
-            
-      Patienten ska:
-      Be barnmorskan, läkaren eller sjuksköterskan om ett intyg om graviditet
-      Barnmorskan, läkaren eller sjuksköterskan ska:
-      Skriva ett intyg om graviditet och skicka in intyget om graviditet till Försäkringskassan digitalt.""";
+      Vad är intyg om graviditet?
+      När en person är gravid ska hen få ett intyg om graviditet av hälso- och sjukvården. Intyget behövs om den gravida begär ersättning från Försäkringskassan innan barnet är fött. Intyget skickas till Försäkringskassan digitalt av hälso- och sjukvården eller av den gravida.
+      """;
   public static final CertificateModelId FK7210_V1_0 = CertificateModelId.builder()
       .type(new CertificateType(FK_7210))
       .version(new CertificateVersion(VERSION))
       .build();
-  public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_CATEGORY_ID = new ElementId(
+  public static final ElementId QUESTION_BERAKNAT_FODELSEDATUM_CATEGORY_ID = new ElementId(
       "KAT_1");
-  public static final ElementId QUESTION_BERAKNAT_NEDKOMSTDATUM_ID = new ElementId("1");
-  private static final FieldId QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID = new FieldId("1.1");
+  public static final ElementId QUESTION_BERAKNAT_FODELSEDATUM_ID = new ElementId("54");
+  private static final FieldId QUESTION_BERAKNAT_FODELSEDATUM_FIELD_ID = new FieldId("54.1");
   public static final String PDF_FK_7210_PDF = "fk7210/pdf/fk7210_v1.pdf";
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk7210/schematron/igrav.v1.sch");
@@ -117,8 +114,8 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
         )
         .elementSpecifications(
             List.of(
-                categoryBeraknatNedkomstdatum(
-                    questionBeraknatNedkomstdatum()
+                categoryBeraknatFodelsedatum(
+                    questionBeraknatFodelsedatum()
                 ),
                 issuingUnitContactInfo()
             )
@@ -138,13 +135,13 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
         .build();
   }
 
-  private static ElementSpecification categoryBeraknatNedkomstdatum(
+  private static ElementSpecification categoryBeraknatFodelsedatum(
       ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_CATEGORY_ID)
+        .id(QUESTION_BERAKNAT_FODELSEDATUM_CATEGORY_ID)
         .configuration(
             ElementConfigurationCategory.builder()
-                .name("Beräknat nedkomstdatum")
+                .name("Beräknat födelsedatum")
                 .build()
         )
         .children(
@@ -153,13 +150,13 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
         .build();
   }
 
-  private static ElementSpecification questionBeraknatNedkomstdatum() {
+  private static ElementSpecification questionBeraknatFodelsedatum() {
     return ElementSpecification.builder()
-        .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
+        .id(QUESTION_BERAKNAT_FODELSEDATUM_ID)
         .configuration(
             ElementConfigurationDate.builder()
-                .name("Beräknat nedkomstdatum")
-                .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID)
+                .name("Beräknat födelsedatum")
+                .id(QUESTION_BERAKNAT_FODELSEDATUM_FIELD_ID)
                 .min(Period.ofDays(0))
                 .max(Period.ofYears(1))
                 .build()
@@ -167,8 +164,8 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatory(
-                    QUESTION_BERAKNAT_NEDKOMSTDATUM_ID,
-                    QUESTION_BERAKNAT_NEDKOMSTDATUM_FIELD_ID
+                    QUESTION_BERAKNAT_FODELSEDATUM_ID,
+                    QUESTION_BERAKNAT_FODELSEDATUM_FIELD_ID
                 )
             )
         )

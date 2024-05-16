@@ -341,8 +341,8 @@ Content-Type: application/json
       "summary": null
     },
     "data": {
-      "1": {
-        "id": "1",
+      "54": {
+        "id": "54",
         "parent": "KAT_1",
         "index": 2,
         "config": {
@@ -351,25 +351,25 @@ Content-Type: application/json
           "header": null,
           "label": null,
           "icon": null,
-          "text": "Beräknat nedkomstdatum",
+          "text": "Beräknat fodelsedatum",
           "description": null,
           "accordion": null,
-          "id": "1.1",
+          "id": "54.1",
           "minDate": "2024-02-14",
           "maxDate": "2025-02-14"
         },
         "value": {
           "type": "DATE",
           "type": "DATE",
-          "id": "1.1",
+          "id": "54.1",
           "date": "2024-03-29"
         },
         "validation": [
           {
             "type": "MANDATORY_VALIDATION",
             "type": "MANDATORY_VALIDATION",
-            "questionId": "1",
-            "expression": "$1.1"
+            "questionId": "54",
+            "expression": "$54.1"
           }
         ],
         "validationError": null,
@@ -386,7 +386,7 @@ Content-Type: application/json
           "header": null,
           "label": null,
           "icon": null,
-          "text": "Beräknat nedkomstdatum",
+          "text": "Beräknat fodelsedatum",
           "description": null,
           "accordion": null
         },

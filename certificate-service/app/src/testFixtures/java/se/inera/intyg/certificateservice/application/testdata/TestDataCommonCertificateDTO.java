@@ -21,8 +21,8 @@ public class TestDataCommonCertificateDTO {
   }
 
   private static final String QUESTION_ID = "questionId";
-  private static final String FK7210_CONFIG_ID = "beraknatnedkomstdatum";
-  private static final String FK7210_CONFIG_TEXT = "Beräknat nedkomstdatum";
+  private static final String FK7210_CONFIG_ID = "beraknatFodelsedatum";
+  private static final String FK7210_CONFIG_TEXT = "Beräknat fodelsedatum";
   public static final CertificateMetadataDTO METADATA = certificateMetadata().build();
 
   public static CertificateMetadataDTO.CertificateMetadataDTOBuilder certificateMetadata() {

@@ -19,7 +19,7 @@ import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7210.FK7210PdfFillService.CERTIFIER_DOCTOR_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7210.FK7210PdfFillService.CERTIFIER_MIDWIFE_FIELD_ID;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7210.FK7210PdfFillService.CERTIFIER_NURSE_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7210.FK7210PdfFillService.QUESTION_BERAKNAT_NEDKOMSTDATUM_ID;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7210.FK7210PdfFillService.QUESTION_BERAKNAT_FODELSEDATUM_ID;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -45,8 +45,8 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfDateValueG
 class FK7210PdfFillServiceTest {
 
   private static final LocalDate DELIVERY_DATE = LocalDate.now();
-  private static final ElementData BERAKNAT_NEDKOMST_DATUM_ELEMENT_DATA = ElementData.builder()
-      .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
+  private static final ElementData BERAKNAT_FODELSE_DATUM_ELEMENT_DATA = ElementData.builder()
+      .id(QUESTION_BERAKNAT_FODELSEDATUM_ID)
       .value(
           ElementValueDate.builder()
               .date(DELIVERY_DATE)
@@ -114,7 +114,7 @@ class FK7210PdfFillServiceTest {
       @Test
       void shouldReturnExpectedDeliveryDateIfDateIsProvided() {
         final var result = fk7210PdfFillService.getFields(
-            buildCertificate(List.of(BERAKNAT_NEDKOMST_DATUM_ELEMENT_DATA))
+            buildCertificate(List.of(BERAKNAT_FODELSE_DATUM_ELEMENT_DATA))
         );
 
         assertTrue(result.contains(DATE_FIELD), "Expected date field to be included in result");

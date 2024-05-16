@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.testability.certificate.service.fillservice.fk7210;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.FK7210_V1_0;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.QUESTION_BERAKNAT_NEDKOMSTDATUM_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.QUESTION_BERAKNAT_FODELSEDATUM_ID;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -34,15 +34,15 @@ public class TestabilityCertificateFillServiceFK7210 implements TestabilityCerti
 
   private static List<ElementData> fillWithValues(CertificateModel certificateModel) {
     final var elementSpecification = certificateModel.elementSpecification(
-        QUESTION_BERAKNAT_NEDKOMSTDATUM_ID);
+        QUESTION_BERAKNAT_FODELSEDATUM_ID);
     final var elementValue = elementSpecification.configuration().emptyValue();
     if (elementValue instanceof ElementValueDate elementValueDate) {
-      final var beraknatNedkomstdatum = elementValueDate
+      final var beraknatFodelsedatum = elementValueDate
           .withDate(LocalDate.now(ZoneId.systemDefault()).plusMonths(6));
       return List.of(
           ElementData.builder()
-              .id(QUESTION_BERAKNAT_NEDKOMSTDATUM_ID)
-              .value(beraknatNedkomstdatum)
+              .id(QUESTION_BERAKNAT_FODELSEDATUM_ID)
+              .value(beraknatFodelsedatum)
               .build()
       );
     }

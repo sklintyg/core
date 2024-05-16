@@ -272,7 +272,7 @@ class CertificateModelFactoryFK7210Test {
   class CertificateSpecifications {
 
     @Nested
-    class CategoryBeraknatNedkomstdatum {
+    class CategoryBeraknatFodelsedatum {
 
       private static final ElementId ELEMENT_ID = new ElementId("KAT_1");
 
@@ -289,7 +289,7 @@ class CertificateModelFactoryFK7210Test {
       @Test
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationCategory.builder()
-            .name("Beräknat nedkomstdatum")
+            .name("Beräknat födelsedatum")
             .build();
 
         final var certificateModel = certificateModelFactoryFK7210.create();
@@ -301,9 +301,9 @@ class CertificateModelFactoryFK7210Test {
     }
 
     @Nested
-    class QuestionBeraknatNedkomstdatum {
+    class QuestionBeraknatFodelsedatum {
 
-      private static final ElementId ELEMENT_ID = new ElementId("1");
+      private static final ElementId ELEMENT_ID = new ElementId("54");
 
       @Test
       void shallIncludeId() {
@@ -318,8 +318,8 @@ class CertificateModelFactoryFK7210Test {
       @Test
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationDate.builder()
-            .name("Beräknat nedkomstdatum")
-            .id(new FieldId("1.1"))
+            .name("Beräknat födelsedatum")
+            .id(new FieldId("54.1"))
             .min(Period.ofDays(0))
             .max(Period.ofYears(1))
             .build();
@@ -335,10 +335,10 @@ class CertificateModelFactoryFK7210Test {
       void shallIncludeRules() {
         final var expectedRules = List.of(
             ElementRuleExpression.builder()
-                .id(new ElementId("1"))
+                .id(new ElementId("54"))
                 .type(ElementRuleType.MANDATORY)
                 .expression(
-                    new RuleExpression("$1.1")
+                    new RuleExpression("$54.1")
                 )
                 .build()
         );
@@ -409,5 +409,4 @@ class CertificateModelFactoryFK7210Test {
       }
     }
   }
-
 }
