@@ -18,8 +18,8 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfTextValueG
 public class FK7472PdfFillService implements CertificateTypePdfFillService {
 
   public static final String SYMPTOM_FIELD_ID = "form1[0].#subform[0].flt_txtDiagnos[0]";
-  public static final ElementId QUESTION_SYMPTOM_ID = new ElementId("1");
-  public static final ElementId QUESTION_PERIOD_ID = new ElementId("2");
+  public static final ElementId QUESTION_SYMPTOM_ID = new ElementId("55");
+  public static final ElementId QUESTION_PERIOD_ID = new ElementId("56");
   public static final String PATIENT_ID_FIELD_ID = "form1[0].#subform[0].flt_txtPersonNrBarn[0]";
   public static final String PERIOD_FIELD_ID_PREFIX = "form1[0].#subform[0]";
 

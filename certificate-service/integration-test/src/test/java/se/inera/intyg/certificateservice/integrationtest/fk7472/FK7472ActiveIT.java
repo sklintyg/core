@@ -25,6 +25,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.QUESTION_PERIOD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.QUESTION_SYMPTOM_ID;
 import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.FK7472;
 import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.VERSION;
 import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.WRONG_VERSION;
@@ -608,14 +609,13 @@ class FK7472ActiveIT {
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
-      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, expectedText))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), expectedText))
       );
 
       final var response = api.updateCertificate(
@@ -626,7 +626,7 @@ class FK7472ActiveIT {
           certificateId(testCertificates)
       );
 
-      assertEquals(expectedText, getValueText(response, questionId));
+      assertEquals(expectedText, getValueText(response, QUESTION_SYMPTOM_ID.id()));
     }
 
     @Test
@@ -658,14 +658,13 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
-      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, expectedText))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), expectedText))
       );
 
       final var response = api.updateCertificate(
@@ -676,7 +675,7 @@ class FK7472ActiveIT {
           certificateId(testCertificates)
       );
 
-      assertEquals(expectedText, getValueText(response, questionId));
+      assertEquals(expectedText, getValueText(response, QUESTION_SYMPTOM_ID.id()));
     }
 
     @Test
@@ -686,14 +685,13 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
-      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, expectedText))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), expectedText))
       );
 
       final var response = api.updateCertificate(
@@ -703,7 +701,7 @@ class FK7472ActiveIT {
           certificateId(testCertificates)
       );
 
-      assertEquals(expectedText, getValueText(response, questionId)
+      assertEquals(expectedText, getValueText(response, QUESTION_SYMPTOM_ID.id())
       );
     }
 
@@ -716,14 +714,13 @@ class FK7472ActiveIT {
               .build()
       );
 
-      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, expectedText))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), expectedText))
       );
 
       final var response = api.updateCertificate(
@@ -734,7 +731,7 @@ class FK7472ActiveIT {
           certificateId(testCertificates)
       );
 
-      assertEquals(expectedText, getValueText(response, questionId));
+      assertEquals(expectedText, getValueText(response, QUESTION_SYMPTOM_ID.id()));
     }
 
     @Test
@@ -746,7 +743,6 @@ class FK7472ActiveIT {
               .build()
       );
 
-      final var questionId = "3";
       final var expectedData = List.of(
           CertificateDataValueDateRange.builder()
               .id("HALVA")
@@ -758,8 +754,8 @@ class FK7472ActiveIT {
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateDateRangeListValue(certificate, questionId, expectedData))
+              QUESTION_PERIOD_ID.id(),
+              updateDateRangeListValue(certificate, QUESTION_PERIOD_ID.id(), expectedData))
       );
 
       final var response = api.updateCertificate(
@@ -770,7 +766,7 @@ class FK7472ActiveIT {
           certificateId(testCertificates)
       );
 
-      assertEquals(expectedData, getValueDateRangeList(response, questionId));
+      assertEquals(expectedData, getValueDateRangeList(response, QUESTION_PERIOD_ID.id()));
     }
 
     @Test
@@ -1638,14 +1634,13 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
-      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, expectedText))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), expectedText))
       );
 
       api.updateCertificate(
@@ -1679,14 +1674,13 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
-      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, expectedText))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), expectedText))
       );
 
       api.updateCertificate(
@@ -2148,14 +2142,13 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
-      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, expectedText))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), expectedText))
       );
 
       final var response = api.validateCertificate(
@@ -2175,7 +2168,6 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
-      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar. Ett nytt exempel på ett svar."
           + "Ett nytt exempel på ett svar.  Ett nytt exempel på ett svar."
           + "Ett nytt exempel på ett svar. Ett nytt exempel på ett svar."
@@ -2191,8 +2183,8 @@ class FK7472ActiveIT {
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, expectedText))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), expectedText))
       );
 
       final var response = api.validateCertificate(
@@ -2221,13 +2213,12 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
-      final var questionId = "2";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, null))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), null))
       );
 
       final var response = api.validateCertificate(
@@ -2343,12 +2334,10 @@ class FK7472ActiveIT {
               .withAddress("")
       );
 
-      final var questionId = "2";
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, "Text"
-              )
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), "Text")
           )
       );
 
@@ -2384,12 +2373,10 @@ class FK7472ActiveIT {
               .withZipCode("")
       );
 
-      final var questionId = "2";
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, "Text"
-              )
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), "Text")
           )
       );
 
@@ -2425,12 +2412,10 @@ class FK7472ActiveIT {
               .withCity("")
       );
 
-      final var questionId = "2";
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, "Text"
-              )
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), "Text")
           )
       );
 
@@ -2466,12 +2451,10 @@ class FK7472ActiveIT {
               .withPhoneNumber("")
       );
 
-      final var questionId = "2";
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, "Text"
-              )
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), "Text")
           )
       );
 
