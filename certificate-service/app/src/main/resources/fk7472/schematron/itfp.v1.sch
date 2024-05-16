@@ -45,6 +45,9 @@
 
     <iso:pattern id="q56">
         <iso:rule context="//gn:svar[@id='56']">
+            <iso:assert test="not(preceding-sibling::gn:svar[@id='56']/gn:delsvar[@id='56.1']/tp:cv/tp:code/normalize-space() = normalize-space(gn:delsvar[@id='56.1']/tp:cv/tp:code))">
+                'Ordinarie tillsynsform' (56.1) får besvaras med flera olika koder (KV_FKMU_0009) men varje kod får bara förekomma en gång.
+            </iso:assert>
             <iso:assert test="count(gn:instans) = 1">
                 Svaret för frågan "Period som barnet inte bör vårdas i ordinarie tillsynsform" måste ha ett instansnummer.
             </iso:assert>
@@ -68,12 +71,6 @@
             </iso:assert>
             <iso:assert test="matches(normalize-space(tp:cv/tp:code), '^(EN_ATTONDEL|HELA|TRE_FJARDEDELAR|HALVA|EN_FJARDEDEL)$')">
                 'Ordinarie tillsynsform' kan ha ett av värdena EN_ATTONDEL, HELA, TRE_FJARDEDELAR, HALVA, EN_FJARDEDEL.
-            </iso:assert>
-        </iso:rule>
-
-        <iso:rule context="//gn:svar[@id='56']">
-            <iso:assert test="not(preceding-sibling::gn:svar[@id='56']/gn:delsvar[@id='56.1']/tp:cv/tp:code/normalize-space() = normalize-space(gn:delsvar[@id='56.1']/tp:cv/tp:code))">
-                'Ordinarie tillsynsform' (56.1) får besvaras med flera olika koder (KV_FKMU_0009) men varje kod får bara förekomma en gång.
             </iso:assert>
         </iso:rule>
     </iso:pattern>
