@@ -141,16 +141,16 @@ class SchematronValidatorTest {
     void shallReturnTrueIfAllFieldsHaveValues() {
       final var element = List.of(
           ElementData.builder()
-              .id(new ElementId("2"))
+              .id(new ElementId("55"))
               .value(
                   ElementValueText.builder()
-                      .textId(new FieldId("2.1"))
+                      .textId(new FieldId("55.1"))
                       .text("text")
                       .build()
               )
               .build(),
           ElementData.builder()
-              .id(new ElementId("3"))
+              .id(new ElementId("56"))
               .value(
                   ElementValueDateRangeList.builder()
                       .dateRangeList(
@@ -162,7 +162,7 @@ class SchematronValidatorTest {
                                   .build()
                           )
                       )
-                      .dateRangeListId(new FieldId("3.2"))
+                      .dateRangeListId(new FieldId("56.2"))
                       .build())
               .build()
       );
@@ -181,7 +181,7 @@ class SchematronValidatorTest {
     class QuestionDiagnosEllerSymtom {
 
       private static final ElementData QUESTION_PERIOD = ElementData.builder()
-          .id(new ElementId("2"))
+          .id(new ElementId("55"))
           .value(
               ElementValueDateRangeList.builder()
                   .dateRangeList(
@@ -193,7 +193,7 @@ class SchematronValidatorTest {
                               .build()
                       )
                   )
-                  .dateRangeListId(new FieldId("2.1"))
+                  .dateRangeListId(new FieldId("55.1"))
                   .build())
           .build();
 

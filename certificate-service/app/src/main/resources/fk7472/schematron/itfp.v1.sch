@@ -31,7 +31,7 @@
     </iso:rule>
   </iso:pattern>
 
-  <iso:pattern id="55.1">
+  <iso:pattern id="q55.1">
     <iso:rule context="//gn:delsvar[@id='55.1']">
       <iso:let name="textValue" value="string(.)"/>
       <iso:assert test="normalize-space($textValue) != ''">
