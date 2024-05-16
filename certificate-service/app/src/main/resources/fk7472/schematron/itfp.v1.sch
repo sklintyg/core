@@ -23,7 +23,7 @@
     </iso:rule>
   </iso:pattern>
 
-  <iso:pattern id="q2">
+  <iso:pattern id="q55">
     <iso:rule context="//gn:svar[@id='55']">
       <iso:assert test="count(gn:delsvar[@id='55.1']) = 1">
         Ett 'Barnets diagnos eller symtom' svar måste ha ett delsvar
@@ -31,7 +31,7 @@
     </iso:rule>
   </iso:pattern>
 
-  <iso:pattern id="q2.1">
+  <iso:pattern id="55.1">
     <iso:rule context="//gn:delsvar[@id='55.1']">
       <iso:let name="textValue" value="string(.)"/>
       <iso:assert test="normalize-space($textValue) != ''">
@@ -43,7 +43,7 @@
     </iso:rule>
   </iso:pattern>
 
-    <iso:pattern id="q.3">
+    <iso:pattern id="q56">
         <iso:rule context="//gn:svar[@id='56']">
             <iso:assert test="count(gn:instans) = 1">
                 Svaret för frågan "Period som barnet inte bör vårdas i ordinarie tillsynsform" måste ha ett instansnummer.
