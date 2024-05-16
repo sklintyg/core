@@ -181,7 +181,7 @@ class SchematronValidatorTest {
     class QuestionDiagnosEllerSymtom {
 
       private static final ElementData QUESTION_PERIOD = ElementData.builder()
-          .id(new ElementId("55"))
+          .id(new ElementId("56"))
           .value(
               ElementValueDateRangeList.builder()
                   .dateRangeList(
@@ -209,10 +209,10 @@ class SchematronValidatorTest {
       @Test
       void shallReturnFalseIfValueIsNull() {
         final var element = ElementData.builder()
-            .id(new ElementId("1"))
+            .id(new ElementId("55"))
             .value(
                 ElementValueText.builder()
-                    .textId(new FieldId("1.1"))
+                    .textId(new FieldId("55.1"))
                     .build()
             ).build();
 
@@ -226,10 +226,10 @@ class SchematronValidatorTest {
       @Test
       void shallReturnFalseIfValueIsBlank() {
         final var element = ElementData.builder()
-            .id(new ElementId("1"))
+            .id(new ElementId("55"))
             .value(
                 ElementValueText.builder()
-                    .textId(new FieldId("1.1"))
+                    .textId(new FieldId("55.1"))
                     .text("")
                     .build()
             ).build();
@@ -244,10 +244,10 @@ class SchematronValidatorTest {
       @Test
       void shallReturnFalseIfValueHasLengthGreaterThan318() {
         final var element = ElementData.builder()
-            .id(new ElementId("1"))
+            .id(new ElementId("55"))
             .value(
                 ElementValueText.builder()
-                    .textId(new FieldId("1.1"))
+                    .textId(new FieldId("55.1"))
                     .text(
                         "awddawadwawdawdawdawdawdadwadwawdadawda"
                             + "wawddawadwawdawdawdawdawdadwadwawd"
@@ -271,7 +271,7 @@ class SchematronValidatorTest {
       @Test
       void shallReturnFalseIfQuestionMissing() {
         final var element = ElementData.builder()
-            .id(new ElementId("1"))
+            .id(new ElementId("55"))
             .value(ElementValueText.builder().build())
             .build();
 
@@ -287,10 +287,10 @@ class SchematronValidatorTest {
     class QuestionPeriod {
 
       private static final ElementData QUESTION_SYMTOM = ElementData.builder()
-          .id(new ElementId("1"))
+          .id(new ElementId("55"))
           .value(
               ElementValueText.builder()
-                  .textId(new FieldId("1.1"))
+                  .textId(new FieldId("55.1"))
                   .text("text")
                   .build()
           )
@@ -314,13 +314,13 @@ class SchematronValidatorTest {
         final var element = List.of(
             QUESTION_SYMTOM,
             ElementData.builder()
-                .id(new ElementId("2"))
+                .id(new ElementId("56"))
                 .value(
                     ElementValueDateRangeList.builder()
                         .dateRangeList(
                             Collections.emptyList()
                         )
-                        .dateRangeListId(new FieldId("2.1"))
+                        .dateRangeListId(new FieldId("56.1"))
                         .build())
                 .build()
         );
@@ -337,7 +337,7 @@ class SchematronValidatorTest {
         final var element = List.of(
             QUESTION_SYMTOM,
             ElementData.builder()
-                .id(new ElementId("2"))
+                .id(new ElementId("56"))
                 .value(
                     ElementValueDateRangeList.builder()
                         .dateRangeList(
@@ -354,7 +354,7 @@ class SchematronValidatorTest {
                                     .build()
                             )
                         )
-                        .dateRangeListId(new FieldId("2.1"))
+                        .dateRangeListId(new FieldId("56.1"))
                         .build())
                 .build()
         );
@@ -371,7 +371,7 @@ class SchematronValidatorTest {
         final var element = List.of(
             QUESTION_SYMTOM,
             ElementData.builder()
-                .id(new ElementId("2"))
+                .id(new ElementId("56"))
                 .value(
                     ElementValueDateRangeList.builder()
                         .dateRangeList(
@@ -388,7 +388,7 @@ class SchematronValidatorTest {
                                     .build()
                             )
                         )
-                        .dateRangeListId(new FieldId("2.1"))
+                        .dateRangeListId(new FieldId("56.1"))
                         .build())
                 .build()
         );
@@ -405,7 +405,7 @@ class SchematronValidatorTest {
         final var element = List.of(
             QUESTION_SYMTOM,
             ElementData.builder()
-                .id(new ElementId("2"))
+                .id(new ElementId("56"))
                 .value(
                     ElementValueDateRangeList.builder()
                         .dateRangeList(
@@ -416,7 +416,7 @@ class SchematronValidatorTest {
                                     .build()
                             )
                         )
-                        .dateRangeListId(new FieldId("2.1"))
+                        .dateRangeListId(new FieldId("56.1"))
                         .build())
                 .build()
         );
@@ -434,7 +434,7 @@ class SchematronValidatorTest {
         final var element = List.of(
             QUESTION_SYMTOM,
             ElementData.builder()
-                .id(new ElementId("2"))
+                .id(new ElementId("56"))
                 .value(
                     ElementValueDateRangeList.builder()
                         .dateRangeList(
@@ -445,7 +445,7 @@ class SchematronValidatorTest {
                                     .build()
                             )
                         )
-                        .dateRangeListId(new FieldId("2.1"))
+                        .dateRangeListId(new FieldId("56.1"))
                         .build())
                 .build()
         );
