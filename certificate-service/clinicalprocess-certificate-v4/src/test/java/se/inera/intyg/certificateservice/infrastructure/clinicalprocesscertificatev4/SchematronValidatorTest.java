@@ -67,10 +67,10 @@ class SchematronValidatorTest {
       @Test
       void shallReturnFalseIfValueIsNull() {
         final var element = ElementData.builder()
-            .id(new ElementId("1"))
+            .id(new ElementId("54"))
             .value(
                 ElementValueDate.builder()
-                    .dateId(new FieldId("1.1"))
+                    .dateId(new FieldId("54.1"))
                     .build()
             ).build();
 
@@ -84,10 +84,10 @@ class SchematronValidatorTest {
       @Test
       void shallReturnFalseIfValueIsBeforeToday() {
         final var element = ElementData.builder()
-            .id(new ElementId("1"))
+            .id(new ElementId("54"))
             .value(
                 ElementValueDate.builder()
-                    .dateId(new FieldId("1.1"))
+                    .dateId(new FieldId("54.1"))
                     .date(LocalDate.now().minusDays(1))
                     .build()
             ).build();
@@ -102,10 +102,10 @@ class SchematronValidatorTest {
       @Test
       void shallReturnFalseIfValueIsMoreThanOneYearInTheFuture() {
         final var element = ElementData.builder()
-            .id(new ElementId("1"))
+            .id(new ElementId("54"))
             .value(
                 ElementValueDate.builder()
-                    .dateId(new FieldId("1.1"))
+                    .dateId(new FieldId("54.1"))
                     .date(LocalDate.now().plusYears(1).plusDays(2))
                     .build()
             ).build();
@@ -120,7 +120,7 @@ class SchematronValidatorTest {
       @Test
       void shallReturnFalseIfQuestionMissing() {
         final var element = ElementData.builder()
-            .id(new ElementId("1"))
+            .id(new ElementId("54"))
             .value(
                 ElementValueDate.builder().build()
             ).build();

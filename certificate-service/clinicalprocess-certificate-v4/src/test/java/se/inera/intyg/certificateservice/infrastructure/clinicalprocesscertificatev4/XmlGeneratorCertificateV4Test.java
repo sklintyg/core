@@ -37,8 +37,6 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
 import java.io.StringReader;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -395,9 +393,10 @@ class XmlGeneratorCertificateV4Test {
 
   @Test
   void shouldIncludeSigneringtidpunkt() {
+    final var expectedValue = "2024-04-01T12:30:35";
     final var signedCertificate = fk7210CertificateBuilder()
         .status(Status.SIGNED)
-        .signed(LocalDateTime.now(ZoneId.systemDefault()))
+        .signed(LocalDateTime.parse(expectedValue))
         .build();
 
     final var signeringstidpunkt = unmarshal(
@@ -405,7 +404,7 @@ class XmlGeneratorCertificateV4Test {
     ).getIntyg().getSigneringstidpunkt();
 
     assertEquals(
-        signedCertificate.signed().truncatedTo(ChronoUnit.SECONDS).toString(),
+        expectedValue,
         signeringstidpunkt.toString()
     );
   }
@@ -430,9 +429,10 @@ class XmlGeneratorCertificateV4Test {
 
   @Test
   void shouldIncludeSkickatTidpunkt() {
+    final var expectedValue = "2024-04-01T12:30:17";
     final var signedCertificate = fk7210CertificateBuilder()
         .status(Status.SIGNED)
-        .signed(LocalDateTime.now(ZoneId.systemDefault()))
+        .signed(LocalDateTime.parse(expectedValue))
         .build();
 
     final var skickatTidpunkt = unmarshal(
@@ -440,7 +440,7 @@ class XmlGeneratorCertificateV4Test {
     ).getIntyg().getSkickatTidpunkt();
 
     assertEquals(
-        signedCertificate.signed().truncatedTo(ChronoUnit.SECONDS).toString(),
+        expectedValue,
         skickatTidpunkt.toString()
     );
   }

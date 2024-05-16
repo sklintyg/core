@@ -21,7 +21,7 @@
   </iso:pattern>
 
   <iso:pattern id="q1">
-    <iso:rule context="//gn:svar[@id='1']">
+    <iso:rule context="//gn:svar[@id='54']">
       <iso:assert test="count(gn:delsvar[@id='54.1']) = 1">
         Ett 'Beräknat födelsedatum' svar måste ha ett delsvar
       </iso:assert>
