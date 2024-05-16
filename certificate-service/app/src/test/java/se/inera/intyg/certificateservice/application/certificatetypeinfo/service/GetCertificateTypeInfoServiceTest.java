@@ -93,7 +93,7 @@ class GetCertificateTypeInfoServiceTest {
         )
         .build();
 
-    final var certificateModels = List.of(getCertifiateModel(), getCertifiateModel());
+    final var certificateModels = List.of(getCertificateModel(), getCertificateModel());
 
     when(actionEvaluationFactory.create(
         certificateTypeInfoRequest.getPatient(),
@@ -117,9 +117,9 @@ class GetCertificateTypeInfoServiceTest {
   }
 
   @NotNull
-  private static CertificateModel getCertifiateModel() {
+  private static CertificateModel getCertificateModel() {
     final var certificateModel = mock(CertificateModel.class);
-    doReturn(CERTIFICATE_ACTIONS).when(certificateModel).actions(ACTION_EVALUATION);
+    doReturn(CERTIFICATE_ACTIONS).when(certificateModel).actionsInclude(ACTION_EVALUATION);
     return certificateModel;
   }
 }

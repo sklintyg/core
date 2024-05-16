@@ -183,13 +183,12 @@ class FK7211ActiveIT {
           defaultCertificateTypeInfoRequest()
       );
 
-      assertNotNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7211),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7211),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertTrue(resourceLink.isEnabled(), "Should be enabled");
     }
 
     @Test
@@ -201,13 +200,12 @@ class FK7211ActiveIT {
               .build()
       );
 
-      assertNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7211),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7211),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertFalse(resourceLink.isEnabled(), "Should be disabled");
     }
 
     @Test
@@ -223,13 +221,12 @@ class FK7211ActiveIT {
               .build()
       );
 
-      assertNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7211),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7211),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertFalse(resourceLink.isEnabled(), "Should be disabled");
     }
 
     @Test
@@ -246,13 +243,12 @@ class FK7211ActiveIT {
               .build()
       );
 
-      assertNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7211),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7211),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertFalse(resourceLink.isEnabled(), "Should be disabled");
     }
 
     @Test
@@ -265,13 +261,12 @@ class FK7211ActiveIT {
               .build()
       );
 
-      assertNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7211),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7211),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertFalse(resourceLink.isEnabled(), "Should be disabled");
     }
 
     @Test
@@ -284,13 +279,12 @@ class FK7211ActiveIT {
               .build()
       );
 
-      assertNotNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7211),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7211),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertTrue(resourceLink.isEnabled(), "Should be enabled");
     }
   }
 

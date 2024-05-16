@@ -55,7 +55,7 @@ public class SignCertificateService {
         .certificate(
             certificateConverter.convert(
                 signedCertificate,
-                signedCertificate.actions(actionEvaluation).stream()
+                signedCertificate.actionsInclude(actionEvaluation).stream()
                     .map(certificateAction ->
                         resourceLinkConverter.convert(
                             certificateAction,

@@ -39,7 +39,7 @@ public class GetCertificateService {
     return GetCertificateResponse.builder()
         .certificate(certificateConverter.convert(
             certificate,
-            certificate.actions(actionEvaluation).stream()
+            certificate.actionsInclude(actionEvaluation).stream()
                 .map(certificateAction ->
                     resourceLinkConverter.convert(
                         certificateAction,

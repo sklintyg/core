@@ -39,6 +39,12 @@ public class CertificateModel {
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return actions().stream()
+        .filter(certificateAction -> certificateAction.evaluate(Optional.empty(), actionEvaluation))
+        .toList();
+  }
+
+  public List<CertificateAction> actionsInclude(ActionEvaluation actionEvaluation) {
+    return actions().stream()
         .filter(certificateAction -> certificateAction.include(Optional.empty(), actionEvaluation))
         .toList();
   }
