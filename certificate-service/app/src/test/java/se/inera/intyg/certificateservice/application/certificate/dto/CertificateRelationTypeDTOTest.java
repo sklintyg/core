@@ -20,4 +20,11 @@ class CertificateRelationTypeDTOTest {
         CertificateRelationTypeDTO.toType(RelationType.RENEW)
     );
   }
+
+  @Test
+  void shallConvertComplement() {
+    assertEquals(CertificateRelationTypeDTO.COMPLEMENTED,
+        CertificateRelationTypeDTO.toType(RelationType.COMPLEMENT)
+    );
+  }
 }
