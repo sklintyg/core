@@ -22,6 +22,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.DAN_DENTIST_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.QUESTION_BERAKNAT_FODELSEDATUM_ID;
@@ -174,6 +175,21 @@ class FK7210ActiveIT {
       assertNotNull(
           certificateTypeInfo(response.getBody(), FK7210),
           "Should contain %s as it is active!".formatted(FK7210)
+      );
+    }
+
+    @Test
+    @DisplayName("FK7210 - Om användaren har rollen tandläkare ska intygstypen inte returneras i listan av tillgängliga intygstyper")
+    void shallNotReturnFK7210WhenUserIsDoctor() {
+      final var response = api.certificateTypeInfo(
+          customCertificateTypeInfoRequest()
+              .user(DAN_DENTIST_DTO)
+              .build()
+      );
+
+      assertNull(
+          certificateTypeInfo(response.getBody(), FK7210),
+          "Should not contain %s as user is dentist!".formatted(FK7210)
       );
     }
 

@@ -14,6 +14,9 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.BETA_HUDMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ANNA_SJUKSKOTERKSA;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.BERTIL_BARNMORSKA;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.DAN_DENTIST;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 
 import java.util.Optional;
@@ -142,6 +145,80 @@ class CertificateActionReadTest {
         actionEvaluation);
 
     assertTrue(actualResult.isEmpty());
+  }
+
+  @Nested
+  class EvaluateActionRuleRole {
+
+    @Test
+    void shallReturnFalseIfDentist() {
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .user(DAN_DENTIST)
+          .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+          .build();
+
+      final var actualResult = certificateActionRead.evaluate(
+          Optional.of(certificateBuilder.build()), actionEvaluation);
+
+      assertFalse(actualResult);
+    }
+
+    @Test
+    void shallReturnTrueIfCareAdmin() {
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .user(ALVA_VARDADMINISTRATOR)
+          .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+          .build();
+
+      final var actualResult = certificateActionRead.evaluate(
+          Optional.of(certificateBuilder.build()), actionEvaluation);
+
+      assertTrue(actualResult);
+    }
+
+    @Test
+    void shallReturnTrueIfDoctor() {
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .user(AJLA_DOKTOR)
+          .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+          .build();
+
+      final var actualResult = certificateActionRead.evaluate(
+          Optional.of(certificateBuilder.build()), actionEvaluation);
+
+      assertTrue(actualResult);
+    }
+
+    @Test
+    void shallReturnTrueIfNurse() {
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .user(ANNA_SJUKSKOTERKSA)
+          .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+          .build();
+
+      final var actualResult = certificateActionRead.evaluate(
+          Optional.of(certificateBuilder.build()), actionEvaluation);
+
+      assertTrue(actualResult);
+    }
+
+    @Test
+    void shallReturnTrueIfMidwife() {
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .user(BERTIL_BARNMORSKA)
+          .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+          .build();
+
+      final var actualResult = certificateActionRead.evaluate(
+          Optional.of(certificateBuilder.build()), actionEvaluation);
+
+      assertTrue(actualResult);
+    }
   }
 
   @Nested

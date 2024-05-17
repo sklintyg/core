@@ -34,6 +34,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpre
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
@@ -532,6 +533,16 @@ class CertificateModelFactoryFK7472Test {
             certificateModel.elementSpecification(ELEMENT_ID).validations()
         );
       }
+    }
+
+    @Test
+    void shallIncludeActiveForRoles() {
+      final var expected = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+          Role.CARE_ADMIN);
+
+      final var certificateModel = certificateModelFactoryFK7472.create();
+
+      assertEquals(expected, certificateModel.rolesWithAccess());
     }
   }
 }

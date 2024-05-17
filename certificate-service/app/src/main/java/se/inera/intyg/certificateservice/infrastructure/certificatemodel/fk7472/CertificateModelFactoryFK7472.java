@@ -29,6 +29,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
@@ -90,6 +91,8 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
         .description(DESCRIPTION)
         .activeFrom(activeFrom)
         .availableForCitizen(false)
+        .rolesWithAccess(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+            Role.CARE_ADMIN))
         .recipient(CertificateRecipientFactory.fkassa())
         .certificateActionSpecifications(
             List.of(

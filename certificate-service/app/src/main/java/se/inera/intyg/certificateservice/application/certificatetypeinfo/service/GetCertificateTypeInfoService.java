@@ -32,6 +32,7 @@ public class GetCertificateTypeInfoService {
     return GetCertificateTypeInfoResponse.builder()
         .list(
             certificateModels.stream()
+                .filter(certificateModel -> certificateModel.activeForUserRole(actionEvaluation))
                 .map(certificateModel ->
                     certificateTypeInfoConverter.convert(
                         certificateModel,
