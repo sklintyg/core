@@ -52,4 +52,10 @@ public class CertificateActionCreate implements CertificateAction {
   public String getDescription() {
     return DESCRIPTION;
   }
+
+  @Override
+  public boolean include(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
+    return true;
+  }
+
 }

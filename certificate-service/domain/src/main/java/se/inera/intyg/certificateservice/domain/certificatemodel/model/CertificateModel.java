@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
@@ -41,7 +42,13 @@ public class CertificateModel {
 
   public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
     return actions().stream()
-        .filter(certificateAction -> certificateAction.evaluate(actionEvaluation))
+        .filter(certificateAction -> certificateAction.evaluate(Optional.empty(), actionEvaluation))
+        .toList();
+  }
+
+  public List<CertificateAction> actionsInclude(ActionEvaluation actionEvaluation) {
+    return actions().stream()
+        .filter(certificateAction -> certificateAction.include(Optional.empty(), actionEvaluation))
         .toList();
   }
 

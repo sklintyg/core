@@ -39,7 +39,7 @@ public class GetPatientCertificateService {
         .certificates(certificates.stream()
             .map(certificate -> certificateConverter.convert(
                     certificate,
-                    certificate.actions(actionEvaluation).stream()
+                    certificate.actionsInclude(actionEvaluation).stream()
                         .map(certificateAction ->
                             resourceLinkConverter.convert(
                                 certificateAction,

@@ -710,6 +710,21 @@ class CertificateTest {
     }
 
     @Test
+    void shallReturnActionIfIncludeTrue() {
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var expectedActions = List.of(certificateAction);
+
+      doReturn(expectedActions).when(certificate.certificateModel()).actions();
+
+      doReturn(true).when(certificateAction).include(Optional.of(certificate), actionEvaluation);
+
+      final var actualActions = certificate.actionsInclude(actionEvaluation);
+
+      assertEquals(expectedActions, actualActions);
+    }
+
+    @Test
     void shallNotReturnActionIfEvaluateFalse() {
       final var actionEvaluation = ActionEvaluation.builder().build();
       final var certificateAction = mock(CertificateAction.class);
@@ -721,6 +736,22 @@ class CertificateTest {
           .evaluate(Optional.of(certificate), actionEvaluation);
 
       final var actualActions = certificate.actions(actionEvaluation);
+
+      assertEquals(expectedActions, actualActions);
+    }
+
+    @Test
+    void shallNotReturnActionIfIncludeFalse() {
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var expectedActions = Collections.emptyList();
+
+      doReturn(List.of(certificateAction)).when(certificate.certificateModel()).actions();
+
+      doReturn(false).when(certificateAction)
+          .include(Optional.of(certificate), actionEvaluation);
+
+      final var actualActions = certificate.actionsInclude(actionEvaluation);
 
       assertEquals(expectedActions, actualActions);
     }

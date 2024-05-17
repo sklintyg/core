@@ -55,6 +55,12 @@ public class Certificate {
         .toList();
   }
 
+  public List<CertificateAction> actionsInclude(ActionEvaluation actionEvaluation) {
+    return certificateModel.actions().stream()
+        .filter(certificateAction -> certificateAction.include(Optional.of(this), actionEvaluation))
+        .toList();
+  }
+
   public boolean allowTo(CertificateActionType certificateActionType,
       ActionEvaluation actionEvaluation) {
     return certificateModel.actions().stream()

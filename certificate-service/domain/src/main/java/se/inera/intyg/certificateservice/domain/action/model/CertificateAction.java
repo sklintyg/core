@@ -33,7 +33,11 @@ public interface CertificateAction {
     return null;
   }
 
-  default boolean isEnabled() {
-    return true;
+  default boolean isEnabled(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
+    return evaluate(certificate, actionEvaluation);
+  }
+
+  default boolean include(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
+    return evaluate(certificate, actionEvaluation);
   }
 }

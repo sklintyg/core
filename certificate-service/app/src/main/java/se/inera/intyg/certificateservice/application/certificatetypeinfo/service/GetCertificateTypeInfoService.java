@@ -35,7 +35,7 @@ public class GetCertificateTypeInfoService {
                 .map(certificateModel ->
                     certificateTypeInfoConverter.convert(
                         certificateModel,
-                        certificateModel.actions(actionEvaluation),
+                        certificateModel.actionsInclude(actionEvaluation),
                         actionEvaluation
                     )
                 )

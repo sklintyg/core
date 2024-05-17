@@ -12,6 +12,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALV
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
@@ -175,5 +176,11 @@ class CertificateActionCreateTest {
     final var actualResult = certificateActionCreate.reasonNotAllowed(actionEvaluation);
 
     assertTrue(actualResult.isEmpty());
+  }
+
+  @Test
+  void shallAlwaysReturnTrue() {
+    final var actionEvaluation = ActionEvaluation.builder().build();
+    assertTrue(certificateActionCreate.include(Optional.empty(), actionEvaluation));
   }
 }
