@@ -22,7 +22,11 @@ public class CertificateActionFactory {
                   new ActionRuleProtectedPerson(),
                   new ActionRulePatientAlive(),
                   new ActionRuleUserNotBlocked(),
-                  new ActionRuleInactiveUnit()
+                  new ActionRuleInactiveUnit(),
+                  new ActionRuleRole(
+                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+                          Role.CARE_ADMIN)
+                  )
               )
           )
           .build();
@@ -31,7 +35,11 @@ public class CertificateActionFactory {
           .actionRules(
               List.of(
                   new ActionRuleWithinAccessScope(AccessScope.ALL_CARE_PROVIDERS),
-                  new ActionRuleProtectedPerson()
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleRole(
+                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+                          Role.CARE_ADMIN)
+                  )
               )
           )
           .build();
@@ -41,7 +49,11 @@ public class CertificateActionFactory {
               List.of(
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleProtectedPerson(),
-                  new ActionRuleStatus(List.of(Status.DRAFT))
+                  new ActionRuleStatus(List.of(Status.DRAFT)),
+                  new ActionRuleRole(
+                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+                          Role.CARE_ADMIN)
+                  )
               )
           )
           .build();
@@ -51,7 +63,11 @@ public class CertificateActionFactory {
               List.of(
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleProtectedPerson(),
-                  new ActionRuleStatus(List.of(Status.DRAFT))
+                  new ActionRuleStatus(List.of(Status.DRAFT)),
+                  new ActionRuleRole(
+                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+                          Role.CARE_ADMIN)
+                  )
               )
           )
           .build();
