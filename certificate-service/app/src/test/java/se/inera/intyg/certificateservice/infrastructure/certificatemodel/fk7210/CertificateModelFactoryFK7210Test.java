@@ -416,7 +416,7 @@ class CertificateModelFactoryFK7210Test {
 
         final var certificateModel = certificateModelFactoryFK7210.create();
 
-        assertEquals(expected, certificateModel.activeForRoles());
+        assertEquals(expected, certificateModel.rolesWithAccess());
       }
     }
   }

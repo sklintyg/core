@@ -33,7 +33,7 @@ public class CertificateModel {
   SchematronPath schematronPath;
   List<CertificateText> texts;
   CertificateSummaryProvider summaryProvider;
-  List<Role> activeForRoles;
+  List<Role> rolesWithAccess;
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()
@@ -55,7 +55,7 @@ public class CertificateModel {
   }
 
   public boolean activeForUserRole(ActionEvaluation actionEvaluation) {
-    return this.activeForRoles.contains(actionEvaluation.user().role());
+    return this.rolesWithAccess.contains(actionEvaluation.user().role());
   }
 
   public boolean allowTo(CertificateActionType certificateActionType,

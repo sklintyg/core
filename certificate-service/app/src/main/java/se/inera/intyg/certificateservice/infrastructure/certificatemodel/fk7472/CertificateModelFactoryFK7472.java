@@ -91,7 +91,7 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
         .description(DESCRIPTION)
         .activeFrom(activeFrom)
         .availableForCitizen(false)
-        .activeForRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+        .rolesWithAccess(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
             Role.CARE_ADMIN))
         .recipient(CertificateRecipientFactory.fkassa())
         .certificateActionSpecifications(

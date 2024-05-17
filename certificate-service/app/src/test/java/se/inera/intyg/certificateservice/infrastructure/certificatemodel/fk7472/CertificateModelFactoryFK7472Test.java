@@ -542,7 +542,7 @@ class CertificateModelFactoryFK7472Test {
 
       final var certificateModel = certificateModelFactoryFK7472.create();
 
-      assertEquals(expected, certificateModel.activeForRoles());
+      assertEquals(expected, certificateModel.rolesWithAccess());
     }
   }
 }

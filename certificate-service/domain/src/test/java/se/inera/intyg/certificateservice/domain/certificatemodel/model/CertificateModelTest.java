@@ -23,6 +23,8 @@ import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.user.model.User;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateModelTest {
@@ -86,7 +88,6 @@ class CertificateModelTest {
     @Test
     void shallReturnEmptyActionsIfNoActionsExistInSpecification() {
       final var expectedActions = Collections.emptyList();
-      final var actionEvaluation = ActionEvaluation.builder().build();
 
       final var certificateModel = CertificateModel.builder()
           .certificateActionSpecifications(
@@ -643,6 +644,44 @@ class CertificateModelTest {
       assertThrows(IllegalArgumentException.class,
           () -> certificateModel.elementSpecification(elementId)
       );
+    }
+  }
+
+  @Nested
+  class TestActiveForUserRole {
+
+    @Test
+    void shouldReturnTrueIfRoleIsInModel() {
+      final var certificateModel = CertificateModel.builder()
+          .rolesWithAccess(List.of(Role.DOCTOR, Role.MIDWIFE))
+          .build();
+
+      final var actionEvaluation = ActionEvaluation.builder()
+          .user(
+              User.builder()
+                  .role(Role.DOCTOR)
+                  .build()
+          )
+          .build();
+
+      assertTrue(certificateModel.activeForUserRole(actionEvaluation));
+    }
+
+    @Test
+    void shouldReturnFalseIfRoleIsNotInModel() {
+      final var certificateModel = CertificateModel.builder()
+          .rolesWithAccess(List.of(Role.DOCTOR, Role.MIDWIFE))
+          .build();
+
+      final var actionEvaluation = ActionEvaluation.builder()
+          .user(
+              User.builder()
+                  .role(Role.NURSE)
+                  .build()
+          )
+          .build();
+
+      assertFalse(certificateModel.activeForUserRole(actionEvaluation));
     }
   }
 }

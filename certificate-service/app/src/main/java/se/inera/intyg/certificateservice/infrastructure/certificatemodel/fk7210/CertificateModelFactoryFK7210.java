@@ -78,7 +78,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
         .description(DESCRIPTION)
         .activeFrom(activeFrom)
         .availableForCitizen(true)
-        .activeForRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+        .rolesWithAccess(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
             Role.CARE_ADMIN))
         .recipient(CertificateRecipientFactory.fkassa())
         .certificateActionSpecifications(
