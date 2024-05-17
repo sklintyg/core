@@ -35,6 +35,7 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 
@@ -406,6 +407,16 @@ class CertificateModelFactoryFK7210Test {
         assertEquals(expectedValidation,
             certificateModel.elementSpecification(ELEMENT_ID).validations()
         );
+      }
+
+      @Test
+      void shallIncludeActiveForRoles() {
+        final var expected = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+            Role.CARE_ADMIN);
+
+        final var certificateModel = certificateModelFactoryFK7210.create();
+
+        assertEquals(expected, certificateModel.activeForRoles());
       }
     }
   }

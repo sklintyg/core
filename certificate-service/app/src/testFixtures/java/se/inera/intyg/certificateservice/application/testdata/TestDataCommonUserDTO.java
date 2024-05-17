@@ -28,6 +28,15 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_ALLOW_COPY;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_BLOCKED;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_FULL_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_HEALTH_CARE_PROFESSIONAL_LICENCES;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_MIDDLE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_ROLE;
 
 import java.util.Collections;
 import se.inera.intyg.certificateservice.application.common.dto.AccessScopeTypeDTO;
@@ -43,6 +52,7 @@ public class TestDataCommonUserDTO {
   public static final UserDTO AJLA_DOCTOR_DTO = ajlaDoktorDtoBuilder().build();
   public static final UserDTO ALVA_VARDADMINISTRATOR_DTO = alvaVardadministratorDtoBuilder().build();
   public static final UserDTO BERTIL_BARNMORSKA_DTO = bertilBarnmorskaDtoBuilder().build();
+  public static final UserDTO DAN_DENTIST_DTO = danDentistDtoBuilder().build();
 
   public static UserDTOBuilder ajlaDoktorDtoBuilder() {
     return UserDTO.builder()
@@ -108,6 +118,26 @@ public class TestDataCommonUserDTO {
         .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
         .healthCareProfessionalLicence(
             BERTIL_BARNMORSKA_HEALTH_CARE_PROFESSIONAL_LICENCES.stream()
+                .map(HealthCareProfessionalLicence::value)
+                .toList()
+        );
+  }
+
+  public static UserDTOBuilder danDentistDtoBuilder() {
+    return UserDTO.builder()
+        .id(DAN_DENTIST_HSA_ID)
+        .firstName(DAN_DENTIST_FIRST_NAME)
+        .middleName(DAN_DENTIST_MIDDLE_NAME)
+        .lastName(DAN_DENTIST_LAST_NAME)
+        .fullName(DAN_DENTIST_FULL_NAME)
+        .role(RoleTypeDTO.toRoleType(DAN_DENTIST_ROLE))
+        .paTitles(Collections.emptyList())
+        .specialities(Collections.emptyList())
+        .blocked(DAN_DENTIST_BLOCKED.value())
+        .allowCopy(DAN_DENTIST_ALLOW_COPY.value())
+        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
+        .healthCareProfessionalLicence(
+            DAN_DENTIST_HEALTH_CARE_PROFESSIONAL_LICENCES.stream()
                 .map(HealthCareProfessionalLicence::value)
                 .toList()
         );
