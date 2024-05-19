@@ -8,18 +8,10 @@ public interface CertificateAction {
 
   CertificateActionType getType();
 
-  default boolean evaluate(Optional<ActionEvaluation> actionEvaluation) {
-    return evaluate(Optional.empty(), actionEvaluation);
-  }
-
-  default List<String> reasonNotAllowed(Optional<ActionEvaluation> actionEvaluation) {
-    return reasonNotAllowed(Optional.empty(), actionEvaluation);
-  }
+  boolean evaluate(Optional<Certificate> certificate, Optional<ActionEvaluation> actionEvaluation);
 
   List<String> reasonNotAllowed(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation);
-
-  boolean evaluate(Optional<Certificate> certificate, Optional<ActionEvaluation> actionEvaluation);
 
   default String getName() {
     return null;
@@ -36,7 +28,7 @@ public interface CertificateAction {
 
   default boolean isEnabled(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
-    return evaluate(certificate, actionEvaluation);
+    return true;
   }
 
   default boolean include(Optional<Certificate> certificate,

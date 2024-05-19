@@ -32,7 +32,8 @@ class ActionRuleUserNotBlockedTest {
         )
         .build();
 
-    final var actualResult = actionRuleUserNotBlocked.evaluate(Optional.of(actionEvaluation));
+    final var actualResult = actionRuleUserNotBlocked.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
   }
@@ -44,7 +45,8 @@ class ActionRuleUserNotBlockedTest {
         .user(AJLA_DOKTOR)
         .build();
 
-    final var actualResult = actionRuleUserNotBlocked.evaluate(Optional.of(actionEvaluation));
+    final var actualResult = actionRuleUserNotBlocked.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
   }

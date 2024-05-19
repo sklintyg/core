@@ -174,13 +174,9 @@ class CertificateActionDeleteTest {
 
   @Test
   void shallReturnReasonNotAllowedIfEvaluateReturnsFalse() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ANONYMA_REACT_ATTILA)
-        .user(ALVA_VARDADMINISTRATOR)
-        .build();
-
     final var actualResult = certificateActionDelete.reasonNotAllowed(
-        Optional.of(actionEvaluation));
+        Optional.of(certificateBuilder.build()),
+        Optional.empty());
 
     assertFalse(actualResult.isEmpty());
   }

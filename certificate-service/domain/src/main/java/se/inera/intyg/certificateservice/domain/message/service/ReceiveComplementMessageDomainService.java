@@ -9,7 +9,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 
 @RequiredArgsConstructor
-public class ReceiveMessageDomainService {
+public class ReceiveComplementMessageDomainService {
 
   private final CertificateRepository certificateRepository;
   private final MessageRepository messageRepository;

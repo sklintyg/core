@@ -27,7 +27,8 @@ class ActionRulePatientAliveTest {
         .user(AJLA_DOKTOR)
         .build();
 
-    final var actualResult = actionRulePatientAlive.evaluate(Optional.of(actionEvaluation));
+    final var actualResult = actionRulePatientAlive.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
   }
@@ -39,7 +40,8 @@ class ActionRulePatientAliveTest {
         .user(AJLA_DOKTOR)
         .build();
 
-    final var actualResult = actionRulePatientAlive.evaluate(Optional.of(actionEvaluation));
+    final var actualResult = actionRulePatientAlive.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
   }

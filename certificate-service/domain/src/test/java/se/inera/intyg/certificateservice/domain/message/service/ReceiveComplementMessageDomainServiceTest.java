@@ -23,7 +23,7 @@ import se.inera.intyg.certificateservice.domain.common.exception.CertificateActi
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 
 @ExtendWith(MockitoExtension.class)
-class ReceiveMessageDomainServiceTest {
+class ReceiveComplementMessageDomainServiceTest {
 
   @Mock
   private Certificate certificate;
@@ -35,7 +35,7 @@ class ReceiveMessageDomainServiceTest {
   private MessageRepository messageRepository;
 
   @InjectMocks
-  private ReceiveMessageDomainService receiveMessageDomainService;
+  private ReceiveComplementMessageDomainService receiveComplementMessageDomainService;
 
   @BeforeEach
   void setUp() {
@@ -49,7 +49,7 @@ class ReceiveMessageDomainServiceTest {
     doReturn(CERTIFICATE_ID).when(certificate).id();
 
     assertThrows(CertificateActionForbidden.class,
-        () -> receiveMessageDomainService.receive(COMPLEMENT_MESSAGE)
+        () -> receiveComplementMessageDomainService.receive(COMPLEMENT_MESSAGE)
     );
   }
 
@@ -65,7 +65,7 @@ class ReceiveMessageDomainServiceTest {
     @Test
     void shallStoreReceivedMessage() {
       final var expectedMessage = messageBuilder().build();
-      receiveMessageDomainService.receive(expectedMessage);
+      receiveComplementMessageDomainService.receive(expectedMessage);
 
       verify(messageRepository).save(expectedMessage);
     }
@@ -76,7 +76,7 @@ class ReceiveMessageDomainServiceTest {
 
       doReturn(expectedMessage).when(messageRepository).save(COMPLEMENT_MESSAGE);
 
-      final var actualMessage = receiveMessageDomainService.receive(COMPLEMENT_MESSAGE
+      final var actualMessage = receiveComplementMessageDomainService.receive(COMPLEMENT_MESSAGE
       );
 
       assertEquals(expectedMessage, actualMessage);

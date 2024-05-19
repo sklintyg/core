@@ -11,7 +11,6 @@ import se.inera.intyg.certificateservice.domain.user.model.User;
 
 class ActionRuleUserAllowCopyTest {
 
-
   private ActionRuleUserAllowCopy actionRuleUserAllowCopy;
 
   @BeforeEach
@@ -29,7 +28,8 @@ class ActionRuleUserAllowCopyTest {
         )
         .build();
 
-    final var actualResult = actionRuleUserAllowCopy.evaluate(Optional.of(actionEvaluation));
+    final var actualResult = actionRuleUserAllowCopy.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
   }
@@ -44,7 +44,8 @@ class ActionRuleUserAllowCopyTest {
         )
         .build();
 
-    final var actualResult = actionRuleUserAllowCopy.evaluate(Optional.of(actionEvaluation));
+    final var actualResult = actionRuleUserAllowCopy.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
   }

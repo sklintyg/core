@@ -11,7 +11,6 @@ import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 
 class ActionRuleInactiveUnitTest {
 
-
   private ActionRuleInactiveUnit actionRuleInactiveUnit;
 
   @BeforeEach
@@ -27,7 +26,10 @@ class ActionRuleInactiveUnitTest {
             .build())
         .build();
 
-    final var actualResult = actionRuleInactiveUnit.evaluate(Optional.of(actionEvaluation));
+    final var actualResult = actionRuleInactiveUnit.evaluate(
+        Optional.empty(),
+        Optional.of(actionEvaluation)
+    );
 
     assertFalse(actualResult);
   }
@@ -40,9 +42,11 @@ class ActionRuleInactiveUnitTest {
             .build())
         .build();
 
-    final var actualResult = actionRuleInactiveUnit.evaluate(Optional.of(actionEvaluation));
+    final var actualResult = actionRuleInactiveUnit.evaluate(
+        Optional.empty(),
+        Optional.of(actionEvaluation)
+    );
 
     assertTrue(actualResult);
   }
-
 }

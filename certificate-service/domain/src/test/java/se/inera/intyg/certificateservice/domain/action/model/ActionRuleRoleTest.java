@@ -23,7 +23,7 @@ class ActionRuleRoleTest {
                 .build()
         )
         .build();
-    assertTrue(actionRuleRole.evaluate(Optional.of(actionEvaluation)));
+    assertTrue(actionRuleRole.evaluate(Optional.empty(), Optional.of(actionEvaluation)));
   }
 
   @Test
@@ -36,6 +36,6 @@ class ActionRuleRoleTest {
                 .build()
         )
         .build();
-    assertFalse(actionRuleRole.evaluate(Optional.of(actionEvaluation)));
+    assertFalse(actionRuleRole.evaluate(Optional.empty(), Optional.of(actionEvaluation)));
   }
 }

@@ -27,7 +27,7 @@ public class CertificateActionCreate implements CertificateAction {
   public List<String> reasonNotAllowed(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
     return actionRules.stream()
-        .filter(value -> !value.evaluate(actionEvaluation))
+        .filter(value -> !value.evaluate(certificate, actionEvaluation))
         .map(ActionRule::getReasonForPermissionDenied)
         .toList();
   }
@@ -43,7 +43,7 @@ public class CertificateActionCreate implements CertificateAction {
     }
 
     return actionRules.stream()
-        .filter(value -> value.evaluate(actionEvaluation))
+        .filter(value -> value.evaluate(certificate, actionEvaluation))
         .count() == actionRules.size();
   }
 

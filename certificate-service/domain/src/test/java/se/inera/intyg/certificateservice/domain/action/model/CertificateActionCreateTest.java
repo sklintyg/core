@@ -60,7 +60,8 @@ class CertificateActionCreateTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionCreate.evaluate(Optional.of(actionEvaluation));
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
   }
@@ -73,7 +74,8 @@ class CertificateActionCreateTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionCreate.evaluate(Optional.of(actionEvaluation));
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
   }
@@ -90,7 +92,8 @@ class CertificateActionCreateTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionCreate.evaluate(Optional.of(actionEvaluation));
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
   }
@@ -103,7 +106,8 @@ class CertificateActionCreateTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionCreate.evaluate(Optional.of(actionEvaluation));
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
   }
@@ -116,7 +120,8 @@ class CertificateActionCreateTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionCreate.evaluate(Optional.of(actionEvaluation));
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
   }
@@ -129,7 +134,8 @@ class CertificateActionCreateTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionCreate.evaluate(Optional.of(actionEvaluation));
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
   }
@@ -140,7 +146,8 @@ class CertificateActionCreateTest {
         .user(AJLA_DOKTOR)
         .build();
 
-    final var actualResult = certificateActionCreate.evaluate(Optional.of(actionEvaluation));
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
   }
@@ -151,7 +158,8 @@ class CertificateActionCreateTest {
         .patient(ATHENA_REACT_ANDERSSON)
         .build();
 
-    final var actualResult = certificateActionCreate.evaluate(Optional.of(actionEvaluation));
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
   }
@@ -164,7 +172,7 @@ class CertificateActionCreateTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionCreate.reasonNotAllowed(
+    final var actualResult = certificateActionCreate.reasonNotAllowed(Optional.empty(),
         Optional.of(actionEvaluation));
 
     assertFalse(actualResult.isEmpty());
@@ -178,7 +186,7 @@ class CertificateActionCreateTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionCreate.reasonNotAllowed(
+    final var actualResult = certificateActionCreate.reasonNotAllowed(Optional.empty(),
         Optional.of(actionEvaluation));
 
     assertTrue(actualResult.isEmpty());
@@ -195,7 +203,8 @@ class CertificateActionCreateTest {
           .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
           .build();
 
-      final var actualResult = certificateActionCreate.evaluate(Optional.of(actionEvaluation));
+      final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+          Optional.of(actionEvaluation));
 
       assertFalse(actualResult);
     }
@@ -208,7 +217,8 @@ class CertificateActionCreateTest {
           .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
           .build();
 
-      final var actualResult = certificateActionCreate.evaluate(Optional.of(actionEvaluation));
+      final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+          Optional.of(actionEvaluation));
 
       assertTrue(actualResult);
     }
@@ -221,7 +231,8 @@ class CertificateActionCreateTest {
           .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
           .build();
 
-      final var actualResult = certificateActionCreate.evaluate(Optional.of(actionEvaluation));
+      final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+          Optional.of(actionEvaluation));
 
       assertTrue(actualResult);
     }
@@ -234,7 +245,8 @@ class CertificateActionCreateTest {
           .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
           .build();
 
-      final var actualResult = certificateActionCreate.evaluate(Optional.of(actionEvaluation));
+      final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+          Optional.of(actionEvaluation));
 
       assertTrue(actualResult);
     }
@@ -247,7 +259,8 @@ class CertificateActionCreateTest {
           .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
           .build();
 
-      final var actualResult = certificateActionCreate.evaluate(Optional.of(actionEvaluation));
+      final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+          Optional.of(actionEvaluation));
 
       assertTrue(actualResult);
     }

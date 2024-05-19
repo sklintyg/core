@@ -86,7 +86,8 @@ public class Certificate {
     return certificateModel.actions().stream()
         .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
         .findFirst()
-        .map(certificateAction -> certificateAction.reasonNotAllowed(actionEvaluation))
+        .map(certificateAction -> certificateAction.reasonNotAllowed(Optional.of(this),
+            actionEvaluation))
         .orElse(Collections.emptyList());
   }
 

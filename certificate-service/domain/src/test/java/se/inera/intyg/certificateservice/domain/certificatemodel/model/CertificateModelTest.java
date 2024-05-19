@@ -344,7 +344,8 @@ class CertificateModelTest {
             .thenReturn(certificateAction);
 
         doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
-        doReturn(true).when(certificateAction).evaluate(Optional.of(actionEvaluation));
+        doReturn(true).when(certificateAction)
+            .evaluate(Optional.empty(), Optional.of(actionEvaluation));
 
         final var actualResult = certificateModel.allowTo(CertificateActionType.CREATE,
             Optional.of(actionEvaluation));
@@ -375,7 +376,8 @@ class CertificateModelTest {
             .thenReturn(certificateAction);
 
         doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
-        doReturn(false).when(certificateAction).evaluate(Optional.of(actionEvaluation));
+        doReturn(false).when(certificateAction)
+            .evaluate(Optional.empty(), Optional.of(actionEvaluation));
 
         final var actualResult = certificateModel.allowTo(CertificateActionType.CREATE,
             Optional.of(actionEvaluation));
@@ -439,7 +441,7 @@ class CertificateModelTest {
 
         doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
         doReturn(Collections.emptyList()).when(certificateAction)
-            .reasonNotAllowed(Optional.of(actionEvaluation));
+            .reasonNotAllowed(Optional.empty(), Optional.of(actionEvaluation));
 
         final var actualResult = certificateModel.reasonNotAllowed(CertificateActionType.CREATE,
             Optional.of(actionEvaluation));
@@ -472,7 +474,7 @@ class CertificateModelTest {
 
         doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
         doReturn(expectedReasons).when(certificateAction)
-            .reasonNotAllowed(Optional.of(actionEvaluation));
+            .reasonNotAllowed(Optional.empty(), Optional.of(actionEvaluation));
 
         final var actualResult = certificateModel.reasonNotAllowed(CertificateActionType.CREATE,
             Optional.of(actionEvaluation));
