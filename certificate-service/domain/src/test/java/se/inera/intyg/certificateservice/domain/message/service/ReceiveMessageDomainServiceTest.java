@@ -1,0 +1,85 @@
+package se.inera.intyg.certificateservice.domain.message.service;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.messageBuilder;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
+import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
+
+@ExtendWith(MockitoExtension.class)
+class ReceiveMessageDomainServiceTest {
+
+  @Mock
+  private Certificate certificate;
+
+  @Mock
+  private CertificateRepository certificateRepository;
+
+  @Mock
+  private MessageRepository messageRepository;
+
+  @InjectMocks
+  private ReceiveMessageDomainService receiveMessageDomainService;
+
+  @BeforeEach
+  void setUp() {
+    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
+  }
+
+  @Test
+  void shallThrowExceptionIfNotAllowedOnCertificate() {
+    doReturn(false).when(certificate)
+        .allowTo(CertificateActionType.RECEIVE_COMPLEMENT, ACTION_EVALUATION);
+    doReturn(CERTIFICATE_ID).when(certificate).id();
+
+    assertThrows(CertificateActionForbidden.class,
+        () -> receiveMessageDomainService.receive(COMPLEMENT_MESSAGE, ACTION_EVALUATION)
+    );
+  }
+
+  @Nested
+  class ComplementMessageAllowed {
+
+    @BeforeEach
+    void setUp() {
+      doReturn(true).when(certificate)
+          .allowTo(CertificateActionType.RECEIVE_COMPLEMENT, ACTION_EVALUATION);
+    }
+
+    @Test
+    void shallStoreReceivedMessage() {
+      final var expectedMessage = messageBuilder().build();
+      receiveMessageDomainService.receive(expectedMessage, ACTION_EVALUATION);
+
+      verify(messageRepository).save(expectedMessage);
+    }
+
+    @Test
+    void shallReturnSavedMessage() {
+      final var expectedMessage = messageBuilder().build();
+
+      doReturn(expectedMessage).when(messageRepository).save(COMPLEMENT_MESSAGE);
+
+      final var actualMessage = receiveMessageDomainService.receive(COMPLEMENT_MESSAGE,
+          ACTION_EVALUATION);
+
+      assertEquals(expectedMessage, actualMessage);
+    }
+  }
+}

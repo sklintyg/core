@@ -159,6 +159,12 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case RECEIVE_COMPLEMENT -> CertificateActionReceiveComplement.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of()
+          )
+          .build();
     };
   }
 }
