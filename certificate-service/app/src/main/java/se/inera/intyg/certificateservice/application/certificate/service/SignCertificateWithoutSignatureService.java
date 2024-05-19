@@ -48,7 +48,7 @@ public class SignCertificateWithoutSignatureService {
         .certificate(
             certificateConverter.convert(
                 signedCertificate,
-                signedCertificate.actionsInclude(actionEvaluation).stream()
+                signedCertificate.actionsInclude(Optional.of(actionEvaluation)).stream()
                     .map(certificateAction ->
                         resourceLinkConverter.convert(
                             certificateAction,

@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.certificate.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -27,10 +28,11 @@ public class CreateCertificateDomainService {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
 
     final var certificateModel = certificateModelRepository.getById(certificateModelId);
-    if (!certificateModel.allowTo(CertificateActionType.CREATE, actionEvaluation)) {
+    if (!certificateModel.allowTo(CertificateActionType.CREATE, Optional.of(actionEvaluation))) {
       throw new CertificateActionForbidden(
           "Not allowed to create certificate for %s".formatted(certificateModelId),
-          certificateModel.reasonNotAllowed(CertificateActionType.CREATE, actionEvaluation)
+          certificateModel.reasonNotAllowed(CertificateActionType.CREATE,
+              Optional.of(actionEvaluation))
       );
     }
 

@@ -8,6 +8,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -60,13 +61,14 @@ class GetCertificatePdfDomainServiceTest {
 
     @BeforeEach
     void setUp() {
-      doReturn(true).when(certificate).allowTo(CertificateActionType.PRINT, ACTION_EVALUATION);
+      doReturn(true).when(certificate)
+          .allowTo(CertificateActionType.PRINT, Optional.of(ACTION_EVALUATION));
     }
 
     @Test
     void shallValidateIfAllowedToPrintCertificate() {
       getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION, ADDITIONAL_INFO_TEXT);
-      verify(certificate).allowTo(CertificateActionType.PRINT, ACTION_EVALUATION);
+      verify(certificate).allowTo(CertificateActionType.PRINT, Optional.of(ACTION_EVALUATION));
     }
 
     @Test
@@ -92,7 +94,8 @@ class GetCertificatePdfDomainServiceTest {
 
     @Test
     void shallThrowIfNotAllowedToPrint() {
-      doReturn(false).when(certificate).allowTo(CertificateActionType.PRINT, ACTION_EVALUATION);
+      doReturn(false).when(certificate)
+          .allowTo(CertificateActionType.PRINT, Optional.of(ACTION_EVALUATION));
       assertThrows(CertificateActionForbidden.class,
           () -> getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION,
               ADDITIONAL_INFO_TEXT)
@@ -103,7 +106,8 @@ class GetCertificatePdfDomainServiceTest {
 
   @Test
   void shallPublishGetCertificateEvent() {
-    doReturn(true).when(certificate).allowTo(CertificateActionType.PRINT, ACTION_EVALUATION);
+    doReturn(true).when(certificate)
+        .allowTo(CertificateActionType.PRINT, Optional.of(ACTION_EVALUATION));
     getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION, ADDITIONAL_INFO_TEXT);
 
     final var certificateEventCaptor = ArgumentCaptor.forClass(CertificateEvent.class);
@@ -120,9 +124,10 @@ class GetCertificatePdfDomainServiceTest {
   @Test
   void shallIncludeReasonNotAllowedToException() {
     final var expectedReason = List.of("expectedReason");
-    doReturn(false).when(certificate).allowTo(CertificateActionType.PRINT, ACTION_EVALUATION);
+    doReturn(false).when(certificate)
+        .allowTo(CertificateActionType.PRINT, Optional.of(ACTION_EVALUATION));
     doReturn(expectedReason).when(certificate)
-        .reasonNotAllowed(CertificateActionType.PRINT, ACTION_EVALUATION);
+        .reasonNotAllowed(CertificateActionType.PRINT, Optional.of(ACTION_EVALUATION));
 
     final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
         () -> getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION,

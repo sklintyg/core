@@ -16,6 +16,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.DATE;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -46,7 +47,7 @@ class UpdateCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(false).when(certificate).allowTo(UPDATE, ACTION_EVALUATION);
+    doReturn(false).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
 
     assertThrows(CertificateActionForbidden.class,
         () -> updateCertificateDomainService.update(CERTIFICATE_ID, data, ACTION_EVALUATION,
@@ -60,7 +61,7 @@ class UpdateCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(UPDATE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
 
     updateCertificateDomainService.update(CERTIFICATE_ID, data, ACTION_EVALUATION, new Revision(0),
         null);
@@ -74,7 +75,7 @@ class UpdateCertificateDomainServiceTest {
     final var certificate = mock(Certificate.class);
 
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(UPDATE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
 
     updateCertificateDomainService.update(CERTIFICATE_ID, data, ACTION_EVALUATION, new Revision(0),
         EXTERNAL_REFERENCE);
@@ -88,7 +89,7 @@ class UpdateCertificateDomainServiceTest {
     final var certificate = mock(Certificate.class);
 
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(UPDATE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
 
     certificate.externalReference(EXTERNAL_REFERENCE);
 
@@ -105,7 +106,7 @@ class UpdateCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(UPDATE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
 
     updateCertificateDomainService.update(CERTIFICATE_ID, data, ACTION_EVALUATION, new Revision(0),
         null);
@@ -119,7 +120,7 @@ class UpdateCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(UPDATE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
 
     updateCertificateDomainService.update(CERTIFICATE_ID, data, ACTION_EVALUATION, new Revision(0),
         null);
@@ -134,7 +135,7 @@ class UpdateCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(UPDATE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
 
     final var actualCertificate = updateCertificateDomainService.update(CERTIFICATE_ID, data,
@@ -150,7 +151,7 @@ class UpdateCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(UPDATE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
 
     updateCertificateDomainService.update(CERTIFICATE_ID, data, ACTION_EVALUATION, new Revision(0),
@@ -173,9 +174,9 @@ class UpdateCertificateDomainServiceTest {
     final var certificate = mock(Certificate.class);
     final var expectedReason = List.of("expectedReason");
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(false).when(certificate).allowTo(UPDATE, ACTION_EVALUATION);
+    doReturn(false).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedReason).when(certificate)
-        .reasonNotAllowed(UPDATE, ACTION_EVALUATION);
+        .reasonNotAllowed(UPDATE, Optional.of(ACTION_EVALUATION));
 
     final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
         () -> updateCertificateDomainService.update(CERTIFICATE_ID, data, ACTION_EVALUATION,

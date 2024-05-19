@@ -68,7 +68,7 @@ class CertificateActionSignTest {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     assertFalse(
-        certificateActionSign.evaluate(certificate, actionEvaluation),
+        certificateActionSign.evaluate(certificate, Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -82,7 +82,7 @@ class CertificateActionSignTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionSign.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -95,7 +95,7 @@ class CertificateActionSignTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionSign.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -109,7 +109,7 @@ class CertificateActionSignTest {
         .build();
 
     assertFalse(
-        certificateActionSign.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -123,7 +123,7 @@ class CertificateActionSignTest {
         .build();
 
     assertFalse(
-        certificateActionSign.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -137,7 +137,7 @@ class CertificateActionSignTest {
         .build();
 
     assertTrue(
-        certificateActionSign.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -159,7 +159,7 @@ class CertificateActionSignTest {
         .user(ALVA_VARDADMINISTRATOR)
         .build();
 
-    final var actualResult = certificateActionSign.reasonNotAllowed(actionEvaluation);
+    final var actualResult = certificateActionSign.reasonNotAllowed(Optional.of(actionEvaluation));
 
     assertFalse(actualResult.isEmpty());
   }
@@ -173,7 +173,7 @@ class CertificateActionSignTest {
         .build();
 
     final var actualResult = certificateActionSign.reasonNotAllowed(Optional.of(certificate),
-        actionEvaluation);
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult.isEmpty());
   }
@@ -223,7 +223,7 @@ class CertificateActionSignTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionSign.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -240,7 +240,7 @@ class CertificateActionSignTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionSign.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -265,7 +265,7 @@ class CertificateActionSignTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionSign.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -282,7 +282,7 @@ class CertificateActionSignTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionSign.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -307,7 +307,7 @@ class CertificateActionSignTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionSign.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -324,7 +324,7 @@ class CertificateActionSignTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionSign.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -343,7 +343,7 @@ class CertificateActionSignTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionSign.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }

@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.certificate.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -25,10 +26,10 @@ public class RenewCertificateDomainService {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
 
     final var certificate = certificateRepository.getById(certificateId);
-    if (!certificate.allowTo(CertificateActionType.RENEW, actionEvaluation)) {
+    if (!certificate.allowTo(CertificateActionType.RENEW, Optional.of(actionEvaluation))) {
       throw new CertificateActionForbidden(
           "Not allowed to renew certificate for %s".formatted(certificateId),
-          certificate.reasonNotAllowed(CertificateActionType.RENEW, actionEvaluation)
+          certificate.reasonNotAllowed(CertificateActionType.RENEW, Optional.of(actionEvaluation))
       );
     }
 

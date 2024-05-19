@@ -73,7 +73,7 @@ class CertificateActionRevokeTest {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     assertFalse(
-        certificateActionRevoke.evaluate(certificate, actionEvaluation),
+        certificateActionRevoke.evaluate(certificate, Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -87,7 +87,7 @@ class CertificateActionRevokeTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionRevoke.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRevoke.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -100,7 +100,7 @@ class CertificateActionRevokeTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionRevoke.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRevoke.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -114,7 +114,7 @@ class CertificateActionRevokeTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionRevoke.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRevoke.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -128,7 +128,7 @@ class CertificateActionRevokeTest {
         .build();
 
     assertTrue(
-        certificateActionRevoke.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRevoke.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -142,7 +142,7 @@ class CertificateActionRevokeTest {
         .build();
 
     assertFalse(
-        certificateActionRevoke.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRevoke.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -156,7 +156,7 @@ class CertificateActionRevokeTest {
         .build();
 
     assertFalse(
-        certificateActionRevoke.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRevoke.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -180,7 +180,8 @@ class CertificateActionRevokeTest {
         .user(ALVA_VARDADMINISTRATOR)
         .build();
 
-    final var actualResult = certificateActionRevoke.reasonNotAllowed(actionEvaluation);
+    final var actualResult = certificateActionRevoke.reasonNotAllowed(
+        Optional.of(actionEvaluation));
 
     assertFalse(actualResult.isEmpty());
   }
@@ -194,7 +195,7 @@ class CertificateActionRevokeTest {
         .build();
 
     final var actualResult = certificateActionRevoke.reasonNotAllowed(Optional.of(certificate),
-        actionEvaluation);
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult.isEmpty());
   }
@@ -244,7 +245,8 @@ class CertificateActionRevokeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionRevoke.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionRevoke.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -261,7 +263,8 @@ class CertificateActionRevokeTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionRevoke.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionRevoke.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -286,7 +289,8 @@ class CertificateActionRevokeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionRevoke.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionRevoke.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -303,7 +307,8 @@ class CertificateActionRevokeTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionRevoke.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionRevoke.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -328,7 +333,8 @@ class CertificateActionRevokeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionRevoke.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionRevoke.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -345,7 +351,8 @@ class CertificateActionRevokeTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionRevoke.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionRevoke.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -364,7 +371,8 @@ class CertificateActionRevokeTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionRevoke.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionRevoke.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }

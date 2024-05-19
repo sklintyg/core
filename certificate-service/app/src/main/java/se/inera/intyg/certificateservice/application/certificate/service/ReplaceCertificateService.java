@@ -49,7 +49,7 @@ public class ReplaceCertificateService {
         .certificate(
             certificateConverter.convert(
                 certificate,
-                certificate.actionsInclude(actionEvaluation).stream()
+                certificate.actionsInclude(Optional.of(actionEvaluation)).stream()
                     .map(certificateAction ->
                         resourceLinkConverter.convert(
                             certificateAction,

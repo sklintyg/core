@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.certificate.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -25,10 +26,10 @@ public class RevokeCertificateDomainService {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
 
     final var certificate = certificateRepository.getById(certificateId);
-    if (!certificate.allowTo(CertificateActionType.REVOKE, actionEvaluation)) {
+    if (!certificate.allowTo(CertificateActionType.REVOKE, Optional.of(actionEvaluation))) {
       throw new CertificateActionForbidden(
           "Not allowed to revoke certificate for %s".formatted(certificateId),
-          certificate.reasonNotAllowed(CertificateActionType.REVOKE, actionEvaluation)
+          certificate.reasonNotAllowed(CertificateActionType.REVOKE, Optional.of(actionEvaluation))
       );
     }
 

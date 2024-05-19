@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.user.model.User;
@@ -22,7 +23,7 @@ class ActionRuleRoleTest {
                 .build()
         )
         .build();
-    assertTrue(actionRuleRole.evaluate(actionEvaluation));
+    assertTrue(actionRuleRole.evaluate(Optional.of(actionEvaluation)));
   }
 
   @Test
@@ -35,6 +36,6 @@ class ActionRuleRoleTest {
                 .build()
         )
         .build();
-    assertFalse(actionRuleRole.evaluate(actionEvaluation));
+    assertFalse(actionRuleRole.evaluate(Optional.of(actionEvaluation)));
   }
 }

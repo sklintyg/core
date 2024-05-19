@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.READ;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -15,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateXml;
@@ -57,7 +58,7 @@ class GetCertificateXmlDomainServiceTest {
 
     @BeforeEach
     void setup() {
-      doReturn(true).when(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
+      doReturn(true).when(certificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
       doReturn(CERTIFICATE_ID).when(certificate).id();
       doReturn(REVISION).when(certificate).revision();
     }
@@ -65,7 +66,7 @@ class GetCertificateXmlDomainServiceTest {
     @Test
     void shallValidateIfAllowedToReadCertificate() {
       getCertificateXmlDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION);
-      verify(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
+      verify(certificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
     }
 
     @Test
@@ -96,7 +97,7 @@ class GetCertificateXmlDomainServiceTest {
 
   @Test
   void shallThrowIfNotAllowedToRead() {
-    doReturn(false).when(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
+    doReturn(false).when(certificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
     assertThrows(CertificateActionForbidden.class,
         () -> getCertificateXmlDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION)
     );
@@ -105,9 +106,9 @@ class GetCertificateXmlDomainServiceTest {
   @Test
   void shallIncludeReasonNotAllowedToException() {
     final var expectedReason = List.of("expectedReason");
-    doReturn(false).when(certificate).allowTo(CertificateActionType.READ, ACTION_EVALUATION);
+    doReturn(false).when(certificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
     doReturn(expectedReason).when(certificate)
-        .reasonNotAllowed(CertificateActionType.READ, ACTION_EVALUATION);
+        .reasonNotAllowed(READ, Optional.of(ACTION_EVALUATION));
 
     final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
         () -> getCertificateXmlDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION));

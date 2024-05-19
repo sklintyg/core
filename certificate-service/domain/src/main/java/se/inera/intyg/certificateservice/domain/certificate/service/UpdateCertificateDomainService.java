@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.certificate.service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -28,10 +29,10 @@ public class UpdateCertificateDomainService {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
 
     final var certificate = certificateRepository.getById(certificateId);
-    if (!certificate.allowTo(CertificateActionType.UPDATE, actionEvaluation)) {
+    if (!certificate.allowTo(CertificateActionType.UPDATE, Optional.of(actionEvaluation))) {
       throw new CertificateActionForbidden(
           "Not allowed to update certificate for %s".formatted(certificateId),
-          certificate.reasonNotAllowed(CertificateActionType.UPDATE, actionEvaluation)
+          certificate.reasonNotAllowed(CertificateActionType.UPDATE, Optional.of(actionEvaluation))
       );
     }
 

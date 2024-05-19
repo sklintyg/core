@@ -14,6 +14,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,7 +64,7 @@ class SignCertificateWithoutSignatureDomainServiceTest {
   void shallThrowExceptionIfUserHasNoAccessToUpdate() {
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(false).when(certificate).allowTo(SIGN, actionEvaluation);
+    doReturn(false).when(certificate).allowTo(SIGN, Optional.of(actionEvaluation));
 
     assertThrows(CertificateActionForbidden.class,
         () -> signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, actionEvaluation)
@@ -74,7 +75,7 @@ class SignCertificateWithoutSignatureDomainServiceTest {
   void shallSignCertificate() {
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(SIGN, actionEvaluation);
+    doReturn(true).when(certificate).allowTo(SIGN, Optional.of(actionEvaluation));
 
     signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, actionEvaluation);
 
@@ -86,7 +87,7 @@ class SignCertificateWithoutSignatureDomainServiceTest {
   void shallUpdateMetaData() {
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(SIGN, actionEvaluation);
+    doReturn(true).when(certificate).allowTo(SIGN, Optional.of(actionEvaluation));
 
     signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, actionEvaluation);
 
@@ -99,7 +100,7 @@ class SignCertificateWithoutSignatureDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(SIGN, actionEvaluation);
+    doReturn(true).when(certificate).allowTo(SIGN, Optional.of(actionEvaluation));
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
 
     final var actualCertificate = signCertificateDomainService.sign(CERTIFICATE_ID, REVISION,
@@ -114,7 +115,7 @@ class SignCertificateWithoutSignatureDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(SIGN, actionEvaluation);
+    doReturn(true).when(certificate).allowTo(SIGN, Optional.of(actionEvaluation));
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
 
     signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, actionEvaluation);
@@ -134,7 +135,7 @@ class SignCertificateWithoutSignatureDomainServiceTest {
   void shallThrowCertificateActionForbiddenIfRoleIsNotPrivateDoctor() {
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(SIGN, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(SIGN, Optional.of(ACTION_EVALUATION));
 
     assertThrows(CertificateActionForbidden.class,
         () -> signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, ACTION_EVALUATION)
@@ -147,9 +148,9 @@ class SignCertificateWithoutSignatureDomainServiceTest {
     final var certificate = mock(Certificate.class);
     final var expectedReason = List.of("expectedReason");
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(false).when(certificate).allowTo(SIGN, ACTION_EVALUATION);
+    doReturn(false).when(certificate).allowTo(SIGN, Optional.of(ACTION_EVALUATION));
     doReturn(expectedReason).when(certificate)
-        .reasonNotAllowed(SIGN, ACTION_EVALUATION);
+        .reasonNotAllowed(SIGN, Optional.of(ACTION_EVALUATION));
 
     final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
         () -> signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, ACTION_EVALUATION)

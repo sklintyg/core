@@ -15,7 +15,8 @@ public class ActionRuleChildRelationMatch implements ActionRule {
   }
 
   @Override
-  public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
+  public boolean evaluate(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
     return certificate.filter(this::matchRelationType).isPresent();
   }
 

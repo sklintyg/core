@@ -18,8 +18,7 @@ public class IncomingMessageService {
     // depending on type of incoming message we use different services
     switch (incomingMessageRequest.getType()) {
       case KOMPLT -> receiveMessageDomainService.receive(
-          messageConverter.convert(incomingMessageRequest),
-          null
+          messageConverter.convert(incomingMessageRequest)
       );
     }
 

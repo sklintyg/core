@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.certificate.service;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -17,10 +18,10 @@ public class GetCertificateXmlDomainService {
   public CertificateXml get(CertificateId certificateId, ActionEvaluation actionEvaluation) {
     final var certificate = certificateRepository.getById(certificateId);
 
-    if (!certificate.allowTo(CertificateActionType.READ, actionEvaluation)) {
+    if (!certificate.allowTo(CertificateActionType.READ, Optional.of(actionEvaluation))) {
       throw new CertificateActionForbidden(
           "Not allowed to read certificate for %s so cannot get XML".formatted(certificateId),
-          certificate.reasonNotAllowed(CertificateActionType.READ, actionEvaluation)
+          certificate.reasonNotAllowed(CertificateActionType.READ, Optional.of(actionEvaluation))
       );
     }
 

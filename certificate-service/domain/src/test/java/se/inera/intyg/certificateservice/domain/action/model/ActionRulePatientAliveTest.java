@@ -7,6 +7,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +27,7 @@ class ActionRulePatientAliveTest {
         .user(AJLA_DOKTOR)
         .build();
 
-    final var actualResult = actionRulePatientAlive.evaluate(actionEvaluation);
+    final var actualResult = actionRulePatientAlive.evaluate(Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
   }
@@ -38,7 +39,7 @@ class ActionRulePatientAliveTest {
         .user(AJLA_DOKTOR)
         .build();
 
-    final var actualResult = actionRulePatientAlive.evaluate(actionEvaluation);
+    final var actualResult = actionRulePatientAlive.evaluate(Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
   }

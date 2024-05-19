@@ -4,11 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.messageBuilder;
 
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -45,11 +45,11 @@ class ReceiveMessageDomainServiceTest {
   @Test
   void shallThrowExceptionIfNotAllowedOnCertificate() {
     doReturn(false).when(certificate)
-        .allowTo(CertificateActionType.RECEIVE_COMPLEMENT, ACTION_EVALUATION);
+        .allowTo(CertificateActionType.RECEIVE_COMPLEMENT, Optional.empty());
     doReturn(CERTIFICATE_ID).when(certificate).id();
 
     assertThrows(CertificateActionForbidden.class,
-        () -> receiveMessageDomainService.receive(COMPLEMENT_MESSAGE, ACTION_EVALUATION)
+        () -> receiveMessageDomainService.receive(COMPLEMENT_MESSAGE)
     );
   }
 
@@ -59,13 +59,13 @@ class ReceiveMessageDomainServiceTest {
     @BeforeEach
     void setUp() {
       doReturn(true).when(certificate)
-          .allowTo(CertificateActionType.RECEIVE_COMPLEMENT, ACTION_EVALUATION);
+          .allowTo(CertificateActionType.RECEIVE_COMPLEMENT, Optional.empty());
     }
 
     @Test
     void shallStoreReceivedMessage() {
       final var expectedMessage = messageBuilder().build();
-      receiveMessageDomainService.receive(expectedMessage, ACTION_EVALUATION);
+      receiveMessageDomainService.receive(expectedMessage);
 
       verify(messageRepository).save(expectedMessage);
     }
@@ -76,8 +76,8 @@ class ReceiveMessageDomainServiceTest {
 
       doReturn(expectedMessage).when(messageRepository).save(COMPLEMENT_MESSAGE);
 
-      final var actualMessage = receiveMessageDomainService.receive(COMPLEMENT_MESSAGE,
-          ACTION_EVALUATION);
+      final var actualMessage = receiveMessageDomainService.receive(COMPLEMENT_MESSAGE
+      );
 
       assertEquals(expectedMessage, actualMessage);
     }

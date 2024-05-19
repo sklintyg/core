@@ -9,19 +9,29 @@ import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 public class ActionRuleProtectedPerson implements ActionRule {
 
   @Override
-  public boolean evaluate(ActionEvaluation actionEvaluation) {
-    return ifPatientIsProtectedUserMustNotBeCareAdmin(actionEvaluation, actionEvaluation.patient());
+  public boolean evaluate(Optional<ActionEvaluation> actionEvaluation) {
+    return actionEvaluation.filter(
+            evaluation ->
+                ifPatientIsProtectedUserMustNotBeCareAdmin(
+                    evaluation,
+                    evaluation.patient()
+                )
+        )
+        .isPresent();
   }
 
   @Override
-  public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
-    return certificate
-        .filter(value ->
-            ifPatientIsProtectedUserMustNotBeCareAdmin(actionEvaluation,
-                value.certificateMetaData().patient()
-            )
-        )
-        .isPresent();
+  public boolean evaluate(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
+    return actionEvaluation.filter(
+        evaluation ->
+            certificate.filter(value ->
+                    ifPatientIsProtectedUserMustNotBeCareAdmin(evaluation,
+                        value.certificateMetaData().patient()
+                    )
+                )
+                .isPresent()
+    ).isPresent();
   }
 
   @Override

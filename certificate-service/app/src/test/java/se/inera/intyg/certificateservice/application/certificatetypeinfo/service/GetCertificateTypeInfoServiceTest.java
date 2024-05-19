@@ -16,6 +16,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -175,7 +176,8 @@ class GetCertificateTypeInfoServiceTest {
   @NotNull
   private static CertificateModel getCertificateModel() {
     final var certificateModel = mock(CertificateModel.class);
-    doReturn(CERTIFICATE_ACTIONS).when(certificateModel).actionsInclude(ACTION_EVALUATION);
+    doReturn(CERTIFICATE_ACTIONS).when(certificateModel)
+        .actionsInclude(Optional.of(ACTION_EVALUATION));
     doReturn(true).when(certificateModel).activeForUserRole(ACTION_EVALUATION);
     return certificateModel;
   }

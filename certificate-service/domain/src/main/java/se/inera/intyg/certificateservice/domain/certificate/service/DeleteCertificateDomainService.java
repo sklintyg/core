@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.certificate.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -25,10 +26,10 @@ public class DeleteCertificateDomainService {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
 
     final var certificate = certificateRepository.getById(certificateId);
-    if (!certificate.allowTo(CertificateActionType.DELETE, actionEvaluation)) {
+    if (!certificate.allowTo(CertificateActionType.DELETE, Optional.of(actionEvaluation))) {
       throw new CertificateActionForbidden(
           "Not allowed to delete certificate for %s".formatted(certificateId),
-          certificate.reasonNotAllowed(CertificateActionType.DELETE, actionEvaluation)
+          certificate.reasonNotAllowed(CertificateActionType.DELETE, Optional.of(actionEvaluation))
       );
     }
 

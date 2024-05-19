@@ -42,13 +42,15 @@ public class CertificateModel {
         .toList();
   }
 
-  public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
+  public List<CertificateAction> actions(Optional<ActionEvaluation> actionEvaluation) {
     return actions().stream()
-        .filter(certificateAction -> certificateAction.evaluate(Optional.empty(), actionEvaluation))
+        .filter(certificateAction ->
+            certificateAction.evaluate(Optional.empty(), actionEvaluation)
+        )
         .toList();
   }
 
-  public List<CertificateAction> actionsInclude(ActionEvaluation actionEvaluation) {
+  public List<CertificateAction> actionsInclude(Optional<ActionEvaluation> actionEvaluation) {
     return actions().stream()
         .filter(certificateAction -> certificateAction.include(Optional.empty(), actionEvaluation))
         .toList();
@@ -59,7 +61,7 @@ public class CertificateModel {
   }
 
   public boolean allowTo(CertificateActionType certificateActionType,
-      ActionEvaluation actionEvaluation) {
+      Optional<ActionEvaluation> actionEvaluation) {
     return actions().stream()
         .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
         .findFirst()
@@ -68,7 +70,7 @@ public class CertificateModel {
   }
 
   public List<String> reasonNotAllowed(CertificateActionType certificateActionType,
-      ActionEvaluation actionEvaluation) {
+      Optional<ActionEvaluation> actionEvaluation) {
     return actions().stream()
         .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
         .findFirst()

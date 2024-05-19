@@ -12,6 +12,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.A
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -46,7 +47,7 @@ class RevokeCertificateDomainServiceTest {
   void shallThrowExceptionIfUserHasNoAccessToRevoke() {
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(false).when(certificate).allowTo(REVOKE, ACTION_EVALUATION);
+    doReturn(false).when(certificate).allowTo(REVOKE, Optional.of(ACTION_EVALUATION));
 
     assertThrows(CertificateActionForbidden.class,
         () -> revokeCertificateDomainService.revoke(CERTIFICATE_ID, ACTION_EVALUATION,
@@ -59,7 +60,7 @@ class RevokeCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(REVOKE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(REVOKE, Optional.of(ACTION_EVALUATION));
 
     revokeCertificateDomainService.revoke(CERTIFICATE_ID, ACTION_EVALUATION, REVOKED_INFORMATION);
 
@@ -72,7 +73,7 @@ class RevokeCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(REVOKE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(REVOKE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
 
     final var actualCertificate = revokeCertificateDomainService.revoke(CERTIFICATE_ID,
@@ -87,7 +88,7 @@ class RevokeCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(REVOKE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(REVOKE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
 
     revokeCertificateDomainService.revoke(CERTIFICATE_ID, ACTION_EVALUATION, REVOKED_INFORMATION);
@@ -108,9 +109,10 @@ class RevokeCertificateDomainServiceTest {
     final var certificate = mock(Certificate.class);
     final var expectedReason = List.of("expectedReason");
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(false).when(certificate).allowTo(CertificateActionType.REVOKE, ACTION_EVALUATION);
+    doReturn(false).when(certificate)
+        .allowTo(CertificateActionType.REVOKE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedReason).when(certificate)
-        .reasonNotAllowed(CertificateActionType.REVOKE, ACTION_EVALUATION);
+        .reasonNotAllowed(CertificateActionType.REVOKE, Optional.of(ACTION_EVALUATION));
 
     final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
         () -> revokeCertificateDomainService.revoke(CERTIFICATE_ID, ACTION_EVALUATION,

@@ -107,7 +107,7 @@ class SignCertificateServiceTest {
 
       final var certificateAction = mock(CertificateAction.class);
       final List<CertificateAction> certificateActions = List.of(certificateAction);
-      doReturn(certificateActions).when(CERTIFICATE).actionsInclude(actionEvaluation);
+      doReturn(certificateActions).when(CERTIFICATE).actionsInclude(Optional.of(actionEvaluation));
 
       final var resourceLinkDTO = ResourceLinkDTO.builder()
           .type(ResourceLinkTypeDTO.CREATE_CERTIFICATE)

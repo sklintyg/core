@@ -13,21 +13,26 @@ public class ActionRuleWithinAccessScope implements ActionRule {
   }
 
   @Override
-  public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
-    final var scope = getStrictestAccessScope(actionEvaluation);
+  public boolean evaluate(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
+    if (actionEvaluation.isEmpty()) {
+      return false;
+    }
+
+    final var scope = getStrictestAccessScope(actionEvaluation.get());
 
     switch (scope) {
       case WITHIN_CARE_UNIT -> {
         return certificate
             .filter(value ->
-                isWithinCareUnit(actionEvaluation, value)
+                isWithinCareUnit(actionEvaluation.get(), value)
             )
             .isPresent();
       }
       case WITHIN_CARE_PROVIDER -> {
         return certificate
             .filter(value ->
-                isWithinCareProvider(actionEvaluation, value)
+                isWithinCareProvider(actionEvaluation.get(), value)
             )
             .isPresent();
       }

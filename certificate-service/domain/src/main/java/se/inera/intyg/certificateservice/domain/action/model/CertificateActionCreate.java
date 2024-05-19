@@ -25,7 +25,7 @@ public class CertificateActionCreate implements CertificateAction {
 
   @Override
   public List<String> reasonNotAllowed(Optional<Certificate> certificate,
-      ActionEvaluation actionEvaluation) {
+      Optional<ActionEvaluation> actionEvaluation) {
     return actionRules.stream()
         .filter(value -> !value.evaluate(actionEvaluation))
         .map(ActionRule::getReasonForPermissionDenied)
@@ -33,8 +33,12 @@ public class CertificateActionCreate implements CertificateAction {
   }
 
   @Override
-  public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
-    if (actionEvaluation.patient() == null || actionEvaluation.user() == null) {
+  public boolean evaluate(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
+    if (actionEvaluation.isEmpty()) {
+      return false;
+    }
+    if (actionEvaluation.get().patient() == null || actionEvaluation.get().user() == null) {
       return false;
     }
 
@@ -54,8 +58,8 @@ public class CertificateActionCreate implements CertificateAction {
   }
 
   @Override
-  public boolean include(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
+  public boolean include(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
     return true;
   }
-
 }
