@@ -2,12 +2,14 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateEntity.CERTIFICATE_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataMessageEntity.COMPLEMENT_MESSAGE_ENTITY;
 import static se.inera.intyg.certificateservice.domain.message.model.MessageType.COMPLEMENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateConstants.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.AUTHOR_INCOMING_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CREATED_AFTER_SENT;
@@ -29,6 +31,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.message.model.Author;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
+import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.SenderReference;
@@ -100,10 +103,28 @@ class MessageEntityMapperTest {
     }
 
     @Test
+    void shallIncludeCreatedWhenMissing() {
+      final Message complementMessageWithoutCreated = complementMessageBuilder()
+          .created(null)
+          .build();
+
+      assertNotNull(mapper.toEntity(complementMessageWithoutCreated).getCreated());
+    }
+
+    @Test
     void shallIncludeModified() {
       assertEquals(CREATED_AFTER_SENT,
           mapper.toEntity(COMPLEMENT_MESSAGE).getModified()
       );
+    }
+
+    @Test
+    void shallIncludeModifiedWhenMissing() {
+      final Message complementMessageWithoutModified = complementMessageBuilder()
+          .modified(null)
+          .build();
+
+      assertNotNull(mapper.toEntity(complementMessageWithoutModified).getModified());
     }
 
     @Test

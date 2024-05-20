@@ -7,6 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.message.model.Author;
 import se.inera.intyg.certificateservice.domain.message.model.Complement;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
+import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageContactInfo;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
@@ -39,6 +40,7 @@ public class MessageConverter {
                 )
                 .toList()
         )
+        .forwarded(new Forwarded(false))
         .build();
   }
 }

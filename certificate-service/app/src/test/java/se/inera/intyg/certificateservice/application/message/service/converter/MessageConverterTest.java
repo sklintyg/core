@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.application.message.service.converter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.INCOMING_COMPLEMENT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateConstants.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.AUTHOR_INCOMING_MESSAGE;
@@ -114,6 +115,11 @@ class MessageConverterTest {
       assertEquals(expectedComplement,
           messageConverter.convert(INCOMING_COMPLEMENT_MESSAGE).complements()
       );
+    }
+
+    @Test
+    void shallIncludeForwardedFalse() {
+      assertFalse(messageConverter.convert(INCOMING_COMPLEMENT_MESSAGE).forwarded().value());
     }
   }
 }

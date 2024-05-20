@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
@@ -38,8 +40,10 @@ public class MessageEntityMapper {
         .subject(message.subject().subject())
         .content(message.content().content())
         .author(message.author().author())
-        .created(message.created())
-        .modified(message.modified())
+        .created(message.created() == null ? LocalDateTime.now(ZoneId.systemDefault())
+            : message.created())
+        .modified(message.modified() == null ? LocalDateTime.now(ZoneId.systemDefault())
+            : message.modified())
         .sent(message.sent())
         .forwarded(message.forwarded().value())
         .lastDateToReply(message.lastDateToReply())

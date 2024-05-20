@@ -7,6 +7,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
 
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,23 +29,27 @@ class JpaMessageRepositoryTest {
   @InjectMocks
   private JpaMessageRepository jpaMessageRepository;
 
-  @Test
-  void shallReturnCreatedMessageWhenSaved() {
-    final var expectedMessage = complementMessageBuilder().created(LocalDateTime.now()).build();
-    final var messageEntityToSave = MessageEntity.builder().build();
-    final var savedMessageEntity = MessageEntity.builder().build();
+  @Nested
+  class TestSaveMessage {
 
-    doReturn(messageEntityToSave).when(messageEntityMapper).toEntity(COMPLEMENT_MESSAGE);
-    doReturn(savedMessageEntity).when(messageEntityRepository).save(messageEntityToSave);
-    doReturn(expectedMessage).when(messageEntityMapper).toDomain(savedMessageEntity);
+    @Test
+    void shallReturnCreatedMessageWhenSaved() {
+      final var expectedMessage = complementMessageBuilder().created(LocalDateTime.now()).build();
+      final var messageEntityToSave = MessageEntity.builder().build();
+      final var savedMessageEntity = MessageEntity.builder().build();
 
-    final var actualMessage = jpaMessageRepository.save(COMPLEMENT_MESSAGE);
+      doReturn(messageEntityToSave).when(messageEntityMapper).toEntity(COMPLEMENT_MESSAGE);
+      doReturn(savedMessageEntity).when(messageEntityRepository).save(messageEntityToSave);
+      doReturn(expectedMessage).when(messageEntityMapper).toDomain(savedMessageEntity);
 
-    assertEquals(expectedMessage, actualMessage);
-  }
+      final var actualMessage = jpaMessageRepository.save(COMPLEMENT_MESSAGE);
 
-  @Test
-  void shallThrowExceptionIfMessageIsNull() {
-    assertThrows(IllegalArgumentException.class, () -> jpaMessageRepository.save(null));
+      assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
+    void shallThrowExceptionIfMessageIsNull() {
+      assertThrows(IllegalArgumentException.class, () -> jpaMessageRepository.save(null));
+    }
   }
 }

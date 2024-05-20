@@ -71,6 +71,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -98,6 +99,12 @@ class CertificateEntityMapperTest {
 
   @Mock
   private CertificateDataEntityMapper certificateDataEntityMapper;
+
+  @Mock
+  private MessageEntityRepository messageEntityRepository;
+
+  @Mock
+  private MessageEntityMapper messageEntityMapper;
 
   @InjectMocks
   private CertificateEntityMapper certificateEntityMapper;
