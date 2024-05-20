@@ -1,0 +1,119 @@
+package se.inera.intyg.certificateservice.application.message.service.converter;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.INCOMING_COMPLEMENT_MESSAGE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateConstants.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.AUTHOR_INCOMING_MESSAGE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.COMPLEMENT_QUESTION_ID_ONE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.COMPLEMENT_TEXT_ONE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTACT_INFO;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTENT;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.LAST_DATE_TO_ANSWER;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.MESSAGE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REFERENCE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
+
+import java.util.List;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.message.model.Author;
+import se.inera.intyg.certificateservice.domain.message.model.Complement;
+import se.inera.intyg.certificateservice.domain.message.model.Content;
+import se.inera.intyg.certificateservice.domain.message.model.MessageContactInfo;
+import se.inera.intyg.certificateservice.domain.message.model.MessageId;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.message.model.SenderReference;
+import se.inera.intyg.certificateservice.domain.message.model.Subject;
+
+@ExtendWith(MockitoExtension.class)
+class MessageConverterTest {
+
+  @InjectMocks
+  private MessageConverter messageConverter;
+
+  @Nested
+  class TestIncomingComplementRequest {
+
+    @Test
+    void shallIncludeMessageId() {
+      assertEquals(new MessageId(MESSAGE_ID),
+          messageConverter.convert(INCOMING_COMPLEMENT_MESSAGE).id()
+      );
+    }
+
+    @Test
+    void shallIncludeReferenceId() {
+      assertEquals(new SenderReference(REFERENCE_ID),
+          messageConverter.convert(INCOMING_COMPLEMENT_MESSAGE).reference()
+      );
+    }
+
+    @Test
+    void shallIncludeMessageType() {
+      assertEquals(MessageType.COMPLEMENT,
+          messageConverter.convert(INCOMING_COMPLEMENT_MESSAGE).type()
+      );
+    }
+
+    @Test
+    void shallIncludeCertificateId() {
+      assertEquals(new CertificateId(CERTIFICATE_ID),
+          messageConverter.convert(INCOMING_COMPLEMENT_MESSAGE).certificateId()
+      );
+    }
+
+    @Test
+    void shallIncludeAuthor() {
+      assertEquals(new Author(AUTHOR_INCOMING_MESSAGE),
+          messageConverter.convert(INCOMING_COMPLEMENT_MESSAGE).author()
+      );
+    }
+
+    @Test
+    void shallIncludeContactInfo() {
+      assertEquals(new MessageContactInfo(CONTACT_INFO),
+          messageConverter.convert(INCOMING_COMPLEMENT_MESSAGE).contactInfo()
+      );
+    }
+
+    @Test
+    void shallIncludeContent() {
+      assertEquals(new Content(CONTENT),
+          messageConverter.convert(INCOMING_COMPLEMENT_MESSAGE).content()
+      );
+    }
+
+    @Test
+    void shallIncludeLastDateToReply() {
+      assertEquals(LAST_DATE_TO_ANSWER,
+          messageConverter.convert(INCOMING_COMPLEMENT_MESSAGE).lastDateToReply()
+      );
+    }
+
+    @Test
+    void shallIncludeSubject() {
+      assertEquals(new Subject(SUBJECT),
+          messageConverter.convert(INCOMING_COMPLEMENT_MESSAGE).subject()
+      );
+    }
+
+    @Test
+    void shallIncludeComplement() {
+      final var expectedComplement = List.of(
+          Complement.builder()
+              .elementId(new ElementId(COMPLEMENT_QUESTION_ID_ONE))
+              .content(new Content(COMPLEMENT_TEXT_ONE))
+              .build()
+      );
+
+      assertEquals(expectedComplement,
+          messageConverter.convert(INCOMING_COMPLEMENT_MESSAGE).complements()
+      );
+    }
+  }
+}

@@ -6,7 +6,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.messageBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,7 +64,7 @@ class ReceiveComplementMessageDomainServiceTest {
 
     @Test
     void shallStoreReceivedMessage() {
-      final var expectedMessage = messageBuilder().build();
+      final var expectedMessage = complementMessageBuilder().build();
       receiveComplementMessageDomainService.receive(expectedMessage);
 
       verify(messageRepository).save(expectedMessage);
@@ -72,7 +72,7 @@ class ReceiveComplementMessageDomainServiceTest {
 
     @Test
     void shallReturnSavedMessage() {
-      final var expectedMessage = messageBuilder().build();
+      final var expectedMessage = complementMessageBuilder().build();
 
       doReturn(expectedMessage).when(messageRepository).save(COMPLEMENT_MESSAGE);
 

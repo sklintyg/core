@@ -8,9 +8,9 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
-import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest.CreateMessageRequestBuilder;
+import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest.IncomingMessageRequestBuilder;
 
-@JsonDeserialize(builder = CreateMessageRequestBuilder.class)
+@JsonDeserialize(builder = IncomingMessageRequestBuilder.class)
 @Value
 @Builder
 public class IncomingMessageRequest {
@@ -32,7 +32,7 @@ public class IncomingMessageRequest {
   LocalDate lastDateToAnswer;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class CreateMessageRequestBuilder {
+  public static class IncomingMessageRequestBuilder {
 
   }
 }
