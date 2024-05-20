@@ -27,7 +27,7 @@ public class TestDataIncomingMessage {
         .type(MessageTypeDTO.KOMPLT)
         .contactInfo(TestDataMessageConstants.CONTACT_INFO)
         .sentBy(SentByDTO.FK)
-        .lastDateToAnswer(TestDataMessageConstants.LAST_DATE_TO_ANSWER)
+        .lastDateToAnswer(TestDataMessageConstants.LAST_DATE_TO_REPLY)
         .personId(TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_PERSON_ID_DTO)
         .complements(
             List.of(

@@ -17,7 +17,7 @@ public class TestDataMessageConstants {
   public static final List<String> CONTACT_INFO = List.of(
       "Contact info 1", "Contact info 2", "Contact info 3"
   );
-  public static final LocalDate LAST_DATE_TO_ANSWER = LocalDate.now(ZoneId.systemDefault())
+  public static final LocalDate LAST_DATE_TO_REPLY = LocalDate.now(ZoneId.systemDefault())
       .plusDays(10);
   public static final String COMPLEMENT_QUESTION_ID_ONE = "55";
   public static final String COMPLEMENT_FIELD_ID_ONE = "55.1";

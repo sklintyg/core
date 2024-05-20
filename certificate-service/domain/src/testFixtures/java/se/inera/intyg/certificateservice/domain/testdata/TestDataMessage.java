@@ -7,7 +7,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTACT_INFO;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CREATED_AFTER_SENT;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.LAST_DATE_TO_ANSWER;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.LAST_DATE_TO_REPLY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.MESSAGE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REFERENCE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SENT;
@@ -42,7 +42,8 @@ public class TestDataMessage {
         .contactInfo(new MessageContactInfo(CONTACT_INFO))
         .sent(SENT)
         .created(CREATED_AFTER_SENT)
-        .lastDateToReply(LAST_DATE_TO_ANSWER)
+        .modified(CREATED_AFTER_SENT)
+        .lastDateToReply(LAST_DATE_TO_REPLY)
         .forwarded(new Forwarded(false))
         .complements(
             List.of(
