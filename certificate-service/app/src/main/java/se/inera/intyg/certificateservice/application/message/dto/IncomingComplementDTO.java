@@ -13,7 +13,7 @@ public class IncomingComplementDTO {
 
   String questionId;
   Integer instance;
-  String text;
+  String content;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class IncomingComplementDTOBuilder {

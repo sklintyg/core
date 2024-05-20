@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.application.message.service.validator;
 
+import java.util.List;
 import org.springframework.stereotype.Component;
+import se.inera.intyg.certificateservice.application.message.dto.IncomingComplementDTO;
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.MessageTypeDTO;
 
@@ -13,9 +15,6 @@ public class IncomingMessageValidator {
     }
     if (isNullOrBlank(incomingMessageRequest.getCertificateId())) {
       throw new IllegalArgumentException("Message.certificateId is missing");
-    }
-    if (isNullOrBlank(incomingMessageRequest.getSubject())) {
-      throw new IllegalArgumentException("Message.subject is missing");
     }
     if (isNullOrBlank(incomingMessageRequest.getContent())) {
       throw new IllegalArgumentException("Message.content is missing");
@@ -38,10 +37,33 @@ public class IncomingMessageValidator {
     if (incomingMessageRequest.getPersonId().getType() == null) {
       throw new IllegalArgumentException("Required parameter missing: Message.personId.type");
     }
-    if (MessageTypeDTO.KOMPLT.equals(incomingMessageRequest.getType())
-        && incomingMessageRequest.getComplements() == null) {
-      throw new IllegalArgumentException("Required parameter missing: Message.complement");
+    validateComplement(incomingMessageRequest);
+  }
+
+  private void validateComplement(IncomingMessageRequest incomingMessageRequest) {
+    if (MessageTypeDTO.KOMPLT.equals(incomingMessageRequest.getType())) {
+      if (incomingMessageRequest.getComplements() == null) {
+        throw new IllegalArgumentException("Required parameter missing: Message.complement");
+      }
+      if (complementMissingQuestionId(incomingMessageRequest.getComplements())) {
+        throw new IllegalArgumentException(
+            "Required parameter missing: Message.complement.questionId"
+        );
+      }
+      if (complementMissingText(incomingMessageRequest.getComplements())) {
+        throw new IllegalArgumentException(
+            "Required parameter missing: Message.complement.content"
+        );
+      }
     }
+  }
+
+  private boolean complementMissingText(List<IncomingComplementDTO> complements) {
+    return complements.stream().anyMatch(complement -> isNullOrBlank(complement.getContent()));
+  }
+
+  private boolean complementMissingQuestionId(List<IncomingComplementDTO> complements) {
+    return complements.stream().anyMatch(complement -> isNullOrBlank(complement.getQuestionId()));
   }
 
   private static boolean isNullOrBlank(String incomingMessageRequest) {

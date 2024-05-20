@@ -34,7 +34,7 @@ public class TestDataIncomingMessage {
                 IncomingComplementDTO.builder()
                     .questionId(TestDataMessageConstants.COMPLEMENT_QUESTION_ID_ONE)
                     .instance(TestDataMessageConstants.INSTANCE_ONE)
-                    .text(TestDataMessageConstants.COMPLEMENT_TEXT_ONE)
+                    .content(TestDataMessageConstants.COMPLEMENT_TEXT_ONE)
                     .build()
             )
         );

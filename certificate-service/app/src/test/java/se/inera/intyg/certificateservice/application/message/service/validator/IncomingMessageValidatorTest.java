@@ -5,12 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
 
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
+import se.inera.intyg.certificateservice.application.message.dto.IncomingComplementDTO;
 
 @ExtendWith(MockitoExtension.class)
 class IncomingMessageValidatorTest {
@@ -74,36 +76,6 @@ class IncomingMessageValidatorTest {
     );
 
     assertTrue(illegalArgumentException.getMessage().contains("Message.certificateId"),
-        illegalArgumentException.getMessage()
-    );
-  }
-
-  @Test
-  void shallThrowIfSubjectIsNull() {
-    final var request = incomingComplementMessageBuilder()
-        .subject(null)
-        .build();
-
-    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> validator.validate(request)
-    );
-
-    assertTrue(illegalArgumentException.getMessage().contains("Message.subject"),
-        illegalArgumentException.getMessage()
-    );
-  }
-
-  @Test
-  void shallThrowIfSubjectIsBlank() {
-    final var request = incomingComplementMessageBuilder()
-        .subject(" ")
-        .build();
-
-    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> validator.validate(request)
-    );
-
-    assertTrue(illegalArgumentException.getMessage().contains("Message.subject"),
         illegalArgumentException.getMessage()
     );
   }
@@ -268,6 +240,92 @@ class IncomingMessageValidatorTest {
       );
 
       assertTrue(illegalArgumentException.getMessage().contains("Message.complement"),
+          illegalArgumentException.getMessage()
+      );
+    }
+
+    @Test
+    void shallThrowIfComplementQuestionIdIsNull() {
+      final var request = incomingComplementMessageBuilder()
+          .complements(
+              List.of(
+                  IncomingComplementDTO.builder()
+                      .questionId(null)
+                      .build()
+              )
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> validator.validate(request)
+      );
+
+      assertTrue(illegalArgumentException.getMessage().contains("Message.complement.questionId"),
+          illegalArgumentException.getMessage()
+      );
+    }
+
+    @Test
+    void shallThrowIfComplementQuestionIdIsBlank() {
+      final var request = incomingComplementMessageBuilder()
+          .complements(
+              List.of(
+                  IncomingComplementDTO.builder()
+                      .questionId("  ")
+                      .build()
+              )
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> validator.validate(request)
+      );
+
+      assertTrue(illegalArgumentException.getMessage().contains("Message.complement.questionId"),
+          illegalArgumentException.getMessage()
+      );
+    }
+
+    @Test
+    void shallThrowIfComplementContentIsNull() {
+      final var request = incomingComplementMessageBuilder()
+          .complements(
+              List.of(
+                  IncomingComplementDTO.builder()
+                      .questionId("questionId")
+                      .content(null)
+                      .build()
+              )
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> validator.validate(request)
+      );
+
+      assertTrue(illegalArgumentException.getMessage().contains("Message.complement.content"),
+          illegalArgumentException.getMessage()
+      );
+    }
+
+    @Test
+    void shallThrowIfComplementContentIsBlank() {
+      final var request = incomingComplementMessageBuilder()
+          .complements(
+              List.of(
+                  IncomingComplementDTO.builder()
+                      .questionId("questionId")
+                      .content("  ")
+                      .build()
+              )
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> validator.validate(request)
+      );
+
+      assertTrue(illegalArgumentException.getMessage().contains("Message.complement.content"),
           illegalArgumentException.getMessage()
       );
     }

@@ -34,7 +34,7 @@ public class MessageConverter {
                 .map(complement ->
                     Complement.builder()
                         .elementId(new ElementId(complement.getQuestionId()))
-                        .content(new Content(complement.getText()))
+                        .content(new Content(complement.getContent()))
                         .build()
                 )
                 .toList()
