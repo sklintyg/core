@@ -7,7 +7,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProv
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.BETA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.BETA_VARDCENTRAL;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_HUDMOTTAGNINGEN;
@@ -72,7 +71,7 @@ class CertificateActionSendTest {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     assertFalse(
-        certificateActionSend.evaluate(certificate, actionEvaluation),
+        certificateActionSend.evaluate(certificate, Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -86,7 +85,7 @@ class CertificateActionSendTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -99,7 +98,7 @@ class CertificateActionSendTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -113,7 +112,7 @@ class CertificateActionSendTest {
         .build();
 
     assertTrue(
-        certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -127,7 +126,7 @@ class CertificateActionSendTest {
         .build();
 
     assertFalse(
-        certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -141,7 +140,7 @@ class CertificateActionSendTest {
         .build();
 
     assertFalse(
-        certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -155,7 +154,7 @@ class CertificateActionSendTest {
         .build();
 
     assertFalse(
-        certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -169,7 +168,7 @@ class CertificateActionSendTest {
         .build();
 
     assertTrue(
-        certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -184,7 +183,7 @@ class CertificateActionSendTest {
         .build();
 
     assertFalse(
-        certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -207,19 +206,15 @@ class CertificateActionSendTest {
 
     assertEquals(
         "<p>Om du går vidare kommer intyget skickas direkt till Försäkringskassans system vilket ska göras i samråd med patienten.</p>",
-        certificateActionSend.getBody(Optional.of(certificate), actionEvaluation)
+        certificateActionSend.getBody(Optional.of(certificate), Optional.of(actionEvaluation))
     );
   }
 
 
   @Test
   void shallReturnReasonNotAllowedIfEvaluateReturnsFalse() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ANONYMA_REACT_ATTILA)
-        .user(ALVA_VARDADMINISTRATOR)
-        .build();
-
-    final var actualResult = certificateActionSend.reasonNotAllowed(actionEvaluation);
+    final var actualResult = certificateActionSend.reasonNotAllowed(
+        Optional.of(certificateBuilder.build()), Optional.empty());
 
     assertFalse(actualResult.isEmpty());
   }
@@ -233,7 +228,7 @@ class CertificateActionSendTest {
         .build();
 
     final var actualResult = certificateActionSend.reasonNotAllowed(Optional.of(certificate),
-        actionEvaluation);
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult.isEmpty());
   }
@@ -283,7 +278,7 @@ class CertificateActionSendTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -300,7 +295,7 @@ class CertificateActionSendTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -325,7 +320,7 @@ class CertificateActionSendTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -342,7 +337,7 @@ class CertificateActionSendTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -367,7 +362,7 @@ class CertificateActionSendTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -384,7 +379,7 @@ class CertificateActionSendTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -403,7 +398,7 @@ class CertificateActionSendTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionSend.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }

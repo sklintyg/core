@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.domain.patient.service;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -18,7 +19,8 @@ public class GetPatientCertificatesDomainService {
             certificatesRequest(actionEvaluation)
         )
         .stream()
-        .filter(certificate -> certificate.allowTo(CertificateActionType.READ, actionEvaluation))
+        .filter(certificate -> certificate.allowTo(CertificateActionType.READ,
+            Optional.of(actionEvaluation)))
         .toList();
   }
 

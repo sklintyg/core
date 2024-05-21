@@ -41,7 +41,7 @@ public class CertificateActionRenew implements CertificateAction {
 
   @Override
   public List<String> reasonNotAllowed(Optional<Certificate> certificate,
-      ActionEvaluation actionEvaluation) {
+      Optional<ActionEvaluation> actionEvaluation) {
     return actionRules.stream()
         .filter(value -> !value.evaluate(certificate, actionEvaluation))
         .map(ActionRule::getReasonForPermissionDenied)
@@ -54,7 +54,8 @@ public class CertificateActionRenew implements CertificateAction {
   }
 
   @Override
-  public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
+  public boolean evaluate(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
     return actionRules.stream()
         .filter(value -> value.evaluate(certificate, actionEvaluation))
         .count() == actionRules.size();
@@ -71,15 +72,16 @@ public class CertificateActionRenew implements CertificateAction {
   }
 
   @Override
-  public String getBody(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
-    if (certificate.isEmpty()) {
+  public String getBody(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
+    if (certificate.isEmpty() || actionEvaluation.isEmpty()) {
       return BODY_PART_1 + BODY_PART_3;
     }
 
     final var stringBuilder = new StringBuilder();
     stringBuilder.append(BODY_PART_1);
-    if (isCareUnitMatchingSubUnit(actionEvaluation, certificate.get()) ||
-        isIssuingUnitMatchingSubUnit(actionEvaluation, certificate.get())) {
+    if (isCareUnitMatchingSubUnit(actionEvaluation.get(), certificate.get()) ||
+        isIssuingUnitMatchingSubUnit(actionEvaluation.get(), certificate.get())) {
       stringBuilder.append(BODY_PART_2_SAME_UNIT);
     } else {
       stringBuilder.append(BODY_PART_2_OTHER_UNIT);

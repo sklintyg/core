@@ -37,6 +37,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
 
 @Component
 @RequiredArgsConstructor
@@ -50,6 +51,8 @@ public class CertificateEntityMapper {
   private final StaffRepository staffRepository;
   private final CertificateDataEntityMapper certificateDataEntityMapper;
   private final CertificateRelationRepository certificateRelationRepository;
+  private final MessageEntityRepository messageEntityRepository;
+  private final MessageEntityMapper messageEntityMapper;
 
   public Certificate toDomain(CertificateEntity certificateEntity) {
     return toDomain(certificateEntity, true);
@@ -216,6 +219,11 @@ public class CertificateEntityMapper {
   public Certificate toDomain(CertificateEntity certificateEntity, CertificateModel model,
       boolean includeRelations) {
     final var relations = getRelations(certificateEntity, includeRelations);
+    final var messages = messageEntityRepository.findMessageEntitiesByCertificate(certificateEntity)
+        .stream()
+        .map(messageEntityMapper::toDomain)
+        .toList();
+
     return Certificate.builder()
         .id(new CertificateId(certificateEntity.getCertificateId()))
         .created(certificateEntity.getCreated())
@@ -302,6 +310,7 @@ public class CertificateEntityMapper {
                 )
                 .toList()
         )
+        .messages(messages)
         .build();
   }
 

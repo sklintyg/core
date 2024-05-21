@@ -10,7 +10,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.relationReplaceBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
@@ -89,7 +88,7 @@ class CertificateActionReplaceContinueTest {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     assertFalse(
-        certificateActionReplaceContinue.evaluate(certificate, actionEvaluation),
+        certificateActionReplaceContinue.evaluate(certificate, Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -107,7 +106,8 @@ class CertificateActionReplaceContinueTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -125,7 +125,8 @@ class CertificateActionReplaceContinueTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -143,7 +144,8 @@ class CertificateActionReplaceContinueTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -161,7 +163,8 @@ class CertificateActionReplaceContinueTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -175,7 +178,8 @@ class CertificateActionReplaceContinueTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -188,7 +192,8 @@ class CertificateActionReplaceContinueTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -202,7 +207,8 @@ class CertificateActionReplaceContinueTest {
         .build();
 
     assertTrue(
-        certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -216,7 +222,8 @@ class CertificateActionReplaceContinueTest {
         .build();
 
     assertFalse(
-        certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -230,7 +237,8 @@ class CertificateActionReplaceContinueTest {
         .build();
 
     assertFalse(
-        certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -244,7 +252,8 @@ class CertificateActionReplaceContinueTest {
         .build();
 
     assertFalse(
-        certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -256,7 +265,8 @@ class CertificateActionReplaceContinueTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -270,7 +280,8 @@ class CertificateActionReplaceContinueTest {
         .build();
 
     assertFalse(
-        certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -294,7 +305,8 @@ class CertificateActionReplaceContinueTest {
         .build();
 
     assertFalse(
-        certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -318,7 +330,8 @@ class CertificateActionReplaceContinueTest {
         .build();
 
     assertFalse(
-        certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -336,12 +349,10 @@ class CertificateActionReplaceContinueTest {
 
   @Test
   void shallReturnReasonNotAllowedIfEvaluateReturnsFalse() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ANONYMA_REACT_ATTILA)
-        .user(ALVA_VARDADMINISTRATOR)
-        .build();
-
-    final var actualResult = certificateActionReplaceContinue.reasonNotAllowed(actionEvaluation);
+    final var actualResult = certificateActionReplaceContinue.reasonNotAllowed(
+        Optional.of(certificateBuilder.build()),
+        Optional.empty()
+    );
 
     assertFalse(actualResult.isEmpty());
   }
@@ -356,7 +367,7 @@ class CertificateActionReplaceContinueTest {
 
     final var actualResult = certificateActionReplaceContinue.reasonNotAllowed(
         Optional.of(certificate),
-        actionEvaluation);
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult.isEmpty());
   }
@@ -413,7 +424,8 @@ class CertificateActionReplaceContinueTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -430,7 +442,8 @@ class CertificateActionReplaceContinueTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -455,7 +468,8 @@ class CertificateActionReplaceContinueTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -472,7 +486,8 @@ class CertificateActionReplaceContinueTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -497,7 +512,8 @@ class CertificateActionReplaceContinueTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -514,7 +530,8 @@ class CertificateActionReplaceContinueTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -533,7 +550,8 @@ class CertificateActionReplaceContinueTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionReplaceContinue.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }

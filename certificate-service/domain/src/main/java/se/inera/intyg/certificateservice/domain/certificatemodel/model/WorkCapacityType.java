@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum WorkCapacityType {
-  EN_ATTANDEL("12,5 procent"),
+  EN_ATTONDEL("12,5 procent"),
   EN_FJARDEDEL("25 procent"),
   HALVA("50 procent"),
   TRE_FJARDEDELAR("75 procent"),

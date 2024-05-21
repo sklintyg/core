@@ -50,8 +50,19 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_PA_TITLES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_ROLE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_SPECIALITIES;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_ALLOW_COPY;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_BLOCKED;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_HEALTH_CARE_PROFESSIONAL_LICENCES;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_MIDDLE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_PA_TITLES;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_SPECIALITIES;
 
 import java.util.Collections;
+import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.user.model.User;
@@ -60,6 +71,7 @@ import se.inera.intyg.certificateservice.domain.user.model.User.UserBuilder;
 public class TestDataUser {
 
   public static final User AJLA_DOKTOR = ajlaDoctorBuilder().build();
+  public static final User DAN_DENTIST = danDentistBuilder().build();
   public static final User ANNA_SJUKSKOTERKSA = annaSjukskoterska().build();
   public static final User ALF_DOKTOR = alfDoktorBuilder().build();
   public static final User ALVA_VARDADMINISTRATOR = alvaVardadministratorBuilder().build();
@@ -154,5 +166,24 @@ public class TestDataUser {
         .specialities(BERTIL_BARNMORSKA_SPECIALITIES)
         .role(BERTIL_BARNMORSKA_ROLE)
         .healthCareProfessionalLicence(BERTIL_BARNMORSKA_HEALTH_CARE_PROFESSIONAL_LICENCES);
+  }
+
+  public static UserBuilder danDentistBuilder() {
+    return User.builder()
+        .hsaId(new HsaId(DAN_DENTIST_HSA_ID))
+        .name(
+            Name.builder()
+                .firstName(DAN_DENTIST_FIRST_NAME)
+                .middleName(DAN_DENTIST_MIDDLE_NAME)
+                .lastName(DAN_DENTIST_LAST_NAME)
+                .build()
+        )
+        .blocked(DAN_DENTIST_BLOCKED)
+        .allowCopy(DAN_DENTIST_ALLOW_COPY)
+        .paTitles(DAN_DENTIST_PA_TITLES)
+        .specialities(DAN_DENTIST_SPECIALITIES)
+        .role(DAN_DENTIST_ROLE)
+        .accessScope(AccessScope.WITHIN_CARE_UNIT)
+        .healthCareProfessionalLicence(DAN_DENTIST_HEALTH_CARE_PROFESSIONAL_LICENCES);
   }
 }

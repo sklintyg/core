@@ -93,4 +93,17 @@ public class TestDataUserConstants {
       new HealthCareProfessionalLicence("Barnmorska")
   );
 
+  public static final String DAN_DENTIST_HSA_ID = "TSTNMT2321000156-BMBL";
+  public static final String DAN_DENTIST_FIRST_NAME = "Dan";
+  public static final String DAN_DENTIST_MIDDLE_NAME = "";
+  public static final String DAN_DENTIST_LAST_NAME = "Tandläkare";
+  public static final String DAN_DENTIST_FULL_NAME = "Dan Tandläkare";
+  public static final Role DAN_DENTIST_ROLE = Role.DENTIST;
+  public static final List<PaTitle> DAN_DENTIST_PA_TITLES = Collections.emptyList();
+  public static final List<Speciality> DAN_DENTIST_SPECIALITIES = Collections.emptyList();
+  public static final Blocked DAN_DENTIST_BLOCKED = BLOCKED_FALSE;
+  public static final AllowCopy DAN_DENTIST_ALLOW_COPY = ALLOW_COPY_TRUE;
+  public static final List<HealthCareProfessionalLicence> DAN_DENTIST_HEALTH_CARE_PROFESSIONAL_LICENCES = List.of(
+      new HealthCareProfessionalLicence("Tandläkare")
+  );
 }

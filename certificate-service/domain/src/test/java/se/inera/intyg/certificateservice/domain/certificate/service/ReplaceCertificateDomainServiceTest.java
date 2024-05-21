@@ -13,6 +13,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REFERENCE;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -40,7 +41,7 @@ class ReplaceCertificateDomainServiceTest {
   void shallThrowExceptionIfUserHasNoAccessToReplace() {
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(false).when(certificate).allowTo(REPLACE, ACTION_EVALUATION);
+    doReturn(false).when(certificate).allowTo(REPLACE, Optional.of(ACTION_EVALUATION));
 
     assertThrows(CertificateActionForbidden.class,
         () -> replaceCertificateDomainService.replace(CERTIFICATE_ID, ACTION_EVALUATION,
@@ -53,7 +54,7 @@ class ReplaceCertificateDomainServiceTest {
     final var newCertificate = mock(Certificate.class);
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(REPLACE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(REPLACE, Optional.of(ACTION_EVALUATION));
     doReturn(newCertificate).when(certificate).replace(ACTION_EVALUATION);
 
     replaceCertificateDomainService.replace(CERTIFICATE_ID, ACTION_EVALUATION, EXTERNAL_REFERENCE);
@@ -66,7 +67,7 @@ class ReplaceCertificateDomainServiceTest {
     final var newCertificate = mock(Certificate.class);
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(REPLACE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(REPLACE, Optional.of(ACTION_EVALUATION));
     doReturn(newCertificate).when(certificate).replace(ACTION_EVALUATION);
 
     replaceCertificateDomainService.replace(CERTIFICATE_ID, ACTION_EVALUATION, EXTERNAL_REFERENCE);
@@ -81,7 +82,7 @@ class ReplaceCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(REPLACE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(REPLACE, Optional.of(ACTION_EVALUATION));
     doReturn(newCertificate).when(certificate).replace(ACTION_EVALUATION);
     doReturn(expectedCertificate).when(certificateRepository).save(newCertificate);
 
@@ -98,7 +99,7 @@ class ReplaceCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(REPLACE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(REPLACE, Optional.of(ACTION_EVALUATION));
     doReturn(newCertificate).when(certificate).replace(ACTION_EVALUATION);
     doReturn(expectedCertificate).when(certificateRepository).save(newCertificate);
 
@@ -120,9 +121,9 @@ class ReplaceCertificateDomainServiceTest {
     final var certificate = mock(Certificate.class);
     final var expectedReason = List.of("expectedReason");
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(false).when(certificate).allowTo(REPLACE, ACTION_EVALUATION);
+    doReturn(false).when(certificate).allowTo(REPLACE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedReason).when(certificate)
-        .reasonNotAllowed(REPLACE, ACTION_EVALUATION);
+        .reasonNotAllowed(REPLACE, Optional.of(ACTION_EVALUATION));
 
     final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
         () -> replaceCertificateDomainService.replace(CERTIFICATE_ID, ACTION_EVALUATION,

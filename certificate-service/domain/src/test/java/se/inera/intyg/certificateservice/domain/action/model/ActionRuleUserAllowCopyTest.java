@@ -3,13 +3,13 @@ package se.inera.intyg.certificateservice.domain.action.model;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.common.model.AllowCopy;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
 class ActionRuleUserAllowCopyTest {
-
 
   private ActionRuleUserAllowCopy actionRuleUserAllowCopy;
 
@@ -28,7 +28,8 @@ class ActionRuleUserAllowCopyTest {
         )
         .build();
 
-    final var actualResult = actionRuleUserAllowCopy.evaluate(actionEvaluation);
+    final var actualResult = actionRuleUserAllowCopy.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
   }
@@ -43,9 +44,9 @@ class ActionRuleUserAllowCopyTest {
         )
         .build();
 
-    final var actualResult = actionRuleUserAllowCopy.evaluate(actionEvaluation);
+    final var actualResult = actionRuleUserAllowCopy.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
   }
-
 }

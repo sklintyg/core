@@ -14,7 +14,9 @@ public class ActionRuleRole implements ActionRule {
   }
 
   @Override
-  public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
-    return roles.contains(actionEvaluation.user().role());
+  public boolean evaluate(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
+    return actionEvaluation.filter(evaluation -> roles.contains(evaluation.user().role()))
+        .isPresent();
   }
 }

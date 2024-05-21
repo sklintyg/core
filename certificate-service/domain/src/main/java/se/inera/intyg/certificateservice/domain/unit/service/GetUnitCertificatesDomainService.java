@@ -4,6 +4,7 @@ import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
@@ -21,7 +22,8 @@ public class GetUnitCertificatesDomainService {
     return certificateRepository.findByCertificatesRequest(
             request.apply(actionEvaluation)
         ).stream()
-        .filter(certificate -> certificate.allowTo(CertificateActionType.READ, actionEvaluation))
+        .filter(certificate -> certificate.allowTo(CertificateActionType.READ,
+            Optional.of(actionEvaluation)))
         .filter(filterOnValid(request))
         .toList();
   }

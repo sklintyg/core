@@ -57,7 +57,7 @@ public class UpdateCertificateService {
     return UpdateCertificateResponse.builder()
         .certificate(certificateConverter.convert(
             updatedCertificate,
-            updatedCertificate.actions(actionEvaluation).stream()
+            updatedCertificate.actionsInclude(Optional.of(actionEvaluation)).stream()
                 .map(certificateAction ->
                     resourceLinkConverter.convert(
                         certificateAction,

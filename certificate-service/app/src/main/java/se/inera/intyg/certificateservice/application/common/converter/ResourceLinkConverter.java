@@ -17,8 +17,8 @@ public class ResourceLinkConverter {
         .type(ResourceLinkTypeDTO.toResourceLinkType(certificateAction.getType()))
         .name(certificateAction.getName(certificate))
         .description(certificateAction.getDescription(certificate))
-        .body(certificateAction.getBody(certificate, actionEvaluation))
-        .enabled(certificateAction.isEnabled())
+        .body(certificateAction.getBody(certificate, Optional.of(actionEvaluation)))
+        .enabled(certificateAction.isEnabled(certificate, Optional.of(actionEvaluation)))
         .build();
   }
 }

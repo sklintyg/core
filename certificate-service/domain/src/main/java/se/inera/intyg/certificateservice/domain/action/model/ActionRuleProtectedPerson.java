@@ -9,19 +9,21 @@ import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 public class ActionRuleProtectedPerson implements ActionRule {
 
   @Override
-  public boolean evaluate(ActionEvaluation actionEvaluation) {
-    return ifPatientIsProtectedUserMustNotBeCareAdmin(actionEvaluation, actionEvaluation.patient());
-  }
-
-  @Override
-  public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
-    return certificate
-        .filter(value ->
-            ifPatientIsProtectedUserMustNotBeCareAdmin(actionEvaluation,
-                value.certificateMetaData().patient()
-            )
-        )
-        .isPresent();
+  public boolean evaluate(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
+    if (certificate.isEmpty()) {
+      return evaluate(actionEvaluation);
+    }
+    
+    return actionEvaluation.filter(
+        evaluation ->
+            certificate.filter(value ->
+                    ifPatientIsProtectedUserMustNotBeCareAdmin(evaluation,
+                        value.certificateMetaData().patient()
+                    )
+                )
+                .isPresent()
+    ).isPresent();
   }
 
   @Override
@@ -29,6 +31,17 @@ public class ActionRuleProtectedPerson implements ActionRule {
     return "Du saknar behörighet för den begärda åtgärden."
         + " Det krävs särskilda rättigheter eller en specifik befattning"
         + " för att hantera patienter med skyddade personuppgifter.";
+  }
+
+  private static boolean evaluate(Optional<ActionEvaluation> actionEvaluation) {
+    return actionEvaluation.filter(
+            evaluation ->
+                ifPatientIsProtectedUserMustNotBeCareAdmin(
+                    evaluation,
+                    evaluation.patient()
+                )
+        )
+        .isPresent();
   }
 
   private static boolean ifPatientIsProtectedUserMustNotBeCareAdmin(

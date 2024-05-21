@@ -20,6 +20,7 @@ import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModif
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
+import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
@@ -46,33 +47,47 @@ public class Certificate {
   private Relation parent;
   @Builder.Default
   private List<Relation> children = Collections.emptyList();
+  @Builder.Default
+  private List<Message> messages = Collections.emptyList();
 
-  public List<CertificateAction> actions(ActionEvaluation actionEvaluation) {
+  public List<CertificateAction> actions(Optional<ActionEvaluation> actionEvaluation) {
     return certificateModel.actions().stream()
         .filter(
-            certificateAction -> certificateAction.evaluate(Optional.of(this), actionEvaluation)
+            certificateAction -> certificateAction.evaluate(
+                Optional.of(this),
+                actionEvaluation
+            )
         )
         .toList();
   }
 
+  public List<CertificateAction> actionsInclude(Optional<ActionEvaluation> actionEvaluation) {
+    return certificateModel.actions().stream()
+        .filter(certificateAction -> certificateAction.include(Optional.of(this), actionEvaluation))
+        .toList();
+  }
+
   public boolean allowTo(CertificateActionType certificateActionType,
-      ActionEvaluation actionEvaluation) {
+      Optional<ActionEvaluation> actionEvaluation) {
     return certificateModel.actions().stream()
         .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
         .findFirst()
         .map(certificateAction ->
-            certificateAction.evaluate(Optional.of(this), addPatientIfMissing(actionEvaluation))
+            certificateAction.evaluate(
+                Optional.of(this),
+                addPatientIfMissing(actionEvaluation)
+            )
         )
         .orElse(false);
   }
 
-
   public List<String> reasonNotAllowed(CertificateActionType certificateActionType,
-      ActionEvaluation actionEvaluation) {
+      Optional<ActionEvaluation> actionEvaluation) {
     return certificateModel.actions().stream()
         .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
         .findFirst()
-        .map(certificateAction -> certificateAction.reasonNotAllowed(actionEvaluation))
+        .map(certificateAction -> certificateAction.reasonNotAllowed(Optional.of(this),
+            actionEvaluation))
         .orElse(Collections.emptyList());
   }
 
@@ -181,11 +196,17 @@ public class Certificate {
     this.revision = this.revision.increment();
   }
 
-  private ActionEvaluation addPatientIfMissing(ActionEvaluation actionEvaluation) {
-    if (actionEvaluation.patient() != null) {
+  private Optional<ActionEvaluation> addPatientIfMissing(
+      Optional<ActionEvaluation> actionEvaluation) {
+    if (actionEvaluation.isEmpty()) {
       return actionEvaluation;
     }
-    return actionEvaluation.withPatient(certificateMetaData.patient());
+    if (actionEvaluation.get().patient() != null) {
+      return actionEvaluation;
+    }
+    return Optional.of(
+        actionEvaluation.get().withPatient(certificateMetaData.patient())
+    );
   }
 
   private void throwIfConcurrentModification(Revision revision, String operation,

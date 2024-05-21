@@ -22,7 +22,9 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.DAN_DENTIST_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.QUESTION_BERAKNAT_FODELSEDATUM_ID;
 import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.FK7210;
@@ -107,6 +109,7 @@ import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.Cer
 import se.inera.intyg.certificateservice.application.common.dto.AccessScopeTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
+import se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants;
 import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
 import se.inera.intyg.certificateservice.integrationtest.util.Containers;
 import se.inera.intyg.certificateservice.integrationtest.util.InternalApiUtil;
@@ -178,19 +181,33 @@ class FK7210ActiveIT {
     }
 
     @Test
+    @DisplayName("FK7210 - Om användaren har rollen tandläkare ska intygstypen inte returneras i listan av tillgängliga intygstyper")
+    void shallNotReturnFK7210WhenUserIsDoctor() {
+      final var response = api.certificateTypeInfo(
+          customCertificateTypeInfoRequest()
+              .user(DAN_DENTIST_DTO)
+              .build()
+      );
+
+      assertNull(
+          certificateTypeInfo(response.getBody(), FK7210),
+          "Should not contain %s as user is dentist!".formatted(FK7210)
+      );
+    }
+
+    @Test
     @DisplayName("FK7210 - Om aktiverad ska 'Skapa utkast' vara tillgänglig")
     void shallReturnResourceLinkCreateCertificate() {
       final var response = api.certificateTypeInfo(
           defaultCertificateTypeInfoRequest()
       );
 
-      assertNotNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7210),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7210),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertTrue(resourceLink.isEnabled(), "Should be enabled");
     }
 
     @Test
@@ -202,13 +219,12 @@ class FK7210ActiveIT {
               .build()
       );
 
-      assertNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7210),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7210),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertFalse(resourceLink.isEnabled(), "Should be disabled");
     }
 
     @Test
@@ -224,13 +240,12 @@ class FK7210ActiveIT {
               .build()
       );
 
-      assertNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7210),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7210),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertFalse(resourceLink.isEnabled(), "Should be disabled");
     }
 
     @Test
@@ -247,13 +262,12 @@ class FK7210ActiveIT {
               .build()
       );
 
-      assertNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7210),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7210),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertFalse(resourceLink.isEnabled(), "Should be disabled");
     }
 
     @Test
@@ -266,13 +280,12 @@ class FK7210ActiveIT {
               .build()
       );
 
-      assertNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7210),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7210),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertFalse(resourceLink.isEnabled(), "Should be disabled");
     }
 
     @Test
@@ -285,13 +298,12 @@ class FK7210ActiveIT {
               .build()
       );
 
-      assertNotNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7210),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7210),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertTrue(resourceLink.isEnabled(), "Should be enabled");
     }
   }
 
@@ -3810,6 +3822,34 @@ class FK7210ActiveIT {
       final var response = api.replaceCertificate(
           defaultReplaceCertificateRequest(),
           certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7210 - Ärendekommunikation skall ej vara tillgänglig!")
+  class Complement {
+
+    @Test
+    @DisplayName("FK7210 - Intyg skall inte kunna ta emot kompletteringsbegäran - 403 (FORBIDDEN)")
+    void shallReturn403IfComplementIsReceived() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7210, FK7472Constants.VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
       );
 
       assertEquals(403, response.getStatusCode().value());

@@ -25,21 +25,25 @@ public class CertificateActionCreate implements CertificateAction {
 
   @Override
   public List<String> reasonNotAllowed(Optional<Certificate> certificate,
-      ActionEvaluation actionEvaluation) {
+      Optional<ActionEvaluation> actionEvaluation) {
     return actionRules.stream()
-        .filter(value -> !value.evaluate(actionEvaluation))
+        .filter(value -> !value.evaluate(certificate, actionEvaluation))
         .map(ActionRule::getReasonForPermissionDenied)
         .toList();
   }
 
   @Override
-  public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
-    if (actionEvaluation.patient() == null || actionEvaluation.user() == null) {
+  public boolean evaluate(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
+    if (actionEvaluation.isEmpty()) {
+      return false;
+    }
+    if (actionEvaluation.get().patient() == null || actionEvaluation.get().user() == null) {
       return false;
     }
 
     return actionRules.stream()
-        .filter(value -> value.evaluate(actionEvaluation))
+        .filter(value -> value.evaluate(certificate, actionEvaluation))
         .count() == actionRules.size();
   }
 
@@ -51,5 +55,17 @@ public class CertificateActionCreate implements CertificateAction {
   @Override
   public String getDescription(Optional<Certificate> certificate) {
     return DESCRIPTION;
+  }
+
+  @Override
+  public boolean include(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
+    return evaluate(certificate, actionEvaluation);
   }
 }

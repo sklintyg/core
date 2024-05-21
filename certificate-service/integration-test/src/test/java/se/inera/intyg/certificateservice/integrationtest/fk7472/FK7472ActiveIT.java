@@ -22,9 +22,12 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.DAN_DENTIST_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.QUESTION_PERIOD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.QUESTION_SYMPTOM_ID;
 import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.FK7472;
 import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.VERSION;
 import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.WRONG_VERSION;
@@ -184,19 +187,33 @@ class FK7472ActiveIT {
     }
 
     @Test
+    @DisplayName("FK7272 - Om användaren har rollen tandläkare ska intygstypen inte returneras i listan av tillgängliga intygstyper")
+    void shallNotReturnFK7210WhenUserIsDoctor() {
+      final var response = api.certificateTypeInfo(
+          customCertificateTypeInfoRequest()
+              .user(DAN_DENTIST_DTO)
+              .build()
+      );
+
+      assertNull(
+          certificateTypeInfo(response.getBody(), FK7472),
+          "Should not contain %s as user is dentist!".formatted(FK7472)
+      );
+    }
+
+    @Test
     @DisplayName("FK7472 - Om aktiverad ska 'Skapa utkast' vara tillgänglig")
     void shallReturnResourceLinkCreateCertificate() {
       final var response = api.certificateTypeInfo(
           defaultCertificateTypeInfoRequest()
       );
 
-      assertNotNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7472),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7472),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertTrue(resourceLink.isEnabled(), "Should be enabled");
     }
 
     @Test
@@ -208,13 +225,12 @@ class FK7472ActiveIT {
               .build()
       );
 
-      assertNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7472),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7472),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertFalse(resourceLink.isEnabled(), "Should be disabled");
     }
 
     @Test
@@ -230,13 +246,12 @@ class FK7472ActiveIT {
               .build()
       );
 
-      assertNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7472),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7472),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertFalse(resourceLink.isEnabled(), "Should be disabled");
     }
 
     @Test
@@ -253,13 +268,12 @@ class FK7472ActiveIT {
               .build()
       );
 
-      assertNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7472),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7472),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertFalse(resourceLink.isEnabled(), "Should be disabled");
     }
 
     @Test
@@ -272,13 +286,12 @@ class FK7472ActiveIT {
               .build()
       );
 
-      assertNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7472),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should not contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7472),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertFalse(resourceLink.isEnabled(), "Should be disabled");
     }
 
     @Test
@@ -291,13 +304,12 @@ class FK7472ActiveIT {
               .build()
       );
 
-      assertNotNull(
-          resourceLink(
-              certificateTypeInfo(response.getBody(), FK7472),
-              ResourceLinkTypeDTO.CREATE_CERTIFICATE
-          ),
-          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
-      );
+      final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), FK7472),
+          ResourceLinkTypeDTO.CREATE_CERTIFICATE);
+
+      assertNotNull(resourceLink,
+          "Should contain %s!".formatted(ResourceLinkTypeDTO.CREATE_CERTIFICATE));
+      assertTrue(resourceLink.isEnabled(), "Should be enabled");
     }
   }
 
@@ -608,14 +620,13 @@ class FK7472ActiveIT {
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
       );
-      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, expectedText))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), expectedText))
       );
 
       final var response = api.updateCertificate(
@@ -626,7 +637,7 @@ class FK7472ActiveIT {
           certificateId(testCertificates)
       );
 
-      assertEquals(expectedText, getValueText(response, questionId));
+      assertEquals(expectedText, getValueText(response, QUESTION_SYMPTOM_ID.id()));
     }
 
     @Test
@@ -658,14 +669,13 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
-      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, expectedText))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), expectedText))
       );
 
       final var response = api.updateCertificate(
@@ -676,7 +686,7 @@ class FK7472ActiveIT {
           certificateId(testCertificates)
       );
 
-      assertEquals(expectedText, getValueText(response, questionId));
+      assertEquals(expectedText, getValueText(response, QUESTION_SYMPTOM_ID.id()));
     }
 
     @Test
@@ -686,14 +696,13 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
-      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, expectedText))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), expectedText))
       );
 
       final var response = api.updateCertificate(
@@ -703,7 +712,7 @@ class FK7472ActiveIT {
           certificateId(testCertificates)
       );
 
-      assertEquals(expectedText, getValueText(response, questionId)
+      assertEquals(expectedText, getValueText(response, QUESTION_SYMPTOM_ID.id())
       );
     }
 
@@ -716,14 +725,13 @@ class FK7472ActiveIT {
               .build()
       );
 
-      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, expectedText))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), expectedText))
       );
 
       final var response = api.updateCertificate(
@@ -734,7 +742,7 @@ class FK7472ActiveIT {
           certificateId(testCertificates)
       );
 
-      assertEquals(expectedText, getValueText(response, questionId));
+      assertEquals(expectedText, getValueText(response, QUESTION_SYMPTOM_ID.id()));
     }
 
     @Test
@@ -746,7 +754,6 @@ class FK7472ActiveIT {
               .build()
       );
 
-      final var questionId = "3";
       final var expectedData = List.of(
           CertificateDataValueDateRange.builder()
               .id("HALVA")
@@ -758,8 +765,8 @@ class FK7472ActiveIT {
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateDateRangeListValue(certificate, questionId, expectedData))
+              QUESTION_PERIOD_ID.id(),
+              updateDateRangeListValue(certificate, QUESTION_PERIOD_ID.id(), expectedData))
       );
 
       final var response = api.updateCertificate(
@@ -770,7 +777,7 @@ class FK7472ActiveIT {
           certificateId(testCertificates)
       );
 
-      assertEquals(expectedData, getValueDateRangeList(response, questionId));
+      assertEquals(expectedData, getValueDateRangeList(response, QUESTION_PERIOD_ID.id()));
     }
 
     @Test
@@ -1638,14 +1645,13 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
-      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, expectedText))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), expectedText))
       );
 
       api.updateCertificate(
@@ -1679,14 +1685,13 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
-      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, expectedText))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), expectedText))
       );
 
       api.updateCertificate(
@@ -2148,14 +2153,13 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
-      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar.";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, expectedText))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), expectedText))
       );
 
       final var response = api.validateCertificate(
@@ -2175,7 +2179,6 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
-      final var questionId = "2";
       final var expectedText = "Ett nytt exempel på ett svar. Ett nytt exempel på ett svar."
           + "Ett nytt exempel på ett svar.  Ett nytt exempel på ett svar."
           + "Ett nytt exempel på ett svar. Ett nytt exempel på ett svar."
@@ -2191,8 +2194,8 @@ class FK7472ActiveIT {
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, expectedText))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), expectedText))
       );
 
       final var response = api.validateCertificate(
@@ -2221,13 +2224,12 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION)
       );
 
-      final var questionId = "2";
       final var certificate = certificate(testCertificates);
 
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, null))
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), null))
       );
 
       final var response = api.validateCertificate(
@@ -2343,12 +2345,10 @@ class FK7472ActiveIT {
               .withAddress("")
       );
 
-      final var questionId = "2";
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, "Text"
-              )
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), "Text")
           )
       );
 
@@ -2384,12 +2384,10 @@ class FK7472ActiveIT {
               .withZipCode("")
       );
 
-      final var questionId = "2";
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, "Text"
-              )
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), "Text")
           )
       );
 
@@ -2425,12 +2423,10 @@ class FK7472ActiveIT {
               .withCity("")
       );
 
-      final var questionId = "2";
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, "Text"
-              )
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), "Text")
           )
       );
 
@@ -2466,12 +2462,10 @@ class FK7472ActiveIT {
               .withPhoneNumber("")
       );
 
-      final var questionId = "2";
       Objects.requireNonNull(
           certificate.getData().put(
-              questionId,
-              updateTextValue(certificate, questionId, "Text"
-              )
+              QUESTION_SYMPTOM_ID.id(),
+              updateTextValue(certificate, QUESTION_SYMPTOM_ID.id(), "Text")
           )
       );
 
@@ -4127,6 +4121,99 @@ class FK7472ActiveIT {
           () -> assertEquals(certificateId(testCertificates),
               relation(renewCertificateResponse(response)).getParent().getCertificateId())
       );
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7472 - Kompletteringsbegäran")
+  class Complement {
+
+    @Test
+    @DisplayName("FK7472 - Intyg skall kunna ta emot kompletteringsbegäran")
+    void shallReturn200IfComplementCanBeReceived() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      assertEquals(200, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7472 - Utkast skall inte kunna ta emot kompletteringsbegäran - 403 (FORBIDDEN) ")
+    void shallReturn403IfCertificateIsDraft() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
+      );
+
+      final var response = api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7472 - Makulerade intyg skall inte kunna ta emot kompletteringsbegäran - 403 (FORBIDDEN)")
+    void shallReturn403IfCertificateIsRevoked() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.revokeCertificate(
+          defaultRevokeCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7472 - Intyg skall inte kunna ta emot kompletteringsbegäran på fel patient - 403 (FORBIDDEN)")
+    void shallReturn403IfComplementIsOfDifferentPatient() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .personId(ALVE_REACT_ALFREDSSON_DTO.getId())
+              .build()
+      );
+
+      assertEquals(403, response.getStatusCode().value());
     }
   }
 }

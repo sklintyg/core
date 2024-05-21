@@ -66,7 +66,8 @@ class ActionRuleWithinAccessScopeTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+        actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -90,7 +91,8 @@ class ActionRuleWithinAccessScopeTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+        actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -127,7 +129,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -148,7 +151,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -169,7 +173,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -190,7 +195,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -218,7 +224,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -239,7 +246,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -260,7 +268,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -281,7 +290,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -309,7 +319,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -330,7 +341,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -351,7 +363,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -372,7 +385,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -411,7 +425,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -432,7 +447,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -453,7 +469,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -474,7 +491,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -501,7 +519,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -519,7 +538,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -536,7 +556,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -563,7 +584,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -581,7 +603,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -598,7 +621,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -637,7 +661,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -658,7 +683,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -679,7 +705,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -700,7 +727,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -727,7 +755,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -745,7 +774,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -762,7 +792,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -789,7 +820,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -807,7 +839,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -824,7 +857,8 @@ class ActionRuleWithinAccessScopeTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            actionRuleWithinAccessScope.evaluate(Optional.of(certificate), actionEvaluation),
+            actionRuleWithinAccessScope.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }

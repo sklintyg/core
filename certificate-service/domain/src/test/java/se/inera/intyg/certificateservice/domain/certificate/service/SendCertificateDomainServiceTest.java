@@ -12,6 +12,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.A
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -39,7 +40,7 @@ class SendCertificateDomainServiceTest {
   void shallThrowExceptionIfUserHasNoAccessToSend() {
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(false).when(certificate).allowTo(SEND, ACTION_EVALUATION);
+    doReturn(false).when(certificate).allowTo(SEND, Optional.of(ACTION_EVALUATION));
 
     assertThrows(CertificateActionForbidden.class,
         () -> sendCertificateDomainService.send(CERTIFICATE_ID, ACTION_EVALUATION)
@@ -51,7 +52,7 @@ class SendCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(SEND, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(SEND, Optional.of(ACTION_EVALUATION));
 
     sendCertificateDomainService.send(CERTIFICATE_ID, ACTION_EVALUATION);
 
@@ -64,7 +65,7 @@ class SendCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(SEND, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(SEND, Optional.of(ACTION_EVALUATION));
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
 
     final var actualCertificate = sendCertificateDomainService.send(CERTIFICATE_ID,
@@ -79,7 +80,7 @@ class SendCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(SEND, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(SEND, Optional.of(ACTION_EVALUATION));
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
 
     sendCertificateDomainService.send(CERTIFICATE_ID, ACTION_EVALUATION);
@@ -100,9 +101,9 @@ class SendCertificateDomainServiceTest {
     final var certificate = mock(Certificate.class);
     final var expectedReason = List.of("expectedReason");
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(false).when(certificate).allowTo(SEND, ACTION_EVALUATION);
+    doReturn(false).when(certificate).allowTo(SEND, Optional.of(ACTION_EVALUATION));
     doReturn(expectedReason).when(certificate)
-        .reasonNotAllowed(SEND, ACTION_EVALUATION);
+        .reasonNotAllowed(SEND, Optional.of(ACTION_EVALUATION));
 
     final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
         () -> sendCertificateDomainService.send(CERTIFICATE_ID, ACTION_EVALUATION));

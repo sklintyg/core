@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.EN_ATTANDEL;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.EN_ATTONDEL;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.EN_FJARDEDEL;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.HALVA;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.HELA;
@@ -29,6 +29,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
@@ -47,13 +48,13 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
   private static final String NAME = "Intyg om tillfällig föräldrapenning";
   private static final String DESCRIPTION = """
       <p className="iu-fw-heading">Vad är Intyg om tillfällig föräldrapenning?</p>
-      <p>När ett barn är sjukt kan den förälder som behöver avstå från sitt arbete för att vårda barnet få tillfällig föräldrapenning. Vårdperioden räknas från den första dagen man får tillfällig föräldrapenning för barnet.</p>
+      <p>När ett barn är sjukt kan den förälder som behöver avstå från sitt arbete för att vårda barnet få tillfällig föräldrapenning. Vårdperioden räknas från och med den första dagen man får tillfällig föräldrapenning för barnet.</p>
       <p className="iu-fw-heading">Förutsättningar för att få tillfällig föräldrapenning:</p>
       <p className="iu-fw-heading">Om barnet är under 12 år</p>
       <p>Från den åttonde kalenderdagen i barnets vårdperiod behöver ett intyg från läkare eller sjuksköterska skickas till Försäkringskassan.</p>
       <p className="iu-fw-heading">Om barnet har fyllt 12 men inte 16 år</p>
-      <p>När föräldern har ett förhandsbesked från Försäkringskassan behöver ett intyg från läkare eller sjuksköterska skickas till Föräkringskassan från och med den åttonde dagen i vårdperioden.\s
-      För barn som är 12-16 år krävs vanligtvis eller läkarutlåtande från första dagen i vårdperioden. Försäkringskassan kan besluta att föräldrar till ett barn som har ett utökat vård- eller tillsynsbehov inte behöver visa läkarutlåtande från första dagen. Det kallas för förhandsbeslut.</p>
+      <p>När föräldern har ett förhandsbesked från Försäkringskassan behöver ett intyg från läkare eller sjuksköterska skickas till Försäkringskassan från och med den åttonde dagen i vårdperioden.\s
+      För barn som är 12-16 år krävs vanligtvis ett läkarutlåtande från första dagen i vårdperioden. Försäkringskassan kan besluta att föräldrar till ett barn som har ett utökat vård- eller tillsynsbehov inte behöver visa läkarutlåtande från första dagen. Det kallas för förhandsbeslut.</p>
       <p className="iu-fw-heading">Om barnet har fyllt 16 men inte 21 år</p>
       <p>För barn som omfattas av LSS (lagen om stöd och service till vissa funktionshindrade) behöver ett intyg från läkare eller sjuksköterska skickas till Försäkringskassan från och med den åttonde dagen i vårdperioden.\s
       Intyget behövs vid tillkommande sjukdom eller en försämring av grundsjukdomen.</p>
@@ -63,13 +64,13 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
       .version(new CertificateVersion(VERSION))
       .build();
   public static final ElementId QUESTION_SYMPTOM_CATEGORY_ID = new ElementId(
-      "KAT_2");
-  public static final ElementId QUESTION_SYMPTOM_ID = new ElementId("2");
-  private static final FieldId QUESTION_SYMPTOM_FIELD_ID = new FieldId("2.1");
+      "KAT_1");
+  public static final ElementId QUESTION_SYMPTOM_ID = new ElementId("55");
+  private static final FieldId QUESTION_SYMPTOM_FIELD_ID = new FieldId("55.1");
 
-  private static final ElementId QUESTION_PERIOD_CATEGORY_ID = new ElementId("KAT_3");
-  public static final ElementId QUESTION_PERIOD_ID = new ElementId("3");
-  private static final String QUESTION_PERIOD_FIELD_ID = "3.1";
+  private static final ElementId QUESTION_PERIOD_CATEGORY_ID = new ElementId("KAT_2");
+  public static final ElementId QUESTION_PERIOD_ID = new ElementId("56");
+  private static final String QUESTION_PERIOD_FIELD_ID = "56.1";
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk7472/schematron/itfp.v1.sch");
 
@@ -90,6 +91,8 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
         .description(DESCRIPTION)
         .activeFrom(activeFrom)
         .availableForCitizen(false)
+        .rolesWithAccess(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+            Role.CARE_ADMIN))
         .recipient(CertificateRecipientFactory.fkassa())
         .certificateActionSpecifications(
             List.of(
@@ -128,6 +131,9 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.SEND_AFTER_SIGN)
+                    .build(),
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.RECEIVE_COMPLEMENT)
                     .build()
             )
         )
@@ -208,7 +214,7 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
 
   private static ElementSpecification questionPeriod() {
     final var dateRanges = List.of(
-        getDateRange(EN_ATTANDEL),
+        getDateRange(EN_ATTONDEL),
         getDateRange(EN_FJARDEDEL),
         getDateRange(HALVA),
         getDateRange(TRE_FJARDEDELAR),
@@ -220,7 +226,7 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
         .includeWhenRenewing(false)
         .configuration(
             ElementConfigurationCheckboxDateRangeList.builder()
-                .name("Jag bedömer att barnet inte bör vårdas i ordinarie tillsynsform")
+                .name("Jag bedömer att barnet inte ska vårdas i ordinarie tillsynsform")
                 .label("Andel av ordinarie tid:")
                 .id(new FieldId(QUESTION_PERIOD_FIELD_ID))
                 .dateRanges(dateRanges)

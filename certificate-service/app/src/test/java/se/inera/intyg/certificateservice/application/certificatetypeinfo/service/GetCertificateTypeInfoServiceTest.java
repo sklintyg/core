@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.certificatetypeinfo.servic
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -13,7 +14,9 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +33,8 @@ import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.user.model.User;
 
 @ExtendWith(MockitoExtension.class)
 class GetCertificateTypeInfoServiceTest {
@@ -39,15 +44,23 @@ class GetCertificateTypeInfoServiceTest {
   private static final List<CertificateAction> CERTIFICATE_ACTIONS = List.of(
       mock(CertificateAction.class)
   );
+  private static final List<Role> ROLES = List.of(
+      Role.DOCTOR
+  );
   private static final ActionEvaluation ACTION_EVALUATION = ActionEvaluation.builder().build();
+
   @Mock
   CertificateTypeInfoValidator certificateTypeInfoValidator;
+
   @Mock
   CertificateTypeInfoConverter certificateTypeInfoConverter;
+
   @Mock
   CertificateModelRepository certificateModelRepository;
+
   @Mock
   ActionEvaluationFactory actionEvaluationFactory;
+
   @InjectMocks
   GetCertificateTypeInfoService getCertificateTypeInfoService;
 
@@ -93,7 +106,7 @@ class GetCertificateTypeInfoServiceTest {
         )
         .build();
 
-    final var certificateModels = List.of(getCertifiateModel(), getCertifiateModel());
+    final var certificateModels = List.of(getCertificateModel(), getCertificateModel());
 
     when(actionEvaluationFactory.create(
         certificateTypeInfoRequest.getPatient(),
@@ -116,10 +129,56 @@ class GetCertificateTypeInfoServiceTest {
     assertEquals(expectedResult, result);
   }
 
+  @Test
+  void shouldFilterTypeIfRoleIsNotSetOnModel() {
+    final var certificateTypeInfoDTO1 = CertificateTypeInfoDTO.builder().type(TYPE_1).build();
+    final var expectedResult = GetCertificateTypeInfoResponse.builder()
+        .list(
+            List.of(
+                certificateTypeInfoDTO1
+            )
+        )
+        .build();
+    final var certificateModels = List.of(
+        CertificateModel.builder()
+            .rolesWithAccess(ROLES)
+            .certificateActionSpecifications(Collections.emptyList())
+            .build(),
+        CertificateModel.builder()
+            .rolesWithAccess(Collections.emptyList())
+            .certificateActionSpecifications(Collections.emptyList())
+            .build()
+    );
+    when(certificateModelRepository.findAllActive()).thenReturn(certificateModels);
+    when(actionEvaluationFactory.create(
+        certificateTypeInfoRequest.getPatient(),
+        certificateTypeInfoRequest.getUser(),
+        certificateTypeInfoRequest.getUnit(),
+        certificateTypeInfoRequest.getCareUnit(),
+        certificateTypeInfoRequest.getCareProvider()
+    )).thenReturn(
+        ActionEvaluation.builder()
+            .user(User.builder()
+                .role(Role.DOCTOR)
+                .build()
+            )
+            .build()
+    );
+    when(certificateTypeInfoConverter.convert(any(), any(), any()))
+        .thenReturn(certificateTypeInfoDTO1);
+
+    final var result = getCertificateTypeInfoService.getActiveCertificateTypeInfos(
+        certificateTypeInfoRequest);
+
+    assertEquals(expectedResult, result);
+  }
+
   @NotNull
-  private static CertificateModel getCertifiateModel() {
+  private static CertificateModel getCertificateModel() {
     final var certificateModel = mock(CertificateModel.class);
-    doReturn(CERTIFICATE_ACTIONS).when(certificateModel).actions(ACTION_EVALUATION);
+    doReturn(CERTIFICATE_ACTIONS).when(certificateModel)
+        .actionsInclude(Optional.of(ACTION_EVALUATION));
+    doReturn(true).when(certificateModel).activeForUserRole(ACTION_EVALUATION);
     return certificateModel;
   }
 }

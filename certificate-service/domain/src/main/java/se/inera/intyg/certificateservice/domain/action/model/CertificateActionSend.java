@@ -20,7 +20,7 @@ public class CertificateActionSend implements CertificateAction {
 
   @Override
   public List<String> reasonNotAllowed(Optional<Certificate> certificate,
-      ActionEvaluation actionEvaluation) {
+      Optional<ActionEvaluation> actionEvaluation) {
     return actionRules.stream()
         .filter(value -> !value.evaluate(certificate, actionEvaluation))
         .map(ActionRule::getReasonForPermissionDenied)
@@ -33,7 +33,8 @@ public class CertificateActionSend implements CertificateAction {
   }
 
   @Override
-  public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
+  public boolean evaluate(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
     return actionRules.stream()
         .filter(value -> value.evaluate(certificate, actionEvaluation))
         .count() == actionRules.size();
@@ -50,7 +51,8 @@ public class CertificateActionSend implements CertificateAction {
   }
 
   @Override
-  public String getBody(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
+  public String getBody(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
     return BODY;
   }
 }

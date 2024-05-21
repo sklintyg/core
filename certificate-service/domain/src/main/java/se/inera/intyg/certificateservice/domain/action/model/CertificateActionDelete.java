@@ -20,7 +20,7 @@ public class CertificateActionDelete implements CertificateAction {
 
   @Override
   public List<String> reasonNotAllowed(Optional<Certificate> certificate,
-      ActionEvaluation actionEvaluation) {
+      Optional<ActionEvaluation> actionEvaluation) {
     return actionRules.stream()
         .filter(value -> !value.evaluate(certificate, actionEvaluation))
         .map(ActionRule::getReasonForPermissionDenied)
@@ -33,7 +33,8 @@ public class CertificateActionDelete implements CertificateAction {
   }
 
   @Override
-  public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
+  public boolean evaluate(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
     return actionRules.stream()
         .filter(value -> value.evaluate(certificate, actionEvaluation))
         .count() == actionRules.size();

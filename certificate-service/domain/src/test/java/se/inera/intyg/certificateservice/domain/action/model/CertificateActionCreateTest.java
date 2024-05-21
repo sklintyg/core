@@ -9,11 +9,15 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ANNA_SJUKSKOTERKSA;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.BERTIL_BARNMORSKA;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.DAN_DENTIST;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 
@@ -57,7 +61,8 @@ class CertificateActionCreateTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
   }
@@ -70,7 +75,8 @@ class CertificateActionCreateTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
   }
@@ -87,7 +93,8 @@ class CertificateActionCreateTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
   }
@@ -100,7 +107,8 @@ class CertificateActionCreateTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
   }
@@ -113,7 +121,8 @@ class CertificateActionCreateTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
   }
@@ -126,7 +135,8 @@ class CertificateActionCreateTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
   }
@@ -137,7 +147,8 @@ class CertificateActionCreateTest {
         .user(AJLA_DOKTOR)
         .build();
 
-    final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
   }
@@ -148,7 +159,8 @@ class CertificateActionCreateTest {
         .patient(ATHENA_REACT_ANDERSSON)
         .build();
 
-    final var actualResult = certificateActionCreate.evaluate(actionEvaluation);
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
   }
@@ -161,7 +173,8 @@ class CertificateActionCreateTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionCreate.reasonNotAllowed(actionEvaluation);
+    final var actualResult = certificateActionCreate.reasonNotAllowed(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertFalse(actualResult.isEmpty());
   }
@@ -174,8 +187,109 @@ class CertificateActionCreateTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionCreate.reasonNotAllowed(actionEvaluation);
+    final var actualResult = certificateActionCreate.reasonNotAllowed(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult.isEmpty());
+  }
+
+  @Nested
+  class EvaluateActionRuleRole {
+
+    @Test
+    void shallReturnFalseIfDentist() {
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .user(DAN_DENTIST)
+          .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+          .build();
+
+      final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+          Optional.of(actionEvaluation));
+
+      assertFalse(actualResult);
+    }
+
+    @Test
+    void shallReturnTrueIfCareAdmin() {
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .user(ALVA_VARDADMINISTRATOR)
+          .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+          .build();
+
+      final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+          Optional.of(actionEvaluation));
+
+      assertTrue(actualResult);
+    }
+
+    @Test
+    void shallReturnTrueIfDoctor() {
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .user(AJLA_DOKTOR)
+          .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+          .build();
+
+      final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+          Optional.of(actionEvaluation));
+
+      assertTrue(actualResult);
+    }
+
+    @Test
+    void shallReturnTrueIfNurse() {
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .user(ANNA_SJUKSKOTERKSA)
+          .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+          .build();
+
+      final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+          Optional.of(actionEvaluation));
+
+      assertTrue(actualResult);
+    }
+
+    @Test
+    void shallReturnTrueIfMidwife() {
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .user(BERTIL_BARNMORSKA)
+          .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+          .build();
+
+      final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+          Optional.of(actionEvaluation));
+
+      assertTrue(actualResult);
+    }
+  }
+
+  @Test
+  void shallAlwaysReturnIncludeTrue() {
+    final var actionEvaluation = ActionEvaluation.builder().build();
+    assertTrue(certificateActionCreate.include(Optional.empty(), Optional.of(actionEvaluation)));
+  }
+
+  @Test
+  void shallReturnEnabledTrueIfEvalutateTrue() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ANONYMA_REACT_ATTILA)
+        .user(AJLA_DOKTOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+        .build();
+    assertTrue(certificateActionCreate.isEnabled(Optional.empty(), Optional.of(actionEvaluation)));
+  }
+
+  @Test
+  void shallReturnEnabledFalseIfEvalutateFalse() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ANONYMA_REACT_ATTILA)
+        .user(ALVA_VARDADMINISTRATOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+        .build();
+    assertFalse(certificateActionCreate.isEnabled(Optional.empty(), Optional.of(actionEvaluation)));
   }
 }

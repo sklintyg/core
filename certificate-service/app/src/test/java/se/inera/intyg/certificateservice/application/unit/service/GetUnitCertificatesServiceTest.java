@@ -97,7 +97,7 @@ class GetUnitCertificatesServiceTest {
 
     final var certificateAction = mock(CertificateAction.class);
     final List<CertificateAction> certificateActions = List.of(certificateAction);
-    doReturn(certificateActions).when(certificate).actions(actionEvaluation);
+    doReturn(certificateActions).when(certificate).actionsInclude(Optional.of(actionEvaluation));
 
     doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction,
         Optional.of(certificate), actionEvaluation);

@@ -14,25 +14,25 @@
 
   <iso:pattern id="intyg">
     <iso:rule context="//rg:intyg">
-      <iso:assert test="count(gn:svar[@id='2']) = 1">
+      <iso:assert test="count(gn:svar[@id='55']) = 1">
         Måsta ange ett 'Barnets diagnos eller symtom' svar
       </iso:assert>
-      <iso:assert test="count(gn:svar[@id='3']) = 1">
+      <iso:assert test="count(gn:svar[@id='56']) le 5 and count(gn:svar[@id='56']) ge 1">
         Måste ange ett 'Period som barnet inte bör vårdas i ordinarie tillsynsform' svar
       </iso:assert>
     </iso:rule>
   </iso:pattern>
 
-  <iso:pattern id="q2">
-    <iso:rule context="//gn:svar[@id='2']">
-      <iso:assert test="count(gn:delsvar[@id='2.1']) = 1">
+  <iso:pattern id="q55">
+    <iso:rule context="//gn:svar[@id='55']">
+      <iso:assert test="count(gn:delsvar[@id='55.1']) = 1">
         Ett 'Barnets diagnos eller symtom' svar måste ha ett delsvar
       </iso:assert>
     </iso:rule>
   </iso:pattern>
 
-  <iso:pattern id="q2.1">
-    <iso:rule context="//gn:delsvar[@id='2.1']">
+  <iso:pattern id="q55.1">
+    <iso:rule context="//gn:delsvar[@id='55.1']">
       <iso:let name="textValue" value="string(.)"/>
       <iso:assert test="normalize-space($textValue) != ''">
         Ange ett svar för frågan "Diagnos eller symtom".
@@ -43,43 +43,40 @@
     </iso:rule>
   </iso:pattern>
 
-    <iso:pattern id="q.3">
-        <iso:rule context="//gn:svar[@id='3']">
+    <iso:pattern id="q56">
+        <iso:rule context="//gn:svar[@id='56']">
+            <iso:assert test="not(preceding-sibling::gn:svar[@id='56']/gn:delsvar[@id='56.1']/tp:cv/tp:code/normalize-space() = normalize-space(gn:delsvar[@id='56.1']/tp:cv/tp:code))">
+                'Ordinarie tillsynsform' (56.1) får besvaras med flera olika koder (KV_FKMU_0009) men varje kod får bara förekomma en gång.
+            </iso:assert>
             <iso:assert test="count(gn:instans) = 1">
                 Svaret för frågan "Period som barnet inte bör vårdas i ordinarie tillsynsform" måste ha ett instansnummer.
             </iso:assert>
-            <iso:assert test="count(gn:delsvar[@id='3.1']) = 1">
+            <iso:assert test="count(gn:delsvar[@id='56.1']) = 1">
                 Svaret för frågan "Period som barnet inte bör vårdas i ordinarie tillsynsform" måste ha en 'grad'.
             </iso:assert>
-            <iso:assert test="count(gn:delsvar[@id='3.2']) = 1">
+            <iso:assert test="count(gn:delsvar[@id='56.2']) = 1">
                 Svaret för frågan "Period som barnet inte bör vårdas i ordinarie tillsynsform" måste ha en 'period'.
             </iso:assert>
-            <iso:let name="cstart" value="normalize-space(gn:delsvar[@id='3.2']/tp:datePeriod/tp:start)"/>
-            <iso:let name="cend" value="normalize-space(gn:delsvar[@id='3.2']/tp:datePeriod/tp:end)"/>
-            <iso:assert test="not(preceding-sibling::gn:svar[@id='3']/gn:delsvar[@id='3.2']/tp:datePeriod/tp:start[normalize-space(.) lt $cend and normalize-space(../tp:end) gt $cstart])">
+            <iso:let name="cstart" value="normalize-space(gn:delsvar[@id='56.2']/tp:datePeriod/tp:start)"/>
+            <iso:let name="cend" value="normalize-space(gn:delsvar[@id='56.2']/tp:datePeriod/tp:end)"/>
+            <iso:assert test="not(preceding-sibling::gn:svar[@id='56']/gn:delsvar[@id='56.2']/tp:datePeriod/tp:start[normalize-space(.) lt $cend and normalize-space(../tp:end) gt $cstart])">
                 Två 'perioder' kan inte vara överlappande.
             </iso:assert>
         </iso:rule>
 
-        <iso:rule context="//gn:delsvar[@id='3.1']">
+        <iso:rule context="//gn:delsvar[@id='56.1']">
             <iso:extends rule="cv"/>
             <iso:assert test="tp:cv/tp:codeSystem = 'KV_FKMU_0009'">
                 'codeSystem' måste vara 'KV_FKMU_0009'.
             </iso:assert>
-            <iso:assert test="matches(normalize-space(tp:cv/tp:code), '^(EN_ATTANDEL|HELA|TRE_FJARDEDELAR|HALVA|EN_FJARDEDEL)$')">
-                'Ordinarie tillsynsform' kan ha ett av värdena EN_ATTANDEL, HELA, TRE_FJARDEDELAR, HALVA, EN_FJARDEDEL.
-            </iso:assert>
-        </iso:rule>
-
-        <iso:rule context="//gn:svar[@id='3']">
-            <iso:assert test="not(preceding-sibling::gn:svar[@id='3']/gn:delsvar[@id='3.1']/tp:cv/tp:code/normalize-space() = normalize-space(gn:delsvar[@id='3.1']/tp:cv/tp:code))">
-                'Ordinarie tillsynsform' (3.1) får besvaras med flera olika koder (KV_FKMU_0009) men varje kod får bara förekomma en gång.
+            <iso:assert test="matches(normalize-space(tp:cv/tp:code), '^(EN_ATTONDEL|HELA|TRE_FJARDEDELAR|HALVA|EN_FJARDEDEL)$')">
+                'Ordinarie tillsynsform' kan ha ett av värdena EN_ATTONDEL, HELA, TRE_FJARDEDELAR, HALVA, EN_FJARDEDEL.
             </iso:assert>
         </iso:rule>
     </iso:pattern>
 
-    <iso:pattern id="q3.2">
-      <iso:rule context="//gn:delsvar[@id='3.2']">
+    <iso:pattern id="q56.2">
+      <iso:rule context="//gn:delsvar[@id='56.2']">
         <iso:extends rule="period"/>
       </iso:rule>
     </iso:pattern>

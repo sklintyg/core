@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REFERENCE;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -60,7 +61,7 @@ class CreateCertificateDomainServiceTest {
       doReturn(certificateModel).when(certificateModelRepository).getById(CERTIFICATE_MODEL_ID);
       doReturn(certificate).when(certificateRepository).create(certificateModel);
       doReturn(true).when(certificateModel)
-          .allowTo(CertificateActionType.CREATE, ACTION_EVALUATION);
+          .allowTo(CertificateActionType.CREATE, Optional.of(ACTION_EVALUATION));
       doReturn(certificate).when(certificateRepository).save(certificate);
     }
 
@@ -91,7 +92,8 @@ class CreateCertificateDomainServiceTest {
     @Test
     void shallValidateIfAllowedToCreateCertificate() {
       createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION, null);
-      verify(certificateModel).allowTo(CertificateActionType.CREATE, ACTION_EVALUATION);
+      verify(certificateModel).allowTo(CertificateActionType.CREATE,
+          Optional.of(ACTION_EVALUATION));
     }
 
     @Test
@@ -121,7 +123,7 @@ class CreateCertificateDomainServiceTest {
     void setUp() {
       doReturn(certificateModel).when(certificateModelRepository).getById(CERTIFICATE_MODEL_ID);
       doReturn(false).when(certificateModel)
-          .allowTo(CertificateActionType.CREATE, ACTION_EVALUATION);
+          .allowTo(CertificateActionType.CREATE, Optional.of(ACTION_EVALUATION));
     }
 
     @Test
@@ -135,7 +137,7 @@ class CreateCertificateDomainServiceTest {
     void shallIncludeReasonNotAllowedToException() {
       final var expectedReason = List.of("expectedReason");
       doReturn(expectedReason).when(certificateModel)
-          .reasonNotAllowed(CertificateActionType.CREATE, ACTION_EVALUATION);
+          .reasonNotAllowed(CertificateActionType.CREATE, Optional.of(ACTION_EVALUATION));
       final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
           () -> createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION, null)
       );

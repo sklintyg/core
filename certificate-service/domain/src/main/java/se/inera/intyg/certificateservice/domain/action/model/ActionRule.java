@@ -5,11 +5,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 
 public interface ActionRule {
 
-  default boolean evaluate(ActionEvaluation actionEvaluation) {
-    return evaluate(Optional.empty(), actionEvaluation);
-  }
-
-  boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation);
+  boolean evaluate(Optional<Certificate> certificate, Optional<ActionEvaluation> actionEvaluation);
 
   default String getReasonForPermissionDenied() {
     return "Du saknar behörighet för den begärda åtgärden."

@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.READ;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,14 +50,14 @@ class ValidateCertificateDomainServiceTest {
 
   @Test
   void shallValidateIfAllowedToReadCertificate() {
-    doReturn(true).when(certificate).allowTo(READ, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
     validateCertificateDomainService.validate(CERTIFICATE_ID, ELEMENT_DATA_LIST, ACTION_EVALUATION);
-    verify(certificate).allowTo(READ, ACTION_EVALUATION);
+    verify(certificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
   }
 
   @Test
   void shallThrowIfNotAllowedToRead() {
-    doReturn(false).when(certificate).allowTo(READ, ACTION_EVALUATION);
+    doReturn(false).when(certificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
     assertThrows(CertificateActionForbidden.class,
         () -> validateCertificateDomainService.validate(CERTIFICATE_ID, ELEMENT_DATA_LIST,
             ACTION_EVALUATION)
@@ -67,7 +68,7 @@ class ValidateCertificateDomainServiceTest {
   void shallReturnValidationResult() {
     final var expectedResult = ValidationResult.builder().build();
 
-    doReturn(true).when(certificate).allowTo(READ, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
     doReturn(expectedResult).when(certificate).validate(ELEMENT_DATA_LIST);
 
     final var actualResult = validateCertificateDomainService.validate(CERTIFICATE_ID,
@@ -79,7 +80,7 @@ class ValidateCertificateDomainServiceTest {
   void shallPublicValidateCertificateEvent() {
     final var expectedResult = ValidationResult.builder().build();
 
-    doReturn(true).when(certificate).allowTo(READ, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
     doReturn(expectedResult).when(certificate).validate(ELEMENT_DATA_LIST);
 
     validateCertificateDomainService.validate(CERTIFICATE_ID, ELEMENT_DATA_LIST, ACTION_EVALUATION);
@@ -99,9 +100,9 @@ class ValidateCertificateDomainServiceTest {
   @Test
   void shallIncludeReasonNotAllowedToException() {
     final var expectedReason = List.of("expectedReason");
-    doReturn(false).when(certificate).allowTo(READ, ACTION_EVALUATION);
+    doReturn(false).when(certificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
     doReturn(expectedReason).when(certificate)
-        .reasonNotAllowed(READ, ACTION_EVALUATION);
+        .reasonNotAllowed(READ, Optional.of(ACTION_EVALUATION));
 
     final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
         () -> validateCertificateDomainService.validate(CERTIFICATE_ID, ELEMENT_DATA_LIST,

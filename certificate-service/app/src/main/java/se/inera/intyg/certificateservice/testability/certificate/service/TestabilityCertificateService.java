@@ -107,7 +107,7 @@ public class TestabilityCertificateService {
         .certificate(
             certificateConverter.convert(
                 certificate,
-                certificate.actions(actionEvaluation).stream()
+                certificate.actionsInclude(Optional.of(actionEvaluation)).stream()
                     .map(certificateAction ->
                         resourceLinkConverter.convert(
                             certificateAction,

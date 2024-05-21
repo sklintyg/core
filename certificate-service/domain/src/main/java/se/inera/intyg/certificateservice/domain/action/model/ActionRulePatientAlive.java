@@ -6,8 +6,12 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 public class ActionRulePatientAlive implements ActionRule {
 
   @Override
-  public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
-    return !actionEvaluation.patient().deceased().value();
+  public boolean evaluate(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
+    return actionEvaluation.filter(
+            evaluation -> !evaluation.patient().deceased().value()
+        )
+        .isPresent();
   }
 
   @Override

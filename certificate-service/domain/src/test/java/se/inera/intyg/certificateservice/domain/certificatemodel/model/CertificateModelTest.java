@@ -13,6 +13,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementS
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +23,8 @@ import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.user.model.User;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateModelTest {
@@ -85,7 +88,6 @@ class CertificateModelTest {
     @Test
     void shallReturnEmptyActionsIfNoActionsExistInSpecification() {
       final var expectedActions = Collections.emptyList();
-      final var actionEvaluation = ActionEvaluation.builder().build();
 
       final var certificateModel = CertificateModel.builder()
           .certificateActionSpecifications(
@@ -93,7 +95,7 @@ class CertificateModelTest {
           )
           .build();
 
-      final var actualActions = certificateModel.actions(actionEvaluation);
+      final var actualActions = certificateModel.actions();
 
       assertEquals(expectedActions, actualActions);
     }
@@ -124,9 +126,10 @@ class CertificateModelTest {
             .when(() -> CertificateActionFactory.create(certificateActionSpecification))
             .thenReturn(certificateAction);
 
-        doReturn(true).when(certificateAction).evaluate(actionEvaluation);
+        doReturn(true).when(certificateAction)
+            .evaluate(Optional.empty(), Optional.of(actionEvaluation));
 
-        final var actualActions = certificateModel.actions(actionEvaluation);
+        final var actualActions = certificateModel.actions(Optional.of(actionEvaluation));
 
         assertEquals(expectedActions, actualActions);
       }
@@ -154,9 +157,10 @@ class CertificateModelTest {
             .when(() -> CertificateActionFactory.create(certificateActionSpecification))
             .thenReturn(certificateAction);
 
-        doReturn(false).when(certificateAction).evaluate(actionEvaluation);
+        doReturn(false).when(certificateAction)
+            .evaluate(Optional.empty(), Optional.of(actionEvaluation));
 
-        final var actualActions = certificateModel.actions(actionEvaluation);
+        final var actualActions = certificateModel.actions(Optional.of(actionEvaluation));
 
         assertEquals(expectedActions, actualActions);
       }
@@ -183,7 +187,7 @@ class CertificateModelTest {
             .when(() -> CertificateActionFactory.create(certificateActionSpecification))
             .thenReturn(null);
 
-        final var actualActions = certificateModel.actions(actionEvaluation);
+        final var actualActions = certificateModel.actions(Optional.of(actionEvaluation));
 
         assertEquals(expectedActions, actualActions);
       }
@@ -200,7 +204,116 @@ class CertificateModelTest {
           )
           .build();
 
-      final var actualActions = certificateModel.actions(actionEvaluation);
+      final var actualActions = certificateModel.actions(Optional.of(actionEvaluation));
+
+      assertEquals(expectedActions, actualActions);
+    }
+  }
+
+  @Nested
+  class TestActionsIncludeWithEvaluation {
+
+    @Test
+    void shallReturnActionIfExistsAndEvaluateTrue() {
+      final var certificateActionSpecification = CertificateActionSpecification.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var expectedActions = List.of(certificateAction);
+
+      final var certificateModel = CertificateModel.builder()
+          .certificateActionSpecifications(
+              List.of(
+                  certificateActionSpecification
+              )
+          )
+          .build();
+
+      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
+          CertificateActionFactory.class)) {
+
+        certificateActionFactory
+            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
+            .thenReturn(certificateAction);
+
+        doReturn(true).when(certificateAction)
+            .include(Optional.empty(), Optional.of(actionEvaluation));
+
+        final var actualActions = certificateModel.actionsInclude(Optional.of(actionEvaluation));
+
+        assertEquals(expectedActions, actualActions);
+      }
+    }
+
+    @Test
+    void shallNotReturnActionIfExistsAndEvaluateFalse() {
+      final var certificateActionSpecification = CertificateActionSpecification.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var expectedActions = Collections.emptyList();
+
+      final var certificateModel = CertificateModel.builder()
+          .certificateActionSpecifications(
+              List.of(
+                  certificateActionSpecification
+              )
+          )
+          .build();
+
+      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
+          CertificateActionFactory.class)) {
+
+        certificateActionFactory
+            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
+            .thenReturn(certificateAction);
+
+        doReturn(false).when(certificateAction)
+            .include(Optional.empty(), Optional.of(actionEvaluation));
+
+        final var actualActions = certificateModel.actionsInclude(Optional.of(actionEvaluation));
+
+        assertEquals(expectedActions, actualActions);
+      }
+    }
+
+    @Test
+    void shallReturnEmptyActionsIfNoActionExistsInFactory() {
+      final var certificateActionSpecification = CertificateActionSpecification.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var expectedActions = Collections.emptyList();
+
+      final var certificateModel = CertificateModel.builder()
+          .certificateActionSpecifications(
+              List.of(
+                  certificateActionSpecification
+              )
+          )
+          .build();
+
+      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
+          CertificateActionFactory.class)) {
+
+        certificateActionFactory
+            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
+            .thenReturn(null);
+
+        final var actualActions = certificateModel.actionsInclude(Optional.of(actionEvaluation));
+
+        assertEquals(expectedActions, actualActions);
+      }
+    }
+
+    @Test
+    void shallReturnEmptyActionsIfNoActionsExistInSpecification() {
+      final var expectedActions = Collections.emptyList();
+      final var actionEvaluation = ActionEvaluation.builder().build();
+
+      final var certificateModel = CertificateModel.builder()
+          .certificateActionSpecifications(
+              Collections.emptyList()
+          )
+          .build();
+
+      final var actualActions = certificateModel.actionsInclude(Optional.of(actionEvaluation));
 
       assertEquals(expectedActions, actualActions);
     }
@@ -231,10 +344,11 @@ class CertificateModelTest {
             .thenReturn(certificateAction);
 
         doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
-        doReturn(true).when(certificateAction).evaluate(actionEvaluation);
+        doReturn(true).when(certificateAction)
+            .evaluate(Optional.empty(), Optional.of(actionEvaluation));
 
         final var actualResult = certificateModel.allowTo(CertificateActionType.CREATE,
-            actionEvaluation);
+            Optional.of(actionEvaluation));
 
         assertTrue(actualResult, "Expected allowTo to return 'true'");
       }
@@ -262,10 +376,11 @@ class CertificateModelTest {
             .thenReturn(certificateAction);
 
         doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
-        doReturn(false).when(certificateAction).evaluate(actionEvaluation);
+        doReturn(false).when(certificateAction)
+            .evaluate(Optional.empty(), Optional.of(actionEvaluation));
 
         final var actualResult = certificateModel.allowTo(CertificateActionType.CREATE,
-            actionEvaluation);
+            Optional.of(actionEvaluation));
 
         assertFalse(actualResult, "Expected allowTo to return 'false'");
       }
@@ -293,7 +408,7 @@ class CertificateModelTest {
             .thenReturn(certificateAction);
 
         final var actualResult = certificateModel.allowTo(CertificateActionType.CREATE,
-            actionEvaluation);
+            Optional.of(actionEvaluation));
 
         assertFalse(actualResult, "Expected allowTo to return 'false'");
       }
@@ -326,10 +441,10 @@ class CertificateModelTest {
 
         doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
         doReturn(Collections.emptyList()).when(certificateAction)
-            .reasonNotAllowed(actionEvaluation);
+            .reasonNotAllowed(Optional.empty(), Optional.of(actionEvaluation));
 
         final var actualResult = certificateModel.reasonNotAllowed(CertificateActionType.CREATE,
-            actionEvaluation);
+            Optional.of(actionEvaluation));
 
         assertTrue(actualResult.isEmpty(), "Expected reasonNotAllowed to return empty list");
       }
@@ -358,10 +473,11 @@ class CertificateModelTest {
             .thenReturn(certificateAction);
 
         doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
-        doReturn(expectedReasons).when(certificateAction).reasonNotAllowed(actionEvaluation);
+        doReturn(expectedReasons).when(certificateAction)
+            .reasonNotAllowed(Optional.empty(), Optional.of(actionEvaluation));
 
         final var actualResult = certificateModel.reasonNotAllowed(CertificateActionType.CREATE,
-            actionEvaluation);
+            Optional.of(actionEvaluation));
 
         assertEquals(expectedReasons, actualResult);
       }
@@ -535,6 +651,44 @@ class CertificateModelTest {
       assertThrows(IllegalArgumentException.class,
           () -> certificateModel.elementSpecification(elementId)
       );
+    }
+  }
+
+  @Nested
+  class TestActiveForUserRole {
+
+    @Test
+    void shouldReturnTrueIfRoleIsInModel() {
+      final var certificateModel = CertificateModel.builder()
+          .rolesWithAccess(List.of(Role.DOCTOR, Role.MIDWIFE))
+          .build();
+
+      final var actionEvaluation = ActionEvaluation.builder()
+          .user(
+              User.builder()
+                  .role(Role.DOCTOR)
+                  .build()
+          )
+          .build();
+
+      assertTrue(certificateModel.activeForUserRole(actionEvaluation));
+    }
+
+    @Test
+    void shouldReturnFalseIfRoleIsNotInModel() {
+      final var certificateModel = CertificateModel.builder()
+          .rolesWithAccess(List.of(Role.DOCTOR, Role.MIDWIFE))
+          .build();
+
+      final var actionEvaluation = ActionEvaluation.builder()
+          .user(
+              User.builder()
+                  .role(Role.NURSE)
+                  .build()
+          )
+          .build();
+
+      assertFalse(certificateModel.activeForUserRole(actionEvaluation));
     }
   }
 }
