@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.message.dto.AnswerDTO.AnswerBuilder;
+import se.inera.intyg.certificateservice.application.message.dto.AnswerDTO.AnswerDTOBuilder;
 
-@JsonDeserialize(builder = AnswerBuilder.class)
+@JsonDeserialize(builder = AnswerDTOBuilder.class)
 @Value
 @Builder
 public class AnswerDTO {
@@ -19,7 +19,7 @@ public class AnswerDTO {
   String[] contactInfo;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class AnswerBuilder {
+  public static class AnswerDTOBuilder {
 
   }
 }

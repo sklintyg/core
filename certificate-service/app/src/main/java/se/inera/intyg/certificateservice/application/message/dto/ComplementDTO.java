@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.message.dto.ComplementDTO.ComplementBuilder;
+import se.inera.intyg.certificateservice.application.message.dto.ComplementDTO.ComplementDTOBuilder;
 
-@JsonDeserialize(builder = ComplementBuilder.class)
+@JsonDeserialize(builder = ComplementDTOBuilder.class)
 @Value
 @Builder
 public class ComplementDTO {
@@ -17,7 +17,7 @@ public class ComplementDTO {
   String message;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class ComplementBuilder {
+  public static class ComplementDTOBuilder {
 
   }
 }

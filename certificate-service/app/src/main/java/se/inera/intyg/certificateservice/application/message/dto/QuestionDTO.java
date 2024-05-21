@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationDTO;
-import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO.QuestionBuilder;
+import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO.QuestionDTOBuilder;
 
-@JsonDeserialize(builder = QuestionBuilder.class)
+@JsonDeserialize(builder = QuestionDTOBuilder.class)
 @Value
 @Builder
 public class QuestionDTO {
@@ -32,7 +32,7 @@ public class QuestionDTO {
   String certificateId;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class QuestionBuilder {
+  public static class QuestionDTOBuilder {
 
   }
 }

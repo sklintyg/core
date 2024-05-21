@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.message.dto.ReminderDTO.ReminderBuilder;
+import se.inera.intyg.certificateservice.application.message.dto.ReminderDTO.ReminderDTOBuilder;
 
-@JsonDeserialize(builder = ReminderBuilder.class)
+@JsonDeserialize(builder = ReminderDTOBuilder.class)
 @Value
 @Builder
 public class ReminderDTO {
@@ -18,7 +18,7 @@ public class ReminderDTO {
   LocalDateTime sent;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class ReminderBuilder {
+  public static class ReminderDTOBuilder {
 
   }
 }
