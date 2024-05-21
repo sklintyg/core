@@ -267,8 +267,28 @@ class CertificateActionCreateTest {
   }
 
   @Test
-  void shallAlwaysReturnTrue() {
+  void shallAlwaysReturnIncludeTrue() {
     final var actionEvaluation = ActionEvaluation.builder().build();
     assertTrue(certificateActionCreate.include(Optional.empty(), Optional.of(actionEvaluation)));
+  }
+
+  @Test
+  void shallReturnEnabledTrueIfEvalutateTrue() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ANONYMA_REACT_ATTILA)
+        .user(AJLA_DOKTOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+        .build();
+    assertTrue(certificateActionCreate.isEnabled(Optional.empty(), Optional.of(actionEvaluation)));
+  }
+
+  @Test
+  void shallReturnEnabledFalseIfEvalutateFalse() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ANONYMA_REACT_ATTILA)
+        .user(ALVA_VARDADMINISTRATOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+        .build();
+    assertFalse(certificateActionCreate.isEnabled(Optional.empty(), Optional.of(actionEvaluation)));
   }
 }

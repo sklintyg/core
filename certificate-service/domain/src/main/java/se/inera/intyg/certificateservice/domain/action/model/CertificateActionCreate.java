@@ -62,4 +62,10 @@ public class CertificateActionCreate implements CertificateAction {
       Optional<ActionEvaluation> actionEvaluation) {
     return true;
   }
+
+  @Override
+  public boolean isEnabled(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
+    return evaluate(certificate, actionEvaluation);
+  }
 }
