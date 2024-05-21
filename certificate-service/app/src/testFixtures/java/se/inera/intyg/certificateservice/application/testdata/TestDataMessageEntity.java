@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.application.testdata;
 
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateEntity.CERTIFICATE_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateEntity.certificateEntityBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.COMPLEMENT_QUESTION_ID_ONE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.COMPLEMENT_TEXT_ONE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTACT_INFO;
@@ -68,6 +68,6 @@ public class TestDataMessageEntity {
                     .build()
             )
         )
-        .certificate(CERTIFICATE_ENTITY);
+        .certificate(certificateEntityBuilder().build());
   }
 }
