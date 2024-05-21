@@ -48,6 +48,13 @@ class ResourceLinkTypeDTOTest {
     }
 
     @Test
+    void shallReturnCertificateActionTypeSendAfterSign() {
+      assertEquals(CertificateActionType.SEND_AFTER_SIGN,
+          ResourceLinkTypeDTO.SEND_AFTER_SIGN_CERTIFICATE.toCertificateActionType()
+      );
+    }
+
+    @Test
     void shallReturnCertificateActionTypeSend() {
       assertEquals(CertificateActionType.SEND,
           ResourceLinkTypeDTO.SEND_CERTIFICATE.toCertificateActionType()

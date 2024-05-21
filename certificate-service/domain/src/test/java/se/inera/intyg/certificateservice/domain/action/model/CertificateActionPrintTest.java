@@ -121,14 +121,14 @@ class CertificateActionPrintTest {
 
   @Test
   void shallReturnName() {
-    assertEquals("Skriv ut", certificateActionPrint.getName());
+    assertEquals("Skriv ut", certificateActionPrint.getName(Optional.empty()));
   }
 
   @Test
   void shallReturnDescription() {
     assertEquals(
         "Öppnar ett fönster där du kan välja att skriva ut eller spara intygsutkastet som PDF.",
-        certificateActionPrint.getDescription());
+        certificateActionPrint.getDescription(Optional.empty()));
   }
 
   @Test

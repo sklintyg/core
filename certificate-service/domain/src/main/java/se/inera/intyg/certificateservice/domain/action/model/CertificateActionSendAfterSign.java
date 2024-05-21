@@ -10,10 +10,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 
 @Builder
 @Getter(AccessLevel.NONE)
-public class CertificateActionPrint implements CertificateAction {
+public class CertificateActionSendAfterSign implements CertificateAction {
 
-  private static final String NAME = "Skriv ut";
-  private static final String DESCRIPTION = "Öppnar ett fönster där du kan välja att skriva ut eller spara intygsutkastet som PDF.";
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
 
@@ -32,20 +30,10 @@ public class CertificateActionPrint implements CertificateAction {
   }
 
   @Override
-  public boolean evaluate(Optional<Certificate> certificate,
+  public boolean evaluate(Optional<Certificate> optionalCertificate,
       Optional<ActionEvaluation> actionEvaluation) {
     return actionRules.stream()
-        .filter(value -> value.evaluate(certificate, actionEvaluation))
+        .filter(value -> value.evaluate(optionalCertificate, actionEvaluation))
         .count() == actionRules.size();
-  }
-
-  @Override
-  public String getName(Optional<Certificate> certificate) {
-    return NAME;
-  }
-
-  @Override
-  public String getDescription(Optional<Certificate> certificate) {
-    return DESCRIPTION;
   }
 }

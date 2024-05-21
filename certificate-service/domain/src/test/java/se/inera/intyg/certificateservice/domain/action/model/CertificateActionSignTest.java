@@ -15,6 +15,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJL
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -24,6 +25,9 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.Ce
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.common.model.Recipient;
+import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 
 class CertificateActionSignTest {
 
@@ -141,15 +145,90 @@ class CertificateActionSignTest {
     );
   }
 
-  @Test
-  void shallReturnName() {
-    assertEquals("Signera intyget", certificateActionSign.getName());
+  @Nested
+  class NameTests {
+
+    @Test
+    void shallReturnSignNameIfSendAfterSignIsNotPresent() {
+      final var certificate = certificateBuilder.certificateModel(
+              CertificateModel.builder()
+                  .certificateActionSpecifications(
+                      List.of(
+                          CertificateActionSpecification.builder()
+                              .certificateActionType(CertificateActionType.SIGN)
+                              .build()
+                      )
+                  )
+                  .build()
+          )
+          .build();
+      assertEquals("Signera intyget", certificateActionSign.getName(Optional.of(certificate)));
+    }
+
+    @Test
+    void shallReturnSendAfterSignNameIfSendAfterSignIsPresent() {
+      final var certificate = certificateBuilder.certificateModel(
+              CertificateModel.builder()
+                  .certificateActionSpecifications(
+                      List.of(
+                          CertificateActionSpecification.builder()
+                              .certificateActionType(CertificateActionType.SEND_AFTER_SIGN)
+                              .build()
+                      )
+                  )
+                  .build()
+          )
+          .build();
+      assertEquals("Signera och skicka", certificateActionSign.getName(Optional.of(certificate)));
+    }
   }
 
-  @Test
-  void shallReturnDescription() {
-    assertEquals("Intyget signeras.", certificateActionSign.getDescription());
+  @Nested
+  class DescriptionTests {
+
+    @Test
+    void shallReturnSignDescriptionIfSendAfterSignIsNotPresent() {
+      final var certificate = certificateBuilder.certificateModel(
+              CertificateModel.builder()
+                  .certificateActionSpecifications(
+                      List.of(
+                          CertificateActionSpecification.builder()
+                              .certificateActionType(CertificateActionType.SIGN)
+                              .build()
+                      )
+                  )
+                  .build()
+          )
+          .build();
+      assertEquals("Intyget signeras.",
+          certificateActionSign.getDescription(Optional.of(certificate)));
+    }
+
+    @Test
+    void shallReturnSendAfterSignDescriptionIfSendAfterSignIsPresent() {
+      final var certificate = certificateBuilder.certificateModel(
+              CertificateModel.builder()
+                  .certificateActionSpecifications(
+                      List.of(
+                          CertificateActionSpecification.builder()
+                              .certificateActionType(CertificateActionType.SEND_AFTER_SIGN)
+                              .build()
+                      )
+                  )
+                  .recipient(
+                      new Recipient(
+                          new RecipientId("id"),
+                          "Försäkringskassan"
+                      )
+                  )
+                  .build()
+          )
+          .build();
+      assertEquals("Intyget skickas direkt till Försäkringskassan.",
+          certificateActionSign.getDescription(Optional.of(certificate)));
+    }
   }
+
 
   @Test
   void shallReturnReasonNotAllowedIfEvaluateReturnsFalse() {

@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.EN_ATTONDEL;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.EN_ATTANDEL;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.EN_FJARDEDEL;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.HALVA;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.HELA;
@@ -130,6 +130,9 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
                     .certificateActionType(CertificateActionType.RENEW)
                     .build(),
                 CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.SEND_AFTER_SIGN)
+                    .build(),
+                CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.RECEIVE_COMPLEMENT)
                     .build()
             )
@@ -211,7 +214,7 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
 
   private static ElementSpecification questionPeriod() {
     final var dateRanges = List.of(
-        getDateRange(EN_ATTONDEL),
+        getDateRange(EN_ATTANDEL),
         getDateRange(EN_FJARDEDEL),
         getDateRange(HALVA),
         getDateRange(TRE_FJARDEDELAR),

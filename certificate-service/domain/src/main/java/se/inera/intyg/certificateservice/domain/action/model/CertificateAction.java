@@ -13,11 +13,11 @@ public interface CertificateAction {
   List<String> reasonNotAllowed(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation);
 
-  default String getName() {
+  default String getName(Optional<Certificate> certificate) {
     return null;
   }
 
-  default String getDescription() {
+  default String getDescription(Optional<Certificate> certificate) {
     return null;
   }
 

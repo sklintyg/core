@@ -164,12 +164,13 @@ class CertificateActionDeleteTest {
 
   @Test
   void shallReturnName() {
-    assertEquals("Radera", certificateActionDelete.getName());
+    assertEquals("Radera", certificateActionDelete.getName(Optional.empty()));
   }
 
   @Test
   void shallReturnDescription() {
-    assertEquals("Raderar intygsutkastet.", certificateActionDelete.getDescription());
+    assertEquals("Raderar intygsutkastet.",
+        certificateActionDelete.getDescription(Optional.empty()));
   }
 
   @Test

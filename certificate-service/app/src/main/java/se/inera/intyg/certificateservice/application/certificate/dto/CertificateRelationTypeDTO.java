@@ -9,6 +9,7 @@ public enum CertificateRelationTypeDTO {
     return switch (type) {
       case REPLACE -> REPLACED;
       case RENEW -> EXTENDED;
+      case COMPLEMENT -> COMPLEMENTED;
     };
   }
 }
