@@ -45,7 +45,8 @@ public class CertificateActionSign implements CertificateAction {
   public String getName(Optional<Certificate> optionalCertificate) {
     return optionalCertificate.map(
             certificate -> {
-              final var hasSignAfterSendAction = isSignAfterSendActionSpecificationPresent(certificate);
+              final var hasSignAfterSendAction = certificate.certificateModel()
+                  .certificateActionExists(CertificateActionType.SEND_AFTER_SIGN);
               return hasSignAfterSendAction ? SIGN_AND_SEND : SIGN;
             }
         )
@@ -56,7 +57,8 @@ public class CertificateActionSign implements CertificateAction {
   public String getDescription(Optional<Certificate> optionalCertificate) {
     return optionalCertificate.map(
             certificate -> {
-              final var hasSignAfterSendAction = isSignAfterSendActionSpecificationPresent(certificate);
+              final var hasSignAfterSendAction = certificate.certificateModel()
+                  .certificateActionExists(CertificateActionType.SEND_AFTER_SIGN);
               return hasSignAfterSendAction
                   ? SIGN_AND_SEND_DESCRIPTION.formatted(
                   certificate.certificateModel().recipient().name())
@@ -64,13 +66,5 @@ public class CertificateActionSign implements CertificateAction {
             }
         )
         .orElse(SIGN_DESCRIPTION);
-  }
-
-  private static boolean isSignAfterSendActionSpecificationPresent(Certificate certificate) {
-    return certificate.certificateModel()
-        .certificateActionSpecifications()
-        .stream()
-        .anyMatch(specification -> specification.certificateActionType()
-            .equals(CertificateActionType.SEND_AFTER_SIGN));
   }
 }

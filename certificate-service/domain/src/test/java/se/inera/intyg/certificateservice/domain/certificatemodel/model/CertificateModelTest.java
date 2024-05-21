@@ -691,4 +691,34 @@ class CertificateModelTest {
       assertFalse(certificateModel.activeForUserRole(actionEvaluation));
     }
   }
+
+  @Nested
+  class TestCertificateActionExists {
+
+    @Test
+    void shouldReturnTrueIfCertificateActionTypeExists() {
+      final var certificateModel = CertificateModel.builder()
+          .certificateActionSpecifications(
+              List.of(CertificateActionSpecification.builder()
+                  .certificateActionType(CertificateActionType.CREATE)
+                  .build())
+          )
+          .build();
+
+      assertTrue(certificateModel.certificateActionExists(CertificateActionType.CREATE));
+    }
+
+    @Test
+    void shouldReturnFalseIfCertificateActionTypeDontExists() {
+      final var certificateModel = CertificateModel.builder()
+          .certificateActionSpecifications(
+              List.of(CertificateActionSpecification.builder()
+                  .certificateActionType(CertificateActionType.SIGN)
+                  .build())
+          )
+          .build();
+
+      assertFalse(certificateModel.certificateActionExists(CertificateActionType.CREATE));
+    }
+  }
 }

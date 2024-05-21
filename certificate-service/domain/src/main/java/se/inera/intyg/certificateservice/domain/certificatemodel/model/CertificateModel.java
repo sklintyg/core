@@ -94,4 +94,12 @@ public class CertificateModel {
             () -> new IllegalArgumentException("No element with id '%s' exists".formatted(id))
         );
   }
+
+  public boolean certificateActionExists(CertificateActionType certificateActionType) {
+    return certificateActionSpecifications()
+        .stream()
+        .anyMatch(
+            specification -> specification.certificateActionType().equals(certificateActionType)
+        );
+  }
 }
