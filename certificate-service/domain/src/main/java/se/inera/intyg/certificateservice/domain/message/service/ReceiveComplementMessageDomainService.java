@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.message.service;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -21,6 +22,14 @@ public class ReceiveComplementMessageDomainService {
           "Not allowed to receive complement on certificate for %s"
               .formatted(certificate.id().id()),
           certificate.reasonNotAllowed(CertificateActionType.RECEIVE_COMPLEMENT, Optional.empty())
+      );
+    }
+
+    if (!certificate.isCertificateIssuedOnPatient(message.personId())) {
+      throw new CertificateActionForbidden(
+          "Not allowed to receive complement on certificate for %s, because patient is not matching"
+              .formatted(certificate.id().id()),
+          List.of("Different patient on certificate and incoming message!")
       );
     }
 

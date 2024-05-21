@@ -18,6 +18,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REFERENCE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -269,6 +270,13 @@ class MessageEntityMapperTest {
     void shallIncludeCertificateId() {
       assertEquals(new CertificateId(CERTIFICATE_ID),
           mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).certificateId()
+      );
+    }
+
+    @Test
+    void shallIncludePersonId() {
+      assertEquals(ATHENA_REACT_ANDERSSON.id(),
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).personId()
       );
     }
   }

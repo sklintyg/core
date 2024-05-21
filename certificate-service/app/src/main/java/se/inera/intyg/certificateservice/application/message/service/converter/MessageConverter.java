@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.message.model.Author;
 import se.inera.intyg.certificateservice.domain.message.model.Complement;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
@@ -23,6 +24,12 @@ public class MessageConverter {
         .id(new MessageId(incomingMessageRequest.getId()))
         .reference(new SenderReference(incomingMessageRequest.getReferenceId()))
         .certificateId(new CertificateId(incomingMessageRequest.getCertificateId()))
+        .personId(
+            PersonId.builder()
+                .type(incomingMessageRequest.getPersonId().getType().toPersonIdType())
+                .id(incomingMessageRequest.getPersonId().getId())
+                .build()
+        )
         .subject(new Subject(incomingMessageRequest.getSubject()))
         .content(new Content(incomingMessageRequest.getContent()))
         .author(new Author(incomingMessageRequest.getSentBy().name()))

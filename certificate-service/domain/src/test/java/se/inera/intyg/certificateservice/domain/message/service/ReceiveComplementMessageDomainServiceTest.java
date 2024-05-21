@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,6 +54,18 @@ class ReceiveComplementMessageDomainServiceTest {
     );
   }
 
+  @Test
+  void shallThrowExceptionIfNotSamePatientAsCertificate() {
+    doReturn(true).when(certificate)
+        .allowTo(CertificateActionType.RECEIVE_COMPLEMENT, Optional.empty());
+    doReturn(CERTIFICATE_ID).when(certificate).id();
+    doReturn(false).when(certificate).isCertificateIssuedOnPatient(ATHENA_REACT_ANDERSSON.id());
+
+    assertThrows(CertificateActionForbidden.class,
+        () -> receiveComplementMessageDomainService.receive(COMPLEMENT_MESSAGE)
+    );
+  }
+
   @Nested
   class ComplementMessageAllowed {
 
@@ -60,6 +73,7 @@ class ReceiveComplementMessageDomainServiceTest {
     void setUp() {
       doReturn(true).when(certificate)
           .allowTo(CertificateActionType.RECEIVE_COMPLEMENT, Optional.empty());
+      doReturn(true).when(certificate).isCertificateIssuedOnPatient(ATHENA_REACT_ANDERSSON.id());
     }
 
     @Test

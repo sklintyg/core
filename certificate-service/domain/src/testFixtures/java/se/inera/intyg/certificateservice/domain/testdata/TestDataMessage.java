@@ -12,6 +12,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REFERENCE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -36,6 +37,7 @@ public class TestDataMessage {
         .reference(new SenderReference(REFERENCE_ID))
         .type(MessageType.COMPLEMENT)
         .certificateId(CERTIFICATE_ID)
+        .personId(ATHENA_REACT_ANDERSSON.id())
         .subject(new Subject(SUBJECT))
         .content(new Content(CONTENT))
         .author(new Author(AUTHOR_INCOMING_MESSAGE))

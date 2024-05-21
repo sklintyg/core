@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
+import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.message.model.Author;
 import se.inera.intyg.certificateservice.domain.message.model.Complement;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
@@ -89,30 +91,40 @@ public class MessageEntityMapper {
         .build();
   }
 
-  public Message toDomain(MessageEntity savedEntity) {
+  public Message toDomain(MessageEntity messageEntity) {
     return Message.builder()
-        .id(new MessageId(savedEntity.getId()))
-        .reference(new SenderReference(savedEntity.getReference()))
-        .certificateId(new CertificateId(savedEntity.getCertificate().getCertificateId()))
-        .type(MessageType.valueOf(savedEntity.getMessageType().getType()))
-        .status(MessageStatus.valueOf(savedEntity.getStatus().getStatus()))
-        .subject(new Subject(savedEntity.getSubject()))
-        .content(new Content(savedEntity.getContent()))
-        .author(new Author(savedEntity.getAuthor()))
-        .created(savedEntity.getCreated())
-        .modified(savedEntity.getModified())
-        .sent(savedEntity.getSent())
-        .forwarded(new Forwarded(savedEntity.isForwarded()))
-        .lastDateToReply(savedEntity.getLastDateToReply())
+        .id(new MessageId(messageEntity.getId()))
+        .reference(new SenderReference(messageEntity.getReference()))
+        .certificateId(new CertificateId(messageEntity.getCertificate().getCertificateId()))
+        .personId(
+            PersonId.builder()
+                .id(messageEntity.getCertificate().getPatient().getId())
+                .type(
+                    PersonIdType.valueOf(
+                        messageEntity.getCertificate().getPatient().getType().getType()
+                    )
+                )
+                .build()
+        )
+        .type(MessageType.valueOf(messageEntity.getMessageType().getType()))
+        .status(MessageStatus.valueOf(messageEntity.getStatus().getStatus()))
+        .subject(new Subject(messageEntity.getSubject()))
+        .content(new Content(messageEntity.getContent()))
+        .author(new Author(messageEntity.getAuthor()))
+        .created(messageEntity.getCreated())
+        .modified(messageEntity.getModified())
+        .sent(messageEntity.getSent())
+        .forwarded(new Forwarded(messageEntity.isForwarded()))
+        .lastDateToReply(messageEntity.getLastDateToReply())
         .contactInfo(
             new MessageContactInfo(
-                savedEntity.getContactInfo().stream()
+                messageEntity.getContactInfo().stream()
                     .map(MessageContactInfoEmbeddable::getInfo)
                     .toList()
             )
         )
         .complements(
-            savedEntity.getComplements().stream()
+            messageEntity.getComplements().stream()
                 .map(complement ->
                     Complement.builder()
                         .elementId(new ElementId(complement.getElementId()))

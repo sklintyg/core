@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 
 @Getter
 @Builder
@@ -15,6 +16,7 @@ public class Message {
 
   private MessageId id;
   private CertificateId certificateId;
+  private PersonId personId;
   private SenderReference reference;
   private MessageType type;
   private Subject subject;

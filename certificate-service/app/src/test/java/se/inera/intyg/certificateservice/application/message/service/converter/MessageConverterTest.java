@@ -13,6 +13,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.MESSAGE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REFERENCE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -22,6 +23,8 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
+import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.message.model.Author;
 import se.inera.intyg.certificateservice.domain.message.model.Complement;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
@@ -51,6 +54,18 @@ class MessageConverterTest {
     void shallIncludeReferenceId() {
       assertEquals(new SenderReference(REFERENCE_ID),
           messageConverter.convert(INCOMING_COMPLEMENT_MESSAGE).reference()
+      );
+    }
+
+    @Test
+    void shallIncludePersonId() {
+      final var expectedId = PersonId.builder()
+          .id(ATHENA_REACT_ANDERSSON_ID)
+          .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
+          .build();
+
+      assertEquals(expectedId,
+          messageConverter.convert(INCOMING_COMPLEMENT_MESSAGE).personId()
       );
     }
 
