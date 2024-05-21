@@ -162,7 +162,9 @@ public class CertificateActionFactory {
       case RECEIVE_COMPLEMENT -> CertificateActionReceiveComplement.builder()
           .certificateActionSpecification(actionSpecification)
           .actionRules(
-              List.of()
+              List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED))
+              )
           )
           .build();
     };
