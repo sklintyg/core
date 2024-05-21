@@ -54,7 +54,7 @@ class ActionRuleChildRelationMatchTest {
         .build();
 
     assertTrue(
-        actionRuleChildRelation.evaluate(Optional.of(certificate), ACTION_EVALUATION)
+        actionRuleChildRelation.evaluate(Optional.of(certificate), Optional.of(ACTION_EVALUATION))
     );
   }
 
@@ -78,7 +78,7 @@ class ActionRuleChildRelationMatchTest {
         .build();
 
     assertFalse(
-        actionRuleChildRelation.evaluate(Optional.of(certificate), ACTION_EVALUATION)
+        actionRuleChildRelation.evaluate(Optional.of(certificate), Optional.of(ACTION_EVALUATION))
     );
   }
 
@@ -97,7 +97,7 @@ class ActionRuleChildRelationMatchTest {
         .build();
 
     assertFalse(
-        actionRuleChildRelation.evaluate(Optional.of(certificate), ACTION_EVALUATION)
+        actionRuleChildRelation.evaluate(Optional.of(certificate), Optional.of(ACTION_EVALUATION))
     );
   }
 

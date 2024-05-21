@@ -31,7 +31,7 @@ class ActionRuleSentTest {
       );
 
       assertTrue(
-          actionRuleSent.evaluate(certificate, ACTION_EVALUATION)
+          actionRuleSent.evaluate(certificate, Optional.of(ACTION_EVALUATION))
       );
     }
 
@@ -44,7 +44,7 @@ class ActionRuleSentTest {
       );
 
       assertFalse(
-          actionRuleSent.evaluate(certificate, ACTION_EVALUATION)
+          actionRuleSent.evaluate(certificate, Optional.of(ACTION_EVALUATION))
       );
     }
   }
@@ -68,7 +68,7 @@ class ActionRuleSentTest {
       );
 
       assertFalse(
-          actionRuleSent.evaluate(certificate, ACTION_EVALUATION)
+          actionRuleSent.evaluate(certificate, Optional.of(ACTION_EVALUATION))
       );
     }
 
@@ -81,7 +81,7 @@ class ActionRuleSentTest {
       );
 
       assertTrue(
-          actionRuleSent.evaluate(certificate, ACTION_EVALUATION)
+          actionRuleSent.evaluate(certificate, Optional.of(ACTION_EVALUATION))
       );
     }
   }

@@ -3,13 +3,13 @@ package se.inera.intyg.certificateservice.domain.action.model;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.unit.model.Inactive;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 
 class ActionRuleInactiveUnitTest {
-
 
   private ActionRuleInactiveUnit actionRuleInactiveUnit;
 
@@ -26,7 +26,10 @@ class ActionRuleInactiveUnitTest {
             .build())
         .build();
 
-    final var actualResult = actionRuleInactiveUnit.evaluate(actionEvaluation);
+    final var actualResult = actionRuleInactiveUnit.evaluate(
+        Optional.empty(),
+        Optional.of(actionEvaluation)
+    );
 
     assertFalse(actualResult);
   }
@@ -39,9 +42,11 @@ class ActionRuleInactiveUnitTest {
             .build())
         .build();
 
-    final var actualResult = actionRuleInactiveUnit.evaluate(actionEvaluation);
+    final var actualResult = actionRuleInactiveUnit.evaluate(
+        Optional.empty(),
+        Optional.of(actionEvaluation)
+    );
 
     assertTrue(actualResult);
   }
-
 }

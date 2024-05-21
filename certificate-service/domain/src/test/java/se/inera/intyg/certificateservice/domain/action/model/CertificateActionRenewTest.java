@@ -8,7 +8,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_HUDMOTTAGNINGEN;
@@ -76,7 +75,7 @@ class CertificateActionRenewTest {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     assertFalse(
-        certificateActionRenew.evaluate(certificate, actionEvaluation),
+        certificateActionRenew.evaluate(certificate, Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -94,7 +93,7 @@ class CertificateActionRenewTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionRenew.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -112,7 +111,7 @@ class CertificateActionRenewTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionRenew.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -130,7 +129,7 @@ class CertificateActionRenewTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionRenew.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -148,7 +147,7 @@ class CertificateActionRenewTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionRenew.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -162,7 +161,7 @@ class CertificateActionRenewTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionRenew.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -175,7 +174,7 @@ class CertificateActionRenewTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionRenew.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -189,7 +188,7 @@ class CertificateActionRenewTest {
         .build();
 
     assertTrue(
-        certificateActionRenew.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -203,7 +202,7 @@ class CertificateActionRenewTest {
         .build();
 
     assertFalse(
-        certificateActionRenew.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -217,7 +216,7 @@ class CertificateActionRenewTest {
         .build();
 
     assertFalse(
-        certificateActionRenew.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -231,7 +230,7 @@ class CertificateActionRenewTest {
         .build();
 
     assertFalse(
-        certificateActionRenew.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -249,7 +248,7 @@ class CertificateActionRenewTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionRenew.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -261,7 +260,7 @@ class CertificateActionRenewTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionRenew.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -279,7 +278,7 @@ class CertificateActionRenewTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionRenew.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -291,7 +290,7 @@ class CertificateActionRenewTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionRenew.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -314,7 +313,7 @@ class CertificateActionRenewTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionRenew.getBody(Optional.of(certificate), actionEvaluation)
+        certificateActionRenew.getBody(Optional.of(certificate), Optional.of(actionEvaluation))
             .contains("Eventuell kompletteringsbegäran kommer att klarmarkeras.")
     );
   }
@@ -328,19 +327,15 @@ class CertificateActionRenewTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionRenew.getBody(Optional.of(certificate), actionEvaluation)
+        certificateActionRenew.getBody(Optional.of(certificate), Optional.of(actionEvaluation))
             .contains("Eventuell kompletteringsbegäran kommer inte att klarmarkeras.")
     );
   }
 
   @Test
   void shallReturnReasonNotAllowedIfEvaluateReturnsFalse() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ANONYMA_REACT_ATTILA)
-        .user(ALVA_VARDADMINISTRATOR)
-        .build();
-
-    final var actualResult = certificateActionRenew.reasonNotAllowed(actionEvaluation);
+    final var actualResult = certificateActionRenew.reasonNotAllowed(
+        Optional.of(certificateBuilder.build()), Optional.empty());
 
     assertFalse(actualResult.isEmpty());
   }
@@ -354,7 +349,7 @@ class CertificateActionRenewTest {
         .build();
 
     final var actualResult = certificateActionRenew.reasonNotAllowed(Optional.of(certificate),
-        actionEvaluation);
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult.isEmpty());
   }

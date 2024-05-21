@@ -24,6 +24,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.DAN_DENTIST_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.QUESTION_PERIOD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.QUESTION_SYMPTOM_ID;
@@ -4120,6 +4121,99 @@ class FK7472ActiveIT {
           () -> assertEquals(certificateId(testCertificates),
               relation(renewCertificateResponse(response)).getParent().getCertificateId())
       );
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7472 - Kompletteringsbegäran")
+  class Complement {
+
+    @Test
+    @DisplayName("FK7472 - Intyg skall kunna ta emot kompletteringsbegäran")
+    void shallReturn200IfComplementCanBeReceived() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      assertEquals(200, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7472 - Utkast skall inte kunna ta emot kompletteringsbegäran - 403 (FORBIDDEN) ")
+    void shallReturn403IfCertificateIsDraft() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
+      );
+
+      final var response = api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7472 - Makulerade intyg skall inte kunna ta emot kompletteringsbegäran - 403 (FORBIDDEN)")
+    void shallReturn403IfCertificateIsRevoked() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.revokeCertificate(
+          defaultRevokeCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7472 - Intyg skall inte kunna ta emot kompletteringsbegäran på fel patient - 403 (FORBIDDEN)")
+    void shallReturn403IfComplementIsOfDifferentPatient() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .personId(ALVE_REACT_ALFREDSSON_DTO.getId())
+              .build()
+      );
+
+      assertEquals(403, response.getStatusCode().value());
     }
   }
 }

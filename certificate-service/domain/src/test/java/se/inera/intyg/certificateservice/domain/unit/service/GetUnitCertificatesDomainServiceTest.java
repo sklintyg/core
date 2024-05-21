@@ -13,6 +13,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJL
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,7 +61,8 @@ class GetUnitCertificatesDomainServiceTest {
     final var certificatesRequest = certificatesRequestBuilder.build();
 
     final var certificate = mock(Certificate.class);
-    doReturn(true).when(certificate).allowTo(CertificateActionType.READ, actionEvaluation);
+    doReturn(true).when(certificate)
+        .allowTo(CertificateActionType.READ, Optional.of(actionEvaluation));
     doReturn(List.of(certificate)).when(certificateRepository)
         .findByCertificatesRequest(certificatesRequest);
 
@@ -79,8 +81,10 @@ class GetUnitCertificatesDomainServiceTest {
 
     final var certificate1 = mock(Certificate.class);
     final var certificate2 = mock(Certificate.class);
-    doReturn(true).when(certificate1).allowTo(CertificateActionType.READ, actionEvaluation);
-    doReturn(false).when(certificate2).allowTo(CertificateActionType.READ, actionEvaluation);
+    doReturn(true).when(certificate1)
+        .allowTo(CertificateActionType.READ, Optional.of(actionEvaluation));
+    doReturn(false).when(certificate2)
+        .allowTo(CertificateActionType.READ, Optional.of(actionEvaluation));
     doReturn(List.of(certificate1, certificate2)).when(certificateRepository)
         .findByCertificatesRequest(certificatesRequest);
 
@@ -140,7 +144,8 @@ class GetUnitCertificatesDomainServiceTest {
         .build();
 
     final var certificate = mock(Certificate.class);
-    doReturn(true).when(certificate).allowTo(CertificateActionType.READ, actionEvaluation);
+    doReturn(true).when(certificate)
+        .allowTo(CertificateActionType.READ, Optional.of(actionEvaluation));
     doReturn(ValidationResult.builder().build()).when(certificate).validate();
     doReturn(List.of(certificate)).when(certificateRepository)
         .findByCertificatesRequest(certificatesRequest);
@@ -162,7 +167,8 @@ class GetUnitCertificatesDomainServiceTest {
         .build();
 
     final var certificate = mock(Certificate.class);
-    doReturn(true).when(certificate).allowTo(CertificateActionType.READ, actionEvaluation);
+    doReturn(true).when(certificate)
+        .allowTo(CertificateActionType.READ, Optional.of(actionEvaluation));
     doReturn(
         ValidationResult.builder()
             .errors(List.of(ValidationError.builder().build()))

@@ -702,9 +702,10 @@ class CertificateTest {
 
       doReturn(expectedActions).when(certificate.certificateModel()).actions();
 
-      doReturn(true).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
+      doReturn(true).when(certificateAction)
+          .evaluate(Optional.of(certificate), Optional.of(actionEvaluation));
 
-      final var actualActions = certificate.actions(actionEvaluation);
+      final var actualActions = certificate.actions(Optional.of(actionEvaluation));
 
       assertEquals(expectedActions, actualActions);
     }
@@ -717,9 +718,10 @@ class CertificateTest {
 
       doReturn(expectedActions).when(certificate.certificateModel()).actions();
 
-      doReturn(true).when(certificateAction).include(Optional.of(certificate), actionEvaluation);
+      doReturn(true).when(certificateAction)
+          .include(Optional.of(certificate), Optional.of(actionEvaluation));
 
-      final var actualActions = certificate.actionsInclude(actionEvaluation);
+      final var actualActions = certificate.actionsInclude(Optional.of(actionEvaluation));
 
       assertEquals(expectedActions, actualActions);
     }
@@ -733,9 +735,9 @@ class CertificateTest {
       doReturn(List.of(certificateAction)).when(certificate.certificateModel()).actions();
 
       doReturn(false).when(certificateAction)
-          .evaluate(Optional.of(certificate), actionEvaluation);
+          .evaluate(Optional.of(certificate), Optional.of(actionEvaluation));
 
-      final var actualActions = certificate.actions(actionEvaluation);
+      final var actualActions = certificate.actions(Optional.of(actionEvaluation));
 
       assertEquals(expectedActions, actualActions);
     }
@@ -749,9 +751,9 @@ class CertificateTest {
       doReturn(List.of(certificateAction)).when(certificate.certificateModel()).actions();
 
       doReturn(false).when(certificateAction)
-          .include(Optional.of(certificate), actionEvaluation);
+          .include(Optional.of(certificate), Optional.of(actionEvaluation));
 
-      final var actualActions = certificate.actionsInclude(actionEvaluation);
+      final var actualActions = certificate.actionsInclude(Optional.of(actionEvaluation));
 
       assertEquals(expectedActions, actualActions);
     }
@@ -769,10 +771,11 @@ class CertificateTest {
       doReturn(actions).when(certificate.certificateModel()).actions();
 
       doReturn(CertificateActionType.READ).when(certificateAction).getType();
-      doReturn(true).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
+      doReturn(true).when(certificateAction)
+          .evaluate(Optional.of(certificate), Optional.of(actionEvaluation));
 
       assertTrue(
-          certificate.allowTo(CertificateActionType.READ, actionEvaluation),
+          certificate.allowTo(CertificateActionType.READ, Optional.of(actionEvaluation)),
           "Expected allowTo to return 'true'"
       );
     }
@@ -787,10 +790,10 @@ class CertificateTest {
 
       doReturn(CertificateActionType.READ).when(certificateAction).getType();
       doReturn(false).when(certificateAction)
-          .evaluate(Optional.of(certificate), actionEvaluation);
+          .evaluate(Optional.of(certificate), Optional.of(actionEvaluation));
 
       assertFalse(
-          certificate.allowTo(CertificateActionType.READ, actionEvaluation),
+          certificate.allowTo(CertificateActionType.READ, Optional.of(actionEvaluation)),
           "Expected allowTo to return 'false'"
       );
     }
@@ -806,7 +809,7 @@ class CertificateTest {
       doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
 
       assertFalse(
-          certificate.allowTo(CertificateActionType.READ, actionEvaluation),
+          certificate.allowTo(CertificateActionType.READ, Optional.of(actionEvaluation)),
           "Expected allowTo to return 'false'"
       );
     }
@@ -814,7 +817,8 @@ class CertificateTest {
     @Test
     void shallUseCertificatePatientIfPatientNotPresentInActionEvalutaion() {
       final var actionEvaluation = actionEvaluationBuilder.patient(null).build();
-      final var actionEvaluationArgumentCaptor = ArgumentCaptor.forClass(ActionEvaluation.class);
+      final ArgumentCaptor<Optional<ActionEvaluation>> actionEvaluationArgumentCaptor =
+          ArgumentCaptor.forClass(Optional.class);
 
       final var certificateAction = mock(CertificateAction.class);
       final var actions = List.of(certificateAction);
@@ -822,12 +826,13 @@ class CertificateTest {
       doReturn(actions).when(certificate.certificateModel()).actions();
       doReturn(CertificateActionType.DELETE).when(certificateAction).getType();
 
-      certificate.allowTo(CertificateActionType.DELETE, actionEvaluation);
+      certificate.allowTo(CertificateActionType.DELETE, Optional.of(actionEvaluation));
 
       verify(certificateAction).evaluate(any(Optional.class),
           actionEvaluationArgumentCaptor.capture());
 
-      assertEquals(ATHENA_REACT_ANDERSSON, actionEvaluationArgumentCaptor.getValue().patient());
+      assertEquals(ATHENA_REACT_ANDERSSON,
+          actionEvaluationArgumentCaptor.getValue().orElseThrow().patient());
     }
   }
 
@@ -1413,10 +1418,10 @@ class CertificateTest {
         doReturn(actions).when(certificate.certificateModel()).actions();
         doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
         doReturn(Collections.emptyList()).when(certificateAction)
-            .reasonNotAllowed(actionEvaluation);
+            .reasonNotAllowed(Optional.of(certificate), Optional.of(actionEvaluation));
 
         final var actualResult = certificate.reasonNotAllowed(CertificateActionType.CREATE,
-            actionEvaluation);
+            Optional.of(actionEvaluation));
 
         assertTrue(actualResult.isEmpty(), "Expected reasonNotAllowed to return empty list");
       }
@@ -1439,10 +1444,11 @@ class CertificateTest {
 
         doReturn(actions).when(certificate.certificateModel()).actions();
         doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
-        doReturn(expectedReasons).when(certificateAction).reasonNotAllowed(actionEvaluation);
+        doReturn(expectedReasons).when(certificateAction)
+            .reasonNotAllowed(Optional.of(certificate), Optional.of(actionEvaluation));
 
         final var actualResult = certificate.reasonNotAllowed(CertificateActionType.CREATE,
-            actionEvaluation);
+            Optional.of(actionEvaluation));
 
         assertEquals(expectedReasons, actualResult);
       }

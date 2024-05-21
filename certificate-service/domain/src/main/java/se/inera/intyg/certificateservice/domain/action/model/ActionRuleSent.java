@@ -12,7 +12,8 @@ public class ActionRuleSent implements ActionRule {
   }
 
   @Override
-  public boolean evaluate(Optional<Certificate> certificate, ActionEvaluation actionEvaluation) {
+  public boolean evaluate(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
     return certificate.filter(value -> sent == (value.sent() != null)).isPresent();
   }
 }

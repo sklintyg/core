@@ -7,6 +7,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJL
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +32,8 @@ class ActionRuleUserNotBlockedTest {
         )
         .build();
 
-    final var actualResult = actionRuleUserNotBlocked.evaluate(actionEvaluation);
+    final var actualResult = actionRuleUserNotBlocked.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
   }
@@ -43,7 +45,8 @@ class ActionRuleUserNotBlockedTest {
         .user(AJLA_DOKTOR)
         .build();
 
-    final var actualResult = actionRuleUserNotBlocked.evaluate(actionEvaluation);
+    final var actualResult = actionRuleUserNotBlocked.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
   }

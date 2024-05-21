@@ -71,7 +71,7 @@ class CertificateActionDeleteTest {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     assertFalse(
-        certificateActionDelete.evaluate(certificate, actionEvaluation),
+        certificateActionDelete.evaluate(certificate, Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -94,7 +94,7 @@ class CertificateActionDeleteTest {
         .build();
 
     assertFalse(
-        certificateActionDelete.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionDelete.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -115,7 +115,7 @@ class CertificateActionDeleteTest {
         .build();
 
     assertTrue(
-        certificateActionDelete.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionDelete.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -129,7 +129,7 @@ class CertificateActionDeleteTest {
         .build();
 
     assertFalse(
-        certificateActionDelete.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionDelete.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -143,7 +143,7 @@ class CertificateActionDeleteTest {
         .build();
 
     assertFalse(
-        certificateActionDelete.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionDelete.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -157,7 +157,7 @@ class CertificateActionDeleteTest {
         .build();
 
     assertTrue(
-        certificateActionDelete.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionDelete.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -174,12 +174,9 @@ class CertificateActionDeleteTest {
 
   @Test
   void shallReturnReasonNotAllowedIfEvaluateReturnsFalse() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ANONYMA_REACT_ATTILA)
-        .user(ALVA_VARDADMINISTRATOR)
-        .build();
-
-    final var actualResult = certificateActionDelete.reasonNotAllowed(actionEvaluation);
+    final var actualResult = certificateActionDelete.reasonNotAllowed(
+        Optional.of(certificateBuilder.build()),
+        Optional.empty());
 
     assertFalse(actualResult.isEmpty());
   }
@@ -193,7 +190,7 @@ class CertificateActionDeleteTest {
         .build();
 
     final var actualResult = certificateActionDelete.reasonNotAllowed(Optional.of(certificate),
-        actionEvaluation);
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult.isEmpty());
   }
@@ -210,7 +207,7 @@ class CertificateActionDeleteTest {
           .build();
 
       final var actualResult = certificateActionDelete.evaluate(
-          Optional.of(certificateBuilder.build()), actionEvaluation);
+          Optional.of(certificateBuilder.build()), Optional.of(actionEvaluation));
 
       assertFalse(actualResult);
     }
@@ -224,7 +221,7 @@ class CertificateActionDeleteTest {
           .build();
 
       final var actualResult = certificateActionDelete.evaluate(
-          Optional.of(certificateBuilder.build()), actionEvaluation);
+          Optional.of(certificateBuilder.build()), Optional.of(actionEvaluation));
 
       assertTrue(actualResult);
     }
@@ -238,7 +235,7 @@ class CertificateActionDeleteTest {
           .build();
 
       final var actualResult = certificateActionDelete.evaluate(
-          Optional.of(certificateBuilder.build()), actionEvaluation);
+          Optional.of(certificateBuilder.build()), Optional.of(actionEvaluation));
 
       assertTrue(actualResult);
     }
@@ -252,7 +249,7 @@ class CertificateActionDeleteTest {
           .build();
 
       final var actualResult = certificateActionDelete.evaluate(
-          Optional.of(certificateBuilder.build()), actionEvaluation);
+          Optional.of(certificateBuilder.build()), Optional.of(actionEvaluation));
 
       assertTrue(actualResult);
     }
@@ -266,7 +263,7 @@ class CertificateActionDeleteTest {
           .build();
 
       final var actualResult = certificateActionDelete.evaluate(
-          Optional.of(certificateBuilder.build()), actionEvaluation);
+          Optional.of(certificateBuilder.build()), Optional.of(actionEvaluation));
 
       assertTrue(actualResult);
     }
@@ -317,7 +314,8 @@ class CertificateActionDeleteTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionDelete.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionDelete.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -334,7 +332,8 @@ class CertificateActionDeleteTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionDelete.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionDelete.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -359,7 +358,8 @@ class CertificateActionDeleteTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionDelete.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionDelete.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -376,7 +376,8 @@ class CertificateActionDeleteTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionDelete.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionDelete.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -401,7 +402,8 @@ class CertificateActionDeleteTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionDelete.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionDelete.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -418,7 +420,8 @@ class CertificateActionDeleteTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionDelete.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionDelete.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -437,7 +440,8 @@ class CertificateActionDeleteTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionDelete.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionDelete.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }

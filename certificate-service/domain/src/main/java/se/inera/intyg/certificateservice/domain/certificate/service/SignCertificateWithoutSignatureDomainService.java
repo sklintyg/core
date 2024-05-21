@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.certificate.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -27,10 +28,10 @@ public class SignCertificateWithoutSignatureDomainService {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
 
     final var certificate = certificateRepository.getById(certificateId);
-    if (!certificate.allowTo(CertificateActionType.SIGN, actionEvaluation)) {
+    if (!certificate.allowTo(CertificateActionType.SIGN, Optional.of(actionEvaluation))) {
       throw new CertificateActionForbidden(
           "Not allowed to sign certificate with id %s".formatted(certificateId),
-          certificate.reasonNotAllowed(CertificateActionType.SIGN, actionEvaluation)
+          certificate.reasonNotAllowed(CertificateActionType.SIGN, Optional.of(actionEvaluation))
       );
     }
 
@@ -38,7 +39,7 @@ public class SignCertificateWithoutSignatureDomainService {
       throw new CertificateActionForbidden(
           "Only '%s' is allowed to sign without signature! Cannot sign certificate '%s'!"
               .formatted(Role.PRIVATE_DOCTOR.name(), certificateId.id()),
-          certificate.reasonNotAllowed(CertificateActionType.SIGN, actionEvaluation)
+          certificate.reasonNotAllowed(CertificateActionType.SIGN, Optional.of(actionEvaluation))
       );
     }
 

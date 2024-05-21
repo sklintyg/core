@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificatetypeinfo.service;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
@@ -36,7 +37,7 @@ public class GetCertificateTypeInfoService {
                 .map(certificateModel ->
                     certificateTypeInfoConverter.convert(
                         certificateModel,
-                        certificateModel.actionsInclude(actionEvaluation),
+                        certificateModel.actionsInclude(Optional.of(actionEvaluation)),
                         actionEvaluation
                     )
                 )

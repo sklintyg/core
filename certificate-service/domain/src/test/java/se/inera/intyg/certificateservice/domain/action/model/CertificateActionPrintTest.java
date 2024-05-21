@@ -70,7 +70,7 @@ class CertificateActionPrintTest {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     assertFalse(
-        certificateActionPrint.evaluate(certificate, actionEvaluation),
+        certificateActionPrint.evaluate(certificate, Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -93,7 +93,7 @@ class CertificateActionPrintTest {
         .build();
 
     assertFalse(
-        certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionPrint.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -114,7 +114,7 @@ class CertificateActionPrintTest {
         .build();
 
     assertTrue(
-        certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionPrint.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -140,7 +140,7 @@ class CertificateActionPrintTest {
         .build();
 
     assertTrue(
-        certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionPrint.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -154,7 +154,7 @@ class CertificateActionPrintTest {
         .build();
 
     assertTrue(
-        certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionPrint.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -168,7 +168,7 @@ class CertificateActionPrintTest {
         .build();
 
     assertFalse(
-        certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionPrint.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -182,19 +182,15 @@ class CertificateActionPrintTest {
         .build();
 
     assertFalse(
-        certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+        certificateActionPrint.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
 
   @Test
   void shallReturnReasonNotAllowedIfEvaluateReturnsFalse() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ANONYMA_REACT_ATTILA)
-        .user(ALVA_VARDADMINISTRATOR)
-        .build();
-
-    final var actualResult = certificateActionPrint.reasonNotAllowed(actionEvaluation);
+    final var actualResult = certificateActionPrint.reasonNotAllowed(
+        Optional.of(certificateBuilder.build()), Optional.empty());
 
     assertFalse(actualResult.isEmpty());
   }
@@ -208,7 +204,7 @@ class CertificateActionPrintTest {
         .build();
 
     final var actualResult = certificateActionPrint.reasonNotAllowed(Optional.of(certificate),
-        actionEvaluation);
+        Optional.of(actionEvaluation));
 
     assertTrue(actualResult.isEmpty());
   }
@@ -258,7 +254,8 @@ class CertificateActionPrintTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionPrint.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -275,7 +272,8 @@ class CertificateActionPrintTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionPrint.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -300,7 +298,8 @@ class CertificateActionPrintTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionPrint.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -317,7 +316,8 @@ class CertificateActionPrintTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionPrint.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -342,7 +342,8 @@ class CertificateActionPrintTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionPrint.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -359,7 +360,8 @@ class CertificateActionPrintTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionPrint.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
@@ -378,7 +380,8 @@ class CertificateActionPrintTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionPrint.evaluate(Optional.of(certificate), actionEvaluation),
+            certificateActionPrint.evaluate(Optional.of(certificate),
+                Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
