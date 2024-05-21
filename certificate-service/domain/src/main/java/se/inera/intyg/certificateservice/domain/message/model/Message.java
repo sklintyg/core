@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.message.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -29,7 +30,10 @@ public class Message {
   private Forwarded forwarded;
   private LocalDate lastDateToReply;
   private MessageContactInfo contactInfo;
-  private List<Complement> complements;
+  @Builder.Default
+  private List<Complement> complements = Collections.emptyList();
   private Answer answer;
-  private List<Reminder> reminders;
+  @Builder.Default
+  private List<Reminder> reminders = Collections.emptyList();
+
 }

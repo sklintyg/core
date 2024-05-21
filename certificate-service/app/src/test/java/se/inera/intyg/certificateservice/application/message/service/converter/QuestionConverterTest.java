@@ -1,0 +1,109 @@
+package se.inera.intyg.certificateservice.application.message.service.converter;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.AUTHOR_INCOMING_MESSAGE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTACT_INFO;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTENT;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CREATED_AFTER_SENT;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.LAST_DATE_TO_REPLY;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.MESSAGE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SENT;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.application.message.dto.QuestionTypeDTO;
+
+@ExtendWith(MockitoExtension.class)
+class QuestionConverterTest {
+
+  @Mock
+  ReminderConverter reminderConverter;
+  @Mock
+  ComplementConverter complementConverter;
+  @InjectMocks
+  QuestionConverter questionConverter;
+
+  @Test
+  void shallIncludeId() {
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
+    assertEquals(MESSAGE_ID, convert.getId());
+  }
+
+  @Test
+  void shallIncludeCertificateId() {
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
+    assertEquals(CERTIFICATE_ID.id(), convert.getCertificateId());
+  }
+
+  @Test
+  void shallIncludeType() {
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
+    assertEquals(QuestionTypeDTO.COMPLEMENT, convert.getType());
+  }
+
+  @Test
+  void shallIncludeAuthor() {
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
+    assertEquals(AUTHOR_INCOMING_MESSAGE, convert.getAuthor());
+  }
+
+  @Test
+  void shallIncludeSubject() {
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
+    assertEquals(SUBJECT, convert.getSubject());
+  }
+
+  @Test
+  void shallIncludeSent() {
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
+    assertEquals(SENT, convert.getSent());
+  }
+
+  @Test
+  void shallIncludeIsHandled() {
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
+    assertFalse(convert.isHandled());
+  }
+
+  @Test
+  void shallIncludeIsForwarded() {
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
+    assertFalse(convert.isForwarded());
+  }
+
+  @Test
+  void shallIncludeMessage() {
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
+    assertEquals(CONTENT, convert.getMessage());
+  }
+
+  @Test
+  void shallIncludeLastUpdate() {
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
+    assertEquals(CREATED_AFTER_SENT, convert.getLastUpdate());
+  }
+
+  @Test
+  void shallIncludeLastDateToReply() {
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
+    assertEquals(LAST_DATE_TO_REPLY, convert.getLastDateToReply());
+  }
+
+  @Test
+  void shallIncludeContactInfo() {
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
+    assertAll(
+        () -> assertEquals(CONTACT_INFO.get(0), convert.getContactInfo()[0]),
+        () -> assertEquals(CONTACT_INFO.get(1), convert.getContactInfo()[1]),
+        () -> assertEquals(CONTACT_INFO.get(2), convert.getContactInfo()[2])
+    );
+  }
+}

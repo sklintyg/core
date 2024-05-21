@@ -23,6 +23,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageContactInfo;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.SenderReference;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
@@ -47,6 +48,7 @@ public class TestDataMessage {
         .modified(CREATED_AFTER_SENT)
         .lastDateToReply(LAST_DATE_TO_REPLY)
         .forwarded(new Forwarded(false))
+        .status(MessageStatus.SENT)
         .complements(
             List.of(
                 Complement.builder()
