@@ -62,20 +62,23 @@ class CertificateActionSendAfterSignTest {
   void shallReturnTrueIfCertificateIsSigned() {
     final var certificate = certificateBuilder.status(Status.SIGNED).build();
     final var actionEvaluation = actionEvaluationBuilder.build();
-    assertTrue(certificateActionSign.evaluate(Optional.of(certificate), actionEvaluation));
+    assertTrue(
+        certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)));
   }
 
   @Test
   void shallReturnFalseIfCertificateIsNotSigned() {
     final var certificate = certificateBuilder.status(Status.DRAFT).build();
     final var actionEvaluation = actionEvaluationBuilder.build();
-    assertFalse(certificateActionSign.evaluate(Optional.of(certificate), actionEvaluation));
+    assertFalse(
+        certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)));
   }
 
   @Test
   void shallReturnFalseIfCertificateAlreadyIsSent() {
     final var certificate = certificateBuilder.sent(Sent.builder().build()).build();
     final var actionEvaluation = actionEvaluationBuilder.build();
-    assertFalse(certificateActionSign.evaluate(Optional.of(certificate), actionEvaluation));
+    assertFalse(
+        certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)));
   }
 }

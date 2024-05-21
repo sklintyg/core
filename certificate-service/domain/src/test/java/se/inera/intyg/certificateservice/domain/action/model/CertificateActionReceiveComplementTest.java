@@ -117,12 +117,14 @@ class CertificateActionReceiveComplementTest {
 
   @Test
   void shallReturnName() {
-    assertNull(certificateActionReceiveComplement.getName());
+    final var certificate = certificateBuilder.build();
+    assertNull(certificateActionReceiveComplement.getName(Optional.of(certificate)));
   }
 
   @Test
   void shallReturnDescription() {
-    assertNull(certificateActionReceiveComplement.getDescription());
+    final var certificate = certificateBuilder.build();
+    assertNull(certificateActionReceiveComplement.getDescription(Optional.of(certificate)));
   }
 
   @Test
