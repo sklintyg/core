@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 
@@ -37,7 +38,7 @@ public class Message {
   @Builder.Default
   private List<Reminder> reminders = Collections.emptyList();
 
-  public List<MessageAction> messageActions() {
+  public List<MessageAction> availableActions(ActionEvaluation actionEvaluation) {
     final var messageActions = new ArrayList<MessageAction>();
 
     if (type.equals(MessageType.COMPLEMENT) && !status.equals(MessageStatus.HANDLED)) {

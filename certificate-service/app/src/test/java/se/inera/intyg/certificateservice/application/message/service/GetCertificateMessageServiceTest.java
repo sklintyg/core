@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
@@ -24,6 +25,7 @@ import se.inera.intyg.certificateservice.application.message.service.validator.G
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageAction;
 import se.inera.intyg.certificateservice.domain.message.service.GetCertificateMessageDomainService;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,14 +72,17 @@ class GetCertificateMessageServiceTest {
         ALFA_REGIONEN_DTO
     );
 
-    final var message = Message.builder().build();
+    final var message = mock(Message.class);
+
+    final var messageActions = List.of(MessageAction.builder().build());
+    doReturn(messageActions).when(message)
+        .availableActions(actionEvaluation);
     doReturn(List.of(message)).when(getCertificateMessageDomainService).get(
         actionEvaluation,
         new CertificateId(CERTIFICATE_ID)
     );
 
-    doReturn(questionDTO).when(questionConverter)
-        .convert(message);
+    doReturn(questionDTO).when(questionConverter).convert(message, messageActions);
 
     final var actualResult = getCertificateService.get(
         GetCertificateMessageRequest.builder()

@@ -38,7 +38,10 @@ public class GetCertificateMessageService {
     return GetCertificateMessageResponse.builder()
         .questions(
             messages.stream()
-                .map(questionConverter::convert)
+                .map(message -> questionConverter.convert(
+                    message,
+                    message.availableActions(actionEvaluation)
+                ))
                 .toList()
         )
         .build();
