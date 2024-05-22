@@ -3,6 +3,8 @@ package se.inera.intyg.certificateservice.application.message.service.converter;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.AUTHOR_INCOMING_MESSAGE;
@@ -19,11 +21,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationDTO;
+import se.inera.intyg.certificateservice.application.message.dto.ComplementDTO;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionTypeDTO;
 
 @ExtendWith(MockitoExtension.class)
 class QuestionConverterTest {
 
+  @Mock
+  CertificateRelationConverter certificateRelationConverter;
   @Mock
   ReminderConverter reminderConverter;
   @Mock
@@ -105,5 +111,32 @@ class QuestionConverterTest {
         () -> assertEquals(CONTACT_INFO.get(1), convert.getContactInfo()[1]),
         () -> assertEquals(CONTACT_INFO.get(2), convert.getContactInfo()[2])
     );
+  }
+
+  @Test
+  void shallIncludeAnsweredByCertificate() {
+    final var expectedRelation = CertificateRelationDTO.builder().build();
+
+    doReturn(expectedRelation).when(certificateRelationConverter).convert(CERTIFICATE_ID);
+
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
+    assertEquals(expectedRelation, convert.getAnsweredByCertificate());
+  }
+
+  @Test
+  void shallIncludeReminders() {
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
+    assertNotNull(convert.getReminders());
+  }
+
+  @Test
+  void shallIncludeComplements() {
+    final var expectedComplement = ComplementDTO.builder().build();
+
+    doReturn(expectedComplement).when(complementConverter)
+        .convert(COMPLEMENT_MESSAGE.complements().get(0));
+
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
+    assertEquals(expectedComplement, convert.getComplementDTOS()[0]);
   }
 }
