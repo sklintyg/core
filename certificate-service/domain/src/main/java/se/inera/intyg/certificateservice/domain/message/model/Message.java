@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.message.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import lombok.Builder;
@@ -36,4 +37,24 @@ public class Message {
   @Builder.Default
   private List<Reminder> reminders = Collections.emptyList();
 
+  public List<MessageAction> messageActions() {
+    final var messageActions = new ArrayList<MessageAction>();
+
+    if (type.equals(MessageType.COMPLEMENT) && !status.equals(MessageStatus.HANDLED)) {
+      messageActions.add(
+          MessageActionFactory.complement()
+      );
+      messageActions.add(
+          MessageActionFactory.cannotComplement()
+      );
+    }
+
+    if (!status.equals(MessageStatus.HANDLED)) {
+      messageActions.add(
+          MessageActionFactory.forward()
+      );
+    }
+
+    return messageActions;
+  }
 }

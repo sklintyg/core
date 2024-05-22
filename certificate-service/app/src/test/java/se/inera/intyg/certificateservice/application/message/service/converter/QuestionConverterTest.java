@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
@@ -23,6 +24,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationDTO;
+import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.application.message.dto.ComplementDTO;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionTypeDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
@@ -31,6 +33,8 @@ import se.inera.intyg.certificateservice.domain.certificate.repository.Certifica
 @ExtendWith(MockitoExtension.class)
 class QuestionConverterTest {
 
+  @Mock
+  MessageActionConverter messageActionConverter;
   @Mock
   CertificateRepository certificateRepository;
   @Mock
@@ -150,5 +154,12 @@ class QuestionConverterTest {
 
     final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertEquals(expectedComplement, convert.getComplementDTOS()[0]);
+  }
+
+  @Test
+  void shallIncludeLinks() {
+    doReturn(ResourceLinkDTO.builder().build()).when(messageActionConverter).convert(any());
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
+    assertFalse(convert.getLinks().isEmpty());
   }
 }

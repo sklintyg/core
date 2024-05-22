@@ -19,6 +19,7 @@ public class QuestionConverter {
   private final ComplementConverter complementConverter;
   private final CertificateRepository certificateRepository;
   private final CertificateRelationConverter certificateRelationConverter;
+  private final MessageActionConverter messageActionConverter;
 
   public QuestionDTO convert(Message message) {
     final var certificate = certificateRepository.getById(message.certificateId());
@@ -52,7 +53,11 @@ public class QuestionConverter {
                 .map(complement -> complementConverter.convert(complement, certificate))
                 .toList().toArray(new ComplementDTO[0])
         )
-        // Handle links
+        .links(
+            message.messageActions().stream()
+                .map(messageActionConverter::convert)
+                .toList()
+        )
         .build();
   }
 }
