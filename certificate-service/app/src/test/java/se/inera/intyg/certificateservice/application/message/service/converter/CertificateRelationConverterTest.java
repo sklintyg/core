@@ -78,4 +78,31 @@ class CertificateRelationConverterTest {
         .build())
     );
   }
+
+  @Test
+  void shallReturnLastestRelationIfMultipleComplementedRelationsArePresent() {
+    final var now = LocalDateTime.now();
+    final var convert = certificateRelationConverter.convert(
+        Certificate.builder()
+            .children(
+                List.of(
+                    Relation.builder()
+                        .certificate(
+                            Certificate.builder()
+                                .id(CHILD_CERTIFICATE_ID)
+                                .status(Status.SIGNED)
+                                .build()
+                        )
+                        .type(RelationType.COMPLEMENT)
+                        .created(now)
+                        .build(),
+                    Relation.builder()
+                        .type(RelationType.COMPLEMENT)
+                        .created(LocalDateTime.now().minusDays(1))
+                        .build()
+                )
+            )
+            .build());
+    assertEquals(now, convert.getCreated());
+  }
 }

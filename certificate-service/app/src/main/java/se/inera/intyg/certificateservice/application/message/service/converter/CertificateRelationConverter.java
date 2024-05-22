@@ -1,11 +1,13 @@
 package se.inera.intyg.certificateservice.application.message.service.converter;
 
+import java.util.Comparator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 
 @Component
@@ -15,7 +17,7 @@ public class CertificateRelationConverter {
   public CertificateRelationDTO convert(Certificate certificate) {
     return certificate.children().stream()
         .filter(child -> child.type().equals(RelationType.COMPLEMENT))
-        .findFirst()
+        .max(Comparator.comparing(Relation::created))
         .map(relation ->
             CertificateRelationDTO.builder()
                 .certificateId(relation.certificate().id().id())

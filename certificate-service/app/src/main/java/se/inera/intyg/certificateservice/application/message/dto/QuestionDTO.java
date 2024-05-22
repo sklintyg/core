@@ -22,15 +22,15 @@ public class QuestionDTO {
   String message;
   String author;
   LocalDateTime sent;
-  ComplementDTO[] complements;
+  List<ComplementDTO> complements;
   boolean isHandled;
   boolean isForwarded;
   AnswerDTO answerDTO;
   CertificateRelationDTO answeredByCertificate;
-  ReminderDTO[] reminders;
+  List<ReminderDTO> reminders;
   LocalDateTime lastUpdate;
   LocalDate lastDateToReply;
-  String[] contactInfo;
+  List<String> contactInfo;
   String certificateId;
   List<ResourceLinkDTO> links;
 

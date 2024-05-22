@@ -2,10 +2,8 @@ package se.inera.intyg.certificateservice.application.message.service.converter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateservice.application.message.dto.ComplementDTO;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionTypeDTO;
-import se.inera.intyg.certificateservice.application.message.dto.ReminderDTO;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
@@ -41,17 +39,17 @@ public class QuestionConverter {
                 : null
         )
         .contactInfo(
-            message.contactInfo().lines().toArray(new String[0])
+            message.contactInfo().lines()
         )
         .reminders(
             message.reminders().stream()
                 .map(reminderConverter::convert)
-                .toList().toArray(new ReminderDTO[0])
+                .toList()
         )
         .complements(
             message.complements().stream()
                 .map(complement -> complementConverter.convert(complement, certificate))
-                .toList().toArray(new ComplementDTO[0])
+                .toList()
         )
         .links(
             message.messageActions().stream()

@@ -123,9 +123,9 @@ class QuestionConverterTest {
   void shallIncludeContactInfo() {
     final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertAll(
-        () -> assertEquals(CONTACT_INFO.get(0), convert.getContactInfo()[0]),
-        () -> assertEquals(CONTACT_INFO.get(1), convert.getContactInfo()[1]),
-        () -> assertEquals(CONTACT_INFO.get(2), convert.getContactInfo()[2])
+        () -> assertEquals(CONTACT_INFO.get(0), convert.getContactInfo().get(0)),
+        () -> assertEquals(CONTACT_INFO.get(1), convert.getContactInfo().get(1)),
+        () -> assertEquals(CONTACT_INFO.get(2), convert.getContactInfo().get(2))
     );
   }
 
@@ -153,7 +153,7 @@ class QuestionConverterTest {
         .convert(COMPLEMENT_MESSAGE.complements().get(0), CERTIFICATE);
 
     final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
-    assertEquals(expectedComplement, convert.getComplements()[0]);
+    assertEquals(expectedComplement, convert.getComplements().get(0));
   }
 
   @Test
