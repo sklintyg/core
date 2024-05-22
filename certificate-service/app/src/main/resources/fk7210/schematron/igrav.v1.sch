@@ -51,4 +51,15 @@
     </iso:rule>
   </iso:pattern>
 
+    <iso:pattern id="cv-pattern">
+      <iso:rule id="cv" abstract="true">
+        <iso:assert test="count(tp:cv) = 1">Ett värde av typen CV måste ha ett cv-element</iso:assert>
+        <iso:assert test="count(tp:cv/tp:codeSystem) = 1">codeSystem är obligatoriskt</iso:assert>
+        <iso:assert test="tp:cv/tp:codeSystem/count(*) = 0">'codeSystem' får inte vara inbäddat i något element.</iso:assert>
+        <iso:assert test="count(tp:cv/tp:code) = 1">code är obligatoriskt</iso:assert>
+        <iso:assert test="tp:cv/tp:code/count(*) = 0">'code' får inte vara inbäddat i något element.</iso:assert>
+        <iso:assert test="count(tp:cv/tp:displayName) le 1">högst ett displayName kan anges</iso:assert>
+      </iso:rule>
+    </iso:pattern>
+
 </iso:schema>
