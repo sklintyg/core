@@ -28,7 +28,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 import se.inera.intyg.certificateservice.testability.certificate.dto.SupportedCertificateTypesResponse;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityCertificateRequest;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO;
@@ -37,6 +36,7 @@ import se.inera.intyg.certificateservice.testability.certificate.dto.Testability
 import se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityCertificateFillService;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateModelRepository;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateRepository;
+import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityMessageRepository;
 
 @Profile(TESTABILITY_PROFILE)
 @Service
@@ -51,7 +51,7 @@ public class TestabilityCertificateService {
   private final ResourceLinkConverter resourceLinkConverter;
   private final List<TestabilityCertificateFillService> testabilityCertificateFillServices;
   private final XmlGenerator xmlGenerator;
-  private final MessageRepository messageRepository;
+  private final TestabilityMessageRepository testabilityMessageRepository;
 
   public CreateCertificateResponse create(
       TestabilityCertificateRequest testabilityCertificateRequest) {
@@ -152,8 +152,8 @@ public class TestabilityCertificateService {
             .map(CertificateId::new)
             .toList()
     );
-    
-    messageRepository.remove(
+
+    testabilityMessageRepository.remove(
         testabilityCertificateRequest.getMessageIds()
     );
   }
