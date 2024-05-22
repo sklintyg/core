@@ -9,12 +9,15 @@ public enum CertificateStatusTypeDTO {
   REVOKED,
   LOCKED_REVOKED;
 
-  public static CertificateStatusTypeDTO toCertificateStatusTypeDTO(Status status) {
+  public static CertificateStatusTypeDTO toType(Status status) {
     return switch (status) {
       case DRAFT -> UNSIGNED;
-      case REVOKED, DELETED_DRAFT -> REVOKED;
+      case REVOKED -> REVOKED;
       case SIGNED -> SIGNED;
       case LOCKED_DRAFT -> LOCKED;
+      case DELETED_DRAFT ->
+          throw new IllegalArgumentException("Not able to convert status '%s'".formatted(status)
+          );
     };
   }
 }

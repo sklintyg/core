@@ -23,10 +23,7 @@ public class CertificateRelationConverter {
         .map(relation ->
             CertificateRelationDTO.builder()
                 .certificateId(relation.certificate().id().id())
-                .status(
-                    CertificateStatusTypeDTO.toCertificateStatusTypeDTO(
-                        relation.certificate().status())
-                )
+                .status(CertificateStatusTypeDTO.toType(relation.certificate().status()))
                 .created(relation.created())
                 .type(CertificateRelationTypeDTO.toType(relation.type()))
                 .build()
