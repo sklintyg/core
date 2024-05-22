@@ -3,10 +3,14 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,6 +54,26 @@ class JpaMessageRepositoryTest {
     @Test
     void shallThrowExceptionIfMessageIsNull() {
       assertThrows(IllegalArgumentException.class, () -> jpaMessageRepository.save(null));
+    }
+
+    @Test
+    void shallRemoveMessages() {
+      final var ids = List.of("ID1", "ID2");
+
+      jpaMessageRepository.remove(
+          ids
+      );
+
+      verify(messageEntityRepository).deleteAllByIdIn(ids);
+    }
+
+    @Test
+    void shallNotRemoveMessagesIfListIsEmpty() {
+      jpaMessageRepository.remove(
+          Collections.emptyList()
+      );
+
+      verifyNoInteractions(messageEntityRepository);
     }
   }
 }

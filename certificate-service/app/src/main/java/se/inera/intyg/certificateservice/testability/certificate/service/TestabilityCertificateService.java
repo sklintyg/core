@@ -28,6 +28,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 import se.inera.intyg.certificateservice.testability.certificate.dto.SupportedCertificateTypesResponse;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityCertificateRequest;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO;
@@ -50,6 +51,7 @@ public class TestabilityCertificateService {
   private final ResourceLinkConverter resourceLinkConverter;
   private final List<TestabilityCertificateFillService> testabilityCertificateFillServices;
   private final XmlGenerator xmlGenerator;
+  private final MessageRepository messageRepository;
 
   public CreateCertificateResponse create(
       TestabilityCertificateRequest testabilityCertificateRequest) {
@@ -149,6 +151,10 @@ public class TestabilityCertificateService {
         testabilityCertificateRequest.getCertificateIds().stream()
             .map(CertificateId::new)
             .toList()
+    );
+    
+    messageRepository.remove(
+        testabilityCertificateRequest.getMessageIds()
     );
   }
 

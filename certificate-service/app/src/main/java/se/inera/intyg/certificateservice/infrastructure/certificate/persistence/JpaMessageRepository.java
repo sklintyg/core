@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
@@ -27,5 +28,14 @@ public class JpaMessageRepository implements MessageRepository {
     );
 
     return messageEntityMapper.toDomain(savedEntity);
+  }
+
+  @Override
+  public void remove(List<String> messageIds) {
+    if (messageIds.isEmpty()) {
+      return;
+    }
+
+    messageEntityRepository.deleteAllByIdIn(messageIds);
   }
 }

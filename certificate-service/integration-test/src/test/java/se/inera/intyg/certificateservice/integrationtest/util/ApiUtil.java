@@ -67,6 +67,8 @@ public class ApiUtil {
   private final int port;
 
   private List<String> certificateIds = new ArrayList<>();
+  private List<String> messageIds = new ArrayList<>();
+
 
   public ResponseEntity<GetCertificateTypeInfoResponse> certificateTypeInfo(
       GetCertificateTypeInfoRequest request) {
@@ -415,6 +417,8 @@ public class ApiUtil {
 
     final var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
+    
+    messageIds.add(request.getId());
 
     return this.restTemplate.exchange(
         requestUrl,
@@ -424,6 +428,7 @@ public class ApiUtil {
         },
         Collections.emptyMap()
     );
+
   }
 
   public ResponseEntity<GetCertificateMessageResponse> getMessagesForCertificate(
@@ -543,7 +548,7 @@ public class ApiUtil {
   }
 
   public void reset() {
-    if (certificateIds.isEmpty()) {
+    if (certificateIds.isEmpty() && messageIds.isEmpty()) {
       return;
     }
 
@@ -552,6 +557,7 @@ public class ApiUtil {
     headers.setContentType(MediaType.APPLICATION_JSON);
     final var request = TestabilityResetCertificateRequest.builder()
         .certificateIds(certificateIds)
+        .messageIds(messageIds)
         .build();
     final var response = this.restTemplate.<Void>exchange(
         requestUrl,
