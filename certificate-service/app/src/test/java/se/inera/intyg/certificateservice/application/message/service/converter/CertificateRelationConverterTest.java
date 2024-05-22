@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationTypeDTO.COMPLEMENTED;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
@@ -20,89 +20,52 @@ class CertificateRelationConverterTest {
 
   private static final CertificateId CHILD_CERTIFICATE_ID = new CertificateId("childCertificateId");
   private CertificateRelationConverter certificateRelationConverter;
-  private Certificate certificate;
+  private Optional<Relation> relation;
 
   @BeforeEach
   void setUp() {
     certificateRelationConverter = new CertificateRelationConverter();
-    certificate = Certificate.builder()
-        .children(
-            List.of(
-                Relation.builder()
-                    .type(RelationType.COMPLEMENT)
-                    .certificate(
-                        Certificate.builder()
-                            .id(CHILD_CERTIFICATE_ID)
-                            .status(Status.SIGNED)
-                            .build()
-                    )
-                    .created(LocalDateTime.now())
+    relation = Optional.of(
+        Relation.builder()
+            .type(RelationType.COMPLEMENT)
+            .certificate(
+                Certificate.builder()
+                    .id(CHILD_CERTIFICATE_ID)
+                    .status(Status.SIGNED)
                     .build()
             )
-        )
-        .build();
+            .created(LocalDateTime.now())
+            .build()
+    );
   }
 
   @Test
   void shallIncludeCertificateId() {
     assertEquals(CHILD_CERTIFICATE_ID.id(),
-        certificateRelationConverter.convert(certificate).getCertificateId());
+        certificateRelationConverter.convert(relation)
+            .getCertificateId());
   }
 
   @Test
   void shallIncludeStatus() {
     assertEquals(CertificateStatusTypeDTO.SIGNED,
-        certificateRelationConverter.convert(certificate).getStatus());
+        certificateRelationConverter.convert(relation).getStatus());
   }
 
   @Test
   void shallIncludeCreated() {
-    assertNotNull(certificateRelationConverter.convert(certificate).getCreated());
+    assertNotNull(
+        certificateRelationConverter.convert(relation).getCreated());
   }
 
   @Test
   void shallIncludeType() {
-    assertEquals(COMPLEMENTED, certificateRelationConverter.convert(certificate).getType());
+    assertEquals(COMPLEMENTED,
+        certificateRelationConverter.convert(relation).getType());
   }
 
   @Test
-  void shallFilterChildrenThatsNotComplemented() {
-    assertNull(certificateRelationConverter.convert(Certificate.builder()
-        .children(
-            List.of(
-                Relation.builder()
-                    .type(RelationType.REPLACE)
-                    .build()
-            )
-        )
-        .build())
-    );
-  }
-
-  @Test
-  void shallReturnLastestRelationIfMultipleComplementedRelationsArePresent() {
-    final var now = LocalDateTime.now();
-    final var convert = certificateRelationConverter.convert(
-        Certificate.builder()
-            .children(
-                List.of(
-                    Relation.builder()
-                        .certificate(
-                            Certificate.builder()
-                                .id(CHILD_CERTIFICATE_ID)
-                                .status(Status.SIGNED)
-                                .build()
-                        )
-                        .type(RelationType.COMPLEMENT)
-                        .created(now)
-                        .build(),
-                    Relation.builder()
-                        .type(RelationType.COMPLEMENT)
-                        .created(LocalDateTime.now().minusDays(1))
-                        .build()
-                )
-            )
-            .build());
-    assertEquals(now, convert.getCreated());
+  void shallReturnNullIfEmpty() {
+    assertNull(certificateRelationConverter.convert(Optional.empty()));
   }
 }

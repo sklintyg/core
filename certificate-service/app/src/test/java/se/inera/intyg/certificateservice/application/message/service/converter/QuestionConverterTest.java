@@ -17,6 +17,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
 
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -133,7 +134,8 @@ class QuestionConverterTest {
   void shallIncludeAnsweredByCertificate() {
     final var expectedRelation = CertificateRelationDTO.builder().build();
 
-    doReturn(expectedRelation).when(certificateRelationConverter).convert(CERTIFICATE);
+    doReturn(expectedRelation).when(certificateRelationConverter)
+        .convert(Optional.empty());
 
     final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertEquals(expectedRelation, convert.getAnsweredByCertificate());

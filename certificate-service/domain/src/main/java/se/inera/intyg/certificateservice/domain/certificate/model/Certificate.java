@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.certificate.model;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -354,6 +355,12 @@ public class Certificate {
   public boolean isCertificateIssuedOnPatient(PersonId citizen) {
     return this.certificateMetaData().patient().id().idWithoutDash()
         .equals(citizen.idWithoutDash());
+  }
+
+  public Optional<Relation> getLatestChildRelationOfType(RelationType relationType) {
+    return this.children().stream()
+        .filter(child -> child.type().equals(relationType))
+        .max(Comparator.comparing(Relation::created));
   }
 }
 

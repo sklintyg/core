@@ -2007,4 +2007,69 @@ class CertificateTest {
       assertTrue(certificate.isSendActiveForCitizen());
     }
   }
+
+  @Nested
+  class GetLatestChildRelationOfTypeTest {
+
+    @Test
+    void shallReturnMatchingChildRelation() {
+      final var expectedRelation = Relation.builder()
+          .type(RelationType.COMPLEMENT)
+          .created(LocalDateTime.now())
+          .build();
+
+      final var certificate = Certificate.builder()
+          .children(
+              List.of(
+                  expectedRelation
+              )
+          )
+          .build();
+
+      assertEquals(Optional.of(expectedRelation),
+          certificate.getLatestChildRelationOfType(RelationType.COMPLEMENT));
+    }
+
+    @Test
+    void shallReturnOptionalEmptyIfNoMatchingChildRelation() {
+      final var certificate = Certificate.builder()
+          .children(
+              List.of(
+                  Relation.builder()
+                      .type(RelationType.REPLACE)
+                      .created(LocalDateTime.now())
+                      .build()
+              )
+          )
+          .build();
+
+      assertEquals(Optional.empty(),
+          certificate.getLatestChildRelationOfType(RelationType.COMPLEMENT));
+    }
+
+    @Test
+    void shallReturnLastestRelationIfMultipleChildRelationsArePresent() {
+      final var now = LocalDateTime.now();
+
+      final var expectedRelation = Relation.builder()
+          .type(RelationType.COMPLEMENT)
+          .created(now)
+          .build();
+
+      final var certificate = Certificate.builder()
+          .children(
+              List.of(
+                  expectedRelation,
+                  Relation.builder()
+                      .type(RelationType.COMPLEMENT)
+                      .created(LocalDateTime.now().minusDays(1))
+                      .build()
+              )
+          )
+          .build();
+
+      assertEquals(Optional.of(expectedRelation),
+          certificate.getLatestChildRelationOfType(RelationType.COMPLEMENT));
+    }
+  }
 }

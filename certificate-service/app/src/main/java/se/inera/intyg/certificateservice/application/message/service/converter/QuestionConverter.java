@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionTypeDTO;
+import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
@@ -35,7 +36,10 @@ public class QuestionConverter {
         .lastDateToReply(message.lastDateToReply())
         .answeredByCertificate(
             message.type().equals(MessageType.COMPLEMENT)
-                ? certificateRelationConverter.convert(certificate)
+                ? certificateRelationConverter.convert(
+                certificate.getLatestChildRelationOfType(
+                    RelationType.COMPLEMENT
+                ))
                 : null
         )
         .contactInfo(
