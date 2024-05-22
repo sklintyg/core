@@ -36,7 +36,6 @@ class ComplementConverterTest {
                             .id(ELEMENT_SPECIFICATION_ID)
                             .configuration(
                                 ElementConfigurationDate.builder()
-                                    .id(FIELD_ID)
                                     .name(QUESTION_TEXT)
                                     .build()
                             )
@@ -63,12 +62,6 @@ class ComplementConverterTest {
   void shallIncludeQuestionText() {
     assertEquals(QUESTION_TEXT,
         complementConverter.convert(complement, certificate).getQuestionText());
-  }
-
-  @Test
-  void shallIncludeValueId() {
-    assertEquals(FIELD_ID.value(),
-        complementConverter.convert(complement, certificate).getValueId());
   }
 
   @Test
