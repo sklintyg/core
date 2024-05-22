@@ -16,6 +16,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,10 +25,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationDTO;
 import se.inera.intyg.certificateservice.application.message.dto.ComplementDTO;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionTypeDTO;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 
 @ExtendWith(MockitoExtension.class)
 class QuestionConverterTest {
 
+  @Mock
+  CertificateRepository certificateRepository;
   @Mock
   CertificateRelationConverter certificateRelationConverter;
   @Mock
@@ -36,6 +41,13 @@ class QuestionConverterTest {
   ComplementConverter complementConverter;
   @InjectMocks
   QuestionConverter questionConverter;
+
+  private static final Certificate CERTIFICATE = Certificate.builder().build();
+
+  @BeforeEach
+  void setUp() {
+    doReturn(CERTIFICATE).when(certificateRepository).getById(CERTIFICATE_ID);
+  }
 
   @Test
   void shallIncludeId() {
@@ -117,7 +129,7 @@ class QuestionConverterTest {
   void shallIncludeAnsweredByCertificate() {
     final var expectedRelation = CertificateRelationDTO.builder().build();
 
-    doReturn(expectedRelation).when(certificateRelationConverter).convert(CERTIFICATE_ID);
+    doReturn(expectedRelation).when(certificateRelationConverter).convert(CERTIFICATE);
 
     final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertEquals(expectedRelation, convert.getAnsweredByCertificate());
@@ -134,7 +146,7 @@ class QuestionConverterTest {
     final var expectedComplement = ComplementDTO.builder().build();
 
     doReturn(expectedComplement).when(complementConverter)
-        .convert(COMPLEMENT_MESSAGE.complements().get(0));
+        .convert(COMPLEMENT_MESSAGE.complements().get(0), CERTIFICATE);
 
     final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertEquals(expectedComplement, convert.getComplementDTOS()[0]);

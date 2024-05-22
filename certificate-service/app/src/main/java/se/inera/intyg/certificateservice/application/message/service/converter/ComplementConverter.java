@@ -2,13 +2,23 @@ package se.inera.intyg.certificateservice.application.message.service.converter;
 
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.message.dto.ComplementDTO;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.message.model.Complement;
 
 @Component
 public class ComplementConverter {
 
-  public ComplementDTO convert(Complement complement) {
+  public ComplementDTO convert(Complement complement, Certificate certificate) {
     return ComplementDTO.builder()
+        .questionId(complement.elementId().id())
+        .questionText(
+            certificate.certificateModel()
+                .elementSpecification(complement.elementId())
+                .configuration()
+                .name()
+        )
+        .valueId(complement.fieldId().value())
+        .message(complement.content().content())
         .build();
   }
 }

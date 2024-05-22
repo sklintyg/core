@@ -6,6 +6,7 @@ import se.inera.intyg.certificateservice.application.message.dto.ComplementDTO;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionTypeDTO;
 import se.inera.intyg.certificateservice.application.message.dto.ReminderDTO;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
@@ -16,9 +17,11 @@ public class QuestionConverter {
 
   private final ReminderConverter reminderConverter;
   private final ComplementConverter complementConverter;
+  private final CertificateRepository certificateRepository;
   private final CertificateRelationConverter certificateRelationConverter;
 
   public QuestionDTO convert(Message message) {
+    final var certificate = certificateRepository.getById(message.certificateId());
     return QuestionDTO.builder()
         .id(message.id().id())
         .certificateId(message.certificateId().id())
@@ -33,7 +36,7 @@ public class QuestionConverter {
         .lastDateToReply(message.lastDateToReply())
         .answeredByCertificate(
             message.type().equals(MessageType.COMPLEMENT)
-                ? certificateRelationConverter.convert(message.certificateId())
+                ? certificateRelationConverter.convert(certificate)
                 : null
         )
         .contactInfo(
@@ -46,7 +49,7 @@ public class QuestionConverter {
         )
         .complementDTOS(
             message.complements().stream()
-                .map(complementConverter::convert)
+                .map(complement -> complementConverter.convert(complement, certificate))
                 .toList().toArray(new ComplementDTO[0])
         )
         // Handle links
