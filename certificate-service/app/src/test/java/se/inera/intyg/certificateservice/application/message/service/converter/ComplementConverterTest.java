@@ -36,6 +36,7 @@ class ComplementConverterTest {
                             .id(ELEMENT_SPECIFICATION_ID)
                             .configuration(
                                 ElementConfigurationDate.builder()
+                                    .id(FIELD_ID)
                                     .name(QUESTION_TEXT)
                                     .build()
                             )
@@ -48,7 +49,6 @@ class ComplementConverterTest {
 
     complement = Complement.builder()
         .elementId(ELEMENT_SPECIFICATION_ID)
-        .fieldId(FIELD_ID)
         .content(CONTENT)
         .build();
   }
