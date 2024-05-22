@@ -20,6 +20,7 @@ public class ElementConfigurationCheckboxDateRangeList implements ElementConfigu
   String label;
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.CHECKBOX_DATE_RANGE_LIST;
+  @Getter(onMethod = @__(@Override))
   FieldId id;
   boolean hideWorkingHours;
   List<CheckboxDateRange> dateRanges;
@@ -38,7 +39,7 @@ public class ElementConfigurationCheckboxDateRangeList implements ElementConfigu
     if (dateRanges == null) {
       return Optional.empty();
     }
-    
+
     return dateRanges.stream()
         .filter(dateRange -> dateRange.id().equals(id))
         .findFirst();

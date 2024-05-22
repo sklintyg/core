@@ -48,7 +48,7 @@ public class QuestionConverter {
                 .map(reminderConverter::convert)
                 .toList().toArray(new ReminderDTO[0])
         )
-        .complementDTOS(
+        .complements(
             message.complements().stream()
                 .map(complement -> complementConverter.convert(complement, certificate))
                 .toList().toArray(new ComplementDTO[0])

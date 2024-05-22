@@ -14,6 +14,7 @@ public class ElementConfigurationTextArea implements ElementConfiguration {
   String name;
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.TEXT_AREA;
+  @Getter(onMethod = @__(@Override))
   FieldId id;
 
   @Override

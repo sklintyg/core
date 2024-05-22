@@ -12,6 +12,10 @@ public interface ElementConfiguration {
     return null;
   }
 
+  default FieldId id() {
+    return null;
+  }
+
   ElementType type();
 
   ElementValue emptyValue();

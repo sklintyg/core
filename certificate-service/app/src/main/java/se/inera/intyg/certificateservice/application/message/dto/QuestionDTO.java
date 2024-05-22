@@ -22,7 +22,7 @@ public class QuestionDTO {
   String message;
   String author;
   LocalDateTime sent;
-  ComplementDTO[] complementDTOS;
+  ComplementDTO[] complements;
   boolean isHandled;
   boolean isForwarded;
   AnswerDTO answerDTO;

@@ -153,7 +153,7 @@ class QuestionConverterTest {
         .convert(COMPLEMENT_MESSAGE.complements().get(0), CERTIFICATE);
 
     final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
-    assertEquals(expectedComplement, convert.getComplementDTOS()[0]);
+    assertEquals(expectedComplement, convert.getComplements()[0]);
   }
 
   @Test

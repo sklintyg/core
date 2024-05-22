@@ -51,6 +51,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCertificateTypeInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultDeleteCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateMessageRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificatePdfRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateXmlRequest;
@@ -74,6 +75,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.exists;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueDateRangeList;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueText;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.hasQuestions;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.pdfData;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.recipient;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.relation;
@@ -4214,6 +4216,41 @@ class FK7472ActiveIT {
       );
 
       assertEquals(403, response.getStatusCode().value());
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7472 - Frågor för intyg")
+  class Messages {
+
+    @Test
+    @DisplayName("FK7472 - Skall returnera lista av frågor som finns på intyget")
+    void shallReturn200IfComplementCanBeReceived() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          defaultGetCertificateMessageRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertTrue(
+          hasQuestions(messagesForCertificate.getBody())
+      );
     }
   }
 }

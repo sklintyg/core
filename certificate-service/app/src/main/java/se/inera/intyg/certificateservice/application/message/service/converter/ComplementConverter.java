@@ -17,7 +17,13 @@ public class ComplementConverter {
                 .configuration()
                 .name()
         )
-        .valueId(complement.fieldId().value())
+        .valueId(
+            certificate.certificateModel()
+                .elementSpecification(complement.elementId())
+                .configuration()
+                .id()
+                .value()
+        )
         .message(complement.content().content())
         .build();
   }
