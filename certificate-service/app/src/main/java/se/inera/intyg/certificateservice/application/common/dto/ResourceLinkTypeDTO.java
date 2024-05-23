@@ -79,6 +79,7 @@ public enum ResourceLinkTypeDTO {
       case REPLACE_CONTINUE -> REPLACE_CERTIFICATE_CONTINUE;
       case RENEW -> RENEW_CERTIFICATE;
       case SEND_AFTER_SIGN -> SEND_AFTER_SIGN_CERTIFICATE;
+      case COMPLEMENT -> COMPLEMENT_CERTIFICATE;
       case RECEIVE_COMPLEMENT ->
           throw new IllegalArgumentException("%s is not a valid type!".formatted(type));
     };

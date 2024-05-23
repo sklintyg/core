@@ -182,5 +182,11 @@ class ResourceLinkTypeDTOTest {
       assertEquals(ResourceLinkTypeDTO.SEND_AFTER_SIGN_CERTIFICATE,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SEND_AFTER_SIGN));
     }
+
+    @Test
+    void shallReturnCertificateActionTypeComplement() {
+      assertEquals(ResourceLinkTypeDTO.COMPLEMENT_CERTIFICATE,
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.COMPLEMENT));
+    }
   }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.certificate.service.ComplementCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.DeleteCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
@@ -204,6 +205,14 @@ public class AppConfig {
       CertificateRepository certificateRepository,
       CertificateEventDomainService certificateEventDomainService) {
     return new RenewCertificateDomainService(certificateRepository, certificateEventDomainService);
+  }
+
+  @Bean
+  public ComplementCertificateDomainService complementCertificateDomainService(
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new ComplementCertificateDomainService(certificateRepository,
+        certificateEventDomainService);
   }
 
   @Bean
