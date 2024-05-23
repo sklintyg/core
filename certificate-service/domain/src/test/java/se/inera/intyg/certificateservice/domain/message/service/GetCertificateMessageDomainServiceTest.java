@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.message.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.READ;
 
@@ -55,8 +56,21 @@ class GetCertificateMessageDomainServiceTest {
   }
 
   @Test
+  void shallEvaluateAvailableActions() {
+    final var message = mock(Message.class);
+    final var messages = List.of(message);
+    doReturn(messages).when(certificate).messages();
+    doReturn(true).when(certificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
+    getCertificateMessageDomainService.get(ACTION_EVALUATION,
+        CERTIFICATE_ID);
+
+    verify(message).evaluateAvailableActions(ACTION_EVALUATION, certificate);
+  }
+
+  @Test
   void shallReturnMessages() {
-    final var expectedMessages = List.of(Message.builder().build());
+    final var message = mock(Message.class);
+    final var expectedMessages = List.of(message);
     doReturn(expectedMessages).when(certificate).messages();
     doReturn(true).when(certificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
     final var actualMessages = getCertificateMessageDomainService.get(ACTION_EVALUATION,

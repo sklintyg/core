@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.domain.message.model;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +15,7 @@ class MessageTest {
         .status(MessageStatus.SENT)
         .build();
 
-    final var messageActions = message.getAvailableActions();
+    final var messageActions = message.availableActions();
     assertAll(
         () -> assertTrue(messageActions.contains(MessageActionFactory.complement())),
         () -> assertTrue(messageActions.contains(MessageActionFactory.cannotComplement()))
@@ -27,7 +29,7 @@ class MessageTest {
         .status(MessageStatus.SENT)
         .build();
 
-    final var messageActions = message.getAvailableActions();
+    final var messageActions = message.availableActions();
     assertTrue(messageActions.contains(MessageActionFactory.forward()));
   }
 
@@ -38,7 +40,7 @@ class MessageTest {
         .status(MessageStatus.HANDLED)
         .build();
 
-    final var messageActions = message.getAvailableActions();
+    final var messageActions = message.availableActions();
     assertFalse(messageActions.contains(MessageActionFactory.forward()));
   }
 
@@ -50,7 +52,7 @@ class MessageTest {
         .status(MessageStatus.SENT)
         .build();
 
-    final var messageActions = message.getAvailableActions();
+    final var messageActions = message.availableActions();
     assertAll(
         () -> assertFalse(messageActions.contains(MessageActionFactory.complement())),
         () -> assertFalse(messageActions.contains(MessageActionFactory.cannotComplement()))
@@ -64,7 +66,7 @@ class MessageTest {
         .status(MessageStatus.HANDLED)
         .build();
 
-    final var messageActions = message.getAvailableActions();
+    final var messageActions = message.availableActions();
     assertAll(
         () -> assertFalse(messageActions.contains(MessageActionFactory.complement())),
         () -> assertFalse(messageActions.contains(MessageActionFactory.cannotComplement()))
