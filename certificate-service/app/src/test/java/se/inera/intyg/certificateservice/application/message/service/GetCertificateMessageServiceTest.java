@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
@@ -67,6 +68,7 @@ class GetCertificateMessageServiceTest {
     final var actionEvaluation = ActionEvaluation.builder().build();
 
     doReturn(actionEvaluation).when(actionEvaluationFactory).create(
+        ATHENA_REACT_ANDERSSON_DTO,
         AJLA_DOCTOR_DTO,
         ALFA_ALLERGIMOTTAGNINGEN_DTO,
         ALFA_MEDICINCENTRUM_DTO,
@@ -82,7 +84,7 @@ class GetCertificateMessageServiceTest {
 
     final var messageActions = List.of(MessageAction.builder().build());
     final var messages = List.of(message);
-    
+
     doReturn(messages).when(certificate).messages();
     doReturn(messageActions).when(message).actions(actionEvaluation, certificate);
     doReturn(questionDTO).when(questionConverter).convert(message, messageActions);
@@ -93,6 +95,7 @@ class GetCertificateMessageServiceTest {
             .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
             .careUnit(ALFA_MEDICINCENTRUM_DTO)
             .careProvider(ALFA_REGIONEN_DTO)
+            .patient(ATHENA_REACT_ANDERSSON_DTO)
             .build(),
         CERTIFICATE_ID
     );

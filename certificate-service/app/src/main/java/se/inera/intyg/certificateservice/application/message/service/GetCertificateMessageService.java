@@ -24,6 +24,7 @@ public class GetCertificateMessageService {
     getCertificateMessageRequestValidator.validate(getCertificateMessageRequest, certificateId);
 
     final var actionEvaluation = actionEvaluationFactory.create(
+        getCertificateMessageRequest.getPatient(),
         getCertificateMessageRequest.getUser(),
         getCertificateMessageRequest.getUnit(),
         getCertificateMessageRequest.getCareUnit(),

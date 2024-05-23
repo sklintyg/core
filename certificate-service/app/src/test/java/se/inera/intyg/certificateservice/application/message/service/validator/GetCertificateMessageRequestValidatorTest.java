@@ -2,6 +2,8 @@ package se.inera.intyg.certificateservice.application.message.service.validator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.athenaReactAnderssonDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
@@ -14,6 +16,8 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
+import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageRequest;
 
 class GetCertificateMessageRequestValidatorTest {
@@ -27,6 +31,7 @@ class GetCertificateMessageRequestValidatorTest {
     requestValidator = new GetCertificateMessageRequestValidator();
     requestBuilder = GetCertificateMessageRequest.builder()
         .user(AJLA_DOCTOR_DTO)
+        .patient(ATHENA_REACT_ANDERSSON_DTO)
         .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
         .careUnit(ALFA_MEDICINCENTRUM_DTO)
         .careProvider(ALFA_REGIONEN_DTO);
@@ -427,6 +432,104 @@ class GetCertificateMessageRequestValidatorTest {
           () -> requestValidator.validate(request, ""));
 
       assertEquals("Required parameter missing: certificateId",
+          illegalArgumentException.getMessage());
+    }
+  }
+
+  @Nested
+  class PatientValidation {
+
+    @Test
+    void shallThrowIfPatientIsNull() {
+      final var request = requestBuilder
+          .patient(null)
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> requestValidator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: Patient",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfIdIsNull() {
+      final var request = requestBuilder
+          .patient(
+              athenaReactAnderssonDtoBuilder()
+                  .id(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> requestValidator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: Patient.id",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfPatientIdIsNull() {
+      final var request = requestBuilder
+          .patient(
+              athenaReactAnderssonDtoBuilder()
+                  .id(
+                      PersonIdDTO.builder()
+                          .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
+                          .build()
+                  )
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> requestValidator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: Patient.id.id",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfPatientIdIsEmpty() {
+      final var request = requestBuilder
+          .patient(
+              athenaReactAnderssonDtoBuilder()
+                  .id(
+                      PersonIdDTO.builder()
+                          .id("")
+                          .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
+                          .build()
+                  )
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> requestValidator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: Patient.id.id",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfPatientIdTypeIsNull() {
+      final var request = requestBuilder
+          .patient(
+              athenaReactAnderssonDtoBuilder()
+                  .id(
+                      PersonIdDTO.builder()
+                          .id(ATHENA_REACT_ANDERSSON_DTO.getId().getId())
+                          .build()
+                  )
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> requestValidator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: Patient.id.type",
           illegalArgumentException.getMessage());
     }
   }
