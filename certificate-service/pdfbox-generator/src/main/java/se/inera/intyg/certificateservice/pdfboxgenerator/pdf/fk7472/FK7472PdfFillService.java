@@ -38,12 +38,12 @@ public class FK7472PdfFillService implements CertificateTypePdfFillService {
 
   @Override
   public int getAvailableMcid() {
-    return 100;
+    return 120;
   }
 
   @Override
   public int getSignatureTagIndex() {
-    return 34;
+    return 42;
   }
 
   @Override
