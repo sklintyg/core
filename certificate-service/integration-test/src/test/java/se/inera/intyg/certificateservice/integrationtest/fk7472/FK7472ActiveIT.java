@@ -4225,7 +4225,7 @@ class FK7472ActiveIT {
 
     @Test
     @DisplayName("FK7472 - Skall returnera lista av frågor som finns på intyget")
-    void shallReturn200IfComplementCanBeReceived() {
+    void shallReturnListOfQuestionsForCertificate() {
       final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
