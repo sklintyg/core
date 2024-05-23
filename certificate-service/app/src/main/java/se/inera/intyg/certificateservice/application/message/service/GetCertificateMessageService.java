@@ -8,7 +8,7 @@ import se.inera.intyg.certificateservice.application.message.dto.GetCertificateM
 import se.inera.intyg.certificateservice.application.message.service.converter.QuestionConverter;
 import se.inera.intyg.certificateservice.application.message.service.validator.GetCertificateMessageRequestValidator;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.message.service.GetCertificateMessageDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +16,7 @@ public class GetCertificateMessageService {
 
   private final GetCertificateMessageRequestValidator getCertificateMessageRequestValidator;
   private final ActionEvaluationFactory actionEvaluationFactory;
-  private final GetCertificateMessageDomainService getCertificateMessageDomainService;
+  private final GetCertificateDomainService getCertificateDomainService;
   private final QuestionConverter questionConverter;
 
   public GetCertificateMessageResponse get(
@@ -30,15 +30,20 @@ public class GetCertificateMessageService {
         getCertificateMessageRequest.getCareProvider()
     );
 
-    final var messages = getCertificateMessageDomainService.get(
-        actionEvaluation,
-        new CertificateId(certificateId)
+    final var certificate = getCertificateDomainService.get(
+        new CertificateId(certificateId),
+        actionEvaluation
     );
 
     return GetCertificateMessageResponse.builder()
         .questions(
-            messages.stream()
-                .map(questionConverter::convert)
+            certificate.messages().stream()
+                .map(message -> questionConverter.convert(
+                        message,
+                        message.actions(actionEvaluation, certificate
+                        )
+                    )
+                )
                 .toList()
         )
         .build();

@@ -176,6 +176,58 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case COMPLEMENT -> CertificateActionComplement.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleUserNotBlocked(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleInactiveUnit(),
+                  new ActionRulePatientAlive(),
+                  new ActionRuleUserAllowCopy()
+              )
+          )
+          .build();
+      case CANNOT_COMPLEMENT -> CertificateActionCannotComplement.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleUserNotBlocked(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleInactiveUnit(),
+                  new ActionRulePatientAlive(),
+                  new ActionRuleUserAllowCopy()
+              )
+          )
+          .build();
+      case FORWARD_MESSAGE -> CertificateActionForwardMessage.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleUserNotBlocked(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleInactiveUnit(),
+                  new ActionRulePatientAlive(),
+                  new ActionRuleUserAllowCopy()
+              )
+          )
+          .build();
+      case HANDLE_COMPLEMENT -> CertificateActionHandleComplement.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleUserNotBlocked(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleInactiveUnit(),
+                  new ActionRulePatientAlive(),
+                  new ActionRuleUserAllowCopy()
+              )
+          )
+          .build();
     };
   }
 }

@@ -12,13 +12,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 
 @Builder
 @Getter(AccessLevel.NONE)
-public class CertificateActionCreate implements CertificateAction {
+public class CertificateActionCannotComplement implements CertificateAction {
 
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
 
-  private static final String NAME = "Skapa intyg";
-  private static final String DESCRIPTION = "Skapa ett intygsutkast.";
+  private static final String NAME = "Kan ej komplettera";
+  private static final String DESCRIPTION = "Öppnar en dialogruta med mer information.";
 
   @Override
   public CertificateActionType getType() {
@@ -54,12 +54,6 @@ public class CertificateActionCreate implements CertificateAction {
   @Override
   public String getDescription(Optional<Certificate> certificate) {
     return DESCRIPTION;
-  }
-
-  @Override
-  public boolean include(Optional<Certificate> certificate,
-      Optional<ActionEvaluation> actionEvaluation) {
-    return true;
   }
 
   @Override

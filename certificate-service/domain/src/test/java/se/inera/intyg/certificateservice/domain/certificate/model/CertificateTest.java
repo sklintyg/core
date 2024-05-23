@@ -2027,7 +2027,7 @@ class CertificateTest {
           .build();
 
       assertEquals(Optional.of(expectedRelation),
-          certificate.getLatestChildRelationOfType(RelationType.COMPLEMENT));
+          certificate.latestChildRelation(RelationType.COMPLEMENT));
     }
 
     @Test
@@ -2044,7 +2044,7 @@ class CertificateTest {
           .build();
 
       assertEquals(Optional.empty(),
-          certificate.getLatestChildRelationOfType(RelationType.COMPLEMENT));
+          certificate.latestChildRelation(RelationType.COMPLEMENT));
     }
 
     @Test
@@ -2069,7 +2069,7 @@ class CertificateTest {
           .build();
 
       assertEquals(Optional.of(expectedRelation),
-          certificate.getLatestChildRelationOfType(RelationType.COMPLEMENT));
+          certificate.latestChildRelation(RelationType.COMPLEMENT));
     }
   }
 }

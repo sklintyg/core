@@ -23,9 +23,11 @@ import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.message.service.converter.QuestionConverter;
 import se.inera.intyg.certificateservice.application.message.service.validator.GetCertificateMessageRequestValidator;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
-import se.inera.intyg.certificateservice.domain.message.service.GetCertificateMessageDomainService;
+import se.inera.intyg.certificateservice.domain.message.model.MessageAction;
 
 @ExtendWith(MockitoExtension.class)
 class GetCertificateMessageServiceTest {
@@ -37,7 +39,7 @@ class GetCertificateMessageServiceTest {
   @Mock
   private GetCertificateMessageRequestValidator messageRequestValidator;
   @Mock
-  private GetCertificateMessageDomainService getCertificateMessageDomainService;
+  private GetCertificateDomainService getCertificateDomainService;
   @Mock
   private QuestionConverter questionConverter;
   @InjectMocks
@@ -72,12 +74,18 @@ class GetCertificateMessageServiceTest {
     );
 
     final var message = mock(Message.class);
-    doReturn(List.of(message)).when(getCertificateMessageDomainService).get(
-        actionEvaluation,
-        new CertificateId(CERTIFICATE_ID)
+    final var certificate = mock(Certificate.class);
+    doReturn(certificate).when(getCertificateDomainService).get(
+        new CertificateId(CERTIFICATE_ID),
+        actionEvaluation
     );
 
-    doReturn(questionDTO).when(questionConverter).convert(message);
+    final var messageActions = List.of(MessageAction.builder().build());
+    final var messages = List.of(message);
+    
+    doReturn(messages).when(certificate).messages();
+    doReturn(messageActions).when(message).actions(actionEvaluation, certificate);
+    doReturn(questionDTO).when(questionConverter).convert(message, messageActions);
 
     final var actualResult = getCertificateService.get(
         GetCertificateMessageRequest.builder()

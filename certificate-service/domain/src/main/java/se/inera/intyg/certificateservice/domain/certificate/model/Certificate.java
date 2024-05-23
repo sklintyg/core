@@ -357,7 +357,7 @@ public class Certificate {
         .equals(citizen.idWithoutDash());
   }
 
-  public Optional<Relation> getLatestChildRelationOfType(RelationType relationType) {
+  public Optional<Relation> latestChildRelation(RelationType relationType) {
     return this.children().stream()
         .filter(child -> child.type().equals(relationType))
         .max(Comparator.comparing(Relation::created));

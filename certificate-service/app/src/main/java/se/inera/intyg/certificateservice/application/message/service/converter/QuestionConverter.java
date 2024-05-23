@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.message.service.converter;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
@@ -7,6 +8,7 @@ import se.inera.intyg.certificateservice.application.message.dto.QuestionTypeDTO
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageAction;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 
@@ -20,7 +22,7 @@ public class QuestionConverter {
   private final CertificateRelationConverter certificateRelationConverter;
   private final MessageActionConverter messageActionConverter;
 
-  public QuestionDTO convert(Message message) {
+  public QuestionDTO convert(Message message, List<MessageAction> messageActions) {
     final var certificate = certificateRepository.getById(message.certificateId());
     return QuestionDTO.builder()
         .id(message.id().id())
@@ -37,7 +39,7 @@ public class QuestionConverter {
         .answeredByCertificate(
             message.type().equals(MessageType.COMPLEMENT)
                 ? certificateRelationConverter.convert(
-                certificate.getLatestChildRelationOfType(
+                certificate.latestChildRelation(
                     RelationType.COMPLEMENT
                 ))
                 : null
@@ -56,7 +58,7 @@ public class QuestionConverter {
                 .toList()
         )
         .links(
-            message.availableActions().stream()
+            messageActions.stream()
                 .map(messageActionConverter::convert)
                 .toList()
         )
