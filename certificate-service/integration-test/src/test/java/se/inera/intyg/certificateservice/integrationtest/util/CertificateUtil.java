@@ -31,7 +31,9 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateRange;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateRangeList;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
+import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageResponse;
+import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesResponse;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesResponse;
 
@@ -95,6 +97,20 @@ public class CertificateUtil {
       throw new IllegalStateException("GetCertificateMessageResponse is null");
     }
     return !response.getQuestions().isEmpty();
+  }
+
+  public static List<QuestionDTO> getQuestions(GetCertificateMessageResponse response) {
+    if (response == null || response.getQuestions() == null) {
+      throw new IllegalStateException("GetCertificateMessageResponse is null");
+    }
+    return response.getQuestions();
+  }
+
+  public static List<ResourceLinkDTO> resourceLink(GetCertificateMessageResponse response) {
+    if (response == null || response.getQuestions() == null) {
+      throw new IllegalStateException("GetCertificateMessageResponse is null");
+    }
+    return response.getQuestions().get(0).getLinks();
   }
 
   public static long version(List<CreateCertificateResponse> responses) {
