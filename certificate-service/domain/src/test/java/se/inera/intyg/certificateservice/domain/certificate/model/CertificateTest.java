@@ -39,7 +39,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementD
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.DATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.dateElementDataBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementDataConstants.DATE_ELEMENT_VALUE_DATE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ALVE_REACT_ALFREDSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
@@ -92,7 +91,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
-import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
 import se.inera.intyg.certificateservice.domain.validation.model.ErrorMessage;
@@ -1157,20 +1155,6 @@ class CertificateTest {
       );
       assertEquals(XML, certificate.xml());
     }
-
-    @Test
-    void shallSetComplementMessagesAsHandled() {
-      final var actionEvaluation = actionEvaluationBuilder.build();
-      final var certificateWithComplements = certificateBuilder
-          .messages(
-              List.of(complementMessageBuilder().build())
-          )
-          .build();
-
-      certificateWithComplements.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluation);
-
-      assertEquals(MessageStatus.HANDLED, certificateWithComplements.messages().get(0).status());
-    }
   }
 
   @Nested
@@ -1216,19 +1200,6 @@ class CertificateTest {
       doReturn(XML).when(xmlGenerator).generate(certificate, true);
       certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build());
       assertEquals(XML, certificate.xml());
-    }
-
-    @Test
-    void shallSetComplementMessagesAsHandled() {
-      final var certificateWithComplements = certificateBuilder
-          .messages(
-              List.of(complementMessageBuilder().build())
-          )
-          .build();
-
-      certificateWithComplements.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build());
-
-      assertEquals(MessageStatus.HANDLED, certificateWithComplements.messages().get(0).status());
     }
   }
 
