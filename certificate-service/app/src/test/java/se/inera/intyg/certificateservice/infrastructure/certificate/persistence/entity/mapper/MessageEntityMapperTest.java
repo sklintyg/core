@@ -148,7 +148,7 @@ class MessageEntityMapperTest {
     }
 
     @Test
-    void shallIncludeStatus() {
+    void shallIncludeStatusSENT() {
       final var expectedStatus = MessageStatusEntity.builder()
           .key(MessageStatusEnum.SENT.getKey())
           .status(MessageStatusEnum.SENT.name())
@@ -156,6 +156,22 @@ class MessageEntityMapperTest {
 
       assertEquals(expectedStatus,
           mapper.toEntity(COMPLEMENT_MESSAGE).getStatus()
+      );
+    }
+
+    @Test
+    void shallIncludeStatusHANDLED() {
+      final var expectedStatus = MessageStatusEntity.builder()
+          .key(MessageStatusEnum.HANDLED.getKey())
+          .status(MessageStatusEnum.HANDLED.name())
+          .build();
+
+      final Message complementMessageHandled = complementMessageBuilder()
+          .status(MessageStatus.HANDLED)
+          .build();
+
+      assertEquals(expectedStatus,
+          mapper.toEntity(complementMessageHandled).getStatus()
       );
     }
 

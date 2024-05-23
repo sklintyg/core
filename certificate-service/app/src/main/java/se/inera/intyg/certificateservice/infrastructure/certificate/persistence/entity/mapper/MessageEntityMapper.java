@@ -36,6 +36,7 @@ public class MessageEntityMapper {
   private final CertificateEntityRepository certificateEntityRepository;
 
   public MessageEntity toEntity(Message message) {
+    final var messageStatusEnum = MessageStatusEnum.valueOf(message.status().name());
     return MessageEntity.builder()
         .id(message.id().id())
         .reference(message.reference().reference())
@@ -57,8 +58,8 @@ public class MessageEntityMapper {
         )
         .status(
             MessageStatusEntity.builder()
-                .key(MessageStatusEnum.SENT.getKey())
-                .status(MessageStatusEnum.SENT.name())
+                .key(messageStatusEnum.getKey())
+                .status(messageStatusEnum.name())
                 .build()
         )
         .contactInfo(
