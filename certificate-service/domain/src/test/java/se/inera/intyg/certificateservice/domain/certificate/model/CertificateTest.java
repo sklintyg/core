@@ -39,6 +39,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementD
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.DATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.dateElementDataBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementDataConstants.DATE_ELEMENT_VALUE_DATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ALVE_REACT_ALFREDSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
@@ -91,6 +92,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
 import se.inera.intyg.certificateservice.domain.validation.model.ErrorMessage;
@@ -1144,8 +1146,7 @@ class CertificateTest {
 
     @Test
     void shallReturnStateSignedWhenSigned() {
-      certificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluationBuilder.build()
-      );
+      certificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluationBuilder.build());
       assertEquals(Status.SIGNED, certificate.status());
     }
 
@@ -1155,6 +1156,20 @@ class CertificateTest {
       certificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluationBuilder.build()
       );
       assertEquals(XML, certificate.xml());
+    }
+
+    @Test
+    void shallSetComplementMessagesAsHandled() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificateWithComplements = certificateBuilder
+          .messages(
+              List.of(complementMessageBuilder().build())
+          )
+          .build();
+
+      certificateWithComplements.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluation);
+
+      assertEquals(MessageStatus.HANDLED, certificateWithComplements.messages().get(0).status());
     }
   }
 
@@ -1167,8 +1182,7 @@ class CertificateTest {
       final var revision = new Revision(2);
       final var concurrentModificationException = assertThrows(
           ConcurrentModificationException.class,
-          () -> certificate.sign(xmlGenerator, revision, actionEvaluation
-          )
+          () -> certificate.sign(xmlGenerator, revision, actionEvaluation)
       );
       assertTrue(concurrentModificationException.getMessage().contains("Incorrect revision"),
           () -> "Received message was: %s".formatted(concurrentModificationException.getMessage())
@@ -1183,8 +1197,7 @@ class CertificateTest {
           .build();
 
       final var illegalStateException = assertThrows(IllegalStateException.class,
-          () -> deletedCertificate.sign(xmlGenerator, REVISION, actionEvaluation
-          )
+          () -> deletedCertificate.sign(xmlGenerator, REVISION, actionEvaluation)
       );
 
       assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
@@ -1194,17 +1207,28 @@ class CertificateTest {
 
     @Test
     void shallReturnStateSignedWhenSigned() {
-      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build()
-      );
+      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build());
       assertEquals(Status.SIGNED, certificate.status());
     }
 
     @Test
     void shallReturnXmlWhenSigned() {
       doReturn(XML).when(xmlGenerator).generate(certificate, true);
-      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build()
-      );
+      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build());
       assertEquals(XML, certificate.xml());
+    }
+
+    @Test
+    void shallSetComplementMessagesAsHandled() {
+      final var certificateWithComplements = certificateBuilder
+          .messages(
+              List.of(complementMessageBuilder().build())
+          )
+          .build();
+
+      certificateWithComplements.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build());
+
+      assertEquals(MessageStatus.HANDLED, certificateWithComplements.messages().get(0).status());
     }
   }
 

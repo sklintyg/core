@@ -8,6 +8,7 @@ import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Signature;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
@@ -15,6 +16,8 @@ import se.inera.intyg.certificateservice.domain.common.exception.CertificateActi
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
 
 @RequiredArgsConstructor
 public class SignCertificateDomainService {
@@ -22,6 +25,7 @@ public class SignCertificateDomainService {
   private final CertificateRepository certificateRepository;
   private final CertificateEventDomainService certificateEventDomainService;
   private final XmlGenerator xmlGenerator;
+  private final SetMessagesToHandleDomainService setMessagesToHandleDomainService;
 
   public Certificate sign(CertificateId certificateId, Revision revision, Signature signature,
       ActionEvaluation actionEvaluation) {
@@ -40,6 +44,12 @@ public class SignCertificateDomainService {
     certificate.sign(xmlGenerator, signature, revision, actionEvaluation);
 
     final var signedCertificate = certificateRepository.save(certificate);
+
+    if (signedCertificate.hasParent(RelationType.COMPLEMENT)) {
+      setMessagesToHandleDomainService.handle(
+          signedCertificate.parent().certificate().messages(MessageType.COMPLEMENT)
+      );
+    }
 
     certificateEventDomainService.publish(
         CertificateEvent.builder()

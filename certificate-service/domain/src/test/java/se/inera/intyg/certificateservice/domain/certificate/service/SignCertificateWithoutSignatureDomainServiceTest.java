@@ -11,6 +11,7 @@ import static se.inera.intyg.certificateservice.domain.action.model.CertificateA
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.actionEvaluationBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 
 import java.util.List;
@@ -24,6 +25,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
+import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
@@ -32,6 +35,9 @@ import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
+import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
 
 @ExtendWith(MockitoExtension.class)
 class SignCertificateWithoutSignatureDomainServiceTest {
@@ -45,6 +51,8 @@ class SignCertificateWithoutSignatureDomainServiceTest {
   private CertificateEventDomainService certificateEventDomainService;
   @Mock
   private XmlGenerator xmlGenerator;
+  @Mock
+  private SetMessagesToHandleDomainService setMessagesToHandleDomainService;
   @InjectMocks
   private SignCertificateWithoutSignatureDomainService signCertificateDomainService;
   private ActionEvaluation actionEvaluation;
@@ -74,8 +82,11 @@ class SignCertificateWithoutSignatureDomainServiceTest {
   @Test
   void shallSignCertificate() {
     final var certificate = mock(Certificate.class);
+    final var savedCertificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, Optional.of(actionEvaluation));
+    doReturn(savedCertificate).when(certificateRepository).save(certificate);
+    doReturn(false).when(savedCertificate).hasParent(RelationType.COMPLEMENT);
 
     signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, actionEvaluation);
 
@@ -86,8 +97,11 @@ class SignCertificateWithoutSignatureDomainServiceTest {
   @Test
   void shallUpdateMetaData() {
     final var certificate = mock(Certificate.class);
+    final var savedCertificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, Optional.of(actionEvaluation));
+    doReturn(savedCertificate).when(certificateRepository).save(certificate);
+    doReturn(false).when(savedCertificate).hasParent(RelationType.COMPLEMENT);
 
     signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, actionEvaluation);
 
@@ -157,5 +171,31 @@ class SignCertificateWithoutSignatureDomainServiceTest {
     );
 
     assertEquals(expectedReason, certificateActionForbidden.reason());
+  }
+
+  @Test
+  void shallSetMessagesToHandleIfComplementingCertificate() {
+    final var expectedMessages = List.of(COMPLEMENT_MESSAGE);
+
+    final var certificate = mock(Certificate.class);
+    final var savedCertificate = mock(Certificate.class);
+    final var parentCertificate = mock(Certificate.class);
+    final var parentRelation = Relation.builder()
+        .certificate(parentCertificate)
+        .type(RelationType.COMPLEMENT)
+        .build();
+    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
+    doReturn(true).when(certificate).allowTo(SIGN, Optional.of(actionEvaluation));
+    doReturn(savedCertificate).when(certificateRepository).save(certificate);
+    doReturn(true).when(savedCertificate).hasParent(RelationType.COMPLEMENT);
+    doReturn(parentRelation).when(savedCertificate).parent();
+    doReturn(expectedMessages).when(parentCertificate).messages(MessageType.COMPLEMENT);
+
+    signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, actionEvaluation);
+
+    final ArgumentCaptor<List<Message>> messagesCaptor = ArgumentCaptor.forClass(List.class);
+    verify(setMessagesToHandleDomainService).handle(messagesCaptor.capture());
+
+    assertEquals(expectedMessages, messagesCaptor.getValue());
   }
 }

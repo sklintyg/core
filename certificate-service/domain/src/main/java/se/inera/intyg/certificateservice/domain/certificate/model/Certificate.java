@@ -21,6 +21,7 @@ import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
@@ -354,6 +355,19 @@ public class Certificate {
   public boolean isCertificateIssuedOnPatient(PersonId citizen) {
     return this.certificateMetaData().patient().id().idWithoutDash()
         .equals(citizen.idWithoutDash());
+  }
+
+  public boolean hasParent(RelationType relationType) {
+    if (this.parent() == null) {
+      return false;
+    }
+    return this.parent().type().equals(relationType);
+  }
+
+  public List<Message> messages(MessageType type) {
+    return messages.stream()
+        .filter(message -> message.type().equals(type))
+        .toList();
   }
 }
 

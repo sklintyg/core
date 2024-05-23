@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.message.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -14,22 +15,29 @@ import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 @EqualsAndHashCode
 public class Message {
 
-  private MessageId id;
-  private CertificateId certificateId;
-  private PersonId personId;
-  private SenderReference reference;
-  private MessageType type;
+  private final MessageId id;
+  private final CertificateId certificateId;
+  private final PersonId personId;
+  private final SenderReference reference;
+  private final MessageType type;
   private Subject subject;
   private Content content;
-  private Author author;
-  private LocalDateTime created;
+  private final Author author;
+  private final LocalDateTime created;
   private LocalDateTime modified;
   private LocalDateTime sent;
   private MessageStatus status;
   private Forwarded forwarded;
   private LocalDate lastDateToReply;
   private MessageContactInfo contactInfo;
-  private List<Complement> complements;
+  private final List<Complement> complements;
   private Answer answer;
   private List<Reminder> reminders;
+
+  public void handle() {
+    if (this.status != MessageStatus.HANDLED) {
+      this.status = MessageStatus.HANDLED;
+      this.modified = LocalDateTime.now(ZoneId.systemDefault());
+    }
+  }
 }
