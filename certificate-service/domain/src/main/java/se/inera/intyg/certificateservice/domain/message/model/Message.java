@@ -52,8 +52,7 @@ public class Message {
   public List<MessageAction> actions(ActionEvaluation actionEvaluation,
       Certificate certificate) {
     final var messageActions = new ArrayList<MessageAction>();
-    final var certificateActions = certificate.certificateModel()
-        .actions(Optional.of(actionEvaluation));
+    final var certificateActions = certificate.actions(Optional.of(actionEvaluation));
 
     if (isUnhandledComplement() && actionAvailable(CertificateActionType.COMPLEMENT,
         certificateActions)) {
