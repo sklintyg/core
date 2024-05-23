@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.AUTHOR_INCOMING_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTACT_INFO;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTENT;
@@ -49,8 +50,6 @@ class QuestionConverterTest {
   QuestionConverter questionConverter;
 
   private static final Certificate CERTIFICATE = Certificate.builder().build();
-  private static final List<MessageAction> MESSAGE_ACTIONS = List.of(
-      MessageAction.builder().build());
 
   @BeforeEach
   void setUp() {
@@ -59,73 +58,73 @@ class QuestionConverterTest {
 
   @Test
   void shallIncludeId() {
-    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertEquals(MESSAGE_ID, convert.getId());
   }
 
   @Test
   void shallIncludeCertificateId() {
-    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertEquals(CERTIFICATE_ID.id(), convert.getCertificateId());
   }
 
   @Test
   void shallIncludeType() {
-    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertEquals(QuestionTypeDTO.COMPLEMENT, convert.getType());
   }
 
   @Test
   void shallIncludeAuthor() {
-    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertEquals(AUTHOR_INCOMING_MESSAGE, convert.getAuthor());
   }
 
   @Test
   void shallIncludeSubject() {
-    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertEquals(SUBJECT, convert.getSubject());
   }
 
   @Test
   void shallIncludeSent() {
-    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertEquals(SENT, convert.getSent());
   }
 
   @Test
   void shallIncludeIsHandled() {
-    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertFalse(convert.isHandled());
   }
 
   @Test
   void shallIncludeIsForwarded() {
-    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertFalse(convert.isForwarded());
   }
 
   @Test
   void shallIncludeMessage() {
-    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertEquals(CONTENT, convert.getMessage());
   }
 
   @Test
   void shallIncludeLastUpdate() {
-    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertEquals(CREATED_AFTER_SENT, convert.getLastUpdate());
   }
 
   @Test
   void shallIncludeLastDateToReply() {
-    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertEquals(LAST_DATE_TO_REPLY, convert.getLastDateToReply());
   }
 
   @Test
   void shallIncludeContactInfo() {
-    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertAll(
         () -> assertEquals(CONTACT_INFO.get(0), convert.getContactInfo().get(0)),
         () -> assertEquals(CONTACT_INFO.get(1), convert.getContactInfo().get(1)),
@@ -140,13 +139,13 @@ class QuestionConverterTest {
     doReturn(expectedRelation).when(certificateRelationConverter)
         .convert(Optional.empty());
 
-    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertEquals(expectedRelation, convert.getAnsweredByCertificate());
   }
 
   @Test
   void shallIncludeReminders() {
-    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertNotNull(convert.getReminders());
   }
 
@@ -157,15 +156,19 @@ class QuestionConverterTest {
     doReturn(expectedComplement).when(complementConverter)
         .convert(COMPLEMENT_MESSAGE.complements().get(0), CERTIFICATE);
 
-    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
+    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE);
     assertEquals(expectedComplement, convert.getComplements().get(0));
   }
 
   @Test
   void shallIncludeLinks() {
+    final var messageAction = MessageAction.builder().build();
+    final var message = complementMessageBuilder()
+        .availableActions(List.of(messageAction))
+        .build();
     doReturn(ResourceLinkDTO.builder().build()).when(messageActionConverter)
-        .convert(MESSAGE_ACTIONS.get(0));
-    final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
+        .convert(messageAction);
+    final var convert = questionConverter.convert(message);
     assertFalse(convert.getLinks().isEmpty());
   }
 }

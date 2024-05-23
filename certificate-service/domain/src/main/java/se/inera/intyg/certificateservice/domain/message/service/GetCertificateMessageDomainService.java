@@ -24,6 +24,9 @@ public class GetCertificateMessageDomainService {
       );
     }
 
+    certificate.messages()
+        .forEach(message -> message.evaluateAvailableActions(actionEvaluation, certificate));
+
     return certificate.messages();
   }
 }

@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.application.message.service.converter;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
@@ -8,7 +7,6 @@ import se.inera.intyg.certificateservice.application.message.dto.QuestionTypeDTO
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
-import se.inera.intyg.certificateservice.domain.message.model.MessageAction;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 
@@ -22,7 +20,7 @@ public class QuestionConverter {
   private final CertificateRelationConverter certificateRelationConverter;
   private final MessageActionConverter messageActionConverter;
 
-  public QuestionDTO convert(Message message, List<MessageAction> messageActions) {
+  public QuestionDTO convert(Message message) {
     final var certificate = certificateRepository.getById(message.certificateId());
     return QuestionDTO.builder()
         .id(message.id().id())
@@ -58,7 +56,7 @@ public class QuestionConverter {
                 .toList()
         )
         .links(
-            messageActions.stream()
+            message.availableActions().stream()
                 .map(messageActionConverter::convert)
                 .toList()
         )

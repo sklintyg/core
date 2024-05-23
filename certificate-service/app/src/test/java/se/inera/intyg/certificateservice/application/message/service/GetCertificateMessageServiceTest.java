@@ -25,7 +25,6 @@ import se.inera.intyg.certificateservice.application.message.service.validator.G
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
-import se.inera.intyg.certificateservice.domain.message.model.MessageAction;
 import se.inera.intyg.certificateservice.domain.message.service.GetCertificateMessageDomainService;
 
 @ExtendWith(MockitoExtension.class)
@@ -73,16 +72,12 @@ class GetCertificateMessageServiceTest {
     );
 
     final var message = mock(Message.class);
-
-    final var messageActions = List.of(MessageAction.builder().build());
-    doReturn(messageActions).when(message)
-        .availableActions(actionEvaluation);
     doReturn(List.of(message)).when(getCertificateMessageDomainService).get(
         actionEvaluation,
         new CertificateId(CERTIFICATE_ID)
     );
 
-    doReturn(questionDTO).when(questionConverter).convert(message, messageActions);
+    doReturn(questionDTO).when(questionConverter).convert(message);
 
     final var actualResult = getCertificateService.get(
         GetCertificateMessageRequest.builder()
