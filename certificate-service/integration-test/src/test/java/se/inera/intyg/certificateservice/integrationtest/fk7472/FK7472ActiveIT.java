@@ -49,6 +49,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customUpdateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customValidateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCertificateTypeInfoRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultComplementCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultDeleteCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificatePdfRequest;
@@ -4149,6 +4150,90 @@ class FK7472ActiveIT {
       );
 
       assertEquals(200, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7472 - Intyg som har kompletteringsbegäran ska kunna kompletteras")
+    void shallReturnCertificateIfComplementingCertificateWithComplements() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .id("NEW_MESSAGE_ID")
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var response = api.complementCertificate(
+          defaultComplementCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(200, response.getStatusCode().value());
+      assertNotNull(response.getBody().getCertificate());
+    }
+
+    @Test
+    @DisplayName("FK7472 - Intyg som har påbörjad komplettering ska inte kunna kompletteras - 403 (FORBIDDEN)")
+    void shallReturn403IfDraftComplementAlreadyExists() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .id("NEW_MESSAGE_ID")
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      api.complementCertificate(
+          defaultComplementCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.complementCertificate(
+          defaultComplementCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7472 - Intyg som inte har kompletteringsbegäran ska inte kunna kompletteras - 403 (FORBIDDEN)")
+    void shallReturn403IfNoComplementsFromRecipient() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.complementCertificate(
+          defaultComplementCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
     }
 
     @Test

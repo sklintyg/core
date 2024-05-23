@@ -267,6 +267,18 @@ class CertificateModelFactoryFK7472Test {
   }
 
   @Test
+  void shallIncludeCertificateActionComplement() {
+    final var expectedType = CertificateActionType.COMPLEMENT;
+
+    final var certificateModel = certificateModelFactoryFK7472.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
   void shallIncludeSchematronPath() {
     final var certificateModel = certificateModelFactoryFK7472.create();
 

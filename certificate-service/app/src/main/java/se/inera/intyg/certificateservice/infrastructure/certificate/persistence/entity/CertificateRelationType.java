@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum CertificateRelationType {
-  REPLACE(1), RENEW(2);
+  REPLACE(1), RENEW(2), COMPLEMENT(3);
 
   private final int key;
 
