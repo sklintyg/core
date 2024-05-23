@@ -132,7 +132,7 @@ class PdfDateRangeListValueGeneratorTest {
           () -> assertEquals(3, result.size()),
           () -> assertTrue(
               result.contains(PdfField.builder()
-                  .id(FIELD_PREFIX + ".ksr_kryssruta[0]")
+                  .id(FIELD_PREFIX + ".ksr_Hela[0]")
                   .value("1")
                   .build())
           ),
@@ -178,7 +178,7 @@ class PdfDateRangeListValueGeneratorTest {
           () -> assertEquals(6, result.size()),
           () -> assertTrue(
               result.contains(PdfField.builder()
-                  .id(FIELD_PREFIX + ".ksr_kryssruta[0]")
+                  .id(FIELD_PREFIX + ".ksr_Hela[0]")
                   .value("1")
                   .build())
           ),
@@ -196,7 +196,7 @@ class PdfDateRangeListValueGeneratorTest {
           ),
           () -> assertTrue(
               result.contains(PdfField.builder()
-                  .id(FIELD_PREFIX + ".ksr_kryssruta[0]")
+                  .id(FIELD_PREFIX + ".ksr_EnFjardedela[0]")
                   .value("1")
                   .build())
           ),
@@ -243,7 +243,7 @@ class PdfDateRangeListValueGeneratorTest {
           () -> assertEquals(7, result.size()),
           () -> assertTrue(
               result.contains(PdfField.builder()
-                  .id(FIELD_PREFIX + ".ksr_kryssruta3[0]")
+                  .id(FIELD_PREFIX + ".ksr_Halva[0]")
                   .value("1")
                   .build())
           ),
@@ -261,7 +261,7 @@ class PdfDateRangeListValueGeneratorTest {
           ),
           () -> assertTrue(
               result.contains(PdfField.builder()
-                  .id(FIELD_PREFIX + ".ksr_kryssruta5[0]")
+                  .id(FIELD_PREFIX + ".ksr_EnAttondel[0]")
                   .value("1")
                   .build())
           ),
@@ -273,7 +273,7 @@ class PdfDateRangeListValueGeneratorTest {
           ),
           () -> assertTrue(
               result.contains(PdfField.builder()
-                  .id(FIELD_PREFIX + ".ksr_kryssruta2[0]")
+                  .id(FIELD_PREFIX + ".ksr_Trefjardedela[0]")
                   .value("1")
                   .build())
           ),
