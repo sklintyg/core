@@ -41,8 +41,6 @@ public class Message {
   private Answer answer;
   @Builder.Default
   private List<Reminder> reminders = Collections.emptyList();
-  @Builder.Default
-  private List<MessageAction> availableActions = Collections.emptyList();
 
   public List<MessageAction> actionsInclude(ActionEvaluation actionEvaluation,
       Certificate certificate) {
