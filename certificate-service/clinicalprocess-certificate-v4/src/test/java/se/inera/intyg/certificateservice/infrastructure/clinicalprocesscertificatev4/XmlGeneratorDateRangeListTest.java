@@ -88,7 +88,7 @@ class XmlGeneratorDateRangeListTest {
           () -> assertEquals(QUESTION_ID + ".1", delsvarCode.getId()),
           () -> assertEquals(RANGE_ID, cvType.getCode()),
           () -> assertEquals("KV_FKMU_0009", cvType.getCodeSystem()),
-          () -> assertEquals("50 procent", cvType.getDisplayName())
+          () -> assertEquals("Halva den ordinarie tiden", cvType.getDisplayName())
       );
     }
 
@@ -176,7 +176,7 @@ class XmlGeneratorDateRangeListTest {
           () -> assertEquals(QUESTION_ID + ".1", delsvarCode.getId()),
           () -> assertEquals(RANGE_ID, cvType.getCode()),
           () -> assertEquals("KV_FKMU_0009", cvType.getCodeSystem()),
-          () -> assertEquals("50 procent", cvType.getDisplayName())
+          () -> assertEquals("Halva den ordinarie tiden", cvType.getDisplayName())
       );
     }
 
@@ -194,7 +194,7 @@ class XmlGeneratorDateRangeListTest {
           () -> assertEquals(QUESTION_ID + ".1", delsvarCode.getId()),
           () -> assertEquals(RANGE_ID_2, cvType.getCode()),
           () -> assertEquals("KV_FKMU_0009", cvType.getCodeSystem()),
-          () -> assertEquals("25 procent", cvType.getDisplayName())
+          () -> assertEquals("En fjärdedel av den ordinarie tiden", cvType.getDisplayName())
       );
     }
 
