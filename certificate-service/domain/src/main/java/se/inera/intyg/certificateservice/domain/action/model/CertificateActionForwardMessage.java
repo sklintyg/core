@@ -61,4 +61,11 @@ public class CertificateActionForwardMessage implements CertificateAction {
       Optional<ActionEvaluation> actionEvaluation) {
     return evaluate(certificate, actionEvaluation);
   }
+
+  @Override
+  public boolean include(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
+    //TODO: Handle in INTYGFV-16620
+    return false;
+  }
 }

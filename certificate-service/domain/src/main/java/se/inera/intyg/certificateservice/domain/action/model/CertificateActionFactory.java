@@ -185,7 +185,8 @@ public class CertificateActionFactory {
                   new ActionRuleProtectedPerson(),
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
-                  new ActionRuleUserAllowCopy()
+                  new ActionRuleUserAllowCopy(),
+                  new ActionRuleChildRelationNoMatch(List.of(RelationType.COMPLEMENT))
               )
           )
           .build();
@@ -198,7 +199,8 @@ public class CertificateActionFactory {
                   new ActionRuleProtectedPerson(),
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
-                  new ActionRuleUserAllowCopy()
+                  new ActionRuleUserAllowCopy(),
+                  new ActionRuleChildRelationNoMatch(List.of(RelationType.COMPLEMENT))
               )
           )
           .build();

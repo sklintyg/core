@@ -8,9 +8,11 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProv
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.BETA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.BETA_VARDCENTRAL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.relationComplementBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.relationReplaceBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_HUDMOTTAGNINGEN;
@@ -463,5 +465,50 @@ class CertificateActionComplementTest {
         );
       }
     }
+  }
+
+  @Test
+  void shallReturnFalseIfAlreadyComplementedByDraftCertificate() {
+    final var actionEvaluation = actionEvaluationBuilder().build();
+
+    final var certificate = certificateBuilder
+        .children(
+            List.of(
+                relationComplementBuilder()
+                    .build()
+            )
+        )
+        .build();
+
+    assertFalse(
+        certificateActionComplement.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfAlreadyReplacedButCertificateIsRevoked() {
+    final var actionEvaluation = actionEvaluationBuilder().build();
+
+    final var certificate = certificateBuilder
+        .children(
+            List.of(
+                relationComplementBuilder()
+                    .certificate(
+                        fk7210CertificateBuilder()
+                            .status(Status.REVOKED)
+                            .build()
+                    )
+                    .build()
+            )
+        )
+        .build();
+
+    assertTrue(
+        certificateActionComplement.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
   }
 }

@@ -21,4 +21,11 @@ public class TestDataRelation {
         .type(RelationType.REPLACE)
         .created(LocalDateTime.now(ZoneId.systemDefault()));
   }
+
+  public static Relation.RelationBuilder relationComplementBuilder() {
+    return Relation.builder()
+        .certificate(FK7210_CERTIFICATE)
+        .type(RelationType.COMPLEMENT)
+        .created(LocalDateTime.now(ZoneId.systemDefault()));
+  }
 }
