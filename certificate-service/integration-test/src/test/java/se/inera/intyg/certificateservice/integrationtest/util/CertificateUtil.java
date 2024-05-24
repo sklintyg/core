@@ -99,7 +99,7 @@ public class CertificateUtil {
     return !response.getQuestions().isEmpty();
   }
 
-  public static List<QuestionDTO> getQuestions(GetCertificateMessageResponse response) {
+  public static List<QuestionDTO> questions(GetCertificateMessageResponse response) {
     if (response == null || response.getQuestions() == null) {
       throw new IllegalStateException("GetCertificateMessageResponse is null");
     }
@@ -152,6 +152,13 @@ public class CertificateUtil {
   }
 
   public static CertificateDTO certificate(RenewCertificateResponse response) {
+    if (response == null || response.getCertificate() == null) {
+      return null;
+    }
+    return response.getCertificate();
+  }
+
+  public static CertificateDTO certificate(UpdateCertificateResponse response) {
     if (response == null || response.getCertificate() == null) {
       return null;
     }

@@ -1152,8 +1152,7 @@ class CertificateTest {
 
     @Test
     void shallReturnStateSignedWhenSigned() {
-      certificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluationBuilder.build()
-      );
+      certificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluationBuilder.build());
       assertEquals(Status.SIGNED, certificate.status());
     }
 
@@ -1175,8 +1174,7 @@ class CertificateTest {
       final var revision = new Revision(2);
       final var concurrentModificationException = assertThrows(
           ConcurrentModificationException.class,
-          () -> certificate.sign(xmlGenerator, revision, actionEvaluation
-          )
+          () -> certificate.sign(xmlGenerator, revision, actionEvaluation)
       );
       assertTrue(concurrentModificationException.getMessage().contains("Incorrect revision"),
           () -> "Received message was: %s".formatted(concurrentModificationException.getMessage())
@@ -1191,8 +1189,7 @@ class CertificateTest {
           .build();
 
       final var illegalStateException = assertThrows(IllegalStateException.class,
-          () -> deletedCertificate.sign(xmlGenerator, REVISION, actionEvaluation
-          )
+          () -> deletedCertificate.sign(xmlGenerator, REVISION, actionEvaluation)
       );
 
       assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
@@ -1202,16 +1199,14 @@ class CertificateTest {
 
     @Test
     void shallReturnStateSignedWhenSigned() {
-      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build()
-      );
+      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build());
       assertEquals(Status.SIGNED, certificate.status());
     }
 
     @Test
     void shallReturnXmlWhenSigned() {
       doReturn(XML).when(xmlGenerator).generate(certificate, true);
-      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build()
-      );
+      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build());
       assertEquals(XML, certificate.xml());
     }
   }

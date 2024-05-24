@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.certificate.model;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -22,6 +23,7 @@ import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
@@ -362,6 +364,19 @@ public class Certificate {
     return this.children().stream()
         .filter(child -> child.type().equals(relationType))
         .max(Comparator.comparing(Relation::created));
+  }
+
+  public boolean hasParent(RelationType... relationType) {
+    if (this.parent() == null) {
+      return false;
+    }
+    return Arrays.stream(relationType).anyMatch(type -> this.parent.type().equals(type));
+  }
+
+  public List<Message> messages(MessageType type) {
+    return messages.stream()
+        .filter(message -> message.type().equals(type))
+        .toList();
   }
 }
 

@@ -12,6 +12,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageContactInfo;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.SenderReference;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
@@ -35,6 +36,7 @@ public class MessageConverter {
         .author(new Author(incomingMessageRequest.getSentBy().name()))
         .sent(incomingMessageRequest.getSent())
         .type(MessageType.COMPLEMENT)
+        .status(MessageStatus.SENT)
         .contactInfo(new MessageContactInfo(incomingMessageRequest.getContactInfo()))
         .lastDateToReply(incomingMessageRequest.getLastDateToAnswer())
         .complements(

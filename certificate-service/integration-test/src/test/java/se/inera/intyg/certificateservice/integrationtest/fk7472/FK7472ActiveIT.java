@@ -78,6 +78,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueText;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.hasQuestions;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.pdfData;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.questions;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.recipient;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.relation;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.renewCertificateResponse;
@@ -119,6 +120,7 @@ import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.Cer
 import se.inera.intyg.certificateservice.application.common.dto.AccessScopeTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
 import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
 import se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil;
 import se.inera.intyg.certificateservice.integrationtest.util.Containers;
@@ -4220,6 +4222,108 @@ class FK7472ActiveIT {
       assertEquals(403, response.getStatusCode().value());
     }
 
+    @Test
+    @DisplayName("FK7472 - Kompletteringsbegäran skall sättas som hanterad när ersättande intyg signeras")
+    void shallSetComplementAsHandledWhenComplementingCertificateIsSigned() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var response = api.replaceCertificate(
+          defaultReplaceCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.signCertificate(
+          defaultSignCertificateRequest(),
+          certificateId(response.getBody()),
+          certificate(response.getBody()).getMetadata().getVersion()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          defaultGetCertificateMessageRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertTrue(questions(messagesForCertificate.getBody()).get(0).isHandled(),
+          "Expected that complement message was handled, but it was not!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Kompletteringsbegäran skall sättas som hanterad när förnyade intyget signeras")
+    void shallSetComplementAsHandledWhenRenewingCertificateIsSigned() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var renewResponse = api.renewCertificate(
+          defaultRenewCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var renewingCertificate = certificate(renewResponse.getBody());
+      renewingCertificate.getData().put(
+          QUESTION_PERIOD_ID.id(),
+          updateDateRangeListValue(renewingCertificate, QUESTION_PERIOD_ID.id(),
+              List.of(
+                  CertificateDataValueDateRange.builder()
+                      .id(WorkCapacityType.HALVA.name())
+                      .to(LocalDate.now())
+                      .from(LocalDate.now().minusDays(10))
+                      .build()
+              )
+          )
+      );
+
+      final var updateResponse = api.updateCertificate(
+          customUpdateCertificateRequest()
+              .certificate(renewingCertificate)
+              .build(),
+          certificateId(renewResponse.getBody())
+      );
+
+      api.signCertificate(
+          defaultSignCertificateRequest(),
+          certificateId(renewResponse.getBody()),
+          certificate(updateResponse.getBody()).getMetadata().getVersion()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          defaultGetCertificateMessageRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertTrue(questions(messagesForCertificate.getBody()).get(0).isHandled(),
+          "Expected that complement message was handled, but it was not!"
+      );
+    }
   }
 
   @Nested
@@ -4459,7 +4563,7 @@ class FK7472ActiveIT {
       );
 
       assertTrue(
-          CertificateUtil.getQuestions(messagesForCertificate.getBody()).get(0).getLinks()
+          questions(messagesForCertificate.getBody()).get(0).getLinks()
               .isEmpty(),
           "Should not return link!"
       );
@@ -4492,7 +4596,7 @@ class FK7472ActiveIT {
       );
 
       assertTrue(
-          CertificateUtil.getQuestions(messagesForCertificate.getBody()).get(0).getLinks()
+          questions(messagesForCertificate.getBody()).get(0).getLinks()
               .isEmpty(),
           "Should not return link!"
       );

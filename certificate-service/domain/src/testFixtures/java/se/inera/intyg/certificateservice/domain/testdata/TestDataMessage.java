@@ -37,6 +37,7 @@ public class TestDataMessage {
         .id(new MessageId(MESSAGE_ID))
         .reference(new SenderReference(REFERENCE_ID))
         .type(MessageType.COMPLEMENT)
+        .status(MessageStatus.SENT)
         .certificateId(CERTIFICATE_ID)
         .personId(ATHENA_REACT_ANDERSSON.id())
         .subject(new Subject(SUBJECT))

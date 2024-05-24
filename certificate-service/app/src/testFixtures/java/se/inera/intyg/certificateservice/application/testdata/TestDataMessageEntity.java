@@ -26,9 +26,11 @@ public class TestDataMessageEntity {
 
   public final static MessageEntity COMPLEMENT_MESSAGE_ENTITY = complementMessageEntityBuilder().build();
 
+  public final static Integer MESSAGE_KEY = 999;
+
   public static MessageEntity.MessageEntityBuilder complementMessageEntityBuilder() {
     return MessageEntity.builder()
-        .key(999)
+        .key(MESSAGE_KEY)
         .id(MESSAGE_ID)
         .reference(REFERENCE_ID)
         .subject(SUBJECT)

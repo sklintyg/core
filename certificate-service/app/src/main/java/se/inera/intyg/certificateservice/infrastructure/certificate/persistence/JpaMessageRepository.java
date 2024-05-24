@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityMessageRepository;
@@ -24,7 +25,12 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
     }
 
     final var savedEntity = messageEntityRepository.save(
-        messageEntityMapper.toEntity(message)
+        messageEntityMapper.toEntity(
+            message,
+            messageEntityRepository.findMessageEntityById(message.id().id())
+                .map(MessageEntity::getKey)
+                .orElse(null)
+        )
     );
 
     return messageEntityMapper.toDomain(savedEntity);

@@ -41,8 +41,7 @@ public class GetCertificateMessageService {
             certificate.messages().stream()
                 .map(message -> questionConverter.convert(
                         message,
-                        message.actions(actionEvaluation, certificate
-                        )
+                        message.actions(actionEvaluation, certificate)
                     )
                 )
                 .toList()
