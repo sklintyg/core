@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificate.model;
 
 public enum RelationType {
-  REPLACE, RENEW;
+  REPLACE, RENEW, COMPLEMENT;
 
   public String toRelationKod() {
     return switch (this) {
