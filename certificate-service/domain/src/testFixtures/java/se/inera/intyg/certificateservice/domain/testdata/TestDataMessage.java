@@ -49,6 +49,7 @@ public class TestDataMessage {
         .modified(CREATED_AFTER_SENT)
         .lastDateToReply(LAST_DATE_TO_REPLY)
         .forwarded(new Forwarded(false))
+        .status(MessageStatus.SENT)
         .complements(
             List.of(
                 Complement.builder()

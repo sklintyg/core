@@ -36,6 +36,7 @@ import se.inera.intyg.certificateservice.testability.certificate.dto.Testability
 import se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityCertificateFillService;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateModelRepository;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateRepository;
+import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityMessageRepository;
 
 @Profile(TESTABILITY_PROFILE)
 @Service
@@ -50,6 +51,7 @@ public class TestabilityCertificateService {
   private final ResourceLinkConverter resourceLinkConverter;
   private final List<TestabilityCertificateFillService> testabilityCertificateFillServices;
   private final XmlGenerator xmlGenerator;
+  private final TestabilityMessageRepository testabilityMessageRepository;
 
   public CreateCertificateResponse create(
       TestabilityCertificateRequest testabilityCertificateRequest) {
@@ -149,6 +151,10 @@ public class TestabilityCertificateService {
         testabilityCertificateRequest.getCertificateIds().stream()
             .map(CertificateId::new)
             .toList()
+    );
+
+    testabilityMessageRepository.remove(
+        testabilityCertificateRequest.getMessageIds()
     );
   }
 

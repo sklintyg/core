@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -57,7 +58,7 @@ public class Certificate {
         .filter(
             certificateAction -> certificateAction.evaluate(
                 Optional.of(this),
-                actionEvaluation
+                addPatientIfMissing(actionEvaluation)
             )
         )
         .toList();
@@ -65,7 +66,8 @@ public class Certificate {
 
   public List<CertificateAction> actionsInclude(Optional<ActionEvaluation> actionEvaluation) {
     return certificateModel.actions().stream()
-        .filter(certificateAction -> certificateAction.include(Optional.of(this), actionEvaluation))
+        .filter(certificateAction -> certificateAction.include(Optional.of(this),
+            addPatientIfMissing(actionEvaluation)))
         .toList();
   }
 
@@ -89,7 +91,7 @@ public class Certificate {
         .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
         .findFirst()
         .map(certificateAction -> certificateAction.reasonNotAllowed(Optional.of(this),
-            actionEvaluation))
+            addPatientIfMissing(actionEvaluation)))
         .orElse(Collections.emptyList());
   }
 
@@ -356,6 +358,12 @@ public class Certificate {
   public boolean isCertificateIssuedOnPatient(PersonId citizen) {
     return this.certificateMetaData().patient().id().idWithoutDash()
         .equals(citizen.idWithoutDash());
+  }
+
+  public Optional<Relation> latestChildRelation(RelationType relationType) {
+    return this.children().stream()
+        .filter(child -> child.type().equals(relationType))
+        .max(Comparator.comparing(Relation::created));
   }
 
   public boolean hasParent(RelationType... relationType) {

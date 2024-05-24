@@ -48,6 +48,8 @@ import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCerti
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateResponse;
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateRequest;
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateResponse;
+import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesResponse;
@@ -65,6 +67,8 @@ public class ApiUtil {
   private final int port;
 
   private List<String> certificateIds = new ArrayList<>();
+  private List<String> messageIds = new ArrayList<>();
+
 
   public ResponseEntity<GetCertificateTypeInfoResponse> certificateTypeInfo(
       GetCertificateTypeInfoRequest request) {
@@ -413,6 +417,30 @@ public class ApiUtil {
 
     final var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
+    
+    messageIds.add(request.getId());
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+
+  }
+
+  public ResponseEntity<GetCertificateMessageResponse> getMessagesForCertificate(
+      GetCertificateMessageRequest request,
+      String certificateId) {
+    final var requestUrl = "http://localhost:%s/api/message/%s".formatted(
+        port,
+        certificateId
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
 
     return this.restTemplate.exchange(
         requestUrl,
@@ -520,7 +548,7 @@ public class ApiUtil {
   }
 
   public void reset() {
-    if (certificateIds.isEmpty()) {
+    if (certificateIds.isEmpty() && messageIds.isEmpty()) {
       return;
     }
 
@@ -529,6 +557,7 @@ public class ApiUtil {
     headers.setContentType(MediaType.APPLICATION_JSON);
     final var request = TestabilityResetCertificateRequest.builder()
         .certificateIds(certificateIds)
+        .messageIds(messageIds)
         .build();
     final var response = this.restTemplate.<Void>exchange(
         requestUrl,

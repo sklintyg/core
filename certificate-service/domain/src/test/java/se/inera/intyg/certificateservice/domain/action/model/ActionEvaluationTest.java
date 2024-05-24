@@ -42,4 +42,30 @@ class ActionEvaluationTest {
 
     assertFalse(actionEvaluation.isIssuingUnitCareUnit());
   }
+
+  @Test
+  void shallReturnTrueIfPatientIsPresent() {
+    assertTrue(actionEvaluationBuilder.build().hasPatient());
+  }
+
+  @Test
+  void shallReturnTrueIfUserIsPresent() {
+    assertTrue(actionEvaluationBuilder.build().hasUser());
+  }
+
+  @Test
+  void shallReturnFalseIfPatientIsMissing() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .patient(null)
+        .build();
+    assertFalse(actionEvaluation.hasPatient());
+  }
+
+  @Test
+  void shallReturnTrueIfUserIsMissing() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .user(null)
+        .build();
+    assertFalse(actionEvaluation.hasUser());
+  }
 }
