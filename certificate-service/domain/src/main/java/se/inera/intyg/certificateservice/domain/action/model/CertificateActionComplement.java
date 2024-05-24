@@ -1,7 +1,5 @@
 package se.inera.intyg.certificateservice.domain.action.model;
 
-import static se.inera.intyg.certificateservice.domain.action.model.ActionEvaluationUtil.missingPatientOrUser;
-
 import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -37,10 +35,6 @@ public class CertificateActionComplement implements CertificateAction {
   @Override
   public boolean evaluate(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
-    if (missingPatientOrUser(actionEvaluation)) {
-      return false;
-    }
-
     return actionRules.stream()
         .filter(value -> value.evaluate(certificate, actionEvaluation))
         .count() == actionRules.size();

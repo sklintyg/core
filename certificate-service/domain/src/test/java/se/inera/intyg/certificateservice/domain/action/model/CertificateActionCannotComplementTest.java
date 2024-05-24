@@ -147,6 +147,7 @@ class CertificateActionCannotComplementTest {
   @Test
   void shallReturnFalseIfUserIsCareAdminAndPatientIsProtectedPerson() {
     final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ATHENA_REACT_ANDERSSON)
         .user(ALVA_VARDADMINISTRATOR)
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
@@ -155,6 +156,7 @@ class CertificateActionCannotComplementTest {
         .certificateMetaData(
             CertificateMetaData.builder()
                 .patient(ANONYMA_REACT_ATTILA)
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
                 .build()
         )
         .build();
@@ -178,33 +180,7 @@ class CertificateActionCannotComplementTest {
 
     assertTrue(actualResult);
   }
-
-  @Test
-  void shallReturnFalseIfPatientMissing() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .user(AJLA_DOKTOR)
-        .build();
-
-    final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionCannotComplement.evaluate(Optional.of(certificate),
-        Optional.of(actionEvaluation));
-
-    assertFalse(actualResult);
-  }
-
-  @Test
-  void shallReturnFalseIfUserMissing() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ATHENA_REACT_ANDERSSON)
-        .build();
-
-    final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionCannotComplement.evaluate(Optional.of(certificate),
-        Optional.of(actionEvaluation));
-
-    assertFalse(actualResult);
-  }
-
+  
   @Test
   void shallReturnReasonNotAllowedIfEvaluateReturnsFalse() {
     final var actionEvaluation = ActionEvaluation.builder()

@@ -146,6 +146,7 @@ class CertificateActionComplementTest {
   @Test
   void shallReturnFalseIfUserIsCareAdminAndPatientIsProtectedPerson() {
     final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ANONYMA_REACT_ATTILA)
         .user(ALVA_VARDADMINISTRATOR)
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
@@ -154,6 +155,7 @@ class CertificateActionComplementTest {
         .certificateMetaData(
             CertificateMetaData.builder()
                 .patient(ANONYMA_REACT_ATTILA)
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
                 .build()
         )
         .build();
@@ -176,32 +178,6 @@ class CertificateActionComplementTest {
         Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
-  }
-
-  @Test
-  void shallReturnFalseIfPatientMissing() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .user(AJLA_DOKTOR)
-        .build();
-
-    final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionComplement.evaluate(Optional.of(certificate),
-        Optional.of(actionEvaluation));
-
-    assertFalse(actualResult);
-  }
-
-  @Test
-  void shallReturnFalseIfUserMissing() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ATHENA_REACT_ANDERSSON)
-        .build();
-
-    final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionComplement.evaluate(Optional.of(certificate),
-        Optional.of(actionEvaluation));
-
-    assertFalse(actualResult);
   }
 
   @Test

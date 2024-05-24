@@ -1,7 +1,5 @@
 package se.inera.intyg.certificateservice.domain.action.model;
 
-import static se.inera.intyg.certificateservice.domain.action.model.ActionEvaluationUtil.missingPatientOrUser;
-
 import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -37,7 +35,11 @@ public class CertificateActionCreate implements CertificateAction {
   @Override
   public boolean evaluate(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
-    if (missingPatientOrUser(actionEvaluation)) {
+    if (actionEvaluation.isEmpty()) {
+      return false;
+    }
+
+    if (!actionEvaluation.get().hasPatient() || !actionEvaluation.get().hasUser()) {
       return false;
     }
 
