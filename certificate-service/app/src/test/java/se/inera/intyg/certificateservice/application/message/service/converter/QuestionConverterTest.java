@@ -166,7 +166,6 @@ class QuestionConverterTest {
   void shallIncludeLinks() {
     final var messageAction = MessageAction.builder().build();
     final var message = complementMessageBuilder()
-        .availableActions(List.of(messageAction))
         .build();
     doReturn(ResourceLinkDTO.builder().build()).when(messageActionConverter)
         .convert(messageAction);
