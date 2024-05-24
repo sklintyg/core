@@ -87,7 +87,6 @@ public class Message {
         .anyMatch(certificateAction -> certificateAction.getType()
             .equals(certificateActionType));
   }
-  private List<Reminder> reminders;
 
   public void handle() {
     if (this.status != MessageStatus.HANDLED) {
