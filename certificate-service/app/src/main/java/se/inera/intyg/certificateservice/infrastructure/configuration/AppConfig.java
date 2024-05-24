@@ -162,9 +162,10 @@ public class AppConfig {
   @Bean
   public RevokeCertificateDomainService revokeCertificateDomainService(
       CertificateRepository certificateRepository,
-      CertificateEventDomainService certificateEventDomainService) {
+      CertificateEventDomainService certificateEventDomainService,
+      SetMessagesToHandleDomainService setMessagesToHandleDomainService) {
     return new RevokeCertificateDomainService(certificateRepository,
-        certificateEventDomainService);
+        certificateEventDomainService, setMessagesToHandleDomainService);
   }
 
   @Bean

@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.certificate.model;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -357,11 +358,11 @@ public class Certificate {
         .equals(citizen.idWithoutDash());
   }
 
-  public boolean hasParent(RelationType relationType) {
+  public boolean hasParent(RelationType... relationType) {
     if (this.parent() == null) {
       return false;
     }
-    return this.parent().type().equals(relationType);
+    return Arrays.stream(relationType).anyMatch(type -> this.parent.type().equals(type));
   }
 
   public List<Message> messages(MessageType type) {

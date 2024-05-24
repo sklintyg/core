@@ -8,6 +8,9 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.SIGN;
+import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.COMPLEMENT;
+import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.RENEW;
+import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.REPLACE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.actionEvaluationBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
@@ -36,7 +39,6 @@ import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
-import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
 
 @ExtendWith(MockitoExtension.class)
@@ -86,7 +88,7 @@ class SignCertificateWithoutSignatureDomainServiceTest {
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, Optional.of(actionEvaluation));
     doReturn(savedCertificate).when(certificateRepository).save(certificate);
-    doReturn(false).when(savedCertificate).hasParent(RelationType.COMPLEMENT);
+    doReturn(false).when(savedCertificate).hasParent(COMPLEMENT, RENEW, REPLACE);
 
     signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, actionEvaluation);
 
@@ -101,7 +103,7 @@ class SignCertificateWithoutSignatureDomainServiceTest {
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, Optional.of(actionEvaluation));
     doReturn(savedCertificate).when(certificateRepository).save(certificate);
-    doReturn(false).when(savedCertificate).hasParent(RelationType.COMPLEMENT);
+    doReturn(false).when(savedCertificate).hasParent(COMPLEMENT, RENEW, REPLACE);
 
     signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, actionEvaluation);
 
@@ -187,9 +189,9 @@ class SignCertificateWithoutSignatureDomainServiceTest {
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, Optional.of(actionEvaluation));
     doReturn(savedCertificate).when(certificateRepository).save(certificate);
-    doReturn(true).when(savedCertificate).hasParent(RelationType.COMPLEMENT);
+    doReturn(true).when(savedCertificate).hasParent(COMPLEMENT, RENEW, REPLACE);
     doReturn(parentRelation).when(savedCertificate).parent();
-    doReturn(expectedMessages).when(parentCertificate).messages(MessageType.COMPLEMENT);
+    doReturn(expectedMessages).when(parentCertificate).messages();
 
     signCertificateDomainService.sign(CERTIFICATE_ID, REVISION, actionEvaluation);
 
