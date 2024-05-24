@@ -363,7 +363,7 @@
         <constraints nullable="false" unique="true"/>
       </column>
       <column name="reference" type="varchar(255)">
-        <constraints nullable="false"/>
+        <constraints nullable="true"/>
       </column>
       <column name="subject" type="varchar(255)">
         <constraints nullable="true"/>

@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.message.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.time.LocalDate;
@@ -23,6 +24,7 @@ public class QuestionDTO {
   String author;
   LocalDateTime sent;
   List<ComplementDTO> complements;
+  @JsonProperty("isHandled")
   boolean isHandled;
   boolean isForwarded;
   AnswerDTO answerDTO;
