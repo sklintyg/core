@@ -62,7 +62,8 @@ public enum ResourceLinkTypeDTO {
   MISSING_RELATED_CERTIFICATE_CONFIRMATION,
   SHOW_RELATED_CERTIFICATE,
   SRS_FULL_VIEW,
-  SRS_MINIMIZED_VIEW;
+  SRS_MINIMIZED_VIEW,
+  SEND_AFTER_SIGN_CERTIFICATE;
 
   public static ResourceLinkTypeDTO toResourceLinkType(CertificateActionType type) {
     return switch (type) {
@@ -77,6 +78,7 @@ public enum ResourceLinkTypeDTO {
       case REPLACE -> REPLACE_CERTIFICATE;
       case REPLACE_CONTINUE -> REPLACE_CERTIFICATE_CONTINUE;
       case RENEW -> RENEW_CERTIFICATE;
+      case SEND_AFTER_SIGN -> SEND_AFTER_SIGN_CERTIFICATE;
       case RECEIVE_COMPLEMENT ->
           throw new IllegalArgumentException("%s is not a valid type!".formatted(type));
     };

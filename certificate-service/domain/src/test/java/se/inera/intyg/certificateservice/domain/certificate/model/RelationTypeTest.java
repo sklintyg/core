@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificate.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.COMPLEMENT;
 import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.RENEW;
 import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.REPLACE;
 
@@ -21,6 +22,11 @@ class RelationTypeTest {
     void shallConvertRenew() {
       assertEquals("FRLANG", RENEW.toRelationKod());
     }
+
+    @Test
+    void shallConvertComplement() {
+      assertEquals("KOMPLT", COMPLEMENT.toRelationKod());
+    }
   }
 
   @Nested
@@ -34,6 +40,11 @@ class RelationTypeTest {
     @Test
     void shallConvertRenew() {
       assertEquals("Förlänger", RENEW.toRelationKodText());
+    }
+
+    @Test
+    void shallConvertComplement() {
+      assertEquals("Kompletterar", COMPLEMENT.toRelationKodText());
     }
   }
 }

@@ -176,6 +176,11 @@ class ResourceLinkTypeDTOTest {
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.RENEW)
       );
     }
+
+    @Test
+    void shallReturnCertificateActionTypeSendAfterSign() {
+      assertEquals(ResourceLinkTypeDTO.SEND_AFTER_SIGN_CERTIFICATE,
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SEND_AFTER_SIGN));
+    }
   }
 }
-

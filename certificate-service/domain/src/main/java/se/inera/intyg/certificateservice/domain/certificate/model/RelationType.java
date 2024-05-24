@@ -1,13 +1,13 @@
 package se.inera.intyg.certificateservice.domain.certificate.model;
 
 public enum RelationType {
-  REPLACE, RENEW, COMPLEMENT;
+  REPLACE, RENEW;
 
   public String toRelationKod() {
     return switch (this) {
       case REPLACE -> "ERSATT";
       case RENEW -> "FRLANG";
-      case COMPLEMENT -> "KOMPL";
+      case COMPLEMENT -> "KOMPLT";
     };
   }
 

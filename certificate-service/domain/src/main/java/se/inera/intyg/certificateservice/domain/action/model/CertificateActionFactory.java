@@ -167,6 +167,15 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case SEND_AFTER_SIGN -> CertificateActionSendAfterSign.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED)),
+                  new ActionRuleSent(false)
+              )
+          )
+          .build();
     };
   }
 }

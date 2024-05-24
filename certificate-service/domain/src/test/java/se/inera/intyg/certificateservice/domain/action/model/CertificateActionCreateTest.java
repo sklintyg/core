@@ -39,7 +39,7 @@ class CertificateActionCreateTest {
 
   @Test
   void shallReturnName() {
-    assertEquals("Skapa intyg", certificateActionCreate.getName());
+    assertEquals("Skapa intyg", certificateActionCreate.getName(Optional.empty()));
   }
 
   @Test
@@ -49,7 +49,8 @@ class CertificateActionCreateTest {
 
   @Test
   void shallReturnDescription() {
-    assertEquals("Skapa ett intygsutkast.", certificateActionCreate.getDescription());
+    assertEquals("Skapa ett intygsutkast.",
+        certificateActionCreate.getDescription(Optional.empty()));
   }
 
   @Test
