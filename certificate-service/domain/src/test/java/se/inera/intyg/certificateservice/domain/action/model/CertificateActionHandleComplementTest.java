@@ -209,7 +209,7 @@ class CertificateActionHandleComplementTest {
   }
 
   @Test
-  void shallReturnEnabledTrueIfEvalutateTrue() {
+  void shallReturnEnabledTrue() {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(ANONYMA_REACT_ATTILA)
         .user(AJLA_DOKTOR)
@@ -217,22 +217,10 @@ class CertificateActionHandleComplementTest {
         .build();
 
     final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionHandleComplement.evaluate(Optional.of(certificate),
+    final var actualResult = certificateActionHandleComplement.isEnabled(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
-  }
-
-  @Test
-  void shallReturnEnabledFalseIfEvalutateFalse() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ANONYMA_REACT_ATTILA)
-        .user(ALVA_VARDADMINISTRATOR)
-        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
-        .build();
-    assertFalse(
-        certificateActionHandleComplement.isEnabled(Optional.empty(),
-            Optional.of(actionEvaluation)));
   }
 
   @Test

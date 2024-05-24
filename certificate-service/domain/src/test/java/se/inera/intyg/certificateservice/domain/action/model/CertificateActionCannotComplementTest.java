@@ -180,7 +180,7 @@ class CertificateActionCannotComplementTest {
 
     assertTrue(actualResult);
   }
-  
+
   @Test
   void shallReturnReasonNotAllowedIfEvaluateReturnsFalse() {
     final var actionEvaluation = ActionEvaluation.builder()
@@ -211,7 +211,7 @@ class CertificateActionCannotComplementTest {
   }
 
   @Test
-  void shallReturnEnabledTrueIfEvalutateTrue() {
+  void shallReturnEnabledTrue() {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(ANONYMA_REACT_ATTILA)
         .user(AJLA_DOKTOR)
@@ -219,22 +219,10 @@ class CertificateActionCannotComplementTest {
         .build();
 
     final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionCannotComplement.evaluate(Optional.of(certificate),
+    final var actualResult = certificateActionCannotComplement.isEnabled(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
-  }
-
-  @Test
-  void shallReturnEnabledFalseIfEvalutateFalse() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ANONYMA_REACT_ATTILA)
-        .user(ALVA_VARDADMINISTRATOR)
-        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
-        .build();
-    assertFalse(
-        certificateActionCannotComplement.isEnabled(Optional.empty(),
-            Optional.of(actionEvaluation)));
   }
 
   @Test

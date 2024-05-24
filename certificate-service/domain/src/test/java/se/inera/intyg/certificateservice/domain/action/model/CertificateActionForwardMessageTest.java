@@ -209,7 +209,7 @@ class CertificateActionForwardMessageTest {
   }
 
   @Test
-  void shallReturnEnabledTrueIfEvalutateTrue() {
+  void shallReturnEnabledTrue() {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(ANONYMA_REACT_ATTILA)
         .user(AJLA_DOKTOR)
@@ -217,22 +217,10 @@ class CertificateActionForwardMessageTest {
         .build();
 
     final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionForwardMessage.evaluate(Optional.of(certificate),
+    final var actualResult = certificateActionForwardMessage.isEnabled(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
-  }
-
-  @Test
-  void shallReturnEnabledFalseIfEvalutateFalse() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ANONYMA_REACT_ATTILA)
-        .user(ALVA_VARDADMINISTRATOR)
-        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
-        .build();
-    assertFalse(
-        certificateActionForwardMessage.isEnabled(Optional.empty(),
-            Optional.of(actionEvaluation)));
   }
 
   @Test
