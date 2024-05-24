@@ -26,6 +26,7 @@ public class QuestionDTO {
   List<ComplementDTO> complements;
   @JsonProperty("isHandled")
   boolean isHandled;
+  @JsonProperty("isForwarded")
   boolean isForwarded;
   AnswerDTO answerDTO;
   CertificateRelationDTO answeredByCertificate;

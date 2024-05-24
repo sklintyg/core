@@ -8,15 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doReturn;
-
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
 
 import java.util.Collections;
 import java.util.List;
@@ -60,7 +51,7 @@ class MessageTest {
           .status(MessageStatus.SENT)
           .build();
 
-      doReturn(List.of(CERTIFICATE_ACTION_COMPLEMENT)).when(certificate).actions(
+      doReturn(List.of(CERTIFICATE_ACTION_COMPLEMENT)).when(certificate).actionsInclude(
           Optional.of(ACTION_EVALUATION)
       );
 
@@ -75,7 +66,7 @@ class MessageTest {
           .status(MessageStatus.SENT)
           .build();
 
-      doReturn(List.of(CERTIFICATE_ACTION_COMPLEMENT)).when(certificate).actions(
+      doReturn(List.of(CERTIFICATE_ACTION_COMPLEMENT)).when(certificate).actionsInclude(
           Optional.of(ACTION_EVALUATION)
       );
 
@@ -90,7 +81,7 @@ class MessageTest {
           .status(MessageStatus.HANDLED)
           .build();
 
-      doReturn(List.of(CERTIFICATE_ACTION_COMPLEMENT)).when(certificate).actions(
+      doReturn(List.of(CERTIFICATE_ACTION_COMPLEMENT)).when(certificate).actionsInclude(
           Optional.of(ACTION_EVALUATION)
       );
 
@@ -105,7 +96,7 @@ class MessageTest {
           .status(MessageStatus.SENT)
           .build();
 
-      doReturn(Collections.emptyList()).when(certificate).actions(
+      doReturn(Collections.emptyList()).when(certificate).actionsInclude(
           Optional.of(ACTION_EVALUATION)
       );
 
@@ -133,7 +124,7 @@ class MessageTest {
           .status(MessageStatus.SENT)
           .build();
 
-      doReturn(List.of(CERTIFICATE_ACTION_CANNOT_COMPLEMENT)).when(certificate).actions(
+      doReturn(List.of(CERTIFICATE_ACTION_CANNOT_COMPLEMENT)).when(certificate).actionsInclude(
           Optional.of(ACTION_EVALUATION)
       );
 
@@ -148,7 +139,7 @@ class MessageTest {
           .status(MessageStatus.SENT)
           .build();
 
-      doReturn(List.of(CERTIFICATE_ACTION_CANNOT_COMPLEMENT)).when(certificate).actions(
+      doReturn(List.of(CERTIFICATE_ACTION_CANNOT_COMPLEMENT)).when(certificate).actionsInclude(
           Optional.of(ACTION_EVALUATION)
       );
 
@@ -163,7 +154,7 @@ class MessageTest {
           .status(MessageStatus.HANDLED)
           .build();
 
-      doReturn(List.of(CERTIFICATE_ACTION_CANNOT_COMPLEMENT)).when(certificate).actions(
+      doReturn(List.of(CERTIFICATE_ACTION_CANNOT_COMPLEMENT)).when(certificate).actionsInclude(
           Optional.of(ACTION_EVALUATION)
       );
 
@@ -178,7 +169,7 @@ class MessageTest {
           .status(MessageStatus.SENT)
           .build();
 
-      doReturn(Collections.emptyList()).when(certificate).actions(
+      doReturn(Collections.emptyList()).when(certificate).actionsInclude(
           Optional.of(ACTION_EVALUATION)
       );
 
@@ -206,7 +197,7 @@ class MessageTest {
           .status(MessageStatus.SENT)
           .build();
 
-      doReturn(List.of(CERTIFICATE_ACTION_FORWARD)).when(certificate).actions(
+      doReturn(List.of(CERTIFICATE_ACTION_FORWARD)).when(certificate).actionsInclude(
           Optional.of(ACTION_EVALUATION)
       );
 
@@ -221,7 +212,7 @@ class MessageTest {
           .status(MessageStatus.HANDLED)
           .build();
 
-      doReturn(List.of(CERTIFICATE_ACTION_FORWARD)).when(certificate).actions(
+      doReturn(List.of(CERTIFICATE_ACTION_FORWARD)).when(certificate).actionsInclude(
           Optional.of(ACTION_EVALUATION)
       );
 
@@ -236,7 +227,7 @@ class MessageTest {
           .status(MessageStatus.SENT)
           .build();
 
-      doReturn(Collections.emptyList()).when(certificate).actions(
+      doReturn(Collections.emptyList()).when(certificate).actionsInclude(
           Optional.of(ACTION_EVALUATION)
       );
 
@@ -245,36 +236,36 @@ class MessageTest {
     }
   }
 
-@Nested
-class TestHandle {
+  @Nested
+  class TestHandle {
 
-  @Test
-  void shallSetStatusToHandled() {
-    final var unhandledMessage = complementMessageBuilder().build();
-    unhandledMessage.handle();
-    assertEquals(MessageStatus.HANDLED, unhandledMessage.status());
+    @Test
+    void shallSetStatusToHandled() {
+      final var unhandledMessage = complementMessageBuilder().build();
+      unhandledMessage.handle();
+      assertEquals(MessageStatus.HANDLED, unhandledMessage.status());
+    }
+
+    @Test
+    void shallUpdateModified() {
+      final var unhandledMessage = complementMessageBuilder().build();
+      final var modifiedBefore = unhandledMessage.modified();
+      unhandledMessage.handle();
+      assertAll(
+          () -> assertNotNull(unhandledMessage.modified()),
+          () -> assertNotEquals(modifiedBefore, unhandledMessage.modified())
+      );
+    }
+
+    @Test
+    void shallNotUpdateModifiedIfAlreadyHandled() {
+      final var unhandledMessage = complementMessageBuilder()
+          .status(MessageStatus.HANDLED)
+          .build();
+
+      final var modifiedBefore = unhandledMessage.modified();
+      unhandledMessage.handle();
+      assertEquals(modifiedBefore, unhandledMessage.modified());
+    }
   }
-
-  @Test
-  void shallUpdateModified() {
-    final var unhandledMessage = complementMessageBuilder().build();
-    final var modifiedBefore = unhandledMessage.modified();
-    unhandledMessage.handle();
-    assertAll(
-        () -> assertNotNull(unhandledMessage.modified()),
-        () -> assertNotEquals(modifiedBefore, unhandledMessage.modified())
-    );
-  }
-
-  @Test
-  void shallNotUpdateModifiedIfAlreadyHandled() {
-    final var unhandledMessage = complementMessageBuilder()
-        .status(MessageStatus.HANDLED)
-        .build();
-
-    final var modifiedBefore = unhandledMessage.modified();
-    unhandledMessage.handle();
-    assertEquals(modifiedBefore, unhandledMessage.modified());
-  }
-}
 }
