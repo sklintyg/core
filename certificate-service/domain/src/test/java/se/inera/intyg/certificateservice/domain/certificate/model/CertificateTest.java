@@ -696,7 +696,9 @@ class CertificateTest {
 
     @Test
     void shallReturnActionIfEvaluateTrue() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
       final var certificateAction = mock(CertificateAction.class);
       final var expectedActions = List.of(certificateAction);
 
@@ -712,7 +714,9 @@ class CertificateTest {
 
     @Test
     void shallReturnActionIfIncludeTrue() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
       final var certificateAction = mock(CertificateAction.class);
       final var expectedActions = List.of(certificateAction);
 
@@ -728,7 +732,9 @@ class CertificateTest {
 
     @Test
     void shallNotReturnActionIfEvaluateFalse() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
       final var certificateAction = mock(CertificateAction.class);
       final var expectedActions = Collections.emptyList();
 
@@ -744,7 +750,9 @@ class CertificateTest {
 
     @Test
     void shallNotReturnActionIfIncludeFalse() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
       final var certificateAction = mock(CertificateAction.class);
       final var expectedActions = Collections.emptyList();
 
@@ -1404,7 +1412,9 @@ class CertificateTest {
     @Test
     void shallReturnEmptyList() {
       final var certificateActionSpecification = CertificateActionSpecification.builder().build();
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
       final var certificateAction = mock(CertificateAction.class);
       final var actions = List.of(certificateAction);
 
@@ -1431,7 +1441,9 @@ class CertificateTest {
     void shallReturnReasons() {
       final var expectedReasons = List.of("expectedReasons");
       final var certificateActionSpecification = CertificateActionSpecification.builder().build();
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
       final var certificateAction = mock(CertificateAction.class);
       final var actions = List.of(certificateAction);
 

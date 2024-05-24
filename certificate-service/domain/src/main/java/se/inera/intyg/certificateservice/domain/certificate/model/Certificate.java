@@ -56,7 +56,7 @@ public class Certificate {
         .filter(
             certificateAction -> certificateAction.evaluate(
                 Optional.of(this),
-                actionEvaluation
+                addPatientIfMissing(actionEvaluation)
             )
         )
         .toList();
@@ -64,7 +64,8 @@ public class Certificate {
 
   public List<CertificateAction> actionsInclude(Optional<ActionEvaluation> actionEvaluation) {
     return certificateModel.actions().stream()
-        .filter(certificateAction -> certificateAction.include(Optional.of(this), actionEvaluation))
+        .filter(certificateAction -> certificateAction.include(Optional.of(this),
+            addPatientIfMissing(actionEvaluation)))
         .toList();
   }
 
@@ -88,7 +89,7 @@ public class Certificate {
         .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
         .findFirst()
         .map(certificateAction -> certificateAction.reasonNotAllowed(Optional.of(this),
-            actionEvaluation))
+            addPatientIfMissing(actionEvaluation)))
         .orElse(Collections.emptyList());
   }
 

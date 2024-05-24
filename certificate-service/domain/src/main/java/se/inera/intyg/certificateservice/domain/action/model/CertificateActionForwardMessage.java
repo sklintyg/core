@@ -50,11 +50,6 @@ public class CertificateActionForwardMessage implements CertificateAction {
     return DESCRIPTION;
   }
 
-  @Override
-  public boolean isEnabled(Optional<Certificate> certificate,
-      Optional<ActionEvaluation> actionEvaluation) {
-    return evaluate(certificate, actionEvaluation);
-  }
 
   @Override
   public boolean include(Optional<Certificate> certificate,

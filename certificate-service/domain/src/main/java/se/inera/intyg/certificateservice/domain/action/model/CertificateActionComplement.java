@@ -49,10 +49,4 @@ public class CertificateActionComplement implements CertificateAction {
   public String getDescription(Optional<Certificate> certificate) {
     return DESCRIPTION;
   }
-
-  @Override
-  public boolean isEnabled(Optional<Certificate> certificate,
-      Optional<ActionEvaluation> actionEvaluation) {
-    return evaluate(certificate, actionEvaluation);
-  }
 }
