@@ -133,5 +133,6 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
             .map(CertificateId::id)
             .toList()
     );
+
   }
 }

@@ -696,7 +696,9 @@ class CertificateTest {
 
     @Test
     void shallReturnActionIfEvaluateTrue() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
       final var certificateAction = mock(CertificateAction.class);
       final var expectedActions = List.of(certificateAction);
 
@@ -712,7 +714,9 @@ class CertificateTest {
 
     @Test
     void shallReturnActionIfIncludeTrue() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
       final var certificateAction = mock(CertificateAction.class);
       final var expectedActions = List.of(certificateAction);
 
@@ -728,7 +732,9 @@ class CertificateTest {
 
     @Test
     void shallNotReturnActionIfEvaluateFalse() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
       final var certificateAction = mock(CertificateAction.class);
       final var expectedActions = Collections.emptyList();
 
@@ -744,7 +750,9 @@ class CertificateTest {
 
     @Test
     void shallNotReturnActionIfIncludeFalse() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
       final var certificateAction = mock(CertificateAction.class);
       final var expectedActions = Collections.emptyList();
 
@@ -1404,7 +1412,9 @@ class CertificateTest {
     @Test
     void shallReturnEmptyList() {
       final var certificateActionSpecification = CertificateActionSpecification.builder().build();
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
       final var certificateAction = mock(CertificateAction.class);
       final var actions = List.of(certificateAction);
 
@@ -1431,7 +1441,9 @@ class CertificateTest {
     void shallReturnReasons() {
       final var expectedReasons = List.of("expectedReasons");
       final var certificateActionSpecification = CertificateActionSpecification.builder().build();
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
       final var certificateAction = mock(CertificateAction.class);
       final var actions = List.of(certificateAction);
 
@@ -2005,6 +2017,71 @@ class CertificateTest {
               .build();
 
       assertTrue(certificate.isSendActiveForCitizen());
+    }
+  }
+
+  @Nested
+  class GetLatestChildRelationOfTypeTest {
+
+    @Test
+    void shallReturnMatchingChildRelation() {
+      final var expectedRelation = Relation.builder()
+          .type(RelationType.COMPLEMENT)
+          .created(LocalDateTime.now())
+          .build();
+
+      final var certificate = Certificate.builder()
+          .children(
+              List.of(
+                  expectedRelation
+              )
+          )
+          .build();
+
+      assertEquals(Optional.of(expectedRelation),
+          certificate.latestChildRelation(RelationType.COMPLEMENT));
+    }
+
+    @Test
+    void shallReturnOptionalEmptyIfNoMatchingChildRelation() {
+      final var certificate = Certificate.builder()
+          .children(
+              List.of(
+                  Relation.builder()
+                      .type(RelationType.REPLACE)
+                      .created(LocalDateTime.now())
+                      .build()
+              )
+          )
+          .build();
+
+      assertEquals(Optional.empty(),
+          certificate.latestChildRelation(RelationType.COMPLEMENT));
+    }
+
+    @Test
+    void shallReturnLastestRelationIfMultipleChildRelationsArePresent() {
+      final var now = LocalDateTime.now();
+
+      final var expectedRelation = Relation.builder()
+          .type(RelationType.COMPLEMENT)
+          .created(now)
+          .build();
+
+      final var certificate = Certificate.builder()
+          .children(
+              List.of(
+                  expectedRelation,
+                  Relation.builder()
+                      .type(RelationType.COMPLEMENT)
+                      .created(LocalDateTime.now().minusDays(1))
+                      .build()
+              )
+          )
+          .build();
+
+      assertEquals(Optional.of(expectedRelation),
+          certificate.latestChildRelation(RelationType.COMPLEMENT));
     }
   }
 }

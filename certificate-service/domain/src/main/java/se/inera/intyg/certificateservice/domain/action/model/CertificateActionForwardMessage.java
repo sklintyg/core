@@ -10,13 +10,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 
 @Builder
 @Getter(AccessLevel.NONE)
-public class CertificateActionCreate implements CertificateAction {
+public class CertificateActionForwardMessage implements CertificateAction {
 
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
 
-  private static final String NAME = "Skapa intyg";
-  private static final String DESCRIPTION = "Skapa ett intygsutkast.";
+  private static final String NAME = "Vidarebefordra";
+  private static final String DESCRIPTION = "Skapar ett e-postmeddelande med länk till intyget.";
 
   @Override
   public CertificateActionType getType() {
@@ -35,14 +35,6 @@ public class CertificateActionCreate implements CertificateAction {
   @Override
   public boolean evaluate(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
-    if (actionEvaluation.isEmpty()) {
-      return false;
-    }
-
-    if (!actionEvaluation.get().hasPatient() || !actionEvaluation.get().hasUser()) {
-      return false;
-    }
-
     return actionRules.stream()
         .filter(value -> value.evaluate(certificate, actionEvaluation))
         .count() == actionRules.size();
@@ -58,15 +50,11 @@ public class CertificateActionCreate implements CertificateAction {
     return DESCRIPTION;
   }
 
+
   @Override
   public boolean include(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
-    return true;
-  }
-
-  @Override
-  public boolean isEnabled(Optional<Certificate> certificate,
-      Optional<ActionEvaluation> actionEvaluation) {
-    return evaluate(certificate, actionEvaluation);
+    //TODO: Handle in INTYGFV-16620
+    return false;
   }
 }

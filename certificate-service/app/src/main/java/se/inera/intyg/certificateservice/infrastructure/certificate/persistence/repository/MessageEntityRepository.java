@@ -10,4 +10,6 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 public interface MessageEntityRepository extends CrudRepository<MessageEntity, Long> {
 
   List<MessageEntity> findMessageEntitiesByCertificate(CertificateEntity certificate);
+
+  void deleteAllByIdIn(List<String> messageIds);
 }

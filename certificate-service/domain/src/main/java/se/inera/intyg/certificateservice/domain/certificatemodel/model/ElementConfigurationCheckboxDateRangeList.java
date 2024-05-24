@@ -38,7 +38,7 @@ public class ElementConfigurationCheckboxDateRangeList implements ElementConfigu
     if (dateRanges == null) {
       return Optional.empty();
     }
-    
+
     return dateRanges.stream()
         .filter(dateRange -> dateRange.id().equals(id))
         .findFirst();
