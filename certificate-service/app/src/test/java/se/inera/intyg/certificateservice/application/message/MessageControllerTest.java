@@ -10,17 +10,29 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
+import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.MessageExistsResponse;
+import se.inera.intyg.certificateservice.application.message.service.GetCertificateFromMessageService;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateMessageService;
 import se.inera.intyg.certificateservice.application.message.service.IncomingMessageService;
+import se.inera.intyg.certificateservice.application.message.service.MessageExistsService;
 
 @ExtendWith(MockitoExtension.class)
 class MessageControllerTest {
 
 
   private static final String CERTIFICATE_ID = "certificateId";
+  private static final String MESSAGE_ID = "messageId";
+  private static final CertificateDTO CERTIFICATE = CertificateDTO.builder().build();
+  @Mock
+  private GetCertificateFromMessageService getCertificateFromMessageService;
+  @Mock
+  private MessageExistsService messageExistsService;
   @Mock
   private IncomingMessageService incomingMessageService;
   @Mock
@@ -53,6 +65,37 @@ class MessageControllerTest {
       final var actualResponse = messageController.getMessagesForCertificate(request,
           CERTIFICATE_ID);
 
+      assertEquals(expectedResponse, actualResponse);
+    }
+  }
+
+  @Nested
+  class FindExistingMessage {
+
+    @Test
+    void shallReturnMessageExistsResponse() {
+      final var expectedResponse = MessageExistsResponse.builder()
+          .exists(true)
+          .build();
+      doReturn(expectedResponse).when(messageExistsService).exist(MESSAGE_ID);
+
+      final var actualResponse = messageController.findExistingMessage(MESSAGE_ID);
+      assertEquals(expectedResponse, actualResponse);
+    }
+  }
+
+  @Nested
+  class GetCertificateFromMessage {
+
+    @Test
+    void shallReturnGetCertificateFromMessageResponse() {
+      final var expectedResponse = GetCertificateFromMessageResponse.builder()
+          .certificate(CERTIFICATE)
+          .build();
+      final var request = GetCertificateFromMessageRequest.builder().build();
+      doReturn(expectedResponse).when(getCertificateFromMessageService).get(request, MESSAGE_ID);
+
+      final var actualResponse = messageController.getCertificateFromMessage(request, MESSAGE_ID);
       assertEquals(expectedResponse, actualResponse);
     }
   }
