@@ -196,7 +196,7 @@ class PdfDateRangeListValueGeneratorTest {
           ),
           () -> assertTrue(
               result.contains(PdfField.builder()
-                  .id(FIELD_PREFIX + ".ksr_EnFjardedela[0]")
+                  .id(FIELD_PREFIX + ".ksr_Enfjardedela[0]")
                   .value("1")
                   .build())
           ),

@@ -125,7 +125,7 @@ public class PdfDateRangeListValueGenerator implements PdfElementValueGenerator 
         return "EnAttondel";
       }
       case EN_FJARDEDEL -> {
-        return "EnFjardedela";
+        return "Enfjardedela";
       }
       case HALVA -> {
         return "Halva";
