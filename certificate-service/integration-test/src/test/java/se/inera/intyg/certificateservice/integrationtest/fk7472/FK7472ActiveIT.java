@@ -4452,6 +4452,11 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
       api.receiveMessage(
           incomingComplementMessageBuilder()
               .certificateId(
@@ -4478,6 +4483,11 @@ class FK7472ActiveIT {
     void shallReturnQuestionWithComplementCertificateIfIssuedOnSameCareUnitDifferentSubUnit() {
       final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
       );
 
       api.receiveMessage(
@@ -4512,6 +4522,13 @@ class FK7472ActiveIT {
               .build()
       );
 
+      api.sendCertificate(
+          customSendCertificateRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
       api.receiveMessage(
           incomingComplementMessageBuilder()
               .certificateId(
@@ -4542,6 +4559,11 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
       api.receiveMessage(
           incomingComplementMessageBuilder()
               .certificateId(
@@ -4567,6 +4589,11 @@ class FK7472ActiveIT {
           customTestabilityCertificateRequest(FK7472, VERSION, SIGNED)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
       );
 
       api.receiveMessage(
@@ -4595,6 +4622,11 @@ class FK7472ActiveIT {
           customTestabilityCertificateRequest(FK7472, VERSION, SIGNED)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
       );
 
       api.receiveMessage(
@@ -4628,6 +4660,11 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
       api.receiveMessage(
           incomingComplementMessageBuilder()
               .certificateId(
@@ -4659,6 +4696,11 @@ class FK7472ActiveIT {
     void shallNotReturnComplementCertificateIfUserCopyIsFalse() {
       final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
       );
 
       api.receiveMessage(
