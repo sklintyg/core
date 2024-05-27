@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4;
+package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.validation;
 
 import com.helger.schematron.sch.SchematronResourceSCH;
 import com.helger.schematron.svrl.SVRLHelper;
