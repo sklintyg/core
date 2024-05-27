@@ -4172,7 +4172,6 @@ class FK7472ActiveIT {
 
       api.receiveMessage(
           incomingComplementMessageBuilder()
-              .id("NEW_MESSAGE_ID")
               .certificateId(
                   certificateId(testCertificates)
               )
@@ -4202,7 +4201,6 @@ class FK7472ActiveIT {
 
       api.receiveMessage(
           incomingComplementMessageBuilder()
-              .id("NEW_MESSAGE_ID")
               .certificateId(
                   certificateId(testCertificates)
               )

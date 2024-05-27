@@ -1871,18 +1871,18 @@ class CertificateTest {
     }
 
     @Test
-    void shallReturnNewCertificateWithMessages() {
-      final var expected = List.of(Message.builder().build());
+    void shallReturnNewCertificateWithoutOldMessages() {
+      final var oldMessages = List.of(Message.builder().build());
 
       final var actionEvaluation = actionEvaluationBuilder.build();
       final var signedCertificate = certificateBuilder
-          .messages(expected)
+          .messages(oldMessages)
           .status(Status.SIGNED)
           .build();
 
       final var actualCertificate = signedCertificate.complement(actionEvaluation);
 
-      assertEquals(expected, actualCertificate.messages());
+      assertEquals(Collections.emptyList(), actualCertificate.messages());
     }
 
     @Test
