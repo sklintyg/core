@@ -4691,7 +4691,7 @@ class FK7472ActiveIT {
     }
 
     @Test
-    @DisplayName("FK7472 - Om intyget inte finns tillgängligt skall felkod 400 (BAD_REQUEST) returneras")
+    @DisplayName("FK7472 - Om intyget inte finns i tjänsten skall felkod 400 (BAD_REQUEST) returneras")
     void shallNotReturnCertificateIfMissing() {
       final var response = api.certificateFromMessage(
           defaultGetCertificateFromMessageRequest(),
