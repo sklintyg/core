@@ -48,6 +48,8 @@ import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCerti
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateResponse;
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateRequest;
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateResponse;
+import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
@@ -302,6 +304,23 @@ public class ApiUtil {
         requestUrl,
         HttpMethod.GET,
         new HttpEntity<>(headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<GetCertificateFromMessageResponse> certificateFromMessage(
+      GetCertificateFromMessageRequest request,
+      String messageId) {
+    final var requestUrl = "http://localhost:%s/api/message/%s/certificate"
+        .formatted(port, messageId);
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
         new ParameterizedTypeReference<>() {
         },
         Collections.emptyMap()

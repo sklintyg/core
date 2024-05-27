@@ -52,6 +52,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCertificateTypeInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultDeleteCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateFromMessageRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateMessageRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificatePdfRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateRequest;
@@ -4650,6 +4651,53 @@ class FK7472ActiveIT {
           "Should return false when message doesnt exists!"
       );
     }
+  }
 
+  @Nested
+  @DisplayName("FK7472 - Hämta intyg utifrån id från meddelande")
+  class CertificateFromMessageTests {
+
+    @Test
+    @DisplayName("FK7472 - Ska returnera intyget om det finns")
+    void shallReturnCertificate() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          defaultGetCertificateMessageRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var questions = questions(messagesForCertificate.getBody());
+
+      final var response = api.certificateFromMessage(
+          defaultGetCertificateFromMessageRequest(),
+          messageId(questions.get(0))
+      );
+
+      assertEquals(
+          certificateId(testCertificates),
+          certificateId(response.getBody())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Om intyget inte finns tillgängligt skall felkod 400 (BAD_REQUEST) returneras")
+    void shallNotReturnCertificateIfMissing() {
+      final var response = api.certificateFromMessage(
+          defaultGetCertificateFromMessageRequest(),
+          "message-not-exists");
+
+      assertEquals(400, response.getStatusCode().value());
+    }
   }
 }
