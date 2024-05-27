@@ -12,10 +12,16 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 @Getter(AccessLevel.NONE)
 public class CertificateActionComplement implements CertificateAction {
 
-  private static final String NAME = "Komplettera";
-  private static final String DESCRIPTION = "Öppnar ett nytt intygsutkast.";
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
+
+  private static final String NAME = "Komplettera";
+  private static final String DESCRIPTION = "Öppnar ett nytt intygsutkast.";
+
+  @Override
+  public CertificateActionType getType() {
+    return certificateActionSpecification.certificateActionType();
+  }
 
   @Override
   public List<String> reasonNotAllowed(Optional<Certificate> certificate,
@@ -24,11 +30,6 @@ public class CertificateActionComplement implements CertificateAction {
         .filter(value -> !value.evaluate(certificate, actionEvaluation))
         .map(ActionRule::getReasonForPermissionDenied)
         .toList();
-  }
-
-  @Override
-  public CertificateActionType getType() {
-    return certificateActionSpecification.certificateActionType();
   }
 
   @Override

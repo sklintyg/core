@@ -13,6 +13,7 @@ import static se.inera.intyg.certificateservice.domain.action.model.CertificateA
 import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.UPDATE;
 
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.message.model.MessageActionType;
 
 public enum ResourceLinkTypeDTO {
   EDIT_CERTIFICATE,
@@ -80,8 +81,22 @@ public enum ResourceLinkTypeDTO {
       case RENEW -> RENEW_CERTIFICATE;
       case SEND_AFTER_SIGN -> SEND_AFTER_SIGN_CERTIFICATE;
       case COMPLEMENT -> COMPLEMENT_CERTIFICATE;
+      case CANNOT_COMPLEMENT -> CANNOT_COMPLEMENT_CERTIFICATE;
+      case FORWARD_MESSAGE -> FORWARD_QUESTION;
+      case HANDLE_COMPLEMENT -> HANDLE_QUESTION;
       case RECEIVE_COMPLEMENT ->
           throw new IllegalArgumentException("%s is not a valid type!".formatted(type));
+    };
+  }
+
+  public static ResourceLinkTypeDTO toResourceLinkType(MessageActionType type) {
+    return switch (type) {
+      case COMPLEMENT -> COMPLEMENT_CERTIFICATE;
+      case FORWARD -> FORWARD_QUESTION;
+      case CANNOT_COMPLEMENT -> CANNOT_COMPLEMENT_CERTIFICATE;
+      default -> throw new IllegalArgumentException(
+          "Unsupported type: '%s'".formatted(type)
+      );
     };
   }
 

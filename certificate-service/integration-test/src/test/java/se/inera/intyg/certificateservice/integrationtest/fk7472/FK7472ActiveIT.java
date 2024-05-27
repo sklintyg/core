@@ -34,6 +34,7 @@ import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Con
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCertificateTypeInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customDeleteCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetCertificateMessageRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetCertificatePdfRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetCertificateXmlRequest;
@@ -52,6 +53,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultComplementCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultDeleteCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateMessageRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificatePdfRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateXmlRequest;
@@ -75,7 +77,9 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.exists;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueDateRangeList;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueText;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.hasQuestions;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.pdfData;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.questions;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.recipient;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.relation;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.renewCertificateResponse;
@@ -117,7 +121,9 @@ import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.Cer
 import se.inera.intyg.certificateservice.application.common.dto.AccessScopeTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
 import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
+import se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil;
 import se.inera.intyg.certificateservice.integrationtest.util.Containers;
 import se.inera.intyg.certificateservice.integrationtest.util.InternalApiUtil;
 import se.inera.intyg.certificateservice.integrationtest.util.StaffUtil;
@@ -4299,6 +4305,386 @@ class FK7472ActiveIT {
       );
 
       assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7472 - Kompletteringsbegäran skall sättas som hanterad när ersättande intyg signeras")
+    void shallSetComplementAsHandledWhenComplementingCertificateIsSigned() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var response = api.replaceCertificate(
+          defaultReplaceCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.signCertificate(
+          defaultSignCertificateRequest(),
+          certificateId(response.getBody()),
+          certificate(response.getBody()).getMetadata().getVersion()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          defaultGetCertificateMessageRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertTrue(questions(messagesForCertificate.getBody()).get(0).isHandled(),
+          "Expected that complement message was handled, but it was not!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Kompletteringsbegäran skall sättas som hanterad när förnyade intyget signeras")
+    void shallSetComplementAsHandledWhenRenewingCertificateIsSigned() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var renewResponse = api.renewCertificate(
+          defaultRenewCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var renewingCertificate = certificate(renewResponse.getBody());
+      renewingCertificate.getData().put(
+          QUESTION_PERIOD_ID.id(),
+          updateDateRangeListValue(renewingCertificate, QUESTION_PERIOD_ID.id(),
+              List.of(
+                  CertificateDataValueDateRange.builder()
+                      .id(WorkCapacityType.HALVA.name())
+                      .to(LocalDate.now())
+                      .from(LocalDate.now().minusDays(10))
+                      .build()
+              )
+          )
+      );
+
+      final var updateResponse = api.updateCertificate(
+          customUpdateCertificateRequest()
+              .certificate(renewingCertificate)
+              .build(),
+          certificateId(renewResponse.getBody())
+      );
+
+      api.signCertificate(
+          defaultSignCertificateRequest(),
+          certificateId(renewResponse.getBody()),
+          certificate(updateResponse.getBody()).getMetadata().getVersion()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          defaultGetCertificateMessageRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertTrue(questions(messagesForCertificate.getBody()).get(0).isHandled(),
+          "Expected that complement message was handled, but it was not!"
+      );
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7472 - Hantering av frågor för intyg")
+  class Messages {
+
+    @Test
+    @DisplayName("FK7472 - Skall returnera lista av frågor som finns på intyget")
+    void shallReturnListOfQuestionsForCertificate() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          defaultGetCertificateMessageRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertTrue(
+          hasQuestions(messagesForCertificate.getBody())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma mottagning ska hantering av frågor vara tillgänglig")
+    void shallReturnListOfQuestionsForCertificateOnSameUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          defaultGetCertificateMessageRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertTrue(
+          CertificateUtil.resourceLink(messagesForCertificate.getBody())
+              .stream()
+              .anyMatch(link -> link.getType().equals(ResourceLinkTypeDTO.COMPLEMENT_CERTIFICATE)),
+          "Should return link!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Om intyget är utfärdat på mottagning men på samma vårdenhet ska hantering av frågor vara tillgänglig")
+    void shallReturnQuestionWithComplementCertificateIfIssuedOnSameCareUnitDifferentSubUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          customGetCertificateMessageRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertTrue(
+          CertificateUtil.resourceLink(messagesForCertificate.getBody())
+              .stream()
+              .anyMatch(link -> link.getType().equals(ResourceLinkTypeDTO.COMPLEMENT_CERTIFICATE)),
+          "Should return link!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Om intyget är utfärdat på samma vårdenhet ska hantering av frågor vara tillgänglig")
+    void shallReturnQuestionWithComplementCertificateIfIssuedOnSameCareUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7472, VERSION, SIGNED)
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build()
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          customGetCertificateMessageRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertTrue(
+          CertificateUtil.resourceLink(messagesForCertificate.getBody())
+              .stream()
+              .anyMatch(link -> link.getType().equals(ResourceLinkTypeDTO.COMPLEMENT_CERTIFICATE)),
+          "Should return link!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Om intyget är utfärdat på en annan mottagning ska hantering av frågor vara tillgänglig")
+    void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          customGetCertificateMessageRequest()
+              .unit(ALFA_HUDMOTTAGNINGEN_DTO).build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, messagesForCertificate.getStatusCode().value());
+    }
+
+
+    @Test
+    @DisplayName("FK7472 - Vårdadministratör - Om intyget är utfärdat på en patient som har skyddade personuppgifter ska inte hantering av frågor vara tillgänglig")
+    void shallReturn403IfPatientIsProtectedPersonAndUserIsCareAdmin() {
+      final var testCertificates = testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7472, VERSION, SIGNED)
+              .patient(ANONYMA_REACT_ATTILA_DTO)
+              .build()
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .personId(ANONYMA_REACT_ATTILA_DTO.getId())
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          customGetCertificateMessageRequest()
+              .user(ALVA_VARDADMINISTRATOR_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, messagesForCertificate.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7472 - Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter ska inte hantering av frågor vara tillgänglig")
+    void shallReturnComplementCertificateLinkIfPatientIsProtectedPersonAndUserIsDoctor() {
+      final var testCertificates = testabilityApi.addCertificates(
+          customTestabilityCertificateRequest(FK7472, VERSION, SIGNED)
+              .patient(ANONYMA_REACT_ATTILA_DTO)
+              .build()
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .personId(ANONYMA_REACT_ATTILA_DTO.getId())
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          customGetCertificateMessageRequest()
+              .user(AJLA_DOCTOR_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertTrue(
+          CertificateUtil.resourceLink(messagesForCertificate.getBody())
+              .stream()
+              .anyMatch(link -> link.getType().equals(ResourceLinkTypeDTO.COMPLEMENT_CERTIFICATE)),
+          "Should return link!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Om användaren är blockerad ska inte hantering av frågor vara tillgänglig")
+    void shallNotReturnComplementCertificateIfUserIsBlocked() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          customGetCertificateMessageRequest()
+              .user(
+                  ajlaDoktorDtoBuilder()
+                      .blocked(Boolean.TRUE)
+                      .build()
+              )
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertTrue(
+          questions(messagesForCertificate.getBody()).get(0).getLinks()
+              .isEmpty(),
+          "Should not return link!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Om användaren saknar kopieringsmöjligheter ska inte hantering av frågor vara tillgänglig")
+    void shallNotReturnComplementCertificateIfUserCopyIsFalse() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          customGetCertificateMessageRequest()
+              .user(
+                  ajlaDoktorDtoBuilder()
+                      .allowCopy(Boolean.FALSE)
+                      .build()
+              )
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      assertTrue(
+          questions(messagesForCertificate.getBody()).get(0).getLinks()
+              .isEmpty(),
+          "Should not return link!"
+      );
     }
   }
 }

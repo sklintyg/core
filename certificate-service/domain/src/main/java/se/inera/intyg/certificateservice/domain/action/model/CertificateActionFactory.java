@@ -180,15 +180,59 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
-                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleUserNotBlocked(),
                   new ActionRuleRole(
                       List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
                   ),
                   new ActionRuleSent(true),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
-                  new ActionRuleUserNotBlocked(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleInactiveUnit(),
+                  new ActionRulePatientAlive(),
+                  new ActionRuleUserAllowCopy(),
                   new ActionRuleCertificateHasComplement(),
                   new ActionRuleChildRelationNoMatch(List.of(RelationType.COMPLEMENT))
+              )
+          )
+          .build();
+      case CANNOT_COMPLEMENT -> CertificateActionCannotComplement.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleUserNotBlocked(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleInactiveUnit(),
+                  new ActionRulePatientAlive(),
+                  new ActionRuleUserAllowCopy(),
+                  new ActionRuleChildRelationNoMatch(List.of(RelationType.COMPLEMENT))
+              )
+          )
+          .build();
+      case FORWARD_MESSAGE -> CertificateActionForwardMessage.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleUserNotBlocked(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleInactiveUnit(),
+                  new ActionRulePatientAlive(),
+                  new ActionRuleUserAllowCopy()
+              )
+          )
+          .build();
+      case HANDLE_COMPLEMENT -> CertificateActionHandleComplement.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleUserNotBlocked(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleInactiveUnit(),
+                  new ActionRulePatientAlive(),
+                  new ActionRuleUserAllowCopy()
               )
           )
           .build();

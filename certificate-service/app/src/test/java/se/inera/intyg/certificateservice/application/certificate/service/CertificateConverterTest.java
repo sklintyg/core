@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonWebcertUnitDTO.alfaMedicincentrumDtoBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
@@ -40,7 +41,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +76,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummary;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummaryProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
@@ -88,7 +90,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.FK7210CertificateSummaryProvider;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateConverterTest {
@@ -112,7 +113,11 @@ class CertificateConverterTest {
       .sentAt(LocalDateTime.now(ZoneId.systemDefault()))
       .sentBy(AJLA_DOKTOR)
       .build();
+  private static final String CERTIFICATE_SUMMARY_LABEL = "SummaryLabel";
+  private static final String CERTIFICATE_SUMMARY_VALUE = "SummaryValue";
   private final List<ResourceLinkDTO> resourceLinkDTOs = Collections.emptyList();
+  @Mock
+  private CertificateSummaryProvider certificateSummaryProvider;
   @Mock
   private CertificateUnitConverter certificateUnitConverter;
   @Mock
@@ -190,7 +195,7 @@ class CertificateConverterTest {
                             .build()
                     )
                 )
-                .summaryProvider(new FK7210CertificateSummaryProvider())
+                .summaryProvider(certificateSummaryProvider)
                 .build()
         )
         .certificateMetaData(
@@ -222,6 +227,11 @@ class CertificateConverterTest {
             EXTERNAL_REFERENCE
         );
     certificate = certificateBuilder.build();
+    final var certificateSummary = CertificateSummary.builder()
+        .label(CERTIFICATE_SUMMARY_LABEL)
+        .value(CERTIFICATE_SUMMARY_VALUE)
+        .build();
+    doReturn(certificateSummary).when(certificateSummaryProvider).summaryOf(any(Certificate.class));
   }
 
   @Nested
@@ -287,13 +297,12 @@ class CertificateConverterTest {
 
     @Test
     void shallIncludeCertificateSummary() {
-      final var certificateSummary = CertificateSummaryDTO.builder()
-          .label("Gäller intygsperiod")
-          .value(SIGNED.format(DateTimeFormatter.ISO_DATE) + " - " + DATE.format(
-              DateTimeFormatter.ISO_DATE))
+      final var expectedSummary = CertificateSummaryDTO.builder()
+          .label(CERTIFICATE_SUMMARY_LABEL)
+          .value(CERTIFICATE_SUMMARY_VALUE)
           .build();
-
-      assertEquals(certificateSummary,
+      
+      assertEquals(expectedSummary,
           certificateConverter.convert(certificate, resourceLinkDTOs).getMetadata().getSummary()
       );
     }

@@ -279,6 +279,42 @@ class CertificateModelFactoryFK7472Test {
   }
 
   @Test
+  void shallIncludeCertificateActionCannotComplement() {
+    final var expectedType = CertificateActionType.CANNOT_COMPLEMENT;
+
+    final var certificateModel = certificateModelFactoryFK7472.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionForwardMessage() {
+    final var expectedType = CertificateActionType.FORWARD_MESSAGE;
+
+    final var certificateModel = certificateModelFactoryFK7472.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionHandleComplement() {
+    final var expectedType = CertificateActionType.HANDLE_COMPLEMENT;
+
+    final var certificateModel = certificateModelFactoryFK7472.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
   void shallIncludeSchematronPath() {
     final var certificateModel = certificateModelFactoryFK7472.create();
 

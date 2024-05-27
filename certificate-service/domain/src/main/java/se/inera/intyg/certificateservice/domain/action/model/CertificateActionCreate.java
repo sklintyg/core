@@ -38,7 +38,8 @@ public class CertificateActionCreate implements CertificateAction {
     if (actionEvaluation.isEmpty()) {
       return false;
     }
-    if (actionEvaluation.get().patient() == null || actionEvaluation.get().user() == null) {
+
+    if (!actionEvaluation.get().hasPatient() || !actionEvaluation.get().hasUser()) {
       return false;
     }
 

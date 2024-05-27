@@ -184,6 +184,24 @@ class ResourceLinkTypeDTOTest {
     }
 
     @Test
+    void shallReturnCertificateActionTypeCannotComplementCertificate() {
+      assertEquals(ResourceLinkTypeDTO.CANNOT_COMPLEMENT_CERTIFICATE,
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.CANNOT_COMPLEMENT));
+    }
+
+    @Test
+    void shallReturnCertificateActionTypeForwardQuestion() {
+      assertEquals(ResourceLinkTypeDTO.FORWARD_QUESTION,
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.FORWARD_MESSAGE));
+    }
+
+    @Test
+    void shallReturnCertificateActionTypeHandleQuestion() {
+      assertEquals(ResourceLinkTypeDTO.HANDLE_QUESTION,
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.HANDLE_COMPLEMENT));
+    }
+
+    @Test
     void shallReturnCertificateActionTypeComplement() {
       assertEquals(ResourceLinkTypeDTO.COMPLEMENT_CERTIFICATE,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.COMPLEMENT));

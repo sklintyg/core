@@ -15,7 +15,7 @@ public class CertificatePdfGenerator implements PdfGenerator {
   private final List<CertificateTypePdfFillService> certificateTypePdfFillServices;
   private final CertificatePdfFillService certificatePdfFillService;
 
-  public Pdf generate(Certificate certificate, String additionalInfoText) {
+  public Pdf generate(Certificate certificate, String additionalInfoText, boolean isCitizenFormat) {
 
     try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
       final var certificateTypeSpecificFillService = certificateTypePdfFillServices.stream()
@@ -25,11 +25,13 @@ public class CertificatePdfGenerator implements PdfGenerator {
       final var filledPdf = certificatePdfFillService.fillDocument(
           certificate,
           additionalInfoText,
-          certificateTypeSpecificFillService
+          certificateTypeSpecificFillService,
+          isCitizenFormat
       );
 
       filledPdf.getDocumentInformation().setTitle(getFileName(certificate));
       filledPdf.getDocumentCatalog().getAcroForm().flatten();
+      filledPdf.setAllSecurityToBeRemoved(true);
       filledPdf.save(byteArrayOutputStream);
       filledPdf.close();
 

@@ -31,6 +31,6 @@ public class PrintCitizenCertificateDomainService {
       );
     }
 
-    return pdfGenerator.generate(certificate, additionalInfoText);
+    return pdfGenerator.generate(certificate, additionalInfoText, true);
   }
 }

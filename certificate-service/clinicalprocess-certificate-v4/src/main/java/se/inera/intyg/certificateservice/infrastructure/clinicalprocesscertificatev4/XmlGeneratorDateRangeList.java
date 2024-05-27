@@ -49,7 +49,9 @@ public class XmlGeneratorDateRangeList implements XmlGeneratorElementData {
           subAnswerCode.setId(getCvId(data.id().id()));
           cvType.setCode(dateRange.dateRangeId().value());
           cvType.setCodeSystem(WorkCapacityType.CODE_SYSTEM);
-          cvType.setDisplayName(WorkCapacityType.valueOf(dateRange.dateRangeId().value()).label());
+          cvType.setDisplayName(
+              WorkCapacityType.valueOf(dateRange.dateRangeId().value()).displayName()
+          );
           final var convertedCvType = objectFactory.createCv(cvType);
           subAnswerCode.getContent().add(convertedCvType);
 

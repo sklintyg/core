@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.testdata;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_PATH;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_PATH_NO_ADDRESS;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_TYPE;
@@ -10,6 +11,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_PATH;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_PATH_NO_ADDRESS;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_VERSION;
@@ -34,6 +36,7 @@ public class TestDataCertificateModel {
         .type(FK7210_CODE_TYPE)
         .availableForCitizen(true)
         .pdfTemplatePath(FK7210_PDF_PATH)
+        .pdfNoAddressTemplatePath(FK7210_PDF_PATH_NO_ADDRESS)
         .schematronPath(FK7210_SCHEMATRON_PATH)
         .recipient(FK7210_RECIPIENT);
   }
@@ -51,6 +54,7 @@ public class TestDataCertificateModel {
         .type(FK7472_CODE_TYPE)
         .availableForCitizen(false)
         .pdfTemplatePath(FK7472_PDF_PATH)
+        .pdfNoAddressTemplatePath(FK7472_PDF_PATH_NO_ADDRESS)
         .schematronPath(FK7472_SCHEMATRON_PATH);
   }
 }

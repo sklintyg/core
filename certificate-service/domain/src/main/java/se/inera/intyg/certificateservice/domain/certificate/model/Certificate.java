@@ -2,7 +2,9 @@ package se.inera.intyg.certificateservice.domain.certificate.model;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,6 +23,7 @@ import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
@@ -55,7 +58,7 @@ public class Certificate {
         .filter(
             certificateAction -> certificateAction.evaluate(
                 Optional.of(this),
-                actionEvaluation
+                addPatientIfMissing(actionEvaluation)
             )
         )
         .toList();
@@ -63,7 +66,8 @@ public class Certificate {
 
   public List<CertificateAction> actionsInclude(Optional<ActionEvaluation> actionEvaluation) {
     return certificateModel.actions().stream()
-        .filter(certificateAction -> certificateAction.include(Optional.of(this), actionEvaluation))
+        .filter(certificateAction -> certificateAction.include(Optional.of(this),
+            addPatientIfMissing(actionEvaluation)))
         .toList();
   }
 
@@ -87,7 +91,7 @@ public class Certificate {
         .filter(certificateAction -> certificateActionType.equals(certificateAction.getType()))
         .findFirst()
         .map(certificateAction -> certificateAction.reasonNotAllowed(Optional.of(this),
-            actionEvaluation))
+            addPatientIfMissing(actionEvaluation)))
         .orElse(Collections.emptyList());
   }
 
@@ -363,6 +367,25 @@ public class Certificate {
   public boolean isCertificateIssuedOnPatient(PersonId citizen) {
     return this.certificateMetaData().patient().id().idWithoutDash()
         .equals(citizen.idWithoutDash());
+  }
+
+  public Optional<Relation> latestChildRelation(RelationType relationType) {
+    return this.children().stream()
+        .filter(child -> child.type().equals(relationType))
+        .max(Comparator.comparing(Relation::created));
+  }
+
+  public boolean hasParent(RelationType... relationType) {
+    if (this.parent() == null) {
+      return false;
+    }
+    return Arrays.stream(relationType).anyMatch(type -> this.parent.type().equals(type));
+  }
+
+  public List<Message> messages(MessageType type) {
+    return messages.stream()
+        .filter(message -> message.type().equals(type))
+        .toList();
   }
 }
 

@@ -27,6 +27,7 @@ import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDo
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventSubscriber;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 import se.inera.intyg.certificateservice.domain.message.service.ReceiveComplementMessageDomainService;
+import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
 import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesInfoDomainService;
@@ -136,17 +137,19 @@ public class AppConfig {
   @Bean
   public SignCertificateDomainService signCertificateDomainService(
       CertificateRepository certificateRepository,
-      CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator) {
+      CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator,
+      SetMessagesToHandleDomainService setMessagesToHandleDomainService) {
     return new SignCertificateDomainService(certificateRepository, certificateEventDomainService,
-        xmlGenerator);
+        xmlGenerator, setMessagesToHandleDomainService);
   }
 
   @Bean
   public SignCertificateWithoutSignatureDomainService signCertificateWithoutSignatureDomainService(
       CertificateRepository certificateRepository,
-      CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator) {
+      CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator,
+      SetMessagesToHandleDomainService setMessagesToHandleDomainService) {
     return new SignCertificateWithoutSignatureDomainService(certificateRepository,
-        certificateEventDomainService, xmlGenerator);
+        certificateEventDomainService, xmlGenerator, setMessagesToHandleDomainService);
   }
 
   @Bean
@@ -160,9 +163,10 @@ public class AppConfig {
   @Bean
   public RevokeCertificateDomainService revokeCertificateDomainService(
       CertificateRepository certificateRepository,
-      CertificateEventDomainService certificateEventDomainService) {
+      CertificateEventDomainService certificateEventDomainService,
+      SetMessagesToHandleDomainService setMessagesToHandleDomainService) {
     return new RevokeCertificateDomainService(certificateRepository,
-        certificateEventDomainService);
+        certificateEventDomainService, setMessagesToHandleDomainService);
   }
 
   @Bean
@@ -225,5 +229,11 @@ public class AppConfig {
   public ReceiveComplementMessageDomainService receiveMessageDomainService(
       CertificateRepository certificateRepository, MessageRepository messageRepository) {
     return new ReceiveComplementMessageDomainService(certificateRepository, messageRepository);
+  }
+
+  @Bean
+  public SetMessagesToHandleDomainService setMessagesToHandleDomainService(
+      MessageRepository messageRepository) {
+    return new SetMessagesToHandleDomainService(messageRepository);
   }
 }

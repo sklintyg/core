@@ -30,6 +30,7 @@ public class CertificateModel {
   List<CertificateActionSpecification> certificateActionSpecifications;
   List<ElementSpecification> elementSpecifications;
   String pdfTemplatePath;
+  String pdfNoAddressTemplatePath;
   SchematronPath schematronPath;
   List<CertificateText> texts;
   CertificateSummaryProvider summaryProvider;

@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.REVOKE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,8 @@ import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
+import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
 
 @ExtendWith(MockitoExtension.class)
 class RevokeCertificateDomainServiceTest {
@@ -40,6 +43,8 @@ class RevokeCertificateDomainServiceTest {
   private CertificateRepository certificateRepository;
   @Mock
   private CertificateEventDomainService certificateEventDomainService;
+  @Mock
+  private SetMessagesToHandleDomainService setMessagesToHandleDomainService;
   @InjectMocks
   private RevokeCertificateDomainService revokeCertificateDomainService;
 
@@ -59,8 +64,10 @@ class RevokeCertificateDomainServiceTest {
   void shallRevokeCertificate() {
 
     final var certificate = mock(Certificate.class);
+    final var revokedCertificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(REVOKE, Optional.of(ACTION_EVALUATION));
+    doReturn(revokedCertificate).when(certificateRepository).save(certificate);
 
     revokeCertificateDomainService.revoke(CERTIFICATE_ID, ACTION_EVALUATION, REVOKED_INFORMATION);
 
@@ -119,5 +126,24 @@ class RevokeCertificateDomainServiceTest {
             REVOKED_INFORMATION));
 
     assertEquals(expectedReason, certificateActionForbidden.reason());
+  }
+
+  @Test
+  void shallSetMessagesToHandleIfContainingMessages() {
+    final var expectedMessages = List.of(COMPLEMENT_MESSAGE);
+    final var revokedCertificate = mock(Certificate.class);
+
+    final var certificate = mock(Certificate.class);
+    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
+    doReturn(true).when(certificate).allowTo(REVOKE, Optional.of(ACTION_EVALUATION));
+    doReturn(revokedCertificate).when(certificateRepository).save(certificate);
+    doReturn(expectedMessages).when(revokedCertificate).messages();
+
+    revokeCertificateDomainService.revoke(CERTIFICATE_ID, ACTION_EVALUATION, REVOKED_INFORMATION);
+
+    final ArgumentCaptor<List<Message>> messagesCaptor = ArgumentCaptor.forClass(List.class);
+    verify(setMessagesToHandleDomainService).handle(messagesCaptor.capture());
+
+    assertEquals(expectedMessages, messagesCaptor.getValue());
   }
 }

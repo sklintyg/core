@@ -30,6 +30,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Complement;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.MessageContactInfo;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.SenderReference;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
@@ -135,6 +136,13 @@ class MessageConverterTest {
     @Test
     void shallIncludeForwardedFalse() {
       assertFalse(messageConverter.convert(INCOMING_COMPLEMENT_MESSAGE).forwarded().value());
+    }
+
+    @Test
+    void shallIncludeStatusSENT() {
+      assertEquals(MessageStatus.SENT,
+          messageConverter.convert(INCOMING_COMPLEMENT_MESSAGE).status()
+      );
     }
   }
 }

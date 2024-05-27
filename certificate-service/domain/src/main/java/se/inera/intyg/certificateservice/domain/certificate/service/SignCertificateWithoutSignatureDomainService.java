@@ -1,5 +1,9 @@
 package se.inera.intyg.certificateservice.domain.certificate.service;
 
+import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.COMPLEMENT;
+import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.RENEW;
+import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.REPLACE;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
@@ -15,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
+import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
 
 @RequiredArgsConstructor
 public class SignCertificateWithoutSignatureDomainService {
@@ -22,6 +27,7 @@ public class SignCertificateWithoutSignatureDomainService {
   private final CertificateRepository certificateRepository;
   private final CertificateEventDomainService certificateEventDomainService;
   private final XmlGenerator xmlGenerator;
+  private final SetMessagesToHandleDomainService setMessagesToHandleDomainService;
 
   public Certificate sign(CertificateId certificateId, Revision revision,
       ActionEvaluation actionEvaluation) {
@@ -48,6 +54,12 @@ public class SignCertificateWithoutSignatureDomainService {
     certificate.sign(xmlGenerator, revision, actionEvaluation);
 
     final var signedCertificate = certificateRepository.save(certificate);
+
+    if (signedCertificate.hasParent(COMPLEMENT, RENEW, REPLACE)) {
+      setMessagesToHandleDomainService.handle(
+          signedCertificate.parent().certificate().messages()
+      );
+    }
 
     certificateEventDomainService.publish(
         CertificateEvent.builder()

@@ -100,12 +100,17 @@ class FK7472PdfFillServiceTest {
 
   @Test
   void shouldReturnAvailableMcid() {
-    assertEquals(100, fk7472PdfFillService.getAvailableMcid());
+    assertEquals(120, fk7472PdfFillService.getAvailableMcid());
   }
 
   @Test
   void shouldReturnSignedTagIndex() {
-    assertEquals(34, fk7472PdfFillService.getSignatureTagIndex());
+    assertEquals(42, fk7472PdfFillService.getSignatureTagIndex(false));
+  }
+
+  @Test
+  void shouldReturnSignedTagIndexWhenAddressIsIncluded() {
+    assertEquals(50, fk7472PdfFillService.getSignatureTagIndex(true));
   }
 
   @Test

@@ -27,4 +27,12 @@ public class ActionEvaluation {
   public boolean isIssuingUnitSubUnit() {
     return !isIssuingUnitCareUnit();
   }
+
+  public boolean hasPatient() {
+    return patient != null;
+  }
+
+  public boolean hasUser() {
+    return user != null;
+  }
 }

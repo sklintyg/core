@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateEntity.CERTIFICATE_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataMessageEntity.COMPLEMENT_MESSAGE_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataMessageEntity.MESSAGE_KEY;
 import static se.inera.intyg.certificateservice.domain.message.model.MessageType.COMPLEMENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateConstants.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
@@ -62,44 +63,51 @@ class MessageEntityMapperTest {
     }
 
     @Test
+    void shallIncludeKey() {
+      assertEquals(MESSAGE_KEY,
+          mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).getKey()
+      );
+    }
+
+    @Test
     void shallIncludeId() {
       assertEquals(MESSAGE_ID,
-          mapper.toEntity(COMPLEMENT_MESSAGE).getId()
+          mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).getId()
       );
     }
 
     @Test
     void shallIncludeReference() {
       assertEquals(REFERENCE_ID,
-          mapper.toEntity(COMPLEMENT_MESSAGE).getReference()
+          mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).getReference()
       );
     }
 
     @Test
     void shallIncludeSubject() {
       assertEquals(SUBJECT,
-          mapper.toEntity(COMPLEMENT_MESSAGE).getSubject()
+          mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).getSubject()
       );
     }
 
     @Test
     void shallIncludeContent() {
       assertEquals(CONTENT,
-          mapper.toEntity(COMPLEMENT_MESSAGE).getContent()
+          mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).getContent()
       );
     }
 
     @Test
     void shallIncludeAuthor() {
       assertEquals(AUTHOR_INCOMING_MESSAGE,
-          mapper.toEntity(COMPLEMENT_MESSAGE).getAuthor()
+          mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).getAuthor()
       );
     }
 
     @Test
     void shallIncludeCreated() {
       assertEquals(CREATED_AFTER_SENT,
-          mapper.toEntity(COMPLEMENT_MESSAGE).getCreated()
+          mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).getCreated()
       );
     }
 
@@ -109,13 +117,13 @@ class MessageEntityMapperTest {
           .created(null)
           .build();
 
-      assertNotNull(mapper.toEntity(complementMessageWithoutCreated).getCreated());
+      assertNotNull(mapper.toEntity(complementMessageWithoutCreated, 0).getCreated());
     }
 
     @Test
     void shallIncludeModified() {
       assertEquals(CREATED_AFTER_SENT,
-          mapper.toEntity(COMPLEMENT_MESSAGE).getModified()
+          mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).getModified()
       );
     }
 
@@ -125,37 +133,53 @@ class MessageEntityMapperTest {
           .modified(null)
           .build();
 
-      assertNotNull(mapper.toEntity(complementMessageWithoutModified).getModified());
+      assertNotNull(mapper.toEntity(complementMessageWithoutModified, 0).getModified());
     }
 
     @Test
     void shallIncludeSent() {
       assertEquals(SENT,
-          mapper.toEntity(COMPLEMENT_MESSAGE).getSent()
+          mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).getSent()
       );
     }
 
     @Test
     void shallIncludeForwarded() {
-      assertFalse(mapper.toEntity(COMPLEMENT_MESSAGE).isForwarded());
+      assertFalse(mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).isForwarded());
     }
 
     @Test
     void shallIncludeLastDateToReply() {
       assertEquals(LAST_DATE_TO_REPLY,
-          mapper.toEntity(COMPLEMENT_MESSAGE).getLastDateToReply()
+          mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).getLastDateToReply()
       );
     }
 
     @Test
-    void shallIncludeStatus() {
+    void shallIncludeStatusSENT() {
       final var expectedStatus = MessageStatusEntity.builder()
           .key(MessageStatusEnum.SENT.getKey())
           .status(MessageStatusEnum.SENT.name())
           .build();
 
       assertEquals(expectedStatus,
-          mapper.toEntity(COMPLEMENT_MESSAGE).getStatus()
+          mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).getStatus()
+      );
+    }
+
+    @Test
+    void shallIncludeStatusHANDLED() {
+      final var expectedStatus = MessageStatusEntity.builder()
+          .key(MessageStatusEnum.HANDLED.getKey())
+          .status(MessageStatusEnum.HANDLED.name())
+          .build();
+
+      final Message complementMessageHandled = complementMessageBuilder()
+          .status(MessageStatus.HANDLED)
+          .build();
+
+      assertEquals(expectedStatus,
+          mapper.toEntity(complementMessageHandled, 0).getStatus()
       );
     }
 
@@ -167,14 +191,14 @@ class MessageEntityMapperTest {
           .build();
 
       assertEquals(expectedType,
-          mapper.toEntity(COMPLEMENT_MESSAGE).getMessageType()
+          mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).getMessageType()
       );
     }
 
     @Test
     void shallIncludeCertificate() {
       assertEquals(CERTIFICATE_ENTITY,
-          mapper.toEntity(COMPLEMENT_MESSAGE).getCertificate()
+          mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).getCertificate()
       );
     }
   }
