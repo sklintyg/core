@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataMessageEntity.COMPLEMENT_MESSAGE_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataMessageEntity.MESSAGE_KEY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
@@ -22,6 +24,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
@@ -121,6 +124,38 @@ class JpaMessageRepositoryTest {
       final var messageId = new MessageId(MESSAGE_ID);
       doReturn(Optional.empty()).when(messageEntityRepository).findMessageEntityById(MESSAGE_ID);
       assertFalse(jpaMessageRepository.exists(messageId));
+    }
+  }
+
+  @Nested
+  class TestGetById {
+
+    @Test
+    void shouldThrowExceptionIfIdIsNull() {
+      assertThrows(IllegalArgumentException.class,
+          () -> jpaMessageRepository.getById(null));
+    }
+
+    @Test
+    void shouldThrowExceptionIfMessageNotFound() {
+      final var id = new MessageId("ID");
+      assertThrows(IllegalArgumentException.class,
+          () -> jpaMessageRepository.getById(id)
+      );
+    }
+
+    @Test
+    void shouldReturnMessageFromRepository() {
+      final var expectedMessage = Message.builder().build();
+
+      when(messageEntityRepository.findMessageEntityById("ID"))
+          .thenReturn(Optional.of(COMPLEMENT_MESSAGE_ENTITY));
+      when(messageEntityMapper.toDomain(COMPLEMENT_MESSAGE_ENTITY))
+          .thenReturn(expectedMessage);
+
+      final var response = jpaMessageRepository.getById(new MessageId("ID"));
+
+      assertEquals(expectedMessage, response);
     }
   }
 }

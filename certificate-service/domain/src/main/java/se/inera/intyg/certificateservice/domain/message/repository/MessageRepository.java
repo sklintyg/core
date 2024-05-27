@@ -9,4 +9,5 @@ public interface MessageRepository {
 
   boolean exists(MessageId messageId);
 
+  Message getById(MessageId messageId);
 }
