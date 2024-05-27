@@ -71,8 +71,14 @@ class FK7210PdfFillServiceTest {
 
   @Test
   void shouldReturnSignedTagIndex() {
-    assertEquals(8, fk7210PdfFillService.getSignatureTagIndex());
+    assertEquals(7, fk7210PdfFillService.getSignatureTagIndex(false));
   }
+
+  @Test
+  void shouldReturnSignedTagIndexWhenAddressIsIncluded() {
+    assertEquals(15, fk7210PdfFillService.getSignatureTagIndex(true));
+  }
+
 
   @Test
   void shouldNotSetExpectedDeliveryDateIfDateIsNotProvided() {

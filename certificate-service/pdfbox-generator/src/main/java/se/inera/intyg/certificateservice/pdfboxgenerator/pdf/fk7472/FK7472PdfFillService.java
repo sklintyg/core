@@ -42,8 +42,8 @@ public class FK7472PdfFillService implements CertificateTypePdfFillService {
   }
 
   @Override
-  public int getSignatureTagIndex() {
-    return 42;
+  public int getSignatureTagIndex(boolean includeAddress) {
+    return !includeAddress ? 42 : 50;
   }
 
   @Override
