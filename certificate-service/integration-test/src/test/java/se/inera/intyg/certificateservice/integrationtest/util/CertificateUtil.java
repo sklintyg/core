@@ -33,6 +33,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageResponse;
+import se.inera.intyg.certificateservice.application.message.dto.MessageExistsResponse;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesResponse;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesResponse;
@@ -69,6 +70,13 @@ public class CertificateUtil {
       return null;
     }
     return certificate.getMetadata().getId();
+  }
+
+  public static String messageId(QuestionDTO questionDTO) {
+    if (questionDTO == null) {
+      return null;
+    }
+    return questionDTO.getId();
   }
 
   public static CertificateStatusTypeDTO status(RevokeCertificateResponse responses) {
@@ -219,6 +227,14 @@ public class CertificateUtil {
   }
 
   public static boolean exists(CertificateExistsResponse response) {
+    if (response == null) {
+      return false;
+    }
+
+    return response.isExists();
+  }
+
+  public static boolean exists(MessageExistsResponse response) {
     if (response == null) {
       return false;
     }
