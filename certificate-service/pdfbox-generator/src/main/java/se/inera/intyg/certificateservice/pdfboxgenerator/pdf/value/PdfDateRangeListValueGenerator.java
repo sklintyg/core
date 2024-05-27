@@ -17,7 +17,7 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 @Component
 public class PdfDateRangeListValueGenerator implements PdfElementValueGenerator {
 
-  private static final String CHECKBOX_PERIOD_PREFIX_ID = ".ksr_kryssruta";
+  private static final String CHECKBOX_PERIOD_PREFIX_ID = ".ksr_";
   private static final String DATE_FROM_PERIOD_PREFIX_ID = ".flt_datFranMed";
   private static final String DATE_TO_PERIOD_PREFIX_ID = ".flt_datLangstTillMed";
   private static final String PERIOD_SUFFIX_ID = "[0]";
@@ -82,7 +82,7 @@ public class PdfDateRangeListValueGenerator implements PdfElementValueGenerator 
   }
 
   private String getPeriodCheckboxId(DateRange dateRange, String fieldName) {
-    return fieldName + CHECKBOX_PERIOD_PREFIX_ID + getFieldSuffixFromDateRange(dateRange)
+    return fieldName + CHECKBOX_PERIOD_PREFIX_ID + getCheckboxSuffixFromDateRange(dateRange)
         + PERIOD_SUFFIX_ID;
   }
 
@@ -113,6 +113,28 @@ public class PdfDateRangeListValueGenerator implements PdfElementValueGenerator 
       }
       case HELA -> {
         return "";
+      }
+    }
+    return "";
+  }
+
+  private String getCheckboxSuffixFromDateRange(DateRange dateRange) {
+    final var workCapacityType = WorkCapacityType.valueOf(dateRange.dateRangeId().value());
+    switch (workCapacityType) {
+      case EN_ATTANDEL -> {
+        return "EnAttondel";
+      }
+      case EN_FJARDEDEL -> {
+        return "Enfjardedela";
+      }
+      case HALVA -> {
+        return "Halva";
+      }
+      case TRE_FJARDEDELAR -> {
+        return "Trefjardedela";
+      }
+      case HELA -> {
+        return "Hela";
       }
     }
     return "";

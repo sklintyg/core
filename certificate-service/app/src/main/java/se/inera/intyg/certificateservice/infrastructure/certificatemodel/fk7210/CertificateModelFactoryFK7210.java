@@ -52,6 +52,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
   public static final ElementId QUESTION_BERAKNAT_FODELSEDATUM_ID = new ElementId("54");
   private static final FieldId QUESTION_BERAKNAT_FODELSEDATUM_FIELD_ID = new FieldId("54.1");
   public static final String PDF_FK_7210_PDF = "fk7210/pdf/fk7210_v1.pdf";
+  public static final String PDF_NO_ADDRESS_FK_7210_PDF = "fk7210/pdf/fk7210_v1_no_address.pdf";
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk7210/schematron/igrav.v1.sch");
   public static final String LINK_FK_ID = "LINK_FK";
@@ -124,6 +125,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
             )
         )
         .pdfTemplatePath(PDF_FK_7210_PDF)
+        .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7210_PDF)
         .schematronPath(SCHEMATRON_PATH)
         .summaryProvider(new FK7210CertificateSummaryProvider())
         .texts(List.of(CertificateText.builder()

@@ -75,6 +75,7 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
       "fk7472/schematron/itfp.v1.sch");
 
   public static final String PDF_FK_7472_PDF = "fk7472/pdf/fk7472_v1.pdf";
+  public static final String PDF_NO_ADDRESS_FK_7472_PDF = "fk7472/pdf/fk7472_v1_no_address.pdf";
 
   @Override
   public CertificateModel create() {
@@ -161,6 +162,7 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
             )
         )
         .pdfTemplatePath(PDF_FK_7472_PDF)
+        .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7472_PDF)
         .schematronPath(SCHEMATRON_PATH)
         .build();
   }

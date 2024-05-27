@@ -21,7 +21,7 @@ public class PdfAdditionalInformationTextGenerator {
     pdfTextGenerator.addTopWatermark(
         document,
         "Intyget har skickats digitalt till %s".formatted(certificate.sent().recipient().name()),
-        Matrix.getTranslateInstance(40, 665),
+        Matrix.getTranslateInstance(40, 685),
         22,
         mcid,
         false
@@ -32,7 +32,7 @@ public class PdfAdditionalInformationTextGenerator {
     pdfTextGenerator.addTopWatermark(
         document,
         "Du kan se intyget genom att logga in på 1177.se",
-        Matrix.getTranslateInstance(40, 645),
+        Matrix.getTranslateInstance(40, 665),
         16,
         mcid,
         true

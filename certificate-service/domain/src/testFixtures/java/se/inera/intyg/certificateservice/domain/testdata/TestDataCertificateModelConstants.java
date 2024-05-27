@@ -38,6 +38,8 @@ public class TestDataCertificateModelConstants {
       "fk7472/schematron/itfp.v1.sch");
   public static final String FK7210_PDF_PATH = "fk7210/pdf/fk7210_v1.pdf";
   public static final String FK7472_PDF_PATH = "fk7472/pdf/fk7472_v1.pdf";
+  public static final String FK7210_PDF_PATH_NO_ADDRESS = "fk7210/pdf/fk7210_v1_no_address.pdf";
+  public static final String FK7472_PDF_PATH_NO_ADDRESS = "fk7472/pdf/fk7472_v1_no_address.pdf";
   public static final String FK7210_NAME = "Intyg om graviditet";
   public static final String FK7472_NAME = "Intyg om tillfällig föräldrapenning";
   public static final Recipient FK7210_RECIPIENT = new Recipient(

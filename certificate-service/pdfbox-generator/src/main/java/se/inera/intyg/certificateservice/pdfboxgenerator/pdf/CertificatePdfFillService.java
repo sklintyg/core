@@ -34,8 +34,8 @@ public class CertificatePdfFillService {
   private final PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
 
   public PDDocument fillDocument(Certificate certificate, String additionalInfoText,
-      CertificateTypePdfFillService certificateValueGenerator) {
-    final var template = certificate.certificateModel().pdfTemplatePath();
+      CertificateTypePdfFillService certificateValueGenerator, boolean isCitizenFormat) {
+    final var template = getTemplatePath(certificate, isCitizenFormat);
     try (final var inputStream = getClass().getClassLoader().getResourceAsStream(template)) {
       if (inputStream == null) {
         throw new IllegalArgumentException("Template not found: " + template);
@@ -43,12 +43,26 @@ public class CertificatePdfFillService {
 
       final var document = Loader.loadPDF(inputStream.readAllBytes());
       setFields(certificate, certificateValueGenerator, document);
-      addTexts(certificate, additionalInfoText, certificateValueGenerator, document);
+      addTexts(certificate, additionalInfoText, certificateValueGenerator, document,
+          isCitizenFormat);
 
       return document;
     } catch (Exception e) {
       throw new IllegalStateException("Could not create Pdf", e);
     }
+  }
+
+  private static String getTemplatePath(Certificate certificate, boolean isCitizenFormat) {
+    return includeAddress(certificate, isCitizenFormat) ? certificate.certificateModel()
+        .pdfTemplatePath() : certificate.certificateModel().pdfNoAddressTemplatePath();
+  }
+
+  private static boolean includeAddress(Certificate certificate, boolean isCitizenFormat) {
+    if (isCitizenFormat) {
+      return false;
+    }
+
+    return certificate.sent() == null || certificate.sent().sentAt() == null;
   }
 
   private void setFields(Certificate certificate,
@@ -63,7 +77,8 @@ public class CertificatePdfFillService {
   }
 
   private void addTexts(Certificate certificate, String additionalInfoText,
-      CertificateTypePdfFillService certificateValueGenerator, PDDocument document)
+      CertificateTypePdfFillService certificateValueGenerator, PDDocument document,
+      boolean isCitizenFormat)
       throws IOException {
     final var mcid = new AtomicInteger(certificateValueGenerator.getAvailableMcid());
 
@@ -72,7 +87,8 @@ public class CertificatePdfFillService {
         document,
         certificate,
         certificateValueGenerator,
-        mcid
+        mcid,
+        isCitizenFormat
     );
     setSentText(document, certificate, mcid);
     setMarginText(document, certificate, additionalInfoText, mcid);
@@ -120,14 +136,14 @@ public class CertificatePdfFillService {
   }
 
   private void setSignatureText(PDDocument document, Certificate certificate,
-      CertificateTypePdfFillService pdfFillService, AtomicInteger mcid)
+      CertificateTypePdfFillService pdfFillService, AtomicInteger mcid, boolean isCitizenFormat)
       throws IOException {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
     if (certificate.status() == Status.SIGNED) {
       pdfAdditionalInformationTextGenerator.addDigitalSignatureText(
           document, getSignatureOffsetX(acroForm), getSignatureOffsetY(acroForm),
           mcid.getAndIncrement(),
-          pdfFillService.getSignatureTagIndex()
+          pdfFillService.getSignatureTagIndex(includeAddress(certificate, isCitizenFormat))
       );
     }
   }
