@@ -13,14 +13,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.MessageExistsResponse;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateMessageService;
 import se.inera.intyg.certificateservice.application.message.service.IncomingMessageService;
+import se.inera.intyg.certificateservice.application.message.service.MessageExistsService;
 
 @ExtendWith(MockitoExtension.class)
 class MessageControllerTest {
 
 
   private static final String CERTIFICATE_ID = "certificateId";
+  private static final String MESSAGE_ID = "messageId";
+  @Mock
+  private MessageExistsService messageExistsService;
   @Mock
   private IncomingMessageService incomingMessageService;
   @Mock
@@ -53,6 +58,21 @@ class MessageControllerTest {
       final var actualResponse = messageController.getMessagesForCertificate(request,
           CERTIFICATE_ID);
 
+      assertEquals(expectedResponse, actualResponse);
+    }
+  }
+
+  @Nested
+  class FindExistingMessage {
+
+    @Test
+    void shallReturnMessageExistsResponse() {
+      final var expectedResponse = MessageExistsResponse.builder()
+          .exists(true)
+          .build();
+      doReturn(expectedResponse).when(messageExistsService).exist(MESSAGE_ID);
+
+      final var actualResponse = messageController.findExistingMessage(MESSAGE_ID);
       assertEquals(expectedResponse, actualResponse);
     }
   }

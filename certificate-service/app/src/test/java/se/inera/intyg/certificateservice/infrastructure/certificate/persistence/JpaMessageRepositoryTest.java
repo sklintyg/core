@@ -1,7 +1,9 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -20,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
@@ -98,6 +101,26 @@ class JpaMessageRepositoryTest {
       );
 
       verifyNoInteractions(messageEntityRepository);
+    }
+  }
+
+  @Nested
+  class TestExists {
+
+    @Test
+    void shallReturnTrueIfMessageExists() {
+      final var messageId = new MessageId(MESSAGE_ID);
+      final var messageEntity = MessageEntity.builder().build();
+      doReturn(Optional.of(messageEntity)).when(messageEntityRepository)
+          .findMessageEntityById(MESSAGE_ID);
+      assertTrue(jpaMessageRepository.exists(messageId));
+    }
+
+    @Test
+    void shallReturnFalseIfMessageDontExists() {
+      final var messageId = new MessageId(MESSAGE_ID);
+      doReturn(Optional.empty()).when(messageEntityRepository).findMessageEntityById(MESSAGE_ID);
+      assertFalse(jpaMessageRepository.exists(messageId));
     }
   }
 }
