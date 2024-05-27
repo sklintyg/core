@@ -121,7 +121,7 @@ public class PdfDateRangeListValueGenerator implements PdfElementValueGenerator 
   private String getCheckboxSuffixFromDateRange(DateRange dateRange) {
     final var workCapacityType = WorkCapacityType.valueOf(dateRange.dateRangeId().value());
     switch (workCapacityType) {
-      case EN_ATTANDEL -> {
+      case EN_ATTONDEL -> {
         return "EnAttondel";
       }
       case EN_FJARDEDEL -> {
