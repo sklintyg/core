@@ -265,6 +265,9 @@
     <insert tableName="certificate_relation_type">
       <column name="type" value="RENEW"/>
     </insert>
+    <insert tableName="certificate_relation_type">
+      <column name="type" value="COMPLEMENT"/>
+    </insert>
 
     <createTable tableName="staff">
       <column name="key" type="integer unsigned" autoIncrement="true">
