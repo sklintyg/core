@@ -1,6 +1,6 @@
-package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4;
+package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate;
 
-import static se.inera.intyg.certificateservice.domain.common.model.HsaId.OID;
+import static se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.common.XmlGeneratorHosPersonal.hosPersonal;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
@@ -12,40 +12,26 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import lombok.RequiredArgsConstructor;
 import org.w3._2000._09.xmldsig_.SignatureType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Signature;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
-import se.inera.intyg.certificateservice.domain.common.model.HealthCareProfessionalLicence;
-import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
-import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
-import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.validation.XmlValidationService;
 import se.riv.clinicalprocess.healthcond.certificate.registerCertificate.v3.ObjectFactory;
 import se.riv.clinicalprocess.healthcond.certificate.registerCertificate.v3.RegisterCertificateType;
-import se.riv.clinicalprocess.healthcond.certificate.types.v3.ArbetsplatsKod;
-import se.riv.clinicalprocess.healthcond.certificate.types.v3.Befattning;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.DatePeriodType;
-import se.riv.clinicalprocess.healthcond.certificate.types.v3.HsaId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.IntygId;
-import se.riv.clinicalprocess.healthcond.certificate.types.v3.LegitimeratYrkeType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.PersonId;
-import se.riv.clinicalprocess.healthcond.certificate.types.v3.Specialistkompetens;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.TypAvIntyg;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.TypAvRelation;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.UnderskriftType;
-import se.riv.clinicalprocess.healthcond.certificate.v3.Enhet;
-import se.riv.clinicalprocess.healthcond.certificate.v3.HosPersonal;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Intyg;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Patient;
-import se.riv.clinicalprocess.healthcond.certificate.v3.Vardgivare;
 
 @RequiredArgsConstructor
 public class XmlGeneratorCertificateV4 implements XmlGenerator {
 
   private static final String EMPTY = "";
-  private static final String NOT_APPLICABLE = "N/A";
-  private static final String PRESCRIPTION_CODE_MASKED = "0000000";
   private static final String KV_RELATION_CODE_SYSTEM = "c2362fcd-eda0-4f9a-bd13-b3bbaf7f2146";
   private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(
       "yyyy-MM-dd'T'HH:mm:ss");
@@ -105,7 +91,7 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
         patient(certificate)
     );
     intyg.setSkapadAv(
-        skapadAv(certificate)
+        hosPersonal(certificate)
     );
     intyg.getSvar().addAll(
         xmlGeneratorValue.generate(certificate.elementData())
@@ -179,92 +165,6 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
     patient.setPostnummer(EMPTY);
     patient.setPostort(EMPTY);
     return patient;
-  }
-
-  private static HosPersonal skapadAv(Certificate certificate) {
-    final var hosPersonal = new HosPersonal();
-    final var hsaId = new HsaId();
-    hsaId.setRoot(OID);
-    hsaId.setExtension(certificate.certificateMetaData().issuer().hsaId().id());
-    hosPersonal.setPersonalId(hsaId);
-    hosPersonal.setForskrivarkod(PRESCRIPTION_CODE_MASKED);
-    hosPersonal.setFullstandigtNamn(certificate.certificateMetaData().issuer().name().fullName());
-
-    certificate.certificateMetaData().issuer().paTitles().stream()
-        .map(paTitle -> {
-              final var befattning = new Befattning();
-              befattning.setCode(paTitle.code());
-              befattning.setCodeSystem(PaTitle.OID);
-              befattning.setDisplayName(paTitle.description());
-              return befattning;
-            }
-        )
-        .forEach(befattning -> hosPersonal.getBefattning().add(befattning));
-
-    certificate.certificateMetaData().issuer().specialities().stream()
-        .map(speciality -> {
-              final var specialistkompetens = new Specialistkompetens();
-              specialistkompetens.setCode(NOT_APPLICABLE);
-              specialistkompetens.setDisplayName(speciality.value());
-              return specialistkompetens;
-            }
-        )
-        .forEach(
-            specialistkompetens -> hosPersonal.getSpecialistkompetens().add(specialistkompetens)
-        );
-
-    certificate.certificateMetaData().issuer().healthCareProfessionalLicence().stream()
-        .map(HealthCareProfessionalLicence::code)
-        .map(code -> {
-              final var legitimeratYrkeType = new LegitimeratYrkeType();
-              legitimeratYrkeType.setCode(code.code());
-              legitimeratYrkeType.setDisplayName(code.displayName());
-              legitimeratYrkeType.setCodeSystem(code.codeSystem());
-              return legitimeratYrkeType;
-            }
-        )
-        .forEach(legitimeratYrke -> hosPersonal.getLegitimeratYrke().add(legitimeratYrke));
-
-    hosPersonal.setEnhet(
-        enhet(certificate.certificateMetaData())
-    );
-
-    return hosPersonal;
-  }
-
-  private static Enhet enhet(CertificateMetaData certificateMetaData) {
-    final var enhet = new Enhet();
-    final var hsaId = new HsaId();
-    hsaId.setRoot(OID);
-    hsaId.setExtension(certificateMetaData.issuingUnit().hsaId().id());
-    enhet.setEnhetsId(hsaId);
-    enhet.setEnhetsnamn(certificateMetaData.issuingUnit().name().name());
-    enhet.setPostadress(certificateMetaData.issuingUnit().address().address());
-    enhet.setPostnummer(certificateMetaData.issuingUnit().address().zipCode());
-    enhet.setPostort(certificateMetaData.issuingUnit().address().city());
-    enhet.setTelefonnummer(certificateMetaData.issuingUnit().contactInfo().phoneNumber());
-    enhet.setEpost(certificateMetaData.issuingUnit().contactInfo().email());
-
-    final var arbetsplatsKod = new ArbetsplatsKod();
-    arbetsplatsKod.setRoot(WorkplaceCode.OID);
-    arbetsplatsKod.setExtension(certificateMetaData.issuingUnit().workplaceCode().code());
-    enhet.setArbetsplatskod(arbetsplatsKod);
-
-    enhet.setVardgivare(
-        vardgivare(certificateMetaData.careProvider())
-    );
-
-    return enhet;
-  }
-
-  private static Vardgivare vardgivare(CareProvider careProvider) {
-    final var vardgivare = new Vardgivare();
-    final var hsaId = new HsaId();
-    hsaId.setRoot(OID);
-    hsaId.setExtension(careProvider.hsaId().id());
-    vardgivare.setVardgivareId(hsaId);
-    vardgivare.setVardgivarnamn(careProvider.name().name());
-    return vardgivare;
   }
 
   private XMLGregorianCalendar signeringsTidpunkt(Certificate certificate) {

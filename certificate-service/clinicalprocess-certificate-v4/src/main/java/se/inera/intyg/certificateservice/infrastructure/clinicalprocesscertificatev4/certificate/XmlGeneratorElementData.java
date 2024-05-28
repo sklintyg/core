@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4;
+package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;

@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4;
+package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4;
+package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.validation;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

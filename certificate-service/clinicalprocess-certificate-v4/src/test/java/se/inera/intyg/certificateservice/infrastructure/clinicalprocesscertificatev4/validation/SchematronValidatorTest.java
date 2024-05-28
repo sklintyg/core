@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4;
+package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.validation;
 
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -20,6 +20,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorCertificateV4;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorValue;
 
 class SchematronValidatorTest {
 
