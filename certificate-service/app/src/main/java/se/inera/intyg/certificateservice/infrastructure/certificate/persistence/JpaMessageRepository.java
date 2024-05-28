@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
@@ -43,5 +44,27 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
     }
 
     messageEntityRepository.deleteAllByIdIn(messageIds);
+  }
+
+  @Override
+  public boolean exists(MessageId messageId) {
+    return messageEntityRepository.findMessageEntityById(messageId.id()).isPresent();
+  }
+
+  @Override
+  public Message getById(MessageId messageId) {
+    if (messageId == null) {
+      throw new IllegalArgumentException("Cannot get message if messageId is null");
+    }
+    final var messageEntity = messageEntityRepository.findMessageEntityById(
+            messageId.id()
+        )
+        .orElseThrow(() ->
+            new IllegalArgumentException(
+                "MessgeId '%s' not present in repository".formatted(messageId)
+            )
+        );
+
+    return messageEntityMapper.toDomain(messageEntity);
   }
 }
