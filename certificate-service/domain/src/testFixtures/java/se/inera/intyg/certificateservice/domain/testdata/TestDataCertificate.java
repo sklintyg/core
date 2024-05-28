@@ -100,7 +100,7 @@ public class TestDataCertificate {
   }
 
 
-  public static final Certificate FK443_CERTIFICATE = fk7472CertificateBuilder().build();
+  public static final Certificate FK7473_CERTIFICATE = fk7472CertificateBuilder().build();
 
   public static Certificate.CertificateBuilder fk7472CertificateBuilder() {
     return Certificate.builder()

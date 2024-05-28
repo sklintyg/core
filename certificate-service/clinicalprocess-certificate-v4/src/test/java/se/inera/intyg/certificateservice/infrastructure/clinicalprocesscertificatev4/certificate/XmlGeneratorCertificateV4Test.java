@@ -498,7 +498,6 @@ class XmlGeneratorCertificateV4Test {
 
   private RegisterCertificateType unmarshal(Xml response) {
     try {
-      System.out.println(response.xml());
       final var context = JAXBContext.newInstance(RegisterCertificateType.class);
       final var unmarshaller = context.createUnmarshaller();
       final var stringReader = new StringReader(response.xml());
@@ -506,7 +505,6 @@ class XmlGeneratorCertificateV4Test {
           stringReader);
       return jaxbElement.getValue();
     } catch (Exception ex) {
-      ex.printStackTrace();
       throw new IllegalStateException(ex);
     }
   }
