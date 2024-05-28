@@ -12,6 +12,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.ANSWER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.answerBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.ANSWER_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.ANSWER_REFERENCE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTENT;
@@ -220,6 +221,21 @@ class XmlGeneratorMessageV4Test {
     assertAll(
         () -> assertEquals(MESSAGE_ID, svarPa.getMeddelandeId()),
         () -> assertEquals(REFERENCE_ID, svarPa.getReferensId())
+    );
+  }
+
+  @Test
+  void shouldIncludeSvarPaWithoutReferens() {
+    final var messageWithoutReference = complementMessageBuilder()
+        .reference(null)
+        .build();
+    final var svarPa = unmarshal(
+        xmlGeneratorMessageV4.generate(ANSWER, messageWithoutReference, FK7473_CERTIFICATE)
+    ).getSvarPa();
+
+    assertAll(
+        () -> assertEquals(MESSAGE_ID, svarPa.getMeddelandeId()),
+        () -> assertNull(svarPa.getReferensId())
     );
   }
 

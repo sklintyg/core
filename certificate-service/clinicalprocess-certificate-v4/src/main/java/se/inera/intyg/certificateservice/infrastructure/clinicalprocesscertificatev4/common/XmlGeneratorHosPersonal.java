@@ -23,6 +23,10 @@ public class XmlGeneratorHosPersonal {
   private static final String PRESCRIPTION_CODE_MASKED = "0000000";
   private static final String NOT_APPLICABLE = "N/A";
 
+  private XmlGeneratorHosPersonal() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static HosPersonal hosPersonal(Certificate certificate) {
     final var hosPersonal = hosPersonalWithoutEnhet(
         certificate.certificateMetaData().issuer()
