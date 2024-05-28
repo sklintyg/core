@@ -50,9 +50,12 @@ import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCerti
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateResponse;
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateRequest;
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateResponse;
+import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.MessageExistsResponse;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesResponse;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoRequest;
@@ -293,6 +296,39 @@ public class ApiUtil {
     );
   }
 
+  public ResponseEntity<MessageExistsResponse> messageExists(
+      String messageId) {
+    final var requestUrl = "http://localhost:%s/api/message/%s/exists"
+        .formatted(port, messageId);
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.GET,
+        new HttpEntity<>(headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<GetCertificateFromMessageResponse> certificateFromMessage(
+      GetCertificateFromMessageRequest request,
+      String messageId) {
+    final var requestUrl = "http://localhost:%s/api/message/%s/certificate"
+        .formatted(port, messageId);
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
   public ResponseEntity<UpdateCertificateResponse> updateCertificate(
       UpdateCertificateRequest request, String certificateId) {
     final var requestUrl = "http://localhost:%s/api/certificate/%s".formatted(
@@ -419,7 +455,7 @@ public class ApiUtil {
 
     final var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    
+
     messageIds.add(request.getId());
 
     return this.restTemplate.exchange(

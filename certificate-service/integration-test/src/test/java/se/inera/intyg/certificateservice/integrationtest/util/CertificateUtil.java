@@ -33,7 +33,9 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateRangeList;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
+import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageResponse;
+import se.inera.intyg.certificateservice.application.message.dto.MessageExistsResponse;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesResponse;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesResponse;
@@ -72,12 +74,27 @@ public class CertificateUtil {
     return certificate.getMetadata().getId();
   }
 
+  public static String certificateId(GetCertificateFromMessageResponse response) {
+    final var certificate = certificate(response);
+    if (certificate == null || certificate.getMetadata() == null) {
+      return null;
+    }
+    return certificate.getMetadata().getId();
+  }
+
   public static String certificateId(List<CreateCertificateResponse> responses) {
     final var certificate = certificate(responses);
     if (certificate == null || certificate.getMetadata() == null) {
       return null;
     }
     return certificate.getMetadata().getId();
+  }
+
+  public static String messageId(QuestionDTO questionDTO) {
+    if (questionDTO == null) {
+      return null;
+    }
+    return questionDTO.getId();
   }
 
   public static CertificateStatusTypeDTO status(RevokeCertificateResponse responses) {
@@ -188,6 +205,13 @@ public class CertificateUtil {
     return response.getCertificate();
   }
 
+  public static CertificateDTO certificate(GetCertificateFromMessageResponse response) {
+    if (response == null || response.getCertificate() == null) {
+      return null;
+    }
+    return response.getCertificate();
+  }
+
   public static byte[] pdfData(GetCertificatePdfResponse response) {
     if (response == null || response.getPdfData() == null) {
       return null;
@@ -235,6 +259,14 @@ public class CertificateUtil {
   }
 
   public static boolean exists(CertificateExistsResponse response) {
+    if (response == null) {
+      return false;
+    }
+
+    return response.isExists();
+  }
+
+  public static boolean exists(MessageExistsResponse response) {
     if (response == null) {
       return false;
     }

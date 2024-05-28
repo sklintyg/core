@@ -108,6 +108,12 @@ public class ValidationUtil {
     }
   }
 
+  public static void validateMessageId(String messageId) {
+    if (messageId == null || messageId.isBlank()) {
+      throw new IllegalArgumentException("Required parameter missing: messageId");
+    }
+  }
+
   public static void validateRevokeInformation(RevokeInformationDTO revokeInformation) {
     if (revokeInformation.getReason() == null || revokeInformation.getReason().isBlank()) {
       throw new IllegalArgumentException("Required parameter missing: revoke.reason");

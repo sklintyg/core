@@ -16,6 +16,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
+import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageRequest;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoRequest;
@@ -141,6 +142,14 @@ public class ApiRequestUtil {
 
   public static GetCertificateMessageRequest defaultGetCertificateMessageRequest() {
     return GetCertificateMessageRequestBuilder.create().build();
+  }
+
+  public static GetCertificateFromMessageRequest defaultGetCertificateFromMessageRequest() {
+    return GetCertificateFromMessageRequestBuilder.create().build();
+  }
+
+  public static GetCertificateFromMessageRequestBuilder customGetCertificateFromMessageRequest() {
+    return GetCertificateFromMessageRequestBuilder.create();
   }
 
   public static GetCertificateMessageRequestBuilder customGetCertificateMessageRequest() {
