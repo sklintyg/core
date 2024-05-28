@@ -15,7 +15,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
-import se.inera.intyg.certificateservice.domain.message.service.XmlGenerator;
+import se.inera.intyg.certificateservice.domain.message.service.XmlGeneratorMessage;
 import se.riv.clinicalprocess.healthcond.certificate.sendMessageToRecipient.v2.ObjectFactory;
 import se.riv.clinicalprocess.healthcond.certificate.sendMessageToRecipient.v2.SendMessageToRecipientType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.Amneskod;
@@ -26,7 +26,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.HosPersonal;
 import se.riv.clinicalprocess.healthcond.certificate.v3.MeddelandeReferens;
 
 @RequiredArgsConstructor
-public class XmlGeneratorMessageV4 implements XmlGenerator {
+public class XmlGeneratorMessageV4 implements XmlGeneratorMessage {
 
   private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(
       "yyyy-MM-dd'T'HH:mm:ss");
