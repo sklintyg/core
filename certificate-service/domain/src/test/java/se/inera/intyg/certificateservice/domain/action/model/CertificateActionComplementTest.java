@@ -253,6 +253,7 @@ class CertificateActionComplementTest {
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
                 .build()
         )
+        .status(Status.DRAFT)
         .build();
     final var actualResult = certificateActionComplement.evaluate(Optional.of(certificate),
         Optional.of(actionEvaluation));
