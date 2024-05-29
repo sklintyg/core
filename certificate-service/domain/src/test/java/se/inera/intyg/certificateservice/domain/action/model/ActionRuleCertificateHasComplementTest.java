@@ -109,8 +109,6 @@ class ActionRuleCertificateHasComplementTest {
                         .type(MessageType.COMPLEMENT)
                         .status(MessageStatus.SENT)
                         .answer(Answer.builder().build())
-                        .build(),
-                    Message.builder()
                         .build()
                 )).build()
         ),
