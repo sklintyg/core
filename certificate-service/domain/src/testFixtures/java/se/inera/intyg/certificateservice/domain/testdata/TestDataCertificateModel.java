@@ -4,7 +4,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_PATH_NO_ADDRESS;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_VERSION;
@@ -15,6 +14,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_VERSION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK_RECIPIENT;
 
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
@@ -38,7 +38,7 @@ public class TestDataCertificateModel {
         .pdfTemplatePath(FK7210_PDF_PATH)
         .pdfNoAddressTemplatePath(FK7210_PDF_PATH_NO_ADDRESS)
         .schematronPath(FK7210_SCHEMATRON_PATH)
-        .recipient(FK7210_RECIPIENT);
+        .recipient(FK_RECIPIENT);
   }
 
 
@@ -55,6 +55,7 @@ public class TestDataCertificateModel {
         .availableForCitizen(false)
         .pdfTemplatePath(FK7472_PDF_PATH)
         .pdfNoAddressTemplatePath(FK7472_PDF_PATH_NO_ADDRESS)
-        .schematronPath(FK7472_SCHEMATRON_PATH);
+        .schematronPath(FK7472_SCHEMATRON_PATH)
+        .recipient(FK_RECIPIENT);
   }
 }

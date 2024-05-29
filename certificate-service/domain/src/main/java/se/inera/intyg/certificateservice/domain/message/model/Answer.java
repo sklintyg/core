@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 
 @Getter
 @Builder
@@ -21,4 +22,5 @@ public class Answer {
   private LocalDateTime sent;
   private MessageStatus status;
   private MessageContactInfo contactInfo;
+  private Staff authoredStaff;
 }

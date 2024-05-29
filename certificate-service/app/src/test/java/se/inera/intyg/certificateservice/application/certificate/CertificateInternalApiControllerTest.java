@@ -8,13 +8,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalMetadataService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalXmlService;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateInternalApiControllerTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
+  @Mock
+  private GetCertificateInternalMetadataService getCertificateInternalMetadataService;
   @Mock
   private GetCertificateInternalXmlService getCertificateInternalXmlService;
   @InjectMocks
@@ -30,6 +35,20 @@ class CertificateInternalApiControllerTest {
     doReturn(expectedResult).when(getCertificateInternalXmlService).get(CERTIFICATE_ID);
 
     final var actualResult = certificateInternalApiController.getCertificateXml(CERTIFICATE_ID);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnGetCertificateMetadataResponse() {
+    final var expectedResult = GetCertificateInternalMetadataResponse.builder()
+        .certificateMetadata(CertificateMetadataDTO.builder().build())
+        .build();
+
+    doReturn(expectedResult).when(getCertificateInternalMetadataService).get(CERTIFICATE_ID);
+
+    final var actualResult = certificateInternalApiController.getCertificateMetadata(
+        CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
   }

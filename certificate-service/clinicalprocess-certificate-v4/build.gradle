@@ -71,5 +71,16 @@ wsdl2java {
                     "-p",
                     "urn:riv:clinicalprocess:healthcond:certificate:RegisterCertificateResponder:3=se.riv.clinicalprocess.healthcond.certificate.registerCertificate.v3",
                     "$wsdlDir/certificate/$certificateVersion/interactions/RegisterCertificateInteraction/RegisterCertificateInteraction_3.0_RIVTABP21.wsdl"],
+            commonCertificateOptions + [
+                    "-xjc=-extension,-npa,-Xnamespace-prefix",
+                    "-b",
+                    "$wsdlDir/certificate/$certificateVersion/xmldsig-binding.xjb",
+                    "-wsdlLocation",
+                    "classpath:interactions/SendMessageToRecipientInteraction/SendMessageToRecipientInteraction_2.0_RIVTABP21.wsdl",
+                    "-p",
+                    "urn:riv:clinicalprocess:healthcond:certificate:SendMessageToRecipient:2:rivtabp21=se.riv.clinicalprocess.healthcond.certificate.sendMessageToRecipient.v2",
+                    "-p",
+                    "urn:riv:clinicalprocess:healthcond:certificate:SendMessageToRecipientResponder:2=se.riv.clinicalprocess.healthcond.certificate.sendMessageToRecipient.v2",
+                    "$wsdlDir/certificate/$certificateVersion/interactions/SendMessageToRecipientInteraction/SendMessageToRecipientInteraction_2.0_RIVTABP21.wsdl"],
     ]
 }

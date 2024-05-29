@@ -10,6 +10,9 @@ public class TestDataMessageConstants {
   public static final String MESSAGE_ID = "MESSAGE_ID";
   public static final String REFERENCE_ID = "REFERENCE_ID";
 
+  public static final String ANSWER_ID = "ANSWER_ID";
+  public static final String ANSWER_REFERENCE_ID = "ANSWER_REFERENCE_ID";
+
   public static final String SUBJECT = "This is the subject";
   public static final String CONTENT = "This is the content of the message";
   public static final LocalDateTime SENT = LocalDateTime.now(ZoneId.systemDefault());

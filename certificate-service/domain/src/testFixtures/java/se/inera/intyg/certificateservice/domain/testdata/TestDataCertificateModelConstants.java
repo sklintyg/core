@@ -42,6 +42,7 @@ public class TestDataCertificateModelConstants {
   public static final String FK7472_PDF_PATH_NO_ADDRESS = "fk7472/pdf/fk7472_v1_no_address.pdf";
   public static final String FK7210_NAME = "Intyg om graviditet";
   public static final String FK7472_NAME = "Intyg om tillfällig föräldrapenning";
-  public static final Recipient FK7210_RECIPIENT = new Recipient(
-      new RecipientId("FKASSA"), "Försäkringskassan");
+  public static final Recipient FK_RECIPIENT = new Recipient(
+      new RecipientId("FKASSA"), "Försäkringskassan"
+  );
 }
