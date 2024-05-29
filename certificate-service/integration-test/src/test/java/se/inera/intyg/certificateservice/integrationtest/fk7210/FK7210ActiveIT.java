@@ -70,6 +70,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.decodeXml;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.exists;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueDate;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.metadata;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.pdfData;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.recipient;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.relation;
@@ -3106,6 +3107,26 @@ class FK7210ActiveIT {
                   certificateId(testCertificates)),
               () -> "Expected 'Läkare' to be part of xml: '%s'"
                   .formatted(decodeXml(certificateInternalXmlResponse(response).getXml())))
+      );
+    }
+
+    @Test
+    @DisplayName("FK7210 - Metadata för intyget skall gå att hämta")
+    void shallReturnCertificateMetadata() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7210, VERSION)
+      );
+
+      final var response = internalApi.getCertificateMetadata(
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertEquals(certificateId(testCertificates),
+              metadata(response).getId()),
+          () -> assertEquals(FK7210, metadata(response).getType()),
+          () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ID,
+              metadata(response).getUnit().getUnitId())
       );
     }
   }
