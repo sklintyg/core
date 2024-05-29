@@ -8,21 +8,24 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.message.model.Complement;
+import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 
 class ActionRuleCertificateHasComplementTest {
 
   private static final ActionRuleCertificateHasComplement actionRule = new ActionRuleCertificateHasComplement();
 
   @Test
-  void shouldReturnTrueIfOneComplement() {
+  void shouldReturnTrueIfMessageIsComplementAndNotAnsweredOrHandled() {
     final var result = actionRule.evaluate(
         Optional.of(
             Certificate.builder()
                 .messages(List.of(
                     Message.builder()
-                        .complements(List.of(Complement.builder().build()))
+                        .type(MessageType.COMPLEMENT)
+                        .status(MessageStatus.SENT)
                         .build()
                 ))
                 .build()
@@ -34,22 +37,21 @@ class ActionRuleCertificateHasComplementTest {
   }
 
   @Test
-  void shouldReturnTrueIfSeveralComplements() {
+  void shouldReturnFalseIfNoComplement() {
     final var result = actionRule.evaluate(
         Optional.of(
             Certificate.builder()
                 .messages(List.of(
                     Message.builder()
-                        .complements(List.of(Complement.builder().build()))
-                        .build(),
-                    Message.builder()
+                        .type(MessageType.REMINDER)
+                        .status(MessageStatus.SENT)
                         .build()
                 )).build()
         ),
         Optional.empty()
     );
 
-    assertTrue(result);
+    assertFalse(result);
   }
 
   @Test
@@ -80,16 +82,14 @@ class ActionRuleCertificateHasComplementTest {
   }
 
   @Test
-  void shouldReturnFalseIfNoComplements() {
+  void shouldReturnFalseIfHandledComplement() {
     final var result = actionRule.evaluate(
         Optional.of(
             Certificate.builder()
                 .messages(List.of(
                     Message.builder()
-                        .complements(Collections.emptyList())
-                        .build(),
-                    Message.builder()
-                        .complements(Collections.emptyList())
+                        .type(MessageType.COMPLEMENT)
+                        .status(MessageStatus.HANDLED)
                         .build()
                 )).build()
         ),
@@ -100,12 +100,15 @@ class ActionRuleCertificateHasComplementTest {
   }
 
   @Test
-  void shouldReturnFalseIfNullComplements() {
+  void shouldReturnFalseIfAnsweredComplement() {
     final var result = actionRule.evaluate(
         Optional.of(
             Certificate.builder()
                 .messages(List.of(
                     Message.builder()
+                        .type(MessageType.COMPLEMENT)
+                        .status(MessageStatus.SENT)
+                        .answer(Answer.builder().build())
                         .build(),
                     Message.builder()
                         .build()
