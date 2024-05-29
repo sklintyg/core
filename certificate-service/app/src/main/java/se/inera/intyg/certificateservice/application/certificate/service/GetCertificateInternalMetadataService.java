@@ -2,25 +2,25 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateMetadataResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateMetadataConverter;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 
 @Service
 @RequiredArgsConstructor
-public class GetCertificateMetadataService {
+public class GetCertificateInternalMetadataService {
 
   private final CertificateRepository certificateRepository;
   private final CertificateMetadataConverter certificateMetadataConverter;
 
-  public GetCertificateMetadataResponse get(String certificateId) {
+  public GetCertificateInternalMetadataResponse get(String certificateId) {
     if (certificateId == null || certificateId.isBlank()) {
       throw new IllegalArgumentException("Certificate id cannot be null or empty");
     }
 
     final var certificate = certificateRepository.getById(new CertificateId(certificateId));
-    return GetCertificateMetadataResponse.builder()
+    return GetCertificateInternalMetadataResponse.builder()
         .certificateMetadata(certificateMetadataConverter.convert(certificate))
         .build();
   }
