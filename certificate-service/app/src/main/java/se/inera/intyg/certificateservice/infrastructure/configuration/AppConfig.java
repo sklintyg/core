@@ -26,6 +26,7 @@ import se.inera.intyg.certificateservice.domain.citizen.service.PrintCitizenCert
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventSubscriber;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
+import se.inera.intyg.certificateservice.domain.message.service.HandleMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.ReceiveComplementMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.XmlGeneratorMessage;
@@ -237,6 +238,12 @@ public class AppConfig {
   public SetMessagesToHandleDomainService setMessagesToHandleDomainService(
       MessageRepository messageRepository) {
     return new SetMessagesToHandleDomainService(messageRepository);
+  }
+
+  @Bean
+  public HandleMessageDomainService handleMessageDomainService(
+      MessageRepository messageRepository) {
+    return new HandleMessageDomainService(messageRepository);
   }
 
   @Bean
