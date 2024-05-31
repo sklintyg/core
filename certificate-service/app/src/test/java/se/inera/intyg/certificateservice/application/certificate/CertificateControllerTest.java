@@ -11,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
@@ -37,6 +39,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
+import se.inera.intyg.certificateservice.application.certificate.service.ComplementCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificatePdfService;
@@ -73,7 +76,6 @@ class CertificateControllerTest {
   private GetCertificateXmlService getCertificateXmlService;
   @Mock
   private SignCertificateService signCertificateService;
-
   @Mock
   private SendCertificateService sendCertificateService;
   @Mock
@@ -86,6 +88,8 @@ class CertificateControllerTest {
   private ReplaceCertificateService replaceCertificateService;
   @Mock
   private RenewCertificateService renewCertificateService;
+  @Mock
+  private ComplementCertificateService complementCertificateService;
   @InjectMocks
   private CertificateController certificateController;
 
@@ -293,6 +297,17 @@ class CertificateControllerTest {
     doReturn(expectedResult).when(renewCertificateService).renew(request, CERTIFICATE_ID);
 
     final var actualResult = certificateController.renewCertificate(request, CERTIFICATE_ID);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnComplementCertificateResponse() {
+    final var request = ComplementCertificateRequest.builder().build();
+    final var expectedResult = ComplementCertificateResponse.builder().build();
+    doReturn(expectedResult).when(complementCertificateService).complement(request, CERTIFICATE_ID);
+
+    final var actualResult = certificateController.complementCertificate(request, CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
   }

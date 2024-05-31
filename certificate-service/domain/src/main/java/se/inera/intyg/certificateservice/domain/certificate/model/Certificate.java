@@ -291,6 +291,14 @@ public class Certificate {
     return newCertificate;
   }
 
+  public Certificate complement(ActionEvaluation actionEvaluation) {
+    final var newCertificate = createCertificate(actionEvaluation, RelationType.COMPLEMENT);
+
+    newCertificate.elementData = this.elementData().stream().toList();
+
+    return newCertificate;
+  }
+
   public Certificate renew(ActionEvaluation actionEvaluation) {
     final var newCertificate = createCertificate(actionEvaluation, RelationType.RENEW);
 

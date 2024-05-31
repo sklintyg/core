@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
@@ -36,6 +38,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
+import se.inera.intyg.certificateservice.application.certificate.service.ComplementCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificatePdfService;
@@ -69,6 +72,7 @@ public class CertificateController {
   private final RevokeCertificateService revokeCertificateService;
   private final ReplaceCertificateService replaceCertificateService;
   private final RenewCertificateService renewCertificateService;
+  private final ComplementCertificateService complementCertificateService;
 
   @PostMapping
   CreateCertificateResponse createCertificate(
@@ -165,5 +169,12 @@ public class CertificateController {
       @RequestBody RenewCertificateRequest renewCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
     return renewCertificateService.renew(renewCertificateRequest, certificateId);
+  }
+
+  @PostMapping("/{certificateId}/complement")
+  ComplementCertificateResponse complementCertificate(
+      @RequestBody ComplementCertificateRequest request,
+      @PathVariable("certificateId") String certificateId) {
+    return complementCertificateService.complement(request, certificateId);
   }
 }

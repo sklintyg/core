@@ -181,11 +181,17 @@ public class CertificateActionFactory {
           .actionRules(
               List.of(
                   new ActionRuleUserNotBlocked(),
+                  new ActionRuleRole(
+                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
+                  ),
+                  new ActionRuleSent(true),
+                  new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleProtectedPerson(),
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
                   new ActionRuleUserAllowCopy(),
+                  new ActionRuleCertificateHasComplement(),
                   new ActionRuleChildRelationNoMatch(List.of(RelationType.COMPLEMENT))
               )
           )
