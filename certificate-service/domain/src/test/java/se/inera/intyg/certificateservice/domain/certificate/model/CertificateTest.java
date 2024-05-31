@@ -2361,11 +2361,11 @@ class CertificateTest {
 
     @Test
     void shallBuildAnswerWithSubject() {
-      final var expectedType = message.subject();
+      final var expectedSubject = message.subject();
       final var actionEvaluation = actionEvaluationBuilder.build();
       certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
       final var answer = certificateWithMessages.messages().get(0).answer();
-      assertEquals(expectedType, answer.subject());
+      assertEquals(expectedSubject, answer.subject());
     }
 
 
@@ -2419,11 +2419,19 @@ class CertificateTest {
     }
 
     @Test
+    void shallBuildAnswerWithReference() {
+      final var expectedReference = message.reference();
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
+      assertEquals(expectedReference, answer.reference());
+    }
+
+    @Test
     void shallNotAddAnswerIfTypeNotComplement() {
       final var message1 = Message.builder()
           .type(MessageType.REMINDER)
           .build();
-
       final var message2 = Message.builder()
           .type(MessageType.REMINDER)
           .build();

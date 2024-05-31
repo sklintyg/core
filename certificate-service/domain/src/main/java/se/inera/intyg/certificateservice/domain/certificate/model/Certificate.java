@@ -398,6 +398,7 @@ public class Certificate {
             return message.withAnswer(
                 Answer.builder()
                     .id(message.id())
+                    .reference(message.reference())
                     .type(message.type())
                     .created(LocalDateTime.now())
                     .subject(message.subject())
