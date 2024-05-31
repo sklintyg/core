@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
+import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageInternalResponse;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -42,6 +43,25 @@ public class InternalApiUtil {
   public ResponseEntity<GetCertificateInternalMetadataResponse> getCertificateMetadata(
       String certificateId) {
     final var requestUrl = "http://localhost:%s/internalapi/certificate/%s/metadata".formatted(
+        port,
+        certificateId
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(null, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<GetCertificateMessageInternalResponse> getMessages(String certificateId) {
+    final var requestUrl = "http://localhost:%s/internalapi/message/%s".formatted(
         port,
         certificateId
     );

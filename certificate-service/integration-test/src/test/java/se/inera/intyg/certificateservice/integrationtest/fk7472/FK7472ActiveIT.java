@@ -80,6 +80,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueText;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.hasQuestions;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.messageId;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.messages;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.metadata;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.pdfData;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.questions;
@@ -3117,7 +3118,7 @@ class FK7472ActiveIT {
   }
 
   @Nested
-  @DisplayName("FK7472 - Intern api för Intygstjänsten")
+  @DisplayName("FK7472 - Intern api för Intygstjänsten och Webcert")
   class InternalApi {
 
     @Test
@@ -3223,6 +3224,38 @@ class FK7472ActiveIT {
           () -> assertEquals(FK7472, metadata(response).getType()),
           () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN_ID,
               metadata(response).getUnit().getUnitId())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Ärendekommunikation för intyget skall gå att hämta")
+    void shallReturnQuestionsAndAnswers() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var response = internalApi.getMessages(
+          certificateId(testCertificates)
+      );
+
+      final var messages = messages(response.getBody());
+
+      assertAll(
+          () -> assertEquals(1, messages.size()),
+          () -> assertEquals(certificateId(testCertificates), messages.get(0).getCertificateId())
       );
     }
   }
