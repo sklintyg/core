@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
@@ -507,6 +509,33 @@ public class ApiUtil {
         },
         Collections.emptyMap()
     );
+  }
+
+  public ResponseEntity<ComplementCertificateResponse> complementCertificate(
+      ComplementCertificateRequest request,
+      String certificateId) {
+    final var requestUrl = "http://localhost:%s/api/certificate/%s/complement".formatted(
+        port,
+        certificateId
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    final var response = this.restTemplate.<ComplementCertificateResponse>exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+
+    if (certificateId(response.getBody()) != null) {
+      certificateIds.add(certificateId(response.getBody()));
+    }
+
+    return response;
   }
 
   public ResponseEntity<ReplaceCertificateResponse> replaceCertificate(

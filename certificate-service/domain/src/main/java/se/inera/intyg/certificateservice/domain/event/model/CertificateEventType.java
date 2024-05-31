@@ -12,6 +12,7 @@ public enum CertificateEventType {
   SENT("sent-certificate", Constants.ACTION_TYPE_CHANGE, "certificate-sent"),
   REPLACE("replace-certificate", Constants.ACTION_TYPE_CREATION, null),
   RENEW("renew-certificate", Constants.ACTION_TYPE_CREATION, null),
+  COMPLEMENT("complement-certificate", Constants.ACTION_TYPE_CREATION, null),
   REVOKED("revoked-certificate", Constants.ACTION_TYPE_CHANGE, "certificate-revoked");
 
   private final String action;

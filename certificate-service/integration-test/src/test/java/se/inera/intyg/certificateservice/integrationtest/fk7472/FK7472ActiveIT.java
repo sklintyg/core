@@ -50,6 +50,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customUpdateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customValidateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCertificateTypeInfoRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultComplementCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultDeleteCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateFromMessageRequest;
@@ -4181,6 +4182,88 @@ class FK7472ActiveIT {
     }
 
     @Test
+    @DisplayName("FK7472 - Intyg som har kompletteringsbegäran ska kunna kompletteras")
+    void shallReturnCertificateIfComplementingCertificateWithComplements() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var response = api.complementCertificate(
+          defaultComplementCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(200, response.getStatusCode().value());
+      assertNotNull(response.getBody().getCertificate());
+    }
+
+    @Test
+    @DisplayName("FK7472 - Intyg som har påbörjad komplettering ska inte kunna kompletteras - 403 (FORBIDDEN)")
+    void shallReturn403IfDraftComplementAlreadyExists() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      api.complementCertificate(
+          defaultComplementCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.complementCertificate(
+          defaultComplementCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7472 - Intyg som inte har kompletteringsbegäran ska inte kunna kompletteras - 403 (FORBIDDEN)")
+    void shallReturn403IfNoComplementsFromRecipient() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var response = api.complementCertificate(
+          defaultComplementCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
     @DisplayName("FK7472 - Utkast skall inte kunna ta emot kompletteringsbegäran - 403 (FORBIDDEN) ")
     void shallReturn403IfCertificateIsDraft() {
       final var testCertificates = testabilityApi.addCertificates(
@@ -4390,6 +4473,11 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
       api.receiveMessage(
           incomingComplementMessageBuilder()
               .certificateId(
@@ -4416,6 +4504,11 @@ class FK7472ActiveIT {
     void shallReturnQuestionWithComplementCertificateIfIssuedOnSameCareUnitDifferentSubUnit() {
       final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
       );
 
       api.receiveMessage(
@@ -4450,6 +4543,13 @@ class FK7472ActiveIT {
               .build()
       );
 
+      api.sendCertificate(
+          customSendCertificateRequest()
+              .unit(ALFA_MEDICINCENTRUM_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
       api.receiveMessage(
           incomingComplementMessageBuilder()
               .certificateId(
@@ -4480,6 +4580,11 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
       );
 
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
       api.receiveMessage(
           incomingComplementMessageBuilder()
               .certificateId(
@@ -4505,6 +4610,11 @@ class FK7472ActiveIT {
           customTestabilityCertificateRequest(FK7472, VERSION, SIGNED)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
       );
 
       api.receiveMessage(
@@ -4533,6 +4643,11 @@ class FK7472ActiveIT {
           customTestabilityCertificateRequest(FK7472, VERSION, SIGNED)
               .patient(ANONYMA_REACT_ATTILA_DTO)
               .build()
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
       );
 
       api.receiveMessage(
@@ -4566,6 +4681,11 @@ class FK7472ActiveIT {
           defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
       );
 
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
       api.receiveMessage(
           incomingComplementMessageBuilder()
               .certificateId(
@@ -4597,6 +4717,11 @@ class FK7472ActiveIT {
     void shallNotReturnComplementCertificateIfUserCopyIsFalse() {
       final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
       );
 
       api.receiveMessage(

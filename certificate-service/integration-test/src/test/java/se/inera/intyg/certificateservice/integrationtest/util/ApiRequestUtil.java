@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.integrationtest.util;
 
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
@@ -161,6 +162,10 @@ public class ApiRequestUtil {
 
   public static RevokeCertificateRequestBuilder customRevokeCertificateRequest() {
     return RevokeCertificateRequestBuilder.create();
+  }
+
+  public static ComplementCertificateRequest defaultComplementCertificateRequest() {
+    return ComplementCertificateRequestBuilder.create().build();
   }
 
   public static ReplaceCertificateRequest defaultReplaceCertificateRequest() {

@@ -23,6 +23,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajl
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALLOW_COPY_FALSE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,18 +32,22 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.message.model.Complement;
+import se.inera.intyg.certificateservice.domain.message.model.Message;
 
 class CertificateActionComplementTest {
 
   private CertificateActionComplement certificateActionComplement;
 
+  private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
+  private CertificateBuilder certificateBuilder;
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
           .certificateActionType(CertificateActionType.COMPLEMENT)
           .build();
-  private CertificateBuilder certificateBuilder;
 
   @BeforeEach
   void setUp() {
@@ -52,7 +57,18 @@ class CertificateActionComplementTest {
 
     certificateBuilder = Certificate.builder()
         .status(Status.SIGNED)
-        .sent(null)
+        .sent(Sent.builder()
+            .sentAt(LocalDateTime.now())
+            .build())
+        .messages(
+            List.of(
+                Message.builder()
+                    .complements(
+                        List.of(Complement.builder().build())
+                    )
+                    .build()
+            )
+        )
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -61,22 +77,29 @@ class CertificateActionComplementTest {
                 .patient(ATHENA_REACT_ANDERSSON)
                 .build()
         );
+    actionEvaluationBuilder = ActionEvaluation.builder()
+        .user(AJLA_DOKTOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+        .patient(ATHENA_REACT_ANDERSSON)
+        .careProvider(ALFA_REGIONEN)
+        .careUnit(ALFA_MEDICINCENTRUM);
   }
 
-  @Test
-  void shallReturnName() {
-    assertEquals("Komplettera", certificateActionComplement.getName(Optional.empty()));
-  }
 
   @Test
-  void shallReturnType() {
+  void shallReturnTypeFromSpecification() {
     assertEquals(CertificateActionType.COMPLEMENT, certificateActionComplement.getType());
   }
 
   @Test
-  void shallReturnDescription() {
-    assertEquals("Öppnar ett nytt intygsutkast.",
-        certificateActionComplement.getDescription(Optional.empty()));
+  void shallReturnFalseIfCertificateIsEmpty() {
+    final Optional<Certificate> certificate = Optional.empty();
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    assertFalse(
+        certificateActionComplement.evaluate(certificate, Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
   }
 
   @Test
@@ -151,6 +174,78 @@ class CertificateActionComplementTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
+    final var certificate = certificateBuilder.build();
+
+    assertFalse(
+        certificateActionComplement.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfDoctor() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .build();
+
+    final var certificate = certificateBuilder.build();
+
+    assertTrue(
+        certificateActionComplement.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfSigned() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .build();
+
+    assertTrue(
+        certificateActionComplement.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfRevoked() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.REVOKED)
+        .build();
+
+    assertFalse(
+        certificateActionComplement.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnFalseIfDeletedDraft() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.DELETED_DRAFT)
+        .build();
+
+    assertFalse(
+        certificateActionComplement.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnFalseIfDraft() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
     final var certificate = certificateBuilder
         .certificateMetaData(
             CertificateMetaData.builder()
@@ -158,6 +253,7 @@ class CertificateActionComplementTest {
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
                 .build()
         )
+        .status(Status.DRAFT)
         .build();
     final var actualResult = certificateActionComplement.evaluate(Optional.of(certificate),
         Optional.of(actionEvaluation));
@@ -233,7 +329,9 @@ class CertificateActionComplementTest {
                 .build()
         )
         .build();
+
     final var certificate = certificateBuilder.build();
+
     assertFalse(
         certificateActionComplement.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
@@ -253,6 +351,17 @@ class CertificateActionComplementTest {
     );
   }
 
+  @Test
+  void shallReturnName() {
+    assertEquals("Komplettera", certificateActionComplement.getName(Optional.empty()));
+  }
+
+  @Test
+  void shallReturnDescription() {
+    assertEquals("Öppnar ett nytt intygsutkast.",
+        certificateActionComplement.getDescription(Optional.empty()));
+  }
+
   @Nested
   class AccessScope {
 
@@ -260,9 +369,20 @@ class CertificateActionComplementTest {
 
     @BeforeEach
     void setUp() {
+      certificateActionComplement = (CertificateActionComplement) CertificateActionFactory.create(
+          CERTIFICATE_ACTION_SPECIFICATION);
       certificateBuilder = Certificate.builder()
           .status(Status.SIGNED)
-          .sent(null)
+          .sent(Sent.builder().sentAt(LocalDateTime.now()).build())
+          .messages(
+              List.of(
+                  Message.builder()
+                      .complements(
+                          List.of(Complement.builder().build())
+                      )
+                      .build()
+              )
+          )
           .certificateMetaData(
               CertificateMetaData.builder()
                   .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -277,6 +397,11 @@ class CertificateActionComplementTest {
                       .build()
               )
           );
+      actionEvaluationBuilder = ActionEvaluation.builder()
+          .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+          .patient(ATHENA_REACT_ANDERSSON)
+          .careProvider(ALFA_REGIONEN)
+          .careUnit(ALFA_MEDICINCENTRUM);
     }
 
     @Nested

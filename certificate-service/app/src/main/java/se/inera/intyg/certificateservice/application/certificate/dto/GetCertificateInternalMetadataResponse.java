@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse.GetCertificateMetadataResponseBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse.GetCertificateInternalMetadataResponseBuilder;
 
-@JsonDeserialize(builder = GetCertificateMetadataResponseBuilder.class)
+@JsonDeserialize(builder = GetCertificateInternalMetadataResponseBuilder.class)
 @Value
 @Builder
 public class GetCertificateInternalMetadataResponse {
@@ -14,7 +14,7 @@ public class GetCertificateInternalMetadataResponse {
   CertificateMetadataDTO certificateMetadata;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class GetCertificateMetadataResponseBuilder {
+  public static class GetCertificateInternalMetadataResponseBuilder {
 
   }
 }
