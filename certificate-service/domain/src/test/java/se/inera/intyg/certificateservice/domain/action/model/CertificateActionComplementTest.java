@@ -35,8 +35,9 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
-import se.inera.intyg.certificateservice.domain.message.model.Complement;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 
 class CertificateActionComplementTest {
 
@@ -63,9 +64,8 @@ class CertificateActionComplementTest {
         .messages(
             List.of(
                 Message.builder()
-                    .complements(
-                        List.of(Complement.builder().build())
-                    )
+                    .type(MessageType.COMPLEMENT)
+                    .status(MessageStatus.SENT)
                     .build()
             )
         )
@@ -377,9 +377,8 @@ class CertificateActionComplementTest {
           .messages(
               List.of(
                   Message.builder()
-                      .complements(
-                          List.of(Complement.builder().build())
-                      )
+                      .type(MessageType.COMPLEMENT)
+                      .status(MessageStatus.SENT)
                       .build()
               )
           )
