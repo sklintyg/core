@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -97,6 +98,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Author;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
 import se.inera.intyg.certificateservice.domain.validation.model.ErrorMessage;
@@ -135,9 +137,6 @@ class CertificateTest {
         )
         .elementData(
             List.of(DATE)
-        )
-        .messages(
-            List.of(complementMessageBuilder().build())
         );
 
     certificate = certificateBuilder.build();
@@ -2325,39 +2324,38 @@ class CertificateTest {
 
 
     private final Message message = complementMessageBuilder().build();
+    private Certificate certificateWithMessages;
+
+    @BeforeEach
+    void setUp() {
+      certificateWithMessages = certificateBuilder.messages(
+              List.of(complementMessageBuilder().build()))
+          .build();
+    }
 
     @Test
     void shallBuildAnswerWithId() {
       final var actionEvaluation = actionEvaluationBuilder.build();
       final var expectedId = message.id();
-      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificate.messages().get(0).answer();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
       assertEquals(expectedId, answer.id());
-    }
-
-    @Test
-    void shallBuildAnswerWithReference() {
-      final var actionEvaluation = actionEvaluationBuilder.build();
-      final var expectedReference = message.reference();
-      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificate.messages().get(0).answer();
-      assertEquals(expectedReference, answer.reference());
     }
 
     @Test
     void shallBuildAnswerWithType() {
       final var actionEvaluation = actionEvaluationBuilder.build();
       final var expectedType = message.type();
-      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificate.messages().get(0).answer();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
       assertEquals(expectedType, answer.type());
     }
 
     @Test
     void shallBuildAnswerWithCreated() {
       final var actionEvaluation = actionEvaluationBuilder.build();
-      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificate.messages().get(0).answer();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
       assertNotNull(answer.created());
     }
 
@@ -2365,8 +2363,8 @@ class CertificateTest {
     void shallBuildAnswerWithSubject() {
       final var expectedType = message.subject();
       final var actionEvaluation = actionEvaluationBuilder.build();
-      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificate.messages().get(0).answer();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
       assertEquals(expectedType, answer.subject());
     }
 
@@ -2375,49 +2373,72 @@ class CertificateTest {
     void shallBuildAnswerWithContent() {
       final var expectedContent = new Content(CONTENT);
       final var actionEvaluation = actionEvaluationBuilder.build();
-      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificate.messages().get(0).answer();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
       assertEquals(expectedContent, answer.content());
     }
 
     @Test
     void shallBuildAnswerWithModified() {
       final var actionEvaluation = actionEvaluationBuilder.build();
-      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificate.messages().get(0).answer();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
       assertNotNull(answer.modified());
     }
 
     @Test
     void shallBuildAnswerWithSent() {
       final var actionEvaluation = actionEvaluationBuilder.build();
-      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificate.messages().get(0).answer();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
       assertNotNull(answer.sent());
     }
 
     @Test
     void shallBuildAnswerWithStatus() {
       final var actionEvaluation = actionEvaluationBuilder.build();
-      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificate.messages().get(0).answer();
-      assertEquals(MessageStatus.SENT, answer.status());
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
+      assertEquals(MessageStatus.HANDLED, answer.status());
     }
 
     @Test
     void shallBuildAnswerWithAuthor() {
       final var actionEvaluation = actionEvaluationBuilder.build();
-      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificate.messages().get(0).answer();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
       assertEquals(new Author("WC"), answer.author());
     }
 
     @Test
     void shallBuildAnswerWithAuthoredStaff() {
       final var actionEvaluation = actionEvaluationBuilder.build();
-      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificate.messages().get(0).answer();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
       assertNotNull(answer.authoredStaff());
+    }
+
+    @Test
+    void shallNotAddAnswerIfTypeNotComplement() {
+      final var message1 = Message.builder()
+          .type(MessageType.REMINDER)
+          .build();
+
+      final var message2 = Message.builder()
+          .type(MessageType.REMINDER)
+          .build();
+
+      certificateWithMessages = certificateBuilder
+          .messages(
+              List.of(
+                  message1, message2
+              )
+          )
+          .build();
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      assertNull(certificateWithMessages.messages().get(0).answer());
+      assertNull(certificateWithMessages.messages().get(1).answer());
     }
   }
 }

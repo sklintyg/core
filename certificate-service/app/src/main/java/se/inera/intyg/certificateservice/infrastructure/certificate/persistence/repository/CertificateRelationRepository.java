@@ -15,7 +15,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 public class CertificateRelationRepository {
 
   private final CertificateEntityRepository certificateEntityRepository;
-  public final CertificateRelationEntityRepository relationEntityRepository;
+  private final CertificateRelationEntityRepository relationEntityRepository;
 
   public void save(Certificate certificate, CertificateEntity certificateEntity) {
     if (certificate.parent() == null) {
@@ -67,5 +67,4 @@ public class CertificateRelationRepository {
             )
         );
   }
-
 }

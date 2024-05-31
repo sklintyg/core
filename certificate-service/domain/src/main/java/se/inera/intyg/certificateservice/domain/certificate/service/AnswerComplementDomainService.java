@@ -43,18 +43,19 @@ public class AnswerComplementDomainService {
 
     setMessagesToHandleDomainService.handle(certificate.messages(MessageType.COMPLEMENT));
 
-    final var latestComplementAnswer = certificate.messages(MessageType.COMPLEMENT).stream()
+    final var latestAnswer = certificate.messages(MessageType.COMPLEMENT).stream()
         .max(Comparator.comparing(Message::created))
         .map(Message::answer)
         .orElseThrow(() -> new IllegalStateException(
-            "No complement found for certificate %s".formatted(certificateId)));
+            "No answer found for certificate %s".formatted(certificateId)));
 
     messageEventDomainService.publish(
         MessageEvent.builder()
             .type(MessageEventType.ANSWER_COMPLEMENT)
             .start(start)
             .end(LocalDateTime.now(ZoneId.systemDefault()))
-            .answer(latestComplementAnswer)
+            .answer(latestAnswer)
+            .certificateId(certificate.id())
             .actionEvaluation(actionEvaluation)
             .build()
     );

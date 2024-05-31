@@ -26,6 +26,8 @@ import se.inera.intyg.certificateservice.domain.citizen.service.GetCitizenCertif
 import se.inera.intyg.certificateservice.domain.citizen.service.PrintCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventSubscriber;
+import se.inera.intyg.certificateservice.domain.event.service.MessageEventDomainService;
+import se.inera.intyg.certificateservice.domain.event.service.MessageEventSubscriber;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 import se.inera.intyg.certificateservice.domain.message.service.ReceiveComplementMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
@@ -249,8 +251,14 @@ public class AppConfig {
   public AnswerComplementDomainService answerComplementDomainService(
       CertificateRepository certificateRepository,
       SetMessagesToHandleDomainService setMessagesToHandleDomainService,
-      CertificateEventDomainService certificateEventDomainService) {
+      MessageEventDomainService messageEventDomainService) {
     return new AnswerComplementDomainService(certificateRepository,
-        setMessagesToHandleDomainService, certificateEventDomainService);
+        setMessagesToHandleDomainService, messageEventDomainService);
+  }
+
+  @Bean
+  public MessageEventDomainService messageEventDomainService(
+      List<MessageEventSubscriber> messageEventSubscribers) {
+    return new MessageEventDomainService(messageEventSubscribers);
   }
 }

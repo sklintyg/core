@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.message.model.Answer;
 
 @Builder
@@ -15,6 +16,7 @@ public class MessageEvent {
   LocalDateTime start;
   LocalDateTime end;
   Answer answer;
+  CertificateId certificateId;
   ActionEvaluation actionEvaluation;
 
   public long duration() {

@@ -392,22 +392,27 @@ public class Certificate {
   }
 
   public void answerComplement(ActionEvaluation actionEvaluation, Content content) {
-    this.messages = messages(MessageType.COMPLEMENT).stream()
-        .map(message -> message.withAnswer(
-            Answer.builder()
-                .id(message.id())
-                .reference(message.reference())
-                .type(message.type())
-                .created(LocalDateTime.now())
-                .subject(message.subject())
-                .content(content)
-                .modified(LocalDateTime.now())
-                .sent(LocalDateTime.now())
-                .status(MessageStatus.SENT)
-                .author(new Author("WC"))
-                .authoredStaff(Staff.create(actionEvaluation.user()))
-                .build()
-        ))
+    this.messages = this.messages.stream()
+        .map(message -> {
+          if (message.type().equals(MessageType.COMPLEMENT)) {
+            return message.withAnswer(
+                Answer.builder()
+                    .id(message.id())
+                    .type(message.type())
+                    .created(LocalDateTime.now())
+                    .subject(message.subject())
+                    .content(content)
+                    .modified(LocalDateTime.now())
+                    .sent(LocalDateTime.now())
+                    .status(MessageStatus.HANDLED)
+                    .author(new Author("WC"))
+                    .authoredStaff(Staff.create(actionEvaluation.user()))
+                    .build()
+            );
+          } else {
+            return message;
+          }
+        })
         .toList();
   }
 }

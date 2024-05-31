@@ -36,15 +36,18 @@ public class EventMessageService implements CertificateEventSubscriber, MessageE
         session -> getMessageEventMessage(
             event.answer().id().id(),
             event.type().messageType(),
+            event.certificateId().id(),
             session)
     );
   }
 
   private static TextMessage getMessageEventMessage(String messageId, String eventType,
+      String certificateId,
       Session session)
       throws JMSException {
     final var message = session.createTextMessage();
     message.setStringProperty("messageId", messageId);
+    message.setStringProperty("certificateId", certificateId);
     message.setStringProperty("eventType", eventType);
     return message;
   }
