@@ -54,6 +54,8 @@ import se.inera.intyg.certificateservice.application.message.dto.GetCertificateF
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageResponse;
+import se.inera.intyg.certificateservice.application.message.dto.HandleMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.HandleMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.MessageExistsResponse;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
@@ -316,6 +318,22 @@ public class ApiUtil {
       GetCertificateFromMessageRequest request,
       String messageId) {
     final var requestUrl = "http://localhost:%s/api/message/%s/certificate"
+        .formatted(port, messageId);
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<HandleMessageResponse> handleMessage(
+      HandleMessageRequest request, String messageId) {
+    final var requestUrl = "http://localhost:%s/api/message/%s/handle"
         .formatted(port, messageId);
     final var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
