@@ -39,6 +39,8 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementD
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.DATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.dateElementDataBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementDataConstants.DATE_ELEMENT_VALUE_DATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ALVE_REACT_ALFREDSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
@@ -91,7 +93,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
+import se.inera.intyg.certificateservice.domain.message.model.Author;
+import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
 import se.inera.intyg.certificateservice.domain.validation.model.ErrorMessage;
@@ -130,6 +135,9 @@ class CertificateTest {
         )
         .elementData(
             List.of(DATE)
+        )
+        .messages(
+            List.of(complementMessageBuilder().build())
         );
 
     certificate = certificateBuilder.build();
@@ -769,84 +777,84 @@ class CertificateTest {
   }
 
   @Nested
-  class TestAllowTo {
-
-    @Test
-    void shallReturnTrueIfExistsAndEvaluateTrue() {
-      final var actionEvaluation = actionEvaluationBuilder.build();
-      final var certificateAction = mock(CertificateAction.class);
-      final var actions = List.of(certificateAction);
-
-      doReturn(actions).when(certificate.certificateModel()).actions();
-
-      doReturn(CertificateActionType.READ).when(certificateAction).getType();
-      doReturn(true).when(certificateAction)
-          .evaluate(Optional.of(certificate), Optional.of(actionEvaluation));
-
-      assertTrue(
-          certificate.allowTo(CertificateActionType.READ, Optional.of(actionEvaluation)),
-          "Expected allowTo to return 'true'"
-      );
-    }
-
-    @Test
-    void shallReturnFalseIfExistsAndEvaluateFalse() {
-      final var actionEvaluation = actionEvaluationBuilder.build();
-      final var certificateAction = mock(CertificateAction.class);
-      final var actions = List.of(certificateAction);
-
-      doReturn(actions).when(certificate.certificateModel()).actions();
-
-      doReturn(CertificateActionType.READ).when(certificateAction).getType();
-      doReturn(false).when(certificateAction)
-          .evaluate(Optional.of(certificate), Optional.of(actionEvaluation));
-
-      assertFalse(
-          certificate.allowTo(CertificateActionType.READ, Optional.of(actionEvaluation)),
-          "Expected allowTo to return 'false'"
-      );
-    }
-
-    @Test
-    void shallReturnFalseIfNotExists() {
-      final var actionEvaluation = actionEvaluationBuilder.build();
-      final var certificateAction = mock(CertificateAction.class);
-      final var actions = List.of(certificateAction);
-
-      doReturn(actions).when(certificate.certificateModel()).actions();
-
-      doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
-
-      assertFalse(
-          certificate.allowTo(CertificateActionType.READ, Optional.of(actionEvaluation)),
-          "Expected allowTo to return 'false'"
-      );
-    }
-
-    @Test
-    void shallUseCertificatePatientIfPatientNotPresentInActionEvalutaion() {
-      final var actionEvaluation = actionEvaluationBuilder.patient(null).build();
-      final ArgumentCaptor<Optional<ActionEvaluation>> actionEvaluationArgumentCaptor =
-          ArgumentCaptor.forClass(Optional.class);
-
-      final var certificateAction = mock(CertificateAction.class);
-      final var actions = List.of(certificateAction);
-
-      doReturn(actions).when(certificate.certificateModel()).actions();
-      doReturn(CertificateActionType.DELETE).when(certificateAction).getType();
-
-      certificate.allowTo(CertificateActionType.DELETE, Optional.of(actionEvaluation));
-
-      verify(certificateAction).evaluate(any(Optional.class),
-          actionEvaluationArgumentCaptor.capture());
-
-      assertEquals(ATHENA_REACT_ANDERSSON,
-          actionEvaluationArgumentCaptor.getValue().orElseThrow().patient());
-    }
-  }
-
-  @Nested
   class TestUpdateData {
+
+    @Nested
+    class TestAllowTo {
+
+      @Test
+      void shallReturnTrueIfExistsAndEvaluateTrue() {
+        final var actionEvaluation = actionEvaluationBuilder.build();
+        final var certificateAction = mock(CertificateAction.class);
+        final var actions = List.of(certificateAction);
+
+        doReturn(actions).when(certificate.certificateModel()).actions();
+
+        doReturn(CertificateActionType.READ).when(certificateAction).getType();
+        doReturn(true).when(certificateAction)
+            .evaluate(Optional.of(certificate), Optional.of(actionEvaluation));
+
+        assertTrue(
+            certificate.allowTo(CertificateActionType.READ, Optional.of(actionEvaluation)),
+            "Expected allowTo to return 'true'"
+        );
+      }
+
+      @Test
+      void shallReturnFalseIfExistsAndEvaluateFalse() {
+        final var actionEvaluation = actionEvaluationBuilder.build();
+        final var certificateAction = mock(CertificateAction.class);
+        final var actions = List.of(certificateAction);
+
+        doReturn(actions).when(certificate.certificateModel()).actions();
+
+        doReturn(CertificateActionType.READ).when(certificateAction).getType();
+        doReturn(false).when(certificateAction)
+            .evaluate(Optional.of(certificate), Optional.of(actionEvaluation));
+
+        assertFalse(
+            certificate.allowTo(CertificateActionType.READ, Optional.of(actionEvaluation)),
+            "Expected allowTo to return 'false'"
+        );
+      }
+
+      @Test
+      void shallReturnFalseIfNotExists() {
+        final var actionEvaluation = actionEvaluationBuilder.build();
+        final var certificateAction = mock(CertificateAction.class);
+        final var actions = List.of(certificateAction);
+
+        doReturn(actions).when(certificate.certificateModel()).actions();
+
+        doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
+
+        assertFalse(
+            certificate.allowTo(CertificateActionType.READ, Optional.of(actionEvaluation)),
+            "Expected allowTo to return 'false'"
+        );
+      }
+
+      @Test
+      void shallUseCertificatePatientIfPatientNotPresentInActionEvalutaion() {
+        final var actionEvaluation = actionEvaluationBuilder.patient(null).build();
+        final ArgumentCaptor<Optional<ActionEvaluation>> actionEvaluationArgumentCaptor =
+            ArgumentCaptor.forClass(Optional.class);
+
+        final var certificateAction = mock(CertificateAction.class);
+        final var actions = List.of(certificateAction);
+
+        doReturn(actions).when(certificate.certificateModel()).actions();
+        doReturn(CertificateActionType.DELETE).when(certificateAction).getType();
+
+        certificate.allowTo(CertificateActionType.DELETE, Optional.of(actionEvaluation));
+
+        verify(certificateAction).evaluate(any(Optional.class),
+            actionEvaluationArgumentCaptor.capture());
+
+        assertEquals(ATHENA_REACT_ANDERSSON,
+            actionEvaluationArgumentCaptor.getValue().orElseThrow().patient());
+      }
+    }
 
     @Test
     void shallUpdateDataIfChanged() {
@@ -2309,6 +2317,107 @@ class CertificateTest {
 
       assertEquals(Optional.of(expectedRelation),
           certificate.latestChildRelation(RelationType.COMPLEMENT));
+    }
+  }
+
+  @Nested
+  class AnswerComplementTests {
+
+
+    private final Message message = complementMessageBuilder().build();
+
+    @Test
+    void shallBuildAnswerWithId() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var expectedId = message.id();
+      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificate.messages().get(0).answer();
+      assertEquals(expectedId, answer.id());
+    }
+
+    @Test
+    void shallBuildAnswerWithReference() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var expectedReference = message.reference();
+      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificate.messages().get(0).answer();
+      assertEquals(expectedReference, answer.reference());
+    }
+
+    @Test
+    void shallBuildAnswerWithType() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var expectedType = message.type();
+      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificate.messages().get(0).answer();
+      assertEquals(expectedType, answer.type());
+    }
+
+    @Test
+    void shallBuildAnswerWithCreated() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificate.messages().get(0).answer();
+      assertNotNull(answer.created());
+    }
+
+    @Test
+    void shallBuildAnswerWithSubject() {
+      final var expectedType = message.subject();
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificate.messages().get(0).answer();
+      assertEquals(expectedType, answer.subject());
+    }
+
+
+    @Test
+    void shallBuildAnswerWithContent() {
+      final var expectedContent = new Content(CONTENT);
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificate.messages().get(0).answer();
+      assertEquals(expectedContent, answer.content());
+    }
+
+    @Test
+    void shallBuildAnswerWithModified() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificate.messages().get(0).answer();
+      assertNotNull(answer.modified());
+    }
+
+    @Test
+    void shallBuildAnswerWithSent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificate.messages().get(0).answer();
+      assertNotNull(answer.sent());
+    }
+
+    @Test
+    void shallBuildAnswerWithStatus() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificate.messages().get(0).answer();
+      assertEquals(MessageStatus.SENT, answer.status());
+    }
+
+    @Test
+    void shallBuildAnswerWithAuthor() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificate.messages().get(0).answer();
+      assertEquals(new Author("WC"), answer.author());
+    }
+
+    @Test
+    void shallBuildAnswerWithAuthoredStaff() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificate.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificate.messages().get(0).answer();
+      assertNotNull(answer.authoredStaff());
     }
   }
 }

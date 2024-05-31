@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,6 +15,10 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
+import se.inera.intyg.certificateservice.domain.event.model.MessageEvent;
+import se.inera.intyg.certificateservice.domain.event.model.MessageEventType;
+import se.inera.intyg.certificateservice.domain.message.model.Answer;
+import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 
 @ExtendWith(MockitoExtension.class)
 class EventMessageServiceTest {
@@ -24,44 +29,71 @@ class EventMessageServiceTest {
   @Mock
   JmsTemplate jmsTemplate;
 
-  @Test
-  void shouldLogForSignedEvent() {
-    final var event = createEvent(CertificateEventType.SIGNED);
+  @Nested
+  class CertificateEventTests {
 
-    eventMessageService.event(event);
+    @Test
+    void shouldLogForSignedEvent() {
+      final var event = createEvent(CertificateEventType.SIGNED);
 
-    verify(jmsTemplate, times(1)).send(any());
+      eventMessageService.event(event);
+
+      verify(jmsTemplate, times(1)).send(any());
+    }
+
+    @Test
+    void shouldLogForSentEvent() {
+      final var event = createEvent(CertificateEventType.SENT);
+
+      eventMessageService.event(event);
+
+      verify(jmsTemplate, times(1)).send(any());
+    }
+
+    @Test
+    void shouldNotLogForReadEvent() {
+      final var event = createEvent(CertificateEventType.READ);
+
+      eventMessageService.event(event);
+
+      verify(jmsTemplate, times(0)).send(any());
+    }
+
+    private CertificateEvent createEvent(CertificateEventType eventType) {
+      return CertificateEvent.builder()
+          .certificate(
+              Certificate.builder()
+                  .id(new CertificateId("ID"))
+                  .build()
+          )
+          .type(
+              eventType
+          )
+          .build();
+    }
   }
 
-  @Test
-  void shouldLogForSentEvent() {
-    final var event = createEvent(CertificateEventType.SENT);
+  @Nested
+  class MessageEventTests {
 
-    eventMessageService.event(event);
+    @Test
+    void shouldSendEvent() {
+      final var event = createEvent();
 
-    verify(jmsTemplate, times(1)).send(any());
+      eventMessageService.event(event);
+
+      verify(jmsTemplate, times(1)).send(any());
+    }
+
+    private MessageEvent createEvent() {
+      return MessageEvent.builder()
+          .answer(
+              Answer.builder()
+                  .id(new MessageId("ID"))
+                  .build()
+          )
+          .type(MessageEventType.ANSWER_COMPLEMENT)
+          .build();
+    }
   }
-
-  @Test
-  void shouldNotLogForReadEvent() {
-    final var event = createEvent(CertificateEventType.READ);
-
-    eventMessageService.event(event);
-
-    verify(jmsTemplate, times(0)).send(any());
-  }
-
-  private CertificateEvent createEvent(CertificateEventType eventType) {
-    return CertificateEvent.builder()
-        .certificate(
-            Certificate.builder()
-                .id(new CertificateId("ID"))
-                .build()
-        )
-        .type(
-            eventType
-        )
-        .build();
-  }
-
 }

@@ -22,7 +22,11 @@ import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModif
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
+import se.inera.intyg.certificateservice.domain.message.model.Answer;
+import se.inera.intyg.certificateservice.domain.message.model.Author;
+import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
@@ -384,6 +388,26 @@ public class Certificate {
   public List<Message> messages(MessageType type) {
     return messages.stream()
         .filter(message -> message.type().equals(type))
+        .toList();
+  }
+
+  public void answerComplement(ActionEvaluation actionEvaluation, Content content) {
+    this.messages = messages(MessageType.COMPLEMENT).stream()
+        .map(message -> message.withAnswer(
+            Answer.builder()
+                .id(message.id())
+                .reference(message.reference())
+                .type(message.type())
+                .created(LocalDateTime.now())
+                .subject(message.subject())
+                .content(content)
+                .modified(LocalDateTime.now())
+                .sent(LocalDateTime.now())
+                .status(MessageStatus.SENT)
+                .author(new Author("WC"))
+                .authoredStaff(Staff.create(actionEvaluation.user()))
+                .build()
+        ))
         .toList();
   }
 }

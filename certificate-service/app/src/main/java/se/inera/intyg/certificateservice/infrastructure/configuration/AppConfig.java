@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.certificate.service.AnswerComplementDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ComplementCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.DeleteCertificateDomainService;
@@ -242,5 +243,14 @@ public class AppConfig {
   @Bean
   public XmlGeneratorMessage xmlGeneratorMessage() {
     return new XmlGeneratorMessageV4();
+  }
+
+  @Bean
+  public AnswerComplementDomainService answerComplementDomainService(
+      CertificateRepository certificateRepository,
+      SetMessagesToHandleDomainService setMessagesToHandleDomainService,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new AnswerComplementDomainService(certificateRepository,
+        setMessagesToHandleDomainService, certificateEventDomainService);
   }
 }
