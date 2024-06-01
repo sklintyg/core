@@ -41,6 +41,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetPatientCertificatesRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetUnitCertificatesInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetUnitCertificatesRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customHandleMessageRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customRenewCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customReplaceCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customRevokeCertificateRequest;
@@ -62,6 +63,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetPatientCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetUnitCertificatesInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetUnitCertificatesRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultHandleMessageRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultRenewCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultReplaceCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultRevokeCertificateRequest;
@@ -3229,6 +3231,52 @@ class FK7472ActiveIT {
     }
 
     @Test
+    @DisplayName("FK7472 - Om intyget finns så returneras true")
+    void shallReturnTrueIfCertificateExists() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
+      );
+
+      final var response = internalApi.certificateExists(
+          certificateId(testCertificates)
+      );
+
+      assertTrue(
+          exists(response.getBody()),
+          "Should return true when certificate exists!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Om intyget inte finns lagrat så returneras false")
+    void shallReturnFalseIfCertificateDoesnt() {
+      final var response = internalApi.certificateExists("certificate-not-exists");
+
+      assertFalse(
+          exists(response.getBody()),
+          "Should return false when certificate doesnt exists!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Intyget skall gå att hämta")
+    void shallReturnCertificate() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION)
+      );
+
+      final var response = internalApi.getCertificate(
+          certificateId(testCertificates)
+      );
+
+      final var certificate = certificate(response.getBody());
+      assertAll(
+          () -> assertEquals(certificateId(testCertificates), certificate.getMetadata().getId()),
+          () -> assertEquals(FK7472, certificate.getMetadata().getType())
+      );
+    }
+
+    @Test
     @DisplayName("FK7472 - Ärendekommunikation för intyget skall gå att hämta")
     void shallReturnQuestionsAndAnswers() {
       final var testCertificates = testabilityApi.addCertificates(
@@ -4374,17 +4422,17 @@ class FK7472ActiveIT {
           certificateId(testCertificates)
       );
 
+      final var response = api.replaceCertificate(
+          defaultReplaceCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
       api.receiveMessage(
           incomingComplementMessageBuilder()
               .certificateId(
                   certificateId(testCertificates)
               )
               .build()
-      );
-
-      final var response = api.replaceCertificate(
-          defaultReplaceCertificateRequest(),
-          certificateId(testCertificates)
       );
 
       api.signCertificate(
@@ -4461,6 +4509,87 @@ class FK7472ActiveIT {
       );
 
       assertTrue(questions(messagesForCertificate.getBody()).get(0).isHandled(),
+          "Expected that complement message was handled, but it was not!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Kompletteringsbegäran ska kunna sättas som hanterad av användaren")
+    void shallSetComplementAsHandledWhenHandledByUser() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          defaultGetCertificateMessageRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var questions = questions(messagesForCertificate.getBody());
+
+      final var response = api.handleMessage(
+          defaultHandleMessageRequest(),
+          messageId(questions.get(0))
+      );
+
+      assertTrue(response.getBody().getQuestion().isHandled(),
+          "Expected that complement message was handled, but it was not!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Kompletteringsbegäran ska inte kunna byta status till ej hanterad av användaren")
+    void shallNotSetComplementAsUnhandled() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          defaultGetCertificateMessageRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var questions = questions(messagesForCertificate.getBody());
+
+      api.handleMessage(
+          defaultHandleMessageRequest(),
+          messageId(questions.get(0))
+      );
+
+      final var response = api.handleMessage(
+          customHandleMessageRequest()
+              .handled(false)
+              .build(),
+          messageId(questions.get(0))
+      );
+
+      assertTrue(response.getBody().getQuestion().isHandled(),
           "Expected that complement message was handled, but it was not!"
       );
     }

@@ -134,6 +134,9 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
                     .certificateActionType(CertificateActionType.SEND_AFTER_SIGN)
                     .build(),
                 CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.MESSAGES)
+                    .build(),
+                CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.RECEIVE_COMPLEMENT)
                     .build(),
                 CertificateActionSpecification.builder()

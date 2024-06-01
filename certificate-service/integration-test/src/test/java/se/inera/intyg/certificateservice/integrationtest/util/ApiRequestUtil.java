@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.Cer
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.HandleMessageRequest;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesRequest;
@@ -187,6 +188,14 @@ public class ApiRequestUtil {
 
   public static RenewCertificateRequest defaultRenewCertificateRequest() {
     return RenewCertificateRequestBuilder.create().build();
+  }
+
+  public static HandleMessageRequest defaultHandleMessageRequest() {
+    return HandleMessageRequestBuilder.create().build();
+  }
+
+  public static HandleMessageRequestBuilder customHandleMessageRequest() {
+    return HandleMessageRequestBuilder.create();
   }
 
   public static RenewCertificateRequestBuilder customRenewCertificateRequest() {

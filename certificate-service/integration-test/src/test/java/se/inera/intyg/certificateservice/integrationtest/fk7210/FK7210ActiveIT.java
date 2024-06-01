@@ -3129,6 +3129,52 @@ class FK7210ActiveIT {
               metadata(response).getUnit().getUnitId())
       );
     }
+
+    @Test
+    @DisplayName("FK7210 - Om intyget finns så returneras true")
+    void shallReturnTrueIfCertificateExists() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7210, FK7472Constants.VERSION)
+      );
+
+      final var response = internalApi.certificateExists(
+          certificateId(testCertificates)
+      );
+
+      assertTrue(
+          exists(response.getBody()),
+          "Should return true when certificate exists!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7210 - Om intyget inte finns lagrat så returneras false")
+    void shallReturnFalseIfCertificateDoesnt() {
+      final var response = internalApi.certificateExists("certificate-not-exists");
+
+      assertFalse(
+          exists(response.getBody()),
+          "Should return false when certificate doesnt exists!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7210 - Intyget skall gå att hämta")
+    void shallReturnCertificate() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7210, FK7472Constants.VERSION)
+      );
+
+      final var response = internalApi.getCertificate(
+          certificateId(testCertificates)
+      );
+
+      final var certificate = certificate(response.getBody());
+      assertAll(
+          () -> assertEquals(certificateId(testCertificates), certificate.getMetadata().getId()),
+          () -> assertEquals(FK7210, certificate.getMetadata().getType())
+      );
+    }
   }
 
   @Nested

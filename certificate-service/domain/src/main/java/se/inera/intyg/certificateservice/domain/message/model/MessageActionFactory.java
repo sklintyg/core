@@ -24,6 +24,15 @@ public class MessageActionFactory {
         .build();
   }
 
+  public static MessageAction handleComplement() {
+    return MessageAction.builder()
+        .type(MessageActionType.HANDLE_COMPLEMENT)
+        .name("Hantera")
+        .description("Hantera kompletteringsbegäran.")
+        .enabled(true)
+        .build();
+  }
+
   public static MessageAction forward() {
     return MessageAction.builder()
         .type(MessageActionType.FORWARD)

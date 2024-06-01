@@ -13,12 +13,12 @@ import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 
-class ActionRuleCertificateHasComplementTest {
+class ActionRuleNoComplementMessagesTest {
 
-  private static final ActionRuleCertificateHasComplement actionRule = new ActionRuleCertificateHasComplement();
+  private static final ActionRuleNoComplementMessages actionRule = new ActionRuleNoComplementMessages();
 
   @Test
-  void shouldReturnTrueIfMessageIsComplementAndNotAnsweredOrHandled() {
+  void shouldReturnFalseIfMessageIsComplementAndNotAnsweredOrHandled() {
     final var result = actionRule.evaluate(
         Optional.of(
             Certificate.builder()
@@ -33,11 +33,11 @@ class ActionRuleCertificateHasComplementTest {
         Optional.empty()
     );
 
-    assertTrue(result);
+    assertFalse(result);
   }
 
   @Test
-  void shouldReturnFalseIfNoComplement() {
+  void shouldReturnTrueIfNoComplement() {
     final var result = actionRule.evaluate(
         Optional.of(
             Certificate.builder()
@@ -51,11 +51,11 @@ class ActionRuleCertificateHasComplementTest {
         Optional.empty()
     );
 
-    assertFalse(result);
+    assertTrue(result);
   }
 
   @Test
-  void shouldReturnFalseIfNoMessages() {
+  void shouldReturnTrueIfNoMessages() {
     final var result = actionRule.evaluate(
         Optional.of(
             Certificate.builder()
@@ -65,11 +65,11 @@ class ActionRuleCertificateHasComplementTest {
         Optional.empty()
     );
 
-    assertFalse(result);
+    assertTrue(result);
   }
 
   @Test
-  void shouldReturnFalseIfNullMessages() {
+  void shouldReturnTrueIfNullMessages() {
     final var result = actionRule.evaluate(
         Optional.of(
             Certificate.builder()
@@ -78,11 +78,11 @@ class ActionRuleCertificateHasComplementTest {
         Optional.empty()
     );
 
-    assertFalse(result);
+    assertTrue(result);
   }
 
   @Test
-  void shouldReturnFalseIfHandledComplement() {
+  void shouldReturnTrueIfHandledComplement() {
     final var result = actionRule.evaluate(
         Optional.of(
             Certificate.builder()
@@ -96,11 +96,11 @@ class ActionRuleCertificateHasComplementTest {
         Optional.empty()
     );
 
-    assertFalse(result);
+    assertTrue(result);
   }
 
   @Test
-  void shouldReturnFalseIfAnsweredComplement() {
+  void shouldReturnTrueIfAnsweredComplement() {
     final var result = actionRule.evaluate(
         Optional.of(
             Certificate.builder()
@@ -115,6 +115,6 @@ class ActionRuleCertificateHasComplementTest {
         Optional.empty()
     );
 
-    assertFalse(result);
+    assertTrue(result);
   }
 }

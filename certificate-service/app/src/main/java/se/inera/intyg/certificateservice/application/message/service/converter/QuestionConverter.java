@@ -29,7 +29,7 @@ public class QuestionConverter {
         .id(message.id().id())
         .certificateId(message.certificateId().id())
         .type(QuestionTypeDTO.COMPLEMENT)
-        .author(message.author().author())
+        .author(message.author().name())
         .subject(message.subject().subject())
         .sent(message.sent())
         .isHandled(message.status().equals(MessageStatus.HANDLED))
