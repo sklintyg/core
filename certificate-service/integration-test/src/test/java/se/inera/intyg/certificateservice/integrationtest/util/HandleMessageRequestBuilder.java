@@ -50,7 +50,7 @@ public class HandleMessageRequestBuilder {
         .careProvider(ALFA_REGIONEN_DTO)
         .unit(unit)
         .careUnit(careUnit)
-        .isHandled(handled)
+        .handled(handled)
         .build();
   }
 }

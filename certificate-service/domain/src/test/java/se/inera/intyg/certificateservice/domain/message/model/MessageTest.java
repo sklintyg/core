@@ -179,6 +179,79 @@ class MessageTest {
   }
 
   @Nested
+  class HandleComplementTests {
+
+    private static final CertificateActionCannotComplement CERTIFICATE_ACTION_HANDLE_COMPLEMENT =
+        CertificateActionCannotComplement.builder()
+            .certificateActionSpecification(
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.HANDLE_COMPLEMENT)
+                    .build()
+            )
+            .build();
+
+    @Test
+    void shallIncludeMessageActionCannotComplement() {
+      final var message = Message.builder()
+          .type(MessageType.COMPLEMENT)
+          .status(MessageStatus.SENT)
+          .build();
+
+      doReturn(List.of(CERTIFICATE_ACTION_HANDLE_COMPLEMENT)).when(certificate).actionsInclude(
+          Optional.of(ACTION_EVALUATION)
+      );
+
+      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
+      assertTrue(messageActions.contains(MessageActionFactory.handleComplement()));
+    }
+
+    @Test
+    void shallExcludeMessageActionCannotComplementIfWrongType() {
+      final var message = Message.builder()
+          .type(MessageType.REMINDER)
+          .status(MessageStatus.SENT)
+          .build();
+
+      doReturn(List.of(CERTIFICATE_ACTION_HANDLE_COMPLEMENT)).when(certificate).actionsInclude(
+          Optional.of(ACTION_EVALUATION)
+      );
+
+      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
+      assertFalse(messageActions.contains(MessageActionFactory.handleComplement()));
+    }
+
+    @Test
+    void shallExcludeMessageActionCannotComplementIfHandled() {
+      final var message = Message.builder()
+          .type(MessageType.COMPLEMENT)
+          .status(MessageStatus.HANDLED)
+          .build();
+
+      doReturn(List.of(CERTIFICATE_ACTION_HANDLE_COMPLEMENT)).when(certificate).actionsInclude(
+          Optional.of(ACTION_EVALUATION)
+      );
+
+      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
+      assertFalse(messageActions.contains(MessageActionFactory.handleComplement()));
+    }
+
+    @Test
+    void shallExcludeMessageActionCannotComplementIfCertificateActionComplementIsMissing() {
+      final var message = Message.builder()
+          .type(MessageType.COMPLEMENT)
+          .status(MessageStatus.SENT)
+          .build();
+
+      doReturn(Collections.emptyList()).when(certificate).actionsInclude(
+          Optional.of(ACTION_EVALUATION)
+      );
+
+      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
+      assertFalse(messageActions.contains(MessageActionFactory.handleComplement()));
+    }
+  }
+
+  @Nested
   class ForwardMessageTests {
 
     private static final CertificateActionForwardMessage CERTIFICATE_ACTION_FORWARD =

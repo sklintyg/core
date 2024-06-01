@@ -185,7 +185,7 @@ class ResourceLinkTypeDTOTest {
 
     @Test
     void shallReturnCertificateActionTypeCannotComplementCertificate() {
-      assertEquals(ResourceLinkTypeDTO.CANNOT_COMPLEMENT_CERTIFICATE,
+      assertEquals(ResourceLinkTypeDTO.CANNOT_COMPLEMENT_CERTIFICATE_ONLY_MESSAGE,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.CANNOT_COMPLEMENT));
     }
 

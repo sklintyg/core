@@ -27,4 +27,5 @@ public class TestDataMessageConstants {
   public static final Integer INSTANCE_ONE = 0;
   public static final String COMPLEMENT_TEXT_ONE = "This is text for the first question";
   public static final String AUTHOR_INCOMING_MESSAGE = "FK";
+  public static final String AUTHOR_INCOMING_MESSAGE_NAME = "Försäkringskassan";
 }

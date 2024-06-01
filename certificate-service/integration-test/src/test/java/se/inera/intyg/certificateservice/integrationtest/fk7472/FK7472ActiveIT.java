@@ -3230,6 +3230,52 @@ class FK7472ActiveIT {
     }
 
     @Test
+    @DisplayName("FK7472 - Om intyget finns så returneras true")
+    void shallReturnTrueIfCertificateExists() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION)
+      );
+
+      final var response = internalApi.certificateExists(
+          certificateId(testCertificates)
+      );
+
+      assertTrue(
+          exists(response.getBody()),
+          "Should return true when certificate exists!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Om intyget inte finns lagrat så returneras false")
+    void shallReturnFalseIfCertificateDoesnt() {
+      final var response = internalApi.certificateExists("certificate-not-exists");
+
+      assertFalse(
+          exists(response.getBody()),
+          "Should return false when certificate doesnt exists!"
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Intyget skall gå att hämta")
+    void shallReturnCertificate() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION)
+      );
+
+      final var response = internalApi.getCertificate(
+          certificateId(testCertificates)
+      );
+
+      final var certificate = certificate(response.getBody());
+      assertAll(
+          () -> assertEquals(certificateId(testCertificates), certificate.getMetadata().getId()),
+          () -> assertEquals(FK7472, certificate.getMetadata().getType())
+      );
+    }
+
+    @Test
     @DisplayName("FK7472 - Ärendekommunikation för intyget skall gå att hämta")
     void shallReturnQuestionsAndAnswers() {
       final var testCertificates = testabilityApi.addCertificates(
@@ -4375,17 +4421,17 @@ class FK7472ActiveIT {
           certificateId(testCertificates)
       );
 
+      final var response = api.replaceCertificate(
+          defaultReplaceCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
       api.receiveMessage(
           incomingComplementMessageBuilder()
               .certificateId(
                   certificateId(testCertificates)
               )
               .build()
-      );
-
-      final var response = api.replaceCertificate(
-          defaultReplaceCertificateRequest(),
-          certificateId(testCertificates)
       );
 
       api.signCertificate(
