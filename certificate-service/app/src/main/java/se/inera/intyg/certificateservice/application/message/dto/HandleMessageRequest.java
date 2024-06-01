@@ -18,7 +18,7 @@ public class HandleMessageRequest {
   UnitDTO unit;
   UnitDTO careUnit;
   UnitDTO careProvider;
-  Boolean isHandled;
+  Boolean handled;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class HandleMessageRequestBuilder {

@@ -43,7 +43,7 @@ public class HandleMessageService {
 
     final var updatedMessage = handleMessageDomainService.handle(
         message,
-        request.getIsHandled(),
+        request.getHandled(),
         certificate,
         actionEvaluation
     );

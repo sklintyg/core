@@ -35,7 +35,7 @@ class HandleMessageServiceTest {
       .user(UserDTO.builder().build())
       .careUnit(UnitDTO.builder().build())
       .careProvider(UnitDTO.builder().build())
-      .isHandled(true)
+      .handled(true)
       .build();
   private static final ActionEvaluation ACTION = ActionEvaluation.builder().build();
   private static final String MESSAGE_ID = "messageId";
@@ -76,7 +76,7 @@ class HandleMessageServiceTest {
         .thenReturn(MESSAGE);
     when(getCertificateDomainService.get(new CertificateId(CERTIFICATE_ID), ACTION))
         .thenReturn(CERTIFICATE);
-    when(handleMessageDomainService.handle(MESSAGE, REQUEST.getIsHandled(), CERTIFICATE, ACTION))
+    when(handleMessageDomainService.handle(MESSAGE, REQUEST.getHandled(), CERTIFICATE, ACTION))
         .thenReturn(UPDATED_MESSAGE);
     when(questionConverter.convert(UPDATED_MESSAGE, Collections.emptyList()))
         .thenReturn(CONVERTED_QUESTION);

@@ -11,12 +11,14 @@ import se.inera.intyg.certificateservice.application.message.dto.HandleMessageRe
 @Component
 public class HandleMessageRequestValidator {
 
-  public void validate(HandleMessageRequest request,
-      String messageId) {
+  public void validate(HandleMessageRequest request, String messageId) {
     validateUser(request.getUser());
     validateUnitExtended(request.getUnit(), "Unit");
     validateUnit(request.getCareUnit(), "CareUnit");
     validateUnit(request.getCareProvider(), "CareProvider");
     validateMessageId(messageId);
+    if (request.getHandled() == null) {
+      throw new IllegalArgumentException("Required parameter missing: handled");
+    }
   }
 }
