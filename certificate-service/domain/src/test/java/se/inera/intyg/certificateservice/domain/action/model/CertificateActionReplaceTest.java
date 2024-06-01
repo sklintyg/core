@@ -10,6 +10,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.relationReplaceBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
@@ -22,6 +23,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALV
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +34,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.Ce
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 
@@ -349,9 +352,9 @@ class CertificateActionReplaceTest {
   }
 
   @Nested
-  class AccessScope {
+  class AccessScopeTest {
 
-    private se.inera.intyg.certificateservice.domain.common.model.AccessScope userAccessScope;
+    private AccessScope userAccessScope;
 
     @BeforeEach
     void setUp() {
@@ -379,7 +382,7 @@ class CertificateActionReplaceTest {
 
       @BeforeEach
       void setUp() {
-        userAccessScope = se.inera.intyg.certificateservice.domain.common.model.AccessScope.WITHIN_CARE_UNIT;
+        userAccessScope = AccessScope.WITHIN_CARE_UNIT;
       }
 
       @Test
@@ -423,7 +426,7 @@ class CertificateActionReplaceTest {
 
       @BeforeEach
       void setUp() {
-        userAccessScope = se.inera.intyg.certificateservice.domain.common.model.AccessScope.WITHIN_CARE_PROVIDER;
+        userAccessScope = AccessScope.WITHIN_CARE_PROVIDER;
       }
 
       @Test
@@ -525,5 +528,65 @@ class CertificateActionReplaceTest {
         );
       }
     }
+  }
+
+  @Test
+  void shallReturnDifferentDescriptionIfCertificateHasComplementMessages() {
+    final var certificate = certificateBuilder
+        .messages(
+            List.of(
+                COMPLEMENT_MESSAGE
+            )
+        )
+        .build();
+
+    assertEquals(
+        "Intyget har minst en ohanterad kompletteringsbegäran och går inte att ersätta.",
+        certificateActionReplace.getDescription(Optional.of(certificate))
+    );
+  }
+
+  @Test
+  void shallReturnNormalDescriptionIfCertificateHasNoComplementMessages() {
+    final var certificate = certificateBuilder
+        .messages(Collections.emptyList())
+        .build();
+
+    assertEquals(
+        "Skapar en kopia av detta intyg som du kan redigera.",
+        certificateActionReplace.getDescription(Optional.of(certificate))
+    );
+  }
+
+  @Test
+  void shallReturnIncludeTrueIfHasComplementMessages() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+    final var certificate = certificateBuilder
+        .messages(
+            List.of(
+                COMPLEMENT_MESSAGE
+            )
+        )
+        .build();
+
+    assertTrue(
+        certificateActionReplace.include(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnIncludeTrueIfHasNoComplementMessages() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+    final var certificate = certificateBuilder
+        .messages(Collections.emptyList())
+        .build();
+
+    assertTrue(
+        certificateActionReplace.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
   }
 }

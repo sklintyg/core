@@ -11,10 +11,13 @@ import se.inera.intyg.certificateservice.application.message.dto.GetCertificateF
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageResponse;
+import se.inera.intyg.certificateservice.application.message.dto.HandleMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.HandleMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.MessageExistsResponse;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateFromMessageService;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateMessageService;
+import se.inera.intyg.certificateservice.application.message.service.HandleMessageService;
 import se.inera.intyg.certificateservice.application.message.service.IncomingMessageService;
 import se.inera.intyg.certificateservice.application.message.service.MessageExistsService;
 
@@ -27,6 +30,7 @@ public class MessageController {
   private final GetCertificateMessageService getCertificateMessageService;
   private final MessageExistsService messageExistsService;
   private final GetCertificateFromMessageService getCertificateFromMessageService;
+  private final HandleMessageService handleMessageService;
 
   @PostMapping
   void receiveMessage(@RequestBody IncomingMessageRequest incomingMessageRequest) {
@@ -51,5 +55,12 @@ public class MessageController {
       @RequestBody GetCertificateFromMessageRequest getCertificateFromMessageRequest,
       @PathVariable("messageId") String messageId) {
     return getCertificateFromMessageService.get(getCertificateFromMessageRequest, messageId);
+  }
+
+  @PostMapping("/{messageId}/handle")
+  HandleMessageResponse handleMessage(
+      @RequestBody HandleMessageRequest request,
+      @PathVariable("messageId") String messageId) {
+    return handleMessageService.handle(request, messageId);
   }
 }

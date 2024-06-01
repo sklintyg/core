@@ -67,6 +67,13 @@ public class Message {
       );
     }
 
+    if (isUnhandledComplement() && actionAvailable(CertificateActionType.HANDLE_COMPLEMENT,
+        certificateActions)) {
+      messageActions.add(
+          MessageActionFactory.handleComplement()
+      );
+    }
+
     if (!status.equals(MessageStatus.HANDLED) && actionAvailable(
         CertificateActionType.FORWARD_MESSAGE, certificateActions)) {
       messageActions.add(

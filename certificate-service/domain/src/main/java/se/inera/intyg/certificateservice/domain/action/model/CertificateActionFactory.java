@@ -128,7 +128,8 @@ public class CertificateActionFactory {
                   ),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleChildRelationNoMatch(List.of(RelationType.REPLACE)),
-                  new ActionRuleUserNotBlocked()
+                  new ActionRuleUserNotBlocked(),
+                  new ActionRuleNoComplementMessages()
               )
           )
           .build();
@@ -141,7 +142,8 @@ public class CertificateActionFactory {
                       List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
                   ),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
-                  new ActionRuleChildRelationMatch(List.of(RelationType.REPLACE))
+                  new ActionRuleChildRelationMatch(List.of(RelationType.REPLACE)),
+                  new ActionRuleNoComplementMessages()
               )
           )
           .build();
@@ -191,7 +193,7 @@ public class CertificateActionFactory {
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
                   new ActionRuleUserAllowCopy(),
-                  new ActionRuleCertificateHasComplement(),
+                  new ActionRuleComplementMessages(),
                   new ActionRuleChildRelationNoMatch(List.of(RelationType.COMPLEMENT))
               )
           )
@@ -209,6 +211,9 @@ public class CertificateActionFactory {
                   new ActionRuleChildRelationNoMatch(List.of(RelationType.COMPLEMENT))
               )
           )
+          .build();
+      case MESSAGES -> CertificateActionMessages.builder()
+          .certificateActionSpecification(actionSpecification)
           .build();
       case FORWARD_MESSAGE -> CertificateActionForwardMessage.builder()
           .certificateActionSpecification(actionSpecification)

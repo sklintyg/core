@@ -10,6 +10,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.relationReplaceBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
@@ -556,5 +557,65 @@ class CertificateActionReplaceContinueTest {
         );
       }
     }
+  }
+
+  @Test
+  void shallReturnDifferentDescriptionIfCertificateHasComplementMessages() {
+    final var certificate = certificateBuilder
+        .messages(
+            List.of(
+                COMPLEMENT_MESSAGE
+            )
+        )
+        .build();
+
+    assertEquals(
+        "Intyget har minst en ohanterad kompletteringsbegäran och går inte att ersätta.",
+        certificateActionReplaceContinue.getDescription(Optional.of(certificate))
+    );
+  }
+
+  @Test
+  void shallReturnNormalDescriptionIfCertificateHasNoComplementMessages() {
+    final var certificate = certificateBuilder
+        .messages(Collections.emptyList())
+        .build();
+
+    assertEquals(
+        "Skapar en kopia av detta intyg som du kan redigera.",
+        certificateActionReplaceContinue.getDescription(Optional.of(certificate))
+    );
+  }
+
+  @Test
+  void shallReturnIncludeTrueIfHasComplementMessages() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+    final var certificate = certificateBuilder
+        .messages(
+            List.of(
+                COMPLEMENT_MESSAGE
+            )
+        )
+        .build();
+
+    assertTrue(
+        certificateActionReplaceContinue.include(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnIncludeTrueIfHasNoComplementMessages() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+    final var certificate = certificateBuilder
+        .messages(Collections.emptyList())
+        .build();
+
+    assertTrue(
+        certificateActionReplaceContinue.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
   }
 }
