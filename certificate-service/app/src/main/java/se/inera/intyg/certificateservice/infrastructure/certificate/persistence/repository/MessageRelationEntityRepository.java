@@ -11,5 +11,11 @@ public interface MessageRelationEntityRepository extends
     CrudRepository<MessageRelationEntity, Long> {
 
   List<MessageRelationEntity> findByParentMessage(
-      MessageEntity certificateEntity);
+      MessageEntity messageEntity);
+
+  List<MessageRelationEntity> findByParentMessageOrChildMessage(
+      MessageEntity messageEntityParent, MessageEntity messageEntityChild);
+
+  void deleteAllByChildMessageOrParentMessage(
+      MessageEntity messageEntityParent, MessageEntity messageEntityChild);
 }

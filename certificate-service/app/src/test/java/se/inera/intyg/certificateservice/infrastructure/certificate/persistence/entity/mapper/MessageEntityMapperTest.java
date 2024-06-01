@@ -43,10 +43,13 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageTypeEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageTypeEnum;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationEntityRepository;
 
 @ExtendWith(MockitoExtension.class)
 class MessageEntityMapperTest {
 
+  @Mock
+  private MessageRelationEntityRepository messageRelationEntityRepository;
   @Mock
   private CertificateEntityRepository certificateEntityRepository;
 

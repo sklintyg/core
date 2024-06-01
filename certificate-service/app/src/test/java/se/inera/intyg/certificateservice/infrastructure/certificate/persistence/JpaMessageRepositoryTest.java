@@ -29,10 +29,14 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationRepository;
 
 @ExtendWith(MockitoExtension.class)
 class JpaMessageRepositoryTest {
+
+  @Mock
+  private MessageRelationEntityRepository messageRelationEntityRepository;
 
   @Mock
   private MessageRelationRepository messageRelationRepository;

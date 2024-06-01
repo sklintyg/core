@@ -49,6 +49,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customUpdateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customValidateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultAnswerComplementRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCertificateTypeInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultComplementCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
@@ -4877,6 +4878,47 @@ class FK7472ActiveIT {
           "message-not-exists");
 
       assertEquals(400, response.getStatusCode().value());
+    }
+  }
+
+  @Nested
+  @DisplayName("FK7472 - Besvara kompletteringsbegäran med meddelande")
+  class AnswerComplementTests {
+
+    @Test
+    @DisplayName("Skall markera komplettering som hanterad om besvarad med meddelande")
+    void shallSetComplementedQuestionsToHandledWitAnswers() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, FK7472Constants.VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      api.answerComplement(
+          defaultAnswerComplementRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          defaultGetCertificateMessageRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertTrue(
+          questions(messagesForCertificate.getBody()).get(0).isHandled(),
+          "Should return true when answer complement is handled!"
+      );
     }
   }
 }

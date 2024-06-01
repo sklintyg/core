@@ -9,6 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
+import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.Author;
 import se.inera.intyg.certificateservice.domain.message.model.Complement;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
@@ -23,17 +24,21 @@ import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageComplementEmbeddable;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageContactInfoEmbeddable;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageRelationEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageRelationType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageStatusEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageStatusEnum;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageTypeEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageTypeEnum;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationEntityRepository;
 
 @Component
 @RequiredArgsConstructor
 public class MessageEntityMapper {
 
   private final CertificateEntityRepository certificateEntityRepository;
+  private final MessageRelationEntityRepository messageRelationEntityRepository;
 
   public MessageEntity toEntity(Message message, Integer key) {
     final var messageStatusEnum = MessageStatusEnum.valueOf(message.status().name());
@@ -94,6 +99,10 @@ public class MessageEntityMapper {
   }
 
   public Message toDomain(MessageEntity messageEntity) {
+    final var messageRelations = messageRelationEntityRepository.findByParentMessage(
+        messageEntity
+    );
+
     return Message.builder()
         .id(new MessageId(messageEntity.getId()))
         .reference(new SenderReference(messageEntity.getReference()))
@@ -136,6 +145,36 @@ public class MessageEntityMapper {
                         .build()
                 )
                 .toList()
+        )
+        .answer(
+            messageRelations.stream()
+                .filter(relation -> relation.getMessageRelationType().getType()
+                    .equals(MessageRelationType.ANSWER.name()))
+                .findFirst()
+                .map(MessageRelationEntity::getChildMessage)
+                .map(childMessage ->
+                    Answer.builder()
+                        .id(new MessageId(childMessage.getId()))
+                        .reference(
+                            childMessage.getReference() != null
+                                ? new SenderReference(childMessage.getReference())
+                                : null)
+                        .type(MessageType.valueOf(childMessage.getMessageType().getType()))
+                        .created(childMessage.getCreated())
+                        .subject(
+                            childMessage.getSubject() != null
+                                ? new Subject(childMessage.getSubject())
+                                : null)
+                        .content(new Content(childMessage.getContent()))
+                        .modified(childMessage.getModified())
+                        .sent(childMessage.getSent())
+                        .status(MessageStatus.valueOf(childMessage.getStatus().getStatus()))
+                        .author(new Author(childMessage.getAuthor()))
+                        .authoredStaff(
+                            StaffEntityMapper.toDomain(childMessage.getAuthoredByStaff()))
+                        .build()
+                )
+                .orElse(null)
         )
         .build();
   }

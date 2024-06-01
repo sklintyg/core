@@ -6,6 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.Author;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
@@ -13,11 +16,13 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.SenderReference;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.StaffRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageStatusEnum;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageTypeEnum;
 
+@ExtendWith(MockitoExtension.class)
 class AnswerToMessageEntityMapperTest {
 
   private static final String REFERENCE = "Ref123";
@@ -32,10 +37,12 @@ class AnswerToMessageEntityMapperTest {
   private static final boolean FORWARDED = true;
   private static final CertificateEntity CERTIFICATE = CertificateEntity.builder().build();
   private AnswerToMessageEntityMapper answerToMessageEntityMapper;
+  @Mock
+  private StaffRepository staffRepository;
 
   @BeforeEach
   void setUp() {
-    answerToMessageEntityMapper = new AnswerToMessageEntityMapper();
+    answerToMessageEntityMapper = new AnswerToMessageEntityMapper(staffRepository);
   }
 
   @Test

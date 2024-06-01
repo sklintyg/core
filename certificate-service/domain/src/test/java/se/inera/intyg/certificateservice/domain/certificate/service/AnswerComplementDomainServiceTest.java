@@ -10,7 +10,6 @@ import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.CANNOT_COMPLEMENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.CONTENT;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,6 +27,7 @@ import se.inera.intyg.certificateservice.domain.event.model.MessageEvent;
 import se.inera.intyg.certificateservice.domain.event.model.MessageEventType;
 import se.inera.intyg.certificateservice.domain.event.service.MessageEventDomainService;
 import se.inera.intyg.certificateservice.domain.message.model.Answer;
+import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
@@ -43,6 +43,7 @@ class AnswerComplementDomainServiceTest {
           )
           .build()
   );
+  private static final Content CONTENT = new Content("content");
   @Mock
   private SetMessagesToHandleDomainService setMessagesToHandleDomainService;
   @Mock
@@ -59,7 +60,8 @@ class AnswerComplementDomainServiceTest {
     doReturn(false).when(certificate).allowTo(CANNOT_COMPLEMENT, Optional.of(ACTION_EVALUATION));
 
     assertThrows(CertificateActionForbidden.class,
-        () -> answerComplementDomainService.answer(CERTIFICATE_ID, ACTION_EVALUATION, CONTENT)
+        () -> answerComplementDomainService.answer(CERTIFICATE_ID, ACTION_EVALUATION,
+            CONTENT)
     );
   }
 
@@ -71,7 +73,8 @@ class AnswerComplementDomainServiceTest {
     doReturn(true).when(certificate).allowTo(CANNOT_COMPLEMENT, Optional.of(ACTION_EVALUATION));
     doReturn(MESSAGES).when(certificate).messages(MessageType.COMPLEMENT);
 
-    answerComplementDomainService.answer(CERTIFICATE_ID, ACTION_EVALUATION, CONTENT);
+    answerComplementDomainService.answer(CERTIFICATE_ID, ACTION_EVALUATION,
+        CONTENT);
 
     verify(certificate).answerComplement(ACTION_EVALUATION, CONTENT);
   }
@@ -115,7 +118,8 @@ class AnswerComplementDomainServiceTest {
             .build()
     )).when(certificate).messages(MessageType.COMPLEMENT);
 
-    answerComplementDomainService.answer(CERTIFICATE_ID, ACTION_EVALUATION, CONTENT);
+    answerComplementDomainService.answer(CERTIFICATE_ID, ACTION_EVALUATION,
+        CONTENT);
 
     verify(messageEventDomainService).publish(certificateEventCaptor.capture());
 
@@ -139,7 +143,8 @@ class AnswerComplementDomainServiceTest {
         .reasonNotAllowed(CANNOT_COMPLEMENT, Optional.of(ACTION_EVALUATION));
 
     final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
-        () -> answerComplementDomainService.answer(CERTIFICATE_ID, ACTION_EVALUATION, CONTENT)
+        () -> answerComplementDomainService.answer(CERTIFICATE_ID, ACTION_EVALUATION,
+            CONTENT)
     );
 
     assertEquals(expectedReason, certificateActionForbidden.reason());
@@ -153,7 +158,8 @@ class AnswerComplementDomainServiceTest {
     doReturn(true).when(certificate).allowTo(CANNOT_COMPLEMENT, Optional.of(ACTION_EVALUATION));
     doReturn(MESSAGES).when(certificate).messages(MessageType.COMPLEMENT);
 
-    answerComplementDomainService.answer(CERTIFICATE_ID, ACTION_EVALUATION, CONTENT);
+    answerComplementDomainService.answer(CERTIFICATE_ID, ACTION_EVALUATION,
+        CONTENT);
 
     final ArgumentCaptor<List<Message>> messagesCaptor = ArgumentCaptor.forClass(List.class);
     verify(setMessagesToHandleDomainService).handle(messagesCaptor.capture());

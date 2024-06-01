@@ -7,6 +7,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.COMPLEMENT_QUESTION_ID_ONE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.COMPLEMENT_TEXT_ONE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTACT_INFO;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CREATED_AFTER_SENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.LAST_DATE_TO_REPLY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.MESSAGE_ID;
@@ -35,9 +36,8 @@ import se.inera.intyg.certificateservice.domain.message.model.Subject;
 
 public class TestDataMessage {
 
-  public static Message COMPLEMENT_MESSAGE = complementMessageBuilder().build();
-  public static Answer ANSWER = answerBuilder().build();
-  public static final Content CONTENT = new Content("content");
+  public static final Message COMPLEMENT_MESSAGE = complementMessageBuilder().build();
+  public static final Answer ANSWER = answerBuilder().build();
 
   public static MessageBuilder complementMessageBuilder() {
     return Message.builder()
@@ -48,7 +48,7 @@ public class TestDataMessage {
         .certificateId(CERTIFICATE_ID)
         .personId(ATHENA_REACT_ANDERSSON.id())
         .subject(new Subject(SUBJECT))
-        .content(CONTENT)
+        .content(new Content(CONTENT))
         .author(new Author(AUTHOR_INCOMING_MESSAGE))
         .contactInfo(new MessageContactInfo(CONTACT_INFO))
         .sent(SENT)
@@ -73,7 +73,7 @@ public class TestDataMessage {
         .type(MessageType.COMPLEMENT)
         .status(MessageStatus.SENT)
         .subject(new Subject(SUBJECT))
-        .content(CONTENT)
+        .content(new Content(CONTENT))
         .author(new Author(AUTHOR_INCOMING_MESSAGE))
         .contactInfo(new MessageContactInfo(CONTACT_INFO))
         .sent(SENT)

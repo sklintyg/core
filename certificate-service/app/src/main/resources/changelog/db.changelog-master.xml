@@ -487,6 +487,13 @@
       </column>
     </createTable>
 
+    <insert tableName="message_relation_type">
+      <column name="type" value="ANSWER"/>
+    </insert>
+    <insert tableName="message_relation_type">
+      <column name="type" value="REMIND"/>
+    </insert>
+
     <createTable tableName="message_relation">
       <column name="key" type="integer unsigned" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>

@@ -1,8 +1,10 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.message.model.Answer;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.StaffRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageStatusEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageStatusEnum;
@@ -10,7 +12,10 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageTypeEnum;
 
 @Component
+@RequiredArgsConstructor
 public class AnswerToMessageEntityMapper {
+
+  private final StaffRepository staffEntityRepository;
 
   public MessageEntity toEntity(MessageEntity messageEntity, Answer answer) {
     return MessageEntity.builder()
@@ -34,6 +39,7 @@ public class AnswerToMessageEntityMapper {
                 .type(MessageTypeEnum.valueOf(answer.type().name()).name())
                 .build()
         )
+        .authoredByStaff(staffEntityRepository.staff(answer.authoredStaff()))
         .certificate(messageEntity.getCertificate())
         .forwarded(messageEntity.isForwarded())
         .build();
