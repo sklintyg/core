@@ -8,7 +8,11 @@ import se.inera.intyg.certificateservice.domain.message.model.Reminder;
 public class ReminderConverter {
 
   public ReminderDTO convert(Reminder reminder) {
-    //TODO: Handle in INTYGFV-16615
-    return ReminderDTO.builder().build();
+    return ReminderDTO.builder()
+        .id(reminder.id().id())
+        .sent(reminder.sent())
+        .message(reminder.content().content())
+        .author(reminder.author().name())
+        .build();
   }
 }

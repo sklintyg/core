@@ -14,6 +14,7 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageContactInfo
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.message.model.Reminder;
 import se.inera.intyg.certificateservice.domain.message.model.SenderReference;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
 
@@ -50,6 +51,18 @@ public class MessageConverter {
                 .toList()
         )
         .forwarded(new Forwarded(false))
+        .build();
+  }
+
+  public Reminder convertReminder(IncomingMessageRequest incomingMessageRequest) {
+    return Reminder.builder()
+        .id(new MessageId(incomingMessageRequest.getId()))
+        .reference(new SenderReference(incomingMessageRequest.getReferenceId()))
+        .subject(new Subject(incomingMessageRequest.getSubject()))
+        .content(new Content(incomingMessageRequest.getContent()))
+        .author(new Author(incomingMessageRequest.getSentBy().name()))
+        .sent(incomingMessageRequest.getSent())
+        .contactInfo(new MessageContactInfo(incomingMessageRequest.getContactInfo()))
         .build();
   }
 }

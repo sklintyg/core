@@ -31,6 +31,7 @@ import se.inera.intyg.certificateservice.domain.event.service.MessageEventSubscr
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 import se.inera.intyg.certificateservice.domain.message.service.HandleMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.ReceiveComplementMessageDomainService;
+import se.inera.intyg.certificateservice.domain.message.service.ReceiveReminderMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.XmlGeneratorMessage;
 import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
@@ -232,9 +233,15 @@ public class AppConfig {
   }
 
   @Bean
-  public ReceiveComplementMessageDomainService receiveMessageDomainService(
+  public ReceiveComplementMessageDomainService receiveComplementMessageDomainService(
       CertificateRepository certificateRepository, MessageRepository messageRepository) {
     return new ReceiveComplementMessageDomainService(certificateRepository, messageRepository);
+  }
+
+  @Bean
+  public ReceiveReminderMessageDomainService receiveReminderMessageDomainService(
+      CertificateRepository certificateRepository, MessageRepository messageRepository) {
+    return new ReceiveReminderMessageDomainService(certificateRepository, messageRepository);
   }
 
   @Bean

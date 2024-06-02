@@ -31,6 +31,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatusEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateXmlEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.ExternalReferenceEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageTypeEnum;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReasonEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
@@ -221,6 +222,9 @@ public class CertificateEntityMapper {
     final var relations = getRelations(certificateEntity, includeRelations);
     final var messages = messageEntityRepository.findMessageEntitiesByCertificate(certificateEntity)
         .stream()
+        .filter(messageEntity -> messageEntity.getAuthor().equalsIgnoreCase("FK"))
+        .filter(messageEntity -> messageEntity.getMessageType().getKey()
+            == MessageTypeEnum.COMPLEMENT.getKey())
         .map(messageEntityMapper::toDomain)
         .toList();
 

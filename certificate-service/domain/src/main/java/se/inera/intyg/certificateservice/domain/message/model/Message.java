@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -102,5 +103,13 @@ public class Message {
       this.status = MessageStatus.HANDLED;
       this.modified = LocalDateTime.now(ZoneId.systemDefault());
     }
+  }
+
+  public void remind(Reminder reminder) {
+    this.reminders = Stream.concat(
+            this.reminders.stream(),
+            Stream.of(reminder)
+        )
+        .toList();
   }
 }

@@ -82,7 +82,7 @@ class MessageRelationAnswerTest {
             MessageRelationEntity.builder()
                 .messageRelationType(
                     MessageRelationTypeEntity.builder()
-                        .type(MessageRelationType.REMIND.name())
+                        .type(MessageRelationType.REMINDER.name())
                         .build()
                 )
                 .build()

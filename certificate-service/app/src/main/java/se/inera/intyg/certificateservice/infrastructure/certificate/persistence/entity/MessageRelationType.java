@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum MessageRelationType {
-  ANSWER(1), REMIND(2);
+  ANSWER(1), REMINDER(2);
 
   private final int key;
 

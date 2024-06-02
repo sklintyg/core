@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageContactInfo
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.message.model.Reminder;
 import se.inera.intyg.certificateservice.domain.message.model.SenderReference;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageComplementEmbeddable;
@@ -175,6 +176,30 @@ public class MessageEntityMapper {
                         .build()
                 )
                 .orElse(null)
+        )
+        .reminders(
+            messageRelations.stream()
+                .filter(relation -> relation.getMessageRelationType().getType()
+                    .equals(MessageRelationType.REMINDER.name()))
+                .map(MessageRelationEntity::getChildMessage)
+                .map(childMessage ->
+                    Reminder.builder()
+                        .id(new MessageId(childMessage.getId()))
+                        .reference(
+                            childMessage.getReference() != null
+                                ? new SenderReference(childMessage.getReference())
+                                : null)
+                        .created(childMessage.getCreated())
+                        .subject(
+                            childMessage.getSubject() != null
+                                ? new Subject(childMessage.getSubject())
+                                : null)
+                        .content(new Content(childMessage.getContent()))
+                        .sent(childMessage.getSent())
+                        .author(new Author(childMessage.getAuthor()))
+                        .build()
+                )
+                .toList()
         )
         .build();
   }

@@ -67,7 +67,7 @@ public class QuestionConverter {
             message.answer() != null
                 ? AnswerDTO.builder()
                 .id(message.answer().id().id())
-                .author(message.answer().author().author())
+                .author(message.answer().authoredStaff().name().fullName())
                 .sent(message.answer().sent())
                 .message(message.answer().content().content())
                 .contactInfo(
