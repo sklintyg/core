@@ -36,7 +36,7 @@ class GetMessageInternalXmlServiceTest {
   @Test
   void shallReturnXml() {
     final var expected = GetMessageInternalXmlResponse.builder()
-        .xml(XML)
+        .xml(new Xml(XML).base64())
         .build();
 
     final var complementMessageWithAnswer = complementMessageBuilder()
