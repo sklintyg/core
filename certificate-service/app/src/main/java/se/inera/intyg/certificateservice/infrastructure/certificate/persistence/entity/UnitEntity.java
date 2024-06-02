@@ -29,6 +29,18 @@ public class UnitEntity {
   private String hsaId;
   @Column(name = "name")
   private String name;
+  @Column(name = "address")
+  private String address;
+  @Column(name = "zip_code")
+  private String zipCode;
+  @Column(name = "city")
+  private String city;
+  @Column(name = "phone_number")
+  private String phoneNumber;
+  @Column(name = "email")
+  private String email;
+  @Column(name = "workplace_code")
+  private String workplaceCode;
   @ManyToOne
   @JoinColumn(name = "unit_type_key")
   private UnitTypeEntity type;

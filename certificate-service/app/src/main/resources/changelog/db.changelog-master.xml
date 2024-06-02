@@ -157,6 +157,24 @@
       <column name="name" type="varchar(255)">
         <constraints nullable="false"/>
       </column>
+      <column name="address" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="zip_code" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="city" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="phone_number" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="email" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="workplace_code" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
       <column name="unit_type_key" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
