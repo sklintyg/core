@@ -289,6 +289,48 @@
       baseTableName="certificate" baseColumnNames="issued_by_staff_key"
       referencedTableName="staff" referencedColumnNames="key"/>
 
+    <createTable tableName="staff_pa_title">
+      <column name="code" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="staff_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_staff_pa_title_staff_key"
+      baseTableName="staff_pa_title" baseColumnNames="staff_key"
+      referencedTableName="staff" referencedColumnNames="key"/>
+
+    <createTable tableName="staff_speciality">
+      <column name="speciality" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="staff_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_staff_speciality_staff_key"
+      baseTableName="staff_speciality" baseColumnNames="staff_key"
+      referencedTableName="staff" referencedColumnNames="key"/>
+
+    <createTable tableName="staff_healthcare_professional_licence">
+      <column name="healthcare_professional_licence" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="staff_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_staff_healthcare_professinal_licence_staff_key"
+      baseTableName="staff_healthcare_professional_licence" baseColumnNames="staff_key"
+      referencedTableName="staff" referencedColumnNames="key"/>
+
     <createTable tableName="staff_role">
       <column name="key" type="tinyint unsigned" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" unique="true"/>
