@@ -116,6 +116,7 @@ public class ActionEvaluationFactory {
                         .email(careUnit.getEmail())
                         .build()
                 )
+                .workplaceCode(new WorkplaceCode(unit.getWorkplaceCode()))
                 .build()
         )
         .careProvider(
