@@ -137,7 +137,7 @@ class CertificateMetadataConverterTest {
                         .build()
                 )
                 .name(TYPE_NAME)
-                .description(TYPE_DESCRIPTION)
+                .detailedDescription(TYPE_DESCRIPTION)
                 .recipient(RECIPIENT)
                 .elementSpecifications(
                     List.of(

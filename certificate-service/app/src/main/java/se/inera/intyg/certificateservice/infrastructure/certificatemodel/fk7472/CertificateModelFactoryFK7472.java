@@ -46,7 +46,7 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
   private static final String TYPE = "fk7472";
   private static final String VERSION = "1.0";
   private static final String NAME = "Intyg om tillfällig föräldrapenning";
-  private static final String DESCRIPTION = """
+  private static final String DETAILED_DESCRIPTION = """
       <b className="iu-fw-heading">Vad är Intyg om tillfällig föräldrapenning?</b>
       <p>När ett barn är sjukt kan den förälder som behöver avstå från sitt arbete för att vårda barnet få tillfällig föräldrapenning. Vårdperioden räknas från och med den första dagen man får tillfällig föräldrapenning för barnet.</p>
       <b className="iu-fw-heading">Förutsättningar för att få tillfällig föräldrapenning:</b><br>
@@ -58,6 +58,9 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
       <b className="iu-fw-heading">Om barnet har fyllt 16 men inte 21 år</b>
       <p>För barn som omfattas av LSS (lagen om stöd och service till vissa funktionshindrade) behöver ett intyg från läkare eller sjuksköterska skickas till Försäkringskassan från och med den åttonde dagen i vårdperioden.<br>
       Intyget behövs vid tillkommande sjukdom eller en försämring av grundsjukdomen.</p>
+      """;
+  private static final String DESCRIPTION = """
+         När ett barn är sjukt kan den förälder som behöver avstå från sitt arbete för att vårda barnet få tillfällig föräldrapenning. Från och med den åttonde dagen i barnets vårdperiod behöver ett intyg från en läkare eller sjuksköterska skickas till Försäkringskassan.                                                                                                                                                         \s
       """;
   public static final CertificateModelId FK7472_V1_0 = CertificateModelId.builder()
       .type(new CertificateType(TYPE))
@@ -90,6 +93,7 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
         )
         .name(NAME)
         .description(DESCRIPTION)
+        .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)
         .availableForCitizen(false)
         .rolesWithAccess(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,

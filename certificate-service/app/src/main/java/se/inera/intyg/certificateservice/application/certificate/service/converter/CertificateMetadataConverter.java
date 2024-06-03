@@ -41,7 +41,7 @@ public class CertificateMetadataConverter {
         .typeName(certificate.certificateModel().id().type().type())
         .typeVersion(certificate.certificateModel().id().version().version())
         .name(certificate.certificateModel().name())
-        .description(certificate.certificateModel().description())
+        .description(certificate.certificateModel().detailedDescription())
         .validForSign(certificate.isDraft() && certificate.validate().isValid())
         .created(certificate.created())
         .patient(
