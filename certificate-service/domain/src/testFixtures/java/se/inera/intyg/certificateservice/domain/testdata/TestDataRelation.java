@@ -15,6 +15,7 @@ public class TestDataRelation {
   }
 
   public static final Relation RELATION_REPLACE = relationReplaceBuilder().build();
+  public static final Relation RELATION_COMPLEMENT = relationComplementBuilder().build();
 
   public static Relation.RelationBuilder relationReplaceBuilder() {
     return Relation.builder()
