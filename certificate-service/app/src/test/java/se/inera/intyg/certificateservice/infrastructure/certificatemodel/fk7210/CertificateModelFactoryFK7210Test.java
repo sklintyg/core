@@ -326,7 +326,7 @@ class CertificateModelFactoryFK7210Test {
       @Test
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationDate.builder()
-            .name("Beräknat födelsedatum")
+            .name("Datum")
             .id(new FieldId("54.1"))
             .min(Period.ofDays(0))
             .max(Period.ofYears(1))

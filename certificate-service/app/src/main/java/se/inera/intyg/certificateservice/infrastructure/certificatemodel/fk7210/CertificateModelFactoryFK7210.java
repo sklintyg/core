@@ -163,7 +163,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
         .id(QUESTION_BERAKNAT_FODELSEDATUM_ID)
         .configuration(
             ElementConfigurationDate.builder()
-                .name("Beräknat födelsedatum")
+                .name("Datum")
                 .id(QUESTION_BERAKNAT_FODELSEDATUM_FIELD_ID)
                 .min(Period.ofDays(0))
                 .max(Period.ofYears(1))
