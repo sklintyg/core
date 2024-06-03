@@ -2673,7 +2673,9 @@ class FK7210ActiveIT {
     @DisplayName("FK7210 - Om användaren har rollen barnmorska ska intyget gå att signeras")
     void shallSuccessfullySignIfRoleIsMidwife() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7210, VERSION)
+          customTestabilityCertificateRequest(FK7210, VERSION)
+              .user(BERTIL_BARNMORSKA_DTO)
+              .build()
       );
 
       final var response = api.signCertificate(

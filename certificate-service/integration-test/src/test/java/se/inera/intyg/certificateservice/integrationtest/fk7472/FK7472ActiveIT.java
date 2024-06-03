@@ -28,6 +28,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataInc
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.QUESTION_PERIOD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.QUESTION_SYMPTOM_ID;
+import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.FK7210;
 import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.FK7472;
 import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.VERSION;
 import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.WRONG_VERSION;
@@ -129,6 +130,7 @@ import se.inera.intyg.certificateservice.application.common.dto.AccessScopeTypeD
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
+import se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants;
 import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
 import se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil;
 import se.inera.intyg.certificateservice.integrationtest.util.Containers;
@@ -2773,7 +2775,9 @@ class FK7472ActiveIT {
     @DisplayName("FK7472 - Om användaren har rollen barnmorska ska intyget gå att signeras")
     void shallSuccessfullySignIfRoleIsMidwife() {
       final var testCertificates = testabilityApi.addCertificates(
-          defaultTestablilityCertificateRequest(FK7472, VERSION)
+          customTestabilityCertificateRequest(FK7210, FK7210Constants.VERSION)
+              .user(BERTIL_BARNMORSKA_DTO)
+              .build()
       );
 
       final var response = api.signCertificate(
