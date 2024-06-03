@@ -21,20 +21,20 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 
-class CertificateActionMessagesTest {
+class CertificateActionMessagesAdministrativeTest {
 
-  private CertificateActionMessages certificateActionMessages;
+  private CertificateActionMessagesAdministrative certificateActionMessagesAdministrative;
 
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
-          .certificateActionType(CertificateActionType.MESSAGES)
+          .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
           .build();
   private CertificateBuilder certificateBuilder;
   private ActionEvaluationBuilder actionEvaluationBuilder;
 
   @BeforeEach
   void setUp() {
-    certificateActionMessages = (CertificateActionMessages) CertificateActionFactory.create(
+    certificateActionMessagesAdministrative = (CertificateActionMessagesAdministrative) CertificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION
     );
 
@@ -60,18 +60,21 @@ class CertificateActionMessagesTest {
 
   @Test
   void shallReturnName() {
-    assertEquals("Ärendekommunikation", certificateActionMessages.getName(Optional.empty()));
+    assertEquals("Administrativa frågor",
+        certificateActionMessagesAdministrative.getName(Optional.empty()));
   }
 
   @Test
   void shallReturnType() {
-    assertEquals(CertificateActionType.MESSAGES, certificateActionMessages.getType());
+    assertEquals(CertificateActionType.MESSAGES_ADMINISTRATIVE,
+        certificateActionMessagesAdministrative.getType()
+    );
   }
 
   @Test
   void shallReturnDescription() {
-    assertEquals("Hantera kompletteringsbegäran, frågor och svar",
-        certificateActionMessages.getDescription(Optional.empty()));
+    assertEquals("Funktionen finns inte för detta intyg.",
+        certificateActionMessagesAdministrative.getDescription(Optional.empty()));
   }
 
   @Test
@@ -83,7 +86,8 @@ class CertificateActionMessagesTest {
         .build();
 
     assertTrue(
-        certificateActionMessages.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        certificateActionMessagesAdministrative.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -97,7 +101,8 @@ class CertificateActionMessagesTest {
         .build();
 
     assertFalse(
-        certificateActionMessages.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        certificateActionMessagesAdministrative.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -111,7 +116,8 @@ class CertificateActionMessagesTest {
         .build();
 
     assertFalse(
-        certificateActionMessages.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        certificateActionMessagesAdministrative.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -128,7 +134,8 @@ class CertificateActionMessagesTest {
         .build();
 
     assertTrue(
-        certificateActionMessages.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        certificateActionMessagesAdministrative.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -142,7 +149,8 @@ class CertificateActionMessagesTest {
         .build();
 
     assertTrue(
-        certificateActionMessages.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        certificateActionMessagesAdministrative.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -156,7 +164,8 @@ class CertificateActionMessagesTest {
         .build();
 
     assertTrue(
-        certificateActionMessages.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        certificateActionMessagesAdministrative.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -171,7 +180,8 @@ class CertificateActionMessagesTest {
         .build();
 
     assertTrue(
-        certificateActionMessages.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        certificateActionMessagesAdministrative.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -184,7 +194,7 @@ class CertificateActionMessagesTest {
         .status(Status.DRAFT)
         .build();
 
-    final var actualResult = certificateActionMessages.reasonNotAllowed(
+    final var actualResult = certificateActionMessagesAdministrative.reasonNotAllowed(
         Optional.of(certificate), Optional.of(actionEvaluation)
     );
 
@@ -199,23 +209,24 @@ class CertificateActionMessagesTest {
         .status(Status.SIGNED)
         .build();
 
-    final var actualResult = certificateActionMessages.reasonNotAllowed(Optional.of(certificate),
+    final var actualResult = certificateActionMessagesAdministrative.reasonNotAllowed(
+        Optional.of(certificate),
         Optional.of(actionEvaluation));
 
     assertTrue(actualResult.isEmpty());
   }
 
   @Test
-  void shallReturnEnabledTrue() {
+  void shallReturnEnabledFalse() {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     final var certificate = certificateBuilder
         .status(Status.SIGNED)
         .build();
 
-    final var enabled = certificateActionMessages.isEnabled(Optional.of(certificate),
+    final var enabled = certificateActionMessagesAdministrative.isEnabled(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
-    assertTrue(enabled);
+    assertFalse(enabled);
   }
 }

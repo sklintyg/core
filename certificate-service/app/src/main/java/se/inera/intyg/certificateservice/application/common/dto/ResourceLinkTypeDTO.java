@@ -65,7 +65,8 @@ public enum ResourceLinkTypeDTO {
   SRS_FULL_VIEW,
   SRS_MINIMIZED_VIEW,
   SEND_AFTER_SIGN_CERTIFICATE,
-  CANNOT_COMPLEMENT_CERTIFICATE_ONLY_MESSAGE;
+  CANNOT_COMPLEMENT_CERTIFICATE_ONLY_MESSAGE,
+  QUESTIONS_ADMINISTRATIVE;
 
   public static ResourceLinkTypeDTO toResourceLinkType(CertificateActionType type) {
     return switch (type) {
@@ -86,6 +87,7 @@ public enum ResourceLinkTypeDTO {
       case FORWARD_MESSAGE -> FORWARD_QUESTION;
       case HANDLE_COMPLEMENT -> HANDLE_QUESTION;
       case MESSAGES -> QUESTIONS;
+      case MESSAGES_ADMINISTRATIVE -> QUESTIONS_ADMINISTRATIVE;
       case RECEIVE_COMPLEMENT ->
           throw new IllegalArgumentException("%s is not a valid type!".formatted(type));
     };
