@@ -3122,6 +3122,38 @@ class FK7472ActiveIT {
 
       assertEquals(403, response.getStatusCode().value());
     }
+
+    @Test
+    @DisplayName("FK7472 - Om intyget är ersatt av ett signerat intyg skall det inte gå att skicka")
+    void shallReturn403IfCertificateReplacedIsAlreadySent() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, FK7210Constants.VERSION, SIGNED)
+      );
+
+      final var replaceCertificate = api.replaceCertificate(
+          defaultReplaceCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var replacedCertificateId = replaceCertificateResponse(
+          replaceCertificate)
+          .getCertificate()
+          .getMetadata()
+          .getId();
+
+      api.signCertificate(
+          defaultSignCertificateRequest(),
+          replacedCertificateId,
+          0L
+      );
+
+      final var response = api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(403, response.getStatusCode().value());
+    }
   }
 
   @Nested

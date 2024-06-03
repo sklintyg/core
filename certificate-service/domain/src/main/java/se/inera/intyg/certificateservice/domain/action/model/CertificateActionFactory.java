@@ -92,7 +92,8 @@ public class CertificateActionFactory {
                       List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
                   ),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
-                  new ActionRuleSent(false)
+                  new ActionRuleSent(false),
+                  new ActionRuleChildRelationNotSigned()
               )
           )
           .build();
