@@ -70,14 +70,18 @@ public class QuestionConverter {
                 .author(message.answer().authoredStaff().name().fullName())
                 .sent(message.answer().sent())
                 .message(message.answer().content().content())
-                .contactInfo(
-                    message.answer().contactInfo() != null
-                        ? message.answer().contactInfo().lines()
-                        : null)
+                .contactInfo(getContactInfo(message))
                 .build()
                 : null
         )
         .build();
+  }
+
+  private static List<String> getContactInfo(Message message) {
+    return
+        message.answer().contactInfo() != null && !message.answer().contactInfo().lines().isEmpty()
+            ? message.answer().contactInfo().lines()
+            : null;
   }
 
 }

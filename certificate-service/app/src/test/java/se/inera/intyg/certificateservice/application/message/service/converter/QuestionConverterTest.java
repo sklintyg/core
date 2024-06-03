@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
@@ -16,10 +17,14 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.MESSAGE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,7 +36,12 @@ import se.inera.intyg.certificateservice.application.message.dto.ComplementDTO;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionTypeDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.message.model.Answer;
+import se.inera.intyg.certificateservice.domain.message.model.Content;
+import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageAction;
+import se.inera.intyg.certificateservice.domain.message.model.MessageContactInfo;
+import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 
 @ExtendWith(MockitoExtension.class)
 class QuestionConverterTest {
@@ -171,5 +181,98 @@ class QuestionConverterTest {
         .convert(messageAction);
     final var convert = questionConverter.convert(message, List.of(messageAction));
     assertFalse(convert.getLinks().isEmpty());
+  }
+
+  @Nested
+  class AnswerTests {
+
+    private final Message message = complementMessageBuilder()
+        .answer(
+            Answer.builder()
+                .id(new MessageId("id"))
+                .authoredStaff(AJLA_DOKTOR)
+                .sent(LocalDateTime.now())
+                .content(new Content("content"))
+                .contactInfo(new MessageContactInfo(List.of("info")))
+
+                .build()
+        )
+        .build();
+
+    @Test
+    void shallIncludeId() {
+      final var expectedId = "id";
+      final var convert = questionConverter.convert(message, MESSAGE_ACTIONS);
+      assertEquals(expectedId, convert.getAnswer().getId());
+    }
+
+
+    @Test
+    void shallIncludeAuthor() {
+      final var convert = questionConverter.convert(message, MESSAGE_ACTIONS);
+      assertEquals(AJLA_DOKTOR.name().fullName(), convert.getAnswer().getAuthor());
+    }
+
+    @Test
+    void shallIncludeSent() {
+      final var convert = questionConverter.convert(message, MESSAGE_ACTIONS);
+      assertNotNull(convert.getAnswer().getSent());
+    }
+
+    @Test
+    void shallIncludeMessage() {
+      final var expectedMessage = "content";
+      final var convert = questionConverter.convert(message, MESSAGE_ACTIONS);
+      assertEquals(expectedMessage, convert.getAnswer().getMessage());
+    }
+
+    @Test
+    void shallIncludeContactInfo() {
+      final var expectedContactInfo = List.of("info");
+      final var convert = questionConverter.convert(message, MESSAGE_ACTIONS);
+      assertEquals(expectedContactInfo, convert.getAnswer().getContactInfo());
+    }
+
+    @Test
+    void shallExcludeContactInfoIfNull() {
+      final var MessageWithAnswerWithoutContactInfo = complementMessageBuilder()
+          .answer(
+              Answer.builder()
+                  .id(new MessageId("id"))
+                  .authoredStaff(AJLA_DOKTOR)
+                  .sent(LocalDateTime.now())
+                  .content(new Content("content"))
+                  .build()
+          )
+          .build();
+      final var convert = questionConverter.convert(MessageWithAnswerWithoutContactInfo,
+          MESSAGE_ACTIONS);
+      assertNull(convert.getAnswer().getContactInfo());
+    }
+
+    @Test
+    void shallExcludeContactInfoIfEmpty() {
+      final var MessageWithAnswerWithoutContactInfo = complementMessageBuilder()
+          .answer(
+              Answer.builder()
+                  .id(new MessageId("id"))
+                  .authoredStaff(AJLA_DOKTOR)
+                  .sent(LocalDateTime.now())
+                  .content(new Content("content"))
+                  .contactInfo(new MessageContactInfo(Collections.emptyList()))
+                  .build()
+          )
+          .build();
+      final var convert = questionConverter.convert(MessageWithAnswerWithoutContactInfo,
+          MESSAGE_ACTIONS);
+      assertNull(convert.getAnswer().getContactInfo());
+    }
+
+    @Test
+    void shallExcludeAnswer() {
+      final var messageWithoutAnswer = complementMessageBuilder().build();
+      final var convert = questionConverter.convert(messageWithoutAnswer, MESSAGE_ACTIONS);
+      assertNull(convert.getAnswer());
+    }
   }
 }
