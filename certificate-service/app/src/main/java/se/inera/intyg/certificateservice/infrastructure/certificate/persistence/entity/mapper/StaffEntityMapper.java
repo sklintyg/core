@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
+import se.inera.intyg.certificateservice.domain.common.model.AllowCopy;
+import se.inera.intyg.certificateservice.domain.common.model.Blocked;
 import se.inera.intyg.certificateservice.domain.common.model.HealthCareProfessionalLicence;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
@@ -99,6 +101,8 @@ public class StaffEntityMapper {
                 )
                 .toList()
         )
+        .allowCopy(new AllowCopy(true))
+        .blocked(new Blocked(false))
         .build();
   }
 }

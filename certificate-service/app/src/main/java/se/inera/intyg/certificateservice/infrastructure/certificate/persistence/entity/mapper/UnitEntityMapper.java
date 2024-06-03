@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
+import se.inera.intyg.certificateservice.domain.unit.model.Inactive;
 import se.inera.intyg.certificateservice.domain.unit.model.IssuingUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitAddress;
@@ -95,6 +96,7 @@ public class UnitEntityMapper {
                 .build()
         )
         .workplaceCode(new WorkplaceCode(unit.getWorkplaceCode()))
+        .inactive(new Inactive(false))
         .build();
   }
 
@@ -116,6 +118,7 @@ public class UnitEntityMapper {
                 .build()
         )
         .workplaceCode(new WorkplaceCode(unit.getWorkplaceCode()))
+        .inactive(new Inactive(false))
         .build();
   }
 

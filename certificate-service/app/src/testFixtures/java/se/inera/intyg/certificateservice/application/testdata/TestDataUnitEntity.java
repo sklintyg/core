@@ -2,10 +2,22 @@ package se.inera.intyg.certificateservice.application.testdata;
 
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ADDRESS;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_CITY;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_EMAIL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_PHONENUMBER;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_WORKPLACE_CODE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ZIP_CODE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ADDRESS;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_CITY;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_EMAIL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_WORKPLACE_CODE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE;
 
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
@@ -27,7 +39,6 @@ public class TestDataUnitEntity {
         )
         .hsaId(ALFA_REGIONEN_ID)
         .name(ALFA_REGIONEN_NAME);
-
   }
 
   public static UnitEntity.UnitEntityBuilder alfaMedicinCentrumEntityBuilder() {
@@ -39,7 +50,13 @@ public class TestDataUnitEntity {
                 .build()
         )
         .hsaId(ALFA_MEDICINCENTRUM_ID)
-        .name(ALFA_MEDICINCENTRUM_NAME);
+        .name(ALFA_MEDICINCENTRUM_NAME)
+        .address(ALFA_MEDICINCENTRUM_ADDRESS)
+        .zipCode(ALFA_MEDICINCENTRUM_ZIP_CODE)
+        .city(ALFA_MEDICINCENTRUM_CITY)
+        .phoneNumber(ALFA_MEDICINCENTRUM_PHONENUMBER)
+        .email(ALFA_MEDICINCENTRUM_EMAIL)
+        .workplaceCode(ALFA_MEDICINCENTRUM_WORKPLACE_CODE);
   }
 
   public static UnitEntity.UnitEntityBuilder alfaAllergimottagningenEntityBuilder() {
@@ -51,7 +68,13 @@ public class TestDataUnitEntity {
                 .build()
         )
         .hsaId(ALFA_ALLERGIMOTTAGNINGEN_ID)
-        .name(ALFA_ALLERGIMOTTAGNINGEN_NAME);
+        .name(ALFA_ALLERGIMOTTAGNINGEN_NAME)
+        .address(ALFA_ALLERGIMOTTAGNINGEN_ADDRESS)
+        .zipCode(ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE)
+        .city(ALFA_ALLERGIMOTTAGNINGEN_CITY)
+        .phoneNumber(ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER)
+        .email(ALFA_ALLERGIMOTTAGNINGEN_EMAIL)
+        .workplaceCode(ALFA_ALLERGIMOTTAGNINGEN_WORKPLACE_CODE);
   }
 
 }

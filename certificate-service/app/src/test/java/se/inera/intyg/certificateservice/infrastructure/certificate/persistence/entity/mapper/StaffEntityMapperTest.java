@@ -3,7 +3,6 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.AJLA_DOKTOR_ENTITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ajlaDoctorBuilder;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,16 +23,7 @@ class StaffEntityMapperTest {
 
     @Test
     void shouldMapStaff() {
-
-      final var expectedStaff = ajlaDoctorBuilder()
-          .paTitles(null)
-          .specialities(null)
-          .blocked(null)
-          .allowCopy(null)
-          .healthCareProfessionalLicence(null)
-          .build();
-
-      assertEquals(expectedStaff, StaffEntityMapper.toDomain(AJLA_DOKTOR_ENTITY));
+      assertEquals(AJLA_DOKTOR, StaffEntityMapper.toDomain(AJLA_DOKTOR_ENTITY));
     }
   }
 }
