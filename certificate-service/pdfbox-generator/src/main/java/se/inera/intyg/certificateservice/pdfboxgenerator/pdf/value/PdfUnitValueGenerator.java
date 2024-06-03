@@ -38,8 +38,8 @@ public class PdfUnitValueGenerator {
 
     return String.join("\n",
         certificate.certificateMetaData().issuingUnit().name().name(),
-        String.join("", unitValue.address(), " "),
-        String.join(" ", unitValue.zipCode(), unitValue.city()),
+        String.join("", unitValue.address(), ", ",
+            String.join(" ", unitValue.zipCode(), unitValue.city())),
         String.join(" ", "Telefon:", unitValue.phoneNumber()));
   }
 }
