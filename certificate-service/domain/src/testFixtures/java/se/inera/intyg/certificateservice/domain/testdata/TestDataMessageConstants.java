@@ -13,8 +13,12 @@ public class TestDataMessageConstants {
   public static final String ANSWER_ID = "ANSWER_ID";
   public static final String ANSWER_REFERENCE_ID = "ANSWER_REFERENCE_ID";
 
+  public static final String REMINDER_MESSAGE_ID = "REMINDER_MESSAGE_ID";
+  public static final String REMINDER_REFERENCE_ID = "REMINDER_REFERENCE_ID";
+
   public static final String SUBJECT = "This is the subject";
   public static final String CONTENT = "This is the content of the message";
+  public static final String REMINDER_CONTENT = "This is a reminder";
   public static final LocalDateTime SENT = LocalDateTime.now(ZoneId.systemDefault());
   public static final LocalDateTime CREATED_AFTER_SENT = SENT.plusDays(1);
   public static final List<String> CONTACT_INFO = List.of(

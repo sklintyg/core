@@ -116,7 +116,7 @@ class MessageControllerTest {
     when(handleMessageService.handle(request, "messageId"))
         .thenReturn(expectedResponse);
 
-    final var response = handleMessageService.handle(request, "messageId");
+    final var response = messageController.handleMessage(request, "messageId");
 
     assertEquals(expectedResponse, response);
   }
