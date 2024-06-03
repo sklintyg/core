@@ -42,6 +42,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageAction;
 import se.inera.intyg.certificateservice.domain.message.model.MessageContactInfo;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 
 @ExtendWith(MockitoExtension.class)
 class QuestionConverterTest {
@@ -153,6 +154,16 @@ class QuestionConverterTest {
 
     final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
     assertEquals(expectedRelation, convert.getAnsweredByCertificate());
+  }
+
+  @Test
+  void shallExcludeAnsweredByCertificate() {
+    final var messageWithoutAnsweredByCertificate = complementMessageBuilder()
+        .type(MessageType.REMINDER)
+        .build();
+    final var convert = questionConverter.convert(messageWithoutAnsweredByCertificate,
+        MESSAGE_ACTIONS);
+    assertNull(convert.getAnsweredByCertificate());
   }
 
   @Test
