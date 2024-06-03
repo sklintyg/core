@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.application.message.service.converter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import se.inera.intyg.certificateservice.application.message.dto.AnswerDTO;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionTypeDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
@@ -62,6 +63,25 @@ public class QuestionConverter {
                 .map(messageActionConverter::convert)
                 .toList()
         )
+        .answer(
+            message.answer() != null
+                ? AnswerDTO.builder()
+                .id(message.answer().id().id())
+                .author(message.answer().authoredStaff().name().fullName())
+                .sent(message.answer().sent())
+                .message(message.answer().content().content())
+                .contactInfo(getContactInfo(message))
+                .build()
+                : null
+        )
         .build();
   }
+
+  private static List<String> getContactInfo(Message message) {
+    return
+        message.answer().contactInfo() != null && !message.answer().contactInfo().lines().isEmpty()
+            ? message.answer().contactInfo().lines()
+            : null;
+  }
+
 }

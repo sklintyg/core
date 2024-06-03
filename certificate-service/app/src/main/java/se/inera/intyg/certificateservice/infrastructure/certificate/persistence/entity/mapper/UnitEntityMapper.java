@@ -3,9 +3,13 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
+import se.inera.intyg.certificateservice.domain.unit.model.Inactive;
 import se.inera.intyg.certificateservice.domain.unit.model.IssuingUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitAddress;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitContactInfo;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
+import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitTypeEntity;
@@ -26,6 +30,12 @@ public class UnitEntityMapper {
         )
         .hsaId(careUnit.hsaId().id())
         .name(careUnit.name().name())
+        .address(careUnit.address().address())
+        .zipCode(careUnit.address().zipCode())
+        .city(careUnit.address().city())
+        .phoneNumber(careUnit.contactInfo().phoneNumber())
+        .email(careUnit.contactInfo().email())
+        .workplaceCode(careUnit.workplaceCode() == null ? null : careUnit.workplaceCode().code())
         .build();
   }
 
@@ -39,6 +49,12 @@ public class UnitEntityMapper {
         )
         .hsaId(subUnit.hsaId().id())
         .name(subUnit.name().name())
+        .address(subUnit.address().address())
+        .zipCode(subUnit.address().zipCode())
+        .city(subUnit.address().city())
+        .phoneNumber(subUnit.contactInfo().phoneNumber())
+        .email(subUnit.contactInfo().email())
+        .workplaceCode(subUnit.workplaceCode() == null ? null : subUnit.workplaceCode().code())
         .build();
   }
 
@@ -66,6 +82,21 @@ public class UnitEntityMapper {
     return CareUnit.builder()
         .name(new UnitName(unit.getName()))
         .hsaId(new HsaId(unit.getHsaId()))
+        .address(
+            UnitAddress.builder()
+                .address(unit.getAddress())
+                .zipCode(unit.getZipCode())
+                .city(unit.getCity())
+                .build()
+        )
+        .contactInfo(
+            UnitContactInfo.builder()
+                .phoneNumber(unit.getPhoneNumber())
+                .email(unit.getEmail())
+                .build()
+        )
+        .workplaceCode(new WorkplaceCode(unit.getWorkplaceCode()))
+        .inactive(new Inactive(false))
         .build();
   }
 
@@ -73,6 +104,21 @@ public class UnitEntityMapper {
     return SubUnit.builder()
         .name(new UnitName(unit.getName()))
         .hsaId(new HsaId(unit.getHsaId()))
+        .address(
+            UnitAddress.builder()
+                .address(unit.getAddress())
+                .zipCode(unit.getZipCode())
+                .city(unit.getCity())
+                .build()
+        )
+        .contactInfo(
+            UnitContactInfo.builder()
+                .phoneNumber(unit.getPhoneNumber())
+                .email(unit.getEmail())
+                .build()
+        )
+        .workplaceCode(new WorkplaceCode(unit.getWorkplaceCode()))
+        .inactive(new Inactive(false))
         .build();
   }
 

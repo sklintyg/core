@@ -157,6 +157,24 @@
       <column name="name" type="varchar(255)">
         <constraints nullable="false"/>
       </column>
+      <column name="address" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="zip_code" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="city" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="phone_number" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="email" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="workplace_code" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
       <column name="unit_type_key" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
@@ -287,6 +305,48 @@
       referencedTableName="staff" referencedColumnNames="key"/>
     <addForeignKeyConstraint constraintName="fk_certificate_issued_by_staff_key"
       baseTableName="certificate" baseColumnNames="issued_by_staff_key"
+      referencedTableName="staff" referencedColumnNames="key"/>
+
+    <createTable tableName="staff_pa_title">
+      <column name="code" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="staff_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_staff_pa_title_staff_key"
+      baseTableName="staff_pa_title" baseColumnNames="staff_key"
+      referencedTableName="staff" referencedColumnNames="key"/>
+
+    <createTable tableName="staff_speciality">
+      <column name="speciality" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="staff_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_staff_speciality_staff_key"
+      baseTableName="staff_speciality" baseColumnNames="staff_key"
+      referencedTableName="staff" referencedColumnNames="key"/>
+
+    <createTable tableName="staff_healthcare_professional_licence">
+      <column name="healthcare_professional_licence" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="staff_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_staff_healthcare_professinal_licence_staff_key"
+      baseTableName="staff_healthcare_professional_licence" baseColumnNames="staff_key"
       referencedTableName="staff" referencedColumnNames="key"/>
 
     <createTable tableName="staff_role">
@@ -477,6 +537,15 @@
     <insert tableName="message_type">
       <column name="type" value="COMPLEMENT"/>
     </insert>
+    <insert tableName="message_type">
+      <column name="type" value="QUESTION"/>
+    </insert>
+    <insert tableName="message_type">
+      <column name="type" value="ANSWER"/>
+    </insert>
+    <insert tableName="message_type">
+      <column name="type" value="REMINDER"/>
+    </insert>
 
     <createTable tableName="message_relation_type">
       <column name="key" type="tinyint unsigned" autoIncrement="true">
@@ -486,6 +555,13 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
+
+    <insert tableName="message_relation_type">
+      <column name="type" value="ANSWER"/>
+    </insert>
+    <insert tableName="message_relation_type">
+      <column name="type" value="REMINDER"/>
+    </insert>
 
     <createTable tableName="message_relation">
       <column name="key" type="integer unsigned" autoIncrement="true">

@@ -24,6 +24,7 @@ public class CertificateModel {
   Code type;
   String name;
   String description;
+  String detailedDescription;
   Recipient recipient;
   LocalDateTime activeFrom;
   Boolean availableForCitizen;

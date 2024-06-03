@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.application.message.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.message.dto.GetMessageInternalXmlResponse;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
@@ -10,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.message.service.XmlGeneratorMess
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GetMessageInternalXmlService {
 
   private final MessageRepository messageRepository;
@@ -22,7 +24,7 @@ public class GetMessageInternalXmlService {
 
     return GetMessageInternalXmlResponse.builder()
         .xml(
-            xmlGeneratorMessage.generate(message.answer(), message, certificate).xml()
+            xmlGeneratorMessage.generate(message.answer(), message, certificate).base64()
         )
         .build();
   }

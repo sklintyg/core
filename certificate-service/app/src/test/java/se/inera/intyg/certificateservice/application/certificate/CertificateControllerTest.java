@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
@@ -38,6 +40,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.service.AnswerComplementService;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.ComplementCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
@@ -59,7 +62,8 @@ class CertificateControllerTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
   private static final Long VERSION = 0L;
-
+  @Mock
+  private AnswerComplementService answerComplementService;
   @Mock
   private ValidateCertificateService validateCertificateService;
   @Mock
@@ -308,6 +312,17 @@ class CertificateControllerTest {
     doReturn(expectedResult).when(complementCertificateService).complement(request, CERTIFICATE_ID);
 
     final var actualResult = certificateController.complementCertificate(request, CERTIFICATE_ID);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnAnswerComplementComplementResponse() {
+    final var request = AnswerComplementRequest.builder().build();
+    final var expectedResult = AnswerComplementResponse.builder().build();
+    doReturn(expectedResult).when(answerComplementService).answer(request, CERTIFICATE_ID);
+
+    final var actualResult = certificateController.answerComplement(request, CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
   }

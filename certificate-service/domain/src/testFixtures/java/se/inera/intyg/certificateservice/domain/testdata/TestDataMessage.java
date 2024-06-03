@@ -12,6 +12,9 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.LAST_DATE_TO_REPLY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.MESSAGE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REFERENCE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REMINDER_CONTENT;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REMINDER_MESSAGE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REMINDER_REFERENCE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
@@ -31,13 +34,16 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageContactInfo
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.message.model.Reminder;
+import se.inera.intyg.certificateservice.domain.message.model.Reminder.ReminderBuilder;
 import se.inera.intyg.certificateservice.domain.message.model.SenderReference;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
 
 public class TestDataMessage {
 
-  public static Message COMPLEMENT_MESSAGE = complementMessageBuilder().build();
-  public static Answer ANSWER = answerBuilder().build();
+  public static final Message COMPLEMENT_MESSAGE = complementMessageBuilder().build();
+  public static final Answer ANSWER = answerBuilder().build();
+  public static final Reminder REMINDER = reminderBuilder().build();
 
   public static MessageBuilder complementMessageBuilder() {
     return Message.builder()
@@ -80,5 +86,17 @@ public class TestDataMessage {
         .created(CREATED_AFTER_SENT)
         .modified(CREATED_AFTER_SENT)
         .authoredStaff(AJLA_DOKTOR);
+  }
+
+  public static ReminderBuilder reminderBuilder() {
+    return Reminder.builder()
+        .id(new MessageId(REMINDER_MESSAGE_ID))
+        .reference(new SenderReference(REMINDER_REFERENCE_ID))
+        .subject(new Subject(SUBJECT))
+        .content(new Content(REMINDER_CONTENT))
+        .author(new Author(AUTHOR_INCOMING_MESSAGE))
+        .contactInfo(new MessageContactInfo(CONTACT_INFO))
+        .sent(SENT)
+        .created(CREATED_AFTER_SENT);
   }
 }

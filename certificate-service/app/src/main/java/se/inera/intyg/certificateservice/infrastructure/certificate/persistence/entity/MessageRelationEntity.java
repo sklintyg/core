@@ -37,6 +37,6 @@ public class MessageRelationEntity {
   private MessageEntity parentMessage;
 
   @ManyToOne
-  @JoinColumn(name = "certificate_relation_type_key")
+  @JoinColumn(name = "message_relation_type_key")
   private MessageRelationTypeEntity messageRelationType;
 }

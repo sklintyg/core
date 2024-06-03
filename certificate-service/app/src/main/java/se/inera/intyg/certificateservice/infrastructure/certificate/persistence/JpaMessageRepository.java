@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
@@ -8,6 +9,8 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationRepository;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityMessageRepository;
 
 @Repository
@@ -16,6 +19,9 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
 
   private final MessageEntityRepository messageEntityRepository;
   private final MessageEntityMapper messageEntityMapper;
+  private final MessageRelationRepository messageRelationRepository;
+  private final MessageRelationEntityRepository messageRelationEntityRepository;
+
 
   @Override
   public Message save(Message message) {
@@ -34,6 +40,8 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
         )
     );
 
+    messageRelationRepository.save(message, savedEntity);
+
     return messageEntityMapper.toDomain(savedEntity);
   }
 
@@ -42,6 +50,17 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
     if (messageIds.isEmpty()) {
       return;
     }
+
+    messageIds.stream()
+        .map(messageEntityRepository::findMessageEntityById)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .forEach(
+            entity ->
+                messageRelationEntityRepository.deleteAllByChildMessageOrParentMessage(
+                    entity,
+                    entity)
+        );
 
     messageEntityRepository.deleteAllByIdIn(messageIds);
   }

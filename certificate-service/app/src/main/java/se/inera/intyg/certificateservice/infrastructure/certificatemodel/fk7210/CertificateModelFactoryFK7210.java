@@ -39,9 +39,12 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
   private static final String FK_7210 = "fk7210";
   private static final String VERSION = "1.0";
   private static final String NAME = "Intyg om graviditet";
+  private static final String DETAILED_DESCRIPTION = """
+      <b>Vad är intyg om graviditet?</b>
+      När en person är gravid ska hen få ett intyg om graviditet av hälso- och sjukvården. Intyget behövs om den gravida begär ersättning från Försäkringskassan innan barnet är fött.<br><br> Intyget skickas till Försäkringskassan digitalt av hälso- och sjukvården eller av den gravida.
+      """;
   private static final String DESCRIPTION = """
-      Vad är intyg om graviditet?
-      När en person är gravid ska hen få ett intyg om graviditet av hälso- och sjukvården. Intyget behövs om den gravida begär ersättning från Försäkringskassan innan barnet är fött. Intyget skickas till Försäkringskassan digitalt av hälso- och sjukvården eller av den gravida.
+          När en person är gravid ska hen få ett intyg om graviditet av hälso- och sjukvården. Intyget behövs om den gravida begär ersättning från Försäkringskassan innan barnet är fött.
       """;
   public static final CertificateModelId FK7210_V1_0 = CertificateModelId.builder()
       .type(new CertificateType(FK_7210))
@@ -63,7 +66,6 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
   public static final String URL_FK = "https://www.forsakringskassan.se/";
   public static final String FK_NAME = "Försäkringskassan";
 
-
   @Override
   public CertificateModel create() {
     return CertificateModel.builder()
@@ -77,6 +79,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
         )
         .name(NAME)
         .description(DESCRIPTION)
+        .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)
         .availableForCitizen(true)
         .rolesWithAccess(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,

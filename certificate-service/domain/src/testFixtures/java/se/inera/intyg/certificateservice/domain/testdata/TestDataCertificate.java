@@ -39,7 +39,7 @@ public class TestDataCertificate {
   private TestDataCertificate() {
 
   }
-
+  
   public static final CertificateId CERTIFICATE_ID = new CertificateId("CERTIFICATE_ID");
   public static final CertificateId PARENT_CERTIFICATE_ID = new CertificateId(
       "PARENT_CERTIFICATE_ID");

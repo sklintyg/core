@@ -15,6 +15,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
@@ -410,6 +412,26 @@ public class ApiUtil {
   public ResponseEntity<GetCertificateXmlResponse> getCertificateXml(
       GetCertificateXmlRequest request, String certificateId) {
     final var requestUrl = "http://localhost:%s/api/certificate/%s/xml".formatted(
+        port,
+        certificateId
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<AnswerComplementResponse> answerComplement(
+      AnswerComplementRequest request, String certificateId) {
+    final var requestUrl = "http://localhost:%s/api/certificate/%s/answerComplement".formatted(
         port,
         certificateId
     );

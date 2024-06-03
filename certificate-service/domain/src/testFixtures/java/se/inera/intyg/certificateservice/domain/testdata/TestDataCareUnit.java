@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_PHONENUMBER;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_WORKPLACE_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ADDRESS;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_CITY;
@@ -25,9 +26,11 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.CareUnit.CareUnitBuilder;
+import se.inera.intyg.certificateservice.domain.unit.model.Inactive;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitAddress;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitContactInfo;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
+import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
 
 public class TestDataCareUnit {
 
@@ -51,7 +54,11 @@ public class TestDataCareUnit {
                 .email(ALFA_MEDICINCENTRUM_EMAIL)
                 .phoneNumber(ALFA_MEDICINCENTRUM_PHONENUMBER)
                 .build()
-        );
+        )
+        .workplaceCode(
+            new WorkplaceCode(ALFA_MEDICINCENTRUM_WORKPLACE_CODE)
+        )
+        .inactive(new Inactive(false));
   }
 
   public static CareUnitBuilder alfaVardcentralBuilder() {

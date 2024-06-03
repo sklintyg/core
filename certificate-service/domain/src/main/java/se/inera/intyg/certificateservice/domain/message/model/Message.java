@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.With;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -39,6 +41,7 @@ public class Message {
   private MessageContactInfo contactInfo;
   @Builder.Default
   private final List<Complement> complements = Collections.emptyList();
+  @With
   private Answer answer;
   @Builder.Default
   private List<Reminder> reminders = Collections.emptyList();
@@ -100,5 +103,13 @@ public class Message {
       this.status = MessageStatus.HANDLED;
       this.modified = LocalDateTime.now(ZoneId.systemDefault());
     }
+  }
+
+  public void remind(Reminder reminder) {
+    this.reminders = Stream.concat(
+            this.reminders.stream(),
+            Stream.of(reminder)
+        )
+        .toList();
   }
 }

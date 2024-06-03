@@ -80,6 +80,13 @@ class CertificateModelFactoryFK7210Test {
   }
 
   @Test
+  void shallIncludeDetailedDescription() {
+    final var certificateModel = certificateModelFactoryFK7210.create();
+
+    assertFalse(certificateModel.detailedDescription().isBlank());
+  }
+
+  @Test
   void shallIncludeActiveFrom() {
     final var expectedActiveFrom = LocalDateTime.now(ZoneId.systemDefault());
     ReflectionTestUtils.setField(certificateModelFactoryFK7210, "activeFrom",

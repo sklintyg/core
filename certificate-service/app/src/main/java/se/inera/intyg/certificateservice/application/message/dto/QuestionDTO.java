@@ -28,7 +28,7 @@ public class QuestionDTO {
   boolean isHandled;
   @JsonProperty("isForwarded")
   boolean isForwarded;
-  AnswerDTO answerDTO;
+  AnswerDTO answer;
   CertificateRelationDTO answeredByCertificate;
   List<ReminderDTO> reminders;
   LocalDateTime lastUpdate;

@@ -29,7 +29,7 @@ class PdfUnitValueGeneratorTest {
     );
     final var unitValue = (ElementValueUnitContactInformation) elementData.get().value();
     final var expectedAddress =
-        unit.name().name() + "\n" + unitValue.address() + " \n" + unitValue.zipCode() + " "
+        unit.name().name() + "\n" + unitValue.address() + ", " + unitValue.zipCode() + " "
             + unitValue.city() + "\nTelefon: " + unitValue.phoneNumber();
 
     final var expected = List.of(

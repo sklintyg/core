@@ -29,9 +29,17 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationRepository;
 
 @ExtendWith(MockitoExtension.class)
 class JpaMessageRepositoryTest {
+
+  @Mock
+  private MessageRelationEntityRepository messageRelationEntityRepository;
+
+  @Mock
+  private MessageRelationRepository messageRelationRepository;
 
   @Mock
   private MessageEntityMapper messageEntityMapper;
@@ -87,6 +95,25 @@ class JpaMessageRepositoryTest {
     }
 
     @Test
+    void shallSaveMessageRelations() {
+      final var message = complementMessageBuilder().created(LocalDateTime.now()).build();
+      final var messageEntityToSave = MessageEntity.builder().build();
+      final var savedMessageEntity = MessageEntity.builder().build();
+
+      doReturn(messageEntityToSave).when(messageEntityMapper).toEntity(COMPLEMENT_MESSAGE, null);
+      doReturn(savedMessageEntity).when(messageEntityRepository).save(messageEntityToSave);
+      doReturn(message).when(messageEntityMapper).toDomain(savedMessageEntity);
+
+      jpaMessageRepository.save(COMPLEMENT_MESSAGE);
+
+      verify(messageRelationRepository).save(COMPLEMENT_MESSAGE, savedMessageEntity);
+    }
+  }
+
+  @Nested
+  class TestRemove {
+
+    @Test
     void shallRemoveMessages() {
       final var ids = List.of("ID1", "ID2");
 
@@ -105,6 +132,7 @@ class JpaMessageRepositoryTest {
 
       verifyNoInteractions(messageEntityRepository);
     }
+
   }
 
   @Nested

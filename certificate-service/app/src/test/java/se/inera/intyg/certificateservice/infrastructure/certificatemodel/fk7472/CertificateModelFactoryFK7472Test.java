@@ -81,6 +81,13 @@ class CertificateModelFactoryFK7472Test {
   }
 
   @Test
+  void shallIncludeDetailedDescription() {
+    final var certificateModel = certificateModelFactoryFK7472.create();
+
+    assertFalse(certificateModel.detailedDescription().isBlank());
+  }
+
+  @Test
   void shallIncludePdfTemplatePath() {
     final var certificateModel = certificateModelFactoryFK7472.create();
 

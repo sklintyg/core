@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.integrationtest.util;
 
+import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
@@ -143,6 +144,14 @@ public class ApiRequestUtil {
 
   public static GetCertificateMessageRequest defaultGetCertificateMessageRequest() {
     return GetCertificateMessageRequestBuilder.create().build();
+  }
+
+  public static AnswerComplementRequest defaultAnswerComplementRequest() {
+    return AnswerComplementRequestBuilder.create().build();
+  }
+
+  public static AnswerComplementRequestBuilder customAnswerComplementRequest() {
+    return AnswerComplementRequestBuilder.create();
   }
 
   public static GetCertificateFromMessageRequest defaultGetCertificateFromMessageRequest() {

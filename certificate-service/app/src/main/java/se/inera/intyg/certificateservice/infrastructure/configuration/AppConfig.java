@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.certificate.service.AnswerComplementDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ComplementCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.DeleteCertificateDomainService;
@@ -25,9 +26,12 @@ import se.inera.intyg.certificateservice.domain.citizen.service.GetCitizenCertif
 import se.inera.intyg.certificateservice.domain.citizen.service.PrintCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventSubscriber;
+import se.inera.intyg.certificateservice.domain.event.service.MessageEventDomainService;
+import se.inera.intyg.certificateservice.domain.event.service.MessageEventSubscriber;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 import se.inera.intyg.certificateservice.domain.message.service.HandleMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.ReceiveComplementMessageDomainService;
+import se.inera.intyg.certificateservice.domain.message.service.ReceiveReminderMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.XmlGeneratorMessage;
 import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
@@ -229,9 +233,15 @@ public class AppConfig {
   }
 
   @Bean
-  public ReceiveComplementMessageDomainService receiveMessageDomainService(
+  public ReceiveComplementMessageDomainService receiveComplementMessageDomainService(
       CertificateRepository certificateRepository, MessageRepository messageRepository) {
     return new ReceiveComplementMessageDomainService(certificateRepository, messageRepository);
+  }
+
+  @Bean
+  public ReceiveReminderMessageDomainService receiveReminderMessageDomainService(
+      CertificateRepository certificateRepository, MessageRepository messageRepository) {
+    return new ReceiveReminderMessageDomainService(certificateRepository, messageRepository);
   }
 
   @Bean
@@ -249,5 +259,20 @@ public class AppConfig {
   @Bean
   public XmlGeneratorMessage xmlGeneratorMessage() {
     return new XmlGeneratorMessageV4();
+  }
+
+  @Bean
+  public AnswerComplementDomainService answerComplementDomainService(
+      CertificateRepository certificateRepository,
+      SetMessagesToHandleDomainService setMessagesToHandleDomainService,
+      MessageEventDomainService messageEventDomainService) {
+    return new AnswerComplementDomainService(certificateRepository,
+        setMessagesToHandleDomainService, messageEventDomainService);
+  }
+
+  @Bean
+  public MessageEventDomainService messageEventDomainService(
+      List<MessageEventSubscriber> messageEventSubscribers) {
+    return new MessageEventDomainService(messageEventSubscribers);
   }
 }

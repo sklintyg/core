@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
@@ -37,6 +39,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.service.AnswerComplementService;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.ComplementCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
@@ -73,6 +76,7 @@ public class CertificateController {
   private final ReplaceCertificateService replaceCertificateService;
   private final RenewCertificateService renewCertificateService;
   private final ComplementCertificateService complementCertificateService;
+  private final AnswerComplementService answerComplementService;
 
   @PostMapping
   CreateCertificateResponse createCertificate(
@@ -176,5 +180,12 @@ public class CertificateController {
       @RequestBody ComplementCertificateRequest request,
       @PathVariable("certificateId") String certificateId) {
     return complementCertificateService.complement(request, certificateId);
+  }
+
+  @PostMapping("/{certificateId}/answerComplement")
+  AnswerComplementResponse answerComplement(
+      @RequestBody AnswerComplementRequest answerComplementRequest,
+      @PathVariable("certificateId") String certificateId) {
+    return answerComplementService.answer(answerComplementRequest, certificateId);
   }
 }

@@ -10,8 +10,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCer
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRevokedEntity.REVOKED_MESSAGE;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_MEDICINCENTRUM_ENTITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REF;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.PARENT_CERTIFICATE_ID;
@@ -22,12 +21,8 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_MIDDLE_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FIRST_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_LAST_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_MIDDLE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason.INCORRECT_PATIENT;
 
 import java.time.LocalDate;
@@ -50,20 +45,14 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
-import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.patient.model.Deceased;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
-import se.inera.intyg.certificateservice.domain.staff.model.Staff;
-import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
-import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
-import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.PatientRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.StaffRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.UnitRepository;
@@ -289,63 +278,36 @@ class CertificateEntityMapperTest {
 
     @Test
     void shouldMapCareUnit() {
-      final var expected = CareUnit.builder()
-          .hsaId(new HsaId(ALFA_MEDICINCENTRUM_ID))
-          .name(new UnitName(ALFA_MEDICINCENTRUM_NAME))
-          .build();
-
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
           FK7210_CERTIFICATE_MODEL);
 
-      assertEquals(expected, response.certificateMetaData().careUnit());
+      assertEquals(ALFA_MEDICINCENTRUM, response.certificateMetaData().careUnit());
     }
 
     @Test
     void shouldMapIssuedOnUnitAsSubUnit() {
-      final var expected = SubUnit.builder()
-          .hsaId(new HsaId(ALFA_ALLERGIMOTTAGNINGEN_ID))
-          .name(new UnitName(ALFA_ALLERGIMOTTAGNINGEN_NAME))
-          .build();
-
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
           FK7210_CERTIFICATE_MODEL);
 
-      assertEquals(expected, response.certificateMetaData().issuingUnit());
+      assertEquals(ALFA_ALLERGIMOTTAGNINGEN, response.certificateMetaData().issuingUnit());
     }
 
     @Test
     void shouldMapIssuedOnUnitAsCareUnit() {
       CERTIFICATE_ENTITY.setIssuedOnUnit(ALFA_MEDICINCENTRUM_ENTITY);
 
-      final var expected = CareUnit.builder()
-          .hsaId(new HsaId(ALFA_MEDICINCENTRUM_ID))
-          .name(new UnitName(ALFA_MEDICINCENTRUM_NAME))
-          .build();
-
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
           FK7210_CERTIFICATE_MODEL);
 
-      assertEquals(expected, response.certificateMetaData().issuingUnit());
+      assertEquals(ALFA_MEDICINCENTRUM, response.certificateMetaData().issuingUnit());
     }
 
     @Test
     void shouldMapIssuer() {
-      final var expected = Staff.builder()
-          .hsaId(new HsaId(AJLA_DOCTOR_HSA_ID))
-          .name(
-              Name.builder()
-                  .firstName(AJLA_DOCTOR_FIRST_NAME)
-                  .middleName(AJLA_DOCTOR_MIDDLE_NAME)
-                  .lastName(AJLA_DOCTOR_LAST_NAME)
-                  .build()
-          )
-          .role(Role.DOCTOR)
-          .build();
-
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
           FK7210_CERTIFICATE_MODEL);
 
-      assertEquals(expected, response.certificateMetaData().issuer());
+      assertEquals(AJLA_DOKTOR, response.certificateMetaData().issuer());
     }
 
     @Test
@@ -404,22 +366,10 @@ class CertificateEntityMapperTest {
 
     @Test
     void shouldMapSentBy() {
-      final var expected = Staff.builder()
-          .hsaId(new HsaId(AJLA_DOCTOR_HSA_ID))
-          .name(
-              Name.builder()
-                  .firstName(AJLA_DOCTOR_FIRST_NAME)
-                  .middleName(AJLA_DOCTOR_MIDDLE_NAME)
-                  .lastName(AJLA_DOCTOR_LAST_NAME)
-                  .build()
-          )
-          .role(Role.DOCTOR)
-          .build();
-
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
           FK7210_CERTIFICATE_MODEL);
 
-      assertEquals(expected, response.sent().sentBy());
+      assertEquals(AJLA_DOKTOR, response.sent().sentBy());
     }
 
     @Test
@@ -439,22 +389,10 @@ class CertificateEntityMapperTest {
 
     @Test
     void shouldMapRevokedBy() {
-      final var expected = Staff.builder()
-          .hsaId(new HsaId(AJLA_DOCTOR_HSA_ID))
-          .name(
-              Name.builder()
-                  .firstName(AJLA_DOCTOR_FIRST_NAME)
-                  .middleName(AJLA_DOCTOR_MIDDLE_NAME)
-                  .lastName(AJLA_DOCTOR_LAST_NAME)
-                  .build()
-          )
-          .role(Role.DOCTOR)
-          .build();
-
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
           FK7210_CERTIFICATE_MODEL);
 
-      assertEquals(expected, response.revoked().revokedBy());
+      assertEquals(AJLA_DOKTOR, response.revoked().revokedBy());
     }
 
     @Test

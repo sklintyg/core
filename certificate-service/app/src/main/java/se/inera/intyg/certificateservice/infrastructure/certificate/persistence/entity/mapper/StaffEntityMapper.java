@@ -1,9 +1,17 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
+import se.inera.intyg.certificateservice.domain.common.model.AllowCopy;
+import se.inera.intyg.certificateservice.domain.common.model.Blocked;
+import se.inera.intyg.certificateservice.domain.common.model.HealthCareProfessionalLicence;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
+import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.common.model.Speciality;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.HealthcareProfessionalLicenceEmbeddable;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PaTitleEmbeddable;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.SpecialityEmbeddable;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffRole;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffRoleEntity;
@@ -27,6 +35,34 @@ public class StaffEntityMapper {
                 .role(staffRole.name())
                 .build()
         )
+        .paTitles(
+            staff.paTitles().stream()
+                .map(
+                    paTitle -> PaTitleEmbeddable.builder()
+                        .code(paTitle.code())
+                        .description(paTitle.description())
+                        .build()
+                )
+                .toList()
+        )
+        .specialities(
+            staff.specialities().stream()
+                .map(
+                    speciality -> SpecialityEmbeddable.builder()
+                        .speciality(speciality.value())
+                        .build()
+                )
+                .toList()
+        )
+        .healthcareProfessionalLicences(
+            staff.healthCareProfessionalLicence().stream()
+                .map(
+                    healthCareProfessionalLicence -> HealthcareProfessionalLicenceEmbeddable.builder()
+                        .healthcareProfessionalLicence(healthCareProfessionalLicence.value())
+                        .build()
+                )
+                .toList()
+        )
         .build();
   }
 
@@ -43,6 +79,30 @@ public class StaffEntityMapper {
         .role(
             Role.valueOf(entity.getRole().getRole())
         )
+        .paTitles(
+            entity.getPaTitles().stream()
+                .map(paTitleEmbeddable -> new PaTitle(
+                        paTitleEmbeddable.getCode(),
+                        paTitleEmbeddable.getDescription()
+                    )
+                )
+                .toList()
+        )
+        .specialities(
+            entity.getSpecialities().stream()
+                .map(specialityEmbeddable -> new Speciality(specialityEmbeddable.getSpeciality()))
+                .toList()
+        )
+        .healthCareProfessionalLicence(
+            entity.getHealthcareProfessionalLicences().stream()
+                .map(healthcareProfessionalLicenceEmbeddable -> new HealthCareProfessionalLicence(
+                        healthcareProfessionalLicenceEmbeddable.getHealthcareProfessionalLicence()
+                    )
+                )
+                .toList()
+        )
+        .allowCopy(new AllowCopy(true))
+        .blocked(new Blocked(false))
         .build();
   }
 }
