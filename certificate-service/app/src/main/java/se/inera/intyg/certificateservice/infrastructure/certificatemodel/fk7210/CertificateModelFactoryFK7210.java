@@ -40,8 +40,8 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
   private static final String VERSION = "1.0";
   private static final String NAME = "Intyg om graviditet";
   private static final String DESCRIPTION = """
-      Vad är intyg om graviditet?
-      När en person är gravid ska hen få ett intyg om graviditet av hälso- och sjukvården. Intyget behövs om den gravida begär ersättning från Försäkringskassan innan barnet är fött. Intyget skickas till Försäkringskassan digitalt av hälso- och sjukvården eller av den gravida.
+      <b>Vad är intyg om graviditet?</b>
+      När en person är gravid ska hen få ett intyg om graviditet av hälso- och sjukvården. Intyget behövs om den gravida begär ersättning från Försäkringskassan innan barnet är fött.<br><br> Intyget skickas till Försäkringskassan digitalt av hälso- och sjukvården eller av den gravida.
       """;
   public static final CertificateModelId FK7210_V1_0 = CertificateModelId.builder()
       .type(new CertificateType(FK_7210))

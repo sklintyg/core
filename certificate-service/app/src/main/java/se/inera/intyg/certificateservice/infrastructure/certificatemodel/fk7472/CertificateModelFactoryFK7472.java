@@ -47,16 +47,16 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
   private static final String VERSION = "1.0";
   private static final String NAME = "Intyg om tillfällig föräldrapenning";
   private static final String DESCRIPTION = """
-      <p className="iu-fw-heading">Vad är Intyg om tillfällig föräldrapenning?</p>
+      <b className="iu-fw-heading">Vad är Intyg om tillfällig föräldrapenning?</b>
       <p>När ett barn är sjukt kan den förälder som behöver avstå från sitt arbete för att vårda barnet få tillfällig föräldrapenning. Vårdperioden räknas från och med den första dagen man får tillfällig föräldrapenning för barnet.</p>
-      <p className="iu-fw-heading">Förutsättningar för att få tillfällig föräldrapenning:</p>
-      <p className="iu-fw-heading">Om barnet är under 12 år</p>
+      <b className="iu-fw-heading">Förutsättningar för att få tillfällig föräldrapenning:</b><br>
+      <b className="iu-fw-heading">Om barnet är under 12 år</b>
       <p>Från den åttonde kalenderdagen i barnets vårdperiod behöver ett intyg från läkare eller sjuksköterska skickas till Försäkringskassan.</p>
-      <p className="iu-fw-heading">Om barnet har fyllt 12 men inte 16 år</p>
-      <p>När föräldern har ett förhandsbesked från Försäkringskassan behöver ett intyg från läkare eller sjuksköterska skickas till Försäkringskassan från och med den åttonde dagen i vårdperioden.\s
+      <b className="iu-fw-heading">Om barnet har fyllt 12 men inte 16 år</b>
+      <p>När föräldern har ett förhandsbesked från Försäkringskassan behöver ett intyg från läkare eller sjuksköterska skickas till Försäkringskassan från och med den åttonde dagen i vårdperioden.<br>
       För barn som är 12-16 år krävs vanligtvis ett läkarutlåtande från första dagen i vårdperioden. Försäkringskassan kan besluta att föräldrar till ett barn som har ett utökat vård- eller tillsynsbehov inte behöver visa läkarutlåtande från första dagen. Det kallas för förhandsbeslut.</p>
-      <p className="iu-fw-heading">Om barnet har fyllt 16 men inte 21 år</p>
-      <p>För barn som omfattas av LSS (lagen om stöd och service till vissa funktionshindrade) behöver ett intyg från läkare eller sjuksköterska skickas till Försäkringskassan från och med den åttonde dagen i vårdperioden.\s
+      <b className="iu-fw-heading">Om barnet har fyllt 16 men inte 21 år</b>
+      <p>För barn som omfattas av LSS (lagen om stöd och service till vissa funktionshindrade) behöver ett intyg från läkare eller sjuksköterska skickas till Försäkringskassan från och med den åttonde dagen i vårdperioden.<br>
       Intyget behövs vid tillkommande sjukdom eller en försämring av grundsjukdomen.</p>
       """;
   public static final CertificateModelId FK7472_V1_0 = CertificateModelId.builder()
