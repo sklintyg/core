@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 import se.inera.intyg.certificateservice.domain.common.model.AllowCopy;
 import se.inera.intyg.certificateservice.domain.common.model.Blocked;
 import se.inera.intyg.certificateservice.domain.common.model.HealthCareProfessionalLicence;
@@ -43,7 +45,7 @@ public class StaffEntityMapper {
                         .description(paTitle.description())
                         .build()
                 )
-                .toList()
+                .collect(Collectors.toCollection(ArrayList::new))
         )
         .specialities(
             staff.specialities().stream()
@@ -52,7 +54,7 @@ public class StaffEntityMapper {
                         .speciality(speciality.value())
                         .build()
                 )
-                .toList()
+                .collect(Collectors.toCollection(ArrayList::new))
         )
         .healthcareProfessionalLicences(
             staff.healthCareProfessionalLicence().stream()
@@ -61,7 +63,7 @@ public class StaffEntityMapper {
                         .healthcareProfessionalLicence(healthCareProfessionalLicence.value())
                         .build()
                 )
-                .toList()
+                .collect(Collectors.toCollection(ArrayList::new))
         )
         .build();
   }

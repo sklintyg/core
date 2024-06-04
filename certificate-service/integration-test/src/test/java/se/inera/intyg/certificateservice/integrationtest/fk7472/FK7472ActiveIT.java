@@ -28,7 +28,6 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataInc
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.QUESTION_PERIOD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.QUESTION_SYMPTOM_ID;
-import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.FK7210;
 import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.FK7472;
 import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.VERSION;
 import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.WRONG_VERSION;
@@ -2775,9 +2774,7 @@ class FK7472ActiveIT {
     @DisplayName("FK7472 - Om användaren har rollen barnmorska ska intyget gå att signeras")
     void shallSuccessfullySignIfRoleIsMidwife() {
       final var testCertificates = testabilityApi.addCertificates(
-          customTestabilityCertificateRequest(FK7210, FK7210Constants.VERSION)
-              .user(BERTIL_BARNMORSKA_DTO)
-              .build()
+          defaultTestablilityCertificateRequest(FK7472, FK7210Constants.VERSION)
       );
 
       final var response = api.signCertificate(
