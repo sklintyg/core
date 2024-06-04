@@ -19,9 +19,15 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
@@ -345,7 +351,7 @@ class CertificateModelFactoryFK3226Test {
   class CertificateSpecifications {
 
     @Nested
-    class CategorySymptom {
+    class CategoryGrund {
 
       private static final ElementId ELEMENT_ID = new ElementId("KAT_1");
 
@@ -375,7 +381,67 @@ class CertificateModelFactoryFK3226Test {
     }
 
     @Nested
-    class CategoryPeriod {
+    class QuestionUtlatandeBaseratPa {
+
+      private static final ElementId ELEMENT_ID = new ElementId("1");
+
+      @Test
+      void shallIncludeId() {
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
+                certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeConfiguration() {
+        final var expectedConfiguration = ElementConfigurationCheckboxMultipleDate.builder()
+            .name("Utlåtandet är baserat på")
+            .id(new FieldId("1.1"))
+            .dates(
+                List.of(
+                    new CheckboxDate(new FieldId("undersokningAvPatienten"),
+                        "min undersökning av patienten"),
+                    new CheckboxDate(new FieldId("journaluppgifter"), "journaluppgifter från den"),
+                    new CheckboxDate(new FieldId("annat"), "annat")
+                )
+            )
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+
+      @Test
+      void shallIncludeRules() {
+        final var expectedRules = List.of(
+            ElementRuleExpression.builder()
+                .id(ELEMENT_ID)
+                .type(ElementRuleType.MANDATORY)
+                .expression(
+                    new RuleExpression(
+                        "$undersokningAvPatienten || $journaluppgifter || $annat"
+                    )
+                )
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedRules,
+            certificateModel.elementSpecification(ELEMENT_ID).rules()
+        );
+      }
+    }
+
+    @Nested
+    class CategoryHot {
 
       private static final ElementId ELEMENT_ID = new ElementId("KAT_2");
 
@@ -486,4 +552,6 @@ class CertificateModelFactoryFK3226Test {
       assertEquals(expected, certificateModel.rolesWithAccess());
     }
   }
+
+
 }

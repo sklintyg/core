@@ -15,8 +15,10 @@ public class TestDataCertificateModelConstants {
   }
 
   public static final CertificateType FK7210_TYPE = new CertificateType("fk7210");
+  public static final CertificateType FK3226_TYPE = new CertificateType("fk3226");
   public static final CertificateType FK7472_TYPE = new CertificateType("fk7472");
   public static final CertificateVersion FK7210_VERSION = new CertificateVersion("1.0");
+  public static final CertificateVersion FK3226_VERSION = new CertificateVersion("1.0");
   public static final CertificateVersion FK7472_VERSION = new CertificateVersion("1.0");
   public static final CertificateModelId FK7210_ID = CertificateModelId.builder()
       .type(FK7210_TYPE)
@@ -27,6 +29,11 @@ public class TestDataCertificateModelConstants {
       "b64ea353-e8f6-4832-b563-fc7d46f29548",
       "Intyg om graviditet"
   );
+  public static final Code FK3226_CODE_TYPE = new Code(
+      "LUNSP",
+      "b64ea353-e8f6-4832-b563-fc7d46f29548",
+      "Intyg om graviditet"
+  );
   public static final Code FK7472_CODE_TYPE = new Code(
       "ITFP",
       "b64ea353-e8f6-4832-b563-fc7d46f29548",
@@ -34,13 +41,18 @@ public class TestDataCertificateModelConstants {
   );
   public static final SchematronPath FK7210_SCHEMATRON_PATH = new SchematronPath(
       "fk7210/schematron/igrav.v1.sch");
+  public static final SchematronPath FK3226_SCHEMATRON_PATH = new SchematronPath(
+      "fk3226/schematron/lunsp.v1.sch");
   public static final SchematronPath FK7472_SCHEMATRON_PATH = new SchematronPath(
       "fk7472/schematron/itfp.v1.sch");
   public static final String FK7210_PDF_PATH = "fk7210/pdf/fk7210_v1.pdf";
+  public static final String FK3226_PDF_PATH = "fk3226/pdf/fk3226_v1.pdf";
   public static final String FK7472_PDF_PATH = "fk7472/pdf/fk7472_v1.pdf";
   public static final String FK7210_PDF_PATH_NO_ADDRESS = "fk7210/pdf/fk7210_v1_no_address.pdf";
+  public static final String FK3226_PDF_PATH_NO_ADDRESS = "fk3226/pdf/fk3226_v1_no_address.pdf";
   public static final String FK7472_PDF_PATH_NO_ADDRESS = "fk7472/pdf/fk7472_v1_no_address.pdf";
   public static final String FK7210_NAME = "Intyg om graviditet";
+  public static final String FK3226_NAME = "Läkarutlåtande för närståendepenning";
   public static final String FK7472_NAME = "Intyg om tillfällig föräldrapenning";
   public static final Recipient FK_RECIPIENT = new Recipient(
       new RecipientId("FKASSA"), "Försäkringskassan"
