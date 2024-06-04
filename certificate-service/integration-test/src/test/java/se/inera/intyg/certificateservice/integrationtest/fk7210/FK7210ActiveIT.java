@@ -17,6 +17,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_HUDMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_VARDCENTRAL_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.BETA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
@@ -24,6 +25,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.DAN_DENTIST_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.alvaVardadministratorDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.QUESTION_BERAKNAT_FODELSEDATUM_ID;
@@ -3602,6 +3604,7 @@ class FK7210ActiveIT {
                   .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
                   .build())
               .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .careUnit(ALFA_VARDCENTRAL_DTO)
               .build(),
           certificateId(testCertificates)
       );
@@ -3625,6 +3628,7 @@ class FK7210ActiveIT {
                   .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
                   .build())
               .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .careUnit(ALFA_VARDCENTRAL_DTO)
               .build(),
           certificateId(testCertificates)
       );
@@ -3648,11 +3652,44 @@ class FK7210ActiveIT {
                   .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
                   .build())
               .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .careUnit(ALFA_VARDCENTRAL_DTO)
               .build(),
           certificateId(testCertificates)
       );
 
       assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7210 - Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall det gå att läsa intyget - metadata skall vara oförändrad")
+    void shallReturnCertificateIfOnDifferentUnitButSameCareProviderWithSameMetadata() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7210, VERSION)
+      );
+
+      final var response = api.getCertificate(
+          customGetCertificateRequest()
+              .user(alvaVardadministratorDtoBuilder()
+                  .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
+                  .build())
+              .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .careUnit(ALFA_VARDCENTRAL_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      final var certificate = certificate(response.getBody());
+
+      assertAll(
+          () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN_DTO.getId(),
+              certificate.getMetadata().getUnit().getUnitId()),
+          () -> assertEquals(ALFA_MEDICINCENTRUM_DTO.getId(),
+              certificate.getMetadata().getCareUnit().getUnitId()),
+          () -> assertEquals(ALFA_REGIONEN_DTO.getId(),
+              certificate.getMetadata().getCareProvider().getUnitId()),
+          () -> assertEquals(AJLA_DOCTOR_DTO.getId(),
+              certificate.getMetadata().getIssuedBy().getPersonId())
+      );
     }
   }
 
@@ -3672,6 +3709,8 @@ class FK7210ActiveIT {
               .user(ajlaDoktorDtoBuilder()
                   .accessScope(AccessScopeTypeDTO.ALL_CARE_PROVIDERS)
                   .build())
+              .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .careUnit(ALFA_VARDCENTRAL_DTO)
               .careProvider(BETA_REGIONEN_DTO)
               .build(),
           certificateId(testCertificates)
@@ -3695,6 +3734,8 @@ class FK7210ActiveIT {
               .user(ajlaDoktorDtoBuilder()
                   .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
                   .build())
+              .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .careUnit(ALFA_VARDCENTRAL_DTO)
               .careProvider(BETA_REGIONEN_DTO)
               .build(),
           certificateId(testCertificates)
@@ -3715,12 +3756,47 @@ class FK7210ActiveIT {
               .user(ajlaDoktorDtoBuilder()
                   .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
                   .build())
+              .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .careUnit(ALFA_VARDCENTRAL_DTO)
               .careProvider(BETA_REGIONEN_DTO)
               .build(),
           certificateId(testCertificates)
       );
 
       assertEquals(403, response.getStatusCode().value());
+    }
+
+    @Test
+    @DisplayName("FK7210 - Om intyget är utfärdat inom en annan vårdgivare skall det gå att läsa intyget - metadata skall vara oförändrad")
+    void shallReturnCertificateIfOnDifferentUnitButSameCareProviderWithSameMetadata() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7210, VERSION)
+      );
+
+      final var response = api.getCertificate(
+          customGetCertificateRequest()
+              .user(alvaVardadministratorDtoBuilder()
+                  .accessScope(AccessScopeTypeDTO.ALL_CARE_PROVIDERS)
+                  .build())
+              .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+              .careUnit(ALFA_VARDCENTRAL_DTO)
+              .careProvider(BETA_REGIONEN_DTO)
+              .build(),
+          certificateId(testCertificates)
+      );
+
+      final var certificate = certificate(response.getBody());
+
+      assertAll(
+          () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN_DTO.getId(),
+              certificate.getMetadata().getUnit().getUnitId()),
+          () -> assertEquals(ALFA_MEDICINCENTRUM_DTO.getId(),
+              certificate.getMetadata().getCareUnit().getUnitId()),
+          () -> assertEquals(ALFA_REGIONEN_DTO.getId(),
+              certificate.getMetadata().getCareProvider().getUnitId()),
+          () -> assertEquals(AJLA_DOCTOR_DTO.getId(),
+              certificate.getMetadata().getIssuedBy().getPersonId())
+      );
     }
   }
 

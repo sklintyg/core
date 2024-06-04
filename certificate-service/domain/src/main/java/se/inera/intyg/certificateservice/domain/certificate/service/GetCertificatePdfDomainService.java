@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificate.service;
 
+import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.UPDATE;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
@@ -34,7 +36,8 @@ public class GetCertificatePdfDomainService {
           certificate.reasonNotAllowed(CertificateActionType.PRINT, Optional.of(actionEvaluation))
       );
     }
-    if (certificate.isDraft()) {
+
+    if (certificate.isDraft() && certificate.allowTo(UPDATE, Optional.of(actionEvaluation))) {
       certificate.updateMetadata(actionEvaluation);
     }
 

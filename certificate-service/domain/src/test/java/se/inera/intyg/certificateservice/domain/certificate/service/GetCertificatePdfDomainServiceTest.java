@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.UPDATE;
 
 import java.util.List;
 import java.util.Optional;
@@ -72,10 +74,26 @@ class GetCertificatePdfDomainServiceTest {
     }
 
     @Test
-    void shallUpdateCertificateMetadataIfCertificateIsDraft() {
+    void shallUpdateCertificateMetadataIfDraftAndHasUpdateRights() {
+      doReturn(true).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
       doReturn(true).when(certificate).isDraft();
       getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION, ADDITIONAL_INFO_TEXT);
       verify(certificate).updateMetadata(ACTION_EVALUATION);
+    }
+
+    @Test
+    void shallNotUpdateCertificateMetadataIfDraftAndHasNoUpdateRights() {
+      doReturn(false).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
+      doReturn(true).when(certificate).isDraft();
+      getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION, ADDITIONAL_INFO_TEXT);
+      verify(certificate, never()).updateMetadata(ACTION_EVALUATION);
+    }
+
+    @Test
+    void shallNotUpdateCertificateMetadataIfNotDraft() {
+      doReturn(false).when(certificate).isDraft();
+      getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION, ADDITIONAL_INFO_TEXT);
+      verify(certificate, never()).updateMetadata(ACTION_EVALUATION);
     }
 
     @Test
