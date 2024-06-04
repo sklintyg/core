@@ -117,7 +117,7 @@ class PdfDateValueGeneratorTest {
     }
 
     @Test
-    void shouldThrowExceptionIfGivenQuestionIdIsNotInElementData() {
+    void shouldReturnEmptyListIfGivenQuestionIdIsNotInElementData() {
       final var certificate = buildCertificate(
           List.of(
               ElementData.builder()
@@ -131,9 +131,8 @@ class PdfDateValueGeneratorTest {
           )
       );
 
-      assertThrows(
-          IllegalStateException.class,
-          () -> pdfDateValueGenerator
+      assertEquals(Collections.emptyList(),
+          pdfDateValueGenerator
               .generate(certificate, QUESTION_ID, FIELD_ID)
       );
     }
