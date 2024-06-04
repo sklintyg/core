@@ -46,7 +46,7 @@ class ActionRuleChildRelationNoMatchTest {
   @Test
   void shallReturnFalseIfRelationTypeMatches() {
     final var actionRuleChildRelation = new ActionRuleChildRelationNoMatch(
-        List.of(RelationType.REPLACE));
+        List.of(RelationType.REPLACE), List.of(Status.REVOKED));
 
     final var certificate = certificateBuilder.build();
 
@@ -58,7 +58,7 @@ class ActionRuleChildRelationNoMatchTest {
   @Test
   void shallReturnTrueIfRelationTypeDoesntMatch() {
     final var actionRuleChildRelation = new ActionRuleChildRelationNoMatch(
-        List.of(RelationType.RENEW));
+        List.of(RelationType.RENEW), List.of(Status.REVOKED));
 
     final var certificate = certificateBuilder.build();
 
@@ -70,7 +70,7 @@ class ActionRuleChildRelationNoMatchTest {
   @Test
   void shallReturnTrueIfRelationTypeMatchesButIsRevoked() {
     final var actionRuleChildRelation = new ActionRuleChildRelationNoMatch(
-        List.of(RelationType.REPLACE));
+        List.of(RelationType.REPLACE), List.of(Status.REVOKED));
 
     final var certificate = certificateBuilder
         .children(
@@ -94,7 +94,7 @@ class ActionRuleChildRelationNoMatchTest {
   @Test
   void shallReturnReason() {
     final var actionRuleChildRelation = new ActionRuleChildRelationNoMatch(
-        List.of(RelationType.REPLACE));
+        List.of(RelationType.REPLACE), List.of(Status.REVOKED));
 
     assertEquals(
         "Du saknar behörighet för den begärda åtgärden eftersom intyget redan har relation med typ: [REPLACE]",

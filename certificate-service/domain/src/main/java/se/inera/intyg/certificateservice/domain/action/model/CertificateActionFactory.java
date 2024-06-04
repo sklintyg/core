@@ -93,7 +93,8 @@ public class CertificateActionFactory {
                   ),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleSent(false),
-                  new ActionRuleChildRelationNotSigned()
+                  new ActionRuleChildRelationNoMatch(List.of(RelationType.REPLACE),
+                      List.of(Status.DRAFT, Status.REVOKED))
               )
           )
           .build();
@@ -128,7 +129,8 @@ public class CertificateActionFactory {
                       List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
                   ),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
-                  new ActionRuleChildRelationNoMatch(List.of(RelationType.REPLACE)),
+                  new ActionRuleChildRelationNoMatch(List.of(RelationType.REPLACE),
+                      List.of(Status.REVOKED)),
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleNoComplementMessages()
               )
@@ -195,7 +197,8 @@ public class CertificateActionFactory {
                   new ActionRulePatientAlive(),
                   new ActionRuleUserAllowCopy(),
                   new ActionRuleComplementMessages(),
-                  new ActionRuleChildRelationNoMatch(List.of(RelationType.COMPLEMENT))
+                  new ActionRuleChildRelationNoMatch(List.of(RelationType.COMPLEMENT),
+                      List.of(Status.REVOKED))
               )
           )
           .build();
@@ -209,7 +212,8 @@ public class CertificateActionFactory {
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
                   new ActionRuleUserAllowCopy(),
-                  new ActionRuleChildRelationNoMatch(List.of(RelationType.COMPLEMENT))
+                  new ActionRuleChildRelationNoMatch(List.of(RelationType.COMPLEMENT),
+                      List.of(Status.REVOKED))
               )
           )
           .build();
