@@ -20,8 +20,7 @@ public class PdfDateValueGenerator implements PdfElementValueGenerator {
     final var question = certificate.getElementDataById(questionId);
 
     if (question.isEmpty()) {
-      throw new IllegalStateException(
-          "Could not find question with id: %s".formatted(questionId));
+      return Collections.emptyList();
     }
 
     if (!(question.get().value() instanceof ElementValueDate elementValueDate)) {

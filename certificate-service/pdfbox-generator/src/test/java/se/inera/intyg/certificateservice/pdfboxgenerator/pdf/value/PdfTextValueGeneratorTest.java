@@ -132,9 +132,8 @@ class PdfTextValueGeneratorTest {
           )
       );
 
-      assertThrows(
-          IllegalStateException.class,
-          () -> pdfTextValueGenerator
+      assertEquals(Collections.emptyList(),
+          pdfTextValueGenerator
               .generate(certificate, QUESTION_SYMPTOM_ID, FIELD_ID)
       );
     }

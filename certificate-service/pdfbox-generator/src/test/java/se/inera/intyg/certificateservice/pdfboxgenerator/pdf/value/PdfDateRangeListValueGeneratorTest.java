@@ -309,7 +309,7 @@ class PdfDateRangeListValueGeneratorTest {
     }
 
     @Test
-    void shouldThrowExceptionIfGivenQuestionIdIsNotInElementData() {
+    void shouldReturnEmptyListIfGivenQuestionIdIsNotInElementData() {
       final var certificate = buildCertificate(
           List.of(
               ElementData.builder()
@@ -327,9 +327,8 @@ class PdfDateRangeListValueGeneratorTest {
           )
       );
 
-      assertThrows(
-          IllegalStateException.class,
-          () -> pdfDateRangeListValueGenerator
+      assertEquals(Collections.emptyList(),
+          pdfDateRangeListValueGenerator
               .generate(certificate, QUESTION_ID, FIELD_PREFIX)
       );
     }
