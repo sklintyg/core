@@ -23,7 +23,7 @@ class StaffEntityMapperTest {
     }
 
     @Test
-    void shouldReturnMutableListsForHIbernateToWork() {
+    void shouldReturnMutableListsForHibernateToWork() {
       final var entity = StaffEntityMapper.toEntity(AJLA_DOKTOR);
       assertAll(
           () -> assertDoesNotThrow(
