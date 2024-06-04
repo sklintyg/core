@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificate.service;
 
+import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.UPDATE;
+
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
@@ -25,7 +27,9 @@ public class GetCertificateXmlDomainService {
       );
     }
 
-    certificate.updateMetadata(actionEvaluation);
+    if (certificate.isDraft() && certificate.allowTo(UPDATE, Optional.of(actionEvaluation))) {
+      certificate.updateMetadata(actionEvaluation);
+    }
 
     final var xml = certificate.xml() != null ? certificate.xml()
         : xmlGenerator.generate(certificate, false);

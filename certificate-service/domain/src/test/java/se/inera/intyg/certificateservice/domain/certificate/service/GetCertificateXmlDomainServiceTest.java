@@ -3,9 +3,11 @@ package se.inera.intyg.certificateservice.domain.certificate.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.READ;
+import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.UPDATE;
 
 import java.util.List;
 import java.util.Optional;
@@ -89,9 +91,26 @@ class GetCertificateXmlDomainServiceTest {
     }
 
     @Test
-    void shallUpdateCertificateMetadata() {
+    void shallUpdateCertificateMetadataIfDraftAndHasUpdateRights() {
+      doReturn(true).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
+      doReturn(true).when(certificate).isDraft();
       getCertificateXmlDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION);
       verify(certificate).updateMetadata(ACTION_EVALUATION);
+    }
+
+    @Test
+    void shallNotUpdateCertificateMetadataIfDraftAndHasNoUpdateRights() {
+      doReturn(false).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
+      doReturn(true).when(certificate).isDraft();
+      getCertificateXmlDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION);
+      verify(certificate, never()).updateMetadata(ACTION_EVALUATION);
+    }
+
+    @Test
+    void shallNotUpdateCertificateMetadataIfNotDraft() {
+      doReturn(false).when(certificate).isDraft();
+      getCertificateXmlDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION);
+      verify(certificate, never()).updateMetadata(ACTION_EVALUATION);
     }
   }
 

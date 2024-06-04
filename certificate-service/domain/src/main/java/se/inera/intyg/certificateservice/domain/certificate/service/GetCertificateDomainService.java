@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificate.service;
 
+import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.UPDATE;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
@@ -31,7 +33,9 @@ public class GetCertificateDomainService {
       );
     }
 
-    certificate.updateMetadata(actionEvaluation);
+    if (certificate.isDraft() && certificate.allowTo(UPDATE, Optional.of(actionEvaluation))) {
+      certificate.updateMetadata(actionEvaluation);
+    }
 
     certificateEventDomainService.publish(
         CertificateEvent.builder()
