@@ -9,9 +9,12 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 public class ActionRuleChildRelationNoMatch implements ActionRule {
 
   private final List<RelationType> relationTypes;
+  private final List<Status> allowedStatuses;
 
-  public ActionRuleChildRelationNoMatch(List<RelationType> relationTypes) {
+  public ActionRuleChildRelationNoMatch(List<RelationType> relationTypes,
+      List<Status> allowedStatuses) {
     this.relationTypes = relationTypes;
+    this.allowedStatuses = allowedStatuses;
   }
 
   @Override
@@ -24,7 +27,7 @@ public class ActionRuleChildRelationNoMatch implements ActionRule {
     return certificate.children().stream()
         .noneMatch(relation ->
             relationTypes.contains(relation.type())
-                && !Status.REVOKED.equals(relation.certificate().status())
+                && !allowedStatuses.contains(relation.certificate().status())
         );
   }
 
