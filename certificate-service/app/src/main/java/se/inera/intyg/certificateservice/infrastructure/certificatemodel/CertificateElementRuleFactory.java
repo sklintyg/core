@@ -41,6 +41,22 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
+  public static ElementRule mandatoryExist(ElementId id, List<FieldId> fieldIds) {
+    return ElementRuleExpression.builder()
+        .id(id)
+        .type(ElementRuleType.MANDATORY)
+        .expression(
+            new RuleExpression(
+                multipleOrExpressionWithExists(
+                    fieldIds.stream()
+                        .map(field -> singleExpression(field.value()))
+                        .toArray(String[]::new)
+                )
+            )
+        )
+        .build();
+  }
+
   public static ElementRule limit(ElementId id, short limit) {
     return ElementRuleLimit.builder()
         .id(id)
@@ -59,6 +75,16 @@ public class CertificateElementRuleFactory {
         s += " || ";
       }
       s += s2;
+      return s;
+    });
+  }
+
+  public static String multipleOrExpressionWithExists(String... expression) {
+    return Arrays.stream(expression).reduce("", (s, s2) -> {
+      if (!s.isEmpty()) {
+        s += " || ";
+      }
+      s += "exists(" + s2 + ")";
       return s;
     });
   }

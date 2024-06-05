@@ -21,12 +21,12 @@ class ElementValueMapperTextTest {
   }
 
   @Test
-  void shallReturnTrueIfClassMappedElementValueIssuingUnit() {
+  void shallReturnTrueIfClassMappedElementValueText() {
     assertTrue(elementValueMapperText.supports(MappedElementValueText.class));
   }
 
   @Test
-  void shallReturnTrueIfClassElementValueUnitContactInformation() {
+  void shallReturnTrueIfClassElementValueText() {
     assertTrue(elementValueMapperText.supports(ElementValueText.class));
   }
 
@@ -42,13 +42,13 @@ class ElementValueMapperTextTest {
         .text(TEXT)
         .build();
 
-    final var mappedElementValueIssuingUnit = MappedElementValueText.builder()
+    final var mappedElementValueText = MappedElementValueText.builder()
         .textId(ID)
         .text(TEXT)
         .build();
 
     final var actualValue = elementValueMapperText.toDomain(
-        mappedElementValueIssuingUnit
+        mappedElementValueText
     );
 
     assertEquals(expectedValue, actualValue);
@@ -61,13 +61,13 @@ class ElementValueMapperTextTest {
         .text(TEXT)
         .build();
 
-    final var elementValueUnitContactInformation = ElementValueText.builder()
+    final var elementValueText = ElementValueText.builder()
         .textId(new FieldId(ID))
         .text(TEXT)
         .build();
 
     final var actualValue = elementValueMapperText.toMapped(
-        elementValueUnitContactInformation
+        elementValueText
     );
 
     assertEquals(expectedValue, actualValue);

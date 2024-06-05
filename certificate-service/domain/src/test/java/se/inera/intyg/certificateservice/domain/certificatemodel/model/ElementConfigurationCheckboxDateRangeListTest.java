@@ -15,13 +15,13 @@ class ElementConfigurationCheckboxDateRangeListTest {
 
   @Test
   void shallReturnDateRangeIfExists() {
-    final var expectedDateRange = new CheckboxDateRange(
+    final var expectedDateRange = new ElementConfigurationCode(
         new FieldId(DATE_RANGE_TWO), DATE_RANGE_LABE_TWO);
 
     final var checkboxDateRangeList = ElementConfigurationCheckboxDateRangeList.builder()
         .dateRanges(
             List.of(
-                new CheckboxDateRange(new FieldId(DATE_RANGE_ONE), DATE_RANGE_LABE_ONE),
+                new ElementConfigurationCode(new FieldId(DATE_RANGE_ONE), DATE_RANGE_LABE_ONE),
                 expectedDateRange
             )
         )
@@ -36,7 +36,7 @@ class ElementConfigurationCheckboxDateRangeListTest {
     final var checkboxDateRangeList = ElementConfigurationCheckboxDateRangeList.builder()
         .dateRanges(
             List.of(
-                new CheckboxDateRange(new FieldId(DATE_RANGE_ONE), DATE_RANGE_LABE_ONE)
+                new ElementConfigurationCode(new FieldId(DATE_RANGE_ONE), DATE_RANGE_LABE_ONE)
             )
         )
         .build();

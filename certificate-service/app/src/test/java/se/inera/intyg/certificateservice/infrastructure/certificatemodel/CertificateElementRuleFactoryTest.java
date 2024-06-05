@@ -47,6 +47,22 @@ class CertificateElementRuleFactoryTest {
   }
 
   @Test
+  void shouldReturnMandatoryExistRuleForSeveralFields() {
+    final var expected = ElementRuleExpression.builder()
+        .id(new ElementId("ID"))
+        .type(ElementRuleType.MANDATORY)
+        .expression(new RuleExpression("exists($FIELD0) || exists($FIELD1) || exists($FIELD2)"))
+        .build();
+
+    final var response = CertificateElementRuleFactory.mandatoryExist(
+        new ElementId("ID"),
+        List.of(new FieldId("FIELD0"), new FieldId("FIELD1"), new FieldId("FIELD2"))
+    );
+
+    assertEquals(expected, response);
+  }
+
+  @Test
   void shouldReturnLimitRule() {
     final var expected = ElementRuleLimit.builder()
         .id(new ElementId("ID"))

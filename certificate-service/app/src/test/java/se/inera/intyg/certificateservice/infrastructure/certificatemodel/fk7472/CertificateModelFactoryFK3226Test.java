@@ -23,9 +23,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -570,6 +573,68 @@ class CertificateModelFactoryFK3226Test {
     }
 
     @Nested
+    class QuestionPatientBehandlingOchVardsituation {
+
+      private static final ElementId ELEMENT_ID = new ElementId("52");
+
+      @Test
+      void shallIncludeId() {
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
+                certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeConfiguration() {
+        final var expectedConfiguration = ElementConfigurationRadioMultipleCode.builder()
+            .id(new FieldId("52.1"))
+            .name("Patientens behandling och vårdsituation")
+            .elementLayout(ElementLayout.ROWS)
+            .list(
+                List.of(
+                    new ElementConfigurationCode(new FieldId("ENDAST_PALLIATIV"),
+                        "Endast palliativ vård ges och all aktiv behandling mot sjukdomstillståndet har avslutats"),
+                    new ElementConfigurationCode(new FieldId("AKUT_LIVSHOTANDE"),
+                        "Akut livshotande tillstånd (till exempel vård på intensivvårdsavdelning)"),
+                    new ElementConfigurationCode(new FieldId("ANNAT"), "Annat")
+                )
+            )
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+
+      @Test
+      void shallIncludeRules() {
+        final var expectedRules = List.of(
+            ElementRuleExpression.builder()
+                .id(ELEMENT_ID)
+                .type(ElementRuleType.MANDATORY)
+                .expression(
+                    new RuleExpression(
+                        "exists($ENDAST_PALLIATIV) || exists($AKUT_LIVSHOTANDE) || exists($ANNAT)"
+                    )
+                )
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedRules,
+            certificateModel.elementSpecification(ELEMENT_ID).rules()
+        );
+      }
+    }
+
+    @Nested
     class CategorySamtycke {
 
       private static final ElementId ELEMENT_ID = new ElementId("KAT_3");
@@ -651,6 +716,4 @@ class CertificateModelFactoryFK3226Test {
       assertEquals(expected, certificateModel.rolesWithAccess());
     }
   }
-
-
 }

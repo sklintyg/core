@@ -16,9 +16,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -60,6 +63,10 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
       .version(new CertificateVersion(VERSION))
       .build();
   public static final ElementId QUESTION_GRUND_CATEGORY_ID = new ElementId("KAT_1");
+  public static final ElementId QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID = new ElementId(
+      "52");
+  public static final FieldId QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_FIELD_ID = new FieldId(
+      "52.1");
   public static final ElementId QUESTION_UTLATANDE_BASERAT_PA_ID = new ElementId("1");
   private static final FieldId QUESTION_UTLATANDE_BASERAT_PA_FIELD_ID = new FieldId("1.1");
   public static final ElementId QUESTION_UTLATANDE_BASERAT_PA_ANNAT_ID = new ElementId("1.3");
@@ -158,7 +165,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     questionUtlatandeBaseratPa(),
                     questionUtlatandeBaseratPaAnnat()
                 ),
-                categoryHot(),
+                categoryHot(
+                    questionPatientBehandlingOchVardsituation()
+                ),
                 categorySamtycke(),
                 issuingUnitContactInfo()
             )
@@ -166,6 +175,36 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .pdfTemplatePath(PDF_FK_3226_PDF)
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7472_PDF)
         .schematronPath(SCHEMATRON_PATH)
+        .build();
+  }
+
+  private static ElementSpecification questionPatientBehandlingOchVardsituation() {
+    final var radioMultipleCodes = List.of(
+        new ElementConfigurationCode(new FieldId("ENDAST_PALLIATIV"),
+            "Endast palliativ vård ges och all aktiv behandling mot sjukdomstillståndet har avslutats"),
+        new ElementConfigurationCode(new FieldId("AKUT_LIVSHOTANDE"),
+            "Akut livshotande tillstånd (till exempel vård på intensivvårdsavdelning)"),
+        new ElementConfigurationCode(new FieldId("ANNAT"), "Annat")
+    );
+
+    return ElementSpecification.builder()
+        .id(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID)
+        .configuration(
+            ElementConfigurationRadioMultipleCode.builder()
+                .id(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_FIELD_ID)
+                .name("Patientens behandling och vårdsituation")
+                .elementLayout(ElementLayout.ROWS)
+                .list(radioMultipleCodes)
+                .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.mandatoryExist(
+                    QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID,
+                    radioMultipleCodes.stream().map(ElementConfigurationCode::id).toList()
+                )
+            )
+        )
         .build();
   }
 

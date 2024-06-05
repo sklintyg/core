@@ -15,7 +15,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigCheckboxDateRangeList;
-import se.inera.intyg.certificateservice.application.certificate.dto.config.CheckboxDateRangeConfig;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.CheckboxDateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -23,8 +23,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -55,8 +55,8 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
                 .max(Period.ofMonths(2))
                 .dateRanges(
                     List.of(
-                        new CheckboxDateRange(new FieldId(RANGE_ID_ONE), RANGE_LABEL_ONE),
-                        new CheckboxDateRange(new FieldId(RANGE_ID_TWO), RANGE_LABEL_TWO)
+                        new ElementConfigurationCode(new FieldId(RANGE_ID_ONE), RANGE_LABEL_ONE),
+                        new ElementConfigurationCode(new FieldId(RANGE_ID_TWO), RANGE_LABEL_TWO)
                     )
                 )
                 .build()
@@ -90,11 +90,11 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
         .max(LocalDate.now().plusMonths(2))
         .list(
             List.of(
-                CheckboxDateRangeConfig.builder()
+                CheckboxDateRange.builder()
                     .id(RANGE_ID_ONE)
                     .label(RANGE_LABEL_ONE)
                     .build(),
-                CheckboxDateRangeConfig.builder()
+                CheckboxDateRange.builder()
                     .id(RANGE_ID_TWO)
                     .label(RANGE_LABEL_TWO)
                     .build()

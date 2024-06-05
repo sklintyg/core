@@ -22,7 +22,7 @@ public class ElementConfigurationCheckboxDateRangeList implements ElementConfigu
   ElementType type = ElementType.CHECKBOX_DATE_RANGE_LIST;
   FieldId id;
   boolean hideWorkingHours;
-  List<CheckboxDateRange> dateRanges;
+  List<ElementConfigurationCode> dateRanges;
   Period min;
   Period max;
 
@@ -34,7 +34,7 @@ public class ElementConfigurationCheckboxDateRangeList implements ElementConfigu
         .build();
   }
 
-  public Optional<CheckboxDateRange> checkboxDateRange(FieldId id) {
+  public Optional<ElementConfigurationCode> checkboxDateRange(FieldId id) {
     if (dateRanges == null) {
       return Optional.empty();
     }

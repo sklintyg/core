@@ -18,9 +18,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -262,7 +262,7 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
             List.of(
                 CertificateElementRuleFactory.mandatory(
                     QUESTION_PERIOD_ID,
-                    dateRanges.stream().map(CheckboxDateRange::id).toList()
+                    dateRanges.stream().map(ElementConfigurationCode::id).toList()
                 )
             )
         )
@@ -291,7 +291,7 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
         .build();
   }
 
-  private static CheckboxDateRange getDateRange(WorkCapacityType type) {
-    return new CheckboxDateRange(new FieldId(type.toString()), type.label());
+  private static ElementConfigurationCode getDateRange(WorkCapacityType type) {
+    return new ElementConfigurationCode(new FieldId(type.toString()), type.label());
   }
 }
