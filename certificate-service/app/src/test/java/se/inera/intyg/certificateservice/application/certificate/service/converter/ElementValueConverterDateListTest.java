@@ -16,7 +16,10 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 
 class ElementValueConverterDateListTest {
 
+  private static final String DATE_LIST_ID = "DATE_LIST_ID";
+
   private static final CertificateDataValueDateList CERTIFICATE_DATA_VALUE = CertificateDataValueDateList.builder()
+      .id(DATE_LIST_ID)
       .list(
           List.of(
               CertificateDataValueDate.builder()
@@ -48,6 +51,15 @@ class ElementValueConverterDateListTest {
     assertEquals(CertificateDataValueType.DATE_LIST, converter.getType());
   }
 
+  @Test
+  void shallReturnDateListId() {
+    final var result = converter.convert(CERTIFICATE_DATA_VALUE);
+    final var actualResult = (ElementValueDateList) result;
+    assertEquals(
+        CERTIFICATE_DATA_VALUE.getId(),
+        actualResult.dateListId().value()
+    );
+  }
 
   @Test
   void shallConvertIdOfDateInList() {

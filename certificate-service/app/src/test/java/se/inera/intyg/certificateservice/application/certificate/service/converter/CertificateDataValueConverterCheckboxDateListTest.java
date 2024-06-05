@@ -8,24 +8,38 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 class CertificateDataValueConverterCheckboxDateListTest {
-  
+
+  private static final String DATE_LIST_ID = "DATE_LIST_ID";
+
   private final CertificateDataValueConverterCheckboxDateList converter =
       new CertificateDataValueConverterCheckboxDateList();
+  private ElementSpecification configuration;
 
+  @BeforeEach
+  void setUp() {
+    configuration = ElementSpecification.builder()
+        .configuration(
+            ElementConfigurationCheckboxMultipleDate.builder()
+                .id(new FieldId(DATE_LIST_ID))
+                .build()
+        )
+        .build();
+  }
 
   @Test
-  void shouldThrowExceptionIfWrongClassOfValue() {
-    final var configuration = ElementSpecification.builder().build();
+  void shallThrowExceptionIfWrongClassOfValue() {
     final var elementValue = ElementValueText.builder().build();
 
     assertThrows(IllegalStateException.class,
@@ -34,9 +48,7 @@ class CertificateDataValueConverterCheckboxDateListTest {
   }
 
   @Test
-  void shouldNotThrowExceptionForWrongClassOfValueIfElementValueIsNull() {
-    final var configuration = ElementSpecification.builder().build();
-
+  void shallNotThrowExceptionForWrongClassOfValueIfElementValueIsNull() {
     final var result = converter.convert(configuration, null);
     assertEquals(Collections.emptyList(), ((CertificateDataValueDateList) result).getList());
   }
@@ -47,9 +59,16 @@ class CertificateDataValueConverterCheckboxDateListTest {
   }
 
   @Test
-  void shallCreateCertificateDataValueDate() {
-    final var configuration = ElementSpecification.builder().build();
+  void shallReturnDateListId() {
+    final var elementValue = ElementValueDateList.builder().build();
 
+    final var result = converter.convert(configuration, elementValue);
+
+    assertEquals(DATE_LIST_ID, ((CertificateDataValueDateList) result).getId());
+  }
+
+  @Test
+  void shallCreateCertificateDataValueDate() {
     final var elementValue = ElementValueDateList.builder().build();
 
     final var result = converter.convert(configuration, elementValue);
@@ -59,8 +78,6 @@ class CertificateDataValueConverterCheckboxDateListTest {
 
   @Test
   void shallSetCorrectIdForDateValue() {
-    final var configuration = ElementSpecification.builder().build();
-
     final var elementValue = ElementValueDateList.builder()
         .dateList(
             List.of(
@@ -81,8 +98,6 @@ class CertificateDataValueConverterCheckboxDateListTest {
 
   @Test
   void shallSetCorrectDateForDateValue() {
-    final var configuration = ElementSpecification.builder().build();
-
     final var elementValue = ElementValueDateList.builder()
         .dateList(
             List.of(
@@ -103,8 +118,6 @@ class CertificateDataValueConverterCheckboxDateListTest {
 
   @Test
   void shallSetValueToEmpty() {
-    final var configuration = ElementSpecification.builder().build();
-
     final var elementValue = ElementValueDateList.builder().build();
 
     final var result = converter.convert(configuration, elementValue);

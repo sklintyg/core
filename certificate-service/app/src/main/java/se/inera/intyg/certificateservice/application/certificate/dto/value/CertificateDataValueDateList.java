@@ -15,6 +15,7 @@ public class CertificateDataValueDateList implements CertificateDataValue {
 
   @Getter(onMethod = @__(@Override))
   CertificateDataValueType type = CertificateDataValueType.DATE_LIST;
+  String id;
   List<CertificateDataValueDate> list;
 
   @JsonPOJOBuilder(withPrefix = "")

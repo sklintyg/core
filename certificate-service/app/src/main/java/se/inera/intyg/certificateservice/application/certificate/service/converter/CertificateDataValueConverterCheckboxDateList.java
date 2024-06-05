@@ -7,6 +7,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 
@@ -28,7 +29,15 @@ public class CertificateDataValueConverterCheckboxDateList implements
       );
     }
 
+    if (!(elementSpecification.configuration() instanceof ElementConfigurationCheckboxMultipleDate elementConfigurationCheckboxMultipleDate)) {
+      throw new IllegalStateException(
+          "Invalid configuration type. Type was '%s'".formatted(
+              elementSpecification.configuration().type())
+      );
+    }
+
     return CertificateDataValueDateList.builder()
+        .id(elementConfigurationCheckboxMultipleDate.id().value())
         .list(
             isValueDefined(elementValue)
                 ? ((ElementValueDateList) elementValue).dateList()

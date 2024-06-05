@@ -30,6 +30,7 @@ public class ElementValueConverterDateList implements ElementValueConverter {
     }
 
     return ElementValueDateList.builder()
+        .dateListId(new FieldId(certificateDataValueDates.getId()))
         .dateList(
             certificateDataValueDates.getList().stream()
                 .map(date ->
