@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpre
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateElementRuleFactory;
@@ -207,6 +209,14 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     QUESTION_UTLATANDE_BASERAT_PA_ID,
                     checkboxDates.stream().map(CheckboxDate::id).toList()
                 )
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationDateList.builder()
+                    .mandatory(true)
+                    .max(Period.ofDays(0))
+                    .build()
             )
         )
         .children(List.of(children))
