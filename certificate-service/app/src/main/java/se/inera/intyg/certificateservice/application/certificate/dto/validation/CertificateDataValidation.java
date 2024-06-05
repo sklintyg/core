@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
     @Type(value = CertificateDataValidationMandatory.class, name = "MANDATORY_VALIDATION"),
     @Type(value = CertificateDataValidationText.class, name = "TEXT_VALIDATION"),
+    @Type(value = CertificateDataValidationShow.class, name = "SHOW_VALIDATION"),
 })
 public interface CertificateDataValidation {
 

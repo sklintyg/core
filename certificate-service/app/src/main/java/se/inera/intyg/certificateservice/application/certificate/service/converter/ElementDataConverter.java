@@ -15,6 +15,10 @@ public class ElementDataConverter {
 
   public ElementData convert(String questionId, CertificateDataElement certificateDataElement) {
     final var value = certificateDataElement.getValue();
+    // TODO: How to handle missing values
+    if (value == null) {
+      return null;
+    }
     return ElementData.builder()
         .id(new ElementId(questionId))
         .value(elementValueConverter.stream()

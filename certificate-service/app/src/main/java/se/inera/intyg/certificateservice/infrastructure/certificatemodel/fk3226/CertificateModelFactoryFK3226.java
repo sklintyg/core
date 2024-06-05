@@ -15,13 +15,18 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
@@ -30,7 +35,6 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.Certifi
 @Component
 public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
 
-  private static final FieldId QUESTION_UTLATANDE_BASERAT_PA_FIELD_ID = new FieldId("1.1");
   @Value("${certificate.model.fk7472.v1_0.active.from}")
   private LocalDateTime activeFrom;
   private static final String TYPE = "fk3226";
@@ -55,6 +59,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
       .build();
   public static final ElementId QUESTION_GRUND_CATEGORY_ID = new ElementId("KAT_1");
   public static final ElementId QUESTION_UTLATANDE_BASERAT_PA_ID = new ElementId("1");
+  private static final FieldId QUESTION_UTLATANDE_BASERAT_PA_FIELD_ID = new FieldId("1.1");
+  public static final ElementId QUESTION_UTLATANDE_BASERAT_PA_ANNAT_ID = new ElementId("1.3");
+  public static final FieldId QUESTION_UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID = new FieldId("1.3");
   private static final ElementId QUESTION_HOT_CATEGORY_ID = new ElementId("KAT_2");
   private static final ElementId QUESTION_SAMTYCKE_CATEGORY_ID = new ElementId("KAT_3");
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
@@ -146,7 +153,8 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .elementSpecifications(
             List.of(
                 categoryGrund(
-                    questionUtlatandeBaseratPa()
+                    questionUtlatandeBaseratPa(),
+                    questionUtlatandeBaseratPaAnnat()
                 ),
                 categoryHot(),
                 categorySamtycke(),
@@ -156,37 +164,6 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .pdfTemplatePath(PDF_FK_3226_PDF)
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7472_PDF)
         .schematronPath(SCHEMATRON_PATH)
-        .build();
-  }
-
-  private static ElementSpecification questionUtlatandeBaseratPa() {
-    final var checkboxDates = List.of(
-        new CheckboxDate(new FieldId("undersokningAvPatienten"),
-            "min undersökning av patienten"),
-        new CheckboxDate(new FieldId("journaluppgifter"),
-            "journaluppgifter från den"),
-        new CheckboxDate(new FieldId("annat"),
-            "annat")
-    );
-
-    return ElementSpecification.builder()
-        .id(QUESTION_UTLATANDE_BASERAT_PA_ID)
-        .configuration(
-            ElementConfigurationCheckboxMultipleDate.builder()
-                //TODO: Not needed, should we still include it?
-                .id(QUESTION_UTLATANDE_BASERAT_PA_FIELD_ID)
-                .name("Utlåtandet är baserat på")
-                .dates(checkboxDates)
-                .build()
-        )
-        .rules(
-            List.of(
-                CertificateElementRuleFactory.mandatory(
-                    QUESTION_UTLATANDE_BASERAT_PA_ID,
-                    checkboxDates.stream().map(CheckboxDate::id).toList()
-                )
-            )
-        )
         .build();
   }
 
@@ -201,6 +178,77 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         )
         .children(
             List.of(children)
+        )
+        .build();
+  }
+
+  private static ElementSpecification questionUtlatandeBaseratPa(ElementSpecification... children) {
+    final var checkboxDates = List.of(
+        new CheckboxDate(new FieldId("undersokningAvPatienten"),
+            "min undersökning av patienten"),
+        new CheckboxDate(new FieldId("journaluppgifter"),
+            "journaluppgifter från den"),
+        new CheckboxDate(new FieldId("annat"),
+            "annat")
+    );
+
+    return ElementSpecification.builder()
+        .id(QUESTION_UTLATANDE_BASERAT_PA_ID)
+        .configuration(
+            ElementConfigurationCheckboxMultipleDate.builder()
+                .id(QUESTION_UTLATANDE_BASERAT_PA_FIELD_ID)
+                .name("Utlåtandet är baserat på")
+                .dates(checkboxDates)
+                .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.mandatory(
+                    QUESTION_UTLATANDE_BASERAT_PA_ID,
+                    checkboxDates.stream().map(CheckboxDate::id).toList()
+                )
+            )
+        )
+        .children(List.of(children))
+        .build();
+  }
+
+  private static ElementSpecification questionUtlatandeBaseratPaAnnat() {
+    return ElementSpecification.builder()
+        .id(QUESTION_UTLATANDE_BASERAT_PA_ANNAT_ID)
+        .configuration(
+            ElementConfigurationTextArea.builder()
+                .name(
+                    "Ange vad annat är och motivera vid behov varför du inte baserar utlåtandet på en undersökning eller på journaluppgifter")
+                .id(QUESTION_UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID)
+                .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.mandatory(
+                    QUESTION_UTLATANDE_BASERAT_PA_ANNAT_ID,
+                    QUESTION_UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID
+                ),
+                CertificateElementRuleFactory.limit(QUESTION_UTLATANDE_BASERAT_PA_ANNAT_ID,
+                    (short) 4000),
+                ElementRuleExpression.builder()
+                    .type(ElementRuleType.SHOW)
+                    .id(QUESTION_UTLATANDE_BASERAT_PA_ID)
+                    .expression(
+                        new RuleExpression(
+                            "$annat"
+                        )
+                    )
+                    .build()
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationText.builder()
+                    .mandatory(true)
+                    .limit(4000)
+                    .build()
+            )
         )
         .build();
   }

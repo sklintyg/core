@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.certificate.service.conver
 
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,8 @@ public class ElementCertificateConverter {
                 .map(entry ->
                     elementDataConverter.convert(entry.getKey(), entry.getValue())
                 )
+                // TODO: How to handle missing values
+                .filter(Objects::nonNull)
             ,
             elementMetaDataConverter.convert(certificateDTO.getMetadata()).stream()
         )
