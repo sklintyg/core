@@ -43,6 +43,7 @@ class CertificateDataCategoryConfigConverterTest {
   void shouldReturnConvertedCategory() {
     final var expected = CertificateDataConfigCategory.builder()
         .text("NAME")
+        .description("DESCRIPTION")
         .build();
 
     final var response = certificateDataCategoryConfigConverter.convert(
@@ -50,6 +51,7 @@ class CertificateDataCategoryConfigConverterTest {
             .configuration(
                 ElementConfigurationCategory.builder()
                     .name("NAME")
+                    .description("DESCRIPTION")
                     .build()
             ).build(),
         FK7210_CERTIFICATE

@@ -26,6 +26,7 @@ public class CertificateDataCategoryConfigConverter implements CertificateDataCo
 
     return CertificateDataConfigCategory.builder()
         .text(elementSpecification.configuration().name())
+        .description(elementSpecification.configuration().description())
         .build();
   }
 }
