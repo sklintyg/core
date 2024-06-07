@@ -47,7 +47,7 @@ class ElementValueConverterBooleanTest {
     final var certificateDataValueBoolean = CERTIFICATE_DATA_VALUE_BOOLEAN_BUILDER.build();
     final var result = elementValueConverterBoolean.convert(certificateDataValueBoolean);
     final var actualResult = (ElementValueBoolean) result;
-    assertEquals(TEXT_ID, actualResult.textId());
+    assertEquals(TEXT_ID, actualResult.booleanId());
   }
 
   @Test

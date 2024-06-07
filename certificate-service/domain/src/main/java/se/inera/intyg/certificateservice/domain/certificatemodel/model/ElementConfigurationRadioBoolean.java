@@ -21,7 +21,7 @@ public class ElementConfigurationRadioBoolean implements ElementConfiguration {
   @Override
   public ElementValue emptyValue() {
     return ElementValueBoolean.builder()
-        .textId(id)
+        .booleanId(id)
         .build();
   }
 }

@@ -26,7 +26,7 @@ public class ElementValueConverterBoolean implements ElementValueConverter {
       );
     }
     return ElementValueBoolean.builder()
-        .textId(new FieldId(valueBoolean.getId()))
+        .booleanId(new FieldId(valueBoolean.getId()))
         .value(((CertificateDataValueBoolean) value).getSelected())
         .build();
   }

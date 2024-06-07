@@ -9,7 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 @Builder
 public class ElementValueBoolean implements ElementValue {
 
-  FieldId textId;
+  FieldId booleanId;
   @With
   Boolean value;
 
