@@ -47,6 +47,10 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
   private static final FieldId UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID = new FieldId("annat");
   private static final String UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID = "journaluppgifter";
   private static final String UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID = "undersokningAvPatienten";
+  private static final ElementId QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_AKUT_LIVSHOTANDE_ID = new ElementId(
+      "52.4");
+  private static final FieldId QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_AKUT_LIVSHOTANDE_FIELD_ID = new FieldId(
+      "52.4");
   @Value("${certificate.model.fk7472.v1_0.active.from}")
   private LocalDateTime activeFrom;
   private static final String TYPE = "fk3226";
@@ -80,9 +84,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
   public static final FieldId QUESTION_UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID = new FieldId("1.3");
   private static final ElementId QUESTION_HOT_CATEGORY_ID = new ElementId("KAT_2");
   public static final ElementId QUESTION_NAR_TILLSTANDET_BLEV_AKUT_LIVSHOTANDE_ID = new ElementId(
-      "53.2");
+      "52.3");
   private static final FieldId QUESTION_NAR_TILLSTANDET_BLEV_AKUT_LIVSHOTANDE_FIELD_ID = new FieldId(
-      "53.2");
+      "52.3");
   public static final ElementId QUESTION_NAR_AKTIVA_BEHANDLINGEN_AVSLUTADES_ID = new ElementId(
       "52.2");
   private static final FieldId QUESTION_NAR_AKTIVA_BEHANDLINGEN_AVSLUTADES_FIELD_ID = new FieldId(
@@ -183,7 +187,8 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                 categoryHot(
                     questionPatientBehandlingOchVardsituation(),
                     questionNarAktivaBehandlingenAvslutades(),
-                    questionNarTillstandetBlevAkutLivshotande()
+                    questionNarTillstandetBlevAkutLivshotande(),
+                    questionPatagligtHotMotPatientensLivAkutLivshotande()
                 ),
                 categorySamtycke(),
                 issuingUnitContactInfo()
@@ -192,6 +197,41 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .pdfTemplatePath(PDF_FK_3226_PDF)
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7472_PDF)
         .schematronPath(SCHEMATRON_PATH)
+        .build();
+  }
+
+  private static ElementSpecification questionPatagligtHotMotPatientensLivAkutLivshotande() {
+    return ElementSpecification.builder()
+        .id(QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_AKUT_LIVSHOTANDE_ID)
+        .configuration(
+            ElementConfigurationTextArea.builder()
+                .id(QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_AKUT_LIVSHOTANDE_FIELD_ID)
+                .name(
+                    "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv")
+                .description(
+                    "Ange om möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller.")
+                .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.mandatory(
+                    QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_AKUT_LIVSHOTANDE_ID,
+                    QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_AKUT_LIVSHOTANDE_FIELD_ID
+                ),
+                CertificateElementRuleFactory.show(
+                    QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID,
+                    AKUT_LIVSHOTANDE_FIELD_ID
+                )
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationText.builder()
+                    .mandatory(true)
+                    .limit(4000)
+                    .build()
+            )
+        )
         .build();
   }
 

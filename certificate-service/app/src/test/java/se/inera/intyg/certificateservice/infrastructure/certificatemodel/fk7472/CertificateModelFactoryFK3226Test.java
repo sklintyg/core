@@ -42,6 +42,7 @@ import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CertificateModelFactoryFK3226;
 
@@ -733,7 +734,7 @@ class CertificateModelFactoryFK3226Test {
     @Nested
     class QuestionNarTillstandetBlevAkutLivshotande {
 
-      private static final ElementId ELEMENT_ID = new ElementId("53.2");
+      private static final ElementId ELEMENT_ID = new ElementId("52.3");
 
       @Test
       void shallIncludeId() {
@@ -749,7 +750,7 @@ class CertificateModelFactoryFK3226Test {
       @Test
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationDate.builder()
-            .id(new FieldId("53.2"))
+            .id(new FieldId("52.3"))
             .name("Ange när tillståndet blev akut livshotande")
             .max(Period.ofDays(0))
             .build();
@@ -769,7 +770,7 @@ class CertificateModelFactoryFK3226Test {
                 .type(ElementRuleType.MANDATORY)
                 .expression(
                     new RuleExpression(
-                        "$53.2"
+                        "$52.3"
                     )
                 )
                 .build(),
@@ -797,6 +798,86 @@ class CertificateModelFactoryFK3226Test {
             ElementValidationDate.builder()
                 .mandatory(true)
                 .max(Period.ofDays(0))
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedValidations,
+            certificateModel.elementSpecification(ELEMENT_ID).validations()
+        );
+      }
+    }
+
+    @Nested
+    class QuestionPatagligtHotMotPatientensLivAkutLivshotande {
+
+      private static final ElementId ELEMENT_ID = new ElementId("52.4");
+
+      @Test
+      void shallIncludeId() {
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
+                certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeConfiguration() {
+        final var expectedConfiguration = ElementConfigurationTextArea.builder()
+            .id(new FieldId("52.4"))
+            .name(
+                "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv")
+            .description(
+                "Ange om möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller.")
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+
+      @Test
+      void shallIncludeRules() {
+        final var expectedRules = List.of(
+            ElementRuleExpression.builder()
+                .id(ELEMENT_ID)
+                .type(ElementRuleType.MANDATORY)
+                .expression(
+                    new RuleExpression(
+                        "$52.4"
+                    )
+                )
+                .build(),
+            ElementRuleExpression.builder()
+                .id(new ElementId("52"))
+                .type(ElementRuleType.SHOW)
+                .expression(
+                    new RuleExpression(
+                        "$AKUT_LIVSHOTANDE"
+                    )
+                )
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedRules,
+            certificateModel.elementSpecification(ELEMENT_ID).rules()
+        );
+      }
+
+      @Test
+      void shallIncludeValidations() {
+        final var expectedValidations = List.of(
+            ElementValidationText.builder()
+                .mandatory(true)
+                .limit(4000)
                 .build()
         );
 

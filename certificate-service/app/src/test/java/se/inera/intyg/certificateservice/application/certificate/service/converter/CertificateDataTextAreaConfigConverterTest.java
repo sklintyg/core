@@ -43,6 +43,7 @@ class CertificateDataTextAreaConfigConverterTest {
     final var expected = CertificateDataConfigTextArea.builder()
         .id("ID")
         .text("NAME")
+        .description("DESCRIPTION")
         .build();
 
     final var response = certificateDataTextAreaConfigConverter.convert(
@@ -51,6 +52,7 @@ class CertificateDataTextAreaConfigConverterTest {
                 ElementConfigurationTextArea.builder()
                     .id(new FieldId("ID"))
                     .name("NAME")
+                    .description("DESCRIPTION")
                     .build()
             ).build(),
         FK7210_CERTIFICATE
@@ -58,5 +60,4 @@ class CertificateDataTextAreaConfigConverterTest {
 
     assertEquals(expected, response);
   }
-
 }
