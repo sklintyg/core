@@ -20,7 +20,7 @@ class CertificateDataValueConverterTextAreaTest {
 
   private static final String ELEMENT_ID = "elementId";
   private static final String TEST_TEXT = "testText";
-  private static final FieldId FIELD_ID = new FieldId("fieldId");
+  private static final FieldId FIELD_ID = new FieldId("code");
   private static final String NAME = "NAME";
   private final CertificateDataValueConverterTextArea converter =
       new CertificateDataValueConverterTextArea();

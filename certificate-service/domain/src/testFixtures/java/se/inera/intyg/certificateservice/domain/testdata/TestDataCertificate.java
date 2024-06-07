@@ -68,7 +68,7 @@ public class TestDataCertificate {
       .build();
   public static final Certificate FK7210_CERTIFICATE = fk7210CertificateBuilder().build();
   public static final Certificate FK3226_CERTIFICATE = fk3226CertificateBuilder().build();
-
+  
   public static Certificate.CertificateBuilder fk7210CertificateBuilder() {
     return Certificate.builder()
         .id(CERTIFICATE_ID)

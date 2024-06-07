@@ -2,9 +2,12 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 
 public interface XmlGeneratorElementData {
+
+  Class<? extends ElementValue> supports();
 
   List<Svar> generate(ElementData data);
 

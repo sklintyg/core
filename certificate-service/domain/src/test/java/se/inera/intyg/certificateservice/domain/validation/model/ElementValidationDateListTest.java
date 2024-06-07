@@ -22,7 +22,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 class ElementValidationDateListTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("elementId");
-  private static final FieldId FIELD_ID = new FieldId("fieldId");
+  private static final FieldId FIELD_ID = new FieldId("code");
   private static final FieldId FIELD_ID_DATE_ONE = new FieldId("dateIdOne");
   private static final FieldId FIELD_ID_DATE_TWO = new FieldId("dateIdTwo");
   private static final ElementId CATEGORY_ID = new ElementId("categoryId");

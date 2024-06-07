@@ -23,6 +23,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
@@ -344,6 +347,12 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .mandatory(true)
                     .limit(4000)
                     .build()
+            )
+        )
+        .mapping(
+            new ElementMapping(
+                QUESTION_UTLATANDE_BASERAT_PA_ID,
+                new Code("annat", "codeSystem", "annat")
             )
         )
         .build();

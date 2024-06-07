@@ -22,6 +22,7 @@ public class ElementSpecification {
   List<ElementRule> rules = Collections.emptyList();
   @Builder.Default
   List<ElementValidation> validations = Collections.emptyList();
+  ElementMapping mapping;
   @Builder.Default
   List<ElementSpecification> children = Collections.emptyList();
 

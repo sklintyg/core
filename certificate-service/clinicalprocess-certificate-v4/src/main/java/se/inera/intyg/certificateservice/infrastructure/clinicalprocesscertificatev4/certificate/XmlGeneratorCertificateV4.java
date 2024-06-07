@@ -94,7 +94,7 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
         hosPersonal(certificate)
     );
     intyg.getSvar().addAll(
-        xmlGeneratorValue.generate(certificate.elementData())
+        xmlGeneratorValue.generate(certificate)
     );
 
     relation(intyg, certificate.parent());
