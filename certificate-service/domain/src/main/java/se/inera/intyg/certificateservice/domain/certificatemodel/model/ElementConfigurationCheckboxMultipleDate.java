@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 @Value
 @Builder
@@ -25,5 +27,16 @@ public class ElementConfigurationCheckboxMultipleDate implements ElementConfigur
         .dateListId(id)
         .dateList(Collections.emptyList())
         .build();
+  }
+
+  public Code code(ElementValueDate elementValueDate) {
+    return dates.stream()
+        .filter(checkboxDate -> checkboxDate.id().equals(elementValueDate.dateId()))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException(
+                "Cannot find matching code for dateId '%s'".formatted(elementValueDate.dateId())
+            )
+        )
+        .code();
   }
 }

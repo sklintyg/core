@@ -387,12 +387,21 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
 
   private static ElementSpecification questionUtlatandeBaseratPa(ElementSpecification... children) {
     final var checkboxDates = List.of(
-        new CheckboxDate(new FieldId(UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID),
-            "min undersökning av patienten"),
-        new CheckboxDate(new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID),
-            "journaluppgifter från den"),
-        new CheckboxDate(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID,
-            "annat")
+        new CheckboxDate(
+            new FieldId(UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID),
+            CodeSystemKvFkmu0001.UNDERSOKNING.displayName(),
+            CodeSystemKvFkmu0001.UNDERSOKNING
+        ),
+        new CheckboxDate(
+            new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID),
+            CodeSystemKvFkmu0001.JOURNALUPGIFTER.displayName(),
+            CodeSystemKvFkmu0001.JOURNALUPGIFTER
+        ),
+        new CheckboxDate(
+            UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID,
+            CodeSystemKvFkmu0001.ANNAT.displayName(),
+            CodeSystemKvFkmu0001.ANNAT
+        )
     );
 
     return ElementSpecification.builder()

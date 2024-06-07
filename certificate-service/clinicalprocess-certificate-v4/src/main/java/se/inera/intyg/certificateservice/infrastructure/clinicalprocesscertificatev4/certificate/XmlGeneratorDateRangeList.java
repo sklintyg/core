@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.DatePeriodType;
@@ -24,7 +25,7 @@ public class XmlGeneratorDateRangeList implements XmlGeneratorElementData {
     return ElementValueDateRangeList.class;
   }
 
-  public List<Svar> generate(ElementData data) {
+  public List<Svar> generate(ElementData data, ElementSpecification specification) {
     if (!(data.value() instanceof ElementValueDateRangeList dateRangeListValue)) {
       return Collections.emptyList();
     }

@@ -3,6 +3,8 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -129,7 +131,7 @@ class XmlGeneratorValueTest {
       subAnswer.setId(ANSWER_ID_ONE);
       expectedData.getDelsvar().add(subAnswer);
 
-      doReturn(List.of(expectedData)).when(xmlGeneratorElementDataOne).generate(data);
+      doReturn(List.of(expectedData)).when(xmlGeneratorElementDataOne).generate(eq(data), any());
 
       final var response = xmlGeneratorValue.generate(certificate).get(0);
 
@@ -223,8 +225,8 @@ class XmlGeneratorValueTest {
       answerTwo.setId(QUESTION_ID_TWO);
       answerTwo.getDelsvar().add(subAnswerTwo);
 
-      doReturn(List.of(answerOne)).when(xmlGeneratorElementDataOne).generate(dataOne);
-      doReturn(List.of(answerTwo)).when(xmlGeneratorElementDataTwo).generate(dataTwo);
+      doReturn(List.of(answerOne)).when(xmlGeneratorElementDataOne).generate(eq(dataOne), any());
+      doReturn(List.of(answerTwo)).when(xmlGeneratorElementDataTwo).generate(eq(dataTwo), any());
 
       final var response = xmlGeneratorValue.generate(certificate);
 
@@ -321,9 +323,8 @@ class XmlGeneratorValueTest {
 
       doReturn(List.of(answerOneInstanceOne, answerOneInstanceTwo))
           .when(xmlGeneratorElementDataOne)
-          .generate(dataOne);
-      doReturn(List.of(answerTwo)).when(xmlGeneratorElementDataTwo).generate(dataTwo);
-
+          .generate(eq(dataOne), any());
+      doReturn(List.of(answerTwo)).when(xmlGeneratorElementDataTwo).generate(eq(dataTwo), any());
       final var response = xmlGeneratorValue.generate(certificate);
 
       assertAll(
@@ -394,8 +395,8 @@ class XmlGeneratorValueTest {
       answerTwo.setId(QUESTION_ID_TWO);
       answerTwo.getDelsvar().add(subAnswerTwo);
 
-      doReturn(List.of(answerOne)).when(xmlGeneratorElementDataOne).generate(dataOne);
-      doReturn(List.of(answerTwo)).when(xmlGeneratorElementDataTwo).generate(dataTwo);
+      doReturn(List.of(answerOne)).when(xmlGeneratorElementDataOne).generate(eq(dataOne), any());
+      doReturn(List.of(answerTwo)).when(xmlGeneratorElementDataTwo).generate(eq(dataTwo), any());
 
       assertThrows(IllegalStateException.class,
           () -> xmlGeneratorValue.generate(certificate)

@@ -12,6 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
@@ -22,6 +23,7 @@ class XmlGeneratorTextTest {
   private static final String QUESTION_ID = "QUESTION_ID";
   private static final String ANSWER_ID = "ANSWER_ID";
   private static final String VALUE = "VALUE";
+  private final ElementSpecification ELEMENT_SPECIFICATION = ElementSpecification.builder().build();
 
   @InjectMocks
   private XmlGeneratorText xmlGeneratorText;
@@ -42,7 +44,7 @@ class XmlGeneratorTextTest {
     subAnswer.setId(ANSWER_ID);
     expectedData.getDelsvar().add(subAnswer);
 
-    final var response = xmlGeneratorText.generate(data);
+    final var response = xmlGeneratorText.generate(data, ELEMENT_SPECIFICATION);
 
     assertAll(
         () -> assertEquals(expectedData.getId(), response.get(0).getId()),
@@ -63,7 +65,7 @@ class XmlGeneratorTextTest {
         .id(new ElementId(QUESTION_ID))
         .build();
 
-    final var response = xmlGeneratorText.generate(data);
+    final var response = xmlGeneratorText.generate(data, ELEMENT_SPECIFICATION);
 
     assertTrue(response.isEmpty());
   }
@@ -77,7 +79,7 @@ class XmlGeneratorTextTest {
         .id(new ElementId(QUESTION_ID))
         .build();
 
-    final var response = xmlGeneratorText.generate(data);
+    final var response = xmlGeneratorText.generate(data, ELEMENT_SPECIFICATION);
 
     assertTrue(response.isEmpty());
   }

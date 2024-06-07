@@ -37,6 +37,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
@@ -416,10 +417,33 @@ class CertificateModelFactoryFK3226Test {
             .id(new FieldId("1.1"))
             .dates(
                 List.of(
-                    new CheckboxDate(new FieldId("undersokningAvPatienten"),
-                        "min undersökning av patienten"),
-                    new CheckboxDate(new FieldId("journaluppgifter"), "journaluppgifter från den"),
-                    new CheckboxDate(new FieldId("annat"), "annat")
+                    new CheckboxDate(
+                        new FieldId("undersokningAvPatienten"),
+                        "min undersökning av patienten",
+                        new Code(
+                            "UNDERSOKNING",
+                            "KV_FKMU_0001",
+                            "min undersökning av patienten"
+                        )
+                    ),
+                    new CheckboxDate(
+                        new FieldId("journaluppgifter"),
+                        "journaluppgifter från den",
+                        new Code(
+                            "JOURNALUPPGIFTER",
+                            "KV_FKMU_0001",
+                            "journaluppgifter från den"
+                        )
+                    ),
+                    new CheckboxDate(
+                        new FieldId("annat"),
+                        "annat",
+                        new Code(
+                            "ANNAT",
+                            "KV_FKMU_0001",
+                            "annat"
+                        )
+                    )
                 )
             )
             .build();

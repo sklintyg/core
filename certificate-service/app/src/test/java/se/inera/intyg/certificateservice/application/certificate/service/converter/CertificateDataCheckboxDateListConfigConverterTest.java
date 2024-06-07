@@ -16,6 +16,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateDataCheckboxDateListConfigConverterTest {
@@ -61,8 +62,10 @@ class CertificateDataCheckboxDateListConfigConverterTest {
                 .name("NAME")
                 .dates(
                     List.of(
-                        new CheckboxDate(new FieldId("ID_ONE"), "LABEL_ONE"),
-                        new CheckboxDate(new FieldId("ID_TWO"), "LABEL_TWO")
+                        new CheckboxDate(new FieldId("ID_ONE"), "LABEL_ONE",
+                            new Code("CODE", "CODE_SYSTEM", "DISPLAY_NAME")),
+                        new CheckboxDate(new FieldId("ID_TWO"), "LABEL_TWO",
+                            new Code("CODE", "CODE_SYSTEM", "DISPLAY_NAME"))
                     )
                 )
                 .build())

@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.DatePeriodType;
@@ -39,6 +40,7 @@ class XmlGeneratorDateRangeListTest {
 
   @InjectMocks
   private XmlGeneratorDateRangeList xmlGenerator;
+  private ElementSpecification elementSpecification;
 
   @Nested
   class OneDateRange {
@@ -60,11 +62,12 @@ class XmlGeneratorDateRangeListTest {
               )
               .build())
           .build();
+      elementSpecification = ElementSpecification.builder().build();
     }
 
     @Test
     void shouldMapSvar() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var first = response.get(0);
       assertAll(
@@ -76,7 +79,7 @@ class XmlGeneratorDateRangeListTest {
 
     @Test
     void shouldMapDelsvarForCode() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var delsvar = response.get(0).getDelsvar();
       final var delsvarCode = response.get(0).getDelsvar().get(0);
@@ -94,7 +97,7 @@ class XmlGeneratorDateRangeListTest {
 
     @Test
     void shouldMapDelsvarForDateRange() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var delsvar = response.get(0).getDelsvar();
       final var delsvarDateRange = response.get(0).getDelsvar().get(1);
@@ -140,7 +143,7 @@ class XmlGeneratorDateRangeListTest {
 
     @Test
     void shouldMapFirstSvar() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var first = response.get(0);
       assertAll(
@@ -152,7 +155,7 @@ class XmlGeneratorDateRangeListTest {
 
     @Test
     void shouldMapSecondSvar() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var first = response.get(1);
       assertAll(
@@ -164,7 +167,7 @@ class XmlGeneratorDateRangeListTest {
 
     @Test
     void shouldMapFirstDelsvarForCode() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var delsvar = response.get(0).getDelsvar();
       final var delsvarCode = delsvar.get(0);
@@ -182,7 +185,7 @@ class XmlGeneratorDateRangeListTest {
 
     @Test
     void shouldMapSecondDelsvarForCode() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var delsvar = response.get(1).getDelsvar();
       final var delsvarCode = delsvar.get(0);
@@ -200,7 +203,7 @@ class XmlGeneratorDateRangeListTest {
 
     @Test
     void shouldMapFirstDelsvarForDateRange() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var delsvar = response.get(0).getDelsvar();
       final var delsvarDateRange = delsvar.get(1);
@@ -218,7 +221,7 @@ class XmlGeneratorDateRangeListTest {
 
     @Test
     void shouldMapSecondDelsvarForDateRange() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var delsvar = response.get(1).getDelsvar();
       final var delsvarDateRange = delsvar.get(1);
@@ -245,7 +248,7 @@ class XmlGeneratorDateRangeListTest {
         .id(new ElementId(QUESTION_ID))
         .build();
 
-    final var response = xmlGenerator.generate(data);
+    final var response = xmlGenerator.generate(data, elementSpecification);
 
     assertTrue(response.isEmpty());
   }
@@ -259,7 +262,7 @@ class XmlGeneratorDateRangeListTest {
         .id(new ElementId(QUESTION_ID))
         .build();
 
-    final var response = xmlGenerator.generate(data);
+    final var response = xmlGenerator.generate(data, elementSpecification);
 
     assertTrue(response.isEmpty());
   }

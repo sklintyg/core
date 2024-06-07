@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
-public record CheckboxDate(FieldId id, String label) {
+import se.inera.intyg.certificateservice.domain.common.model.Code;
+
+public record CheckboxDate(FieldId id, String label, Code code) {
 
 }

@@ -72,7 +72,7 @@ public class XmlGeneratorValue {
                           .elementSpecification(data.id())
                           .mapping())
                   .answers(
-                      converter.generate(data)
+                      converter.generate(data, certificateModel.elementSpecification(data.id()))
                   )
                   .build();
             }

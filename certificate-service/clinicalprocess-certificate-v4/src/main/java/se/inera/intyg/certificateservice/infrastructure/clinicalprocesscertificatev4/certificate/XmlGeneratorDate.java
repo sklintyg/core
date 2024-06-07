@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 
 @Component
@@ -16,7 +17,7 @@ public class XmlGeneratorDate implements XmlGeneratorElementData {
     return ElementValueDate.class;
   }
 
-  public List<Svar> generate(ElementData data) {
+  public List<Svar> generate(ElementData data, ElementSpecification specification) {
     if (!(data.value() instanceof ElementValueDate dateValue)) {
       return Collections.emptyList();
     }
