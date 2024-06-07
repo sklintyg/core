@@ -18,7 +18,7 @@ public class MessageComplementEmbeddable {
 
   @Column(name = "elementId", table = "message_complement")
   private String elementId;
-  @Column(name = "code", table = "message_complement")
+  @Column(name = "fieldId", table = "message_complement")
   private String fieldId;
   @Column(name = "content", table = "message_complement")
   private String content;
