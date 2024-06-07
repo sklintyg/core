@@ -30,6 +30,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpre
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
@@ -203,6 +204,13 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID,
                     radioMultipleCodes.stream().map(ElementConfigurationCode::id).toList()
                 )
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationCode.builder()
+                    .mandatory(true)
+                    .build()
             )
         )
         .build();
