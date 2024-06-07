@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
@@ -19,7 +18,7 @@ public class XmlGeneratorCode implements XmlGeneratorElementData {
 
   @Override
   public Class<? extends ElementValue> supports() {
-    return ElementValueDate.class;
+    return ElementValueCode.class;
   }
 
   public List<Svar> generate(ElementData data, ElementSpecification specification) {
