@@ -24,8 +24,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
@@ -82,8 +80,12 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
   public static final FieldId QUESTION_UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID = new FieldId("1.3");
   private static final ElementId QUESTION_HOT_CATEGORY_ID = new ElementId("KAT_2");
   public static final ElementId QUESTION_NAR_TILLSTANDET_BLEV_AKUT_LIVSHOTANDE_ID = new ElementId(
-      "52.2");
+      "53.2");
   private static final FieldId QUESTION_NAR_TILLSTANDET_BLEV_AKUT_LIVSHOTANDE_FIELD_ID = new FieldId(
+      "53.2");
+  public static final ElementId QUESTION_NAR_AKTIVA_BEHANDLINGEN_AVSLUTADES_ID = new ElementId(
+      "52.2");
+  private static final FieldId QUESTION_NAR_AKTIVA_BEHANDLINGEN_AVSLUTADES_FIELD_ID = new FieldId(
       "52.2");
   private static final ElementId QUESTION_SAMTYCKE_CATEGORY_ID = new ElementId("KAT_3");
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
@@ -180,6 +182,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                 ),
                 categoryHot(
                     questionPatientBehandlingOchVardsituation(),
+                    questionNarAktivaBehandlingenAvslutades(),
                     questionNarTillstandetBlevAkutLivshotande()
                 ),
                 categorySamtycke(),
@@ -189,6 +192,39 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .pdfTemplatePath(PDF_FK_3226_PDF)
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7472_PDF)
         .schematronPath(SCHEMATRON_PATH)
+        .build();
+  }
+
+  private static ElementSpecification questionNarAktivaBehandlingenAvslutades() {
+    return ElementSpecification.builder()
+        .id(QUESTION_NAR_AKTIVA_BEHANDLINGEN_AVSLUTADES_ID)
+        .configuration(
+            ElementConfigurationDate.builder()
+                .name("Ange när den aktiva behandlingen avslutades")
+                .id(QUESTION_NAR_AKTIVA_BEHANDLINGEN_AVSLUTADES_FIELD_ID)
+                .max(Period.ofDays(0))
+                .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.mandatory(
+                    QUESTION_NAR_AKTIVA_BEHANDLINGEN_AVSLUTADES_ID,
+                    QUESTION_NAR_AKTIVA_BEHANDLINGEN_AVSLUTADES_FIELD_ID
+                ),
+                CertificateElementRuleFactory.show(
+                    QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID,
+                    ENDAST_PALLIATIV_FIELD_ID
+                )
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationDate.builder()
+                    .mandatory(true)
+                    .max(Period.ofDays(0))
+                    .build()
+            )
+        )
         .build();
   }
 

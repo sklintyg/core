@@ -653,7 +653,7 @@ class CertificateModelFactoryFK3226Test {
     }
 
     @Nested
-    class QuestionNarTillstandetBlevAkutLivshotande {
+    class QuestionNarAktivaBehandlingenAvslutades {
 
       private static final ElementId ELEMENT_ID = new ElementId("52.2");
 
@@ -672,7 +672,7 @@ class CertificateModelFactoryFK3226Test {
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationDate.builder()
             .id(new FieldId("52.2"))
-            .name("Ange när tillståndet blev akut livshotande")
+            .name("Ange när den aktiva behandlingen avslutades")
             .max(Period.ofDays(0))
             .build();
 
@@ -692,6 +692,84 @@ class CertificateModelFactoryFK3226Test {
                 .expression(
                     new RuleExpression(
                         "$52.2"
+                    )
+                )
+                .build(),
+            ElementRuleExpression.builder()
+                .id(new ElementId("52"))
+                .type(ElementRuleType.SHOW)
+                .expression(
+                    new RuleExpression(
+                        "$ENDAST_PALLIATIV"
+                    )
+                )
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedRules,
+            certificateModel.elementSpecification(ELEMENT_ID).rules()
+        );
+      }
+
+      @Test
+      void shallIncludeValidations() {
+        final var expectedValidations = List.of(
+            ElementValidationDate.builder()
+                .mandatory(true)
+                .max(Period.ofDays(0))
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedValidations,
+            certificateModel.elementSpecification(ELEMENT_ID).validations()
+        );
+      }
+    }
+
+    @Nested
+    class QuestionNarTillstandetBlevAkutLivshotande {
+
+      private static final ElementId ELEMENT_ID = new ElementId("53.2");
+
+      @Test
+      void shallIncludeId() {
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
+                certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeConfiguration() {
+        final var expectedConfiguration = ElementConfigurationDate.builder()
+            .id(new FieldId("53.2"))
+            .name("Ange när tillståndet blev akut livshotande")
+            .max(Period.ofDays(0))
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+
+      @Test
+      void shallIncludeRules() {
+        final var expectedRules = List.of(
+            ElementRuleExpression.builder()
+                .id(ELEMENT_ID)
+                .type(ElementRuleType.MANDATORY)
+                .expression(
+                    new RuleExpression(
+                        "$53.2"
                     )
                 )
                 .build(),
