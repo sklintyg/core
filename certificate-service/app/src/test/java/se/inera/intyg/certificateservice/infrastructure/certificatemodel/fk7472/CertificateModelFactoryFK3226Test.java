@@ -911,6 +911,8 @@ class CertificateModelFactoryFK3226Test {
               .id(new FieldId("52.5"))
               .name(
                   "Kan du uppskatta hur länge tillståndet kommer vara livshotande?")
+              .selectedText("Ja")
+              .unselectedText("Nej")
               .build();
 
           final var certificateModel = certificateModelFactoryFK3226.create();

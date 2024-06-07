@@ -213,6 +213,8 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
             ElementConfigurationRadioBoolean.builder()
                 .id(QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_FIELD_ID)
                 .name("Kan du uppskatta hur länge tillståndet kommer vara livshotande?")
+                .selectedText("Ja")
+                .unselectedText("Nej")
                 .build()
         )
         .rules(

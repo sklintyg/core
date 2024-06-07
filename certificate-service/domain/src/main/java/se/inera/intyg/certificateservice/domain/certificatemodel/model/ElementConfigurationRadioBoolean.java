@@ -13,8 +13,10 @@ public class ElementConfigurationRadioBoolean implements ElementConfiguration {
   @Getter(onMethod = @__(@Override))
   String name;
   @Getter(onMethod = @__(@Override))
-  ElementType type = ElementType.TEXT_AREA;
+  ElementType type = ElementType.RADIO_BOOLEAN;
   FieldId id;
+  String selectedText;
+  String unselectedText;
 
   @Override
   public ElementValue emptyValue() {
