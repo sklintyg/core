@@ -25,6 +25,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
@@ -886,6 +887,73 @@ class CertificateModelFactoryFK3226Test {
         assertEquals(expectedValidations,
             certificateModel.elementSpecification(ELEMENT_ID).validations()
         );
+      }
+
+      @Nested
+      class QuestionUppskattaHurLangeTillstandetKommerVaraLivshotande {
+
+        private static final ElementId ELEMENT_ID = new ElementId("52.5");
+
+        @Test
+        void shallIncludeId() {
+          final var certificateModel = certificateModelFactoryFK3226.create();
+
+          assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+              "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                  ELEMENT_ID,
+                  certificateModel.elementSpecifications())
+          );
+        }
+
+        @Test
+        void shallIncludeConfiguration() {
+          final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
+              .id(new FieldId("52.5"))
+              .name(
+                  "Kan du uppskatta hur länge tillståndet kommer vara livshotande?")
+              .build();
+
+          final var certificateModel = certificateModelFactoryFK3226.create();
+
+          assertEquals(expectedConfiguration,
+              certificateModel.elementSpecification(ELEMENT_ID).configuration()
+          );
+        }
+
+        @Test
+        void shallIncludeRules() {
+          final var expectedRules = List.of(
+              ElementRuleExpression.builder()
+                  .id(ELEMENT_ID)
+                  .type(ElementRuleType.MANDATORY)
+                  .expression(
+                      new RuleExpression(
+                          "$52.5"
+                      )
+                  )
+                  .build(),
+              ElementRuleExpression.builder()
+                  .id(new ElementId("52"))
+                  .type(ElementRuleType.SHOW)
+                  .expression(
+                      new RuleExpression(
+                          "$AKUT_LIVSHOTANDE"
+                      )
+                  )
+                  .build()
+          );
+
+          final var certificateModel = certificateModelFactoryFK3226.create();
+
+          assertEquals(expectedRules,
+              certificateModel.elementSpecification(ELEMENT_ID).rules()
+          );
+        }
+
+        @Test
+        void shallIncludeValidations() {
+          //TODO: Add
+        }
       }
     }
 

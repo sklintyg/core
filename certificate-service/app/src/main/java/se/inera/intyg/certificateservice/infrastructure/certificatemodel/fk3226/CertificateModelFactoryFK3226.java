@@ -18,6 +18,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
@@ -51,6 +52,10 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
       "52.4");
   private static final FieldId QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_AKUT_LIVSHOTANDE_FIELD_ID = new FieldId(
       "52.4");
+  private static final ElementId QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_ID = new ElementId(
+      "52.5");
+  private static final FieldId QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_FIELD_ID = new FieldId(
+      "52.5");
   @Value("${certificate.model.fk7472.v1_0.active.from}")
   private LocalDateTime activeFrom;
   private static final String TYPE = "fk3226";
@@ -188,7 +193,8 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     questionPatientBehandlingOchVardsituation(),
                     questionNarAktivaBehandlingenAvslutades(),
                     questionNarTillstandetBlevAkutLivshotande(),
-                    questionPatagligtHotMotPatientensLivAkutLivshotande()
+                    questionPatagligtHotMotPatientensLivAkutLivshotande(),
+                    questionUppskattaHurLangeTillstandetKommerVaraLivshotande()
                 ),
                 categorySamtycke(),
                 issuingUnitContactInfo()
@@ -197,6 +203,30 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .pdfTemplatePath(PDF_FK_3226_PDF)
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7472_PDF)
         .schematronPath(SCHEMATRON_PATH)
+        .build();
+  }
+
+  private static ElementSpecification questionUppskattaHurLangeTillstandetKommerVaraLivshotande() {
+    return ElementSpecification.builder()
+        .id(QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_ID)
+        .configuration(
+            ElementConfigurationRadioBoolean.builder()
+                .id(QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_FIELD_ID)
+                .name("Kan du uppskatta hur länge tillståndet kommer vara livshotande?")
+                .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.mandatory(
+                    QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_ID,
+                    QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_FIELD_ID
+                ),
+                CertificateElementRuleFactory.show(
+                    QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID,
+                    AKUT_LIVSHOTANDE_FIELD_ID
+                )
+            )
+        )
         .build();
   }
 
