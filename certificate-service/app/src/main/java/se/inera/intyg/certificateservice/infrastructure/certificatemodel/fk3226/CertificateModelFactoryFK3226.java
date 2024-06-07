@@ -57,6 +57,14 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
       "52.5");
   private static final FieldId QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_FIELD_ID = new FieldId(
       "52.5");
+  private static final ElementId QUESTION_TILLSTANDET_UPPSKATTAS_LIVSHOTANDE_TILL_OCH_MED_ID = new ElementId(
+      "52.6");
+  private static final FieldId QUESTION_TILLSTANDET_UPPSKATTAS_LIVSHOTANDE_TILL_OCH_MED_FIELD_ID = new FieldId(
+      "52.6");
+  private static final ElementId QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_ANNAT_ID = new ElementId(
+      "52.7");
+  private static final FieldId QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_ANNAT_FIELD_ID = new FieldId(
+      "52.7");
   @Value("${certificate.model.fk7472.v1_0.active.from}")
   private LocalDateTime activeFrom;
   private static final String TYPE = "fk3226";
@@ -195,7 +203,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     questionNarAktivaBehandlingenAvslutades(),
                     questionNarTillstandetBlevAkutLivshotande(),
                     questionPatagligtHotMotPatientensLivAkutLivshotande(),
-                    questionUppskattaHurLangeTillstandetKommerVaraLivshotande()
+                    questionUppskattaHurLangeTillstandetKommerVaraLivshotande(),
+                    questionTillstandetUppskattasLivshotandeTillOchMed(),
+                    questionPatagligtHotMotPatientensLivAnnat()
                 ),
                 categorySamtycke(),
                 issuingUnitContactInfo()
@@ -204,6 +214,74 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .pdfTemplatePath(PDF_FK_3226_PDF)
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7472_PDF)
         .schematronPath(SCHEMATRON_PATH)
+        .build();
+  }
+
+  private static ElementSpecification questionPatagligtHotMotPatientensLivAnnat() {
+    return ElementSpecification.builder()
+        .id(QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_ANNAT_ID)
+        .configuration(
+            ElementConfigurationTextArea.builder()
+                .id(QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_ANNAT_FIELD_ID)
+                .name(
+                    "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv")
+                .description(
+                    "Ange när tillståndet blev livshotande, och om det är möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller.")
+                .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.mandatory(
+                    QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_ANNAT_ID,
+                    QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_ANNAT_FIELD_ID
+                ),
+                CertificateElementRuleFactory.show(
+                    QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID,
+                    ANNAT_FIELD_ID
+                )
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationText.builder()
+                    .mandatory(true)
+                    .limit(4000)
+                    .build()
+            )
+        )
+        .build();
+  }
+
+  private static ElementSpecification questionTillstandetUppskattasLivshotandeTillOchMed() {
+    return ElementSpecification.builder()
+        .id(QUESTION_TILLSTANDET_UPPSKATTAS_LIVSHOTANDE_TILL_OCH_MED_ID)
+        .configuration(
+            ElementConfigurationDate.builder()
+                .id(QUESTION_TILLSTANDET_UPPSKATTAS_LIVSHOTANDE_TILL_OCH_MED_FIELD_ID)
+                .name("Till och med")
+                .min(Period.ofDays(0))
+                .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.mandatory(
+                    QUESTION_TILLSTANDET_UPPSKATTAS_LIVSHOTANDE_TILL_OCH_MED_ID,
+                    QUESTION_TILLSTANDET_UPPSKATTAS_LIVSHOTANDE_TILL_OCH_MED_FIELD_ID
+                ),
+                CertificateElementRuleFactory.show(
+                    QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_ID,
+                    QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_FIELD_ID
+                )
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationDate.builder()
+                    .mandatory(true)
+                    .min(Period.ofDays(0))
+                    .build()
+            )
+        )
         .build();
   }
 
@@ -280,8 +358,8 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .id(QUESTION_NAR_AKTIVA_BEHANDLINGEN_AVSLUTADES_ID)
         .configuration(
             ElementConfigurationDate.builder()
-                .name("Ange när den aktiva behandlingen avslutades")
                 .id(QUESTION_NAR_AKTIVA_BEHANDLINGEN_AVSLUTADES_FIELD_ID)
+                .name("Ange när den aktiva behandlingen avslutades")
                 .max(Period.ofDays(0))
                 .build()
         )
