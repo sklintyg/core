@@ -65,6 +65,10 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
       "52.7");
   private static final FieldId QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_ANNAT_FIELD_ID = new FieldId(
       "52.7");
+  private static final ElementId FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_ID = new ElementId(
+      "53");
+  private static final FieldId FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_FIELD_ID = new FieldId(
+      "53.1");
   @Value("${certificate.model.fk7472.v1_0.active.from}")
   private LocalDateTime activeFrom;
   private static final String TYPE = "fk3226";
@@ -207,13 +211,45 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     questionTillstandetUppskattasLivshotandeTillOchMed(),
                     questionPatagligtHotMotPatientensLivAnnat()
                 ),
-                categorySamtycke(),
+                categorySamtycke(
+                    questionForutsattningarForAttLamnaSkriftligtSamtycke()
+                ),
                 issuingUnitContactInfo()
             )
         )
         .pdfTemplatePath(PDF_FK_3226_PDF)
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7472_PDF)
         .schematronPath(SCHEMATRON_PATH)
+        .build();
+  }
+
+  private static ElementSpecification questionForutsattningarForAttLamnaSkriftligtSamtycke() {
+    return ElementSpecification.builder()
+        .id(FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_ID)
+        .configuration(
+            ElementConfigurationRadioBoolean.builder()
+                .id(FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_FIELD_ID)
+                .name(
+                    "Har patienten de medicinska förutsättningarna för att kunna lämna sitt samtycke?")
+                .selectedText("Ja")
+                .unselectedText("Nej")
+                .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.mandatoryExist(
+                    FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_ID,
+                    FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_FIELD_ID
+                )
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationBoolean.builder()
+                    .mandatory(true)
+                    .build()
+            )
+        )
         .build();
   }
 
