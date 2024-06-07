@@ -30,6 +30,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 class CertificateDataCheckboxDateRangeListConfigConverterTest {
 
@@ -55,8 +56,10 @@ class CertificateDataCheckboxDateRangeListConfigConverterTest {
                 .max(Period.ofMonths(2))
                 .dateRanges(
                     List.of(
-                        new ElementConfigurationCode(new FieldId(RANGE_ID_ONE), RANGE_LABEL_ONE),
-                        new ElementConfigurationCode(new FieldId(RANGE_ID_TWO), RANGE_LABEL_TWO)
+                        new ElementConfigurationCode(new FieldId(RANGE_ID_ONE), RANGE_LABEL_ONE,
+                            new Code("CODE", "CODE_SYSTEM", "DISPLAY_NAME")),
+                        new ElementConfigurationCode(new FieldId(RANGE_ID_TWO), RANGE_LABEL_TWO,
+                            new Code("CODE", "CODE_SYSTEM", "DISPLAY_NAME"))
                     )
                 )
                 .build()

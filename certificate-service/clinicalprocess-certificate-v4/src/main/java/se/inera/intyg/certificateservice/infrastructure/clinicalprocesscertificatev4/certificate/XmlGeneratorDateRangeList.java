@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.DatePeriodType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.ObjectFactory;
@@ -35,40 +35,48 @@ public class XmlGeneratorDateRangeList implements XmlGeneratorElementData {
       return Collections.emptyList();
     }
 
+    if (!(specification.configuration() instanceof ElementConfigurationCheckboxDateRangeList configuration)) {
+      throw new IllegalArgumentException(
+          "Cannot generate xml for configuration of type '%s'"
+              .formatted(specification.configuration().getClass())
+      );
+    }
+
     final var objectFactory = new ObjectFactory();
 
     return dateRangeListValue.dateRangeList().stream()
         .map(dateRange -> {
-          final var dateRangeAnswer = new Svar();
-          dateRangeAnswer.setId(data.id().id());
-          dateRangeAnswer.setInstans(dateRangeListValue.dateRangeList().indexOf(dateRange) + 1);
+              final var dateRangeAnswer = new Svar();
+              dateRangeAnswer.setId(data.id().id());
+              dateRangeAnswer.setInstans(dateRangeListValue.dateRangeList().indexOf(dateRange) + 1);
 
-          final var subAnswerDateRange = new Delsvar();
-          final var dateRangeType = new DatePeriodType();
+              final var subAnswerDateRange = new Delsvar();
+              final var dateRangeType = new DatePeriodType();
 
-          final var subAnswerCode = new Delsvar();
-          final var cvType = new CVType();
+              final var subAnswerCode = new Delsvar();
+              final var cvType = new CVType();
 
-          subAnswerDateRange.setId(getDateRangeId(data.id().id()));
-          dateRangeType.setEnd(toXmlGregorianCalendar(dateRange.to()));
-          dateRangeType.setStart(toXmlGregorianCalendar(dateRange.from()));
-          final var convertedDateRangeType = objectFactory.createDatePeriod(dateRangeType);
-          subAnswerDateRange.getContent().add(convertedDateRangeType);
+              subAnswerDateRange.setId(getDateRangeId(data.id().id()));
+              dateRangeType.setEnd(toXmlGregorianCalendar(dateRange.to()));
+              dateRangeType.setStart(toXmlGregorianCalendar(dateRange.from()));
+              final var convertedDateRangeType = objectFactory.createDatePeriod(dateRangeType);
+              subAnswerDateRange.getContent().add(convertedDateRangeType);
 
-          subAnswerCode.setId(getCvId(data.id().id()));
-          cvType.setCode(dateRange.dateRangeId().value());
-          cvType.setCodeSystem(WorkCapacityType.CODE_SYSTEM);
-          cvType.setDisplayName(
-              WorkCapacityType.valueOf(dateRange.dateRangeId().value()).displayName()
-          );
-          final var convertedCvType = objectFactory.createCv(cvType);
-          subAnswerCode.getContent().add(convertedCvType);
+              final var code = configuration.code(dateRange);
+              subAnswerCode.setId(getCvId(data.id().id()));
+              cvType.setCode(code.code());
+              cvType.setCodeSystem(code.codeSystem());
+              cvType.setDisplayName(code.displayName());
 
-          dateRangeAnswer.getDelsvar().add(subAnswerCode);
-          dateRangeAnswer.getDelsvar().add(subAnswerDateRange);
+              final var convertedCvType = objectFactory.createCv(cvType);
+              subAnswerCode.getContent().add(convertedCvType);
 
-          return dateRangeAnswer;
-        }).toList();
+              dateRangeAnswer.getDelsvar().add(subAnswerCode);
+              dateRangeAnswer.getDelsvar().add(subAnswerDateRange);
+
+              return dateRangeAnswer;
+            }
+        ).toList();
   }
 
   private static String getDateRangeId(String id) {

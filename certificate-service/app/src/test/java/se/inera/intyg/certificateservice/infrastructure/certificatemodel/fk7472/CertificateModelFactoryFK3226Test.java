@@ -48,6 +48,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CertificateModelFactoryFK3226;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CodeSystemKvFkmu0010;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateModelFactoryFK3226Test {
@@ -644,11 +645,21 @@ class CertificateModelFactoryFK3226Test {
             .elementLayout(ElementLayout.ROWS)
             .list(
                 List.of(
-                    new ElementConfigurationCode(new FieldId("ENDAST_PALLIATIV"),
-                        "Endast palliativ vård ges och all aktiv behandling mot sjukdomstillståndet har avslutats"),
-                    new ElementConfigurationCode(new FieldId("AKUT_LIVSHOTANDE"),
-                        "Akut livshotande tillstånd (till exempel vård på intensivvårdsavdelning)"),
-                    new ElementConfigurationCode(new FieldId("ANNAT"), "Annat")
+                    new ElementConfigurationCode(
+                        new FieldId("ENDAST_PALLIATIV"),
+                        "Endast palliativ vård ges och all aktiv behandling mot sjukdomstillståndet har avslutats",
+                        CodeSystemKvFkmu0010.ENDAST_PALLIATIV
+                    ),
+                    new ElementConfigurationCode(
+                        new FieldId("AKUT_LIVSHOTANDE"),
+                        "Akut livshotande tillstånd (till exempel vård på intensivvårdsavdelning)",
+                        CodeSystemKvFkmu0010.AKUT_LIVSHOTANDE
+                    ),
+                    new ElementConfigurationCode(
+                        new FieldId("ANNAT"),
+                        "Annat",
+                        CodeSystemKvFkmu0010.ANNAT
+                    )
                 )
             )
             .build();

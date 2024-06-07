@@ -17,6 +17,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 class CertificateDataRadioMultipleCodeConfigConverterTest {
 
@@ -99,8 +100,10 @@ class CertificateDataRadioMultipleCodeConfigConverterTest {
                 .elementLayout(ElementLayout.ROWS)
                 .list(
                     List.of(
-                        new ElementConfigurationCode(new FieldId(ID_1), LABEL_1),
-                        new ElementConfigurationCode(new FieldId(ID_2), LABEL_2)
+                        new ElementConfigurationCode(new FieldId(ID_1), LABEL_1,
+                            new Code("CODE", "CODE_SYSTEM", "DISPLAY_NAME")),
+                        new ElementConfigurationCode(new FieldId(ID_2), LABEL_2,
+                            new Code("CODE", "CODE_SYSTEM", "DISPLAY_NAME"))
                     )
                 )
                 .build())

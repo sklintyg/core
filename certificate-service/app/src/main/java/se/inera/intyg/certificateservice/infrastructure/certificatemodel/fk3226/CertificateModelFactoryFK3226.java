@@ -343,11 +343,21 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
 
   private static ElementSpecification questionPatientBehandlingOchVardsituation() {
     final var radioMultipleCodes = List.of(
-        new ElementConfigurationCode(ENDAST_PALLIATIV_FIELD_ID,
-            "Endast palliativ vård ges och all aktiv behandling mot sjukdomstillståndet har avslutats"),
-        new ElementConfigurationCode(AKUT_LIVSHOTANDE_FIELD_ID,
-            "Akut livshotande tillstånd (till exempel vård på intensivvårdsavdelning)"),
-        new ElementConfigurationCode(ANNAT_FIELD_ID, "Annat")
+        new ElementConfigurationCode(
+            ENDAST_PALLIATIV_FIELD_ID,
+            CodeSystemKvFkmu0010.ENDAST_PALLIATIV.displayName(),
+            CodeSystemKvFkmu0010.ENDAST_PALLIATIV
+        ),
+        new ElementConfigurationCode(
+            AKUT_LIVSHOTANDE_FIELD_ID,
+            CodeSystemKvFkmu0010.AKUT_LIVSHOTANDE.displayName(),
+            CodeSystemKvFkmu0010.AKUT_LIVSHOTANDE
+        ),
+        new ElementConfigurationCode(
+            ANNAT_FIELD_ID,
+            CodeSystemKvFkmu0010.ANNAT.displayName(),
+            CodeSystemKvFkmu0010.ANNAT
+        )
     );
 
     return ElementSpecification.builder()

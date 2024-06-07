@@ -7,8 +7,10 @@ import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
+import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 @Value
 @Builder
@@ -42,5 +44,16 @@ public class ElementConfigurationCheckboxDateRangeList implements ElementConfigu
     return dateRanges.stream()
         .filter(dateRange -> dateRange.id().equals(id))
         .findFirst();
+  }
+
+  public Code code(DateRange dateRange) {
+    return dateRanges.stream()
+        .filter(configurationCode -> configurationCode.id().equals(dateRange.dateRangeId()))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException(
+                "Cannot find matching code for dateId '%s'".formatted(dateRange.dateRangeId())
+            )
+        )
+        .code();
   }
 }
