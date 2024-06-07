@@ -469,7 +469,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .mapping(
             new ElementMapping(
                 QUESTION_UTLATANDE_BASERAT_PA_ID,
-                new Code("annat", "codeSystem", "annat")
+                CodeSystemKvFkmu0001.ANNAT
             )
         )
         .build();

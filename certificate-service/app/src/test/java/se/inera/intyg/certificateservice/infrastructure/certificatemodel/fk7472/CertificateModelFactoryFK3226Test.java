@@ -31,6 +31,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -556,6 +557,24 @@ class CertificateModelFactoryFK3226Test {
 
         assertEquals(expectedRules,
             certificateModel.elementSpecification(ELEMENT_ID).rules()
+        );
+      }
+
+      @Test
+      void shallIncludeCustomMapping() {
+        final var expectedConfiguration = new ElementMapping(
+            new ElementId("1"),
+            new Code(
+                "ANNAT",
+                "KV_FKMU_0001",
+                "annat"
+            )
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).mapping()
         );
       }
     }
