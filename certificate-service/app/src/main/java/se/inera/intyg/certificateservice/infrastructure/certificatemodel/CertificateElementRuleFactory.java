@@ -25,6 +25,18 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
+  public static ElementRule show(ElementId id, FieldId fieldId) {
+    return ElementRuleExpression.builder()
+        .type(ElementRuleType.SHOW)
+        .id(id)
+        .expression(
+            new RuleExpression(
+                singleExpression(fieldId.value())
+            )
+        )
+        .build();
+  }
+
   public static ElementRule mandatory(ElementId id, List<FieldId> fieldIds) {
     return ElementRuleExpression.builder()
         .id(id)

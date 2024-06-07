@@ -17,20 +17,19 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxD
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
@@ -41,6 +40,12 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.Certifi
 @Component
 public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
 
+  private static final FieldId ENDAST_PALLIATIV_FIELD_ID = new FieldId("ENDAST_PALLIATIV");
+  private static final FieldId AKUT_LIVSHOTANDE_FIELD_ID = new FieldId("AKUT_LIVSHOTANDE");
+  private static final FieldId ANNAT_FIELD_ID = new FieldId("ANNAT");
+  private static final FieldId UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID = new FieldId("annat");
+  private static final String UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID = "journaluppgifter";
+  private static final String UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID = "undersokningAvPatienten";
   @Value("${certificate.model.fk7472.v1_0.active.from}")
   private LocalDateTime activeFrom;
   private static final String TYPE = "fk3226";
@@ -73,6 +78,10 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
   public static final ElementId QUESTION_UTLATANDE_BASERAT_PA_ANNAT_ID = new ElementId("1.3");
   public static final FieldId QUESTION_UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID = new FieldId("1.3");
   private static final ElementId QUESTION_HOT_CATEGORY_ID = new ElementId("KAT_2");
+  public static final ElementId QUESTION_NAR_TILLSTANDET_BLEV_AKUT_LIVSHOTANDE_ID = new ElementId(
+      "52.2");
+  private static final FieldId QUESTION_NAR_TILLSTANDET_BLEV_AKUT_LIVSHOTANDE_FIELD_ID = new FieldId(
+      "52.2");
   private static final ElementId QUESTION_SAMTYCKE_CATEGORY_ID = new ElementId("KAT_3");
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk7472/schematron/lunsp.v1.sch");
@@ -167,7 +176,8 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     questionUtlatandeBaseratPaAnnat()
                 ),
                 categoryHot(
-                    questionPatientBehandlingOchVardsituation()
+                    questionPatientBehandlingOchVardsituation(),
+                    questionNarTillstandetBlevAkutLivshotande()
                 ),
                 categorySamtycke(),
                 issuingUnitContactInfo()
@@ -179,13 +189,46 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .build();
   }
 
+  private static ElementSpecification questionNarTillstandetBlevAkutLivshotande() {
+    return ElementSpecification.builder()
+        .id(QUESTION_NAR_TILLSTANDET_BLEV_AKUT_LIVSHOTANDE_ID)
+        .configuration(
+            ElementConfigurationDate.builder()
+                .name("Ange när tillståndet blev akut livshotande")
+                .id(QUESTION_NAR_TILLSTANDET_BLEV_AKUT_LIVSHOTANDE_FIELD_ID)
+                .max(Period.ofDays(0))
+                .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.mandatory(
+                    QUESTION_NAR_TILLSTANDET_BLEV_AKUT_LIVSHOTANDE_ID,
+                    QUESTION_NAR_TILLSTANDET_BLEV_AKUT_LIVSHOTANDE_FIELD_ID
+                ),
+                CertificateElementRuleFactory.show(
+                    QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID,
+                    AKUT_LIVSHOTANDE_FIELD_ID
+                )
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationDate.builder()
+                    .mandatory(true)
+                    .max(Period.ofDays(0))
+                    .build()
+            )
+        )
+        .build();
+  }
+
   private static ElementSpecification questionPatientBehandlingOchVardsituation() {
     final var radioMultipleCodes = List.of(
-        new ElementConfigurationCode(new FieldId("ENDAST_PALLIATIV"),
+        new ElementConfigurationCode(ENDAST_PALLIATIV_FIELD_ID,
             "Endast palliativ vård ges och all aktiv behandling mot sjukdomstillståndet har avslutats"),
-        new ElementConfigurationCode(new FieldId("AKUT_LIVSHOTANDE"),
+        new ElementConfigurationCode(AKUT_LIVSHOTANDE_FIELD_ID,
             "Akut livshotande tillstånd (till exempel vård på intensivvårdsavdelning)"),
-        new ElementConfigurationCode(new FieldId("ANNAT"), "Annat")
+        new ElementConfigurationCode(ANNAT_FIELD_ID, "Annat")
     );
 
     return ElementSpecification.builder()
@@ -233,11 +276,11 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
 
   private static ElementSpecification questionUtlatandeBaseratPa(ElementSpecification... children) {
     final var checkboxDates = List.of(
-        new CheckboxDate(new FieldId("undersokningAvPatienten"),
+        new CheckboxDate(new FieldId(UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID),
             "min undersökning av patienten"),
-        new CheckboxDate(new FieldId("journaluppgifter"),
+        new CheckboxDate(new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID),
             "journaluppgifter från den"),
-        new CheckboxDate(new FieldId("annat"),
+        new CheckboxDate(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID,
             "annat")
     );
 
@@ -286,17 +329,13 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     QUESTION_UTLATANDE_BASERAT_PA_ANNAT_ID,
                     QUESTION_UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID
                 ),
-                CertificateElementRuleFactory.limit(QUESTION_UTLATANDE_BASERAT_PA_ANNAT_ID,
+                CertificateElementRuleFactory.limit(
+                    QUESTION_UTLATANDE_BASERAT_PA_ANNAT_ID,
                     (short) 4000),
-                ElementRuleExpression.builder()
-                    .type(ElementRuleType.SHOW)
-                    .id(QUESTION_UTLATANDE_BASERAT_PA_ID)
-                    .expression(
-                        new RuleExpression(
-                            "$annat"
-                        )
-                    )
-                    .build()
+                CertificateElementRuleFactory.show(
+                    QUESTION_UTLATANDE_BASERAT_PA_ID,
+                    UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID
+                )
             )
         )
         .validations(

@@ -31,6 +31,22 @@ class CertificateElementRuleFactoryTest {
   }
 
   @Test
+  void shouldReturnShowRule() {
+    final var expected = ElementRuleExpression.builder()
+        .id(new ElementId("ID"))
+        .type(ElementRuleType.SHOW)
+        .expression(new RuleExpression("$FIELD"))
+        .build();
+
+    final var response = CertificateElementRuleFactory.show(
+        new ElementId("ID"),
+        new FieldId("FIELD")
+    );
+
+    assertEquals(expected, response);
+  }
+
+  @Test
   void shouldReturnMandatoryRuleForSeveralFields() {
     final var expected = ElementRuleExpression.builder()
         .id(new ElementId("ID"))
