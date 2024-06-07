@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 @Value
 @Builder
@@ -24,5 +25,17 @@ public class ElementConfigurationRadioMultipleCode implements ElementConfigurati
     return ElementValueCode.builder()
         .codeId(id)
         .build();
+  }
+
+  public Code code(ElementValueCode elementValueCode) {
+    return list.stream()
+        .filter(elementConfigurationCode -> elementConfigurationCode.id()
+            .equals(elementValueCode.codeId()))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException(
+                "Cannot find matching code for dateId '%s'".formatted(elementValueCode.codeId())
+            )
+        )
+        .code();
   }
 }
