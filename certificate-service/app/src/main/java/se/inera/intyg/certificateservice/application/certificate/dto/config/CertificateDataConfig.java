@@ -14,7 +14,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @Type(value = CertificateDataConfigCheckboxDateRangeList.class, name = "UE_CHECKBOX_DATE_RANGE_LIST"),
     @Type(value = CertificateDataConfigCheckboxMultipleDate.class, name = "UE_CHECKBOX_MULTIPLE_DATE"),
     @Type(value = CertificateDataConfigRadioMultipleCode.class, name = "UE_RADIO_MULTIPLE_CODE"),
-    @Type(value = CertificateDataConfigRadioBoolean.class, name = "UE_RADIO_BOOLEAN")
+    @Type(value = CertificateDataConfigRadioBoolean.class, name = "UE_RADIO_BOOLEAN"),
+    @Type(value = CertificateDataConfigMessage.class, name = "UE_MESSAGE"),
 })
 public interface CertificateDataConfig {
 

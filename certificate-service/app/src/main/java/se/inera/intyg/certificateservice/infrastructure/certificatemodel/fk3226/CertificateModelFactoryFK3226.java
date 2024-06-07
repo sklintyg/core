@@ -18,6 +18,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
@@ -25,6 +26,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
@@ -212,6 +214,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     questionPatagligtHotMotPatientensLivAnnat()
                 ),
                 categorySamtycke(
+                    messageForutsattningarForAttLamnaSkriftligtSamtycke(),
                     questionForutsattningarForAttLamnaSkriftligtSamtycke()
                 ),
                 issuingUnitContactInfo()
@@ -220,6 +223,22 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .pdfTemplatePath(PDF_FK_3226_PDF)
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7472_PDF)
         .schematronPath(SCHEMATRON_PATH)
+        .build();
+  }
+
+  private static ElementSpecification messageForutsattningarForAttLamnaSkriftligtSamtycke() {
+    return ElementSpecification.builder()
+        .id(new ElementId("forutsattningar"))
+        .configuration(
+            ElementConfigurationMessage.builder()
+                .message("""
+                     Om patienten har medicinska förutsättningar att samtycka till att den vill ha stöd av en närstående, så ska patienten göra det.
+                                        \s
+                     Därför ska du fylla i om patienten kan lämna ett skriftligt samtycke eller inte.
+                    """)
+                .level(ElementMessageLevel.INFO)
+                .build()
+        )
         .build();
   }
 

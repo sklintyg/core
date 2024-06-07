@@ -25,6 +25,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
@@ -32,6 +33,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -1256,6 +1258,41 @@ class CertificateModelFactoryFK3226Test {
 
       assertEquals(expectedValidations,
           certificateModel.elementSpecification(ELEMENT_ID).validations()
+      );
+    }
+  }
+
+  @Nested
+  class MessageForutsattningarForAttLamnaSkriftligtSamtycke {
+
+    private static final ElementId ELEMENT_ID = new ElementId("forutsattningar");
+
+    @Test
+    void shallIncludeId() {
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              ELEMENT_ID,
+              certificateModel.elementSpecifications())
+      );
+    }
+
+    @Test
+    void shallIncludeConfiguration() {
+      final var expectedConfiguration = ElementConfigurationMessage.builder()
+          .message("""
+               Om patienten har medicinska förutsättningar att samtycka till att den vill ha stöd av en närstående, så ska patienten göra det.
+                                  \s
+               Därför ska du fylla i om patienten kan lämna ett skriftligt samtycke eller inte.
+              """)
+          .level(ElementMessageLevel.INFO)
+          .build();
+
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(expectedConfiguration,
+          certificateModel.elementSpecification(ELEMENT_ID).configuration()
       );
     }
   }
