@@ -63,6 +63,21 @@ class CertificateElementRuleFactoryTest {
   }
 
   @Test
+  void shouldReturnMandatoryExistRule() {
+    final var expected = ElementRuleExpression.builder()
+        .id(new ElementId("ID"))
+        .type(ElementRuleType.MANDATORY)
+        .expression(new RuleExpression("exists($FIELD1)"))
+        .build();
+
+    final var response = CertificateElementRuleFactory.mandatoryExist(
+        new ElementId("ID"), new FieldId("FIELD1")
+    );
+
+    assertEquals(expected, response);
+  }
+
+  @Test
   void shouldReturnMandatoryExistRuleForSeveralFields() {
     final var expected = ElementRuleExpression.builder()
         .id(new ElementId("ID"))

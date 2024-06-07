@@ -53,6 +53,10 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
+  public static ElementRule mandatoryExist(ElementId id, FieldId fieldId) {
+    return mandatoryExist(id, List.of(fieldId));
+  }
+
   public static ElementRule mandatoryExist(ElementId id, List<FieldId> fieldIds) {
     return ElementRuleExpression.builder()
         .id(id)

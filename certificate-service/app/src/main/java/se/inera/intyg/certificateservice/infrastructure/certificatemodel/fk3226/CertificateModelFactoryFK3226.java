@@ -30,6 +30,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
@@ -219,7 +220,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatory(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_ID,
                     QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_FIELD_ID
                 ),
@@ -227,6 +228,13 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID,
                     AKUT_LIVSHOTANDE_FIELD_ID
                 )
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationBoolean.builder()
+                    .mandatory(true)
+                    .build()
             )
         )
         .build();

@@ -10,31 +10,31 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
-class ElementValidationCodeTest {
+class ElementValidationBooleanTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("elementId");
   private static final FieldId FIELD_ID = new FieldId("fieldId");
   private static final ElementId CATEGORY_ID = new ElementId("categoryId");
-  private ElementValidationCode elementValidationDate;
+  private ElementValidationBoolean elementValidationBoolean;
 
   @Nested
   class IllegalStates {
 
     @BeforeEach
     void setUp() {
-      elementValidationDate = ElementValidationCode.builder().build();
+      elementValidationBoolean = ElementValidationBoolean.builder().build();
     }
 
     @Test
     void shallThrowIllegalArgumentExceptionIfDataIsNull() {
       final Optional<ElementId> categoryId = Optional.empty();
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationDate.validate(null, categoryId)
+          () -> elementValidationBoolean.validate(null, categoryId)
       );
     }
 
@@ -46,7 +46,7 @@ class ElementValidationCodeTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationDate.validate(elementData, categoryId));
+          () -> elementValidationBoolean.validate(elementData, categoryId));
     }
 
     @Test
@@ -58,7 +58,7 @@ class ElementValidationCodeTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationDate.validate(elementData, categoryId));
+          () -> elementValidationBoolean.validate(elementData, categoryId));
     }
   }
 
@@ -66,7 +66,7 @@ class ElementValidationCodeTest {
   class Mandatory {
 
     @Test
-    void shallReturnValidationErrorIfMandatoryTrueAndCodeIsNull() {
+    void shallReturnValidationErrorIfMandatoryTrueAndBooleanValueIsNull() {
       final var expectedValidationErrors = List.of(
           ValidationError.builder()
               .elementId(ELEMENT_ID)
@@ -76,103 +76,58 @@ class ElementValidationCodeTest {
               .build()
       );
 
-      elementValidationDate = ElementValidationCode.builder()
+      elementValidationBoolean = ElementValidationBoolean.builder()
           .mandatory(true)
           .build();
 
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)
-          .value(ElementValueCode.builder()
-              .codeId(FIELD_ID)
+          .value(ElementValueBoolean.builder()
+              .booleanId(FIELD_ID)
               .build())
           .build();
 
-      final var actualValidationErrors = elementValidationDate.validate(elementData,
+      final var actualValidationErrors = elementValidationBoolean.validate(elementData,
           Optional.of(CATEGORY_ID));
       assertEquals(expectedValidationErrors, actualValidationErrors);
     }
 
     @Test
-    void shallNotReturnValidationErrorIfMandatoryTrueAndCodeHasValue() {
-      elementValidationDate = ElementValidationCode.builder()
-          .mandatory(false)
-          .build();
-
-      final var elementData = ElementData.builder()
-          .id(ELEMENT_ID)
-          .value(ElementValueCode.builder()
-              .codeId(FIELD_ID)
-              .code("code")
-              .build())
-          .build();
-
-      final var actualValidationErrors = elementValidationDate.validate(elementData,
-          Optional.of(CATEGORY_ID));
-      assertEquals(Collections.emptyList(), actualValidationErrors);
-    }
-
-    @Test
-    void shallReturnValidationErrorIfMandatoryTrueAndCodeIsEmpty() {
-      final var expectedValidationErrors = List.of(
-          ValidationError.builder()
-              .elementId(ELEMENT_ID)
-              .fieldId(FIELD_ID)
-              .categoryId(CATEGORY_ID)
-              .message(new ErrorMessage("Välj ett alternativ."))
-              .build()
-      );
-
-      elementValidationDate = ElementValidationCode.builder()
+    void shallNotReturnValidationErrorIfMandatoryTrueAndBooleanValueHasValue() {
+      elementValidationBoolean = ElementValidationBoolean.builder()
           .mandatory(true)
           .build();
 
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)
-          .value(ElementValueCode.builder()
-              .codeId(FIELD_ID)
-              .code("")
+          .value(ElementValueBoolean.builder()
+              .booleanId(FIELD_ID)
+              .value(true)
               .build())
           .build();
 
-      final var actualValidationErrors = elementValidationDate.validate(elementData,
+      final var actualValidationErrors = elementValidationBoolean.validate(elementData,
           Optional.of(CATEGORY_ID));
-      assertEquals(expectedValidationErrors, actualValidationErrors);
-    }
 
-    @Test
-    void shallNotReturnValidationErrorIfMandatoryFalseAndCodeIsNull() {
-      elementValidationDate = ElementValidationCode.builder()
-          .mandatory(false)
-          .build();
-
-      final var elementData = ElementData.builder()
-          .id(ELEMENT_ID)
-          .value(ElementValueCode.builder()
-              .codeId(FIELD_ID)
-              .build())
-          .build();
-
-      final var actualValidationErrors = elementValidationDate.validate(elementData,
-          Optional.of(CATEGORY_ID));
       assertEquals(Collections.emptyList(), actualValidationErrors);
     }
 
     @Test
-    void shallNotReturnValidationErrorIfMandatoryFalseAndCodeIsEmpty() {
-      elementValidationDate = ElementValidationCode.builder()
+    void shallNotReturnValidationErrorIfMandatoryFalseAndBooleanValueIsNull() {
+      elementValidationBoolean = ElementValidationBoolean.builder()
           .mandatory(false)
           .build();
 
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)
-          .value(ElementValueCode.builder()
-              .codeId(FIELD_ID)
-              .code("")
+          .value(ElementValueBoolean.builder()
+              .booleanId(FIELD_ID)
               .build())
           .build();
 
-      final var actualValidationErrors = elementValidationDate.validate(elementData,
+      final var actualValidationErrors = elementValidationBoolean.validate(elementData,
           Optional.of(CATEGORY_ID));
+
       assertEquals(Collections.emptyList(), actualValidationErrors);
     }
   }
