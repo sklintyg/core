@@ -77,7 +77,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
       "53");
   private static final FieldId FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_FIELD_ID = new FieldId(
       "53.1");
-  @Value("${certificate.model.fk7472.v1_0.active.from}")
+  @Value("${certificate.model.fk3226.v1_0.active.from}")
   private LocalDateTime activeFrom;
   private static final String TYPE = "fk3226";
   private static final String VERSION = "1.0";
@@ -119,10 +119,10 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
       "52.2");
   private static final ElementId QUESTION_SAMTYCKE_CATEGORY_ID = new ElementId("KAT_3");
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
-      "fk7472/schematron/lunsp.v1.sch");
+      "fk3226/schematron/lunsp.v1.sch");
 
-  public static final String PDF_FK_3226_PDF = "fk7472/pdf/fk7472_v1.pdf";
-  public static final String PDF_NO_ADDRESS_FK_7472_PDF = "fk7472/pdf/fk7472_v1_no_address.pdf";
+  public static final String PDF_FK_3226_PDF = "fk3226/pdf/fk3226_v1.pdf";
+  public static final String PDF_NO_ADDRESS_FK_7472_PDF = "fk3226/pdf/fk3226_v1_no_address.pdf";
 
   @Override
   public CertificateModel create() {
@@ -196,6 +196,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
+                    .enabled(Boolean.TRUE)
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.RECEIVE_COMPLEMENT)
