@@ -4,21 +4,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 
-@ExtendWith(MockitoExtension.class)
 class CertificateDataCategoryConfigConverterTest {
 
-  @InjectMocks
+
   CertificateDataCategoryConfigConverter certificateDataCategoryConfigConverter;
+
+  @BeforeEach
+  void setUp() {
+    certificateDataCategoryConfigConverter = new CertificateDataCategoryConfigConverter();
+  }
 
   @Test
   void shouldThrowExceptionIfWrongClass() {

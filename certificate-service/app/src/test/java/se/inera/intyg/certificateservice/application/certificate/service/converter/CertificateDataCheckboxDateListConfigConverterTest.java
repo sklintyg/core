@@ -6,10 +6,8 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 
 import java.util.Collections;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
@@ -18,11 +16,14 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 
-@ExtendWith(MockitoExtension.class)
 class CertificateDataCheckboxDateListConfigConverterTest {
 
-  @InjectMocks
   private CertificateDataCheckboxDateListConfigConverter certificateDataCheckboxDateListConfigConverter;
+
+  @BeforeEach
+  void setUp() {
+    certificateDataCheckboxDateListConfigConverter = new CertificateDataCheckboxDateListConfigConverter();
+  }
 
   @Test
   void shouldThrowExceptionIfWrongClass() {
