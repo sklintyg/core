@@ -17,6 +17,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 
@@ -26,9 +27,13 @@ public class GetCertificateInternalXmlService {
 
   private final CertificateRepository certificateRepository;
   private final CertificateUnitConverter certificateUnitConverter;
+  private final XmlGenerator xmlGenerator;
 
   public GetCertificateInternalXmlResponse get(String certificateId) {
     final var certificate = certificateRepository.getById(new CertificateId(certificateId));
+
+    final var xml = certificate.xml() != null ? certificate.xml()
+        : xmlGenerator.generate(certificate, false);
 
     return GetCertificateInternalXmlResponse.builder()
         .certificateId(certificate.id().id())
@@ -46,7 +51,7 @@ public class GetCertificateInternalXmlService {
                 .unitName(certificate.certificateMetaData().careProvider().name().name())
                 .build()
         )
-        .xml(certificate.xml().base64())
+        .xml(xml.base64())
         .revoked(convertRevoked(Optional.ofNullable(certificate.revoked())))
         .recipient(convertRecipient(Optional.ofNullable(certificate.sent())))
         .patientId(convertPersonId(certificate.certificateMetaData().patient().id()))
