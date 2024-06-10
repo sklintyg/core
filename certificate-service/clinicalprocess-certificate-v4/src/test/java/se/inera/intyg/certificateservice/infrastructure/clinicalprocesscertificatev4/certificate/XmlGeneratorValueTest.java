@@ -28,6 +28,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
+import se.riv.clinicalprocess.healthcond.certificate.types.v3.ObjectFactory;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
@@ -302,7 +303,7 @@ class XmlGeneratorValueTest {
       answerTwoSubAnswerCodeOne.setCodeSystem("CodeSystem");
       answerTwoSubAnswerCodeOne.setDisplayName("DisplayName2");
       answerTwoSubAnswerOne.getContent().add(
-          answerTwoSubAnswerCodeOne
+          new ObjectFactory().createCv(answerTwoSubAnswerCodeOne)
       );
       expectedDataTwo.getDelsvar().add(answerTwoSubAnswerOne);
       answerTwoSubAnswerTwo.setId(ANSWER_ID_TWO);

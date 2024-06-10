@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate;
 
+import jakarta.xml.bind.JAXBElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -93,10 +94,13 @@ public class XmlGeneratorValue {
             mapping.getMapping().code() == null || svar.getDelsvar().stream()
                 .anyMatch(delsvar ->
                     delsvar.getContent().stream()
+                        .filter(JAXBElement.class::isInstance)
+                        .map(JAXBElement.class::cast)
+                        .map(JAXBElement::getValue)
                         .filter(CVType.class::isInstance)
-                        .anyMatch(content ->
-                            ((CVType) content).getCode()
-                                .equalsIgnoreCase(mapping.getMapping().code().code())
+                        .map(CVType.class::cast)
+                        .anyMatch(cvType ->
+                            cvType.getCode().equalsIgnoreCase(mapping.getMapping().code().code())
                         )
                 )
         )
