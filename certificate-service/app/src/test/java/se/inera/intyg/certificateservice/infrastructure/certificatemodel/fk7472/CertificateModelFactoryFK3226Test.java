@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CertificateModelFactoryFK3226.PDF_FK_3226_PDF;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CertificateModelFactoryFK3226.SCHEMATRON_PATH;
@@ -581,6 +582,12 @@ class CertificateModelFactoryFK3226Test {
             certificateModel.elementSpecification(ELEMENT_ID).mapping()
         );
       }
+
+      @Test
+      void shallIncludeShouldValidatePredicate() {
+        final var certificateModel = certificateModelFactoryFK3226.create();
+        assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
+      }
     }
 
     @Nested
@@ -788,6 +795,12 @@ class CertificateModelFactoryFK3226Test {
             certificateModel.elementSpecification(ELEMENT_ID).validations()
         );
       }
+
+      @Test
+      void shallIncludeShouldValidatePredicate() {
+        final var certificateModel = certificateModelFactoryFK3226.create();
+        assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
+      }
     }
 
     @Nested
@@ -865,6 +878,12 @@ class CertificateModelFactoryFK3226Test {
         assertEquals(expectedValidations,
             certificateModel.elementSpecification(ELEMENT_ID).validations()
         );
+      }
+
+      @Test
+      void shallIncludeShouldValidatePredicate() {
+        final var certificateModel = certificateModelFactoryFK3226.create();
+        assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
       }
     }
 
@@ -946,6 +965,12 @@ class CertificateModelFactoryFK3226Test {
             certificateModel.elementSpecification(ELEMENT_ID).validations()
         );
       }
+
+      @Test
+      void shallIncludeShouldValidatePredicate() {
+        final var certificateModel = certificateModelFactoryFK3226.create();
+        assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
+      }
     }
 
     @Nested
@@ -1024,6 +1049,96 @@ class CertificateModelFactoryFK3226Test {
         assertEquals(expectedValidations,
             certificateModel.elementSpecification(ELEMENT_ID).validations()
         );
+      }
+
+      @Test
+      void shallIncludeShouldValidatePredicate() {
+        final var certificateModel = certificateModelFactoryFK3226.create();
+        assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
+      }
+    }
+
+    @Nested
+    class QuestionTillstandetUppskattasLivshotandeTillOchMed {
+
+      private static final ElementId ELEMENT_ID = new ElementId("52.6");
+
+      @Test
+      void shallIncludeId() {
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
+                certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeConfiguration() {
+        final var expectedConfiguration = ElementConfigurationDate.builder()
+            .id(new FieldId("52.6"))
+            .name("Till och med")
+            .min(Period.ofDays(0))
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+
+      @Test
+      void shallIncludeRules() {
+        final var expectedRules = List.of(
+            ElementRuleExpression.builder()
+                .id(ELEMENT_ID)
+                .type(ElementRuleType.MANDATORY)
+                .expression(
+                    new RuleExpression(
+                        "$52.6"
+                    )
+                )
+                .build(),
+            ElementRuleExpression.builder()
+                .id(new ElementId("52.5"))
+                .type(ElementRuleType.SHOW)
+                .expression(
+                    new RuleExpression(
+                        "$52.5"
+                    )
+                )
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedRules,
+            certificateModel.elementSpecification(ELEMENT_ID).rules()
+        );
+      }
+
+      @Test
+      void shallIncludeValidations() {
+        final var expectedValidations = List.of(
+            ElementValidationDate.builder()
+                .mandatory(true)
+                .min(Period.ofDays(0))
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedValidations,
+            certificateModel.elementSpecification(ELEMENT_ID).validations()
+        );
+      }
+
+      @Test
+      void shallIncludeShouldValidatePredicate() {
+        final var certificateModel = certificateModelFactoryFK3226.create();
+        assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
       }
     }
 
@@ -1105,6 +1220,12 @@ class CertificateModelFactoryFK3226Test {
         assertEquals(expectedValidations,
             certificateModel.elementSpecification(ELEMENT_ID).validations()
         );
+      }
+
+      @Test
+      void shallIncludeShouldValidatePredicate() {
+        final var certificateModel = certificateModelFactoryFK3226.create();
+        assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
       }
     }
   }

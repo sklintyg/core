@@ -8,6 +8,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
@@ -304,6 +307,13 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .build()
             )
         )
+        .shouldValidate(
+            elementData -> elementData.stream()
+                .filter(
+                    data -> data.id().equals(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID))
+                .map(element -> (ElementValueCode) element.value())
+                .anyMatch(value -> value.codeId().equals(ANNAT_FIELD_ID))
+        )
         .build();
   }
 
@@ -337,6 +347,14 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .build()
             )
         )
+        .shouldValidate(
+            elementData -> elementData.stream()
+                .filter(
+                    data -> data.id()
+                        .equals(QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_ID))
+                .map(element -> (ElementValueBoolean) element.value())
+                .anyMatch(value -> Boolean.TRUE.equals(value.value()))
+        )
         .build();
   }
 
@@ -369,6 +387,13 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .mandatory(true)
                     .build()
             )
+        )
+        .shouldValidate(
+            elementData -> elementData.stream()
+                .filter(
+                    data -> data.id().equals(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID))
+                .map(element -> (ElementValueCode) element.value())
+                .anyMatch(value -> value.codeId().equals(AKUT_LIVSHOTANDE_FIELD_ID))
         )
         .build();
   }
@@ -405,6 +430,13 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .build()
             )
         )
+        .shouldValidate(
+            elementData -> elementData.stream()
+                .filter(
+                    data -> data.id().equals(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID))
+                .map(element -> (ElementValueCode) element.value())
+                .anyMatch(value -> value.codeId().equals(AKUT_LIVSHOTANDE_FIELD_ID))
+        )
         .build();
   }
 
@@ -438,6 +470,13 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .build()
             )
         )
+        .shouldValidate(
+            elementData -> elementData.stream()
+                .filter(
+                    data -> data.id().equals(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID))
+                .map(element -> (ElementValueCode) element.value())
+                .anyMatch(value -> value.codeId().equals(ENDAST_PALLIATIV_FIELD_ID))
+        )
         .build();
   }
 
@@ -470,6 +509,13 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .max(Period.ofDays(0))
                     .build()
             )
+        )
+        .shouldValidate(
+            elementData -> elementData.stream()
+                .filter(
+                    data -> data.id().equals(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID))
+                .map(element -> (ElementValueCode) element.value())
+                .anyMatch(value -> value.codeId().equals(AKUT_LIVSHOTANDE_FIELD_ID))
         )
         .build();
   }
@@ -622,6 +668,14 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                 QUESTION_UTLATANDE_BASERAT_PA_ID,
                 CodeSystemKvFkmu0001.ANNAT
             )
+        )
+        .shouldValidate(
+            elementData -> elementData.stream()
+                .filter(data -> data.id().equals(QUESTION_UTLATANDE_BASERAT_PA_ID))
+                .map(element -> (ElementValueDateList) element.value())
+                .anyMatch(value -> value.dateList().stream().anyMatch(
+                    valueDate -> valueDate.dateId().equals(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID))
+                )
         )
         .build();
   }

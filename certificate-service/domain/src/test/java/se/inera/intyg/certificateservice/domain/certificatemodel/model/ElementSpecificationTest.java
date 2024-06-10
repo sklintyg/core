@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementDataConstants.CATEGORY_ELEMENT_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementDataConstants.DATE_ELEMENT_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementSpecification.DATE_ELEMENT_SPECIFICATION;
@@ -116,6 +117,26 @@ class ElementSpecificationTest {
     private static final FieldId FIELD_ID_ONE = new FieldId("dateElementValueId");
     private static final FieldId FIELD_ID_TWO = new FieldId("fieldIdTwo");
     private static final ElementId CATEGORY_ID = new ElementId("categoryId");
+
+    @Test
+    void shallReturnEmptyIfShouldValidateReturnsFalse() {
+      final var expectedResult = Collections.emptyList();
+      final var validation = mock(ElementValidation.class);
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(mock(ElementValue.class))
+          .build();
+
+      final var element = dateElementSpecificationBuilder()
+          .shouldValidate(elementDataList -> elementDataList.stream()
+              .noneMatch(data -> data.id().equals(ELEMENT_ID))
+          ).build();
+
+      final var actualResult = element.validate(List.of(elementData), Optional.empty());
+      verifyNoInteractions(validation);
+      assertEquals(expectedResult, actualResult);
+    }
 
     @Test
     void shallReturnEmptyIfValid() {
