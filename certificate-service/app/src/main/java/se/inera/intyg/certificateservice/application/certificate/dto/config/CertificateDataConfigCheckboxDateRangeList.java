@@ -30,7 +30,7 @@ public class CertificateDataConfigCheckboxDateRangeList implements CertificateDa
   Accordion accordion;
   String previousDateRangeText;
   boolean hideWorkingHours;
-  List<CheckboxDateRangeConfig> list;
+  List<CheckboxDateRange> list;
   LocalDate min;
   LocalDate max;
 

@@ -20,9 +20,9 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -521,11 +521,31 @@ class CertificateModelFactoryFK7472Test {
             .min(Period.ofMonths(-1))
             .dateRanges(
                 List.of(
-                    new CheckboxDateRange(new FieldId("EN_ATTONDEL"), "12,5 procent"),
-                    new CheckboxDateRange(new FieldId("EN_FJARDEDEL"), "25 procent"),
-                    new CheckboxDateRange(new FieldId("HALVA"), "50 procent"),
-                    new CheckboxDateRange(new FieldId("TRE_FJARDEDELAR"), "75 procent"),
-                    new CheckboxDateRange(new FieldId("HELA"), "100 procent")
+                    new ElementConfigurationCode(
+                        new FieldId("EN_ATTONDEL"),
+                        "12,5 procent",
+                        CodeSystemKvFkmu0009.EN_ATTONDEL
+                    ),
+                    new ElementConfigurationCode(
+                        new FieldId("EN_FJARDEDEL"),
+                        "25 procent",
+                        CodeSystemKvFkmu0009.EN_FJARDEDEL
+                    ),
+                    new ElementConfigurationCode(
+                        new FieldId("HALVA"),
+                        "50 procent",
+                        CodeSystemKvFkmu0009.HALVA
+                    ),
+                    new ElementConfigurationCode(
+                        new FieldId("TRE_FJARDEDELAR"),
+                        "75 procent",
+                        CodeSystemKvFkmu0009.TRE_FJARDEDELAR
+                    ),
+                    new ElementConfigurationCode(
+                        new FieldId("HELA"),
+                        "100 procent",
+                        CodeSystemKvFkmu0009.HELA
+                    )
                 )
             )
             .build();

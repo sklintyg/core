@@ -1,9 +1,5 @@
 package se.inera.intyg.certificateservice.domain.validation.model;
 
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange.FROM_SUFFIX;
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange.RANGE_SUFFIX;
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange.TO_SUFFIX;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAmount;
@@ -19,7 +15,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
@@ -28,6 +23,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 @Builder
 public class ElementValidationDateRangeList implements ElementValidation {
 
+  private static final String TO_SUFFIX = ".to";
+  private static final String FROM_SUFFIX = ".from";
+  private static final String RANGE_SUFFIX = ".range";
   boolean mandatory;
   TemporalAmount min;
   TemporalAmount max;
@@ -236,7 +234,7 @@ public class ElementValidationDateRangeList implements ElementValidation {
 
   private FieldId getFieldIdOfIncompleteDateRange(DateRange dateRange) {
     return dateRange.to() == null
-        ? getFieldId(dateRange.dateRangeId(), CheckboxDateRange.TO_SUFFIX)
+        ? getFieldId(dateRange.dateRangeId(), TO_SUFFIX)
         : getFieldId(dateRange.dateRangeId(), FROM_SUFFIX);
   }
 

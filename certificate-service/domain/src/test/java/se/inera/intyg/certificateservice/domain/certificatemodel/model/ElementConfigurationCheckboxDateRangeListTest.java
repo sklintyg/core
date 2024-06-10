@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 class ElementConfigurationCheckboxDateRangeListTest {
 
@@ -15,20 +16,26 @@ class ElementConfigurationCheckboxDateRangeListTest {
 
   @Test
   void shallReturnDateRangeIfExists() {
-    final var expectedDateRange = new CheckboxDateRange(
-        new FieldId(DATE_RANGE_TWO), DATE_RANGE_LABE_TWO);
+    final var expectedDateRange = new ElementConfigurationCode(
+        new FieldId(DATE_RANGE_TWO), DATE_RANGE_LABE_TWO,
+        new Code("CODE", "CODESYSTEM", "DISPLAY_NAME")
+    );
 
     final var checkboxDateRangeList = ElementConfigurationCheckboxDateRangeList.builder()
         .dateRanges(
             List.of(
-                new CheckboxDateRange(new FieldId(DATE_RANGE_ONE), DATE_RANGE_LABE_ONE),
+                new ElementConfigurationCode(
+                    new FieldId(DATE_RANGE_ONE), DATE_RANGE_LABE_ONE,
+                    new Code("CODE", "CODESYSTEM", "DISPLAY_NAME")
+                ),
                 expectedDateRange
             )
         )
         .build();
 
     assertEquals(expectedDateRange,
-        checkboxDateRangeList.checkboxDateRange(new FieldId(DATE_RANGE_TWO)).orElseThrow());
+        checkboxDateRangeList.checkboxDateRange(new FieldId(DATE_RANGE_TWO)).orElseThrow()
+    );
   }
 
   @Test
@@ -36,7 +43,10 @@ class ElementConfigurationCheckboxDateRangeListTest {
     final var checkboxDateRangeList = ElementConfigurationCheckboxDateRangeList.builder()
         .dateRanges(
             List.of(
-                new CheckboxDateRange(new FieldId(DATE_RANGE_ONE), DATE_RANGE_LABE_ONE)
+                new ElementConfigurationCode(
+                    new FieldId(DATE_RANGE_ONE), DATE_RANGE_LABE_ONE,
+                    new Code("CODE", "CODESYSTEM", "DISPLAY_NAME")
+                )
             )
         )
         .build();

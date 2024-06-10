@@ -19,7 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CodeSystemKvFkmu0009;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 class PdfDateRangeListValueGeneratorTest {
@@ -27,30 +27,30 @@ class PdfDateRangeListValueGeneratorTest {
   private static final String FIELD_PREFIX = "form1[0].#subform[0]";
 
   private static final DateRange DATE_RANGE = DateRange.builder()
-      .dateRangeId(new FieldId(WorkCapacityType.HELA.toString()))
+      .dateRangeId(new FieldId(CodeSystemKvFkmu0009.HELA.code()))
       .from(LocalDate.now().minusDays(1))
       .to(LocalDate.now().plusDays(10))
       .build();
 
   private static final DateRange DATE_RANGE_2 = DateRange.builder()
-      .dateRangeId(new FieldId(WorkCapacityType.EN_FJARDEDEL.toString()))
+      .dateRangeId(new FieldId(CodeSystemKvFkmu0009.EN_FJARDEDEL.code()))
       .from(LocalDate.now().minusDays(5))
       .to(LocalDate.now().plusDays(7))
       .build();
 
   private static final DateRange DATE_RANGE_3 = DateRange.builder()
-      .dateRangeId(new FieldId(WorkCapacityType.HALVA.toString()))
+      .dateRangeId(new FieldId(CodeSystemKvFkmu0009.HALVA.code()))
       .from(LocalDate.now().minusDays(5))
       .to(LocalDate.now().plusDays(7))
       .build();
 
   private static final DateRange DATE_RANGE_ONLY_FROM = DateRange.builder()
-      .dateRangeId(new FieldId(WorkCapacityType.EN_ATTONDEL.toString()))
+      .dateRangeId(new FieldId(CodeSystemKvFkmu0009.EN_ATTONDEL.code()))
       .from(LocalDate.now().minusDays(1))
       .build();
 
   private static final DateRange DATE_RANGE_ONLY_TO = DateRange.builder()
-      .dateRangeId(new FieldId(WorkCapacityType.TRE_FJARDEDELAR.toString()))
+      .dateRangeId(new FieldId(CodeSystemKvFkmu0009.TRE_FJARDEDELAR.code()))
       .to(LocalDate.now().plusDays(10))
       .build();
 

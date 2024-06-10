@@ -25,6 +25,18 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
+  public static ElementRule show(ElementId id, FieldId fieldId) {
+    return ElementRuleExpression.builder()
+        .type(ElementRuleType.SHOW)
+        .id(id)
+        .expression(
+            new RuleExpression(
+                singleExpression(fieldId.value())
+            )
+        )
+        .build();
+  }
+
   public static ElementRule mandatory(ElementId id, List<FieldId> fieldIds) {
     return ElementRuleExpression.builder()
         .id(id)
@@ -32,6 +44,26 @@ public class CertificateElementRuleFactory {
         .expression(
             new RuleExpression(
                 multipleOrExpression(
+                    fieldIds.stream()
+                        .map(field -> singleExpression(field.value()))
+                        .toArray(String[]::new)
+                )
+            )
+        )
+        .build();
+  }
+
+  public static ElementRule mandatoryExist(ElementId id, FieldId fieldId) {
+    return mandatoryExist(id, List.of(fieldId));
+  }
+
+  public static ElementRule mandatoryExist(ElementId id, List<FieldId> fieldIds) {
+    return ElementRuleExpression.builder()
+        .id(id)
+        .type(ElementRuleType.MANDATORY)
+        .expression(
+            new RuleExpression(
+                multipleOrExpressionWithExists(
                     fieldIds.stream()
                         .map(field -> singleExpression(field.value()))
                         .toArray(String[]::new)
@@ -59,6 +91,16 @@ public class CertificateElementRuleFactory {
         s += " || ";
       }
       s += s2;
+      return s;
+    });
+  }
+
+  public static String multipleOrExpressionWithExists(String... expression) {
+    return Arrays.stream(expression).reduce("", (s, s2) -> {
+      if (!s.isEmpty()) {
+        s += " || ";
+      }
+      s += "exists(" + s2 + ")";
       return s;
     });
   }

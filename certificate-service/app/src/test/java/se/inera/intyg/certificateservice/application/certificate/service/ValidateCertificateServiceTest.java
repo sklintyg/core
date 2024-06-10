@@ -39,7 +39,7 @@ class ValidateCertificateServiceTest {
   private static final String CERTIFICATE_ID = "certificateId";
   private static final String ELEMENT_ID = "elementId";
   private static final String CATEGORY_ID = "categoryId";
-  private static final String FIELD_ID = "fieldId";
+  private static final String FIELD_ID = "code";
   private static final String MESSAGE = "text";
   @Mock
   private ActionEvaluationFactory actionEvaluationFactory;

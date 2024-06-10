@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.testdata;
 
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK3226_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7210_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7472_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
@@ -18,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
@@ -39,7 +41,7 @@ public class TestDataCertificate {
   private TestDataCertificate() {
 
   }
-  
+
   public static final CertificateId CERTIFICATE_ID = new CertificateId("CERTIFICATE_ID");
   public static final CertificateId PARENT_CERTIFICATE_ID = new CertificateId(
       "PARENT_CERTIFICATE_ID");
@@ -65,7 +67,8 @@ public class TestDataCertificate {
       .revokedInformation(REVOKED_INFORMATION)
       .build();
   public static final Certificate FK7210_CERTIFICATE = fk7210CertificateBuilder().build();
-
+  public static final Certificate FK3226_CERTIFICATE = fk3226CertificateBuilder().build();
+  
   public static Certificate.CertificateBuilder fk7210CertificateBuilder() {
     return Certificate.builder()
         .id(CERTIFICATE_ID)
@@ -84,6 +87,45 @@ public class TestDataCertificate {
                         ElementValueDate.builder()
                             .dateId(new FieldId("54.1"))
                             .date(LocalDate.now())
+                            .build()
+                    ).build()
+            )
+        )
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .issuer(AJLA_DOKTOR)
+                .patient(ATHENA_REACT_ANDERSSON)
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                .careUnit(ALFA_MEDICINCENTRUM)
+                .careProvider(ALFA_REGIONEN)
+                .build()
+        );
+  }
+
+  public static Certificate.CertificateBuilder fk3226CertificateBuilder() {
+    return Certificate.builder()
+        .id(CERTIFICATE_ID)
+        .revision(REVISION)
+        .created(LocalDateTime.now(ZoneId.systemDefault()))
+        .certificateModel(FK3226_CERTIFICATE_MODEL)
+        .xml(XML)
+        .sent(SENT)
+        .revoked(REVOKED)
+        .externalReference(EXTERNAL_REFERENCE)
+        .elementData(
+            List.of(
+                ElementData.builder()
+                    .id(new ElementId("1"))
+                    .value(
+                        ElementValueDateList.builder()
+                            .dateList(
+                                List.of(
+                                    ElementValueDate.builder()
+                                        .dateId(new FieldId("undersokningAvPatienten"))
+                                        .date(LocalDate.now())
+                                        .build()
+                                )
+                            )
                             .build()
                     ).build()
             )

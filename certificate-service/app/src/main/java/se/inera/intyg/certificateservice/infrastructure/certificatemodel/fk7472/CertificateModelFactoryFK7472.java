@@ -1,11 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.EN_ATTONDEL;
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.EN_FJARDEDEL;
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.HALVA;
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.HELA;
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType.TRE_FJARDEDELAR;
 
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -18,16 +13,15 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
@@ -238,11 +232,31 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
 
   private static ElementSpecification questionPeriod() {
     final var dateRanges = List.of(
-        getDateRange(EN_ATTONDEL),
-        getDateRange(EN_FJARDEDEL),
-        getDateRange(HALVA),
-        getDateRange(TRE_FJARDEDELAR),
-        getDateRange(HELA)
+        new ElementConfigurationCode(
+            new FieldId(CodeSystemKvFkmu0009.EN_ATTONDEL.code()),
+            "12,5 procent",
+            CodeSystemKvFkmu0009.EN_ATTONDEL
+        ),
+        new ElementConfigurationCode(
+            new FieldId(CodeSystemKvFkmu0009.EN_FJARDEDEL.code()),
+            "25 procent",
+            CodeSystemKvFkmu0009.EN_FJARDEDEL
+        ),
+        new ElementConfigurationCode(
+            new FieldId(CodeSystemKvFkmu0009.HALVA.code()),
+            "50 procent",
+            CodeSystemKvFkmu0009.HALVA
+        ),
+        new ElementConfigurationCode(
+            new FieldId(CodeSystemKvFkmu0009.TRE_FJARDEDELAR.code()),
+            "75 procent",
+            CodeSystemKvFkmu0009.TRE_FJARDEDELAR
+        ),
+        new ElementConfigurationCode(
+            new FieldId(CodeSystemKvFkmu0009.HELA.code()),
+            "100 procent",
+            CodeSystemKvFkmu0009.HELA
+        )
     );
 
     return ElementSpecification.builder()
@@ -262,7 +276,7 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
             List.of(
                 CertificateElementRuleFactory.mandatory(
                     QUESTION_PERIOD_ID,
-                    dateRanges.stream().map(CheckboxDateRange::id).toList()
+                    dateRanges.stream().map(ElementConfigurationCode::id).toList()
                 )
             )
         )
@@ -289,9 +303,5 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
             )
         )
         .build();
-  }
-
-  private static CheckboxDateRange getDateRange(WorkCapacityType type) {
-    return new CheckboxDateRange(new FieldId(type.toString()), type.label());
   }
 }

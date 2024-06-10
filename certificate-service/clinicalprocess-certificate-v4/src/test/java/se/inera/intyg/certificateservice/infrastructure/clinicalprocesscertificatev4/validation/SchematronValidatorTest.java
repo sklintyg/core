@@ -21,22 +21,31 @@ import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorCertificateV4;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorDate;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorDateRangeList;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorText;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorValue;
 
 class SchematronValidatorTest {
 
   private SchematronValidator schematronValidator;
   private final XmlGeneratorCertificateV4 generator = new XmlGeneratorCertificateV4(
-      new XmlGeneratorValue(),
+      new XmlGeneratorValue(
+          List.of(new XmlGeneratorDate(), new XmlGeneratorDateRangeList(), new XmlGeneratorText())
+      ),
       new XmlValidationService(
           new SchematronValidator(),
           new SchemaValidatorV4()
       )
   );
+  private CertificateModelFactoryFK7210 certificateModelFactoryFK7210;
+  private CertificateModelFactoryFK7472 certificateModelFactoryFK7472;
 
   @BeforeEach
   void setUp() {
     schematronValidator = new SchematronValidator();
+    certificateModelFactoryFK7210 = new CertificateModelFactoryFK7210();
+    certificateModelFactoryFK7472 = new CertificateModelFactoryFK7472();
   }
 
   @Nested
@@ -54,6 +63,7 @@ class SchematronValidatorTest {
           ).build();
 
       final var certificate = TestDataCertificate.fk7210CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK7210.create())
           .elementData(List.of(element))
           .build();
 
@@ -77,6 +87,7 @@ class SchematronValidatorTest {
             ).build();
 
         final var certificate = TestDataCertificate.fk7210CertificateBuilder()
+            .certificateModel(certificateModelFactoryFK7210.create())
             .elementData(List.of(element))
             .build();
 
@@ -95,6 +106,7 @@ class SchematronValidatorTest {
             ).build();
 
         final var certificate = TestDataCertificate.fk7210CertificateBuilder()
+            .certificateModel(certificateModelFactoryFK7210.create())
             .elementData(List.of(element))
             .build();
 
@@ -113,6 +125,7 @@ class SchematronValidatorTest {
             ).build();
 
         final var certificate = TestDataCertificate.fk7210CertificateBuilder()
+            .certificateModel(certificateModelFactoryFK7210.create())
             .elementData(List.of(element))
             .build();
 
@@ -128,6 +141,7 @@ class SchematronValidatorTest {
             ).build();
 
         final var certificate = TestDataCertificate.fk7210CertificateBuilder()
+            .certificateModel(certificateModelFactoryFK7210.create())
             .elementData(List.of(element))
             .build();
 
@@ -170,6 +184,7 @@ class SchematronValidatorTest {
       );
 
       final var certificate = TestDataCertificate.fk7472CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK7472.create())
           .elementData(element)
           .build();
 
@@ -202,6 +217,7 @@ class SchematronValidatorTest {
       @Test
       void shallReturnQuestionMissing() {
         final var certificate = TestDataCertificate.fk7472CertificateBuilder()
+            .certificateModel(certificateModelFactoryFK7472.create())
             .elementData(List.of(QUESTION_PERIOD))
             .build();
 
@@ -219,6 +235,7 @@ class SchematronValidatorTest {
             ).build();
 
         final var certificate = TestDataCertificate.fk7472CertificateBuilder()
+            .certificateModel(certificateModelFactoryFK7472.create())
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
@@ -237,6 +254,7 @@ class SchematronValidatorTest {
             ).build();
 
         final var certificate = TestDataCertificate.fk7472CertificateBuilder()
+            .certificateModel(certificateModelFactoryFK7472.create())
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
@@ -264,6 +282,7 @@ class SchematronValidatorTest {
             ).build();
 
         final var certificate = TestDataCertificate.fk7472CertificateBuilder()
+            .certificateModel(certificateModelFactoryFK7472.create())
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
@@ -278,6 +297,7 @@ class SchematronValidatorTest {
             .build();
 
         final var certificate = TestDataCertificate.fk7472CertificateBuilder()
+            .certificateModel(certificateModelFactoryFK7472.create())
             .elementData(List.of(element, QUESTION_PERIOD))
             .build();
 
@@ -305,6 +325,7 @@ class SchematronValidatorTest {
         );
 
         final var certificate = TestDataCertificate.fk7472CertificateBuilder()
+            .certificateModel(certificateModelFactoryFK7472.create())
             .elementData(element)
             .build();
 
@@ -328,6 +349,7 @@ class SchematronValidatorTest {
         );
 
         final var certificate = TestDataCertificate.fk7472CertificateBuilder()
+            .certificateModel(certificateModelFactoryFK7472.create())
             .elementData(element)
             .build();
 
@@ -362,6 +384,7 @@ class SchematronValidatorTest {
         );
 
         final var certificate = TestDataCertificate.fk7472CertificateBuilder()
+            .certificateModel(certificateModelFactoryFK7472.create())
             .elementData(element)
             .build();
 
@@ -396,6 +419,7 @@ class SchematronValidatorTest {
         );
 
         final var certificate = TestDataCertificate.fk7472CertificateBuilder()
+            .certificateModel(certificateModelFactoryFK7472.create())
             .elementData(element)
             .build();
 
@@ -424,6 +448,7 @@ class SchematronValidatorTest {
         );
 
         final var certificate = TestDataCertificate.fk7472CertificateBuilder()
+            .certificateModel(certificateModelFactoryFK7472.create())
             .elementData(element)
             .build();
 
@@ -453,6 +478,7 @@ class SchematronValidatorTest {
         );
 
         final var certificate = TestDataCertificate.fk7472CertificateBuilder()
+            .certificateModel(certificateModelFactoryFK7472.create())
             .elementData(element)
             .build();
 

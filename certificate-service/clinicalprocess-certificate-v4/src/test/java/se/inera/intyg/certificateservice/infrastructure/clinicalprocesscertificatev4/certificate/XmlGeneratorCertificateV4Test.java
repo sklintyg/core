@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -336,8 +335,7 @@ class XmlGeneratorCertificateV4Test {
     answer.setId(ANSWER_ID);
     answer.getDelsvar().add(subAnswer);
     final var expectedAnswers = List.of(answer);
-    when(xmlGeneratorValue.generate(any()))
-        .thenReturn(expectedAnswers);
+    when(xmlGeneratorValue.generate(FK7210_CERTIFICATE)).thenReturn(expectedAnswers);
 
     final var answers = unmarshal(
         xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)

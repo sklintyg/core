@@ -131,15 +131,19 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7210_PDF)
         .schematronPath(SCHEMATRON_PATH)
         .summaryProvider(new FK7210CertificateSummaryProvider())
-        .texts(List.of(CertificateText.builder()
-            .text(PREAMBLE_TEXT)
-            .type(CertificateTextType.PREAMBLE_TEXT)
-            .links(List.of(CertificateLink.builder()
-                .url(URL_FK)
-                .id(LINK_FK_ID)
-                .name(FK_NAME)
-                .build()))
-            .build()))
+        .texts(
+            List.of(
+                CertificateText.builder()
+                    .text(PREAMBLE_TEXT)
+                    .type(CertificateTextType.PREAMBLE_TEXT)
+                    .links(List.of(CertificateLink.builder()
+                        .url(URL_FK)
+                        .id(LINK_FK_ID)
+                        .name(FK_NAME)
+                        .build()))
+                    .build()
+            )
+        )
         .build();
   }
 

@@ -7,24 +7,25 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
-@ExtendWith(MockitoExtension.class)
 class CertificateDataDateConfigConverterTest {
 
   private static final LocalDate MIN_DATE = LocalDate.now(ZoneId.systemDefault()).minusDays(1);
   private static final LocalDate MAX_DATE = LocalDate.now(ZoneId.systemDefault()).plusDays(5);
 
-  @InjectMocks
   private CertificateDataDateConfigConverter certificateDataDateConfigConverter;
+
+  @BeforeEach
+  void setUp() {
+    certificateDataDateConfigConverter = new CertificateDataDateConfigConverter();
+  }
 
   @Test
   void shouldThrowExceptionIfWrongClass() {

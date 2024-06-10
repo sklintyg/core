@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import jakarta.xml.bind.JAXBElement;
@@ -18,8 +19,13 @@ import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.DatePeriodType;
 
@@ -39,6 +45,7 @@ class XmlGeneratorDateRangeListTest {
 
   @InjectMocks
   private XmlGeneratorDateRangeList xmlGenerator;
+  private ElementSpecification elementSpecification;
 
   @Nested
   class OneDateRange {
@@ -60,11 +67,32 @@ class XmlGeneratorDateRangeListTest {
               )
               .build())
           .build();
+
+      elementSpecification = ElementSpecification.builder()
+          .configuration(
+              ElementConfigurationCheckboxDateRangeList.builder()
+                  .id(new FieldId(VALUE_ID))
+                  .dateRanges(
+                      List.of(
+                          new ElementConfigurationCode(
+                              new FieldId(RANGE_ID),
+                              "label",
+                              new Code(
+                                  "CODE",
+                                  "CODE_SYSTEM",
+                                  "DISPLAY_NAME"
+                              )
+                          )
+                      )
+                  )
+                  .build()
+          )
+          .build();
     }
 
     @Test
     void shouldMapSvar() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var first = response.get(0);
       assertAll(
@@ -76,7 +104,7 @@ class XmlGeneratorDateRangeListTest {
 
     @Test
     void shouldMapDelsvarForCode() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var delsvar = response.get(0).getDelsvar();
       final var delsvarCode = response.get(0).getDelsvar().get(0);
@@ -86,20 +114,19 @@ class XmlGeneratorDateRangeListTest {
       assertAll(
           () -> assertEquals(2, delsvar.size()),
           () -> assertEquals(QUESTION_ID + ".1", delsvarCode.getId()),
-          () -> assertEquals(RANGE_ID, cvType.getCode()),
-          () -> assertEquals("KV_FKMU_0009", cvType.getCodeSystem()),
-          () -> assertEquals("Halva den ordinarie tiden", cvType.getDisplayName())
+          () -> assertEquals("CODE", cvType.getCode()),
+          () -> assertEquals("CODE_SYSTEM", cvType.getCodeSystem()),
+          () -> assertEquals("DISPLAY_NAME", cvType.getDisplayName())
       );
     }
 
     @Test
     void shouldMapDelsvarForDateRange() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var delsvar = response.get(0).getDelsvar();
       final var delsvarDateRange = response.get(0).getDelsvar().get(1);
-      final var jaxbElement = (JAXBElement<DatePeriodType>) delsvarDateRange.getContent()
-          .get(0);
+      final var jaxbElement = (JAXBElement<DatePeriodType>) delsvarDateRange.getContent().get(0);
       final var dateRange = jaxbElement.getValue();
 
       assertAll(
@@ -136,11 +163,41 @@ class XmlGeneratorDateRangeListTest {
               )
               .build())
           .build();
+
+      elementSpecification = ElementSpecification.builder()
+          .configuration(
+              ElementConfigurationCheckboxDateRangeList.builder()
+                  .id(new FieldId(VALUE_ID))
+                  .dateRanges(
+                      List.of(
+                          new ElementConfigurationCode(
+                              new FieldId(RANGE_ID),
+                              "label",
+                              new Code(
+                                  "CODE",
+                                  "CODE_SYSTEM",
+                                  "DISPLAY_NAME"
+                              )
+                          ),
+                          new ElementConfigurationCode(
+                              new FieldId(RANGE_ID_2),
+                              "labelTwo",
+                              new Code(
+                                  "CODE_TWO",
+                                  "CODE_SYSTEM",
+                                  "DISPLAY_NAME_TWO"
+                              )
+                          )
+                      )
+                  )
+                  .build()
+          )
+          .build();
     }
 
     @Test
     void shouldMapFirstSvar() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var first = response.get(0);
       assertAll(
@@ -152,7 +209,7 @@ class XmlGeneratorDateRangeListTest {
 
     @Test
     void shouldMapSecondSvar() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var first = response.get(1);
       assertAll(
@@ -164,7 +221,7 @@ class XmlGeneratorDateRangeListTest {
 
     @Test
     void shouldMapFirstDelsvarForCode() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var delsvar = response.get(0).getDelsvar();
       final var delsvarCode = delsvar.get(0);
@@ -174,15 +231,15 @@ class XmlGeneratorDateRangeListTest {
       assertAll(
           () -> assertEquals(2, delsvar.size()),
           () -> assertEquals(QUESTION_ID + ".1", delsvarCode.getId()),
-          () -> assertEquals(RANGE_ID, cvType.getCode()),
-          () -> assertEquals("KV_FKMU_0009", cvType.getCodeSystem()),
-          () -> assertEquals("Halva den ordinarie tiden", cvType.getDisplayName())
+          () -> assertEquals("CODE", cvType.getCode()),
+          () -> assertEquals("CODE_SYSTEM", cvType.getCodeSystem()),
+          () -> assertEquals("DISPLAY_NAME", cvType.getDisplayName())
       );
     }
 
     @Test
     void shouldMapSecondDelsvarForCode() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var delsvar = response.get(1).getDelsvar();
       final var delsvarCode = delsvar.get(0);
@@ -192,20 +249,19 @@ class XmlGeneratorDateRangeListTest {
       assertAll(
           () -> assertEquals(2, delsvar.size()),
           () -> assertEquals(QUESTION_ID + ".1", delsvarCode.getId()),
-          () -> assertEquals(RANGE_ID_2, cvType.getCode()),
-          () -> assertEquals("KV_FKMU_0009", cvType.getCodeSystem()),
-          () -> assertEquals("En fjärdedel av den ordinarie tiden", cvType.getDisplayName())
+          () -> assertEquals("CODE_TWO", cvType.getCode()),
+          () -> assertEquals("CODE_SYSTEM", cvType.getCodeSystem()),
+          () -> assertEquals("DISPLAY_NAME_TWO", cvType.getDisplayName())
       );
     }
 
     @Test
     void shouldMapFirstDelsvarForDateRange() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var delsvar = response.get(0).getDelsvar();
       final var delsvarDateRange = delsvar.get(1);
-      final var jaxbElement = (JAXBElement<DatePeriodType>) delsvarDateRange.getContent()
-          .get(0);
+      final var jaxbElement = (JAXBElement<DatePeriodType>) delsvarDateRange.getContent().get(0);
       final var dateRange = jaxbElement.getValue();
 
       assertAll(
@@ -218,12 +274,11 @@ class XmlGeneratorDateRangeListTest {
 
     @Test
     void shouldMapSecondDelsvarForDateRange() {
-      final var response = xmlGenerator.generate(data);
+      final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var delsvar = response.get(1).getDelsvar();
       final var delsvarDateRange = delsvar.get(1);
-      final var jaxbElement = (JAXBElement<DatePeriodType>) delsvarDateRange.getContent()
-          .get(0);
+      final var jaxbElement = (JAXBElement<DatePeriodType>) delsvarDateRange.getContent().get(0);
       final var dateRange = jaxbElement.getValue();
 
       assertAll(
@@ -245,9 +300,40 @@ class XmlGeneratorDateRangeListTest {
         .id(new ElementId(QUESTION_ID))
         .build();
 
-    final var response = xmlGenerator.generate(data);
+    final var response = xmlGenerator.generate(data, elementSpecification);
 
     assertTrue(response.isEmpty());
+  }
+
+  @Test
+  void shallThrowIfIncorrectConfiguration() {
+    final var data = ElementData.builder()
+        .id(new ElementId(QUESTION_ID))
+        .value(
+            ElementValueDateRangeList.builder()
+                .dateRangeListId(new FieldId(VALUE_ID))
+                .dateRangeList(
+                    List.of(
+                        DateRange.builder()
+                            .dateRangeId(new FieldId(RANGE_ID))
+                            .from(FROM)
+                            .to(TO)
+                            .build()
+                    )
+                )
+                .build()
+        )
+        .build();
+
+    elementSpecification = ElementSpecification.builder()
+        .configuration(
+            ElementConfigurationDate.builder().build()
+        )
+        .build();
+
+    assertThrows(IllegalArgumentException.class,
+        () -> xmlGenerator.generate(data, elementSpecification)
+    );
   }
 
   @Test
@@ -259,7 +345,7 @@ class XmlGeneratorDateRangeListTest {
         .id(new ElementId(QUESTION_ID))
         .build();
 
-    final var response = xmlGenerator.generate(data);
+    final var response = xmlGenerator.generate(data, elementSpecification);
 
     assertTrue(response.isEmpty());
   }

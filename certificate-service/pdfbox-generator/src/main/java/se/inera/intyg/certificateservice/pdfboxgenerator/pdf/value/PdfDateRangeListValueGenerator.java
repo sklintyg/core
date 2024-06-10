@@ -1,6 +1,11 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.CHECKED_BOX_VALUE;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.CodeSystemKvFkmu0009.EN_ATTONDEL;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.CodeSystemKvFkmu0009.EN_FJARDEDEL;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.CodeSystemKvFkmu0009.HALVA;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.CodeSystemKvFkmu0009.HELA;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.CodeSystemKvFkmu0009.TRE_FJARDEDELAR;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,7 +16,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.WorkCapacityType;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 @Component
@@ -96,45 +100,43 @@ public class PdfDateRangeListValueGenerator implements PdfElementValueGenerator 
   }
 
   private String getFieldSuffixFromDateRange(DateRange dateRange) {
-    final var workCapacityType = WorkCapacityType.valueOf(dateRange.dateRangeId().value());
-    switch (workCapacityType) {
-      case EN_ATTONDEL -> {
-        return "5";
-      }
-      case EN_FJARDEDEL -> {
-        return "4";
-      }
-      case HALVA -> {
-        return "3";
-      }
-      case TRE_FJARDEDELAR -> {
-        return "2";
-      }
-      case HELA -> {
-        return "";
-      }
+    final var workCapacityType = dateRange.dateRangeId().value();
+
+    if (EN_ATTONDEL.code().equalsIgnoreCase(workCapacityType)) {
+      return "5";
+    }
+    if (EN_FJARDEDEL.code().equalsIgnoreCase(workCapacityType)) {
+      return "4";
+    }
+    if (HALVA.code().equalsIgnoreCase(workCapacityType)) {
+      return "3";
+    }
+    if (TRE_FJARDEDELAR.code().equalsIgnoreCase(workCapacityType)) {
+      return "2";
+    }
+    if (HELA.code().equalsIgnoreCase(workCapacityType)) {
+      return "";
     }
     return "";
   }
 
   private String getCheckboxSuffixFromDateRange(DateRange dateRange) {
-    final var workCapacityType = WorkCapacityType.valueOf(dateRange.dateRangeId().value());
-    switch (workCapacityType) {
-      case EN_ATTONDEL -> {
-        return "EnAttondel";
-      }
-      case EN_FJARDEDEL -> {
-        return "Enfjardedela";
-      }
-      case HALVA -> {
-        return "Halva";
-      }
-      case TRE_FJARDEDELAR -> {
-        return "Trefjardedela";
-      }
-      case HELA -> {
-        return "Hela";
-      }
+    final var workCapacityType = dateRange.dateRangeId().value();
+
+    if (EN_ATTONDEL.code().equalsIgnoreCase(workCapacityType)) {
+      return "EnAttondel";
+    }
+    if (EN_FJARDEDEL.code().equalsIgnoreCase(workCapacityType)) {
+      return "Enfjardedela";
+    }
+    if (HALVA.code().equalsIgnoreCase(workCapacityType)) {
+      return "Halva";
+    }
+    if (TRE_FJARDEDELAR.code().equalsIgnoreCase(workCapacityType)) {
+      return "Trefjardedela";
+    }
+    if (HELA.code().equalsIgnoreCase(workCapacityType)) {
+      return "Hela";
     }
     return "";
   }

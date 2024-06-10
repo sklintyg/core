@@ -18,7 +18,7 @@ class ComplementConverterTest {
 
   private static final ElementId ELEMENT_SPECIFICATION_ID = new ElementId("elementSpecificationId");
   private static final String QUESTION_TEXT = "questionText";
-  private static final FieldId FIELD_ID = new FieldId("fieldId");
+  private static final FieldId FIELD_ID = new FieldId("code");
   private static final Content CONTENT = new Content("content");
   private ComplementConverter complementConverter;
   private Complement complement;

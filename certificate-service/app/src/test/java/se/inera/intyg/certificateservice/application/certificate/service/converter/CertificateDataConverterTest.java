@@ -31,6 +31,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -556,6 +557,49 @@ class CertificateDataConverterTest {
 
     assertNull(result.get(ID_1).getValue(),
         "CertificateDataElementDTO should be null if category");
+  }
+
+  @Test
+  void shallReturnNullIfMessageConfiguration() {
+    final var elementId = new ElementId(ID_1);
+    final var elementData = ElementData.builder()
+        .id(elementId)
+        .value(ElementValueDate.builder().build())
+        .build();
+
+    final var elementSpecification = ElementSpecification.builder()
+        .id(elementId)
+        .configuration(
+            ElementConfigurationMessage.builder().build()
+        )
+        .build();
+
+    final var elementSpecifications = List.of(
+        elementSpecification
+    );
+
+    final var certificateModel = CertificateModel.builder()
+        .elementSpecifications(elementSpecifications)
+        .build();
+
+    final var certificate = certificateBuilder
+        .certificateModel(certificateModel)
+        .elementData(List.of(elementData))
+        .build();
+
+    when(certificateDataDateConfigConverter.getType())
+        .thenReturn(ElementType.MESSAGE);
+
+    when(certificateDataDateConfigConverter.convert(any(ElementSpecification.class),
+        eq(certificate)))
+        .thenReturn(
+            CertificateDataConfigDate.builder().build()
+        );
+
+    final var result = certificateDataConverter.convert(certificate);
+
+    assertNull(result.get(ID_1).getValue(),
+        "CertificateDataElementDTO should be null if message configuration");
   }
 
 

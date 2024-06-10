@@ -6,13 +6,13 @@ import java.time.ZoneId;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfig;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigCheckboxDateRangeList;
-import se.inera.intyg.certificateservice.application.certificate.dto.config.CheckboxDateRangeConfig;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.CheckboxDateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDateRange;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 
@@ -41,7 +41,7 @@ public class CertificateDataCheckboxDateRangeListConfigConverter implements
         .list(
             configuration.dateRanges().stream()
                 .map(dateRange ->
-                    CheckboxDateRangeConfig.builder()
+                    CheckboxDateRange.builder()
                         .id(dateRange.id().value())
                         .label(dateRange.label())
                         .build()
@@ -87,7 +87,7 @@ public class CertificateDataCheckboxDateRangeListConfigConverter implements
         .formatted(
             previousLastDateRange.to(),
             configuration.checkboxDateRange(previousLastDateRange.dateRangeId())
-                .map(CheckboxDateRange::label)
+                .map(ElementConfigurationCode::label)
                 .orElse("<saknas>")
         );
   }

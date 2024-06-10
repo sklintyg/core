@@ -13,6 +13,8 @@ public class ElementConfigurationCategory implements ElementConfiguration {
   String name;
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.CATEGORY;
+  @Getter(onMethod = @__(@Override))
+  String description;
 
   @Override
   public ElementValue emptyValue() {

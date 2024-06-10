@@ -25,7 +25,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 class ElementValidationDateRangeListTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("elementId");
-  private static final FieldId FIELD_ID = new FieldId("fieldId");
+  private static final FieldId FIELD_ID = new FieldId("code");
   private static final FieldId FIELD_ID_RANGE = new FieldId("date_range_1");
   private static final FieldId FIELD_ID_RANGE_2 = new FieldId("date_range_2");
   private static final FieldId FIELD_ID_RANGE_3 = new FieldId("date_range_3");

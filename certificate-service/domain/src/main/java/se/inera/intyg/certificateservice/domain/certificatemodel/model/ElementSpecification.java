@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.Value;
@@ -22,8 +23,10 @@ public class ElementSpecification {
   List<ElementRule> rules = Collections.emptyList();
   @Builder.Default
   List<ElementValidation> validations = Collections.emptyList();
+  ElementMapping mapping;
   @Builder.Default
   List<ElementSpecification> children = Collections.emptyList();
+  Predicate<List<ElementData>> shouldValidate;
 
   public boolean exists(ElementId id) {
     if (id().equals(id)) {
@@ -58,6 +61,10 @@ public class ElementSpecification {
 
   public List<ValidationError> validate(List<ElementData> elementData,
       Optional<ElementId> categoryId) {
+    if (shouldValidate != null && shouldValidate.negate().test(elementData)) {
+      return Collections.emptyList();
+    }
+
     final var validationErrors = validations.stream()
         .map(validation -> validation.validate(dataForElement(elementData), categoryId))
         .flatMap(List::stream);
@@ -68,6 +75,7 @@ public class ElementSpecification {
 
     return Stream.concat(validationErrors, childrenValidationErrors).toList();
   }
+
 
   private Optional<ElementId> categoryForElement(Optional<ElementId> categoryId) {
     if (ElementType.CATEGORY.equals(configuration.type())) {

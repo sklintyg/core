@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
@@ -23,6 +24,7 @@ class XmlGeneratorDateTest {
   private static final String QUESTION_ID = "QUESTION_ID";
   private static final String ANSWER_ID = "ANSWER_ID";
   private static final LocalDate DATE = LocalDate.now();
+  private final ElementSpecification ELEMENT_SPECIFICATION = ElementSpecification.builder().build();
 
   @InjectMocks
   private XmlGeneratorDate xmlGeneratorDate;
@@ -43,7 +45,7 @@ class XmlGeneratorDateTest {
     subAnswer.setId(ANSWER_ID);
     expectedData.getDelsvar().add(subAnswer);
 
-    final var response = xmlGeneratorDate.generate(data);
+    final var response = xmlGeneratorDate.generate(data, ELEMENT_SPECIFICATION);
 
     assertAll(
         () -> assertEquals(expectedData.getId(), response.get(0).getId()),
@@ -64,7 +66,7 @@ class XmlGeneratorDateTest {
         .id(new ElementId(QUESTION_ID))
         .build();
 
-    final var response = xmlGeneratorDate.generate(data);
+    final var response = xmlGeneratorDate.generate(data, ELEMENT_SPECIFICATION);
 
     assertTrue(response.isEmpty());
   }
@@ -78,7 +80,7 @@ class XmlGeneratorDateTest {
         .id(new ElementId(QUESTION_ID))
         .build();
 
-    final var response = xmlGeneratorDate.generate(data);
+    final var response = xmlGeneratorDate.generate(data, ELEMENT_SPECIFICATION);
 
     assertTrue(response.isEmpty());
   }

@@ -137,7 +137,8 @@ public class CertificateDataConverter {
 
   private CertificateDataValue getValue(ElementSpecification elementSpecification,
       ElementValue elementValue) {
-    if (ElementType.CATEGORY.equals(elementSpecification.configuration().type())) {
+    if (ElementType.CATEGORY.equals(elementSpecification.configuration().type())
+        || ElementType.MESSAGE.equals(elementSpecification.configuration().type())) {
       return null;
     }
     return certificateDataValueConverter.stream()
