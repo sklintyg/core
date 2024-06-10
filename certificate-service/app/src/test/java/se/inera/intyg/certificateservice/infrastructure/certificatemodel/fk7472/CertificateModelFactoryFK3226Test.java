@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CertificateModelFactoryFK3226.PDF_FK_3226_PDF;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CertificateModelFactoryFK3226.SCHEMATRON_PATH;
@@ -19,6 +18,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
@@ -608,11 +612,64 @@ class CertificateModelFactoryFK3226Test {
         );
       }
 
-      @Test
-      void shallIncludeShouldValidatePredicate() {
-        final var certificateModel = certificateModelFactoryFK3226.create();
-        assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
+      @Nested
+      class ShouldValidate {
+
+        @Test
+        void shallReturnTrueIfElementPresent() {
+          final var elementData = List.of(
+              ElementData.builder()
+                  .id(new ElementId("1"))
+                  .value(
+                      ElementValueDateList.builder()
+                          .dateList(
+                              List.of(
+                                  ElementValueDate.builder()
+                                      .dateId(new FieldId("annat"))
+                                      .build()
+                              )
+                          )
+                          .build()
+                  )
+                  .build()
+          );
+
+          final var certificateModel = certificateModelFactoryFK3226.create();
+
+          final var shouldValidate = certificateModel.elementSpecification(ELEMENT_ID)
+              .shouldValidate();
+
+          assertTrue(shouldValidate.test(elementData));
+        }
+
+        @Test
+        void shallReturnFalseIfElementMissing() {
+          final var elementData = List.of(
+              ElementData.builder()
+                  .id(new ElementId("2"))
+                  .value(
+                      ElementValueDateList.builder()
+                          .dateList(
+                              List.of(
+                                  ElementValueDate.builder()
+                                      .dateId(new FieldId("annat"))
+                                      .build()
+                              )
+                          )
+                          .build()
+                  )
+                  .build()
+          );
+
+          final var certificateModel = certificateModelFactoryFK3226.create();
+
+          final var shouldValidate = certificateModel.elementSpecification(ELEMENT_ID)
+              .shouldValidate();
+
+          assertFalse(shouldValidate.test(elementData));
+        }
       }
+
     }
 
     @Nested
@@ -821,10 +878,50 @@ class CertificateModelFactoryFK3226Test {
         );
       }
 
-      @Test
-      void shallIncludeShouldValidatePredicate() {
-        final var certificateModel = certificateModelFactoryFK3226.create();
-        assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
+      @Nested
+      class ShouldValidate {
+
+        @Test
+        void shallReturnTrueIfElementPresent() {
+          final var elementData = List.of(
+              ElementData.builder()
+                  .id(new ElementId("52"))
+                  .value(
+                      ElementValueCode.builder()
+                          .codeId(new FieldId("ENDAST_PALLIATIV"))
+                          .build()
+                  )
+                  .build()
+          );
+
+          final var certificateModel = certificateModelFactoryFK3226.create();
+
+          final var shouldValidate = certificateModel.elementSpecification(ELEMENT_ID)
+              .shouldValidate();
+
+          assertTrue(shouldValidate.test(elementData));
+        }
+
+        @Test
+        void shallReturnFalseIfElementMissing() {
+          final var elementData = List.of(
+              ElementData.builder()
+                  .id(new ElementId("52"))
+                  .value(
+                      ElementValueCode.builder()
+                          .codeId(new FieldId("annat"))
+                          .build()
+                  )
+                  .build()
+          );
+
+          final var certificateModel = certificateModelFactoryFK3226.create();
+
+          final var shouldValidate = certificateModel.elementSpecification(ELEMENT_ID)
+              .shouldValidate();
+
+          assertFalse(shouldValidate.test(elementData));
+        }
       }
 
       @Test
@@ -918,11 +1015,52 @@ class CertificateModelFactoryFK3226Test {
         );
       }
 
-      @Test
-      void shallIncludeShouldValidatePredicate() {
-        final var certificateModel = certificateModelFactoryFK3226.create();
-        assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
+      @Nested
+      class ShouldValidate {
+
+        @Test
+        void shallReturnTrueIfElementPresent() {
+          final var elementData = List.of(
+              ElementData.builder()
+                  .id(new ElementId("52"))
+                  .value(
+                      ElementValueCode.builder()
+                          .codeId(new FieldId("AKUT_LIVSHOTANDE"))
+                          .build()
+                  )
+                  .build()
+          );
+
+          final var certificateModel = certificateModelFactoryFK3226.create();
+
+          final var shouldValidate = certificateModel.elementSpecification(ELEMENT_ID)
+              .shouldValidate();
+
+          assertTrue(shouldValidate.test(elementData));
+        }
+
+        @Test
+        void shallReturnFalseIfElementMissing() {
+          final var elementData = List.of(
+              ElementData.builder()
+                  .id(new ElementId("5"))
+                  .value(
+                      ElementValueCode.builder()
+                          .codeId(new FieldId("annat"))
+                          .build()
+                  )
+                  .build()
+          );
+
+          final var certificateModel = certificateModelFactoryFK3226.create();
+
+          final var shouldValidate = certificateModel.elementSpecification(ELEMENT_ID)
+              .shouldValidate();
+
+          assertFalse(shouldValidate.test(elementData));
+        }
       }
+
 
       @Test
       void shallIncludeCustomMapping() {
@@ -1017,10 +1155,50 @@ class CertificateModelFactoryFK3226Test {
         );
       }
 
-      @Test
-      void shallIncludeShouldValidatePredicate() {
-        final var certificateModel = certificateModelFactoryFK3226.create();
-        assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
+      @Nested
+      class ShouldValidate {
+
+        @Test
+        void shallReturnTrueIfElementPresent() {
+          final var elementData = List.of(
+              ElementData.builder()
+                  .id(new ElementId("52"))
+                  .value(
+                      ElementValueCode.builder()
+                          .codeId(new FieldId("AKUT_LIVSHOTANDE"))
+                          .build()
+                  )
+                  .build()
+          );
+
+          final var certificateModel = certificateModelFactoryFK3226.create();
+
+          final var shouldValidate = certificateModel.elementSpecification(ELEMENT_ID)
+              .shouldValidate();
+
+          assertTrue(shouldValidate.test(elementData));
+        }
+
+        @Test
+        void shallReturnFalseIfElementMissing() {
+          final var elementData = List.of(
+              ElementData.builder()
+                  .id(new ElementId("5"))
+                  .value(
+                      ElementValueCode.builder()
+                          .codeId(new FieldId("annat"))
+                          .build()
+                  )
+                  .build()
+          );
+
+          final var certificateModel = certificateModelFactoryFK3226.create();
+
+          final var shouldValidate = certificateModel.elementSpecification(ELEMENT_ID)
+              .shouldValidate();
+
+          assertFalse(shouldValidate.test(elementData));
+        }
       }
 
       @Test
@@ -1115,10 +1293,50 @@ class CertificateModelFactoryFK3226Test {
         );
       }
 
-      @Test
-      void shallIncludeShouldValidatePredicate() {
-        final var certificateModel = certificateModelFactoryFK3226.create();
-        assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
+      @Nested
+      class ShouldValidate {
+
+        @Test
+        void shallReturnTrueIfElementPresent() {
+          final var elementData = List.of(
+              ElementData.builder()
+                  .id(new ElementId("52"))
+                  .value(
+                      ElementValueCode.builder()
+                          .codeId(new FieldId("AKUT_LIVSHOTANDE"))
+                          .build()
+                  )
+                  .build()
+          );
+
+          final var certificateModel = certificateModelFactoryFK3226.create();
+
+          final var shouldValidate = certificateModel.elementSpecification(ELEMENT_ID)
+              .shouldValidate();
+
+          assertTrue(shouldValidate.test(elementData));
+        }
+
+        @Test
+        void shallReturnFalseIfElementMissing() {
+          final var elementData = List.of(
+              ElementData.builder()
+                  .id(new ElementId("5"))
+                  .value(
+                      ElementValueCode.builder()
+                          .codeId(new FieldId("annat"))
+                          .build()
+                  )
+                  .build()
+          );
+
+          final var certificateModel = certificateModelFactoryFK3226.create();
+
+          final var shouldValidate = certificateModel.elementSpecification(ELEMENT_ID)
+              .shouldValidate();
+
+          assertFalse(shouldValidate.test(elementData));
+        }
       }
 
       @Test
@@ -1212,10 +1430,50 @@ class CertificateModelFactoryFK3226Test {
         );
       }
 
-      @Test
-      void shallIncludeShouldValidatePredicate() {
-        final var certificateModel = certificateModelFactoryFK3226.create();
-        assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
+      @Nested
+      class ShouldValidate {
+
+        @Test
+        void shallReturnTrueIfElementPresent() {
+          final var elementData = List.of(
+              ElementData.builder()
+                  .id(new ElementId("52.5"))
+                  .value(
+                      ElementValueBoolean.builder()
+                          .value(true)
+                          .build()
+                  )
+                  .build()
+          );
+
+          final var certificateModel = certificateModelFactoryFK3226.create();
+
+          final var shouldValidate = certificateModel.elementSpecification(ELEMENT_ID)
+              .shouldValidate();
+
+          assertTrue(shouldValidate.test(elementData));
+        }
+
+        @Test
+        void shallReturnFalseIfElementMissing() {
+          final var elementData = List.of(
+              ElementData.builder()
+                  .id(new ElementId("5"))
+                  .value(
+                      ElementValueBoolean.builder()
+                          .value(false)
+                          .build()
+                  )
+                  .build()
+          );
+
+          final var certificateModel = certificateModelFactoryFK3226.create();
+
+          final var shouldValidate = certificateModel.elementSpecification(ELEMENT_ID)
+              .shouldValidate();
+
+          assertFalse(shouldValidate.test(elementData));
+        }
       }
 
       @Test
@@ -1311,10 +1569,50 @@ class CertificateModelFactoryFK3226Test {
         );
       }
 
-      @Test
-      void shallIncludeShouldValidatePredicate() {
-        final var certificateModel = certificateModelFactoryFK3226.create();
-        assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
+      @Nested
+      class ShouldValidate {
+
+        @Test
+        void shallReturnTrueIfElementPresent() {
+          final var elementData = List.of(
+              ElementData.builder()
+                  .id(new ElementId("52"))
+                  .value(
+                      ElementValueCode.builder()
+                          .codeId(new FieldId("ANNAT"))
+                          .build()
+                  )
+                  .build()
+          );
+
+          final var certificateModel = certificateModelFactoryFK3226.create();
+
+          final var shouldValidate = certificateModel.elementSpecification(ELEMENT_ID)
+              .shouldValidate();
+
+          assertTrue(shouldValidate.test(elementData));
+        }
+
+        @Test
+        void shallReturnFalseIfElementMissing() {
+          final var elementData = List.of(
+              ElementData.builder()
+                  .id(new ElementId("5"))
+                  .value(
+                      ElementValueCode.builder()
+                          .codeId(new FieldId("annat"))
+                          .build()
+                  )
+                  .build()
+          );
+
+          final var certificateModel = certificateModelFactoryFK3226.create();
+
+          final var shouldValidate = certificateModel.elementSpecification(ELEMENT_ID)
+              .shouldValidate();
+
+          assertFalse(shouldValidate.test(elementData));
+        }
       }
 
       @Test
