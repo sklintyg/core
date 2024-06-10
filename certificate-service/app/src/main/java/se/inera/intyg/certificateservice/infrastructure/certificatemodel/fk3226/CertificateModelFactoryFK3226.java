@@ -314,6 +314,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                 .map(element -> (ElementValueCode) element.value())
                 .anyMatch(value -> value.codeId().equals(ANNAT_FIELD_ID))
         )
+        .mapping(
+            new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
+        )
         .build();
   }
 
@@ -355,6 +358,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                 .map(element -> (ElementValueBoolean) element.value())
                 .anyMatch(value -> Boolean.TRUE.equals(value.value()))
         )
+        .mapping(
+            new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
+        )
         .build();
   }
 
@@ -394,6 +400,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     data -> data.id().equals(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID))
                 .map(element -> (ElementValueCode) element.value())
                 .anyMatch(value -> value.codeId().equals(AKUT_LIVSHOTANDE_FIELD_ID))
+        )
+        .mapping(
+            new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
         )
         .build();
   }
@@ -437,6 +446,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                 .map(element -> (ElementValueCode) element.value())
                 .anyMatch(value -> value.codeId().equals(AKUT_LIVSHOTANDE_FIELD_ID))
         )
+        .mapping(
+            new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
+        )
         .build();
   }
 
@@ -477,6 +489,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                 .map(element -> (ElementValueCode) element.value())
                 .anyMatch(value -> value.codeId().equals(ENDAST_PALLIATIV_FIELD_ID))
         )
+        .mapping(
+            new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
+        )
         .build();
   }
 
@@ -516,6 +531,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     data -> data.id().equals(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID))
                 .map(element -> (ElementValueCode) element.value())
                 .anyMatch(value -> value.codeId().equals(AKUT_LIVSHOTANDE_FIELD_ID))
+        )
+        .mapping(
+            new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
         )
         .build();
   }

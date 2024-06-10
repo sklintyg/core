@@ -801,6 +801,19 @@ class CertificateModelFactoryFK3226Test {
         final var certificateModel = certificateModelFactoryFK3226.create();
         assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
       }
+
+      @Test
+      void shallIncludeCustomMapping() {
+        final var expectedConfiguration = new ElementMapping(
+            new ElementId("52"), null
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).mapping()
+        );
+      }
     }
 
     @Nested
@@ -884,6 +897,19 @@ class CertificateModelFactoryFK3226Test {
       void shallIncludeShouldValidatePredicate() {
         final var certificateModel = certificateModelFactoryFK3226.create();
         assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
+      }
+
+      @Test
+      void shallIncludeCustomMapping() {
+        final var expectedConfiguration = new ElementMapping(
+            new ElementId("52"), null
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).mapping()
+        );
       }
     }
 
@@ -971,6 +997,19 @@ class CertificateModelFactoryFK3226Test {
         final var certificateModel = certificateModelFactoryFK3226.create();
         assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
       }
+
+      @Test
+      void shallIncludeCustomMapping() {
+        final var expectedConfiguration = new ElementMapping(
+            new ElementId("52"), null
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).mapping()
+        );
+      }
     }
 
     @Nested
@@ -1056,6 +1095,19 @@ class CertificateModelFactoryFK3226Test {
         final var certificateModel = certificateModelFactoryFK3226.create();
         assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
       }
+
+      @Test
+      void shallIncludeCustomMapping() {
+        final var expectedConfiguration = new ElementMapping(
+            new ElementId("52"), null
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).mapping()
+        );
+      }
     }
 
     @Nested
@@ -1140,8 +1192,20 @@ class CertificateModelFactoryFK3226Test {
         final var certificateModel = certificateModelFactoryFK3226.create();
         assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
       }
-    }
 
+      @Test
+      void shallIncludeCustomMapping() {
+        final var expectedConfiguration = new ElementMapping(
+            new ElementId("52"), null
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).mapping()
+        );
+      }
+    }
 
     @Nested
     class QuestionPatagligtHotMotPatientensLivAnnat {
@@ -1226,6 +1290,19 @@ class CertificateModelFactoryFK3226Test {
       void shallIncludeShouldValidatePredicate() {
         final var certificateModel = certificateModelFactoryFK3226.create();
         assertNotNull(certificateModel.elementSpecification(ELEMENT_ID).shouldValidate());
+      }
+
+      @Test
+      void shallIncludeCustomMapping() {
+        final var expectedConfiguration = new ElementMapping(
+            new ElementId("52"), null
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).mapping()
+        );
       }
     }
   }
