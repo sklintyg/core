@@ -10,6 +10,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -41,6 +42,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
@@ -53,6 +56,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CertificateModelFactoryFK3226;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CodeSystemKvFkmu0010;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.FK3226CertificateSummaryProvider;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateModelFactoryFK3226Test {
@@ -127,7 +131,28 @@ class CertificateModelFactoryFK3226Test {
   void shallIncludeAvailableForCitizen() {
     final var certificateModel = certificateModelFactoryFK3226.create();
 
-    assertFalse(certificateModel.availableForCitizen());
+    assertTrue(certificateModel.availableForCitizen());
+  }
+
+  @Test
+  void shallIncludeCertificateSummaryProvider() {
+    final var certificateModel = certificateModelFactoryFK3226.create();
+
+    assertEquals(FK3226CertificateSummaryProvider.class,
+        certificateModel.summaryProvider().getClass());
+  }
+
+  @Test
+  void shallIncludeCertificateText() {
+    final var expectedText = CertificateText.builder()
+        .text("Här skall det stå en text om intyget!")
+        .type(CertificateTextType.PREAMBLE_TEXT)
+        .links(Collections.emptyList())
+        .build();
+
+    final var certificateModel = certificateModelFactoryFK3226.create();
+
+    assertEquals(List.of(expectedText), certificateModel.texts());
   }
 
   @Test

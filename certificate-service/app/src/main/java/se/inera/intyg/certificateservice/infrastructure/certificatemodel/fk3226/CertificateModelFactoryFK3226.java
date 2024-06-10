@@ -4,6 +4,7 @@ import static se.inera.intyg.certificateservice.domain.certificatemodel.model.El
 
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -33,6 +34,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMe
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
@@ -136,7 +139,17 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)
-        .availableForCitizen(false)
+        .availableForCitizen(true)
+        .summaryProvider(new FK3226CertificateSummaryProvider())
+        .texts(
+            List.of(
+                CertificateText.builder()
+                    .text("Här skall det stå en text om intyget!")
+                    .type(CertificateTextType.PREAMBLE_TEXT)
+                    .links(Collections.emptyList())
+                    .build()
+            )
+        )
         .rolesWithAccess(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
             Role.CARE_ADMIN))
         .recipient(CertificateRecipientFactory.fkassa())
