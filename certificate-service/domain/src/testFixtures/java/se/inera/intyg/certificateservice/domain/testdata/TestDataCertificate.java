@@ -18,6 +18,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
@@ -68,7 +70,7 @@ public class TestDataCertificate {
       .build();
   public static final Certificate FK7210_CERTIFICATE = fk7210CertificateBuilder().build();
   public static final Certificate FK3226_CERTIFICATE = fk3226CertificateBuilder().build();
-  
+
   public static Certificate.CertificateBuilder fk7210CertificateBuilder() {
     return Certificate.builder()
         .id(CERTIFICATE_ID)
@@ -118,6 +120,7 @@ public class TestDataCertificate {
                     .id(new ElementId("1"))
                     .value(
                         ElementValueDateList.builder()
+                            .dateListId(new FieldId("1.1"))
                             .dateList(
                                 List.of(
                                     ElementValueDate.builder()
@@ -127,7 +130,35 @@ public class TestDataCertificate {
                                 )
                             )
                             .build()
-                    ).build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("52"))
+                    .value(
+                        ElementValueCode.builder()
+                            .codeId(new FieldId("ENDAST_PALLIATIV"))
+                            .code("ENDAST_PALLIATIV")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("52.2"))
+                    .value(
+                        ElementValueDate.builder()
+                            .dateId(new FieldId("52.2"))
+                            .date(LocalDate.now())
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("53"))
+                    .value(
+                        ElementValueBoolean.builder()
+                            .booleanId(new FieldId("53.1"))
+                            .value(true)
+                            .build()
+                    )
+                    .build()
             )
         )
         .certificateMetaData(
