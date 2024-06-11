@@ -666,9 +666,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .id(QUESTION_UTLATANDE_BASERAT_PA_ANNAT_ID)
         .configuration(
             ElementConfigurationTextArea.builder()
+                .id(QUESTION_UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID)
                 .name(
                     "Ange vad annat är och motivera vid behov varför du inte baserar utlåtandet på en undersökning eller på journaluppgifter")
-                .id(QUESTION_UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID)
                 .build()
         )
         .rules(
