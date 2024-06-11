@@ -16,6 +16,13 @@ public class GetCertificateMessageInternalService {
   private final QuestionConverter questionConverter;
 
   public GetCertificateMessageInternalResponse get(String certificateId) {
+    final var exists = certificateRepository.exists(new CertificateId(certificateId));
+    if (!exists) {
+      return GetCertificateMessageInternalResponse.builder()
+          .questions(Collections.emptyList())
+          .build();
+    }
+
     final var certificate = certificateRepository.getById(new CertificateId(certificateId));
     return GetCertificateMessageInternalResponse.builder()
         .questions(

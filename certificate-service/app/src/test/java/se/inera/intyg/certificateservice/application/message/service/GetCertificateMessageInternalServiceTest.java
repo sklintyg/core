@@ -42,6 +42,7 @@ class GetCertificateMessageInternalServiceTest {
 
     final var message = mock(Message.class);
     final var certificate = mock(Certificate.class);
+    doReturn(true).when(certificateRepository).exists(new CertificateId(CERTIFICATE_ID));
     doReturn(certificate).when(certificateRepository).getById(new CertificateId(CERTIFICATE_ID));
 
     final var messages = List.of(message);
@@ -49,6 +50,19 @@ class GetCertificateMessageInternalServiceTest {
     doReturn(messages).when(certificate).messages();
     doReturn(questionDTO).when(questionConverter).convert(message, Collections.emptyList());
 
+    final var actualResult = getCertificateMessageInternalService.get(CERTIFICATE_ID);
+
+    assertEquals(expectedResponse, actualResult);
+  }
+
+  @Test
+  void shallReturnResponseWithMessagesIfCertificateDoesntExist() {
+    final var expectedResponse = GetCertificateMessageInternalResponse.builder()
+        .questions(Collections.emptyList())
+        .build();
+
+    doReturn(false).when(certificateRepository).exists(new CertificateId(CERTIFICATE_ID));
+    
     final var actualResult = getCertificateMessageInternalService.get(CERTIFICATE_ID);
 
     assertEquals(expectedResponse, actualResult);
