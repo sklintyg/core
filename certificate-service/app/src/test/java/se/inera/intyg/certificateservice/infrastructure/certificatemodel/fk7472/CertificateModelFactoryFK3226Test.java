@@ -693,15 +693,9 @@ class CertificateModelFactoryFK3226Test {
         final var expectedConfiguration = ElementConfigurationCategory.builder()
             .name("Påtagligt hot mot patientens liv")
             .description("""
-                Ange på vilket sätt hälsotillståndet utgör ett påtagligt hot mot patientens liv i nuläget eller på någon tids sikt. Hälsotillstånd som på flera års sikt kan utvecklas till livshotande tillstånd ger däremot inte rätt till närståendepenning.
+                Ange på vilket sätt hälsotillståndet utgör ett påtagligt hot mot patientens liv i nuläget eller på någon tids sikt.
                                     \s
                 Hälsotillståndet kan utgöra ett påtagligt hot även om det finns hopp om att det förbättras.
-                                    \s
-                <b>Särskilda regler för vissa HIV-smittade </b>
-                Ange om patienten blivit hiv-smittad på något av följande sätt.
-                                    \s
-                1.   Patienten har blivit smittad när hen fick blod- eller blodprodukter, och smittades när hen behandlades av den svenska hälso- och sjukvården.
-                2.   Patienten har blivit smittad av nuvarande eller före detta make, maka, sambo eller registrerade partner, och den personen smittades när hen behandlades av den svenska hälso- och sjukvården.
                 """)
             .build();
 
@@ -1096,10 +1090,12 @@ class CertificateModelFactoryFK3226Test {
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationTextArea.builder()
             .id(new FieldId("52.4"))
+            .header(
+                "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv"
+            )
             .name(
-                "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv")
-            .description(
-                "Ange om möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller.")
+                "Ange om möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller."
+            )
             .build();
 
         final var certificateModel = certificateModelFactoryFK3226.create();
@@ -1510,10 +1506,12 @@ class CertificateModelFactoryFK3226Test {
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationTextArea.builder()
             .id(new FieldId("52.7"))
+            .header(
+                "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv"
+            )
             .name(
-                "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv")
-            .description(
-                "Ange när tillståndet blev livshotande, och om det är möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller.")
+                "Ange när tillståndet blev livshotande, och om det är möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller."
+            )
             .build();
 
         final var certificateModel = certificateModelFactoryFK3226.create();
