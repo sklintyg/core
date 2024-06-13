@@ -37,6 +37,7 @@ import se.inera.intyg.certificateservice.application.message.dto.QuestionTypeDTO
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.message.model.Answer;
+import se.inera.intyg.certificateservice.domain.message.model.Author;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageAction;
@@ -284,6 +285,24 @@ class QuestionConverterTest {
       final var messageWithoutAnswer = complementMessageBuilder().build();
       final var convert = questionConverter.convert(messageWithoutAnswer, MESSAGE_ACTIONS);
       assertNull(convert.getAnswer());
+    }
+
+    @Test
+    void shallSetAuthorToAuthorIfAuthoredByStaffIsNull() {
+      final var messageWithoutAuthoredStaff = complementMessageBuilder()
+          .answer(
+              Answer.builder()
+                  .id(new MessageId("id"))
+                  .author(new Author("Försäkringskassan"))
+                  .sent(LocalDateTime.now())
+                  .content(new Content("content"))
+                  .contactInfo(new MessageContactInfo(List.of("info")))
+
+                  .build()
+          )
+          .build();
+      final var convert = questionConverter.convert(messageWithoutAuthoredStaff, MESSAGE_ACTIONS);
+      assertEquals("Försäkringskassan", convert.getAnswer().getAuthor());
     }
   }
 }

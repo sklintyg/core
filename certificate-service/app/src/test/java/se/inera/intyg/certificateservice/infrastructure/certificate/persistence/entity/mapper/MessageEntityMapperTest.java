@@ -5,22 +5,28 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateEntity.CERTIFICATE_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataMessageEntity.ANSWER_MESSAGE_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataMessageEntity.COMPLEMENT_MESSAGE_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataMessageEntity.MESSAGE_KEY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataMessageEntity.REMINDER_MESSAGE_ENTITY;
+import static se.inera.intyg.certificateservice.domain.message.model.MessageType.ANSWER;
 import static se.inera.intyg.certificateservice.domain.message.model.MessageType.COMPLEMENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateConstants.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.ANSWER_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.AUTHOR_INCOMING_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CREATED_AFTER_SENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.LAST_DATE_TO_REPLY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.MESSAGE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REFERENCE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REMINDER_MESSAGE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -38,6 +44,9 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.SenderReference;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageRelationEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageRelationType;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageRelationTypeEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageStatusEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageStatusEnum;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageTypeEntity;
@@ -305,6 +314,165 @@ class MessageEntityMapperTest {
     void shallIncludePersonId() {
       assertEquals(ATHENA_REACT_ANDERSSON.id(),
           mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).personId()
+      );
+    }
+  }
+
+  @Nested
+  class MessageWithAnswerTests {
+
+    @BeforeEach
+    void setUp() {
+      doReturn(
+          List.of(
+              MessageRelationEntity.builder()
+                  .messageRelationType(
+                      MessageRelationTypeEntity.builder()
+                          .type(MessageRelationType.ANSWER.name())
+                          .build()
+                  )
+                  .childMessage(ANSWER_MESSAGE_ENTITY)
+                  .build()
+          )
+      ).when(messageRelationEntityRepository).findByParentMessage(COMPLEMENT_MESSAGE_ENTITY);
+    }
+
+    @Test
+    void shallIncludeId() {
+      assertEquals(new MessageId(ANSWER_ID),
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).answer().id()
+      );
+    }
+
+    @Test
+    void shallIncludeReference() {
+      assertEquals(new SenderReference(REFERENCE_ID),
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).answer().reference()
+      );
+    }
+
+    @Test
+    void shallIncludeSubject() {
+      assertEquals(new Subject(SUBJECT),
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).answer().subject()
+      );
+    }
+
+    @Test
+    void shallIncludeContent() {
+      assertEquals(new Content(CONTENT),
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).answer().content()
+      );
+    }
+
+    @Test
+    void shallIncludeAuthor() {
+      assertEquals(new Author(AUTHOR_INCOMING_MESSAGE),
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).answer().author()
+      );
+    }
+
+    @Test
+    void shallIncludeCreated() {
+      assertEquals(CREATED_AFTER_SENT,
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).answer().created()
+      );
+    }
+
+    @Test
+    void shallIncludeModified() {
+      assertEquals(CREATED_AFTER_SENT,
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).answer().modified()
+      );
+    }
+
+    @Test
+    void shallIncludeSent() {
+      assertEquals(SENT,
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).answer().sent()
+      );
+    }
+
+    @Test
+    void shallIncludeStatus() {
+      assertEquals(MessageStatus.SENT,
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).answer().status()
+      );
+    }
+
+    @Test
+    void shallIncludeType() {
+      assertEquals(ANSWER,
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).answer().type()
+      );
+    }
+  }
+
+  @Nested
+  class MessageWithRemindersTests {
+
+    @BeforeEach
+    void setUp() {
+      doReturn(
+          List.of(
+              MessageRelationEntity.builder()
+                  .messageRelationType(
+                      MessageRelationTypeEntity.builder()
+                          .type(MessageRelationType.REMINDER.name())
+                          .build()
+                  )
+                  .childMessage(REMINDER_MESSAGE_ENTITY)
+                  .build()
+          )
+      ).when(messageRelationEntityRepository).findByParentMessage(COMPLEMENT_MESSAGE_ENTITY);
+    }
+
+    @Test
+    void shallIncludeId() {
+      assertEquals(new MessageId(REMINDER_MESSAGE_ID),
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().get(0).id()
+      );
+    }
+
+    @Test
+    void shallIncludeReference() {
+      assertEquals(new SenderReference(REFERENCE_ID),
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().get(0).reference()
+      );
+    }
+
+    @Test
+    void shallIncludeSubject() {
+      assertEquals(new Subject(SUBJECT),
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().get(0).subject()
+      );
+    }
+
+    @Test
+    void shallIncludeContent() {
+      assertEquals(new Content(CONTENT),
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().get(0).content()
+      );
+    }
+
+    @Test
+    void shallIncludeAuthor() {
+      assertEquals(new Author(AUTHOR_INCOMING_MESSAGE),
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().get(0).author()
+      );
+    }
+
+    @Test
+    void shallIncludeCreated() {
+      assertEquals(CREATED_AFTER_SENT,
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().get(0).created()
+      );
+    }
+
+    @Test
+    void shallIncludeSent() {
+      assertEquals(SENT,
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().get(0).sent()
       );
     }
   }
