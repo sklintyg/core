@@ -172,6 +172,30 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case RECEIVE_QUESTION -> CertificateActionReceiveQuestion.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED))
+              )
+          )
+          .build();
+      case RECEIVE_ANSWER -> CertificateActionReceiveAnswer.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED))
+              )
+          )
+          .build();
+      case RECEIVE_REMINDER -> CertificateActionReceiveReminder.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED))
+              )
+          )
+          .build();
       case SEND_AFTER_SIGN -> CertificateActionSendAfterSign.builder()
           .certificateActionSpecification(actionSpecification)
           .actionRules(

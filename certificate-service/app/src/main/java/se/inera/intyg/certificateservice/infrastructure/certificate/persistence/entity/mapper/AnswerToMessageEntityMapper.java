@@ -43,7 +43,11 @@ public class AnswerToMessageEntityMapper {
                 .type(MessageTypeEnum.valueOf(answer.type().name()).name())
                 .build()
         )
-        .authoredByStaff(staffEntityRepository.staff(answer.authoredStaff()))
+        .authoredByStaff(
+            answer.authoredStaff() != null
+                ? staffEntityRepository.staff(answer.authoredStaff())
+                : null
+        )
         .certificate(messageEntity.getCertificate())
         .forwarded(messageEntity.isForwarded())
         .build();

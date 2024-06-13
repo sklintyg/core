@@ -2,6 +2,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.doReturn;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,11 +19,13 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.SenderReference;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
+import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.StaffRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageStatusEnum;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageTypeEnum;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
 
 @ExtendWith(MockitoExtension.class)
 class AnswerToMessageEntityMapperTest {
@@ -143,6 +148,33 @@ class AnswerToMessageEntityMapperTest {
     assertEquals(FORWARDED, result.isForwarded());
   }
 
+  @Test
+  void shallIncludeAuthoredByStaff() {
+    final var expectedStaff = StaffEntity.builder().build();
+
+    final var originalEntity = createOriginalEntity();
+    final var authoredStaff = Staff.create(AJLA_DOKTOR);
+    final var answer = createAnswerBuilder()
+        .authoredStaff(authoredStaff)
+        .build();
+
+    doReturn(expectedStaff).when(staffRepository).staff(authoredStaff);
+
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
+    assertEquals(expectedStaff, result.getAuthoredByStaff());
+  }
+
+  @Test
+  void shallExcludeAuthoredByStaff() {
+    final var originalEntity = createOriginalEntity();
+    final var answer = createAnswerBuilder()
+        .authoredStaff(null)
+        .build();
+
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
+    assertNull(result.getAuthoredByStaff());
+  }
+
   private MessageEntity createOriginalEntity() {
     return MessageEntity.builder()
         .certificate(CERTIFICATE)
@@ -162,5 +194,18 @@ class AnswerToMessageEntityMapperTest {
         .status(STATUS)
         .type(TYPE)
         .build();
+  }
+
+  private Answer.AnswerBuilder createAnswerBuilder() {
+    return Answer.builder()
+        .reference(new SenderReference(REFERENCE))
+        .subject(new Subject(SUBJECT))
+        .content(new Content(CONTENT))
+        .author(new Author(AUTHOR))
+        .created(CREATED)
+        .modified(MODIFIED)
+        .sent(SENT)
+        .status(STATUS)
+        .type(TYPE);
   }
 }

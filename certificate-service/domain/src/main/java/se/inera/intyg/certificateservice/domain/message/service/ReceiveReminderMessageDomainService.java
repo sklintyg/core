@@ -20,11 +20,11 @@ public class ReceiveReminderMessageDomainService {
   public Message receive(MessageId messageId, Reminder reminder) {
     final var message = messageRepository.getById(messageId);
     final var certificate = certificateRepository.getById(message.certificateId());
-    if (!certificate.allowTo(CertificateActionType.RECEIVE_COMPLEMENT, Optional.empty())) {
+    if (!certificate.allowTo(CertificateActionType.RECEIVE_REMINDER, Optional.empty())) {
       throw new CertificateActionForbidden(
-          "Not allowed to receive complement reminder on certificate for %s"
+          "Not allowed to receive reminder on certificate for %s"
               .formatted(certificate.id().id()),
-          certificate.reasonNotAllowed(CertificateActionType.RECEIVE_COMPLEMENT, Optional.empty())
+          certificate.reasonNotAllowed(CertificateActionType.RECEIVE_REMINDER, Optional.empty())
       );
     }
 

@@ -17,17 +17,17 @@ public class ReceiveQuestionMessageDomainService {
 
   public Message receive(Message message) {
     final var certificate = certificateRepository.getById(message.certificateId());
-    if (!certificate.allowTo(CertificateActionType.RECEIVE_COMPLEMENT, Optional.empty())) {
+    if (!certificate.allowTo(CertificateActionType.RECEIVE_QUESTION, Optional.empty())) {
       throw new CertificateActionForbidden(
-          "Not allowed to receive message on certificate for %s"
+          "Not allowed to receive question message on certificate for %s"
               .formatted(certificate.id().id()),
-          certificate.reasonNotAllowed(CertificateActionType.RECEIVE_COMPLEMENT, Optional.empty())
+          certificate.reasonNotAllowed(CertificateActionType.RECEIVE_QUESTION, Optional.empty())
       );
     }
 
     if (!certificate.isCertificateIssuedOnPatient(message.personId())) {
       throw new CertificateActionForbidden(
-          "Not allowed to receive complement on certificate for %s, because patient is not matching"
+          "Not allowed to receive question on certificate for %s, because patient is not matching"
               .formatted(certificate.id().id()),
           List.of("Different patient on certificate and incoming message!")
       );

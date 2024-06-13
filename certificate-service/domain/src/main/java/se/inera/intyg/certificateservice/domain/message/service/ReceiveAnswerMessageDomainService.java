@@ -20,11 +20,11 @@ public class ReceiveAnswerMessageDomainService {
   public Message receive(MessageId messageId, Answer answer) {
     final var message = messageRepository.getById(messageId);
     final var certificate = certificateRepository.getById(message.certificateId());
-    if (!certificate.allowTo(CertificateActionType.RECEIVE_COMPLEMENT, Optional.empty())) {
+    if (!certificate.allowTo(CertificateActionType.RECEIVE_ANSWER, Optional.empty())) {
       throw new CertificateActionForbidden(
-          "Not allowed to receive complement answer on certificate for %s"
+          "Not allowed to receive answer on certificate for %s"
               .formatted(certificate.id().id()),
-          certificate.reasonNotAllowed(CertificateActionType.RECEIVE_COMPLEMENT, Optional.empty())
+          certificate.reasonNotAllowed(CertificateActionType.RECEIVE_ANSWER, Optional.empty())
       );
     }
 
@@ -35,6 +35,8 @@ public class ReceiveAnswerMessageDomainService {
           List.of("Different patient on certificate and incoming message!")
       );
     }
+
+    message.answer(answer);
 
     return messageRepository.save(message);
   }
