@@ -128,8 +128,8 @@ class AnswerToMessageEntityMapperTest {
     final var originalEntity = createOriginalEntity();
     final var answer = createAnswer();
     final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
-    assertEquals(MessageTypeEnum.COMPLEMENT.name(), result.getMessageType().getType());
-    assertEquals(MessageTypeEnum.COMPLEMENT.getKey(), result.getMessageType().getKey());
+    assertEquals(MessageTypeEnum.ANSWER.name(), result.getMessageType().getType());
+    assertEquals(MessageTypeEnum.ANSWER.getKey(), result.getMessageType().getKey());
   }
 
   @Test

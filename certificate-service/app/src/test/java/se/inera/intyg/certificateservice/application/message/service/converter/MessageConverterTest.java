@@ -247,12 +247,5 @@ class MessageConverterTest {
           messageConverter.convertAnswer(INCOMING_ANSWER_MESSAGE).status()
       );
     }
-
-    @Test
-    void shallIncludeType() {
-      assertEquals(MessageType.CONTACT,
-          messageConverter.convertAnswer(INCOMING_ANSWER_MESSAGE).type()
-      );
-    }
   }
 }

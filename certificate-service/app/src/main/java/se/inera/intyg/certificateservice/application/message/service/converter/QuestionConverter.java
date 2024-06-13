@@ -28,7 +28,7 @@ public class QuestionConverter {
     return QuestionDTO.builder()
         .id(message.id().id())
         .certificateId(message.certificateId().id())
-        .type(QuestionTypeDTO.COMPLEMENT)
+        .type(QuestionTypeDTO.valueOf(message.type().name()))
         .author(message.author().name())
         .subject(message.subject().subject())
         .sent(message.sent())

@@ -207,6 +207,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .certificateActionType(CertificateActionType.RECEIVE_ANSWER)
                     .build(),
                 CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.RECEIVE_REMINDER)
+                    .build(),
+                CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.COMPLEMENT)
                     .build(),
                 CertificateActionSpecification.builder()

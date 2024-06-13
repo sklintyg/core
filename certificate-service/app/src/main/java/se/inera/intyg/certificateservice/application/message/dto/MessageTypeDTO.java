@@ -7,10 +7,10 @@ public enum MessageTypeDTO {
 
   public MessageType toMessageType() {
     return switch (this) {
-      case KONTKT -> MessageType.CONTACT;
       case KOMPLT -> MessageType.COMPLEMENT;
-      case OVRIGT -> MessageType.OTHER;
       case PAMINN -> MessageType.REMINDER;
+      case KONTKT -> MessageType.CONTACT;
+      case OVRIGT -> MessageType.OTHER;
       default -> throw new IllegalStateException("MessageType '%s' not supported".formatted(this));
     };
   }

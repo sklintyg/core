@@ -414,6 +414,18 @@ class CertificateModelFactoryFK3226Test {
   }
 
   @Test
+  void shallIncludeCertificateActionRecieveReminder() {
+    final var expectedType = CertificateActionType.RECEIVE_REMINDER;
+
+    final var certificateModel = certificateModelFactoryFK3226.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
   void shallIncludeSchematronPath() {
     final var certificateModel = certificateModelFactoryFK3226.create();
 

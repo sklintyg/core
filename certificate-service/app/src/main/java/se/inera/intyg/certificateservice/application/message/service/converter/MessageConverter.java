@@ -76,7 +76,6 @@ public class MessageConverter {
         .sent(incomingMessageRequest.getSent())
         .contactInfo(new MessageContactInfo(incomingMessageRequest.getContactInfo()))
         .status(MessageStatus.SENT)
-        .type(incomingMessageRequest.getType().toMessageType())
         .build();
   }
 }

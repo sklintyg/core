@@ -4,8 +4,9 @@ public enum MessageType {
   COMPLEMENT("KOMPLT", "Komplettering"),
   REMINDER("PAMINN", "Påminnelse"),
   CONTACT("KONTKT", "Kontakt"),
-  OTHER("OVRIGT", "Övrigt");
-  
+  OTHER("OVRIGT", "Övrigt"),
+  ANSWER("SVAR", "Svar");
+
   public static final String OID = "ffa59d8f-8d7e-46ae-ac9e-31804e8e8499";
 
   private final String code;

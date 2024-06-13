@@ -159,7 +159,7 @@ class QuestionConverterTest {
   @Test
   void shallExcludeAnsweredByCertificate() {
     final var messageWithoutAnsweredByCertificate = complementMessageBuilder()
-        .type(MessageType.REMINDER)
+        .type(MessageType.CONTACT)
         .build();
     final var convert = questionConverter.convert(messageWithoutAnsweredByCertificate,
         MESSAGE_ACTIONS);

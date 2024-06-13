@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum MessageTypeEnum {
-  COMPLEMENT(1), QUESTION(2), ANSWER(3), REMINDER(4);
+  COMPLEMENT(1), CONTACT(2), OTHER(3), REMINDER(4), ANSWER(5);
 
   private final int key;
 
