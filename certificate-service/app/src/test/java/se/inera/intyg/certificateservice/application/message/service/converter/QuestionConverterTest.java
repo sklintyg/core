@@ -297,7 +297,6 @@ class QuestionConverterTest {
                   .sent(LocalDateTime.now())
                   .content(new Content("content"))
                   .contactInfo(new MessageContactInfo(List.of("info")))
-
                   .build()
           )
           .build();
