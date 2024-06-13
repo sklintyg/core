@@ -303,7 +303,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
             ElementConfigurationTextArea.builder()
                 .id(QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_ANNAT_FIELD_ID)
                 .name(
-                    "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv")
+                    "Beskriv på vilket sätt sjukdomstillståndet utgör ett påtagligt hot mot patientens liv")
                 .label(
                     "Ange när tillståndet blev livshotande, och om det är möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller."
                 )

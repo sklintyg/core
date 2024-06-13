@@ -1516,7 +1516,7 @@ class CertificateModelFactoryFK3226Test {
         final var expectedConfiguration = ElementConfigurationTextArea.builder()
             .id(new FieldId("52.7"))
             .name(
-                "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv"
+                "Beskriv på vilket sätt sjukdomstillståndet utgör ett påtagligt hot mot patientens liv"
             )
             .label(
                 "Ange när tillståndet blev livshotande, och om det är möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller."
