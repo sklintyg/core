@@ -38,6 +38,15 @@ public class IncomingMessageValidator {
       throw new IllegalArgumentException("Required parameter missing: Message.personId.type");
     }
     validateComplement(incomingMessageRequest);
+    validateReminder(incomingMessageRequest);
+  }
+
+  private void validateReminder(IncomingMessageRequest incomingMessageRequest) {
+    if (MessageTypeDTO.PAMINN.equals(incomingMessageRequest.getType())
+        && (incomingMessageRequest.getReminderMessageId() == null
+        || incomingMessageRequest.getReminderMessageId().isBlank())) {
+      throw new IllegalArgumentException("Required parameter missing: Message.reminderMessageId");
+    }
   }
 
   private void validateComplement(IncomingMessageRequest incomingMessageRequest) {

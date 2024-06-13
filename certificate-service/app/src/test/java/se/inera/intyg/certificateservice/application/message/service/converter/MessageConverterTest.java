@@ -191,4 +191,50 @@ class MessageConverterTest {
       );
     }
   }
+
+  @Nested
+  class TestIncomingAnswer {
+
+    @Test
+    void shallIncludeMessageId() {
+      assertEquals(new MessageId(MESSAGE_ID),
+          messageConverter.convertAnswer(INCOMING_COMPLEMENT_MESSAGE).id()
+      );
+    }
+
+    @Test
+    void shallIncludeReferenceId() {
+      assertEquals(new SenderReference(REFERENCE_ID),
+          messageConverter.convertAnswer(INCOMING_COMPLEMENT_MESSAGE).reference()
+      );
+    }
+
+    @Test
+    void shallIncludeAuthor() {
+      assertEquals(new Author(AUTHOR_INCOMING_MESSAGE),
+          messageConverter.convertAnswer(INCOMING_COMPLEMENT_MESSAGE).author()
+      );
+    }
+
+    @Test
+    void shallIncludeContactInfo() {
+      assertEquals(new MessageContactInfo(CONTACT_INFO),
+          messageConverter.convertAnswer(INCOMING_COMPLEMENT_MESSAGE).contactInfo()
+      );
+    }
+
+    @Test
+    void shallIncludeContent() {
+      assertEquals(new Content(CONTENT),
+          messageConverter.convertAnswer(INCOMING_COMPLEMENT_MESSAGE).content()
+      );
+    }
+
+    @Test
+    void shallIncludeSubject() {
+      assertEquals(new Subject(SUBJECT),
+          messageConverter.convertAnswer(INCOMING_COMPLEMENT_MESSAGE).subject()
+      );
+    }
+  }
 }

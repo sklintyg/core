@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
@@ -28,7 +29,8 @@ public class IncomingMessageRequest {
   String answerMessageId;
   String answerReferenceId;
   String reminderMessageId;
-  List<IncomingComplementDTO> complements;
+  @Builder.Default
+  List<IncomingComplementDTO> complements = Collections.emptyList();
   LocalDate lastDateToAnswer;
 
   @JsonPOJOBuilder(withPrefix = "")

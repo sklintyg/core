@@ -58,7 +58,7 @@ public class CertificateActionMessagesAdministrative implements CertificateActio
   @Override
   public boolean isEnabled(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
-    return false;
+    return true;
   }
 
   private static boolean isDraftButIsComplementing(Optional<Certificate> certificate) {

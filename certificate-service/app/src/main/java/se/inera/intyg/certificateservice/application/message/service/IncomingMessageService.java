@@ -6,7 +6,9 @@ import se.inera.intyg.certificateservice.application.message.dto.IncomingMessage
 import se.inera.intyg.certificateservice.application.message.service.converter.MessageConverter;
 import se.inera.intyg.certificateservice.application.message.service.validator.IncomingMessageValidator;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
+import se.inera.intyg.certificateservice.domain.message.service.ReceiveAnswerMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.ReceiveComplementMessageDomainService;
+import se.inera.intyg.certificateservice.domain.message.service.ReceiveQuestionMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.ReceiveReminderMessageDomainService;
 
 @Service
@@ -17,6 +19,8 @@ public class IncomingMessageService {
   private final MessageConverter messageConverter;
   private final ReceiveComplementMessageDomainService receiveComplementMessageDomainService;
   private final ReceiveReminderMessageDomainService receiveReminderMessageDomainService;
+  private final ReceiveQuestionMessageDomainService receiveQuestionMessageDomainService;
+  private final ReceiveAnswerMessageDomainService receiveAnswerMessageDomainService;
 
   public void receive(IncomingMessageRequest incomingMessageRequest) {
     incomingMessageValidator.validate(incomingMessageRequest);
@@ -29,9 +33,25 @@ public class IncomingMessageService {
           new MessageId(incomingMessageRequest.getReminderMessageId()),
           messageConverter.convertReminder(incomingMessageRequest)
       );
+      case KONTKT, OVRIGT -> {
+        if (isAnswer(incomingMessageRequest)) {
+          receiveAnswerMessageDomainService.receive(
+              new MessageId(incomingMessageRequest.getAnswerMessageId()),
+              messageConverter.convertAnswer(incomingMessageRequest)
+          );
+        } else {
+          receiveQuestionMessageDomainService.receive(
+              messageConverter.convert(incomingMessageRequest)
+          );
+        }
+      }
       default -> throw new IllegalArgumentException(
           "Message type '%s' is not supported!".formatted(incomingMessageRequest.getType())
       );
     }
+  }
+
+  private static boolean isAnswer(IncomingMessageRequest incomingMessageRequest) {
+    return incomingMessageRequest.getAnswerMessageId() != null;
   }
 }

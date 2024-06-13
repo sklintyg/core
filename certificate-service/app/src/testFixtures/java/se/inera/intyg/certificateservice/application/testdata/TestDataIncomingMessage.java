@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.application.testdata;
 
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateConstants.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.ANSWER_MESSAGE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.MESSAGE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REFERENCE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REMINDER_MESSAGE_ID;
@@ -17,6 +18,8 @@ public class TestDataIncomingMessage {
 
   public final static IncomingMessageRequest INCOMING_COMPLEMENT_MESSAGE = incomingComplementMessageBuilder().build();
   public final static IncomingMessageRequest INCOMING_REMINDER_MESSAGE = incomingReminderMessageBuilder().build();
+  public final static IncomingMessageRequest INCOMING_ANSWER_MESSAGE = incomingAnswerMessageBuilder().build();
+  public final static IncomingMessageRequest INCOMING_QUESTION_MESSAGE = incomingQuestionMessageBuilder().build();
 
   public static IncomingMessageRequestBuilder incomingComplementMessageBuilder() {
     return IncomingMessageRequest.builder()
@@ -55,5 +58,35 @@ public class TestDataIncomingMessage {
         .sentBy(SentByDTO.FK)
         .personId(TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_PERSON_ID_DTO)
         .reminderMessageId(MESSAGE_ID);
+  }
+
+  public static IncomingMessageRequestBuilder incomingAnswerMessageBuilder() {
+    return IncomingMessageRequest.builder()
+        .id(ANSWER_MESSAGE_ID)
+        .referenceId(REFERENCE_ID)
+        .certificateId(CERTIFICATE_ID)
+        .subject(TestDataMessageConstants.SUBJECT)
+        .content(TestDataMessageConstants.CONTENT)
+        .sent(TestDataMessageConstants.SENT)
+        .type(MessageTypeDTO.KONTKT)
+        .contactInfo(TestDataMessageConstants.CONTACT_INFO)
+        .sentBy(SentByDTO.FK)
+        .personId(TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_PERSON_ID_DTO)
+        .answerMessageId(MESSAGE_ID);
+  }
+
+  public static IncomingMessageRequestBuilder incomingQuestionMessageBuilder() {
+    return IncomingMessageRequest.builder()
+        .id(MESSAGE_ID)
+        .referenceId(REFERENCE_ID)
+        .certificateId(CERTIFICATE_ID)
+        .subject(TestDataMessageConstants.SUBJECT)
+        .content(TestDataMessageConstants.CONTENT)
+        .sent(TestDataMessageConstants.SENT)
+        .type(MessageTypeDTO.KONTKT)
+        .contactInfo(TestDataMessageConstants.CONTACT_INFO)
+        .sentBy(SentByDTO.FK)
+        .lastDateToAnswer(TestDataMessageConstants.LAST_DATE_TO_REPLY)
+        .personId(TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_PERSON_ID_DTO);
   }
 }
