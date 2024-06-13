@@ -71,15 +71,17 @@ class XmlGeneratorDateListTest {
                   .id(new FieldId(VALUE_ID))
                   .dates(
                       List.of(
-                          new CheckboxDate(
-                              new FieldId(DATE_ID_ONE),
-                              "label",
-                              new Code(
-                                  "CODE",
-                                  "CODE_SYSTEM",
-                                  "DISPLAY_NAME"
+                          CheckboxDate.builder()
+                              .id(new FieldId(DATE_ID_ONE))
+                              .label("label")
+                              .code(
+                                  new Code(
+                                      "CODE",
+                                      "CODE_SYSTEM",
+                                      "DISPLAY_NAME"
+                                  )
                               )
-                          )
+                              .build()
                       )
                   )
                   .build()
@@ -165,24 +167,28 @@ class XmlGeneratorDateListTest {
                   .id(new FieldId(VALUE_ID))
                   .dates(
                       List.of(
-                          new CheckboxDate(
-                              new FieldId(DATE_ID_ONE),
-                              "label",
-                              new Code(
-                                  "CODE",
-                                  "CODE_SYSTEM",
-                                  "DISPLAY_NAME"
+                          CheckboxDate.builder()
+                              .id(new FieldId(DATE_ID_ONE))
+                              .label("label")
+                              .code(
+                                  new Code(
+                                      "CODE",
+                                      "CODE_SYSTEM",
+                                      "DISPLAY_NAME"
+                                  )
                               )
-                          ),
-                          new CheckboxDate(
-                              new FieldId(DATE_ID_TWO),
-                              "labelTwo",
-                              new Code(
-                                  "CODE_TWO",
-                                  "CODE_SYSTEM",
-                                  "DISPLAY_NAME_TWO"
+                              .build(),
+                          CheckboxDate.builder()
+                              .id(new FieldId(DATE_ID_TWO))
+                              .label("labelTwo")
+                              .code(
+                                  new Code(
+                                      "CODE_TWO",
+                                      "CODE_SYSTEM",
+                                      "DISPLAY_NAME_TWO"
+                                  )
                               )
-                          )
+                              .build()
                       )
                   )
                   .build()

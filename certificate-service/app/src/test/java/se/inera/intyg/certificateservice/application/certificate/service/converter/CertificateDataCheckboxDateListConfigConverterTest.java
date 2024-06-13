@@ -1,9 +1,13 @@
 package se.inera.intyg.certificateservice.application.certificate.service.converter;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK3226_CERTIFICATE;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,25 +67,46 @@ class CertificateDataCheckboxDateListConfigConverterTest {
                 .name("NAME")
                 .dates(
                     List.of(
-                        new CheckboxDate(new FieldId("ID_ONE"), "LABEL_ONE",
-                            new Code("CODE", "CODE_SYSTEM", "DISPLAY_NAME")),
-                        new CheckboxDate(new FieldId("ID_TWO"), "LABEL_TWO",
-                            new Code("CODE", "CODE_SYSTEM", "DISPLAY_NAME"))
+                        CheckboxDate.builder()
+                            .id(new FieldId("ID_ONE"))
+                            .label("LABEL_ONE")
+                            .code(
+                                new Code("CODE", "CODE_SYSTEM", "DISPLAY_NAME")
+                            )
+                            .min(Period.ofDays(-1))
+                            .max(Period.ofDays(1))
+                            .build(),
+                        CheckboxDate.builder()
+                            .id(new FieldId("ID_TWO"))
+                            .label("LABEL_TWO")
+                            .code(
+                                new Code("CODE", "CODE_SYSTEM", "DISPLAY_NAME")
+                            )
+                            .min(Period.ofDays(-2))
+                            .max(Period.ofDays(2))
+                            .build()
                     )
                 )
-                .build())
+                .build()
+        )
         .build();
 
-    final var result = certificateDataCheckboxDateListConfigConverter.convert(elementSpecification,
-        FK3226_CERTIFICATE);
+    final CertificateDataConfigCheckboxMultipleDate result = (CertificateDataConfigCheckboxMultipleDate) certificateDataCheckboxDateListConfigConverter.convert(
+        elementSpecification, FK3226_CERTIFICATE);
 
-    assertEquals("ID_ONE",
-        ((CertificateDataConfigCheckboxMultipleDate) result).getList().get(0).getId());
-    assertEquals("LABEL_ONE",
-        ((CertificateDataConfigCheckboxMultipleDate) result).getList().get(0).getLabel());
-    assertEquals("ID_TWO",
-        ((CertificateDataConfigCheckboxMultipleDate) result).getList().get(1).getId());
-    assertEquals("LABEL_TWO",
-        ((CertificateDataConfigCheckboxMultipleDate) result).getList().get(1).getLabel());
+    assertAll(
+        () -> assertEquals("ID_ONE", result.getList().get(0).getId()),
+        () -> assertEquals("LABEL_ONE", result.getList().get(0).getLabel()),
+        () -> assertEquals(LocalDate.now(ZoneId.systemDefault()).minusDays(1),
+            result.getList().get(0).getMinDate()),
+        () -> assertEquals(LocalDate.now(ZoneId.systemDefault()).plusDays(1),
+            result.getList().get(0).getMaxDate()),
+        () -> assertEquals("ID_TWO", result.getList().get(1).getId()),
+        () -> assertEquals("LABEL_TWO", result.getList().get(1).getLabel()),
+        () -> assertEquals(LocalDate.now(ZoneId.systemDefault()).minusDays(2),
+            result.getList().get(1).getMinDate()),
+        () -> assertEquals(LocalDate.now(ZoneId.systemDefault()).plusDays(2),
+            result.getList().get(1).getMaxDate())
+    );
   }
 }

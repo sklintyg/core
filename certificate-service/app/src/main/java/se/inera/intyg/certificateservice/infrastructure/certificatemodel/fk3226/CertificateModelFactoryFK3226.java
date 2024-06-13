@@ -92,9 +92,10 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
       <p>När den närstående som stödjer patienten ansöker om närståendepenning ska hen bifoga blankett Samtycke för närståendepenning. Det gäller i de fall patienten har medicinska förutsättningar för att kunna samtycka till en närståendes stöd.</p>
       <b>Särskilda regler för vissa HIV-smittade </b>
       Ange om patienten blivit hiv-smittad på något av följande sätt.
-                          \s
-      1.   Patienten har blivit smittad när hen fick blod- eller blodprodukter, och smittades när hen behandlades av den svenska hälso- och sjukvården.
-      2.   Patienten har blivit smittad av nuvarande eller före detta make, maka, sambo eller registrerade partner, och den personen smittades när hen behandlades av den svenska hälso- och sjukvården.
+      <ol>
+        <li>Patienten har blivit smittad när hen fick blod- eller blodprodukter, och smittades när hen behandlades av den svenska hälso- och sjukvården.</li>
+        <li>Patienten har blivit smittad av nuvarande eller före detta make, maka, sambo eller registrerade partner, och den personen smittades när hen behandlades av den svenska hälso- och sjukvården.</li>
+      </ol>
       """;
   private static final String DESCRIPTION = """
          <b className="iu-fw-heading">Vad är närståendepenning?</b><br>
@@ -301,9 +302,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .configuration(
             ElementConfigurationTextArea.builder()
                 .id(QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_ANNAT_FIELD_ID)
-                .header(
-                    "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv")
                 .name(
+                    "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv")
+                .label(
                     "Ange när tillståndet blev livshotande, och om det är möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller."
                 )
                 .build()
@@ -434,9 +435,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .configuration(
             ElementConfigurationTextArea.builder()
                 .id(QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_AKUT_LIVSHOTANDE_FIELD_ID)
-                .header(
-                    "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv")
                 .name(
+                    "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv")
+                .label(
                     "Ange om möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller.")
                 .build()
         )
@@ -625,21 +626,27 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
 
   private static ElementSpecification questionUtlatandeBaseratPa(ElementSpecification... children) {
     final var checkboxDates = List.of(
-        new CheckboxDate(
-            new FieldId(UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID),
-            CodeSystemKvFkmu0001.UNDERSOKNING.displayName(),
-            CodeSystemKvFkmu0001.UNDERSOKNING
-        ),
-        new CheckboxDate(
-            new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID),
-            CodeSystemKvFkmu0001.JOURNALUPGIFTER.displayName(),
-            CodeSystemKvFkmu0001.JOURNALUPGIFTER
-        ),
-        new CheckboxDate(
-            UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID,
-            CodeSystemKvFkmu0001.ANNAT.displayName(),
-            CodeSystemKvFkmu0001.ANNAT
-        )
+        CheckboxDate.builder()
+            .id(new FieldId(UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID))
+            .label(CodeSystemKvFkmu0001.UNDERSOKNING.displayName())
+            .code(CodeSystemKvFkmu0001.UNDERSOKNING)
+            .min(null)
+            .max(Period.ofDays(0))
+            .build(),
+        CheckboxDate.builder()
+            .id(new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID))
+            .label(CodeSystemKvFkmu0001.JOURNALUPGIFTER.displayName())
+            .code(CodeSystemKvFkmu0001.JOURNALUPGIFTER)
+            .min(null)
+            .max(Period.ofDays(0))
+            .build(),
+        CheckboxDate.builder()
+            .id(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID)
+            .label(CodeSystemKvFkmu0001.ANNAT.displayName())
+            .code(CodeSystemKvFkmu0001.ANNAT)
+            .min(null)
+            .max(Period.ofDays(0))
+            .build()
     );
 
     return ElementSpecification.builder()

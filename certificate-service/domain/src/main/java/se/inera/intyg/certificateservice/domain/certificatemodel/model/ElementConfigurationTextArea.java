@@ -18,6 +18,8 @@ public class ElementConfigurationTextArea implements ElementConfiguration {
   String description;
   @Getter(onMethod = @__(@Override))
   String header;
+  @Getter(onMethod = @__(@Override))
+  String label;
   FieldId id;
 
   @Override

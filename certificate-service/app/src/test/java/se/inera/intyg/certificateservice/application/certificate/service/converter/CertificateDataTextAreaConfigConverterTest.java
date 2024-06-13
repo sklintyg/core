@@ -46,6 +46,7 @@ class CertificateDataTextAreaConfigConverterTest {
         .text("NAME")
         .description("DESCRIPTION")
         .header("HEADER")
+        .label("LABEL")
         .build();
 
     final var response = certificateDataTextAreaConfigConverter.convert(
@@ -56,6 +57,7 @@ class CertificateDataTextAreaConfigConverterTest {
                     .name("NAME")
                     .description("DESCRIPTION")
                     .header("HEADER")
+                    .label("LABEL")
                     .build()
             ).build(),
         FK7210_CERTIFICATE
