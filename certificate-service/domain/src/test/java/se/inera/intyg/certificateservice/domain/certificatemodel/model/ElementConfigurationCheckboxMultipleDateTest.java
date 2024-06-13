@@ -45,16 +45,16 @@ class ElementConfigurationCheckboxMultipleDateTest {
         .id(new FieldId(FIELD_ID))
         .dates(
             List.of(
-                new CheckboxDate(
-                    new FieldId(DATE_FIELD_ID),
-                    LABEL,
-                    new Code(CODE, CODE_SYSTEM, DISPLAY_NAME)
-                ),
-                new CheckboxDate(
-                    new FieldId(DATE_FIELD_ID_TWO),
-                    LABEL_TWO,
-                    new Code(CODE_TWO, CODE_SYSTEM, DISPLAY_NAME_TWO)
-                )
+                CheckboxDate.builder()
+                    .id(new FieldId(DATE_FIELD_ID))
+                    .label(LABEL)
+                    .code(new Code(CODE, CODE_SYSTEM, DISPLAY_NAME))
+                    .build(),
+                CheckboxDate.builder()
+                    .id(new FieldId(DATE_FIELD_ID_TWO))
+                    .label(LABEL_TWO)
+                    .code(new Code(CODE_TWO, CODE_SYSTEM, DISPLAY_NAME_TWO))
+                    .build()
             )
         )
         .build();

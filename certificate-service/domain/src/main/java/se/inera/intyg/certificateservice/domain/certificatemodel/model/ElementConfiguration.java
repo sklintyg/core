@@ -16,6 +16,10 @@ public interface ElementConfiguration {
     return null;
   }
 
+  default String header() {
+    return null;
+  }
+
   ElementType type();
 
   ElementValue emptyValue();

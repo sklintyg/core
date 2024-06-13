@@ -28,6 +28,8 @@ public class CertificateDataTextAreaConfigConverter implements CertificateDataCo
         .id(configuration.id().value())
         .description(configuration.description())
         .text(configuration.name())
+        .header(configuration.header())
+        .label(configuration.label())
         .build();
   }
 }

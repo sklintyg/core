@@ -90,6 +90,12 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
       <p>Till närstående räknas anhöriga, men även andra som har nära relationer med den som är sjuk till exempel vänner eller grannar. Flera närstående kan turas om och få ersätttning för olika dagar eller olika delar av dagar.</p>
       <b className="iu-fw-heading">Ansökan och samtycke</b><br>
       <p>När den närstående som stödjer patienten ansöker om närståendepenning ska hen bifoga blankett Samtycke för närståendepenning. Det gäller i de fall patienten har medicinska förutsättningar för att kunna samtycka till en närståendes stöd.</p>
+      <b>Särskilda regler för vissa HIV-smittade </b>
+      Ange om patienten blivit hiv-smittad på något av följande sätt.
+      <ol>
+        <li>Patienten har blivit smittad när hen fick blod- eller blodprodukter, och smittades när hen behandlades av den svenska hälso- och sjukvården.</li>
+        <li>Patienten har blivit smittad av nuvarande eller före detta make, maka, sambo eller registrerade partner, och den personen smittades när hen behandlades av den svenska hälso- och sjukvården.</li>
+      </ol>
       """;
   private static final String DESCRIPTION = """
          <b className="iu-fw-heading">Vad är närståendepenning?</b><br>
@@ -217,17 +223,19 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .elementSpecifications(
             List.of(
                 categoryGrund(
-                    questionUtlatandeBaseratPa(),
-                    questionUtlatandeBaseratPaAnnat()
+                    questionUtlatandeBaseratPa(
+                        questionUtlatandeBaseratPaAnnat()
+                    )
                 ),
                 categoryHot(
-                    questionPatientBehandlingOchVardsituation(),
-                    questionNarAktivaBehandlingenAvslutades(),
-                    questionNarTillstandetBlevAkutLivshotande(),
-                    questionPatagligtHotMotPatientensLivAkutLivshotande(),
-                    questionUppskattaHurLangeTillstandetKommerVaraLivshotande(),
-                    questionTillstandetUppskattasLivshotandeTillOchMed(),
-                    questionPatagligtHotMotPatientensLivAnnat()
+                    questionPatientBehandlingOchVardsituation(
+                        questionNarAktivaBehandlingenAvslutades(),
+                        questionNarTillstandetBlevAkutLivshotande(),
+                        questionPatagligtHotMotPatientensLivAkutLivshotande(),
+                        questionUppskattaHurLangeTillstandetKommerVaraLivshotande(),
+                        questionTillstandetUppskattasLivshotandeTillOchMed(),
+                        questionPatagligtHotMotPatientensLivAnnat()
+                    )
                 ),
                 categorySamtycke(
                     messageForutsattningarForAttLamnaSkriftligtSamtycke(),
@@ -295,9 +303,10 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
             ElementConfigurationTextArea.builder()
                 .id(QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_ANNAT_FIELD_ID)
                 .name(
-                    "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv")
-                .description(
-                    "Ange när tillståndet blev livshotande, och om det är möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller.")
+                    "Beskriv på vilket sätt sjukdomstillståndet utgör ett påtagligt hot mot patientens liv")
+                .label(
+                    "Ange när tillståndet blev livshotande, och om det är möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller."
+                )
                 .build()
         )
         .rules(
@@ -428,7 +437,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                 .id(QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_AKUT_LIVSHOTANDE_FIELD_ID)
                 .name(
                     "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv")
-                .description(
+                .label(
                     "Ange om möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller.")
                 .build()
         )
@@ -551,7 +560,8 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .build();
   }
 
-  private static ElementSpecification questionPatientBehandlingOchVardsituation() {
+  private static ElementSpecification questionPatientBehandlingOchVardsituation(
+      ElementSpecification... children) {
     final var radioMultipleCodes = List.of(
         new ElementConfigurationCode(
             ENDAST_PALLIATIV_FIELD_ID,
@@ -595,6 +605,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .build()
             )
         )
+        .children(List.of(children))
         .build();
   }
 
@@ -615,21 +626,27 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
 
   private static ElementSpecification questionUtlatandeBaseratPa(ElementSpecification... children) {
     final var checkboxDates = List.of(
-        new CheckboxDate(
-            new FieldId(UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID),
-            CodeSystemKvFkmu0001.UNDERSOKNING.displayName(),
-            CodeSystemKvFkmu0001.UNDERSOKNING
-        ),
-        new CheckboxDate(
-            new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID),
-            CodeSystemKvFkmu0001.JOURNALUPGIFTER.displayName(),
-            CodeSystemKvFkmu0001.JOURNALUPGIFTER
-        ),
-        new CheckboxDate(
-            UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID,
-            CodeSystemKvFkmu0001.ANNAT.displayName(),
-            CodeSystemKvFkmu0001.ANNAT
-        )
+        CheckboxDate.builder()
+            .id(new FieldId(UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID))
+            .label(CodeSystemKvFkmu0001.UNDERSOKNING.displayName())
+            .code(CodeSystemKvFkmu0001.UNDERSOKNING)
+            .min(null)
+            .max(Period.ofDays(0))
+            .build(),
+        CheckboxDate.builder()
+            .id(new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID))
+            .label(CodeSystemKvFkmu0001.JOURNALUPGIFTER.displayName())
+            .code(CodeSystemKvFkmu0001.JOURNALUPGIFTER)
+            .min(null)
+            .max(Period.ofDays(0))
+            .build(),
+        CheckboxDate.builder()
+            .id(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID)
+            .label(CodeSystemKvFkmu0001.ANNAT.displayName())
+            .code(CodeSystemKvFkmu0001.ANNAT)
+            .min(null)
+            .max(Period.ofDays(0))
+            .build()
     );
 
     return ElementSpecification.builder()
@@ -719,15 +736,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
             ElementConfigurationCategory.builder()
                 .name("Påtagligt hot mot patientens liv")
                 .description("""
-                    Ange på vilket sätt hälsotillståndet utgör ett påtagligt hot mot patientens liv i nuläget eller på någon tids sikt. Hälsotillstånd som på flera års sikt kan utvecklas till livshotande tillstånd ger däremot inte rätt till närståendepenning.
+                    Ange på vilket sätt hälsotillståndet utgör ett påtagligt hot mot patientens liv i nuläget eller på någon tids sikt.
                                         \s
                     Hälsotillståndet kan utgöra ett påtagligt hot även om det finns hopp om att det förbättras.
-                                        \s
-                    <b>Särskilda regler för vissa HIV-smittade </b>
-                    Ange om patienten blivit hiv-smittad på något av följande sätt.
-                                        \s
-                    1.   Patienten har blivit smittad när hen fick blod- eller blodprodukter, och smittades när hen behandlades av den svenska hälso- och sjukvården.
-                    2.   Patienten har blivit smittad av nuvarande eller före detta make, maka, sambo eller registrerade partner, och den personen smittades när hen behandlades av den svenska hälso- och sjukvården.
                     """)
                 .build()
         )

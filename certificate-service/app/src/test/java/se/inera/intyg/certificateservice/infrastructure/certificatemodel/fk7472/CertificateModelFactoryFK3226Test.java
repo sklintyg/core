@@ -452,33 +452,42 @@ class CertificateModelFactoryFK3226Test {
             .id(new FieldId("1.1"))
             .dates(
                 List.of(
-                    new CheckboxDate(
-                        new FieldId("undersokningAvPatienten"),
-                        "min undersökning av patienten",
-                        new Code(
-                            "UNDERSOKNING",
-                            "KV_FKMU_0001",
-                            "min undersökning av patienten"
+                    CheckboxDate.builder()
+                        .id(new FieldId("undersokningAvPatienten"))
+                        .label("min undersökning av patienten")
+                        .code(
+                            new Code(
+                                "UNDERSOKNING",
+                                "KV_FKMU_0001",
+                                "min undersökning av patienten"
+                            )
                         )
-                    ),
-                    new CheckboxDate(
-                        new FieldId("journaluppgifter"),
-                        "journaluppgifter från den",
-                        new Code(
-                            "JOURNALUPPGIFTER",
-                            "KV_FKMU_0001",
-                            "journaluppgifter från den"
+                        .max(Period.ZERO)
+                        .build(),
+                    CheckboxDate.builder()
+                        .id(new FieldId("journaluppgifter"))
+                        .label("journaluppgifter från den")
+                        .code(
+                            new Code(
+                                "JOURNALUPPGIFTER",
+                                "KV_FKMU_0001",
+                                "journaluppgifter från den"
+                            )
                         )
-                    ),
-                    new CheckboxDate(
-                        new FieldId("annat"),
-                        "annat",
-                        new Code(
-                            "ANNAT",
-                            "KV_FKMU_0001",
-                            "annat"
+                        .max(Period.ZERO)
+                        .build(),
+                    CheckboxDate.builder()
+                        .id(new FieldId("annat"))
+                        .label("annat")
+                        .code(
+                            new Code(
+                                "ANNAT",
+                                "KV_FKMU_0001",
+                                "annat"
+                            )
                         )
-                    )
+                        .max(Period.ZERO)
+                        .build()
                 )
             )
             .build();
@@ -693,15 +702,9 @@ class CertificateModelFactoryFK3226Test {
         final var expectedConfiguration = ElementConfigurationCategory.builder()
             .name("Påtagligt hot mot patientens liv")
             .description("""
-                Ange på vilket sätt hälsotillståndet utgör ett påtagligt hot mot patientens liv i nuläget eller på någon tids sikt. Hälsotillstånd som på flera års sikt kan utvecklas till livshotande tillstånd ger däremot inte rätt till närståendepenning.
+                Ange på vilket sätt hälsotillståndet utgör ett påtagligt hot mot patientens liv i nuläget eller på någon tids sikt.
                                     \s
                 Hälsotillståndet kan utgöra ett påtagligt hot även om det finns hopp om att det förbättras.
-                                    \s
-                <b>Särskilda regler för vissa HIV-smittade </b>
-                Ange om patienten blivit hiv-smittad på något av följande sätt.
-                                    \s
-                1.   Patienten har blivit smittad när hen fick blod- eller blodprodukter, och smittades när hen behandlades av den svenska hälso- och sjukvården.
-                2.   Patienten har blivit smittad av nuvarande eller före detta make, maka, sambo eller registrerade partner, och den personen smittades när hen behandlades av den svenska hälso- och sjukvården.
                 """)
             .build();
 
@@ -1097,9 +1100,11 @@ class CertificateModelFactoryFK3226Test {
         final var expectedConfiguration = ElementConfigurationTextArea.builder()
             .id(new FieldId("52.4"))
             .name(
-                "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv")
-            .description(
-                "Ange om möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller.")
+                "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv"
+            )
+            .label(
+                "Ange om möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller."
+            )
             .build();
 
         final var certificateModel = certificateModelFactoryFK3226.create();
@@ -1511,9 +1516,11 @@ class CertificateModelFactoryFK3226Test {
         final var expectedConfiguration = ElementConfigurationTextArea.builder()
             .id(new FieldId("52.7"))
             .name(
-                "Beskriv på vilket sätt  sjukdomstillståndet utgör ett påtagligt hot mot patientens liv")
-            .description(
-                "Ange när tillståndet blev livshotande, och om det är möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller.")
+                "Beskriv på vilket sätt sjukdomstillståndet utgör ett påtagligt hot mot patientens liv"
+            )
+            .label(
+                "Ange när tillståndet blev livshotande, och om det är möjligt hur länge hotet mot livet kvarstår när patienten får vård enligt den vårdplan som gäller."
+            )
             .build();
 
         final var certificateModel = certificateModelFactoryFK3226.create();
