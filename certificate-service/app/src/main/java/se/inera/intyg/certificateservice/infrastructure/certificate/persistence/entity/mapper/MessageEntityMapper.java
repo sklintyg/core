@@ -173,7 +173,9 @@ public class MessageEntityMapper {
                         .status(MessageStatus.valueOf(childMessage.getStatus().getStatus()))
                         .author(new Author(childMessage.getAuthor()))
                         .authoredStaff(
-                            StaffEntityMapper.toDomain(childMessage.getAuthoredByStaff()))
+                            childMessage.getAuthoredByStaff() != null
+                                ? StaffEntityMapper.toDomain(childMessage.getAuthoredByStaff())
+                                : null)
                         .build()
                 )
                 .orElse(null)

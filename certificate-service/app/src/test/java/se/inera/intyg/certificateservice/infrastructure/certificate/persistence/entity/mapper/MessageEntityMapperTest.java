@@ -146,6 +146,7 @@ class MessageEntityMapperTest {
       );
     }
 
+
     @Test
     void shallIncludeForwarded() {
       assertFalse(mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).isForwarded());
