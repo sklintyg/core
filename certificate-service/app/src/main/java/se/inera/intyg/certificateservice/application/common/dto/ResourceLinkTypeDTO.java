@@ -89,6 +89,7 @@ public enum ResourceLinkTypeDTO {
       case MESSAGES -> QUESTIONS;
       case MESSAGES_ADMINISTRATIVE -> QUESTIONS_ADMINISTRATIVE;
       case CREATE_MESSAGES -> CREATE_QUESTIONS;
+      case ANSWER_MESSAGES -> ANSWER_QUESTION;
       case RECEIVE_COMPLEMENT, RECEIVE_ANSWER, RECEIVE_QUESTION, RECEIVE_REMINDER ->
           throw new IllegalArgumentException("%s is not a valid type!".formatted(type));
     };

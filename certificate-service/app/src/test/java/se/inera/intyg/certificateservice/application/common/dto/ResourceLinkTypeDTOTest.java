@@ -212,5 +212,11 @@ class ResourceLinkTypeDTOTest {
       assertEquals(ResourceLinkTypeDTO.CREATE_QUESTIONS,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.CREATE_MESSAGES));
     }
+
+    @Test
+    void shallReturnCertificateActionTypeAnswerQuestions() {
+      assertEquals(ResourceLinkTypeDTO.ANSWER_QUESTION,
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.ANSWER_MESSAGES));
+    }
   }
 }
