@@ -2,8 +2,11 @@ package se.inera.intyg.certificateservice.application.message.service.converter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.INCOMING_ANSWER_MESSAGE;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.INCOMING_COMPLEMENT_MESSAGE;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.INCOMING_REMINDER_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateConstants.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.ANSWER_MESSAGE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.AUTHOR_INCOMING_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.COMPLEMENT_QUESTION_ID_ONE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.COMPLEMENT_TEXT_ONE;
@@ -12,6 +15,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.LAST_DATE_TO_REPLY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.MESSAGE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REFERENCE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REMINDER_MESSAGE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
 
@@ -151,43 +155,96 @@ class MessageConverterTest {
 
     @Test
     void shallIncludeMessageId() {
-      assertEquals(new MessageId(MESSAGE_ID),
-          messageConverter.convertReminder(INCOMING_COMPLEMENT_MESSAGE).id()
+      assertEquals(new MessageId(REMINDER_MESSAGE_ID),
+          messageConverter.convertReminder(INCOMING_REMINDER_MESSAGE).id()
       );
     }
 
     @Test
     void shallIncludeReferenceId() {
       assertEquals(new SenderReference(REFERENCE_ID),
-          messageConverter.convertReminder(INCOMING_COMPLEMENT_MESSAGE).reference()
+          messageConverter.convertReminder(INCOMING_REMINDER_MESSAGE).reference()
       );
     }
 
     @Test
     void shallIncludeAuthor() {
       assertEquals(new Author(AUTHOR_INCOMING_MESSAGE),
-          messageConverter.convertReminder(INCOMING_COMPLEMENT_MESSAGE).author()
+          messageConverter.convertReminder(INCOMING_REMINDER_MESSAGE).author()
       );
     }
 
     @Test
     void shallIncludeContactInfo() {
       assertEquals(new MessageContactInfo(CONTACT_INFO),
-          messageConverter.convertReminder(INCOMING_COMPLEMENT_MESSAGE).contactInfo()
+          messageConverter.convertReminder(INCOMING_REMINDER_MESSAGE).contactInfo()
       );
     }
 
     @Test
     void shallIncludeContent() {
       assertEquals(new Content(CONTENT),
-          messageConverter.convertReminder(INCOMING_COMPLEMENT_MESSAGE).content()
+          messageConverter.convertReminder(INCOMING_REMINDER_MESSAGE).content()
       );
     }
 
     @Test
     void shallIncludeSubject() {
       assertEquals(new Subject(SUBJECT),
-          messageConverter.convertReminder(INCOMING_COMPLEMENT_MESSAGE).subject()
+          messageConverter.convertReminder(INCOMING_REMINDER_MESSAGE).subject()
+      );
+    }
+  }
+
+  @Nested
+  class TestIncomingAnswer {
+
+    @Test
+    void shallIncludeMessageId() {
+      assertEquals(new MessageId(ANSWER_MESSAGE_ID),
+          messageConverter.convertAnswer(INCOMING_ANSWER_MESSAGE).id()
+      );
+    }
+
+    @Test
+    void shallIncludeReferenceId() {
+      assertEquals(new SenderReference(REFERENCE_ID),
+          messageConverter.convertAnswer(INCOMING_ANSWER_MESSAGE).reference()
+      );
+    }
+
+    @Test
+    void shallIncludeAuthor() {
+      assertEquals(new Author(AUTHOR_INCOMING_MESSAGE),
+          messageConverter.convertAnswer(INCOMING_ANSWER_MESSAGE).author()
+      );
+    }
+
+    @Test
+    void shallIncludeContactInfo() {
+      assertEquals(new MessageContactInfo(CONTACT_INFO),
+          messageConverter.convertAnswer(INCOMING_ANSWER_MESSAGE).contactInfo()
+      );
+    }
+
+    @Test
+    void shallIncludeContent() {
+      assertEquals(new Content(CONTENT),
+          messageConverter.convertAnswer(INCOMING_ANSWER_MESSAGE).content()
+      );
+    }
+
+    @Test
+    void shallIncludeSubject() {
+      assertEquals(new Subject(SUBJECT),
+          messageConverter.convertAnswer(INCOMING_ANSWER_MESSAGE).subject()
+      );
+    }
+
+    @Test
+    void shallIncludeStatus() {
+      assertEquals(MessageStatus.SENT,
+          messageConverter.convertAnswer(INCOMING_ANSWER_MESSAGE).status()
       );
     }
   }

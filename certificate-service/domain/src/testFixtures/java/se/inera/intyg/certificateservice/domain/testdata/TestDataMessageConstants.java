@@ -14,6 +14,7 @@ public class TestDataMessageConstants {
   public static final String ANSWER_REFERENCE_ID = "ANSWER_REFERENCE_ID";
 
   public static final String REMINDER_MESSAGE_ID = "REMINDER_MESSAGE_ID";
+  public static final String ANSWER_MESSAGE_ID = "ANSWER_MESSAGE_ID";
   public static final String REMINDER_REFERENCE_ID = "REMINDER_REFERENCE_ID";
 
   public static final String SUBJECT = "This is the subject";

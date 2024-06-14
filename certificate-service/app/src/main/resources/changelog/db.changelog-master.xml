@@ -538,13 +538,16 @@
       <column name="type" value="COMPLEMENT"/>
     </insert>
     <insert tableName="message_type">
-      <column name="type" value="QUESTION"/>
+      <column name="type" value="CONTACT"/>
     </insert>
     <insert tableName="message_type">
-      <column name="type" value="ANSWER"/>
+      <column name="type" value="OTHER"/>
     </insert>
     <insert tableName="message_type">
       <column name="type" value="REMINDER"/>
+    </insert>
+    <insert tableName="message_type">
+      <column name="type" value="ANSWER"/>
     </insert>
 
     <createTable tableName="message_relation_type">

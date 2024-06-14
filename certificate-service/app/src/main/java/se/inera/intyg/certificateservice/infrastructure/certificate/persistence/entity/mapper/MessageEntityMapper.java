@@ -43,6 +43,7 @@ public class MessageEntityMapper {
 
   public MessageEntity toEntity(Message message, Integer key) {
     final var messageStatusEnum = MessageStatusEnum.valueOf(message.status().name());
+    final var messageTypeEnum = MessageTypeEnum.valueOf(message.type().name());
     return MessageEntity.builder()
         .key(key)
         .id(message.id().id())
@@ -59,8 +60,8 @@ public class MessageEntityMapper {
         .lastDateToReply(message.lastDateToReply())
         .messageType(
             MessageTypeEntity.builder()
-                .key(MessageTypeEnum.COMPLEMENT.getKey())
-                .type(MessageTypeEnum.COMPLEMENT.name())
+                .key(messageTypeEnum.getKey())
+                .type(messageTypeEnum.name())
                 .build()
         )
         .status(
@@ -172,7 +173,9 @@ public class MessageEntityMapper {
                         .status(MessageStatus.valueOf(childMessage.getStatus().getStatus()))
                         .author(new Author(childMessage.getAuthor()))
                         .authoredStaff(
-                            StaffEntityMapper.toDomain(childMessage.getAuthoredByStaff()))
+                            childMessage.getAuthoredByStaff() != null
+                                ? StaffEntityMapper.toDomain(childMessage.getAuthoredByStaff())
+                                : null)
                         .build()
                 )
                 .orElse(null)

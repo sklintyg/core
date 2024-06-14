@@ -39,11 +39,15 @@ public class AnswerToMessageEntityMapper {
         )
         .messageType(
             MessageTypeEntity.builder()
-                .key(MessageTypeEnum.valueOf(answer.type().name()).getKey())
-                .type(MessageTypeEnum.valueOf(answer.type().name()).name())
+                .key(MessageTypeEnum.ANSWER.getKey())
+                .type(MessageTypeEnum.ANSWER.name())
                 .build()
         )
-        .authoredByStaff(staffEntityRepository.staff(answer.authoredStaff()))
+        .authoredByStaff(
+            answer.authoredStaff() != null
+                ? staffEntityRepository.staff(answer.authoredStaff())
+                : null
+        )
         .certificate(messageEntity.getCertificate())
         .forwarded(messageEntity.isForwarded())
         .build();

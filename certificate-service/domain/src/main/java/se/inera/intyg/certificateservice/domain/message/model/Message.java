@@ -112,4 +112,8 @@ public class Message {
         )
         .toList();
   }
+
+  public void answer(Answer answer) {
+    this.answer = answer;
+  }
 }

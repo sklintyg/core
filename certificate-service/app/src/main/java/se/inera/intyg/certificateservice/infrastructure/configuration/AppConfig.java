@@ -30,7 +30,9 @@ import se.inera.intyg.certificateservice.domain.event.service.MessageEventDomain
 import se.inera.intyg.certificateservice.domain.event.service.MessageEventSubscriber;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 import se.inera.intyg.certificateservice.domain.message.service.HandleMessageDomainService;
+import se.inera.intyg.certificateservice.domain.message.service.ReceiveAnswerMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.ReceiveComplementMessageDomainService;
+import se.inera.intyg.certificateservice.domain.message.service.ReceiveQuestionMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.ReceiveReminderMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.XmlGeneratorMessage;
@@ -175,7 +177,7 @@ public class AppConfig {
     return new GetCertificatePdfDomainService(certificateRepository, pdfGenerator,
         certificateEventDomainService);
   }
-  
+
   @Bean
   public XmlValidationService xmlValidationService(XmlSchemaValidator xmlSchemaValidator,
       XmlSchematronValidator xmlSchematronValidator) {
@@ -227,6 +229,18 @@ public class AppConfig {
   public ReceiveReminderMessageDomainService receiveReminderMessageDomainService(
       CertificateRepository certificateRepository, MessageRepository messageRepository) {
     return new ReceiveReminderMessageDomainService(certificateRepository, messageRepository);
+  }
+
+  @Bean
+  public ReceiveQuestionMessageDomainService receiveAdministrativeMessageDomainService(
+      CertificateRepository certificateRepository, MessageRepository messageRepository) {
+    return new ReceiveQuestionMessageDomainService(certificateRepository, messageRepository);
+  }
+
+  @Bean
+  public ReceiveAnswerMessageDomainService receiveAnswerMessageDomainService(
+      CertificateRepository certificateRepository, MessageRepository messageRepository) {
+    return new ReceiveAnswerMessageDomainService(certificateRepository, messageRepository);
   }
 
   @Bean

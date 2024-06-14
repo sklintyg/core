@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.application.message.service.validator;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingReminderMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
 
 import java.util.List;
@@ -326,6 +327,40 @@ class IncomingMessageValidatorTest {
       );
 
       assertTrue(illegalArgumentException.getMessage().contains("Message.complement.content"),
+          illegalArgumentException.getMessage()
+      );
+    }
+  }
+
+  @Nested
+  class ValidateReminderQuestion {
+
+    @Test
+    void shallThrowIfReminderMessageIdIsNull() {
+      final var request = incomingReminderMessageBuilder()
+          .reminderMessageId(null)
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> validator.validate(request)
+      );
+
+      assertTrue(illegalArgumentException.getMessage().contains("Message.reminderMessageId"),
+          illegalArgumentException.getMessage()
+      );
+    }
+
+    @Test
+    void shallThrowIfReminderMessageIdIsEmpty() {
+      final var request = incomingReminderMessageBuilder()
+          .reminderMessageId(" ")
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> validator.validate(request)
+      );
+
+      assertTrue(illegalArgumentException.getMessage().contains("Message.reminderMessageId"),
           illegalArgumentException.getMessage()
       );
     }

@@ -42,6 +42,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Subject;
 public class TestDataMessage {
 
   public static final Message COMPLEMENT_MESSAGE = complementMessageBuilder().build();
+  public static final Message QUESTION_MESSAGE = questionMessageBuilder().build();
   public static final Answer ANSWER = answerBuilder().build();
   public static final Reminder REMINDER = reminderBuilder().build();
 
@@ -70,6 +71,25 @@ public class TestDataMessage {
                     .build()
             )
         );
+  }
+
+  public static MessageBuilder questionMessageBuilder() {
+    return Message.builder()
+        .id(new MessageId(MESSAGE_ID))
+        .reference(new SenderReference(REFERENCE_ID))
+        .type(MessageType.CONTACT)
+        .status(MessageStatus.SENT)
+        .certificateId(CERTIFICATE_ID)
+        .personId(ATHENA_REACT_ANDERSSON.id())
+        .subject(new Subject(SUBJECT))
+        .content(new Content(CONTENT))
+        .author(new Author(AUTHOR_INCOMING_MESSAGE))
+        .contactInfo(new MessageContactInfo(CONTACT_INFO))
+        .sent(SENT)
+        .created(CREATED_AFTER_SENT)
+        .modified(CREATED_AFTER_SENT)
+        .lastDateToReply(LAST_DATE_TO_REPLY)
+        .forwarded(new Forwarded(false));
   }
 
   public static AnswerBuilder answerBuilder() {

@@ -28,7 +28,7 @@ public class QuestionConverter {
     return QuestionDTO.builder()
         .id(message.id().id())
         .certificateId(message.certificateId().id())
-        .type(QuestionTypeDTO.COMPLEMENT)
+        .type(QuestionTypeDTO.valueOf(message.type().name()))
         .author(message.author().name())
         .subject(message.subject().subject())
         .sent(message.sent())
@@ -67,7 +67,7 @@ public class QuestionConverter {
             message.answer() != null
                 ? AnswerDTO.builder()
                 .id(message.answer().id().id())
-                .author(message.answer().authoredStaff().name().fullName())
+                .author(getAuthor(message))
                 .sent(message.answer().sent())
                 .message(message.answer().content().content())
                 .contactInfo(getContactInfo(message))
@@ -75,6 +75,12 @@ public class QuestionConverter {
                 : null
         )
         .build();
+  }
+
+  private static String getAuthor(Message message) {
+    return message.answer().authoredStaff() != null
+        ? message.answer().authoredStaff().name().fullName()
+        : message.author().name();
   }
 
   private static List<String> getContactInfo(Message message) {

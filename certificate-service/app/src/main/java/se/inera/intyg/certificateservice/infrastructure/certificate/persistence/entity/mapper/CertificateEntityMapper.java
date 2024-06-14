@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
@@ -31,6 +32,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatusEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateXmlEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.ExternalReferenceEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageTypeEnum;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReasonEntity;
@@ -222,9 +224,7 @@ public class CertificateEntityMapper {
     final var relations = getRelations(certificateEntity, includeRelations);
     final var messages = messageEntityRepository.findMessageEntitiesByCertificate(certificateEntity)
         .stream()
-        .filter(messageEntity -> messageEntity.getAuthor().equalsIgnoreCase("FK"))
-        .filter(messageEntity -> messageEntity.getMessageType().getKey()
-            == MessageTypeEnum.COMPLEMENT.getKey())
+        .filter(removeRemindersAndAnswers())
         .map(messageEntityMapper::toDomain)
         .toList();
 
@@ -316,6 +316,12 @@ public class CertificateEntityMapper {
         )
         .messages(messages)
         .build();
+  }
+
+  private static Predicate<MessageEntity> removeRemindersAndAnswers() {
+    return messageEntity -> !messageEntity.getMessageType().getType()
+        .equals(MessageTypeEnum.REMINDER.name())
+        && !messageEntity.getMessageType().getType().equals(MessageTypeEnum.ANSWER.name());
   }
 
   private List<CertificateRelationEntity> getRelations(CertificateEntity certificateEntity,
