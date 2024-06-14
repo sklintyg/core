@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.application.certificate.dto;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 import lombok.With;
@@ -42,6 +43,7 @@ public class CertificateMetadataDTO {
   CertificateSummaryDTO summary;
   boolean validForSign;
   String externalReference;
+  List<CertificateMessageTypeDTO> messageTypes;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class CertificateMetadataDTOBuilder {
