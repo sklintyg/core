@@ -264,6 +264,21 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case ANSWER_MESSAGES -> CertificateActionAnswerMessages.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
+                  new ActionRuleSent(true),
+                  new ActionRuleUserNotBlocked(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleInactiveUnit(),
+                  new ActionRulePatientAlive(),
+                  new ActionRuleUserAllowCopy()
+              )
+          )
+          .build();
       case MESSAGES_ADMINISTRATIVE -> CertificateActionMessagesAdministrative.builder()
           .certificateActionSpecification(actionSpecification)
           .enabled(actionSpecification.isEnabled())
