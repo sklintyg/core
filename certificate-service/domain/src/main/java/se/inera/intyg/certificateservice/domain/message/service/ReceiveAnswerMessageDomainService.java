@@ -30,7 +30,7 @@ public class ReceiveAnswerMessageDomainService {
 
     if (!certificate.isCertificateIssuedOnPatient(message.personId())) {
       throw new CertificateActionForbidden(
-          "Not allowed to receive complement on certificate for %s, because patient is not matching"
+          "Not allowed to receive answer on certificate for %s, because patient is not matching"
               .formatted(certificate.id().id()),
           List.of("Different patient on certificate and incoming message!")
       );
