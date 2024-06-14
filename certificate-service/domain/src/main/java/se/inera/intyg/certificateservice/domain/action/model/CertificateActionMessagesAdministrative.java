@@ -18,6 +18,7 @@ public class CertificateActionMessagesAdministrative implements CertificateActio
   private static final String DESCRIPTION = "Funktionen finns inte för detta intyg.";
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
+  private final Boolean enabled;
 
   @Override
   public CertificateActionType getType() {
@@ -58,7 +59,7 @@ public class CertificateActionMessagesAdministrative implements CertificateActio
   @Override
   public boolean isEnabled(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
-    return false;
+    return enabled != null && enabled;
   }
 
   private static boolean isDraftButIsComplementing(Optional<Certificate> certificate) {

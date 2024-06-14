@@ -9,4 +9,5 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 public class CertificateActionSpecification {
 
   CertificateActionType certificateActionType;
+  Boolean isEnabled;
 }

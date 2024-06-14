@@ -330,6 +330,22 @@ class CertificateModelFactoryFK3226Test {
   }
 
   @Test
+  void shallIncludeCertificateActionMessagesAdministrativeWithEnabledTrue() {
+    final var expectedType = CertificateActionType.MESSAGES_ADMINISTRATIVE;
+
+    final var certificateModel = certificateModelFactoryFK3226.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream()
+            .filter(
+                actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+            )
+            .findFirst()
+            .orElseThrow()
+            .isEnabled(),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
   void shallIncludeCertificateActionReceiveComplement() {
     final var expectedType = CertificateActionType.RECEIVE_COMPLEMENT;
 

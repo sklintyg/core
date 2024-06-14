@@ -102,4 +102,23 @@ class CertificateActionCreateMessagesTest {
         certificateActionCreateMessages.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)));
   }
+
+  @Test
+  void shallIncludeName() {
+    final var expectedName = "Ny fråga";
+
+    final var certificate = certificateBuilder.build();
+
+    assertEquals(expectedName, certificateActionCreateMessages.getName(Optional.of(certificate)));
+  }
+
+  @Test
+  void shallIncludeDescription() {
+    final var expectedName = "Här kan du ställa en ny fråga till Försäkringskassan.";
+
+    final var certificate = certificateBuilder.build();
+
+    assertEquals(expectedName,
+        certificateActionCreateMessages.getDescription(Optional.of(certificate)));
+  }
 }

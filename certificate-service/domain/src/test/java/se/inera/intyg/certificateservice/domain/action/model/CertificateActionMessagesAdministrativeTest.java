@@ -229,4 +229,28 @@ class CertificateActionMessagesAdministrativeTest {
 
     assertFalse(enabled);
   }
+
+  @Test
+  void shallReturnEnabledTrue() {
+    final var specification =
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
+            .isEnabled(true)
+            .build();
+
+    final var actionMessagesAdministrative = (CertificateActionMessagesAdministrative) CertificateActionFactory.create(
+        specification
+    );
+
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .build();
+
+    final var enabled = actionMessagesAdministrative.isEnabled(Optional.of(certificate),
+        Optional.of(actionEvaluation));
+
+    assertTrue(enabled);
+  }
 }
