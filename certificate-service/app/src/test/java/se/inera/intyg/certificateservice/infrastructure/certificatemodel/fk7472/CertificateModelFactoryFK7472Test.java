@@ -667,5 +667,14 @@ class CertificateModelFactoryFK7472Test {
 
       assertEquals(expected, certificateModel.rolesWithAccess());
     }
+
+    @Test
+    void shallIncludeRolesWithSignAccess() {
+      final var expected = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE);
+
+      final var certificateModel = certificateModelFactoryFK7472.create();
+
+      assertEquals(expected, certificateModel.rolesWithSignAccess());
+    }
   }
 }

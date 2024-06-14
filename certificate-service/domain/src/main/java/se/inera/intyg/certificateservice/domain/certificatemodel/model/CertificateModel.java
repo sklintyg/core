@@ -36,6 +36,7 @@ public class CertificateModel {
   List<CertificateText> texts;
   CertificateSummaryProvider summaryProvider;
   List<Role> rolesWithAccess;
+  List<Role> rolesWithSignAccess;
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()
@@ -60,6 +61,10 @@ public class CertificateModel {
 
   public boolean activeForUserRole(ActionEvaluation actionEvaluation) {
     return this.rolesWithAccess.contains(actionEvaluation.user().role());
+  }
+
+  public boolean accessToSign(ActionEvaluation actionEvaluation) {
+    return this.rolesWithSignAccess.contains(actionEvaluation.user().role());
   }
 
   public boolean allowTo(CertificateActionType certificateActionType,

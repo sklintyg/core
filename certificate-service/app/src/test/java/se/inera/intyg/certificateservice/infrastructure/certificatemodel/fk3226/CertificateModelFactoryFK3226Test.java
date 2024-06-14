@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -58,9 +58,6 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CertificateModelFactoryFK3226;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CodeSystemKvFkmu0010;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.FK3226CertificateSummaryProvider;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateModelFactoryFK3226Test {
@@ -1753,6 +1750,15 @@ class CertificateModelFactoryFK3226Test {
       final var certificateModel = certificateModelFactoryFK3226.create();
 
       assertEquals(expected, certificateModel.rolesWithAccess());
+    }
+
+    @Test
+    void shallIncludeRolesWithSignAccess() {
+      final var expected = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR);
+
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(expected, certificateModel.rolesWithSignAccess());
     }
   }
 

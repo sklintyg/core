@@ -693,6 +693,44 @@ class CertificateModelTest {
   }
 
   @Nested
+  class TestRolesWithSignAccess {
+
+    @Test
+    void shouldReturnTrueIfRoleHasAccessToSign() {
+      final var certificateModel = CertificateModel.builder()
+          .rolesWithSignAccess(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+          .build();
+
+      final var actionEvaluation = ActionEvaluation.builder()
+          .user(
+              User.builder()
+                  .role(Role.DOCTOR)
+                  .build()
+          )
+          .build();
+
+      assertTrue(certificateModel.accessToSign(actionEvaluation));
+    }
+
+    @Test
+    void shouldReturnFalseIfRoleDoesNotHasAccessToSign() {
+      final var certificateModel = CertificateModel.builder()
+          .rolesWithSignAccess(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+          .build();
+
+      final var actionEvaluation = ActionEvaluation.builder()
+          .user(
+              User.builder()
+                  .role(Role.NURSE)
+                  .build()
+          )
+          .build();
+
+      assertFalse(certificateModel.accessToSign(actionEvaluation));
+    }
+  }
+
+  @Nested
   class TestCertificateActionExists {
 
     @Test
