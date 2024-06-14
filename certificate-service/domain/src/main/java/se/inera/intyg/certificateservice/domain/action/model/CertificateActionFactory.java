@@ -249,6 +249,15 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case CREATE_MESSAGES -> CertificateActionCreateMessages.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
+                  new ActionRuleSent(true)
+              )
+          )
+          .build();
       case MESSAGES_ADMINISTRATIVE -> CertificateActionMessagesAdministrative.builder()
           .certificateActionSpecification(actionSpecification)
           .actionRules(
