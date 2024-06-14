@@ -84,6 +84,13 @@ public class Message {
       );
     }
 
+    if (this.answer == null && actionAvailable(CertificateActionType.ANSWER_MESSAGES,
+        certificateActions)) {
+      messageActions.add(
+          MessageActionFactory.answer()
+      );
+    }
+
     return messageActions;
   }
 

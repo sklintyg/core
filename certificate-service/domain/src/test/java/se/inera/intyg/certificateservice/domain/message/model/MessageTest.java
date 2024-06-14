@@ -18,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.model.CertificateActionAnswerMessages;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionCannotComplement;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionComplement;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionForwardMessage;
@@ -339,6 +340,65 @@ class MessageTest {
       final var modifiedBefore = unhandledMessage.modified();
       unhandledMessage.handle();
       assertEquals(modifiedBefore, unhandledMessage.modified());
+    }
+  }
+
+  @Nested
+  class AnswerMessageTests {
+
+    private static final CertificateActionAnswerMessages CERTIFICATE_ACTION_ANSWER =
+        CertificateActionAnswerMessages.builder()
+            .certificateActionSpecification(
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.ANSWER_MESSAGES)
+                    .build()
+            )
+            .build();
+
+    @Test
+    void shallIncludeMessageActionAnswer() {
+      final var message = Message.builder()
+          .type(MessageType.CONTACT)
+          .status(MessageStatus.SENT)
+          .build();
+
+      doReturn(List.of(CERTIFICATE_ACTION_ANSWER)).when(certificate).actionsInclude(
+          Optional.of(ACTION_EVALUATION)
+      );
+
+      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
+      assertTrue(messageActions.contains(MessageActionFactory.answer()));
+    }
+
+    @Test
+    void shallExcludeMessageActionAnswer() {
+      final var message = Message.builder()
+          .type(MessageType.CONTACT)
+          .status(MessageStatus.SENT)
+          .build();
+
+      doReturn(Collections.emptyList()).when(certificate).actionsInclude(
+          Optional.of(ACTION_EVALUATION)
+      );
+
+      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
+      assertFalse(messageActions.contains(MessageActionFactory.answer()));
+    }
+
+    @Test
+    void shallExcludeMessageActionAnswerIfAnswerAlreadyExists() {
+      final var message = Message.builder()
+          .type(MessageType.CONTACT)
+          .status(MessageStatus.SENT)
+          .answer(Answer.builder().build())
+          .build();
+
+      doReturn(List.of(CERTIFICATE_ACTION_ANSWER)).when(certificate).actionsInclude(
+          Optional.of(ACTION_EVALUATION)
+      );
+
+      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
+      assertFalse(messageActions.contains(MessageActionFactory.answer()));
     }
   }
 }

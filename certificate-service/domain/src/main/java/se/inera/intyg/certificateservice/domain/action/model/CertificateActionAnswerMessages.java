@@ -12,8 +12,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 @Getter(AccessLevel.NONE)
 public class CertificateActionAnswerMessages implements CertificateAction {
 
-  private static final String NAME = "Svara";
-  private static final String DESCRIPTION = "Svara på fråga";
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
 
@@ -24,17 +22,6 @@ public class CertificateActionAnswerMessages implements CertificateAction {
         .filter(value -> !value.evaluate(certificate, actionEvaluation))
         .map(ActionRule::getReasonForPermissionDenied)
         .toList();
-  }
-
-
-  @Override
-  public String getName(Optional<Certificate> optionalCertificate) {
-    return NAME;
-  }
-
-  @Override
-  public String getDescription(Optional<Certificate> optionalCertificate) {
-    return DESCRIPTION;
   }
 
   @Override

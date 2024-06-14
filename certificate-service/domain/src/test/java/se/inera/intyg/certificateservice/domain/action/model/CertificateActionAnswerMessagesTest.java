@@ -120,25 +120,6 @@ class CertificateActionAnswerMessagesTest {
   }
 
   @Test
-  void shallIncludeName() {
-    final var expectedName = "Svara";
-
-    final var certificate = certificateBuilder.build();
-
-    assertEquals(expectedName, certificateActionAnswerMessages.getName(Optional.of(certificate)));
-  }
-
-  @Test
-  void shallIncludeDescription() {
-    final var expectedName = "Svara på fråga";
-
-    final var certificate = certificateBuilder.build();
-
-    assertEquals(expectedName,
-        certificateActionAnswerMessages.getDescription(Optional.of(certificate)));
-  }
-
-  @Test
   void shallReturnFalseIfPatientIsDeceased() {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(ATLAS_REACT_ABRAHAMSSON)

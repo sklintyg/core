@@ -97,13 +97,11 @@ public enum ResourceLinkTypeDTO {
 
   public static ResourceLinkTypeDTO toResourceLinkType(MessageActionType type) {
     return switch (type) {
+      case ANSWER -> ANSWER_QUESTION;
       case COMPLEMENT -> COMPLEMENT_CERTIFICATE;
       case FORWARD -> FORWARD_QUESTION;
       case CANNOT_COMPLEMENT -> CANNOT_COMPLEMENT_CERTIFICATE_ONLY_MESSAGE;
       case HANDLE_COMPLEMENT -> HANDLE_QUESTION;
-      default -> throw new IllegalArgumentException(
-          "Unsupported type: '%s'".formatted(type)
-      );
     };
   }
 
