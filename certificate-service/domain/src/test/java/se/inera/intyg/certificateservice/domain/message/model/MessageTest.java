@@ -24,6 +24,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionCo
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionForwardMessage;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 
 @ExtendWith(MockitoExtension.class)
@@ -399,6 +400,55 @@ class MessageTest {
 
       final var messageActions = message.actions(ACTION_EVALUATION, certificate);
       assertFalse(messageActions.contains(MessageActionFactory.answer()));
+    }
+  }
+
+  @Nested
+  class CreateMessageTests {
+
+    private static final CertificateId CERTIFICATE_ID = new CertificateId("certificateId");
+    private static final Content CONTENT = new Content("content");
+    private static final Author AUTHOR = new Author("author");
+
+    @Test
+    void shallIncludeId() {
+      assertNotNull(Message.create(MessageType.CONTACT, CONTENT, AUTHOR, CERTIFICATE_ID).id());
+    }
+
+    @Test
+    void shallIncludeType() {
+      assertEquals(MessageType.CONTACT,
+          Message.create(MessageType.CONTACT, CONTENT, AUTHOR, CERTIFICATE_ID).type());
+    }
+
+    @Test
+    void shallIncludeContent() {
+      assertEquals(CONTENT,
+          Message.create(MessageType.CONTACT, CONTENT, AUTHOR, CERTIFICATE_ID).content());
+    }
+
+    @Test
+    void shallIncludeStatus() {
+      assertEquals(MessageStatus.DRAFT,
+          Message.create(MessageType.CONTACT, CONTENT, AUTHOR, CERTIFICATE_ID).status());
+    }
+
+    @Test
+    void shallIncludeAuthor() {
+      assertEquals(AUTHOR,
+          Message.create(MessageType.CONTACT, CONTENT, AUTHOR, CERTIFICATE_ID).author());
+    }
+
+    @Test
+    void shallIncludeForwarded() {
+      assertEquals(new Forwarded(false),
+          Message.create(MessageType.CONTACT, CONTENT, AUTHOR, CERTIFICATE_ID).forwarded());
+    }
+
+    @Test
+    void shallIncludeCertificateId() {
+      assertEquals(CERTIFICATE_ID,
+          Message.create(MessageType.CONTACT, CONTENT, AUTHOR, CERTIFICATE_ID).certificateId());
     }
   }
 }

@@ -3,12 +3,14 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateEntity.CERTIFICATE_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataMessageEntity.ANSWER_MESSAGE_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataMessageEntity.COMPLEMENT_MESSAGE_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataMessageEntity.MESSAGE_KEY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataMessageEntity.REMINDER_MESSAGE_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataMessageEntity.complementMessageEntityBuilder;
 import static se.inera.intyg.certificateservice.domain.message.model.MessageType.ANSWER;
 import static se.inera.intyg.certificateservice.domain.message.model.MessageType.COMPLEMENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateConstants.CERTIFICATE_ID;
@@ -26,6 +28,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -96,6 +99,15 @@ class MessageEntityMapperTest {
     }
 
     @Test
+    void shallExcludeReference() {
+      final var message = complementMessageBuilder()
+          .reference(null)
+          .build();
+
+      assertNull(mapper.toEntity(message, MESSAGE_KEY).getReference());
+    }
+
+    @Test
     void shallIncludeSubject() {
       assertEquals(SUBJECT,
           mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).getSubject()
@@ -103,10 +115,31 @@ class MessageEntityMapperTest {
     }
 
     @Test
+    void shallExcludeSubject() {
+      final var message = complementMessageBuilder()
+          .subject(null)
+          .build();
+      assertNull(mapper.toEntity(message, MESSAGE_KEY).getSubject());
+    }
+
+    @Test
     void shallIncludeContent() {
       assertEquals(CONTENT,
           mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).getContent()
       );
+    }
+
+    @Test
+    void shallIncludeContactInfo() {
+      assertNotNull(mapper.toEntity(COMPLEMENT_MESSAGE, MESSAGE_KEY).getContactInfo());
+    }
+
+    @Test
+    void shallExcludeContactInfo() {
+      final var message = complementMessageBuilder()
+          .contactInfo(null)
+          .build();
+      assertNull(mapper.toEntity(message, MESSAGE_KEY).getContactInfo());
     }
 
     @Test
@@ -475,5 +508,16 @@ class MessageEntityMapperTest {
           mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().get(0).sent()
       );
     }
+  }
+
+  @Test
+  void shallSetContactInfoToEmptyListIfMissing() {
+    final var messageEntity = complementMessageEntityBuilder()
+        .contactInfo(null)
+        .build();
+    
+    assertEquals(Collections.emptyList(),
+        mapper.toDomain(messageEntity).contactInfo().lines()
+    );
   }
 }

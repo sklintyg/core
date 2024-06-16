@@ -29,6 +29,7 @@ import se.inera.intyg.certificateservice.domain.event.service.CertificateEventSu
 import se.inera.intyg.certificateservice.domain.event.service.MessageEventDomainService;
 import se.inera.intyg.certificateservice.domain.event.service.MessageEventSubscriber;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
+import se.inera.intyg.certificateservice.domain.message.service.CreateMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.HandleMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.ReceiveAnswerMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.ReceiveComplementMessageDomainService;
@@ -273,5 +274,11 @@ public class AppConfig {
   public MessageEventDomainService messageEventDomainService(
       List<MessageEventSubscriber> messageEventSubscribers) {
     return new MessageEventDomainService(messageEventSubscribers);
+  }
+
+  @Bean
+  public CreateMessageDomainService createMessageDomainService(
+      MessageRepository messageRepository, CertificateRepository certificateRepository) {
+    return new CreateMessageDomainService(messageRepository, certificateRepository);
   }
 }

@@ -12,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
+import se.inera.intyg.certificateservice.application.message.dto.CreateMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.CreateMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageRequest;
@@ -21,6 +23,7 @@ import se.inera.intyg.certificateservice.application.message.dto.HandleMessageRe
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.MessageExistsResponse;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
+import se.inera.intyg.certificateservice.application.message.service.CreateMessageService;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateFromMessageService;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateMessageService;
 import se.inera.intyg.certificateservice.application.message.service.HandleMessageService;
@@ -34,6 +37,8 @@ class MessageControllerTest {
   private static final String CERTIFICATE_ID = "certificateId";
   private static final String MESSAGE_ID = "messageId";
   private static final CertificateDTO CERTIFICATE = CertificateDTO.builder().build();
+  @Mock
+  private CreateMessageService createMessageService;
   @Mock
   private GetCertificateFromMessageService getCertificateFromMessageService;
   @Mock
@@ -107,17 +112,40 @@ class MessageControllerTest {
     }
   }
 
-  @Test
-  void shouldReturnResponseWhenHandlingMessage() {
-    final var expectedResponse = HandleMessageResponse.builder()
-        .question(QuestionDTO.builder().build())
-        .build();
-    final var request = HandleMessageRequest.builder().build();
-    when(handleMessageService.handle(request, "messageId"))
-        .thenReturn(expectedResponse);
+  @Nested
+  class HandleMessage {
 
-    final var response = messageController.handleMessage(request, "messageId");
 
-    assertEquals(expectedResponse, response);
+    @Test
+    void shallReturnResponseWhenHandlingMessage() {
+      final var expectedResponse = HandleMessageResponse.builder()
+          .question(QuestionDTO.builder().build())
+          .build();
+      final var request = HandleMessageRequest.builder().build();
+      when(handleMessageService.handle(request, "messageId"))
+          .thenReturn(expectedResponse);
+
+      final var actualResponse = messageController.handleMessage(request, "messageId");
+
+      assertEquals(expectedResponse, actualResponse);
+    }
+  }
+
+  @Nested
+  class CreateMessage {
+
+    @Test
+    void shallReturnCreateMessageResponse() {
+      final var expectedResponse = CreateMessageResponse.builder()
+          .question(QuestionDTO.builder().build())
+          .build();
+
+      final var request = CreateMessageRequest.builder().build();
+      doReturn(expectedResponse).when(createMessageService)
+          .create(request, CERTIFICATE_ID);
+
+      final var actualResponse = messageController.createMessage(request, CERTIFICATE_ID);
+      assertEquals(expectedResponse, actualResponse);
+    }
   }
 }

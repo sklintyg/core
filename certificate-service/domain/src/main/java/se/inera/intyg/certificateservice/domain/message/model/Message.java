@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -122,5 +123,18 @@ public class Message {
 
   public void answer(Answer answer) {
     this.answer = answer;
+  }
+
+  public static Message create(MessageType messageType, Content content, Author author,
+      CertificateId certificateId) {
+    return Message.builder()
+        .id(new MessageId(UUID.randomUUID().toString()))
+        .type(messageType)
+        .content(content)
+        .status(MessageStatus.DRAFT)
+        .author(author)
+        .forwarded(new Forwarded(false))
+        .certificateId(certificateId)
+        .build();
   }
 }

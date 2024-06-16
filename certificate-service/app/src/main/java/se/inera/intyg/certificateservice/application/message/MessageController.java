@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import se.inera.intyg.certificateservice.application.message.dto.CreateMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.CreateMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageRequest;
@@ -15,6 +17,7 @@ import se.inera.intyg.certificateservice.application.message.dto.HandleMessageRe
 import se.inera.intyg.certificateservice.application.message.dto.HandleMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.MessageExistsResponse;
+import se.inera.intyg.certificateservice.application.message.service.CreateMessageService;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateFromMessageService;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateMessageService;
 import se.inera.intyg.certificateservice.application.message.service.HandleMessageService;
@@ -31,6 +34,7 @@ public class MessageController {
   private final MessageExistsService messageExistsService;
   private final GetCertificateFromMessageService getCertificateFromMessageService;
   private final HandleMessageService handleMessageService;
+  private final CreateMessageService createMessageService;
 
   @PostMapping
   void receiveMessage(@RequestBody IncomingMessageRequest incomingMessageRequest) {
@@ -62,5 +66,12 @@ public class MessageController {
       @RequestBody HandleMessageRequest request,
       @PathVariable("messageId") String messageId) {
     return handleMessageService.handle(request, messageId);
+  }
+
+  @PostMapping("/{certificateId}/create")
+  CreateMessageResponse createMessage(
+      @RequestBody CreateMessageRequest request,
+      @PathVariable("certificateId") String certificateId) {
+    return createMessageService.create(request, certificateId);
   }
 }

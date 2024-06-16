@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
@@ -47,8 +48,8 @@ public class MessageEntityMapper {
     return MessageEntity.builder()
         .key(key)
         .id(message.id().id())
-        .reference(message.reference().reference())
-        .subject(message.subject().subject())
+        .reference(message.reference() != null ? message.reference().reference() : null)
+        .subject(message.subject() != null ? message.subject().subject() : null)
         .content(message.content().content())
         .author(message.author().author())
         .created(message.created() == null ? LocalDateTime.now(ZoneId.systemDefault())
@@ -71,13 +72,14 @@ public class MessageEntityMapper {
                 .build()
         )
         .contactInfo(
-            message.contactInfo().lines().stream()
+            message.contactInfo() != null ? message.contactInfo().lines().stream()
                 .map(info ->
                     MessageContactInfoEmbeddable.builder()
                         .info(info)
                         .build()
                 )
                 .toList()
+                : null
         )
         .complements(
             message.complements().stream()
@@ -131,9 +133,10 @@ public class MessageEntityMapper {
         .lastDateToReply(messageEntity.getLastDateToReply())
         .contactInfo(
             new MessageContactInfo(
-                messageEntity.getContactInfo().stream()
+                messageEntity.getContactInfo() != null ? messageEntity.getContactInfo().stream()
                     .map(MessageContactInfoEmbeddable::getInfo)
                     .toList()
+                    : Collections.emptyList()
             )
         )
         .complements(
