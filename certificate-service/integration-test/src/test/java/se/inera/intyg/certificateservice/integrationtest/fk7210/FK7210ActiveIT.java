@@ -2687,8 +2687,7 @@ class FK7210ActiveIT {
       );
 
       assertAll(
-          () -> assertEquals(SIGNED,
-              certificate(response).getMetadata().getStatus()
+          () -> assertEquals(SIGNED, certificate(response).getMetadata().getStatus()
           )
       );
     }

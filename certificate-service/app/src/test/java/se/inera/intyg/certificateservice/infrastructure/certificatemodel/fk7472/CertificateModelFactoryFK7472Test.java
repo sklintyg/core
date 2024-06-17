@@ -17,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
@@ -179,26 +180,30 @@ class CertificateModelFactoryFK7472Test {
 
   @Test
   void shallIncludeCertificateActionSign() {
-    final var expectedType = CertificateActionType.SIGN;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.SIGN)
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
+        .build();
 
     final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+            expectedSpecification::equals),
+        "Expected specification: %s".formatted(expectedSpecification));
   }
 
   @Test
   void shallIncludeCertificateActionSend() {
-    final var expectedType = CertificateActionType.SEND;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.SEND)
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
+        .build();
 
     final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
   }
 
   @Test
@@ -215,14 +220,16 @@ class CertificateModelFactoryFK7472Test {
 
   @Test
   void shallIncludeCertificateActionRevoke() {
-    final var expectedType = CertificateActionType.REVOKE;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.REVOKE)
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
+        .build();
 
     final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
   }
 
   @Test

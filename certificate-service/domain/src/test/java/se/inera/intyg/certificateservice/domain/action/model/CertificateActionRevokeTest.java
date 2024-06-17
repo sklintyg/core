@@ -13,9 +13,9 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.BETA_HUDMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ANNA_SJUKSKOTERKSA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -25,6 +25,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.Ce
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 
 class CertificateActionRevokeTest {
 
@@ -35,6 +36,7 @@ class CertificateActionRevokeTest {
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
           .certificateActionType(CertificateActionType.REVOKE)
+          .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
           .build();
 
   @BeforeEach
@@ -78,7 +80,7 @@ class CertificateActionRevokeTest {
   }
 
   @Test
-  void shallReturnFalseIfNotDoctor() {
+  void shallReturnFalseIfNotAllowedToRevoke() {
     final var actionEvaluation = actionEvaluationBuilder
         .user(ALVA_VARDADMINISTRATOR)
         .build();
@@ -92,22 +94,8 @@ class CertificateActionRevokeTest {
   }
 
   @Test
-  void shallReturnTrueIfDoctor() {
+  void shallReturnTrueIfAllowedToRevoke() {
     final var actionEvaluation = actionEvaluationBuilder
-        .build();
-
-    final var certificate = certificateBuilder.build();
-
-    assertTrue(
-        certificateActionRevoke.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
-        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
-    );
-  }
-
-  @Test
-  void shallReturnTrueIfNurse() {
-    final var actionEvaluation = actionEvaluationBuilder
-        .user(ANNA_SJUKSKOTERKSA)
         .build();
 
     final var certificate = certificateBuilder.build();

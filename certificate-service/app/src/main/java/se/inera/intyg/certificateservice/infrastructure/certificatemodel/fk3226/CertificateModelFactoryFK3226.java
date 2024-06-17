@@ -176,15 +176,18 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.SIGN)
+                    .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.SEND)
+                    .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.PRINT)
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.REVOKE)
+                    .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.REPLACE)
