@@ -30,6 +30,7 @@ import se.inera.intyg.certificateservice.domain.event.service.MessageEventDomain
 import se.inera.intyg.certificateservice.domain.event.service.MessageEventSubscriber;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 import se.inera.intyg.certificateservice.domain.message.service.CreateMessageDomainService;
+import se.inera.intyg.certificateservice.domain.message.service.DeleteMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.HandleMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.ReceiveAnswerMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.ReceiveComplementMessageDomainService;
@@ -287,5 +288,11 @@ public class AppConfig {
   public SaveMessageDomainService saveMessageDomainService(
       MessageRepository messageRepository, CertificateRepository certificateRepository) {
     return new SaveMessageDomainService(messageRepository, certificateRepository);
+  }
+
+  @Bean
+  public DeleteMessageDomainService deleteMessageDomainService(
+      MessageRepository messageRepository, CertificateRepository certificateRepository) {
+    return new DeleteMessageDomainService(messageRepository, certificateRepository);
   }
 }

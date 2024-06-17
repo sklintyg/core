@@ -86,4 +86,12 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
 
     return messageEntityMapper.toDomain(messageEntity);
   }
+
+  @Override
+  public void deleteById(MessageId messageId) {
+    if (messageId == null) {
+      throw new IllegalArgumentException("Cannot delete message if messageId is null");
+    }
+    messageEntityRepository.deleteById(messageId.id());
+  }
 }

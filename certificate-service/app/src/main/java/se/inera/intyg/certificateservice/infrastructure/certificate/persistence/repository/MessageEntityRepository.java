@@ -15,4 +15,6 @@ public interface MessageEntityRepository extends CrudRepository<MessageEntity, L
   Optional<MessageEntity> findMessageEntityById(String id);
 
   void deleteAllByIdIn(List<String> messageIds);
+
+  void deleteById(String messageId);
 }

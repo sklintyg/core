@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.certificateservice.application.message.dto.CreateMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.CreateMessageResponse;
+import se.inera.intyg.certificateservice.application.message.dto.DeleteMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageRequest;
@@ -20,6 +21,7 @@ import se.inera.intyg.certificateservice.application.message.dto.MessageExistsRe
 import se.inera.intyg.certificateservice.application.message.dto.SaveMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.SaveMessageResponse;
 import se.inera.intyg.certificateservice.application.message.service.CreateMessageService;
+import se.inera.intyg.certificateservice.application.message.service.DeleteMessageService;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateFromMessageService;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateMessageService;
 import se.inera.intyg.certificateservice.application.message.service.HandleMessageService;
@@ -39,6 +41,7 @@ public class MessageController {
   private final HandleMessageService handleMessageService;
   private final CreateMessageService createMessageService;
   private final SaveMessageService saveMessageService;
+  private final DeleteMessageService deleteMessageService;
 
   @PostMapping
   void receiveMessage(@RequestBody IncomingMessageRequest incomingMessageRequest) {
@@ -84,5 +87,12 @@ public class MessageController {
       @RequestBody SaveMessageRequest request,
       @PathVariable("messageId") String messageId) {
     return saveMessageService.save(request, messageId);
+  }
+
+  @PostMapping("/{messageId}/delete")
+  void deleteMessage(
+      @RequestBody DeleteMessageRequest request,
+      @PathVariable("messageId") String messageId) {
+    deleteMessageService.delete(request, messageId);
   }
 }

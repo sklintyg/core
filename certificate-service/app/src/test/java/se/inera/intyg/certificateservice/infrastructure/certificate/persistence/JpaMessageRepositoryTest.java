@@ -186,4 +186,21 @@ class JpaMessageRepositoryTest {
       assertEquals(expectedMessage, response);
     }
   }
+
+  @Nested
+  class TestDelete {
+
+    @Test
+    void shallThrowIfMessageIdIsNull() {
+      assertThrows(IllegalArgumentException.class, () -> jpaMessageRepository.deleteById(null));
+    }
+
+    @Test
+    void shallDeleteMessage() {
+      final var messageToBeDeleted = new MessageId(MESSAGE_ID);
+      jpaMessageRepository.deleteById(messageToBeDeleted);
+
+      verify(messageEntityRepository).deleteById(messageToBeDeleted.id());
+    }
+  }
 }

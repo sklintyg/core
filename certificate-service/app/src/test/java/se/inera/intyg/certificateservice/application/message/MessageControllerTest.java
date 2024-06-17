@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.message.dto.CreateMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.CreateMessageResponse;
+import se.inera.intyg.certificateservice.application.message.dto.DeleteMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageRequest;
@@ -26,6 +27,7 @@ import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.message.dto.SaveMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.SaveMessageResponse;
 import se.inera.intyg.certificateservice.application.message.service.CreateMessageService;
+import se.inera.intyg.certificateservice.application.message.service.DeleteMessageService;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateFromMessageService;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateMessageService;
 import se.inera.intyg.certificateservice.application.message.service.HandleMessageService;
@@ -40,6 +42,8 @@ class MessageControllerTest {
   private static final String CERTIFICATE_ID = "certificateId";
   private static final String MESSAGE_ID = "messageId";
   private static final CertificateDTO CERTIFICATE = CertificateDTO.builder().build();
+  @Mock
+  private DeleteMessageService deleteMessageService;
   @Mock
   private SaveMessageService saveMessageService;
   @Mock
@@ -169,6 +173,19 @@ class MessageControllerTest {
 
       final var actualResponse = messageController.saveMessage(request, MESSAGE_ID);
       assertEquals(expectedResponse, actualResponse);
+    }
+  }
+
+  @Nested
+  class DeleteMessage {
+
+    @Test
+    void shallCallDeleteMessageService() {
+      final var request = DeleteMessageRequest.builder().build();
+
+      messageController.deleteMessage(request, MESSAGE_ID);
+
+      verify(deleteMessageService).delete(request, MESSAGE_ID);
     }
   }
 }
