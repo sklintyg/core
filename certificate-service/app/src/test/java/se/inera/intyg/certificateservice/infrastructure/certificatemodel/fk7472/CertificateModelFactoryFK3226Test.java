@@ -149,7 +149,8 @@ class CertificateModelFactoryFK3226Test {
   @Test
   void shallIncludeCertificateText() {
     final var expectedText = CertificateText.builder()
-        .text("Här skall det stå en text om intyget!")
+        .text(
+            "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. Har du frågor kontaktar du den som skrivit ditt intyg.")
         .type(CertificateTextType.PREAMBLE_TEXT)
         .links(Collections.emptyList())
         .build();

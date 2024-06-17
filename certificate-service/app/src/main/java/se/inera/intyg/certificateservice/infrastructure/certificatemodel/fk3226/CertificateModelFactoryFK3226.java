@@ -149,7 +149,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .texts(
             List.of(
                 CertificateText.builder()
-                    .text("Här skall det stå en text om intyget!")
+                    .text(
+                        "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. Har du frågor kontaktar du den som skrivit ditt intyg."
+                    )
                     .type(CertificateTextType.PREAMBLE_TEXT)
                     .links(Collections.emptyList())
                     .build()
