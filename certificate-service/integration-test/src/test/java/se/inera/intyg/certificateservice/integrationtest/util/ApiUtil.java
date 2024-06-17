@@ -66,6 +66,8 @@ import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificate
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoResponse;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesResponse;
+import se.inera.intyg.certificateservice.application.unit.dto.GetUnitMessagesRequest;
+import se.inera.intyg.certificateservice.application.unit.dto.GetUnitMessagesResponse;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityResetCertificateRequest;
 
 @Slf4j
@@ -515,6 +517,26 @@ public class ApiUtil {
     final var requestUrl = "http://localhost:%s/api/message/%s".formatted(
         port,
         certificateId
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<GetUnitMessagesResponse> getMessagesForUnit(
+      GetUnitMessagesRequest request,
+      String certificateId) {
+    final var requestUrl = "http://localhost:%s/api/unit/messages".formatted(
+        port
     );
 
     final var headers = new HttpHeaders();

@@ -65,6 +65,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetPatientCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetUnitCertificatesInfoRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetUnitCertificatesRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetUnitMessagesRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultHandleMessageRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultRenewCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultReplaceCertificateRequest;
@@ -4733,6 +4734,37 @@ class FK7472ActiveIT {
 
       assertTrue(
           hasQuestions(messagesForCertificate.getBody())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Skall returnera lista av frågor för enheten")
+    void shallReturnListOfQuestionsForUnit() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var response = api.getMessagesForUnit(
+          defaultGetUnitMessagesRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertAll(
+          () -> assertEquals(1, response.getBody().getQuestions().size()),
+          () -> assertEquals(1, response.getBody().getCertificates().size())
       );
     }
 

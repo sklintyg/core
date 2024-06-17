@@ -26,7 +26,7 @@ public class UnitEntitySpecification {
   public static Specification<MessageEntity> inIssuedOnUnitIds(List<HsaId> unitIds) {
     return (root, query, criteriaBuilder) ->
     {
-      Join<CertificateEntity, MessageEntity> certificate = root.join("certificateId");
+      Join<CertificateEntity, MessageEntity> certificate = root.join("certificate");
       Join<UnitEntity, CertificateEntity> certificateIssuedOn = certificate.join("issuedOnUnit");
       return certificateIssuedOn.get(HSA_ID).in(unitIds);
     };

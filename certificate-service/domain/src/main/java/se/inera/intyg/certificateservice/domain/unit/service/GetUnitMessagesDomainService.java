@@ -33,7 +33,7 @@ public class GetUnitMessagesDomainService {
 
     final var filteredMessagesBasedOnActionEvaluation = messages.stream()
         .filter(message -> certificates.stream()
-            .anyMatch(certificate -> certificate.id() == message.certificateId())
+            .anyMatch(certificate -> certificate.id().id().equals(message.certificateId().id()))
         ).toList();
 
     return MessagesResponse.builder()

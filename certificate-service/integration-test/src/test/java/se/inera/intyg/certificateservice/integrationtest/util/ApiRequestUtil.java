@@ -23,6 +23,7 @@ import se.inera.intyg.certificateservice.application.message.dto.HandleMessageRe
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesRequest;
+import se.inera.intyg.certificateservice.application.unit.dto.GetUnitMessagesRequest;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityCertificateRequest;
 
 public class ApiRequestUtil {
@@ -144,6 +145,10 @@ public class ApiRequestUtil {
 
   public static GetCertificateMessageRequest defaultGetCertificateMessageRequest() {
     return GetCertificateMessageRequestBuilder.create().build();
+  }
+
+  public static GetUnitMessagesRequest defaultGetUnitMessagesRequest() {
+    return GetUnitMessagesRequestBuilder.create().build();
   }
 
   public static AnswerComplementRequest defaultAnswerComplementRequest() {

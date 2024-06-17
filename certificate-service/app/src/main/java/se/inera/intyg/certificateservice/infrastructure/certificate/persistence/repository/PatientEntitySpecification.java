@@ -23,7 +23,7 @@ public class PatientEntitySpecification {
   public static Specification<MessageEntity> equalsPatientForMessage(PersonId personId) {
     return (root, query, criteriaBuilder) ->
     {
-      Join<CertificateEntity, MessageEntity> certificate = root.join("certificateId");
+      Join<CertificateEntity, MessageEntity> certificate = root.join("certificate");
       Join<PatientEntity, CertificateEntity> patient = certificate.join("patient");
       return criteriaBuilder.equal(patient.get("id"), personId.idWithoutDash());
     };

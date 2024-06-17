@@ -81,7 +81,7 @@ public class GetUnitMessagesService {
 
   private Certificate getCertificateForMessage(Message message, List<Certificate> certificateList) {
     return certificateList.stream()
-        .filter(certificate -> certificate.id() == message.certificateId())
+        .filter(certificate -> certificate.id().id().equals(message.certificateId().id()))
         .findAny()
         .orElseThrow(
             () -> new IllegalStateException("Message does not have valid certificate in list"));

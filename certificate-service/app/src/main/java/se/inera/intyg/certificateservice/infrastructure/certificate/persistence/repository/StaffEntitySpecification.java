@@ -23,7 +23,7 @@ public class StaffEntitySpecification {
   public static Specification<MessageEntity> equalsIssuedByStaffForMessage(HsaId issuedByStaff) {
     return (root, query, criteriaBuilder) ->
     {
-      Join<CertificateEntity, MessageEntity> certificate = root.join("certificateId");
+      Join<CertificateEntity, MessageEntity> certificate = root.join("certificate");
       Join<StaffEntity, CertificateEntity> certificateIssuedBy = certificate.join("issuedBy");
       return criteriaBuilder.equal(certificateIssuedBy.get("hsaId"), issuedByStaff.id());
     };

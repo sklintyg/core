@@ -37,7 +37,7 @@ public class MessageEntitySpecificationFactory {
       );
     }
 
-    if (request.issuedOnUnitIds() != null) {
+    if (request.issuedOnUnitIds() != null && !request.issuedOnUnitIds().isEmpty()) {
       specification = specification.and(
           inIssuedOnUnitIds(request.issuedOnUnitIds())
       );
