@@ -28,6 +28,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
@@ -627,5 +628,32 @@ class CertificateDataConverterTest {
 
     assertTrue(result.isEmpty(),
         "Should not convert ElementConfigurationMetaData");
+  }
+
+  @Test
+  void shallNotConvertSpecificationsOfMessageConfigurationIfNotUnsigned() {
+    final var elementSpecification = ElementSpecification.builder()
+        .configuration(
+            ElementConfigurationMessage.builder().build()
+        )
+        .build();
+
+    final var elementSpecifications = List.of(
+        elementSpecification
+    );
+
+    final var certificateModel = CertificateModel.builder()
+        .elementSpecifications(elementSpecifications)
+        .build();
+
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .certificateModel(certificateModel)
+        .build();
+
+    final var result = certificateDataConverter.convert(certificate);
+
+    assertTrue(result.isEmpty(),
+        "Should not convert message");
   }
 }

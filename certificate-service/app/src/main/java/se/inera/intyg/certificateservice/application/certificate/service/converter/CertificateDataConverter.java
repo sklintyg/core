@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.application.certificate.service.converter;
 
+import static se.inera.intyg.certificateservice.domain.certificate.model.Status.DRAFT;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType.ISSUING_UNIT;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType.MESSAGE;
 
 import java.util.AbstractMap;
 import java.util.Collections;
@@ -23,6 +25,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -38,7 +41,9 @@ public class CertificateDataConverter {
 
   public Map<String, CertificateDataElement> convert(Certificate certificate) {
     final var childParentMap = certificate.certificateModel().elementSpecifications().stream()
-        .flatMap(this::mapChildrenToParents)
+        .flatMap(elementSpecification ->
+            mapChildrenToParents(elementSpecification, certificate.status())
+        )
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
     final var elementIdElementValueMap = certificate.elementData().stream()
@@ -164,10 +169,11 @@ public class CertificateDataConverter {
   }
 
   private Stream<Set<Entry<String, CertificateDataElement>>> toCertificateDataElementMap(
-      List<ElementSpecification> elementSpecification,
+      List<ElementSpecification> elementSpecifications,
       Map<ElementId, ElementValue> elementIdElementValueMap, AtomicInteger atomicInteger,
       Map<String, String> childParentMap, Certificate certificate) {
-    return elementSpecification.stream()
+    return elementSpecifications.stream()
+        .filter(removeMessagesIfNotUnsigned(certificate.status()))
         .flatMap(
             specification -> {
               final var dataElementMap = convertData(
@@ -182,15 +188,17 @@ public class CertificateDataConverter {
         );
   }
 
-  private Stream<Map.Entry<String, String>> mapChildrenToParents(ElementSpecification parent) {
+  private Stream<Map.Entry<String, String>> mapChildrenToParents(ElementSpecification parent,
+      Status status) {
     return Optional.ofNullable(parent.children())
         .orElse(Collections.emptyList())
         .stream()
+        .filter(removeMessagesIfNotUnsigned(status))
         .flatMap(child -> {
               final var childToParent = Stream.of(
                   new AbstractMap.SimpleEntry<>(child.id().id(), parent.id().id())
               );
-              final var subChildren = mapChildrenToParents(child);
+              final var subChildren = mapChildrenToParents(child, status);
               return Stream.concat(childToParent, subChildren);
             }
         );
@@ -198,5 +206,10 @@ public class CertificateDataConverter {
 
   private static Predicate<ElementSpecification> removeIssuingUnitSpecifications() {
     return specification -> !(specification.configuration().type().equals(ISSUING_UNIT));
+  }
+
+  private static Predicate<ElementSpecification> removeMessagesIfNotUnsigned(Status status) {
+    return elementSpecification -> !MESSAGE.equals(elementSpecification.configuration().type())
+        || DRAFT.equals(status);
   }
 }
