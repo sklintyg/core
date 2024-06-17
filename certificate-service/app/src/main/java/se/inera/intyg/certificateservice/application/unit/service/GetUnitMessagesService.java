@@ -12,7 +12,6 @@ import se.inera.intyg.certificateservice.application.message.service.converter.Q
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitMessagesRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitMessagesResponse;
 import se.inera.intyg.certificateservice.application.unit.service.validator.GetUnitMessagesRequestValidator;
-import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitMessagesDomainService;
 
 @Service
@@ -23,7 +22,6 @@ public class GetUnitMessagesService {
   private final ActionEvaluationFactory actionEvaluationFactory;
   private final MessagesRequestFactory messagesRequestFactory;
   private final GetUnitMessagesDomainService getUnitMessagesDomainService;
-  private final GetCertificateDomainService getCertificateDomainService;
   private final CertificateConverter certificateConverter;
   private final QuestionConverter questionConverter;
   private final ResourceLinkConverter resourceLinkConverter;
@@ -42,23 +40,17 @@ public class GetUnitMessagesService {
         request.getMessagesQueryCriteria()
     );
 
-    final var messages = getUnitMessagesDomainService.get(
-        messagesRequest,
-        actionEvaluation
-    );
-
-    final var certificates = messages.stream()
-        .map(message -> getCertificateDomainService.get(message.certificateId(), actionEvaluation))
-        .toList();
+    final var messagesResponse = getUnitMessagesDomainService.get(messagesRequest,
+        actionEvaluation);
 
     return GetUnitMessagesResponse.builder()
         .questions(
-            messages.stream()
-                .map(question -> questionConverter.convert(question,
-                    Collections.emptyList())) //TODO: fix actions
+            messagesResponse.messages().stream()
+                .map(question -> questionConverter.convert(question, Collections.emptyList()))
+                //TODO: fix actions
                 .toList()
         )
-        .certificates(certificates.stream()
+        .certificates(messagesResponse.certificates().stream()
             .map(certificate -> certificateConverter.convert(
                     certificate,
                     certificate.actionsInclude(Optional.of(actionEvaluation)).stream()

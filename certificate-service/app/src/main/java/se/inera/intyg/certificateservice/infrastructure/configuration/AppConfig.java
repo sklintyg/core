@@ -278,7 +278,7 @@ public class AppConfig {
 
   @Bean
   public GetUnitMessagesDomainService unitMessagesDomainService(
-      MessageRepository messageRepository) {
-    return new GetUnitMessagesDomainService(messageRepository);
+      MessageRepository messageRepository, CertificateRepository certificateRepository) {
+    return new GetUnitMessagesDomainService(messageRepository, certificateRepository);
   }
 }
