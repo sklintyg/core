@@ -26,7 +26,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel.CertificateModelBuilder;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
@@ -36,10 +35,10 @@ class CertificateActionSignTest {
   private CertificateActionSign certificateActionSign;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
   private CertificateBuilder certificateBuilder;
-  private CertificateModelBuilder certificateModelBuilder;
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
           .certificateActionType(CertificateActionType.SIGN)
+          .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
           .build();
 
   @BeforeEach
@@ -61,8 +60,6 @@ class CertificateActionSignTest {
         .patient(ATHENA_REACT_ANDERSSON)
         .careProvider(ALFA_REGIONEN)
         .careUnit(ALFA_MEDICINCENTRUM);
-    certificateModelBuilder = CertificateModel.builder()
-        .rolesWithSignAccess(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE));
   }
 
   @Test
@@ -82,18 +79,12 @@ class CertificateActionSignTest {
   }
 
   @Test
-  void shallReturnFalseIfNotAccessToSign() {
+  void shallReturnFalseIfNotAllowedToSign() {
     final var actionEvaluation = actionEvaluationBuilder
         .user(ALVA_VARDADMINISTRATOR)
         .build();
 
-    final var certificateModel = certificateModelBuilder
-        .rolesWithSignAccess(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
-        .build();
-
-    final var certificate = certificateBuilder
-        .certificateModel(certificateModel)
-        .build();
+    final var certificate = certificateBuilder.build();
 
     assertFalse(
         certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
@@ -102,17 +93,15 @@ class CertificateActionSignTest {
   }
 
   @Test
-  void shallReturnTrueIfAccessToSign() {
+  void shallReturnTrueIfAllowedToSign() {
+    final var certificateActionSign = (CertificateActionSign) CertificateActionFactory.create(
+        CERTIFICATE_ACTION_SPECIFICATION
+    );
+
     final var actionEvaluation = actionEvaluationBuilder
         .build();
 
-    final var certificateModel = certificateModelBuilder
-        .rolesWithSignAccess(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
-        .build();
-
-    final var certificate = certificateBuilder
-        .certificateModel(certificateModel)
-        .build();
+    final var certificate = certificateBuilder.build();
 
     assertTrue(
         certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
@@ -125,7 +114,6 @@ class CertificateActionSignTest {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     final var certificate = certificateBuilder
-        .certificateModel(certificateModelBuilder.build())
         .status(Status.SIGNED)
         .build();
 
@@ -140,7 +128,6 @@ class CertificateActionSignTest {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     final var certificate = certificateBuilder
-        .certificateModel(certificateModelBuilder.build())
         .status(Status.DELETED_DRAFT)
         .build();
 
@@ -155,7 +142,6 @@ class CertificateActionSignTest {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     final var certificate = certificateBuilder
-        .certificateModel(certificateModelBuilder.build())
         .status(Status.DRAFT)
         .build();
 
@@ -263,7 +249,6 @@ class CertificateActionSignTest {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     final var certificate = certificateBuilder
-        .certificateModel(certificateModelBuilder.build())
         .status(Status.DRAFT)
         .build();
 
@@ -283,7 +268,6 @@ class CertificateActionSignTest {
       certificateActionSign = (CertificateActionSign) CertificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION);
       certificateBuilder = Certificate.builder()
-          .certificateModel(certificateModelBuilder.build())
           .status(Status.DRAFT)
           .certificateMetaData(
               CertificateMetaData.builder()

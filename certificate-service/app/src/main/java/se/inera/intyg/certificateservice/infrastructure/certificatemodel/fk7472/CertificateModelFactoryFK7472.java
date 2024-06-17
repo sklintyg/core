@@ -92,7 +92,6 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
         .availableForCitizen(false)
         .rolesWithAccess(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
             Role.CARE_ADMIN))
-        .rolesWithSignAccess(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
         .recipient(CertificateRecipientFactory.fkassa())
         .certificateActionSpecifications(
             List.of(
@@ -110,15 +109,21 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.SIGN)
+                    .allowedRoles(
+                        List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.SEND)
+                    .allowedRoles(
+                        List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.PRINT)
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.REVOKE)
+                    .allowedRoles(
+                        List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.REPLACE)

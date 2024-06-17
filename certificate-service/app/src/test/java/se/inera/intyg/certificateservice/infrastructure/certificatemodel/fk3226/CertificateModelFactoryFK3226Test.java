@@ -23,6 +23,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBo
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
@@ -220,26 +221,30 @@ class CertificateModelFactoryFK3226Test {
 
   @Test
   void shallIncludeCertificateActionSign() {
-    final var expectedType = CertificateActionType.SIGN;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.SIGN)
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+        .build();
 
     final var certificateModel = certificateModelFactoryFK3226.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
   }
 
   @Test
   void shallIncludeCertificateActionSend() {
-    final var expectedType = CertificateActionType.SEND;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.SEND)
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+        .build();
 
     final var certificateModel = certificateModelFactoryFK3226.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
   }
 
   @Test
@@ -256,14 +261,16 @@ class CertificateModelFactoryFK3226Test {
 
   @Test
   void shallIncludeCertificateActionRevoke() {
-    final var expectedType = CertificateActionType.REVOKE;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.REVOKE)
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+        .build();
 
     final var certificateModel = certificateModelFactoryFK3226.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
   }
 
   @Test
@@ -1750,15 +1757,6 @@ class CertificateModelFactoryFK3226Test {
       final var certificateModel = certificateModelFactoryFK3226.create();
 
       assertEquals(expected, certificateModel.rolesWithAccess());
-    }
-
-    @Test
-    void shallIncludeRolesWithSignAccess() {
-      final var expected = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR);
-
-      final var certificateModel = certificateModelFactoryFK3226.create();
-
-      assertEquals(expected, certificateModel.rolesWithSignAccess());
     }
   }
 
