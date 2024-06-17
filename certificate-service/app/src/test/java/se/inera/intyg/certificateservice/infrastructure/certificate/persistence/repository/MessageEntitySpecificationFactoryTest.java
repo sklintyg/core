@@ -72,13 +72,13 @@ class MessageEntitySpecificationFactoryTest {
             UnitEntitySpecification.class)
     ) {
       specification.when(
-              () -> UnitEntitySpecification.equalsIssuedOnUnitIds(messagesRequest.issuedOnUnitIds()))
+              () -> UnitEntitySpecification.inIssuedOnUnitIds(messagesRequest.issuedOnUnitIds()))
           .thenReturn(mock(Specification.class));
 
       assertNotNull(specificationFactory.create(messagesRequest));
 
       specification.verify(
-          () -> UnitEntitySpecification.equalsIssuedOnUnitIds(messagesRequest.issuedOnUnitIds())
+          () -> UnitEntitySpecification.inIssuedOnUnitIds(messagesRequest.issuedOnUnitIds())
       );
     }
   }

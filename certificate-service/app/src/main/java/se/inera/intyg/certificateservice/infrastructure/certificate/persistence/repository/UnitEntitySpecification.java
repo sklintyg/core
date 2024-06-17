@@ -10,6 +10,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 
 public class UnitEntitySpecification {
 
+  private static final String HSA_ID = "hsaId";
+
   private UnitEntitySpecification() {
   }
 
@@ -17,16 +19,16 @@ public class UnitEntitySpecification {
     return (root, query, criteriaBuilder) ->
     {
       Join<UnitEntity, CertificateEntity> certificateIssuedOn = root.join("issuedOnUnit");
-      return criteriaBuilder.equal(certificateIssuedOn.get("hsaId"), issuedOnUnit.id());
+      return criteriaBuilder.equal(certificateIssuedOn.get(HSA_ID), issuedOnUnit.id());
     };
   }
 
-  public static Specification<MessageEntity> equalsIssuedOnUnitIds(List<HsaId> unitIds) {
+  public static Specification<MessageEntity> inIssuedOnUnitIds(List<HsaId> unitIds) {
     return (root, query, criteriaBuilder) ->
     {
       Join<CertificateEntity, MessageEntity> certificate = root.join("certificateId");
       Join<UnitEntity, CertificateEntity> certificateIssuedOn = certificate.join("issuedOnUnit");
-      return criteriaBuilder.equal(certificateIssuedOn.get("hsaId"), unitIds);
+      return certificateIssuedOn.get(HSA_ID).in(unitIds);
     };
   }
 
@@ -34,7 +36,7 @@ public class UnitEntitySpecification {
     return (root, query, criteriaBuilder) ->
     {
       Join<UnitEntity, CertificateEntity> certificateCareUnit = root.join("careUnit");
-      return criteriaBuilder.equal(certificateCareUnit.get("hsaId"), careUnit.id());
+      return criteriaBuilder.equal(certificateCareUnit.get(HSA_ID), careUnit.id());
     };
   }
 }

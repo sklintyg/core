@@ -7,7 +7,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificate.persi
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntitySpecification.sentEqualsAndLesserThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntitySpecification.equalsPatientForMessage;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntitySpecification.equalsIssuedByStaffForMessage;
-import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.equalsIssuedOnUnitIds;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.inIssuedOnUnitIds;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -39,7 +39,7 @@ public class MessageEntitySpecificationFactory {
 
     if (request.issuedOnUnitIds() != null) {
       specification = specification.and(
-          equalsIssuedOnUnitIds(request.issuedOnUnitIds())
+          inIssuedOnUnitIds(request.issuedOnUnitIds())
       );
     }
 
