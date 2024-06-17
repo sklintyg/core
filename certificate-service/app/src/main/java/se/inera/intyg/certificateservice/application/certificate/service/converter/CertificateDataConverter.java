@@ -90,7 +90,10 @@ public class CertificateDataConverter {
         .index(index)
         .config(getConfig(elementSpecification, certificate))
         .value(getValue(elementSpecification, value))
-        .validation(getValidation(elementSpecification.rules()))
+        .validation(certificate.isDraft()
+            ? getValidation(elementSpecification.rules())
+            : new CertificateDataValidation[0]
+        )
         .build();
 
     certificateDataElementHashMap.put(questionId, certificateDataElement);
@@ -146,6 +149,7 @@ public class CertificateDataConverter {
         || ElementType.MESSAGE.equals(elementSpecification.configuration().type())) {
       return null;
     }
+
     return certificateDataValueConverter.stream()
         .filter(
             converter -> converter.getType().equals(elementSpecification.configuration().type())
