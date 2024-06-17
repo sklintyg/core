@@ -10,10 +10,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 
 @Builder
 @Getter(AccessLevel.NONE)
-public class CertificateActionCreateMessages implements CertificateAction {
+public class CertificateActionSaveMessage implements CertificateAction {
 
-  private static final String NAME = "Ny fråga";
-  private static final String DESCRIPTION = "Här kan du ställa en ny fråga till Försäkringskassan.";
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
 
@@ -24,17 +22,6 @@ public class CertificateActionCreateMessages implements CertificateAction {
         .filter(value -> !value.evaluate(certificate, actionEvaluation))
         .map(ActionRule::getReasonForPermissionDenied)
         .toList();
-  }
-
-
-  @Override
-  public String getName(Optional<Certificate> optionalCertificate) {
-    return NAME;
-  }
-
-  @Override
-  public String getDescription(Optional<Certificate> optionalCertificate) {
-    return DESCRIPTION;
   }
 
   @Override

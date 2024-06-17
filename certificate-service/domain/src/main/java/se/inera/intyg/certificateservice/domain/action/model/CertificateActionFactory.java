@@ -249,7 +249,7 @@ public class CertificateActionFactory {
               )
           )
           .build();
-      case CREATE_MESSAGES -> CertificateActionCreateMessages.builder()
+      case CREATE_MESSAGE -> CertificateActionCreateMessage.builder()
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
@@ -264,7 +264,7 @@ public class CertificateActionFactory {
               )
           )
           .build();
-      case ANSWER_MESSAGES -> CertificateActionAnswerMessages.builder()
+      case ANSWER_MESSAGE -> CertificateActionAnswerMessages.builder()
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
@@ -305,6 +305,21 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
+                  new ActionRuleUserNotBlocked(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleInactiveUnit(),
+                  new ActionRulePatientAlive(),
+                  new ActionRuleUserAllowCopy()
+              )
+          )
+          .build();
+      case SAVE_MESSAGE -> CertificateActionSaveMessage.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
+                  new ActionRuleSent(true),
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleProtectedPerson(),

@@ -17,12 +17,15 @@ import se.inera.intyg.certificateservice.application.message.dto.HandleMessageRe
 import se.inera.intyg.certificateservice.application.message.dto.HandleMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.MessageExistsResponse;
+import se.inera.intyg.certificateservice.application.message.dto.SaveMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.SaveMessageResponse;
 import se.inera.intyg.certificateservice.application.message.service.CreateMessageService;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateFromMessageService;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateMessageService;
 import se.inera.intyg.certificateservice.application.message.service.HandleMessageService;
 import se.inera.intyg.certificateservice.application.message.service.IncomingMessageService;
 import se.inera.intyg.certificateservice.application.message.service.MessageExistsService;
+import se.inera.intyg.certificateservice.application.message.service.SaveMessageService;
 
 @RequiredArgsConstructor
 @RestController
@@ -35,6 +38,7 @@ public class MessageController {
   private final GetCertificateFromMessageService getCertificateFromMessageService;
   private final HandleMessageService handleMessageService;
   private final CreateMessageService createMessageService;
+  private final SaveMessageService saveMessageService;
 
   @PostMapping
   void receiveMessage(@RequestBody IncomingMessageRequest incomingMessageRequest) {
@@ -73,5 +77,12 @@ public class MessageController {
       @RequestBody CreateMessageRequest request,
       @PathVariable("certificateId") String certificateId) {
     return createMessageService.create(request, certificateId);
+  }
+
+  @PostMapping("/{messageId}/save")
+  SaveMessageResponse saveMessage(
+      @RequestBody SaveMessageRequest request,
+      @PathVariable("messageId") String messageId) {
+    return saveMessageService.save(request, messageId);
   }
 }

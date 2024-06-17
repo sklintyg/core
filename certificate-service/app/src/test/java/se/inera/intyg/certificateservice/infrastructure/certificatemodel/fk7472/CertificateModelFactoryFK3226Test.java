@@ -383,7 +383,7 @@ class CertificateModelFactoryFK3226Test {
 
   @Test
   void shallIncludeCertificateActionAnswerMessages() {
-    final var expectedType = CertificateActionType.ANSWER_MESSAGES;
+    final var expectedType = CertificateActionType.ANSWER_MESSAGE;
 
     final var certificateModel = certificateModelFactoryFK3226.create();
 
@@ -443,7 +443,7 @@ class CertificateModelFactoryFK3226Test {
 
   @Test
   void shallIncludeCertificateActionCreateMessages() {
-    final var expectedType = CertificateActionType.CREATE_MESSAGES;
+    final var expectedType = CertificateActionType.CREATE_MESSAGE;
 
     final var certificateModel = certificateModelFactoryFK3226.create();
 

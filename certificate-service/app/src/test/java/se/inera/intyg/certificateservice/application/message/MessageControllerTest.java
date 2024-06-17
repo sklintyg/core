@@ -23,12 +23,15 @@ import se.inera.intyg.certificateservice.application.message.dto.HandleMessageRe
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.MessageExistsResponse;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
+import se.inera.intyg.certificateservice.application.message.dto.SaveMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.SaveMessageResponse;
 import se.inera.intyg.certificateservice.application.message.service.CreateMessageService;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateFromMessageService;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateMessageService;
 import se.inera.intyg.certificateservice.application.message.service.HandleMessageService;
 import se.inera.intyg.certificateservice.application.message.service.IncomingMessageService;
 import se.inera.intyg.certificateservice.application.message.service.MessageExistsService;
+import se.inera.intyg.certificateservice.application.message.service.SaveMessageService;
 
 @ExtendWith(MockitoExtension.class)
 class MessageControllerTest {
@@ -37,6 +40,8 @@ class MessageControllerTest {
   private static final String CERTIFICATE_ID = "certificateId";
   private static final String MESSAGE_ID = "messageId";
   private static final CertificateDTO CERTIFICATE = CertificateDTO.builder().build();
+  @Mock
+  private SaveMessageService saveMessageService;
   @Mock
   private CreateMessageService createMessageService;
   @Mock
@@ -145,6 +150,24 @@ class MessageControllerTest {
           .create(request, CERTIFICATE_ID);
 
       final var actualResponse = messageController.createMessage(request, CERTIFICATE_ID);
+      assertEquals(expectedResponse, actualResponse);
+    }
+  }
+
+  @Nested
+  class SaveMessage {
+
+    @Test
+    void shallReturnSaveMessageResponse() {
+      final var expectedResponse = SaveMessageResponse.builder()
+          .question(QuestionDTO.builder().build())
+          .build();
+
+      final var request = SaveMessageRequest.builder().build();
+      doReturn(expectedResponse).when(saveMessageService)
+          .save(request, MESSAGE_ID);
+
+      final var actualResponse = messageController.saveMessage(request, MESSAGE_ID);
       assertEquals(expectedResponse, actualResponse);
     }
   }

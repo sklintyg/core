@@ -248,10 +248,10 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .certificateActionType(CertificateActionType.HANDLE_COMPLEMENT)
                     .build(),
                 CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.CREATE_MESSAGES)
+                    .certificateActionType(CertificateActionType.CREATE_MESSAGE)
                     .build(),
                 CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.ANSWER_MESSAGES)
+                    .certificateActionType(CertificateActionType.ANSWER_MESSAGE)
                     .build()
             )
         )

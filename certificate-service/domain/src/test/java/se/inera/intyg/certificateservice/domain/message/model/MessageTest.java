@@ -351,7 +351,7 @@ class MessageTest {
         CertificateActionAnswerMessages.builder()
             .certificateActionSpecification(
                 CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.ANSWER_MESSAGES)
+                    .certificateActionType(CertificateActionType.ANSWER_MESSAGE)
                     .build()
             )
             .build();
@@ -449,6 +449,28 @@ class MessageTest {
     void shallIncludeCertificateId() {
       assertEquals(CERTIFICATE_ID,
           Message.create(MessageType.CONTACT, CONTENT, AUTHOR, CERTIFICATE_ID).certificateId());
+    }
+  }
+
+  @Nested
+  class UpdateTests {
+
+    @Test
+    void shallUpdateContent() {
+      final var expectedContent = new Content("newContent");
+      final var message = Message.builder().build();
+      message.update(expectedContent, MessageType.CONTACT);
+
+      assertEquals(expectedContent, message.content());
+    }
+
+    @Test
+    void shallUpdateType() {
+      final var expectedType = MessageType.CONTACT;
+      final var message = Message.builder().build();
+      message.update(new Content("newContent"), expectedType);
+
+      assertEquals(expectedType, message.type());
     }
   }
 }

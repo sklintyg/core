@@ -33,19 +33,19 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 
-class CertificateActionAnswerMessagesTest {
+class CertificateActionCreateMessageTest {
 
-  private CertificateActionAnswerMessages certificateActionAnswerMessages;
+  private CertificateActionCreateMessage certificateActionCreateMessage;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
   private CertificateBuilder certificateBuilder;
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
-          .certificateActionType(CertificateActionType.ANSWER_MESSAGE)
+          .certificateActionType(CertificateActionType.CREATE_MESSAGE)
           .build();
 
   @BeforeEach
   void setUp() {
-    certificateActionAnswerMessages = (CertificateActionAnswerMessages) CertificateActionFactory.create(
+    certificateActionCreateMessage = (CertificateActionCreateMessage) CertificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION
     );
 
@@ -71,7 +71,7 @@ class CertificateActionAnswerMessagesTest {
 
   @Test
   void shallReturnTypeFromSpecification() {
-    assertEquals(CertificateActionType.ANSWER_MESSAGE, certificateActionAnswerMessages.getType());
+    assertEquals(CertificateActionType.CREATE_MESSAGE, certificateActionCreateMessage.getType());
   }
 
   @Test
@@ -80,7 +80,7 @@ class CertificateActionAnswerMessagesTest {
         .build();
     final var actionEvaluation = actionEvaluationBuilder.build();
     assertTrue(
-        certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+        certificateActionCreateMessage.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)));
   }
 
@@ -91,7 +91,7 @@ class CertificateActionAnswerMessagesTest {
         .build();
     final var actionEvaluation = actionEvaluationBuilder.build();
     assertFalse(
-        certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+        certificateActionCreateMessage.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)));
   }
 
@@ -103,7 +103,7 @@ class CertificateActionAnswerMessagesTest {
         .build();
     final var actionEvaluation = actionEvaluationBuilder.build();
     assertTrue(
-        certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+        certificateActionCreateMessage.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)));
   }
 
@@ -115,8 +115,27 @@ class CertificateActionAnswerMessagesTest {
         .build();
     final var actionEvaluation = actionEvaluationBuilder.build();
     assertFalse(
-        certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+        certificateActionCreateMessage.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)));
+  }
+
+  @Test
+  void shallIncludeName() {
+    final var expectedName = "Ny fråga";
+
+    final var certificate = certificateBuilder.build();
+
+    assertEquals(expectedName, certificateActionCreateMessage.getName(Optional.of(certificate)));
+  }
+
+  @Test
+  void shallIncludeDescription() {
+    final var expectedName = "Här kan du ställa en ny fråga till Försäkringskassan.";
+
+    final var certificate = certificateBuilder.build();
+
+    assertEquals(expectedName,
+        certificateActionCreateMessage.getDescription(Optional.of(certificate)));
   }
 
   @Test
@@ -128,7 +147,7 @@ class CertificateActionAnswerMessagesTest {
         .build();
 
     final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+    final var actualResult = certificateActionCreateMessage.evaluate(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
@@ -143,7 +162,7 @@ class CertificateActionAnswerMessagesTest {
         .build();
 
     final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+    final var actualResult = certificateActionCreateMessage.evaluate(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
@@ -162,7 +181,7 @@ class CertificateActionAnswerMessagesTest {
         .build();
 
     final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+    final var actualResult = certificateActionCreateMessage.evaluate(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
@@ -177,7 +196,7 @@ class CertificateActionAnswerMessagesTest {
         .build();
 
     final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+    final var actualResult = certificateActionCreateMessage.evaluate(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
@@ -199,7 +218,7 @@ class CertificateActionAnswerMessagesTest {
                 .build()
         )
         .build();
-    final var actualResult = certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+    final var actualResult = certificateActionCreateMessage.evaluate(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
@@ -214,7 +233,7 @@ class CertificateActionAnswerMessagesTest {
         .build();
 
     final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+    final var actualResult = certificateActionCreateMessage.evaluate(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
@@ -228,7 +247,7 @@ class CertificateActionAnswerMessagesTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionAnswerMessages.reasonNotAllowed(Optional.empty(),
+    final var actualResult = certificateActionCreateMessage.reasonNotAllowed(Optional.empty(),
         Optional.of(actionEvaluation));
 
     assertFalse(actualResult.isEmpty());
@@ -243,7 +262,7 @@ class CertificateActionAnswerMessagesTest {
         .build();
 
     final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+    final var actualResult = certificateActionCreateMessage.evaluate(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
@@ -258,7 +277,7 @@ class CertificateActionAnswerMessagesTest {
         .build();
 
     final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionAnswerMessages.isEnabled(Optional.of(certificate),
+    final var actualResult = certificateActionCreateMessage.isEnabled(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
@@ -275,7 +294,7 @@ class CertificateActionAnswerMessagesTest {
         .build();
     final var certificate = certificateBuilder.build();
     assertFalse(
-        certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+        certificateActionCreateMessage.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(Optional.empty(), actionEvaluation)
     );
@@ -287,7 +306,7 @@ class CertificateActionAnswerMessagesTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+        certificateActionCreateMessage.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(Optional.empty(), actionEvaluation)
     );
@@ -338,7 +357,7 @@ class CertificateActionAnswerMessagesTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+            certificateActionCreateMessage.evaluate(Optional.of(certificate),
                 Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
@@ -356,7 +375,7 @@ class CertificateActionAnswerMessagesTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+            certificateActionCreateMessage.evaluate(Optional.of(certificate),
                 Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
@@ -382,7 +401,7 @@ class CertificateActionAnswerMessagesTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+            certificateActionCreateMessage.evaluate(Optional.of(certificate),
                 Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
@@ -400,7 +419,7 @@ class CertificateActionAnswerMessagesTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+            certificateActionCreateMessage.evaluate(Optional.of(certificate),
                 Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
@@ -426,7 +445,7 @@ class CertificateActionAnswerMessagesTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+            certificateActionCreateMessage.evaluate(Optional.of(certificate),
                 Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
@@ -444,7 +463,7 @@ class CertificateActionAnswerMessagesTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+            certificateActionCreateMessage.evaluate(Optional.of(certificate),
                 Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
@@ -464,7 +483,7 @@ class CertificateActionAnswerMessagesTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionAnswerMessages.evaluate(Optional.of(certificate),
+            certificateActionCreateMessage.evaluate(Optional.of(certificate),
                 Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );

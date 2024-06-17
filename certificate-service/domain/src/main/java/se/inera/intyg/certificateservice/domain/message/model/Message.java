@@ -29,7 +29,7 @@ public class Message {
   private final CertificateId certificateId;
   private final PersonId personId;
   private final SenderReference reference;
-  private final MessageType type;
+  private MessageType type;
   private Subject subject;
   private Content content;
   private final Author author;
@@ -85,7 +85,7 @@ public class Message {
       );
     }
 
-    if (this.answer == null && actionAvailable(CertificateActionType.ANSWER_MESSAGES,
+    if (this.answer == null && actionAvailable(CertificateActionType.ANSWER_MESSAGE,
         certificateActions)) {
       messageActions.add(
           MessageActionFactory.answer()
@@ -136,5 +136,10 @@ public class Message {
         .forwarded(new Forwarded(false))
         .certificateId(certificateId)
         .build();
+  }
+
+  public void update(Content content, MessageType messageType) {
+    this.content = content;
+    this.type = messageType;
   }
 }
