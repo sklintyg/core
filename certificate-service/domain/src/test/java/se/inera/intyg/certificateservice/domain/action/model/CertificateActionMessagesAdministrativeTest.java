@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.action.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
@@ -72,9 +73,32 @@ class CertificateActionMessagesAdministrativeTest {
   }
 
   @Test
-  void shallReturnDescription() {
+  void shallReturnDescriptionIfEnabled() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
+        .isEnabled(true)
+        .build();
+
+    final var actionMessagesAdministrative = (CertificateActionMessagesAdministrative) CertificateActionFactory.create(
+        certificateActionSpecification
+    );
+
     assertEquals("Funktionen finns inte för detta intyg.",
-        certificateActionMessagesAdministrative.getDescription(Optional.empty()));
+        actionMessagesAdministrative.getDescription(Optional.empty()));
+  }
+
+  @Test
+  void shallNotReturnDescriptionIfDisabled() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
+        .isEnabled(false)
+        .build();
+
+    final var actionMessagesAdministrative = (CertificateActionMessagesAdministrative) CertificateActionFactory.create(
+        certificateActionSpecification
+    );
+
+    assertNull(actionMessagesAdministrative.getDescription(Optional.empty()));
   }
 
   @Test
