@@ -218,5 +218,11 @@ class ResourceLinkTypeDTOTest {
       assertEquals(ResourceLinkTypeDTO.ANSWER_QUESTION,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.ANSWER_MESSAGE));
     }
+
+    @Test
+    void shallThrowIfCertificateActionTypeSaveMessage() {
+      assertThrows(IllegalArgumentException.class, () ->
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SAVE_MESSAGE));
+    }
   }
 }

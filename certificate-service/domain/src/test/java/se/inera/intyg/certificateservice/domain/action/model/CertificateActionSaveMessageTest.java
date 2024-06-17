@@ -471,4 +471,13 @@ class CertificateActionSaveMessageTest {
       }
     }
   }
+
+  @Nested
+  class IncludeTest {
+
+    @Test
+    void shallReturnFalse() {
+      assertFalse(certificateActionSaveMessage.include(Optional.empty(), Optional.empty()));
+    }
+  }
 }

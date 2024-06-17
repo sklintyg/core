@@ -36,4 +36,10 @@ public class CertificateActionSaveMessage implements CertificateAction {
         .filter(value -> value.evaluate(optionalCertificate, actionEvaluation))
         .count() == actionRules.size();
   }
+
+  @Override
+  public boolean include(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
+    return false;
+  }
 }
