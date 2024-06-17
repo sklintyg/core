@@ -11,7 +11,6 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -35,9 +34,10 @@ import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
+import se.inera.intyg.certificateservice.domain.common.model.MessagesResponse;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageAction;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitMessagesDomainService;
 
 @ExtendWith(MockitoExtension.class)
@@ -55,8 +55,6 @@ class GetUnitMessagesServiceTest {
   private ResourceLinkConverter resourceLinkConverter;
   @Mock
   private CertificateConverter certificateConverter;
-  @Mock
-  private GetCertificateDomainService getCertificateDomainService;
   @Mock
   private QuestionConverter questionConverter;
   @InjectMocks
@@ -104,16 +102,24 @@ class GetUnitMessagesServiceTest {
     doReturn(MESSAGES_REQUEST).when(messagesRequestFactory).create(CRITERIA_DTO);
 
     final var message = mock(Message.class);
+    final var certificate = mock(Certificate.class);
+    final var messageResponse = MessagesResponse.builder()
+        .messages(List.of(message))
+        .certificates(List.of(certificate))
+        .build();
+
     when(message.certificateId())
         .thenReturn(CERTIFICATE_ID);
-    doReturn(List.of(message)).when(getUnitMessagesDomainService).get(
+    when(certificate.id())
+        .thenReturn(CERTIFICATE_ID);
+    doReturn(messageResponse).when(getUnitMessagesDomainService).get(
         MESSAGES_REQUEST,
         actionEvaluation
     );
 
-    final var certificate = mock(Certificate.class);
-    doReturn(certificate)
-        .when(getCertificateDomainService).get(CERTIFICATE_ID, actionEvaluation);
+    final var messageActions = List.of(MessageAction.builder().build());
+    when(message.actions(actionEvaluation, certificate))
+        .thenReturn(messageActions);
 
     final var certificateAction = mock(CertificateAction.class);
     final List<CertificateAction> certificateActions = List.of(certificateAction);
@@ -124,7 +130,7 @@ class GetUnitMessagesServiceTest {
     doReturn(certificateDTO).when(certificateConverter)
         .convert(certificate, List.of(resourceLinkDTO));
     doReturn(questionDTO).when(questionConverter)
-        .convert(message, Collections.emptyList());
+        .convert(message, messageActions);
 
     final var actualResult = getUnitMessagesService.get(
         GetUnitMessagesRequest.builder()
