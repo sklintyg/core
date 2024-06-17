@@ -57,7 +57,7 @@ public class MessageEntitySpecificationFactory {
 
     if (request.author() != null) {
       specification = specification.and(
-          equalsAuthor(request.author()) // TODO: Check how author is saved
+          equalsAuthor(request.author())
       );
     }
 
