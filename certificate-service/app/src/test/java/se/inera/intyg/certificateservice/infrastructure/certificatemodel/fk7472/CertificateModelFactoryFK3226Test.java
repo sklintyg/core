@@ -1414,7 +1414,7 @@ class CertificateModelFactoryFK3226Test {
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationDate.builder()
             .id(new FieldId("52.6"))
-            .name("Till och med")
+            .name("Till och med vilket datum")
             .min(Period.ofDays(0))
             .build();
 
