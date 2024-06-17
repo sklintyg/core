@@ -9,8 +9,8 @@ public class FK3226CertificateSummaryProvider implements CertificateSummaryProvi
   @Override
   public CertificateSummary summaryOf(Certificate certificate) {
     return CertificateSummary.builder()
-        .value("<saknas period>")
-        .label("Gäller intygsperiod")
+        .label("Avser diagnos")
+        .value("Namn på exempeldiagnos")
         .build();
   }
 }
