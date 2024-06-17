@@ -13,4 +13,15 @@ public class PersonId {
   public String idWithoutDash() {
     return id.replace("-", "");
   }
+
+  public String idWithDash() {
+    if (id.contains("-")) {
+      return id;
+    }
+    return String.join(
+        "-",
+        id.substring(0, 8),
+        id.substring(8)
+    );
+  }
 }

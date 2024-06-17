@@ -87,14 +87,13 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
   private static final String NAME = "Läkarutlåtande för närståendepenning";
   private static final String DETAILED_DESCRIPTION = """
       <b className="iu-fw-heading">Vad är närståendepenning?</b><br>
-      <p>Närståendepenning är en ersättning för den som avstår från att förvärvsarbeta för att vara med en patient som är svårt sjuk i lagens mening. I lagen definierar man svårt sjuk som att patientens hälsotillstånd är så nedsatt att det finns ett påtagligt hot mot hens liv på viss tids sikt. Sjukdomstillstånd som på flera års sikt utvecklas till livshotande tillstånd ger däremot inte rätt till närståendepenning.</p>
-      <p>Att ge hjälp och stöd till en person som inte har ett livshotande tillstånd kan inte ge rätt till närståendepenning.</p>
+      <p>Närståendepenning är en ersättning för den som avstår från att förvärvsarbeta för att vara med en patient som är svårt sjuk i lagens mening. I lagen definierar man svårt sjuk som att patientens hälsotillstånd är så nedsatt att det finns ett påtagligt hot mot hens liv på viss tids sikt. Sjukdomstillstånd som på flera års sikt utvecklas till livshotande tillstånd ger däremot inte rätt till närståendepenning.<br><br>Att ge hjälp och stöd till en person som inte har ett livshotande tillstånd kan inte ge rätt till närståendepenning.</p>
       <b className="iu-fw-heading">Vem är närstående?</b><br>
       <p>Till närstående räknas anhöriga, men även andra som har nära relationer med den som är sjuk till exempel vänner eller grannar. Flera närstående kan turas om och få ersätttning för olika dagar eller olika delar av dagar.</p>
       <b className="iu-fw-heading">Ansökan och samtycke</b><br>
       <p>När den närstående som stödjer patienten ansöker om närståendepenning ska hen bifoga blankett Samtycke för närståendepenning. Det gäller i de fall patienten har medicinska förutsättningar för att kunna samtycka till en närståendes stöd.</p>
       <b>Särskilda regler för vissa HIV-smittade </b>
-      Ange om patienten blivit hiv-smittad på något av följande sätt.
+      Om patienten har hiv och har blivit smittad på något av följande sätt, ange det vid “Annat” under “Patientens behandling och vårdsituation”.
       <ol>
         <li>Patienten har blivit smittad när hen fick blod- eller blodprodukter, och smittades när hen behandlades av den svenska hälso- och sjukvården.</li>
         <li>Patienten har blivit smittad av nuvarande eller före detta make, maka, sambo eller registrerade partner, och den personen smittades när hen behandlades av den svenska hälso- och sjukvården.</li>
@@ -153,7 +152,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .texts(
             List.of(
                 CertificateText.builder()
-                    .text("Här skall det stå en text om intyget!")
+                    .text(
+                        "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. Har du frågor kontaktar du den som skrivit ditt intyg."
+                    )
                     .type(CertificateTextType.PREAMBLE_TEXT)
                     .links(Collections.emptyList())
                     .build()
@@ -194,15 +195,18 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.SIGN)
+                    .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.SEND)
+                    .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.PRINT)
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.REVOKE)
+                    .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.REPLACE)
@@ -389,7 +393,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .configuration(
             ElementConfigurationDate.builder()
                 .id(QUESTION_TILLSTANDET_UPPSKATTAS_LIVSHOTANDE_TILL_OCH_MED_FIELD_ID)
-                .name("Till och med")
+                .name("Till och med vilket datum")
                 .min(Period.ofDays(0))
                 .build()
         )

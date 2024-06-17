@@ -28,6 +28,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 
 class CertificateActionSignTest {
 
@@ -37,6 +38,7 @@ class CertificateActionSignTest {
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
           .certificateActionType(CertificateActionType.SIGN)
+          .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
           .build();
 
   @BeforeEach
@@ -77,7 +79,7 @@ class CertificateActionSignTest {
   }
 
   @Test
-  void shallReturnFalseIfNotDoctor() {
+  void shallReturnFalseIfNotAllowedToSign() {
     final var actionEvaluation = actionEvaluationBuilder
         .user(ALVA_VARDADMINISTRATOR)
         .build();
@@ -91,7 +93,11 @@ class CertificateActionSignTest {
   }
 
   @Test
-  void shallReturnTrueIfDoctor() {
+  void shallReturnTrueIfAllowedToSign() {
+    final var certificateActionSign = (CertificateActionSign) CertificateActionFactory.create(
+        CERTIFICATE_ACTION_SPECIFICATION
+    );
+
     final var actionEvaluation = actionEvaluationBuilder
         .build();
 

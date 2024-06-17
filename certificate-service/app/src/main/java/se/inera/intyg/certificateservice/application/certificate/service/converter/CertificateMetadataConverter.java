@@ -181,7 +181,7 @@ public class CertificateMetadataConverter {
     return PatientDTO.builder()
         .personId(
             PersonIdDTO.builder()
-                .id(patient.id().id())
+                .id(patient.id().idWithDash())
                 .type(patient.id().type().name())
                 .build()
         )

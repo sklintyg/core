@@ -18,8 +18,8 @@ class FK3226CertificateSummaryProviderTest {
   @Test
   void shallIncludePlaceholderTextUntilRequirementsAreSet() {
     final var expectedSummary = CertificateSummary.builder()
-        .label("Gäller intygsperiod")
-        .value("<saknas period>")
+        .label("Avser diagnos")
+        .value("Namn på exempeldiagnos")
         .build();
 
     assertEquals(expectedSummary,

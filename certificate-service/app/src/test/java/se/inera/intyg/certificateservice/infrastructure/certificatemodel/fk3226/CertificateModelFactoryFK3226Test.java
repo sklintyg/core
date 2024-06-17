@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -23,6 +23,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBo
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
@@ -58,9 +59,6 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CertificateModelFactoryFK3226;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CodeSystemKvFkmu0010;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.FK3226CertificateSummaryProvider;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateModelFactoryFK3226Test {
@@ -149,7 +147,8 @@ class CertificateModelFactoryFK3226Test {
   @Test
   void shallIncludeCertificateText() {
     final var expectedText = CertificateText.builder()
-        .text("Här skall det stå en text om intyget!")
+        .text(
+            "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. Har du frågor kontaktar du den som skrivit ditt intyg.")
         .type(CertificateTextType.PREAMBLE_TEXT)
         .links(Collections.emptyList())
         .build();
@@ -223,26 +222,30 @@ class CertificateModelFactoryFK3226Test {
 
   @Test
   void shallIncludeCertificateActionSign() {
-    final var expectedType = CertificateActionType.SIGN;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.SIGN)
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+        .build();
 
     final var certificateModel = certificateModelFactoryFK3226.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
   }
 
   @Test
   void shallIncludeCertificateActionSend() {
-    final var expectedType = CertificateActionType.SEND;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.SEND)
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+        .build();
 
     final var certificateModel = certificateModelFactoryFK3226.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
   }
 
   @Test
@@ -259,14 +262,16 @@ class CertificateModelFactoryFK3226Test {
 
   @Test
   void shallIncludeCertificateActionRevoke() {
-    final var expectedType = CertificateActionType.REVOKE;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.REVOKE)
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+        .build();
 
     final var certificateModel = certificateModelFactoryFK3226.create();
 
     assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
   }
 
   @Test
@@ -1478,7 +1483,7 @@ class CertificateModelFactoryFK3226Test {
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationDate.builder()
             .id(new FieldId("52.6"))
-            .name("Till och med")
+            .name("Till och med vilket datum")
             .min(Period.ofDays(0))
             .build();
 

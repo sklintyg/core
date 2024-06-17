@@ -15,6 +15,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJL
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -24,6 +25,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.Ce
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 
 class CertificateActionSendTest {
@@ -34,6 +36,7 @@ class CertificateActionSendTest {
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
           .certificateActionType(CertificateActionType.SEND)
+          .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
           .build();
 
   @BeforeEach
@@ -77,7 +80,7 @@ class CertificateActionSendTest {
   }
 
   @Test
-  void shallReturnFalseIfNotDoctor() {
+  void shallReturnFalseIfNotAllowedToSend() {
     final var actionEvaluation = actionEvaluationBuilder
         .user(ALVA_VARDADMINISTRATOR)
         .build();
@@ -91,7 +94,7 @@ class CertificateActionSendTest {
   }
 
   @Test
-  void shallReturnTrueIfDoctor() {
+  void shallReturnTrueIfAllowedToSend() {
     final var actionEvaluation = actionEvaluationBuilder
         .build();
 
