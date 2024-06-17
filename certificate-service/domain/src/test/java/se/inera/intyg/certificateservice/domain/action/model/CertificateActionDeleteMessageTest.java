@@ -68,7 +68,7 @@ class CertificateActionDeleteMessageTest {
 
   @Test
   void shallReturnTypeFromSpecification() {
-    assertEquals(CertificateActionType.SAVE_MESSAGE, certificateActionDeleteMessage.getType());
+    assertEquals(CertificateActionType.DELETE_MESSAGE, certificateActionDeleteMessage.getType());
   }
 
   @Test
