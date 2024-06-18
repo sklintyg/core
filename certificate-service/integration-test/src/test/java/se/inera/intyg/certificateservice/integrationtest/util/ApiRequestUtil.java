@@ -151,6 +151,10 @@ public class ApiRequestUtil {
     return GetUnitMessagesRequestBuilder.create().build();
   }
 
+  public static GetUnitMessagesRequestBuilder customGetUnitMessagesRequest() {
+    return GetUnitMessagesRequestBuilder.create();
+  }
+
   public static AnswerComplementRequest defaultAnswerComplementRequest() {
     return AnswerComplementRequestBuilder.create().build();
   }

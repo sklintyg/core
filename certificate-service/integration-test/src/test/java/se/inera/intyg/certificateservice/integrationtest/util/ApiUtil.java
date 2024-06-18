@@ -533,8 +533,7 @@ public class ApiUtil {
   }
 
   public ResponseEntity<GetUnitMessagesResponse> getMessagesForUnit(
-      GetUnitMessagesRequest request,
-      String certificateId) {
+      GetUnitMessagesRequest request) {
     final var requestUrl = "http://localhost:%s/api/unit/messages".formatted(
         port
     );

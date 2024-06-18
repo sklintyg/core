@@ -48,6 +48,12 @@ public class GetUnitMessagesRequestBuilder {
     return this;
   }
 
+  public GetUnitMessagesRequestBuilder messagesQueryCriteria(
+      MessagesQueryCriteriaDTO messagesQueryCriteria) {
+    this.messagesQueryCriteriaDTO = messagesQueryCriteria;
+    return this;
+  }
+
   public GetUnitMessagesRequest build() {
     return GetUnitMessagesRequest.builder()
         .user(user)
