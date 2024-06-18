@@ -17,9 +17,7 @@ public class GetUnitMessagesDomainService {
   private final CertificateRepository certificateRepository;
 
   public MessagesResponse get(MessagesRequest request, ActionEvaluation actionEvaluation) {
-    final var messages = messageRepository.findByMessagesRequest(request)
-        .stream()
-        .toList();
+    final var messages = messageRepository.findByMessagesRequest(request);
 
     final var certificates = messages.stream()
         .map(Message::certificateId)
