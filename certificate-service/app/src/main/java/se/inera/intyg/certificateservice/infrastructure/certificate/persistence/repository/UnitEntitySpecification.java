@@ -28,7 +28,11 @@ public class UnitEntitySpecification {
     {
       Join<CertificateEntity, MessageEntity> certificate = root.join("certificate");
       Join<UnitEntity, CertificateEntity> certificateIssuedOn = certificate.join("issuedOnUnit");
-      return certificateIssuedOn.get(HSA_ID).in(unitIds);
+      return certificateIssuedOn.get(HSA_ID).in(
+          unitIds.stream()
+              .map(HsaId::id)
+              .toList()
+      );
     };
   }
 
