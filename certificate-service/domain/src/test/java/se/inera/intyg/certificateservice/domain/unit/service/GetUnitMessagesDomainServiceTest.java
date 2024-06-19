@@ -37,6 +37,7 @@ class GetUnitMessagesDomainServiceTest {
   private static Message messageWithReminder;
   private static Message reminder;
   private static Message answer;
+  private static Message missing;
   private static final ActionEvaluation ACTION_EVALUATION = ActionEvaluation.builder().build();
 
   private static final MessagesRequest MESSAGES_REQUEST = MessagesRequest.builder().build();
@@ -61,6 +62,7 @@ class GetUnitMessagesDomainServiceTest {
     messageWithReminder = mock(Message.class);
     reminder = mock(Message.class);
     answer = mock(Message.class);
+    missing = mock(Message.class);
 
     when(certificateWithReadPermission.id())
         .thenReturn(C1);
@@ -80,6 +82,8 @@ class GetUnitMessagesDomainServiceTest {
         .thenReturn(MessageType.REMINDER);
     when(answer.type())
         .thenReturn(MessageType.ANSWER);
+    when(missing.type())
+        .thenReturn(MessageType.MISSING);
 
     when(certificateWithReadPermission.allowTo(CertificateActionType.READ,
         Optional.of(ACTION_EVALUATION)))
@@ -94,7 +98,7 @@ class GetUnitMessagesDomainServiceTest {
     when(messageRepository.findByMessagesRequest(MESSAGES_REQUEST))
         .thenReturn(
             List.of(messageForC1, messageForC2, secondMessageForC1, messageWithReminder, reminder,
-                answer));
+                answer, missing));
     when(certificateRepository.getById(C1))
         .thenReturn(certificateWithReadPermission);
     when(certificateRepository.getById(C2))
@@ -104,7 +108,7 @@ class GetUnitMessagesDomainServiceTest {
   }
 
   @Test
-  void shouldReturnMessagesBelongingToCertificateWithReadPermissionExcludingReminderAndAnswers() {
+  void shouldReturnMessagesBelongingToCertificateWithReadPermissionExcludingRemindersAnswersAndMissing() {
     final var result = getUnitMessagesDomainService.get(MESSAGES_REQUEST, ACTION_EVALUATION);
 
     assertEquals(List.of(messageForC1, secondMessageForC1, messageWithReminder),

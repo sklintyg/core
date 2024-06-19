@@ -45,7 +45,8 @@ public class GetUnitMessagesDomainService {
   }
 
   private static boolean isReminderOrAnswer(Message message) {
-    return message.type() == MessageType.ANSWER || message.type() == MessageType.REMINDER;
+    return message.type() == MessageType.ANSWER || message.type() == MessageType.REMINDER
+        || message.type() == MessageType.MISSING;
   }
 }
 
