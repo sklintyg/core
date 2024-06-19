@@ -87,7 +87,7 @@ public class Message {
       );
     }
 
-    if (isMessageFromWC() && !type.equals(MessageType.COMPLEMENT) && this.answer == null
+    if (this.authoredStaff == null && !type.equals(MessageType.COMPLEMENT) && this.answer == null
         && actionAvailable(CertificateActionType.ANSWER_MESSAGE, certificateActions)) {
       messageActions.add(
           MessageActionFactory.answer()
@@ -95,10 +95,6 @@ public class Message {
     }
 
     return messageActions;
-  }
-
-  private boolean isMessageFromWC() {
-    return this.author != null && !this.author.author().equals(AuthorType.WC.name());
   }
 
   private boolean isUnhandledComplement() {

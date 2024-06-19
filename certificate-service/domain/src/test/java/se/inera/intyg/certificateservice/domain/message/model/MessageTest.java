@@ -375,25 +375,10 @@ class MessageTest {
     }
 
     @Test
-    void shallExcludeMessageActionAnswerIfAuthorIsFromWC() {
+    void shallExcludeMessageActionAnswerIfAuthoredStaffIsNotNull() {
       final var message = Message.builder()
           .type(MessageType.CONTACT)
-          .author(new Author(AuthorType.WC.name()))
-          .status(MessageStatus.SENT)
-          .build();
-
-      doReturn(List.of(CERTIFICATE_ACTION_ANSWER)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.answer()));
-    }
-
-    @Test
-    void shallExcludeMessageActionAnswerIfAuthorIsNull() {
-      final var message = Message.builder()
-          .type(MessageType.CONTACT)
+          .authoredStaff(AJLA_DOKTOR)
           .status(MessageStatus.SENT)
           .build();
 
