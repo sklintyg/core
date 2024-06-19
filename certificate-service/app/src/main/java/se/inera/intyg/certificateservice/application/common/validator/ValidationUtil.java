@@ -174,5 +174,8 @@ public class ValidationUtil {
     if (question == null) {
       throw new IllegalArgumentException("Required parameter missing: Question");
     }
+    if (question.getType() == null) {
+      throw new IllegalArgumentException("Required parameter missing: Question.type");
+    }
   }
 }

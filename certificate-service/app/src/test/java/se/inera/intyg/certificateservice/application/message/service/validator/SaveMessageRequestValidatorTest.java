@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
+import se.inera.intyg.certificateservice.application.message.dto.QuestionTypeDTO;
 import se.inera.intyg.certificateservice.application.message.dto.SaveMessageRequest;
 
 class SaveMessageRequestValidatorTest {
@@ -31,7 +32,9 @@ class SaveMessageRequestValidatorTest {
         .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
         .careUnit(ALFA_MEDICINCENTRUM_DTO)
         .careProvider(ALFA_REGIONEN_DTO)
-        .question(QuestionDTO.builder().build());
+        .question(QuestionDTO.builder()
+            .type(QuestionTypeDTO.CONTACT)
+            .build());
   }
 
   @Test
@@ -433,16 +436,37 @@ class SaveMessageRequestValidatorTest {
     }
   }
 
-  @Test
-  void shallThrowIfQuestionIsNull() {
-    final var request = requestBuilder
-        .question(null)
-        .build();
+  @Nested
+  class QuestionValidation {
 
-    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> requestValidator.validate(request, MESSAGE_ID));
+    @Test
+    void shallThrowIfQuestionIsNull() {
+      final var request = requestBuilder
+          .question(null)
+          .build();
 
-    assertEquals("Required parameter missing: Question",
-        illegalArgumentException.getMessage());
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> requestValidator.validate(request, MESSAGE_ID));
+
+      assertEquals("Required parameter missing: Question",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfQuestionTypeIsNull() {
+      final var request = requestBuilder
+          .question(
+              QuestionDTO.builder()
+                  .type(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> requestValidator.validate(request, MESSAGE_ID));
+
+      assertEquals("Required parameter missing: Question.type",
+          illegalArgumentException.getMessage());
+    }
   }
 }
