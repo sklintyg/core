@@ -4375,6 +4375,42 @@ class FK7472ActiveIT {
     }
 
     @Test
+    @DisplayName("FK7472 - Intyg skall kunna ta emot påminnelse")
+    void shallReturn200IfReminderOnComplementCanBeReceived() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          defaultGetCertificateMessageRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertEquals(1, messagesForCertificate.getBody().getQuestions().size());
+    }
+
+    @Test
     @DisplayName("FK7472 - Intyg som har kompletteringsbegäran ska kunna kompletteras")
     void shallReturnCertificateIfComplementingCertificateWithComplements() {
       final var testCertificates = testabilityApi.addCertificates(

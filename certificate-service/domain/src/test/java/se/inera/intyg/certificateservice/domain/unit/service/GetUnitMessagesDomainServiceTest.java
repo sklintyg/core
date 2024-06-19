@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -26,11 +27,16 @@ class GetUnitMessagesDomainServiceTest {
 
   private static final CertificateId C1 = new CertificateId("C1");
   private static final CertificateId C2 = new CertificateId("C2");
+  private static final CertificateId C3 = new CertificateId("C3");
   private static Certificate certificateWithReadPermission;
   private static Certificate certificateWithoutReadPermission;
+  private static Certificate certificateWithReminder;
   private static Message messageForC1;
   private static Message secondMessageForC1;
   private static Message messageForC2;
+  private static Message messageWithReminder;
+  private static Message reminder;
+  private static Message answer;
   private static final ActionEvaluation ACTION_EVALUATION = ActionEvaluation.builder().build();
 
   private static final MessagesRequest MESSAGES_REQUEST = MessagesRequest.builder().build();
@@ -48,12 +54,18 @@ class GetUnitMessagesDomainServiceTest {
   void setup() {
     certificateWithReadPermission = mock(Certificate.class);
     certificateWithoutReadPermission = mock(Certificate.class);
+    certificateWithReminder = mock(Certificate.class);
     messageForC1 = mock(Message.class);
     secondMessageForC1 = mock(Message.class);
     messageForC2 = mock(Message.class);
+    messageWithReminder = mock(Message.class);
+    reminder = mock(Message.class);
+    answer = mock(Message.class);
 
     when(certificateWithReadPermission.id())
         .thenReturn(C1);
+    when(certificateWithReminder.id())
+        .thenReturn(C3);
 
     when(messageForC1.certificateId())
         .thenReturn(C1);
@@ -61,8 +73,18 @@ class GetUnitMessagesDomainServiceTest {
         .thenReturn(C1);
     when(messageForC2.certificateId())
         .thenReturn(C2);
+    when(messageWithReminder.certificateId())
+        .thenReturn(C3);
+
+    when(reminder.type())
+        .thenReturn(MessageType.REMINDER);
+    when(answer.type())
+        .thenReturn(MessageType.ANSWER);
 
     when(certificateWithReadPermission.allowTo(CertificateActionType.READ,
+        Optional.of(ACTION_EVALUATION)))
+        .thenReturn(true);
+    when(certificateWithReminder.allowTo(CertificateActionType.READ,
         Optional.of(ACTION_EVALUATION)))
         .thenReturn(true);
     when(certificateWithoutReadPermission.allowTo(CertificateActionType.READ,
@@ -70,25 +92,30 @@ class GetUnitMessagesDomainServiceTest {
         .thenReturn(false);
 
     when(messageRepository.findByMessagesRequest(MESSAGES_REQUEST))
-        .thenReturn(List.of(messageForC1, messageForC2, secondMessageForC1));
+        .thenReturn(
+            List.of(messageForC1, messageForC2, secondMessageForC1, messageWithReminder, reminder,
+                answer));
     when(certificateRepository.getById(C1))
         .thenReturn(certificateWithReadPermission);
     when(certificateRepository.getById(C2))
         .thenReturn(certificateWithoutReadPermission);
+    when(certificateRepository.getById(C3))
+        .thenReturn(certificateWithReminder);
   }
 
   @Test
-  void shouldReturnMessagesBelongingToCertificateWithReadPermission() {
+  void shouldReturnMessagesBelongingToCertificateWithReadPermissionExcludingReminderAndAnswers() {
     final var result = getUnitMessagesDomainService.get(MESSAGES_REQUEST, ACTION_EVALUATION);
 
-    assertEquals(List.of(messageForC1, secondMessageForC1), result.messages());
+    assertEquals(List.of(messageForC1, secondMessageForC1, messageWithReminder),
+        result.messages());
   }
 
   @Test
   void shouldReturnCertificatesWithReadPermission() {
     final var result = getUnitMessagesDomainService.get(MESSAGES_REQUEST, ACTION_EVALUATION);
 
-    assertEquals(List.of(certificateWithReadPermission), result.certificates());
+    assertEquals(List.of(certificateWithReadPermission, certificateWithReminder),
+        result.certificates());
   }
-
 }
