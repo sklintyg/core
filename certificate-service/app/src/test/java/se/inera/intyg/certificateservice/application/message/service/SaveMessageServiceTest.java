@@ -8,8 +8,9 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK3226_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.CONTACT_MESSAGE;
 
-import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,8 +25,8 @@ import se.inera.intyg.certificateservice.application.message.service.converter.Q
 import se.inera.intyg.certificateservice.application.message.service.validator.SaveMessageRequestValidator;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
-import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.service.SaveMessageDomainService;
@@ -41,6 +42,8 @@ class SaveMessageServiceTest {
       .type(QuestionTypeDTO.CONTACT)
       .message(MESSAGE)
       .build();
+  @Mock
+  CertificateRepository certificateRepository;
   @Mock
   SaveMessageRequestValidator saveMessageRequestValidator;
   @Mock
@@ -81,9 +84,12 @@ class SaveMessageServiceTest {
         ALFA_REGIONEN_DTO
     );
 
-    final var message = Message.builder().build();
-    doReturn(message).when(saveMessageDomainService).save(
-        new CertificateId(CERTIFICATE_ID),
+    doReturn(FK3226_CERTIFICATE).when(certificateRepository).getById(
+        new CertificateId(CERTIFICATE_ID)
+    );
+
+    doReturn(CONTACT_MESSAGE).when(saveMessageDomainService).save(
+        FK3226_CERTIFICATE,
         new MessageId(MESSAGE_ID),
         new Content(MESSAGE),
         actionEvaluation,
@@ -91,7 +97,8 @@ class SaveMessageServiceTest {
     );
 
     final var expectedQuestion = QuestionDTO.builder().build();
-    doReturn(expectedQuestion).when(questionConverter).convert(message, Collections.emptyList());
+    doReturn(expectedQuestion).when(questionConverter)
+        .convert(CONTACT_MESSAGE, CONTACT_MESSAGE.actions(actionEvaluation, FK3226_CERTIFICATE));
 
     final var expectedResponse = SaveMessageResponse.builder()
         .question(expectedQuestion)

@@ -46,15 +46,12 @@ class SendMessageDomainServiceTest {
     final var certificate = mock(Certificate.class);
     final var message = mock(Message.class);
 
-    doReturn(message).when(messageRepository).getById(MESSAGE_ID);
-    doReturn(CERTIFICATE_ID).when(message).certificateId();
     doReturn(CERTIFICATE_ID).when(certificate).id();
-    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(false).when(certificate)
         .allowTo(CertificateActionType.SEND_MESSAGE, Optional.of(ACTION_EVALUATION));
 
     assertThrows(CertificateActionForbidden.class, () -> sendMessageDomainService.send(
-        MESSAGE_ID, ACTION_EVALUATION
+        message, certificate, ACTION_EVALUATION
     ));
   }
 
@@ -64,15 +61,12 @@ class SendMessageDomainServiceTest {
     final var message = mock(Message.class);
     final var expectedMessage = Message.builder().build();
 
-    doReturn(message).when(messageRepository).getById(MESSAGE_ID);
-    doReturn(CERTIFICATE_ID).when(message).certificateId();
-    doReturn(CERTIFICATE_ID).when(certificate).id();
-    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.SEND_MESSAGE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedMessage).when(messageRepository).save(message);
 
-    final var actualMessage = sendMessageDomainService.send(MESSAGE_ID, ACTION_EVALUATION);
+    final var actualMessage = sendMessageDomainService.send(message, certificate,
+        ACTION_EVALUATION);
     assertEquals(expectedMessage, actualMessage);
   }
 
@@ -81,14 +75,11 @@ class SendMessageDomainServiceTest {
     final var certificate = mock(Certificate.class);
     final var message = mock(Message.class);
 
-    doReturn(message).when(messageRepository).getById(MESSAGE_ID);
-    doReturn(CERTIFICATE_ID).when(message).certificateId();
     doReturn(CERTIFICATE_ID).when(certificate).id();
-    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.SEND_MESSAGE, Optional.of(ACTION_EVALUATION));
 
-    sendMessageDomainService.send(MESSAGE_ID, ACTION_EVALUATION);
+    sendMessageDomainService.send(message, certificate, ACTION_EVALUATION);
     verify(message).send();
   }
 
@@ -97,15 +88,13 @@ class SendMessageDomainServiceTest {
     final var certificate = mock(Certificate.class);
     final var message = mock(Message.class);
     final var certificateEventCaptor = ArgumentCaptor.forClass(MessageEvent.class);
-
-    doReturn(message).when(messageRepository).getById(MESSAGE_ID);
-    doReturn(CERTIFICATE_ID).when(message).certificateId();
+    
     doReturn(CERTIFICATE_ID).when(certificate).id();
-    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.SEND_MESSAGE, Optional.of(ACTION_EVALUATION));
+    doReturn(MESSAGE_ID).when(message).id();
 
-    sendMessageDomainService.send(MESSAGE_ID, ACTION_EVALUATION);
+    sendMessageDomainService.send(message, certificate, ACTION_EVALUATION);
     verify(messageEventDomainService).publish(certificateEventCaptor.capture());
 
     assertAll(

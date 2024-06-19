@@ -23,6 +23,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK_RECIPIENT;
 
+import java.util.Collections;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 
@@ -43,6 +44,7 @@ public class TestDataCertificateModel {
         .name(FK7210_NAME)
         .type(FK7210_CODE_TYPE)
         .availableForCitizen(true)
+        .certificateActionSpecifications(Collections.emptyList())
         .pdfTemplatePath(FK7210_PDF_PATH)
         .pdfNoAddressTemplatePath(FK7210_PDF_PATH_NO_ADDRESS)
         .schematronPath(FK7210_SCHEMATRON_PATH)
@@ -57,6 +59,7 @@ public class TestDataCertificateModel {
                 .version(FK3226_VERSION)
                 .build()
         )
+        .certificateActionSpecifications(Collections.emptyList())
         .name(FK3226_NAME)
         .type(FK3226_CODE_TYPE)
         .availableForCitizen(true)
@@ -76,6 +79,7 @@ public class TestDataCertificateModel {
                 .build()
         )
         .name(FK7472_NAME)
+        .certificateActionSpecifications(Collections.emptyList())
         .type(FK7472_CODE_TYPE)
         .availableForCitizen(false)
         .pdfTemplatePath(FK7472_PDF_PATH)

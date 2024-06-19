@@ -282,14 +282,14 @@ public class AppConfig {
 
   @Bean
   public CreateMessageDomainService createMessageDomainService(
-      MessageRepository messageRepository, CertificateRepository certificateRepository) {
-    return new CreateMessageDomainService(messageRepository, certificateRepository);
+      MessageRepository messageRepository) {
+    return new CreateMessageDomainService(messageRepository);
   }
 
   @Bean
   public SaveMessageDomainService saveMessageDomainService(
-      MessageRepository messageRepository, CertificateRepository certificateRepository) {
-    return new SaveMessageDomainService(messageRepository, certificateRepository);
+      MessageRepository messageRepository) {
+    return new SaveMessageDomainService(messageRepository);
   }
 
   @Bean
@@ -300,9 +300,9 @@ public class AppConfig {
 
   @Bean
   public SendMessageDomainService sendMessageDomainService(
-      MessageRepository messageRepository, CertificateRepository certificateRepository,
+      MessageRepository messageRepository,
       MessageEventDomainService messageEventDomainService) {
-    return new SendMessageDomainService(messageRepository, certificateRepository,
+    return new SendMessageDomainService(messageRepository,
         messageEventDomainService);
   }
 

@@ -9,8 +9,9 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK3226_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.CONTACT_MESSAGE;
 
-import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,8 +26,8 @@ import se.inera.intyg.certificateservice.application.message.service.converter.Q
 import se.inera.intyg.certificateservice.application.message.service.validator.CreateMessageRequestValidator;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
-import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.service.CreateMessageDomainService;
 
@@ -35,6 +36,8 @@ class CreateMessageServiceTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
   private static final String MESSAGE = "message";
+  @Mock
+  CertificateRepository certificateRepository;
   @Mock
   CreateMessageRequestValidator createMessageRequestValidator;
   @Mock
@@ -78,16 +81,18 @@ class CreateMessageServiceTest {
         ALFA_REGIONEN_DTO
     );
 
-    final var createdMessage = Message.builder().build();
-    doReturn(createdMessage).when(createMessageDomainService).create(
-        new CertificateId(CERTIFICATE_ID),
+    doReturn(FK3226_CERTIFICATE).when(certificateRepository)
+        .getById(new CertificateId(CERTIFICATE_ID));
+    doReturn(CONTACT_MESSAGE).when(createMessageDomainService).create(
+        FK3226_CERTIFICATE,
         actionEvaluation,
         MessageType.CONTACT,
         new Content(MESSAGE)
     );
 
     final var questionDTO = QuestionDTO.builder().build();
-    doReturn(questionDTO).when(questionConverter).convert(createdMessage, Collections.emptyList());
+    doReturn(questionDTO).when(questionConverter)
+        .convert(CONTACT_MESSAGE, CONTACT_MESSAGE.actions(actionEvaluation, FK3226_CERTIFICATE));
 
     final var expectedResponse = CreateMessageResponse.builder()
         .question(questionDTO)

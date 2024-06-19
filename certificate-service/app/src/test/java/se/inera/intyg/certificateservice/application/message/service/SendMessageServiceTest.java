@@ -9,8 +9,9 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK3226_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.CONTACT_MESSAGE;
 
-import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,14 +24,22 @@ import se.inera.intyg.certificateservice.application.message.dto.SendMessageResp
 import se.inera.intyg.certificateservice.application.message.service.converter.QuestionConverter;
 import se.inera.intyg.certificateservice.application.message.service.validator.SendMessageRequestValidator;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
+import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 import se.inera.intyg.certificateservice.domain.message.service.SendMessageDomainService;
 
 @ExtendWith(MockitoExtension.class)
 class SendMessageServiceTest {
 
   private static final String MESSAGE_ID = "messageId";
+  private static final String CERTIFICATE_ID = "certificateId";
+  @Mock
+  CertificateRepository certificateRepository;
+  @Mock
+  MessageRepository messageRepository;
   @Mock
   SendMessageRequestValidator sendMessageRequestValidator;
   @Mock
@@ -72,13 +81,20 @@ class SendMessageServiceTest {
         ALFA_REGIONEN_DTO
     );
 
-    final var message = Message.builder().build();
-    doReturn(message).when(sendMessageDomainService).send(
-        new MessageId(MESSAGE_ID), actionEvaluation
+    final var message = Message.builder()
+        .certificateId(new CertificateId(CERTIFICATE_ID))
+        .build();
+
+    doReturn(message).when(messageRepository).getById(new MessageId(MESSAGE_ID));
+    doReturn(FK3226_CERTIFICATE).when(certificateRepository)
+        .getById(new CertificateId(CERTIFICATE_ID));
+    doReturn(CONTACT_MESSAGE).when(sendMessageDomainService).send(
+        message, FK3226_CERTIFICATE, actionEvaluation
     );
 
     final var questionDTO = QuestionDTO.builder().build();
-    doReturn(questionDTO).when(questionConverter).convert(message, Collections.emptyList());
+    doReturn(questionDTO).when(questionConverter)
+        .convert(CONTACT_MESSAGE, CONTACT_MESSAGE.actions(actionEvaluation, FK3226_CERTIFICATE));
 
     final var expectedResponse = SendMessageResponse.builder()
         .question(questionDTO)

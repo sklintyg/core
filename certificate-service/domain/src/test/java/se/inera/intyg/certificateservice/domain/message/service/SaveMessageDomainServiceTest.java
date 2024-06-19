@@ -16,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
@@ -34,8 +33,6 @@ class SaveMessageDomainServiceTest {
   private static final MessageId MESSAGE_ID = new MessageId("messageId");
   @Mock
   MessageRepository messageRepository;
-  @Mock
-  CertificateRepository certificateRepository;
   @InjectMocks
   SaveMessageDomainService createMessageDomainService;
 
@@ -43,12 +40,11 @@ class SaveMessageDomainServiceTest {
   void shallThrowIfNotAllowedToSaveMessage() {
     final var certificate = mock(Certificate.class);
     doReturn(CERTIFICATE_ID).when(certificate).id();
-    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(false).when(certificate)
         .allowTo(CertificateActionType.SAVE_MESSAGE, Optional.of(ACTION_EVALUATION));
 
     assertThrows(CertificateActionForbidden.class, () -> createMessageDomainService.save(
-        CERTIFICATE_ID, MESSAGE_ID, CONTENT, ACTION_EVALUATION, MessageType.CONTACT
+        certificate, MESSAGE_ID, CONTENT, ACTION_EVALUATION, MessageType.CONTACT
     ));
   }
 
@@ -56,13 +52,12 @@ class SaveMessageDomainServiceTest {
   void shallUpdateMessage() {
     final var message = mock(Message.class);
     final var certificate = mock(Certificate.class);
-    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.SAVE_MESSAGE, Optional.of(ACTION_EVALUATION));
     doReturn(message).when(messageRepository).getById(MESSAGE_ID);
 
     createMessageDomainService.save(
-        CERTIFICATE_ID, MESSAGE_ID, CONTENT, ACTION_EVALUATION, MessageType.CONTACT
+        certificate, MESSAGE_ID, CONTENT, ACTION_EVALUATION, MessageType.CONTACT
     );
 
     verify(message).update(CONTENT, MessageType.CONTACT, Staff.create(ACTION_EVALUATION.user()),
@@ -73,13 +68,12 @@ class SaveMessageDomainServiceTest {
   void shallPersistUpdatedMessage() {
     final var expectedMessage = Message.builder().build();
     final var certificate = mock(Certificate.class);
-    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.SAVE_MESSAGE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedMessage).when(messageRepository).getById(MESSAGE_ID);
 
     createMessageDomainService.save(
-        CERTIFICATE_ID, MESSAGE_ID, CONTENT, ACTION_EVALUATION, MessageType.CONTACT
+        certificate, MESSAGE_ID, CONTENT, ACTION_EVALUATION, MessageType.CONTACT
     );
 
     verify(messageRepository).save(expectedMessage);
@@ -89,14 +83,13 @@ class SaveMessageDomainServiceTest {
   void shallReturnSavedMessage() {
     final var expectedMessage = Message.builder().build();
     final var certificate = mock(Certificate.class);
-    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.SAVE_MESSAGE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedMessage).when(messageRepository).getById(MESSAGE_ID);
     doReturn(expectedMessage).when(messageRepository).save(expectedMessage);
 
     final var actualMessage = createMessageDomainService.save(
-        CERTIFICATE_ID, MESSAGE_ID, CONTENT, ACTION_EVALUATION, MessageType.CONTACT
+        certificate, MESSAGE_ID, CONTENT, ACTION_EVALUATION, MessageType.CONTACT
     );
 
     assertEquals(expectedMessage, actualMessage);

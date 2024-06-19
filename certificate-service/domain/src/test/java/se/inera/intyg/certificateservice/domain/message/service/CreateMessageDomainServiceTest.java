@@ -45,12 +45,11 @@ class CreateMessageDomainServiceTest {
   void shallThrowIfNotAllowedToCreateMessage() {
     final var certificate = mock(Certificate.class);
     doReturn(CERTIFICATE_ID).when(certificate).id();
-    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(false).when(certificate)
         .allowTo(CertificateActionType.CREATE_MESSAGE, Optional.of(ACTION_EVALUATION));
 
     assertThrows(CertificateActionForbidden.class, () -> createMessageDomainService.create(
-        CERTIFICATE_ID, ACTION_EVALUATION, MessageType.CONTACT, CONTENT
+        certificate, ACTION_EVALUATION, MessageType.CONTACT, CONTENT
     ));
   }
 
@@ -58,9 +57,9 @@ class CreateMessageDomainServiceTest {
   void shallPersistCreatedMessage() {
     final var expectedMessage = Message.builder().build();
     final var certificate = mock(Certificate.class);
-    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.CREATE_MESSAGE, Optional.of(ACTION_EVALUATION));
+    doReturn(CERTIFICATE_ID).when(certificate).id();
 
     try (MockedStatic<Message> messageMockedStatic = Mockito.mockStatic(Message.class)) {
       messageMockedStatic.when(() ->
@@ -74,7 +73,7 @@ class CreateMessageDomainServiceTest {
           .thenReturn(expectedMessage);
 
       createMessageDomainService.create(
-          CERTIFICATE_ID, ACTION_EVALUATION, MessageType.CONTACT, CONTENT
+          certificate, ACTION_EVALUATION, MessageType.CONTACT, CONTENT
       );
 
       verify(messageRepository).save(expectedMessage);
@@ -85,10 +84,10 @@ class CreateMessageDomainServiceTest {
   void shallReturnCreatedMessage() {
     final var expectedMessage = Message.builder().build();
     final var certificate = mock(Certificate.class);
-    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.CREATE_MESSAGE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedMessage).when(messageRepository).save(expectedMessage);
+    doReturn(CERTIFICATE_ID).when(certificate).id();
 
     try (MockedStatic<Message> messageMockedStatic = Mockito.mockStatic(Message.class)) {
       messageMockedStatic.when(() ->
@@ -102,7 +101,7 @@ class CreateMessageDomainServiceTest {
           .thenReturn(expectedMessage);
 
       final var actualMessage = createMessageDomainService.create(
-          CERTIFICATE_ID, ACTION_EVALUATION, MessageType.CONTACT, CONTENT
+          certificate, ACTION_EVALUATION, MessageType.CONTACT, CONTENT
       );
       assertEquals(expectedMessage, actualMessage);
     }
