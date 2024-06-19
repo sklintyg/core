@@ -19,7 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionAnswerMessages;
+import se.inera.intyg.certificateservice.domain.action.model.CertificateActionAnswerMessage;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionCannotComplement;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionComplement;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionForwardMessage;
@@ -349,8 +349,8 @@ class MessageTest {
   @Nested
   class AnswerMessageTests {
 
-    private static final CertificateActionAnswerMessages CERTIFICATE_ACTION_ANSWER =
-        CertificateActionAnswerMessages.builder()
+    private static final CertificateActionAnswerMessage CERTIFICATE_ACTION_ANSWER =
+        CertificateActionAnswerMessage.builder()
             .certificateActionSpecification(
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.ANSWER_MESSAGE)

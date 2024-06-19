@@ -254,7 +254,7 @@ public class CertificateActionFactory {
               )
           )
           .build();
-      case ANSWER_MESSAGE -> CertificateActionAnswerMessages.builder()
+      case ANSWER_MESSAGE -> CertificateActionAnswerMessage.builder()
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
@@ -316,6 +316,17 @@ public class CertificateActionFactory {
           )
           .build();
       case DELETE_MESSAGE -> CertificateActionDeleteMessage.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
+                  new ActionRuleSent(true),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson()
+              )
+          )
+          .build();
+      case SEND_MESSAGE -> CertificateActionSendMessage.builder()
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(

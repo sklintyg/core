@@ -26,12 +26,12 @@ public class SendMessageDomainService {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
     final var message = messageRepository.getById(messageId);
     final var certificate = certificateRepository.getById(message.certificateId());
-    if (!certificate.allowTo(CertificateActionType.CREATE_MESSAGE,
+    if (!certificate.allowTo(CertificateActionType.SEND_MESSAGE,
         Optional.of(actionEvaluation))) {
       throw new CertificateActionForbidden(
-          "Not allowed to create messages on certificate for %s"
+          "Not allowed to send messages on certificate for %s"
               .formatted(certificate.id().id()),
-          certificate.reasonNotAllowed(CertificateActionType.CREATE_MESSAGE, Optional.empty())
+          certificate.reasonNotAllowed(CertificateActionType.SEND_MESSAGE, Optional.empty())
       );
     }
 
