@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.message.model.Answer;
+import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 
 @Builder
 @Value
@@ -15,7 +15,7 @@ public class MessageEvent {
   MessageEventType type;
   LocalDateTime start;
   LocalDateTime end;
-  Answer answer;
+  MessageId messageId;
   CertificateId certificateId;
   ActionEvaluation actionEvaluation;
 

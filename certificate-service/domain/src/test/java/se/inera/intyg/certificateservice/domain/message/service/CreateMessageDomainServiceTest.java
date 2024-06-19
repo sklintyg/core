@@ -22,11 +22,11 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
-import se.inera.intyg.certificateservice.domain.message.model.Author;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
+import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 
 @ExtendWith(MockitoExtension.class)
 class CreateMessageDomainServiceTest {
@@ -67,8 +67,8 @@ class CreateMessageDomainServiceTest {
               Message.create(
                   eq(MessageType.CONTACT),
                   eq(CONTENT),
-                  any(Author.class),
-                  eq(CERTIFICATE_ID)
+                  eq(CERTIFICATE_ID),
+                  any(Staff.class)
               )
           )
           .thenReturn(expectedMessage);
@@ -95,8 +95,8 @@ class CreateMessageDomainServiceTest {
               Message.create(
                   eq(MessageType.CONTACT),
                   eq(CONTENT),
-                  any(Author.class),
-                  eq(CERTIFICATE_ID)
+                  eq(CERTIFICATE_ID),
+                  any(Staff.class)
               )
           )
           .thenReturn(expectedMessage);

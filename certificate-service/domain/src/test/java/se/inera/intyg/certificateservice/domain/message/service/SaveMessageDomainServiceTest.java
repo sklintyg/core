@@ -22,7 +22,9 @@ import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
+import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 
 @ExtendWith(MockitoExtension.class)
 class SaveMessageDomainServiceTest {
@@ -62,8 +64,9 @@ class SaveMessageDomainServiceTest {
     createMessageDomainService.save(
         CERTIFICATE_ID, MESSAGE_ID, CONTENT, ACTION_EVALUATION, MessageType.CONTACT
     );
-    
-    verify(message).update(CONTENT, MessageType.CONTACT);
+
+    verify(message).update(CONTENT, MessageType.CONTACT, Staff.create(ACTION_EVALUATION.user()),
+        new Subject(MessageType.CONTACT.displayName()));
   }
 
   @Test

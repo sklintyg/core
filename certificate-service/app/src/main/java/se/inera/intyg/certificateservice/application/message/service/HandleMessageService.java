@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.message.service;
 
+import jakarta.transaction.Transactional;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class HandleMessageService {
   private final GetCertificateDomainService getCertificateDomainService;
   private final QuestionConverter questionConverter;
 
+  @Transactional
   public HandleMessageResponse handle(HandleMessageRequest request, String messageId) {
     handleMessageRequestValidator.validate(request, messageId);
 

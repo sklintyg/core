@@ -36,8 +36,6 @@ public class ReceiveAnswerMessageDomainService {
       );
     }
 
-    message.answer(answer);
-
-    return messageRepository.save(message);
+    return messageRepository.save(message.withAnswer(answer));
   }
 }

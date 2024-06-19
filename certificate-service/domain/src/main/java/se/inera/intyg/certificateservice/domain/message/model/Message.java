@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
+import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 
 @Getter
 @Builder
@@ -43,9 +44,10 @@ public class Message {
   @Builder.Default
   private final List<Complement> complements = Collections.emptyList();
   @With
-  private Answer answer;
+  private final Answer answer;
   @Builder.Default
   private List<Reminder> reminders = Collections.emptyList();
+  private Staff authoredStaff;
 
   public List<MessageAction> actionsInclude(ActionEvaluation actionEvaluation,
       Certificate certificate) {
@@ -85,14 +87,18 @@ public class Message {
       );
     }
 
-    if (this.answer == null && actionAvailable(CertificateActionType.ANSWER_MESSAGE,
-        certificateActions)) {
+    if (isMessageFromWC() && !type.equals(MessageType.COMPLEMENT) && this.answer == null
+        && actionAvailable(CertificateActionType.ANSWER_MESSAGE, certificateActions)) {
       messageActions.add(
           MessageActionFactory.answer()
       );
     }
 
     return messageActions;
+  }
+
+  private boolean isMessageFromWC() {
+    return this.author != null && !this.author.author().equals(AuthorType.WC.name());
   }
 
   private boolean isUnhandledComplement() {
@@ -121,25 +127,31 @@ public class Message {
         .toList();
   }
 
-  public void answer(Answer answer) {
-    this.answer = answer;
-  }
 
-  public static Message create(MessageType messageType, Content content, Author author,
-      CertificateId certificateId) {
+  public static Message create(MessageType messageType, Content content,
+      CertificateId certificateId, Staff staff) {
     return Message.builder()
         .id(new MessageId(UUID.randomUUID().toString()))
+        .author(new Author(AuthorType.WC.name()))
+        .authoredStaff(staff)
         .type(messageType)
         .content(content)
+        .subject(new Subject(messageType.displayName()))
         .status(MessageStatus.DRAFT)
-        .author(author)
         .forwarded(new Forwarded(false))
         .certificateId(certificateId)
         .build();
   }
 
-  public void update(Content content, MessageType messageType) {
+  public void update(Content content, MessageType messageType, Staff staff, Subject subject) {
     this.content = content;
     this.type = messageType;
+    this.authoredStaff = staff;
+    this.subject = subject;
+  }
+
+  public void send() {
+    this.status = MessageStatus.SENT;
+    this.sent = LocalDateTime.now();
   }
 }

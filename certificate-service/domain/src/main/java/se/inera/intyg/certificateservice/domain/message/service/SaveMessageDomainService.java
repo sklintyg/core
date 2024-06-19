@@ -11,7 +11,9 @@ import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
+import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 
 @RequiredArgsConstructor
 public class SaveMessageDomainService {
@@ -33,7 +35,12 @@ public class SaveMessageDomainService {
 
     final var message = messageRepository.getById(messageId);
 
-    message.update(content, messageType);
+    message.update(
+        content,
+        messageType,
+        Staff.create(actionEvaluation.user()),
+        new Subject(messageType.displayName())
+    );
 
     return messageRepository.save(message);
   }

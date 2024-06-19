@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.message.service;
 
+import jakarta.transaction.Transactional;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class SaveMessageService {
   private final SaveMessageDomainService saveMessageDomainService;
   private final QuestionConverter questionConverter;
 
+  @Transactional
   public SaveMessageResponse save(SaveMessageRequest request, String messageId) {
     saveMessageRequestValidator.validate(request, messageId);
 

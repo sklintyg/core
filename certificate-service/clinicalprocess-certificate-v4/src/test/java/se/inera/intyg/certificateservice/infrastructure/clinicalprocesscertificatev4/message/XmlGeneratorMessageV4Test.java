@@ -11,8 +11,10 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK_RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.ANSWER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.CONTACT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.answerBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.contactMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.ANSWER_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.ANSWER_REFERENCE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTENT;
@@ -76,12 +78,21 @@ class XmlGeneratorMessageV4Test {
   }
 
   @Test
-  void shouldIncludeMeddelandeId() {
+  void shouldIncludeMeddelandeIdFromAnswer() {
     final var meddelandeId = unmarshal(
         xmlGeneratorMessageV4.generate(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
     ).getMeddelandeId();
 
     assertEquals(ANSWER_ID, meddelandeId);
+  }
+
+  @Test
+  void shouldIncludeMeddelandeIdFromMessageIfAnswerIsNull() {
+    final var meddelandeId = unmarshal(
+        xmlGeneratorMessageV4.generate(null, CONTACT_MESSAGE, FK7473_CERTIFICATE)
+    ).getMeddelandeId();
+
+    assertEquals(MESSAGE_ID, meddelandeId);
   }
 
   @Test
@@ -108,7 +119,7 @@ class XmlGeneratorMessageV4Test {
   }
 
   @Test
-  void shouldIncludeSkickatTidpunkt() {
+  void shouldIncludeSkickatTidpunktFromAnswer() {
     final var expectedValue = "2024-04-01T12:30:35";
     final var answer = answerBuilder()
         .sent(LocalDateTime.parse(expectedValue))
@@ -116,6 +127,20 @@ class XmlGeneratorMessageV4Test {
 
     final var skickatTidpunkt = unmarshal(
         xmlGeneratorMessageV4.generate(answer, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+    ).getSkickatTidpunkt();
+
+    assertEquals(expectedValue, skickatTidpunkt.toString());
+  }
+
+  @Test
+  void shouldIncludeSkickatTidpunktFromMessageIfAnswerIsNull() {
+    final var expectedValue = "2024-04-01T12:30:35";
+    final var message = contactMessageBuilder()
+        .sent(LocalDateTime.parse(expectedValue))
+        .build();
+
+    final var skickatTidpunkt = unmarshal(
+        xmlGeneratorMessageV4.generate(null, message, FK7473_CERTIFICATE)
     ).getSkickatTidpunkt();
 
     assertEquals(expectedValue, skickatTidpunkt.toString());
@@ -195,7 +220,7 @@ class XmlGeneratorMessageV4Test {
   }
 
   @Test
-  void shouldIncludeRubrik() {
+  void shouldIncludeRubrikFromAnswer() {
     final var rubrik = unmarshal(
         xmlGeneratorMessageV4.generate(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
     ).getRubrik();
@@ -204,9 +229,27 @@ class XmlGeneratorMessageV4Test {
   }
 
   @Test
-  void shouldIncludeMeddelande() {
+  void shouldIncludeRubrikFromMessageIfAnswerIsNull() {
+    final var rubrik = unmarshal(
+        xmlGeneratorMessageV4.generate(null, CONTACT_MESSAGE, FK7473_CERTIFICATE)
+    ).getRubrik();
+
+    assertEquals(SUBJECT, rubrik);
+  }
+
+  @Test
+  void shouldIncludeMeddelandeFromAnswer() {
     final var meddelande = unmarshal(
         xmlGeneratorMessageV4.generate(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+    ).getMeddelande();
+
+    assertEquals(CONTENT, meddelande);
+  }
+
+  @Test
+  void shouldIncludeMeddelandeFromMessageIfAnswerIsNull() {
+    final var meddelande = unmarshal(
+        xmlGeneratorMessageV4.generate(null, CONTACT_MESSAGE, FK7473_CERTIFICATE)
     ).getMeddelande();
 
     assertEquals(CONTENT, meddelande);
@@ -225,6 +268,15 @@ class XmlGeneratorMessageV4Test {
   }
 
   @Test
+  void shouldExcludeSvarPaIfAnswerIsNull() {
+    final var svarPa = unmarshal(
+        xmlGeneratorMessageV4.generate(null, CONTACT_MESSAGE, FK7473_CERTIFICATE)
+    ).getSvarPa();
+
+    assertNull(svarPa);
+  }
+
+  @Test
   void shouldIncludeSvarPaWithoutReferens() {
     final var messageWithoutReference = complementMessageBuilder()
         .reference(null)
@@ -240,7 +292,7 @@ class XmlGeneratorMessageV4Test {
   }
 
   @Test
-  void shouldIncludeHoSPersonalBasicInformation() {
+  void shouldIncludeHoSPersonalBasicInformationFromAnswer() {
     final var expected = new HosPersonal();
     final var hsaId = new HsaId();
     hsaId.setRoot("1.2.752.129.2.1.4.1");
@@ -251,6 +303,29 @@ class XmlGeneratorMessageV4Test {
 
     final var skapadAv = unmarshal(
         xmlGeneratorMessageV4.generate(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+    ).getSkickatAv();
+
+    assertAll(
+        () -> assertEquals(expected.getPersonalId().getRoot(), skapadAv.getPersonalId().getRoot()),
+        () -> assertEquals(expected.getPersonalId().getExtension(),
+            skapadAv.getPersonalId().getExtension()),
+        () -> assertEquals(expected.getForskrivarkod(), skapadAv.getForskrivarkod()),
+        () -> assertEquals(expected.getFullstandigtNamn(), skapadAv.getFullstandigtNamn())
+    );
+  }
+
+  @Test
+  void shouldIncludeHoSPersonalBasicInformationFromMessageIfAnswerIsNull() {
+    final var expected = new HosPersonal();
+    final var hsaId = new HsaId();
+    hsaId.setRoot("1.2.752.129.2.1.4.1");
+    hsaId.setExtension(AJLA_DOCTOR_HSA_ID);
+    expected.setPersonalId(hsaId);
+    expected.setForskrivarkod("0000000");
+    expected.setFullstandigtNamn(AJLA_DOCTOR_FULLNAME);
+
+    final var skapadAv = unmarshal(
+        xmlGeneratorMessageV4.generate(null, CONTACT_MESSAGE, FK7473_CERTIFICATE)
     ).getSkickatAv();
 
     assertAll(

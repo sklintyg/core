@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
 
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +27,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 
 @ExtendWith(MockitoExtension.class)
 class MessageTest {
@@ -360,6 +362,7 @@ class MessageTest {
     void shallIncludeMessageActionAnswer() {
       final var message = Message.builder()
           .type(MessageType.CONTACT)
+          .author(new Author(AuthorType.FK.name()))
           .status(MessageStatus.SENT)
           .build();
 
@@ -369,6 +372,53 @@ class MessageTest {
 
       final var messageActions = message.actions(ACTION_EVALUATION, certificate);
       assertTrue(messageActions.contains(MessageActionFactory.answer()));
+    }
+
+    @Test
+    void shallExcludeMessageActionAnswerIfAuthorIsFromWC() {
+      final var message = Message.builder()
+          .type(MessageType.CONTACT)
+          .author(new Author(AuthorType.WC.name()))
+          .status(MessageStatus.SENT)
+          .build();
+
+      doReturn(List.of(CERTIFICATE_ACTION_ANSWER)).when(certificate).actionsInclude(
+          Optional.of(ACTION_EVALUATION)
+      );
+
+      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
+      assertFalse(messageActions.contains(MessageActionFactory.answer()));
+    }
+
+    @Test
+    void shallExcludeMessageActionAnswerIfAuthorIsNull() {
+      final var message = Message.builder()
+          .type(MessageType.CONTACT)
+          .status(MessageStatus.SENT)
+          .build();
+
+      doReturn(List.of(CERTIFICATE_ACTION_ANSWER)).when(certificate).actionsInclude(
+          Optional.of(ACTION_EVALUATION)
+      );
+
+      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
+      assertFalse(messageActions.contains(MessageActionFactory.answer()));
+    }
+
+    @Test
+    void shallExcludeMessageActionAnswerIfTypeIsComplement() {
+      final var message = Message.builder()
+          .type(MessageType.COMPLEMENT)
+          .author(new Author(AuthorType.FK.name()))
+          .status(MessageStatus.SENT)
+          .build();
+
+      doReturn(List.of(CERTIFICATE_ACTION_ANSWER)).when(certificate).actionsInclude(
+          Optional.of(ACTION_EVALUATION)
+      );
+
+      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
+      assertFalse(messageActions.contains(MessageActionFactory.answer()));
     }
 
     @Test
@@ -412,43 +462,52 @@ class MessageTest {
 
     @Test
     void shallIncludeId() {
-      assertNotNull(Message.create(MessageType.CONTACT, CONTENT, AUTHOR, CERTIFICATE_ID).id());
+      assertNotNull(Message.create(MessageType.CONTACT, CONTENT, CERTIFICATE_ID, AJLA_DOKTOR).id());
     }
 
     @Test
     void shallIncludeType() {
       assertEquals(MessageType.CONTACT,
-          Message.create(MessageType.CONTACT, CONTENT, AUTHOR, CERTIFICATE_ID).type());
+          Message.create(MessageType.CONTACT, CONTENT, CERTIFICATE_ID, AJLA_DOKTOR).type());
     }
 
     @Test
     void shallIncludeContent() {
       assertEquals(CONTENT,
-          Message.create(MessageType.CONTACT, CONTENT, AUTHOR, CERTIFICATE_ID).content());
+          Message.create(MessageType.CONTACT, CONTENT, CERTIFICATE_ID, AJLA_DOKTOR).content());
     }
 
     @Test
     void shallIncludeStatus() {
       assertEquals(MessageStatus.DRAFT,
-          Message.create(MessageType.CONTACT, CONTENT, AUTHOR, CERTIFICATE_ID).status());
+          Message.create(MessageType.CONTACT, CONTENT, CERTIFICATE_ID, AJLA_DOKTOR).status());
     }
 
     @Test
     void shallIncludeAuthor() {
-      assertEquals(AUTHOR,
-          Message.create(MessageType.CONTACT, CONTENT, AUTHOR, CERTIFICATE_ID).author());
+      assertEquals(AuthorType.WC.name(),
+          Message.create(MessageType.CONTACT, CONTENT, CERTIFICATE_ID, AJLA_DOKTOR).author()
+              .author());
+    }
+
+    @Test
+    void shallIncludeAuthoredStaff() {
+      assertEquals(AJLA_DOKTOR,
+          Message.create(MessageType.CONTACT, CONTENT, CERTIFICATE_ID, AJLA_DOKTOR)
+              .authoredStaff());
     }
 
     @Test
     void shallIncludeForwarded() {
       assertEquals(new Forwarded(false),
-          Message.create(MessageType.CONTACT, CONTENT, AUTHOR, CERTIFICATE_ID).forwarded());
+          Message.create(MessageType.CONTACT, CONTENT, CERTIFICATE_ID, AJLA_DOKTOR).forwarded());
     }
 
     @Test
     void shallIncludeCertificateId() {
       assertEquals(CERTIFICATE_ID,
-          Message.create(MessageType.CONTACT, CONTENT, AUTHOR, CERTIFICATE_ID).certificateId());
+          Message.create(MessageType.CONTACT, CONTENT, CERTIFICATE_ID, AJLA_DOKTOR)
+              .certificateId());
     }
   }
 
@@ -459,7 +518,9 @@ class MessageTest {
     void shallUpdateContent() {
       final var expectedContent = new Content("newContent");
       final var message = Message.builder().build();
-      message.update(expectedContent, MessageType.CONTACT);
+      final var staff = Staff.builder().build();
+      final var subject = new Subject("subject");
+      message.update(expectedContent, MessageType.CONTACT, staff, subject);
 
       assertEquals(expectedContent, message.content());
     }
@@ -467,10 +528,53 @@ class MessageTest {
     @Test
     void shallUpdateType() {
       final var expectedType = MessageType.CONTACT;
+      final var expectedContent = new Content("newContent");
       final var message = Message.builder().build();
-      message.update(new Content("newContent"), expectedType);
+      final var staff = Staff.builder().build();
+      final var subject = new Subject("subject");
+      message.update(expectedContent, expectedType, staff, subject);
 
       assertEquals(expectedType, message.type());
+    }
+
+    @Test
+    void shallUpdateAuthoredStaff() {
+      final var expectedContent = new Content("newContent");
+      final var message = Message.builder().build();
+      final var staff = Staff.builder().build();
+      final var subject = new Subject("subject");
+      message.update(expectedContent, MessageType.CONTACT, staff, subject);
+
+      assertEquals(staff, message.authoredStaff());
+    }
+
+    @Test
+    void shallUpdateSubject() {
+      final var expectedContent = new Content("newContent");
+      final var message = Message.builder().build();
+      final var staff = Staff.builder().build();
+      final var subject = new Subject("subject");
+      message.update(expectedContent, MessageType.CONTACT, staff, subject);
+
+      assertEquals(subject, message.subject());
+    }
+  }
+
+  @Nested
+  class SendTests {
+
+    @Test
+    void shallSetStatusSent() {
+      final var message = Message.builder().build();
+      message.send();
+      assertEquals(MessageStatus.SENT, message.status());
+    }
+
+    @Test
+    void shallSetSent() {
+      final var message = Message.builder().build();
+      message.send();
+      assertNotNull(message.sent());
     }
   }
 }

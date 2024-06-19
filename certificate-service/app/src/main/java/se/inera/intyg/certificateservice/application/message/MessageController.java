@@ -20,6 +20,8 @@ import se.inera.intyg.certificateservice.application.message.dto.IncomingMessage
 import se.inera.intyg.certificateservice.application.message.dto.MessageExistsResponse;
 import se.inera.intyg.certificateservice.application.message.dto.SaveMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.SaveMessageResponse;
+import se.inera.intyg.certificateservice.application.message.dto.SendMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.SendMessageResponse;
 import se.inera.intyg.certificateservice.application.message.service.CreateMessageService;
 import se.inera.intyg.certificateservice.application.message.service.DeleteMessageService;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateFromMessageService;
@@ -28,6 +30,7 @@ import se.inera.intyg.certificateservice.application.message.service.HandleMessa
 import se.inera.intyg.certificateservice.application.message.service.IncomingMessageService;
 import se.inera.intyg.certificateservice.application.message.service.MessageExistsService;
 import se.inera.intyg.certificateservice.application.message.service.SaveMessageService;
+import se.inera.intyg.certificateservice.application.message.service.SendMessageService;
 
 @RequiredArgsConstructor
 @RestController
@@ -42,6 +45,7 @@ public class MessageController {
   private final CreateMessageService createMessageService;
   private final SaveMessageService saveMessageService;
   private final DeleteMessageService deleteMessageService;
+  private final SendMessageService sendMessageService;
 
   @PostMapping
   void receiveMessage(@RequestBody IncomingMessageRequest incomingMessageRequest) {
@@ -94,5 +98,12 @@ public class MessageController {
       @RequestBody DeleteMessageRequest request,
       @PathVariable("messageId") String messageId) {
     deleteMessageService.delete(request, messageId);
+  }
+
+  @PostMapping("/{messageId}/send")
+  SendMessageResponse sendMessage(
+      @RequestBody SendMessageRequest request,
+      @PathVariable("messageId") String messageId) {
+    return sendMessageService.send(request, messageId);
   }
 }

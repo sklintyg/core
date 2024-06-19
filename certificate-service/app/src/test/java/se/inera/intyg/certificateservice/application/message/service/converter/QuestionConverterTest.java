@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.CONTACT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.AUTHOR_INCOMING_MESSAGE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTACT_INFO;
@@ -92,6 +93,12 @@ class QuestionConverterTest {
   void shallIncludeAuthor() {
     final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
     assertEquals(AUTHOR_INCOMING_MESSAGE_NAME, convert.getAuthor());
+  }
+
+  @Test
+  void shallIncludeAuthorFromAuthoredByStaffIfIncluded() {
+    final var convert = questionConverter.convert(CONTACT_MESSAGE, MESSAGE_ACTIONS);
+    assertEquals(AJLA_DOKTOR.name().fullName(), convert.getAuthor());
   }
 
   @Test
@@ -224,6 +231,7 @@ class QuestionConverterTest {
       final var convert = questionConverter.convert(message, MESSAGE_ACTIONS);
       assertEquals(AJLA_DOKTOR.name().fullName(), convert.getAnswer().getAuthor());
     }
+
 
     @Test
     void shallIncludeSent() {

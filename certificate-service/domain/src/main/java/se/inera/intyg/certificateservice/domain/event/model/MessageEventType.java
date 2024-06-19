@@ -4,6 +4,8 @@ public enum MessageEventType {
 
 
   ANSWER_COMPLEMENT("answer-complement-message", Constants.ACTION_TYPE_CREATION,
+      "message-sent"),
+  SEND_QUESTION("send-question-message", Constants.ACTION_TYPE_CREATION,
       "message-sent");
 
   private final String action;

@@ -23,6 +23,7 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.Reminder;
 import se.inera.intyg.certificateservice.domain.message.model.SenderReference;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.StaffRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageComplementEmbeddable;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageContactInfoEmbeddable;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
@@ -41,6 +42,8 @@ public class MessageEntityMapper {
 
   private final CertificateEntityRepository certificateEntityRepository;
   private final MessageRelationEntityRepository messageRelationEntityRepository;
+  private final StaffRepository staffEntityRepository;
+
 
   public MessageEntity toEntity(Message message, Integer key) {
     final var messageStatusEnum = MessageStatusEnum.valueOf(message.status().name());
@@ -59,6 +62,9 @@ public class MessageEntityMapper {
         .sent(message.sent())
         .forwarded(message.forwarded().value())
         .lastDateToReply(message.lastDateToReply())
+        .authoredByStaff(
+            message.authoredStaff() != null ? staffEntityRepository.staff(message.authoredStaff())
+                : null)
         .messageType(
             MessageTypeEntity.builder()
                 .key(messageTypeEnum.getKey())
@@ -131,6 +137,8 @@ public class MessageEntityMapper {
         .sent(messageEntity.getSent())
         .forwarded(new Forwarded(messageEntity.isForwarded()))
         .lastDateToReply(messageEntity.getLastDateToReply())
+        .authoredStaff(messageEntity.getAuthoredByStaff() != null ? StaffEntityMapper.toDomain(
+            messageEntity.getAuthoredByStaff()) : null)
         .contactInfo(
             new MessageContactInfo(
                 messageEntity.getContactInfo() != null ? messageEntity.getContactInfo().stream()

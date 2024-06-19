@@ -7,7 +7,6 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
-import se.inera.intyg.certificateservice.domain.message.model.Author;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
@@ -35,8 +34,8 @@ public class CreateMessageDomainService {
     final var createdMessage = Message.create(
         messageType,
         content,
-        new Author(Staff.create(actionEvaluation.user()).name().fullName()),
-        certificateId
+        certificateId,
+        Staff.create(actionEvaluation.user())
     );
 
     return messageRepository.save(createdMessage);
