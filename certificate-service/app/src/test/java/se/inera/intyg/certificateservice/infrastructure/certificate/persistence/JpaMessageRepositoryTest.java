@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -24,11 +25,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.jpa.domain.Specification;
+import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationRepository;
 
@@ -46,6 +50,9 @@ class JpaMessageRepositoryTest {
 
   @Mock
   private MessageEntityRepository messageEntityRepository;
+
+  @Mock
+  MessageEntitySpecificationFactory messageEntitySpecificationFactory;
 
   @InjectMocks
   private JpaMessageRepository jpaMessageRepository;
@@ -202,5 +209,27 @@ class JpaMessageRepositoryTest {
 
       verify(messageEntityRepository).deleteById(messageToBeDeleted.id());
     }
+  }
+
+  @Nested
+  class TestGetByMessagesRequest {
+
+    @Test
+    void shouldReturnMessageFromRepository() {
+      final var specification = mock(Specification.class);
+      final var expectedMessage = Message.builder().build();
+      final var request = MessagesRequest.builder().build();
+      when(messageEntitySpecificationFactory.create(request))
+          .thenReturn(specification);
+      when(messageEntityRepository.findAll(specification))
+          .thenReturn(List.of(COMPLEMENT_MESSAGE_ENTITY));
+      when(messageEntityMapper.toDomain(COMPLEMENT_MESSAGE_ENTITY))
+          .thenReturn(expectedMessage);
+
+      final var response = jpaMessageRepository.findByMessagesRequest(request);
+
+      assertEquals(List.of(expectedMessage), response);
+    }
+
   }
 }
