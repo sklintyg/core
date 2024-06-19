@@ -4802,8 +4802,55 @@ class FK7472ActiveIT {
                   MessagesQueryCriteriaDTO.builder()
                       .senderType(QuestionSenderTypeDTO.FK)
                       .forwarded(false)
-                      .sentDateFrom(LocalDateTime.now().minusDays(1))
-                      .sentDateTo(LocalDateTime.now().plusDays(1))
+                      .sentDateFrom(LocalDateTime.now().minusDays(1).toLocalDate().atStartOfDay())
+                      .sentDateTo(LocalDateTime.now().plusDays(1).toLocalDate().atStartOfDay())
+                      .issuedByStaffId(AJLA_DOCTOR_DTO.getId())
+                      .patientId(
+                          PersonIdDTO.builder()
+                              .id(ATHENA_REACT_ANDERSSON_DTO.getId().getId())
+                              .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER.name())
+                              .build()
+                      )
+                      .issuedOnUnitIds(List.of(ALFA_ALLERGIMOTTAGNINGEN_DTO.getId()))
+                      .build()
+              )
+              .build()
+      );
+
+      assertAll(
+          () -> assertEquals(1, response.getBody().getQuestions().size()),
+          () -> assertEquals(1, response.getBody().getCertificates().size())
+      );
+    }
+
+    @Test
+    @DisplayName("FK7472 - Ska returnera ärende om filter för skickat är satt till samma dag som meddelandet skickats")
+    void shallReturnListOfQuestionsForUnitWhenApplyingFilterSetToSameDayAsSent() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(FK7472, VERSION, SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(
+                  certificateId(testCertificates)
+              )
+              .build()
+      );
+
+      final var response = api.getMessagesForUnit(
+          customGetUnitMessagesRequest()
+              .messagesQueryCriteria(
+                  MessagesQueryCriteriaDTO.builder()
+                      .senderType(QuestionSenderTypeDTO.FK)
+                      .forwarded(false)
+                      .sentDateFrom(LocalDateTime.now().toLocalDate().atStartOfDay())
+                      .sentDateTo(LocalDateTime.now().toLocalDate().atStartOfDay())
                       .issuedByStaffId(AJLA_DOCTOR_DTO.getId())
                       .patientId(
                           PersonIdDTO.builder()

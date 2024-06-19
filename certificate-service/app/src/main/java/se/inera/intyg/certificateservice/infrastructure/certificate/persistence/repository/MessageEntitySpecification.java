@@ -13,12 +13,13 @@ public class MessageEntitySpecification {
 
   public static Specification<MessageEntity> sentEqualsAndGreaterThan(LocalDateTime from) {
     return (root, query, criteriaBuilder) ->
-        criteriaBuilder.greaterThanOrEqualTo(root.get("sent"), from);
+        criteriaBuilder.greaterThanOrEqualTo(root.get("sent"), from.toLocalDate().atStartOfDay());
   }
 
   public static Specification<MessageEntity> sentEqualsAndLesserThan(LocalDateTime to) {
     return (root, query, criteriaBuilder) ->
-        criteriaBuilder.lessThanOrEqualTo(root.get("sent"), to);
+        criteriaBuilder.lessThanOrEqualTo(root.get("sent"),
+            to.toLocalDate().plusDays(1).atStartOfDay());
   }
 
   public static Specification<MessageEntity> equalsForwarded(Forwarded forwarded) {
