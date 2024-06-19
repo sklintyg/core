@@ -20,7 +20,7 @@ public class GetUnitMessagesDomainService {
   public MessagesResponse get(MessagesRequest request, ActionEvaluation actionEvaluation) {
     final var messages = messageRepository.findByMessagesRequest(request)
         .stream()
-        .filter(message -> !isReminderOrAnswer(message))
+        .filter(message -> !isReminderOrAnswerOrMissing(message))
         .toList();
 
     final var certificates = messages.stream()
@@ -44,7 +44,7 @@ public class GetUnitMessagesDomainService {
         .build();
   }
 
-  private static boolean isReminderOrAnswer(Message message) {
+  private static boolean isReminderOrAnswerOrMissing(Message message) {
     return message.type() == MessageType.ANSWER || message.type() == MessageType.REMINDER
         || message.type() == MessageType.MISSING;
   }
