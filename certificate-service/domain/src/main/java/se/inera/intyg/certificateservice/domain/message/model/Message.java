@@ -128,7 +128,7 @@ public class Message {
       CertificateId certificateId, Staff staff) {
     return Message.builder()
         .id(new MessageId(UUID.randomUUID().toString()))
-        .author(new Author(AuthorType.WC.name()))
+        .author(new Author(staff.name().fullName()))
         .authoredStaff(staff)
         .type(messageType)
         .content(content)

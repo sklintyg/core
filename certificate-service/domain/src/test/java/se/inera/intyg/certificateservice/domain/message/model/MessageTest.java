@@ -362,7 +362,6 @@ class MessageTest {
     void shallIncludeMessageActionAnswer() {
       final var message = Message.builder()
           .type(MessageType.CONTACT)
-          .author(new Author(AuthorType.FK.name()))
           .status(MessageStatus.SENT)
           .build();
 
@@ -394,7 +393,6 @@ class MessageTest {
     void shallExcludeMessageActionAnswerIfTypeIsComplement() {
       final var message = Message.builder()
           .type(MessageType.COMPLEMENT)
-          .author(new Author(AuthorType.FK.name()))
           .status(MessageStatus.SENT)
           .build();
 
@@ -470,7 +468,7 @@ class MessageTest {
 
     @Test
     void shallIncludeAuthor() {
-      assertEquals(AuthorType.WC.name(),
+      assertEquals(AJLA_DOKTOR.name().fullName(),
           Message.create(MessageType.CONTACT, CONTENT, CERTIFICATE_ID, AJLA_DOKTOR).author()
               .author());
     }
