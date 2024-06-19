@@ -39,6 +39,7 @@ import se.inera.intyg.certificateservice.domain.message.service.XmlGeneratorMess
 import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesInfoDomainService;
+import se.inera.intyg.certificateservice.domain.unit.service.GetUnitMessagesDomainService;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorCertificateV4;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorValue;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.message.XmlGeneratorMessageV4;
@@ -273,5 +274,11 @@ public class AppConfig {
   public MessageEventDomainService messageEventDomainService(
       List<MessageEventSubscriber> messageEventSubscribers) {
     return new MessageEventDomainService(messageEventSubscribers);
+  }
+
+  @Bean
+  public GetUnitMessagesDomainService unitMessagesDomainService(
+      MessageRepository messageRepository, CertificateRepository certificateRepository) {
+    return new GetUnitMessagesDomainService(messageRepository, certificateRepository);
   }
 }

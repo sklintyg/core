@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.domain.message.repository;
 
+import java.util.List;
+import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 
@@ -10,4 +12,6 @@ public interface MessageRepository {
   boolean exists(MessageId messageId);
 
   Message getById(MessageId messageId);
+
+  List<Message> findByMessagesRequest(MessagesRequest messagesRequest);
 }

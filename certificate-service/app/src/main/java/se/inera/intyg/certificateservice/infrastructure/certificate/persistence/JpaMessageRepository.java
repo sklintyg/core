@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationRepository;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityMessageRepository;
@@ -21,6 +23,7 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
   private final MessageEntityMapper messageEntityMapper;
   private final MessageRelationRepository messageRelationRepository;
   private final MessageRelationEntityRepository messageRelationEntityRepository;
+  private final MessageEntitySpecificationFactory messageEntitySpecificationFactory;
 
 
   @Override
@@ -85,5 +88,14 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
         );
 
     return messageEntityMapper.toDomain(messageEntity);
+  }
+
+  @Override
+  public List<Message> findByMessagesRequest(MessagesRequest request) {
+    final var specification = messageEntitySpecificationFactory.create(request);
+
+    return messageEntityRepository.findAll(specification).stream()
+        .map(messageEntityMapper::toDomain)
+        .toList();
   }
 }
