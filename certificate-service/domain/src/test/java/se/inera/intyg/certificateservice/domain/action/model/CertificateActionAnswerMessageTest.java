@@ -10,7 +10,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.BETA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.relationReplaceBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_HUDMOTTAGNINGEN;
@@ -18,8 +17,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALLOW_COPY_FALSE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,8 +61,8 @@ class CertificateActionAnswerMessageTest {
     actionEvaluationBuilder = ActionEvaluation.builder()
         .user(AJLA_DOKTOR)
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
-        .patient(ATHENA_REACT_ANDERSSON)
         .careProvider(ALFA_REGIONEN)
+        .patient(ATHENA_REACT_ANDERSSON)
         .careUnit(ALFA_MEDICINCENTRUM);
   }
 
@@ -117,70 +114,6 @@ class CertificateActionAnswerMessageTest {
     assertFalse(
         certificateActionAnswerMessage.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)));
-  }
-
-  @Test
-  void shallReturnFalseIfPatientIsDeceased() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ATLAS_REACT_ABRAHAMSSON)
-        .user(AJLA_DOKTOR)
-        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
-        .build();
-
-    final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionAnswerMessage.evaluate(Optional.of(certificate),
-        Optional.of(actionEvaluation));
-
-    assertFalse(actualResult);
-  }
-
-  @Test
-  void shallReturnTrueIfPatientIsNotDeceased() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ATHENA_REACT_ANDERSSON)
-        .user(AJLA_DOKTOR)
-        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
-        .build();
-
-    final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionAnswerMessage.evaluate(Optional.of(certificate),
-        Optional.of(actionEvaluation));
-
-    assertTrue(actualResult);
-  }
-
-  @Test
-  void shallReturnFalseIfUserIsBlocked() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ATHENA_REACT_ANDERSSON)
-        .user(
-            ajlaDoctorBuilder()
-                .blocked(BLOCKED_TRUE)
-                .build()
-        )
-        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
-        .build();
-
-    final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionAnswerMessage.evaluate(Optional.of(certificate),
-        Optional.of(actionEvaluation));
-
-    assertFalse(actualResult);
-  }
-
-  @Test
-  void shallReturnTrueIfUserIsNotBlocked() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ATHENA_REACT_ANDERSSON)
-        .user(AJLA_DOKTOR)
-        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
-        .build();
-
-    final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionAnswerMessage.evaluate(Optional.of(certificate),
-        Optional.of(actionEvaluation));
-
-    assertTrue(actualResult);
   }
 
   @Test
@@ -262,35 +195,6 @@ class CertificateActionAnswerMessageTest {
         Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
-  }
-
-  @Test
-  void shallReturnFalseIfUserHasAllowCopyFalse() {
-    final var actionEvaluation = actionEvaluationBuilder()
-        .user(
-            ajlaDoctorBuilder()
-                .allowCopy(ALLOW_COPY_FALSE)
-                .build()
-        )
-        .build();
-    final var certificate = certificateBuilder.build();
-    assertFalse(
-        certificateActionAnswerMessage.evaluate(Optional.of(certificate),
-            Optional.of(actionEvaluation)),
-        () -> "Expected false when passing %s and %s".formatted(Optional.empty(), actionEvaluation)
-    );
-  }
-
-  @Test
-  void shallReturnTrueIfUserHasAllowCopyTrue() {
-    final var actionEvaluation = actionEvaluationBuilder().build();
-    final var certificate = certificateBuilder.build();
-
-    assertTrue(
-        certificateActionAnswerMessage.evaluate(Optional.of(certificate),
-            Optional.of(actionEvaluation)),
-        () -> "Expected true when passing %s and %s".formatted(Optional.empty(), actionEvaluation)
-    );
   }
 
   @Nested
@@ -469,6 +373,15 @@ class CertificateActionAnswerMessageTest {
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
+    }
+  }
+
+  @Nested
+  class IncludeTest {
+
+    @Test
+    void shallReturnFalse() {
+      assertFalse(certificateActionAnswerMessage.include(Optional.empty(), Optional.empty()));
     }
   }
 }

@@ -260,12 +260,8 @@ public class CertificateActionFactory {
               List.of(
                   new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
                   new ActionRuleSent(true),
-                  new ActionRuleUserNotBlocked(),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
-                  new ActionRuleInactiveUnit(),
-                  new ActionRulePatientAlive(),
-                  new ActionRuleUserAllowCopy()
+                  new ActionRuleProtectedPerson()
               )
           )
           .build();
