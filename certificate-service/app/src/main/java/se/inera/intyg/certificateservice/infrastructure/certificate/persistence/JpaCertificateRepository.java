@@ -100,7 +100,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
             .toList()
     );
 
-    if (certificateEntities.isEmpty()) {
+    if (certificateEntities.isEmpty() || certificateEntities.size() != certificateIds.size()) {
       throw new IllegalStateException(
           "No certificate found with ids '%s'".formatted(certificateIds));
     }

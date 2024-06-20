@@ -287,7 +287,7 @@ class JpaCertificateRepositoryTest {
     @Test
     void shouldReturnCertificatesFromRepository() {
       final var expectedCertificate = Certificate.builder().build();
-      final var expectedCertificates = List.of(expectedCertificate);
+      final var expectedCertificates = List.of(expectedCertificate, expectedCertificate);
       final var certificate1 = new CertificateId("ID1");
       final var certificate2 = new CertificateId("ID2");
 
@@ -295,7 +295,7 @@ class JpaCertificateRepositoryTest {
 
       when(certificateEntityRepository.findCertificateEntitiesByCertificateIdIn(
           List.of("ID1", "ID2"))
-      ).thenReturn(List.of(CERTIFICATE_ENTITY));
+      ).thenReturn(List.of(CERTIFICATE_ENTITY, CERTIFICATE_ENTITY));
       when(certificateEntityMapper.toDomain(CERTIFICATE_ENTITY))
           .thenReturn(expectedCertificate);
 
@@ -314,6 +314,21 @@ class JpaCertificateRepositoryTest {
       when(certificateEntityRepository.findCertificateEntitiesByCertificateIdIn(
           List.of("ID1", "ID2"))
       ).thenReturn(Collections.emptyList());
+
+      assertThrows(IllegalStateException.class,
+          () -> jpaCertificateRepository.getByIds(certificateIds));
+    }
+
+    @Test
+    void shouldThrowIfCertificateEntitiesSizeDontMatchCertificateIds() {
+      final var certificate1 = new CertificateId("ID1");
+      final var certificate2 = new CertificateId("ID2");
+
+      final var certificateIds = List.of(certificate1, certificate2);
+
+      when(certificateEntityRepository.findCertificateEntitiesByCertificateIdIn(
+          List.of("ID1", "ID2"))
+      ).thenReturn(List.of(CertificateEntity.builder().build()));
 
       assertThrows(IllegalStateException.class,
           () -> jpaCertificateRepository.getByIds(certificateIds));
