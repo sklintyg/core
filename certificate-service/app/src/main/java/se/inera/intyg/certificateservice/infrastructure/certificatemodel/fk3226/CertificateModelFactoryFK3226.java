@@ -225,7 +225,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
-                    .isEnabled(true)
+                    .enabled(true)
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.RECEIVE_COMPLEMENT)

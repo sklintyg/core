@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.domain.common.model.Role;
 public class CertificateActionSpecification {
 
   CertificateActionType certificateActionType;
-  Boolean isEnabled;
+  Boolean enabled;
   @Default
   List<Role> allowedRoles = Collections.emptyList();
 }

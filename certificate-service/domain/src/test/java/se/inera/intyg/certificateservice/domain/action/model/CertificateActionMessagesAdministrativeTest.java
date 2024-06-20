@@ -76,7 +76,7 @@ class CertificateActionMessagesAdministrativeTest {
   void shallReturnDescriptionIfEnabled() {
     final var certificateActionSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
-        .isEnabled(true)
+        .enabled(true)
         .build();
 
     final var actionMessagesAdministrative = (CertificateActionMessagesAdministrative) CertificateActionFactory.create(
@@ -91,7 +91,7 @@ class CertificateActionMessagesAdministrativeTest {
   void shallNotReturnDescriptionIfDisabled() {
     final var certificateActionSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
-        .isEnabled(false)
+        .enabled(false)
         .build();
 
     final var actionMessagesAdministrative = (CertificateActionMessagesAdministrative) CertificateActionFactory.create(
@@ -259,7 +259,7 @@ class CertificateActionMessagesAdministrativeTest {
     final var specification =
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
-            .isEnabled(true)
+            .enabled(true)
             .build();
 
     final var actionMessagesAdministrative = (CertificateActionMessagesAdministrative) CertificateActionFactory.create(

@@ -267,7 +267,7 @@ public class CertificateActionFactory {
           .build();
       case MESSAGES_ADMINISTRATIVE -> CertificateActionMessagesAdministrative.builder()
           .certificateActionSpecification(actionSpecification)
-          .enabled(actionSpecification.isEnabled())
+          .enabled(actionSpecification.enabled())
           .actionRules(
               List.of(
                   new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED))

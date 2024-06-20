@@ -346,7 +346,7 @@ class CertificateModelFactoryFK3226Test {
             )
             .findFirst()
             .orElseThrow()
-            .isEnabled(),
+            .enabled(),
         "Expected type: %s".formatted(expectedType));
   }
 
