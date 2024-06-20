@@ -34,7 +34,17 @@ public class XmlGeneratorMessageV4 implements XmlGeneratorMessage {
       "yyyy-MM-dd'T'HH:mm:ss");
 
   @Override
-  public Xml generate(Answer answer, Message message, Certificate certificate) {
+  public Xml generate(Message message, Certificate certificate) {
+    return marshall(
+        sendMessageToRecipientType(
+            message,
+            certificate
+        )
+    );
+  }
+
+  @Override
+  public Xml generateAnswer(Answer answer, Message message, Certificate certificate) {
     return marshall(
         sendMessageToRecipientType(
             answer,
@@ -44,18 +54,18 @@ public class XmlGeneratorMessageV4 implements XmlGeneratorMessage {
     );
   }
 
-  private static SendMessageToRecipientType sendMessageToRecipientType(Answer answer,
-      Message message, Certificate certificate) {
+  private static SendMessageToRecipientType sendMessageToRecipientType(Message message,
+      Certificate certificate) {
     final var sendMessageToRecipientType = new SendMessageToRecipientType();
     sendMessageToRecipientType.setMeddelandeId(
-        getStringValue(answer, a -> a.id().id(), message, m -> m.id().id())
+        message.id().id()
     );
-    if (answer != null && answer.reference() != null) {
-      sendMessageToRecipientType.setReferensId(answer.reference().reference());
+    if (message.reference() != null) {
+      sendMessageToRecipientType.setReferensId(message.reference().reference());
     }
     sendMessageToRecipientType.setSkickatTidpunkt(
         skickatTidpunkt(
-            getDateValue(answer, Answer::sent, message, Message::sent)
+            message.sent()
         )
     );
     sendMessageToRecipientType.setIntygsId(
@@ -71,17 +81,58 @@ public class XmlGeneratorMessageV4 implements XmlGeneratorMessage {
         amneskod(message.type())
     );
     sendMessageToRecipientType.setRubrik(
-        getStringValue(answer, a -> a.subject().subject(), message, m -> m.subject().subject())
+        message.subject().subject()
     );
     sendMessageToRecipientType.setMeddelande(
-        getStringValue(answer, a -> a.content().content(), message, m -> m.content().content())
-    );
-    sendMessageToRecipientType.setSvarPa(
-        answer != null ? svarPa(message) : null
+        message.content().content()
     );
     sendMessageToRecipientType.setSkickatAv(
         skickatAv(
-            getStaffValue(answer, Answer::authoredStaff, message, Message::authoredStaff),
+            message.authoredStaff(),
+            certificate
+        )
+    );
+    return sendMessageToRecipientType;
+  }
+
+  private static SendMessageToRecipientType sendMessageToRecipientType(Answer answer,
+      Message message, Certificate certificate) {
+    final var sendMessageToRecipientType = new SendMessageToRecipientType();
+    sendMessageToRecipientType.setMeddelandeId(
+        answer.id().id()
+    );
+    if (answer.reference() != null) {
+      sendMessageToRecipientType.setReferensId(answer.reference().reference());
+    }
+    sendMessageToRecipientType.setSkickatTidpunkt(
+        skickatTidpunkt(
+            answer.sent()
+        )
+    );
+    sendMessageToRecipientType.setIntygsId(
+        intygsId(certificate)
+    );
+    sendMessageToRecipientType.setPatientPersonId(
+        patientPersonId(certificate)
+    );
+    sendMessageToRecipientType.setLogiskAdressMottagare(
+        logiskAdressMottagare(certificate)
+    );
+    sendMessageToRecipientType.setAmne(
+        amneskod(message.type())
+    );
+    sendMessageToRecipientType.setRubrik(
+        answer.subject().subject()
+    );
+    sendMessageToRecipientType.setMeddelande(
+        answer.content().content()
+    );
+    sendMessageToRecipientType.setSvarPa(
+        svarPa(message)
+    );
+    sendMessageToRecipientType.setSkickatAv(
+        skickatAv(
+            answer.authoredStaff(),
             certificate
         )
     );
