@@ -21,15 +21,19 @@ public class GetUnitMessagesDomainService {
         .stream()
         .toList();
 
-    final var certificates = messages.stream()
-        .map(Message::certificateId)
-        .distinct()
-        .map(certificateRepository::getById)
+    final var certificates = certificateRepository.getByIds(
+            messages.stream()
+                .map(Message::certificateId)
+                .distinct()
+                .toList()
+        )
+        .stream()
         .filter(certificate -> certificate.allowTo(
                 CertificateActionType.READ,
                 Optional.of(actionEvaluation)
             )
-        ).toList();
+        )
+        .toList();
 
     final var filteredMessagesBasedOnActionEvaluation = messages.stream()
         .filter(message -> certificates.stream()
