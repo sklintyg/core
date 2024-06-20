@@ -438,6 +438,20 @@ class MessageTest {
   }
 
   @Nested
+  class AnswerTests {
+
+    @Test
+    void shallUpdateAnswer() {
+      final var answer = Answer.builder()
+          .build();
+      final var message = Message.builder().build();
+
+      message.answer(answer);
+      assertEquals(answer, message.answer());
+    }
+  }
+
+  @Nested
   class CreateMessageTests {
 
     private static final CertificateId CERTIFICATE_ID = new CertificateId("certificateId");

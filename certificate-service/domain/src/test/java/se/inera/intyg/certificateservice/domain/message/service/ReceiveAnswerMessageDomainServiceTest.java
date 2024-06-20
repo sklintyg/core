@@ -91,7 +91,7 @@ class ReceiveAnswerMessageDomainServiceTest {
 
       receiveAnswerMessageDomainService.receive(MESSAGE_ID, ANSWER);
 
-      verify(messageRepository).save(expectedMessage.withAnswer(ANSWER));
+      verify(messageRepository).save(expectedMessage);
     }
 
     @Test
@@ -99,7 +99,7 @@ class ReceiveAnswerMessageDomainServiceTest {
       final var expectedMessage = complementMessageBuilder().build();
 
       doReturn(COMPLEMENT_MESSAGE).when(messageRepository).getById(MESSAGE_ID);
-      doReturn(expectedMessage).when(messageRepository).save(COMPLEMENT_MESSAGE.withAnswer(ANSWER));
+      doReturn(expectedMessage).when(messageRepository).save(COMPLEMENT_MESSAGE);
 
       final var actualMessage = receiveAnswerMessageDomainService.receive(MESSAGE_ID, ANSWER);
 
@@ -116,7 +116,7 @@ class ReceiveAnswerMessageDomainServiceTest {
 
       receiveAnswerMessageDomainService.receive(MESSAGE_ID, ANSWER);
 
-      verify(expectedMessage).withAnswer(ANSWER);
+      verify(expectedMessage).answer(ANSWER);
     }
   }
 }
