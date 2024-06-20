@@ -313,7 +313,7 @@ class JpaCertificateRepositoryTest {
 
       when(certificateEntityRepository.findCertificateEntitiesByCertificateIdIn(
           List.of("ID1", "ID2"))
-      ).thenReturn(List.of(CertificateEntity.builder().build()));
+      ).thenReturn(List.of(CertificateEntity.builder().certificateId("ID").build()));
 
       assertThrows(IllegalStateException.class,
           () -> jpaCertificateRepository.getByIds(certificateIds));
