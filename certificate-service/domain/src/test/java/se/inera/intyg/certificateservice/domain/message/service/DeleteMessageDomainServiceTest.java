@@ -61,6 +61,21 @@ class DeleteMessageDomainServiceTest {
 
     deleteMessageDomainService.delete(MESSAGE_ID, ACTION_EVALUATION);
 
-    verify(messageRepository).deleteById(MESSAGE_ID);
+    verify(message).delete();
+  }
+
+  @Test
+  void shallPersistDeletedMessage() {
+    final var certificate = mock(Certificate.class);
+    final var message = mock(Message.class);
+    doReturn(message).when(messageRepository).getById(MESSAGE_ID);
+    doReturn(CERTIFICATE_ID).when(message).certificateId();
+    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
+    doReturn(true).when(certificate)
+        .allowTo(CertificateActionType.DELETE_MESSAGE, Optional.of(ACTION_EVALUATION));
+
+    deleteMessageDomainService.delete(MESSAGE_ID, ACTION_EVALUATION);
+
+    verify(messageRepository).save(message);
   }
 }

@@ -29,6 +29,7 @@ import org.springframework.data.jpa.domain.Specification;
 import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
@@ -115,6 +116,42 @@ class JpaMessageRepositoryTest {
 
       verify(messageRelationRepository).save(COMPLEMENT_MESSAGE, savedMessageEntity);
     }
+
+    @Test
+    void shallDeleteMessageIfStatusIsDeletedDraft() {
+      final var message = Message.builder()
+          .status(MessageStatus.DELETED_DRAFT)
+          .id(new MessageId(MESSAGE_ID))
+          .build();
+
+      final var messageEntity = MessageEntity.builder().build();
+      final var messageEntityToDelete = Optional.of(messageEntity);
+
+      doReturn(messageEntityToDelete).when(messageEntityRepository)
+          .findMessageEntityById(MESSAGE_ID);
+
+      jpaMessageRepository.save(message);
+
+      verify(messageEntityRepository).delete(messageEntity);
+    }
+
+
+    @Test
+    void shallReturnMessageAfterDeletingEntity() {
+      final var message = Message.builder()
+          .status(MessageStatus.DELETED_DRAFT)
+          .id(new MessageId(MESSAGE_ID))
+          .build();
+
+      final var messageEntity = MessageEntity.builder().build();
+      final var messageEntityToDelete = Optional.of(messageEntity);
+
+      doReturn(messageEntityToDelete).when(messageEntityRepository)
+          .findMessageEntityById(MESSAGE_ID);
+
+      final var actualResult = jpaMessageRepository.save(message);
+      assertEquals(message, actualResult);
+    }
   }
 
   @Nested
@@ -191,23 +228,6 @@ class JpaMessageRepositoryTest {
       final var response = jpaMessageRepository.getById(new MessageId("ID"));
 
       assertEquals(expectedMessage, response);
-    }
-  }
-
-  @Nested
-  class TestDelete {
-
-    @Test
-    void shallThrowIfMessageIdIsNull() {
-      assertThrows(IllegalArgumentException.class, () -> jpaMessageRepository.deleteById(null));
-    }
-
-    @Test
-    void shallDeleteMessage() {
-      final var messageToBeDeleted = new MessageId(MESSAGE_ID);
-      jpaMessageRepository.deleteById(messageToBeDeleted);
-
-      verify(messageEntityRepository).deleteById(messageToBeDeleted.id());
     }
   }
 

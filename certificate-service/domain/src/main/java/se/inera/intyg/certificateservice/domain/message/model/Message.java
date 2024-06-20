@@ -150,4 +150,14 @@ public class Message {
     this.status = MessageStatus.SENT;
     this.sent = LocalDateTime.now();
   }
+
+  public void delete() {
+    if (this.status != MessageStatus.DRAFT) {
+      throw new IllegalStateException(
+          "Incorrect status '%s' - required status is '%s' to delete".formatted(this.status,
+              MessageStatus.DRAFT)
+      );
+    }
+    this.status = MessageStatus.DELETED_DRAFT;
+  }
 }

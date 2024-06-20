@@ -13,7 +13,5 @@ public interface MessageRepository {
 
   Message getById(MessageId messageId);
 
-  void deleteById(MessageId messageId);
-
   List<Message> findByMessagesRequest(MessagesRequest messagesRequest);
 }

@@ -27,6 +27,8 @@ public class DeleteMessageDomainService {
       );
     }
 
-    messageRepository.deleteById(messageId);
+    message.delete();
+
+    messageRepository.save(message);
   }
 }

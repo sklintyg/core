@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
@@ -32,6 +33,12 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
       throw new IllegalArgumentException(
           "Unable to save, message was null"
       );
+    }
+
+    if (message.status() == MessageStatus.DELETED_DRAFT) {
+      messageEntityRepository.findMessageEntityById(message.id().id())
+          .ifPresent(messageEntityRepository::delete);
+      return message;
     }
 
     final var savedEntity = messageEntityRepository.save(
@@ -88,14 +95,6 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
         );
 
     return messageEntityMapper.toDomain(messageEntity);
-  }
-
-  @Override
-  public void deleteById(MessageId messageId) {
-    if (messageId == null) {
-      throw new IllegalArgumentException("Cannot delete message if messageId is null");
-    }
-    messageEntityRepository.deleteById(messageId.id());
   }
 
   @Override

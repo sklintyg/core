@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
@@ -558,6 +559,30 @@ class MessageTest {
       final var message = Message.builder().build();
       message.send();
       assertNotNull(message.sent());
+    }
+  }
+
+  @Nested
+  class DeleteTests {
+
+    @Test
+    void shallThrowwIfMessageIsNotStatusDraft() {
+      final var message = Message.builder()
+          .status(MessageStatus.SENT)
+          .build();
+
+      assertThrows(IllegalStateException.class, message::delete);
+    }
+
+    @Test
+    void shallUpdateStatusToDeletedDraftIfDraft() {
+      final var message = Message.builder()
+          .status(MessageStatus.DRAFT)
+          .build();
+
+      message.delete();
+
+      assertEquals(MessageStatus.DELETED_DRAFT, message.status());
     }
   }
 }
