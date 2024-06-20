@@ -305,21 +305,6 @@ class JpaCertificateRepositoryTest {
     }
 
     @Test
-    void shouldThrowIfNoCertificateEntitiesAreFound() {
-      final var certificate1 = new CertificateId("ID1");
-      final var certificate2 = new CertificateId("ID2");
-
-      final var certificateIds = List.of(certificate1, certificate2);
-
-      when(certificateEntityRepository.findCertificateEntitiesByCertificateIdIn(
-          List.of("ID1", "ID2"))
-      ).thenReturn(Collections.emptyList());
-
-      assertThrows(IllegalStateException.class,
-          () -> jpaCertificateRepository.getByIds(certificateIds));
-    }
-
-    @Test
     void shouldThrowIfCertificateEntitiesSizeDontMatchCertificateIds() {
       final var certificate1 = new CertificateId("ID1");
       final var certificate2 = new CertificateId("ID2");
