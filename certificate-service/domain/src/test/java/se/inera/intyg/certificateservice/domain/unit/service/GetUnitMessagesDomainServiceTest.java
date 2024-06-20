@@ -1,8 +1,11 @@
 package se.inera.intyg.certificateservice.domain.unit.service;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -89,5 +92,17 @@ class GetUnitMessagesDomainServiceTest {
 
     assertEquals(List.of(certificateWithReadPermission),
         result.certificates());
+  }
+
+  @Test
+  void shouldReturnEmptyResponseIfNoMessagesAreFound() {
+    when(messageRepository.findByMessagesRequest(MESSAGES_REQUEST))
+        .thenReturn(Collections.emptyList());
+
+    final var result = getUnitMessagesDomainService.get(MESSAGES_REQUEST, ACTION_EVALUATION);
+    assertAll(
+        () -> assertTrue(result.messages().isEmpty()),
+        () -> assertTrue(result.certificates().isEmpty())
+    );
   }
 }

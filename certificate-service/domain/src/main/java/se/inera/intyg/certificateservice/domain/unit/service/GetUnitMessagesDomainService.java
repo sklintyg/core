@@ -21,6 +21,10 @@ public class GetUnitMessagesDomainService {
         .stream()
         .toList();
 
+    if (messages.isEmpty()) {
+      return MessagesResponse.builder().build();
+    }
+
     final var certificates = certificateRepository.getByIds(
             messages.stream()
                 .map(Message::certificateId)
