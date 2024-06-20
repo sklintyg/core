@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.message.dto.GetMessageInternalXmlResponse;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 import se.inera.intyg.certificateservice.domain.message.service.XmlGeneratorMessage;
@@ -23,9 +25,14 @@ public class GetMessageInternalXmlService {
     final var certificate = certificateRepository.getById(message.certificateId());
 
     return GetMessageInternalXmlResponse.builder()
-        .xml(
-            xmlGeneratorMessage.generate(message.answer(), message, certificate).base64()
-        )
+        .xml(getXml(message, certificate))
         .build();
+  }
+
+  private String getXml(Message message, Certificate certificate) {
+    return message.answer() != null
+        ? xmlGeneratorMessage.generateAnswer(message.answer(), message, certificate)
+        .base64()
+        : xmlGeneratorMessage.generate(message, certificate).base64();
   }
 }

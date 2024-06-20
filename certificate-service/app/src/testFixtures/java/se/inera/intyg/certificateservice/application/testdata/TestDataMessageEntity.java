@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.application.testdata;
 
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateEntity.certificateEntityBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.AJLA_DOKTOR_ENTITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.ANSWER_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.COMPLEMENT_QUESTION_ID_ONE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.COMPLEMENT_TEXT_ONE;
@@ -14,6 +15,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
 
+import java.util.Collections;
 import java.util.List;
 import se.inera.intyg.certificateservice.application.message.dto.SentByDTO;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageComplementEmbeddable;
@@ -27,6 +29,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 public class TestDataMessageEntity {
 
   public final static MessageEntity COMPLEMENT_MESSAGE_ENTITY = complementMessageEntityBuilder().build();
+  public final static MessageEntity CONTACT_MESSAGE_ENTITY = contactMessageEntityBuilder().build();
   public final static MessageEntity ANSWER_MESSAGE_ENTITY = answerMessageEntityBuilder().build();
   public final static MessageEntity REMINDER_MESSAGE_ENTITY = reminderMessageEntityBuilder().build();
 
@@ -74,6 +77,45 @@ public class TestDataMessageEntity {
                     .build()
             )
         )
+        .certificate(certificateEntityBuilder().build());
+  }
+
+  public static MessageEntity.MessageEntityBuilder contactMessageEntityBuilder() {
+    return MessageEntity.builder()
+        .key(MESSAGE_KEY)
+        .id(MESSAGE_ID)
+        .reference(REFERENCE_ID)
+        .subject(SUBJECT)
+        .content(CONTENT)
+        .author(SentByDTO.FK.name())
+        .created(CREATED_AFTER_SENT)
+        .modified(CREATED_AFTER_SENT)
+        .sent(SENT)
+        .forwarded(false)
+        .lastDateToReply(LAST_DATE_TO_REPLY)
+        .status(
+            MessageStatusEntity.builder()
+                .key(MessageStatusEnum.SENT.getKey())
+                .status(MessageStatusEnum.SENT.name())
+                .build()
+        )
+        .messageType(
+            MessageTypeEntity.builder()
+                .key(MessageTypeEnum.CONTACT.getKey())
+                .type(MessageTypeEnum.CONTACT.name())
+                .build()
+        )
+        .contactInfo(
+            CONTACT_INFO.stream()
+                .map(info ->
+                    MessageContactInfoEmbeddable.builder()
+                        .info(info)
+                        .build()
+                )
+                .toList()
+        )
+        .complements(Collections.emptyList())
+        .authoredByStaff(AJLA_DOKTOR_ENTITY)
         .certificate(certificateEntityBuilder().build());
   }
 

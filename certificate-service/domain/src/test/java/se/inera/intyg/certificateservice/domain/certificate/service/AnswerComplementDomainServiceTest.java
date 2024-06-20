@@ -29,6 +29,7 @@ import se.inera.intyg.certificateservice.domain.event.service.MessageEventDomain
 import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
 
@@ -44,6 +45,7 @@ class AnswerComplementDomainServiceTest {
           .build()
   );
   private static final Content CONTENT = new Content("content");
+  private static final MessageId MESSAGE_ID = new MessageId("messageId");
   @Mock
   private SetMessagesToHandleDomainService setMessagesToHandleDomainService;
   @Mock
@@ -100,9 +102,12 @@ class AnswerComplementDomainServiceTest {
     final var certificate = mock(Certificate.class);
 
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
+    doReturn(CERTIFICATE_ID).when(certificate).id();
     doReturn(true).when(certificate).allowTo(CANNOT_COMPLEMENT, Optional.of(ACTION_EVALUATION));
 
-    final var answer = Answer.builder().build();
+    final var answer = Answer.builder()
+        .id(MESSAGE_ID)
+        .build();
     doReturn(List.of(
         Message.builder()
             .created(LocalDateTime.now())
@@ -126,7 +131,8 @@ class AnswerComplementDomainServiceTest {
     assertAll(
         () -> assertEquals(MessageEventType.ANSWER_COMPLEMENT,
             certificateEventCaptor.getValue().type()),
-        () -> assertEquals(answer, certificateEventCaptor.getValue().answer()),
+        () -> assertEquals(MESSAGE_ID, certificateEventCaptor.getValue().messageId()),
+        () -> assertEquals(CERTIFICATE_ID, certificateEventCaptor.getValue().certificateId()),
         () -> assertEquals(ACTION_EVALUATION, certificateEventCaptor.getValue().actionEvaluation()),
         () -> assertTrue(certificateEventCaptor.getValue().duration() >= 0)
     );

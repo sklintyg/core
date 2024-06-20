@@ -14,6 +14,8 @@ public interface CertificateRepository {
 
   Certificate getById(CertificateId certificateId);
 
+  List<Certificate> getByIds(List<CertificateId> certificateIds);
+
   boolean exists(CertificateId certificateId);
 
   List<Certificate> findByCertificatesRequest(CertificatesRequest request);

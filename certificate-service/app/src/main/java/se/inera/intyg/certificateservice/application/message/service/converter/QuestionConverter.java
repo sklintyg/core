@@ -8,6 +8,7 @@ import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionTypeDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageAction;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
@@ -29,7 +30,11 @@ public class QuestionConverter {
         .id(message.id().id())
         .certificateId(message.certificateId().id())
         .type(QuestionTypeDTO.valueOf(message.type().name()))
-        .author(message.author().name())
+        .author(
+            message.authoredStaff() != null
+                ? message.authoredStaff().name().fullName()
+                : message.author().name()
+        )
         .subject(message.subject().subject())
         .sent(message.sent())
         .isHandled(message.status().equals(MessageStatus.HANDLED))
@@ -67,7 +72,7 @@ public class QuestionConverter {
             message.answer() != null
                 ? AnswerDTO.builder()
                 .id(message.answer().id().id())
-                .author(getAuthor(message))
+                .author(getAuthor(message.answer()))
                 .sent(message.answer().sent())
                 .message(message.answer().content().content())
                 .contactInfo(getContactInfo(message))
@@ -77,10 +82,10 @@ public class QuestionConverter {
         .build();
   }
 
-  private static String getAuthor(Message message) {
-    return message.answer().authoredStaff() != null
-        ? message.answer().authoredStaff().name().fullName()
-        : message.author().name();
+  private static String getAuthor(Answer answer) {
+    return answer.authoredStaff() != null
+        ? answer.authoredStaff().name().fullName()
+        : answer.author().name();
   }
 
   private static List<String> getContactInfo(Message message) {

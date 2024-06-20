@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.application.message.service;
 
-import java.util.Collections;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
@@ -8,7 +8,7 @@ import se.inera.intyg.certificateservice.application.message.dto.HandleMessageRe
 import se.inera.intyg.certificateservice.application.message.dto.HandleMessageResponse;
 import se.inera.intyg.certificateservice.application.message.service.converter.QuestionConverter;
 import se.inera.intyg.certificateservice.application.message.service.validator.HandleMessageRequestValidator;
-import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 import se.inera.intyg.certificateservice.domain.message.service.HandleMessageDomainService;
@@ -21,9 +21,10 @@ public class HandleMessageService {
   private final ActionEvaluationFactory actionEvaluationFactory;
   private final MessageRepository messageRepository;
   private final HandleMessageDomainService handleMessageDomainService;
-  private final GetCertificateDomainService getCertificateDomainService;
+  private final CertificateRepository certificateRepository;
   private final QuestionConverter questionConverter;
 
+  @Transactional
   public HandleMessageResponse handle(HandleMessageRequest request, String messageId) {
     handleMessageRequestValidator.validate(request, messageId);
 
@@ -36,9 +37,8 @@ public class HandleMessageService {
 
     final var message = messageRepository.getById(new MessageId(messageId));
 
-    final var certificate = getCertificateDomainService.get(
-        message.certificateId(),
-        actionEvaluation
+    final var certificate = certificateRepository.getById(
+        message.certificateId()
     );
 
     final var updatedMessage = handleMessageDomainService.handle(
@@ -49,7 +49,9 @@ public class HandleMessageService {
     );
 
     return HandleMessageResponse.builder()
-        .question(questionConverter.convert(updatedMessage, Collections.emptyList()))
+        .question(questionConverter.convert(
+            updatedMessage,
+            updatedMessage.actions(actionEvaluation, certificate)))
         .build();
   }
 }

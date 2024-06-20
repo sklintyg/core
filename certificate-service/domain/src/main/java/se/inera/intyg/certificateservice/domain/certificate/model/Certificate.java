@@ -395,7 +395,7 @@ public class Certificate {
     this.messages = this.messages.stream()
         .map(message -> {
           if (message.type().equals(MessageType.COMPLEMENT)) {
-            return message.withAnswer(
+            message.answer(
                 Answer.builder()
                     .id(message.id())
                     .reference(message.reference())
@@ -410,9 +410,8 @@ public class Certificate {
                     .authoredStaff(Staff.create(actionEvaluation.user()))
                     .build()
             );
-          } else {
-            return message;
           }
+          return message;
         })
         .toList();
   }

@@ -13,6 +13,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProv
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_MESSAGE_TYPES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REF;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REFERENCE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.RECIPIENT;
@@ -52,6 +53,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMessageTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRecipientDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationTypeDTO;
@@ -111,6 +113,8 @@ class CertificateMetadataConverterTest {
   private static final String CERTIFICATE_SUMMARY_LABEL = "SummaryLabel";
   private static final String CERTIFICATE_SUMMARY_VALUE = "SummaryValue";
   @Mock
+  private CertificateMessageTypeConverter certificateMessageTypeConverter;
+  @Mock
   private CertificateSummaryProvider certificateSummaryProvider;
   @Mock
   private CertificateUnitConverter certificateUnitConverter;
@@ -141,6 +145,7 @@ class CertificateMetadataConverterTest {
                 .name(TYPE_NAME)
                 .detailedDescription(TYPE_DESCRIPTION)
                 .recipient(RECIPIENT)
+                .messageTypes(CERTIFICATE_MESSAGE_TYPES)
                 .elementSpecifications(
                     List.of(
                         ElementSpecification.builder()
@@ -775,5 +780,17 @@ class CertificateMetadataConverterTest {
           certificateMetadataConverter.convert(replacedCertificate).getRelations()
       );
     }
+  }
+
+  @Test
+  void shallIncludeMessageTypes() {
+    final var certificateMessageTypeDTO = CertificateMessageTypeDTO.builder().build();
+    final var expectedMessageTypes = List.of(certificateMessageTypeDTO);
+    doReturn(certificateMessageTypeDTO).when(certificateMessageTypeConverter)
+        .convert(CERTIFICATE_MESSAGE_TYPES.get(0));
+
+    assertEquals(expectedMessageTypes,
+        certificateMetadataConverter.convert(certificate).getMessageTypes()
+    );
   }
 }

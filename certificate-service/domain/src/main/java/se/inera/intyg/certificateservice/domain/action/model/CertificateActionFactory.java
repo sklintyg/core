@@ -243,8 +243,31 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case CREATE_MESSAGE -> CertificateActionCreateMessage.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
+                  new ActionRuleSent(true),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson()
+              )
+          )
+          .build();
+      case ANSWER_MESSAGE -> CertificateActionAnswerMessage.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
+                  new ActionRuleSent(true),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson()
+              )
+          )
+          .build();
       case MESSAGES_ADMINISTRATIVE -> CertificateActionMessagesAdministrative.builder()
           .certificateActionSpecification(actionSpecification)
+          .enabled(actionSpecification.enabled())
           .actionRules(
               List.of(
                   new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED))
@@ -274,6 +297,39 @@ public class CertificateActionFactory {
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
                   new ActionRuleUserAllowCopy()
+              )
+          )
+          .build();
+      case SAVE_MESSAGE -> CertificateActionSaveMessage.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
+                  new ActionRuleSent(true),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson()
+              )
+          )
+          .build();
+      case DELETE_MESSAGE -> CertificateActionDeleteMessage.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
+                  new ActionRuleSent(true),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson()
+              )
+          )
+          .build();
+      case SEND_MESSAGE -> CertificateActionSendMessage.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
+                  new ActionRuleSent(true),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson()
               )
           )
           .build();

@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.action.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
@@ -72,9 +73,32 @@ class CertificateActionMessagesAdministrativeTest {
   }
 
   @Test
-  void shallReturnDescription() {
+  void shallReturnDescriptionIfEnabled() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
+        .enabled(true)
+        .build();
+
+    final var actionMessagesAdministrative = (CertificateActionMessagesAdministrative) CertificateActionFactory.create(
+        certificateActionSpecification
+    );
+
     assertEquals("Funktionen finns inte för detta intyg.",
-        certificateActionMessagesAdministrative.getDescription(Optional.empty()));
+        actionMessagesAdministrative.getDescription(Optional.empty()));
+  }
+
+  @Test
+  void shallNotReturnDescriptionIfDisabled() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
+        .enabled(false)
+        .build();
+
+    final var actionMessagesAdministrative = (CertificateActionMessagesAdministrative) CertificateActionFactory.create(
+        certificateActionSpecification
+    );
+
+    assertNull(actionMessagesAdministrative.getDescription(Optional.empty()));
   }
 
   @Test
@@ -228,5 +252,29 @@ class CertificateActionMessagesAdministrativeTest {
         Optional.of(actionEvaluation));
 
     assertFalse(enabled);
+  }
+
+  @Test
+  void shallReturnEnabledTrue() {
+    final var specification =
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
+            .enabled(true)
+            .build();
+
+    final var actionMessagesAdministrative = (CertificateActionMessagesAdministrative) CertificateActionFactory.create(
+        specification
+    );
+
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .build();
+
+    final var enabled = actionMessagesAdministrative.isEnabled(Optional.of(certificate),
+        Optional.of(actionEvaluation));
+
+    assertTrue(enabled);
   }
 }

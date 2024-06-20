@@ -54,7 +54,7 @@ public class AnswerComplementDomainService {
             .type(MessageEventType.ANSWER_COMPLEMENT)
             .start(start)
             .end(LocalDateTime.now(ZoneId.systemDefault()))
-            .answer(latestAnswer)
+            .messageId(latestAnswer.id())
             .certificateId(certificate.id())
             .actionEvaluation(actionEvaluation)
             .build()

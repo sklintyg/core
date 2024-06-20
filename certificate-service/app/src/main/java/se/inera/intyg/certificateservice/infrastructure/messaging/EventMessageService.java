@@ -34,7 +34,7 @@ public class EventMessageService implements CertificateEventSubscriber, MessageE
   public void event(MessageEvent event) {
     jmsTemplate.send(
         session -> getMessageEventMessage(
-            event.answer().id().id(),
+            event.messageId().id(),
             event.type().messageType(),
             event.certificateId().id(),
             session)

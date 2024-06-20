@@ -89,6 +89,40 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   }
 
   @Override
+  public List<Certificate> getByIds(List<CertificateId> certificateIds) {
+    if (certificateIds == null || certificateIds.isEmpty()) {
+      throw new IllegalArgumentException(
+          "Cannot get certificate if certificateIds is null or empty '%s'".formatted(
+              certificateIds)
+      );
+    }
+
+    final var certificateEntities = certificateEntityRepository.findCertificateEntitiesByCertificateIdIn(
+        certificateIds.stream()
+            .map(CertificateId::id)
+            .toList()
+    );
+
+    if (certificateEntities.size() != certificateIds.size()) {
+      throw new IllegalStateException(
+          "Missing certificate for ids '%s'".formatted(
+              certificateIds.stream()
+                  .map(CertificateId::id)
+                  .filter(
+                      certificateId -> certificateEntities.stream()
+                          .noneMatch(entity -> entity.getCertificateId().equals(certificateId))
+                  )
+                  .toList()
+          )
+      );
+    }
+
+    return certificateEntities.stream()
+        .map(certificateEntityMapper::toDomain)
+        .toList();
+  }
+
+  @Override
   public boolean exists(CertificateId certificateId) {
     if (certificateId == null) {
       throw new IllegalArgumentException(

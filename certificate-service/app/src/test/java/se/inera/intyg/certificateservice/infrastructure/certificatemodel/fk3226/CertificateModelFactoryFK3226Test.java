@@ -335,6 +335,22 @@ class CertificateModelFactoryFK3226Test {
   }
 
   @Test
+  void shallIncludeCertificateActionMessagesAdministrativeWithEnabledTrue() {
+    final var expectedType = CertificateActionType.MESSAGES_ADMINISTRATIVE;
+
+    final var certificateModel = certificateModelFactoryFK3226.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream()
+            .filter(
+                actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+            )
+            .findFirst()
+            .orElseThrow()
+            .enabled(),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
   void shallIncludeCertificateActionReceiveComplement() {
     final var expectedType = CertificateActionType.RECEIVE_COMPLEMENT;
 
@@ -361,6 +377,54 @@ class CertificateModelFactoryFK3226Test {
   @Test
   void shallIncludeCertificateActionReceiveAnswer() {
     final var expectedType = CertificateActionType.RECEIVE_ANSWER;
+
+    final var certificateModel = certificateModelFactoryFK3226.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionAnswerMessages() {
+    final var expectedType = CertificateActionType.ANSWER_MESSAGE;
+
+    final var certificateModel = certificateModelFactoryFK3226.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionSaveMessage() {
+    final var expectedType = CertificateActionType.SAVE_MESSAGE;
+
+    final var certificateModel = certificateModelFactoryFK3226.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionDeleteMessage() {
+    final var expectedType = CertificateActionType.DELETE_MESSAGE;
+
+    final var certificateModel = certificateModelFactoryFK3226.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionSendMessage() {
+    final var expectedType = CertificateActionType.SEND_MESSAGE;
 
     final var certificateModel = certificateModelFactoryFK3226.create();
 
@@ -409,6 +473,18 @@ class CertificateModelFactoryFK3226Test {
   @Test
   void shallIncludeCertificateActionHandleComplement() {
     final var expectedType = CertificateActionType.HANDLE_COMPLEMENT;
+
+    final var certificateModel = certificateModelFactoryFK3226.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionCreateMessages() {
+    final var expectedType = CertificateActionType.CREATE_MESSAGE;
 
     final var certificateModel = certificateModelFactoryFK3226.create();
 

@@ -549,6 +549,9 @@
     <insert tableName="message_type">
       <column name="type" value="ANSWER"/>
     </insert>
+    <insert tableName="message_type">
+      <column name="type" value="MISSING"/>
+    </insert>
 
     <createTable tableName="message_relation_type">
       <column name="key" type="tinyint unsigned" autoIncrement="true">

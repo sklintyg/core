@@ -42,7 +42,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Subject;
 public class TestDataMessage {
 
   public static final Message COMPLEMENT_MESSAGE = complementMessageBuilder().build();
-  public static final Message QUESTION_MESSAGE = questionMessageBuilder().build();
+  public static final Message CONTACT_MESSAGE = contactMessageBuilder().build();
   public static final Answer ANSWER = answerBuilder().build();
   public static final Reminder REMINDER = reminderBuilder().build();
 
@@ -73,7 +73,7 @@ public class TestDataMessage {
         );
   }
 
-  public static MessageBuilder questionMessageBuilder() {
+  public static MessageBuilder contactMessageBuilder() {
     return Message.builder()
         .id(new MessageId(MESSAGE_ID))
         .reference(new SenderReference(REFERENCE_ID))
@@ -89,6 +89,7 @@ public class TestDataMessage {
         .created(CREATED_AFTER_SENT)
         .modified(CREATED_AFTER_SENT)
         .lastDateToReply(LAST_DATE_TO_REPLY)
+        .authoredStaff(AJLA_DOKTOR)
         .forwarded(new Forwarded(false));
   }
 
