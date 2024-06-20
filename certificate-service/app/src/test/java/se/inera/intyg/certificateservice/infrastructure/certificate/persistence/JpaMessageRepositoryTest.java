@@ -30,6 +30,7 @@ import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
@@ -251,5 +252,65 @@ class JpaMessageRepositoryTest {
       assertEquals(List.of(expectedMessage), response);
     }
 
+    @Test
+    void shouldReturnEmptyListIfNoMessagesAreFound() {
+      final var specification = mock(Specification.class);
+      final var request = MessagesRequest.builder().build();
+      when(messageEntitySpecificationFactory.create(request))
+          .thenReturn(specification);
+      when(messageEntityRepository.findAll(specification))
+          .thenReturn(Collections.emptyList());
+
+      final var response = jpaMessageRepository.findByMessagesRequest(request);
+
+      assertEquals(Collections.emptyList(), response);
+    }
+
+    @Test
+    void shouldFilterOutMessagesOfInvalidTypeOrStatus() {
+      final var missingMessageEntity = MessageEntity.builder().build();
+      final var reminderMessageEntity = MessageEntity.builder().build();
+      final var answerMessageEntity = MessageEntity.builder().build();
+      final var draftMessageEntity = MessageEntity.builder().build();
+
+      final var missingMessage = Message.builder()
+          .type(MessageType.MISSING)
+          .build();
+      final var reminderMessage = Message.builder()
+          .type(MessageType.REMINDER)
+          .build();
+      final var answerMessage = Message.builder()
+          .type(MessageType.ANSWER)
+          .build();
+      final var draftMessage = Message.builder()
+          .type(MessageType.CONTACT)
+          .status(MessageStatus.DRAFT)
+          .build();
+
+      final var specification = mock(Specification.class);
+      final var expectedMessage = Message.builder().build();
+      final var request = MessagesRequest.builder().build();
+
+      when(messageEntitySpecificationFactory.create(request))
+          .thenReturn(specification);
+      when(messageEntityRepository.findAll(specification))
+          .thenReturn(
+              List.of(COMPLEMENT_MESSAGE_ENTITY, missingMessageEntity, reminderMessageEntity,
+                  answerMessageEntity, draftMessageEntity));
+      when(messageEntityMapper.toDomain(COMPLEMENT_MESSAGE_ENTITY))
+          .thenReturn(expectedMessage);
+      when(messageEntityMapper.toDomain(missingMessageEntity))
+          .thenReturn(missingMessage);
+      when(messageEntityMapper.toDomain(reminderMessageEntity))
+          .thenReturn(reminderMessage);
+      when(messageEntityMapper.toDomain(answerMessageEntity))
+          .thenReturn(answerMessage);
+      when(messageEntityMapper.toDomain(draftMessageEntity))
+          .thenReturn(draftMessage);
+
+      final var response = jpaMessageRepository.findByMessagesRequest(request);
+
+      assertEquals(List.of(expectedMessage), response);
+    }
   }
 }

@@ -8,7 +8,6 @@ import se.inera.intyg.certificateservice.domain.certificate.repository.Certifica
 import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.MessagesResponse;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
-import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 
 @RequiredArgsConstructor
@@ -20,7 +19,6 @@ public class GetUnitMessagesDomainService {
   public MessagesResponse get(MessagesRequest request, ActionEvaluation actionEvaluation) {
     final var messages = messageRepository.findByMessagesRequest(request)
         .stream()
-        .filter(message -> !isReminderOrAnswerOrMissing(message))
         .toList();
 
     final var certificates = messages.stream()
@@ -42,11 +40,6 @@ public class GetUnitMessagesDomainService {
         .messages(filteredMessagesBasedOnActionEvaluation)
         .certificates(certificates)
         .build();
-  }
-
-  private static boolean isReminderOrAnswerOrMissing(Message message) {
-    return message.type() == MessageType.ANSWER || message.type() == MessageType.REMINDER
-        || message.type() == MessageType.MISSING;
   }
 }
 

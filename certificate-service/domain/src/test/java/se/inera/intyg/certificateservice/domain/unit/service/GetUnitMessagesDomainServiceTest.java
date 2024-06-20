@@ -19,7 +19,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
-import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,9 +34,6 @@ class GetUnitMessagesDomainServiceTest {
   private static Message secondMessageForC1;
   private static Message messageForC2;
   private static Message messageWithReminder;
-  private static Message reminder;
-  private static Message answer;
-  private static Message missing;
   private static final ActionEvaluation ACTION_EVALUATION = ActionEvaluation.builder().build();
 
   private static final MessagesRequest MESSAGES_REQUEST = MessagesRequest.builder().build();
@@ -60,9 +56,6 @@ class GetUnitMessagesDomainServiceTest {
     secondMessageForC1 = mock(Message.class);
     messageForC2 = mock(Message.class);
     messageWithReminder = mock(Message.class);
-    reminder = mock(Message.class);
-    answer = mock(Message.class);
-    missing = mock(Message.class);
 
     when(certificateWithReadPermission.id())
         .thenReturn(C1);
@@ -78,13 +71,6 @@ class GetUnitMessagesDomainServiceTest {
     when(messageWithReminder.certificateId())
         .thenReturn(C3);
 
-    when(reminder.type())
-        .thenReturn(MessageType.REMINDER);
-    when(answer.type())
-        .thenReturn(MessageType.ANSWER);
-    when(missing.type())
-        .thenReturn(MessageType.MISSING);
-
     when(certificateWithReadPermission.allowTo(CertificateActionType.READ,
         Optional.of(ACTION_EVALUATION)))
         .thenReturn(true);
@@ -97,8 +83,7 @@ class GetUnitMessagesDomainServiceTest {
 
     when(messageRepository.findByMessagesRequest(MESSAGES_REQUEST))
         .thenReturn(
-            List.of(messageForC1, messageForC2, secondMessageForC1, messageWithReminder, reminder,
-                answer, missing));
+            List.of(messageForC1, messageForC2, secondMessageForC1, messageWithReminder));
     when(certificateRepository.getById(C1))
         .thenReturn(certificateWithReadPermission);
     when(certificateRepository.getById(C2))

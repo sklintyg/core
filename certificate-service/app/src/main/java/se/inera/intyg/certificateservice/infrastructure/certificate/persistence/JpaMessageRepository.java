@@ -8,6 +8,7 @@ import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
@@ -103,6 +104,12 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
 
     return messageEntityRepository.findAll(specification).stream()
         .map(messageEntityMapper::toDomain)
+        .filter(message -> !messageIsValidType(message))
         .toList();
+  }
+
+  private boolean messageIsValidType(Message message) {
+    return message.type() == MessageType.ANSWER || message.type() == MessageType.REMINDER
+        || message.type() == MessageType.MISSING || message.status() == MessageStatus.DRAFT;
   }
 }
