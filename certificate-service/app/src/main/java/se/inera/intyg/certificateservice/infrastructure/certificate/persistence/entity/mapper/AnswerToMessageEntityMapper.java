@@ -22,7 +22,7 @@ public class AnswerToMessageEntityMapper {
   public MessageEntity toEntity(MessageEntity messageEntity, Answer answer) {
     return MessageEntity.builder()
         .id(UUID.randomUUID().toString())
-        .reference(answer.reference().reference())
+        .reference(answer.reference() != null ? answer.reference().reference() : null)
         .subject(answer.subject().subject())
         .content(answer.content().content())
         .author(answer.author().author())

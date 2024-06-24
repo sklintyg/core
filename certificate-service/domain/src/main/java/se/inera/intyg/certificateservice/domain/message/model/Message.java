@@ -162,4 +162,15 @@ public class Message {
   public void answer(Answer answer) {
     this.answer = answer;
   }
+
+  public void saveAnswer(Staff staff, Content content) {
+    this.answer = Answer.builder()
+        .id(answer != null ? answer.id() : new MessageId(UUID.randomUUID().toString()))
+        .subject(subject)
+        .content(content)
+        .status(MessageStatus.DRAFT)
+        .author(new Author(staff.name().fullName()))
+        .authoredStaff(staff)
+        .build();
+  }
 }

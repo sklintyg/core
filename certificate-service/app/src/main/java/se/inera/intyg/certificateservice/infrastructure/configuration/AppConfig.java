@@ -36,6 +36,7 @@ import se.inera.intyg.certificateservice.domain.message.service.ReceiveAnswerMes
 import se.inera.intyg.certificateservice.domain.message.service.ReceiveComplementMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.ReceiveQuestionMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.ReceiveReminderMessageDomainService;
+import se.inera.intyg.certificateservice.domain.message.service.SaveAnswerDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.SaveMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.SendMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
@@ -304,6 +305,12 @@ public class AppConfig {
       MessageEventDomainService messageEventDomainService) {
     return new SendMessageDomainService(messageRepository,
         messageEventDomainService);
+  }
+
+  @Bean
+  public SaveAnswerDomainService saveAnswerDomainService(
+      MessageRepository messageRepository) {
+    return new SaveAnswerDomainService(messageRepository);
   }
 
   @Bean

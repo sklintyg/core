@@ -67,6 +67,24 @@ class AnswerToMessageEntityMapperTest {
   }
 
   @Test
+  void shallExcludeReference() {
+    final var originalEntity = createOriginalEntity();
+    final var answer = Answer.builder()
+        .subject(new Subject(SUBJECT))
+        .content(new Content(CONTENT))
+        .author(new Author(AUTHOR))
+        .created(CREATED)
+        .modified(MODIFIED)
+        .sent(SENT)
+        .status(STATUS)
+        .type(TYPE)
+        .build();
+
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
+    assertNull(result.getReference());
+  }
+
+  @Test
   void shallIncludeSubject() {
     final var originalEntity = createOriginalEntity();
     final var answer = createAnswer();

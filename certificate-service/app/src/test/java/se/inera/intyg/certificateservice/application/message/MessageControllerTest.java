@@ -24,6 +24,8 @@ import se.inera.intyg.certificateservice.application.message.dto.HandleMessageRe
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.MessageExistsResponse;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
+import se.inera.intyg.certificateservice.application.message.dto.SaveAnswerRequest;
+import se.inera.intyg.certificateservice.application.message.dto.SaveAnswerResponse;
 import se.inera.intyg.certificateservice.application.message.dto.SaveMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.SaveMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.SendMessageRequest;
@@ -35,6 +37,7 @@ import se.inera.intyg.certificateservice.application.message.service.GetCertific
 import se.inera.intyg.certificateservice.application.message.service.HandleMessageService;
 import se.inera.intyg.certificateservice.application.message.service.IncomingMessageService;
 import se.inera.intyg.certificateservice.application.message.service.MessageExistsService;
+import se.inera.intyg.certificateservice.application.message.service.SaveAnswerService;
 import se.inera.intyg.certificateservice.application.message.service.SaveMessageService;
 import se.inera.intyg.certificateservice.application.message.service.SendMessageService;
 
@@ -45,6 +48,8 @@ class MessageControllerTest {
   private static final String CERTIFICATE_ID = "certificateId";
   private static final String MESSAGE_ID = "messageId";
   private static final CertificateDTO CERTIFICATE = CertificateDTO.builder().build();
+  @Mock
+  private SaveAnswerService saveAnswerService;
   @Mock
   private SendMessageService sendMessageService;
   @Mock
@@ -205,6 +210,21 @@ class MessageControllerTest {
       doReturn(expectedResponse).when(sendMessageService).send(request, MESSAGE_ID);
 
       final var actualResponse = messageController.sendMessage(request, MESSAGE_ID);
+      assertEquals(expectedResponse, actualResponse);
+    }
+  }
+
+  @Nested
+  class SaveAnswer {
+
+    @Test
+    void shallReturnSaveAnswerResponse() {
+      final var request = SaveAnswerRequest.builder().build();
+
+      final var expectedResponse = SaveAnswerResponse.builder().build();
+      doReturn(expectedResponse).when(saveAnswerService).save(request, MESSAGE_ID);
+
+      final var actualResponse = messageController.saveAnswer(request, MESSAGE_ID);
       assertEquals(expectedResponse, actualResponse);
     }
   }

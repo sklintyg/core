@@ -33,6 +33,7 @@ import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 @ExtendWith(MockitoExtension.class)
 class MessageTest {
 
+  private static final Content CONTENT = new Content("content");
   @Mock
   private Certificate certificate;
 
@@ -597,6 +598,72 @@ class MessageTest {
       message.delete();
 
       assertEquals(MessageStatus.DELETED_DRAFT, message.status());
+    }
+  }
+
+  @Nested
+  class SaveAnswerTests {
+
+    @Test
+    void shallIncludeNewlyGeneratedIdIfAnswerIsNull() {
+      final var message = Message.builder().build();
+      message.saveAnswer(AJLA_DOKTOR, CONTENT);
+      assertNotNull(message.answer().id());
+    }
+
+    @Test
+    void shallIncludeAlreadyGeneratedIdIfAnswerIsNotNull() {
+      final var expectedId = new MessageId("expectedId");
+      final var message = Message.builder()
+          .answer(
+              Answer.builder()
+                  .id(expectedId)
+                  .build()
+          )
+          .build();
+      message.saveAnswer(AJLA_DOKTOR, CONTENT);
+      assertEquals(expectedId, message.answer().id());
+    }
+
+    @Test
+    void shallIncludeSubject() {
+      final var expectedSubject = new Subject("expectedSubject");
+      final var message = Message.builder()
+          .subject(expectedSubject)
+          .build();
+      message.saveAnswer(AJLA_DOKTOR, CONTENT);
+      assertEquals(expectedSubject, message.answer().subject());
+    }
+
+    @Test
+    void shallIncludeContent() {
+      final var expectedContent = new Content("expectedContent");
+      final var message = Message.builder()
+          .content(expectedContent)
+          .build();
+      message.saveAnswer(AJLA_DOKTOR, expectedContent);
+      assertEquals(expectedContent, message.answer().content());
+    }
+
+    @Test
+    void shallIncludeStatus() {
+      final var message = Message.builder().build();
+      message.saveAnswer(AJLA_DOKTOR, CONTENT);
+      assertEquals(MessageStatus.DRAFT, message.answer().status());
+    }
+
+    @Test
+    void shallIncludeAuthor() {
+      final var message = Message.builder().build();
+      message.saveAnswer(AJLA_DOKTOR, CONTENT);
+      assertEquals(AJLA_DOKTOR.name().fullName(), message.answer().author().author());
+    }
+
+    @Test
+    void shallIncludeAuthoredStaff() {
+      final var message = Message.builder().build();
+      message.saveAnswer(AJLA_DOKTOR, CONTENT);
+      assertEquals(AJLA_DOKTOR, message.answer().authoredStaff());
     }
   }
 }

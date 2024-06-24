@@ -18,6 +18,8 @@ import se.inera.intyg.certificateservice.application.message.dto.HandleMessageRe
 import se.inera.intyg.certificateservice.application.message.dto.HandleMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.MessageExistsResponse;
+import se.inera.intyg.certificateservice.application.message.dto.SaveAnswerRequest;
+import se.inera.intyg.certificateservice.application.message.dto.SaveAnswerResponse;
 import se.inera.intyg.certificateservice.application.message.dto.SaveMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.SaveMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.SendMessageRequest;
@@ -29,6 +31,7 @@ import se.inera.intyg.certificateservice.application.message.service.GetCertific
 import se.inera.intyg.certificateservice.application.message.service.HandleMessageService;
 import se.inera.intyg.certificateservice.application.message.service.IncomingMessageService;
 import se.inera.intyg.certificateservice.application.message.service.MessageExistsService;
+import se.inera.intyg.certificateservice.application.message.service.SaveAnswerService;
 import se.inera.intyg.certificateservice.application.message.service.SaveMessageService;
 import se.inera.intyg.certificateservice.application.message.service.SendMessageService;
 
@@ -46,6 +49,7 @@ public class MessageController {
   private final SaveMessageService saveMessageService;
   private final DeleteMessageService deleteMessageService;
   private final SendMessageService sendMessageService;
+  private final SaveAnswerService saveAnswerService;
 
   @PostMapping
   void receiveMessage(@RequestBody IncomingMessageRequest incomingMessageRequest) {
@@ -105,5 +109,12 @@ public class MessageController {
       @RequestBody SendMessageRequest request,
       @PathVariable("messageId") String messageId) {
     return sendMessageService.send(request, messageId);
+  }
+
+  @PostMapping("/{messageId}/saveanswer")
+  SaveAnswerResponse saveAnswer(
+      @RequestBody SaveAnswerRequest request,
+      @PathVariable("messageId") String messageId) {
+    return saveAnswerService.save(request, messageId);
   }
 }

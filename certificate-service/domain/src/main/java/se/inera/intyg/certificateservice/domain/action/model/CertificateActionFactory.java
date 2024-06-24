@@ -333,6 +333,17 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case SAVE_ANSWER -> CertificateActionSaveAnswer.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
+                  new ActionRuleSent(true),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson()
+              )
+          )
+          .build();
     };
   }
 }
