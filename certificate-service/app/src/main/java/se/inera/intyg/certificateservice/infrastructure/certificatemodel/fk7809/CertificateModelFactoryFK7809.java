@@ -551,7 +551,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         .rules(
             List.of(
                 CertificateElementRuleFactory.limit(
-                    QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_ID,
+                    QUESTION_AKTIVITETSBEGRANSNINGAR_ID,
                     (short) 4000)
             )
         )
@@ -670,7 +670,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         .rules(
             List.of(
                 CertificateElementRuleFactory.limit(
-                    QUESTION_PROGNOS_ID,
+                    QUESTION_OVRIGT_ID,
                     (short) 4000)
             )
         )
