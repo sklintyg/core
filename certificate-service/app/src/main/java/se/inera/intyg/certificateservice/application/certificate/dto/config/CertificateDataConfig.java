@@ -33,4 +33,5 @@ public interface CertificateDataConfig {
 
   Accordion getAccordion();
 
+  Message getMessage();
 }

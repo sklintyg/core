@@ -27,6 +27,8 @@ public class CertificateDataConfigCheckboxMultipleDate implements CertificateDat
   String description;
   @Getter(onMethod = @__(@Override))
   Accordion accordion;
+  @Getter(onMethod = @__(@Override))
+  Message message;
   List<CheckboxMultipleDate> list;
 
 

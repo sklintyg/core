@@ -28,6 +28,8 @@ public class CertificateDataConfigCheckboxDateRangeList implements CertificateDa
   String description;
   @Getter(onMethod = @__(@Override))
   Accordion accordion;
+  @Getter(onMethod = @__(@Override))
+  Message message;
   String previousDateRangeText;
   boolean hideWorkingHours;
   List<CheckboxDateRange> list;

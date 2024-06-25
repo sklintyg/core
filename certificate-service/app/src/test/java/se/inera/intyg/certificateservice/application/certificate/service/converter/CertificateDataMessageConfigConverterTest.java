@@ -7,6 +7,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigMessage;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.Message;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.MessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMessage;
@@ -45,8 +46,12 @@ class CertificateDataMessageConfigConverterTest {
   @Test
   void shouldReturnConvertedMessage() {
     final var expected = CertificateDataConfigMessage.builder()
-        .message("MESSAGE")
-        .level(MessageLevel.INFO)
+        .message(
+            Message.builder()
+                .content("MESSAGE")
+                .level(MessageLevel.INFO)
+                .build()
+        )
         .build();
 
     final var response = certificateDataMessageConfigConverter.convert(
