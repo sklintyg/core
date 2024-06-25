@@ -248,5 +248,11 @@ class ResourceLinkTypeDTOTest {
       assertThrows(IllegalArgumentException.class, () ->
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.DELETE_ANSWER));
     }
+
+    @Test
+    void shallThrowIfCertificateActionTypeSendAnswer() {
+      assertThrows(IllegalArgumentException.class, () ->
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SEND_ANSWER));
+    }
   }
 }
