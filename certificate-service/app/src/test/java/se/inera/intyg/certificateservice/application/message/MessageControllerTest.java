@@ -30,6 +30,8 @@ import se.inera.intyg.certificateservice.application.message.dto.SaveAnswerReque
 import se.inera.intyg.certificateservice.application.message.dto.SaveAnswerResponse;
 import se.inera.intyg.certificateservice.application.message.dto.SaveMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.SaveMessageResponse;
+import se.inera.intyg.certificateservice.application.message.dto.SendAnswerRequest;
+import se.inera.intyg.certificateservice.application.message.dto.SendAnswerResponse;
 import se.inera.intyg.certificateservice.application.message.dto.SendMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.SendMessageResponse;
 import se.inera.intyg.certificateservice.application.message.service.CreateMessageService;
@@ -42,6 +44,7 @@ import se.inera.intyg.certificateservice.application.message.service.IncomingMes
 import se.inera.intyg.certificateservice.application.message.service.MessageExistsService;
 import se.inera.intyg.certificateservice.application.message.service.SaveAnswerService;
 import se.inera.intyg.certificateservice.application.message.service.SaveMessageService;
+import se.inera.intyg.certificateservice.application.message.service.SendAnswerService;
 import se.inera.intyg.certificateservice.application.message.service.SendMessageService;
 
 @ExtendWith(MockitoExtension.class)
@@ -51,6 +54,8 @@ class MessageControllerTest {
   private static final String CERTIFICATE_ID = "certificateId";
   private static final String MESSAGE_ID = "messageId";
   private static final CertificateDTO CERTIFICATE = CertificateDTO.builder().build();
+  @Mock
+  private SendAnswerService sendAnswerService;
   @Mock
   private DeleteAnswerService deleteAnswerService;
   @Mock
@@ -247,5 +252,21 @@ class MessageControllerTest {
       final var actualResponse = messageController.deleteAnswer(request, MESSAGE_ID);
       assertEquals(expectedResponse, actualResponse);
     }
+  }
+
+  @Nested
+  class SendAnswer {
+
+    @Test
+    void shallReturnSendAnswerResponse() {
+      final var request = SendAnswerRequest.builder().build();
+
+      final var expectedResponse = SendAnswerResponse.builder().build();
+      doReturn(expectedResponse).when(sendAnswerService).send(request, MESSAGE_ID);
+
+      final var actualResponse = messageController.sendAnswer(request, MESSAGE_ID);
+      assertEquals(expectedResponse, actualResponse);
+    }
+
   }
 }

@@ -164,14 +164,18 @@ public class Message {
   }
 
   public void saveAnswer(Staff staff, Content content) {
-    this.answer = Answer.builder()
-        .id(answer != null ? answer.id() : new MessageId(UUID.randomUUID().toString()))
-        .subject(subject)
-        .content(content)
-        .status(MessageStatus.DRAFT)
-        .author(new Author(staff.name().fullName()))
-        .authoredStaff(staff)
-        .build();
+    if (answer == null) {
+      this.answer = Answer.builder()
+          .id(new MessageId(UUID.randomUUID().toString()))
+          .subject(subject)
+          .content(content)
+          .status(MessageStatus.DRAFT)
+          .author(new Author(staff.name().fullName()))
+          .authoredStaff(staff)
+          .build();
+    } else {
+      answer.save(staff, content);
+    }
   }
 
   public void deleteAnswer() {
@@ -186,6 +190,22 @@ public class Message {
               MessageStatus.DRAFT)
       );
     }
-    this.answer.updateStatus(MessageStatus.DELETED_DRAFT);
+    this.answer.delete();
+  }
+
+  public void sendAnswer(Staff staff, Content content) {
+    if (type(List.of(MessageType.COMPLEMENT, MessageType.REMINDER, MessageType.MISSING,
+        MessageType.ANSWER))) {
+      throw new IllegalStateException(
+          "Incorrect type '%s' - required type is '%s' or '%s' to send answer".formatted(
+              this.type,
+              MessageType.CONTACT, MessageType.OTHER)
+      );
+    }
+    this.answer.send(staff, content);
+  }
+
+  public boolean type(List<MessageType> messageTypes) {
+    return messageTypes.stream().anyMatch(messageType -> messageType.equals(this.type));
   }
 }

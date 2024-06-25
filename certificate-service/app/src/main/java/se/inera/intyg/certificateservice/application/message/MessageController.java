@@ -24,6 +24,8 @@ import se.inera.intyg.certificateservice.application.message.dto.SaveAnswerReque
 import se.inera.intyg.certificateservice.application.message.dto.SaveAnswerResponse;
 import se.inera.intyg.certificateservice.application.message.dto.SaveMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.SaveMessageResponse;
+import se.inera.intyg.certificateservice.application.message.dto.SendAnswerRequest;
+import se.inera.intyg.certificateservice.application.message.dto.SendAnswerResponse;
 import se.inera.intyg.certificateservice.application.message.dto.SendMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.SendMessageResponse;
 import se.inera.intyg.certificateservice.application.message.service.CreateMessageService;
@@ -36,6 +38,7 @@ import se.inera.intyg.certificateservice.application.message.service.IncomingMes
 import se.inera.intyg.certificateservice.application.message.service.MessageExistsService;
 import se.inera.intyg.certificateservice.application.message.service.SaveAnswerService;
 import se.inera.intyg.certificateservice.application.message.service.SaveMessageService;
+import se.inera.intyg.certificateservice.application.message.service.SendAnswerService;
 import se.inera.intyg.certificateservice.application.message.service.SendMessageService;
 
 @RequiredArgsConstructor
@@ -54,6 +57,7 @@ public class MessageController {
   private final SendMessageService sendMessageService;
   private final SaveAnswerService saveAnswerService;
   private final DeleteAnswerService deleteAnswerService;
+  private final SendAnswerService sendAnswerService;
 
   @PostMapping
   void receiveMessage(@RequestBody IncomingMessageRequest incomingMessageRequest) {
@@ -127,5 +131,12 @@ public class MessageController {
       @RequestBody DeleteAnswerRequest request,
       @PathVariable("messageId") String messageId) {
     return deleteAnswerService.delete(request, messageId);
+  }
+
+  @PostMapping("/{messageId}/sendanswer")
+  SendAnswerResponse sendAnswer(
+      @RequestBody SendAnswerRequest request,
+      @PathVariable("messageId") String messageId) {
+    return sendAnswerService.send(request, messageId);
   }
 }
