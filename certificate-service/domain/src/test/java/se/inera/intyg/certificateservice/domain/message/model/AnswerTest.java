@@ -78,5 +78,12 @@ class AnswerTest {
       answer.save(AJLA_DOKTOR, CONTENT);
       assertEquals(AJLA_DOKTOR.name().fullName(), answer.author().author());
     }
+
+    @Test
+    void shallUpdateModified() {
+      final var answer = Answer.builder().build();
+      answer.save(AJLA_DOKTOR, CONTENT);
+      assertNotNull(answer.modified());
+    }
   }
 }

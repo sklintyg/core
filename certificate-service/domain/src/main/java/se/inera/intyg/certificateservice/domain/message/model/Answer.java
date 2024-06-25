@@ -39,5 +39,6 @@ public class Answer {
     this.content = content;
     this.authoredStaff = staff;
     this.author = new Author(staff.name().fullName());
+    this.modified = LocalDateTime.now();
   }
 }
