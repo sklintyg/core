@@ -4,30 +4,29 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
-import se.inera.intyg.certificateservice.application.message.dto.SaveAnswerRequest;
-import se.inera.intyg.certificateservice.application.message.dto.SaveAnswerResponse;
+import se.inera.intyg.certificateservice.application.message.dto.DeleteAnswerRequest;
+import se.inera.intyg.certificateservice.application.message.dto.DeleteAnswerResponse;
 import se.inera.intyg.certificateservice.application.message.service.converter.QuestionConverter;
-import se.inera.intyg.certificateservice.application.message.service.validator.SaveAnswerRequestValidator;
+import se.inera.intyg.certificateservice.application.message.service.validator.DeleteAnswerRequestValidator;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
-import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
-import se.inera.intyg.certificateservice.domain.message.service.SaveAnswerDomainService;
+import se.inera.intyg.certificateservice.domain.message.service.DeleteAnswerDomainService;
 
 @Service
 @RequiredArgsConstructor
-public class SaveAnswerService {
+public class DeleteAnswerService {
 
-  private final SaveAnswerRequestValidator saveAnswerRequestValidator;
+  private final DeleteAnswerRequestValidator deleteAnswerRequestValidator;
   private final ActionEvaluationFactory actionEvaluationFactory;
-  private final SaveAnswerDomainService saveAnswerDomainService;
+  private final DeleteAnswerDomainService deleteAnswerDomainService;
   private final QuestionConverter questionConverter;
   private final CertificateRepository certificateRepository;
   private final MessageRepository messageRepository;
 
   @Transactional
-  public SaveAnswerResponse save(SaveAnswerRequest request, String messageId) {
-    saveAnswerRequestValidator.validate(request, messageId);
+  public DeleteAnswerResponse delete(DeleteAnswerRequest request, String messageId) {
+    deleteAnswerRequestValidator.validate(request, messageId);
 
     final var actionEvaluation = actionEvaluationFactory.create(
         request.getUser(),
@@ -44,16 +43,15 @@ public class SaveAnswerService {
         message.certificateId()
     );
 
-    final var messageWithAnswer = saveAnswerDomainService.save(
+    final var messageWithDeletedAnswer = deleteAnswerDomainService.delete(
         message,
         certificate,
-        actionEvaluation,
-        new Content(request.getContent())
+        actionEvaluation
     );
 
-    return SaveAnswerResponse.builder()
-        .question(questionConverter.convert(messageWithAnswer,
-            messageWithAnswer.actions(actionEvaluation, certificate)))
+    return DeleteAnswerResponse.builder()
+        .question(questionConverter.convert(messageWithDeletedAnswer,
+            messageWithDeletedAnswer.actions(actionEvaluation, certificate)))
         .build();
   }
 }

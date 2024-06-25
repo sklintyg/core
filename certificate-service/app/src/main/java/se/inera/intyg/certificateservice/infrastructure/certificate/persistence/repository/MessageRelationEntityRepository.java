@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
@@ -12,6 +13,8 @@ public interface MessageRelationEntityRepository extends
 
   List<MessageRelationEntity> findByParentMessage(
       MessageEntity messageEntity);
+
+  Optional<MessageRelationEntity> findByChildMessageId(String id);
 
   List<MessageRelationEntity> findByParentMessageOrChildMessage(
       MessageEntity messageEntityParent, MessageEntity messageEntityChild);

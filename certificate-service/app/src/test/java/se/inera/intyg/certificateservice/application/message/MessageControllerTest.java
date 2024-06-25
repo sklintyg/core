@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.message.dto.CreateMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.CreateMessageResponse;
+import se.inera.intyg.certificateservice.application.message.dto.DeleteAnswerRequest;
+import se.inera.intyg.certificateservice.application.message.dto.DeleteAnswerResponse;
 import se.inera.intyg.certificateservice.application.message.dto.DeleteMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageResponse;
@@ -31,6 +33,7 @@ import se.inera.intyg.certificateservice.application.message.dto.SaveMessageResp
 import se.inera.intyg.certificateservice.application.message.dto.SendMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.SendMessageResponse;
 import se.inera.intyg.certificateservice.application.message.service.CreateMessageService;
+import se.inera.intyg.certificateservice.application.message.service.DeleteAnswerService;
 import se.inera.intyg.certificateservice.application.message.service.DeleteMessageService;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateFromMessageService;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateMessageService;
@@ -48,6 +51,8 @@ class MessageControllerTest {
   private static final String CERTIFICATE_ID = "certificateId";
   private static final String MESSAGE_ID = "messageId";
   private static final CertificateDTO CERTIFICATE = CertificateDTO.builder().build();
+  @Mock
+  private DeleteAnswerService deleteAnswerService;
   @Mock
   private SaveAnswerService saveAnswerService;
   @Mock
@@ -225,6 +230,21 @@ class MessageControllerTest {
       doReturn(expectedResponse).when(saveAnswerService).save(request, MESSAGE_ID);
 
       final var actualResponse = messageController.saveAnswer(request, MESSAGE_ID);
+      assertEquals(expectedResponse, actualResponse);
+    }
+  }
+
+  @Nested
+  class DeleteAnswer {
+
+    @Test
+    void shallReturnDeleteAnswerResponse() {
+      final var request = DeleteAnswerRequest.builder().build();
+
+      final var expectedResponse = DeleteAnswerResponse.builder().build();
+      doReturn(expectedResponse).when(deleteAnswerService).delete(request, MESSAGE_ID);
+
+      final var actualResponse = messageController.deleteAnswer(request, MESSAGE_ID);
       assertEquals(expectedResponse, actualResponse);
     }
   }

@@ -173,4 +173,19 @@ public class Message {
         .authoredStaff(staff)
         .build();
   }
+
+  public void deleteAnswer() {
+    if (this.answer == null) {
+      throw new IllegalStateException(
+          "Can`t delete answer because answer is null"
+      );
+    }
+    if (this.answer.status() != MessageStatus.DRAFT) {
+      throw new IllegalStateException(
+          "Incorrect status '%s' - required status is '%s' to delete answer".formatted(this.status,
+              MessageStatus.DRAFT)
+      );
+    }
+    this.answer.updateStatus(MessageStatus.DELETED_DRAFT);
+  }
 }

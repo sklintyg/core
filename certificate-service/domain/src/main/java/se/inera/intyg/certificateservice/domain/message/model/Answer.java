@@ -23,4 +23,8 @@ public class Answer {
   private MessageStatus status;
   private MessageContactInfo contactInfo;
   private Staff authoredStaff;
+
+  public void updateStatus(MessageStatus status) {
+    this.status = status;
+  }
 }

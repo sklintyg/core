@@ -342,4 +342,16 @@ class CertificateActionFactoryTest {
     assert certificateAction != null;
     assertEquals(certificateAction.getClass(), CertificateActionSaveAnswer.class);
   }
+
+  @Test
+  void shallReturnCertificateActionDeleteAnswerIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.DELETE_ANSWER)
+        .build();
+
+    final var certificateAction = CertificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionDeleteAnswer.class);
+  }
 }

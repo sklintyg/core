@@ -666,4 +666,42 @@ class MessageTest {
       assertEquals(AJLA_DOKTOR, message.answer().authoredStaff());
     }
   }
+
+  @Nested
+  class DeleteAnswerTests {
+
+    @Test
+    void shallThrowIfAnswerIsNull() {
+      final var message = Message.builder().build();
+      assertThrows(IllegalStateException.class, message::deleteAnswer);
+    }
+
+    @Test
+    void shallThrowIfAnswerStatusIsNotDraft() {
+      final var answer = Answer.builder()
+          .status(MessageStatus.SENT)
+          .build();
+
+      final var message = Message.builder()
+          .answer(answer)
+          .build();
+
+      assertThrows(IllegalStateException.class, message::deleteAnswer);
+    }
+
+    @Test
+    void shallUpdateStatusToDeletedDraftOnAnswer() {
+      final var answer = Answer.builder()
+          .status(MessageStatus.DRAFT)
+          .build();
+
+      final var message = Message.builder()
+          .answer(answer)
+          .build();
+
+      message.deleteAnswer();
+
+      assertEquals(MessageStatus.DELETED_DRAFT, message.answer().status());
+    }
+  }
 }

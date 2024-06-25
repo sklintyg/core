@@ -447,6 +447,18 @@ class CertificateModelFactoryFK3226Test {
   }
 
   @Test
+  void shallIncludeCertificateActionDeleteAnswer() {
+    final var expectedType = CertificateActionType.DELETE_ANSWER;
+
+    final var certificateModel = certificateModelFactoryFK3226.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
   void shallIncludeCertificateActionComplement() {
     final var expectedType = CertificateActionType.COMPLEMENT;
 

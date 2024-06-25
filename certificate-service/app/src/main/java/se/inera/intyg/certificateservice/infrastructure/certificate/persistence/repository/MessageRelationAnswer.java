@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageRelationEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageRelationTypeEntity;
@@ -25,15 +26,25 @@ public class MessageRelationAnswer implements MessageRelation {
       return;
     }
 
+    if (message.answer().status() == MessageStatus.DELETED_DRAFT) {
+      deleteMessageAndRelations(message, messageEntity);
+      return;
+    }
+
+    final var savedAnswer = messageEntityRepository.save(
+        answerToMessageEntityMapper.toEntity(
+            messageEntity,
+            message.answer(),
+            messageEntityRepository.findMessageEntityById(message.answer().id().id())
+                .map(MessageEntity::getKey)
+                .orElse(null))
+    );
+
     final var messageRelations = messageRelationEntityRepository.findByParentMessage(
         messageEntity
     );
 
     if (messageRelations.isEmpty() || isMissingAnswer(messageRelations)) {
-      final var savedAnswer = messageEntityRepository.save(
-          answerToMessageEntityMapper.toEntity(messageEntity, message.answer())
-      );
-
       messageRelationEntityRepository.save(
           MessageRelationEntity.builder()
               .childMessage(savedAnswer)
@@ -54,6 +65,16 @@ public class MessageRelationAnswer implements MessageRelation {
         messageRelationEntity -> messageRelationEntity.getMessageRelationType().getType()
             .equals(ANSWER.name())
     );
+  }
+
+  private void deleteMessageAndRelations(Message message, MessageEntity messageEntity) {
+    messageRelationEntityRepository.findByParentMessage(messageEntity).stream()
+        .filter(entity -> entity.getChildMessage().getId().equals(message.answer().id().id()))
+        .findFirst()
+        .ifPresent(messageRelationEntityRepository::delete);
+
+    messageEntityRepository.findMessageEntityById(message.answer().id().id())
+        .ifPresent(messageEntityRepository::delete);
   }
 }
 

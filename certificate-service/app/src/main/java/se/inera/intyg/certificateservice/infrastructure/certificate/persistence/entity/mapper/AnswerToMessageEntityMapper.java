@@ -19,9 +19,10 @@ public class AnswerToMessageEntityMapper {
 
   private final StaffRepository staffEntityRepository;
 
-  public MessageEntity toEntity(MessageEntity messageEntity, Answer answer) {
+  public MessageEntity toEntity(MessageEntity messageEntity, Answer answer, Integer key) {
     return MessageEntity.builder()
-        .id(UUID.randomUUID().toString())
+        .key(key)
+        .id(answer.id() != null ? answer.id().id() : UUID.randomUUID().toString())
         .reference(answer.reference() != null ? answer.reference().reference() : null)
         .subject(answer.subject().subject())
         .content(answer.content().content())
