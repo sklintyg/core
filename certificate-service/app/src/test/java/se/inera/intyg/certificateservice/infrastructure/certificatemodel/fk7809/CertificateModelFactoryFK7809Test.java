@@ -25,6 +25,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
@@ -491,6 +492,18 @@ class CertificateModelFactoryFK7809Test {
                         .max(Period.ZERO)
                         .build(),
                     CheckboxDate.builder()
+                        .id(new FieldId("anhorig"))
+                        .label("Anhörig eller annans relation till patienten")
+                        .code(
+                            new Code(
+                                "ANHORIG",
+                                "KV_FKMU_0001",
+                                "Anhörig eller annans relation till patienten"
+                            )
+                        )
+                        .max(Period.ZERO)
+                        .build(),
+                    CheckboxDate.builder()
                         .id(new FieldId("annat"))
                         .label("annat")
                         .code(
@@ -521,7 +534,7 @@ class CertificateModelFactoryFK7809Test {
                 .type(ElementRuleType.MANDATORY)
                 .expression(
                     new RuleExpression(
-                        "$undersokningAvPatienten || $journaluppgifter || $annat"
+                        "$undersokningAvPatienten || $journaluppgifter || $anhorig || $annat"
                     )
                 )
                 .build()
@@ -569,7 +582,7 @@ class CertificateModelFactoryFK7809Test {
 
       @Test
       void shallIncludeConfiguration() {
-        final var expectedConfiguration = ElementConfigurationTextArea.builder()
+        final var expectedConfiguration = ElementConfigurationTextField.builder()
             .name(
                 "Ange anhörig eller annas relation till patienten")
             .id(new FieldId("1.4"))
@@ -600,11 +613,11 @@ class CertificateModelFactoryFK7809Test {
                 .limit(new RuleLimit((short) 4000))
                 .build(),
             ElementRuleExpression.builder()
-                .id(new ElementId("1.4"))
+                .id(new ElementId("1"))
                 .type(ElementRuleType.SHOW)
                 .expression(
                     new RuleExpression(
-                        "$annat"
+                        "$anhorig"
                     )
                 )
                 .build()

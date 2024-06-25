@@ -20,6 +20,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
@@ -93,11 +94,14 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
       "57");
   private static final FieldId UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID = new FieldId("annat");
   private static final String UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID = "journaluppgifter";
+  private static final FieldId UTLATANDE_BASERAT_PA_ANHORIG_FIELD_ID = new FieldId("anhorig");
   private static final String UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID = "undersokningAvPatienten";
 
   public static final ElementId BASERAT_PA_ANNAT_UNDERLAG_CATEGORY_ID = new ElementId("KAT_2");
   public static final ElementId QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID = new ElementId("3");
   private static final FieldId QUESTION_BASERAT_PA_ANNAT_UNDERLAG_FIELD_ID = new FieldId("3.1");
+
+  public static final ElementId FUNKTIONSNEDSATTNINGAR_CATEGORY_ID = new ElementId("KAT_5");
 
   public static final ElementId QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR = new ElementId("4");
 
@@ -357,6 +361,13 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
             .max(Period.ofDays(0))
             .build(),
         CheckboxDate.builder()
+            .id(UTLATANDE_BASERAT_PA_ANHORIG_FIELD_ID)
+            .label(CodeSystemKvFkmu0001.ANHORIG.displayName())
+            .code(CodeSystemKvFkmu0001.ANHORIG)
+            .min(null)
+            .max(Period.ofDays(0))
+            .build(),
+        CheckboxDate.builder()
             .id(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID)
             .label(CodeSystemKvFkmu0001.ANNAT.displayName())
             .code(CodeSystemKvFkmu0001.ANNAT)
@@ -398,7 +409,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
     return ElementSpecification.builder()
         .id(QUESTION_RELATION_TILL_PATIENTEN_ID)
         .configuration(
-            ElementConfigurationTextArea.builder()
+            ElementConfigurationTextField.builder()
                 .id(QUESTION_RELATION_TILL_PATIENTEN_FIELD_ID)
                 .name(
                     "Ange anhörig eller annas relation till patienten")
@@ -414,8 +425,8 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     QUESTION_RELATION_TILL_PATIENTEN_ID,
                     (short) 4000),
                 CertificateElementRuleFactory.show(
-                    QUESTION_RELATION_TILL_PATIENTEN_ID,
-                    UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID //TODO byt till anhörig
+                    QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID,
+                    UTLATANDE_BASERAT_PA_ANHORIG_FIELD_ID
                 )
             )
         )
@@ -430,7 +441,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         .mapping(
             new ElementMapping(
                 QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID,
-                CodeSystemKvFkmu0001.ANNAT //TODO byt till anhörig
+                CodeSystemKvFkmu0001.ANHORIG
             )
         )
         .shouldValidate(
@@ -438,8 +449,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                 .filter(data -> data.id().equals(QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID))
                 .map(element -> (ElementValueDateList) element.value())
                 .anyMatch(value -> value.dateList().stream().anyMatch(
-                        valueDate -> valueDate.dateId().equals(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID))
-                    //TODO byt ut
+                    valueDate -> valueDate.dateId().equals(UTLATANDE_BASERAT_PA_ANHORIG_FIELD_ID))
                 )
         )
         .build();
