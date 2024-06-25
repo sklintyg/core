@@ -203,6 +203,7 @@ public class Message {
       );
     }
     this.answer.send(staff, content);
+    this.handle();
   }
 
   public boolean type(List<MessageType> messageTypes) {

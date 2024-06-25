@@ -790,6 +790,19 @@ class MessageTest {
       message.sendAnswer(AJLA_DOKTOR, CONTENT);
       assertNotNull(message.answer().sent());
     }
+
+    @Test
+    void shallSetMessageAsHandled() {
+      final var answer = Answer.builder()
+          .build();
+      final var message = Message.builder()
+          .type(MessageType.CONTACT)
+          .answer(answer)
+          .build();
+
+      message.sendAnswer(AJLA_DOKTOR, CONTENT);
+      assertEquals(MessageStatus.HANDLED, message.status());
+    }
   }
 
   @Nested
