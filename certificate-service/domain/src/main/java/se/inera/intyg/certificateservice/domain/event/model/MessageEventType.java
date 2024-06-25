@@ -7,7 +7,7 @@ public enum MessageEventType {
       "message-sent"),
   SEND_QUESTION("send-question-message", Constants.ACTION_TYPE_CREATION,
       "message-sent"),
-  SEND_ANSWER("send-anwer-message", Constants.ACTION_TYPE_CREATION,
+  SEND_ANSWER("send-answer-message", Constants.ACTION_TYPE_CREATION,
       "message-sent");
 
   private final String action;
