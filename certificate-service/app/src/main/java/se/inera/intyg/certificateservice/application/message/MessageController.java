@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.application.message;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -105,7 +106,7 @@ public class MessageController {
     return saveMessageService.save(request, messageId);
   }
 
-  @PostMapping("/{messageId}/delete")
+  @DeleteMapping("/{messageId}/delete")
   void deleteMessage(
       @RequestBody DeleteMessageRequest request,
       @PathVariable("messageId") String messageId) {
@@ -126,7 +127,7 @@ public class MessageController {
     return saveAnswerService.save(request, messageId);
   }
 
-  @PostMapping("/{messageId}/deleteanswer")
+  @DeleteMapping("/{messageId}/deleteanswer")
   DeleteAnswerResponse deleteAnswer(
       @RequestBody DeleteAnswerRequest request,
       @PathVariable("messageId") String messageId) {
