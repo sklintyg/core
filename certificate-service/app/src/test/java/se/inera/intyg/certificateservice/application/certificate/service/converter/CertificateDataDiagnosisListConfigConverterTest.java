@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK3226_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk3226CertificateBuilder;
 
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.config.Diag
 import se.inera.intyg.certificateservice.application.certificate.dto.config.DiagnosesTerminology;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.Message;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.MessageLevel;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisListItem;
@@ -82,7 +84,7 @@ class CertificateDataDiagnosisListConfigConverterTest {
   }
 
   @Test
-  void shallConvertToCertificateDataConfigDiagnosesWithExcludedMessage() {
+  void shallConvertToCertificateDataConfigDiagnosesWithExcludedMessageIfNull() {
     final var elementSpecification = ElementSpecification.builder()
         .configuration(
             ElementConfigurationDiagnosis.builder()
@@ -92,6 +94,28 @@ class CertificateDataDiagnosisListConfigConverterTest {
 
     final var certificateDataConfig = certificateDataDiagnosisListConfigConverter.convert(
         elementSpecification, FK3226_CERTIFICATE);
+    assertNull(certificateDataConfig.getMessage());
+  }
+
+  @Test
+  void shallConvertToCertificateDataConfigDiagnosesWithExcludedMessageIfCertificateIsSigned() {
+    final var elementSpecification = ElementSpecification.builder()
+        .configuration(
+            ElementConfigurationDiagnosis.builder()
+                .message(
+                    ElementMessage.builder()
+                        .content(EXPECTED_CONTENT)
+                        .level(ElementMessageLevel.INFO)
+                        .build()
+                )
+                .build()
+        )
+        .build();
+    final var certificate = fk3226CertificateBuilder()
+        .status(Status.SIGNED)
+        .build();
+    final var certificateDataConfig = certificateDataDiagnosisListConfigConverter.convert(
+        elementSpecification, certificate);
     assertNull(certificateDataConfig.getMessage());
   }
 

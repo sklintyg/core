@@ -349,7 +349,8 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(DIAGNOSIS_ID, DIAGNOSIS_FIELD_ID),
+                CertificateElementRuleFactory.mandatoryExist(DIAGNOSIS_ID,
+                    DIAGNOS_1),
                 CertificateElementRuleFactory.limit(DIAGNOSIS_ID, DIAGNOSIS_CODE_LIMIT)
             )
         )

@@ -22,24 +22,25 @@ public class ElementValidationDiagnosis implements ElementValidation {
   @Override
   public List<ValidationError> validate(ElementData data,
       Optional<ElementId> categoryId) {
-    if (data == null) {
-      throw new IllegalArgumentException("Element data is null");
-    }
-
-    final var valueBoolean = getValue(data.value());
-
-    if (mandatory && valueBoolean.value() == null) {
-      return List.of(
-          ValidationError.builder()
-              .elementId(data.id())
-              .categoryId(categoryId.orElse(null))
-              .fieldId(valueBoolean.booleanId())
-              .message(new ErrorMessage("Välj ett alternativ."))
-              .build()
-      );
-    }
-
     return Collections.emptyList();
+//    if (data == null) {
+//      throw new IllegalArgumentException("Element data is null");
+//    }
+//
+//    final var valueBoolean = getValue(data.value());
+//
+//    if (mandatory && valueBoolean.value() == null) {
+//      return List.of(
+//          ValidationError.builder()
+//              .elementId(data.id())
+//              .categoryId(categoryId.orElse(null))
+//              .fieldId(valueBoolean.booleanId())
+//              .message(new ErrorMessage("Välj ett alternativ."))
+//              .build()
+//      );
+//    }
+//
+//    return Collections.emptyList();
   }
 
   private ElementValueBoolean getValue(ElementValue value) {

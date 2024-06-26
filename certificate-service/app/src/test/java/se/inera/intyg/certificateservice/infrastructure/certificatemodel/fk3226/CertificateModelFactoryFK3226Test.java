@@ -898,7 +898,7 @@ class CertificateModelFactoryFK3226Test {
                 .type(ElementRuleType.MANDATORY)
                 .expression(
                     new RuleExpression(
-                        "exists($58.1)"
+                        "exists($huvuddiagnos)"
                     )
                 )
                 .build(),

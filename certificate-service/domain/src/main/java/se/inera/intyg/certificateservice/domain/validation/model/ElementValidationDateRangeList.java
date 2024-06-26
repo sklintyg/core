@@ -33,35 +33,34 @@ public class ElementValidationDateRangeList implements ElementValidation {
   @Override
   public List<ValidationError> validate(ElementData data,
       Optional<ElementId> categoryId) {
+    if (data == null) {
+      throw new IllegalArgumentException("Element data is null");
+    }
+
+    final var dateRangeList = getValue(data.value());
+
+    final var childValidationErrors = getChildValidationErrors(data, categoryId, dateRangeList);
+    if (childValidationErrors != null && !childValidationErrors.isEmpty()) {
+      return childValidationErrors;
+    }
+
+    final var overlappingErrors = getOverlappingErrors(data, categoryId, dateRangeList);
+    if (overlappingErrors != null && !overlappingErrors.isEmpty()) {
+      return overlappingErrors;
+    }
+
+    if (mandatory && !isDateRangeListFilled(dateRangeList)) {
+      return List.of(
+          errorMessage(
+              data,
+              dateRangeList.dateRangeListId(),
+              categoryId,
+              "Välj minst ett alternativ."
+          )
+      );
+    }
+
     return Collections.emptyList();
-//    if (data == null) {
-//      throw new IllegalArgumentException("Element data is null");
-//    }
-//
-//    final var dateRangeList = getValue(data.value());
-//
-//    final var childValidationErrors = getChildValidationErrors(data, categoryId, dateRangeList);
-//    if (childValidationErrors != null && !childValidationErrors.isEmpty()) {
-//      return childValidationErrors;
-//    }
-//
-//    final var overlappingErrors = getOverlappingErrors(data, categoryId, dateRangeList);
-//    if (overlappingErrors != null && !overlappingErrors.isEmpty()) {
-//      return overlappingErrors;
-//    }
-//
-//    if (mandatory && !isDateRangeListFilled(dateRangeList)) {
-//      return List.of(
-//          errorMessage(
-//              data,
-//              dateRangeList.dateRangeListId(),
-//              categoryId,
-//              "Välj minst ett alternativ."
-//          )
-//      );
-//    }
-//
-//    return Collections.emptyList();
   }
 
   private List<ValidationError> getChildValidationErrors(ElementData data,

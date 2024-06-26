@@ -31,7 +31,7 @@ public class CertificateDataDiagnosisListConfigConverter implements CertificateD
 
     return CertificateDataConfigDiagnoses.builder()
         .message(
-            elementConfigurationDiagnosis.message() != null ?
+            elementConfigurationDiagnosis.message() != null && certificate.isDraft() ?
                 Message.builder()
                     .content(elementConfigurationDiagnosis.message().content())
                     .level(MessageLevel.toMessageLevel(
