@@ -33,6 +33,7 @@ import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 @ExtendWith(MockitoExtension.class)
 class MessageTest {
 
+  private static final Content CONTENT = new Content("content");
   @Mock
   private Certificate certificate;
 
@@ -597,6 +598,234 @@ class MessageTest {
       message.delete();
 
       assertEquals(MessageStatus.DELETED_DRAFT, message.status());
+    }
+  }
+
+  @Nested
+  class SaveAnswerTests {
+
+    @Nested
+    class AnswerIsNull {
+
+      @Test
+      void shallIncludeNewlyGeneratedIdIfAnswerIsNull() {
+        final var message = Message.builder().build();
+        message.saveAnswer(AJLA_DOKTOR, CONTENT);
+        assertNotNull(message.answer().id());
+      }
+
+      @Test
+      void shallIncludeSubject() {
+        final var expectedSubject = new Subject("expectedSubject");
+        final var message = Message.builder()
+            .subject(expectedSubject)
+            .build();
+        message.saveAnswer(AJLA_DOKTOR, CONTENT);
+        assertEquals(expectedSubject, message.answer().subject());
+      }
+
+      @Test
+      void shallIncludeContent() {
+        final var expectedContent = new Content("expectedContent");
+        final var message = Message.builder()
+            .content(expectedContent)
+            .build();
+        message.saveAnswer(AJLA_DOKTOR, expectedContent);
+        assertEquals(expectedContent, message.answer().content());
+      }
+
+      @Test
+      void shallIncludeStatus() {
+        final var message = Message.builder().build();
+        message.saveAnswer(AJLA_DOKTOR, CONTENT);
+        assertEquals(MessageStatus.DRAFT, message.answer().status());
+      }
+
+      @Test
+      void shallIncludeAuthor() {
+        final var message = Message.builder().build();
+        message.saveAnswer(AJLA_DOKTOR, CONTENT);
+        assertEquals(AJLA_DOKTOR.name().fullName(), message.answer().author().author());
+      }
+
+      @Test
+      void shallIncludeAuthoredStaff() {
+        final var message = Message.builder().build();
+        message.saveAnswer(AJLA_DOKTOR, CONTENT);
+        assertEquals(AJLA_DOKTOR, message.answer().authoredStaff());
+      }
+
+    }
+
+    @Nested
+    class AnswerIsNotNull {
+
+      @Test
+      void shallUpdateContent() {
+        final var message = Message.builder()
+            .answer(Answer.builder().build())
+            .build();
+        message.saveAnswer(AJLA_DOKTOR, CONTENT);
+        assertEquals(CONTENT, message.answer().content());
+      }
+
+      @Test
+      void shallUpdateAuthoredStaff() {
+        final var message = Message.builder()
+            .answer(Answer.builder().build())
+            .build();
+        message.saveAnswer(AJLA_DOKTOR, CONTENT);
+        assertEquals(AJLA_DOKTOR, message.answer().authoredStaff());
+      }
+
+      @Test
+      void shallUpdateAuthor() {
+        final var message = Message.builder()
+            .answer(Answer.builder().build())
+            .build();
+        message.saveAnswer(AJLA_DOKTOR, CONTENT);
+        assertEquals(AJLA_DOKTOR.name().fullName(), message.answer().author().author());
+      }
+    }
+  }
+
+  @Nested
+  class DeleteAnswerTests {
+
+    @Test
+    void shallThrowIfAnswerIsNull() {
+      final var message = Message.builder().build();
+      assertThrows(IllegalStateException.class, message::deleteAnswer);
+    }
+
+    @Test
+    void shallThrowIfAnswerStatusIsNotDraft() {
+      final var answer = Answer.builder()
+          .status(MessageStatus.SENT)
+          .build();
+
+      final var message = Message.builder()
+          .answer(answer)
+          .build();
+
+      assertThrows(IllegalStateException.class, message::deleteAnswer);
+    }
+
+    @Test
+    void shallUpdateStatusToDeletedDraftOnAnswer() {
+      final var answer = Answer.builder()
+          .status(MessageStatus.DRAFT)
+          .build();
+
+      final var message = Message.builder()
+          .answer(answer)
+          .build();
+
+      message.deleteAnswer();
+
+      assertEquals(MessageStatus.DELETED_DRAFT, message.answer().status());
+    }
+  }
+
+  @Nested
+  class SendAnswer {
+
+    @Test
+    void shallThrowIfIncorrectType() {
+      final var message = Message.builder()
+          .type(MessageType.REMINDER)
+          .build();
+
+      assertThrows(IllegalStateException.class, () -> message.sendAnswer(AJLA_DOKTOR, CONTENT));
+    }
+
+    @Test
+    void shallUpdateStatus() {
+      final var answer = Answer.builder()
+          .build();
+      final var message = Message.builder()
+          .type(MessageType.CONTACT)
+          .answer(answer)
+          .build();
+
+      message.sendAnswer(AJLA_DOKTOR, CONTENT);
+      assertEquals(MessageStatus.SENT, message.answer().status());
+    }
+
+    @Test
+    void shallUpdateContent() {
+      final var answer = Answer.builder()
+          .build();
+      final var message = Message.builder()
+          .type(MessageType.CONTACT)
+          .answer(answer)
+          .build();
+
+      message.sendAnswer(AJLA_DOKTOR, CONTENT);
+      assertEquals(CONTENT, message.answer().content());
+    }
+
+    @Test
+    void shallUpdateAuthoredStaff() {
+      final var answer = Answer.builder()
+          .build();
+      final var message = Message.builder()
+          .type(MessageType.CONTACT)
+          .answer(answer)
+          .build();
+
+      message.sendAnswer(AJLA_DOKTOR, CONTENT);
+      assertEquals(AJLA_DOKTOR, message.answer().authoredStaff());
+    }
+
+    @Test
+    void shallUpdateSent() {
+      final var answer = Answer.builder()
+          .build();
+      final var message = Message.builder()
+          .type(MessageType.CONTACT)
+          .answer(answer)
+          .build();
+
+      message.sendAnswer(AJLA_DOKTOR, CONTENT);
+      assertNotNull(message.answer().sent());
+    }
+
+    @Test
+    void shallSetMessageAsHandled() {
+      final var answer = Answer.builder()
+          .build();
+      final var message = Message.builder()
+          .type(MessageType.CONTACT)
+          .answer(answer)
+          .build();
+
+      message.sendAnswer(AJLA_DOKTOR, CONTENT);
+      assertEquals(MessageStatus.HANDLED, message.status());
+    }
+  }
+
+  @Nested
+  class TypeTests {
+
+    @Test
+    void shallReturnTrueIfStatusMatch() {
+      final var messageTypes = List.of(MessageType.COMPLEMENT);
+      final var message = Message.builder()
+          .type(MessageType.COMPLEMENT)
+          .build();
+
+      assertTrue(message.type(messageTypes));
+    }
+
+    @Test
+    void shallReturnFalseIfStatusDontMatch() {
+      final var messageTypes = List.of(MessageType.REMINDER);
+      final var message = Message.builder()
+          .type(MessageType.COMPLEMENT)
+          .build();
+
+      assertFalse(message.type(messageTypes));
     }
   }
 }

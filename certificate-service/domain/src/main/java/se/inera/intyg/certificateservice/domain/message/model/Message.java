@@ -162,4 +162,51 @@ public class Message {
   public void answer(Answer answer) {
     this.answer = answer;
   }
+
+  public void saveAnswer(Staff staff, Content content) {
+    if (answer == null) {
+      this.answer = Answer.builder()
+          .id(new MessageId(UUID.randomUUID().toString()))
+          .subject(subject)
+          .content(content)
+          .status(MessageStatus.DRAFT)
+          .author(new Author(staff.name().fullName()))
+          .authoredStaff(staff)
+          .build();
+    } else {
+      answer.save(staff, content);
+    }
+  }
+
+  public void deleteAnswer() {
+    if (this.answer == null) {
+      throw new IllegalStateException(
+          "Can`t delete answer because answer is null"
+      );
+    }
+    if (this.answer.status() != MessageStatus.DRAFT) {
+      throw new IllegalStateException(
+          "Incorrect status '%s' - required status is '%s' to delete answer".formatted(this.status,
+              MessageStatus.DRAFT)
+      );
+    }
+    this.answer.delete();
+  }
+
+  public void sendAnswer(Staff staff, Content content) {
+    if (type(List.of(MessageType.COMPLEMENT, MessageType.REMINDER, MessageType.MISSING,
+        MessageType.ANSWER))) {
+      throw new IllegalStateException(
+          "Incorrect type '%s' - required type is '%s' or '%s' to send answer".formatted(
+              this.type,
+              MessageType.CONTACT, MessageType.OTHER)
+      );
+    }
+    this.answer.send(staff, content);
+    this.handle();
+  }
+
+  public boolean type(List<MessageType> messageTypes) {
+    return messageTypes.stream().anyMatch(messageType -> messageType.equals(this.type));
+  }
 }

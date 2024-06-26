@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.Author;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
+import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.SenderReference;
@@ -41,6 +42,7 @@ class AnswerToMessageEntityMapperTest {
   private static final MessageType TYPE = MessageType.COMPLEMENT;
   private static final boolean FORWARDED = true;
   private static final CertificateEntity CERTIFICATE = CertificateEntity.builder().build();
+  private static final int KEY = 1;
   private AnswerToMessageEntityMapper answerToMessageEntityMapper;
   @Mock
   private StaffRepository staffRepository;
@@ -51,26 +53,72 @@ class AnswerToMessageEntityMapperTest {
   }
 
   @Test
+  void shallIncludeKey() {
+    final var originalEntity = createOriginalEntity();
+    final var answer = createAnswer();
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
+    assertEquals(KEY, result.getKey());
+  }
+
+  @Test
   void shallIncludeId() {
     final var originalEntity = createOriginalEntity();
     final var answer = createAnswer();
-    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
     assertNotNull(result.getId());
+  }
+
+  @Test
+  void shallUseIdFromAnswerInclude() {
+    final var expectedId = "expectedId";
+    final var originalEntity = createOriginalEntity();
+    final var answer = Answer.builder()
+        .id(new MessageId(expectedId))
+        .reference(new SenderReference(REFERENCE))
+        .subject(new Subject(SUBJECT))
+        .content(new Content(CONTENT))
+        .author(new Author(AUTHOR))
+        .created(CREATED)
+        .modified(MODIFIED)
+        .sent(SENT)
+        .status(STATUS)
+        .type(TYPE)
+        .build();
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
+    assertEquals(expectedId, result.getId());
   }
 
   @Test
   void shallIncludeReference() {
     final var originalEntity = createOriginalEntity();
     final var answer = createAnswer();
-    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
     assertEquals(REFERENCE, result.getReference());
+  }
+
+  @Test
+  void shallExcludeReference() {
+    final var originalEntity = createOriginalEntity();
+    final var answer = Answer.builder()
+        .subject(new Subject(SUBJECT))
+        .content(new Content(CONTENT))
+        .author(new Author(AUTHOR))
+        .created(CREATED)
+        .modified(MODIFIED)
+        .sent(SENT)
+        .status(STATUS)
+        .type(TYPE)
+        .build();
+
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
+    assertNull(result.getReference());
   }
 
   @Test
   void shallIncludeSubject() {
     final var originalEntity = createOriginalEntity();
     final var answer = createAnswer();
-    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
     assertEquals(SUBJECT, result.getSubject());
   }
 
@@ -78,7 +126,7 @@ class AnswerToMessageEntityMapperTest {
   void shallIncludeContent() {
     final var originalEntity = createOriginalEntity();
     final var answer = createAnswer();
-    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
     assertEquals(CONTENT, result.getContent());
   }
 
@@ -86,7 +134,7 @@ class AnswerToMessageEntityMapperTest {
   void shallIncludeAuthor() {
     final var originalEntity = createOriginalEntity();
     final var answer = createAnswer();
-    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
     assertEquals(AUTHOR, result.getAuthor());
   }
 
@@ -94,7 +142,7 @@ class AnswerToMessageEntityMapperTest {
   void shallIncludeCreated() {
     final var originalEntity = createOriginalEntity();
     final var answer = createAnswer();
-    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
     assertEquals(CREATED, result.getCreated());
   }
 
@@ -102,7 +150,7 @@ class AnswerToMessageEntityMapperTest {
   void shallIncludeModified() {
     final var originalEntity = createOriginalEntity();
     final var answer = createAnswer();
-    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
     assertEquals(MODIFIED, result.getModified());
   }
 
@@ -110,7 +158,7 @@ class AnswerToMessageEntityMapperTest {
   void shallIncludeSent() {
     final var originalEntity = createOriginalEntity();
     final var answer = createAnswer();
-    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
     assertEquals(SENT, result.getSent());
   }
 
@@ -118,7 +166,7 @@ class AnswerToMessageEntityMapperTest {
   void shallIncludeStatus() {
     final var originalEntity = createOriginalEntity();
     final var answer = createAnswer();
-    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
     assertEquals(MessageStatusEnum.HANDLED.name(), result.getStatus().getStatus());
     assertEquals(MessageStatusEnum.HANDLED.getKey(), result.getStatus().getKey());
   }
@@ -127,7 +175,7 @@ class AnswerToMessageEntityMapperTest {
   void shallIncludeMessageType() {
     final var originalEntity = createOriginalEntity();
     final var answer = createAnswer();
-    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
     assertEquals(MessageTypeEnum.ANSWER.name(), result.getMessageType().getType());
     assertEquals(MessageTypeEnum.ANSWER.getKey(), result.getMessageType().getKey());
   }
@@ -136,7 +184,7 @@ class AnswerToMessageEntityMapperTest {
   void shallIncludeCertificate() {
     final var originalEntity = createOriginalEntity();
     final var answer = createAnswer();
-    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
     assertEquals(CERTIFICATE, result.getCertificate());
   }
 
@@ -144,7 +192,7 @@ class AnswerToMessageEntityMapperTest {
   void shallIncludeForwarded() {
     final var originalEntity = createOriginalEntity();
     final var answer = createAnswer();
-    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
     assertEquals(FORWARDED, result.isForwarded());
   }
 
@@ -160,7 +208,7 @@ class AnswerToMessageEntityMapperTest {
 
     doReturn(expectedStaff).when(staffRepository).staff(authoredStaff);
 
-    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
     assertEquals(expectedStaff, result.getAuthoredByStaff());
   }
 
@@ -171,7 +219,7 @@ class AnswerToMessageEntityMapperTest {
         .authoredStaff(null)
         .build();
 
-    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer);
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
     assertNull(result.getAuthoredByStaff());
   }
 
