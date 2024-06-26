@@ -19,7 +19,7 @@ public class CertificateDataMedicalInvestigationConfigConverter implements
 
   @Override
   public ElementType getType() {
-    return ElementType.MEDICAL_INVESTIGATION;
+    return ElementType.MEDICAL_INVESTIGATION_LIST;
   }
 
   public CertificateDataConfig convert(ElementSpecification elementSpecification,

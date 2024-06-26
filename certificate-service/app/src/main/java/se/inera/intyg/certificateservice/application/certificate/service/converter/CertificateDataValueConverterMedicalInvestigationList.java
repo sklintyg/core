@@ -20,7 +20,7 @@ public class CertificateDataValueConverterMedicalInvestigationList implements
 
   @Override
   public ElementType getType() {
-    return ElementType.MEDICAL_INVESTIGATION;
+    return ElementType.MEDICAL_INVESTIGATION_LIST;
   }
 
   @Override

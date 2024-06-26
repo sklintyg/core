@@ -93,7 +93,7 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
 
   @Test
   void shouldReturnCorrectType() {
-    assertEquals(ElementType.MEDICAL_INVESTIGATION, converter.getType());
+    assertEquals(ElementType.MEDICAL_INVESTIGATION_LIST, converter.getType());
   }
 
   @Test

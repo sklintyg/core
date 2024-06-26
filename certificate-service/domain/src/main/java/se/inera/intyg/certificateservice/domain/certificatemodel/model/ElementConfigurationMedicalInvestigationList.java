@@ -14,7 +14,7 @@ public class ElementConfigurationMedicalInvestigationList implements ElementConf
   @Getter(onMethod = @__(@Override))
   String name;
   @Getter(onMethod = @__(@Override))
-  ElementType type = ElementType.MEDICAL_INVESTIGATION;
+  ElementType type = ElementType.MEDICAL_INVESTIGATION_LIST;
   @Getter(onMethod = @__(@Override))
   String description;
   @Getter(onMethod = @__(@Override))
