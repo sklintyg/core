@@ -21,6 +21,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 class CertificateDataDiagnosisListConfigConverterTest {
@@ -29,11 +30,16 @@ class CertificateDataDiagnosisListConfigConverterTest {
   private static final String EXPECTED_ID = "expectedId";
   private static final String EXPECTED_LABEL = "expectedLabel";
   private static final String EXPECTED_TEXT = "expectedText";
-  private CertificateDataDiagnosisListConfigConverter converter;
+  private CertificateDataDiagnosisListConfigConverter certificateDataDiagnosisListConfigConverter;
 
   @BeforeEach
   void setUp() {
-    converter = new CertificateDataDiagnosisListConfigConverter();
+    certificateDataDiagnosisListConfigConverter = new CertificateDataDiagnosisListConfigConverter();
+  }
+
+  @Test
+  void shallReturnType() {
+    assertEquals(ElementType.DIAGNOSIS, certificateDataDiagnosisListConfigConverter.getType());
   }
 
   @Test
@@ -45,7 +51,7 @@ class CertificateDataDiagnosisListConfigConverterTest {
         .build();
 
     assertThrows(IllegalStateException.class,
-        () -> converter.convert(elementSpecification,
+        () -> certificateDataDiagnosisListConfigConverter.convert(elementSpecification,
             FK7210_CERTIFICATE)
     );
   }
@@ -70,7 +76,8 @@ class CertificateDataDiagnosisListConfigConverterTest {
         )
         .build();
 
-    final var certificateDataConfig = converter.convert(elementSpecification, FK3226_CERTIFICATE);
+    final var certificateDataConfig = certificateDataDiagnosisListConfigConverter.convert(
+        elementSpecification, FK3226_CERTIFICATE);
     assertEquals(expectedMessage, certificateDataConfig.getMessage());
   }
 
@@ -83,7 +90,8 @@ class CertificateDataDiagnosisListConfigConverterTest {
         )
         .build();
 
-    final var certificateDataConfig = converter.convert(elementSpecification, FK3226_CERTIFICATE);
+    final var certificateDataConfig = certificateDataDiagnosisListConfigConverter.convert(
+        elementSpecification, FK3226_CERTIFICATE);
     assertNull(certificateDataConfig.getMessage());
   }
 
@@ -108,7 +116,7 @@ class CertificateDataDiagnosisListConfigConverterTest {
         )
         .build();
 
-    final var certificateDataConfig = (CertificateDataConfigDiagnoses) converter.convert(
+    final var certificateDataConfig = (CertificateDataConfigDiagnoses) certificateDataDiagnosisListConfigConverter.convert(
         elementSpecification, FK3226_CERTIFICATE);
     assertEquals(expectedTerminlogy, certificateDataConfig.getTerminology());
   }
@@ -133,7 +141,7 @@ class CertificateDataDiagnosisListConfigConverterTest {
         )
         .build();
 
-    final var certificateDataConfig = (CertificateDataConfigDiagnoses) converter.convert(
+    final var certificateDataConfig = (CertificateDataConfigDiagnoses) certificateDataDiagnosisListConfigConverter.convert(
         elementSpecification, FK3226_CERTIFICATE);
     assertEquals(expectedDiagnosesListItem, certificateDataConfig.getList());
   }
@@ -148,7 +156,8 @@ class CertificateDataDiagnosisListConfigConverterTest {
         )
         .build();
 
-    final var certificateDataConfig = converter.convert(elementSpecification, FK3226_CERTIFICATE);
+    final var certificateDataConfig = certificateDataDiagnosisListConfigConverter.convert(
+        elementSpecification, FK3226_CERTIFICATE);
     assertEquals(EXPECTED_TEXT, certificateDataConfig.getText());
   }
 
@@ -162,7 +171,8 @@ class CertificateDataDiagnosisListConfigConverterTest {
         )
         .build();
 
-    final var certificateDataConfig = converter.convert(elementSpecification, FK3226_CERTIFICATE);
+    final var certificateDataConfig = certificateDataDiagnosisListConfigConverter.convert(
+        elementSpecification, FK3226_CERTIFICATE);
     assertEquals(EXPECTED_TEXT, certificateDataConfig.getDescription());
   }
 }
