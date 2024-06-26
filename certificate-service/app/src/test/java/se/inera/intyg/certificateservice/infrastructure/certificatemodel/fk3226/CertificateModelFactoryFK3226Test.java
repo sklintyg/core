@@ -40,6 +40,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
@@ -1926,12 +1927,19 @@ class CertificateModelFactoryFK3226Test {
     @Test
     void shallIncludeConfiguration() {
       final var expectedConfiguration = ElementConfigurationMessage.builder()
-          .message("""
-               Om patienten har medicinska förutsättningar att samtycka till att den vill ha stöd av en närstående, så ska patienten göra det.
-                                  \s
-               Därför ska du fylla i om patienten kan lämna ett skriftligt samtycke eller inte.
-              """)
-          .level(ElementMessageLevel.INFO)
+          .message(
+              ElementMessage.builder()
+                  .content(
+                      """
+                           Om patienten har medicinska förutsättningar att samtycka till att den vill ha stöd av en närstående, så ska patienten göra det.
+                                              \s
+                           Därför ska du fylla i om patienten kan lämna ett skriftligt samtycke eller inte.
+                          """
+
+                  )
+                  .level(ElementMessageLevel.INFO)
+                  .build()
+          )
           .build();
 
       final var certificateModel = certificateModelFactoryFK3226.create();

@@ -29,8 +29,8 @@ public class CertificateDataMessageConfigConverter implements CertificateDataCon
     return CertificateDataConfigMessage.builder()
         .message(
             Message.builder()
-                .content(elementConfigurationMessage.message())
-                .level(MessageLevel.toMessageLevel(elementConfigurationMessage.level()))
+                .content(elementConfigurationMessage.message().content())
+                .level(MessageLevel.toMessageLevel(elementConfigurationMessage.message().level()))
                 .build()
         )
         .build();
