@@ -109,4 +109,34 @@ class CertificateElementRuleFactoryTest {
     assertEquals(expected, response);
   }
 
+  @Test
+  void shouldReturnMandatoryNotEmptyRule() {
+    final var expected = ElementRuleExpression.builder()
+        .id(new ElementId("ID"))
+        .type(ElementRuleType.MANDATORY)
+        .expression(new RuleExpression("!empty($FIELD1)"))
+        .build();
+
+    final var response = CertificateElementRuleFactory.mandatoryNotEmpty(
+        new ElementId("ID"), List.of(new FieldId("FIELD1"))
+    );
+
+    assertEquals(expected, response);
+  }
+
+  @Test
+  void shouldReturnMandatoryNotEmptyRuleForSeveralFields() {
+    final var expected = ElementRuleExpression.builder()
+        .id(new ElementId("ID"))
+        .type(ElementRuleType.MANDATORY)
+        .expression(new RuleExpression("!empty($FIELD0) || !empty($FIELD1) || !empty($FIELD2)"))
+        .build();
+
+    final var response = CertificateElementRuleFactory.mandatoryNotEmpty(
+        new ElementId("ID"),
+        List.of(new FieldId("FIELD0"), new FieldId("FIELD1"), new FieldId("FIELD2"))
+    );
+
+    assertEquals(expected, response);
+  }
 }

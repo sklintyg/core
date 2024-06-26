@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemKvFkmu0005.getAllCodes;
 
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -18,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
@@ -26,12 +28,14 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.MedicalInvestigationConfig;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateElementRuleFactory;
@@ -101,9 +105,17 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   public static final ElementId QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID = new ElementId("3");
   private static final FieldId QUESTION_BASERAT_PA_ANNAT_UNDERLAG_FIELD_ID = new FieldId("3.1");
 
+  private static final FieldId MEDICAL_INVESTIGATION_FIELD_ID_1 = new FieldId(
+      "medicalInvestigation1");
+  private static final FieldId MEDICAL_INVESTIGATION_FIELD_ID_2 = new FieldId(
+      "medicalInvestigation2");
+  private static final FieldId MEDICAL_INVESTIGATION_FIELD_ID_3 = new FieldId(
+      "medicalInvestigation3");
+
   public static final ElementId FUNKTIONSNEDSATTNINGAR_CATEGORY_ID = new ElementId("KAT_5");
 
-  public static final ElementId QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR = new ElementId("4");
+  public static final ElementId QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_ID = new ElementId("4");
+  public static final FieldId QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_FIELD_ID = new FieldId("4.1");
 
   public static final ElementId AKTIVITETSBEGRANSNINGAR_CATEGORY_ID = new ElementId("KAT_6");
   public static final ElementId QUESTION_AKTIVITETSBEGRANSNINGAR_ID = new ElementId("17");
@@ -240,7 +252,8 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     questionGrundForMedicinsktUnderlag(
                         questionRelationTillPatienten(),
                         questionAnnanGrundForMedicinsktUnderlag(),
-                        questionBaseratPaAnnatMedicinsktUnderlag()
+                        questionBaseratPaAnnatMedicinsktUnderlag(),
+                        questionUtredningEllerUnderlag()
                     )
                 ),
                 categoryAktivitetsbegransningar(
@@ -505,6 +518,50 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         .build();
   }
 
+  private static ElementSpecification questionUtredningEllerUnderlag(
+      ElementSpecification... children) {
+    final var medicalInvestigations = List.of(
+        getMedicalInvestigationConfig(MEDICAL_INVESTIGATION_FIELD_ID_1),
+        getMedicalInvestigationConfig(MEDICAL_INVESTIGATION_FIELD_ID_2),
+        getMedicalInvestigationConfig(MEDICAL_INVESTIGATION_FIELD_ID_3)
+    );
+
+    return ElementSpecification.builder()
+        .id(QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_ID)
+        .configuration(
+            ElementConfigurationMedicalInvestigationList.builder()
+                .id(QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_FIELD_ID)
+                .name("Ange utredning eller underlag")
+                .informationSourceDescription(
+                    "Skriv exempelvis Neuropsykiatriska kliniken på X-stads sjukhus eller om patienten själv kommer att bifoga utredningen till sin ansökan.")
+                .informationSourceText("Från vilken vårdgivare")
+                .list(medicalInvestigations)
+                .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.mandatoryNotEmpty(
+                    QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_ID,
+                    List.of(
+                        getDateId(MEDICAL_INVESTIGATION_FIELD_ID_1),
+                        getInvestigationTypeId(MEDICAL_INVESTIGATION_FIELD_ID_1),
+                        getInformationSourceId(MEDICAL_INVESTIGATION_FIELD_ID_1)
+                    )
+                )
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationMedicalInvestigationList.builder()
+                    .mandatory(true)
+                    .max(Period.ofDays(0))
+                    .build()
+            )
+        )
+        .children(List.of(children))
+        .build();
+  }
+
   private static ElementSpecification issuingUnitContactInfo() {
     return ElementSpecification.builder()
         .id(UNIT_CONTACT_INFORMATION)
@@ -693,5 +750,28 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
             )
         )
         .build();
+  }
+
+  private static MedicalInvestigationConfig getMedicalInvestigationConfig(FieldId fieldId) {
+    return MedicalInvestigationConfig.builder()
+        .dateId(getDateId(fieldId))
+        .investigationTypeId(getInvestigationTypeId(fieldId))
+        .informationSourceId(getInformationSourceId(fieldId))
+        .typeOptions(getAllCodes())
+        .min(null)
+        .max(Period.ofDays(0))
+        .build();
+  }
+
+  private static FieldId getInformationSourceId(FieldId fieldId) {
+    return new FieldId(fieldId.value() + "_INFORMATION_SOURCE");
+  }
+
+  private static FieldId getInvestigationTypeId(FieldId fieldId) {
+    return new FieldId(fieldId.value() + "_INVESTIGATION_TYPE");
+  }
+
+  private static FieldId getDateId(FieldId fieldId) {
+    return new FieldId(fieldId.value() + "_DATE");
   }
 }
