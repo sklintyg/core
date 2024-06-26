@@ -7,9 +7,11 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigMessage;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.Message;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.MessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMessage;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
@@ -45,16 +47,24 @@ class CertificateDataMessageConfigConverterTest {
   @Test
   void shouldReturnConvertedMessage() {
     final var expected = CertificateDataConfigMessage.builder()
-        .message("MESSAGE")
-        .level(MessageLevel.INFO)
+        .message(
+            Message.builder()
+                .content("MESSAGE")
+                .level(MessageLevel.INFO)
+                .build()
+        )
         .build();
 
     final var response = certificateDataMessageConfigConverter.convert(
         ElementSpecification.builder()
             .configuration(
                 ElementConfigurationMessage.builder()
-                    .message("MESSAGE")
-                    .level(ElementMessageLevel.INFO)
+                    .message(
+                        ElementMessage.builder()
+                            .content("MESSAGE")
+                            .level(ElementMessageLevel.INFO)
+                            .build()
+                    )
                     .build()
             ).build(),
         FK7210_CERTIFICATE
