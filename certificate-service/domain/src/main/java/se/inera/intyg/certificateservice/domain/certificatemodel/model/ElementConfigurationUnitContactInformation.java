@@ -12,6 +12,8 @@ public class ElementConfigurationUnitContactInformation implements ElementConfig
 
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.ISSUING_UNIT;
+  @Getter(onMethod = @__(@Override))
+  ElementMessage message;
 
   public static final ElementId UNIT_CONTACT_INFORMATION = new ElementId(
       "UNIT_CONTACT_INFORMATION");

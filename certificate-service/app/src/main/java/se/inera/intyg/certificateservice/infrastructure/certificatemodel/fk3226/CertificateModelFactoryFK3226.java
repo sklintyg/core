@@ -23,14 +23,18 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisListItem;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisTerminology;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -45,6 +49,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDiagnosis;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateElementRuleFactory;
@@ -80,6 +85,17 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
       "53");
   private static final FieldId FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_FIELD_ID = new FieldId(
       "53.1");
+  private static final FieldId DIAGNOSIS_FIELD_ID = new FieldId(
+      "58.1");
+  private static final ElementId DIAGNOSIS_ID = new ElementId("58");
+  private static final String DIAGNOS_ICD_10_ID = "ICD_10_SE";
+  private static final String DIAGNOS_ICD_10_LABEL = "ICD-10-SE";
+  private static final FieldId DIAGNOS_1 = new FieldId("huvuddiagnos");
+  private static final FieldId DIAGNOS_2 = new FieldId("diagnos2");
+  private static final FieldId DIAGNOS_3 = new FieldId("diagnos3");
+  private static final FieldId DIAGNOS_4 = new FieldId("diagnos4");
+  private static final FieldId DIAGNOS_5 = new FieldId("diagnos5");
+  private static final short DIAGNOSIS_CODE_LIMIT = (short) 81;
   @Value("${certificate.model.fk3226.v1_0.active.from}")
   private LocalDateTime activeFrom;
   private static final String TYPE = "fk3226";
@@ -276,6 +292,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     )
                 ),
                 categoryHot(
+                    questionDiagnos(),
                     questionPatientBehandlingOchVardsituation(
                         questionNarAktivaBehandlingenAvslutades(),
                         questionNarTillstandetBlevAkutLivshotande(),
@@ -298,17 +315,71 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .build();
   }
 
+
+  private ElementSpecification questionDiagnos() {
+    return ElementSpecification.builder()
+        .id(DIAGNOSIS_ID)
+        .configuration(
+            ElementConfigurationDiagnosis.builder()
+                .id(DIAGNOSIS_FIELD_ID)
+                .name(
+                    "Diagnos eller diagnoser för det tillstånd som orsakar ett hot mot patientens liv")
+                .message(
+                    ElementMessage.builder()
+                        .content(
+                            "Ange alla diagnoser som sammantaget medför ett påtagligt hot mot patientens liv.")
+                        .level(ElementMessageLevel.OBSERVE)
+                        .build()
+                )
+                .terminology(
+                    List.of(
+                        new ElementDiagnosisTerminology(DIAGNOS_ICD_10_ID, DIAGNOS_ICD_10_LABEL)
+                    )
+                )
+                .list(
+                    List.of(
+                        new ElementDiagnosisListItem(DIAGNOS_1),
+                        new ElementDiagnosisListItem(DIAGNOS_2),
+                        new ElementDiagnosisListItem(DIAGNOS_3),
+                        new ElementDiagnosisListItem(DIAGNOS_4),
+                        new ElementDiagnosisListItem(DIAGNOS_5)
+                    )
+                )
+                .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.mandatoryExist(DIAGNOSIS_ID, DIAGNOSIS_FIELD_ID),
+                CertificateElementRuleFactory.limit(DIAGNOSIS_ID, DIAGNOSIS_CODE_LIMIT)
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationDiagnosis.builder()
+                    .mandatory(true)
+                    .build()
+            )
+        )
+        .build();
+  }
+
   private static ElementSpecification messageForutsattningarForAttLamnaSkriftligtSamtycke() {
     return ElementSpecification.builder()
         .id(new ElementId("forutsattningar"))
         .configuration(
             ElementConfigurationMessage.builder()
-                .message("""
-                     Om patienten har medicinska förutsättningar att samtycka till att den vill ha stöd av en närstående, så ska patienten göra det.
-                                        \s
-                     Därför ska du fylla i om patienten kan lämna ett skriftligt samtycke eller inte.
-                    """)
-                .level(ElementMessageLevel.INFO)
+                .message(
+                    ElementMessage.builder()
+                        .content(
+                            """
+                                 Om patienten har medicinska förutsättningar att samtycka till att den vill ha stöd av en närstående, så ska patienten göra det.
+                                                    \s
+                                 Därför ska du fylla i om patienten kan lämna ett skriftligt samtycke eller inte.
+                                """
+                        )
+                        .level(ElementMessageLevel.INFO)
+                        .build()
+                )
                 .build()
         )
         .build();

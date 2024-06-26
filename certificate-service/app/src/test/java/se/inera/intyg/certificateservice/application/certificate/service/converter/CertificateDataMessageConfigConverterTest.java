@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.config.Mess
 import se.inera.intyg.certificateservice.application.certificate.dto.config.MessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMessage;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
@@ -58,8 +59,12 @@ class CertificateDataMessageConfigConverterTest {
         ElementSpecification.builder()
             .configuration(
                 ElementConfigurationMessage.builder()
-                    .message("MESSAGE")
-                    .level(ElementMessageLevel.INFO)
+                    .message(
+                        ElementMessage.builder()
+                            .content("MESSAGE")
+                            .level(ElementMessageLevel.INFO)
+                            .build()
+                    )
                     .build()
             ).build(),
         FK7210_CERTIFICATE

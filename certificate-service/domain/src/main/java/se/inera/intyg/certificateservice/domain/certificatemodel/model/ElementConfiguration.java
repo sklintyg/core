@@ -23,4 +23,6 @@ public interface ElementConfiguration {
   ElementType type();
 
   ElementValue emptyValue();
+
+  ElementMessage message();
 }

@@ -32,14 +32,18 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisListItem;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisTerminology;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
@@ -57,6 +61,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDiagnosis;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 
@@ -829,6 +834,102 @@ class CertificateModelFactoryFK3226Test {
 
         assertEquals(expectedConfiguration,
             certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+    }
+
+    @Nested
+    class QuestionDiagnos {
+
+      private static final ElementId ELEMENT_ID = new ElementId("58");
+
+      @Test
+      void shallIncludeId() {
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
+                certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeConfiguration() {
+        final var expectedConfiguration = ElementConfigurationDiagnosis.builder()
+            .id(new FieldId("58.1"))
+            .name(
+                "Diagnos eller diagnoser för det tillstånd som orsakar ett hot mot patientens liv")
+            .message(
+                ElementMessage.builder()
+                    .content(
+                        "Ange alla diagnoser som sammantaget medför ett påtagligt hot mot patientens liv.")
+                    .level(ElementMessageLevel.OBSERVE)
+                    .build()
+            )
+            .terminology(
+                List.of(
+                    new ElementDiagnosisTerminology("ICD_10_SE", "ICD-10-SE")
+                )
+            )
+            .list(
+                List.of(
+                    new ElementDiagnosisListItem(new FieldId("huvuddiagnos")),
+                    new ElementDiagnosisListItem(new FieldId("diagnos2")),
+                    new ElementDiagnosisListItem(new FieldId("diagnos3")),
+                    new ElementDiagnosisListItem(new FieldId("diagnos4")),
+                    new ElementDiagnosisListItem(new FieldId("diagnos5"))
+                )
+            )
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+
+      @Test
+      void shallIncludeRules() {
+        final var expectedRules = List.of(
+            ElementRuleExpression.builder()
+                .id(ELEMENT_ID)
+                .type(ElementRuleType.MANDATORY)
+                .expression(
+                    new RuleExpression(
+                        "exists($58.1)"
+                    )
+                )
+                .build(),
+            ElementRuleLimit.builder()
+                .id(ELEMENT_ID)
+                .type(ElementRuleType.TEXT_LIMIT)
+                .limit(
+                    new RuleLimit((short) 81)
+                )
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedRules,
+            certificateModel.elementSpecification(ELEMENT_ID).rules()
+        );
+      }
+
+      @Test
+      void shallIncludeValidations() {
+        final var expectedValidations = List.of(
+            ElementValidationDiagnosis.builder()
+                .mandatory(true)
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedValidations,
+            certificateModel.elementSpecification(ELEMENT_ID).validations()
         );
       }
     }
@@ -1926,12 +2027,19 @@ class CertificateModelFactoryFK3226Test {
     @Test
     void shallIncludeConfiguration() {
       final var expectedConfiguration = ElementConfigurationMessage.builder()
-          .message("""
-               Om patienten har medicinska förutsättningar att samtycka till att den vill ha stöd av en närstående, så ska patienten göra det.
-                                  \s
-               Därför ska du fylla i om patienten kan lämna ett skriftligt samtycke eller inte.
-              """)
-          .level(ElementMessageLevel.INFO)
+          .message(
+              ElementMessage.builder()
+                  .content(
+                      """
+                           Om patienten har medicinska förutsättningar att samtycka till att den vill ha stöd av en närstående, så ska patienten göra det.
+                                              \s
+                           Därför ska du fylla i om patienten kan lämna ett skriftligt samtycke eller inte.
+                          """
+
+                  )
+                  .level(ElementMessageLevel.INFO)
+                  .build()
+          )
           .build();
 
       final var certificateModel = certificateModelFactoryFK3226.create();
