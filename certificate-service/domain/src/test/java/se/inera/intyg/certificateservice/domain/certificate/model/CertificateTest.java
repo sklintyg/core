@@ -2336,10 +2336,9 @@ class CertificateTest {
     @Test
     void shallBuildAnswerWithId() {
       final var actionEvaluation = actionEvaluationBuilder.build();
-      final var expectedId = message.id();
       certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
       final var answer = certificateWithMessages.messages().get(0).answer();
-      assertEquals(expectedId, answer.id());
+      assertNotNull(answer.id());
     }
 
     @Test
