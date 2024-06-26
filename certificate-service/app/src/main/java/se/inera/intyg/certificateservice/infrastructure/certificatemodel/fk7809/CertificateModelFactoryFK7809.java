@@ -251,10 +251,10 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                 categoryGrundForMedicinsktUnderlag(
                     questionGrundForMedicinsktUnderlag(
                         questionRelationTillPatienten(),
-                        questionAnnanGrundForMedicinsktUnderlag(),
-                        questionBaseratPaAnnatMedicinsktUnderlag(),
-                        questionUtredningEllerUnderlag()
-                    )
+                        questionAnnanGrundForMedicinsktUnderlag()
+                    ),
+                    questionBaseratPaAnnatMedicinsktUnderlag(),
+                    questionUtredningEllerUnderlag()
                 ),
                 categoryAktivitetsbegransningar(
                     questionAktivitetsbegransningar()
