@@ -958,7 +958,7 @@ class CertificateModelFactoryFK3226Test {
       void shallIncludeValidations() {
         final var expectedValidations = List.of(
             ElementValidationDiagnosis.builder()
-                .mandatory(true)
+                .mandatoryField(new FieldId("huvuddiagnos"))
                 .build()
         );
 

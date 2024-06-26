@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 public class ElementValidationDiagnosis implements ElementValidation {
 
   FieldId mandatoryField;
+  List<FieldId> order;
 
   @Override
   public List<ValidationError> validate(ElementData data,
@@ -40,7 +41,7 @@ public class ElementValidationDiagnosis implements ElementValidation {
           errorMessage(data, mandatoryField, categoryId, "Ange diagnos på översta raden först.")
       );
     }
-    
+
     return Collections.emptyList();
   }
 

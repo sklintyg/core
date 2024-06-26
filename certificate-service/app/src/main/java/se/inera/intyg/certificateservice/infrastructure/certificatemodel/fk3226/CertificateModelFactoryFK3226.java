@@ -367,6 +367,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
             List.of(
                 ElementValidationDiagnosis.builder()
                     .mandatoryField(DIAGNOS_1)
+                    .order(
+                        List.of(DIAGNOS_1, DIAGNOS_2, DIAGNOS_3, DIAGNOS_4, DIAGNOS_5)
+                    )
                     .build()
             )
         )
