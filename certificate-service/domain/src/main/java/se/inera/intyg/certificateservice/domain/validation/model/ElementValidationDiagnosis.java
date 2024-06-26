@@ -8,8 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
 @Value
@@ -23,37 +21,5 @@ public class ElementValidationDiagnosis implements ElementValidation {
   public List<ValidationError> validate(ElementData data,
       Optional<ElementId> categoryId) {
     return Collections.emptyList();
-//    if (data == null) {
-//      throw new IllegalArgumentException("Element data is null");
-//    }
-//
-//    final var valueBoolean = getValue(data.value());
-//
-//    if (mandatory && valueBoolean.value() == null) {
-//      return List.of(
-//          ValidationError.builder()
-//              .elementId(data.id())
-//              .categoryId(categoryId.orElse(null))
-//              .fieldId(valueBoolean.booleanId())
-//              .message(new ErrorMessage("Välj ett alternativ."))
-//              .build()
-//      );
-//    }
-//
-//    return Collections.emptyList();
-  }
-
-  private ElementValueBoolean getValue(ElementValue value) {
-    if (value == null) {
-      throw new IllegalArgumentException("Element data value is null");
-    }
-
-    if (value instanceof ElementValueBoolean dateValue) {
-      return dateValue;
-    }
-
-    throw new IllegalArgumentException(
-        "Element data value %s is of wrong type".formatted(value.getClass())
-    );
   }
 }
