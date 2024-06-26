@@ -29,11 +29,18 @@ public class ElementValidationDiagnosis implements ElementValidation {
 
     final var elementValueDiagnosisList = getValue(data.value());
 
-    if (mandatoryField != null && missingMandatoryField(elementValueDiagnosisList)) {
+    if (mandatoryField != null && elementValueDiagnosisList.diagnoses().isEmpty()) {
       return List.of(
           errorMessage(data, mandatoryField, categoryId, "Ange minst en diagnos.")
       );
     }
+
+    if (mandatoryField != null && missingMandatoryField(elementValueDiagnosisList)) {
+      return List.of(
+          errorMessage(data, mandatoryField, categoryId, "Ange diagnos på översta raden först.")
+      );
+    }
+    
     return Collections.emptyList();
   }
 
