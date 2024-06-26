@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
+import java.util.Collections;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,12 +14,16 @@ public class ElementConfigurationDiagnosis implements ElementConfiguration {
   @Getter(onMethod = @__(@Override))
   String name;
   @Getter(onMethod = @__(@Override))
-  ElementType type = ElementType.MESSAGE;
+  ElementType type = ElementType.DIAGNOSIS;
   @Getter(onMethod = @__(@Override))
   ElementMessage message;
+  @Getter(onMethod = @__(@Override))
+  String description;
   FieldId id;
-  List<ElementDiagnosisTerminology> terminology;
-  List<ElementDiagnosisListItem> list;
+  @Builder.Default
+  List<ElementDiagnosisTerminology> terminology = Collections.emptyList();
+  @Builder.Default
+  List<ElementDiagnosisListItem> list = Collections.emptyList();
 
   @Override
   public ElementValue emptyValue() {

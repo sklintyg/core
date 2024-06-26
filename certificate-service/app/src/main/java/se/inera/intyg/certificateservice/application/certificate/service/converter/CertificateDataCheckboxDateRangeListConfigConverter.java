@@ -29,7 +29,8 @@ public class CertificateDataCheckboxDateRangeListConfigConverter implements
       Certificate certificate) {
     if (!(elementSpecification.configuration() instanceof ElementConfigurationCheckboxDateRangeList configuration)) {
       throw new IllegalStateException(
-          "Invalid value type. Type was '%s'".formatted(elementSpecification.configuration().type())
+          "Invalid config type. Type was '%s'".formatted(
+              elementSpecification.configuration().type())
       );
     }
     return CertificateDataConfigCheckboxDateRangeList.builder()

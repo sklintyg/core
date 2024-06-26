@@ -20,7 +20,8 @@ public class CertificateDataRadioBooleanConfigConverter implements CertificateDa
       Certificate certificate) {
     if (!(elementSpecification.configuration() instanceof ElementConfigurationRadioBoolean configurationRadioBoolean)) {
       throw new IllegalStateException(
-          "Invalid value type. Type was '%s'".formatted(elementSpecification.configuration().type())
+          "Invalid config type. Type was '%s'".formatted(
+              elementSpecification.configuration().type())
       );
     }
 

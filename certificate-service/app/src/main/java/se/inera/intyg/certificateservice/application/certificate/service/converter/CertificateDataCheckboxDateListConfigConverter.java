@@ -25,7 +25,8 @@ public class CertificateDataCheckboxDateListConfigConverter implements
       Certificate certificate) {
     if (!(elementSpecification.configuration() instanceof ElementConfigurationCheckboxMultipleDate configuration)) {
       throw new IllegalStateException(
-          "Invalid value type. Type was '%s'".formatted(elementSpecification.configuration().type())
+          "Invalid config type. Type was '%s'".formatted(
+              elementSpecification.configuration().type())
       );
     }
     return CertificateDataConfigCheckboxMultipleDate.builder()

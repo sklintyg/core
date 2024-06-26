@@ -22,7 +22,8 @@ public class CertificateDataMessageConfigConverter implements CertificateDataCon
       Certificate certificate) {
     if (!(elementSpecification.configuration() instanceof ElementConfigurationMessage elementConfigurationMessage)) {
       throw new IllegalStateException(
-          "Invalid value type. Type was '%s'".formatted(elementSpecification.configuration().type())
+          "Invalid config type. Type was '%s'".formatted(
+              elementSpecification.configuration().type())
       );
     }
 
