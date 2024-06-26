@@ -8,6 +8,6 @@ import lombok.Value;
 @Builder
 public class ElementValueDiagnosisList implements ElementValue {
 
-  List<ElementValueDiagnosis> diagnosisList;
+  List<ElementValueDiagnosis> diagnoses;
 
 }

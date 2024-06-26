@@ -27,7 +27,7 @@ public class ElementValueConverterDiagnosisList implements ElementValueConverter
       );
     }
     return ElementValueDiagnosisList.builder()
-        .diagnosisList(
+        .diagnoses(
             diagnosis.getList().stream()
                 .map(valueDiagnosis -> ElementValueDiagnosis.builder()
                     .id(new FieldId(valueDiagnosis.getId()))

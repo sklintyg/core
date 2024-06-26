@@ -64,7 +64,7 @@ class ElementValueConverterDiagnosisListTest {
 
     final var actualValue = (ElementValueDiagnosisList) elementValueConverterDiagnosisList.convert(
         certificateDataValueDiagnosisList);
-    assertEquals(expectedValue, actualValue.diagnosisList().get(0));
+    assertEquals(expectedValue, actualValue.diagnoses().get(0));
   }
 
   @Test
@@ -106,6 +106,6 @@ class ElementValueConverterDiagnosisListTest {
 
     final var actualValue = (ElementValueDiagnosisList) elementValueConverterDiagnosisList.convert(
         certificateDataValueDiagnosisList);
-    assertEquals(expectedValue, actualValue.diagnosisList());
+    assertEquals(expectedValue, actualValue.diagnoses());
   }
 }
