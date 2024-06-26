@@ -236,5 +236,23 @@ class ResourceLinkTypeDTOTest {
       assertThrows(IllegalArgumentException.class, () ->
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SEND_MESSAGE));
     }
+
+    @Test
+    void shallThrowIfCertificateActionTypeSaveAnswer() {
+      assertThrows(IllegalArgumentException.class, () ->
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SAVE_ANSWER));
+    }
+
+    @Test
+    void shallThrowIfCertificateActionTypeDeleteAnswer() {
+      assertThrows(IllegalArgumentException.class, () ->
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.DELETE_ANSWER));
+    }
+
+    @Test
+    void shallThrowIfCertificateActionTypeSendAnswer() {
+      assertThrows(IllegalArgumentException.class, () ->
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SEND_ANSWER));
+    }
   }
 }

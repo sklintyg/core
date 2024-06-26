@@ -20,7 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
@@ -36,8 +35,6 @@ class CreateMessageDomainServiceTest {
   private static final Content CONTENT = new Content("content");
   @Mock
   MessageRepository messageRepository;
-  @Mock
-  CertificateRepository certificateRepository;
   @InjectMocks
   CreateMessageDomainService createMessageDomainService;
 

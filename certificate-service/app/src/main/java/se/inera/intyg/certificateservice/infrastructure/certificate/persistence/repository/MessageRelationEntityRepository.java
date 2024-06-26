@@ -13,9 +13,6 @@ public interface MessageRelationEntityRepository extends
   List<MessageRelationEntity> findByParentMessage(
       MessageEntity messageEntity);
 
-  List<MessageRelationEntity> findByParentMessageOrChildMessage(
-      MessageEntity messageEntityParent, MessageEntity messageEntityChild);
-
   void deleteAllByChildMessageOrParentMessage(
       MessageEntity messageEntityParent, MessageEntity messageEntityChild);
 }

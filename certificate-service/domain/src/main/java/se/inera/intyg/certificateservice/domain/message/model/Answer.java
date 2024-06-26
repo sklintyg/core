@@ -23,4 +23,22 @@ public class Answer {
   private MessageStatus status;
   private MessageContactInfo contactInfo;
   private Staff authoredStaff;
+
+  public void send(Staff staff, Content content) {
+    this.status = MessageStatus.SENT;
+    this.content = content;
+    this.authoredStaff = staff;
+    this.sent = LocalDateTime.now();
+  }
+
+  public void delete() {
+    this.status = MessageStatus.DELETED_DRAFT;
+  }
+
+  public void save(Staff staff, Content content) {
+    this.content = content;
+    this.authoredStaff = staff;
+    this.author = new Author(staff.name().fullName());
+    this.modified = LocalDateTime.now();
+  }
 }

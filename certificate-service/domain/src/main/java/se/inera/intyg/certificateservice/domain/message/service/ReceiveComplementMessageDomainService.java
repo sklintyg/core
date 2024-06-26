@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
+import se.inera.intyg.certificateservice.domain.message.model.Complement;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 
@@ -33,6 +35,22 @@ public class ReceiveComplementMessageDomainService {
       );
     }
 
+    if (certificateDoesNotContainProvidedElementId(message, certificate)) {
+      throw new IllegalStateException("Certificate '%s' does not contain element with id: '%s' "
+          .formatted(certificate.id().id(),
+              message.complements().stream()
+                  .map(Complement::elementId)
+                  .filter(id -> !certificate.certificateModel().elementSpecificationExists(id))
+                  .toList()));
+    }
+
     return messageRepository.save(message);
+  }
+
+  private static boolean certificateDoesNotContainProvidedElementId(Message message,
+      Certificate certificate) {
+    return message.complements().stream()
+        .noneMatch(complement -> certificate.certificateModel()
+            .elementSpecificationExists(complement.elementId()));
   }
 }
