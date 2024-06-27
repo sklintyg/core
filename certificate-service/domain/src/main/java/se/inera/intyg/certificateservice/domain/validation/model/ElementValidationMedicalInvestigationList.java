@@ -270,7 +270,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
   }
 
   private boolean isTextOverLimit(String value) {
-    return limit != null && value.length() > limit;
+    return limit != null && value != null && value.length() > limit;
   }
 
   private boolean isMedicalInvestigationNotInitialized(

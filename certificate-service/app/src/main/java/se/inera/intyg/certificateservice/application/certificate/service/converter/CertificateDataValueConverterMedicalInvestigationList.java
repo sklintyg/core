@@ -42,24 +42,29 @@ public class CertificateDataValueConverterMedicalInvestigationList implements
       );
     }
 
+    final var valueForConversion =
+        !isValueDefined(elementValue)
+            || ((ElementValueMedicalInvestigationList) elementValue).list().isEmpty()
+            ? elementConfiguration.emptyValue() : elementValue;
+
     return CertificateDataValueMedicalInvestigationList.builder()
         .id(elementConfiguration.id().value())
         .list(
-            isValueDefined(elementValue)
-                ? ((ElementValueMedicalInvestigationList) elementValue).list()
+            isValueDefined(valueForConversion)
+                ? ((ElementValueMedicalInvestigationList) valueForConversion).list()
                 .stream()
                 .map(medicalInvestigation ->
                     CertificateDataValueMedicalInvestigation.builder()
                         .id(
                             getMedicalInvestigationConfig(
-                                elementValue,
+                                valueForConversion,
                                 elementConfiguration,
                                 medicalInvestigation
                             ).id().value())
                         .date(CertificateDataValueDate.builder()
                             .id(
                                 getMedicalInvestigationConfig(
-                                    elementValue,
+                                    valueForConversion,
                                     elementConfiguration,
                                     medicalInvestigation
                                 ).dateId().value()
@@ -68,7 +73,7 @@ public class CertificateDataValueConverterMedicalInvestigationList implements
                             .build())
                         .informationSource(CertificateDataValueText.builder()
                             .id(getMedicalInvestigationConfig(
-                                elementValue,
+                                valueForConversion,
                                 elementConfiguration,
                                 medicalInvestigation
                             ).informationSourceId().value())
@@ -76,7 +81,7 @@ public class CertificateDataValueConverterMedicalInvestigationList implements
                             .build())
                         .investigationType(CertificateDataValueCode.builder()
                             .id(getMedicalInvestigationConfig(
-                                elementValue,
+                                valueForConversion,
                                 elementConfiguration,
                                 medicalInvestigation
                             ).investigationTypeId().value())
@@ -93,7 +98,14 @@ public class CertificateDataValueConverterMedicalInvestigationList implements
       ElementConfigurationMedicalInvestigationList elementConfiguration,
       MedicalInvestigation medicalInvestigation) {
     final var value = (ElementValueMedicalInvestigationList) elementValue;
-    return elementConfiguration.list().get(value.list().indexOf(medicalInvestigation));
+    final var config = elementConfiguration.list().get(value.list().indexOf(medicalInvestigation));
+
+    if (config == null) {
+      throw new IllegalStateException(
+          "Could not find matching config for medical investigation value");
+    }
+
+    return config;
   }
 
   private static boolean isValueDefined(ElementValue elementValue) {

@@ -5,7 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueMedicalInvestigationList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalInvestigation;
 
 @Value
@@ -37,6 +40,15 @@ public class ElementConfigurationMedicalInvestigationList implements ElementConf
             list.stream()
                 .map(config -> MedicalInvestigation.builder()
                     .id(config.id())
+                    .date(ElementValueDate.builder()
+                        .dateId(config.dateId())
+                        .build())
+                    .investigationType(ElementValueCode.builder()
+                        .codeId(config.investigationTypeId())
+                        .build())
+                    .informationSource(ElementValueText.builder()
+                        .textId(config.informationSourceId())
+                        .build())
                     .build()
                 )
                 .toList()

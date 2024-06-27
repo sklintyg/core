@@ -760,6 +760,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
 
   private static MedicalInvestigationConfig getMedicalInvestigationConfig(FieldId fieldId) {
     return MedicalInvestigationConfig.builder()
+        .id(fieldId)
         .dateId(getDateId(fieldId))
         .investigationTypeId(getInvestigationTypeId(fieldId))
         .informationSourceId(getInformationSourceId(fieldId))
