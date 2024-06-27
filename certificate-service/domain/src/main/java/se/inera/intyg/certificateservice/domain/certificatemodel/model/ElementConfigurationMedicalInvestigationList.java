@@ -1,12 +1,12 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
-import java.util.Collections;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueMedicalInvestigationList;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalInvestigation;
 
 @Value
 @Builder
@@ -33,7 +33,14 @@ public class ElementConfigurationMedicalInvestigationList implements ElementConf
   public ElementValue emptyValue() {
     return ElementValueMedicalInvestigationList.builder()
         .id(id)
-        .list(Collections.emptyList())
+        .list(
+            list.stream()
+                .map(config -> MedicalInvestigation.builder()
+                    .id(config.id())
+                    .build()
+                )
+                .toList()
+        )
         .build();
   }
 }

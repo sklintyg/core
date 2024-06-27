@@ -533,6 +533,8 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                 .name("Ange utredning eller underlag")
                 .informationSourceDescription(
                     "Skriv exempelvis Neuropsykiatriska kliniken på X-stads sjukhus eller om patienten själv kommer att bifoga utredningen till sin ansökan.")
+                .dateText("Datum")
+                .typeText("Utredning eller underlag")
                 .informationSourceText("Från vilken vårdgivare")
                 .list(medicalInvestigations)
                 .build()
@@ -548,7 +550,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     )
                 ),
                 CertificateElementRuleFactory.show(
-                    QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_ID,
+                    QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID,
                     QUESTION_BASERAT_PA_ANNAT_UNDERLAG_FIELD_ID
                 )
             )
@@ -671,7 +673,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         .configuration(
             ElementConfigurationTextArea.builder()
                 .id(QUESTION_VARDENHET_OCH_TIDPLAN_FIELD_ID)
-                .label("Ange ansvarig vårdenhet och tidplan")
+                .name("Ange ansvarig vårdenhet och tidplan")
                 .build()
         )
         .rules(

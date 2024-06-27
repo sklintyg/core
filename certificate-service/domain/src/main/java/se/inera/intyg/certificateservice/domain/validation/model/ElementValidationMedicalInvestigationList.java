@@ -35,7 +35,9 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
     validateElementData(data);
     final var medicalInvestigationList = getValue(data.value());
 
-    if (medicalInvestigationList.list().isEmpty()) {
+    if (medicalInvestigationList.list().isEmpty()
+        || medicalInvestigationList.list().stream()
+        .anyMatch(this::isMedicalInvestigationNotInitialized)) {
       return Collections.emptyList();
     }
 
@@ -269,6 +271,13 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
 
   private boolean isTextOverLimit(String value) {
     return limit != null && value.length() > limit;
+  }
+
+  private boolean isMedicalInvestigationNotInitialized(
+      MedicalInvestigation medicalInvestigation) {
+    return medicalInvestigation.date() == null
+        || medicalInvestigation.investigationType() == null
+        || medicalInvestigation.informationSource() == null;
   }
 
 }
