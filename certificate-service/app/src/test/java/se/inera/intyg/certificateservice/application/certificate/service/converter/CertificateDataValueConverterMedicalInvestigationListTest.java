@@ -29,6 +29,7 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
 
   private static final ElementSpecification ELEMENT_SPECIFICATION = ElementSpecification.builder()
       .configuration(ElementConfigurationMedicalInvestigationList.builder()
+          .id(new FieldId("ID"))
           .name("NAME")
           .description("DESCRIPTION")
           .typeText("TYPE_TEXT")
@@ -119,6 +120,7 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
   @Test
   void shouldReturnEmptyListIfValueIsNull() {
     final var expected = CertificateDataValueMedicalInvestigationList.builder()
+        .id("ID")
         .list(Collections.emptyList())
         .build();
 
@@ -134,6 +136,7 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
         .build();
 
     final var expected = CertificateDataValueMedicalInvestigationList.builder()
+        .id("ID")
         .list(Collections.emptyList())
         .build();
 
@@ -150,6 +153,7 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
         .build();
 
     final var expected = CertificateDataValueMedicalInvestigationList.builder()
+        .id("ID")
         .list(Collections.emptyList())
         .build();
 
@@ -159,11 +163,27 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
   }
 
   @Test
+  void shouldSetId() {
+    final var result = converter.convert(ELEMENT_SPECIFICATION, ELEMENT_VALUE);
+    final var medicalInvestigationResult = (CertificateDataValueMedicalInvestigationList) result;
+
+    assertEquals("ID", medicalInvestigationResult.getId());
+  }
+
+  @Test
+  void shouldSetMedicalInvestigationId() {
+    final var result = converter.convert(ELEMENT_SPECIFICATION, ELEMENT_VALUE);
+    final var medicalInvestigationResult = (CertificateDataValueMedicalInvestigationList) result;
+
+    assertEquals("ID_1", medicalInvestigationResult.getList().get(0).getId());
+  }
+
+  @Test
   void shouldSetDateId() {
     final var result = converter.convert(ELEMENT_SPECIFICATION, ELEMENT_VALUE);
     final var medicalInvestigationResult = (CertificateDataValueMedicalInvestigationList) result;
 
-    assertEquals("DATE_ID", medicalInvestigationResult.getList().get(0).getDate().getId());
+    assertEquals("DATE_ID_1", medicalInvestigationResult.getList().get(0).getDate().getId());
   }
 
   @Test
@@ -179,7 +199,7 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
     final var result = converter.convert(ELEMENT_SPECIFICATION, ELEMENT_VALUE);
     final var medicalInvestigationResult = (CertificateDataValueMedicalInvestigationList) result;
 
-    assertEquals("TEXT_ID",
+    assertEquals("SOURCE_ID_1",
         medicalInvestigationResult.getList().get(0).getInformationSource().getId());
   }
 
@@ -197,7 +217,7 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
     final var result = converter.convert(ELEMENT_SPECIFICATION, ELEMENT_VALUE);
     final var medicalInvestigationResult = (CertificateDataValueMedicalInvestigationList) result;
 
-    assertEquals("CODE_ID",
+    assertEquals("TYPE_ID_1",
         medicalInvestigationResult.getList().get(0).getInvestigationType().getId());
   }
 

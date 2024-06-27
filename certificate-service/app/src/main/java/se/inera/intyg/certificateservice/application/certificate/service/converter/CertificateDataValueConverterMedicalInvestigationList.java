@@ -10,9 +10,11 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueMedicalInvestigationList;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalInvestigation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.MedicalInvestigationConfig;
 
 @Component
 public class CertificateDataValueConverterMedicalInvestigationList implements
@@ -33,36 +35,65 @@ public class CertificateDataValueConverterMedicalInvestigationList implements
     }
 
     if (!(elementSpecification.configuration() instanceof ElementConfigurationMedicalInvestigationList
-        elementConfigurationMedicalInvestigationList)) {
+        elementConfiguration)) {
       throw new IllegalStateException(
           "Invalid configuration type. Type was '%s'".formatted(
               elementSpecification.configuration().type())
       );
     }
 
-    return CertificateDataValueMedicalInvestigationList.builder() //TODO kolla om vi vill lägga till id
+    return CertificateDataValueMedicalInvestigationList.builder()
+        .id(elementConfiguration.id().value())
         .list(
             isValueDefined(elementValue)
                 ? ((ElementValueMedicalInvestigationList) elementValue).list()
                 .stream()
                 .map(medicalInvestigation ->
                     CertificateDataValueMedicalInvestigation.builder()
+                        .id(
+                            getMedicalInvestigationConfig(
+                                elementValue,
+                                elementConfiguration,
+                                medicalInvestigation
+                            ).id().value())
                         .date(CertificateDataValueDate.builder()
-                            .id(medicalInvestigation.date().dateId().value())
+                            .id(
+                                getMedicalInvestigationConfig(
+                                    elementValue,
+                                    elementConfiguration,
+                                    medicalInvestigation
+                                ).dateId().value()
+                            )
                             .date(medicalInvestigation.date().date())
                             .build())
                         .informationSource(CertificateDataValueText.builder()
-                            .id(medicalInvestigation.informationSource().textId().value())
+                            .id(getMedicalInvestigationConfig(
+                                elementValue,
+                                elementConfiguration,
+                                medicalInvestigation
+                            ).informationSourceId().value())
                             .text(medicalInvestigation.informationSource().text())
                             .build())
                         .investigationType(CertificateDataValueCode.builder()
-                            .id(medicalInvestigation.investigationType().codeId().value())
+                            .id(getMedicalInvestigationConfig(
+                                elementValue,
+                                elementConfiguration,
+                                medicalInvestigation
+                            ).investigationTypeId().value())
                             .code(medicalInvestigation.investigationType().code())
                             .build())
                         .build()
                 ).toList()
                 : Collections.emptyList())
         .build();
+  }
+
+  private static MedicalInvestigationConfig getMedicalInvestigationConfig(
+      ElementValue elementValue,
+      ElementConfigurationMedicalInvestigationList elementConfiguration,
+      MedicalInvestigation medicalInvestigation) {
+    final var value = (ElementValueMedicalInvestigationList) elementValue;
+    return elementConfiguration.list().get(value.list().indexOf(medicalInvestigation));
   }
 
   private static boolean isValueDefined(ElementValue elementValue) {
