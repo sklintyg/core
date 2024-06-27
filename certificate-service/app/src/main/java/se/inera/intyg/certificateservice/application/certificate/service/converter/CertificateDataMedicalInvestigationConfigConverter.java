@@ -30,7 +30,7 @@ public class CertificateDataMedicalInvestigationConfigConverter implements
       );
     }
 
-    return CertificateDataConfigMedicalInvestigation.builder() //TODO kolla hur göra med id
+    return CertificateDataConfigMedicalInvestigation.builder()
         .text(configuration.name())
         .description(configuration.description())
         .header(configuration.header())

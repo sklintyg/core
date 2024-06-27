@@ -14,13 +14,16 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueMedicalInvestigationList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 class ElementValueConverterMedicalInvestigationListTest {
 
   private static final CertificateDataValueMedicalInvestigationList CERTIFICATE_DATA_VALUE
       = CertificateDataValueMedicalInvestigationList.builder()
+      .id("MI_ID_LIST")
       .list(List.of(
           CertificateDataValueMedicalInvestigation.builder()
+              .id("MI_ID")
               .date(CertificateDataValueDate.builder()
                   .id("DATE_ID")
                   .date(LocalDate.now())
@@ -111,4 +114,19 @@ class ElementValueConverterMedicalInvestigationListTest {
         medicalInvestigationResult.list().get(0).investigationType().code());
   }
 
+  @Test
+  void shouldSetId() {
+    final var result = converter.convert(CERTIFICATE_DATA_VALUE);
+    final var medicalInvestigationResult = (ElementValueMedicalInvestigationList) result;
+
+    assertEquals(new FieldId("MI_ID"), medicalInvestigationResult.list().get(0).id());
+  }
+
+  @Test
+  void shouldSetListFieldId() {
+    final var result = converter.convert(CERTIFICATE_DATA_VALUE);
+    final var medicalInvestigationResult = (ElementValueMedicalInvestigationList) result;
+
+    assertEquals(new FieldId("MI_ID_LIST"), medicalInvestigationResult.id());
+  }
 }

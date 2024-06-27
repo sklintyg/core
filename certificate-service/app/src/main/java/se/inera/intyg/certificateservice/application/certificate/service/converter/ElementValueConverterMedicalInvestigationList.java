@@ -33,12 +33,12 @@ public class ElementValueConverterMedicalInvestigationList implements ElementVal
     }
 
     return ElementValueMedicalInvestigationList.builder()
-        .id(new FieldId("1"))//TODO byt ut
+        .id(new FieldId(dataValueMedicalInvestigationList.getId()))
         .list(
             dataValueMedicalInvestigationList.getList().stream()
                 .map(medicalInvestigation ->
                     MedicalInvestigation.builder()
-                        .id(new FieldId("1")) //TODO
+                        .id(new FieldId(medicalInvestigation.getId()))
                         .date(ElementValueDate.builder()
                             .dateId(new FieldId(medicalInvestigation.getDate().getId()))
                             .date(medicalInvestigation.getDate().getDate())
