@@ -546,6 +546,10 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                         getInvestigationTypeId(MEDICAL_INVESTIGATION_FIELD_ID_1),
                         getInformationSourceId(MEDICAL_INVESTIGATION_FIELD_ID_1)
                     )
+                ),
+                CertificateElementRuleFactory.show(
+                    QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_ID,
+                    QUESTION_BASERAT_PA_ANNAT_UNDERLAG_FIELD_ID
                 )
             )
         )
