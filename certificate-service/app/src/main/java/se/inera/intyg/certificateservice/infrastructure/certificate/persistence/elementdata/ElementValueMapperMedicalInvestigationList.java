@@ -67,6 +67,7 @@ public class ElementValueMapperMedicalInvestigationList implements ElementValueM
               elementValueMedicalInvestigationList.list().stream()
                   .map(medicalInvestigation ->
                       MappedMedicalInvestigation.builder()
+                          .id(medicalInvestigation.id().value())
                           .date(MappedDate.builder()
                               .id(medicalInvestigation.date().dateId().value())
                               .date(medicalInvestigation.date().date())
