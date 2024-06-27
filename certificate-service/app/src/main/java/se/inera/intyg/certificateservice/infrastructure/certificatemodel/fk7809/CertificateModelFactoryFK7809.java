@@ -355,7 +355,6 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         .build();
   }
 
-  //TODO dubbelkolla kodverk
   private static ElementSpecification questionGrundForMedicinsktUnderlag(
       ElementSpecification... children) {
     final var checkboxDates = List.of(
@@ -555,6 +554,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                 ElementValidationMedicalInvestigationList.builder()
                     .mandatory(true)
                     .max(Period.ofDays(0))
+                    .limit(4000)
                     .build()
             )
         )
