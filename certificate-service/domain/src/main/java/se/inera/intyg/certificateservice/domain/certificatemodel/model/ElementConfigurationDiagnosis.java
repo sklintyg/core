@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 
 @Value
 @Builder
@@ -27,6 +28,8 @@ public class ElementConfigurationDiagnosis implements ElementConfiguration {
 
   @Override
   public ElementValue emptyValue() {
-    return null;
+    return ElementValueDiagnosisList.builder()
+        .diagnoses(Collections.emptyList())
+        .build();
   }
 }

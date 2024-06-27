@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.validation.model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -18,6 +20,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 @Builder
 public class ElementValidationDiagnosis implements ElementValidation {
 
+  private static final String DIAGNOSIS_DESCRIPTION = ".description";
   FieldId mandatoryField;
   List<FieldId> order;
 
@@ -40,6 +43,30 @@ public class ElementValidationDiagnosis implements ElementValidation {
       return List.of(
           errorMessage(data, mandatoryField, categoryId, "Ange diagnos på översta raden först.")
       );
+    }
+
+    if (order != null) {
+      final var validationErrors = new ArrayList<ValidationError>();
+      final var elementDiagnoseIds = elementValueDiagnosisList.diagnoses().stream()
+          .map(ElementValueDiagnosis::id)
+          .toList();
+
+      for (int index = order.size() - 1; index > 0; index--) {
+        if (elementDiagnoseIds.contains(order.get(index))) {
+          while (index > 0 && !elementDiagnoseIds.contains(order.get(index - 1))) {
+            index--;
+            final var orderId = order.get(index);
+            validationErrors.add(
+                errorMessage(data, orderId, categoryId, "Ange diagnoskod.")
+            );
+            validationErrors.add(
+                errorMessage(data, new FieldId(orderId.value() + DIAGNOSIS_DESCRIPTION), categoryId,
+                    "Ange diagnosbeskrivning.")
+            );
+          }
+        }
+      }
+      return validationErrors;
     }
 
     return Collections.emptyList();
