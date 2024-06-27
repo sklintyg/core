@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.elementdata;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MappedElementValueMedicalInvestigationList implements MappedElementValue {
+public class MappedText {
 
   private String id;
-  private List<MappedMedicalInvestigation> list;
+  private String text;
 
 }

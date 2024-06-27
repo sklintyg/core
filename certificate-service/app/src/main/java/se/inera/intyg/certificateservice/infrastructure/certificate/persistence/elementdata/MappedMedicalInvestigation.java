@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MappedMedicalInvestigation {
 
-  String medicalInvestigationId;
-  MappedDate date;
-  MappedElementValueText informationSource;
-  MappedElementValueText investigationType;
+  private String id;
+  private MappedDate date;
+  private MappedText informationSource;
+  private MappedCode investigationType;
 
 }
