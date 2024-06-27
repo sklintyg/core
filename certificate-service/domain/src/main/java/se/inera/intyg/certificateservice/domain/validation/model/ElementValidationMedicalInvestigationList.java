@@ -24,7 +24,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 @Getter(AccessLevel.NONE)
 @Builder
 public class ElementValidationMedicalInvestigationList implements ElementValidation {
-  
+
   boolean mandatory;
   TemporalAmount max;
   TemporalAmount min;
@@ -34,6 +34,11 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
   public List<ValidationError> validate(ElementData data, Optional<ElementId> categoryId) {
     validateElementData(data);
     final var medicalInvestigationList = getValue(data.value());
+
+    if (medicalInvestigationList.list().isEmpty()) {
+      return Collections.emptyList();
+    }
+
     final var dateAfterMaxErrors = getDateAfterMaxErrors(data, categoryId,
         medicalInvestigationList);
     final var dateBeforeMinErrors = getDateBeforeMinErrors(data, categoryId,
