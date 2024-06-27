@@ -25,6 +25,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 @Builder
 public class ElementValidationMedicalInvestigationList implements ElementValidation {
 
+  // TODO: Validate on text limit and validate on code matching code system
+
   boolean mandatory;
   TemporalAmount max;
   TemporalAmount min;
@@ -55,7 +57,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
   private List<ValidationError> getMandatoryErrors(ElementData data,
       Optional<ElementId> categoryId,
       ElementValueMedicalInvestigationList medicalInvestigationList) {
-    if (Boolean.TRUE.equals(isEmpty(medicalInvestigationList.list().get(0)))) {
+    if (mandatory && Boolean.TRUE.equals(isEmpty(medicalInvestigationList.list().get(0)))) {
       return List.of(errorMessage(
           data,
           medicalInvestigationList.list().get(0).id(),
@@ -63,6 +65,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
           "Ange ett svar."
       ));
     }
+
     return Collections.emptyList();
   }
 
@@ -83,7 +86,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
         .filter(medicalInvestigation -> isAfterMax(medicalInvestigation.date().date()))
         .map(medicalInvestigation -> errorMessage(
             data,
-            medicalInvestigation.id(),
+            medicalInvestigation.date().dateId(),
             categoryId,
             "Ange ett datum som är senast %s.".formatted(maxDate())
         ))
@@ -97,7 +100,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
         .filter(medicalInvestigation -> isDateBeforeMin(medicalInvestigation.date()))
         .map(medicalInvestigation -> errorMessage(
             data,
-            medicalInvestigation.id(),
+            medicalInvestigation.date().dateId(),
             categoryId,
             "Ange ett datum som är tidigast %s.".formatted(minDate())
         ))
@@ -207,13 +210,9 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
   }
 
   private Boolean isIncomplete(MedicalInvestigation medicalInvestigation) {
-    return medicalInvestigation.date() == null || medicalInvestigation.investigationType() == null
-        || medicalInvestigation.informationSource() == null;
-  }
-
-  private Boolean isComplete(MedicalInvestigation medicalInvestigation) {
-    return medicalInvestigation.date() != null && medicalInvestigation.investigationType() != null
-        && medicalInvestigation.informationSource() != null;
+    return medicalInvestigation.date().date() == null
+        || medicalInvestigation.investigationType().code() == null
+        || medicalInvestigation.informationSource().text() == null;
   }
 
   private Boolean hasIncompleteRow(List<MedicalInvestigation> medicalInvestigationList) {
@@ -270,7 +269,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
   }
 
   private LocalDate minDate() {
-    return LocalDate.now(ZoneId.systemDefault()).minus(min);
+    return LocalDate.now(ZoneId.systemDefault()).plus(min);
   }
 
   private LocalDate maxDate() {
