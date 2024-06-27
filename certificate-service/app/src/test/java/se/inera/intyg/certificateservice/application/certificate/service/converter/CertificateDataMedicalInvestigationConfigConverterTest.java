@@ -118,7 +118,7 @@ class CertificateDataMedicalInvestigationConfigConverterTest {
   }
 
   @Test
-  void shouldSetCorrecInformationSourceText() {
+  void shouldSetCorrectInformationSourceText() {
     final CertificateDataConfigMedicalInvestigation result = (CertificateDataConfigMedicalInvestigation)
         converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
 
