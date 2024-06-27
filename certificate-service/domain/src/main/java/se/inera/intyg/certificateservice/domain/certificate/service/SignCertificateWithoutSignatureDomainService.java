@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
 
 @RequiredArgsConstructor
@@ -57,7 +58,9 @@ public class SignCertificateWithoutSignatureDomainService {
 
     if (signedCertificate.hasParent(COMPLEMENT, RENEW, REPLACE)) {
       setMessagesToHandleDomainService.handle(
-          signedCertificate.parent().certificate().messages()
+          signedCertificate.parent().certificate().messages().stream()
+              .filter(message -> message.type() == MessageType.COMPLEMENT)
+              .toList()
       );
     }
 

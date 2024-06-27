@@ -7,6 +7,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 
@@ -16,6 +17,45 @@ public class HandleMessageDomainService {
   private final MessageRepository messageRepository;
 
   public Message handle(Message message, boolean handle, Certificate certificate,
+      ActionEvaluation actionEvaluation) {
+    if (message.type() == MessageType.COMPLEMENT) {
+      return handleComplementMessage(message, handle, certificate, actionEvaluation);
+    }
+
+    return handleAdministrativeMessage(message, handle, certificate, actionEvaluation);
+  }
+
+  private Message handleAdministrativeMessage(Message message, boolean handle,
+      Certificate certificate,
+      ActionEvaluation actionEvaluation) {
+    if (!certificate.allowTo(
+        CertificateActionType.HANDLE_MESSAGE,
+        Optional.of(actionEvaluation)
+    )) {
+      throw new CertificateActionForbidden(
+          "Not allowed to handle administrative message on certificate for %s"
+              .formatted(certificate.id().id()),
+          certificate.reasonNotAllowed(CertificateActionType.HANDLE_MESSAGE, Optional.empty())
+      );
+    }
+
+    if (handle) {
+      deleteDraftAnswerIfExists(message);
+      message.handle();
+    } else {
+      message.unhandle();
+    }
+
+    return messageRepository.save(message);
+  }
+
+  private static void deleteDraftAnswerIfExists(Message message) {
+    if (message.answer() != null && message.answer().status() == MessageStatus.DRAFT) {
+      message.deleteAnswer();
+    }
+  }
+
+  private Message handleComplementMessage(Message message, boolean handle, Certificate certificate,
       ActionEvaluation actionEvaluation) {
     if (!certificate.allowTo(
         CertificateActionType.HANDLE_COMPLEMENT,

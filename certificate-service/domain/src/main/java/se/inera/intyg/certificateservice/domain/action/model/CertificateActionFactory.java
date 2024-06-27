@@ -247,7 +247,7 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
-                  new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
+                  new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleSent(true),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleProtectedPerson()
@@ -360,6 +360,17 @@ public class CertificateActionFactory {
           .actionRules(
               List.of(
                   new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
+                  new ActionRuleSent(true),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson()
+              )
+          )
+          .build();
+      case HANDLE_MESSAGE -> CertificateActionHandleMessage.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleSent(true),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleProtectedPerson()
