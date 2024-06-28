@@ -499,12 +499,12 @@ class CertificateModelFactoryFK7809Test {
                         .build(),
                     CheckboxDate.builder()
                         .id(new FieldId("anhorig"))
-                        .label("Anhörig eller annans relation till patienten")
+                        .label("anhörig eller annans relation till patienten")
                         .code(
                             new Code(
                                 "ANHORIG",
                                 "KV_FKMU_0001",
-                                "Anhörig eller annans relation till patienten"
+                                "anhörig eller annans relation till patienten"
                             )
                         )
                         .max(Period.ZERO)
@@ -944,19 +944,19 @@ class CertificateModelFactoryFK7809Test {
         void shallIncludeConfiguration() {
           final var codes = List.of(
               CodeSystemKvFkmu0005.NEUROPSYKIATRISKT,
-              CodeSystemKvFkmu0005.ARBETSTERAPEUT,
-              CodeSystemKvFkmu0005.AUDIONOM,
-              CodeSystemKvFkmu0005.DIETIST,
-              CodeSystemKvFkmu0005.FYSIOTERAPEUT,
               CodeSystemKvFkmu0005.HABILITERING,
-              CodeSystemKvFkmu0005.HORSELHABILITERING,
+              CodeSystemKvFkmu0005.ARBETSTERAPEUT,
+              CodeSystemKvFkmu0005.FYSIOTERAPEUT,
               CodeSystemKvFkmu0005.LOGOPED,
-              CodeSystemKvFkmu0005.ORTOPEDTEKNIKER,
-              CodeSystemKvFkmu0005.ORTOPTIST,
               CodeSystemKvFkmu0005.PSYKOLOG,
-              CodeSystemKvFkmu0005.SYNHABILITERING,
               CodeSystemKvFkmu0005.SPECIALISTKLINIK,
               CodeSystemKvFkmu0005.VARD_UTOMLANDS,
+              CodeSystemKvFkmu0005.HORSELHABILITERING,
+              CodeSystemKvFkmu0005.SYNHABILITERING,
+              CodeSystemKvFkmu0005.AUDIONOM,
+              CodeSystemKvFkmu0005.DIETIST,
+              CodeSystemKvFkmu0005.ORTOPTIST,
+              CodeSystemKvFkmu0005.ORTOPEDTEKNIKER,
               CodeSystemKvFkmu0005.OVRIGT
           );
           final var expectedConfiguration = ElementConfigurationMedicalInvestigationList.builder()
@@ -1015,8 +1015,8 @@ class CertificateModelFactoryFK7809Test {
                   .expression(
                       new RuleExpression(
                           "!empty($medicalInvestigation1_DATE) "
-                              + "|| !empty($medicalInvestigation1_INVESTIGATION_TYPE) "
-                              + "|| !empty($medicalInvestigation1_INFORMATION_SOURCE)"
+                          + "|| !empty($medicalInvestigation1_INVESTIGATION_TYPE) "
+                          + "|| !empty($medicalInvestigation1_INFORMATION_SOURCE)"
                       )
                   )
                   .build(),
@@ -1079,8 +1079,10 @@ class CertificateModelFactoryFK7809Test {
         final var expectedConfiguration = ElementConfigurationCategory.builder()
             .name("Aktivitetsbegränsningar")
             .description(
-                "Beskriv de aktivitetsbegränsningar som du bedömer att patienten har. Beskriv även om din bedömning är baserad på observationer, anamnes eller utredning gjord av någon annan. Någon annan kan till exempel vara psykolog, arbetsterapeut, audionom, syn- eller hörselpedagog. \n"
-                    + "\nI beskrivningen kan du utgå från aktiviteter inom områden som till exempel kommunikation, förflyttning, personlig vård och hemliv. Ange om möjligt svårighetsgraden på aktivitetsbegränsningarna.")
+                """
+                    Beskriv de aktivitetsbegränsningar som du bedömer att patienten har. Beskriv även om din bedömning är baserad på observationer, anamnes eller utredning gjord av någon annan. Någon annan kan till exempel vara psykolog, arbetsterapeut, audionom, syn- eller hörselpedagog.
+                                        
+                    I beskrivningen kan du utgå från aktiviteter inom områden som till exempel kommunikation, förflyttning, personlig vård och hemliv. Ange om möjligt svårighetsgraden på aktivitetsbegränsningarna.""")
             .build();
 
         final var certificateModel = certificateModelFactoryFK7809.create();
