@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
@@ -19,14 +18,14 @@ public class CodeSystemKvFkmu0005 {
             PSYKOLOG,
             SPECIALISTKLINIK,
             VARD_UTOMLANDS,
-            OVRIGT,
             HORSELHABILITERING,
             SYNHABILITERING,
             AUDIONOM,
             DIETIST,
             ORTOPTIST,
-            ORTOPEDTEKNIKER)
-        .sorted(Comparator.comparing(Code::displayName))
+            ORTOPEDTEKNIKER,
+            OVRIGT
+        )
         .toList();
   }
 
