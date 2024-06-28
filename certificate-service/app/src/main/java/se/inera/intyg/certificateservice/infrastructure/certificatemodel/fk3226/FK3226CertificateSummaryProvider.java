@@ -44,7 +44,7 @@ public class FK3226CertificateSummaryProvider implements CertificateSummaryProvi
         .stream()
         .filter(elementValueDiagnosis -> elementValueDiagnosis.id().equals(DIAGNOS_1))
         .findFirst()
-        .map(ElementValueDiagnosis::code)
+        .map(ElementValueDiagnosis::description)
         .orElse("");
   }
 }

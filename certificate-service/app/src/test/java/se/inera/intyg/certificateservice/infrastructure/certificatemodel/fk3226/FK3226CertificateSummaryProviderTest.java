@@ -24,7 +24,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 @ExtendWith(MockitoExtension.class)
 class FK3226CertificateSummaryProviderTest {
 
-  private static final String CODE = "code";
+  private static final String DESCRIPTION = "description";
   private FK3226CertificateSummaryProvider provider;
 
   @BeforeEach
@@ -106,7 +106,7 @@ class FK3226CertificateSummaryProviderTest {
                                   List.of(
                                       ElementValueDiagnosis.builder()
                                           .id(DIAGNOS_1)
-                                          .code(expectedCode)
+                                          .description(expectedCode)
                                           .build()
                                   )
                               )
@@ -134,7 +134,7 @@ class FK3226CertificateSummaryProviderTest {
                                   List.of(
                                       ElementValueDiagnosis.builder()
                                           .id(new FieldId("wrongId"))
-                                          .code(CODE)
+                                          .description(DESCRIPTION)
                                           .build()
                                   )
                               )
