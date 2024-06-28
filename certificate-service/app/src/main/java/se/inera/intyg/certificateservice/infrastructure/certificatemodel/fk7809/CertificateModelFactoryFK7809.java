@@ -95,14 +95,12 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
       "1.3");
   public static final ElementId QUESTION_RELATION_TILL_PATIENTEN_ID = new ElementId("1.4");
   public static final FieldId QUESTION_RELATION_TILL_PATIENTEN_FIELD_ID = new FieldId("1.4");
-  public static final ElementId QUESTION_MOTIVERING_EJ_BASERAS_PA_UNDERSOKNING = new ElementId(
-      "57");
+
   private static final FieldId UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID = new FieldId("annat");
   private static final String UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID = "journaluppgifter";
   private static final FieldId UTLATANDE_BASERAT_PA_ANHORIG_FIELD_ID = new FieldId("anhorig");
   private static final String UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID = "undersokningAvPatienten";
 
-  public static final ElementId BASERAT_PA_ANNAT_UNDERLAG_CATEGORY_ID = new ElementId("KAT_2");
   public static final ElementId QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID = new ElementId("3");
   private static final FieldId QUESTION_BASERAT_PA_ANNAT_UNDERLAG_FIELD_ID = new FieldId("3.1");
 
@@ -112,8 +110,6 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
       "medicalInvestigation2");
   private static final FieldId MEDICAL_INVESTIGATION_FIELD_ID_3 = new FieldId(
       "medicalInvestigation3");
-
-  public static final ElementId FUNKTIONSNEDSATTNINGAR_CATEGORY_ID = new ElementId("KAT_5");
 
   public static final ElementId QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_ID = new ElementId("4");
   public static final FieldId QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_FIELD_ID = new FieldId("4.1");
