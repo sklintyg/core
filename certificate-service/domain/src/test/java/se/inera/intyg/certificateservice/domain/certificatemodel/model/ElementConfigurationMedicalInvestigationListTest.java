@@ -4,8 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueMedicalInvestigationList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalInvestigation;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 class ElementConfigurationMedicalInvestigationListTest {
@@ -92,5 +97,45 @@ class ElementConfigurationMedicalInvestigationListTest {
     assertThrows(IllegalArgumentException.class,
         () -> CONFIG.code(value)
     );
+  }
+
+  @Nested
+  class EmptyValue {
+
+    @Test
+    void shallReturnEmptyValue() {
+      final var emptyValue = ElementValueMedicalInvestigationList.builder()
+          .id(new FieldId(FIELD_ID))
+          .list(
+              List.of(
+                  MedicalInvestigation.builder()
+                      .id(new FieldId(ROW_FIELD_ID))
+                      .date(ElementValueDate.builder()
+                          .dateId(new FieldId(FIELD_ID))
+                          .build())
+                      .investigationType(ElementValueCode.builder()
+                          .codeId(new FieldId(CODE_FIELD_ID))
+                          .build())
+                      .informationSource(ElementValueText.builder()
+                          .textId(new FieldId(FIELD_ID))
+                          .build())
+                      .build(),
+                  MedicalInvestigation.builder()
+                      .id(new FieldId(SECOND_ROW_FIELD_ID))
+                      .date(ElementValueDate.builder()
+                          .dateId(new FieldId(FIELD_ID))
+                          .build())
+                      .investigationType(ElementValueCode.builder()
+                          .codeId(new FieldId(SECOND_CODE_FIELD_ID))
+                          .build())
+                      .informationSource(ElementValueText.builder()
+                          .textId(new FieldId(FIELD_ID))
+                          .build())
+                      .build()
+              ))
+          .build();
+
+      assertEquals(emptyValue, CONFIG.emptyValue());
+    }
   }
 }
