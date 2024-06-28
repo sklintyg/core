@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MappedElementValueDiagnosisList implements MappedElementValue {
 
-
   List<MappedDiagnosis> mappedDiagnoses;
 }
