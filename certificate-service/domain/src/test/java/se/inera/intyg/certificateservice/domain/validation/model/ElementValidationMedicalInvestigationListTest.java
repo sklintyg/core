@@ -140,6 +140,27 @@ class ElementValidationMedicalInvestigationListTest {
 
   private ElementValidationMedicalInvestigationList validation;
 
+  @BeforeEach
+  void setUp() {
+    validation = ElementValidationMedicalInvestigationList.builder().build();
+  }
+
+  @Test
+  void shallReturnEmptyListIfMedicalInvestigationListIsEmpty() {
+    final var categoryId = Optional.of(CATEGORY_ID);
+
+    final var elementData = ElementData.builder()
+        .id(ELEMENT_ID)
+        .value(ElementValueMedicalInvestigationList.builder()
+            .id(FIELD_ID)
+            .list(Collections.emptyList())
+            .build())
+        .build();
+
+    final var result = validation.validate(elementData, categoryId);
+    assertEquals(Collections.emptyList(), result);
+  }
+
   @Nested
   class IllegalStates {
 
