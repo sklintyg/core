@@ -10,6 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalInvestigation;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 @Value
 @Builder
@@ -54,5 +55,20 @@ public class ElementConfigurationMedicalInvestigationList implements ElementConf
                 .toList()
         )
         .build();
+  }
+
+  public Code code(ElementValueCode code) {
+    return list.stream()
+        .filter(row -> row.investigationTypeId().equals(code.codeId()))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException(
+                "Cannot find matching medical investigation with codeId '%s'".formatted(code.codeId())
+            )
+        ).typeOptions().stream()
+        .filter(typeOption -> typeOption.code().equals(code.code()))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException(
+            "Cannot find matching type option for code '%s'".formatted(code.code()))
+        );
   }
 }
