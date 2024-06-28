@@ -25,7 +25,6 @@ public class ElementConfigurationDiagnosis implements ElementConfiguration {
   List<ElementDiagnosisTerminology> terminology = Collections.emptyList();
   @Builder.Default
   List<ElementDiagnosisListItem> list = Collections.emptyList();
-  CodeSystem codeSystem;
 
   @Override
   public ElementValue emptyValue() {
@@ -34,7 +33,11 @@ public class ElementConfigurationDiagnosis implements ElementConfiguration {
         .build();
   }
 
-  public String codeSystem() {
-    return this.codeSystem.value();
+  public String codeSystem(String id) {
+    return this.terminology.stream()
+        .filter(elementDiagnosisTerminology -> elementDiagnosisTerminology.id().equals(id))
+        .findFirst()
+        .map(ElementDiagnosisTerminology::codeSystem)
+        .orElseThrow(() -> new IllegalStateException("No code system found for id: " + id));
   }
 }

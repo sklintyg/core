@@ -29,7 +29,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CodeSystem;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
@@ -911,7 +910,8 @@ class CertificateModelFactoryFK3226Test {
             )
             .terminology(
                 List.of(
-                    new ElementDiagnosisTerminology("ICD_10_SE", "ICD-10-SE")
+                    new ElementDiagnosisTerminology("ICD_10_SE", "ICD-10-SE",
+                        "1.2.752.116.1.1.1.1.8")
                 )
             )
             .list(
@@ -923,7 +923,6 @@ class CertificateModelFactoryFK3226Test {
                     new ElementDiagnosisListItem(new FieldId("diagnos5"))
                 )
             )
-            .codeSystem(new CodeSystem("1.2.752.116.1.1.1.1.8"))
             .build();
 
         final var certificateModel = certificateModelFactoryFK3226.create();

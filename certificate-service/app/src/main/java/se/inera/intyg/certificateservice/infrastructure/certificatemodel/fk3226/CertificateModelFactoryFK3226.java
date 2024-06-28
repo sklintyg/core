@@ -20,7 +20,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CodeSystem;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
@@ -32,7 +31,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisListItem;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisTerminology;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
@@ -63,7 +61,6 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.Certifi
 @RequiredArgsConstructor
 public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
 
-  private static final String DIAGNOSIS_CODE_SYSTEM = "1.2.752.116.1.1.1.1.8";
   private final DiagnosisCodeRepository diagnosisCodeRepositoy;
   private static final FieldId ENDAST_PALLIATIV_FIELD_ID = new FieldId("ENDAST_PALLIATIV");
   private static final FieldId AKUT_LIVSHOTANDE_FIELD_ID = new FieldId("AKUT_LIVSHOTANDE");
@@ -94,8 +91,6 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
   private static final FieldId DIAGNOSIS_FIELD_ID = new FieldId(
       "58.1");
   public static final ElementId DIAGNOSIS_ID = new ElementId("58");
-  private static final String DIAGNOS_ICD_10_ID = "ICD_10_SE";
-  private static final String DIAGNOS_ICD_10_LABEL = "ICD-10-SE";
   public static final FieldId DIAGNOS_1 = new FieldId("huvuddiagnos");
   private static final FieldId DIAGNOS_2 = new FieldId("diagnos2");
   private static final FieldId DIAGNOS_3 = new FieldId("diagnos3");
@@ -348,7 +343,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                 )
                 .terminology(
                     List.of(
-                        new ElementDiagnosisTerminology(DIAGNOS_ICD_10_ID, DIAGNOS_ICD_10_LABEL)
+                        CodeSystemIcd10Se.terminology()
                     )
                 )
                 .list(
@@ -360,7 +355,6 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                         new ElementDiagnosisListItem(DIAGNOS_5)
                     )
                 )
-                .codeSystem(new CodeSystem(DIAGNOSIS_CODE_SYSTEM))
                 .build()
         )
         .rules(

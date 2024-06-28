@@ -15,9 +15,9 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CodeSystem;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisTerminology;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -32,6 +32,7 @@ class XmlGeneratorDiagnosisListTest {
   private static final String DESCRIPTION_ONE = "DESCRIPTION_ONE";
   private static final String DESCRIPTION_TWO = "DESCRIPTION_TWO";
   private static final String CODE_SYSTEM = "CODE_SYSTEM";
+  private static final String ICD_10_SE = "icd-10-se";
 
   private static ElementData data;
   private ElementSpecification elementSpecification;
@@ -58,6 +59,7 @@ class XmlGeneratorDiagnosisListTest {
                               .code(CODE_ONE)
                               .id(new FieldId("CODE_ID"))
                               .description(DESCRIPTION_ONE)
+                              .terminology(ICD_10_SE)
                               .build()
                       )
                   )
@@ -68,7 +70,11 @@ class XmlGeneratorDiagnosisListTest {
           .configuration(
               ElementConfigurationDiagnosis.builder()
                   .id(new FieldId(FIELD_ID))
-                  .codeSystem(new CodeSystem(CODE_SYSTEM))
+                  .terminology(
+                      List.of(
+                          new ElementDiagnosisTerminology(ICD_10_SE, "label", CODE_SYSTEM)
+                      )
+                  )
                   .build()
           )
           .build();
@@ -134,11 +140,13 @@ class XmlGeneratorDiagnosisListTest {
                               .code(CODE_ONE)
                               .id(new FieldId("CODE_ID"))
                               .description(DESCRIPTION_ONE)
+                              .terminology(ICD_10_SE)
                               .build(),
                           ElementValueDiagnosis.builder()
                               .code(CODE_TWO)
                               .id(new FieldId("CODE_ID"))
                               .description(DESCRIPTION_TWO)
+                              .terminology(ICD_10_SE)
                               .build()
                       )
                   )
@@ -149,7 +157,11 @@ class XmlGeneratorDiagnosisListTest {
           .configuration(
               ElementConfigurationDiagnosis.builder()
                   .id(new FieldId(FIELD_ID))
-                  .codeSystem(new CodeSystem(CODE_SYSTEM))
+                  .terminology(
+                      List.of(
+                          new ElementDiagnosisTerminology(ICD_10_SE, "label", CODE_SYSTEM)
+                      )
+                  )
                   .build()
           )
           .build();

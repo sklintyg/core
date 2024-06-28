@@ -32,6 +32,7 @@ class CertificateDataDiagnosisListConfigConverterTest {
   private static final String EXPECTED_ID = "expectedId";
   private static final String EXPECTED_LABEL = "expectedLabel";
   private static final String EXPECTED_TEXT = "expectedText";
+  private static final String CODE_SYSTEM = "codeSystem";
   private CertificateDataDiagnosisListConfigConverter certificateDataDiagnosisListConfigConverter;
 
   @BeforeEach
@@ -133,7 +134,7 @@ class CertificateDataDiagnosisListConfigConverterTest {
             ElementConfigurationDiagnosis.builder()
                 .terminology(
                     List.of(
-                        new ElementDiagnosisTerminology(EXPECTED_ID, EXPECTED_LABEL)
+                        new ElementDiagnosisTerminology(EXPECTED_ID, EXPECTED_LABEL, CODE_SYSTEM)
                     )
                 )
                 .build()

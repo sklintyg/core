@@ -54,7 +54,7 @@ public class XmlGeneratorDiagnosisList implements XmlGeneratorElementData {
               final var cvType = new CVType();
               cvType.setCode(diagnosis.code());
               cvType.setDisplayName(diagnosis.description());
-              cvType.setCodeSystem(configurationDiagnosis.codeSystem());
+              cvType.setCodeSystem(configurationDiagnosis.codeSystem(diagnosis.terminology()));
 
               final var convertedCvType = objectFactory.createCv(cvType);
               subAnswerDiagnosisCode.getContent().add(convertedCvType);

@@ -133,7 +133,7 @@
         <iso:assert test="count(gn:delsvar[@id='58.2']) = 1">
           'Typ av diagnos' måste ha en 'Diagnoskod ICD-10'.
         </iso:assert>
-        <iso:let name="delsvarsIdExpr" value="'^58\.[123456789]$'"/>
+        <iso:let name="delsvarsIdExpr" value="'^58\.(10|[1-9])$'"/>
         <iso:assert test="count(gn:delsvar[not(matches(@id, $delsvarsIdExpr))]) = 0">
           Oväntat delsvars-id i delsvar till svar "<value-of select="@id"/>". Delsvars-id:n måste matcha "<value-of select="$delsvarsIdExpr"/>".
         </iso:assert>
@@ -312,6 +312,13 @@
       <iso:assert test="count(tp:cv/tp:code) = 1">code är obligatoriskt</iso:assert>
       <iso:assert test="tp:cv/tp:code/count(*) = 0">'code' får inte vara inbäddat i något element.</iso:assert>
       <iso:assert test="count(tp:cv/tp:displayName) le 1">högst ett displayName kan anges</iso:assert>
+    </iso:rule>
+  </iso:pattern>
+
+  <iso:pattern id="non-empty-string-pattern">
+    <iso:rule id="non-empty-string" abstract="true">
+      <iso:assert test="count(*) = 0">Värdet får inte vara inbäddat i något element.</iso:assert>
+      <iso:assert test="string-length(normalize-space(text())) > 0">Sträng kan inte vara tom.</iso:assert>
     </iso:rule>
   </iso:pattern>
 
