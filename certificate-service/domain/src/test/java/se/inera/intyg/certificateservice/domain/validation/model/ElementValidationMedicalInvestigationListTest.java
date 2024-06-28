@@ -646,6 +646,34 @@ class ElementValidationMedicalInvestigationListTest {
       assertEquals(getExpectedValidationErrorAsList("Ange en text som inte är längre än 1.",
           COMPLETE_MEDICAL_INV.informationSource().textId()), validationErrors);
     }
+
+    @Test
+    void shouldReturnNoValidationErrorsIfFilledInCorecly() {
+      validation = ElementValidationMedicalInvestigationList.builder()
+          .limit(100)
+          .mandatory(true)
+          .max(Period.ofDays(10))
+          .min(Period.ofDays(-10))
+          .build();
+
+      final var categoryId = Optional.of(CATEGORY_ID);
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueMedicalInvestigationList.builder()
+                  .id(FIELD_ID)
+                  .list(
+                      List.of(
+                          COMPLETE_MEDICAL_INV
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      final var validationErrors = validation.validate(elementData, categoryId);
+      assertEquals(Collections.emptyList(), validationErrors);
+    }
   }
 
   private static ValidationError getExpectedValidationError(String message, FieldId fieldId) {
