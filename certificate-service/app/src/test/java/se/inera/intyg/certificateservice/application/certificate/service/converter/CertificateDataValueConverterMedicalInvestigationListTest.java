@@ -9,7 +9,11 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueCode;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueMedicalInvestigation;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueMedicalInvestigationList;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueMedicalInvestigationList;
@@ -63,6 +67,50 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
                   .build()
           ))
           .build())
+      .build();
+  private static final ElementConfigurationMedicalInvestigationList CONFIGURATION = (ElementConfigurationMedicalInvestigationList) ELEMENT_SPECIFICATION.configuration();
+  private static final CertificateDataValueMedicalInvestigationList EXPECTED_EMPTY_VALUE = CertificateDataValueMedicalInvestigationList.builder()
+      .id("ID")
+      .list(
+          List.of(
+              CertificateDataValueMedicalInvestigation.builder()
+                  .id(CONFIGURATION.list().get(0).id().value())
+                  .date(
+                      CertificateDataValueDate.builder()
+                          .id(CONFIGURATION.list().get(0).dateId().value())
+                          .build()
+                  )
+                  .investigationType(
+                      CertificateDataValueCode.builder()
+                          .id(CONFIGURATION.list().get(0).investigationTypeId().value())
+                          .build()
+                  )
+                  .informationSource(
+                      CertificateDataValueText.builder()
+                          .id(CONFIGURATION.list().get(0).informationSourceId().value())
+                          .build()
+                  )
+                  .build(),
+              CertificateDataValueMedicalInvestigation.builder()
+                  .id(CONFIGURATION.list().get(1).id().value())
+                  .date(
+                      CertificateDataValueDate.builder()
+                          .id(CONFIGURATION.list().get(1).dateId().value())
+                          .build()
+                  )
+                  .investigationType(
+                      CertificateDataValueCode.builder()
+                          .id(CONFIGURATION.list().get(1).investigationTypeId().value())
+                          .build()
+                  )
+                  .informationSource(
+                      CertificateDataValueText.builder()
+                          .id(CONFIGURATION.list().get(1).informationSourceId().value())
+                          .build()
+                  )
+                  .build()
+          )
+      )
       .build();
 
   private static final ElementValueMedicalInvestigationList ELEMENT_VALUE =
@@ -118,15 +166,10 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
   }
 
   @Test
-  void shouldReturnEmptyListIfValueIsNull() {
-    final var expected = CertificateDataValueMedicalInvestigationList.builder()
-        .id("ID")
-        .list(Collections.emptyList())
-        .build();
-
+  void shouldReturnEmptyValueIfValueIsNull() {
     final var result = converter.convert(ELEMENT_SPECIFICATION, null);
 
-    assertEquals(expected, result);
+    assertEquals(EXPECTED_EMPTY_VALUE, result);
   }
 
   @Test
@@ -135,14 +178,9 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
         .id(new FieldId("LIST_ID"))
         .build();
 
-    final var expected = CertificateDataValueMedicalInvestigationList.builder()
-        .id("ID")
-        .list(Collections.emptyList())
-        .build();
-
     final var result = converter.convert(ELEMENT_SPECIFICATION, elementValue);
 
-    assertEquals(expected, result);
+    assertEquals(EXPECTED_EMPTY_VALUE, result);
   }
 
   @Test
@@ -152,14 +190,9 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
         .list(Collections.emptyList())
         .build();
 
-    final var expected = CertificateDataValueMedicalInvestigationList.builder()
-        .id("ID")
-        .list(Collections.emptyList())
-        .build();
-
     final var result = converter.convert(ELEMENT_SPECIFICATION, elementValue);
 
-    assertEquals(expected, result);
+    assertEquals(EXPECTED_EMPTY_VALUE, result);
   }
 
   @Test
