@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -57,6 +58,7 @@ import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
@@ -72,9 +74,12 @@ class CertificateModelFactoryFK3226Test {
   private static final String VERSION = "1.0";
   private CertificateModelFactoryFK3226 certificateModelFactoryFK3226;
 
+  @Mock
+  private DiagnosisCodeRepository diagnosisCodeRepository;
+
   @BeforeEach
   void setUp() {
-    certificateModelFactoryFK3226 = new CertificateModelFactoryFK3226();
+    certificateModelFactoryFK3226 = new CertificateModelFactoryFK3226(diagnosisCodeRepository);
   }
 
   @Test
@@ -959,6 +964,16 @@ class CertificateModelFactoryFK3226Test {
         final var expectedValidations = List.of(
             ElementValidationDiagnosis.builder()
                 .mandatoryField(new FieldId("huvuddiagnos"))
+                .order(
+                    List.of(
+                        new FieldId("huvuddiagnos"),
+                        new FieldId("diagnos2"),
+                        new FieldId("diagnos3"),
+                        new FieldId("diagnos4"),
+                        new FieldId("diagnos5")
+                    )
+                )
+                .diagnosisCodeRepository(diagnosisCodeRepository)
                 .build()
         );
 

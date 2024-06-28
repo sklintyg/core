@@ -2,6 +2,8 @@ package se.inera.intyg.certificateservice.domain.validation.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doReturn;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,12 +11,19 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.model.Diagnosis;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.model.DiagnosisCode;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 
+@ExtendWith(MockitoExtension.class)
 class ElementValidationDiagnosisTest {
 
   private static final String MANDATORY_FIELD = "mandatoryField";
@@ -28,6 +37,8 @@ class ElementValidationDiagnosisTest {
   private static final FieldId DIAGNOS_TWO = new FieldId("diagnos2");
   private static final FieldId DIAGNOS_THREE = new FieldId("diagnos3");
   private static final FieldId DIAGNOS_FOUR = new FieldId("diagnos4");
+  @Mock
+  DiagnosisCodeRepository diagnosisCodeRepository;
   ElementValidationDiagnosis elementValidationDiagnosis;
 
 
@@ -351,6 +362,77 @@ class ElementValidationDiagnosisTest {
       final var validationErrors = elementValidationDiagnosis.validate(elementData,
           CATEGORY_ELEMENT_ID);
       assertEquals(Collections.emptyList(), validationErrors);
+    }
+  }
+
+  @Nested
+  class ValidateCodeTests {
+
+    @BeforeEach
+    void setUp() {
+      elementValidationDiagnosis = ElementValidationDiagnosis.builder()
+          .diagnosisCodeRepository(diagnosisCodeRepository)
+          .build();
+    }
+
+    @Test
+    void shallGiveValidationErrorIfCodeNotValid() {
+      final var expectedValidationError = List.of(
+          ValidationError.builder()
+              .elementId(ELEMENT_ID)
+              .fieldId(DIAGNOS_ONE)
+              .categoryId(CATEGORY_ELEMENT_ID.orElseThrow())
+              .message(new ErrorMessage("Diagnoskod är ej giltig."))
+              .build()
+      );
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDiagnosisList.builder()
+                  .diagnoses(
+                      List.of(
+                          ElementValueDiagnosis.builder()
+                              .id(DIAGNOS_ONE)
+                              .code(CODE)
+                              .build()
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      doReturn(Optional.empty()).when(diagnosisCodeRepository).findByCode(new DiagnosisCode(CODE));
+      final var validationErrors = elementValidationDiagnosis.validate(elementData,
+          CATEGORY_ELEMENT_ID);
+      assertEquals(expectedValidationError, validationErrors);
+    }
+
+    @Test
+    void shallNotGiveValidationErrorIfCodeIsValid() {
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDiagnosisList.builder()
+                  .diagnoses(
+                      List.of(
+                          ElementValueDiagnosis.builder()
+                              .id(DIAGNOS_ONE)
+                              .code(CODE)
+                              .build()
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      final var diagnosis = Diagnosis.builder().build();
+      doReturn(Optional.of(diagnosis)).when(diagnosisCodeRepository)
+          .findByCode(new DiagnosisCode(CODE));
+
+      final var validationErrors = elementValidationDiagnosis.validate(elementData,
+          CATEGORY_ELEMENT_ID);
+      assertTrue(validationErrors.isEmpty());
     }
   }
 }

@@ -14,6 +14,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDi
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.model.DiagnosisCode;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 
 @Value
 @Getter(AccessLevel.NONE)
@@ -23,6 +25,7 @@ public class ElementValidationDiagnosis implements ElementValidation {
   private static final String DIAGNOSIS_DESCRIPTION = ".description";
   FieldId mandatoryField;
   List<FieldId> order;
+  DiagnosisCodeRepository diagnosisCodeRepository;
 
   @Override
   public List<ValidationError> validate(ElementData data,
@@ -66,10 +69,30 @@ public class ElementValidationDiagnosis implements ElementValidation {
           }
         }
       }
+      if (!validationErrors.isEmpty()) {
+        return validationErrors;
+      }
+    }
+
+    if (diagnosisCodeRepository != null) {
+      final var validationErrors = new ArrayList<ValidationError>();
+      elementValueDiagnosisList.diagnoses().forEach(elementValueDiagnosis -> {
+        final var code = elementValueDiagnosis.code();
+        if (codeIsInvalid(new DiagnosisCode(code))) {
+          validationErrors.add(
+              errorMessage(data, elementValueDiagnosis.id(), categoryId,
+                  "Diagnoskod är ej giltig.")
+          );
+        }
+      });
       return validationErrors;
     }
 
     return Collections.emptyList();
+  }
+
+  private boolean codeIsInvalid(DiagnosisCode diagnosisCode) {
+    return diagnosisCodeRepository.findByCode(diagnosisCode).isEmpty();
   }
 
   private boolean missingMandatoryField(ElementValueDiagnosisList elementValueDiagnosisList) {

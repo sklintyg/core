@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.Collections;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -43,6 +44,7 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
@@ -57,8 +59,10 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.Certifi
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateRecipientFactory;
 
 @Component
+@RequiredArgsConstructor
 public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
 
+  private final DiagnosisCodeRepository diagnosisCodeRepositoy;
   private static final FieldId ENDAST_PALLIATIV_FIELD_ID = new FieldId("ENDAST_PALLIATIV");
   private static final FieldId AKUT_LIVSHOTANDE_FIELD_ID = new FieldId("AKUT_LIVSHOTANDE");
   private static final FieldId ANNAT_FIELD_ID = new FieldId("ANNAT");
@@ -370,6 +374,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .order(
                         List.of(DIAGNOS_1, DIAGNOS_2, DIAGNOS_3, DIAGNOS_4, DIAGNOS_5)
                     )
+                    .diagnosisCodeRepository(diagnosisCodeRepositoy)
                     .build()
             )
         )
