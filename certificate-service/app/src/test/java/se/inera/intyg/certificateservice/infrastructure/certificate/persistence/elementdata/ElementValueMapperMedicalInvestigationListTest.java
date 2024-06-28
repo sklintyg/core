@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
@@ -38,6 +39,21 @@ class ElementValueMapperMedicalInvestigationListTest {
   void shallReturnFalseForUnsupportedClass() {
     assertFalse(elementValueMapper.supports(String.class));
   }
+
+  @Test
+  void shallThrowErrorIfWrongMappedValueType() {
+    final var mappedElementValue = MappedElementValueCode.builder().build();
+    assertThrows(IllegalStateException.class,
+        () -> elementValueMapper.toDomain(mappedElementValue));
+  }
+
+  @Test
+  void shallThrowErrorIfWrongValueType() {
+    final var mappedElementValue = ElementValueCode.builder().build();
+    assertThrows(IllegalStateException.class,
+        () -> elementValueMapper.toMapped(mappedElementValue));
+  }
+
 
   @Test
   void shallMapToDomain() {
