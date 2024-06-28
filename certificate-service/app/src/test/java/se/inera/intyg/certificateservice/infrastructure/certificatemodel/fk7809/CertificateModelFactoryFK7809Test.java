@@ -966,9 +966,11 @@ class CertificateModelFactoryFK7809Test {
               .informationSourceDescription(
                   "Skriv exempelvis Neuropsykiatriska kliniken på X-stads sjukhus eller om patienten själv kommer att bifoga utredningen till sin ansökan.")
               .informationSourceText("Från vilken vårdgivare")
+              .dateText("Datum")
+              .typeText("Utredning eller underlag")
               .list(List.of(
                   MedicalInvestigationConfig.builder()
-                      .id(null)
+                      .id(new FieldId("medicalInvestigation1"))
                       .dateId(new FieldId("medicalInvestigation1_DATE"))
                       .investigationTypeId(new FieldId("medicalInvestigation1_INVESTIGATION_TYPE"))
                       .informationSourceId(new FieldId("medicalInvestigation1_INFORMATION_SOURCE"))
@@ -977,7 +979,7 @@ class CertificateModelFactoryFK7809Test {
                       .max(Period.ofDays(0))
                       .build(),
                   MedicalInvestigationConfig.builder()
-                      .id(null)
+                      .id(new FieldId("medicalInvestigation2"))
                       .dateId(new FieldId("medicalInvestigation2_DATE"))
                       .investigationTypeId(new FieldId("medicalInvestigation2_INVESTIGATION_TYPE"))
                       .informationSourceId(new FieldId("medicalInvestigation2_INFORMATION_SOURCE"))
@@ -986,7 +988,7 @@ class CertificateModelFactoryFK7809Test {
                       .max(Period.ofDays(0))
                       .build(),
                   MedicalInvestigationConfig.builder()
-                      .id(null)
+                      .id(new FieldId("medicalInvestigation3"))
                       .dateId(new FieldId("medicalInvestigation3_DATE"))
                       .investigationTypeId(new FieldId("medicalInvestigation3_INVESTIGATION_TYPE"))
                       .informationSourceId(new FieldId("medicalInvestigation3_INFORMATION_SOURCE"))
@@ -1019,7 +1021,7 @@ class CertificateModelFactoryFK7809Test {
                   )
                   .build(),
               ElementRuleExpression.builder()
-                  .id(new ElementId("4"))
+                  .id(new ElementId("3"))
                   .type(ElementRuleType.SHOW)
                   .expression(
                       new RuleExpression(
@@ -1269,7 +1271,9 @@ class CertificateModelFactoryFK7809Test {
       @Test
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationTextArea.builder()
-            .label("Ange ansvarig vårdenhet och tidplan")
+            .name("Ange ansvarig vårdenhet och tidplan")
+            .label(null)
+            .description(null)
             .id(new FieldId("50.2"))
             .build();
 
