@@ -37,6 +37,7 @@ class ElementValidationDiagnosisTest {
   private static final FieldId DIAGNOS_TWO = new FieldId("diagnos2");
   private static final FieldId DIAGNOS_THREE = new FieldId("diagnos3");
   private static final FieldId DIAGNOS_FOUR = new FieldId("diagnos4");
+  private static final FieldId DIAGNOS_FIVE = new FieldId("diagnos5");
   @Mock
   DiagnosisCodeRepository diagnosisCodeRepository;
   ElementValidationDiagnosis elementValidationDiagnosis;
@@ -191,7 +192,7 @@ class ElementValidationDiagnosisTest {
     @BeforeEach
     void setUp() {
       elementValidationDiagnosis = ElementValidationDiagnosis.builder()
-          .order(List.of(DIAGNOS_ONE, DIAGNOS_TWO, DIAGNOS_THREE, DIAGNOS_FOUR))
+          .order(List.of(DIAGNOS_ONE, DIAGNOS_TWO, DIAGNOS_THREE, DIAGNOS_FOUR, DIAGNOS_FIVE))
           .build();
     }
 
@@ -200,13 +201,13 @@ class ElementValidationDiagnosisTest {
       final var expectedValidationError = List.of(
           ValidationError.builder()
               .elementId(ELEMENT_ID)
-              .fieldId(DIAGNOS_THREE)
+              .fieldId(DIAGNOS_FOUR)
               .categoryId(CATEGORY_ELEMENT_ID.orElseThrow())
               .message(new ErrorMessage("Ange diagnoskod."))
               .build(),
           ValidationError.builder()
               .elementId(ELEMENT_ID)
-              .fieldId(new FieldId(DIAGNOS_THREE.value() + ".description"))
+              .fieldId(new FieldId(DIAGNOS_FOUR.value() + ".description"))
               .categoryId(CATEGORY_ELEMENT_ID.orElseThrow())
               .message(new ErrorMessage("Ange diagnosbeskrivning."))
               .build(),
@@ -235,7 +236,11 @@ class ElementValidationDiagnosisTest {
                               .code(CODE)
                               .build(),
                           ElementValueDiagnosis.builder()
-                              .id(DIAGNOS_FOUR)
+                              .id(DIAGNOS_THREE)
+                              .code(CODE)
+                              .build(),
+                          ElementValueDiagnosis.builder()
+                              .id(DIAGNOS_FIVE)
                               .code(CODE)
                               .build()
                       )

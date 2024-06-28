@@ -91,10 +91,10 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
       "53.1");
   private static final FieldId DIAGNOSIS_FIELD_ID = new FieldId(
       "58.1");
-  private static final ElementId DIAGNOSIS_ID = new ElementId("58");
+  public static final ElementId DIAGNOSIS_ID = new ElementId("58");
   private static final String DIAGNOS_ICD_10_ID = "ICD_10_SE";
   private static final String DIAGNOS_ICD_10_LABEL = "ICD-10-SE";
-  private static final FieldId DIAGNOS_1 = new FieldId("huvuddiagnos");
+  public static final FieldId DIAGNOS_1 = new FieldId("huvuddiagnos");
   private static final FieldId DIAGNOS_2 = new FieldId("diagnos2");
   private static final FieldId DIAGNOS_3 = new FieldId("diagnos3");
   private static final FieldId DIAGNOS_4 = new FieldId("diagnos4");
