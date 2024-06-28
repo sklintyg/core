@@ -41,4 +41,8 @@ public class Answer {
     this.author = new Author(staff.name().fullName());
     this.modified = LocalDateTime.now();
   }
+
+  public boolean isDraft() {
+    return MessageStatus.DRAFT.equals(this.status);
+  }
 }

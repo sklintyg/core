@@ -7,7 +7,6 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionTy
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
-import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 
@@ -50,7 +49,7 @@ public class HandleMessageDomainService {
   }
 
   private static void deleteDraftAnswerIfExists(Message message) {
-    if (message.answer() != null && message.answer().status() == MessageStatus.DRAFT) {
+    if (message.answer() != null && message.answer().isDraft()) {
       message.deleteAnswer();
     }
   }
