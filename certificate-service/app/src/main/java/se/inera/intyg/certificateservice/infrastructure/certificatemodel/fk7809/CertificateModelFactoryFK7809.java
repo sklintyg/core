@@ -80,28 +80,28 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
             
       Den som anses vara blind eller gravt hörselskadad kan få en garanterad nivå av merkostnadsersättning utan att ha några merkostnader.
       """;
-  public static final CertificateModelId FK7809_V1_0 = CertificateModelId.builder()
+  private static final CertificateModelId FK7809_V1_0 = CertificateModelId.builder()
       .type(new CertificateType(FK_7809))
       .version(new CertificateVersion(VERSION))
       .build();
 
-  public static final ElementId GRUND_FOR_MEDICINSKT_UNDERLAG_CATEGORY_ID = new ElementId("KAT_1");
-  public static final ElementId QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID = new ElementId("1");
-  public static final FieldId QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_FIELD_ID = new FieldId("1.1");
+  private static final ElementId GRUND_FOR_MEDICINSKT_UNDERLAG_CATEGORY_ID = new ElementId("KAT_1");
+  private static final ElementId QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID = new ElementId("1");
+  private static final FieldId QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_FIELD_ID = new FieldId("1.1");
 
-  public static final ElementId QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID = new ElementId(
+  private static final ElementId QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID = new ElementId(
       "1.3");
-  public static final FieldId QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_FIELD_ID = new FieldId(
+  private static final FieldId QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_FIELD_ID = new FieldId(
       "1.3");
-  public static final ElementId QUESTION_RELATION_TILL_PATIENTEN_ID = new ElementId("1.4");
-  public static final FieldId QUESTION_RELATION_TILL_PATIENTEN_FIELD_ID = new FieldId("1.4");
+  private static final ElementId QUESTION_RELATION_TILL_PATIENTEN_ID = new ElementId("1.4");
+  private static final FieldId QUESTION_RELATION_TILL_PATIENTEN_FIELD_ID = new FieldId("1.4");
 
   private static final FieldId UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID = new FieldId("annat");
   private static final String UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID = "journaluppgifter";
   private static final FieldId UTLATANDE_BASERAT_PA_ANHORIG_FIELD_ID = new FieldId("anhorig");
   private static final String UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID = "undersokningAvPatienten";
 
-  public static final ElementId QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID = new ElementId("3");
+  private static final ElementId QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID = new ElementId("3");
   private static final FieldId QUESTION_BASERAT_PA_ANNAT_UNDERLAG_FIELD_ID = new FieldId("3.1");
 
   private static final FieldId MEDICAL_INVESTIGATION_FIELD_ID_1 = new FieldId(
@@ -111,36 +111,36 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   private static final FieldId MEDICAL_INVESTIGATION_FIELD_ID_3 = new FieldId(
       "medicalInvestigation3");
 
-  public static final ElementId QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_ID = new ElementId("4");
-  public static final FieldId QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_FIELD_ID = new FieldId("4.1");
+  private static final ElementId QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_ID = new ElementId("4");
+  private static final FieldId QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_FIELD_ID = new FieldId("4.1");
 
-  public static final ElementId AKTIVITETSBEGRANSNINGAR_CATEGORY_ID = new ElementId("KAT_6");
-  public static final ElementId QUESTION_AKTIVITETSBEGRANSNINGAR_ID = new ElementId("17");
-  public static final FieldId QUESTION_AKTIVITETSBEGRANSNINGAR_FIELD_ID = new FieldId("17.1");
+  private static final ElementId AKTIVITETSBEGRANSNINGAR_CATEGORY_ID = new ElementId("KAT_6");
+  private static final ElementId QUESTION_AKTIVITETSBEGRANSNINGAR_ID = new ElementId("17");
+  private static final FieldId QUESTION_AKTIVITETSBEGRANSNINGAR_FIELD_ID = new FieldId("17.1");
 
-  public static final ElementId MEDICINSK_BEHANDLING_CATEGORY_ID = new ElementId("KAT_7");
-  public static final ElementId QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_ID = new ElementId(
+  private static final ElementId MEDICINSK_BEHANDLING_CATEGORY_ID = new ElementId("KAT_7");
+  private static final ElementId QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_ID = new ElementId(
       "50.1");
-  public static final FieldId QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_FIELD_ID = new FieldId(
+  private static final FieldId QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_FIELD_ID = new FieldId(
       "50.1");
-  public static final ElementId QUESTION_VARDENHET_OCH_TIDPLAN_ID = new ElementId(
+  private static final ElementId QUESTION_VARDENHET_OCH_TIDPLAN_ID = new ElementId(
       "50.2");
-  public static final FieldId QUESTION_VARDENHET_OCH_TIDPLAN_FIELD_ID = new FieldId("50.2");
+  private static final FieldId QUESTION_VARDENHET_OCH_TIDPLAN_FIELD_ID = new FieldId("50.2");
 
-  public static final ElementId PROGNOS_CATEGORY_ID = new ElementId("KAT_8");
-  public static final ElementId QUESTION_PROGNOS_ID = new ElementId(
+  private static final ElementId PROGNOS_CATEGORY_ID = new ElementId("KAT_8");
+  private static final ElementId QUESTION_PROGNOS_ID = new ElementId(
       "51");
-  public static final FieldId QUESTION_PROGNOS_FIELD_ID = new FieldId("51.1");
+  private static final FieldId QUESTION_PROGNOS_FIELD_ID = new FieldId("51.1");
 
-  public static final ElementId OVRIGT_CATEGORY_ID = new ElementId("KAT_9");
-  public static final ElementId QUESTION_OVRIGT_ID = new ElementId(
+  private static final ElementId OVRIGT_CATEGORY_ID = new ElementId("KAT_9");
+  private static final ElementId QUESTION_OVRIGT_ID = new ElementId(
       "25");
-  public static final FieldId QUESTION_OVRIGT_FIELD_ID = new FieldId("25.1");
+  private static final FieldId QUESTION_OVRIGT_FIELD_ID = new FieldId("25.1");
 
-  public static final String PREAMBLE_TEXT =
+  private static final String PREAMBLE_TEXT =
       "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
-      + "Har du frågor kontaktar du den som skrivit ditt intyg.";
-  public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
+          + "Har du frågor kontaktar du den som skrivit ditt intyg.";
+  private static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk7809/schematron/lumek.v1.sch");
 
   @Override
