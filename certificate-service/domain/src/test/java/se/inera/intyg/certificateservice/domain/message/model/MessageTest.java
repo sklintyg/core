@@ -656,7 +656,7 @@ class MessageTest {
   class DeleteTests {
 
     @Test
-    void shallThrowwIfMessageIsNotStatusDraft() {
+    void shallThrowIfMessageIsNotStatusDraft() {
       final var message = Message.builder()
           .status(MessageStatus.SENT)
           .build();
