@@ -532,7 +532,6 @@ class MessageTest {
 
     private static final CertificateId CERTIFICATE_ID = new CertificateId("certificateId");
     private static final Content CONTENT = new Content("content");
-    private static final Author AUTHOR = new Author("author");
 
     @Test
     void shallIncludeId() {
