@@ -42,10 +42,9 @@ public class CertificateDataValueConverterMedicalInvestigationList implements
       );
     }
 
-    final var valueForConversion =
-        !isValueDefined(elementValue)
-            || ((ElementValueMedicalInvestigationList) elementValue).list().isEmpty()
-            ? elementConfiguration.emptyValue() : elementValue;
+    final var valueForConversion = !isValueDefined(elementValue)
+        || ((ElementValueMedicalInvestigationList) elementValue).list().isEmpty()
+        ? elementConfiguration.emptyValue() : elementValue;
 
     return CertificateDataValueMedicalInvestigationList.builder()
         .id(elementConfiguration.id().value())
@@ -55,19 +54,15 @@ public class CertificateDataValueConverterMedicalInvestigationList implements
                 .stream()
                 .map(medicalInvestigation ->
                     CertificateDataValueMedicalInvestigation.builder()
-                        .id(
-                            getMedicalInvestigationConfig(
+                        .id(getMedicalInvestigationConfig(
+                            valueForConversion,
+                            elementConfiguration,
+                            medicalInvestigation).id().value())
+                        .date(CertificateDataValueDate.builder()
+                            .id(getMedicalInvestigationConfig(
                                 valueForConversion,
                                 elementConfiguration,
-                                medicalInvestigation
-                            ).id().value())
-                        .date(CertificateDataValueDate.builder()
-                            .id(
-                                getMedicalInvestigationConfig(
-                                    valueForConversion,
-                                    elementConfiguration,
-                                    medicalInvestigation
-                                ).dateId().value()
+                                medicalInvestigation).dateId().value()
                             )
                             .date(medicalInvestigation.date().date())
                             .build())
