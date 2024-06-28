@@ -176,7 +176,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
       ElementData data, Optional<ElementId> categoryId) {
     final var errors = new ArrayList<ValidationError>();
 
-    if (medicalInvestigation.date().date() == null) {
+    if (isDateEmpty(medicalInvestigation)) {
       errors.add(errorMessage(
           data,
           medicalInvestigation.date().dateId(),
@@ -184,7 +184,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
           "Ange ett datum."));
     }
 
-    if (medicalInvestigation.investigationType().code() == null) {
+    if (isTypeEmpty(medicalInvestigation)) {
       errors.add(errorMessage(
           data,
           medicalInvestigation.investigationType().codeId(),
@@ -192,7 +192,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
           "Välj ett alternativ."));
     }
 
-    if (medicalInvestigation.informationSource().text() == null) {
+    if (isSourceEmpty(medicalInvestigation)) {
       errors.add(errorMessage(
           data,
           medicalInvestigation.informationSource().textId(),
@@ -208,18 +208,33 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
   }
 
   private Boolean isIncomplete(MedicalInvestigation medicalInvestigation) {
-    return !isEmpty(medicalInvestigation) && (medicalInvestigation.date().date() == null
-        || medicalInvestigation.investigationType().code() == null
-        || medicalInvestigation.informationSource().text() == null);
+    return !isEmpty(medicalInvestigation)
+        && (isDateEmpty(medicalInvestigation)
+        || isTypeEmpty(medicalInvestigation)
+        || isSourceEmpty(medicalInvestigation));
   }
 
   private Boolean isEmpty(MedicalInvestigation medicalInvestigation) {
     if (medicalInvestigation == null) {
       return true;
     }
-    return medicalInvestigation.date().date() == null
-        && medicalInvestigation.investigationType().code() == null
-        && medicalInvestigation.informationSource().text() == null;
+    return isDateEmpty(medicalInvestigation)
+        && isTypeEmpty(medicalInvestigation)
+        && isSourceEmpty(medicalInvestigation);
+  }
+
+  private static boolean isSourceEmpty(MedicalInvestigation medicalInvestigation) {
+    return medicalInvestigation.informationSource().text() == null
+        || medicalInvestigation.informationSource().text().isEmpty();
+  }
+
+  private static boolean isTypeEmpty(MedicalInvestigation medicalInvestigation) {
+    return medicalInvestigation.investigationType().code() == null
+        || medicalInvestigation.investigationType().code().isEmpty();
+  }
+
+  private static boolean isDateEmpty(MedicalInvestigation medicalInvestigation) {
+    return medicalInvestigation.date().date() == null;
   }
 
   private ElementValueMedicalInvestigationList getValue(ElementValue value) {
