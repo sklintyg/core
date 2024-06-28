@@ -34,7 +34,7 @@ class GetMessageInternalXmlServiceTest {
   private static final String XML = "<message>test</message>";
 
   @Test
-  void shallReturnXml() {
+  void shallReturnXmlWithAnswer() {
     final var expected = GetMessageInternalXmlResponse.builder()
         .xml(new Xml(XML).base64())
         .build();
@@ -47,7 +47,27 @@ class GetMessageInternalXmlServiceTest {
         .getById(new MessageId(MESSAGE_ID));
     doReturn(FK7473_CERTIFICATE).when(certificateRepository).getById(FK7473_CERTIFICATE.id());
     doReturn(new Xml(XML)).when(xmlGeneratorMessage)
-        .generate(ANSWER, complementMessageWithAnswer, FK7473_CERTIFICATE);
+        .generateAnswer(ANSWER, complementMessageWithAnswer, FK7473_CERTIFICATE);
+
+    assertEquals(expected,
+        getMessageInternalXmlService.get(MESSAGE_ID)
+    );
+  }
+
+  @Test
+  void shallReturnXmlWithoutAnswer() {
+    final var expected = GetMessageInternalXmlResponse.builder()
+        .xml(new Xml(XML).base64())
+        .build();
+
+    final var complementMessageWithAnswer = complementMessageBuilder()
+        .build();
+
+    doReturn(complementMessageWithAnswer).when(messageRepository)
+        .getById(new MessageId(MESSAGE_ID));
+    doReturn(FK7473_CERTIFICATE).when(certificateRepository).getById(FK7473_CERTIFICATE.id());
+    doReturn(new Xml(XML)).when(xmlGeneratorMessage)
+        .generate(complementMessageWithAnswer, FK7473_CERTIFICATE);
 
     assertEquals(expected,
         getMessageInternalXmlService.get(MESSAGE_ID)

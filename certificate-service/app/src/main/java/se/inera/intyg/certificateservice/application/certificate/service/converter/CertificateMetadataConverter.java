@@ -32,6 +32,7 @@ public class CertificateMetadataConverter {
   private static final boolean LATEST_MAJOR_VERSION = true;
   private static final boolean TEST_CERTIFICATE = false;
   private final CertificateUnitConverter certificateUnitConverter;
+  private final CertificateMessageTypeConverter certificateMessageTypeConverter;
 
   public CertificateMetadataDTO convert(Certificate certificate) {
     return CertificateMetadataDTO.builder()
@@ -107,6 +108,13 @@ public class CertificateMetadataConverter {
             toRelations(certificate.parent(), certificate.children())
         )
         .summary(convertSummary(certificate))
+        .messageTypes(
+            certificate.certificateModel().messageTypes() != null
+                ? certificate.certificateModel().messageTypes().stream()
+                .map(certificateMessageTypeConverter::convert)
+                .toList()
+                : null
+        )
         .build();
   }
 

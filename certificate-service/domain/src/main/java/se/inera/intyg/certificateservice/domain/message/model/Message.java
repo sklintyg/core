@@ -7,17 +7,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.With;
 import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
+import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 
 @Getter
 @Builder
@@ -28,7 +29,7 @@ public class Message {
   private final CertificateId certificateId;
   private final PersonId personId;
   private final SenderReference reference;
-  private final MessageType type;
+  private MessageType type;
   private Subject subject;
   private Content content;
   private final Author author;
@@ -41,10 +42,10 @@ public class Message {
   private MessageContactInfo contactInfo;
   @Builder.Default
   private final List<Complement> complements = Collections.emptyList();
-  @With
   private Answer answer;
   @Builder.Default
   private List<Reminder> reminders = Collections.emptyList();
+  private Staff authoredStaff;
 
   public List<MessageAction> actionsInclude(ActionEvaluation actionEvaluation,
       Certificate certificate) {
@@ -77,10 +78,25 @@ public class Message {
       );
     }
 
+    if (isAdministrativeMessage() && actionAvailable(CertificateActionType.HANDLE_MESSAGE,
+        certificateActions)) {
+      messageActions.add(
+          MessageActionFactory.handleMessage()
+      );
+    }
+
     if (!status.equals(MessageStatus.HANDLED) && actionAvailable(
         CertificateActionType.FORWARD_MESSAGE, certificateActions)) {
       messageActions.add(
           MessageActionFactory.forward()
+      );
+    }
+
+    if (this.authoredStaff == null && !type.equals(MessageType.COMPLEMENT) && this.answer == null
+        && status != MessageStatus.HANDLED
+        && actionAvailable(CertificateActionType.ANSWER_MESSAGE, certificateActions)) {
+      messageActions.add(
+          MessageActionFactory.answer()
       );
     }
 
@@ -89,6 +105,10 @@ public class Message {
 
   private boolean isUnhandledComplement() {
     return type.equals(MessageType.COMPLEMENT) && !status.equals(MessageStatus.HANDLED);
+  }
+
+  private boolean isAdministrativeMessage() {
+    return !type.equals(MessageType.COMPLEMENT);
   }
 
   private boolean actionAvailable(CertificateActionType certificateActionType,
@@ -105,6 +125,13 @@ public class Message {
     }
   }
 
+  public void unhandle() {
+    if (this.status == MessageStatus.HANDLED) {
+      this.status = MessageStatus.SENT;
+      this.modified = LocalDateTime.now(ZoneId.systemDefault());
+    }
+  }
+
   public void remind(Reminder reminder) {
     this.reminders = Stream.concat(
             this.reminders.stream(),
@@ -113,7 +140,92 @@ public class Message {
         .toList();
   }
 
+
+  public static Message create(MessageType messageType, Content content,
+      CertificateId certificateId, Staff staff) {
+    return Message.builder()
+        .id(new MessageId(UUID.randomUUID().toString()))
+        .author(new Author(staff.name().fullName()))
+        .authoredStaff(staff)
+        .type(messageType)
+        .content(content)
+        .subject(new Subject(messageType.displayName()))
+        .status(MessageStatus.DRAFT)
+        .forwarded(new Forwarded(false))
+        .certificateId(certificateId)
+        .build();
+  }
+
+  public void update(Content content, MessageType messageType, Staff staff, Subject subject) {
+    this.content = content;
+    this.type = messageType;
+    this.authoredStaff = staff;
+    this.subject = subject;
+  }
+
+  public void send() {
+    this.status = MessageStatus.SENT;
+    this.sent = LocalDateTime.now();
+  }
+
+  public void delete() {
+    if (this.status != MessageStatus.DRAFT) {
+      throw new IllegalStateException(
+          "Incorrect status '%s' - required status is '%s' to delete".formatted(this.status,
+              MessageStatus.DRAFT)
+      );
+    }
+    this.status = MessageStatus.DELETED_DRAFT;
+  }
+
   public void answer(Answer answer) {
     this.answer = answer;
+  }
+
+  public void saveAnswer(Staff staff, Content content) {
+    if (answer == null) {
+      this.answer = Answer.builder()
+          .id(new MessageId(UUID.randomUUID().toString()))
+          .subject(subject)
+          .content(content)
+          .status(MessageStatus.DRAFT)
+          .author(new Author(staff.name().fullName()))
+          .authoredStaff(staff)
+          .build();
+    } else {
+      answer.save(staff, content);
+    }
+  }
+
+  public void deleteAnswer() {
+    if (this.answer == null) {
+      throw new IllegalStateException(
+          "Can`t delete answer because answer is null"
+      );
+    }
+    if (this.answer.status() != MessageStatus.DRAFT) {
+      throw new IllegalStateException(
+          "Incorrect status '%s' - required status is '%s' to delete answer".formatted(this.status,
+              MessageStatus.DRAFT)
+      );
+    }
+    this.answer.delete();
+  }
+
+  public void sendAnswer(Staff staff, Content content) {
+    if (type(List.of(MessageType.COMPLEMENT, MessageType.REMINDER, MessageType.MISSING,
+        MessageType.ANSWER))) {
+      throw new IllegalStateException(
+          "Incorrect type '%s' - required type is '%s' or '%s' to send answer".formatted(
+              this.type,
+              MessageType.CONTACT, MessageType.OTHER)
+      );
+    }
+    this.answer.send(staff, content);
+    this.handle();
+  }
+
+  public boolean type(List<MessageType> messageTypes) {
+    return messageTypes.stream().anyMatch(messageType -> messageType.equals(this.type));
   }
 }

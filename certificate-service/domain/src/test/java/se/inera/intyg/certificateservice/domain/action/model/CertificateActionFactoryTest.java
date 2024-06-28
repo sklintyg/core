@@ -258,4 +258,124 @@ class CertificateActionFactoryTest {
     assert certificateAction != null;
     assertEquals(certificateAction.getClass(), CertificateActionReceiveAnswer.class);
   }
+
+  @Test
+  void shallReturnCertificateActionRecieveReminderIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.RECEIVE_REMINDER)
+        .build();
+
+    final var certificateAction = CertificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionReceiveReminder.class);
+  }
+
+  @Test
+  void shallReturnCertificateActionCreateMessageIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.CREATE_MESSAGE)
+        .build();
+
+    final var certificateAction = CertificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionCreateMessage.class);
+  }
+
+  @Test
+  void shallReturnCertificateActionAnswerMessageIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.ANSWER_MESSAGE)
+        .build();
+
+    final var certificateAction = CertificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionAnswerMessage.class);
+  }
+
+  @Test
+  void shallReturnCertificateActionSaveMessageIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.SAVE_MESSAGE)
+        .build();
+
+    final var certificateAction = CertificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionSaveMessage.class);
+  }
+
+  @Test
+  void shallReturnCertificateActionDeleteMessageIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.DELETE_MESSAGE)
+        .build();
+
+    final var certificateAction = CertificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionDeleteMessage.class);
+  }
+
+  @Test
+  void shallReturnCertificateActionSendMessageIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.SEND_MESSAGE)
+        .build();
+
+    final var certificateAction = CertificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionSendMessage.class);
+  }
+
+  @Test
+  void shallReturnCertificateActionHandleMessageIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.HANDLE_MESSAGE)
+        .build();
+
+    final var certificateAction = CertificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionHandleMessage.class);
+  }
+
+  @Test
+  void shallReturnCertificateActionSaveAnswerIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.SAVE_ANSWER)
+        .build();
+
+    final var certificateAction = CertificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionSaveAnswer.class);
+  }
+
+  @Test
+  void shallReturnCertificateActionDeleteAnswerIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.DELETE_ANSWER)
+        .build();
+
+    final var certificateAction = CertificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionDeleteAnswer.class);
+  }
+
+  @Test
+  void shallReturnCertificateActionSendAnswerIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.SEND_ANSWER)
+        .build();
+
+    final var certificateAction = CertificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionSendAnswer.class);
+  }
 }

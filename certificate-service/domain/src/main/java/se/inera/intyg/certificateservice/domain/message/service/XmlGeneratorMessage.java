@@ -7,5 +7,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Message;
 
 public interface XmlGeneratorMessage {
 
-  Xml generate(Answer answer, Message message, Certificate certificate);
+  Xml generate(Message message, Certificate certificate);
+
+  Xml generateAnswer(Answer answer, Message message, Certificate certificate);
 }

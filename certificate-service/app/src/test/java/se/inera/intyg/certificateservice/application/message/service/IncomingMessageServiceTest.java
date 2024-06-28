@@ -11,7 +11,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataInc
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.ANSWER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.QUESTION_MESSAGE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.CONTACT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.REMINDER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.MESSAGE_ID;
 
@@ -88,10 +88,10 @@ class IncomingMessageServiceTest {
 
   @Test
   void shallReceiveQuestionMessages() {
-    doReturn(QUESTION_MESSAGE).when(messageConverter)
+    doReturn(CONTACT_MESSAGE).when(messageConverter)
         .convert(INCOMING_QUESTION_MESSAGE);
     incomingMessageService.receive(INCOMING_QUESTION_MESSAGE);
-    verify(receiveQuestionMessageDomainService).receive(QUESTION_MESSAGE);
+    verify(receiveQuestionMessageDomainService).receive(CONTACT_MESSAGE);
   }
 
   @Test

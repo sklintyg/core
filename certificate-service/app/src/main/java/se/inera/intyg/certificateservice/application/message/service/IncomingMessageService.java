@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.message.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
@@ -22,6 +23,7 @@ public class IncomingMessageService {
   private final ReceiveQuestionMessageDomainService receiveQuestionMessageDomainService;
   private final ReceiveAnswerMessageDomainService receiveAnswerMessageDomainService;
 
+  @Transactional
   public void receive(IncomingMessageRequest incomingMessageRequest) {
     incomingMessageValidator.validate(incomingMessageRequest);
 

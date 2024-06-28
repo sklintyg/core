@@ -17,12 +17,12 @@ import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.model.MessageEvent;
 import se.inera.intyg.certificateservice.domain.event.model.MessageEventType;
-import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 
 @ExtendWith(MockitoExtension.class)
 class EventMessageServiceTest {
 
+  private static final MessageId MESSAGE_ID = new MessageId("ID");
   @InjectMocks
   EventMessageService eventMessageService;
 
@@ -87,11 +87,7 @@ class EventMessageServiceTest {
 
     private MessageEvent createEvent() {
       return MessageEvent.builder()
-          .answer(
-              Answer.builder()
-                  .id(new MessageId("ID"))
-                  .build()
-          )
+          .messageId(MESSAGE_ID)
           .type(MessageEventType.ANSWER_COMPLEMENT)
           .build();
     }

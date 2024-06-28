@@ -41,4 +41,22 @@ public class MessageActionFactory {
         .enabled(true)
         .build();
   }
+
+  public static MessageAction answer() {
+    return MessageAction.builder()
+        .type(MessageActionType.ANSWER)
+        .name("Skapa")
+        .description("Svara på fråga")
+        .enabled(true)
+        .build();
+  }
+
+  public static MessageAction handleMessage() {
+    return MessageAction.builder()
+        .type(MessageActionType.HANDLE_MESSAGE)
+        .name("Hantera")
+        .description("Hantera fråga")
+        .enabled(true)
+        .build();
+  }
 }

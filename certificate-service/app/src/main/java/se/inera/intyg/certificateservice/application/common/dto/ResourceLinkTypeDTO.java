@@ -85,23 +85,24 @@ public enum ResourceLinkTypeDTO {
       case COMPLEMENT -> COMPLEMENT_CERTIFICATE;
       case CANNOT_COMPLEMENT -> CANNOT_COMPLEMENT_CERTIFICATE_ONLY_MESSAGE;
       case FORWARD_MESSAGE -> FORWARD_QUESTION;
-      case HANDLE_COMPLEMENT -> HANDLE_QUESTION;
+      case HANDLE_COMPLEMENT, HANDLE_MESSAGE -> HANDLE_QUESTION;
       case MESSAGES -> QUESTIONS;
       case MESSAGES_ADMINISTRATIVE -> QUESTIONS_ADMINISTRATIVE;
-      case RECEIVE_COMPLEMENT, RECEIVE_ANSWER, RECEIVE_QUESTION, RECEIVE_REMINDER ->
+      case CREATE_MESSAGE -> CREATE_QUESTIONS;
+      case ANSWER_MESSAGE -> ANSWER_QUESTION;
+      case RECEIVE_COMPLEMENT, RECEIVE_ANSWER, RECEIVE_QUESTION, RECEIVE_REMINDER, SAVE_MESSAGE,
+           DELETE_MESSAGE, SEND_MESSAGE, SAVE_ANSWER, DELETE_ANSWER, SEND_ANSWER ->
           throw new IllegalArgumentException("%s is not a valid type!".formatted(type));
     };
   }
 
   public static ResourceLinkTypeDTO toResourceLinkType(MessageActionType type) {
     return switch (type) {
+      case ANSWER -> ANSWER_QUESTION;
       case COMPLEMENT -> COMPLEMENT_CERTIFICATE;
       case FORWARD -> FORWARD_QUESTION;
       case CANNOT_COMPLEMENT -> CANNOT_COMPLEMENT_CERTIFICATE_ONLY_MESSAGE;
-      case HANDLE_COMPLEMENT -> HANDLE_QUESTION;
-      default -> throw new IllegalArgumentException(
-          "Unsupported type: '%s'".formatted(type)
-      );
+      case HANDLE_COMPLEMENT, HANDLE_MESSAGE -> HANDLE_QUESTION;
     };
   }
 

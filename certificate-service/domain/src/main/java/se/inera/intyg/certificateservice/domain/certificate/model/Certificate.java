@@ -26,6 +26,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.Author;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
@@ -395,9 +396,9 @@ public class Certificate {
     this.messages = this.messages.stream()
         .map(message -> {
           if (message.type().equals(MessageType.COMPLEMENT)) {
-            return message.withAnswer(
+            message.answer(
                 Answer.builder()
-                    .id(message.id())
+                    .id(new MessageId(UUID.randomUUID().toString()))
                     .reference(message.reference())
                     .type(message.type())
                     .created(LocalDateTime.now())
@@ -410,9 +411,8 @@ public class Certificate {
                     .authoredStaff(Staff.create(actionEvaluation.user()))
                     .build()
             );
-          } else {
-            return message;
           }
+          return message;
         })
         .toList();
   }

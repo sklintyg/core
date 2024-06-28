@@ -13,6 +13,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Nested;
@@ -263,6 +264,59 @@ class JpaCertificateRepositoryTest {
       final var response = jpaCertificateRepository.getById(new CertificateId("ID"));
 
       assertEquals(expectedCertificate, response);
+    }
+  }
+
+  @Nested
+  class GetByIds {
+
+    @Test
+    void shouldThrowExceptionIfIdsIsNull() {
+      assertThrows(IllegalArgumentException.class,
+          () -> jpaCertificateRepository.getByIds(null));
+    }
+
+    @Test
+    void shouldThrowExceptionIfIdsIsEmpty() {
+      final List<CertificateId> certificateIds = Collections.emptyList();
+      assertThrows(IllegalArgumentException.class,
+          () -> jpaCertificateRepository.getByIds(certificateIds)
+      );
+    }
+
+    @Test
+    void shouldReturnCertificatesFromRepository() {
+      final var expectedCertificate = Certificate.builder().build();
+      final var expectedCertificates = List.of(expectedCertificate, expectedCertificate);
+      final var certificate1 = new CertificateId("ID1");
+      final var certificate2 = new CertificateId("ID2");
+
+      final var certificateIds = List.of(certificate1, certificate2);
+
+      when(certificateEntityRepository.findCertificateEntitiesByCertificateIdIn(
+          List.of("ID1", "ID2"))
+      ).thenReturn(List.of(CERTIFICATE_ENTITY, CERTIFICATE_ENTITY));
+      when(certificateEntityMapper.toDomain(CERTIFICATE_ENTITY))
+          .thenReturn(expectedCertificate);
+
+      final var response = jpaCertificateRepository.getByIds(certificateIds);
+
+      assertEquals(expectedCertificates, response);
+    }
+
+    @Test
+    void shouldThrowIfCertificateEntitiesSizeDontMatchCertificateIds() {
+      final var certificate1 = new CertificateId("ID1");
+      final var certificate2 = new CertificateId("ID2");
+
+      final var certificateIds = List.of(certificate1, certificate2);
+
+      when(certificateEntityRepository.findCertificateEntitiesByCertificateIdIn(
+          List.of("ID1", "ID2"))
+      ).thenReturn(List.of(CertificateEntity.builder().certificateId("ID").build()));
+
+      assertThrows(IllegalStateException.class,
+          () -> jpaCertificateRepository.getByIds(certificateIds));
     }
   }
 

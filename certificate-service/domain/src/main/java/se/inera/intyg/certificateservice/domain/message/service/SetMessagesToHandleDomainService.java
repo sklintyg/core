@@ -12,6 +12,9 @@ public class SetMessagesToHandleDomainService {
 
   public void handle(List<Message> messages) {
     messages.forEach(Message::handle);
+    messages.stream()
+        .filter(message -> message.answer() != null && message.answer().isDraft())
+        .forEach(Message::deleteAnswer);
     messages.forEach(messageRepository::save);
   }
 }

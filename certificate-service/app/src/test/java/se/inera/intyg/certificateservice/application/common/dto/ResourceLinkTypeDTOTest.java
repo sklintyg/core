@@ -206,5 +206,53 @@ class ResourceLinkTypeDTOTest {
       assertEquals(ResourceLinkTypeDTO.COMPLEMENT_CERTIFICATE,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.COMPLEMENT));
     }
+
+    @Test
+    void shallReturnCertificateActionTypeCreateQuestions() {
+      assertEquals(ResourceLinkTypeDTO.CREATE_QUESTIONS,
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.CREATE_MESSAGE));
+    }
+
+    @Test
+    void shallReturnCertificateActionTypeAnswerQuestions() {
+      assertEquals(ResourceLinkTypeDTO.ANSWER_QUESTION,
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.ANSWER_MESSAGE));
+    }
+
+    @Test
+    void shallThrowIfCertificateActionTypeSaveMessage() {
+      assertThrows(IllegalArgumentException.class, () ->
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SAVE_MESSAGE));
+    }
+
+    @Test
+    void shallThrowIfCertificateActionTypeDeleteMessage() {
+      assertThrows(IllegalArgumentException.class, () ->
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.DELETE_MESSAGE));
+    }
+
+    @Test
+    void shallThrowIfCertificateActionTypeSendMessage() {
+      assertThrows(IllegalArgumentException.class, () ->
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SEND_MESSAGE));
+    }
+
+    @Test
+    void shallThrowIfCertificateActionTypeSaveAnswer() {
+      assertThrows(IllegalArgumentException.class, () ->
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SAVE_ANSWER));
+    }
+
+    @Test
+    void shallThrowIfCertificateActionTypeDeleteAnswer() {
+      assertThrows(IllegalArgumentException.class, () ->
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.DELETE_ANSWER));
+    }
+
+    @Test
+    void shallThrowIfCertificateActionTypeSendAnswer() {
+      assertThrows(IllegalArgumentException.class, () ->
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SEND_ANSWER));
+    }
   }
 }
