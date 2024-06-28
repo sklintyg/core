@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueMedicalInvestigationList;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalInvestigation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
@@ -40,6 +41,7 @@ public class XmlGeneratorMedicalInvestigationList implements XmlGeneratorElement
     final var objectFactory = new ObjectFactory();
 
     return value.list().stream()
+        .filter(row -> isTextDefined(row) && isDateDefined(row) && isTypeDefined(row))
         .map(row -> {
               final var answer = new Svar();
               answer.setId(data.id().id());
@@ -73,6 +75,20 @@ public class XmlGeneratorMedicalInvestigationList implements XmlGeneratorElement
             }
         )
         .toList();
+  }
+
+  private static boolean isTextDefined(MedicalInvestigation row) {
+    return row.informationSource().text() != null && !row.informationSource().text()
+        .isEmpty();
+  }
+
+  private static boolean isDateDefined(MedicalInvestigation row) {
+    return row.date() != null;
+  }
+
+  private static boolean isTypeDefined(MedicalInvestigation row) {
+    return row.investigationType() != null && !row.investigationType().code()
+        .isEmpty();
   }
 
   private static String getCvId(String id) {

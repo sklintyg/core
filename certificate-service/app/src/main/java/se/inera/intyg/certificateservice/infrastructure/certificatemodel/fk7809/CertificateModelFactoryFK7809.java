@@ -29,6 +29,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMa
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MedicalInvestigationConfig;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
@@ -143,6 +144,8 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   public static final String PREAMBLE_TEXT =
       "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
           + "Har du frågor kontaktar du den som skrivit ditt intyg.";
+  public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
+      "fk7809/schematron/lumek.v1.sch");
 
   @Override
   public CertificateModel create() {
@@ -158,6 +161,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
+        .schematronPath(SCHEMATRON_PATH)
         .activeFrom(activeFrom)
         .availableForCitizen(true)
         .summaryProvider(new FK7809CertificateSummaryProvider())
