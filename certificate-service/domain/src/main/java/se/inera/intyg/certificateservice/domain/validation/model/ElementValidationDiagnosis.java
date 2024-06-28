@@ -49,46 +49,76 @@ public class ElementValidationDiagnosis implements ElementValidation {
     }
 
     if (order != null) {
-      final var validationErrors = new ArrayList<ValidationError>();
-      final var elementDiagnoseIds = elementValueDiagnosisList.diagnoses().stream()
-          .map(ElementValueDiagnosis::id)
-          .toList();
+      final var elementDiagnoseIds = getElementDiagnoseIds(elementValueDiagnosisList);
+      final var validationErrors = incorrectOrderValidationErrors(
+          data, categoryId,
+          elementDiagnoseIds
+      );
 
-      for (int index = order.size() - 1; index > 0; index--) {
-        if (elementDiagnoseIds.contains(order.get(index))) {
-          while (index > 0 && !elementDiagnoseIds.contains(order.get(index - 1))) {
-            index--;
-            final var orderId = order.get(index);
-            validationErrors.add(
-                errorMessage(data, orderId, categoryId, "Ange diagnoskod.")
-            );
-            validationErrors.add(
-                errorMessage(data, new FieldId(orderId.value() + DIAGNOSIS_DESCRIPTION), categoryId,
-                    "Ange diagnosbeskrivning.")
-            );
-          }
-        }
-      }
       if (!validationErrors.isEmpty()) {
         return validationErrors;
       }
     }
 
     if (diagnosisCodeRepository != null) {
-      final var validationErrors = new ArrayList<ValidationError>();
-      elementValueDiagnosisList.diagnoses().forEach(elementValueDiagnosis -> {
-        final var code = elementValueDiagnosis.code();
-        if (codeIsInvalid(new DiagnosisCode(code))) {
-          validationErrors.add(
-              errorMessage(data, elementValueDiagnosis.id(), categoryId,
-                  "Diagnoskod är ej giltig.")
-          );
-        }
-      });
-      return validationErrors;
+      return invalidDiagnosisCodeValidationErrors(
+          data,
+          categoryId,
+          elementValueDiagnosisList
+      );
     }
 
     return Collections.emptyList();
+  }
+
+  private static List<FieldId> getElementDiagnoseIds(
+      ElementValueDiagnosisList elementValueDiagnosisList) {
+    return elementValueDiagnosisList.diagnoses().stream()
+        .map(ElementValueDiagnosis::id)
+        .toList();
+  }
+
+  private List<ValidationError> invalidDiagnosisCodeValidationErrors(ElementData data,
+      Optional<ElementId> categoryId, ElementValueDiagnosisList elementValueDiagnosisList) {
+    final var validationErrors = new ArrayList<ValidationError>();
+    elementValueDiagnosisList.diagnoses().forEach(elementValueDiagnosis -> {
+      final var code = elementValueDiagnosis.code();
+      if (codeIsInvalid(new DiagnosisCode(code))) {
+        validationErrors.add(
+            errorMessage(data, elementValueDiagnosis.id(), categoryId,
+                "Diagnoskod är ej giltig.")
+        );
+      }
+    });
+    return validationErrors;
+  }
+
+  private List<ValidationError> incorrectOrderValidationErrors(ElementData data,
+      Optional<ElementId> categoryId, List<FieldId> elementDiagnoseIds) {
+    final var validationErrors = new ArrayList<ValidationError>();
+    for (int index = order.size() - 1; index > 0; index--) {
+      if (!elementDiagnoseIds.contains(order.get(index))) {
+        continue;
+      }
+      
+      while (index > 0 && missingDiagnosisValue(elementDiagnoseIds, index)) {
+        index--;
+        final var orderId = order.get(index);
+        validationErrors.add(
+            errorMessage(data, orderId, categoryId, "Ange diagnoskod.")
+        );
+        validationErrors.add(
+            errorMessage(data, new FieldId(orderId.value() + DIAGNOSIS_DESCRIPTION), categoryId,
+                "Ange diagnosbeskrivning.")
+        );
+
+      }
+    }
+    return validationErrors;
+  }
+
+  private boolean missingDiagnosisValue(List<FieldId> elementDiagnoseIds, int index) {
+    return !elementDiagnoseIds.contains(order.get(index - 1));
   }
 
   private boolean codeIsInvalid(DiagnosisCode diagnosisCode) {
