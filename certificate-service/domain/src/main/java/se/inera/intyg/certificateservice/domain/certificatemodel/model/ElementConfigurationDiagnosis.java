@@ -25,11 +25,16 @@ public class ElementConfigurationDiagnosis implements ElementConfiguration {
   List<ElementDiagnosisTerminology> terminology = Collections.emptyList();
   @Builder.Default
   List<ElementDiagnosisListItem> list = Collections.emptyList();
+  CodeSystem codeSystem;
 
   @Override
   public ElementValue emptyValue() {
     return ElementValueDiagnosisList.builder()
         .diagnoses(Collections.emptyList())
         .build();
+  }
+
+  public String codeSystem() {
+    return this.codeSystem.value();
   }
 }

@@ -16,4 +16,13 @@ class ElementConfigurationDiagnosisTest {
     final var configurationDiagnosis = ElementConfigurationDiagnosis.builder().build();
     assertEquals(expectedValue, configurationDiagnosis.emptyValue());
   }
+
+  @Test
+  void shallReturnCodeSystem() {
+    final var expectedCodeSystem = "expectedCodeSystem";
+    final var configurationDiagnosis = ElementConfigurationDiagnosis.builder()
+        .codeSystem(new CodeSystem(expectedCodeSystem))
+        .build();
+    assertEquals(expectedCodeSystem, configurationDiagnosis.codeSystem());
+  }
 }

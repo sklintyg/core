@@ -20,6 +20,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CodeSystem;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
@@ -62,6 +63,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.Certifi
 @RequiredArgsConstructor
 public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
 
+  private static final String DIAGNOSIS_CODE_SYSTEM = "1.2.752.116.1.1.1.1.8";
   private final DiagnosisCodeRepository diagnosisCodeRepositoy;
   private static final FieldId ENDAST_PALLIATIV_FIELD_ID = new FieldId("ENDAST_PALLIATIV");
   private static final FieldId AKUT_LIVSHOTANDE_FIELD_ID = new FieldId("AKUT_LIVSHOTANDE");
@@ -358,6 +360,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                         new ElementDiagnosisListItem(DIAGNOS_5)
                     )
                 )
+                .codeSystem(new CodeSystem(DIAGNOSIS_CODE_SYSTEM))
                 .build()
         )
         .rules(
