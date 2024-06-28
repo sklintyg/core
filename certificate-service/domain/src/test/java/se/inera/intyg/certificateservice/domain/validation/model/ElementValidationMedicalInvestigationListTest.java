@@ -141,6 +141,40 @@ class ElementValidationMedicalInvestigationListTest {
   private ElementValidationMedicalInvestigationList validation;
 
   @Nested
+  class EmptyStates {
+
+    @Test
+    void shallReturnEmptyListIfListIsEmpty() {
+      validation = ElementValidationMedicalInvestigationList.builder().build();
+      final Optional<ElementId> categoryId = Optional.empty();
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueMedicalInvestigationList.builder()
+                  .list(Collections.emptyList())
+                  .build()
+          )
+          .build();
+      assertEquals(Collections.emptyList(), validation.validate(elementData, categoryId));
+    }
+
+    @Test
+    void shallReturnEmptyListIfListIsNotInitialized() {
+      validation = ElementValidationMedicalInvestigationList.builder().build();
+      final Optional<ElementId> categoryId = Optional.empty();
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueMedicalInvestigationList.builder()
+                  .list(List.of(MedicalInvestigation.builder().build()))
+                  .build()
+          )
+          .build();
+      assertEquals(Collections.emptyList(), validation.validate(elementData, categoryId));
+    }
+  }
+
+  @Nested
   class IllegalStates {
 
     @BeforeEach
