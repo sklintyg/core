@@ -500,7 +500,7 @@ class ElementValidationMedicalInvestigationListTest {
           .build();
 
       final var expectedValidationErrors = List.of(
-          getExpectedValidationError("Fyll i fälten uppifrån och ner.",
+          getExpectedValidationError("Fyll i fälten uppifrån och ned.",
               FIELD_ID),
           getExpectedValidationError("Ange ett datum.", EMPTY_MEDICAL_INV.date().dateId()),
           getExpectedValidationError("Välj ett alternativ.",
@@ -539,7 +539,7 @@ class ElementValidationMedicalInvestigationListTest {
           .build();
 
       final var expectedValidationErrors = List.of(
-          getExpectedValidationError("Fyll i fälten uppifrån och ner.",
+          getExpectedValidationError("Fyll i fälten uppifrån och ned.",
               FIELD_ID),
           getExpectedValidationError("Ange ett datum.", EMPTY_MEDICAL_INV.date().dateId()),
           getExpectedValidationError("Välj ett alternativ.",
@@ -576,7 +576,7 @@ class ElementValidationMedicalInvestigationListTest {
           .build();
 
       final var expectedValidationErrors = List.of(
-          getExpectedValidationError("Fyll i fälten uppifrån och ner.",
+          getExpectedValidationError("Fyll i fälten uppifrån och ned.",
               FIELD_ID),
           getExpectedValidationError("Ange ett datum.", EMPTY_MEDICAL_INV.date().dateId()),
           getExpectedValidationError("Välj ett alternativ.",
