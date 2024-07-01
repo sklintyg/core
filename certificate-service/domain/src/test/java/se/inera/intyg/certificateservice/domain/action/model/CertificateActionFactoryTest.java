@@ -332,6 +332,18 @@ class CertificateActionFactoryTest {
   }
 
   @Test
+  void shallReturnCertificateActionHandleMessageIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.HANDLE_MESSAGE)
+        .build();
+
+    final var certificateAction = CertificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionHandleMessage.class);
+  }
+
+  @Test
   void shallReturnCertificateActionSaveAnswerIfExistInSpecification() {
     final var certificateActionSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.SAVE_ANSWER)

@@ -24,6 +24,7 @@ import se.inera.intyg.certificateservice.domain.action.model.CertificateActionAn
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionCannotComplement;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionComplement;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionForwardMessage;
+import se.inera.intyg.certificateservice.domain.action.model.CertificateActionHandleMessage;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
@@ -349,6 +350,64 @@ class MessageTest {
   }
 
   @Nested
+  class HandleAdministrativeMessage {
+
+    private static final CertificateActionHandleMessage CERTIFICATE_ACTION_HANDLE_MESSAGE =
+        CertificateActionHandleMessage.builder()
+            .certificateActionSpecification(
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.HANDLE_MESSAGE)
+                    .build()
+            )
+            .build();
+
+    @Test
+    void shallIncludeMessageActionHandleMessageWhenActionAvailable() {
+      final var message = Message.builder()
+          .type(MessageType.CONTACT)
+          .status(MessageStatus.SENT)
+          .build();
+
+      doReturn(List.of(CERTIFICATE_ACTION_HANDLE_MESSAGE)).when(certificate).actionsInclude(
+          Optional.of(ACTION_EVALUATION)
+      );
+
+      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
+      assertTrue(messageActions.contains(MessageActionFactory.handleMessage()));
+    }
+
+    @Test
+    void shallExcludeMessageActionHandleMessageWhenActionNotAvailable() {
+      final var message = Message.builder()
+          .type(MessageType.CONTACT)
+          .status(MessageStatus.SENT)
+          .build();
+
+      doReturn(List.of()).when(certificate).actionsInclude(
+          Optional.of(ACTION_EVALUATION)
+      );
+
+      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
+      assertFalse(messageActions.contains(MessageActionFactory.handleMessage()));
+    }
+
+    @Test
+    void shallExcludeMessageActionHandleMessageWhenNotAdministrativeMessage() {
+      final var message = Message.builder()
+          .type(MessageType.COMPLEMENT)
+          .status(MessageStatus.SENT)
+          .build();
+
+      doReturn(List.of(CERTIFICATE_ACTION_HANDLE_MESSAGE)).when(certificate).actionsInclude(
+          Optional.of(ACTION_EVALUATION)
+      );
+
+      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
+      assertFalse(messageActions.contains(MessageActionFactory.handleMessage()));
+    }
+  }
+
+  @Nested
   class AnswerMessageTests {
 
     private static final CertificateActionAnswerMessage CERTIFICATE_ACTION_ANSWER =
@@ -436,6 +495,22 @@ class MessageTest {
       final var messageActions = message.actions(ACTION_EVALUATION, certificate);
       assertFalse(messageActions.contains(MessageActionFactory.answer()));
     }
+
+    @Test
+    void shallExcludeMessageActionAnswerIfMessageIsHandled() {
+      final var message = Message.builder()
+          .type(MessageType.CONTACT)
+          .status(MessageStatus.HANDLED)
+          .answer(Answer.builder().build())
+          .build();
+
+      doReturn(Collections.emptyList()).when(certificate).actionsInclude(
+          Optional.of(ACTION_EVALUATION)
+      );
+
+      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
+      assertFalse(messageActions.contains(MessageActionFactory.answer()));
+    }
   }
 
   @Nested
@@ -457,7 +532,6 @@ class MessageTest {
 
     private static final CertificateId CERTIFICATE_ID = new CertificateId("certificateId");
     private static final Content CONTENT = new Content("content");
-    private static final Author AUTHOR = new Author("author");
 
     @Test
     void shallIncludeId() {
@@ -581,7 +655,7 @@ class MessageTest {
   class DeleteTests {
 
     @Test
-    void shallThrowwIfMessageIsNotStatusDraft() {
+    void shallThrowIfMessageIsNotStatusDraft() {
       final var message = Message.builder()
           .status(MessageStatus.SENT)
           .build();

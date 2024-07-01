@@ -57,6 +57,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateRecipientFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CodeSystemKvFkmu0001;
 
 @Component
 @RequiredArgsConstructor
@@ -292,6 +293,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.SEND_ANSWER)
+                    .build(),
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.HANDLE_MESSAGE)
                     .build()
             )
         )

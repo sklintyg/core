@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
@@ -85,4 +86,33 @@ class SetMessagesToHandleDomainServiceTest {
     verify(messageRepository).save(messagesToHandle.get(0));
     verify(messageRepository).save(messagesToHandle.get(1));
   }
+
+  @Test
+  void shallRemoveDraftAnswer() {
+    final var messageToHandle = complementMessageBuilder()
+        .status(MessageStatus.SENT)
+        .answer(Answer.builder()
+            .status(MessageStatus.DRAFT)
+            .build())
+        .build();
+
+    setMessagesToHandleDomainService.handle(List.of(messageToHandle));
+
+    assertEquals(MessageStatus.DELETED_DRAFT, messageToHandle.answer().status());
+  }
+
+  @Test
+  void shallNotRemoveSentAnswer() {
+    final var messageToHandle = complementMessageBuilder()
+        .status(MessageStatus.SENT)
+        .answer(Answer.builder()
+            .status(MessageStatus.SENT)
+            .build())
+        .build();
+
+    setMessagesToHandleDomainService.handle(List.of(messageToHandle));
+
+    assertEquals(MessageStatus.SENT, messageToHandle.answer().status());
+  }
+
 }

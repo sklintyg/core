@@ -73,6 +73,22 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
+  public static ElementRule mandatoryNotEmpty(ElementId id, List<FieldId> fieldIds) {
+    return ElementRuleExpression.builder()
+        .id(id)
+        .type(ElementRuleType.MANDATORY)
+        .expression(
+            new RuleExpression(
+                multipleOrExpressionWithNotEmpty(
+                    fieldIds.stream()
+                        .map(field -> singleExpression(field.value()))
+                        .toArray(String[]::new)
+                )
+            )
+        )
+        .build();
+  }
+
   public static ElementRule limit(ElementId id, short limit) {
     return ElementRuleLimit.builder()
         .id(id)
@@ -86,22 +102,28 @@ public class CertificateElementRuleFactory {
   }
 
   private static String multipleOrExpression(String... expression) {
+    return multipleOrExpression(null, expression);
+  }
+
+  private static String multipleOrExpression(String wrapWith, String... expression) {
     return Arrays.stream(expression).reduce("", (s, s2) -> {
       if (!s.isEmpty()) {
         s += " || ";
       }
-      s += s2;
+      if (wrapWith != null) {
+        s += wrapWith + "(" + s2 + ")";
+      } else {
+        s += s2;
+      }
       return s;
     });
   }
 
   public static String multipleOrExpressionWithExists(String... expression) {
-    return Arrays.stream(expression).reduce("", (s, s2) -> {
-      if (!s.isEmpty()) {
-        s += " || ";
-      }
-      s += "exists(" + s2 + ")";
-      return s;
-    });
+    return multipleOrExpression("exists", expression);
+  }
+
+  public static String multipleOrExpressionWithNotEmpty(String... expression) {
+    return multipleOrExpression("!empty", expression);
   }
 }

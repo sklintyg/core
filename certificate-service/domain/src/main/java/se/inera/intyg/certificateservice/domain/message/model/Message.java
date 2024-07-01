@@ -78,6 +78,13 @@ public class Message {
       );
     }
 
+    if (isAdministrativeMessage() && actionAvailable(CertificateActionType.HANDLE_MESSAGE,
+        certificateActions)) {
+      messageActions.add(
+          MessageActionFactory.handleMessage()
+      );
+    }
+
     if (!status.equals(MessageStatus.HANDLED) && actionAvailable(
         CertificateActionType.FORWARD_MESSAGE, certificateActions)) {
       messageActions.add(
@@ -86,6 +93,7 @@ public class Message {
     }
 
     if (this.authoredStaff == null && !type.equals(MessageType.COMPLEMENT) && this.answer == null
+        && status != MessageStatus.HANDLED
         && actionAvailable(CertificateActionType.ANSWER_MESSAGE, certificateActions)) {
       messageActions.add(
           MessageActionFactory.answer()
@@ -99,6 +107,10 @@ public class Message {
     return type.equals(MessageType.COMPLEMENT) && !status.equals(MessageStatus.HANDLED);
   }
 
+  private boolean isAdministrativeMessage() {
+    return !type.equals(MessageType.COMPLEMENT);
+  }
+
   private boolean actionAvailable(CertificateActionType certificateActionType,
       List<CertificateAction> certificateActions) {
     return certificateActions.stream()
@@ -109,6 +121,13 @@ public class Message {
   public void handle() {
     if (this.status != MessageStatus.HANDLED) {
       this.status = MessageStatus.HANDLED;
+      this.modified = LocalDateTime.now(ZoneId.systemDefault());
+    }
+  }
+
+  public void unhandle() {
+    if (this.status == MessageStatus.HANDLED) {
+      this.status = MessageStatus.SENT;
       this.modified = LocalDateTime.now(ZoneId.systemDefault());
     }
   }

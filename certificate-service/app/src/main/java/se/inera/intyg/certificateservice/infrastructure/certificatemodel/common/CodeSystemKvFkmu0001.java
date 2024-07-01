@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.common;
 
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 
@@ -23,7 +23,13 @@ public class CodeSystemKvFkmu0001 {
       CODE_SYSTEM,
       "annat"
   );
-  
+
+  public static final Code ANHORIG = new Code(
+      "ANHORIG",
+      CODE_SYSTEM,
+      "anhörig eller annans relation till patienten"
+  );
+
   private CodeSystemKvFkmu0001() {
     throw new IllegalStateException("Utility class");
   }
