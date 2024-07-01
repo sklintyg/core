@@ -19,8 +19,6 @@ public class CertificateDataConfigTextField implements CertificateDataConfig {
   @Getter(onMethod = @__(@Override))
   String label;
   @Getter(onMethod = @__(@Override))
-  Message message;
-  @Getter(onMethod = @__(@Override))
   String icon;
   @Getter(onMethod = @__(@Override))
   String text;
