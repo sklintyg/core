@@ -318,13 +318,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
             ElementConfigurationMessage.builder()
                 .message(
                     ElementMessage.builder()
-                        .content(
-                            """
-                                 Om patienten har medicinska förutsättningar att samtycka till att den vill ha stöd av en närstående, så ska patienten göra det.
-                                                    \s
-                                 Därför ska du fylla i om patienten kan lämna ett skriftligt samtycke eller inte.
-                                """
-                        )
+                        .content("Om patienten har medicinska förutsättningar att samtycka till en närståendes stöd, så ska patienten göra det. Därför ska du fylla i om hen kan samtycka eller inte.")
                         .level(ElementMessageLevel.INFO)
                         .build()
                 )
@@ -752,7 +746,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
             ElementConfigurationTextArea.builder()
                 .id(QUESTION_UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID)
                 .name(
-                    "Ange vad annat är och motivera vid behov varför du inte baserar utlåtandet på en undersökning eller på journaluppgifter")
+                    "Ange vad annat är")
                 .build()
         )
         .rules(
@@ -803,9 +797,12 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
             ElementConfigurationCategory.builder()
                 .name("Påtagligt hot mot patientens liv")
                 .description("""
-                    Ange på vilket sätt hälsotillståndet utgör ett påtagligt hot mot patientens liv i nuläget eller på någon tids sikt.
-                                        \s
-                    Hälsotillståndet kan utgöra ett påtagligt hot även om det finns hopp om att det förbättras.
+                        Ange på vilket sätt hälsotillståndet utgör ett påtagligt hot mot patientens liv i nuläget eller på viss tids sikt.\s
+                        Hälsotillståndet kan utgöra ett påtagligt hot även om det finns hopp om att det förbättras.
+                        <ul>
+                            <li>Ange alla diagnoser som sammantaget medför ett påtagligt hot mot patientens liv.</li>
+                            <li>Ange ett av alternativen som gäller patientens behandling och vårdsituation.</li>
+                        </ul>
                     """)
                 .build()
         )
