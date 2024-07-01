@@ -24,6 +24,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBo
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -918,6 +919,7 @@ class CertificateModelFactoryFK3226Test {
                     .content(
                         "Ange alla diagnoser som sammantaget medför ett påtagligt hot mot patientens liv.")
                     .level(ElementMessageLevel.OBSERVE)
+                    .includedForStatuses(List.of(Status.DRAFT))
                     .build()
             )
             .terminology(
