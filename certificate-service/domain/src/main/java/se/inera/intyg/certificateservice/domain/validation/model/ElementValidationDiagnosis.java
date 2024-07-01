@@ -43,6 +43,7 @@ public class ElementValidationDiagnosis implements ElementValidation {
     }
 
     if (mandatoryField != null && missingMandatoryField(elementValueDiagnosisList)) {
+      //TODO: Look into how we can make this error message more dynamic depending on which field is mandatory
       return List.of(
           errorMessage(data, mandatoryField, categoryId, "Ange diagnos på översta raden först.")
       );
@@ -100,7 +101,7 @@ public class ElementValidationDiagnosis implements ElementValidation {
       if (!elementDiagnoseIds.contains(order.get(index))) {
         continue;
       }
-      
+
       while (index > 0 && missingDiagnosisValue(elementDiagnoseIds, index)) {
         index--;
         final var orderId = order.get(index);

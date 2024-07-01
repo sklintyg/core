@@ -31,7 +31,7 @@ public class CertificateDataDiagnosisListConfigConverter implements CertificateD
 
     return CertificateDataConfigDiagnoses.builder()
         .message(
-            elementConfigurationDiagnosis.message() != null && certificate.isDraft() ?
+            shouldIncludeMessage(certificate, elementConfigurationDiagnosis) ?
                 Message.builder()
                     .content(elementConfigurationDiagnosis.message().content())
                     .level(MessageLevel.toMessageLevel(
@@ -60,5 +60,11 @@ public class CertificateDataDiagnosisListConfigConverter implements CertificateD
         .text(elementConfigurationDiagnosis.name())
         .description(elementConfigurationDiagnosis.description())
         .build();
+  }
+
+  private static boolean shouldIncludeMessage(Certificate certificate,
+      ElementConfigurationDiagnosis elementConfigurationDiagnosis) {
+    return elementConfigurationDiagnosis.message() != null
+        && elementConfigurationDiagnosis.message().include(certificate);
   }
 }

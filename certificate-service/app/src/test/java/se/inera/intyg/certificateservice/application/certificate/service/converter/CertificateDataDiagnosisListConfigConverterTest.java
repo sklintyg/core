@@ -73,14 +73,19 @@ class CertificateDataDiagnosisListConfigConverterTest {
                     ElementMessage.builder()
                         .content(EXPECTED_CONTENT)
                         .level(ElementMessageLevel.INFO)
+                        .includedForStatuses(List.of(Status.DRAFT))
                         .build()
                 )
                 .build()
         )
         .build();
 
+    final var certificate = fk3226CertificateBuilder()
+        .status(Status.DRAFT)
+        .build();
+
     final var certificateDataConfig = certificateDataDiagnosisListConfigConverter.convert(
-        elementSpecification, FK3226_CERTIFICATE);
+        elementSpecification, certificate);
     assertEquals(expectedMessage, certificateDataConfig.getMessage());
   }
 
@@ -107,14 +112,17 @@ class CertificateDataDiagnosisListConfigConverterTest {
                     ElementMessage.builder()
                         .content(EXPECTED_CONTENT)
                         .level(ElementMessageLevel.INFO)
+                        .includedForStatuses(List.of(Status.DRAFT))
                         .build()
                 )
                 .build()
         )
         .build();
+
     final var certificate = fk3226CertificateBuilder()
         .status(Status.SIGNED)
         .build();
+
     final var certificateDataConfig = certificateDataDiagnosisListConfigConverter.convert(
         elementSpecification, certificate);
     assertNull(certificateDataConfig.getMessage());
