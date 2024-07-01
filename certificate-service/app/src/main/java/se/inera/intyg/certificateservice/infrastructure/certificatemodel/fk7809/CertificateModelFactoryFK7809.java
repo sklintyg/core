@@ -10,7 +10,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
@@ -139,7 +141,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
 
   private static final String PREAMBLE_TEXT =
       "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
-      + "Har du frågor kontaktar du den som skrivit ditt intyg.";
+          + "Har du frågor kontaktar du den som skrivit ditt intyg.";
   private static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk7809/schematron/lumek.v1.sch");
 
@@ -261,8 +263,9 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     questionAktivitetsbegransningar()
                 ),
                 categoryMedicinskBehandling(
-                    questionPagaendeOchPlaneradeBehandlingar(),
-                    questionVardenhetOchTidplan()
+                    questionPagaendeOchPlaneradeBehandlingar(
+                        questionVardenhetOchTidplan()
+                    )
                 ),
                 categoryPrognos(
                     questionPrognos()
@@ -421,7 +424,8 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         .build();
   }
 
-  private static ElementSpecification questionRelationTillPatienten() {
+  private static ElementSpecification questionRelationTillPatienten(
+      ElementSpecification... children) {
     return ElementSpecification.builder()
         .id(QUESTION_RELATION_TILL_PATIENTEN_ID)
         .configuration(
@@ -568,6 +572,12 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     .build()
             )
         )
+        .shouldValidate(
+            elementData -> elementData.stream()
+                .filter(data -> data.id().equals(QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID))
+                .map(element -> (ElementValueBoolean) element.value())
+                .anyMatch(ElementValueBoolean::value)
+        )
         .children(List.of(children))
         .build();
   }
@@ -643,7 +653,8 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         .build();
   }
 
-  private static ElementSpecification questionPagaendeOchPlaneradeBehandlingar() {
+  private static ElementSpecification questionPagaendeOchPlaneradeBehandlingar(
+      ElementSpecification... children) {
     return ElementSpecification.builder()
         .id(QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_ID)
         .configuration(
@@ -668,6 +679,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     .build()
             )
         )
+        .children(List.of(children))
         .build();
   }
 
@@ -688,7 +700,11 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                 ),
                 CertificateElementRuleFactory.limit(
                     QUESTION_VARDENHET_OCH_TIDPLAN_ID,
-                    (short) 4000)
+                    (short) 4000),
+                CertificateElementRuleFactory.show(
+                    QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_ID,
+                    QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_FIELD_ID
+                )
             )
         )
         .validations(
@@ -699,7 +715,12 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     .build()
             )
         )
-        .build();
+        .shouldValidate(
+            elementData -> elementData.stream()
+                .filter(data -> data.id().equals(QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_ID))
+                .map(element -> (ElementValueText) element.value())
+                .anyMatch(value -> value.text() != null && !value.text().isEmpty())
+        ).build();
   }
 
   private static ElementSpecification questionPrognos() {

@@ -1017,8 +1017,8 @@ class CertificateModelFactoryFK7809Test {
                   .expression(
                       new RuleExpression(
                           "!empty($medicalInvestigation1_DATE) "
-                          + "|| !empty($medicalInvestigation1_INVESTIGATION_TYPE) "
-                          + "|| !empty($medicalInvestigation1_INFORMATION_SOURCE)"
+                              + "|| !empty($medicalInvestigation1_INVESTIGATION_TYPE) "
+                              + "|| !empty($medicalInvestigation1_INFORMATION_SOURCE)"
                       )
                   )
                   .build(),
@@ -1301,6 +1301,11 @@ class CertificateModelFactoryFK7809Test {
                 .id(new ElementId("50.2"))
                 .type(ElementRuleType.TEXT_LIMIT)
                 .limit(new RuleLimit((short) 4000))
+                .build(),
+            ElementRuleExpression.builder()
+                .id(new ElementId("50.1"))
+                .type(ElementRuleType.SHOW)
+                .expression(new RuleExpression("$50.1"))
                 .build()
         );
 
