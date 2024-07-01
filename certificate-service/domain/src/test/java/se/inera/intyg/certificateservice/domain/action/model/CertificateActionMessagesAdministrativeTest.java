@@ -88,7 +88,7 @@ class CertificateActionMessagesAdministrativeTest {
   }
 
   @Test
-  void shallNotReturnDescriptionIfDisabled() {
+  void shallNotReturnDescriptionIfEnabled() {
     final var certificateActionSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
         .enabled(true)
