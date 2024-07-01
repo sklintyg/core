@@ -13,12 +13,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -26,11 +28,16 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisListItem;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisTerminology;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessage;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -44,8 +51,10 @@ import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDiagnosis;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
@@ -55,11 +64,14 @@ class CertificateModelFactoryFK7809Test {
   private static final String TYPE = "fk7809";
   private static final String VERSION = "1.0";
 
+  @Mock
+  private DiagnosisCodeRepository diagnosisCodeRepository;
+
   private CertificateModelFactoryFK7809 certificateModelFactoryFK7809;
 
   @BeforeEach
   void setUp() {
-    certificateModelFactoryFK7809 = new CertificateModelFactoryFK7809();
+    certificateModelFactoryFK7809 = new CertificateModelFactoryFK7809(diagnosisCodeRepository);
   }
 
   @Test
@@ -1526,6 +1538,214 @@ class CertificateModelFactoryFK7809Test {
         );
       }
     }
+
+    @Nested
+    class CategoryDiagnos {
+
+      private static final ElementId ELEMENT_ID = new ElementId("KAT_2");
+
+      @Test
+      void shallIncludeId() {
+        final var certificateModel = certificateModelFactoryFK7809.create();
+
+        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
+                certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeConfiguration() {
+        final var expectedConfiguration = ElementConfigurationCategory.builder()
+            .name("Diagnos")
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK7809.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+    }
+
+    @Nested
+    class QuestionDiagnos {
+
+      private static final ElementId ELEMENT_ID = new ElementId("58");
+
+      @Test
+      void shallIncludeId() {
+        final var certificateModel = certificateModelFactoryFK7809.create();
+
+        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
+                certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeConfiguration() {
+        final var expectedConfiguration = ElementConfigurationDiagnosis.builder()
+            .id(new FieldId("58.1"))
+            .name(
+                "Diagnos eller diagnoser")
+            .message(
+                ElementMessage.builder()
+                    .content(
+                        "Ange diagnoskod med så många positioner som möjligt. Använd inga andra tecken än bokstäver och siffror.")
+                    .level(ElementMessageLevel.OBSERVE)
+                    .includedForStatuses(List.of(Status.DRAFT))
+                    .build()
+            )
+            .terminology(
+                List.of(
+                    new ElementDiagnosisTerminology("ICD_10_SE", "ICD-10-SE",
+                        "1.2.752.116.1.1.1.1.8")
+                )
+            )
+            .list(
+                List.of(
+                    new ElementDiagnosisListItem(new FieldId("huvuddiagnos")),
+                    new ElementDiagnosisListItem(new FieldId("diagnos2")),
+                    new ElementDiagnosisListItem(new FieldId("diagnos3")),
+                    new ElementDiagnosisListItem(new FieldId("diagnos4")),
+                    new ElementDiagnosisListItem(new FieldId("diagnos5"))
+                )
+            )
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK7809.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+
+      @Test
+      void shallIncludeRules() {
+        final var expectedRules = List.of(
+            ElementRuleExpression.builder()
+                .id(ELEMENT_ID)
+                .type(ElementRuleType.MANDATORY)
+                .expression(
+                    new RuleExpression(
+                        "exists($huvuddiagnos)"
+                    )
+                )
+                .build(),
+            ElementRuleLimit.builder()
+                .id(ELEMENT_ID)
+                .type(ElementRuleType.TEXT_LIMIT)
+                .limit(
+                    new RuleLimit((short) 81)
+                )
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK7809.create();
+
+        assertEquals(expectedRules,
+            certificateModel.elementSpecification(ELEMENT_ID).rules()
+        );
+      }
+
+      @Test
+      void shallIncludeValidations() {
+        final var expectedValidations = List.of(
+            ElementValidationDiagnosis.builder()
+                .mandatoryField(new FieldId("huvuddiagnos"))
+                .order(
+                    List.of(
+                        new FieldId("huvuddiagnos"),
+                        new FieldId("diagnos2"),
+                        new FieldId("diagnos3"),
+                        new FieldId("diagnos4"),
+                        new FieldId("diagnos5")
+                    )
+                )
+                .diagnosisCodeRepository(diagnosisCodeRepository)
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK7809.create();
+
+        assertEquals(expectedValidations,
+            certificateModel.elementSpecification(ELEMENT_ID).validations()
+        );
+      }
+    }
+
+    @Nested
+    class QuestionDiagnosMotivering {
+
+      private static final ElementId ELEMENT_ID = new ElementId("5");
+
+      @Test
+      void shallIncludeId() {
+        final var certificateModel = certificateModelFactoryFK7809.create();
+
+        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
+                certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeConfiguration() {
+        final var expectedConfiguration = ElementConfigurationTextArea.builder()
+            .name("Sammanfatta historiken för diagnoserna")
+            .id(new FieldId("5"))
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK7809.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+
+      @Test
+      void shallIncludeRules() {
+        final var expectedRules = List.of(
+            ElementRuleExpression.builder()
+                .id(ELEMENT_ID)
+                .type(ElementRuleType.MANDATORY)
+                .expression(new RuleExpression("$5"))
+                .build(),
+            ElementRuleLimit.builder()
+                .id(ELEMENT_ID)
+                .type(ElementRuleType.TEXT_LIMIT)
+                .limit(new RuleLimit((short) 4000))
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK7809.create();
+
+        assertEquals(expectedRules,
+            certificateModel.elementSpecification(ELEMENT_ID).rules()
+        );
+      }
+
+      @Test
+      void shallIncludeValidations() {
+        final var expectedValidations = List.of(
+            ElementValidationText.builder()
+                .mandatory(true)
+                .limit(4000)
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK7809.create();
+
+        assertEquals(expectedValidations,
+            certificateModel.elementSpecification(ELEMENT_ID).validations()
+        );
+      }
+    }
+
   }
 }
 

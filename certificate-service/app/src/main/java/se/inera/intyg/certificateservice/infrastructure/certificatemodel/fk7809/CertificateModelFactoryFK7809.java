@@ -7,12 +7,14 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.Collections;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
@@ -21,13 +23,17 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisListItem;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessage;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MedicalInvestigationConfig;
@@ -36,8 +42,10 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDiagnosis;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
@@ -45,12 +53,17 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.Certifi
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateRecipientFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CodeSystemKvFkmu0001;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CodeSystemIcd10Se;
 
 @Component
+@RequiredArgsConstructor
 public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
 
   @Value("${certificate.model.fk7210.v1_0.active.from}")
   private LocalDateTime activeFrom;
+
+  private final DiagnosisCodeRepository diagnosisCodeRepositoy;
+
   private static final String FK_7809 = "fk7809";
   private static final String VERSION = "1.0";
   private static final String NAME = "Läkarutlåtande för merkostnadsersättning";
@@ -138,6 +151,19 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   private static final ElementId QUESTION_OVRIGT_ID = new ElementId(
       "25");
   private static final FieldId QUESTION_OVRIGT_FIELD_ID = new FieldId("25.1");
+
+  private static final ElementId DIAGNOS_CATEGORY_ID = new ElementId("KAT_2");
+  private static final FieldId DIAGNOSIS_FIELD_ID = new FieldId(
+      "58.1");
+  public static final ElementId DIAGNOSIS_ID = new ElementId("58");
+  public static final ElementId DIAGNOSIS_MOTIVATION_ID = new ElementId("5");
+  public static final FieldId DIAGNOSIS_MOTIVATION_FIELD_ID = new FieldId("5");
+  public static final FieldId DIAGNOS_1 = new FieldId("huvuddiagnos");
+  private static final FieldId DIAGNOS_2 = new FieldId("diagnos2");
+  private static final FieldId DIAGNOS_3 = new FieldId("diagnos3");
+  private static final FieldId DIAGNOS_4 = new FieldId("diagnos4");
+  private static final FieldId DIAGNOS_5 = new FieldId("diagnos5");
+  private static final short DIAGNOSIS_CODE_LIMIT = (short) 81;
 
   private static final String PREAMBLE_TEXT =
       "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
@@ -256,6 +282,10 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     questionBaseratPaAnnatMedicinsktUnderlag(),
                     questionUtredningEllerUnderlag()
                 ),
+                categoryDiagnos(
+                    questionDiagnos(),
+                    questionDiagnosHistorik()
+                ),
                 categoryAktivitetsbegransningar(
                     questionAktivitetsbegransningar()
                 ),
@@ -283,6 +313,21 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         .configuration(
             ElementConfigurationCategory.builder()
                 .name("Grund för medicinskt underlag")
+                .build()
+        )
+        .children(
+            List.of(children)
+        )
+        .build();
+  }
+
+  private static ElementSpecification categoryDiagnos(
+      ElementSpecification... children) {
+    return ElementSpecification.builder()
+        .id(DIAGNOS_CATEGORY_ID)
+        .configuration(
+            ElementConfigurationCategory.builder()
+                .name("Diagnos")
                 .build()
         )
         .children(
@@ -773,6 +818,91 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
             List.of(
                 ElementValidationText.builder()
                     .mandatory(false)
+                    .limit(4000)
+                    .build()
+            )
+        )
+        .build();
+  }
+
+  private ElementSpecification questionDiagnos() {
+    return ElementSpecification.builder()
+        .id(DIAGNOSIS_ID)
+        .configuration(
+            ElementConfigurationDiagnosis.builder()
+                .id(DIAGNOSIS_FIELD_ID)
+                .name(
+                    "Diagnos eller diagnoser")
+                .message(
+                    ElementMessage.builder()
+                        .content(
+                            "Ange diagnoskod med så många positioner som möjligt. Använd inga andra tecken än bokstäver och siffror.")
+                        .level(ElementMessageLevel.OBSERVE)
+                        .includedForStatuses(List.of(Status.DRAFT))
+                        .build()
+                )
+                .terminology(
+                    List.of(
+                        CodeSystemIcd10Se.terminology()
+                    )
+                )
+                .list(
+                    List.of(
+                        new ElementDiagnosisListItem(DIAGNOS_1),
+                        new ElementDiagnosisListItem(DIAGNOS_2),
+                        new ElementDiagnosisListItem(DIAGNOS_3),
+                        new ElementDiagnosisListItem(DIAGNOS_4),
+                        new ElementDiagnosisListItem(DIAGNOS_5)
+                    )
+                )
+                .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.mandatoryExist(DIAGNOSIS_ID,
+                    DIAGNOS_1),
+                CertificateElementRuleFactory.limit(DIAGNOSIS_ID, DIAGNOSIS_CODE_LIMIT)
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationDiagnosis.builder()
+                    .mandatoryField(DIAGNOS_1)
+                    .order(
+                        List.of(DIAGNOS_1, DIAGNOS_2, DIAGNOS_3, DIAGNOS_4, DIAGNOS_5)
+                    )
+                    .diagnosisCodeRepository(diagnosisCodeRepositoy)
+                    .build()
+            )
+        )
+        .build();
+  }
+
+  private static ElementSpecification questionDiagnosHistorik() {
+    return ElementSpecification.builder()
+        .id(DIAGNOSIS_MOTIVATION_ID)
+        .configuration(
+            ElementConfigurationTextArea.builder()
+                .id(DIAGNOSIS_MOTIVATION_FIELD_ID)
+                .name(
+                    "Sammanfatta historiken för diagnoserna")
+                .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.mandatory(
+                    DIAGNOSIS_MOTIVATION_ID,
+                    DIAGNOSIS_MOTIVATION_FIELD_ID
+                ),
+                CertificateElementRuleFactory.limit(
+                    DIAGNOSIS_MOTIVATION_ID,
+                    (short) 4000)
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationText.builder()
+                    .mandatory(true)
                     .limit(4000)
                     .build()
             )
