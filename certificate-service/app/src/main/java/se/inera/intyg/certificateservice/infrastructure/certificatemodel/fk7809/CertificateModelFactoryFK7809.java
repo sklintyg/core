@@ -576,7 +576,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
             elementData -> elementData.stream()
                 .filter(data -> data.id().equals(QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID))
                 .map(element -> (ElementValueBoolean) element.value())
-                .anyMatch(ElementValueBoolean::value)
+                .anyMatch(value -> value != null && value.value() != null && value.value())
         )
         .children(List.of(children))
         .build();
