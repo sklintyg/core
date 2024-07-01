@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
@@ -23,6 +24,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBo
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -32,11 +34,14 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisListItem;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisTerminology;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
@@ -54,10 +59,12 @@ import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDiagnosis;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 
@@ -68,9 +75,12 @@ class CertificateModelFactoryFK3226Test {
   private static final String VERSION = "1.0";
   private CertificateModelFactoryFK3226 certificateModelFactoryFK3226;
 
+  @Mock
+  private DiagnosisCodeRepository diagnosisCodeRepository;
+
   @BeforeEach
   void setUp() {
-    certificateModelFactoryFK3226 = new CertificateModelFactoryFK3226();
+    certificateModelFactoryFK3226 = new CertificateModelFactoryFK3226(diagnosisCodeRepository);
   }
 
   @Test
@@ -878,6 +888,114 @@ class CertificateModelFactoryFK3226Test {
 
         assertEquals(expectedConfiguration,
             certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+    }
+
+    @Nested
+    class QuestionDiagnos {
+
+      private static final ElementId ELEMENT_ID = new ElementId("58");
+
+      @Test
+      void shallIncludeId() {
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
+                certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeConfiguration() {
+        final var expectedConfiguration = ElementConfigurationDiagnosis.builder()
+            .id(new FieldId("58.1"))
+            .name(
+                "Diagnos eller diagnoser för det tillstånd som orsakar ett hot mot patientens liv")
+            .message(
+                ElementMessage.builder()
+                    .content(
+                        "Ange alla diagnoser som sammantaget medför ett påtagligt hot mot patientens liv.")
+                    .level(ElementMessageLevel.OBSERVE)
+                    .includedForStatuses(List.of(Status.DRAFT))
+                    .build()
+            )
+            .terminology(
+                List.of(
+                    new ElementDiagnosisTerminology("ICD_10_SE", "ICD-10-SE",
+                        "1.2.752.116.1.1.1.1.8")
+                )
+            )
+            .list(
+                List.of(
+                    new ElementDiagnosisListItem(new FieldId("huvuddiagnos")),
+                    new ElementDiagnosisListItem(new FieldId("diagnos2")),
+                    new ElementDiagnosisListItem(new FieldId("diagnos3")),
+                    new ElementDiagnosisListItem(new FieldId("diagnos4")),
+                    new ElementDiagnosisListItem(new FieldId("diagnos5"))
+                )
+            )
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+
+      @Test
+      void shallIncludeRules() {
+        final var expectedRules = List.of(
+            ElementRuleExpression.builder()
+                .id(ELEMENT_ID)
+                .type(ElementRuleType.MANDATORY)
+                .expression(
+                    new RuleExpression(
+                        "exists($huvuddiagnos)"
+                    )
+                )
+                .build(),
+            ElementRuleLimit.builder()
+                .id(ELEMENT_ID)
+                .type(ElementRuleType.TEXT_LIMIT)
+                .limit(
+                    new RuleLimit((short) 81)
+                )
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedRules,
+            certificateModel.elementSpecification(ELEMENT_ID).rules()
+        );
+      }
+
+      @Test
+      void shallIncludeValidations() {
+        final var expectedValidations = List.of(
+            ElementValidationDiagnosis.builder()
+                .mandatoryField(new FieldId("huvuddiagnos"))
+                .order(
+                    List.of(
+                        new FieldId("huvuddiagnos"),
+                        new FieldId("diagnos2"),
+                        new FieldId("diagnos3"),
+                        new FieldId("diagnos4"),
+                        new FieldId("diagnos5")
+                    )
+                )
+                .diagnosisCodeRepository(diagnosisCodeRepository)
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK3226.create();
+
+        assertEquals(expectedValidations,
+            certificateModel.elementSpecification(ELEMENT_ID).validations()
         );
       }
     }

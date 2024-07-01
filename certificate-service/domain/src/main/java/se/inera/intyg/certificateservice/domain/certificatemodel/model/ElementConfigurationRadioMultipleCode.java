@@ -16,6 +16,8 @@ public class ElementConfigurationRadioMultipleCode implements ElementConfigurati
   String name;
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.RADIO_MULTIPLE_CODE;
+  @Getter(onMethod = @__(@Override))
+  ElementMessage message;
   FieldId id;
   List<ElementConfigurationCode> list;
   ElementLayout elementLayout;

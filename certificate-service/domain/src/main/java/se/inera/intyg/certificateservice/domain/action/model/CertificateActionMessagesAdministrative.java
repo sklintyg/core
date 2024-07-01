@@ -53,7 +53,7 @@ public class CertificateActionMessagesAdministrative implements CertificateActio
 
   @Override
   public String getDescription(Optional<Certificate> optionalCertificate) {
-    return isEnabled(optionalCertificate, Optional.empty()) ? DESCRIPTION : null;
+    return isEnabled(optionalCertificate, Optional.empty()) ? null : DESCRIPTION;
   }
 
   @Override

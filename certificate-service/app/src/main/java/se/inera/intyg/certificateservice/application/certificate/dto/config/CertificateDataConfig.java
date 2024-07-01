@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @Type(value = CertificateDataConfigRadioBoolean.class, name = "UE_RADIO_BOOLEAN"),
     @Type(value = CertificateDataConfigMessage.class, name = "UE_MESSAGE"),
     @Type(value = CertificateDataConfigMedicalInvestigation.class, name = "UE_MEDICAL_INVESTIGATION"),
+    @Type(value = CertificateDataConfigDiagnoses.class, name = "UE_DIAGNOSES"),
 })
 public interface CertificateDataConfig {
 

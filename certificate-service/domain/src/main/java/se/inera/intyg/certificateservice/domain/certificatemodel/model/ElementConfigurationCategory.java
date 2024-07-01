@@ -15,6 +15,9 @@ public class ElementConfigurationCategory implements ElementConfiguration {
   ElementType type = ElementType.CATEGORY;
   @Getter(onMethod = @__(@Override))
   String description;
+  @Getter(onMethod = @__(@Override))
+  ElementMessage message;
+
 
   @Override
   public ElementValue emptyValue() {

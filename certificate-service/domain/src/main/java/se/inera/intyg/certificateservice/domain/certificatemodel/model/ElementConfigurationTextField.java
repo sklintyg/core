@@ -20,6 +20,8 @@ public class ElementConfigurationTextField implements ElementConfiguration {
   String header;
   @Getter(onMethod = @__(@Override))
   String label;
+  @Getter(onMethod = @__(@Override))
+  ElementMessage message;
   FieldId id;
 
   @Override

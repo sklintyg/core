@@ -13,6 +13,7 @@ public class ElementConfigurationMessage implements ElementConfiguration {
   String name;
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.MESSAGE;
+  @Getter(onMethod = @__(@Override))
   ElementMessage message;
 
   @Override

@@ -20,7 +20,8 @@ public class CertificateDataTextAreaConfigConverter implements CertificateDataCo
       Certificate certificate) {
     if (!(elementSpecification.configuration() instanceof ElementConfigurationTextArea configuration)) {
       throw new IllegalStateException(
-          "Invalid value type. Type was '%s'".formatted(elementSpecification.configuration().type())
+          "Invalid config type. Type was '%s'".formatted(
+              elementSpecification.configuration().type())
       );
     }
 

@@ -15,6 +15,8 @@ public class ElementConfigurationDate implements ElementConfiguration {
   String name;
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.DATE;
+  @Getter(onMethod = @__(@Override))
+  ElementMessage message;
   FieldId id;
   Period min;
   Period max;

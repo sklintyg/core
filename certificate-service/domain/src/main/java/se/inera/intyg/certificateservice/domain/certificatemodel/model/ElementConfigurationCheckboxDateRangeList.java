@@ -22,6 +22,9 @@ public class ElementConfigurationCheckboxDateRangeList implements ElementConfigu
   String label;
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.CHECKBOX_DATE_RANGE_LIST;
+  @Getter(onMethod = @__(@Override))
+  ElementMessage message;
+
   FieldId id;
   boolean hideWorkingHours;
   List<ElementConfigurationCode> dateRanges;

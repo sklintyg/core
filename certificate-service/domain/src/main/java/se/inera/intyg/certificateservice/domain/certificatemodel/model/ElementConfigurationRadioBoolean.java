@@ -14,6 +14,8 @@ public class ElementConfigurationRadioBoolean implements ElementConfiguration {
   String name;
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.RADIO_BOOLEAN;
+  @Getter(onMethod = @__(@Override))
+  ElementMessage message;
   FieldId id;
   String selectedText;
   String unselectedText;

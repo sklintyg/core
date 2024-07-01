@@ -18,6 +18,8 @@ public class ElementConfigurationCheckboxMultipleDate implements ElementConfigur
   String name;
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.CHECKBOX_MULTIPLE_DATE;
+  @Getter(onMethod = @__(@Override))
+  ElementMessage message;
   List<CheckboxDate> dates;
   FieldId id;
 

@@ -23,7 +23,8 @@ public class CertificateDataDateConfigConverter implements CertificateDataConfig
       Certificate certificate) {
     if (!(elementSpecification.configuration() instanceof ElementConfigurationDate configuration)) {
       throw new IllegalStateException(
-          "Invalid value type. Type was '%s'".formatted(elementSpecification.configuration().type())
+          "Invalid config type. Type was '%s'".formatted(
+              elementSpecification.configuration().type())
       );
     }
 

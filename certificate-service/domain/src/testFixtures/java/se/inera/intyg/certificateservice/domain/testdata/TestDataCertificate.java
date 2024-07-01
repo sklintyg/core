@@ -24,6 +24,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCo
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
@@ -166,6 +168,22 @@ public class TestDataCertificate {
                         ElementValueBoolean.builder()
                             .booleanId(new FieldId("53.1"))
                             .value(true)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("58"))
+                    .value(
+                        ElementValueDiagnosisList.builder()
+                            .diagnoses(
+                                List.of(
+                                    ElementValueDiagnosis.builder()
+                                        .code("A013")
+                                        .description("Paratyfoidfeber C")
+                                        .terminology("ICD_10_SE")
+                                        .build()
+                                )
+                            )
                             .build()
                     )
                     .build()

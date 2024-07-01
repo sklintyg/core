@@ -6,12 +6,14 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.Collections;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateMessageType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -23,11 +25,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisListItem;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
@@ -40,12 +44,14 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDiagnosis;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateElementRuleFactory;
@@ -54,8 +60,10 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.Certifi
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CodeSystemKvFkmu0001;
 
 @Component
+@RequiredArgsConstructor
 public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
 
+  private final DiagnosisCodeRepository diagnosisCodeRepositoy;
   private static final FieldId ENDAST_PALLIATIV_FIELD_ID = new FieldId("ENDAST_PALLIATIV");
   private static final FieldId AKUT_LIVSHOTANDE_FIELD_ID = new FieldId("AKUT_LIVSHOTANDE");
   private static final FieldId ANNAT_FIELD_ID = new FieldId("ANNAT");
@@ -82,6 +90,15 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
       "53");
   private static final FieldId FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_FIELD_ID = new FieldId(
       "53.1");
+  private static final FieldId DIAGNOSIS_FIELD_ID = new FieldId(
+      "58.1");
+  public static final ElementId DIAGNOSIS_ID = new ElementId("58");
+  public static final FieldId DIAGNOS_1 = new FieldId("huvuddiagnos");
+  private static final FieldId DIAGNOS_2 = new FieldId("diagnos2");
+  private static final FieldId DIAGNOS_3 = new FieldId("diagnos3");
+  private static final FieldId DIAGNOS_4 = new FieldId("diagnos4");
+  private static final FieldId DIAGNOS_5 = new FieldId("diagnos5");
+  private static final short DIAGNOSIS_CODE_LIMIT = (short) 81;
   @Value("${certificate.model.fk3226.v1_0.active.from}")
   private LocalDateTime activeFrom;
   private static final String TYPE = "fk3226";
@@ -290,6 +307,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     )
                 ),
                 categoryHot(
+                    questionDiagnos(),
                     questionPatientBehandlingOchVardsituation(
                         questionNarAktivaBehandlingenAvslutades(),
                         questionNarTillstandetBlevAkutLivshotande(),
@@ -309,6 +327,60 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .pdfTemplatePath(PDF_FK_3226_PDF)
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7472_PDF)
         .schematronPath(SCHEMATRON_PATH)
+        .build();
+  }
+
+
+  private ElementSpecification questionDiagnos() {
+    return ElementSpecification.builder()
+        .id(DIAGNOSIS_ID)
+        .configuration(
+            ElementConfigurationDiagnosis.builder()
+                .id(DIAGNOSIS_FIELD_ID)
+                .name(
+                    "Diagnos eller diagnoser för det tillstånd som orsakar ett hot mot patientens liv")
+                .message(
+                    ElementMessage.builder()
+                        .content(
+                            "Ange alla diagnoser som sammantaget medför ett påtagligt hot mot patientens liv.")
+                        .level(ElementMessageLevel.OBSERVE)
+                        .includedForStatuses(List.of(Status.DRAFT))
+                        .build()
+                )
+                .terminology(
+                    List.of(
+                        CodeSystemIcd10Se.terminology()
+                    )
+                )
+                .list(
+                    List.of(
+                        new ElementDiagnosisListItem(DIAGNOS_1),
+                        new ElementDiagnosisListItem(DIAGNOS_2),
+                        new ElementDiagnosisListItem(DIAGNOS_3),
+                        new ElementDiagnosisListItem(DIAGNOS_4),
+                        new ElementDiagnosisListItem(DIAGNOS_5)
+                    )
+                )
+                .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.mandatoryExist(DIAGNOSIS_ID,
+                    DIAGNOS_1),
+                CertificateElementRuleFactory.limit(DIAGNOSIS_ID, DIAGNOSIS_CODE_LIMIT)
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationDiagnosis.builder()
+                    .mandatoryField(DIAGNOS_1)
+                    .order(
+                        List.of(DIAGNOS_1, DIAGNOS_2, DIAGNOS_3, DIAGNOS_4, DIAGNOS_5)
+                    )
+                    .diagnosisCodeRepository(diagnosisCodeRepositoy)
+                    .build()
+            )
+        )
         .build();
   }
 
