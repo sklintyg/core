@@ -26,6 +26,8 @@ public class ElementConfigurationMedicalInvestigationList implements ElementConf
   String header;
   @Getter(onMethod = @__(@Override))
   String label;
+  @Getter(onMethod = @__(@Override))
+  ElementMessage message;
   FieldId id;
   String typeText;
   String dateText;

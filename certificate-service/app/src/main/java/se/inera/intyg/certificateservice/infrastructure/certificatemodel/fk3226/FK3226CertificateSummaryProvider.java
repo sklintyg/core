@@ -4,10 +4,9 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CertificateModelFactoryFK3226.DIAGNOS_1;
 
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummary;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummaryProvider;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.DiagnosisSummaryValue;
 
 public class FK3226CertificateSummaryProvider implements CertificateSummaryProvider {
 
@@ -24,27 +23,6 @@ public class FK3226CertificateSummaryProvider implements CertificateSummaryProvi
       return "";
     }
 
-    final var elementDataDiagnosis = certificate.elementData()
-        .stream()
-        .filter(elementData -> DIAGNOSIS_ID.equals(elementData.id()))
-        .findFirst();
-
-    if (elementDataDiagnosis.isEmpty()) {
-      return "";
-    }
-
-    if (!(elementDataDiagnosis.get()
-        .value() instanceof ElementValueDiagnosisList elementValueDiagnosisList)) {
-      throw new IllegalStateException(
-          "Invalid value type. Type was '%s'".formatted(elementDataDiagnosis.get().value())
-      );
-    }
-
-    return elementValueDiagnosisList.diagnoses()
-        .stream()
-        .filter(elementValueDiagnosis -> elementValueDiagnosis.id().equals(DIAGNOS_1))
-        .findFirst()
-        .map(ElementValueDiagnosis::description)
-        .orElse("");
+    return DiagnosisSummaryValue.value(DIAGNOSIS_ID, DIAGNOS_1, certificate);
   }
 }
