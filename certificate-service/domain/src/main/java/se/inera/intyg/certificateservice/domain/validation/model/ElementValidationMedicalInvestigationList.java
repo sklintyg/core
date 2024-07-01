@@ -37,7 +37,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
 
     if (medicalInvestigationList.list().isEmpty()
         || medicalInvestigationList.list().stream()
-            .anyMatch(this::isMedicalInvestigationNotInitialized)) {
+        .anyMatch(this::isMedicalInvestigationNotInitialized)) {
       return Collections.emptyList();
     }
 
@@ -63,7 +63,9 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
     }
 
     if (hasIncorrectRowOrder(medicalInvestigationList)) {
-      return Collections.emptyList();
+      return Boolean.TRUE.equals(isIncomplete(medicalInvestigationList.list().get(0)))
+          ? getRowEmptyFieldErrors(
+          medicalInvestigationList.list().get(0), data, categoryId) : Collections.emptyList();
     }
 
     if (isEmpty(medicalInvestigationList.list().get(0)) || isIncomplete(
@@ -142,7 +144,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
 
     final var wrongRowOrderErrors = medicalInvestigationList.list().stream()
         .filter(row -> (isEmpty(row) && hasFilledInRowBelow(medicalInvestigationList, row))
-                       || (isIncomplete(row) && medicalInvestigationList.list().indexOf(row) != 0))
+            || (isIncomplete(row) && medicalInvestigationList.list().indexOf(row) != 0))
         .map(medicalInvestigation -> getRowEmptyFieldErrors(medicalInvestigation, data, categoryId))
         .toList();
 
@@ -209,9 +211,9 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
 
   private Boolean isIncomplete(MedicalInvestigation medicalInvestigation) {
     return !isEmpty(medicalInvestigation)
-           && (isDateEmpty(medicalInvestigation)
-               || isTypeEmpty(medicalInvestigation)
-               || isSourceEmpty(medicalInvestigation));
+        && (isDateEmpty(medicalInvestigation)
+        || isTypeEmpty(medicalInvestigation)
+        || isSourceEmpty(medicalInvestigation));
   }
 
   private Boolean isEmpty(MedicalInvestigation medicalInvestigation) {
@@ -219,18 +221,18 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
       return true;
     }
     return isDateEmpty(medicalInvestigation)
-           && isTypeEmpty(medicalInvestigation)
-           && isSourceEmpty(medicalInvestigation);
+        && isTypeEmpty(medicalInvestigation)
+        && isSourceEmpty(medicalInvestigation);
   }
 
   private static boolean isSourceEmpty(MedicalInvestigation medicalInvestigation) {
     return medicalInvestigation.informationSource().text() == null
-           || medicalInvestigation.informationSource().text().isEmpty();
+        || medicalInvestigation.informationSource().text().isEmpty();
   }
 
   private static boolean isTypeEmpty(MedicalInvestigation medicalInvestigation) {
     return medicalInvestigation.investigationType().code() == null
-           || medicalInvestigation.investigationType().code().isEmpty();
+        || medicalInvestigation.investigationType().code().isEmpty();
   }
 
   private static boolean isDateEmpty(MedicalInvestigation medicalInvestigation) {
@@ -291,8 +293,8 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
   private boolean isMedicalInvestigationNotInitialized(
       MedicalInvestigation medicalInvestigation) {
     return medicalInvestigation.date() == null
-           || medicalInvestigation.investigationType() == null
-           || medicalInvestigation.informationSource() == null;
+        || medicalInvestigation.investigationType() == null
+        || medicalInvestigation.informationSource() == null;
   }
 
 }
