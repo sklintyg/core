@@ -310,14 +310,16 @@ class CertificateModelFactoryFK7809Test {
 
     @Test
     void shallIncludeCertificateActionMessagesAdministrative() {
-      final var expectedType = CertificateActionType.MESSAGES_ADMINISTRATIVE;
+      final var expected = CertificateActionSpecification.builder()
+          .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
+          .enabled(true)
+          .build();
 
       final var certificateModel = certificateModelFactoryFK7809.create();
 
-      assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-              actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-          ),
-          "Expected type: %s".formatted(expectedType));
+      assertTrue(certificateModel.certificateActionSpecifications()
+              .stream().anyMatch(expected::equals),
+          "Expected type: %s".formatted(expected));
     }
 
     @Test
@@ -1081,8 +1083,9 @@ class CertificateModelFactoryFK7809Test {
             .description(
                 """
                     Beskriv de aktivitetsbegränsningar som du bedömer att patienten har. Beskriv även om din bedömning är baserad på observationer, anamnes eller utredning gjord av någon annan. Någon annan kan till exempel vara psykolog, arbetsterapeut, audionom, syn- eller hörselpedagog.
-                                        
-                    I beskrivningen kan du utgå från aktiviteter inom områden som till exempel kommunikation, förflyttning, personlig vård och hemliv. Ange om möjligt svårighetsgraden på aktivitetsbegränsningarna.""")
+                    \s
+                    I beskrivningen kan du utgå från aktiviteter inom områden som till exempel kommunikation, förflyttning, personlig vård och hemliv. Ange om möjligt svårighetsgraden på aktivitetsbegränsningarna.
+                    """)
             .build();
 
         final var certificateModel = certificateModelFactoryFK7809.create();

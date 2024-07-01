@@ -139,7 +139,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
 
   private static final String PREAMBLE_TEXT =
       "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
-          + "Har du frågor kontaktar du den som skrivit ditt intyg.";
+      + "Har du frågor kontaktar du den som skrivit ditt intyg.";
   private static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk7809/schematron/lumek.v1.sch");
 
@@ -219,6 +219,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
+                    .enabled(true)
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.RECEIVE_COMPLEMENT)
@@ -298,8 +299,11 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
             ElementConfigurationCategory.builder()
                 .name("Aktivitetsbegränsningar")
                 .description(
-                    "Beskriv de aktivitetsbegränsningar som du bedömer att patienten har. Beskriv även om din bedömning är baserad på observationer, anamnes eller utredning gjord av någon annan. Någon annan kan till exempel vara psykolog, arbetsterapeut, audionom, syn- eller hörselpedagog.\n"
-                        + "\nI beskrivningen kan du utgå från aktiviteter inom områden som till exempel kommunikation, förflyttning, personlig vård och hemliv. Ange om möjligt svårighetsgraden på aktivitetsbegränsningarna.")
+                    """
+                        Beskriv de aktivitetsbegränsningar som du bedömer att patienten har. Beskriv även om din bedömning är baserad på observationer, anamnes eller utredning gjord av någon annan. Någon annan kan till exempel vara psykolog, arbetsterapeut, audionom, syn- eller hörselpedagog.
+                        \s
+                        I beskrivningen kan du utgå från aktiviteter inom områden som till exempel kommunikation, förflyttning, personlig vård och hemliv. Ange om möjligt svårighetsgraden på aktivitetsbegränsningarna.
+                        """)
                 .build()
         )
         .children(
