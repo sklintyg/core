@@ -214,9 +214,6 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     .certificateActionType(CertificateActionType.RENEW)
                     .build(),
                 CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.SEND_AFTER_SIGN)
-                    .build(),
-                CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.MESSAGES)
                     .build(),
                 CertificateActionSpecification.builder()
