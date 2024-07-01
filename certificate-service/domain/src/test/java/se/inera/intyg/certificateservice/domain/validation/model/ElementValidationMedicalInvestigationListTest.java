@@ -597,6 +597,40 @@ class ElementValidationMedicalInvestigationListTest {
       assertEquals(expectedValidationErrors.size(), validationErrors.size());
       assertEquals(expectedValidationErrors, validationErrors);
     }
+
+    @Test
+    void shouldReturnWrongOrderAndMissingFieldsIfFirstRowIsIncomplete() {
+      validation = ElementValidationMedicalInvestigationList.builder()
+          .mandatory(true)
+          .build();
+      final var categoryId = Optional.of(CATEGORY_ID);
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueMedicalInvestigationList.builder()
+                  .id(FIELD_ID)
+                  .list(
+                      List.of(
+                          INCOMPLETE_MEDICAL_INV_TEXT,
+                          COMPLETE_MEDICAL_INV_2,
+                          COMPLETE_MEDICAL_INV
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      final var expectedValidationErrors = List.of(
+          getExpectedValidationError("Ange ett svar.",
+              INCOMPLETE_MEDICAL_INV_TEXT.informationSource().textId()),
+          getExpectedValidationError("Fyll i fälten uppifrån och ned.",
+              FIELD_ID)
+      );
+
+      final var validationErrors = validation.validate(elementData, categoryId);
+      assertEquals(expectedValidationErrors.size(), validationErrors.size());
+      assertEquals(expectedValidationErrors, validationErrors);
+    }
   }
 
   @Nested
