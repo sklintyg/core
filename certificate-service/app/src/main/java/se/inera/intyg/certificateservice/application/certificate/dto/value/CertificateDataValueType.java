@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate.dto.value;
 
 public enum CertificateDataValueType {
-  DATE, TEXT, DATE_RANGE, DATE_RANGE_LIST, DATE_LIST, CODE, BOOLEAN
+  DATE, TEXT, DATE_RANGE, DATE_RANGE_LIST, DATE_LIST, CODE, BOOLEAN,
+  MEDICAL_INVESTIGATION, MEDICAL_INVESTIGATION_LIST
 }

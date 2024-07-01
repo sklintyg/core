@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = MappedElementValueDateList.class, name = "DATE_LIST"),
         @JsonSubTypes.Type(value = MappedElementValueCode.class, name = "CODE"),
         @JsonSubTypes.Type(value = MappedElementValueBoolean.class, name = "BOOLEAN"),
+        @JsonSubTypes.Type(value = MappedElementValueMedicalInvestigationList.class, name = "MEDICAL_INVESTIGATION_LIST"),
     }
 )
 public interface MappedElementValue {
