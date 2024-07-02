@@ -1,7 +1,15 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.ANNAN_KROPPSILIG_FUNKTION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.HORSELFUNKTION;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.INTELLEKTUELL_FUNKTION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.KOMMUNIKATION_SOCIAL_INTERAKTION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.KOORDINATION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.PSYKISK_FUNKTION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.SINNESFUNKTION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.SYNFUNKTION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.UPPMARKSAMHET;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemKvFkmu0005.getAllCodes;
 
 import java.time.LocalDateTime;
@@ -45,6 +53,7 @@ import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCodeList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDiagnosis;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationMedicalInvestigationList;
@@ -175,33 +184,52 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
       "9");
   private static final FieldId FUNKTIONSNEDSATTNING_UPPMAKRMSAHET_ID = new FieldId("10");
   private static final FieldId FUNKTIONSNEDSATTNING_PSYKISK_FUNKTION_ID = new FieldId("11");
-  private static final FieldId FUNKTIONSNEDSATTNING_HÖRSELFUNKTION_ID = new FieldId("48");
+  private static final FieldId FUNKTIONSNEDSATTNING_HORSELFUNKTION_ID = new FieldId("48");
   private static final FieldId FUNKTIONSNEDSATTNING_SYNFUNKTION_ID = new FieldId("49");
   private static final FieldId FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID = new FieldId("12");
   private static final FieldId FUNKTIONSNEDSATTNING_KOORDINATION_ID = new FieldId("13");
   private static final FieldId FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID = new FieldId(
       "14");
-  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_INTELLEKTUELL_FUNKTION_ID = new FieldId(
+  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_INTELLEKTUELL_FUNKTION_ID = new ElementId(
       "8.1");
-  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID = new FieldId(
+  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID = new ElementId(
       "9.1");
-  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_UPPMAKRMSAHET_ID = new FieldId(
+  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_UPPMAKRMSAHET_ID = new ElementId(
       "10.1");
-  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_ID = new FieldId(
+  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_ID = new ElementId(
       "11.1");
-  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_HÖRSELFUNKTION_ID = new FieldId(
+  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_HORSELFUNKTION_ID = new ElementId(
       "48.1");
-  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_SYNFUNKTION_ID = new FieldId("49.1");
-  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_SINNESFUNKTION_ID = new FieldId(
+  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_SYNFUNKTION_ID = new ElementId(
+      "49.1");
+  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_SINNESFUNKTION_ID = new ElementId(
       "12.1");
-  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_ID = new FieldId(
+  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_ID = new ElementId(
       "13.1");
-  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_ANNAN_KROPPSILIG_FUNKTION_ID = new FieldId(
+  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_ANNAN_KROPPSILIG_FUNKTION_ID = new ElementId(
+      "14.1");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_INTELLEKTUELL_FUNKTION_FIELD_ID = new FieldId(
+      "8.1");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_FIELD_ID = new FieldId(
+      "9.1");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_UPPMAKRMSAHET_FIELD_ID = new FieldId(
+      "10.1");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_FIELD_ID = new FieldId(
+      "11.1");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_HORSELFUNKTION_FIELD_ID = new FieldId(
+      "48.1");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_SYNFUNKTION_FIELD_ID = new FieldId(
+      "49.1");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_SINNESFUNKTION_FIELD_ID = new FieldId(
+      "12.1");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_FIELD_ID = new FieldId(
+      "13.1");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_ANNAN_KROPPSILIG_FUNKTION_FIELD_ID = new FieldId(
       "14.1");
 
   private static final String PREAMBLE_TEXT =
       "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
-          + "Har du frågor kontaktar du den som skrivit ditt intyg.";
+      + "Har du frågor kontaktar du den som skrivit ditt intyg.";
   private static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk7809/schematron/lumek.v1.sch");
 
@@ -321,7 +349,16 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     questionDiagnosHistorik()
                 ),
                 categoryFunktionsnedsattning(
-
+                    questionFunkionsnedsattning(),
+                    questionIntellektuellFunktionMotivering(),
+                    questionKommunikationSocialInteraktionMotivering(),
+                    questionMotiveringUppmarksamhetMotivering(),
+                    questionPsykiskFunktionMotivering(),
+                    questionHorselFunktionMotivering(),
+                    questionSynfunktionMotivering(),
+                    questionSinnesfunktionMotivering(),
+                    questionKoordinationMotivering(),
+                    questionAnnanKroppsligFunktionMotivering()
                 ),
                 categoryAktivitetsbegransningar(
                     questionAktivitetsbegransningar()
@@ -382,15 +419,15 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                 .name("Funktionsnedsättning")
                 .description(
                     "Beskriv de funktionsnedsättningar som patienten har. Ange om din bedömning är baserad på observationer, undersökningsfynd eller testresultat. Det kan till exempel vara:"
-                        + "<ul>"
-                        + "<li>avvikelser i somatiskt och psykiskt status</li>"
-                        + "<li>röntgen- och laboratoriefynd</li>"
-                        + "<li>resultat av kliniskt fysiologiska undersökningar</li>"
-                        + "<li>andra testresultat, exempelvis neuropsykologiska.</li>"
-                        + "</ul>"
-                        + "Ange även vilka uppgifter som är baserade på anamnes."
-                        + "Ange om möjligt grad av funktionsnedsättning (till exempel lätt, måttlig, stor eller total).\n"
-                        + "Funktionsområdenas hjälptexter följer väsentligen ICF men då kategorierna i läkarutlåtandena är färre har vissa förenklingar gjorts."
+                    + "<ul>"
+                    + "<li>avvikelser i somatiskt och psykiskt status</li>"
+                    + "<li>röntgen- och laboratoriefynd</li>"
+                    + "<li>resultat av kliniskt fysiologiska undersökningar</li>"
+                    + "<li>andra testresultat, exempelvis neuropsykologiska.</li>"
+                    + "</ul>"
+                    + "Ange även vilka uppgifter som är baserade på anamnes."
+                    + "Ange om möjligt grad av funktionsnedsättning (till exempel lätt, måttlig, stor eller total).\n"
+                    + "Funktionsområdenas hjälptexter följer väsentligen ICF men då kategorierna i läkarutlåtandena är färre har vissa förenklingar gjorts."
                 )
                 .build()
         )
@@ -970,7 +1007,16 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
 
   private ElementSpecification questionFunkionsnedsattning() {
     final var checkboxes = List.of(
-        getCodeConfig(FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID, INTELLEKTUELL_FUNKTION)
+        getCodeConfig(FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID, INTELLEKTUELL_FUNKTION),
+        getCodeConfig(FUNKTIONSNEDSATTNING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID,
+            KOMMUNIKATION_SOCIAL_INTERAKTION),
+        getCodeConfig(FUNKTIONSNEDSATTNING_UPPMAKRMSAHET_ID, UPPMARKSAMHET),
+        getCodeConfig(FUNKTIONSNEDSATTNING_PSYKISK_FUNKTION_ID, PSYKISK_FUNKTION),
+        getCodeConfig(FUNKTIONSNEDSATTNING_HORSELFUNKTION_ID, HORSELFUNKTION),
+        getCodeConfig(FUNKTIONSNEDSATTNING_SYNFUNKTION_ID, SYNFUNKTION),
+        getCodeConfig(FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID, SINNESFUNKTION),
+        getCodeConfig(FUNKTIONSNEDSATTNING_KOORDINATION_ID, KOORDINATION),
+        getCodeConfig(FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID, ANNAN_KROPPSILIG_FUNKTION)
     );
 
     return ElementSpecification.builder()
@@ -985,19 +1031,210 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(DIAGNOSIS_ID,
-                    DIAGNOS_1),
-                CertificateElementRuleFactory.limit(DIAGNOSIS_ID, DIAGNOSIS_CODE_LIMIT)
+                CertificateElementRuleFactory.mandatory(
+                    FUNKTIONSNEDSATTNING_ID, List.of(
+                        FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID,
+                        FUNKTIONSNEDSATTNING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID,
+                        FUNKTIONSNEDSATTNING_UPPMAKRMSAHET_ID,
+                        FUNKTIONSNEDSATTNING_PSYKISK_FUNKTION_ID,
+                        FUNKTIONSNEDSATTNING_HORSELFUNKTION_ID,
+                        FUNKTIONSNEDSATTNING_SYNFUNKTION_ID,
+                        FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID,
+                        FUNKTIONSNEDSATTNING_KOORDINATION_ID,
+                        FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID
+                    )
+                )
             )
         )
         .validations(
             List.of(
-                ElementValidationDiagnosis.builder()
-                    .mandatoryField(DIAGNOS_1)
-                    .order(
-                        List.of(DIAGNOS_1, DIAGNOS_2, DIAGNOS_3, DIAGNOS_4, DIAGNOS_5)
-                    )
-                    .diagnosisCodeRepository(diagnosisCodeRepositoy)
+                ElementValidationCodeList.builder()
+                    .mandatory(true)
+                    .build()
+            )
+        )
+        .build();
+  }
+
+  private static ElementSpecification questionIntellektuellFunktionMotivering() {
+    return getFunktionsnedsattningMotivering(
+        FUNKTIONSNEDSATTNING_MOTIVERING_INTELLEKTUELL_FUNKTION_ID,
+        FUNKTIONSNEDSATTNING_MOTIVERING_INTELLEKTUELL_FUNKTION_FIELD_ID,
+        FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID,
+        "Intellektuell funktion",
+        "Beskriv eventuella iakttagelser alternativt testresultat från psykologutredning",
+        "Med intellektuell funktion, teoretisk begåvning eller intelligens menas förmågan att tänka logiskt. För att bedöma nivån krävs det att test utförts av en psykolog.");
+  }
+
+  private static ElementSpecification questionKommunikationSocialInteraktionMotivering() {
+    return getFunktionsnedsattningMotivering(
+        FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID,
+        FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_FIELD_ID,
+        FUNKTIONSNEDSATTNING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID,
+        "Övergripande psykosociala funktioner",
+        "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.",
+        """
+            Med psykosociala funktioner menas
+            <ul>
+            <li>förmågan till emotionell kontakt</li>
+            <li>social ömsesidighet</li>
+            <li>samspel</li>
+            <li>förmågan att på ett teoretiskt plan kunna sätta sig in i hur andra människor tänker och känner, även om man inte har varit med om samma sak själv.</li>
+            </ul>
+            """
+    );
+  }
+
+  private static ElementSpecification questionMotiveringUppmarksamhetMotivering() {
+    return getFunktionsnedsattningMotivering(
+        FUNKTIONSNEDSATTNING_MOTIVERING_UPPMAKRMSAHET_ID,
+        FUNKTIONSNEDSATTNING_MOTIVERING_UPPMAKRMSAHET_FIELD_ID,
+        FUNKTIONSNEDSATTNING_UPPMAKRMSAHET_ID,
+        "Uppmärksamhet, koncentration och exekutiv funktion",
+        "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.",
+        "Uppmärksamhet handlar om förmågan att rikta fokus på rätt sak vid rätt tillfälle samt att skifta, fördela och vidmakthålla uppmärksamheten. En person behöver även viljemässigt kunna rikta sin uppmärksamhet under en längre tid. Med exekutiv funktion menas förmågan att planera, initiera, genomföra, korrigera och avsluta en handling."
+    );
+  }
+
+  private static ElementSpecification questionPsykiskFunktionMotivering() {
+    return getFunktionsnedsattningMotivering(
+        FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_ID,
+        FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_FIELD_ID,
+        FUNKTIONSNEDSATTNING_PSYKISK_FUNKTION_ID,
+        "Annan psykisk funktion",
+        "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.",
+        """
+            Med annan psykisk funktion menas exempelvis
+            <ul>
+            <li>stämningsläge, depressivitet, ångest och reglering av affekter</li>
+            <li>motivation, energinivå, impulskontroll och initiativförmåga</li>
+            <li>kognitiv flexibilitet, omdöme och insikt</li>
+            <li>minnesfunktioner</li>
+            <li>sömnfunktioner</li>
+            <li>vanföreställningar och tvångstankar</li>
+            <li>psykiska språkfunktioner</li>
+            <li>orientering i tid samt till plats, situation och person.</li>
+            </ul>
+            """
+    );
+  }
+
+  private static ElementSpecification questionHorselFunktionMotivering() {
+    return getFunktionsnedsattningMotivering(
+        FUNKTIONSNEDSATTNING_MOTIVERING_HORSELFUNKTION_ID,
+        FUNKTIONSNEDSATTNING_MOTIVERING_HORSELFUNKTION_FIELD_ID,
+        FUNKTIONSNEDSATTNING_HORSELFUNKTION_ID,
+        "Hörselfunktion",
+        "Beskriv funktionsnedsättningen och undersökningsfynd.",
+        """
+            Hörselfunktion handlar om förmågan att förnimma närvaro av ljud och att urskilja lokalisering, tonhöjd, ljudstyrka och ljudkvalitet.
+                                        
+            För att Försäkringskassan ska kunna bedöma om det finns rätt till garanterad nivå av merkostnadsersättning är följande information viktig. 
+                  
+            Beskriv eventuell nedsättning av hörseln utifrån hörselmätningar och öronstatus. Motivera konstaterade diagnoser utifrån hörseltesterna. Värdera sambandet mellan hörseltesterna och eventuella avvikelser. Beskriv förmågan till kommunikation och taluppfattning utifrån observation och resultat av mätningar eller tester. Skriv om objektiva hörselmätningar har gjorts. Ange vilken typ av hörhjälpmedel patienten använder, och om hen erbjudits utredning för cochleaimplantat (CI).
+                    
+            Du kan skicka in
+            <ul>
+            <li>resultat av hörseltester – tonaudiogram med ben och luftledning</li>
+            <li>resultat av maximal taluppfattning med angiven stimuleringsnivå i decibel (dB)</li>
+            <li>taluppfattning i ljudfält 65dB med optimalt anpassade hörhjälpmedel</li>
+            <li>resultat av eventuella objektiva hörselmätningar</li>
+            <li>underlag från andra bedömningar som gäller kommunikation.</li>                                              
+            </ul>
+            """
+    );
+  }
+
+  private static ElementSpecification questionSynfunktionMotivering() {
+    return getFunktionsnedsattningMotivering(
+        FUNKTIONSNEDSATTNING_MOTIVERING_SYNFUNKTION_ID,
+        FUNKTIONSNEDSATTNING_MOTIVERING_SYNFUNKTION_FIELD_ID,
+        FUNKTIONSNEDSATTNING_SYNFUNKTION_ID,
+        "Synfunktion",
+        "Beskriv funktionsnedsättningen och undersökningsfynd.",
+        """
+            Synfunktion handlar om förmågan att förnimma närvaro av ljus och synintryckets form, storlek, utformning och färg. För att Försäkringskassan ska kunna bedöma om det finns rätt till garanterad nivå av merkostnadsersättning är följande information viktig.
+                                        
+            Beskriv nedsättningen av synen:
+            <ul>
+            <li>synskärpa på långt håll med bästa korrektion</li>
+            <li>synfält – du kan skicka in en kopia av perimetri eller beskriva synfältet på annat sätt till exempel enligt Donders metod.</li>
+            <li>andra synfunktioner som till exempel förmåga till samsyn, dubbelseende, nystagmus, mörkerseende, färgseende, konstraseende, bländningskänslighet och perception.</li>                                            
+            </ul>                            
+            Beskriv:
+            <ul>
+            <li>personens förmåga att orientera sig och förflytta sig med hjälp av synen</li>                                
+            <li>hur stora svårigheter personen har att orientera sig och förflytta sig i en främmande miljö.</li>                                
+            </ul>
+            Bedöm sambandet mellan svårigheterna och den nedsatta synfunktionen. Ange den ledsagning eller hjälpmedel som personen behöver när hen ska förflytta sig. Det kan till exempel vara markeringskäpp, teknikkäpp eller ledarhund.                       
+            """
+    );
+  }
+
+  private static ElementSpecification questionSinnesfunktionMotivering() {
+    return getFunktionsnedsattningMotivering(
+        FUNKTIONSNEDSATTNING_MOTIVERING_SINNESFUNKTION_ID,
+        FUNKTIONSNEDSATTNING_MOTIVERING_SINNESFUNKTION_FIELD_ID,
+        FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID,
+        "Övriga sinnesfunktioner och smärta",
+        "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.",
+        "Med övriga sinnesfunktioner menas exempelvis känslighet eller upplevelse av obehag vid ljud, ljus, temperatur, beröring, smak eller lukt. Med smärta menas förnimmelse av en obehaglig känsla som tyder på tänkbar eller faktisk skada i någon del av kroppen. Det innefattar förnimmelser av generell eller lokal smärta i en eller flera kroppsdelar, eller i ett dermatom (hudavsnitt). Det kan till exempel vara huggande, brännande, molande smärta och värk."
+    );
+  }
+
+  private static ElementSpecification questionKoordinationMotivering() {
+    return getFunktionsnedsattningMotivering(
+        FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_ID,
+        FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_FIELD_ID,
+        FUNKTIONSNEDSATTNING_KOORDINATION_ID,
+        "Balans, koordination och motorik",
+        "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.",
+        "Med balans menas kroppens balansfunktion och förnimmelse av kroppsställning (positionsuppfattning). Med koordination menas till exempel ögahandkoordination, gångkoordination och att samordna rörelser av armar och ben. Med motorik menas fin- och grovmotorik eller till exempel munmotorik.");
+  }
+
+  private static ElementSpecification questionAnnanKroppsligFunktionMotivering() {
+    return getFunktionsnedsattningMotivering(
+        FUNKTIONSNEDSATTNING_MOTIVERING_ANNAN_KROPPSILIG_FUNKTION_ID,
+        FUNKTIONSNEDSATTNING_MOTIVERING_ANNAN_KROPPSILIG_FUNKTION_FIELD_ID,
+        FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID,
+        "Annan kroppslig funktion",
+        "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.",
+        "Med annan kroppslig funktion menas till exempel andningsfunktion, matsmältnings- och ämnesomsättningsfunktion samt blås- och tarmfunktion.");
+  }
+
+
+  private static ElementSpecification getFunktionsnedsattningMotivering(ElementId questionId,
+      FieldId questionFieldId, FieldId parentFieldId, String name,
+      String label, String description) {
+    return ElementSpecification.builder()
+        .id(questionId)
+        .configuration(
+            ElementConfigurationTextArea.builder()
+                .id(questionFieldId)
+                .name(name)
+                .label(label)
+                .description(description)
+                .build())
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.limit(
+                    questionId,
+                    (short) 4000),
+                CertificateElementRuleFactory.mandatory(
+                    questionId,
+                    questionFieldId
+                ),
+                CertificateElementRuleFactory.show(
+                    FUNKTIONSNEDSATTNING_ID,
+                    parentFieldId
+                )
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationText.builder()
+                    .mandatory(true)
+                    .limit(4000)
                     .build()
             )
         )
