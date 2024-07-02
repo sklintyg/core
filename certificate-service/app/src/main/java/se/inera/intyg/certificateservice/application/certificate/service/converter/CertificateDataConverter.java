@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.application.certificate.service.converter;
 
 import static se.inera.intyg.certificateservice.domain.certificate.model.Status.DRAFT;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType.CATEGORY;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType.ISSUING_UNIT;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType.MESSAGE;
 
@@ -74,6 +75,7 @@ public class CertificateDataConverter {
     final var certificateDataElementHashMap = new HashMap<String, CertificateDataElement>();
     final var questionId = elementSpecification.id().id();
     final var value = elementIdElementValueMap.getOrDefault(elementSpecification.id(), null);
+
     final var index = atomicInteger.incrementAndGet();
 
     final var children = toCertificateDataElementMap(
@@ -145,7 +147,7 @@ public class CertificateDataConverter {
 
   private CertificateDataValue getValue(ElementSpecification elementSpecification,
       ElementValue elementValue) {
-    if (ElementType.CATEGORY.equals(elementSpecification.configuration().type())
+    if (CATEGORY.equals(elementSpecification.configuration().type())
         || ElementType.MESSAGE.equals(elementSpecification.configuration().type())) {
       return null;
     }
@@ -178,6 +180,8 @@ public class CertificateDataConverter {
       Map<String, String> childParentMap, Certificate certificate) {
     return elementSpecifications.stream()
         .filter(removeMessagesIfNotUnsigned(certificate.status()))
+        .filter(
+            removeQuestionIfNotDraftWithoutValue(elementIdElementValueMap, certificate).negate())
         .flatMap(
             specification -> {
               final var dataElementMap = convertData(
@@ -187,9 +191,18 @@ public class CertificateDataConverter {
                   childParentMap,
                   certificate
               );
+
               return Stream.of(dataElementMap.entrySet());
             }
         );
+  }
+
+  private static Predicate<ElementSpecification> removeQuestionIfNotDraftWithoutValue(
+      Map<ElementId, ElementValue> elementIdElementValueMap,
+      Certificate certificate) {
+    return specification -> !certificate.isDraft()
+        && !specification.configuration().type().equals(CATEGORY)
+        && !elementIdElementValueMap.containsKey(specification.id());
   }
 
   private Stream<Map.Entry<String, String>> mapChildrenToParents(ElementSpecification parent,
