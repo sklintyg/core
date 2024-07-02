@@ -38,6 +38,7 @@ class ElementValidationDiagnosisTest {
   private static final FieldId DIAGNOS_THREE = new FieldId("diagnos3");
   private static final FieldId DIAGNOS_FOUR = new FieldId("diagnos4");
   private static final FieldId DIAGNOS_FIVE = new FieldId("diagnos5");
+  private static final String DESCRIPTION = "description";
   @Mock
   DiagnosisCodeRepository diagnosisCodeRepository;
   ElementValidationDiagnosis elementValidationDiagnosis;
@@ -207,7 +208,7 @@ class ElementValidationDiagnosisTest {
               .build(),
           ValidationError.builder()
               .elementId(ELEMENT_ID)
-              .fieldId(new FieldId(DIAGNOS_FOUR.value() + ".description"))
+              .fieldId(new FieldId(DIAGNOS_FOUR.value()))
               .categoryId(CATEGORY_ELEMENT_ID.orElseThrow())
               .message(new ErrorMessage("Ange diagnosbeskrivning."))
               .build(),
@@ -219,7 +220,7 @@ class ElementValidationDiagnosisTest {
               .build(),
           ValidationError.builder()
               .elementId(ELEMENT_ID)
-              .fieldId(new FieldId(DIAGNOS_TWO.value() + ".description"))
+              .fieldId(new FieldId(DIAGNOS_TWO.value()))
               .categoryId(CATEGORY_ELEMENT_ID.orElseThrow())
               .message(new ErrorMessage("Ange diagnosbeskrivning."))
               .build()
@@ -234,14 +235,17 @@ class ElementValidationDiagnosisTest {
                           ElementValueDiagnosis.builder()
                               .id(DIAGNOS_ONE)
                               .code(CODE)
+                              .description(DESCRIPTION)
                               .build(),
                           ElementValueDiagnosis.builder()
                               .id(DIAGNOS_THREE)
                               .code(CODE)
+                              .description(DESCRIPTION)
                               .build(),
                           ElementValueDiagnosis.builder()
                               .id(DIAGNOS_FIVE)
                               .code(CODE)
+                              .description(DESCRIPTION)
                               .build()
                       )
                   )
@@ -265,7 +269,7 @@ class ElementValidationDiagnosisTest {
               .build(),
           ValidationError.builder()
               .elementId(ELEMENT_ID)
-              .fieldId(new FieldId(DIAGNOS_TWO.value() + ".description"))
+              .fieldId(new FieldId(DIAGNOS_TWO.value()))
               .categoryId(CATEGORY_ELEMENT_ID.orElseThrow())
               .message(new ErrorMessage("Ange diagnosbeskrivning."))
               .build()
@@ -280,14 +284,111 @@ class ElementValidationDiagnosisTest {
                           ElementValueDiagnosis.builder()
                               .id(DIAGNOS_ONE)
                               .code(CODE)
+                              .description(DESCRIPTION)
                               .build(),
                           ElementValueDiagnosis.builder()
                               .id(DIAGNOS_THREE)
                               .code(CODE)
+                              .description(DESCRIPTION)
                               .build(),
                           ElementValueDiagnosis.builder()
                               .id(DIAGNOS_FOUR)
                               .code(CODE)
+                              .description(DESCRIPTION)
+                              .build()
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      final var validationErrors = elementValidationDiagnosis.validate(elementData,
+          CATEGORY_ELEMENT_ID);
+      assertEquals(expectedValidationError, validationErrors);
+    }
+
+    @Test
+    void shallGiveValidationOrderIfOrderIsNotFollowedAndDiagnosisCodeIsNull() {
+      final var expectedValidationError = List.of(
+          ValidationError.builder()
+              .elementId(ELEMENT_ID)
+              .fieldId(DIAGNOS_TWO)
+              .categoryId(CATEGORY_ELEMENT_ID.orElseThrow())
+              .message(new ErrorMessage("Ange diagnoskod."))
+              .build()
+      );
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDiagnosisList.builder()
+                  .diagnoses(
+                      List.of(
+                          ElementValueDiagnosis.builder()
+                              .id(DIAGNOS_ONE)
+                              .code(CODE)
+                              .description(DESCRIPTION)
+                              .build(),
+                          ElementValueDiagnosis.builder()
+                              .id(DIAGNOS_TWO)
+                              .description(DESCRIPTION)
+                              .build(),
+                          ElementValueDiagnosis.builder()
+                              .id(DIAGNOS_THREE)
+                              .code(CODE)
+                              .description(DESCRIPTION)
+                              .build(),
+                          ElementValueDiagnosis.builder()
+                              .id(DIAGNOS_FOUR)
+                              .code(CODE)
+                              .description(DESCRIPTION)
+                              .build()
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      final var validationErrors = elementValidationDiagnosis.validate(elementData,
+          CATEGORY_ELEMENT_ID);
+      assertEquals(expectedValidationError, validationErrors);
+    }
+
+    @Test
+    void shallGiveValidationOrderIfOrderIsNotFollowedAndDiagnosisDescriptionIsNull() {
+      final var expectedValidationError = List.of(
+          ValidationError.builder()
+              .elementId(ELEMENT_ID)
+              .fieldId(DIAGNOS_TWO)
+              .categoryId(CATEGORY_ELEMENT_ID.orElseThrow())
+              .message(new ErrorMessage("Ange diagnosbeskrivning."))
+              .build()
+      );
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDiagnosisList.builder()
+                  .diagnoses(
+                      List.of(
+                          ElementValueDiagnosis.builder()
+                              .id(DIAGNOS_ONE)
+                              .code(CODE)
+                              .description(DESCRIPTION)
+                              .build(),
+                          ElementValueDiagnosis.builder()
+                              .id(DIAGNOS_TWO)
+                              .code(CODE)
+                              .build(),
+                          ElementValueDiagnosis.builder()
+                              .id(DIAGNOS_THREE)
+                              .code(CODE)
+                              .description(DESCRIPTION)
+                              .build(),
+                          ElementValueDiagnosis.builder()
+                              .id(DIAGNOS_FOUR)
+                              .code(CODE)
+                              .description(DESCRIPTION)
                               .build()
                       )
                   )
