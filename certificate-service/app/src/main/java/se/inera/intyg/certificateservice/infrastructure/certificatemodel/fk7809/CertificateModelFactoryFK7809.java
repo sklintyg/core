@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
@@ -69,6 +70,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.
 @RequiredArgsConstructor
 public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
 
+  private static final String GENERAL_LABEL_FUNKTIONSNEDSATTNING = "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.";
   @Value("${certificate.model.fk7210.v1_0.active.from}")
   private LocalDateTime activeFrom;
 
@@ -1073,7 +1075,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_FIELD_ID,
         FUNKTIONSNEDSATTNING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID,
         "Övergripande psykosociala funktioner",
-        "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.",
+        GENERAL_LABEL_FUNKTIONSNEDSATTNING,
         """
             Med psykosociala funktioner menas
             <ul>
@@ -1092,7 +1094,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         FUNKTIONSNEDSATTNING_MOTIVERING_UPPMAKRMSAHET_FIELD_ID,
         FUNKTIONSNEDSATTNING_UPPMAKRMSAHET_ID,
         "Uppmärksamhet, koncentration och exekutiv funktion",
-        "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.",
+        GENERAL_LABEL_FUNKTIONSNEDSATTNING,
         "Uppmärksamhet handlar om förmågan att rikta fokus på rätt sak vid rätt tillfälle samt att skifta, fördela och vidmakthålla uppmärksamheten. En person behöver även viljemässigt kunna rikta sin uppmärksamhet under en längre tid. Med exekutiv funktion menas förmågan att planera, initiera, genomföra, korrigera och avsluta en handling."
     );
   }
@@ -1103,7 +1105,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_FIELD_ID,
         FUNKTIONSNEDSATTNING_PSYKISK_FUNKTION_ID,
         "Annan psykisk funktion",
-        "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.",
+        GENERAL_LABEL_FUNKTIONSNEDSATTNING,
         """
             Med annan psykisk funktion menas exempelvis
             <ul>
@@ -1178,7 +1180,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         FUNKTIONSNEDSATTNING_MOTIVERING_SINNESFUNKTION_FIELD_ID,
         FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID,
         "Övriga sinnesfunktioner och smärta",
-        "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.",
+        GENERAL_LABEL_FUNKTIONSNEDSATTNING,
         "Med övriga sinnesfunktioner menas exempelvis känslighet eller upplevelse av obehag vid ljud, ljus, temperatur, beröring, smak eller lukt. Med smärta menas förnimmelse av en obehaglig känsla som tyder på tänkbar eller faktisk skada i någon del av kroppen. Det innefattar förnimmelser av generell eller lokal smärta i en eller flera kroppsdelar, eller i ett dermatom (hudavsnitt). Det kan till exempel vara huggande, brännande, molande smärta och värk."
     );
   }
@@ -1189,7 +1191,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_FIELD_ID,
         FUNKTIONSNEDSATTNING_KOORDINATION_ID,
         "Balans, koordination och motorik",
-        "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.",
+        GENERAL_LABEL_FUNKTIONSNEDSATTNING,
         "Med balans menas kroppens balansfunktion och förnimmelse av kroppsställning (positionsuppfattning). Med koordination menas till exempel ögahandkoordination, gångkoordination och att samordna rörelser av armar och ben. Med motorik menas fin- och grovmotorik eller till exempel munmotorik.");
   }
 
@@ -1199,7 +1201,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         FUNKTIONSNEDSATTNING_MOTIVERING_ANNAN_KROPPSILIG_FUNKTION_FIELD_ID,
         FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID,
         "Annan kroppslig funktion",
-        "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.",
+        GENERAL_LABEL_FUNKTIONSNEDSATTNING,
         "Med annan kroppslig funktion menas till exempel andningsfunktion, matsmältnings- och ämnesomsättningsfunktion samt blås- och tarmfunktion.");
   }
 
@@ -1238,6 +1240,15 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     .limit(4000)
                     .build()
             )
+        )
+        .shouldValidate(
+            elementData -> elementData.stream()
+                .filter(data -> data.id().equals(FUNKTIONSNEDSATTNING_ID))
+                .map(element -> (ElementValueCodeList) element.value())
+                .anyMatch(value -> value.list()
+                    .stream()
+                    .anyMatch(codeValue -> codeValue.codeId().equals(parentFieldId))
+                )
         )
         .build();
   }

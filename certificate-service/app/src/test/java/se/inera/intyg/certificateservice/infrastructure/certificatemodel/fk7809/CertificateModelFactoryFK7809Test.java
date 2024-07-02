@@ -27,6 +27,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
@@ -1968,6 +1970,38 @@ class CertificateModelFactoryFK7809Test {
             "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
                 elementId, certificateModel.elementSpecifications())
         );
+      }
+
+      @Nested
+      class ShouldValidate {
+
+        @Test
+        void shallReturnTrueIfElementPresent() {
+          final var elementData = List.of(
+              ElementData.builder()
+                  .id(new ElementId("funktionsnedsattning"))
+                  .value(
+                      ElementValueCodeList.builder()
+                          .list(
+                              List.of(
+                                  ElementValueCode.builder()
+                                      .codeId(new FieldId("8"))
+                                      .build()
+                              )
+                          )
+                          .build()
+                  )
+                  .build()
+          );
+
+          final var certificateModel = certificateModelFactoryFK7809.create();
+
+          final var shouldValidate = certificateModel.elementSpecification(
+                  new ElementId("8.1"))
+              .shouldValidate();
+
+          assertTrue(shouldValidate.test(elementData));
+        }
       }
     }
   }
