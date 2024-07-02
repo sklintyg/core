@@ -543,27 +543,27 @@ class CertificateModelFactoryFK7472Test {
                     new ElementConfigurationCode(
                         new FieldId("EN_ATTONDEL"),
                         "12,5 procent",
-                        CodeSystemKvFkmu0009.EN_ATTONDEL
+                        CodeSystemKvFkmu0008.EN_ATTONDEL
                     ),
                     new ElementConfigurationCode(
                         new FieldId("EN_FJARDEDEL"),
                         "25 procent",
-                        CodeSystemKvFkmu0009.EN_FJARDEDEL
+                        CodeSystemKvFkmu0008.EN_FJARDEDEL
                     ),
                     new ElementConfigurationCode(
                         new FieldId("HALVA"),
                         "50 procent",
-                        CodeSystemKvFkmu0009.HALVA
+                        CodeSystemKvFkmu0008.HALVA
                     ),
                     new ElementConfigurationCode(
                         new FieldId("TRE_FJARDEDELAR"),
                         "75 procent",
-                        CodeSystemKvFkmu0009.TRE_FJARDEDELAR
+                        CodeSystemKvFkmu0008.TRE_FJARDEDELAR
                     ),
                     new ElementConfigurationCode(
                         new FieldId("HELA"),
                         "100 procent",
-                        CodeSystemKvFkmu0009.HELA
+                        CodeSystemKvFkmu0008.HELA
                     )
                 )
             )

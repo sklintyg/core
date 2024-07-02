@@ -32,7 +32,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CodeSystemKvFkmu0009;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CodeSystemKvFkmu0008;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfDateRangeListValueGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfTextValueGenerator;
@@ -55,7 +55,7 @@ class FK7472PdfFillServiceTest {
       .build();
 
   private static final DateRange DATE_RANGE = DateRange.builder()
-      .dateRangeId(new FieldId(CodeSystemKvFkmu0009.HALVA.code()))
+      .dateRangeId(new FieldId(CodeSystemKvFkmu0008.HALVA.code()))
       .to(LocalDate.now().plusDays(10))
       .from(LocalDate.now())
       .build();
