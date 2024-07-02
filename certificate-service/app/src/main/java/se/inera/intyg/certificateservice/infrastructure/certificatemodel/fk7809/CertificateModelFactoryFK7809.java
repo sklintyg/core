@@ -569,8 +569,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         .build();
   }
 
-  private static ElementSpecification questionRelationTillPatienten(
-      ElementSpecification... children) {
+  private static ElementSpecification questionRelationTillPatienten() {
     return ElementSpecification.builder()
         .id(QUESTION_RELATION_TILL_PATIENTEN_ID)
         .configuration(
