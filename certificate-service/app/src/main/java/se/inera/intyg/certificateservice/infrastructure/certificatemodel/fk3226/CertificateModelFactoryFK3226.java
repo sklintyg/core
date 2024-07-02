@@ -106,13 +106,13 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
   private static final String NAME = "Läkarutlåtande för närståendepenning";
   private static final String DETAILED_DESCRIPTION = """
       <b className="iu-fw-heading">Vad är närståendepenning?</b><br>
-      <p>Närståendepenning är en ersättning för den som avstår från att förvärvsarbeta för att vara med en patient som är svårt sjuk i lagens mening. I lagen definierar man svårt sjuk som att patientens hälsotillstånd är så nedsatt att det finns ett påtagligt hot mot hens liv på viss tids sikt. Sjukdomstillstånd som på flera års sikt utvecklas till livshotande tillstånd ger däremot inte rätt till närståendepenning.<br><br>Att ge hjälp och stöd till en person som inte har ett livshotande tillstånd kan inte ge rätt till närståendepenning.</p>
+      <p>Närståendepenning är en ersättning för den som avstår från att förvärvsarbeta för att vara med en patient som är svårt sjuk i lagens mening. I lagen definierar man svårt sjuk som att patientens hälsotillstånd är så nedsatt att det finns ett påtagligt hot mot hens liv på viss tids sikt. Sjukdomstillstånd som på flera års sikt utvecklas till livshotande tillstånd ger däremot inte rätt till närståendepenning.</p>
       <b className="iu-fw-heading">Vem är närstående?</b><br>
       <p>Till närstående räknas anhöriga, men även andra som har nära relationer med den som är sjuk till exempel vänner eller grannar. Flera närstående kan turas om och få ersätttning för olika dagar eller olika delar av dagar.</p>
       <b className="iu-fw-heading">Ansökan och samtycke</b><br>
       <p>När den närstående som stödjer patienten ansöker om närståendepenning ska hen bifoga blankett Samtycke för närståendepenning. Det gäller i de fall patienten har medicinska förutsättningar för att kunna samtycka till en närståendes stöd.</p>
-      <b>Särskilda regler för vissa HIV-smittade </b>
-      Om patienten har hiv och har blivit smittad på något av följande sätt, ange det vid “Annat” under “Patientens behandling och vårdsituation”.
+      <b className="iu-fw-heading">Särskilda regler för vissa HIV-smittade</b><br>
+      <p>Om patienten har hiv och har blivit smittad på något av följande sätt, ange det vid “Annat” under “Patientens behandling och vårdsituation”.</p>
       <ol>
         <li>Patienten har blivit smittad när hen fick blod- eller blodprodukter, och smittades när hen behandlades av den svenska hälso- och sjukvården.</li>
         <li>Patienten har blivit smittad av nuvarande eller före detta make, maka, sambo eller registrerade partner, och den personen smittades när hen behandlades av den svenska hälso- och sjukvården.</li>
@@ -120,7 +120,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
       """;
   private static final String DESCRIPTION = """
          <b className="iu-fw-heading">Vad är närståendepenning?</b><br>
-         <p>Närståendepenning är en ersättning för den som avstår från att förvärvsarbeta för att vara med en patient som är svårt sjuk i lagens mening. I lagen definierar man svårt sjuk som att patientens hälsotillstånd är så nedsatt att det finns ett påtagligt hot mot hens liv på viss tids sikt. Sjukdomstillstånd som på flera års sikt utvecklas till livshotande tillstånd ger däremot inte rätt till närståendepenning.</p>
+         <p>Närståendepenning är en ersättning för den som avstår från förvärvsarbete, arbetslöshetsersättning (a-kassa) eller föräldrapenning för att vara med en patient som är svårt sjuk i lagens mening. I lagen definierar man svårt sjuk som att patientens hälsotillstånd är så nedsatt att det finns ett påtagligt hot mot hens liv i nuläget eller på viss tids sikt. Sjukdomstillstånd som på flera års sikt utvecklas till livshotande tillstånd ger däremot inte rätt till närståendepenning.</p>
       """;
   public static final CertificateModelId FK3226_V1_0 = CertificateModelId.builder()
       .type(new CertificateType(TYPE))
@@ -391,13 +391,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
             ElementConfigurationMessage.builder()
                 .message(
                     ElementMessage.builder()
-                        .content(
-                            """
-                                 Om patienten har medicinska förutsättningar att samtycka till att den vill ha stöd av en närstående, så ska patienten göra det.
-                                                    \s
-                                 Därför ska du fylla i om patienten kan lämna ett skriftligt samtycke eller inte.
-                                """
-                        )
+                        .content("Om patienten har medicinska förutsättningar att samtycka till en närståendes stöd, så ska patienten göra det. Därför ska du fylla i om hen kan samtycka eller inte.")
                         .level(ElementMessageLevel.INFO)
                         .build()
                 )
@@ -825,7 +819,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
             ElementConfigurationTextArea.builder()
                 .id(QUESTION_UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID)
                 .name(
-                    "Ange vad annat är och motivera vid behov varför du inte baserar utlåtandet på en undersökning eller på journaluppgifter")
+                    "Ange vad annat är")
                 .build()
         )
         .rules(
@@ -876,9 +870,12 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
             ElementConfigurationCategory.builder()
                 .name("Påtagligt hot mot patientens liv")
                 .description("""
-                    Ange på vilket sätt hälsotillståndet utgör ett påtagligt hot mot patientens liv i nuläget eller på någon tids sikt.
-                                        \s
-                    Hälsotillståndet kan utgöra ett påtagligt hot även om det finns hopp om att det förbättras.
+                        Ange på vilket sätt hälsotillståndet utgör ett påtagligt hot mot patientens liv i nuläget eller på viss tids sikt.\s
+                        Hälsotillståndet kan utgöra ett påtagligt hot även om det finns hopp om att det förbättras.
+                        <ul>
+                            <li>Ange alla diagnoser som sammantaget medför ett påtagligt hot mot patientens liv.</li>
+                            <li>Ange ett av alternativen som gäller patientens behandling och vårdsituation.</li>
+                        </ul>
                     """)
                 .build()
         )
