@@ -21,7 +21,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
@@ -30,6 +32,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisListItem;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -149,7 +152,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
       "25");
   private static final FieldId QUESTION_OVRIGT_FIELD_ID = new FieldId("25.1");
 
-  private static final ElementId DIAGNOS_CATEGORY_ID = new ElementId("KAT_2");
+  private static final ElementId DIAGNOS_CATEGORY_ID = new ElementId("KAT_4");
   private static final FieldId DIAGNOSIS_FIELD_ID = new FieldId(
       "58.1");
   public static final ElementId DIAGNOSIS_ID = new ElementId("58");
@@ -161,6 +164,39 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   private static final FieldId DIAGNOS_4 = new FieldId("diagnos4");
   private static final FieldId DIAGNOS_5 = new FieldId("diagnos5");
   private static final short DIAGNOSIS_CODE_LIMIT = (short) 81;
+
+  private static final ElementId FUNKTIONSNEDSATTNING_CATEGORY_ID = new ElementId("KAT_5");
+  private static final ElementId FUNKTIONSNEDSATTNING_ID = new ElementId("funktionsnedsattning");
+  private static final FieldId FUNKTIONSNEDSATNING_FIELD_ID = new FieldId(
+      "funktionsnedsattning");
+  private static final FieldId FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID = new FieldId("8");
+  private static final FieldId FUNKTIONSNEDSATTNING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID = new FieldId(
+      "9");
+  private static final FieldId FUNKTIONSNEDSATTNING_UPPMAKRMSAHET_ID = new FieldId("10");
+  private static final FieldId FUNKTIONSNEDSATTNING_PSYKISK_FUNKTION_ID = new FieldId("11");
+  private static final FieldId FUNKTIONSNEDSATTNING_HÖRSELFUNKTION_ID = new FieldId("48");
+  private static final FieldId FUNKTIONSNEDSATTNING_SYNFUNKTION_ID = new FieldId("49");
+  private static final FieldId FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID = new FieldId("12");
+  private static final FieldId FUNKTIONSNEDSATTNING_KOORDINATION_ID = new FieldId("13");
+  private static final FieldId FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID = new FieldId(
+      "14");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_INTELLEKTUELL_FUNKTION_ID = new FieldId(
+      "8.1");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID = new FieldId(
+      "9.1");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_UPPMAKRMSAHET_ID = new FieldId(
+      "10.1");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_ID = new FieldId(
+      "11.1");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_HÖRSELFUNKTION_ID = new FieldId(
+      "48.1");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_SYNFUNKTION_ID = new FieldId("49.1");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_SINNESFUNKTION_ID = new FieldId(
+      "12.1");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_ID = new FieldId(
+      "13.1");
+  private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_ANNAN_KROPPSILIG_FUNKTION_ID = new FieldId(
+      "14.1");
 
   private static final String PREAMBLE_TEXT =
       "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
@@ -283,6 +319,9 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     questionDiagnos(),
                     questionDiagnosHistorik()
                 ),
+                categoryFunktionsnedsattning(
+
+                ),
                 categoryAktivitetsbegransningar(
                     questionAktivitetsbegransningar()
                 ),
@@ -325,6 +364,33 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         .configuration(
             ElementConfigurationCategory.builder()
                 .name("Diagnos")
+                .build()
+        )
+        .children(
+            List.of(children)
+        )
+        .build();
+  }
+
+  private static ElementSpecification categoryFunktionsnedsattning(
+      ElementSpecification... children) {
+    return ElementSpecification.builder()
+        .id(FUNKTIONSNEDSATTNING_CATEGORY_ID)
+        .configuration(
+            ElementConfigurationCategory.builder()
+                .name("Funktionsnedsättning")
+                .description(
+                    "Beskriv de funktionsnedsättningar som patienten har. Ange om din bedömning är baserad på observationer, undersökningsfynd eller testresultat. Det kan till exempel vara:"
+                        + "<ul>"
+                        + "<li>avvikelser i somatiskt och psykiskt status</li>"
+                        + "<li>röntgen- och laboratoriefynd</li>"
+                        + "<li>resultat av kliniskt fysiologiska undersökningar</li>"
+                        + "<li>andra testresultat, exempelvis neuropsykologiska.</li>"
+                        + "</ul>"
+                        + "Ange även vilka uppgifter som är baserade på anamnes."
+                        + "Ange om möjligt grad av funktionsnedsättning (till exempel lätt, måttlig, stor eller total).\n"
+                        + "Funktionsområdenas hjälptexter följer väsentligen ICF men då kategorierna i läkarutlåtandena är färre har vissa förenklingar gjorts."
+                )
                 .build()
         )
         .children(
@@ -899,6 +965,50 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
             )
         )
         .build();
+  }
+
+  private ElementSpecification questionFunkionsnedsattning() {
+    final var checkboxes = List.of(
+        getCodeConfig()
+    );
+
+    return ElementSpecification.builder()
+        .id(FUNKTIONSNEDSATTNING_ID)
+        .configuration(
+            ElementConfigurationCheckboxMultipleCode.builder()
+                .id(FUNKTIONSNEDSATNING_FIELD_ID)
+                .name("Välj alternativ att fylla i för att visa fritextfält. Välj minst ett:")
+                .elementLayout(ElementLayout.COLUMNS)
+                .list(Collections.emptyList())
+                .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.mandatoryExist(DIAGNOSIS_ID,
+                    DIAGNOS_1),
+                CertificateElementRuleFactory.limit(DIAGNOSIS_ID, DIAGNOSIS_CODE_LIMIT)
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationDiagnosis.builder()
+                    .mandatoryField(DIAGNOS_1)
+                    .order(
+                        List.of(DIAGNOS_1, DIAGNOS_2, DIAGNOS_3, DIAGNOS_4, DIAGNOS_5)
+                    )
+                    .diagnosisCodeRepository(diagnosisCodeRepositoy)
+                    .build()
+            )
+        )
+        .build();
+  }
+
+  private static ElementConfigurationCode getCodeConfig(FieldId fieldId, Code code) {
+    return new ElementConfigurationCode(
+        fieldId,
+        code.displayName(),
+        code
+    );
   }
 
   private static MedicalInvestigationConfig getMedicalInvestigationConfig(FieldId fieldId) {
