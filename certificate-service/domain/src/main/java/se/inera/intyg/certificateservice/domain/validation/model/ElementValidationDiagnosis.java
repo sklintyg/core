@@ -1,9 +1,10 @@
 package se.inera.intyg.certificateservice.domain.validation.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +23,6 @@ import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.Diagnos
 @Builder
 public class ElementValidationDiagnosis implements ElementValidation {
 
-  private static final String DIAGNOSIS_DESCRIPTION = ".description";
   FieldId mandatoryField;
   List<FieldId> order;
   DiagnosisCodeRepository diagnosisCodeRepository;
@@ -49,34 +49,34 @@ public class ElementValidationDiagnosis implements ElementValidation {
       );
     }
 
+    final var validationErrors = new ArrayList<ValidationError>();
     if (order != null) {
-      final var elementDiagnoseIds = getElementDiagnoseIds(elementValueDiagnosisList);
-      final var validationErrors = incorrectOrderValidationErrors(
-          data, categoryId,
-          elementDiagnoseIds
+      final var elementDiagnosesMap = getElementDiagnosesMap(elementValueDiagnosisList);
+      validationErrors.addAll(
+          incorrectOrderValidationErrors(
+              data, categoryId,
+              elementDiagnosesMap
+          )
       );
-
-      if (!validationErrors.isEmpty()) {
-        return validationErrors;
-      }
     }
 
     if (diagnosisCodeRepository != null) {
-      return invalidDiagnosisCodeValidationErrors(
-          data,
-          categoryId,
-          elementValueDiagnosisList
+      validationErrors.addAll(
+          invalidDiagnosisCodeValidationErrors(
+              data,
+              categoryId,
+              elementValueDiagnosisList
+          )
       );
     }
 
-    return Collections.emptyList();
+    return validationErrors;
   }
 
-  private static List<FieldId> getElementDiagnoseIds(
+  private static Map<FieldId, ElementValueDiagnosis> getElementDiagnosesMap(
       ElementValueDiagnosisList elementValueDiagnosisList) {
     return elementValueDiagnosisList.diagnoses().stream()
-        .map(ElementValueDiagnosis::id)
-        .toList();
+        .collect(Collectors.toMap(ElementValueDiagnosis::id, diagnosis -> diagnosis));
   }
 
   private List<ValidationError> invalidDiagnosisCodeValidationErrors(ElementData data,
@@ -95,31 +95,53 @@ public class ElementValidationDiagnosis implements ElementValidation {
   }
 
   private List<ValidationError> incorrectOrderValidationErrors(ElementData data,
-      Optional<ElementId> categoryId, List<FieldId> elementDiagnoseIds) {
+      Optional<ElementId> categoryId, Map<FieldId, ElementValueDiagnosis> elementDiagnosesMap) {
     final var validationErrors = new ArrayList<ValidationError>();
     for (int index = order.size() - 1; index > 0; index--) {
-      if (!elementDiagnoseIds.contains(order.get(index))) {
+      if (!elementDiagnosesMap.containsKey(order.get(index))) {
         continue;
       }
 
-      while (index > 0 && missingDiagnosisValue(elementDiagnoseIds, index)) {
+      while (index > 0 && missingDiagnosisValue(elementDiagnosesMap, index)) {
         index--;
         final var orderId = order.get(index);
-        validationErrors.add(
-            errorMessage(data, orderId, categoryId, "Ange diagnoskod.")
-        );
-        validationErrors.add(
-            errorMessage(data, new FieldId(orderId.value() + DIAGNOSIS_DESCRIPTION), categoryId,
-                "Ange diagnosbeskrivning.")
-        );
+        if (missingDiagnosisCode(elementDiagnosesMap, orderId)) {
+          validationErrors.add(
+              errorMessage(data, orderId, categoryId, "Ange diagnoskod.")
+          );
+        }
 
+        if (missingDiagnosisDescription(elementDiagnosesMap, orderId)) {
+          validationErrors.add(
+              errorMessage(data, new FieldId(orderId.value()), categoryId,
+                  "Ange diagnosbeskrivning.")
+          );
+        }
       }
     }
     return validationErrors;
   }
 
-  private boolean missingDiagnosisValue(List<FieldId> elementDiagnoseIds, int index) {
-    return !elementDiagnoseIds.contains(order.get(index - 1));
+  private static boolean missingDiagnosisDescription(
+      Map<FieldId, ElementValueDiagnosis> elementDiagnosesMap, FieldId orderId) {
+    return elementDiagnosesMap.get(orderId) == null
+        || elementDiagnosesMap.get(orderId).description() == null
+        || elementDiagnosesMap.get(orderId).description().isBlank();
+  }
+
+  private static boolean missingDiagnosisCode(
+      Map<FieldId, ElementValueDiagnosis> elementDiagnosesMap, FieldId orderId) {
+    return elementDiagnosesMap.get(orderId) == null
+        || elementDiagnosesMap.get(orderId).code() == null
+        || elementDiagnosesMap.get(orderId).code().isBlank();
+  }
+
+  private boolean missingDiagnosisValue(Map<FieldId, ElementValueDiagnosis> elementDiagnosesMap,
+      int index) {
+    final var fieldId = order.get(index - 1);
+    return !elementDiagnosesMap.containsKey(fieldId)
+        || missingDiagnosisDescription(elementDiagnosesMap, fieldId)
+        || missingDiagnosisCode(elementDiagnosesMap, fieldId);
   }
 
   private boolean codeIsInvalid(DiagnosisCode diagnosisCode) {
