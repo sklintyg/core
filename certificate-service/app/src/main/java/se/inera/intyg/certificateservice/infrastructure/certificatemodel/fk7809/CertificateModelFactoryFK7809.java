@@ -1021,6 +1021,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
 
     return ElementSpecification.builder()
         .id(FUNKTIONSNEDSATTNING_ID)
+        .includeInXml(false)
         .configuration(
             ElementConfigurationCheckboxMultipleCode.builder()
                 .id(FUNKTIONSNEDSATNING_FIELD_ID)

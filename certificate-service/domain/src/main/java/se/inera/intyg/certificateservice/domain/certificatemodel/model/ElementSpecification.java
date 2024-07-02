@@ -27,6 +27,8 @@ public class ElementSpecification {
   @Builder.Default
   List<ElementSpecification> children = Collections.emptyList();
   Predicate<List<ElementData>> shouldValidate;
+  @Builder.Default
+  boolean includeInXml = Boolean.TRUE;
 
   public boolean exists(ElementId id) {
     if (id().equals(id)) {
