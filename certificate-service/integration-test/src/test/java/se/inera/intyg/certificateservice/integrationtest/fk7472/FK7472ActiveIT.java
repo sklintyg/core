@@ -134,7 +134,7 @@ import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkType
 import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.MessagesQueryCriteriaDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.QuestionSenderTypeDTO;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CodeSystemKvFkmu0009;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CodeSystemKvFkmu0008;
 import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
 import se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil;
 import se.inera.intyg.certificateservice.integrationtest.util.Containers;
@@ -4629,7 +4629,7 @@ class FK7472ActiveIT {
           updateDateRangeListValue(renewingCertificate, QUESTION_PERIOD_ID.id(),
               List.of(
                   CertificateDataValueDateRange.builder()
-                      .id(CodeSystemKvFkmu0009.HALVA.code())
+                      .id(CodeSystemKvFkmu0008.HALVA.code())
                       .to(LocalDate.now())
                       .from(LocalDate.now().minusDays(10))
                       .build()

@@ -2,9 +2,9 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472;
 
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 
-public class CodeSystemKvFkmu0009 {
+public class CodeSystemKvFkmu0008 {
 
-  public static final String CODE_SYSTEM = "KV_FKMU_0009";
+  public static final String CODE_SYSTEM = "KV_FKMU_0008";
 
   public static final Code EN_ATTONDEL = new Code(
       "EN_ATTONDEL",
@@ -36,7 +36,7 @@ public class CodeSystemKvFkmu0009 {
       "Hela den ordinarie tiden"
   );
 
-  private CodeSystemKvFkmu0009() {
+  private CodeSystemKvFkmu0008() {
     throw new IllegalStateException("Utility class");
   }
 }

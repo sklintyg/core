@@ -242,29 +242,29 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
   private static ElementSpecification questionPeriod() {
     final var dateRanges = List.of(
         new ElementConfigurationCode(
-            new FieldId(CodeSystemKvFkmu0009.EN_ATTONDEL.code()),
+            new FieldId(CodeSystemKvFkmu0008.EN_ATTONDEL.code()),
             "12,5 procent",
-            CodeSystemKvFkmu0009.EN_ATTONDEL
+            CodeSystemKvFkmu0008.EN_ATTONDEL
         ),
         new ElementConfigurationCode(
-            new FieldId(CodeSystemKvFkmu0009.EN_FJARDEDEL.code()),
+            new FieldId(CodeSystemKvFkmu0008.EN_FJARDEDEL.code()),
             "25 procent",
-            CodeSystemKvFkmu0009.EN_FJARDEDEL
+            CodeSystemKvFkmu0008.EN_FJARDEDEL
         ),
         new ElementConfigurationCode(
-            new FieldId(CodeSystemKvFkmu0009.HALVA.code()),
+            new FieldId(CodeSystemKvFkmu0008.HALVA.code()),
             "50 procent",
-            CodeSystemKvFkmu0009.HALVA
+            CodeSystemKvFkmu0008.HALVA
         ),
         new ElementConfigurationCode(
-            new FieldId(CodeSystemKvFkmu0009.TRE_FJARDEDELAR.code()),
+            new FieldId(CodeSystemKvFkmu0008.TRE_FJARDEDELAR.code()),
             "75 procent",
-            CodeSystemKvFkmu0009.TRE_FJARDEDELAR
+            CodeSystemKvFkmu0008.TRE_FJARDEDELAR
         ),
         new ElementConfigurationCode(
-            new FieldId(CodeSystemKvFkmu0009.HELA.code()),
+            new FieldId(CodeSystemKvFkmu0008.HELA.code()),
             "100 procent",
-            CodeSystemKvFkmu0009.HELA
+            CodeSystemKvFkmu0008.HELA
         )
     );
 
