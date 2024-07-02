@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.INTELLEKTUELL_FUNKTION;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemKvFkmu0005.getAllCodes;
 
 import java.time.LocalDateTime;
@@ -969,7 +970,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
 
   private ElementSpecification questionFunkionsnedsattning() {
     final var checkboxes = List.of(
-        getCodeConfig()
+        getCodeConfig(FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID, INTELLEKTUELL_FUNKTION)
     );
 
     return ElementSpecification.builder()
@@ -979,7 +980,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                 .id(FUNKTIONSNEDSATNING_FIELD_ID)
                 .name("Välj alternativ att fylla i för att visa fritextfält. Välj minst ett:")
                 .elementLayout(ElementLayout.COLUMNS)
-                .list(Collections.emptyList())
+                .list(checkboxes)
                 .build()
         )
         .rules(
