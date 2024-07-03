@@ -24,6 +24,10 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 
 public class TestDataStaffEntity {
 
+  private TestDataStaffEntity() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static final StaffEntity AJLA_DOKTOR_ENTITY = ajlaDoctorEntityBuilder().build();
   public static final StaffEntity ALF_DOKTOR_ENTITY = alfDoktorEntityBuilder().build();
 

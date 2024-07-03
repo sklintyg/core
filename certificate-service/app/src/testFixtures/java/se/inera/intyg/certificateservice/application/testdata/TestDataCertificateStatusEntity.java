@@ -5,6 +5,10 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 
 public class TestDataCertificateStatusEntity {
 
+  private TestDataCertificateStatusEntity() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static final CertificateStatusEntity STATUS_SIGNED_ENTITY = statusSignedEntityBuilder().build();
   public static final CertificateStatusEntity STATUS_DRAFT_ENTITY = statusDraftEntityBuilder().build();
 

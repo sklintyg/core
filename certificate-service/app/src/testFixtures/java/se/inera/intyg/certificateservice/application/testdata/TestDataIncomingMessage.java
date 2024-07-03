@@ -8,6 +8,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageC
 
 import java.util.List;
 import se.inera.intyg.certificateservice.application.message.dto.IncomingComplementDTO;
+import se.inera.intyg.certificateservice.application.message.dto.IncomingComplementDTO.IncomingComplementDTOBuilder;
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest.IncomingMessageRequestBuilder;
 import se.inera.intyg.certificateservice.application.message.dto.MessageTypeDTO;
@@ -16,10 +17,14 @@ import se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstant
 
 public class TestDataIncomingMessage {
 
-  public final static IncomingMessageRequest INCOMING_COMPLEMENT_MESSAGE = incomingComplementMessageBuilder().build();
-  public final static IncomingMessageRequest INCOMING_REMINDER_MESSAGE = incomingReminderMessageBuilder().build();
-  public final static IncomingMessageRequest INCOMING_ANSWER_MESSAGE = incomingAnswerMessageBuilder().build();
-  public final static IncomingMessageRequest INCOMING_QUESTION_MESSAGE = incomingQuestionMessageBuilder().build();
+  private TestDataIncomingMessage() {
+    throw new IllegalStateException("Utility class");
+  }
+
+  public static final IncomingMessageRequest INCOMING_COMPLEMENT_MESSAGE = incomingComplementMessageBuilder().build();
+  public static final IncomingMessageRequest INCOMING_REMINDER_MESSAGE = incomingReminderMessageBuilder().build();
+  public static final IncomingMessageRequest INCOMING_ANSWER_MESSAGE = incomingAnswerMessageBuilder().build();
+  public static final IncomingMessageRequest INCOMING_QUESTION_MESSAGE = incomingQuestionMessageBuilder().build();
 
   public static IncomingMessageRequestBuilder incomingComplementMessageBuilder() {
     return IncomingMessageRequest.builder()
@@ -43,6 +48,12 @@ public class TestDataIncomingMessage {
                     .build()
             )
         );
+  }
+
+  public static IncomingComplementDTOBuilder incomingComplementDTOBuilder() {
+    return IncomingComplementDTO.builder()
+        .instance(TestDataMessageConstants.INSTANCE_ONE)
+        .content(TestDataMessageConstants.COMPLEMENT_TEXT_ONE);
   }
 
   public static IncomingMessageRequestBuilder incomingReminderMessageBuilder() {

@@ -5,7 +5,11 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 
 public class TestDataCertificateDataEntity {
 
-  private final static String JSON =
+  private TestDataCertificateDataEntity() {
+    throw new IllegalStateException("Utility class");
+  }
+
+  private static final String JSON =
       "[{\"id\":\"F10\",\"value\":{\"type\":\"DATE\",\"dateId\":\"dateId\",\"date\":["
           + LocalDateTime.now().getYear() + "," + LocalDateTime.now().getMonthValue() + ","
           + LocalDateTime.now().getDayOfMonth()

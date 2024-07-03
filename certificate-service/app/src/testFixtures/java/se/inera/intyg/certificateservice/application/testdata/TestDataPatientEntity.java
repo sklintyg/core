@@ -14,6 +14,10 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 
 public class TestDataPatientEntity {
 
+  private TestDataPatientEntity() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static final PatientEntity ATHENA_REACT_ANDERSSON_ENTITY = athenaReactAnderssonEntityBuilder().build();
 
   public static PatientEntity.PatientEntityBuilder athenaReactAnderssonEntityBuilder() {

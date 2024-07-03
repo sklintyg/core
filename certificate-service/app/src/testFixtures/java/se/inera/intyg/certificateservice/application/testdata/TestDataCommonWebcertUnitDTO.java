@@ -41,6 +41,10 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 
 public class TestDataCommonWebcertUnitDTO {
 
+  private TestDataCommonWebcertUnitDTO() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static final UnitDTO ALFA_REGIONEN_DTO = alfaRegionenDtoBuilder().build();
   public static final UnitDTO ALFA_MEDICINCENTRUM_DTO = alfaMedicincentrumDtoBuilder().build();
   public static final UnitDTO ALFA_ALLERGIMOTTAGNINGEN_DTO = alfaAllergimottagningenDtoBuilder().build();

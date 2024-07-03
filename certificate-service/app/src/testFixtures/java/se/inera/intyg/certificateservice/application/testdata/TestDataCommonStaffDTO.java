@@ -20,6 +20,10 @@ import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO;
 
 public class TestDataCommonStaffDTO {
 
+  private TestDataCommonStaffDTO() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static final StaffDTO AJLA_DOKTOR = ajlaDoctorBuilder().build();
   public static final StaffDTO ALVA_VARDADMINISTRATOR = alvaVardadmininstratorBuilder().build();
   public static final StaffDTO BERTIL_BARNMORSKA = bertilBarnmorskaBuilder().build();
