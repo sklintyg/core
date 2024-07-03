@@ -1041,8 +1041,8 @@ class CertificateModelFactoryFK7809Test {
                   .expression(
                       new RuleExpression(
                           "!empty($medicalInvestigation1_DATE) "
-                          + "|| !empty($medicalInvestigation1_INVESTIGATION_TYPE) "
-                          + "|| !empty($medicalInvestigation1_INFORMATION_SOURCE)"
+                              + "|| !empty($medicalInvestigation1_INVESTIGATION_TYPE) "
+                              + "|| !empty($medicalInvestigation1_INFORMATION_SOURCE)"
                       )
                   )
                   .build(),
@@ -1774,15 +1774,15 @@ class CertificateModelFactoryFK7809Test {
             .name("Funktionsnedsättning")
             .description(
                 "Beskriv de funktionsnedsättningar som patienten har. Ange om din bedömning är baserad på observationer, undersökningsfynd eller testresultat. Det kan till exempel vara:"
-                + "<ul>"
-                + "<li>avvikelser i somatiskt och psykiskt status</li>"
-                + "<li>röntgen- och laboratoriefynd</li>"
-                + "<li>resultat av kliniskt fysiologiska undersökningar</li>"
-                + "<li>andra testresultat, exempelvis neuropsykologiska.</li>"
-                + "</ul>"
-                + "Ange även vilka uppgifter som är baserade på anamnes."
-                + "Ange om möjligt grad av funktionsnedsättning (till exempel lätt, måttlig, stor eller total).\n"
-                + "Funktionsområdenas hjälptexter följer väsentligen ICF men då kategorierna i läkarutlåtandena är färre har vissa förenklingar gjorts.")
+                    + "<ul>"
+                    + "<li>avvikelser i somatiskt och psykiskt status</li>"
+                    + "<li>röntgen- och laboratoriefynd</li>"
+                    + "<li>resultat av kliniskt fysiologiska undersökningar</li>"
+                    + "<li>andra testresultat, exempelvis neuropsykologiska.</li>"
+                    + "</ul>"
+                    + "Ange även vilka uppgifter som är baserade på anamnes."
+                    + "Ange om möjligt grad av funktionsnedsättning (till exempel lätt, måttlig, stor eller total).\n"
+                    + "Funktionsområdenas hjälptexter följer väsentligen ICF men då kategorierna i läkarutlåtandena är färre har vissa förenklingar gjorts.")
             .build();
 
         final var certificateModel = certificateModelFactoryFK7809.create();
@@ -1816,24 +1816,25 @@ class CertificateModelFactoryFK7809Test {
             .name("Välj alternativ att fylla i för att visa fritextfält. Välj minst ett:")
             .elementLayout(ElementLayout.COLUMNS)
             .list(List.of(
-                new ElementConfigurationCode(new FieldId("8"), INTELLEKTUELL_FUNKTION.displayName(),
+                new ElementConfigurationCode(new FieldId("8.2"),
+                    INTELLEKTUELL_FUNKTION.displayName(),
                     INTELLEKTUELL_FUNKTION),
-                new ElementConfigurationCode(new FieldId("9"),
+                new ElementConfigurationCode(new FieldId("9.2"),
                     KOMMUNIKATION_SOCIAL_INTERAKTION.displayName(),
                     KOMMUNIKATION_SOCIAL_INTERAKTION),
-                new ElementConfigurationCode(new FieldId("10"), UPPMARKSAMHET.displayName(),
+                new ElementConfigurationCode(new FieldId("10.2"), UPPMARKSAMHET.displayName(),
                     UPPMARKSAMHET),
-                new ElementConfigurationCode(new FieldId("11"), PSYKISK_FUNKTION.displayName(),
+                new ElementConfigurationCode(new FieldId("11.2"), PSYKISK_FUNKTION.displayName(),
                     PSYKISK_FUNKTION),
-                new ElementConfigurationCode(new FieldId("48"), HORSELFUNKTION.displayName(),
+                new ElementConfigurationCode(new FieldId("48.2"), HORSELFUNKTION.displayName(),
                     HORSELFUNKTION),
-                new ElementConfigurationCode(new FieldId("49"), SYNFUNKTION.displayName(),
+                new ElementConfigurationCode(new FieldId("49.2"), SYNFUNKTION.displayName(),
                     SYNFUNKTION),
-                new ElementConfigurationCode(new FieldId("12"), SINNESFUNKTION.displayName(),
+                new ElementConfigurationCode(new FieldId("12.2"), SINNESFUNKTION.displayName(),
                     SINNESFUNKTION),
-                new ElementConfigurationCode(new FieldId("13"), KOORDINATION.displayName(),
+                new ElementConfigurationCode(new FieldId("13.2"), KOORDINATION.displayName(),
                     KOORDINATION),
-                new ElementConfigurationCode(new FieldId("14"),
+                new ElementConfigurationCode(new FieldId("14.2"),
                     ANNAN_KROPPSILIG_FUNKTION.displayName(), ANNAN_KROPPSILIG_FUNKTION)
             ))
             .build();
@@ -1852,7 +1853,8 @@ class CertificateModelFactoryFK7809Test {
                 .id(ELEMENT_ID)
                 .type(ElementRuleType.MANDATORY)
                 .expression(
-                    new RuleExpression("$8 || $9 || $10 || $11 || $48 || $49 || $12 || $13 || $14"))
+                    new RuleExpression(
+                        "$8.2 || $9.2 || $10.2 || $11.2 || $48.2 || $49.2 || $12.2 || $13.2 || $14.2"))
                 .build()
         );
 
@@ -1885,7 +1887,7 @@ class CertificateModelFactoryFK7809Test {
       @Test
       void shallIncludeIntellektuellFunktion() {
         final var certificateModel = certificateModelFactoryFK7809.create();
-        final var elementId = new ElementId("8.1");
+        final var elementId = new ElementId("8");
         assertTrue(certificateModel.elementSpecificationExists(elementId),
             "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
                 elementId, certificateModel.elementSpecifications())
@@ -1895,7 +1897,7 @@ class CertificateModelFactoryFK7809Test {
       @Test
       void shallIncludeKommunikationSocialInteraktion() {
         final var certificateModel = certificateModelFactoryFK7809.create();
-        final var elementId = new ElementId("9.1");
+        final var elementId = new ElementId("9");
         assertTrue(certificateModel.elementSpecificationExists(elementId),
             "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
                 elementId, certificateModel.elementSpecifications())
@@ -1905,7 +1907,7 @@ class CertificateModelFactoryFK7809Test {
       @Test
       void shallIncludeUppmarksamhet() {
         final var certificateModel = certificateModelFactoryFK7809.create();
-        final var elementId = new ElementId("10.1");
+        final var elementId = new ElementId("10");
         assertTrue(certificateModel.elementSpecificationExists(elementId),
             "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
                 elementId, certificateModel.elementSpecifications())
@@ -1915,7 +1917,7 @@ class CertificateModelFactoryFK7809Test {
       @Test
       void shallIncludePsykiskFunktion() {
         final var certificateModel = certificateModelFactoryFK7809.create();
-        final var elementId = new ElementId("11.1");
+        final var elementId = new ElementId("11");
         assertTrue(certificateModel.elementSpecificationExists(elementId),
             "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
                 elementId, certificateModel.elementSpecifications())
@@ -1925,7 +1927,7 @@ class CertificateModelFactoryFK7809Test {
       @Test
       void shallIncludeHorselFunktion() {
         final var certificateModel = certificateModelFactoryFK7809.create();
-        final var elementId = new ElementId("48.1");
+        final var elementId = new ElementId("48");
         assertTrue(certificateModel.elementSpecificationExists(elementId),
             "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
                 elementId, certificateModel.elementSpecifications())
@@ -1935,7 +1937,7 @@ class CertificateModelFactoryFK7809Test {
       @Test
       void shallIncludeSynFunktion() {
         final var certificateModel = certificateModelFactoryFK7809.create();
-        final var elementId = new ElementId("49.1");
+        final var elementId = new ElementId("49");
         assertTrue(certificateModel.elementSpecificationExists(elementId),
             "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
                 elementId, certificateModel.elementSpecifications())
@@ -1945,7 +1947,7 @@ class CertificateModelFactoryFK7809Test {
       @Test
       void shallIncludeSinnesFunktion() {
         final var certificateModel = certificateModelFactoryFK7809.create();
-        final var elementId = new ElementId("12.1");
+        final var elementId = new ElementId("12");
         assertTrue(certificateModel.elementSpecificationExists(elementId),
             "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
                 elementId, certificateModel.elementSpecifications())
@@ -1955,7 +1957,7 @@ class CertificateModelFactoryFK7809Test {
       @Test
       void shallIncludeKoordination() {
         final var certificateModel = certificateModelFactoryFK7809.create();
-        final var elementId = new ElementId("13.1");
+        final var elementId = new ElementId("13");
         assertTrue(certificateModel.elementSpecificationExists(elementId),
             "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
                 elementId, certificateModel.elementSpecifications())
@@ -1965,7 +1967,7 @@ class CertificateModelFactoryFK7809Test {
       @Test
       void shallIncludeAnnanKroppsligFunktion() {
         final var certificateModel = certificateModelFactoryFK7809.create();
-        final var elementId = new ElementId("14.1");
+        final var elementId = new ElementId("14");
         assertTrue(certificateModel.elementSpecificationExists(elementId),
             "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
                 elementId, certificateModel.elementSpecifications())
@@ -1985,7 +1987,7 @@ class CertificateModelFactoryFK7809Test {
                           .list(
                               List.of(
                                   ElementValueCode.builder()
-                                      .codeId(new FieldId("8"))
+                                      .codeId(new FieldId("8.2"))
                                       .build()
                               )
                           )
@@ -1997,7 +1999,7 @@ class CertificateModelFactoryFK7809Test {
           final var certificateModel = certificateModelFactoryFK7809.create();
 
           final var shouldValidate = certificateModel.elementSpecification(
-                  new ElementId("8.1"))
+                  new ElementId("8"))
               .shouldValidate();
 
           assertTrue(shouldValidate.test(elementData));
