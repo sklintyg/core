@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -105,13 +106,13 @@ public class ElementValidationDiagnosis implements ElementValidation {
       while (index > 0 && missingDiagnosisValue(elementDiagnosesMap, index)) {
         index--;
         final var orderId = order.get(index);
-        if (missingDiagnosisCode(elementDiagnosesMap, orderId)) {
+        if (missingField(elementDiagnosesMap.get(orderId), ElementValueDiagnosis::code)) {
           validationErrors.add(
               errorMessage(data, orderId, categoryId, "Ange diagnoskod.")
           );
         }
 
-        if (missingDiagnosisDescription(elementDiagnosesMap, orderId)) {
+        if (missingField(elementDiagnosesMap.get(orderId), ElementValueDiagnosis::description)) {
           validationErrors.add(
               errorMessage(data, new FieldId(orderId.value()), categoryId,
                   "Ange diagnosbeskrivning.")
@@ -122,26 +123,20 @@ public class ElementValidationDiagnosis implements ElementValidation {
     return validationErrors;
   }
 
-  private static boolean missingDiagnosisDescription(
-      Map<FieldId, ElementValueDiagnosis> elementDiagnosesMap, FieldId orderId) {
-    return elementDiagnosesMap.get(orderId) == null
-        || elementDiagnosesMap.get(orderId).description() == null
-        || elementDiagnosesMap.get(orderId).description().isBlank();
-  }
-
-  private static boolean missingDiagnosisCode(
-      Map<FieldId, ElementValueDiagnosis> elementDiagnosesMap, FieldId orderId) {
-    return elementDiagnosesMap.get(orderId) == null
-        || elementDiagnosesMap.get(orderId).code() == null
-        || elementDiagnosesMap.get(orderId).code().isBlank();
+  private static boolean missingField(
+      ElementValueDiagnosis elementValueDiagnosis,
+      Function<ElementValueDiagnosis, String> function) {
+    return elementValueDiagnosis == null
+        || function.apply(elementValueDiagnosis) == null
+        || function.apply(elementValueDiagnosis).isBlank();
   }
 
   private boolean missingDiagnosisValue(Map<FieldId, ElementValueDiagnosis> elementDiagnosesMap,
       int index) {
     final var fieldId = order.get(index - 1);
     return !elementDiagnosesMap.containsKey(fieldId)
-        || missingDiagnosisDescription(elementDiagnosesMap, fieldId)
-        || missingDiagnosisCode(elementDiagnosesMap, fieldId);
+        || missingField(elementDiagnosesMap.get(fieldId), ElementValueDiagnosis::code)
+        || missingField(elementDiagnosesMap.get(fieldId), ElementValueDiagnosis::description);
   }
 
   private boolean codeIsInvalid(DiagnosisCode diagnosisCode) {
