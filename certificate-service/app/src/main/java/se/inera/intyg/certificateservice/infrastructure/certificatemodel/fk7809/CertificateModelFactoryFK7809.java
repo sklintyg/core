@@ -1161,7 +1161,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
             <ul>
             <li>synskärpa på långt håll med bästa korrektion</li>
             <li>synfält – du kan skicka in en kopia av perimetri eller beskriva synfältet på annat sätt till exempel enligt Donders metod.</li>
-            <li>andra synfunktioner som till exempel förmåga till samsyn, dubbelseende, nystagmus, mörkerseende, färgseende, konstraseende, bländningskänslighet och perception.</li>                                            
+            <li>andra synfunktioner som till exempel förmåga till samsyn, dubbelseende, nystagmus, mörkerseende, färgseende, kontrastseende, bländningskänslighet och perception.</li>                                            
             </ul>                            
             Beskriv:
             <ul>
