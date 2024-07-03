@@ -3,6 +3,15 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.ANNAN_KROPPSILIG_FUNKTION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.HORSELFUNKTION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.INTELLEKTUELL_FUNKTION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.KOMMUNIKATION_SOCIAL_INTERAKTION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.KOORDINATION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.PSYKISK_FUNKTION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.SINNESFUNKTION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.SYNFUNKTION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CodeSystemFunktionsnedsattning.UPPMARKSAMHET;
 
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -18,6 +27,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
@@ -26,7 +37,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
@@ -35,6 +48,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisListItem;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisTerminology;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -50,6 +64,7 @@ import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCodeList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDiagnosis;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationMedicalInvestigationList;
@@ -1026,8 +1041,8 @@ class CertificateModelFactoryFK7809Test {
                   .expression(
                       new RuleExpression(
                           "!empty($medicalInvestigation1_DATE) "
-                              + "|| !empty($medicalInvestigation1_INVESTIGATION_TYPE) "
-                              + "|| !empty($medicalInvestigation1_INFORMATION_SOURCE)"
+                          + "|| !empty($medicalInvestigation1_INVESTIGATION_TYPE) "
+                          + "|| !empty($medicalInvestigation1_INFORMATION_SOURCE)"
                       )
                   )
                   .build(),
@@ -1092,7 +1107,7 @@ class CertificateModelFactoryFK7809Test {
             .description(
                 """
                     Beskriv de aktivitetsbegränsningar som du bedömer att patienten har. Beskriv även om din bedömning är baserad på observationer, anamnes eller utredning gjord av någon annan. Någon annan kan till exempel vara psykolog, arbetsterapeut, audionom, syn- eller hörselpedagog.
-                    \s
+                                            
                     I beskrivningen kan du utgå från aktiviteter inom områden som till exempel kommunikation, förflyttning, personlig vård och hemliv. Ange om möjligt svårighetsgraden på aktivitetsbegränsningarna.
                     """)
             .build();
@@ -1539,7 +1554,7 @@ class CertificateModelFactoryFK7809Test {
     @Nested
     class CategoryDiagnos {
 
-      private static final ElementId ELEMENT_ID = new ElementId("KAT_2");
+      private static final ElementId ELEMENT_ID = new ElementId("KAT_4");
 
       @Test
       void shallIncludeId() {
@@ -1737,6 +1752,257 @@ class CertificateModelFactoryFK7809Test {
       }
     }
 
+    @Nested
+    class CategoryFunktionsnedsattning {
+
+      private static final ElementId ELEMENT_ID = new ElementId("KAT_5");
+
+      @Test
+      void shallIncludeId() {
+        final var certificateModel = certificateModelFactoryFK7809.create();
+
+        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
+                certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeConfiguration() {
+        final var expectedConfiguration = ElementConfigurationCategory.builder()
+            .name("Funktionsnedsättning")
+            .description(
+                """
+                    Beskriv de funktionsnedsättningar som patienten har. Ange om din bedömning är baserad på observationer, undersökningsfynd eller testresultat. Det kan till exempel vara:
+                    <ul>
+                    <li>avvikelser i somatiskt och psykiskt status</li><li>röntgen- och laboratoriefynd</li><li>resultat av kliniskt fysiologiska undersökningar</li><li>andra testresultat, exempelvis neuropsykologiska.</li></ul>
+                    Ange även vilka uppgifter som är baserade på anamnes. Ange om möjligt grad av funktionsnedsättning (till exempel lätt, måttlig, stor eller total).
+                                        
+                    Funktionsområdenas hjälptexter följer väsentligen ICF men då kategorierna i läkarutlåtandena är färre har vissa förenklingar gjorts.""")
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK7809.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+    }
+
+    @Nested
+    class QuestionFunktionsnedsattning {
+
+      private static final ElementId ELEMENT_ID = new ElementId("funktionsnedsattning");
+
+      @Test
+      void shallIncludeId() {
+        final var certificateModel = certificateModelFactoryFK7809.create();
+
+        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                ELEMENT_ID,
+                certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeConfiguration() {
+        final var expectedConfiguration = ElementConfigurationCheckboxMultipleCode.builder()
+            .id(new FieldId("funktionsnedsattning"))
+            .name("Välj alternativ att fylla i för att visa fritextfält. Välj minst ett:")
+            .elementLayout(ElementLayout.COLUMNS)
+            .list(List.of(
+                new ElementConfigurationCode(new FieldId("8.2"),
+                    INTELLEKTUELL_FUNKTION.displayName(),
+                    INTELLEKTUELL_FUNKTION),
+                new ElementConfigurationCode(new FieldId("9.2"),
+                    KOMMUNIKATION_SOCIAL_INTERAKTION.displayName(),
+                    KOMMUNIKATION_SOCIAL_INTERAKTION),
+                new ElementConfigurationCode(new FieldId("10.2"), UPPMARKSAMHET.displayName(),
+                    UPPMARKSAMHET),
+                new ElementConfigurationCode(new FieldId("11.2"), PSYKISK_FUNKTION.displayName(),
+                    PSYKISK_FUNKTION),
+                new ElementConfigurationCode(new FieldId("48.2"), HORSELFUNKTION.displayName(),
+                    HORSELFUNKTION),
+                new ElementConfigurationCode(new FieldId("49.2"), SYNFUNKTION.displayName(),
+                    SYNFUNKTION),
+                new ElementConfigurationCode(new FieldId("12.2"), SINNESFUNKTION.displayName(),
+                    SINNESFUNKTION),
+                new ElementConfigurationCode(new FieldId("13.2"), KOORDINATION.displayName(),
+                    KOORDINATION),
+                new ElementConfigurationCode(new FieldId("14.2"),
+                    ANNAN_KROPPSILIG_FUNKTION.displayName(), ANNAN_KROPPSILIG_FUNKTION)
+            ))
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK7809.create();
+
+        assertEquals(expectedConfiguration,
+            certificateModel.elementSpecification(ELEMENT_ID).configuration()
+        );
+      }
+
+      @Test
+      void shallIncludeRules() {
+        final var expectedRules = List.of(
+            ElementRuleExpression.builder()
+                .id(ELEMENT_ID)
+                .type(ElementRuleType.MANDATORY)
+                .expression(
+                    new RuleExpression(
+                        "$8.2 || $9.2 || $10.2 || $11.2 || $48.2 || $49.2 || $12.2 || $13.2 || $14.2"))
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK7809.create();
+
+        assertEquals(expectedRules,
+            certificateModel.elementSpecification(ELEMENT_ID).rules()
+        );
+      }
+
+      @Test
+      void shallIncludeValidations() {
+        final var expectedValidations = List.of(
+            ElementValidationCodeList.builder()
+                .mandatory(true)
+                .build()
+        );
+
+        final var certificateModel = certificateModelFactoryFK7809.create();
+
+        assertEquals(expectedValidations,
+            certificateModel.elementSpecification(ELEMENT_ID).validations()
+        );
+      }
+    }
+
+    @Nested
+    class FunktionsnedsattningMotivering {
+
+      @Test
+      void shallIncludeIntellektuellFunktion() {
+        final var certificateModel = certificateModelFactoryFK7809.create();
+        final var elementId = new ElementId("8");
+        assertTrue(certificateModel.elementSpecificationExists(elementId),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                elementId, certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeKommunikationSocialInteraktion() {
+        final var certificateModel = certificateModelFactoryFK7809.create();
+        final var elementId = new ElementId("9");
+        assertTrue(certificateModel.elementSpecificationExists(elementId),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                elementId, certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeUppmarksamhet() {
+        final var certificateModel = certificateModelFactoryFK7809.create();
+        final var elementId = new ElementId("10");
+        assertTrue(certificateModel.elementSpecificationExists(elementId),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                elementId, certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludePsykiskFunktion() {
+        final var certificateModel = certificateModelFactoryFK7809.create();
+        final var elementId = new ElementId("11");
+        assertTrue(certificateModel.elementSpecificationExists(elementId),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                elementId, certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeHorselFunktion() {
+        final var certificateModel = certificateModelFactoryFK7809.create();
+        final var elementId = new ElementId("48");
+        assertTrue(certificateModel.elementSpecificationExists(elementId),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                elementId, certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeSynFunktion() {
+        final var certificateModel = certificateModelFactoryFK7809.create();
+        final var elementId = new ElementId("49");
+        assertTrue(certificateModel.elementSpecificationExists(elementId),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                elementId, certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeSinnesFunktion() {
+        final var certificateModel = certificateModelFactoryFK7809.create();
+        final var elementId = new ElementId("12");
+        assertTrue(certificateModel.elementSpecificationExists(elementId),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                elementId, certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeKoordination() {
+        final var certificateModel = certificateModelFactoryFK7809.create();
+        final var elementId = new ElementId("13");
+        assertTrue(certificateModel.elementSpecificationExists(elementId),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                elementId, certificateModel.elementSpecifications())
+        );
+      }
+
+      @Test
+      void shallIncludeAnnanKroppsligFunktion() {
+        final var certificateModel = certificateModelFactoryFK7809.create();
+        final var elementId = new ElementId("14");
+        assertTrue(certificateModel.elementSpecificationExists(elementId),
+            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+                elementId, certificateModel.elementSpecifications())
+        );
+      }
+
+      @Nested
+      class ShouldValidate {
+
+        @Test
+        void shallReturnTrueIfElementPresent() {
+          final var elementData = List.of(
+              ElementData.builder()
+                  .id(new ElementId("funktionsnedsattning"))
+                  .value(
+                      ElementValueCodeList.builder()
+                          .list(
+                              List.of(
+                                  ElementValueCode.builder()
+                                      .codeId(new FieldId("8.2"))
+                                      .build()
+                              )
+                          )
+                          .build()
+                  )
+                  .build()
+          );
+
+          final var certificateModel = certificateModelFactoryFK7809.create();
+
+          final var shouldValidate = certificateModel.elementSpecification(
+                  new ElementId("8"))
+              .shouldValidate();
+
+          assertTrue(shouldValidate.test(elementData));
+        }
+      }
+    }
   }
 }
 

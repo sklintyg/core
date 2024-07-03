@@ -7,6 +7,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
@@ -75,6 +78,12 @@ class XmlGeneratorValueTest {
 
   @Test
   void shallThrowIfNotConverterFoundForValue() {
+    doReturn(certificateModel).when(certificate).certificateModel();
+    final var elementSpecificationOne = mock(ElementSpecification.class);
+    when(certificateModel.elementSpecification(new ElementId(QUESTION_ID_ONE))).thenReturn(
+        elementSpecificationOne);
+    when(elementSpecificationOne.includeInXml()).thenReturn(true);
+
     final var data = ElementData.builder()
         .value(
             ElementValueText.builder().build()
@@ -93,6 +102,37 @@ class XmlGeneratorValueTest {
     );
   }
 
+  @Test
+  void shouldNotMapValueIfNotIncludedInXml() {
+    doReturn(ElementValueText.class).when(xmlGeneratorElementDataOne).supports();
+
+    doReturn(certificateModel).when(certificate).certificateModel();
+    final var elementSpecificationOne = mock(ElementSpecification.class);
+    when(elementSpecificationOne.includeInXml()).thenReturn(false);
+    doReturn(elementSpecificationOne).when(certificateModel)
+        .elementSpecification(new ElementId(QUESTION_ID_ONE));
+
+    xmlGeneratorValue = new XmlGeneratorValue(
+        List.of(xmlGeneratorElementDataOne)
+    );
+
+    final var data = ElementData.builder()
+        .id(new ElementId(QUESTION_ID_ONE))
+        .value(
+            ElementValueText.builder()
+                .textId(new FieldId(ANSWER_ID_ONE))
+                .text(TEXT_VALUE_ONE)
+                .build()
+        )
+        .build();
+
+    doReturn(List.of(data)).when(certificate).elementData();
+
+    verify(xmlGeneratorElementDataOne, times(0)).generate(eq(data), any());
+    final var response = xmlGeneratorValue.generate(certificate);
+    assertEquals(Collections.emptyList(), response);
+  }
+
   @Nested
   class TestStandardMapping {
 
@@ -102,6 +142,7 @@ class XmlGeneratorValueTest {
 
       doReturn(certificateModel).when(certificate).certificateModel();
       final var elementSpecificationOne = mock(ElementSpecification.class);
+      when(elementSpecificationOne.includeInXml()).thenReturn(true);
       doReturn(elementSpecificationOne).when(certificateModel)
           .elementSpecification(new ElementId(QUESTION_ID_ONE));
 
@@ -199,7 +240,9 @@ class XmlGeneratorValueTest {
       doReturn(List.of(dataOne, dataTwo)).when(certificate).elementData();
       doReturn(certificateModel).when(certificate).certificateModel();
       final var elementSpecificationOne = mock(ElementSpecification.class);
+      when(elementSpecificationOne.includeInXml()).thenReturn(true);
       final var elementSpecificationTwo = mock(ElementSpecification.class);
+      when(elementSpecificationTwo.includeInXml()).thenReturn(true);
       doReturn(elementSpecificationOne).when(certificateModel)
           .elementSpecification(new ElementId(QUESTION_ID_ONE));
       doReturn(elementSpecificationTwo).when(certificateModel)
@@ -266,7 +309,9 @@ class XmlGeneratorValueTest {
       doReturn(List.of(dataOne, dataTwo)).when(certificate).elementData();
       doReturn(certificateModel).when(certificate).certificateModel();
       final var elementSpecificationOne = mock(ElementSpecification.class);
+      when(elementSpecificationOne.includeInXml()).thenReturn(true);
       final var elementSpecificationTwo = mock(ElementSpecification.class);
+      when(elementSpecificationTwo.includeInXml()).thenReturn(true);
       doReturn(elementSpecificationOne).when(certificateModel)
           .elementSpecification(new ElementId(QUESTION_ID_ONE));
       doReturn(elementSpecificationTwo).when(certificateModel)
@@ -369,7 +414,9 @@ class XmlGeneratorValueTest {
       doReturn(List.of(dataOne, dataTwo)).when(certificate).elementData();
       doReturn(certificateModel).when(certificate).certificateModel();
       final var elementSpecificationOne = mock(ElementSpecification.class);
+      when(elementSpecificationOne.includeInXml()).thenReturn(true);
       final var elementSpecificationTwo = mock(ElementSpecification.class);
+      when(elementSpecificationTwo.includeInXml()).thenReturn(true);
       doReturn(elementSpecificationOne).when(certificateModel)
           .elementSpecification(new ElementId(QUESTION_ID_ONE));
       doReturn(elementSpecificationTwo).when(certificateModel)

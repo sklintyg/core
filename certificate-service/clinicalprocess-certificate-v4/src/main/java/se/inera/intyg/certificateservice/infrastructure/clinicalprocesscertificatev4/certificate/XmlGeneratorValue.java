@@ -60,6 +60,7 @@ public class XmlGeneratorValue {
       List<ElementData> elementData) {
     return elementData.stream()
         .filter(data -> !(data.value() instanceof ElementValueUnitContactInformation))
+        .filter(data -> certificateModel.elementSpecification(data.id()).includeInXml())
         .map(data -> {
               final var converter = converters.get(data.value().getClass());
               if (converter == null) {
