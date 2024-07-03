@@ -181,35 +181,35 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   private static final ElementId FUNKTIONSNEDSATTNING_ID = new ElementId("funktionsnedsattning");
   private static final FieldId FUNKTIONSNEDSATNING_FIELD_ID = new FieldId(
       "funktionsnedsattning");
-  private static final FieldId FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID = new FieldId("8");
+  private static final FieldId FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID = new FieldId("8.2");
   private static final FieldId FUNKTIONSNEDSATTNING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID = new FieldId(
-      "9");
-  private static final FieldId FUNKTIONSNEDSATTNING_UPPMAKRMSAHET_ID = new FieldId("10");
-  private static final FieldId FUNKTIONSNEDSATTNING_PSYKISK_FUNKTION_ID = new FieldId("11");
-  private static final FieldId FUNKTIONSNEDSATTNING_HORSELFUNKTION_ID = new FieldId("48");
-  private static final FieldId FUNKTIONSNEDSATTNING_SYNFUNKTION_ID = new FieldId("49");
-  private static final FieldId FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID = new FieldId("12");
-  private static final FieldId FUNKTIONSNEDSATTNING_KOORDINATION_ID = new FieldId("13");
+      "9.2");
+  private static final FieldId FUNKTIONSNEDSATTNING_UPPMAKRMSAHET_ID = new FieldId("10.2");
+  private static final FieldId FUNKTIONSNEDSATTNING_PSYKISK_FUNKTION_ID = new FieldId("11.2");
+  private static final FieldId FUNKTIONSNEDSATTNING_HORSELFUNKTION_ID = new FieldId("48.2");
+  private static final FieldId FUNKTIONSNEDSATTNING_SYNFUNKTION_ID = new FieldId("49.2");
+  private static final FieldId FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID = new FieldId("12.2");
+  private static final FieldId FUNKTIONSNEDSATTNING_KOORDINATION_ID = new FieldId("13.2");
   private static final FieldId FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID = new FieldId(
-      "14");
+      "14.2");
   private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_INTELLEKTUELL_FUNKTION_ID = new ElementId(
-      "8.1");
+      "8");
   private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID = new ElementId(
-      "9.1");
+      "9");
   private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_UPPMAKRMSAHET_ID = new ElementId(
-      "10.1");
+      "10");
   private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_ID = new ElementId(
-      "11.1");
+      "11");
   private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_HORSELFUNKTION_ID = new ElementId(
-      "48.1");
+      "48");
   private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_SYNFUNKTION_ID = new ElementId(
-      "49.1");
+      "49");
   private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_SINNESFUNKTION_ID = new ElementId(
-      "12.1");
+      "12");
   private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_ID = new ElementId(
-      "13.1");
+      "13");
   private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_ANNAN_KROPPSILIG_FUNKTION_ID = new ElementId(
-      "14.1");
+      "14");
   private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_INTELLEKTUELL_FUNKTION_FIELD_ID = new FieldId(
       "8.1");
   private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_FIELD_ID = new FieldId(
