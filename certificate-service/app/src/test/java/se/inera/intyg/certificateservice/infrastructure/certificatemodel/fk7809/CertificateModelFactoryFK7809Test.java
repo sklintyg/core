@@ -1041,8 +1041,8 @@ class CertificateModelFactoryFK7809Test {
                   .expression(
                       new RuleExpression(
                           "!empty($medicalInvestigation1_DATE) "
-                              + "|| !empty($medicalInvestigation1_INVESTIGATION_TYPE) "
-                              + "|| !empty($medicalInvestigation1_INFORMATION_SOURCE)"
+                          + "|| !empty($medicalInvestigation1_INVESTIGATION_TYPE) "
+                          + "|| !empty($medicalInvestigation1_INFORMATION_SOURCE)"
                       )
                   )
                   .build(),
@@ -1107,7 +1107,7 @@ class CertificateModelFactoryFK7809Test {
             .description(
                 """
                     Beskriv de aktivitetsbegränsningar som du bedömer att patienten har. Beskriv även om din bedömning är baserad på observationer, anamnes eller utredning gjord av någon annan. Någon annan kan till exempel vara psykolog, arbetsterapeut, audionom, syn- eller hörselpedagog.
-                    \s
+                                            
                     I beskrivningen kan du utgå från aktiviteter inom områden som till exempel kommunikation, förflyttning, personlig vård och hemliv. Ange om möjligt svårighetsgraden på aktivitetsbegränsningarna.
                     """)
             .build();
@@ -1773,16 +1773,13 @@ class CertificateModelFactoryFK7809Test {
         final var expectedConfiguration = ElementConfigurationCategory.builder()
             .name("Funktionsnedsättning")
             .description(
-                "Beskriv de funktionsnedsättningar som patienten har. Ange om din bedömning är baserad på observationer, undersökningsfynd eller testresultat. Det kan till exempel vara:"
-                    + "<ul>"
-                    + "<li>avvikelser i somatiskt och psykiskt status</li>"
-                    + "<li>röntgen- och laboratoriefynd</li>"
-                    + "<li>resultat av kliniskt fysiologiska undersökningar</li>"
-                    + "<li>andra testresultat, exempelvis neuropsykologiska.</li>"
-                    + "</ul>"
-                    + "Ange även vilka uppgifter som är baserade på anamnes."
-                    + "Ange om möjligt grad av funktionsnedsättning (till exempel lätt, måttlig, stor eller total).\n"
-                    + "Funktionsområdenas hjälptexter följer väsentligen ICF men då kategorierna i läkarutlåtandena är färre har vissa förenklingar gjorts.")
+                """
+                    Beskriv de funktionsnedsättningar som patienten har. Ange om din bedömning är baserad på observationer, undersökningsfynd eller testresultat. Det kan till exempel vara:
+                    <ul>
+                    <li>avvikelser i somatiskt och psykiskt status</li><li>röntgen- och laboratoriefynd</li><li>resultat av kliniskt fysiologiska undersökningar</li><li>andra testresultat, exempelvis neuropsykologiska.</li></ul>
+                    Ange även vilka uppgifter som är baserade på anamnes. Ange om möjligt grad av funktionsnedsättning (till exempel lätt, måttlig, stor eller total).
+                                        
+                    Funktionsområdenas hjälptexter följer väsentligen ICF men då kategorierna i läkarutlåtandena är färre har vissa förenklingar gjorts.""")
             .build();
 
         final var certificateModel = certificateModelFactoryFK7809.create();
