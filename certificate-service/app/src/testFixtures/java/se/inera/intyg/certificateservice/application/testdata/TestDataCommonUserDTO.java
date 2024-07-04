@@ -19,6 +19,15 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_ALLOW_COPY;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_BLOCKED;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_FIRST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_FULL_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_HEALTH_CARE_PROFESSIONAL_LICENCES;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_LAST_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_MIDDLE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_ROLE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_FIRST_NAME;
@@ -49,8 +58,13 @@ import se.inera.intyg.certificateservice.domain.common.model.Speciality;
 
 public class TestDataCommonUserDTO {
 
+  private TestDataCommonUserDTO() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static final UserDTO AJLA_DOCTOR_DTO = ajlaDoktorDtoBuilder().build();
   public static final UserDTO ALVA_VARDADMINISTRATOR_DTO = alvaVardadministratorDtoBuilder().build();
+  public static final UserDTO ANNA_SJUKSKOTERSKA_DTO = annaSjukskoterskaDtoBuilder().build();
   public static final UserDTO BERTIL_BARNMORSKA_DTO = bertilBarnmorskaDtoBuilder().build();
   public static final UserDTO DAN_DENTIST_DTO = danDentistDtoBuilder().build();
 
@@ -101,6 +115,26 @@ public class TestDataCommonUserDTO {
         .allowCopy(ALVA_VARDADMINISTRATOR_ALLOW_COPY.value())
         .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
         .healthCareProfessionalLicence(Collections.emptyList());
+  }
+
+  public static UserDTOBuilder annaSjukskoterskaDtoBuilder() {
+    return UserDTO.builder()
+        .id(ANNA_SJUKSKOTERSKA_HSA_ID)
+        .firstName(ANNA_SJUKSKOTERSKA_FIRST_NAME)
+        .middleName(ANNA_SJUKSKOTERSKA_MIDDLE_NAME)
+        .lastName(ANNA_SJUKSKOTERSKA_LAST_NAME)
+        .fullName(ANNA_SJUKSKOTERSKA_FULL_NAME)
+        .role(RoleTypeDTO.toRoleType(ANNA_SJUKSKOTERSKA_ROLE))
+        .paTitles(Collections.emptyList())
+        .specialities(Collections.emptyList())
+        .blocked(ANNA_SJUKSKOTERSKA_BLOCKED.value())
+        .allowCopy(ANNA_SJUKSKOTERSKA_ALLOW_COPY.value())
+        .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
+        .healthCareProfessionalLicence(
+            ANNA_SJUKSKOTERSKA_HEALTH_CARE_PROFESSIONAL_LICENCES.stream()
+                .map(HealthCareProfessionalLicence::value)
+                .toList()
+        );
   }
 
   public static UserDTOBuilder bertilBarnmorskaDtoBuilder() {

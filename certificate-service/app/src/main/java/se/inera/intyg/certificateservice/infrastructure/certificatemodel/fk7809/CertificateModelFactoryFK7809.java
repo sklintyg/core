@@ -71,7 +71,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.
 public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
 
   private static final String GENERAL_LABEL_FUNKTIONSNEDSATTNING = "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.";
-  @Value("${certificate.model.fk7210.v1_0.active.from}")
+  @Value("${certificate.model.fk7809.v1_0.active.from}")
   private LocalDateTime activeFrom;
 
   private final DiagnosisCodeRepository diagnosisCodeRepositoy;
@@ -107,13 +107,13 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
             
       Den som anses vara blind eller gravt hörselskadad kan få en garanterad nivå av merkostnadsersättning utan att ha några merkostnader.
       """;
-  private static final CertificateModelId FK7809_V1_0 = CertificateModelId.builder()
+  public static final CertificateModelId FK7809_V1_0 = CertificateModelId.builder()
       .type(new CertificateType(FK_7809))
       .version(new CertificateVersion(VERSION))
       .build();
 
   private static final ElementId GRUND_FOR_MEDICINSKT_UNDERLAG_CATEGORY_ID = new ElementId("KAT_1");
-  private static final ElementId QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID = new ElementId("1");
+  public static final ElementId QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID = new ElementId("1");
   private static final FieldId QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_FIELD_ID = new FieldId("1.1");
 
   private static final ElementId QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID = new ElementId(
@@ -126,9 +126,9 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   private static final FieldId UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID = new FieldId("annat");
   private static final String UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID = "journaluppgifter";
   private static final FieldId UTLATANDE_BASERAT_PA_ANHORIG_FIELD_ID = new FieldId("anhorig");
-  private static final String UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID = "undersokningAvPatienten";
+  public static final String UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID = "undersokningAvPatienten";
 
-  private static final ElementId QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID = new ElementId("3");
+  public static final ElementId QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID = new ElementId("3");
   private static final FieldId QUESTION_BASERAT_PA_ANNAT_UNDERLAG_FIELD_ID = new FieldId("3.1");
 
   private static final FieldId MEDICAL_INVESTIGATION_FIELD_ID_1 = new FieldId(
@@ -155,7 +155,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   private static final FieldId QUESTION_VARDENHET_OCH_TIDPLAN_FIELD_ID = new FieldId("50.2");
 
   private static final ElementId PROGNOS_CATEGORY_ID = new ElementId("KAT_8");
-  private static final ElementId QUESTION_PROGNOS_ID = new ElementId(
+  public static final ElementId QUESTION_PROGNOS_ID = new ElementId(
       "51");
   private static final FieldId QUESTION_PROGNOS_FIELD_ID = new FieldId("51.1");
 
@@ -178,10 +178,10 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   private static final short DIAGNOSIS_CODE_LIMIT = (short) 81;
 
   private static final ElementId FUNKTIONSNEDSATTNING_CATEGORY_ID = new ElementId("KAT_5");
-  private static final ElementId FUNKTIONSNEDSATTNING_ID = new ElementId("funktionsnedsattning");
+  public static final ElementId FUNKTIONSNEDSATTNING_ID = new ElementId("funktionsnedsattning");
   private static final FieldId FUNKTIONSNEDSATNING_FIELD_ID = new FieldId(
       "funktionsnedsattning");
-  private static final FieldId FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID = new FieldId("8.2");
+  public static final FieldId FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID = new FieldId("8.2");
   private static final FieldId FUNKTIONSNEDSATTNING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID = new FieldId(
       "9.2");
   private static final FieldId FUNKTIONSNEDSATTNING_UPPMAKRMSAHET_ID = new FieldId("10.2");
@@ -192,7 +192,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   private static final FieldId FUNKTIONSNEDSATTNING_KOORDINATION_ID = new FieldId("13.2");
   private static final FieldId FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID = new FieldId(
       "14.2");
-  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_INTELLEKTUELL_FUNKTION_ID = new ElementId(
+  public static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_INTELLEKTUELL_FUNKTION_ID = new ElementId(
       "8");
   private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID = new ElementId(
       "9");
@@ -231,7 +231,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
 
   private static final String PREAMBLE_TEXT =
       "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
-      + "Har du frågor kontaktar du den som skrivit ditt intyg.";
+          + "Har du frågor kontaktar du den som skrivit ditt intyg.";
   private static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk7809/schematron/lumek.v1.sch");
 

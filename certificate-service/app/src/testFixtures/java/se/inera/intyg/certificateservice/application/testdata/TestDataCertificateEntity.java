@@ -21,6 +21,10 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 
 public class TestDataCertificateEntity {
 
+  private TestDataCertificateEntity() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static final CertificateEntity CERTIFICATE_ENTITY = certificateEntityBuilder().build();
   public static final CertificateEntity PARENT_CERTIFICATE_ENTITY = certificateParentEntityBuilder().build();
 

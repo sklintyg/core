@@ -25,6 +25,10 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 
 public class TestDataUnitEntity {
 
+  private TestDataUnitEntity() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static final UnitEntity ALFA_REGIONEN_ENTITY = alfaRegionenEntityBuilder().build();
   public static final UnitEntity ALFA_MEDICINCENTRUM_ENTITY = alfaMedicinCentrumEntityBuilder().build();
   public static final UnitEntity ALFA_ALLERGIMOTTAGNINGEN_ENTITY = alfaAllergimottagningenEntityBuilder().build();

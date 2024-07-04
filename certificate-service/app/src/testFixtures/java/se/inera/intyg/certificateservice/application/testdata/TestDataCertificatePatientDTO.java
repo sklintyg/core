@@ -19,6 +19,10 @@ import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 
 public class TestDataCertificatePatientDTO {
 
+  private TestDataCertificatePatientDTO() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static final PatientDTO ATHENA_REACT_ANDERSSON_DTO = athenaReactAnderssonDtoBuilder().build();
 
   public static PatientDTOBuilder athenaReactAnderssonDtoBuilder() {

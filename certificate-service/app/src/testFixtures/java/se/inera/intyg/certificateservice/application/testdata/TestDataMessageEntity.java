@@ -28,12 +28,16 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 
 public class TestDataMessageEntity {
 
-  public final static MessageEntity COMPLEMENT_MESSAGE_ENTITY = complementMessageEntityBuilder().build();
-  public final static MessageEntity CONTACT_MESSAGE_ENTITY = contactMessageEntityBuilder().build();
-  public final static MessageEntity ANSWER_MESSAGE_ENTITY = answerMessageEntityBuilder().build();
-  public final static MessageEntity REMINDER_MESSAGE_ENTITY = reminderMessageEntityBuilder().build();
+  private TestDataMessageEntity() {
+    throw new IllegalStateException("Utility class");
+  }
 
-  public final static Integer MESSAGE_KEY = 999;
+  public static final MessageEntity COMPLEMENT_MESSAGE_ENTITY = complementMessageEntityBuilder().build();
+  public static final MessageEntity CONTACT_MESSAGE_ENTITY = contactMessageEntityBuilder().build();
+  public static final MessageEntity ANSWER_MESSAGE_ENTITY = answerMessageEntityBuilder().build();
+  public static final MessageEntity REMINDER_MESSAGE_ENTITY = reminderMessageEntityBuilder().build();
+
+  public static final Integer MESSAGE_KEY = 999;
 
   public static MessageEntity.MessageEntityBuilder complementMessageEntityBuilder() {
     return MessageEntity.builder()
