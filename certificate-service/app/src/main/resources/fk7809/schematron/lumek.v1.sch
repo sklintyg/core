@@ -114,7 +114,7 @@
     </iso:rule>
   </iso:pattern>
 
-  <iso:pattern id="q1.1-1.4">
+  <iso:pattern id="q1.1-1.3">
     <iso:rule context="//gn:delsvar[@id='1.1']/tp:cv/tp:code[normalize-space(.) = 'ANNAT']">
       <iso:assert test="../../../gn:delsvar[@id='1.3']">
         Om 'Typ av grund för MU' är 'Annat' så måste 'Ange vad annat är' anges.
