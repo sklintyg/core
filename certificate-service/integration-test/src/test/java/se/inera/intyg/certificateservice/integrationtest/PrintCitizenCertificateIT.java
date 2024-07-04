@@ -22,7 +22,7 @@ public abstract class PrintCitizenCertificateIT extends BaseIntegrationIT {
 
   @Test
   @DisplayName("Om intyget är utfärdat på invånaren ska intyget skrivas ut")
-  void shallReturnFK7210IfIssuedOnCitizen() {
+  void shallReturnCertificateIfIssuedOnCitizen() {
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );

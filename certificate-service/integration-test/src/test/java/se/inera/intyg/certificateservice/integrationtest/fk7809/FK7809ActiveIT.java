@@ -37,7 +37,6 @@ import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
 
 public class FK7809ActiveIT {
 
-  private static final String DISPLAY_TYPE = "FK7809";
   private static final String CERTIFICATE_TYPE = FK7809Constants.FK7809;
   private static final String ACTIVE_VERSION = FK7809Constants.VERSION;
   private static final String WRONG_VERSION = FK7809Constants.WRONG_VERSION;

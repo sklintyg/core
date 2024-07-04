@@ -64,7 +64,7 @@ public class TestDataCommonUserDTO {
 
   public static final UserDTO AJLA_DOCTOR_DTO = ajlaDoktorDtoBuilder().build();
   public static final UserDTO ALVA_VARDADMINISTRATOR_DTO = alvaVardadministratorDtoBuilder().build();
-  public static final UserDTO ANNA_SJUKSKOTERSKA_DTO = annaSJukskoterskaDtoBuilder().build();
+  public static final UserDTO ANNA_SJUKSKOTERSKA_DTO = annaSjukskoterskaDtoBuilder().build();
   public static final UserDTO BERTIL_BARNMORSKA_DTO = bertilBarnmorskaDtoBuilder().build();
   public static final UserDTO DAN_DENTIST_DTO = danDentistDtoBuilder().build();
 
@@ -117,7 +117,7 @@ public class TestDataCommonUserDTO {
         .healthCareProfessionalLicence(Collections.emptyList());
   }
 
-  public static UserDTOBuilder annaSJukskoterskaDtoBuilder() {
+  public static UserDTOBuilder annaSjukskoterskaDtoBuilder() {
     return UserDTO.builder()
         .id(ANNA_SJUKSKOTERSKA_HSA_ID)
         .firstName(ANNA_SJUKSKOTERSKA_FIRST_NAME)
