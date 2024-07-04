@@ -5,6 +5,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK3226_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7210_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7472_CERTIFICATE_MODEL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7809_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
@@ -26,7 +27,9 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalInvestigation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
@@ -82,6 +85,7 @@ public class TestDataCertificate {
       .build();
   public static final Certificate FK7210_CERTIFICATE = fk7210CertificateBuilder().build();
   public static final Certificate FK3226_CERTIFICATE = fk3226CertificateBuilder().build();
+  public static final Certificate FK7809_CERTIFICATE = fk7809CertificateBuilder().build();
 
   public static Certificate.CertificateBuilder fk7210CertificateBuilder() {
     return Certificate.builder()
@@ -238,6 +242,133 @@ public class TestDataCertificate {
                             )
                             .dateRangeListId(new FieldId("3.2"))
                             .build())
+                    .build()
+            )
+        )
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .issuer(AJLA_DOKTOR)
+                .patient(ATHENA_REACT_ANDERSSON)
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                .careUnit(ALFA_MEDICINCENTRUM)
+                .careProvider(ALFA_REGIONEN)
+                .build()
+        );
+  }
+
+  public static Certificate.CertificateBuilder fk7809CertificateBuilder() {
+    return Certificate.builder()
+        .id(CERTIFICATE_ID)
+        .revision(REVISION)
+        .created(LocalDateTime.now(ZoneId.systemDefault()))
+        .certificateModel(FK7809_CERTIFICATE_MODEL)
+        .xml(XML)
+        .sent(SENT)
+        .revoked(REVOKED)
+        .externalReference(EXTERNAL_REFERENCE)
+        .elementData(
+            List.of(
+                ElementData.builder()
+                    .id(new ElementId("1"))
+                    .value(
+                        ElementValueDateList.builder()
+                            .dateListId(new FieldId("1.1"))
+                            .dateList(
+                                List.of(
+                                    ElementValueDate.builder()
+                                        .dateId(new FieldId("undersokningAvPatienten"))
+                                        .date(LocalDate.now())
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("3"))
+                    .value(
+                        ElementValueBoolean.builder()
+                            .booleanId(new FieldId("3.1"))
+                            .value(true)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("4"))
+                    .value(
+                        ElementValueMedicalInvestigationList.builder()
+                            .id(new FieldId("52.2"))
+                            .list(
+                                List.of(
+                                    MedicalInvestigation.builder()
+                                        .id(new FieldId("medicalInvestigation1"))
+                                        .informationSource(
+                                            ElementValueText.builder()
+                                                .textId(new FieldId(
+                                                    "medicalInvestigation1_INFORMATION_SOURCE"))
+                                                .text("Example text")
+                                                .build()
+                                        )
+                                        .investigationType(
+                                            ElementValueCode.builder()
+                                                .codeId(new FieldId(
+                                                    "medicalInvestigation1_INVESTIGATION_TYPE"))
+                                                .code("LOGOPED")
+                                                .build()
+                                        )
+                                        .date(
+                                            ElementValueDate.builder()
+                                                .dateId(new FieldId("medicalInvestigation1_DATE"))
+                                                .date(LocalDate.now())
+                                                .build())
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("58"))
+                    .value(
+                        ElementValueDiagnosisList.builder()
+                            .diagnoses(
+                                List.of(
+                                    ElementValueDiagnosis.builder()
+                                        .code("A013")
+                                        .description("Paratyfoidfeber C")
+                                        .terminology("ICD_10_SE")
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("5"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("5"))
+                            .text("TEXT")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("9"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("9.1"))
+                            .text("TEXT")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("51"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("51"))
+                            .text("TEXT")
+                            .build()
+                    )
                     .build()
             )
         )
