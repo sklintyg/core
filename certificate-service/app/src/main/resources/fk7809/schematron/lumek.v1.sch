@@ -80,9 +80,9 @@
       <iso:assert test="count(gn:delsvar[@id='1.3']) le 1">
           'Grund för medicinskt underlag (MU)' får ha högst ett 'Ange vad annat är' svar.
       </iso:assert>
-            <iso:assert test="count(gn:delsvar[@id='1.4']) le 1">
-                'Grund för medicinskt underlag (MU)' får ha högst ett 'Ange anhörig eller annas relation till patienten' svar.
-            </iso:assert>
+      <iso:assert test="count(gn:delsvar[@id='1.4']) le 1">
+          'Grund för medicinskt underlag (MU)' får ha högst ett 'Ange anhörig eller annas relation till patienten' svar.
+      </iso:assert>
       <iso:assert test="not(preceding-sibling::gn:svar[@id='1']/gn:delsvar[@id='1.1']/tp:cv/tp:code/normalize-space() = normalize-space(gn:delsvar[@id='1.1']/tp:cv/tp:code))">
         Samma 'Typ av grund för MU' kan inte användas flera gånger i samma 'LUMEK'.
       </iso:assert>
@@ -160,7 +160,7 @@
         <iso:pattern id="q3.1-4">
           <iso:rule context="//gn:delsvar[@id='3.1' and (normalize-space(.)='1' or normalize-space(.)='true')]">
             <iso:assert test="count(../../gn:svar[@id='4']) ge 1">
-              Om 'Är utlåtandet även baserat på andra medicinska utredningar eller underlag??' besvarats med sant måste minst en 'Andra medicinska utredningar eller underlag' anges.
+              Om 'Är utlåtandet även baserat på andra medicinska utredningar eller underlag?' besvarats med sant måste minst en 'Andra medicinska utredningar eller underlag' anges.
             </iso:assert>
           </iso:rule>
           <iso:rule context="//gn:delsvar[@id='3.1' and (normalize-space(.)='0' or normalize-space(.)='false')]">
