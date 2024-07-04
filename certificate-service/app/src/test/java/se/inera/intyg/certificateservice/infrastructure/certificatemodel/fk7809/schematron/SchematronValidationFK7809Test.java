@@ -2178,7 +2178,125 @@ class SchematronValidationFK7809Test {
   class QuestionFunktionsnedsattning {
 
     @Test
-    void shallReturnTrueIfQuestionFunktionsnedsattningIsAddedOnce() {
+    void shallReturnTrueIfQuestionFunktionsnedsattning8IsAddedOnce() {
+      final var certificate = TestDataCertificate.fk7809CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK7809.create())
+          .elementData(
+              List.of(
+                  ElementData.builder()
+                      .id(new ElementId("1"))
+                      .value(
+                          ElementValueDateList.builder()
+                              .dateListId(new FieldId("1.1"))
+                              .dateList(List.of(
+                                      ElementValueDate.builder()
+                                          .dateId(new FieldId("journaluppgifter"))
+                                          .date(LocalDate.now())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("3"))
+                      .value(
+                          ElementValueBoolean.builder()
+                              .booleanId(new FieldId("3.1"))
+                              .value(true)
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("4"))
+                      .value(
+                          ElementValueMedicalInvestigationList.builder()
+                              .id(new FieldId("52.2"))
+                              .list(
+                                  List.of(
+                                      MedicalInvestigation.builder()
+                                          .id(new FieldId("medicalInvestigation1"))
+                                          .informationSource(
+                                              ElementValueText.builder()
+                                                  .textId(new FieldId(
+                                                      "medicalInvestigation1_INFORMATION_SOURCE"))
+                                                  .text("Example text")
+                                                  .build()
+                                          )
+                                          .investigationType(
+                                              ElementValueCode.builder()
+                                                  .codeId(new FieldId(
+                                                      "medicalInvestigation1_INVESTIGATION_TYPE"))
+                                                  .code("LOGOPED")
+                                                  .build()
+                                          )
+                                          .date(
+                                              ElementValueDate.builder()
+                                                  .dateId(
+                                                      new FieldId("medicalInvestigation1_DATE"))
+                                                  .date(LocalDate.now())
+                                                  .build())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("58"))
+                      .value(
+                          ElementValueDiagnosisList.builder()
+                              .diagnoses(
+                                  List.of(
+                                      ElementValueDiagnosis.builder()
+                                          .code("A20")
+                                          .description("Paratyfoidfeber C")
+                                          .terminology("ICD_10_SE")
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("5"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("5"))
+                              .text("Historiken för diagnoserna")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("8"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("8.1"))
+                              .text("text 2")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("51"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("51.1"))
+                              .text("prognos")
+                              .build()
+                      )
+                      .build()
+              )
+          )
+          .build();
+
+      final var xml = generator.generate(certificate, false);
+
+      assertTrue(schematronValidator.validate(certificate.id(), xml,
+          FK7809_SCHEMATRON_PATH));
+    }
+
+    @Test
+    void shallReturnTrueIfQuestionFunktionsnedsattning9IsAddedOnce() {
       final var certificate = TestDataCertificate.fk7809CertificateBuilder()
           .certificateModel(certificateModelFactoryFK7809.create())
           .elementData(
@@ -2296,7 +2414,833 @@ class SchematronValidationFK7809Test {
     }
 
     @Test
-    void shallReturnFalseIfQuestionFunktionsnedsattningIsAddedTwice() {
+    void shallReturnTrueIfQuestionFunktionsnedsattning10IsAddedOnce() {
+      final var certificate = TestDataCertificate.fk7809CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK7809.create())
+          .elementData(
+              List.of(
+                  ElementData.builder()
+                      .id(new ElementId("1"))
+                      .value(
+                          ElementValueDateList.builder()
+                              .dateListId(new FieldId("1.1"))
+                              .dateList(List.of(
+                                      ElementValueDate.builder()
+                                          .dateId(new FieldId("journaluppgifter"))
+                                          .date(LocalDate.now())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("3"))
+                      .value(
+                          ElementValueBoolean.builder()
+                              .booleanId(new FieldId("3.1"))
+                              .value(true)
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("4"))
+                      .value(
+                          ElementValueMedicalInvestigationList.builder()
+                              .id(new FieldId("52.2"))
+                              .list(
+                                  List.of(
+                                      MedicalInvestigation.builder()
+                                          .id(new FieldId("medicalInvestigation1"))
+                                          .informationSource(
+                                              ElementValueText.builder()
+                                                  .textId(new FieldId(
+                                                      "medicalInvestigation1_INFORMATION_SOURCE"))
+                                                  .text("Example text")
+                                                  .build()
+                                          )
+                                          .investigationType(
+                                              ElementValueCode.builder()
+                                                  .codeId(new FieldId(
+                                                      "medicalInvestigation1_INVESTIGATION_TYPE"))
+                                                  .code("LOGOPED")
+                                                  .build()
+                                          )
+                                          .date(
+                                              ElementValueDate.builder()
+                                                  .dateId(
+                                                      new FieldId("medicalInvestigation1_DATE"))
+                                                  .date(LocalDate.now())
+                                                  .build())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("58"))
+                      .value(
+                          ElementValueDiagnosisList.builder()
+                              .diagnoses(
+                                  List.of(
+                                      ElementValueDiagnosis.builder()
+                                          .code("A20")
+                                          .description("Paratyfoidfeber C")
+                                          .terminology("ICD_10_SE")
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("5"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("5"))
+                              .text("Historiken för diagnoserna")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("10"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("10.1"))
+                              .text("text 2")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("51"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("51.1"))
+                              .text("prognos")
+                              .build()
+                      )
+                      .build()
+              )
+          )
+          .build();
+
+      final var xml = generator.generate(certificate, false);
+
+      assertTrue(schematronValidator.validate(certificate.id(), xml,
+          FK7809_SCHEMATRON_PATH));
+    }
+
+    @Test
+    void shallReturnTrueIfQuestionFunktionsnedsattning11IsAddedOnce() {
+      final var certificate = TestDataCertificate.fk7809CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK7809.create())
+          .elementData(
+              List.of(
+                  ElementData.builder()
+                      .id(new ElementId("1"))
+                      .value(
+                          ElementValueDateList.builder()
+                              .dateListId(new FieldId("1.1"))
+                              .dateList(List.of(
+                                      ElementValueDate.builder()
+                                          .dateId(new FieldId("journaluppgifter"))
+                                          .date(LocalDate.now())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("3"))
+                      .value(
+                          ElementValueBoolean.builder()
+                              .booleanId(new FieldId("3.1"))
+                              .value(true)
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("4"))
+                      .value(
+                          ElementValueMedicalInvestigationList.builder()
+                              .id(new FieldId("52.2"))
+                              .list(
+                                  List.of(
+                                      MedicalInvestigation.builder()
+                                          .id(new FieldId("medicalInvestigation1"))
+                                          .informationSource(
+                                              ElementValueText.builder()
+                                                  .textId(new FieldId(
+                                                      "medicalInvestigation1_INFORMATION_SOURCE"))
+                                                  .text("Example text")
+                                                  .build()
+                                          )
+                                          .investigationType(
+                                              ElementValueCode.builder()
+                                                  .codeId(new FieldId(
+                                                      "medicalInvestigation1_INVESTIGATION_TYPE"))
+                                                  .code("LOGOPED")
+                                                  .build()
+                                          )
+                                          .date(
+                                              ElementValueDate.builder()
+                                                  .dateId(
+                                                      new FieldId("medicalInvestigation1_DATE"))
+                                                  .date(LocalDate.now())
+                                                  .build())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("58"))
+                      .value(
+                          ElementValueDiagnosisList.builder()
+                              .diagnoses(
+                                  List.of(
+                                      ElementValueDiagnosis.builder()
+                                          .code("A20")
+                                          .description("Paratyfoidfeber C")
+                                          .terminology("ICD_10_SE")
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("5"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("5"))
+                              .text("Historiken för diagnoserna")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("11"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("11.1"))
+                              .text("text 2")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("51"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("51.1"))
+                              .text("prognos")
+                              .build()
+                      )
+                      .build()
+              )
+          )
+          .build();
+
+      final var xml = generator.generate(certificate, false);
+
+      assertTrue(schematronValidator.validate(certificate.id(), xml,
+          FK7809_SCHEMATRON_PATH));
+    }
+
+    @Test
+    void shallReturnTrueIfQuestionFunktionsnedsattning12IsAddedOnce() {
+      final var certificate = TestDataCertificate.fk7809CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK7809.create())
+          .elementData(
+              List.of(
+                  ElementData.builder()
+                      .id(new ElementId("1"))
+                      .value(
+                          ElementValueDateList.builder()
+                              .dateListId(new FieldId("1.1"))
+                              .dateList(List.of(
+                                      ElementValueDate.builder()
+                                          .dateId(new FieldId("journaluppgifter"))
+                                          .date(LocalDate.now())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("3"))
+                      .value(
+                          ElementValueBoolean.builder()
+                              .booleanId(new FieldId("3.1"))
+                              .value(true)
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("4"))
+                      .value(
+                          ElementValueMedicalInvestigationList.builder()
+                              .id(new FieldId("52.2"))
+                              .list(
+                                  List.of(
+                                      MedicalInvestigation.builder()
+                                          .id(new FieldId("medicalInvestigation1"))
+                                          .informationSource(
+                                              ElementValueText.builder()
+                                                  .textId(new FieldId(
+                                                      "medicalInvestigation1_INFORMATION_SOURCE"))
+                                                  .text("Example text")
+                                                  .build()
+                                          )
+                                          .investigationType(
+                                              ElementValueCode.builder()
+                                                  .codeId(new FieldId(
+                                                      "medicalInvestigation1_INVESTIGATION_TYPE"))
+                                                  .code("LOGOPED")
+                                                  .build()
+                                          )
+                                          .date(
+                                              ElementValueDate.builder()
+                                                  .dateId(
+                                                      new FieldId("medicalInvestigation1_DATE"))
+                                                  .date(LocalDate.now())
+                                                  .build())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("58"))
+                      .value(
+                          ElementValueDiagnosisList.builder()
+                              .diagnoses(
+                                  List.of(
+                                      ElementValueDiagnosis.builder()
+                                          .code("A20")
+                                          .description("Paratyfoidfeber C")
+                                          .terminology("ICD_10_SE")
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("5"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("5"))
+                              .text("Historiken för diagnoserna")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("12"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("12.1"))
+                              .text("text 2")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("51"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("51.1"))
+                              .text("prognos")
+                              .build()
+                      )
+                      .build()
+              )
+          )
+          .build();
+
+      final var xml = generator.generate(certificate, false);
+
+      assertTrue(schematronValidator.validate(certificate.id(), xml,
+          FK7809_SCHEMATRON_PATH));
+    }
+
+    @Test
+    void shallReturnTrueIfQuestionFunktionsnedsattning13IsAddedOnce() {
+      final var certificate = TestDataCertificate.fk7809CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK7809.create())
+          .elementData(
+              List.of(
+                  ElementData.builder()
+                      .id(new ElementId("1"))
+                      .value(
+                          ElementValueDateList.builder()
+                              .dateListId(new FieldId("1.1"))
+                              .dateList(List.of(
+                                      ElementValueDate.builder()
+                                          .dateId(new FieldId("journaluppgifter"))
+                                          .date(LocalDate.now())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("3"))
+                      .value(
+                          ElementValueBoolean.builder()
+                              .booleanId(new FieldId("3.1"))
+                              .value(true)
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("4"))
+                      .value(
+                          ElementValueMedicalInvestigationList.builder()
+                              .id(new FieldId("52.2"))
+                              .list(
+                                  List.of(
+                                      MedicalInvestigation.builder()
+                                          .id(new FieldId("medicalInvestigation1"))
+                                          .informationSource(
+                                              ElementValueText.builder()
+                                                  .textId(new FieldId(
+                                                      "medicalInvestigation1_INFORMATION_SOURCE"))
+                                                  .text("Example text")
+                                                  .build()
+                                          )
+                                          .investigationType(
+                                              ElementValueCode.builder()
+                                                  .codeId(new FieldId(
+                                                      "medicalInvestigation1_INVESTIGATION_TYPE"))
+                                                  .code("LOGOPED")
+                                                  .build()
+                                          )
+                                          .date(
+                                              ElementValueDate.builder()
+                                                  .dateId(
+                                                      new FieldId("medicalInvestigation1_DATE"))
+                                                  .date(LocalDate.now())
+                                                  .build())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("58"))
+                      .value(
+                          ElementValueDiagnosisList.builder()
+                              .diagnoses(
+                                  List.of(
+                                      ElementValueDiagnosis.builder()
+                                          .code("A20")
+                                          .description("Paratyfoidfeber C")
+                                          .terminology("ICD_10_SE")
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("5"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("5"))
+                              .text("Historiken för diagnoserna")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("13"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("13.1"))
+                              .text("text 2")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("51"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("51.1"))
+                              .text("prognos")
+                              .build()
+                      )
+                      .build()
+              )
+          )
+          .build();
+
+      final var xml = generator.generate(certificate, false);
+
+      assertTrue(schematronValidator.validate(certificate.id(), xml,
+          FK7809_SCHEMATRON_PATH));
+    }
+
+    @Test
+    void shallReturnTrueIfQuestionFunktionsnedsattning14IsAddedOnce() {
+      final var certificate = TestDataCertificate.fk7809CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK7809.create())
+          .elementData(
+              List.of(
+                  ElementData.builder()
+                      .id(new ElementId("1"))
+                      .value(
+                          ElementValueDateList.builder()
+                              .dateListId(new FieldId("1.1"))
+                              .dateList(List.of(
+                                      ElementValueDate.builder()
+                                          .dateId(new FieldId("journaluppgifter"))
+                                          .date(LocalDate.now())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("3"))
+                      .value(
+                          ElementValueBoolean.builder()
+                              .booleanId(new FieldId("3.1"))
+                              .value(true)
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("4"))
+                      .value(
+                          ElementValueMedicalInvestigationList.builder()
+                              .id(new FieldId("52.2"))
+                              .list(
+                                  List.of(
+                                      MedicalInvestigation.builder()
+                                          .id(new FieldId("medicalInvestigation1"))
+                                          .informationSource(
+                                              ElementValueText.builder()
+                                                  .textId(new FieldId(
+                                                      "medicalInvestigation1_INFORMATION_SOURCE"))
+                                                  .text("Example text")
+                                                  .build()
+                                          )
+                                          .investigationType(
+                                              ElementValueCode.builder()
+                                                  .codeId(new FieldId(
+                                                      "medicalInvestigation1_INVESTIGATION_TYPE"))
+                                                  .code("LOGOPED")
+                                                  .build()
+                                          )
+                                          .date(
+                                              ElementValueDate.builder()
+                                                  .dateId(
+                                                      new FieldId("medicalInvestigation1_DATE"))
+                                                  .date(LocalDate.now())
+                                                  .build())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("58"))
+                      .value(
+                          ElementValueDiagnosisList.builder()
+                              .diagnoses(
+                                  List.of(
+                                      ElementValueDiagnosis.builder()
+                                          .code("A20")
+                                          .description("Paratyfoidfeber C")
+                                          .terminology("ICD_10_SE")
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("5"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("5"))
+                              .text("Historiken för diagnoserna")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("14"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("14.1"))
+                              .text("text 2")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("51"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("51.1"))
+                              .text("prognos")
+                              .build()
+                      )
+                      .build()
+              )
+          )
+          .build();
+
+      final var xml = generator.generate(certificate, false);
+
+      assertTrue(schematronValidator.validate(certificate.id(), xml,
+          FK7809_SCHEMATRON_PATH));
+    }
+
+    @Test
+    void shallReturnTrueIfQuestionFunktionsnedsattning48IsAddedOnce() {
+      final var certificate = TestDataCertificate.fk7809CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK7809.create())
+          .elementData(
+              List.of(
+                  ElementData.builder()
+                      .id(new ElementId("1"))
+                      .value(
+                          ElementValueDateList.builder()
+                              .dateListId(new FieldId("1.1"))
+                              .dateList(List.of(
+                                      ElementValueDate.builder()
+                                          .dateId(new FieldId("journaluppgifter"))
+                                          .date(LocalDate.now())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("3"))
+                      .value(
+                          ElementValueBoolean.builder()
+                              .booleanId(new FieldId("3.1"))
+                              .value(true)
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("4"))
+                      .value(
+                          ElementValueMedicalInvestigationList.builder()
+                              .id(new FieldId("52.2"))
+                              .list(
+                                  List.of(
+                                      MedicalInvestigation.builder()
+                                          .id(new FieldId("medicalInvestigation1"))
+                                          .informationSource(
+                                              ElementValueText.builder()
+                                                  .textId(new FieldId(
+                                                      "medicalInvestigation1_INFORMATION_SOURCE"))
+                                                  .text("Example text")
+                                                  .build()
+                                          )
+                                          .investigationType(
+                                              ElementValueCode.builder()
+                                                  .codeId(new FieldId(
+                                                      "medicalInvestigation1_INVESTIGATION_TYPE"))
+                                                  .code("LOGOPED")
+                                                  .build()
+                                          )
+                                          .date(
+                                              ElementValueDate.builder()
+                                                  .dateId(
+                                                      new FieldId("medicalInvestigation1_DATE"))
+                                                  .date(LocalDate.now())
+                                                  .build())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("58"))
+                      .value(
+                          ElementValueDiagnosisList.builder()
+                              .diagnoses(
+                                  List.of(
+                                      ElementValueDiagnosis.builder()
+                                          .code("A20")
+                                          .description("Paratyfoidfeber C")
+                                          .terminology("ICD_10_SE")
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("5"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("5"))
+                              .text("Historiken för diagnoserna")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("48"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("48.1"))
+                              .text("text 2")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("51"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("51.1"))
+                              .text("prognos")
+                              .build()
+                      )
+                      .build()
+              )
+          )
+          .build();
+
+      final var xml = generator.generate(certificate, false);
+
+      assertTrue(schematronValidator.validate(certificate.id(), xml,
+          FK7809_SCHEMATRON_PATH));
+    }
+
+    @Test
+    void shallReturnTrueIfQuestionFunktionsnedsattning49IsAddedOnce() {
+      final var certificate = TestDataCertificate.fk7809CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK7809.create())
+          .elementData(
+              List.of(
+                  ElementData.builder()
+                      .id(new ElementId("1"))
+                      .value(
+                          ElementValueDateList.builder()
+                              .dateListId(new FieldId("1.1"))
+                              .dateList(List.of(
+                                      ElementValueDate.builder()
+                                          .dateId(new FieldId("journaluppgifter"))
+                                          .date(LocalDate.now())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("3"))
+                      .value(
+                          ElementValueBoolean.builder()
+                              .booleanId(new FieldId("3.1"))
+                              .value(true)
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("4"))
+                      .value(
+                          ElementValueMedicalInvestigationList.builder()
+                              .id(new FieldId("52.2"))
+                              .list(
+                                  List.of(
+                                      MedicalInvestigation.builder()
+                                          .id(new FieldId("medicalInvestigation1"))
+                                          .informationSource(
+                                              ElementValueText.builder()
+                                                  .textId(new FieldId(
+                                                      "medicalInvestigation1_INFORMATION_SOURCE"))
+                                                  .text("Example text")
+                                                  .build()
+                                          )
+                                          .investigationType(
+                                              ElementValueCode.builder()
+                                                  .codeId(new FieldId(
+                                                      "medicalInvestigation1_INVESTIGATION_TYPE"))
+                                                  .code("LOGOPED")
+                                                  .build()
+                                          )
+                                          .date(
+                                              ElementValueDate.builder()
+                                                  .dateId(
+                                                      new FieldId("medicalInvestigation1_DATE"))
+                                                  .date(LocalDate.now())
+                                                  .build())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("58"))
+                      .value(
+                          ElementValueDiagnosisList.builder()
+                              .diagnoses(
+                                  List.of(
+                                      ElementValueDiagnosis.builder()
+                                          .code("A20")
+                                          .description("Paratyfoidfeber C")
+                                          .terminology("ICD_10_SE")
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("5"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("5"))
+                              .text("Historiken för diagnoserna")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("49"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("49.1"))
+                              .text("text 2")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("51"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("51.1"))
+                              .text("prognos")
+                              .build()
+                      )
+                      .build()
+              )
+          )
+          .build();
+
+      final var xml = generator.generate(certificate, false);
+
+      assertTrue(schematronValidator.validate(certificate.id(), xml,
+          FK7809_SCHEMATRON_PATH));
+    }
+
+    @Test
+    void shallReturnFalseIfSameFunktionsnedsattningIsAddedTwice() {
       final var certificate = TestDataCertificate.fk7809CertificateBuilder()
           .certificateModel(certificateModelFactoryFK7809.create())
           .elementData(
@@ -2528,6 +3472,196 @@ class SchematronValidationFK7809Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
+          FK7809_SCHEMATRON_PATH));
+    }
+
+    @Test
+    void shallReturnTrueIfAllQuestionFunktionsnedsattningAreAdded() {
+      final var certificate = TestDataCertificate.fk7809CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK7809.create())
+          .elementData(
+              List.of(
+                  ElementData.builder()
+                      .id(new ElementId("1"))
+                      .value(
+                          ElementValueDateList.builder()
+                              .dateListId(new FieldId("1.1"))
+                              .dateList(List.of(
+                                      ElementValueDate.builder()
+                                          .dateId(new FieldId("journaluppgifter"))
+                                          .date(LocalDate.now())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("3"))
+                      .value(
+                          ElementValueBoolean.builder()
+                              .booleanId(new FieldId("3.1"))
+                              .value(true)
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("4"))
+                      .value(
+                          ElementValueMedicalInvestigationList.builder()
+                              .id(new FieldId("52.2"))
+                              .list(
+                                  List.of(
+                                      MedicalInvestigation.builder()
+                                          .id(new FieldId("medicalInvestigation1"))
+                                          .informationSource(
+                                              ElementValueText.builder()
+                                                  .textId(new FieldId(
+                                                      "medicalInvestigation1_INFORMATION_SOURCE"))
+                                                  .text("Example text")
+                                                  .build()
+                                          )
+                                          .investigationType(
+                                              ElementValueCode.builder()
+                                                  .codeId(new FieldId(
+                                                      "medicalInvestigation1_INVESTIGATION_TYPE"))
+                                                  .code("LOGOPED")
+                                                  .build()
+                                          )
+                                          .date(
+                                              ElementValueDate.builder()
+                                                  .dateId(
+                                                      new FieldId("medicalInvestigation1_DATE"))
+                                                  .date(LocalDate.now())
+                                                  .build())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("58"))
+                      .value(
+                          ElementValueDiagnosisList.builder()
+                              .diagnoses(
+                                  List.of(
+                                      ElementValueDiagnosis.builder()
+                                          .code("A20")
+                                          .description("Paratyfoidfeber C")
+                                          .terminology("ICD_10_SE")
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("5"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("5"))
+                              .text("Historiken för diagnoserna")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("8"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("8.1"))
+                              .text("text 2")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("9"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("9.1"))
+                              .text("text 2")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("10"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("10.1"))
+                              .text("text 2")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("11"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("11.1"))
+                              .text("text 2")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("12"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("12.1"))
+                              .text("text 2")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("13"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("13.1"))
+                              .text("text 2")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("14"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("14.1"))
+                              .text("text 2")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("48"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("48.1"))
+                              .text("text 2")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("49"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("49.1"))
+                              .text("text 2")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("51"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("51.1"))
+                              .text("prognos")
+                              .build()
+                      )
+                      .build()
+              )
+          )
+          .build();
+
+      final var xml = generator.generate(certificate, false);
+
+      assertTrue(schematronValidator.validate(certificate.id(), xml,
           FK7809_SCHEMATRON_PATH));
     }
   }

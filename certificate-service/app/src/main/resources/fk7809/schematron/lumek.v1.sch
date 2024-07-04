@@ -60,7 +60,7 @@
        <iso:assert test="count(gn:svar[@id='14']) le 1">
         Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för annan kroppslig funktion'
        </iso:assert>
-       <iso:assert test="count(gn:svar[matches(@id, '^([89]|1[0-4])$')]) ge 1">
+       <iso:assert test="count(gn:svar[matches(@id, '^(48|49|[89]|1[0-4])$')]) ge 1">
         Ett 'LUMEK' måste ha minst ett 'Funktionsnedsättning'
        </iso:assert>
     </iso:rule>
