@@ -15,7 +15,7 @@ public class CodeSystemKvFkmu0001 {
   public static final Code JOURNALUPGIFTER = new Code(
       "JOURNALUPPGIFTER",
       CODE_SYSTEM,
-      "journaluppgifter från den"
+      "journaluppgifter från och med"
   );
 
   public static final Code ANNAT = new Code(
@@ -27,7 +27,7 @@ public class CodeSystemKvFkmu0001 {
   public static final Code ANHORIG = new Code(
       "ANHORIG",
       CODE_SYSTEM,
-      "anhörig eller annans relation till patienten"
+      "anhörig eller annans beskrivning av patienten"
   );
 
   private CodeSystemKvFkmu0001() {

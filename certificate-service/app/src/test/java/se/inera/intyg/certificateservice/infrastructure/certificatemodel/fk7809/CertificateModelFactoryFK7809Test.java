@@ -513,24 +513,24 @@ class CertificateModelFactoryFK7809Test {
                         .build(),
                     CheckboxDate.builder()
                         .id(new FieldId("journaluppgifter"))
-                        .label("journaluppgifter från den")
+                        .label("journaluppgifter från och med")
                         .code(
                             new Code(
                                 "JOURNALUPPGIFTER",
                                 "KV_FKMU_0001",
-                                "journaluppgifter från den"
+                                "journaluppgifter från och med"
                             )
                         )
                         .max(Period.ZERO)
                         .build(),
                     CheckboxDate.builder()
                         .id(new FieldId("anhorig"))
-                        .label("anhörig eller annans relation till patienten")
+                        .label("anhörig eller annans beskrivning av patienten")
                         .code(
                             new Code(
                                 "ANHORIG",
                                 "KV_FKMU_0001",
-                                "anhörig eller annans relation till patienten"
+                                "anhörig eller annans beskrivning av patienten"
                             )
                         )
                         .max(Period.ZERO)
@@ -616,7 +616,7 @@ class CertificateModelFactoryFK7809Test {
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationTextField.builder()
             .name(
-                "Ange anhörig eller annas relation till patienten")
+                "Ange anhörig eller annans relation till patienten")
             .id(new FieldId("1.4"))
             .build();
 
@@ -1041,8 +1041,8 @@ class CertificateModelFactoryFK7809Test {
                   .expression(
                       new RuleExpression(
                           "!empty($medicalInvestigation1_DATE) "
-                          + "|| !empty($medicalInvestigation1_INVESTIGATION_TYPE) "
-                          + "|| !empty($medicalInvestigation1_INFORMATION_SOURCE)"
+                              + "|| !empty($medicalInvestigation1_INVESTIGATION_TYPE) "
+                              + "|| !empty($medicalInvestigation1_INFORMATION_SOURCE)"
                       )
                   )
                   .build(),
