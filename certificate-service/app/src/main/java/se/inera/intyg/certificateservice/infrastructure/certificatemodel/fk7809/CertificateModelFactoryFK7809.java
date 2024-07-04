@@ -573,7 +573,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
             ElementConfigurationTextField.builder()
                 .id(QUESTION_RELATION_TILL_PATIENTEN_FIELD_ID)
                 .name(
-                    "Ange anhörig eller annas relation till patienten")
+                    "Ange anhörig eller annans relation till patienten")
                 .build()
         )
         .rules(

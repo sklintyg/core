@@ -616,7 +616,7 @@ class CertificateModelFactoryFK7809Test {
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationTextField.builder()
             .name(
-                "Ange anhörig eller annas relation till patienten")
+                "Ange anhörig eller annans relation till patienten")
             .id(new FieldId("1.4"))
             .build();
 
