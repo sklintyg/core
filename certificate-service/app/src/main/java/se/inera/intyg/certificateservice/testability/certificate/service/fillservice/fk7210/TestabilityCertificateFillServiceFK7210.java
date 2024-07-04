@@ -2,9 +2,13 @@ package se.inera.intyg.certificateservice.testability.certificate.service.fillse
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.FK7210_V1_0;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.QUESTION_BERAKNAT_FODELSEDATUM_ID;
+import static se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO.EMPTY;
+import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.elementData;
+import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.emptyValue;
+import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.nowPlusDays;
+import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.spec;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Component;
@@ -12,6 +16,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO;
 import se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityCertificateFillService;
 
@@ -26,26 +31,26 @@ public class TestabilityCertificateFillServiceFK7210 implements TestabilityCerti
   @Override
   public List<ElementData> fill(CertificateModel certificateModel,
       TestabilityFillTypeDTO fillType) {
-    if (TestabilityFillTypeDTO.EMPTY.equals(fillType)) {
-      return Collections.emptyList();
-    }
-    return fillWithValues(certificateModel);
+
+    return fillType == EMPTY
+        ? Collections.emptyList()
+        : fillWithValues(certificateModel);
   }
 
   private static List<ElementData> fillWithValues(CertificateModel certificateModel) {
-    final var elementSpecification = certificateModel.elementSpecification(
-        QUESTION_BERAKNAT_FODELSEDATUM_ID);
-    final var elementValue = elementSpecification.configuration().emptyValue();
-    if (elementValue instanceof ElementValueDate elementValueDate) {
-      final var beraknatFodelsedatum = elementValueDate
-          .withDate(LocalDate.now(ZoneId.systemDefault()).plusMonths(6));
-      return List.of(
-          ElementData.builder()
-              .id(QUESTION_BERAKNAT_FODELSEDATUM_ID)
-              .value(beraknatFodelsedatum)
-              .build()
-      );
+    final var elementData = new ArrayList<ElementData>();
+    final var specFodelsedatum = spec(QUESTION_BERAKNAT_FODELSEDATUM_ID, certificateModel);
+
+    fodelsedatum(specFodelsedatum, elementData);
+
+    return elementData;
+  }
+
+  private static void fodelsedatum(ElementSpecification spec, List<ElementData> list) {
+    if (emptyValue(spec) instanceof ElementValueDate elementValueDate) {
+      final var date = elementValueDate.withDate(nowPlusDays(200L));
+
+      list.add(elementData(spec.id(), date));
     }
-    return Collections.emptyList();
   }
 }

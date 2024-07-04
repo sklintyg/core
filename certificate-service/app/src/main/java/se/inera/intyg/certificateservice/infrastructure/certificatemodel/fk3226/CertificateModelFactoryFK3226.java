@@ -65,20 +65,20 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
 
   private final DiagnosisCodeRepository diagnosisCodeRepositoy;
   public static final FieldId ENDAST_PALLIATIV_FIELD_ID = new FieldId("ENDAST_PALLIATIV");
-  private static final FieldId AKUT_LIVSHOTANDE_FIELD_ID = new FieldId("AKUT_LIVSHOTANDE");
+  public static final FieldId AKUT_LIVSHOTANDE_FIELD_ID = new FieldId("AKUT_LIVSHOTANDE");
   private static final FieldId ANNAT_FIELD_ID = new FieldId("ANNAT");
-  private static final FieldId UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID = new FieldId("annat");
+  public static final FieldId UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID = new FieldId("annat");
   public static final String UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID = "journaluppgifter";
   public static final String UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID = "undersokningAvPatienten";
-  private static final ElementId QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_AKUT_LIVSHOTANDE_ID = new ElementId(
+  public static final ElementId QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_AKUT_LIVSHOTANDE_ID = new ElementId(
       "52.4");
   private static final FieldId QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_AKUT_LIVSHOTANDE_FIELD_ID = new FieldId(
       "52.4");
-  private static final ElementId QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_ID = new ElementId(
+  public static final ElementId QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_ID = new ElementId(
       "52.5");
   private static final FieldId QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_FIELD_ID = new FieldId(
       "52.5");
-  private static final ElementId QUESTION_TILLSTANDET_UPPSKATTAS_LIVSHOTANDE_TILL_OCH_MED_ID = new ElementId(
+  public static final ElementId QUESTION_TILLSTANDET_UPPSKATTAS_LIVSHOTANDE_TILL_OCH_MED_ID = new ElementId(
       "52.6");
   private static final FieldId QUESTION_TILLSTANDET_UPPSKATTAS_LIVSHOTANDE_TILL_OCH_MED_FIELD_ID = new FieldId(
       "52.6");
@@ -94,10 +94,10 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
       "58.1");
   public static final ElementId DIAGNOSIS_ID = new ElementId("58");
   public static final FieldId DIAGNOS_1 = new FieldId("huvuddiagnos");
-  private static final FieldId DIAGNOS_2 = new FieldId("diagnos2");
-  private static final FieldId DIAGNOS_3 = new FieldId("diagnos3");
-  private static final FieldId DIAGNOS_4 = new FieldId("diagnos4");
-  private static final FieldId DIAGNOS_5 = new FieldId("diagnos5");
+  public static final FieldId DIAGNOS_2 = new FieldId("diagnos2");
+  public static final FieldId DIAGNOS_3 = new FieldId("diagnos3");
+  public static final FieldId DIAGNOS_4 = new FieldId("diagnos4");
+  public static final FieldId DIAGNOS_5 = new FieldId("diagnos5");
   private static final short DIAGNOSIS_CODE_LIMIT = (short) 81;
   @Value("${certificate.model.fk3226.v1_0.active.from}")
   private LocalDateTime activeFrom;

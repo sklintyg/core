@@ -116,41 +116,41 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   public static final ElementId QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID = new ElementId("1");
   private static final FieldId QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_FIELD_ID = new FieldId("1.1");
 
-  private static final ElementId QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID = new ElementId(
+  public static final ElementId QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID = new ElementId(
       "1.3");
   private static final FieldId QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_FIELD_ID = new FieldId(
       "1.3");
-  private static final ElementId QUESTION_RELATION_TILL_PATIENTEN_ID = new ElementId("1.4");
+  public static final ElementId QUESTION_RELATION_TILL_PATIENTEN_ID = new ElementId("1.4");
   private static final FieldId QUESTION_RELATION_TILL_PATIENTEN_FIELD_ID = new FieldId("1.4");
 
-  private static final FieldId UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID = new FieldId("annat");
-  private static final String UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID = "journaluppgifter";
-  private static final FieldId UTLATANDE_BASERAT_PA_ANHORIG_FIELD_ID = new FieldId("anhorig");
+  public static final FieldId UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID = new FieldId("annat");
+  public static final String UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID = "journaluppgifter";
+  public static final FieldId UTLATANDE_BASERAT_PA_ANHORIG_FIELD_ID = new FieldId("anhorig");
   public static final String UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID = "undersokningAvPatienten";
 
   public static final ElementId QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID = new ElementId("3");
   private static final FieldId QUESTION_BASERAT_PA_ANNAT_UNDERLAG_FIELD_ID = new FieldId("3.1");
 
-  private static final FieldId MEDICAL_INVESTIGATION_FIELD_ID_1 = new FieldId(
+  public static final FieldId MEDICAL_INVESTIGATION_FIELD_ID_1 = new FieldId(
       "medicalInvestigation1");
-  private static final FieldId MEDICAL_INVESTIGATION_FIELD_ID_2 = new FieldId(
+  public static final FieldId MEDICAL_INVESTIGATION_FIELD_ID_2 = new FieldId(
       "medicalInvestigation2");
-  private static final FieldId MEDICAL_INVESTIGATION_FIELD_ID_3 = new FieldId(
+  public static final FieldId MEDICAL_INVESTIGATION_FIELD_ID_3 = new FieldId(
       "medicalInvestigation3");
 
-  private static final ElementId QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_ID = new ElementId("4");
+  public static final ElementId QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_ID = new ElementId("4");
   private static final FieldId QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_FIELD_ID = new FieldId("4.1");
 
   private static final ElementId AKTIVITETSBEGRANSNINGAR_CATEGORY_ID = new ElementId("KAT_6");
-  private static final ElementId QUESTION_AKTIVITETSBEGRANSNINGAR_ID = new ElementId("17");
+  public static final ElementId QUESTION_AKTIVITETSBEGRANSNINGAR_ID = new ElementId("17");
   private static final FieldId QUESTION_AKTIVITETSBEGRANSNINGAR_FIELD_ID = new FieldId("17.1");
 
   private static final ElementId MEDICINSK_BEHANDLING_CATEGORY_ID = new ElementId("KAT_7");
-  private static final ElementId QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_ID = new ElementId(
+  public static final ElementId QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_ID = new ElementId(
       "50.1");
   private static final FieldId QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_FIELD_ID = new FieldId(
       "50.1");
-  private static final ElementId QUESTION_VARDENHET_OCH_TIDPLAN_ID = new ElementId(
+  public static final ElementId QUESTION_VARDENHET_OCH_TIDPLAN_ID = new ElementId(
       "50.2");
   private static final FieldId QUESTION_VARDENHET_OCH_TIDPLAN_FIELD_ID = new FieldId("50.2");
 
@@ -160,7 +160,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   private static final FieldId QUESTION_PROGNOS_FIELD_ID = new FieldId("51.1");
 
   private static final ElementId OVRIGT_CATEGORY_ID = new ElementId("KAT_9");
-  private static final ElementId QUESTION_OVRIGT_ID = new ElementId(
+  public static final ElementId QUESTION_OVRIGT_ID = new ElementId(
       "25");
   private static final FieldId QUESTION_OVRIGT_FIELD_ID = new FieldId("25.1");
 
@@ -171,10 +171,10 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   public static final ElementId DIAGNOSIS_MOTIVATION_ID = new ElementId("5");
   public static final FieldId DIAGNOSIS_MOTIVATION_FIELD_ID = new FieldId("5");
   public static final FieldId DIAGNOS_1 = new FieldId("huvuddiagnos");
-  private static final FieldId DIAGNOS_2 = new FieldId("diagnos2");
-  private static final FieldId DIAGNOS_3 = new FieldId("diagnos3");
-  private static final FieldId DIAGNOS_4 = new FieldId("diagnos4");
-  private static final FieldId DIAGNOS_5 = new FieldId("diagnos5");
+  public static final FieldId DIAGNOS_2 = new FieldId("diagnos2");
+  public static final FieldId DIAGNOS_3 = new FieldId("diagnos3");
+  public static final FieldId DIAGNOS_4 = new FieldId("diagnos4");
+  public static final FieldId DIAGNOS_5 = new FieldId("diagnos5");
   private static final short DIAGNOSIS_CODE_LIMIT = (short) 81;
 
   private static final ElementId FUNKTIONSNEDSATTNING_CATEGORY_ID = new ElementId("KAT_5");
@@ -182,33 +182,33 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   private static final FieldId FUNKTIONSNEDSATNING_FIELD_ID = new FieldId(
       "funktionsnedsattning");
   public static final FieldId FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID = new FieldId("8.2");
-  private static final FieldId FUNKTIONSNEDSATTNING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID = new FieldId(
+  public static final FieldId FUNKTIONSNEDSATTNING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID = new FieldId(
       "9.2");
-  private static final FieldId FUNKTIONSNEDSATTNING_UPPMAKRMSAHET_ID = new FieldId("10.2");
-  private static final FieldId FUNKTIONSNEDSATTNING_PSYKISK_FUNKTION_ID = new FieldId("11.2");
-  private static final FieldId FUNKTIONSNEDSATTNING_HORSELFUNKTION_ID = new FieldId("48.2");
-  private static final FieldId FUNKTIONSNEDSATTNING_SYNFUNKTION_ID = new FieldId("49.2");
-  private static final FieldId FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID = new FieldId("12.2");
-  private static final FieldId FUNKTIONSNEDSATTNING_KOORDINATION_ID = new FieldId("13.2");
-  private static final FieldId FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID = new FieldId(
+  public static final FieldId FUNKTIONSNEDSATTNING_UPPMAKRMSAHET_ID = new FieldId("10.2");
+  public static final FieldId FUNKTIONSNEDSATTNING_PSYKISK_FUNKTION_ID = new FieldId("11.2");
+  public static final FieldId FUNKTIONSNEDSATTNING_HORSELFUNKTION_ID = new FieldId("48.2");
+  public static final FieldId FUNKTIONSNEDSATTNING_SYNFUNKTION_ID = new FieldId("49.2");
+  public static final FieldId FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID = new FieldId("12.2");
+  public static final FieldId FUNKTIONSNEDSATTNING_KOORDINATION_ID = new FieldId("13.2");
+  public static final FieldId FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID = new FieldId(
       "14.2");
   public static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_INTELLEKTUELL_FUNKTION_ID = new ElementId(
       "8");
-  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID = new ElementId(
+  public static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID = new ElementId(
       "9");
-  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_UPPMAKRMSAHET_ID = new ElementId(
+  public static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_UPPMAKRMSAHET_ID = new ElementId(
       "10");
-  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_ID = new ElementId(
+  public static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_ID = new ElementId(
       "11");
-  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_HORSELFUNKTION_ID = new ElementId(
+  public static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_HORSELFUNKTION_ID = new ElementId(
       "48");
-  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_SYNFUNKTION_ID = new ElementId(
+  public static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_SYNFUNKTION_ID = new ElementId(
       "49");
-  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_SINNESFUNKTION_ID = new ElementId(
+  public static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_SINNESFUNKTION_ID = new ElementId(
       "12");
-  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_ID = new ElementId(
+  public static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_ID = new ElementId(
       "13");
-  private static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_ANNAN_KROPPSILIG_FUNKTION_ID = new ElementId(
+  public static final ElementId FUNKTIONSNEDSATTNING_MOTIVERING_ANNAN_KROPPSILIG_FUNKTION_ID = new ElementId(
       "14");
   private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_INTELLEKTUELL_FUNKTION_FIELD_ID = new FieldId(
       "8.1");
