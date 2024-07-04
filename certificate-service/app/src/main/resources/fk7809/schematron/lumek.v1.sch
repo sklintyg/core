@@ -131,6 +131,14 @@
       </iso:rule>
     </iso:pattern>
 
+    <iso:pattern id="q1.1-1.4">
+        <iso:rule context="//gn:delsvar[@id='1.1']/tp:cv/tp:code[normalize-space(.) = 'ANHORIG']">
+          <iso:assert test="../../../gn:delsvar[@id='1.4']">
+            Om 'Typ av grund för MU' är 'Anhorig' så måste 'Ange anhörig eller annas relation till patienten' anges.
+          </iso:assert>
+        </iso:rule>
+      </iso:pattern>
+
     <iso:pattern id="q3">
         <iso:rule context="//gn:svar[@id='3']">
           <iso:assert test="count(gn:delsvar[@id='3.1']) = 1">

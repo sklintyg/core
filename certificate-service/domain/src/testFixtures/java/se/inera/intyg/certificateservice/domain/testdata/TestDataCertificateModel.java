@@ -21,6 +21,11 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_VERSION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_CODE_TYPE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_SCHEMATRON_PATH;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_TYPE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK_RECIPIENT;
 
 import java.util.Collections;
@@ -32,6 +37,7 @@ public class TestDataCertificateModel {
   public static final CertificateModel FK7210_CERTIFICATE_MODEL = fk7210certificateModelBuilder().build();
   public static final CertificateModel FK3226_CERTIFICATE_MODEL = fk3226certificateModelBuilder().build();
   public static final CertificateModel FK7472_CERTIFICATE_MODEL = fk7472certificateModelBuilder().build();
+  public static final CertificateModel FK7809_CERTIFICATE_MODEL = fk7809certificateModelBuilder().build();
 
   public static CertificateModel.CertificateModelBuilder fk7210certificateModelBuilder() {
     return CertificateModel.builder()
@@ -85,6 +91,24 @@ public class TestDataCertificateModel {
         .pdfTemplatePath(FK7472_PDF_PATH)
         .pdfNoAddressTemplatePath(FK7472_PDF_PATH_NO_ADDRESS)
         .schematronPath(FK7472_SCHEMATRON_PATH)
+        .recipient(FK_RECIPIENT);
+  }
+
+  public static CertificateModel.CertificateModelBuilder fk7809certificateModelBuilder() {
+    return CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .type(FK7809_TYPE)
+                .version(FK7809_VERSION)
+                .build()
+        )
+        .certificateActionSpecifications(Collections.emptyList())
+        .name(FK7809_NAME)
+        .type(FK7809_CODE_TYPE)
+        .availableForCitizen(true)
+        .pdfTemplatePath(null)
+        .pdfNoAddressTemplatePath(null)
+        .schematronPath(FK7809_SCHEMATRON_PATH)
         .recipient(FK_RECIPIENT);
   }
 }
