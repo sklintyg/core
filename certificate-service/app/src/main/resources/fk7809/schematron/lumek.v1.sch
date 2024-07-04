@@ -34,34 +34,34 @@
        </iso:assert>
 
        <iso:assert test="count(gn:svar[@id='8']) le 1">
-        Ett 'MU' får ha högst ett 'Funktionsnedsättning för intellektuell funktion'
+        Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för intellektuell funktion'
        </iso:assert>
        <iso:assert test="count(gn:svar[@id='9']) le 1">
-        Ett 'MU' får ha högst ett 'Funktionsnedsättning övergripande psykosociala funktioner'
+        Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning övergripande psykosociala funktioner'
        </iso:assert>
        <iso:assert test="count(gn:svar[@id='10']) le 1">
-        Ett 'MU' får ha högst ett 'Funktionsnedsättning för uppmärksamhet, koncentration och exekutiv funktion'
+        Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för uppmärksamhet, koncentration och exekutiv funktion'
        </iso:assert>
        <iso:assert test="count(gn:svar[@id='11']) le 1">
-        Ett 'MU' får ha högst ett 'Funktionsnedsättning för annan psykisk funktion'
+        Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för annan psykisk funktion'
        </iso:assert>
        <iso:assert test="count(gn:svar[@id='48']) le 1">
-        Ett 'MU' får ha högst ett 'Funktionsnedsättning för hörselfunktion'
+        Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för hörselfunktion'
        </iso:assert>
        <iso:assert test="count(gn:svar[@id='49']) le 1">
-          Ett 'MU' får ha högst ett 'Funktionsnedsättning för synfunktion'
+          Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för synfunktion'
         </iso:assert>
         <iso:assert test="count(gn:svar[@id='12']) le 1">
-          Ett 'MU' får ha högst ett 'Funktionsnedsättning för sinnesfunktioner och smärta
+          Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för sinnesfunktioner och smärta
         </iso:assert>
        <iso:assert test="count(gn:svar[@id='13']) le 1">
-        Ett 'MU' får ha högst ett 'Funktionsnedsättning för balans, koordination och motorik'
+        Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för balans, koordination och motorik'
        </iso:assert>
        <iso:assert test="count(gn:svar[@id='14']) le 1">
-        Ett 'MU' får ha högst ett 'Funktionsnedsättning för annan kroppslig funktion'
+        Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för annan kroppslig funktion'
        </iso:assert>
        <iso:assert test="count(gn:svar[matches(@id, '^([89]|1[0-4])$')]) ge 1">
-        Ett 'MU' måste ha minst ett 'Funktionsnedsättning'
+        Ett 'LUMEK' måste ha minst ett 'Funktionsnedsättning'
        </iso:assert>
     </iso:rule>
   </iso:pattern>
@@ -84,7 +84,7 @@
                 'Grund för medicinskt underlag (MU)' får ha högst ett 'Ange anhörig eller annas relation till patienten' svar.
             </iso:assert>
       <iso:assert test="not(preceding-sibling::gn:svar[@id='1']/gn:delsvar[@id='1.1']/tp:cv/tp:code/normalize-space() = normalize-space(gn:delsvar[@id='1.1']/tp:cv/tp:code))">
-        Samma 'Typ av grund för MU' kan inte användas flera gånger i samma 'MU'.
+        Samma 'Typ av grund för MU' kan inte användas flera gånger i samma 'LUMEK'.
       </iso:assert>
    </iso:rule>
   </iso:pattern>
