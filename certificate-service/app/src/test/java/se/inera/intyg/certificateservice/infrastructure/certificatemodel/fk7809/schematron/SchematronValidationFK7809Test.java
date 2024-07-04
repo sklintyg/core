@@ -600,7 +600,7 @@ class SchematronValidationFK7809Test {
     }
 
     @Test
-    void shallReturnFalseIfMUIsAnhorigAndTextForAnhorigIsNotFilled() {
+    void shallReturnTrueIfMUIsJournaluppgifter() {
       final var certificate = TestDataCertificate.fk7809CertificateBuilder()
           .certificateModel(certificateModelFactoryFK7809.create())
           .elementData(
@@ -613,7 +613,7 @@ class SchematronValidationFK7809Test {
                               .dateList(
                                   List.of(
                                       ElementValueDate.builder()
-                                          .dateId(new FieldId("anhorig"))
+                                          .dateId(new FieldId("journaluppgifter"))
                                           .date(LocalDate.now())
                                           .build()
                                   )
@@ -714,7 +714,7 @@ class SchematronValidationFK7809Test {
 
       final var xml = generator.generate(certificate, false);
 
-      assertFalse(schematronValidator.validate(certificate.id(), xml,
+      assertTrue(schematronValidator.validate(certificate.id(), xml,
           FK7809_SCHEMATRON_PATH));
     }
 
