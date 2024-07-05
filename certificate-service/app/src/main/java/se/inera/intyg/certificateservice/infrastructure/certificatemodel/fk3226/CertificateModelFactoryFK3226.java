@@ -484,7 +484,6 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
             ElementConfigurationDate.builder()
                 .id(QUESTION_TILLSTANDET_UPPSKATTAS_LIVSHOTANDE_TILL_OCH_MED_FIELD_ID)
                 .name("Till och med vilket datum")
-                .min(Period.ofDays(0))
                 .build()
         )
         .rules(
