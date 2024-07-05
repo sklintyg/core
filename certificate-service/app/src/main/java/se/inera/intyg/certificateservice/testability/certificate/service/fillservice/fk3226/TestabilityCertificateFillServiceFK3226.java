@@ -28,13 +28,13 @@ import static se.inera.intyg.certificateservice.testability.certificate.dto.Test
 import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.diagnosisList;
 import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.elementData;
 import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.emptyValue;
+import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.now;
+import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.nowPlusDays;
 import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.spec;
 import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.valueCode;
 import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.valueDate;
 import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.valueDiagnosis;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -113,16 +113,15 @@ public class TestabilityCertificateFillServiceFK3226 implements TestabilityCerti
   private static void baseratPa(ElementSpecification spec, List<ElementData> list,
       TestabilityFillTypeDTO fillType) {
     if (emptyValue(spec) instanceof ElementValueDateList elementValueDateList) {
-      final var date = LocalDate.now(ZoneId.systemDefault());
       final var dateList = List.of(
-          valueDate(new FieldId(UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID), date),
-          valueDate(new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID), date),
-          valueDate(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID, date)
+          valueDate(new FieldId(UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID), now()),
+          valueDate(new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID), now()),
+          valueDate(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID, now())
       );
 
-      final var base = elementValueDateList
+      final var valueDateList = elementValueDateList
           .withDateList(fillType == MAXIMAL ? dateList : dateList.subList(0, 1));
-      list.add(elementData(spec.id(), base));
+      list.add(elementData(spec.id(), valueDateList));
     }
   }
 
@@ -164,18 +163,14 @@ public class TestabilityCertificateFillServiceFK3226 implements TestabilityCerti
   private static void behandlingAvslutad(ElementSpecification spec, List<ElementData> list,
       TestabilityFillTypeDTO fillType) {
     if (fillType != MAXIMAL && emptyValue(spec) instanceof ElementValueDate elementValueDate) {
-      final var date = elementValueDate.withDate(LocalDate.now(ZoneId.systemDefault()));
-
-      list.add(elementData(spec.id(), date));
+      list.add(elementData(spec.id(), elementValueDate.withDate(now())));
     }
   }
 
   private static void livshotandeNar(ElementSpecification spec, List<ElementData> list,
       TestabilityFillTypeDTO fillType) {
     if (fillType == MAXIMAL && emptyValue(spec) instanceof ElementValueDate elementValueDate) {
-      final var date = elementValueDate.withDate(LocalDate.now(ZoneId.systemDefault()));
-
-      list.add(elementData(spec.id(), date));
+      list.add(elementData(spec.id(), elementValueDate.withDate(now())));
     }
   }
 
@@ -191,7 +186,6 @@ public class TestabilityCertificateFillServiceFK3226 implements TestabilityCerti
       TestabilityFillTypeDTO fillType) {
     if (fillType == MAXIMAL && emptyValue(spec)
         instanceof ElementValueBoolean elementValueBoolean) {
-
       list.add(elementData(spec.id(), elementValueBoolean.withValue(true)));
     }
   }
@@ -199,18 +193,13 @@ public class TestabilityCertificateFillServiceFK3226 implements TestabilityCerti
   private static void uppskattasTill(ElementSpecification spec, List<ElementData> list,
       TestabilityFillTypeDTO fillType) {
     if (fillType == MAXIMAL && emptyValue(spec) instanceof ElementValueDate elementValueDate) {
-      final var date = elementValueDate.withDate(LocalDate.now(ZoneId.systemDefault())
-          .plusDays(7L));
-
-      list.add(elementData(spec.id(), date));
+      list.add(elementData(spec.id(), elementValueDate.withDate(nowPlusDays(7L))));
     }
   }
 
   private static void samtycke(ElementSpecification spec, List<ElementData> list) {
     if (emptyValue(spec) instanceof ElementValueBoolean elementValueBoolean) {
-      final var samtycke = elementValueBoolean.withValue(true);
-
-      list.add(elementData(spec.id(), samtycke));
+      list.add(elementData(spec.id(), elementValueBoolean.withValue(true)));
     }
   }
 }

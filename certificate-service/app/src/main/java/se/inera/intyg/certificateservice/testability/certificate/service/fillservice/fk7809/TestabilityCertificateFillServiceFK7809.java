@@ -53,6 +53,7 @@ import static se.inera.intyg.certificateservice.testability.certificate.service.
 import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.elementData;
 import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.emptyValue;
 import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.investigation;
+import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.now;
 import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.nowPlusDays;
 import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.spec;
 import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.valueCode;
@@ -60,8 +61,6 @@ import static se.inera.intyg.certificateservice.testability.certificate.service.
 import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.valueDiagnosis;
 import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.valueText;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -172,7 +171,7 @@ public class TestabilityCertificateFillServiceFK7809 implements
     diagnoshistorik(specDiagnoshistorik, elementData);
     funktionsnedsattning(specFunktionsnedsattning, elementData, fillType);
     intellektuell(specIntellektuell, elementData);
-    psykoSocial(specPsykosocial, elementData, fillType);
+    psykosocial(specPsykosocial, elementData, fillType);
     uppmarksamhet(specUppmarksamhet, elementData, fillType);
     psykisk(specPsykisk, elementData, fillType);
     horsel(specHorsel, elementData, fillType);
@@ -192,17 +191,16 @@ public class TestabilityCertificateFillServiceFK7809 implements
   private static void baseratPa(ElementSpecification spec, List<ElementData> list,
       TestabilityFillTypeDTO fillType) {
     if (emptyValue(spec) instanceof ElementValueDateList elementValueDateList) {
-      final var date = LocalDate.now(ZoneId.systemDefault());
       final var dateList = List.of(
-          valueDate(new FieldId(UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID), date),
-          valueDate(new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID), date),
-          valueDate(UTLATANDE_BASERAT_PA_ANHORIG_FIELD_ID, date),
-          valueDate(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID, date)
+          valueDate(new FieldId(UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID), now()),
+          valueDate(new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID), now()),
+          valueDate(UTLATANDE_BASERAT_PA_ANHORIG_FIELD_ID, now()),
+          valueDate(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID, now())
       );
 
-      final var base = elementValueDateList
+      final var valueDateList = elementValueDateList
           .withDateList(fillType == MAXIMAL ? dateList : dateList.subList(0, 1));
-      list.add(elementData(spec.id(), base));
+      list.add(elementData(spec.id(), valueDateList));
     }
   }
 
@@ -245,7 +243,7 @@ public class TestabilityCertificateFillServiceFK7809 implements
           investigation(MEDICAL_INVESTIGATION_FIELD_ID_3,
               valueDate(MED_INVEST_3_DATE, nowPlusDays(0)),
               valueCode(MED_INVEST_3_TYPE, ORTOPEDTEKNIKER.code()),
-              valueText(MED_INVEST_3_SOURCE, "Ortopekliniken")));
+              valueText(MED_INVEST_3_SOURCE, "Ortopedkliniken")));
 
       final var investigationList = medicalInvestigationList.withList(investigations);
       list.add(elementData(spec.id(), investigationList));
@@ -320,7 +318,7 @@ public class TestabilityCertificateFillServiceFK7809 implements
     }
   }
 
-  private static void psykoSocial(ElementSpecification spec, List<ElementData> list,
+  private static void psykosocial(ElementSpecification spec, List<ElementData> list,
       TestabilityFillTypeDTO fillType) {
     if (fillType == MAXIMAL && emptyValue(spec) instanceof ElementValueText elementValueText) {
       final var text = elementValueText.withText("Psykosocial funktion");

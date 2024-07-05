@@ -23,18 +23,22 @@ public class TestabilityFIllCertificateUtil {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification spec(ElementId id, CertificateModel certificateModel) {
-    return certificateModel.elementSpecification(id);
+  public static ElementSpecification spec(ElementId elementId, CertificateModel certificateModel) {
+    return certificateModel.elementSpecification(elementId);
+  }
+
+  public static LocalDate now() {
+    return LocalDate.now(ZoneId.systemDefault());
   }
 
   public static LocalDate nowPlusDays(long days) {
     return LocalDate.now(ZoneId.systemDefault()).plusDays(days);
   }
 
-  public static ElementValueDiagnosis valueDiagnosis(FieldId id, String code, String desc,
+  public static ElementValueDiagnosis valueDiagnosis(FieldId fieldId, String code, String desc,
       String term) {
     return ElementValueDiagnosis.builder()
-        .id(id)
+        .id(fieldId)
         .code(code)
         .description(desc)
         .terminology(term)
@@ -55,9 +59,9 @@ public class TestabilityFIllCertificateUtil {
         .build();
   }
 
-  public static ElementValueText valueText(FieldId id, String text) {
+  public static ElementValueText valueText(FieldId fieldId, String text) {
     return ElementValueText.builder()
-        .textId(id)
+        .textId(fieldId)
         .text(text)
         .build();
   }
@@ -79,18 +83,18 @@ public class TestabilityFIllCertificateUtil {
         .build();
   }
 
-  public static DateRange dateRange(FieldId id, LocalDate from, LocalDate to) {
+  public static DateRange dateRange(FieldId fieldId, LocalDate from, LocalDate to) {
     return DateRange.builder()
-        .dateRangeId(id)
+        .dateRangeId(fieldId)
         .from(from)
         .to(to)
         .build();
   }
 
-  public static MedicalInvestigation investigation(FieldId id, ElementValueDate date,
+  public static MedicalInvestigation investigation(FieldId fieldId, ElementValueDate date,
       ElementValueCode code, ElementValueText text) {
     return MedicalInvestigation.builder()
-        .id(id)
+        .id(fieldId)
         .date(date)
         .investigationType(code)
         .informationSource(text)

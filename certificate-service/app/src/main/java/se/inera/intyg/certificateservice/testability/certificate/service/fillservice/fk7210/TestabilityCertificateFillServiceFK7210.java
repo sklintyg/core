@@ -48,9 +48,7 @@ public class TestabilityCertificateFillServiceFK7210 implements TestabilityCerti
 
   private static void fodelsedatum(ElementSpecification spec, List<ElementData> list) {
     if (emptyValue(spec) instanceof ElementValueDate elementValueDate) {
-      final var date = elementValueDate.withDate(nowPlusDays(200L));
-
-      list.add(elementData(spec.id(), date));
+      list.add(elementData(spec.id(), elementValueDate.withDate(nowPlusDays(200L))));
     }
   }
 }
