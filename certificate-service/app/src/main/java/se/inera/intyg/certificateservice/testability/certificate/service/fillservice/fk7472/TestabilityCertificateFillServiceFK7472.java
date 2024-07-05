@@ -55,7 +55,7 @@ public class TestabilityCertificateFillServiceFK7472 implements
     final var specPeriod = spec(QUESTION_PERIOD_ID, certificateModel);
 
     symptomDiagnos(specSymptom, elementData);
-    vardPeriod(specPeriod, elementData, fillType);
+    vardperiod(specPeriod, elementData, fillType);
 
     return elementData;
   }
@@ -67,7 +67,7 @@ public class TestabilityCertificateFillServiceFK7472 implements
     }
   }
 
-  private static void vardPeriod(ElementSpecification spec, List<ElementData> list,
+  private static void vardperiod(ElementSpecification spec, List<ElementData> list,
       TestabilityFillTypeDTO fillType) {
     if (emptyValue(spec) instanceof ElementValueDateRangeList elementValueDateRangeList) {
       final var ranges = List.of(
@@ -77,8 +77,9 @@ public class TestabilityCertificateFillServiceFK7472 implements
           dateRange(new FieldId(EN_FJARDEDEL.code()), nowPlusDays(21L), nowPlusDays(27L)),
           dateRange(new FieldId(EN_ATTONDEL.code()), nowPlusDays(28L), nowPlusDays(34L)));
 
-      final var rangeList = fillType == MAXIMAL ? ranges : ranges.subList(0, 1);
-      list.add(elementData(spec.id(), elementValueDateRangeList.withDateRangeList(rangeList)));
+      final var rangeList = elementValueDateRangeList.withDateRangeList(
+          fillType == MAXIMAL ? ranges : ranges.subList(0, 1));
+      list.add(elementData(spec.id(), rangeList));
     }
   }
 }
