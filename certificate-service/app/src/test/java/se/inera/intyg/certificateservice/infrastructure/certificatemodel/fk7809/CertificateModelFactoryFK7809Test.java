@@ -537,6 +537,18 @@ class CertificateModelFactoryFK7809Test {
           ),
           "Expected type: %s".formatted(expectedType));
     }
+
+    @Test
+    void shallIncludeCertificateActionHandleMessage() {
+      final var expectedType = CertificateActionType.HANDLE_MESSAGE;
+
+      final var certificateModel = certificateModelFactoryFK7809.create();
+
+      assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+              actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+          ),
+          "Expected type: %s".formatted(expectedType));
+    }
   }
 
   @Nested
