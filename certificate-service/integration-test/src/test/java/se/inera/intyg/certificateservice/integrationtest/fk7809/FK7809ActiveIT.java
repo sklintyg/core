@@ -9,6 +9,7 @@ import org.springframework.test.context.DynamicPropertySource;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsDeepIntegrationIT;
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsSVODIT;
+import se.inera.intyg.certificateservice.integrationtest.AdministrativeMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.AnswerComplementIT;
 import se.inera.intyg.certificateservice.integrationtest.CertificateFromMessageIT;
 import se.inera.intyg.certificateservice.integrationtest.ComplementIT;
@@ -82,9 +83,17 @@ public class FK7809ActiveIT {
 
   @Nested
   @DisplayName(TYPE + "Administrativ ärendekommunikation")
-  class AdministrativeMessages {
+  class AdministrativeMessages extends AdministrativeMessagesIT {
 
-    //TODO Add tests for aministrative messages
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
   }
 
   @Nested

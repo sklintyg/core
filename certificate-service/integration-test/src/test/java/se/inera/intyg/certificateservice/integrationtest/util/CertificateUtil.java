@@ -42,9 +42,11 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDiagnosisList;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
+import se.inera.intyg.certificateservice.application.message.dto.CreateMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageInternalResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageResponse;
+import se.inera.intyg.certificateservice.application.message.dto.HandleMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.MessageExistsResponse;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesResponse;
@@ -147,6 +149,20 @@ public class CertificateUtil {
       throw new IllegalStateException("GetCertificateMessageResponse is null");
     }
     return response.getQuestions();
+  }
+
+  public static QuestionDTO question(HandleMessageResponse response) {
+    if (response == null || response.getQuestion() == null) {
+      throw new IllegalStateException("HandleMessageResponse is null");
+    }
+    return response.getQuestion();
+  }
+
+  public static QuestionDTO question(CreateMessageResponse response) {
+    if (response == null || response.getQuestion() == null) {
+      throw new IllegalStateException("CreateMessageResponse is null");
+    }
+    return response.getQuestion();
   }
 
   public static List<ResourceLinkDTO> resourceLink(GetCertificateMessageResponse response) {
@@ -308,6 +324,23 @@ public class CertificateUtil {
         .build();
   }
 
+  public static CertificateDataElement updateBooleanValue(CertificateDTO certificateDTO,
+      String questionId, Boolean value) {
+    final var certificate = Objects.requireNonNull(certificateDTO.getData().get(questionId));
+    return CertificateDataElement.builder()
+        .id(certificate.getId())
+        .parent(certificate.getParent())
+        .config(certificate.getConfig())
+        .validation(certificate.getValidation())
+        .value(
+            CertificateDataValueBoolean.builder()
+                .id(((CertificateDataValueBoolean) certificate.getValue()).getId())
+                .selected(value)
+                .build()
+        )
+        .build();
+  }
+
   public static CertificateDataElement updateTextValue(CertificateDTO certificateDTO,
       String questionId, String newText) {
     final var certificate = Objects.requireNonNull(certificateDTO.getData().get(questionId));
@@ -359,6 +392,16 @@ public class CertificateUtil {
         .getValue()).getText();
   }
 
+  public static Boolean getBooleanValue(ResponseEntity<UpdateCertificateResponse> response,
+      String questionId) {
+    if (response == null || response.getBody() == null) {
+      return null;
+    }
+    return ((CertificateDataValueBoolean) response.getBody().getCertificate().getData()
+        .get(questionId)
+        .getValue()).getSelected();
+  }
+
   public static List<CertificateDataValueDateRange> getValueDateRangeList(
       ResponseEntity<UpdateCertificateResponse> response,
       String questionId) {
@@ -392,6 +435,14 @@ public class CertificateUtil {
       throw new IllegalArgumentException("Missing response!");
     }
     return response.getBody().getCertificateMetadata();
+  }
+
+  public static CertificateMetadataDTO metadata(
+      CertificateDTO certificateDTO) {
+    if (certificateDTO == null || certificateDTO.getMetadata() == null) {
+      throw new IllegalArgumentException("Missing response!");
+    }
+    return certificateDTO.getMetadata();
   }
 
   public static CertificateDTO certificate(GetCertificateInternalResponse response) {
