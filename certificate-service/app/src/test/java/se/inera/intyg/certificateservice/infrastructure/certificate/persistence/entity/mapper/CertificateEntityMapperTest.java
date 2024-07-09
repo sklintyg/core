@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateEntity.CERTIFICATE_ENTITY;
@@ -48,6 +49,7 @@ import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
+import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.patient.model.Deceased;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
@@ -206,6 +208,16 @@ class CertificateEntityMapperTest {
     void shouldMapExternalReference() {
       final var response = certificateEntityMapper.toEntity(FK7210_CERTIFICATE);
       assertEquals(CERTIFICATE_ENTITY.getExternalReference(), response.getExternalReference());
+    }
+
+    @Test
+    void shouldMapForwarded() {
+      final var forwardedCertificate = fk7210CertificateBuilder()
+          .forwarded(new Forwarded(true))
+          .build();
+
+      final var response = certificateEntityMapper.toEntity(forwardedCertificate);
+      assertTrue(response.getForwarded());
     }
   }
 
@@ -468,6 +480,13 @@ class CertificateEntityMapperTest {
       assertEquals(expectedParent.certificate().id(), response.parent().certificate().id());
       assertEquals(expectedParent.type(), response.parent().type());
       assertNotNull(response.parent().created());
+    }
+
+    @Test
+    void shouldMapForwarded() {
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7210_CERTIFICATE_MODEL);
+      assertTrue(response.forwarded().value());
     }
   }
 }

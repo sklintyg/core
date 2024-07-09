@@ -22,6 +22,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
+import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.PatientRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.StaffRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.UnitRepository;
@@ -164,6 +165,10 @@ public class CertificateEntityMapper {
               .reference(certificate.externalReference().value())
               .build()
       );
+    }
+
+    if (certificate.forwarded() != null) {
+      certificateEntity.setForwarded(certificate.forwarded().value());
     }
 
     return certificateEntity;
@@ -315,6 +320,11 @@ public class CertificateEntityMapper {
                 .toList()
         )
         .messages(messages)
+        .forwarded(
+            certificateEntity.getForwarded() != null
+                ? new Forwarded(certificateEntity.getForwarded())
+                : null
+        )
         .build();
   }
 
