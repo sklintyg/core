@@ -150,7 +150,7 @@ public class CertificateUtil {
     }
     return response.getQuestions().get(0).getLinks();
   }
-  
+
   public static long version(List<CreateCertificateResponse> responses) {
     final var certificate = certificate(responses);
     if (certificate == null || certificate.getMetadata() == null) {
@@ -287,6 +287,14 @@ public class CertificateUtil {
   }
 
   public static boolean forwarded(ForwardCertificateResponse response) {
+    if (response == null || response.getCertificate() == null) {
+      return false;
+    }
+
+    return response.getCertificate().getMetadata().isForwarded();
+  }
+
+  public static boolean forwardedMessage(ForwardCertificateResponse response) {
     if (response == null || response.getCertificate() == null) {
       return false;
     }

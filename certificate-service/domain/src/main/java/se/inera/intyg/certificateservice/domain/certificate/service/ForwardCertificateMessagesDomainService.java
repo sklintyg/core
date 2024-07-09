@@ -9,7 +9,7 @@ import se.inera.intyg.certificateservice.domain.common.exception.CertificateActi
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 
 @RequiredArgsConstructor
-public class ForwardMessagesDomainService {
+public class ForwardCertificateMessagesDomainService {
 
   private final MessageRepository messageRepository;
 

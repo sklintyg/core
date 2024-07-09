@@ -34,7 +34,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCertificateDomainService;
-import se.inera.intyg.certificateservice.domain.certificate.service.ForwardMessagesDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCertificateMessagesDomainService;
 
 @ExtendWith(MockitoExtension.class)
 class ForwardCertificateServiceTest {
@@ -48,7 +48,7 @@ class ForwardCertificateServiceTest {
   @Mock
   ActionEvaluationFactory actionEvaluationFactory;
   @Mock
-  ForwardMessagesDomainService forwardMessagesDomainService;
+  ForwardCertificateMessagesDomainService forwardCertificateMessagesDomainService;
   @Mock
   ForwardCertificateDomainService forwardCertificateDomainService;
   @Mock
@@ -126,12 +126,12 @@ class ForwardCertificateServiceTest {
 
     doReturn(certificate).when(certificateRepository)
         .getById(new CertificateId(CERTIFICATE_ID));
-    doReturn(certificate).when(forwardMessagesDomainService)
+    doReturn(certificate).when(forwardCertificateMessagesDomainService)
         .forward(certificate, actionEvaluation);
 
     forwardCertificateService.forward(request, CERTIFICATE_ID);
 
-    verify(forwardMessagesDomainService).forward(
+    verify(forwardCertificateMessagesDomainService).forward(
         certificate, actionEvaluation
     );
   }
@@ -168,7 +168,7 @@ class ForwardCertificateServiceTest {
     doReturn(false).when(certificate).isDraft();
     doReturn(certificate).when(certificateRepository)
         .getById(new CertificateId(CERTIFICATE_ID));
-    doReturn(certificate).when(forwardMessagesDomainService)
+    doReturn(certificate).when(forwardCertificateMessagesDomainService)
         .forward(certificate, actionEvaluation);
 
     final var certificateAction = mock(CertificateAction.class);

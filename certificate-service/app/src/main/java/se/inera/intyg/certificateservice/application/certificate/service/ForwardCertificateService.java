@@ -12,14 +12,14 @@ import se.inera.intyg.certificateservice.application.common.converter.ResourceLi
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCertificateDomainService;
-import se.inera.intyg.certificateservice.domain.certificate.service.ForwardMessagesDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCertificateMessagesDomainService;
 
 @Service
 @RequiredArgsConstructor
 public class ForwardCertificateService {
 
   private final ForwardCertificateDomainService forwardCertificateDomainService;
-  private final ForwardMessagesDomainService forwardMessagesDomainService;
+  private final ForwardCertificateMessagesDomainService forwardCertificateMessagesDomainService;
   private final ForwardCertificateRequestValidator forwardCertificateRequestValidator;
   private final CertificateRepository certificateRepository;
   private final ActionEvaluationFactory actionEvaluationFactory;
@@ -41,8 +41,8 @@ public class ForwardCertificateService {
 
     final var forwardedCertificate = certificate.isDraft()
         ? forwardCertificateDomainService.forward(certificate, actionEvaluation)
-        : forwardMessagesDomainService.forward(certificate, actionEvaluation);
-    
+        : forwardCertificateMessagesDomainService.forward(certificate, actionEvaluation);
+
     return ForwardCertificateResponse.builder()
         .certificate(certificateConverter.convert(
             forwardedCertificate,

@@ -261,5 +261,13 @@ public class ApiRequestUtil {
   public static ForwardCertificateRequestBuilder customForwardCertificateRequest() {
     return ForwardCertificateRequestBuilder.create();
   }
+
+  public static ForwardCertificateRequest defaultForwardCertificateMessageRequest() {
+    return ForwardCertificateMessageRequestBuilder.create().build();
+  }
+
+  public static ForwardCertificateMessageRequestBuilder customForwardCertificateMessageRequest() {
+    return ForwardCertificateMessageRequestBuilder.create();
+  }
 }
 

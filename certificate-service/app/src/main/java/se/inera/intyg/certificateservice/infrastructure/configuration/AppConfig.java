@@ -9,7 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.ComplementCe
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.DeleteCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCertificateDomainService;
-import se.inera.intyg.certificateservice.domain.certificate.service.ForwardMessagesDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCertificateMessagesDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificatePdfDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateXmlDomainService;
@@ -342,8 +342,8 @@ public class AppConfig {
   }
 
   @Bean
-  public ForwardMessagesDomainService forwardMessagesDomainService(
+  public ForwardCertificateMessagesDomainService forwardMessagesDomainService(
       MessageRepository messageRepository) {
-    return new ForwardMessagesDomainService(messageRepository);
+    return new ForwardCertificateMessagesDomainService(messageRepository);
   }
 }
