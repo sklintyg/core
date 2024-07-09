@@ -5,6 +5,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
@@ -253,5 +254,12 @@ public class ApiRequestUtil {
         .build();
   }
 
+  public static ForwardCertificateRequest defaultForwardCertificateRequest() {
+    return ForwardCertificateRequestBuilder.create().build();
+  }
+
+  public static ForwardCertificateRequestBuilder customForwardCertificateRequest() {
+    return ForwardCertificateRequestBuilder.create();
+  }
 }
 

@@ -18,6 +18,7 @@ import se.inera.intyg.certificateservice.integrationtest.CreateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.DeleteCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateTypeInfoIT;
+import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateXmlIT;
@@ -543,5 +544,20 @@ public class FK3226ActiveIT {
     }
 
     //TODO Add fk3226 specific validation tests - see FK7472ActiveIT and ValidateFK7472IT
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Vidarebefodra utkast")
+  class ForwardCertificate extends ForwardCertificateIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
   }
 }

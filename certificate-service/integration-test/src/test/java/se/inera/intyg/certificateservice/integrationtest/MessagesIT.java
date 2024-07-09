@@ -622,7 +622,7 @@ public abstract class MessagesIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Om intyget är utfärdat på en annan mottagning ska hantering av frågor vara tillgänglig")
+  @DisplayName("Om intyget är utfärdat på en annan mottagning ska hantering av frågor inte vara tillgänglig")
   void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
