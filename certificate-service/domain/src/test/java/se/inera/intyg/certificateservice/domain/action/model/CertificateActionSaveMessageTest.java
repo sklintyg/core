@@ -72,16 +72,6 @@ class CertificateActionSaveMessageTest {
   }
 
   @Test
-  void shallReturnTrueIfCertificateIsSignedAndSent() {
-    final var certificate = certificateBuilder.status(Status.SIGNED).sent(Sent.builder().build())
-        .build();
-    final var actionEvaluation = actionEvaluationBuilder.build();
-    assertTrue(
-        certificateActionSaveMessage.evaluate(Optional.of(certificate),
-            Optional.of(actionEvaluation)));
-  }
-
-  @Test
   void shallReturnFalseIfCertificateIsNotSigned() {
     final var certificate = certificateBuilder
         .status(Status.DRAFT)

@@ -236,6 +236,18 @@ class CertificateActionFactoryTest {
   }
 
   @Test
+  void shallReturnCertificateActionForwardIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
+        .build();
+
+    final var certificateAction = CertificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionForward.class);
+  }
+
+  @Test
   void shallReturnCertificateActionHandleComplementIfExistInSpecification() {
     final var certificateActionSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.HANDLE_COMPLEMENT)

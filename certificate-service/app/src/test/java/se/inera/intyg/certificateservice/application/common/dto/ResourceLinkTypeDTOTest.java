@@ -254,5 +254,11 @@ class ResourceLinkTypeDTOTest {
       assertThrows(IllegalArgumentException.class, () ->
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SEND_ANSWER));
     }
+
+    @Test
+    void shallReturnCertificateActionTypeForwardCertificate() {
+      assertEquals(ResourceLinkTypeDTO.FORWARD_CERTIFICATE,
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.FORWARD_CERTIFICATE));
+    }
   }
 }

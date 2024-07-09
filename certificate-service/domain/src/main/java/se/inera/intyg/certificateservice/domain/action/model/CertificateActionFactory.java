@@ -274,10 +274,27 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case FORWARD_CERTIFICATE -> CertificateActionForward.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.DRAFT)),
+                  new ActionRuleRole(List.of(Role.CARE_ADMIN)),
+                  new ActionRuleUserNotBlocked(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleInactiveUnit(),
+                  new ActionRulePatientAlive(),
+                  new ActionRuleUserAllowCopy()
+              )
+          )
+          .build();
       case FORWARD_MESSAGE -> CertificateActionForwardMessage.builder()
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED)),
+                  new ActionRuleSent(true),
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleProtectedPerson(),
