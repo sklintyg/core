@@ -902,4 +902,53 @@ class MessageTest {
       assertFalse(message.type(messageTypes));
     }
   }
+
+
+  @Nested
+  class SentTests {
+
+    @Test
+    void shallReturnTrueIfStatusIsSent() {
+      final var message = Message.builder()
+          .status(MessageStatus.SENT)
+          .build();
+      assertTrue(message.isSent());
+    }
+
+    @Test
+    void shallReturnFalseIfStatusIsNotSent() {
+      final var message = Message.builder()
+          .status(MessageStatus.DRAFT)
+          .build();
+      assertFalse(message.isSent());
+    }
+  }
+
+  @Nested
+  class ForwardTests {
+
+    @Test
+    void shallSetForwardedTrueIfSent() {
+      final var message = Message.builder()
+          .forwarded(new Forwarded(false))
+          .status(MessageStatus.SENT)
+          .build();
+
+      message.forward();
+
+      assertTrue(message.forwarded().value());
+    }
+
+    @Test
+    void shallNotSetForwardedTrueIfNotSent() {
+      final var message = Message.builder()
+          .forwarded(new Forwarded(false))
+          .status(MessageStatus.DRAFT)
+          .build();
+
+      message.forward();
+
+      assertFalse(message.forwarded().value());
+    }
+  }
 }

@@ -416,5 +416,17 @@ public class Certificate {
         })
         .toList();
   }
+
+  public void forwardMessages() {
+    if (!status.equals(Status.SIGNED)) {
+      throw new IllegalStateException("Cannot forward messages with status '%s'".formatted(status));
+    }
+
+    if (messages.isEmpty()) {
+      throw new IllegalStateException("Cannot forward messages if no messages are present");
+    }
+
+    this.messages.forEach(Message::forward);
+  }
 }
 

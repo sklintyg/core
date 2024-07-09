@@ -228,4 +228,14 @@ public class Message {
   public boolean type(List<MessageType> messageTypes) {
     return messageTypes.stream().anyMatch(messageType -> messageType.equals(this.type));
   }
+
+  public boolean isSent() {
+    return this.status == MessageStatus.SENT;
+  }
+
+  public void forward() {
+    if (isSent()) {
+      this.forwarded = new Forwarded(true);
+    }
+  }
 }
