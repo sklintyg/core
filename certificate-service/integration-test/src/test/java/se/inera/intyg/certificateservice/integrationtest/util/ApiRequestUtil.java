@@ -17,9 +17,16 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
+import se.inera.intyg.certificateservice.application.message.dto.CreateMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.DeleteAnswerRequest;
+import se.inera.intyg.certificateservice.application.message.dto.DeleteMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.HandleMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.SaveAnswerRequest;
+import se.inera.intyg.certificateservice.application.message.dto.SaveMessageRequest;
+import se.inera.intyg.certificateservice.application.message.dto.SendAnswerRequest;
+import se.inera.intyg.certificateservice.application.message.dto.SendMessageRequest;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesRequest;
@@ -165,6 +172,38 @@ public class ApiRequestUtil {
 
   public static GetCertificateFromMessageRequest defaultGetCertificateFromMessageRequest() {
     return GetCertificateFromMessageRequestBuilder.create().build();
+  }
+
+  public static CreateMessageRequest defaultCreateMessageRequest() {
+    return CreateMessageRequestBuilder.create().build();
+  }
+
+  public static SaveMessageRequest defaultSaveMessageRequest() {
+    return SaveMessageRequestBuilder.create().build();
+  }
+
+  public static SaveMessageRequestBuilder customSaveMessageRequest() {
+    return SaveMessageRequestBuilder.create();
+  }
+
+  public static SendMessageRequest defaultSendMessageRequest() {
+    return SendMessageRequestBuilder.create().build();
+  }
+
+  public static DeleteMessageRequest defaultDeleteMessageRequest() {
+    return DeleteMessageRequestBuilder.create().build();
+  }
+
+  public static SaveAnswerRequest defaultSaveAnswerRequest() {
+    return SaveAnswerRequestBuilder.create().build();
+  }
+
+  public static SendAnswerRequest defaultSendAnswerRequest() {
+    return SendAnswerRequestBuilder.create().build();
+  }
+
+  public static DeleteAnswerRequest defaultDeleteAnswerRequest() {
+    return DeleteAnswerRequestBuilder.create().build();
   }
 
   public static GetCertificateFromMessageRequestBuilder customGetCertificateFromMessageRequest() {

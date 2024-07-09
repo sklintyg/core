@@ -7,6 +7,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateBooleanValue;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateDateValue;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateTextValue;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateUnit;
@@ -194,6 +195,10 @@ public abstract class ValidateCertificateIT extends BaseIntegrationIT {
     if (expectedValue instanceof LocalDate expectedDate) {
       return updateDateValue(certificate, id, expectedDate);
     }
+    if (expectedValue instanceof Boolean expectedBoolean) {
+      return updateBooleanValue(certificate, id, expectedBoolean);
+    }
+
     throw new IllegalStateException("No update function available for type %s"
         .formatted(expectedValue.getClass()));
   }

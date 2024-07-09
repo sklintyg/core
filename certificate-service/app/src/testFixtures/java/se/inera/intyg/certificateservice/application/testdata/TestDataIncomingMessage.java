@@ -62,7 +62,7 @@ public class TestDataIncomingMessage {
         .referenceId(REFERENCE_ID)
         .certificateId(CERTIFICATE_ID)
         .subject(TestDataMessageConstants.SUBJECT)
-        .content(TestDataMessageConstants.CONTENT)
+        .content(TestDataMessageConstants.REMINDER_CONTENT)
         .sent(TestDataMessageConstants.SENT)
         .type(MessageTypeDTO.PAMINN)
         .contactInfo(TestDataMessageConstants.CONTACT_INFO)
