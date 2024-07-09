@@ -87,6 +87,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
+import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 
 @ExtendWith(MockitoExtension.class)
@@ -112,6 +113,7 @@ class CertificateMetadataConverterTest {
       .build();
   private static final String CERTIFICATE_SUMMARY_LABEL = "SummaryLabel";
   private static final String CERTIFICATE_SUMMARY_VALUE = "SummaryValue";
+  private static final Forwarded FORWARDED = new Forwarded(true);
   @Mock
   private CertificateMessageTypeConverter certificateMessageTypeConverter;
   @Mock
@@ -134,6 +136,7 @@ class CertificateMetadataConverterTest {
         .sent(SENT)
         .signed(SIGNED)
         .modified(MODIFIED)
+        .forwarded(FORWARDED)
         .certificateModel(
             CertificateModel.builder()
                 .id(
@@ -791,6 +794,13 @@ class CertificateMetadataConverterTest {
 
     assertEquals(expectedMessageTypes,
         certificateMetadataConverter.convert(certificate).getMessageTypes()
+    );
+  }
+
+  @Test
+  void shallIncludeForwarded() {
+    assertEquals(FORWARDED.value(),
+        certificateMetadataConverter.convert(certificate).isForwarded()
     );
   }
 }
