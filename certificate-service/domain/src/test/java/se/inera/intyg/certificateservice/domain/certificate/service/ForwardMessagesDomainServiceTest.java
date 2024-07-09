@@ -22,13 +22,13 @@ import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 
 @ExtendWith(MockitoExtension.class)
-class ForwardMessagesCertificateDomainServiceTest {
+class ForwardMessagesDomainServiceTest {
 
   private static final CertificateId CERTIFICATE_ID = new CertificateId("certificateId");
   @Mock
   MessageRepository messageRepository;
   @InjectMocks
-  ForwardMessagesCertificateDomainService forwardMessagesCertificateDomainService;
+  ForwardMessagesDomainService forwardMessagesDomainService;
 
   @Test
   void shallThrowIfNotAllowedToForwardMessages() {
@@ -38,7 +38,7 @@ class ForwardMessagesCertificateDomainServiceTest {
         .allowTo(CertificateActionType.FORWARD_MESSAGE, Optional.of(ACTION_EVALUATION));
 
     assertThrows(CertificateActionForbidden.class,
-        () -> forwardMessagesCertificateDomainService.forward(
+        () -> forwardMessagesDomainService.forward(
             certificate, ACTION_EVALUATION
         ));
   }
@@ -49,7 +49,7 @@ class ForwardMessagesCertificateDomainServiceTest {
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.FORWARD_MESSAGE, Optional.of(ACTION_EVALUATION));
 
-    forwardMessagesCertificateDomainService.forward(certificate, ACTION_EVALUATION);
+    forwardMessagesDomainService.forward(certificate, ACTION_EVALUATION);
 
     verify(certificate).forwardMessages();
   }
@@ -62,7 +62,7 @@ class ForwardMessagesCertificateDomainServiceTest {
         .allowTo(CertificateActionType.FORWARD_MESSAGE, Optional.of(ACTION_EVALUATION));
     doReturn(List.of(expectedMessage)).when(certificate).messages();
 
-    forwardMessagesCertificateDomainService.forward(certificate, ACTION_EVALUATION);
+    forwardMessagesDomainService.forward(certificate, ACTION_EVALUATION);
 
     verify(messageRepository).save(expectedMessage);
   }
@@ -73,7 +73,7 @@ class ForwardMessagesCertificateDomainServiceTest {
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.FORWARD_MESSAGE, Optional.of(ACTION_EVALUATION));
 
-    final var actualCertificate = forwardMessagesCertificateDomainService.forward(certificate,
+    final var actualCertificate = forwardMessagesDomainService.forward(certificate,
         ACTION_EVALUATION);
 
     assertEquals(certificate, actualCertificate);

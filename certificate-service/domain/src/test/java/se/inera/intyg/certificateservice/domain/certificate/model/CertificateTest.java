@@ -2509,4 +2509,29 @@ class CertificateTest {
       assertFalse(contactMessage.forwarded().value());
     }
   }
+
+  @Nested
+  class ForwardTests {
+
+    @Test
+    void shallThrowIfStatusIsNotDraft() {
+      final var signedCertificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      assertThrows(IllegalStateException.class, signedCertificate::forward,
+          "Shall throw if certificate does not have status draft");
+    }
+
+    @Test
+    void shallSetForwardedToTrue() {
+      final var draftCertificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      draftCertificate.forward();
+
+      assertTrue(draftCertificate.forwarded().value());
+    }
+  }
 }

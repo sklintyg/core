@@ -25,6 +25,7 @@ import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.Author;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
+import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
@@ -57,6 +58,7 @@ public class Certificate {
   private List<Relation> children = Collections.emptyList();
   @Builder.Default
   private List<Message> messages = Collections.emptyList();
+  private Forwarded forwarded;
 
   public List<CertificateAction> actions(Optional<ActionEvaluation> actionEvaluation) {
     return certificateModel.actions().stream()
@@ -419,7 +421,9 @@ public class Certificate {
 
   public void forwardMessages() {
     if (!status.equals(Status.SIGNED)) {
-      throw new IllegalStateException("Cannot forward messages with status '%s'".formatted(status));
+      throw new IllegalStateException(
+          "Cannot forward messages for certificate with status '%s'. Required status '%s'".formatted(
+              status, Status.SIGNED));
     }
 
     if (messages.isEmpty()) {
@@ -427,6 +431,16 @@ public class Certificate {
     }
 
     this.messages.forEach(Message::forward);
+  }
+
+  public void forward() {
+    if (!status.equals(Status.DRAFT)) {
+      throw new IllegalStateException(
+          "Cannot forward certificate with status '%s'. Required status '%s'".formatted(
+              status, Status.DRAFT));
+    }
+
+    this.forwarded = new Forwarded(true);
   }
 }
 
