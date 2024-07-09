@@ -2,11 +2,14 @@ package se.inera.intyg.certificateservice.integrationtest;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customValidateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateBooleanValue;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateDateValue;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateTextValue;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateUnit;
@@ -186,6 +189,24 @@ public abstract class ValidateCertificateIT extends BaseIntegrationIT {
     );
   }
 
+  @Test
+  @DisplayName("Om utkastet saknar värden skall valideringsfel returneras")
+  void shallReturnListOfErrorsIfEmptyCertificate() {
+
+    final var certificate = api.createCertificate(defaultCreateCertificateRequest(
+        type(), typeVersion()
+    ));
+
+    final var response = api.validateCertificate(
+        customValidateCertificateRequest()
+            .certificate(certificate.getBody().getCertificate())
+            .build(),
+        certificate.getBody().getCertificate().getMetadata().getId()
+    );
+
+    assertFalse(response.getBody().getValidationErrors().isEmpty());
+  }
+
   private CertificateDataElement updateValue(CertificateDTO certificate, String id,
       Object expectedValue) {
     if (expectedValue instanceof String expectedText) {
@@ -194,6 +215,10 @@ public abstract class ValidateCertificateIT extends BaseIntegrationIT {
     if (expectedValue instanceof LocalDate expectedDate) {
       return updateDateValue(certificate, id, expectedDate);
     }
+    if (expectedValue instanceof Boolean expectedBoolean) {
+      return updateBooleanValue(certificate, id, expectedBoolean);
+    }
+
     throw new IllegalStateException("No update function available for type %s"
         .formatted(expectedValue.getClass()));
   }

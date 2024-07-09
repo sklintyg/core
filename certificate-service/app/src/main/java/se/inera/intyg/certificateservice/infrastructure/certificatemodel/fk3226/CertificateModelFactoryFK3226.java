@@ -88,7 +88,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
       "52.7");
   public static final ElementId FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_ID = new ElementId(
       "53");
-  private static final FieldId FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_FIELD_ID = new FieldId(
+  public static final FieldId FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_FIELD_ID = new FieldId(
       "53.1");
   private static final FieldId DIAGNOSIS_FIELD_ID = new FieldId(
       "58.1");

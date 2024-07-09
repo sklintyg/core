@@ -15,6 +15,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.LAST_DATE_TO_REPLY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.MESSAGE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REFERENCE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REMINDER_CONTENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.REMINDER_MESSAGE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
@@ -183,7 +184,7 @@ class MessageConverterTest {
 
     @Test
     void shallIncludeContent() {
-      assertEquals(new Content(CONTENT),
+      assertEquals(new Content(REMINDER_CONTENT),
           messageConverter.convertReminder(INCOMING_REMINDER_MESSAGE).content()
       );
     }

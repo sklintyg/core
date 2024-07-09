@@ -21,6 +21,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificates;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.exists;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateBooleanValue;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateDateValue;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateTextValue;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.version;
@@ -584,6 +585,10 @@ public abstract class GetUnitCertificatesIT extends BaseIntegrationIT {
     if (expectedValue instanceof LocalDate expectedDate) {
       return updateDateValue(certificate, id, expectedDate);
     }
+    if (expectedValue instanceof Boolean expectedBoolean) {
+      return updateBooleanValue(certificate, id, expectedBoolean);
+    }
+
     throw new IllegalStateException("No update function available for type %s"
         .formatted(expectedValue.getClass()));
   }

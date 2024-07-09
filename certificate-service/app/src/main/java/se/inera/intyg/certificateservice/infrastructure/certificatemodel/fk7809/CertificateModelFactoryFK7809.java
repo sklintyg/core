@@ -114,7 +114,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
 
   private static final ElementId GRUND_FOR_MEDICINSKT_UNDERLAG_CATEGORY_ID = new ElementId("KAT_1");
   public static final ElementId QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID = new ElementId("1");
-  private static final FieldId QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_FIELD_ID = new FieldId("1.1");
+  public static final FieldId QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_FIELD_ID = new FieldId("1.1");
 
   public static final ElementId QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID = new ElementId(
       "1.3");
@@ -129,7 +129,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   public static final String UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID = "undersokningAvPatienten";
 
   public static final ElementId QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID = new ElementId("3");
-  private static final FieldId QUESTION_BASERAT_PA_ANNAT_UNDERLAG_FIELD_ID = new FieldId("3.1");
+  public static final FieldId QUESTION_BASERAT_PA_ANNAT_UNDERLAG_FIELD_ID = new FieldId("3.1");
 
   public static final FieldId MEDICAL_INVESTIGATION_FIELD_ID_1 = new FieldId(
       "medicalInvestigation1");
@@ -179,7 +179,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
 
   private static final ElementId FUNKTIONSNEDSATTNING_CATEGORY_ID = new ElementId("KAT_5");
   public static final ElementId FUNKTIONSNEDSATTNING_ID = new ElementId("funktionsnedsattning");
-  private static final FieldId FUNKTIONSNEDSATNING_FIELD_ID = new FieldId(
+  public static final FieldId FUNKTIONSNEDSATNING_FIELD_ID = new FieldId(
       "funktionsnedsattning");
   public static final FieldId FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID = new FieldId("8.2");
   public static final FieldId FUNKTIONSNEDSATTNING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID = new FieldId(

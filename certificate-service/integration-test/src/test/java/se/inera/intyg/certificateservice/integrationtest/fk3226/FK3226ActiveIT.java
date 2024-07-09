@@ -1,9 +1,7 @@
 package se.inera.intyg.certificateservice.integrationtest.fk3226;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CertificateModelFactoryFK3226.QUESTION_NAR_AKTIVA_BEHANDLINGEN_AVSLUTADES_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CertificateModelFactoryFK3226.FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_ID;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -11,6 +9,7 @@ import org.springframework.test.context.DynamicPropertySource;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsDeepIntegrationIT;
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsSVODIT;
+import se.inera.intyg.certificateservice.integrationtest.AdministrativeMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.AnswerComplementIT;
 import se.inera.intyg.certificateservice.integrationtest.CertificateFromMessageIT;
 import se.inera.intyg.certificateservice.integrationtest.ComplementIT;
@@ -34,6 +33,7 @@ import se.inera.intyg.certificateservice.integrationtest.ReplaceCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SendCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateFK3226IT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
 
@@ -43,8 +43,8 @@ public class FK3226ActiveIT {
   private static final String ACTIVE_VERSION = FK3226Constants.VERSION;
   private static final String WRONG_VERSION = FK3226Constants.WRONG_VERSION;
   private static final String TYPE = FK3226Constants.TYPE;
-  private static final ElementId ELEMENT_ID = QUESTION_NAR_AKTIVA_BEHANDLINGEN_AVSLUTADES_ID;
-  private static final LocalDate VALUE = LocalDate.now(ZoneId.systemDefault()).minusDays(5);
+  private static final ElementId ELEMENT_ID = FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_ID;
+  private static final Boolean VALUE = false;
 
   @DynamicPropertySource
   static void testProperties(DynamicPropertyRegistry registry) {
@@ -83,9 +83,17 @@ public class FK3226ActiveIT {
 
   @Nested
   @DisplayName(TYPE + "Administrativ ärendekommunikation")
-  class AdministrativeMessages {
+  class AdministrativeMessages extends AdministrativeMessagesIT {
 
-    //TODO Add tests for administrative messages
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
   }
 
   @Nested
@@ -515,7 +523,11 @@ public class FK3226ActiveIT {
       return VALUE;
     }
 
-    //TODO: Add update tests for remaining elements - see 7472ActiveIT and UpdateCertificateFK7472IT
+    @Nested
+    @DisplayName(TYPE + "Uppdatera svar")
+    class UpdateCertificateFK3226 extends UpdateCertificateFK3226IT {
+
+    }
   }
 
   @Nested
@@ -541,7 +553,5 @@ public class FK3226ActiveIT {
     protected Object value() {
       return VALUE;
     }
-
-    //TODO Add fk3226 specific validation tests - see FK7472ActiveIT and ValidateFK7472IT
   }
 }
