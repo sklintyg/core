@@ -34,6 +34,7 @@ import se.inera.intyg.certificateservice.integrationtest.ReplaceCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SendCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateFK3226IT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
 
@@ -515,7 +516,11 @@ public class FK3226ActiveIT {
       return VALUE;
     }
 
-    //TODO: Add update tests for remaining elements - see 7472ActiveIT and UpdateCertificateFK7472IT
+    @Nested
+    @DisplayName(TYPE + "Uppdatera svar")
+    class UpdateCertificateFK3226 extends UpdateCertificateFK3226IT {
+
+    }
   }
 
   @Nested
@@ -541,7 +546,5 @@ public class FK3226ActiveIT {
     protected Object value() {
       return VALUE;
     }
-
-    //TODO Add fk3226 specific validation tests - see FK7472ActiveIT and ValidateFK7472IT
   }
 }

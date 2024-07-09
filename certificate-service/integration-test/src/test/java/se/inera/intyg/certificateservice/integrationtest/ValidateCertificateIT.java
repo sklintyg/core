@@ -2,8 +2,10 @@ package se.inera.intyg.certificateservice.integrationtest;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customValidateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
@@ -184,6 +186,24 @@ public abstract class ValidateCertificateIT extends BaseIntegrationIT {
                 .formatted(validationErrors(response).get(0))
         )
     );
+  }
+
+  @Test
+  @DisplayName("Om utkastet saknar värden skall valideringsfel returneras")
+  void shallReturnListOfErrorsIfEmptyCertificate() {
+
+    final var certificate = api.createCertificate(defaultCreateCertificateRequest(
+        type(), typeVersion()
+    ));
+
+    final var response = api.validateCertificate(
+        customValidateCertificateRequest()
+            .certificate(certificate.getBody().getCertificate())
+            .build(),
+        certificate.getBody().getCertificate().getMetadata().getId()
+    );
+
+    assertFalse(response.getBody().getValidationErrors().isEmpty());
   }
 
   private CertificateDataElement updateValue(CertificateDTO certificate, String id,
