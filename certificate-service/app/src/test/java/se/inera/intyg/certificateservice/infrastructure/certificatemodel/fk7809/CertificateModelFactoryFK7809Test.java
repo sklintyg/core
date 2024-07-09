@@ -621,12 +621,12 @@ class CertificateModelFactoryFK7809Test {
                         .build(),
                     CheckboxDate.builder()
                         .id(new FieldId("journaluppgifter"))
-                        .label("journaluppgifter från och med")
+                        .label("journaluppgifter från den")
                         .code(
                             new Code(
                                 "JOURNALUPPGIFTER",
                                 "KV_FKMU_0001",
-                                "journaluppgifter från och med"
+                                "journaluppgifter från den"
                             )
                         )
                         .max(Period.ZERO)

@@ -642,12 +642,12 @@ class CertificateModelFactoryFK3226Test {
                         .build(),
                     CheckboxDate.builder()
                         .id(new FieldId("journaluppgifter"))
-                        .label("journaluppgifter från och med")
+                        .label("journaluppgifter från den")
                         .code(
                             new Code(
                                 "JOURNALUPPGIFTER",
                                 "KV_FKMU_0001",
-                                "journaluppgifter från och med"
+                                "journaluppgifter från den"
                             )
                         )
                         .max(Period.ZERO)
@@ -878,13 +878,11 @@ class CertificateModelFactoryFK3226Test {
         final var expectedConfiguration = ElementConfigurationCategory.builder()
             .name("Påtagligt hot mot patientens liv")
             .description("""
-                    Ange på vilket sätt hälsotillståndet utgör ett påtagligt hot mot patientens liv i nuläget eller på viss tids sikt.\s
-                    Hälsotillståndet kan utgöra ett påtagligt hot även om det finns hopp om att det förbättras.
-                    <ul>
-                        <li>Ange alla diagnoser som sammantaget medför ett påtagligt hot mot patientens liv.</li>
-                        <li>Ange ett av alternativen som gäller patientens behandling och vårdsituation.</li>
-                    </ul>
-                """)
+                Ange på vilket sätt hälsotillståndet utgör ett påtagligt hot mot patientens liv i nuläget eller på viss tids sikt.
+                                    
+                Hälsotillståndet kan utgöra ett påtagligt hot även om det finns hopp om att det förbättras.
+                <ul>
+                <li>Ange alla diagnoser som sammantaget medför ett påtagligt hot mot patientens liv.</li><li>Ange ett av alternativen som gäller patientens behandling och vårdsituation.</li></ul>""")
             .build();
 
         final var certificateModel = certificateModelFactoryFK3226.create();
