@@ -13,7 +13,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueBoolean;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getBooleanValue;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueDate;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueText;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateBooleanValue;
@@ -269,7 +269,7 @@ public abstract class UpdateCertificateIT extends BaseIntegrationIT {
       return;
     }
     if (expectedValue instanceof Boolean expectedBoolean) {
-      assertEquals(expectedBoolean, getValueBoolean(response, id));
+      assertEquals(expectedBoolean, getBooleanValue(response, id));
       return;
     }
     fail("Assertion for type %s has not been implemented".formatted(expectedValue.getClass()));

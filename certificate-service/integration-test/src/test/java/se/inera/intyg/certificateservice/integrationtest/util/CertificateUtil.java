@@ -31,10 +31,14 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidationErrorDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValue;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueBoolean;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueCode;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateList;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateRange;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateRangeList;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDiagnosisList;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.application.message.dto.CreateMessageResponse;
@@ -387,7 +391,7 @@ public class CertificateUtil {
         .getValue()).getText();
   }
 
-  public static Boolean getValueBoolean(ResponseEntity<UpdateCertificateResponse> response,
+  public static Boolean getBooleanValue(ResponseEntity<UpdateCertificateResponse> response,
       String questionId) {
     if (response == null || response.getBody() == null) {
       return null;
@@ -498,4 +502,61 @@ public class CertificateUtil {
         )
         .build();
   }
+
+  public static CertificateDataValueDateList getValueDateList(
+      ResponseEntity<UpdateCertificateResponse> response,
+      String questionId) {
+    if (response == null || response.getBody() == null) {
+      return null;
+    }
+    return ((CertificateDataValueDateList) response.getBody().getCertificate().getData()
+        .get(questionId)
+        .getValue());
+  }
+
+  public static CertificateDataElement updateValue(CertificateDTO certificateDTO,
+      String questionId, CertificateDataValue newValue) {
+    final var certificate = Objects.requireNonNull(certificateDTO.getData().get(questionId));
+    return CertificateDataElement.builder()
+        .id(certificate.getId())
+        .parent(certificate.getParent())
+        .config(certificate.getConfig())
+        .validation(certificate.getValidation())
+        .value(newValue)
+        .build();
+  }
+
+  public static CertificateDataValueDiagnosisList getValueDiagnosisList(
+      ResponseEntity<UpdateCertificateResponse> response,
+      String questionId) {
+    if (response == null || response.getBody() == null) {
+      return null;
+    }
+    return ((CertificateDataValueDiagnosisList) response.getBody().getCertificate().getData()
+        .get(questionId)
+        .getValue());
+  }
+
+  public static CertificateDataValueCode getValueCode(
+      ResponseEntity<UpdateCertificateResponse> response,
+      String questionId) {
+    if (response == null || response.getBody() == null) {
+      return null;
+    }
+    return ((CertificateDataValueCode) response.getBody().getCertificate().getData()
+        .get(questionId)
+        .getValue());
+  }
+
+  public static CertificateDataValueBoolean getValueBoolean(
+      ResponseEntity<UpdateCertificateResponse> response,
+      String questionId) {
+    if (response == null || response.getBody() == null) {
+      return null;
+    }
+    return ((CertificateDataValueBoolean) response.getBody().getCertificate().getData()
+        .get(questionId)
+        .getValue());
+  }
+
 }
