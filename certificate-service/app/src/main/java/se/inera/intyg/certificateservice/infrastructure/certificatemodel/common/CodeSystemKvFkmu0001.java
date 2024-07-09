@@ -15,7 +15,7 @@ public class CodeSystemKvFkmu0001 {
   public static final Code JOURNALUPGIFTER = new Code(
       "JOURNALUPPGIFTER",
       CODE_SYSTEM,
-      "journaluppgifter från och med"
+      "journaluppgifter från den"
   );
 
   public static final Code ANNAT = new Code(

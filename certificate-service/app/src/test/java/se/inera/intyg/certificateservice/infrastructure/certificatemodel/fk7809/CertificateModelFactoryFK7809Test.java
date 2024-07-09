@@ -626,7 +626,7 @@ class CertificateModelFactoryFK7809Test {
                             new Code(
                                 "JOURNALUPPGIFTER",
                                 "KV_FKMU_0001",
-                                "journaluppgifter från och med"
+                                "journaluppgifter från den"
                             )
                         )
                         .max(Period.ZERO)
