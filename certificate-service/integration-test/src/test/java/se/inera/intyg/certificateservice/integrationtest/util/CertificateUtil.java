@@ -34,6 +34,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.ValidationE
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValue;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueBoolean;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueCode;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueCodeList;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateList;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateRange;
@@ -555,6 +556,17 @@ public class CertificateUtil {
       return null;
     }
     return ((CertificateDataValueBoolean) response.getBody().getCertificate().getData()
+        .get(questionId)
+        .getValue());
+  }
+
+  public static CertificateDataValueCodeList getValueCodeList(
+      ResponseEntity<UpdateCertificateResponse> response,
+      String questionId) {
+    if (response == null || response.getBody() == null) {
+      return null;
+    }
+    return ((CertificateDataValueCodeList) response.getBody().getCertificate().getData()
         .get(questionId)
         .getValue());
   }
