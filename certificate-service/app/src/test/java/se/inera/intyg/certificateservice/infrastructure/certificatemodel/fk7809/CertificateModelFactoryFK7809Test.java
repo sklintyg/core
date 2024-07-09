@@ -621,7 +621,7 @@ class CertificateModelFactoryFK7809Test {
                         .build(),
                     CheckboxDate.builder()
                         .id(new FieldId("journaluppgifter"))
-                        .label("journaluppgifter från den")
+                        .label("journaluppgifter från och med")
                         .code(
                             new Code(
                                 "JOURNALUPPGIFTER",
