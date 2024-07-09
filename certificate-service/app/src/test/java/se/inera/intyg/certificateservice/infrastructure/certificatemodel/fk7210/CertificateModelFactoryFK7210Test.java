@@ -244,6 +244,18 @@ class CertificateModelFactoryFK7210Test {
   }
 
   @Test
+  void shallIncludeCertificateActionForwardCertificate() {
+    final var expectedType = CertificateActionType.FORWARD_CERTIFICATE;
+
+    final var certificateModel = certificateModelFactoryFK7210.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
   void shallIncludePdfTemplatePath() {
     final var certificateModel = certificateModelFactoryFK7210.create();
 

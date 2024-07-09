@@ -360,6 +360,9 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.HANDLE_MESSAGE)
+                    .build(),
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
                     .build()
             )
         )
