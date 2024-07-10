@@ -39,6 +39,10 @@ public class GetCitizenCertificateListService {
     return GetCitizenCertificateListResponse.builder()
         .citizenCertificates(certificates.stream()
             .filter(certificate -> certificate.certificateModel().availableForCitizen())
+            .filter(
+                certificate -> certificate.certificateMetaData().patient().testIndicated() == null
+                    || !certificate.certificateMetaData().patient().testIndicated().value()
+            )
             .map(certificate -> certificateConverter.convert(certificate, Collections.emptyList()))
             .toList()
         )
