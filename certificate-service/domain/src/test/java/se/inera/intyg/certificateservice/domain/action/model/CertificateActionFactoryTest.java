@@ -244,7 +244,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = CertificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionForward.class);
+    assertEquals(certificateAction.getClass(), CertificateActionForwardCertificate.class);
   }
 
   @Test

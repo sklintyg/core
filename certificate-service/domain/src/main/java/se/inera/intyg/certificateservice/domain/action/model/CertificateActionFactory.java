@@ -274,7 +274,7 @@ public class CertificateActionFactory {
               )
           )
           .build();
-      case FORWARD_CERTIFICATE -> CertificateActionForward.builder()
+      case FORWARD_CERTIFICATE -> CertificateActionForwardCertificate.builder()
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(

@@ -33,7 +33,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 
-class CertificateActionForwardMessageTest {
+class CertificateActionForwardCertificateMessageTest {
 
   private CertificateActionForwardMessage certificateActionForwardMessage;
 

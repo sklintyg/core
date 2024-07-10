@@ -10,13 +10,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 
 @Builder
 @Getter(AccessLevel.NONE)
-public class CertificateActionForward implements CertificateAction {
+public class CertificateActionForwardCertificate implements CertificateAction {
 
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
 
   private static final String NAME = "Vidarebefordra utkast";
-  private static final String DESCRIPTION = "Skapar ett e-postmeddelande med länk till intyget.";
+  private static final String DESCRIPTION = "Skapar ett e-postmeddelande i din e-postklient med en direktlänk till utkastet.";
 
   @Override
   public CertificateActionType getType() {
