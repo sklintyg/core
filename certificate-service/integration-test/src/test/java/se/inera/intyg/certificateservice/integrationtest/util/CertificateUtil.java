@@ -16,6 +16,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
@@ -305,6 +306,22 @@ public class CertificateUtil {
     }
 
     return response.isExists();
+  }
+
+  public static boolean forwarded(ForwardCertificateResponse response) {
+    if (response == null || response.getCertificate() == null) {
+      return false;
+    }
+
+    return response.getCertificate().getMetadata().isForwarded();
+  }
+
+  public static boolean forwardedMessage(ForwardCertificateResponse response) {
+    if (response == null || response.getCertificate() == null) {
+      return false;
+    }
+
+    return response.getCertificate().getMetadata().isForwarded();
   }
 
   public static CertificateDataElement updateDateValue(CertificateDTO certificateDTO,

@@ -122,7 +122,11 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.REPLACE_CONTINUE)
+                    .build(),
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
                     .build()
+
             )
         )
         .elementSpecifications(

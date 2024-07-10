@@ -96,6 +96,7 @@ import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.message.model.Author;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
+import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
@@ -2446,6 +2447,91 @@ class CertificateTest {
       certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
       assertNull(certificateWithMessages.messages().get(0).answer());
       assertNull(certificateWithMessages.messages().get(1).answer());
+    }
+  }
+
+  @Nested
+  class ForwardMessageTests {
+
+    @Test
+    void shallThrowIfCertificateIsNotSigned() {
+      final var draftCertificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      assertThrows(IllegalStateException.class, draftCertificate::forwardMessages,
+          "Certificate status needs to be signed");
+    }
+
+    @Test
+    void shallThrowIfCertificateDoesNotHaveMessages() {
+      final var draftCertificate = certificateBuilder
+          .status(Status.SIGNED)
+          .messages(Collections.emptyList())
+          .build();
+
+      assertThrows(IllegalStateException.class, draftCertificate::forwardMessages,
+          "Certificate requires to have messages");
+    }
+
+    @Test
+    void shallSetSentMessagesToForwarded() {
+      final var contactMessage = Message.builder()
+          .type(MessageType.CONTACT)
+          .status(MessageStatus.SENT)
+          .build();
+
+      final var certificateWithContact = certificateBuilder
+          .status(Status.SIGNED)
+          .messages(List.of(contactMessage))
+          .build();
+
+      certificateWithContact.forwardMessages();
+
+      assertTrue(contactMessage.forwarded().value());
+    }
+
+    @Test
+    void shallNotSetDraftMessagesToForwarded() {
+      final var contactMessage = Message.builder()
+          .type(MessageType.CONTACT)
+          .status(MessageStatus.DRAFT)
+          .forwarded(new Forwarded(false))
+          .build();
+
+      final var certificateWithContact = certificateBuilder
+          .status(Status.SIGNED)
+          .messages(List.of(contactMessage))
+          .build();
+
+      certificateWithContact.forwardMessages();
+
+      assertFalse(contactMessage.forwarded().value());
+    }
+  }
+
+  @Nested
+  class ForwardTests {
+
+    @Test
+    void shallThrowIfStatusIsNotDraft() {
+      final var signedCertificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      assertThrows(IllegalStateException.class, signedCertificate::forward,
+          "Shall throw if certificate does not have status draft");
+    }
+
+    @Test
+    void shallSetForwardedToTrue() {
+      final var draftCertificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      draftCertificate.forward();
+
+      assertTrue(draftCertificate.forwarded().value());
     }
   }
 }

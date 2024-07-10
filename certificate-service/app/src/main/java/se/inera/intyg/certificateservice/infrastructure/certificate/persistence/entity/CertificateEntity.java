@@ -87,4 +87,6 @@ public class CertificateEntity {
   @OneToOne(mappedBy = "certificate", cascade = CascadeType.ALL)
   @PrimaryKeyJoinColumn
   private ExternalReferenceEntity externalReference;
+  @Column(name = "forwarded")
+  private Boolean forwarded;
 }

@@ -51,7 +51,8 @@ public class TestDataCertificateEntity {
         .revokedReason(REVOKED_REASON_ENTITY)
         .revokedMessage(REVOKED_MESSAGE)
         .externalReference(EXTERNAL_REFERENCE)
-        .certificateModel(CERTIFICATE_MODEL_ENTITY);
+        .certificateModel(CERTIFICATE_MODEL_ENTITY)
+        .forwarded(true);
   }
 
   public static CertificateEntity.CertificateEntityBuilder certificateParentEntityBuilder() {

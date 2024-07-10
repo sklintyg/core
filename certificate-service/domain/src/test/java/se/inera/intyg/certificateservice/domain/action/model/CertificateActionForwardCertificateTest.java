@@ -10,13 +10,16 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.BETA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.relationReplaceBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_HUDMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.BETA_HUDMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.alvaVardadministratorBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALLOW_COPY_FALSE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,29 +29,28 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
-import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 
-class CertificateActionSaveMessageTest {
+class CertificateActionForwardCertificateTest {
 
-  private CertificateActionSaveMessage certificateActionSaveMessage;
-  private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
-  private CertificateBuilder certificateBuilder;
+  private CertificateActionForwardCertificate certificateActionForwardCertificate;
+
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
-          .certificateActionType(CertificateActionType.SAVE_MESSAGE)
+          .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
           .build();
+  private CertificateBuilder certificateBuilder;
 
   @BeforeEach
   void setUp() {
-    certificateActionSaveMessage = (CertificateActionSaveMessage) CertificateActionFactory.create(
+    certificateActionForwardCertificate = (CertificateActionForwardCertificate) CertificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION
     );
 
     certificateBuilder = Certificate.builder()
-        .status(Status.SIGNED)
-        .sent(Sent.builder().build())
+        .status(Status.DRAFT)
+        .sent(null)
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -57,53 +59,92 @@ class CertificateActionSaveMessageTest {
                 .patient(ATHENA_REACT_ANDERSSON)
                 .build()
         );
+  }
 
-    actionEvaluationBuilder = ActionEvaluation.builder()
+  @Test
+  void shallReturnName() {
+    assertEquals("Vidarebefordra utkast",
+        certificateActionForwardCertificate.getName(Optional.empty()));
+  }
+
+  @Test
+  void shallReturnType() {
+    assertEquals(CertificateActionType.FORWARD_CERTIFICATE,
+        certificateActionForwardCertificate.getType());
+  }
+
+  @Test
+  void shallReturnDescription() {
+    assertEquals(
+        "Skapar ett e-postmeddelande i din e-postklient med en direktlänk till utkastet.",
+        certificateActionForwardCertificate.getDescription(Optional.empty()));
+  }
+
+  @Test
+  void shallReturnFalseIfPatientIsDeceased() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ATLAS_REACT_ABRAHAMSSON)
         .user(AJLA_DOKTOR)
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
-        .careProvider(ALFA_REGIONEN)
+        .user(ALVA_VARDADMINISTRATOR)
+        .build();
+
+    final var certificate = certificateBuilder.build();
+    final var actualResult = certificateActionForwardCertificate.evaluate(Optional.of(certificate),
+        Optional.of(actionEvaluation));
+
+    assertFalse(actualResult);
+  }
+
+  @Test
+  void shallReturnTrueIfPatientIsNotDeceased() {
+    final var actionEvaluation = ActionEvaluation.builder()
         .patient(ATHENA_REACT_ANDERSSON)
-        .careUnit(ALFA_MEDICINCENTRUM);
-  }
-
-  @Test
-  void shallReturnTypeFromSpecification() {
-    assertEquals(CertificateActionType.SAVE_MESSAGE, certificateActionSaveMessage.getType());
-  }
-
-  @Test
-  void shallReturnFalseIfCertificateIsNotSigned() {
-    final var certificate = certificateBuilder
-        .status(Status.DRAFT)
+        .user(AJLA_DOKTOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+        .user(ALVA_VARDADMINISTRATOR)
         .build();
-    final var actionEvaluation = actionEvaluationBuilder.build();
-    assertFalse(
-        certificateActionSaveMessage.evaluate(Optional.of(certificate),
-            Optional.of(actionEvaluation)));
+
+    final var certificate = certificateBuilder.build();
+    final var actualResult = certificateActionForwardCertificate.evaluate(Optional.of(certificate),
+        Optional.of(actionEvaluation));
+
+    assertTrue(actualResult);
   }
 
   @Test
-  void shallReturnTrueIfCertificateIsSentAndSigned() {
-    final var certificate = certificateBuilder
-        .status(Status.SIGNED)
-        .sent(Sent.builder().build())
+  void shallReturnFalseIfUserIsBlocked() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ATHENA_REACT_ANDERSSON)
+        .user(
+            alvaVardadministratorBuilder()
+                .blocked(BLOCKED_TRUE)
+                .build()
+        )
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
-    final var actionEvaluation = actionEvaluationBuilder.build();
-    assertTrue(
-        certificateActionSaveMessage.evaluate(Optional.of(certificate),
-            Optional.of(actionEvaluation)));
+
+    final var certificate = certificateBuilder.build();
+    final var actualResult = certificateActionForwardCertificate.evaluate(Optional.of(certificate),
+        Optional.of(actionEvaluation));
+
+    assertFalse(actualResult);
   }
 
   @Test
-  void shallReturnFalseIfCertificateIsNotSentAndSigned() {
-    final var certificate = certificateBuilder
-        .status(Status.SIGNED)
-        .sent(null)
+  void shallReturnTrueIfUserIsNotBlocked() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ATHENA_REACT_ANDERSSON)
+        .user(AJLA_DOKTOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+        .user(ALVA_VARDADMINISTRATOR)
         .build();
-    final var actionEvaluation = actionEvaluationBuilder.build();
-    assertFalse(
-        certificateActionSaveMessage.evaluate(Optional.of(certificate),
-            Optional.of(actionEvaluation)));
+
+    final var certificate = certificateBuilder.build();
+    final var actualResult = certificateActionForwardCertificate.evaluate(Optional.of(certificate),
+        Optional.of(actionEvaluation));
+
+    assertTrue(actualResult);
   }
 
   @Test
@@ -122,51 +163,22 @@ class CertificateActionSaveMessageTest {
                 .build()
         )
         .build();
-    final var actualResult = certificateActionSaveMessage.evaluate(Optional.of(certificate),
+    final var actualResult = certificateActionForwardCertificate.evaluate(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
     assertFalse(actualResult);
   }
 
   @Test
-  void shallReturnTrueIfUserIsDoctorAndPatientIsProtectedPerson() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ANONYMA_REACT_ATTILA)
-        .user(AJLA_DOKTOR)
-        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
-        .build();
-
-    final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionSaveMessage.evaluate(Optional.of(certificate),
-        Optional.of(actionEvaluation));
-
-    assertTrue(actualResult);
-  }
-
-  @Test
-  void shallReturnReasonNotAllowedIfEvaluateReturnsFalse() {
+  void shallReturnEmptyListIfEvaluateReturnsTrue() {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(ANONYMA_REACT_ATTILA)
         .user(ALVA_VARDADMINISTRATOR)
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var actualResult = certificateActionSaveMessage.reasonNotAllowed(Optional.empty(),
-        Optional.of(actionEvaluation));
-
-    assertFalse(actualResult.isEmpty());
-  }
-
-  @Test
-  void shallReturnEmptyListIfEvaluateReturnsTrue() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ANONYMA_REACT_ATTILA)
-        .user(AJLA_DOKTOR)
-        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
-        .build();
-
     final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionSaveMessage.evaluate(Optional.of(certificate),
+    final var actualResult = certificateActionForwardCertificate.evaluate(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
@@ -176,15 +188,46 @@ class CertificateActionSaveMessageTest {
   void shallReturnEnabledTrue() {
     final var actionEvaluation = ActionEvaluation.builder()
         .patient(ANONYMA_REACT_ATTILA)
-        .user(AJLA_DOKTOR)
+        .user(ALVA_VARDADMINISTRATOR)
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
     final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionSaveMessage.isEnabled(Optional.of(certificate),
+    final var actualResult = certificateActionForwardCertificate.isEnabled(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
+  }
+
+  @Test
+  void shallReturnFalseIfUserHasAllowCopyFalse() {
+    final var actionEvaluation = actionEvaluationBuilder()
+        .user(
+            alvaVardadministratorBuilder()
+                .allowCopy(ALLOW_COPY_FALSE)
+                .build()
+        )
+        .build();
+    final var certificate = certificateBuilder.build();
+    assertFalse(
+        certificateActionForwardCertificate.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(Optional.empty(), actionEvaluation)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfUserHasAllowCopyTrue() {
+    final var actionEvaluation = actionEvaluationBuilder()
+        .user(ALVA_VARDADMINISTRATOR)
+        .build();
+    final var certificate = certificateBuilder.build();
+
+    assertTrue(
+        certificateActionForwardCertificate.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(Optional.empty(), actionEvaluation)
+    );
   }
 
   @Nested
@@ -195,8 +238,7 @@ class CertificateActionSaveMessageTest {
     @BeforeEach
     void setUp() {
       certificateBuilder = Certificate.builder()
-          .status(Status.SIGNED)
-          .sent(Sent.builder().build())
+          .status(Status.DRAFT)
           .certificateMetaData(
               CertificateMetaData.builder()
                   .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -224,7 +266,7 @@ class CertificateActionSaveMessageTest {
       @Test
       void shallReturnTrueIfWithinCareUnit() {
         final var actionEvaluation = actionEvaluationBuilder()
-            .user(ajlaDoctorBuilder()
+            .user(alvaVardadministratorBuilder()
                 .accessScope(userAccessScope)
                 .build())
             .build();
@@ -232,7 +274,7 @@ class CertificateActionSaveMessageTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionSaveMessage.evaluate(Optional.of(certificate),
+            certificateActionForwardCertificate.evaluate(Optional.of(certificate),
                 Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
@@ -242,7 +284,7 @@ class CertificateActionSaveMessageTest {
       void shallReturnFalseIfNotWithinCareUnit() {
         final var actionEvaluation = actionEvaluationBuilder()
             .subUnit(ALFA_HUDMOTTAGNINGEN)
-            .user(ajlaDoctorBuilder()
+            .user(alvaVardadministratorBuilder()
                 .accessScope(userAccessScope)
                 .build())
             .build();
@@ -250,7 +292,7 @@ class CertificateActionSaveMessageTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionSaveMessage.evaluate(Optional.of(certificate),
+            certificateActionForwardCertificate.evaluate(Optional.of(certificate),
                 Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
@@ -268,7 +310,7 @@ class CertificateActionSaveMessageTest {
       @Test
       void shallReturnTrueIfWithinCareUnit() {
         final var actionEvaluation = actionEvaluationBuilder()
-            .user(ajlaDoctorBuilder()
+            .user(alvaVardadministratorBuilder()
                 .accessScope(userAccessScope)
                 .build())
             .build();
@@ -276,7 +318,7 @@ class CertificateActionSaveMessageTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionSaveMessage.evaluate(Optional.of(certificate),
+            certificateActionForwardCertificate.evaluate(Optional.of(certificate),
                 Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
@@ -286,7 +328,7 @@ class CertificateActionSaveMessageTest {
       void shallReturnFalseIfNotWithinCareUnit() {
         final var actionEvaluation = actionEvaluationBuilder()
             .subUnit(ALFA_HUDMOTTAGNINGEN)
-            .user(ajlaDoctorBuilder()
+            .user(alvaVardadministratorBuilder()
                 .accessScope(userAccessScope)
                 .build())
             .build();
@@ -294,7 +336,7 @@ class CertificateActionSaveMessageTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionSaveMessage.evaluate(Optional.of(certificate),
+            certificateActionForwardCertificate.evaluate(Optional.of(certificate),
                 Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
@@ -312,7 +354,7 @@ class CertificateActionSaveMessageTest {
       @Test
       void shallReturnTrueIfWithinCareUnit() {
         final var actionEvaluation = actionEvaluationBuilder()
-            .user(ajlaDoctorBuilder()
+            .user(alvaVardadministratorBuilder()
                 .accessScope(userAccessScope)
                 .build())
             .build();
@@ -320,7 +362,7 @@ class CertificateActionSaveMessageTest {
         final var certificate = certificateBuilder.build();
 
         assertTrue(
-            certificateActionSaveMessage.evaluate(Optional.of(certificate),
+            certificateActionForwardCertificate.evaluate(Optional.of(certificate),
                 Optional.of(actionEvaluation)),
             () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
         );
@@ -330,7 +372,7 @@ class CertificateActionSaveMessageTest {
       void shallReturnFalseIfNotWithinCareUnit() {
         final var actionEvaluation = actionEvaluationBuilder()
             .subUnit(ALFA_HUDMOTTAGNINGEN)
-            .user(ajlaDoctorBuilder()
+            .user(alvaVardadministratorBuilder()
                 .accessScope(userAccessScope)
                 .build())
             .build();
@@ -338,7 +380,7 @@ class CertificateActionSaveMessageTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionSaveMessage.evaluate(Optional.of(certificate),
+            certificateActionForwardCertificate.evaluate(Optional.of(certificate),
                 Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
@@ -350,7 +392,7 @@ class CertificateActionSaveMessageTest {
             .careUnit(BETA_VARDCENTRAL)
             .subUnit(BETA_HUDMOTTAGNINGEN)
             .careProvider(BETA_REGIONEN)
-            .user(ajlaDoctorBuilder()
+            .user(alvaVardadministratorBuilder()
                 .accessScope(userAccessScope)
                 .build())
             .build();
@@ -358,7 +400,7 @@ class CertificateActionSaveMessageTest {
         final var certificate = certificateBuilder.build();
 
         assertFalse(
-            certificateActionSaveMessage.evaluate(Optional.of(certificate),
+            certificateActionForwardCertificate.evaluate(Optional.of(certificate),
                 Optional.of(actionEvaluation)),
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
@@ -366,12 +408,53 @@ class CertificateActionSaveMessageTest {
     }
   }
 
-  @Nested
-  class IncludeTest {
+  @Test
+  void shallReturnFalseIfCertificateIsSigned() {
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .build();
+    final var actionEvaluation = actionEvaluationBuilder().build();
+    assertFalse(
+        certificateActionForwardCertificate.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)));
+  }
 
-    @Test
-    void shallReturnFalse() {
-      assertFalse(certificateActionSaveMessage.include(Optional.empty(), Optional.empty()));
-    }
+  @Test
+  void shallReturnTrueIfCertificateIsDraft() {
+    final var certificate = certificateBuilder
+        .status(Status.DRAFT)
+        .build();
+    final var actionEvaluation = actionEvaluationBuilder()
+        .user(ALVA_VARDADMINISTRATOR)
+        .build();
+
+    assertTrue(
+        certificateActionForwardCertificate.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)));
+  }
+
+  @Test
+  void shallReturnFalseIfUserIsNotCareAdmin() {
+    final var certificate = certificateBuilder
+        .status(Status.DRAFT)
+        .build();
+    final var actionEvaluation = actionEvaluationBuilder().build();
+    assertFalse(
+        certificateActionForwardCertificate.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)));
+  }
+
+  @Test
+  void shallReturnTrueIfUserIsCareAdmin() {
+    final var certificate = certificateBuilder
+        .status(Status.DRAFT)
+        .build();
+    final var actionEvaluation = actionEvaluationBuilder()
+        .user(ALVA_VARDADMINISTRATOR)
+        .build();
+
+    assertTrue(
+        certificateActionForwardCertificate.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)));
   }
 }

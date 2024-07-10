@@ -29,10 +29,11 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 
-class CertificateActionForwardMessageTest {
+class CertificateActionForwardCertificateMessageTest {
 
   private CertificateActionForwardMessage certificateActionForwardMessage;
 
@@ -50,7 +51,7 @@ class CertificateActionForwardMessageTest {
 
     certificateBuilder = Certificate.builder()
         .status(Status.SIGNED)
-        .sent(null)
+        .sent(Sent.builder().build())
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -74,7 +75,8 @@ class CertificateActionForwardMessageTest {
 
   @Test
   void shallReturnDescription() {
-    assertEquals("Skapar ett e-postmeddelande med länk till intyget.",
+    assertEquals(
+        "Skapar ett e-postmeddelande i din e-postklient med en direktlänk till frågan/svaret.",
         certificateActionForwardMessage.getDescription(Optional.empty()));
   }
 
@@ -261,7 +263,7 @@ class CertificateActionForwardMessageTest {
     void setUp() {
       certificateBuilder = Certificate.builder()
           .status(Status.SIGNED)
-          .sent(null)
+          .sent(Sent.builder().build())
           .certificateMetaData(
               CertificateMetaData.builder()
                   .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -429,5 +431,40 @@ class CertificateActionForwardMessageTest {
         );
       }
     }
+  }
+
+  @Test
+  void shallReturnFalseIfCertificateIsNotSigned() {
+    final var certificate = certificateBuilder
+        .status(Status.DRAFT)
+        .build();
+    final var actionEvaluation = actionEvaluationBuilder().build();
+    assertFalse(
+        certificateActionForwardMessage.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)));
+  }
+
+  @Test
+  void shallReturnTrueIfCertificateIsSentAndSigned() {
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .sent(Sent.builder().build())
+        .build();
+    final var actionEvaluation = actionEvaluationBuilder().build();
+    assertTrue(
+        certificateActionForwardMessage.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)));
+  }
+
+  @Test
+  void shallReturnFalseIfCertificateIsNotSentAndSigned() {
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .sent(null)
+        .build();
+    final var actionEvaluation = actionEvaluationBuilder().build();
+    assertFalse(
+        certificateActionForwardMessage.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)));
   }
 }

@@ -23,6 +23,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.ComplementC
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
@@ -224,6 +226,22 @@ public class ApiUtil {
         requestUrl,
         HttpMethod.GET,
         new HttpEntity<>(headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<ForwardCertificateResponse> forwardCertificate(
+      String certificateId, ForwardCertificateRequest request) {
+    final var requestUrl = "http://localhost:%s/api/certificate/%s/forward"
+        .formatted(port, certificateId);
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
         new ParameterizedTypeReference<>() {
         },
         Collections.emptyMap()

@@ -353,6 +353,18 @@ class CertificateModelFactoryFK7472Test {
   }
 
   @Test
+  void shallIncludeCertificateActionForwardCertificate() {
+    final var expectedType = CertificateActionType.FORWARD_CERTIFICATE;
+
+    final var certificateModel = certificateModelFactoryFK7472.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
   void shallIncludeCertificateActionHandleComplement() {
     final var expectedType = CertificateActionType.HANDLE_COMPLEMENT;
 

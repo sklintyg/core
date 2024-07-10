@@ -37,6 +37,8 @@ import se.inera.intyg.certificateservice.integrationtest.CreateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.DeleteCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateTypeInfoIT;
+import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateMessageIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificatePdfIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateTypeInfoIT;
@@ -643,6 +645,41 @@ public class FK7472ActiveIT {
     @DisplayName(TYPE + "Validera")
     class ValidateFK7472 extends ValidateFK7472IT {
 
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Vidarebefodra utkast")
+  class ForwardCertificate extends ForwardCertificateIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Vidarebefodra utkast med ärendekommunikation")
+  class ForwardCertificateMessage extends ForwardCertificateMessageIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+
+    @Override
+    protected String questionId() {
+      return ELEMENT_ID.id();
     }
   }
 }
