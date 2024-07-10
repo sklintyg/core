@@ -30,14 +30,14 @@ import se.inera.intyg.certificateservice.application.unit.dto.GetUnitMessagesReq
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitMessagesResponse;
 import se.inera.intyg.certificateservice.application.unit.dto.MessagesQueryCriteriaDTO;
 import se.inera.intyg.certificateservice.application.unit.service.validator.GetUnitMessagesRequestValidator;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.MessagesResponse;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
-import se.inera.intyg.certificateservice.domain.message.model.MessageAction;
+import se.inera.intyg.certificateservice.domain.message.model.MessageActionLink;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitMessagesDomainService;
 
 @ExtendWith(MockitoExtension.class)
@@ -117,7 +117,7 @@ class GetUnitMessagesServiceTest {
         actionEvaluation
     );
 
-    final var messageActions = List.of(MessageAction.builder().build());
+    final var messageActions = List.of(MessageActionLink.builder().build());
     when(message.actions(actionEvaluation, certificate))
         .thenReturn(messageActions);
 

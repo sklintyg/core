@@ -3,7 +3,6 @@ package se.inera.intyg.certificateservice.domain.message.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -12,9 +11,10 @@ import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.message.model.MessageAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
@@ -46,72 +46,31 @@ public class Message {
   @Builder.Default
   private List<Reminder> reminders = Collections.emptyList();
   private Staff authoredStaff;
+  private List<MessageAction> messageActions;
 
-  public List<MessageAction> actionsInclude(ActionEvaluation actionEvaluation,
+  public List<MessageActionLink> actionsInclude(ActionEvaluation actionEvaluation,
       Certificate certificate) {
     return actions(actionEvaluation, certificate);
   }
 
-  public List<MessageAction> actions(ActionEvaluation actionEvaluation,
+  public List<MessageActionLink> actions(ActionEvaluation actionEvaluation,
       Certificate certificate) {
-    final var messageActions = new ArrayList<MessageAction>();
     final var certificateActions = certificate.actionsInclude(Optional.of(actionEvaluation));
-
-    if (isUnhandledComplement() && actionAvailable(CertificateActionType.COMPLEMENT,
-        certificateActions)) {
-      messageActions.add(
-          MessageActionFactory.complement()
-      );
-    }
-
-    if (isUnhandledComplement() && actionAvailable(CertificateActionType.CANNOT_COMPLEMENT,
-        certificateActions)) {
-      messageActions.add(
-          MessageActionFactory.cannotComplement()
-      );
-    }
-
-    if (isUnhandledComplement() && actionAvailable(CertificateActionType.HANDLE_COMPLEMENT,
-        certificateActions)) {
-      messageActions.add(
-          MessageActionFactory.handleComplement()
-      );
-    }
-
-    if (isAdministrativeMessage() && actionAvailable(CertificateActionType.HANDLE_MESSAGE,
-        certificateActions)) {
-      messageActions.add(
-          MessageActionFactory.handleMessage()
-      );
-    }
-
-    if (!status.equals(MessageStatus.HANDLED) && actionAvailable(
-        CertificateActionType.FORWARD_MESSAGE, certificateActions)) {
-      messageActions.add(
-          MessageActionFactory.forward()
-      );
-    }
-
-    if (this.authoredStaff == null && !type.equals(MessageType.COMPLEMENT) && this.answer == null
-        && status != MessageStatus.HANDLED
-        && actionAvailable(CertificateActionType.ANSWER_MESSAGE, certificateActions)) {
-      messageActions.add(
-          MessageActionFactory.answer()
-      );
-    }
-
-    return messageActions;
+    return certificate.certificateModel().messageActions().stream()
+        .filter(messageAction -> messageAction.evaluate(certificateActions, this))
+        .map(MessageAction::actionLink)
+        .toList();
   }
 
-  private boolean isUnhandledComplement() {
+  public boolean isUnhandledComplement() {
     return type.equals(MessageType.COMPLEMENT) && !status.equals(MessageStatus.HANDLED);
   }
 
-  private boolean isAdministrativeMessage() {
+  public boolean isAdministrativeMessage() {
     return !type.equals(MessageType.COMPLEMENT);
   }
 
-  private boolean actionAvailable(CertificateActionType certificateActionType,
+  public boolean actionAvailable(CertificateActionType certificateActionType,
       List<CertificateAction> certificateActions) {
     return certificateActions.stream()
         .anyMatch(certificateAction -> certificateAction.getType()

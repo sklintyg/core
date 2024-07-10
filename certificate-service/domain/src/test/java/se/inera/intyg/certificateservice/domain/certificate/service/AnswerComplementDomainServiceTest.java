@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.CANNOT_COMPLEMENT;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.CANNOT_COMPLEMENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 

@@ -23,12 +23,12 @@ import se.inera.intyg.certificateservice.application.message.dto.GetCertificateM
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.message.service.converter.QuestionConverter;
 import se.inera.intyg.certificateservice.application.message.service.validator.GetCertificateMessageRequestValidator;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
-import se.inera.intyg.certificateservice.domain.message.model.MessageAction;
+import se.inera.intyg.certificateservice.domain.message.model.MessageActionLink;
 
 @ExtendWith(MockitoExtension.class)
 class GetCertificateMessageServiceTest {
@@ -82,7 +82,7 @@ class GetCertificateMessageServiceTest {
         actionEvaluation
     );
 
-    final var messageActions = List.of(MessageAction.builder().build());
+    final var messageActions = List.of(MessageActionLink.builder().build());
     final var messages = List.of(message);
 
     doReturn(messages).when(certificate).messages();

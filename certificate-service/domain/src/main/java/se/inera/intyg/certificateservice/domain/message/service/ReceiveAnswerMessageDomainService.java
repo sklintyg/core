@@ -3,7 +3,7 @@ package se.inera.intyg.certificateservice.domain.message.service;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.message.model.Answer;

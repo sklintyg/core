@@ -17,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionSign;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
@@ -24,11 +25,11 @@ import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 @ExtendWith(MockitoExtension.class)
 class ActionRuleTestIndicatedPersonBlockTest {
 
-  private ActionRuleBlockTestIndicatedPerson actionRuleBlockTestIndicatedPerson;
+  private CertificateActionSign.ActionRuleBlockTestIndicatedPerson actionRuleBlockTestIndicatedPerson;
 
   @BeforeEach
   void setUp() {
-    actionRuleBlockTestIndicatedPerson = new ActionRuleBlockTestIndicatedPerson();
+    actionRuleBlockTestIndicatedPerson = new CertificateActionSign.ActionRuleBlockTestIndicatedPerson();
   }
 
   @Test

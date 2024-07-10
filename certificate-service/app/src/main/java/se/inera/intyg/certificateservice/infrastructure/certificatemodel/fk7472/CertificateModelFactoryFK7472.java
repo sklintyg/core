@@ -7,7 +7,7 @@ import java.time.Period;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
@@ -21,9 +21,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.message.model.MessageActionType;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
@@ -163,6 +165,22 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
+                    .build()
+            )
+        )
+        .messageActionSpecifications(
+            List.of(
+                MessageActionSpecification.builder()
+                    .messageActionType(MessageActionType.HANDLE_COMPLEMENT)
+                    .build(),
+                MessageActionSpecification.builder()
+                    .messageActionType(MessageActionType.COMPLEMENT)
+                    .build(),
+                MessageActionSpecification.builder()
+                    .messageActionType(MessageActionType.CANNOT_COMPLEMENT)
+                    .build(),
+                MessageActionSpecification.builder()
+                    .messageActionType(MessageActionType.FORWARD)
                     .build()
             )
         )

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.common.model.AllowCopy;
 import se.inera.intyg.certificateservice.domain.common.model.Blocked;
 import se.inera.intyg.certificateservice.domain.common.model.HealthCareProfessionalLicence;

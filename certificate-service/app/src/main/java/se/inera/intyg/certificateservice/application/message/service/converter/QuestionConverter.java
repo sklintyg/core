@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
-import se.inera.intyg.certificateservice.domain.message.model.MessageAction;
+import se.inera.intyg.certificateservice.domain.message.model.MessageActionLink;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 
@@ -22,9 +22,9 @@ public class QuestionConverter {
   private final ComplementConverter complementConverter;
   private final CertificateRepository certificateRepository;
   private final CertificateRelationConverter certificateRelationConverter;
-  private final MessageActionConverter messageActionConverter;
+  private final MessageActionLinkConverter messageActionLinkConverter;
 
-  public QuestionDTO convert(Message message, List<MessageAction> messageActions) {
+  public QuestionDTO convert(Message message, List<MessageActionLink> messageActionLinks) {
     final var certificate = certificateRepository.getById(message.certificateId());
     return QuestionDTO.builder()
         .id(message.id().id())
@@ -64,8 +64,8 @@ public class QuestionConverter {
                 .toList()
         )
         .links(
-            messageActions.stream()
-                .map(messageActionConverter::convert)
+            messageActionLinks.stream()
+                .map(messageActionLinkConverter::convert)
                 .toList()
         )
         .answer(
