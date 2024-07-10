@@ -22,11 +22,14 @@ import se.inera.intyg.certificateservice.application.citizen.validation.CitizenC
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
+import se.inera.intyg.certificateservice.domain.patient.model.Patient;
+import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 
 @ExtendWith(MockitoExtension.class)
 class GetCitizenCertificateListServiceTest {
@@ -50,6 +53,18 @@ class GetCitizenCertificateListServiceTest {
       .statuses(List.of(Status.SIGNED))
       .build();
   private static final Certificate FK7210 = fk7210CertificateBuilder().build();
+  private static final Certificate FK7210_TEST = fk7210CertificateBuilder()
+      .certificateMetaData(
+          CertificateMetaData.builder()
+              .patient(
+                  Patient.builder()
+                      .testIndicated(new TestIndicated(true))
+                      .build()
+              )
+              .build()
+      )
+      .build();
+
   private static final Certificate FK7472 = fk7472CertificateBuilder().build();
   private static final CertificateDTO CONVERTED_CERTIFICATE = CertificateDTO.builder().build();
 
@@ -68,7 +83,7 @@ class GetCitizenCertificateListServiceTest {
   @BeforeEach
   void setUp() {
     when(certificateRepository.findByCertificatesRequest(CERTIFICATES_REQUEST))
-        .thenReturn(List.of(FK7210, FK7472));
+        .thenReturn(List.of(FK7210, FK7472, FK7210_TEST));
 
     when(certificateConverter.convert(FK7210, Collections.emptyList()))
         .thenReturn(CONVERTED_CERTIFICATE);
@@ -87,7 +102,7 @@ class GetCitizenCertificateListServiceTest {
   }
 
   @Test
-  void shouldFilterCertificateNotAvailableForCitizen() {
+  void shouldFilterCertificateNotAvailableForCitizenAndTestIndicated() {
     final var result = getCitizenCertificateListService.get(REQUEST);
     assertEquals(1, result.getCitizenCertificates().size());
     assertTrue(result.getCitizenCertificates().contains(CONVERTED_CERTIFICATE));
