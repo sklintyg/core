@@ -85,6 +85,7 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
+                  new ActionRuleBlockTestIndicatedPerson(),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleRole(actionSpecification.allowedRoles()),
                   new ActionRuleStatus(List.of(Status.SIGNED)),

@@ -26,6 +26,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.patient.model.Patient;
+import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 
 class CertificateActionSendTest {
@@ -86,6 +88,32 @@ class CertificateActionSendTest {
         .build();
 
     final var certificate = certificateBuilder.build();
+
+    assertFalse(
+        certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnFalseIfPatientIsTestIndicated() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .user(ALVA_VARDADMINISTRATOR)
+        .build();
+
+    final var certificate = certificateBuilder
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                .careUnit(ALFA_MEDICINCENTRUM)
+                .careProvider(ALFA_REGIONEN)
+                .patient(
+                    Patient.builder()
+                        .testIndicated(new TestIndicated(true))
+                        .build()
+                )
+                .build()
+        ).build();
 
     assertFalse(
         certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
