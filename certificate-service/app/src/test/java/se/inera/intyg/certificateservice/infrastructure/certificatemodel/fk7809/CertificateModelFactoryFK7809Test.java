@@ -32,6 +32,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCo
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateMessageType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
@@ -63,6 +64,8 @@ import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCodeList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
@@ -149,6 +152,28 @@ class CertificateModelFactoryFK7809Test {
 
     assertEquals(FK7809CertificateSummaryProvider.class,
         certificateModel.summaryProvider().getClass());
+  }
+
+  @Test
+  void shallIncludeMessageTypes() {
+    final var expectedMessageTypes = List.of(
+        CertificateMessageType.builder()
+            .type(MessageType.MISSING)
+            .subject(new Subject(MessageType.MISSING.displayName()))
+            .build(),
+        CertificateMessageType.builder()
+            .type(MessageType.CONTACT)
+            .subject(new Subject(MessageType.CONTACT.displayName()))
+            .build(),
+        CertificateMessageType.builder()
+            .type(MessageType.OTHER)
+            .subject(new Subject(MessageType.OTHER.displayName()))
+            .build()
+    );
+
+    final var certificateModel = certificateModelFactoryFK7809.create();
+
+    assertEquals(expectedMessageTypes, certificateModel.messageTypes());
   }
 
   @Test
