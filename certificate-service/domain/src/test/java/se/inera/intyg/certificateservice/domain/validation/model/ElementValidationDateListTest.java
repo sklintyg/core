@@ -103,7 +103,7 @@ class ElementValidationDateListTest {
           .max(Period.ofDays(0))
           .build();
       final var expectedValidationError = getExpectedValidationError(
-          "Ange ett giltigt datum. Framtida datum får inte anges.",
+          "Ange ett datum som är senast " + LocalDate.now() + ".",
           FIELD_ID_DATE_ONE);
       final var categoryId = Optional.of(CATEGORY_ID);
       final var elementData = ElementData.builder()
@@ -133,14 +133,14 @@ class ElementValidationDateListTest {
           .max(Period.ofDays(0))
           .build();
       final var expectedValidationError = Stream.concat(getExpectedValidationError(
-                  "Ange ett giltigt datum. Framtida datum får inte anges.",
+                  "Ange ett datum som är senast " + LocalDate.now() + ".",
                   FIELD_ID_DATE_ONE).stream(),
               getExpectedValidationError(
-                  "Ange ett giltigt datum. Framtida datum får inte anges.",
+                  "Ange ett datum som är senast " + LocalDate.now() + ".",
                   FIELD_ID_DATE_TWO).stream()
           )
           .toList();
-
+      
       final var categoryId = Optional.of(CATEGORY_ID);
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)

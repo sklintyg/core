@@ -29,7 +29,7 @@ public class ElementValidationCode implements ElementValidation {
               .elementId(data.id())
               .fieldId(code.codeId())
               .categoryId(categoryId.orElse(null))
-              .message(new ErrorMessage("Välj ett alternativ."))
+              .message(ErrorMessageFactory.missingOption())
               .build()
       );
     }

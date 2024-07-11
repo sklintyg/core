@@ -34,7 +34,7 @@ public class ElementValidationBoolean implements ElementValidation {
               .elementId(data.id())
               .categoryId(categoryId.orElse(null))
               .fieldId(valueBoolean.booleanId())
-              .message(new ErrorMessage("Välj ett alternativ."))
+              .message(ErrorMessageFactory.missingOption())
               .build()
       );
     }

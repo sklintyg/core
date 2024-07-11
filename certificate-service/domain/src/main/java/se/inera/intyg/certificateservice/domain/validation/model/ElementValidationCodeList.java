@@ -40,7 +40,7 @@ public class ElementValidationCodeList implements ElementValidation {
               .elementId(data.id())
               .fieldId(codeList.id())
               .categoryId(categoryId.orElse(null))
-              .message(new ErrorMessage("Välj minst ett alternativ."))
+              .message(ErrorMessageFactory.missingMultipleOption())
               .build()
       );
     }
@@ -51,7 +51,7 @@ public class ElementValidationCodeList implements ElementValidation {
     return codeList.list().stream()
         .noneMatch(
             code -> code != null && code.code() != null && !code.code().isEmpty()
-                    && !code.code().isBlank()
+                && !code.code().isBlank()
         );
   }
 
