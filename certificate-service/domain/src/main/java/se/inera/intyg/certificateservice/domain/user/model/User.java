@@ -26,4 +26,5 @@ public class User {
   AllowCopy allowCopy;
   AccessScope accessScope;
   List<HealthCareProfessionalLicence> healthCareProfessionalLicence;
+  ResponsibleHospName responsibleHospName;
 }

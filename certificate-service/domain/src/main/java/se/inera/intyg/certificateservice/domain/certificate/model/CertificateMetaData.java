@@ -7,6 +7,7 @@ import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.IssuingUnit;
+import se.inera.intyg.certificateservice.domain.user.model.ResponsibleHospName;
 
 
 @Value
@@ -18,4 +19,5 @@ public class CertificateMetaData {
   IssuingUnit issuingUnit;
   CareUnit careUnit;
   CareProvider careProvider;
+  ResponsibleHospName responsibleHospName;
 }
