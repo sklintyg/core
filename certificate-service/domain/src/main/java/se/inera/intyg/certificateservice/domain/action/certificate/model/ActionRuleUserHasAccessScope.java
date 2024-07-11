@@ -15,7 +15,6 @@ public class ActionRuleUserHasAccessScope implements ActionRule {
     this.scopes = scopes;
   }
 
-
   @Override
   public boolean evaluate(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
