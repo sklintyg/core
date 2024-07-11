@@ -24,6 +24,7 @@ public class UserDTO {
   Boolean allowCopy;
   AccessScopeTypeDTO accessScope;
   List<String> healthCareProfessionalLicence;
+  String responsibleHospName;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class UserDTOBuilder {

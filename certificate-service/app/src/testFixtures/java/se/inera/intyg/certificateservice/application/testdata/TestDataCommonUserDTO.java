@@ -9,6 +9,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_PA_TITLES;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_RESPONSIBLE_ISSUER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ROLE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_SPECIALITIES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_ALLOW_COPY;
@@ -98,7 +99,8 @@ public class TestDataCommonUserDTO {
             AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES.stream()
                 .map(HealthCareProfessionalLicence::value)
                 .toList()
-        );
+        )
+        .responsibleHospName(AJLA_DOCTOR_RESPONSIBLE_ISSUER.value());
   }
 
   public static UserDTOBuilder alvaVardadministratorDtoBuilder() {

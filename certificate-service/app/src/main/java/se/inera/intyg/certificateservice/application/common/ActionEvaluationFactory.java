@@ -28,6 +28,7 @@ import se.inera.intyg.certificateservice.domain.unit.model.UnitAddress;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitContactInfo;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
 import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
+import se.inera.intyg.certificateservice.domain.user.model.ResponsibleIssuer;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
 @Component
@@ -76,6 +77,7 @@ public class ActionEvaluationFactory {
                         .map(HealthCareProfessionalLicence::new)
                         .toList()
                 )
+                .responsibleIssuer(new ResponsibleIssuer(user.getResponsibleHospName()))
                 .build()
         )
         .subUnit(

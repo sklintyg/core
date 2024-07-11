@@ -9,6 +9,7 @@ import se.inera.intyg.certificateservice.domain.common.model.HealthCareProfessio
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.common.model.Speciality;
+import se.inera.intyg.certificateservice.domain.user.model.ResponsibleIssuer;
 
 public class TestDataUserConstants {
 
@@ -37,6 +38,8 @@ public class TestDataUserConstants {
       new HealthCareProfessionalLicence("Läkare"));
   public static final List<HealthCareProfessionalLicence> ALF_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES = List.of(
       new HealthCareProfessionalLicence("Läkare"));
+  public static ResponsibleIssuer AJLA_DOCTOR_RESPONSIBLE_ISSUER = new ResponsibleIssuer(
+      "Ajla Doktor");
 
   public static final String ALF_DOKTOR_HSA_ID = "TSTNMT2321000156-DRAF";
   public static final String ALF_DOKTOR_FIRST_NAME = "Alf";
