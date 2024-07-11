@@ -49,10 +49,7 @@ public class ElementValidationCodeList implements ElementValidation {
 
   private static boolean hasNoValue(ElementValueCodeList codeList) {
     return codeList.list().stream()
-        .noneMatch(
-            code -> code != null && code.code() != null && !code.code().isEmpty()
-                && !code.code().isBlank()
-        );
+        .noneMatch(code -> code != null && ElementValidator.isTextDefined(code.code()));
   }
 
   private static void validateElementData(ElementData data) {

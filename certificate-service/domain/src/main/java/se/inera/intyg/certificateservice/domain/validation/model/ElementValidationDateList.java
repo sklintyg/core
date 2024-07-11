@@ -1,7 +1,5 @@
 package se.inera.intyg.certificateservice.domain.validation.model;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.temporal.TemporalAmount;
 import java.util.Collections;
 import java.util.List;
@@ -60,12 +58,12 @@ public class ElementValidationDateList implements ElementValidation {
   private List<ValidationError> getDateAfterMaxErrors(ElementData data,
       Optional<ElementId> categoryId, ElementValueDateList dateList) {
     return dateList.dateList().stream()
-        .filter(valueDate -> isAfterMax(valueDate.date()))
+        .filter(valueDate -> ElementValidator.isDateAfterMax(valueDate.date(), max))
         .map(dateRange -> errorMessage(
                 data,
                 dateRange.dateId(),
                 categoryId,
-                ErrorMessageFactory.maxDate(maxDate())
+                ErrorMessageFactory.maxDate(max)
             )
         )
         .toList();
@@ -82,10 +80,6 @@ public class ElementValidationDateList implements ElementValidation {
 
   }
 
-  private boolean isAfterMax(LocalDate value) {
-    return value != null && max != null && value.isAfter(maxDate());
-  }
-
   private boolean doesDateListHaveValue(ElementValueDateList value) {
     if (value.dateList() == null || value.dateList().isEmpty()) {
       return false;
@@ -94,7 +88,7 @@ public class ElementValidationDateList implements ElementValidation {
     return value.dateList().stream()
         .anyMatch(valueDate -> valueDate.date() != null);
   }
-  
+
   private static ValidationError errorMessage(ElementData data,
       FieldId fieldId,
       Optional<ElementId> categoryId, ErrorMessage message) {
@@ -105,9 +99,5 @@ public class ElementValidationDateList implements ElementValidation {
             .categoryId(categoryId.orElse(null))
             .message(message)
             .build();
-  }
-
-  private LocalDate maxDate() {
-    return LocalDate.now(ZoneId.systemDefault()).plus(max);
   }
 }

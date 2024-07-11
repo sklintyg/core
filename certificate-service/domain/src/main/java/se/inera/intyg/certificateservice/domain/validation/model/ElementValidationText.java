@@ -36,7 +36,7 @@ public class ElementValidationText implements ElementValidation {
       );
     }
 
-    if (value.text() != null && isOverLimit(value.text())) {
+    if (value.text() != null && ElementValidator.isTextOverLimit(value.text(), limit)) {
       return List.of(
           errorMessage(data, value.textId(), categoryId,
               ErrorMessageFactory.textLimit(limit)
@@ -58,10 +58,6 @@ public class ElementValidationText implements ElementValidation {
         .categoryId(categoryId.orElse(null))
         .message(message)
         .build();
-  }
-
-  private boolean isOverLimit(String value) {
-    return limit != null && value.length() > limit;
   }
 
   private ElementValueText getValue(ElementValue value) {
