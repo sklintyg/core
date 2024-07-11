@@ -26,7 +26,7 @@ public class ErrorMessageFactory {
     return new ErrorMessage("Ange ett datum.");
   }
 
-  public static ErrorMessage missingText() {
+  public static ErrorMessage missingAnswer() {
     return new ErrorMessage("Ange ett svar.");
   }
 

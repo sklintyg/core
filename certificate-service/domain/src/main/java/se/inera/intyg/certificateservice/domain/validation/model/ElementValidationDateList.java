@@ -31,7 +31,7 @@ public class ElementValidationDateList implements ElementValidation {
       return dateAfterMaxErrors;
     }
 
-    if (mandatory && !doesDateListHaveValue(dateList)) {
+    if (mandatory && dateList.isEmpty()) {
       return List.of(
           errorMessage(
               data,
@@ -78,15 +78,6 @@ public class ElementValidationDateList implements ElementValidation {
         "Element data value %s is of wrong type".formatted(value.getClass())
     );
 
-  }
-
-  private boolean doesDateListHaveValue(ElementValueDateList value) {
-    if (value.dateList() == null || value.dateList().isEmpty()) {
-      return false;
-    }
-
-    return value.dateList().stream()
-        .anyMatch(valueDate -> valueDate.date() != null);
   }
 
   private static ValidationError errorMessage(ElementData data,

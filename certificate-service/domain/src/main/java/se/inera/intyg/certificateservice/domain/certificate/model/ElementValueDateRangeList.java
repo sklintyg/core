@@ -19,9 +19,19 @@ public class ElementValueDateRangeList implements ElementValue {
     if (dateRangeList == null) {
       return null;
     }
-    
+
     return dateRangeList.stream()
         .max(Comparator.comparing(DateRange::to))
         .orElse(null);
+  }
+
+  @Override
+  public boolean isEmpty() {
+    if (dateRangeList == null || dateRangeList.isEmpty()) {
+      return true;
+    }
+
+    return dateRangeList.stream()
+        .noneMatch(dateRange -> dateRange.to() != null && dateRange.from() != null);
   }
 }

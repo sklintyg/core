@@ -12,4 +12,8 @@ public class ElementValueDiagnosisList implements ElementValue {
   @Builder.Default
   List<ElementValueDiagnosis> diagnoses = Collections.emptyList();
 
+  @Override
+  public boolean isEmpty() {
+    return diagnoses == null || diagnoses.isEmpty();
+  }
 }

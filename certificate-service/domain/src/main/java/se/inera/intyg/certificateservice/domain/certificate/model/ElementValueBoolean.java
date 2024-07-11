@@ -13,4 +13,8 @@ public class ElementValueBoolean implements ElementValue {
   @With
   Boolean value;
 
+  @Override
+  public boolean isEmpty() {
+    return value == null;
+  }
 }

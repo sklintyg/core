@@ -47,7 +47,7 @@ public class ElementValidationDateRangeList implements ElementValidation {
       return overlappingErrors;
     }
 
-    if (mandatory && !isDateRangeListFilled(dateRangeList)) {
+    if (mandatory && dateRangeList.isEmpty()) {
       return List.of(
           ValidationError.builder()
               .elementId(data.id())
@@ -200,15 +200,6 @@ public class ElementValidationDateRangeList implements ElementValidation {
         "Element data value %s is of wrong type".formatted(value.getClass())
     );
 
-  }
-
-  private boolean isDateRangeListFilled(ElementValueDateRangeList value) {
-    if (value.dateRangeList() == null) {
-      return false;
-    }
-
-    return value.dateRangeList().stream()
-        .anyMatch(this::isDateRangeComplete);
   }
 
   private boolean isDateRangeComplete(DateRange value) {

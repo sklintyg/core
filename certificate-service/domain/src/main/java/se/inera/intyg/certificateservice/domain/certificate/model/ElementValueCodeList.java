@@ -14,4 +14,12 @@ public class ElementValueCodeList implements ElementValue {
   @With
   List<ElementValueCode> list;
 
+  @Override
+  public boolean isEmpty() {
+    if (list == null || list.isEmpty()) {
+      return true;
+    }
+
+    return list.stream().allMatch(ElementValueCode::isEmpty);
+  }
 }
