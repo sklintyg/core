@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.domain.validation.model;
 
-import java.time.LocalDate;
+import java.time.temporal.TemporalAmount;
 
 public class ErrorMessageFactory {
 
@@ -8,12 +8,14 @@ public class ErrorMessageFactory {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ErrorMessage maxDate(LocalDate maxDate) {
-    return new ErrorMessage("Ange ett datum som är senast %s.".formatted(maxDate));
+  public static ErrorMessage maxDate(TemporalAmount max) {
+    return new ErrorMessage("Ange ett datum som är senast %s.".formatted(
+        ElementValidator.toDateFromTemporalAmount(max)));
   }
 
-  public static ErrorMessage minDate(LocalDate minDate) {
-    return new ErrorMessage("Ange ett datum som är tidigast %s.".formatted(minDate));
+  public static ErrorMessage minDate(TemporalAmount min) {
+    return new ErrorMessage("Ange ett datum som är tidigast %s.".formatted(
+        ElementValidator.toDateFromTemporalAmount(min)));
   }
 
   public static ErrorMessage textLimit(Integer limit) {
