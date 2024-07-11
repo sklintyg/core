@@ -39,7 +39,7 @@ public class ElementValidationDateList implements ElementValidation {
               data,
               dateList.dateListId(),
               categoryId,
-              "Välj minst ett alternativ."
+              ErrorMessageFactory.missingMultipleOption()
           )
       );
     }
@@ -65,7 +65,7 @@ public class ElementValidationDateList implements ElementValidation {
                 data,
                 dateRange.dateId(),
                 categoryId,
-                "Ange ett giltigt datum. Framtida datum får inte anges."
+                ErrorMessageFactory.maxDate(maxDate())
             )
         )
         .toList();
@@ -94,16 +94,16 @@ public class ElementValidationDateList implements ElementValidation {
     return value.dateList().stream()
         .anyMatch(valueDate -> valueDate.date() != null);
   }
-
+  
   private static ValidationError errorMessage(ElementData data,
       FieldId fieldId,
-      Optional<ElementId> categoryId, String message) {
+      Optional<ElementId> categoryId, ErrorMessage message) {
     return
         ValidationError.builder()
             .elementId(data.id())
             .fieldId(fieldId)
             .categoryId(categoryId.orElse(null))
-            .message(new ErrorMessage(message))
+            .message(message)
             .build();
   }
 

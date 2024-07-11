@@ -34,17 +34,17 @@ public class ElementValidationDate implements ElementValidation {
     final var dateValue = getValue(data.value());
 
     if (mandatory && dateValue.date() == null) {
-      return errorMessage(data, dateValue, categoryId, "Ange ett datum.");
+      return errorMessage(data, dateValue, categoryId, ErrorMessageFactory.missingDate());
     }
 
     if (isDateBeforeMin(dateValue)) {
       return errorMessage(data, dateValue, categoryId,
-          "Ange ett datum som är tidigast %s.".formatted(minDate()));
+          ErrorMessageFactory.minDate(minDate()));
     }
 
     if (isDateAfterMax(dateValue)) {
       return errorMessage(data, dateValue, categoryId,
-          "Ange ett datum som är senast %s.".formatted(maxDate()));
+          ErrorMessageFactory.maxDate(maxDate()));
     }
 
     return Collections.emptyList();
@@ -74,13 +74,13 @@ public class ElementValidationDate implements ElementValidation {
   }
 
   private static List<ValidationError> errorMessage(ElementData data, ElementValueDate dateValue,
-      Optional<ElementId> categoryId, String message) {
+      Optional<ElementId> categoryId, ErrorMessage message) {
     return List.of(
         ValidationError.builder()
             .elementId(data.id())
             .fieldId(dateValue.dateId())
             .categoryId(categoryId.orElse(null))
-            .message(new ErrorMessage(message))
+            .message(message)
             .build()
     );
   }

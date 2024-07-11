@@ -74,7 +74,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
               data,
               medicalInvestigationList.list().get(0).id(),
               categoryId,
-              "Ange ett svar.")),
+              ErrorMessageFactory.missingText())),
           getRowEmptyFieldErrors(medicalInvestigationList.list().get(0), data, categoryId).stream()
       ).toList();
     }
@@ -92,7 +92,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
             data,
             medicalInvestigation.date().dateId(),
             categoryId,
-            "Ange ett datum som är senast %s.".formatted(maxDate())
+            ErrorMessageFactory.maxDate(maxDate())
         ))
         .toList();
   }
@@ -106,7 +106,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
             data,
             medicalInvestigation.date().dateId(),
             categoryId,
-            "Ange ett datum som är tidigast %s.".formatted(minDate())
+            ErrorMessageFactory.minDate(minDate())
         ))
         .toList();
   }
@@ -121,7 +121,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
             data,
             medicalInvestigation.informationSource().textId(),
             categoryId,
-            "Ange en text som inte är längre än %s.".formatted(limit)
+            ErrorMessageFactory.textLimit(limit)
         ))
         .toList();
   }
@@ -138,7 +138,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
           data,
           medicalInvestigationList.id(),
           categoryId,
-          "Fyll i fälten uppifrån och ned."
+          ErrorMessageFactory.fieldOrderDescending()
       ));
     }
 
@@ -183,7 +183,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
           data,
           medicalInvestigation.date().dateId(),
           categoryId,
-          "Ange ett datum."));
+          ErrorMessageFactory.missingDate()));
     }
 
     if (isTypeEmpty(medicalInvestigation)) {
@@ -191,7 +191,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
           data,
           medicalInvestigation.investigationType().codeId(),
           categoryId,
-          "Välj ett alternativ."));
+          ErrorMessageFactory.missingOption()));
     }
 
     if (isSourceEmpty(medicalInvestigation)) {
@@ -199,7 +199,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
           data,
           medicalInvestigation.informationSource().textId(),
           categoryId,
-          "Ange ett svar."));
+          ErrorMessageFactory.missingText()));
     }
     return errors;
   }
@@ -259,13 +259,13 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
 
   private ValidationError errorMessage(ElementData data,
       FieldId fieldId,
-      Optional<ElementId> categoryId, String message) {
+      Optional<ElementId> categoryId, ErrorMessage message) {
     return
         ValidationError.builder()
             .elementId(data.id())
             .fieldId(fieldId)
             .categoryId(categoryId.orElse(null))
-            .message(new ErrorMessage(message))
+            .message(message)
             .build();
   }
 

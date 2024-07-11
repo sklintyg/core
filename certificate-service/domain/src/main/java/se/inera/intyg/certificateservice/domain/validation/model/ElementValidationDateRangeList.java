@@ -51,12 +51,12 @@ public class ElementValidationDateRangeList implements ElementValidation {
 
     if (mandatory && !isDateRangeListFilled(dateRangeList)) {
       return List.of(
-          errorMessage(
-              data,
-              dateRangeList.dateRangeListId(),
-              categoryId,
-              "Välj minst ett alternativ."
-          )
+          ValidationError.builder()
+              .elementId(data.id())
+              .fieldId(dateRangeList.dateRangeListId())
+              .categoryId(categoryId.orElse(null))
+              .message(ErrorMessageFactory.missingMultipleOption())
+              .build()
       );
     }
 
@@ -95,7 +95,7 @@ public class ElementValidationDateRangeList implements ElementValidation {
                 data,
                 dateRangeList.dateRangeListId(),
                 categoryId,
-                "Ange perioder som inte överlappar varandra."
+                ErrorMessageFactory.overlappingPeriods()
             )
         )
         .stream().toList();
@@ -123,7 +123,7 @@ public class ElementValidationDateRangeList implements ElementValidation {
         .filter(this::isToBeforeFrom)
         .map(dateRange -> errorMessage(
                 data, getFieldId(dateRange.dateRangeId(), RANGE_SUFFIX), categoryId,
-                "Ange ett slutdatum som infaller efter startdatumet."
+                ErrorMessageFactory.endDateAfterStartDate()
             )
         )
         .toList();
@@ -134,7 +134,8 @@ public class ElementValidationDateRangeList implements ElementValidation {
     return dateRangeList.dateRangeList().stream()
         .filter(dateRange -> !isDateRangeComplete(dateRange))
         .map(dateRange -> errorMessage(
-                data, getFieldIdOfIncompleteDateRange(dateRange), categoryId, "Ange ett datum."
+                data, getFieldIdOfIncompleteDateRange(dateRange), categoryId,
+                ErrorMessageFactory.missingDate()
             )
         )
         .toList();
@@ -146,7 +147,7 @@ public class ElementValidationDateRangeList implements ElementValidation {
         .filter(dateRange -> isBeforeMin(dateRange.from()))
         .map(dateRange -> errorMessage(
                 data, getFieldId(dateRange.dateRangeId(), FROM_SUFFIX), categoryId,
-                "Ange ett datum som är tidigast %s.".formatted(minDate())
+                ErrorMessageFactory.minDate(minDate())
             )
         )
         .toList();
@@ -158,7 +159,7 @@ public class ElementValidationDateRangeList implements ElementValidation {
         .filter(dateRange -> isBeforeMin(dateRange.to()))
         .map(dateRange -> errorMessage(
                 data, getFieldId(dateRange.dateRangeId(), TO_SUFFIX), categoryId,
-                "Ange ett datum som är tidigast %s.".formatted(minDate())
+                ErrorMessageFactory.minDate(minDate())
             )
         )
         .toList();
@@ -170,7 +171,7 @@ public class ElementValidationDateRangeList implements ElementValidation {
         .filter(dateRange -> isAfterMax(dateRange.from()))
         .map(dateRange -> errorMessage(
                 data, getFieldId(dateRange.dateRangeId(), FROM_SUFFIX), categoryId,
-                "Ange ett datum som är senast %s.".formatted(maxDate())
+                ErrorMessageFactory.maxDate(maxDate())
             )
         )
         .toList();
@@ -182,7 +183,7 @@ public class ElementValidationDateRangeList implements ElementValidation {
         .filter(dateRange -> isAfterMax(dateRange.to()))
         .map(dateRange -> errorMessage(
                 data, getFieldId(dateRange.dateRangeId(), TO_SUFFIX), categoryId,
-                "Ange ett datum som är senast %s.".formatted(maxDate())
+                ErrorMessageFactory.maxDate(maxDate())
             )
         )
         .toList();
@@ -244,13 +245,13 @@ public class ElementValidationDateRangeList implements ElementValidation {
 
   private static ValidationError errorMessage(ElementData data,
       FieldId fieldId,
-      Optional<ElementId> categoryId, String message) {
+      Optional<ElementId> categoryId, ErrorMessage message) {
     return
         ValidationError.builder()
             .elementId(data.id())
             .fieldId(fieldId)
             .categoryId(categoryId.orElse(null))
-            .message(new ErrorMessage(message))
+            .message(message)
             .build();
   }
 
