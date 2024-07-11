@@ -15,7 +15,7 @@ public class ElementValueUnitContactInformation implements ElementValue {
 
   @Override
   public boolean isEmpty() {
-    return !ElementValidator.isTextDefined(address) || !ElementValidator.isTextDefined(city)
-        || !ElementValidator.isTextDefined(zipCode) || !ElementValidator.isTextDefined(phoneNumber);
+    return !ElementValidator.isTextDefined(address) && !ElementValidator.isTextDefined(city)
+        && !ElementValidator.isTextDefined(zipCode) && !ElementValidator.isTextDefined(phoneNumber);
   }
 }

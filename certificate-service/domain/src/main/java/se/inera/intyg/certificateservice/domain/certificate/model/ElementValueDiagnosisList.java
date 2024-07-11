@@ -14,6 +14,10 @@ public class ElementValueDiagnosisList implements ElementValue {
 
   @Override
   public boolean isEmpty() {
-    return diagnoses == null || diagnoses.isEmpty();
+    if (diagnoses == null || diagnoses.isEmpty()) {
+      return true;
+    }
+
+    return diagnoses.stream().allMatch(ElementValueDiagnosis::isEmpty);
   }
 }
