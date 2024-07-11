@@ -18,6 +18,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.alvaVardadministratorBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALLOW_COPY_FALSE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
@@ -333,23 +334,6 @@ class CertificateActionForwardCertificateMessageTest {
       }
 
       @Test
-      void shallReturnTrueIfWithinCareUnit() {
-        final var actionEvaluation = actionEvaluationBuilder()
-            .user(ajlaDoctorBuilder()
-                .accessScope(userAccessScope)
-                .build())
-            .build();
-
-        final var certificate = certificateBuilder.build();
-
-        assertTrue(
-            certificateActionForwardMessage.evaluate(Optional.of(certificate),
-                Optional.of(actionEvaluation)),
-            () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
-        );
-      }
-
-      @Test
       void shallReturnFalseIfNotWithinCareUnit() {
         final var actionEvaluation = actionEvaluationBuilder()
             .subUnit(ALFA_HUDMOTTAGNINGEN)
@@ -374,23 +358,6 @@ class CertificateActionForwardCertificateMessageTest {
       @BeforeEach
       void setUp() {
         userAccessScope = se.inera.intyg.certificateservice.domain.common.model.AccessScope.ALL_CARE_PROVIDERS;
-      }
-
-      @Test
-      void shallReturnTrueIfWithinCareUnit() {
-        final var actionEvaluation = actionEvaluationBuilder()
-            .user(ajlaDoctorBuilder()
-                .accessScope(userAccessScope)
-                .build())
-            .build();
-
-        final var certificate = certificateBuilder.build();
-
-        assertTrue(
-            certificateActionForwardMessage.evaluate(Optional.of(certificate),
-                Optional.of(actionEvaluation)),
-            () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
-        );
       }
 
       @Test
@@ -463,6 +430,37 @@ class CertificateActionForwardCertificateMessageTest {
         .sent(null)
         .build();
     final var actionEvaluation = actionEvaluationBuilder().build();
+    assertFalse(
+        certificateActionForwardMessage.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)));
+  }
+
+  @Test
+  void shallReturnTrueIfUserAccessScopeIsWithinCareUnit() {
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .build();
+    final var actionEvaluation = actionEvaluationBuilder()
+        .user(ALVA_VARDADMINISTRATOR)
+        .build();
+
+    assertTrue(
+        certificateActionForwardMessage.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)));
+  }
+
+  @Test
+  void shallReturnFalseIfUserAccessScopeIsNotWithinCareUnit() {
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .build();
+    final var actionEvaluation = actionEvaluationBuilder()
+        .user(alvaVardadministratorBuilder()
+            .accessScope(
+                se.inera.intyg.certificateservice.domain.common.model.AccessScope.WITHIN_CARE_PROVIDER)
+            .build())
+        .build();
+
     assertFalse(
         certificateActionForwardMessage.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)));

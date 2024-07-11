@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.domain.action.model;
 
 import java.util.List;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionRuleUserHasAccessScope;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
@@ -286,7 +287,10 @@ public class CertificateActionFactory {
                   new ActionRuleProtectedPerson(),
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
-                  new ActionRuleUserAllowCopy()
+                  new ActionRuleUserAllowCopy(),
+                  new ActionRuleUserHasAccessScope(
+                      List.of(AccessScope.WITHIN_CARE_UNIT)
+                  )
               )
           )
           .build();
@@ -301,7 +305,10 @@ public class CertificateActionFactory {
                   new ActionRuleProtectedPerson(),
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
-                  new ActionRuleUserAllowCopy()
+                  new ActionRuleUserAllowCopy(),
+                  new ActionRuleUserHasAccessScope(
+                      List.of(AccessScope.WITHIN_CARE_UNIT)
+                  )
               )
           )
           .build();
