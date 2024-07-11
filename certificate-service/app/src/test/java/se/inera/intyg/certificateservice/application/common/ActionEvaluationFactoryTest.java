@@ -47,7 +47,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_RESPONSIBLE_HOSP_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_RESPONSIBLE_ISSUER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ROLE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALLOW_COPY_FALSE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
@@ -787,7 +787,7 @@ class ActionEvaluationFactoryTest {
     }
 
     @Test
-    void shallIncludeResponsibleHospName() {
+    void shallIncludeResponsibleIssuer() {
       final var actionEvaluation = actionEvaluationFactory.create(
           ATHENA_REACT_ANDERSSON_DTO,
           AJLA_DOCTOR_DTO,
@@ -796,8 +796,8 @@ class ActionEvaluationFactoryTest {
           ALFA_REGIONEN_DTO
       );
 
-      assertEquals(AJLA_DOCTOR_RESPONSIBLE_HOSP_NAME,
-          actionEvaluation.user().responsibleHospName());
+      assertEquals(AJLA_DOCTOR_RESPONSIBLE_ISSUER,
+          actionEvaluation.user().responsibleIssuer());
     }
   }
 }

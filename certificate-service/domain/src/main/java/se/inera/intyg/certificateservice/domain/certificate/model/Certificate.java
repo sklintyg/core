@@ -113,7 +113,7 @@ public class Certificate {
         .careUnit(actionEvaluation.careUnit())
         .careProvider(actionEvaluation.careProvider())
         .issuingUnit(actionEvaluation.subUnit())
-        .responsibleHospName(actionEvaluation.user().responsibleHospName())
+        .responsibleIssuer(actionEvaluation.user().responsibleIssuer())
         .build();
   }
 

@@ -114,8 +114,8 @@ public class CertificateMetadataConverter {
                 .toList()
                 : null
         )
-        .responsibleHospName(certificate.certificateMetaData().responsibleHospName() != null
-            ? certificate.certificateMetaData().responsibleHospName().value()
+        .responsibleHospName(certificate.certificateMetaData().responsibleIssuer() != null
+            ? certificate.certificateMetaData().responsibleIssuer().value()
             : null)
         .build();
   }

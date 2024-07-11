@@ -88,7 +88,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpre
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
-import se.inera.intyg.certificateservice.domain.user.model.ResponsibleHospName;
+import se.inera.intyg.certificateservice.domain.user.model.ResponsibleIssuer;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 
 @ExtendWith(MockitoExtension.class)
@@ -115,7 +115,7 @@ class CertificateMetadataConverterTest {
   private static final String CERTIFICATE_SUMMARY_LABEL = "SummaryLabel";
   private static final String CERTIFICATE_SUMMARY_VALUE = "SummaryValue";
   private static final Forwarded FORWARDED = new Forwarded(true);
-  private static final String RESPONSIBLE_HOSP_NAME = "ResponsibleHospName";
+  private static final String RESPONSIBLE_ISSUER = "ResponsibleIssuer";
   @Mock
   private CertificateMessageTypeConverter certificateMessageTypeConverter;
   @Mock
@@ -216,7 +216,7 @@ class CertificateMetadataConverterTest {
                 .careUnit(ALFA_MEDICINCENTRUM)
                 .careProvider(ALFA_REGIONEN)
                 .issuer(AJLA_DOKTOR)
-                .responsibleHospName(new ResponsibleHospName(RESPONSIBLE_HOSP_NAME))
+                .responsibleIssuer(new ResponsibleIssuer(RESPONSIBLE_ISSUER))
                 .build()
         )
         .elementData(
@@ -319,8 +319,8 @@ class CertificateMetadataConverterTest {
   }
 
   @Test
-  void shallIncludeResponsibleHospName() {
-    assertEquals(RESPONSIBLE_HOSP_NAME,
+  void shallIncludeResponsibleIssuer() {
+    assertEquals(RESPONSIBLE_ISSUER,
         certificateMetadataConverter.convert(certificate).getResponsibleHospName()
     );
   }
