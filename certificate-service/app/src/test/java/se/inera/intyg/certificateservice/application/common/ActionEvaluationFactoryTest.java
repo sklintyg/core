@@ -47,6 +47,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_RESPONSIBLE_HOSP_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ROLE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALLOW_COPY_FALSE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
@@ -783,6 +784,20 @@ class ActionEvaluationFactoryTest {
 
       assertEquals(AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES,
           actionEvaluation.user().healthCareProfessionalLicence());
+    }
+
+    @Test
+    void shallIncludeResponsibleHospName() {
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          AJLA_DOCTOR_DTO,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(AJLA_DOCTOR_RESPONSIBLE_HOSP_NAME,
+          actionEvaluation.user().responsibleHospName());
     }
   }
 }
