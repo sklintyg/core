@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
+import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class ForwardCertificateService {
   private final CertificateConverter certificateConverter;
   private final ResourceLinkConverter resourceLinkConverter;
 
+  @Transactional
   public ForwardCertificateResponse forward(ForwardCertificateRequest request,
       String certificateId) {
     forwardCertificateRequestValidator.validate(request, certificateId);

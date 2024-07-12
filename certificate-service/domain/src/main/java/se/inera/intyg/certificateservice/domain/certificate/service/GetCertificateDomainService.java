@@ -1,13 +1,13 @@
 package se.inera.intyg.certificateservice.domain.certificate.service;
 
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.UPDATE;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.UPDATE;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;

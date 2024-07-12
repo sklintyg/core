@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.SIGN;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.SIGN;
 import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.COMPLEMENT;
 import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.RENEW;
 import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.REPLACE;

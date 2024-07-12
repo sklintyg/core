@@ -9,7 +9,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
@@ -39,12 +39,14 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMe
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
+import se.inera.intyg.certificateservice.domain.message.model.MessageActionType;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
@@ -302,6 +304,28 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.FORWARD_MESSAGE)
+                    .build()
+            )
+        )
+        .messageActionSpecifications(
+            List.of(
+                MessageActionSpecification.builder()
+                    .messageActionType(MessageActionType.ANSWER)
+                    .build(),
+                MessageActionSpecification.builder()
+                    .messageActionType(MessageActionType.HANDLE_COMPLEMENT)
+                    .build(),
+                MessageActionSpecification.builder()
+                    .messageActionType(MessageActionType.COMPLEMENT)
+                    .build(),
+                MessageActionSpecification.builder()
+                    .messageActionType(MessageActionType.CANNOT_COMPLEMENT)
+                    .build(),
+                MessageActionSpecification.builder()
+                    .messageActionType(MessageActionType.FORWARD)
+                    .build(),
+                MessageActionSpecification.builder()
+                    .messageActionType(MessageActionType.HANDLE_MESSAGE)
                     .build()
             )
         )

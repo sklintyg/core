@@ -7,10 +7,12 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionFactory;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.message.model.MessageAction;
+import se.inera.intyg.certificateservice.domain.action.message.model.MessageActionFactory;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
@@ -29,6 +31,8 @@ public class CertificateModel {
   LocalDateTime activeFrom;
   Boolean availableForCitizen;
   List<CertificateActionSpecification> certificateActionSpecifications;
+  @Builder.Default
+  List<MessageActionSpecification> messageActionSpecifications = Collections.emptyList();
   List<ElementSpecification> elementSpecifications;
   String pdfTemplatePath;
   String pdfNoAddressTemplatePath;
@@ -41,6 +45,13 @@ public class CertificateModel {
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()
         .map(CertificateActionFactory::create)
+        .filter(Objects::nonNull)
+        .toList();
+  }
+
+  public List<MessageAction> messageActions() {
+    return messageActionSpecifications.stream()
+        .map(MessageActionFactory::create)
         .filter(Objects::nonNull)
         .toList();
   }

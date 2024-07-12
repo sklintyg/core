@@ -23,7 +23,7 @@ import se.inera.intyg.certificateservice.application.message.dto.SaveMessageRequ
 import se.inera.intyg.certificateservice.application.message.dto.SaveMessageResponse;
 import se.inera.intyg.certificateservice.application.message.service.converter.QuestionConverter;
 import se.inera.intyg.certificateservice.application.message.service.validator.SaveMessageRequestValidator;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.message.model.Content;

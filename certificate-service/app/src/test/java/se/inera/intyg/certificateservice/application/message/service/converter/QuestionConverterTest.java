@@ -41,7 +41,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.Author;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
-import se.inera.intyg.certificateservice.domain.message.model.MessageAction;
+import se.inera.intyg.certificateservice.domain.message.model.MessageActionLink;
 import se.inera.intyg.certificateservice.domain.message.model.MessageContactInfo;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
@@ -49,10 +49,10 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 @ExtendWith(MockitoExtension.class)
 class QuestionConverterTest {
 
-  private static final List<MessageAction> MESSAGE_ACTIONS = List.of(
-      MessageAction.builder().build());
+  private static final List<MessageActionLink> MESSAGE_ACTIONS = List.of(
+      MessageActionLink.builder().build());
   @Mock
-  MessageActionConverter messageActionConverter;
+  MessageActionLinkConverter messageActionLinkConverter;
   @Mock
   CertificateRepository certificateRepository;
   @Mock
@@ -193,10 +193,10 @@ class QuestionConverterTest {
 
   @Test
   void shallIncludeLinks() {
-    final var messageAction = MessageAction.builder().build();
+    final var messageAction = MessageActionLink.builder().build();
     final var message = complementMessageBuilder()
         .build();
-    doReturn(ResourceLinkDTO.builder().build()).when(messageActionConverter)
+    doReturn(ResourceLinkDTO.builder().build()).when(messageActionLinkConverter)
         .convert(messageAction);
     final var convert = questionConverter.convert(message, List.of(messageAction));
     assertFalse(convert.getLinks().isEmpty());

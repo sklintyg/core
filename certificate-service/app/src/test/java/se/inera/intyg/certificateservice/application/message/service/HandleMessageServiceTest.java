@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,11 +19,12 @@ import se.inera.intyg.certificateservice.application.message.dto.HandleMessageRe
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.message.service.converter.QuestionConverter;
 import se.inera.intyg.certificateservice.application.message.service.validator.HandleMessageRequestValidator;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageActionLink;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 import se.inera.intyg.certificateservice.domain.message.service.HandleMessageDomainService;
@@ -69,6 +70,7 @@ class HandleMessageServiceTest {
   @BeforeEach
   void setup() {
     final var certificate = mock(Certificate.class);
+    final var message = mock(Message.class);
     when(actionEvaluationFactory.create(REQUEST.getUser(), REQUEST.getUnit(), REQUEST.getCareUnit(),
         REQUEST.getCareProvider()))
         .thenReturn(ACTION);
@@ -77,10 +79,12 @@ class HandleMessageServiceTest {
     when(certificateRepository.getById(new CertificateId(CERTIFICATE_ID)))
         .thenReturn(certificate);
     when(handleMessageDomainService.handle(MESSAGE, REQUEST.getHandled(), certificate, ACTION))
-        .thenReturn(COMPLEMENT_MESSAGE);
+        .thenReturn(message);
+    final var messageActionLinks = List.of(MessageActionLink.builder().build());
+    when(message.actions(ACTION, certificate)).thenReturn(messageActionLinks);
     when(questionConverter.convert(
-        COMPLEMENT_MESSAGE,
-        COMPLEMENT_MESSAGE.actions(ACTION, certificate)))
+        message,
+        messageActionLinks))
         .thenReturn(CONVERTED_QUESTION);
   }
 
