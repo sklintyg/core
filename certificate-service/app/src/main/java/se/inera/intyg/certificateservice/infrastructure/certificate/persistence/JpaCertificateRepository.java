@@ -60,6 +60,11 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
       return certificate;
     }
 
+    if (Status.LOCKED_DRAFT.equals(certificate.status())) {
+      certificateEntityRepository.findByCertificateId(certificate.id().id())
+          .ifPresent(certificateRelationRepository::deleteRelations);
+    }
+
     final var savedEntity = certificateEntityRepository.save(
         certificateEntityMapper.toEntity(certificate)
     );
@@ -137,6 +142,17 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     final var specification = certificateEntitySpecificationFactory.create(request);
 
     return certificateEntityRepository.findAll(specification).stream()
+        .map(certificateEntityMapper::toDomain)
+        .toList();
+  }
+
+  @Override
+  public List<Certificate> draftsCreatedBefore(LocalDateTime cutoffDate) {
+    final var certificateEntities = certificateEntityRepository.findCertificateEntitiesByCreatedBeforeAndAndStatus(
+        cutoffDate, Status.DRAFT.name()
+    );
+
+    return certificateEntities.stream()
         .map(certificateEntityMapper::toDomain)
         .toList();
   }

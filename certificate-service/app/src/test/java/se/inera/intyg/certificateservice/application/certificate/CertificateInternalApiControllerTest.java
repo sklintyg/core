@@ -15,14 +15,19 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.LockOldDraftsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.LockOldDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalMetadataService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalXmlService;
+import se.inera.intyg.certificateservice.application.certificate.service.LockOldDraftsInternalService;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateInternalApiControllerTest {
 
+  @Mock
+  private LockOldDraftsInternalService lockOldDraftsInternalService;
   @Mock
   private CertificateExistsService certificateExistsService;
   @Mock
@@ -86,6 +91,16 @@ class CertificateInternalApiControllerTest {
 
     final var actualResult = certificateInternalApiController.getCertificate(CERTIFICATE_ID);
 
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnLockOldDraftsResponse() {
+    final var expectedResult = LockOldDraftsResponse.builder().build();
+    final var request = LockOldDraftsRequest.builder().build();
+    doReturn(expectedResult).when(lockOldDraftsInternalService).lock(request);
+
+    final var actualResult = certificateInternalApiController.lockOldDrafts(request);
     assertEquals(expectedResult, actualResult);
   }
 }

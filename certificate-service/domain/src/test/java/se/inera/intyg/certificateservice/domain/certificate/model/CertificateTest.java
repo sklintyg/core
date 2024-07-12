@@ -2534,4 +2534,53 @@ class CertificateTest {
       assertTrue(draftCertificate.forwarded().value());
     }
   }
+
+  @Nested
+  class LockTests {
+
+    @Test
+    void shallSetStatusToLocked() {
+      final var draftCertificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      draftCertificate.lock();
+
+      assertEquals(Status.LOCKED_DRAFT, draftCertificate.status());
+    }
+
+    @Test
+    void shallSetParentToNull() {
+      final var draftCertificate = certificateBuilder
+          .status(Status.DRAFT)
+          .parent(Relation.builder().build())
+          .build();
+
+      draftCertificate.lock();
+
+      assertNull(draftCertificate.parent());
+    }
+
+    @Test
+    void shallSetChildrenToEmptyList() {
+      final var draftCertificate = certificateBuilder
+          .status(Status.DRAFT)
+          .children(List.of(Relation.builder().build()))
+          .build();
+
+      draftCertificate.lock();
+
+      assertTrue(draftCertificate.children().isEmpty());
+    }
+
+    @Test
+    void shallThrowIfStatusIsNotDraft() {
+      final var draftCertificate = certificateBuilder
+          .status(Status.SIGNED)
+          .children(List.of(Relation.builder().build()))
+          .build();
+
+      assertThrows(IllegalStateException.class, draftCertificate::lock);
+    }
+  }
 }

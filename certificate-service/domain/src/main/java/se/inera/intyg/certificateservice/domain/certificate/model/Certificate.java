@@ -443,5 +443,15 @@ public class Certificate {
 
     this.forwarded = new Forwarded(true);
   }
+
+  public void lock() {
+    if (!status.equals(Status.DRAFT)) {
+      throw new IllegalStateException("Cannot lock certificate with status '%s'".formatted(status));
+    }
+
+    this.status = Status.LOCKED_DRAFT;
+    this.parent = null;
+    this.children = Collections.emptyList();
+  }
 }
 

@@ -223,6 +223,20 @@ class JpaCertificateRepositoryTest {
     }
 
     @Test
+    void shouldDeleteRelationsIfStatusLockedDraft() {
+      final var expectedResult = Certificate.builder()
+          .id(CERTIFICATE_ID)
+          .status(Status.LOCKED_DRAFT)
+          .build();
+
+      doReturn(Optional.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository)
+          .findByCertificateId(CERTIFICATE_ID.id());
+      jpaCertificateRepository.save(expectedResult);
+
+      verify(certificateRelationRepository).deleteRelations(CERTIFICATE_ENTITY);
+    }
+
+    @Test
     void shouldSaveCertificateRelations() {
       final var certificate = Certificate.builder().build();
 
@@ -390,6 +404,21 @@ class JpaCertificateRepositoryTest {
       );
 
       verify(certificateRelationRepository).deleteRelations(CERTIFICATE_ENTITY);
+    }
+  }
+
+  @Nested
+  class DraftsCreatedBeforeTests {
+
+    @Test
+    void shallReturnListOfDrafts() {
+      final var expectedDrafts = List.of(CERTIFICATE);
+      final var cutoffDate = LocalDateTime.now().minusDays(14);
+      doReturn(List.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository)
+          .findCertificateEntitiesByCreatedBeforeAndAndStatus(cutoffDate, Status.DRAFT.name());
+      doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
+      final var actualDrafts = jpaCertificateRepository.draftsCreatedBefore(cutoffDate);
+      assertEquals(expectedDrafts, actualDrafts);
     }
   }
 }

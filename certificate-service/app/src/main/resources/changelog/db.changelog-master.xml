@@ -93,6 +93,9 @@
     <insert tableName="certificate_status">
       <column name="status" value="REVOKED"/>
     </insert>
+    <insert tableName="certificate_status">
+      <column name="status" value="LOCKED_DRAFT"/>
+    </insert>
 
     <createTable tableName="certificate_model">
       <column name="key" type="integer unsigned" autoIncrement="true">

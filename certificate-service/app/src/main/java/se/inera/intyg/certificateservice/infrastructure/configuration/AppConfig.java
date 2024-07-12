@@ -18,6 +18,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.RenewCertifi
 import se.inera.intyg.certificateservice.domain.certificate.service.ReplaceCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.RevokeCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SendCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.SetCertificatesToLockedDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SignCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SignCertificateWithoutSignatureDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertificateDomainService;
@@ -345,5 +346,11 @@ public class AppConfig {
   public ForwardCertificateMessagesDomainService forwardMessagesDomainService(
       MessageRepository messageRepository) {
     return new ForwardCertificateMessagesDomainService(messageRepository);
+  }
+
+  @Bean
+  public SetCertificatesToLockedDomainService setCertificatesToLockedDomainService(
+      CertificateRepository certificateRepository) {
+    return new SetCertificatesToLockedDomainService(certificateRepository);
   }
 }

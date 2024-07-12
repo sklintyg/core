@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.certificate.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
@@ -19,4 +20,6 @@ public interface CertificateRepository {
   boolean exists(CertificateId certificateId);
 
   List<Certificate> findByCertificatesRequest(CertificatesRequest request);
+
+  List<Certificate> draftsCreatedBefore(LocalDateTime cutoffDate);
 }
