@@ -29,7 +29,6 @@ public class CertificateMetadataConverter {
    * Default values until functionality has been implemented in domain model
    */
   private static final boolean LATEST_MAJOR_VERSION = true;
-  private static final boolean TEST_CERTIFICATE = false;
   private final CertificateUnitConverter certificateUnitConverter;
   private final CertificateMessageTypeConverter certificateMessageTypeConverter;
 
@@ -44,6 +43,7 @@ public class CertificateMetadataConverter {
         .description(certificate.certificateModel().detailedDescription())
         .validForSign(certificate.isDraft() && certificate.validate().isValid())
         .created(certificate.created())
+        .testCertificate(certificate.certificateMetaData().patient().testIndicated().value())
         .patient(
             toPatientDTO(certificate)
         )
@@ -96,7 +96,6 @@ public class CertificateMetadataConverter {
         .sentTo(certificate.sent() != null ? certificate.sent().recipient().name() : null)
         .recipient(toCertificateRecipientDTO(certificate))
         .status(toCertificateStatusTypeDTO(certificate.status()))
-        .testCertificate(TEST_CERTIFICATE)
         .signed(certificate.signed())
         .modified(certificate.modified())
         .externalReference(
