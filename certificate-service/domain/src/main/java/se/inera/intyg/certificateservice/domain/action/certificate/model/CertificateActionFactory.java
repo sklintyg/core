@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateservice.domain.action.certificate.model;
 
 import java.util.List;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionSign.ActionRuleBlockTestIndicatedPerson;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;

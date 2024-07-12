@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.domain.action.model;
+package se.inera.intyg.certificateservice.domain.action.certificate.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -17,7 +17,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionSign;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
@@ -25,11 +24,11 @@ import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 @ExtendWith(MockitoExtension.class)
 class ActionRuleTestIndicatedPersonBlockTest {
 
-  private CertificateActionSign.ActionRuleBlockTestIndicatedPerson actionRuleBlockTestIndicatedPerson;
+  private ActionRuleBlockTestIndicatedPerson actionRuleBlockTestIndicatedPerson;
 
   @BeforeEach
   void setUp() {
-    actionRuleBlockTestIndicatedPerson = new CertificateActionSign.ActionRuleBlockTestIndicatedPerson();
+    actionRuleBlockTestIndicatedPerson = new ActionRuleBlockTestIndicatedPerson();
   }
 
   @Test
