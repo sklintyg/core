@@ -22,7 +22,7 @@ public class ElementValueMedicalInvestigationList implements ElementValue {
 
     return list.stream().allMatch(
         value -> value.investigationType().isEmpty()
-            && value.informationSource().isEmpty()
-            && value.date().isEmpty());
+            || value.informationSource().isEmpty()
+            || value.date().isEmpty());
   }
 }
