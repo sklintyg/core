@@ -1,11 +1,15 @@
 package se.inera.intyg.certificateservice.domain.certificate.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
@@ -76,5 +80,80 @@ class ElementValueDateRangeListTest {
         .build();
 
     assertNull(dateRangeList.lastRange());
+  }
+
+  @Nested
+  class IsEmpty {
+
+    @Test
+    void shouldReturnTrueIfNull() {
+      assertTrue(
+          ElementValueDateRangeList.builder().build().isEmpty()
+      );
+    }
+
+    @Test
+    void shouldReturnFalseIfDateRangeListWithNonEmptyValue() {
+      assertFalse(
+          ElementValueDateRangeList.builder()
+              .dateRangeList(
+                  List.of(DateRange
+                      .builder()
+                      .to(LocalDate.now())
+                      .from(LocalDate.now())
+                      .build()
+                  )
+              )
+              .build()
+              .isEmpty()
+      );
+    }
+
+    @Test
+    void shouldReturnTrueIfDateRangeListWithEmptyValue() {
+      assertTrue(
+          ElementValueDateRangeList.builder()
+              .dateRangeList(
+                  List.of(DateRange
+                      .builder()
+                      .from(LocalDate.now())
+                      .build()
+                  )
+              )
+              .build()
+              .isEmpty()
+      );
+    }
+
+    @Test
+    void shouldReturnFalseIfDateRangeListWithEmptyValueAndFilledValue() {
+      assertFalse(
+          ElementValueDateRangeList.builder()
+              .dateRangeList(
+                  List.of(DateRange
+                          .builder()
+                          .to(LocalDate.now())
+                          .from(LocalDate.now())
+                          .build(),
+                      DateRange.builder()
+                          .build()
+                  )
+              )
+              .build()
+              .isEmpty()
+      );
+    }
+
+    @Test
+    void shouldReturnFalseIfEmpty() {
+      assertTrue(
+          ElementValueDateRangeList.builder()
+              .dateRangeList(
+                  Collections.emptyList()
+              )
+              .build()
+              .isEmpty()
+      );
+    }
   }
 }

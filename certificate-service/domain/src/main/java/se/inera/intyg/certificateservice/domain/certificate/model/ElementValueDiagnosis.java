@@ -18,6 +18,6 @@ public class ElementValueDiagnosis implements ElementValue {
 
   @Override
   public boolean isEmpty() {
-    return !ElementValidator.isTextDefined(code) && !ElementValidator.isTextDefined(description);
+    return !ElementValidator.isTextDefined(code) || !ElementValidator.isTextDefined(description);
   }
 }
