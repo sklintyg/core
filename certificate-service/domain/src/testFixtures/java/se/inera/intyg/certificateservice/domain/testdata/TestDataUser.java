@@ -147,6 +147,7 @@ public class TestDataUser {
         .paTitles(ALVA_VARDADMINISTRATOR_PA_TITLES)
         .specialities(ALVA_VARDADMINISTRATOR_SPECIALITIES)
         .role(ALVA_VARDADMINISTRATOR_ROLE)
+        .accessScope(AccessScope.WITHIN_CARE_UNIT)
         .healthCareProfessionalLicence(Collections.emptyList());
   }
 
@@ -165,6 +166,7 @@ public class TestDataUser {
         .paTitles(BERTIL_BARNMORSKA_PA_TITLES)
         .specialities(BERTIL_BARNMORSKA_SPECIALITIES)
         .role(BERTIL_BARNMORSKA_ROLE)
+        .accessScope(AccessScope.WITHIN_CARE_UNIT)
         .healthCareProfessionalLicence(BERTIL_BARNMORSKA_HEALTH_CARE_PROFESSIONAL_LICENCES);
   }
 
