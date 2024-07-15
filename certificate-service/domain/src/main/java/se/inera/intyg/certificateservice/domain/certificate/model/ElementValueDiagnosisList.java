@@ -12,4 +12,12 @@ public class ElementValueDiagnosisList implements ElementValue {
   @Builder.Default
   List<ElementValueDiagnosis> diagnoses = Collections.emptyList();
 
+  @Override
+  public boolean isEmpty() {
+    if (diagnoses == null || diagnoses.isEmpty()) {
+      return true;
+    }
+
+    return diagnoses.stream().allMatch(ElementValueDiagnosis::isEmpty);
+  }
 }

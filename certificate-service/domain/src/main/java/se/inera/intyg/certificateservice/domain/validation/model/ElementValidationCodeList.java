@@ -34,7 +34,7 @@ public class ElementValidationCodeList implements ElementValidation {
   private List<ValidationError> getMandatoryError(ElementData data,
       Optional<ElementId> categoryId, ElementValueCodeList codeList) {
 
-    if (codeList.list() == null || codeList.list().isEmpty() || hasNoValue(codeList)) {
+    if (codeList.isEmpty()) {
       return List.of(
           ValidationError.builder()
               .elementId(data.id())
@@ -45,11 +45,6 @@ public class ElementValidationCodeList implements ElementValidation {
       );
     }
     return Collections.emptyList();
-  }
-
-  private static boolean hasNoValue(ElementValueCodeList codeList) {
-    return codeList.list().stream()
-        .noneMatch(code -> code != null && ElementValidator.isTextDefined(code.code()));
   }
 
   private static void validateElementData(ElementData data) {

@@ -31,7 +31,7 @@ public class ElementValidationDate implements ElementValidation {
 
     final var dateValue = getValue(data.value());
 
-    if (mandatory && dateValue.date() == null) {
+    if (mandatory && dateValue.isEmpty()) {
       return errorMessage(data, dateValue, categoryId, ErrorMessageFactory.missingDate());
     }
 

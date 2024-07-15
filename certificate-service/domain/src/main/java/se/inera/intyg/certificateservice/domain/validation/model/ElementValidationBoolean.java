@@ -28,7 +28,7 @@ public class ElementValidationBoolean implements ElementValidation {
 
     final var valueBoolean = getValue(data.value());
 
-    if (mandatory && valueBoolean.value() == null) {
+    if (mandatory && valueBoolean.isEmpty()) {
       return List.of(
           ValidationError.builder()
               .elementId(data.id())

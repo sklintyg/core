@@ -30,9 +30,9 @@ public class ElementValidationText implements ElementValidation {
 
     final var value = getValue(data.value());
 
-    if (mandatory && (value.text() == null || value.text().isBlank())) {
+    if (mandatory && value.isEmpty()) {
       return List.of(
-          errorMessage(data, value.textId(), categoryId, ErrorMessageFactory.missingText())
+          errorMessage(data, value.textId(), categoryId, ErrorMessageFactory.missingAnswer())
       );
     }
 

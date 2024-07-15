@@ -14,4 +14,15 @@ public class ElementValueMedicalInvestigationList implements ElementValue {
   @With
   List<MedicalInvestigation> list;
 
+  @Override
+  public boolean isEmpty() {
+    if (list == null || list.isEmpty()) {
+      return true;
+    }
+
+    return list.stream().allMatch(
+        value -> value.investigationType().isEmpty()
+            || value.informationSource().isEmpty()
+            || value.date().isEmpty());
+  }
 }
