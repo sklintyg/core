@@ -92,7 +92,7 @@ public class TestDataUser {
         .paTitles(ANNA_SJUKSKOTERSKA_PA_TITLES)
         .specialities(ANNA_SJUKSKOTERSKA_SPECIALITIES)
         .role(ANNA_SJUKSKOTERSKA_ROLE)
-        .accessScope(AccessScope.WITHIN_CARE_PROVIDER)
+        .accessScope(AccessScope.WITHIN_CARE_UNIT)
         .healthCareProfessionalLicence(ANNA_SJUKSKOTERSKA_HEALTH_CARE_PROFESSIONAL_LICENCES);
   }
 
