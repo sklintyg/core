@@ -256,6 +256,20 @@ class CertificateModelFactoryFK7210Test {
   }
 
   @Test
+  void shallIncludeCertificateActionResponsibleIssuer() {
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.RESPONSIBLE_ISSUER)
+        .allowedRoles(List.of(Role.CARE_ADMIN))
+        .build();
+
+    final var certificateModel = certificateModelFactoryFK7210.create();
+
+    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
+  }
+
+  @Test
   void shallIncludePdfTemplatePath() {
     final var certificateModel = certificateModelFactoryFK7210.create();
 

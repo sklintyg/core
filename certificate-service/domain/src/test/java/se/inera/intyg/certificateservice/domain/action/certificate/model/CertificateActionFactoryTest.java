@@ -3,40 +3,6 @@ package se.inera.intyg.certificateservice.domain.action.certificate.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionAnswerMessage;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionCannotComplement;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionComplement;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionCreate;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionCreateMessage;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionDelete;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionDeleteAnswer;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionDeleteMessage;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionForwardCertificate;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionForwardMessage;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionHandleComplement;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionHandleMessage;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionMessages;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionMessagesAdministrative;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionPrint;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionRead;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionReceiveAnswer;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionReceiveComplement;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionReceiveQuestion;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionReceiveReminder;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionRenew;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionReplace;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionReplaceContinue;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionRevoke;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionSaveAnswer;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionSaveMessage;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionSend;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionSendAfterSign;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionSendAnswer;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionSendMessage;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionSign;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionUpdate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 
 class CertificateActionFactoryTest {
@@ -423,5 +389,17 @@ class CertificateActionFactoryTest {
 
     assert certificateAction != null;
     assertEquals(certificateAction.getClass(), CertificateActionSendAnswer.class);
+  }
+
+  @Test
+  void shallReturnCertificateActionResponsibleIssuerIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.RESPONSIBLE_ISSUER)
+        .build();
+
+    final var certificateAction = CertificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionResponsibleIssuer.class);
   }
 }

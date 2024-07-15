@@ -165,6 +165,10 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
+                    .build(),
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.RESPONSIBLE_ISSUER)
+                    .allowedRoles(List.of(Role.CARE_ADMIN))
                     .build()
             )
         )

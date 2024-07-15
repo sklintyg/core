@@ -72,12 +72,12 @@ public class TestDataUser {
 
   public static final User AJLA_DOKTOR = ajlaDoctorBuilder().build();
   public static final User DAN_DENTIST = danDentistBuilder().build();
-  public static final User ANNA_SJUKSKOTERKSA = annaSjukskoterska().build();
+  public static final User ANNA_SJUKSKOTERKSA = annaSjukskoterskaBuilder().build();
   public static final User ALF_DOKTOR = alfDoktorBuilder().build();
   public static final User ALVA_VARDADMINISTRATOR = alvaVardadministratorBuilder().build();
   public static final User BERTIL_BARNMORSKA = bertilBarnmorskaBuilder().build();
 
-  private static UserBuilder annaSjukskoterska() {
+  public static UserBuilder annaSjukskoterskaBuilder() {
     return User.builder()
         .hsaId(new HsaId(ANNA_SJUKSKOTERSKA_HSA_ID))
         .name(
@@ -92,6 +92,7 @@ public class TestDataUser {
         .paTitles(ANNA_SJUKSKOTERSKA_PA_TITLES)
         .specialities(ANNA_SJUKSKOTERSKA_SPECIALITIES)
         .role(ANNA_SJUKSKOTERSKA_ROLE)
+        .accessScope(AccessScope.WITHIN_CARE_PROVIDER)
         .healthCareProfessionalLicence(ANNA_SJUKSKOTERSKA_HEALTH_CARE_PROFESSIONAL_LICENCES);
   }
 
