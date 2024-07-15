@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.integrationtest;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_HUDMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_VARDCENTRAL_DTO;
@@ -67,7 +68,7 @@ public abstract class ResponsibleIssuerIT extends BaseIntegrationIT {
             .user(ajlaDoktorDtoBuilder()
                 .accessScope(AccessScopeTypeDTO.ALL_CARE_PROVIDERS)
                 .build())
-            .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+            .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
             .careUnit(ALFA_VARDCENTRAL_DTO)
             .careProvider(ALFA_MEDICINCENTRUM_DTO)
             .build(),
@@ -97,7 +98,38 @@ public abstract class ResponsibleIssuerIT extends BaseIntegrationIT {
             .user(alvaVardadministratorDtoBuilder()
                 .accessScope(AccessScopeTypeDTO.ALL_CARE_PROVIDERS)
                 .build())
-            .unit(ALFA_HUDMOTTAGNINGEN_DTO)
+            .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
+            .careUnit(ALFA_VARDCENTRAL_DTO)
+            .careProvider(ALFA_MEDICINCENTRUM_DTO)
+            .build(),
+        certificateId(testCertificates)
+    );
+
+    final var resourceLinkTypes = Objects.requireNonNull(response.getBody()).getCertificate()
+        .getLinks()
+        .stream()
+        .map(ResourceLinkDTO::getType)
+        .toList();
+
+    assertFalse(resourceLinkTypes.contains(ResourceLinkTypeDTO.RESPONSIBLE_ISSUER),
+        "Should return false if resource link responsible issuer is not included"
+    );
+  }
+
+  @Test
+  @DisplayName("Om användaren är fristående skall ansvarig intygsutfärdare inte visas")
+  void shallNotDisplayResponsibleIssuerIfUserHasOriginNormal() {
+    final var testCertificates = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion(),
+            CertificateStatusTypeDTO.SIGNED)
+    );
+
+    final var response = api.getCertificate(
+        customGetCertificateRequest()
+            .user(alvaVardadministratorDtoBuilder()
+                .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
+                .build())
+            .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
             .careUnit(ALFA_VARDCENTRAL_DTO)
             .careProvider(ALFA_MEDICINCENTRUM_DTO)
             .build(),
