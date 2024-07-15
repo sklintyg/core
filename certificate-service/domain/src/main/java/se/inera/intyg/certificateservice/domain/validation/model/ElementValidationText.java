@@ -32,14 +32,14 @@ public class ElementValidationText implements ElementValidation {
 
     if (mandatory && (value.text() == null || value.text().isBlank())) {
       return List.of(
-          errorMessage(data, value.textId(), categoryId, "Ange ett svar.")
+          errorMessage(data, value.textId(), categoryId, ErrorMessageFactory.missingText())
       );
     }
 
-    if (value.text() != null && isOverLimit(value.text())) {
+    if (value.text() != null && ElementValidator.isTextOverLimit(value.text(), limit)) {
       return List.of(
           errorMessage(data, value.textId(), categoryId,
-              "Ange en text som inte är längre än %s.".formatted(limit)
+              ErrorMessageFactory.textLimit(limit)
           )
       );
     }
@@ -51,17 +51,13 @@ public class ElementValidationText implements ElementValidation {
       ElementData data,
       FieldId fieldId,
       Optional<ElementId> categoryId,
-      String message) {
+      ErrorMessage message) {
     return ValidationError.builder()
         .elementId(data.id())
         .fieldId(fieldId)
         .categoryId(categoryId.orElse(null))
-        .message(new ErrorMessage(message))
+        .message(message)
         .build();
-  }
-
-  private boolean isOverLimit(String value) {
-    return limit != null && value.length() > limit;
   }
 
   private ElementValueText getValue(ElementValue value) {

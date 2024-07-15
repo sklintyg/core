@@ -19,10 +19,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionFactory;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.message.model.MessageAction;
+import se.inera.intyg.certificateservice.domain.action.message.model.MessageActionFactory;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
@@ -96,6 +98,78 @@ class CertificateModelTest {
           .build();
 
       final var actualActions = certificateModel.actions();
+
+      assertEquals(expectedActions, actualActions);
+    }
+  }
+
+  @Nested
+  class TestMessageActions {
+
+    @Test
+    void shallReturnActionIfExists() {
+      final var messageActionSpecification = MessageActionSpecification.builder().build();
+      final var messageAction = mock(MessageAction.class);
+      final var expectedActions = List.of(messageAction);
+
+      final var certificateModel = CertificateModel.builder()
+          .messageActionSpecifications(
+              List.of(
+                  messageActionSpecification
+              )
+          )
+          .build();
+
+      try (MockedStatic<MessageActionFactory> messageActionFactory = mockStatic(
+          MessageActionFactory.class)) {
+
+        messageActionFactory
+            .when(() -> MessageActionFactory.create(messageActionSpecification))
+            .thenReturn(messageAction);
+
+        final var actualActions = certificateModel.messageActions();
+
+        assertEquals(expectedActions, actualActions);
+      }
+    }
+
+    @Test
+    void shallReturnEmptyActionsIfNoActionExists() {
+      final var messageActionSpecification = MessageActionSpecification.builder().build();
+      final var expectedActions = Collections.emptyList();
+
+      final var certificateModel = CertificateModel.builder()
+          .messageActionSpecifications(
+              List.of(
+                  messageActionSpecification
+              )
+          )
+          .build();
+
+      try (MockedStatic<MessageActionFactory> messageActionFactory = mockStatic(
+          MessageActionFactory.class)) {
+
+        messageActionFactory
+            .when(() -> MessageActionFactory.create(messageActionSpecification))
+            .thenReturn(null);
+
+        final var actualActions = certificateModel.messageActions();
+
+        assertEquals(expectedActions, actualActions);
+      }
+    }
+
+    @Test
+    void shallReturnEmptyActionsIfNoActionsExistInSpecification() {
+      final var expectedActions = Collections.emptyList();
+
+      final var certificateModel = CertificateModel.builder()
+          .certificateActionSpecifications(
+              Collections.emptyList()
+          )
+          .build();
+
+      final var actualActions = certificateModel.messageActions();
 
       assertEquals(expectedActions, actualActions);
     }

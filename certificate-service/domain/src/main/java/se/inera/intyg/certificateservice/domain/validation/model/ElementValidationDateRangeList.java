@@ -1,7 +1,5 @@
 package se.inera.intyg.certificateservice.domain.validation.model;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.temporal.TemporalAmount;
 import java.util.Collections;
 import java.util.List;
@@ -51,12 +49,12 @@ public class ElementValidationDateRangeList implements ElementValidation {
 
     if (mandatory && !isDateRangeListFilled(dateRangeList)) {
       return List.of(
-          errorMessage(
-              data,
-              dateRangeList.dateRangeListId(),
-              categoryId,
-              "Välj minst ett alternativ."
-          )
+          ValidationError.builder()
+              .elementId(data.id())
+              .fieldId(dateRangeList.dateRangeListId())
+              .categoryId(categoryId.orElse(null))
+              .message(ErrorMessageFactory.missingMultipleOption())
+              .build()
       );
     }
 
@@ -95,7 +93,7 @@ public class ElementValidationDateRangeList implements ElementValidation {
                 data,
                 dateRangeList.dateRangeListId(),
                 categoryId,
-                "Ange perioder som inte överlappar varandra."
+                ErrorMessageFactory.overlappingPeriods()
             )
         )
         .stream().toList();
@@ -123,7 +121,7 @@ public class ElementValidationDateRangeList implements ElementValidation {
         .filter(this::isToBeforeFrom)
         .map(dateRange -> errorMessage(
                 data, getFieldId(dateRange.dateRangeId(), RANGE_SUFFIX), categoryId,
-                "Ange ett slutdatum som infaller efter startdatumet."
+                ErrorMessageFactory.endDateAfterStartDate()
             )
         )
         .toList();
@@ -134,7 +132,8 @@ public class ElementValidationDateRangeList implements ElementValidation {
     return dateRangeList.dateRangeList().stream()
         .filter(dateRange -> !isDateRangeComplete(dateRange))
         .map(dateRange -> errorMessage(
-                data, getFieldIdOfIncompleteDateRange(dateRange), categoryId, "Ange ett datum."
+                data, getFieldIdOfIncompleteDateRange(dateRange), categoryId,
+                ErrorMessageFactory.missingDate()
             )
         )
         .toList();
@@ -143,10 +142,10 @@ public class ElementValidationDateRangeList implements ElementValidation {
   private List<ValidationError> getFromBeforeMinErrors(ElementData data,
       Optional<ElementId> categoryId, ElementValueDateRangeList dateRangeList) {
     return dateRangeList.dateRangeList().stream()
-        .filter(dateRange -> isBeforeMin(dateRange.from()))
+        .filter(dateRange -> ElementValidator.isDateBeforeMin(dateRange.from(), min))
         .map(dateRange -> errorMessage(
                 data, getFieldId(dateRange.dateRangeId(), FROM_SUFFIX), categoryId,
-                "Ange ett datum som är tidigast %s.".formatted(minDate())
+                ErrorMessageFactory.minDate(min)
             )
         )
         .toList();
@@ -155,10 +154,10 @@ public class ElementValidationDateRangeList implements ElementValidation {
   private List<ValidationError> getToBeforeMinErrors(ElementData data,
       Optional<ElementId> categoryId, ElementValueDateRangeList dateRangeList) {
     return dateRangeList.dateRangeList().stream()
-        .filter(dateRange -> isBeforeMin(dateRange.to()))
+        .filter(dateRange -> ElementValidator.isDateBeforeMin(dateRange.to(), min))
         .map(dateRange -> errorMessage(
                 data, getFieldId(dateRange.dateRangeId(), TO_SUFFIX), categoryId,
-                "Ange ett datum som är tidigast %s.".formatted(minDate())
+                ErrorMessageFactory.minDate(min)
             )
         )
         .toList();
@@ -167,10 +166,10 @@ public class ElementValidationDateRangeList implements ElementValidation {
   private List<ValidationError> getFromAfterMaxErrors(ElementData data,
       Optional<ElementId> categoryId, ElementValueDateRangeList dateRangeList) {
     return dateRangeList.dateRangeList().stream()
-        .filter(dateRange -> isAfterMax(dateRange.from()))
+        .filter(dateRange -> ElementValidator.isDateAfterMax(dateRange.from(), max))
         .map(dateRange -> errorMessage(
                 data, getFieldId(dateRange.dateRangeId(), FROM_SUFFIX), categoryId,
-                "Ange ett datum som är senast %s.".formatted(maxDate())
+                ErrorMessageFactory.maxDate(max)
             )
         )
         .toList();
@@ -179,10 +178,10 @@ public class ElementValidationDateRangeList implements ElementValidation {
   private List<ValidationError> getToAfterMaxErrors(ElementData data,
       Optional<ElementId> categoryId, ElementValueDateRangeList dateRangeList) {
     return dateRangeList.dateRangeList().stream()
-        .filter(dateRange -> isAfterMax(dateRange.to()))
+        .filter(dateRange -> ElementValidator.isDateAfterMax(dateRange.to(), max))
         .map(dateRange -> errorMessage(
                 data, getFieldId(dateRange.dateRangeId(), TO_SUFFIX), categoryId,
-                "Ange ett datum som är senast %s.".formatted(maxDate())
+                ErrorMessageFactory.maxDate(max)
             )
         )
         .toList();
@@ -201,14 +200,6 @@ public class ElementValidationDateRangeList implements ElementValidation {
         "Element data value %s is of wrong type".formatted(value.getClass())
     );
 
-  }
-
-  private boolean isBeforeMin(LocalDate value) {
-    return value != null && min != null && value.isBefore(minDate());
-  }
-
-  private boolean isAfterMax(LocalDate value) {
-    return value != null && max != null && value.isAfter(maxDate());
   }
 
   private boolean isDateRangeListFilled(ElementValueDateRangeList value) {
@@ -244,21 +235,13 @@ public class ElementValidationDateRangeList implements ElementValidation {
 
   private static ValidationError errorMessage(ElementData data,
       FieldId fieldId,
-      Optional<ElementId> categoryId, String message) {
+      Optional<ElementId> categoryId, ErrorMessage message) {
     return
         ValidationError.builder()
             .elementId(data.id())
             .fieldId(fieldId)
             .categoryId(categoryId.orElse(null))
-            .message(new ErrorMessage(message))
+            .message(message)
             .build();
-  }
-
-  private LocalDate minDate() {
-    return LocalDate.now(ZoneId.systemDefault()).plus(min);
-  }
-
-  private LocalDate maxDate() {
-    return LocalDate.now(ZoneId.systemDefault()).plus(max);
   }
 }

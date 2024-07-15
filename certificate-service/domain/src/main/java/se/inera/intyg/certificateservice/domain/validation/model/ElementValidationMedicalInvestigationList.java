@@ -1,7 +1,5 @@
 package se.inera.intyg.certificateservice.domain.validation.model;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +12,6 @@ import lombok.Getter;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalInvestigation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -74,7 +71,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
               data,
               medicalInvestigationList.list().get(0).id(),
               categoryId,
-              "Ange ett svar.")),
+              ErrorMessageFactory.missingText())),
           getRowEmptyFieldErrors(medicalInvestigationList.list().get(0), data, categoryId).stream()
       ).toList();
     }
@@ -87,12 +84,16 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
       Optional<ElementId> categoryId,
       ElementValueMedicalInvestigationList medicalInvestigationList) {
     return medicalInvestigationList.list().stream()
-        .filter(medicalInvestigation -> isAfterMax(medicalInvestigation.date().date()))
+        .filter(medicalInvestigation -> ElementValidator.isDateAfterMax(
+                medicalInvestigation.date().date(),
+                max
+            )
+        )
         .map(medicalInvestigation -> errorMessage(
             data,
             medicalInvestigation.date().dateId(),
             categoryId,
-            "Ange ett datum som är senast %s.".formatted(maxDate())
+            ErrorMessageFactory.maxDate(max)
         ))
         .toList();
   }
@@ -101,12 +102,16 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
       Optional<ElementId> categoryId,
       ElementValueMedicalInvestigationList medicalInvestigationList) {
     return medicalInvestigationList.list().stream()
-        .filter(medicalInvestigation -> isDateBeforeMin(medicalInvestigation.date()))
+        .filter(medicalInvestigation -> ElementValidator.isDateBeforeMin(
+                medicalInvestigation.date().date(),
+                min
+            )
+        )
         .map(medicalInvestigation -> errorMessage(
             data,
             medicalInvestigation.date().dateId(),
             categoryId,
-            "Ange ett datum som är tidigast %s.".formatted(minDate())
+            ErrorMessageFactory.minDate(min)
         ))
         .toList();
   }
@@ -115,13 +120,16 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
       Optional<ElementId> categoryId,
       ElementValueMedicalInvestigationList medicalInvestigationList) {
     return medicalInvestigationList.list().stream()
-        .filter(medicalInvestigation -> isTextOverLimit(
-            medicalInvestigation.informationSource().text()))
+        .filter(medicalInvestigation -> ElementValidator.isTextOverLimit(
+                medicalInvestigation.informationSource().text(),
+                limit
+            )
+        )
         .map(medicalInvestigation -> errorMessage(
             data,
             medicalInvestigation.informationSource().textId(),
             categoryId,
-            "Ange en text som inte är längre än %s.".formatted(limit)
+            ErrorMessageFactory.textLimit(limit)
         ))
         .toList();
   }
@@ -138,7 +146,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
           data,
           medicalInvestigationList.id(),
           categoryId,
-          "Fyll i fälten uppifrån och ned."
+          ErrorMessageFactory.fieldOrderDescending()
       ));
     }
 
@@ -183,7 +191,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
           data,
           medicalInvestigation.date().dateId(),
           categoryId,
-          "Ange ett datum."));
+          ErrorMessageFactory.missingDate()));
     }
 
     if (isTypeEmpty(medicalInvestigation)) {
@@ -191,7 +199,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
           data,
           medicalInvestigation.investigationType().codeId(),
           categoryId,
-          "Välj ett alternativ."));
+          ErrorMessageFactory.missingOption()));
     }
 
     if (isSourceEmpty(medicalInvestigation)) {
@@ -199,7 +207,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
           data,
           medicalInvestigation.informationSource().textId(),
           categoryId,
-          "Ange ett svar."));
+          ErrorMessageFactory.missingText()));
     }
     return errors;
   }
@@ -226,13 +234,11 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
   }
 
   private static boolean isSourceEmpty(MedicalInvestigation medicalInvestigation) {
-    return medicalInvestigation.informationSource().text() == null
-        || medicalInvestigation.informationSource().text().isEmpty();
+    return !ElementValidator.isTextDefined(medicalInvestigation.informationSource().text());
   }
 
   private static boolean isTypeEmpty(MedicalInvestigation medicalInvestigation) {
-    return medicalInvestigation.investigationType().code() == null
-        || medicalInvestigation.investigationType().code().isEmpty();
+    return !ElementValidator.isTextDefined(medicalInvestigation.investigationType().code());
   }
 
   private static boolean isDateEmpty(MedicalInvestigation medicalInvestigation) {
@@ -249,32 +255,16 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
     );
   }
 
-  private boolean isAfterMax(LocalDate value) {
-    return value != null && max != null && value.isAfter(maxDate());
-  }
-
-  private boolean isDateBeforeMin(ElementValueDate dateValue) {
-    return dateValue.date() != null && min != null && dateValue.date().isBefore(minDate());
-  }
-
   private ValidationError errorMessage(ElementData data,
       FieldId fieldId,
-      Optional<ElementId> categoryId, String message) {
+      Optional<ElementId> categoryId, ErrorMessage message) {
     return
         ValidationError.builder()
             .elementId(data.id())
             .fieldId(fieldId)
             .categoryId(categoryId.orElse(null))
-            .message(new ErrorMessage(message))
+            .message(message)
             .build();
-  }
-
-  private LocalDate minDate() {
-    return LocalDate.now(ZoneId.systemDefault()).plus(min);
-  }
-
-  private LocalDate maxDate() {
-    return LocalDate.now(ZoneId.systemDefault()).plus(max);
   }
 
   private void validateElementData(ElementData data) {
@@ -284,10 +274,6 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
     if (data.value() == null) {
       throw new IllegalArgumentException("Element data value is null");
     }
-  }
-
-  private boolean isTextOverLimit(String value) {
-    return limit != null && value != null && value.length() > limit;
   }
 
   private boolean isMedicalInvestigationNotInitialized(

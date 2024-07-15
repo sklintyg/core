@@ -1,18 +1,18 @@
 package se.inera.intyg.certificateservice.application.common.dto;
 
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.CREATE;
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.DELETE;
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.PRINT;
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.READ;
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.RENEW;
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.REPLACE;
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.REPLACE_CONTINUE;
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.REVOKE;
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.SEND;
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.SIGN;
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.UPDATE;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.CREATE;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.DELETE;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.PRINT;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.READ;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.RENEW;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.REPLACE;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.REPLACE_CONTINUE;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.REVOKE;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.SEND;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.SIGN;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.UPDATE;
 
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.message.model.MessageActionType;
 
 public enum ResourceLinkTypeDTO {

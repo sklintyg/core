@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 import lombok.With;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 
 @Value

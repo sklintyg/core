@@ -2,8 +2,6 @@ package se.inera.intyg.certificateservice.domain.action.certificate.model;
 
 import java.util.List;
 import java.util.Optional;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.model.ActionRule;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 

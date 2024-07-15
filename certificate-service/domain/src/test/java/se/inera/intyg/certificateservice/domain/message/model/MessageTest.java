@@ -8,10 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Nested;
@@ -19,16 +19,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionAnswerMessage;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionCannotComplement;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionComplement;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionForwardMessage;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionHandleMessage;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
+import se.inera.intyg.certificateservice.domain.action.message.model.MessageAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,282 +33,52 @@ class MessageTest {
   private static final Content CONTENT = new Content("content");
   @Mock
   private Certificate certificate;
-
   private static final ActionEvaluation ACTION_EVALUATION = ActionEvaluation.builder().build();
 
   @Nested
-  class ComplementTests {
-
-    private static final CertificateActionComplement CERTIFICATE_ACTION_COMPLEMENT = CertificateActionComplement.builder()
-        .certificateActionSpecification(
-            CertificateActionSpecification.builder()
-                .certificateActionType(CertificateActionType.COMPLEMENT)
-                .build()
-        )
-        .build();
+  class ActionsTests {
 
     @Test
-    void shallIncludeMessageActionComplement() {
-      final var message = Message.builder()
-          .type(MessageType.COMPLEMENT)
-          .status(MessageStatus.SENT)
-          .build();
+    void shallReturnListOfMessageActionLinks() {
+      final var messageActionLink = MessageActionLink.builder().build();
+      final var expectedResult = List.of(messageActionLink);
+      final var message = Message.builder().build();
 
-      doReturn(List.of(CERTIFICATE_ACTION_COMPLEMENT)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
+      final var certificateModel = mock(CertificateModel.class);
+      final var certificateAction = mock(CertificateAction.class);
+      final var messageAction = mock(MessageAction.class);
+      doReturn(List.of(certificateAction)).when(certificate)
+          .actionsInclude(Optional.of(ACTION_EVALUATION));
+      doReturn(certificateModel).when(certificate).certificateModel();
+      doReturn(List.of(messageAction)).when(certificateModel).messageActions();
+      doReturn(true).when(messageAction).evaluate(List.of(certificateAction), message);
+      doReturn(messageActionLink).when(messageAction).actionLink();
 
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertTrue(messageActions.contains(MessageActionFactory.complement()));
+      final var actualResult = message.actions(ACTION_EVALUATION, certificate);
+      assertEquals(expectedResult, actualResult);
     }
 
     @Test
-    void shallExcludeMessageActionComplementIfWrongType() {
-      final var message = Message.builder()
-          .type(MessageType.REMINDER)
-          .status(MessageStatus.SENT)
-          .build();
+    void shallFilterListOfMessageActionLinksIfEvaluateReturnsFalse() {
+      final var messageActionLink = MessageActionLink.builder().build();
+      final var expectedResult = List.of(messageActionLink);
+      final var message = Message.builder().build();
 
-      doReturn(List.of(CERTIFICATE_ACTION_COMPLEMENT)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
+      final var certificateModel = mock(CertificateModel.class);
+      final var certificateAction = mock(CertificateAction.class);
+      final var messageActionValid = mock(MessageAction.class);
+      final var messageActionFalse = mock(MessageAction.class);
+      doReturn(List.of(certificateAction)).when(certificate)
+          .actionsInclude(Optional.of(ACTION_EVALUATION));
+      doReturn(certificateModel).when(certificate).certificateModel();
+      doReturn(List.of(messageActionValid, messageActionFalse)).when(certificateModel)
+          .messageActions();
+      doReturn(true).when(messageActionValid).evaluate(List.of(certificateAction), message);
+      doReturn(false).when(messageActionFalse).evaluate(List.of(certificateAction), message);
+      doReturn(messageActionLink).when(messageActionValid).actionLink();
 
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.complement()));
-    }
-
-    @Test
-    void shallExcludeMessageActionComplementIfHandled() {
-      final var message = Message.builder()
-          .type(MessageType.COMPLEMENT)
-          .status(MessageStatus.HANDLED)
-          .build();
-
-      doReturn(List.of(CERTIFICATE_ACTION_COMPLEMENT)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.complement()));
-    }
-
-    @Test
-    void shallExcludeMessageActionComplementIfCertificateActionComplementIsMissing() {
-      final var message = Message.builder()
-          .type(MessageType.COMPLEMENT)
-          .status(MessageStatus.SENT)
-          .build();
-
-      doReturn(Collections.emptyList()).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.complement()));
-    }
-  }
-
-  @Nested
-  class CannotComplementTests {
-
-    private static final CertificateActionCannotComplement CERTIFICATE_ACTION_CANNOT_COMPLEMENT =
-        CertificateActionCannotComplement.builder()
-            .certificateActionSpecification(
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.CANNOT_COMPLEMENT)
-                    .build()
-            )
-            .build();
-
-    @Test
-    void shallIncludeMessageActionCannotComplement() {
-      final var message = Message.builder()
-          .type(MessageType.COMPLEMENT)
-          .status(MessageStatus.SENT)
-          .build();
-
-      doReturn(List.of(CERTIFICATE_ACTION_CANNOT_COMPLEMENT)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertTrue(messageActions.contains(MessageActionFactory.cannotComplement()));
-    }
-
-    @Test
-    void shallExcludeMessageActionCannotComplementIfWrongType() {
-      final var message = Message.builder()
-          .type(MessageType.REMINDER)
-          .status(MessageStatus.SENT)
-          .build();
-
-      doReturn(List.of(CERTIFICATE_ACTION_CANNOT_COMPLEMENT)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.cannotComplement()));
-    }
-
-    @Test
-    void shallExcludeMessageActionCannotComplementIfHandled() {
-      final var message = Message.builder()
-          .type(MessageType.COMPLEMENT)
-          .status(MessageStatus.HANDLED)
-          .build();
-
-      doReturn(List.of(CERTIFICATE_ACTION_CANNOT_COMPLEMENT)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.cannotComplement()));
-    }
-
-    @Test
-    void shallExcludeMessageActionCannotComplementIfCertificateActionComplementIsMissing() {
-      final var message = Message.builder()
-          .type(MessageType.COMPLEMENT)
-          .status(MessageStatus.SENT)
-          .build();
-
-      doReturn(Collections.emptyList()).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.cannotComplement()));
-    }
-  }
-
-  @Nested
-  class HandleComplementTests {
-
-    private static final CertificateActionCannotComplement CERTIFICATE_ACTION_HANDLE_COMPLEMENT =
-        CertificateActionCannotComplement.builder()
-            .certificateActionSpecification(
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.HANDLE_COMPLEMENT)
-                    .build()
-            )
-            .build();
-
-    @Test
-    void shallIncludeMessageActionCannotComplement() {
-      final var message = Message.builder()
-          .type(MessageType.COMPLEMENT)
-          .status(MessageStatus.SENT)
-          .build();
-
-      doReturn(List.of(CERTIFICATE_ACTION_HANDLE_COMPLEMENT)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertTrue(messageActions.contains(MessageActionFactory.handleComplement()));
-    }
-
-    @Test
-    void shallExcludeMessageActionCannotComplementIfWrongType() {
-      final var message = Message.builder()
-          .type(MessageType.REMINDER)
-          .status(MessageStatus.SENT)
-          .build();
-
-      doReturn(List.of(CERTIFICATE_ACTION_HANDLE_COMPLEMENT)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.handleComplement()));
-    }
-
-    @Test
-    void shallExcludeMessageActionCannotComplementIfHandled() {
-      final var message = Message.builder()
-          .type(MessageType.COMPLEMENT)
-          .status(MessageStatus.HANDLED)
-          .build();
-
-      doReturn(List.of(CERTIFICATE_ACTION_HANDLE_COMPLEMENT)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.handleComplement()));
-    }
-
-    @Test
-    void shallExcludeMessageActionCannotComplementIfCertificateActionComplementIsMissing() {
-      final var message = Message.builder()
-          .type(MessageType.COMPLEMENT)
-          .status(MessageStatus.SENT)
-          .build();
-
-      doReturn(Collections.emptyList()).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.handleComplement()));
-    }
-  }
-
-  @Nested
-  class ForwardMessageTests {
-
-    private static final CertificateActionForwardMessage CERTIFICATE_ACTION_FORWARD =
-        CertificateActionForwardMessage.builder()
-            .certificateActionSpecification(
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.FORWARD_MESSAGE)
-                    .build()
-            )
-            .build();
-
-    @Test
-    void shallIncludeMessageActionForward() {
-      final var message = Message.builder()
-          .type(MessageType.COMPLEMENT)
-          .status(MessageStatus.SENT)
-          .build();
-
-      doReturn(List.of(CERTIFICATE_ACTION_FORWARD)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertTrue(messageActions.contains(MessageActionFactory.forward()));
-    }
-
-    @Test
-    void shallExcludeMessageActionForwardIfHandled() {
-      final var message = Message.builder()
-          .type(MessageType.REMINDER)
-          .status(MessageStatus.HANDLED)
-          .build();
-
-      doReturn(List.of(CERTIFICATE_ACTION_FORWARD)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.forward()));
-    }
-
-    @Test
-    void shallExcludeMessageActionForwardIfCertificateActionComplementIsMissing() {
-      final var message = Message.builder()
-          .type(MessageType.COMPLEMENT)
-          .status(MessageStatus.SENT)
-          .build();
-
-      doReturn(Collections.emptyList()).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.forward()));
+      final var actualResult = message.actions(ACTION_EVALUATION, certificate);
+      assertEquals(expectedResult, actualResult);
     }
   }
 
@@ -346,170 +112,6 @@ class MessageTest {
       final var modifiedBefore = unhandledMessage.modified();
       unhandledMessage.handle();
       assertEquals(modifiedBefore, unhandledMessage.modified());
-    }
-  }
-
-  @Nested
-  class HandleAdministrativeMessage {
-
-    private static final CertificateActionHandleMessage CERTIFICATE_ACTION_HANDLE_MESSAGE =
-        CertificateActionHandleMessage.builder()
-            .certificateActionSpecification(
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.HANDLE_MESSAGE)
-                    .build()
-            )
-            .build();
-
-    @Test
-    void shallIncludeMessageActionHandleMessageWhenActionAvailable() {
-      final var message = Message.builder()
-          .type(MessageType.CONTACT)
-          .status(MessageStatus.SENT)
-          .build();
-
-      doReturn(List.of(CERTIFICATE_ACTION_HANDLE_MESSAGE)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertTrue(messageActions.contains(MessageActionFactory.handleMessage()));
-    }
-
-    @Test
-    void shallExcludeMessageActionHandleMessageWhenActionNotAvailable() {
-      final var message = Message.builder()
-          .type(MessageType.CONTACT)
-          .status(MessageStatus.SENT)
-          .build();
-
-      doReturn(List.of()).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.handleMessage()));
-    }
-
-    @Test
-    void shallExcludeMessageActionHandleMessageWhenNotAdministrativeMessage() {
-      final var message = Message.builder()
-          .type(MessageType.COMPLEMENT)
-          .status(MessageStatus.SENT)
-          .build();
-
-      doReturn(List.of(CERTIFICATE_ACTION_HANDLE_MESSAGE)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.handleMessage()));
-    }
-  }
-
-  @Nested
-  class AnswerMessageTests {
-
-    private static final CertificateActionAnswerMessage CERTIFICATE_ACTION_ANSWER =
-        CertificateActionAnswerMessage.builder()
-            .certificateActionSpecification(
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.ANSWER_MESSAGE)
-                    .build()
-            )
-            .build();
-
-    @Test
-    void shallIncludeMessageActionAnswer() {
-      final var message = Message.builder()
-          .type(MessageType.CONTACT)
-          .status(MessageStatus.SENT)
-          .build();
-
-      doReturn(List.of(CERTIFICATE_ACTION_ANSWER)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertTrue(messageActions.contains(MessageActionFactory.answer()));
-    }
-
-    @Test
-    void shallExcludeMessageActionAnswerIfAuthoredStaffIsNotNull() {
-      final var message = Message.builder()
-          .type(MessageType.CONTACT)
-          .authoredStaff(AJLA_DOKTOR)
-          .status(MessageStatus.SENT)
-          .build();
-
-      doReturn(List.of(CERTIFICATE_ACTION_ANSWER)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.answer()));
-    }
-
-    @Test
-    void shallExcludeMessageActionAnswerIfTypeIsComplement() {
-      final var message = Message.builder()
-          .type(MessageType.COMPLEMENT)
-          .status(MessageStatus.SENT)
-          .build();
-
-      doReturn(List.of(CERTIFICATE_ACTION_ANSWER)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.answer()));
-    }
-
-    @Test
-    void shallExcludeMessageActionAnswer() {
-      final var message = Message.builder()
-          .type(MessageType.CONTACT)
-          .status(MessageStatus.SENT)
-          .build();
-
-      doReturn(Collections.emptyList()).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.answer()));
-    }
-
-    @Test
-    void shallExcludeMessageActionAnswerIfAnswerAlreadyExists() {
-      final var message = Message.builder()
-          .type(MessageType.CONTACT)
-          .status(MessageStatus.SENT)
-          .answer(Answer.builder().build())
-          .build();
-
-      doReturn(List.of(CERTIFICATE_ACTION_ANSWER)).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.answer()));
-    }
-
-    @Test
-    void shallExcludeMessageActionAnswerIfMessageIsHandled() {
-      final var message = Message.builder()
-          .type(MessageType.CONTACT)
-          .status(MessageStatus.HANDLED)
-          .answer(Answer.builder().build())
-          .build();
-
-      doReturn(Collections.emptyList()).when(certificate).actionsInclude(
-          Optional.of(ACTION_EVALUATION)
-      );
-
-      final var messageActions = message.actions(ACTION_EVALUATION, certificate);
-      assertFalse(messageActions.contains(MessageActionFactory.answer()));
     }
   }
 

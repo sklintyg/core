@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -36,6 +36,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.message.model.MessageActionType;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
@@ -381,6 +382,59 @@ class CertificateModelFactoryFK7472Test {
     final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertEquals(SCHEMATRON_PATH, certificateModel.schematronPath());
+  }
+
+  @Nested
+  class MessageActionSpecificationsTests {
+
+
+    @Test
+    void shallIncludeMessageActionHandleComplement() {
+      final var expectedType = MessageActionType.HANDLE_COMPLEMENT;
+
+      final var certificateModel = certificateModelFactoryFK7472.create();
+
+      assertTrue(certificateModel.messageActionSpecifications().stream().anyMatch(
+              actionSpecification -> expectedType.equals(actionSpecification.messageActionType())
+          ),
+          "Expected type: %s".formatted(expectedType));
+    }
+
+    @Test
+    void shallIncludeMessageActionCannotComplement() {
+      final var expectedType = MessageActionType.CANNOT_COMPLEMENT;
+
+      final var certificateModel = certificateModelFactoryFK7472.create();
+
+      assertTrue(certificateModel.messageActionSpecifications().stream().anyMatch(
+              actionSpecification -> expectedType.equals(actionSpecification.messageActionType())
+          ),
+          "Expected type: %s".formatted(expectedType));
+    }
+
+    @Test
+    void shallIncludeMessageActionComplement() {
+      final var expectedType = MessageActionType.COMPLEMENT;
+
+      final var certificateModel = certificateModelFactoryFK7472.create();
+
+      assertTrue(certificateModel.messageActionSpecifications().stream().anyMatch(
+              actionSpecification -> expectedType.equals(actionSpecification.messageActionType())
+          ),
+          "Expected type: %s".formatted(expectedType));
+    }
+
+    @Test
+    void shallIncludeMessageActionForward() {
+      final var expectedType = MessageActionType.FORWARD;
+
+      final var certificateModel = certificateModelFactoryFK7472.create();
+
+      assertTrue(certificateModel.messageActionSpecifications().stream().anyMatch(
+              actionSpecification -> expectedType.equals(actionSpecification.messageActionType())
+          ),
+          "Expected type: %s".formatted(expectedType));
+    }
   }
 
   @Nested

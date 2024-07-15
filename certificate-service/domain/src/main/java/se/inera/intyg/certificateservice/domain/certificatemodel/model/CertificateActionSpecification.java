@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Value;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 
 @Value
