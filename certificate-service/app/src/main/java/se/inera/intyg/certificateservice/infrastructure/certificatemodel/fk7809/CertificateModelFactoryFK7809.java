@@ -384,6 +384,10 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
+                    .build(),
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.RESPONSIBLE_ISSUER)
+                    .allowedRoles(List.of(Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
                     .build()
             )
         )

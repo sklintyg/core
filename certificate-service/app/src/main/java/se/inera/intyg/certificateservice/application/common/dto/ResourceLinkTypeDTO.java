@@ -66,7 +66,8 @@ public enum ResourceLinkTypeDTO {
   SRS_MINIMIZED_VIEW,
   SEND_AFTER_SIGN_CERTIFICATE,
   CANNOT_COMPLEMENT_CERTIFICATE_ONLY_MESSAGE,
-  QUESTIONS_ADMINISTRATIVE;
+  QUESTIONS_ADMINISTRATIVE,
+  RESPONSIBLE_ISSUER;
 
   public static ResourceLinkTypeDTO toResourceLinkType(CertificateActionType type) {
     return switch (type) {
@@ -91,6 +92,7 @@ public enum ResourceLinkTypeDTO {
       case CREATE_MESSAGE -> CREATE_QUESTIONS;
       case ANSWER_MESSAGE -> ANSWER_QUESTION;
       case FORWARD_CERTIFICATE -> FORWARD_CERTIFICATE;
+      case RESPONSIBLE_ISSUER -> RESPONSIBLE_ISSUER;
       case RECEIVE_COMPLEMENT, RECEIVE_ANSWER, RECEIVE_QUESTION, RECEIVE_REMINDER, SAVE_MESSAGE,
            DELETE_MESSAGE, SEND_MESSAGE, SAVE_ANSWER, DELETE_ANSWER, SEND_ANSWER ->
           throw new IllegalArgumentException("%s is not a valid type!".formatted(type));
@@ -120,6 +122,7 @@ public enum ResourceLinkTypeDTO {
       case REPLACE_CERTIFICATE -> REPLACE;
       case REPLACE_CERTIFICATE_CONTINUE -> REPLACE_CONTINUE;
       case RENEW_CERTIFICATE -> RENEW;
+      case RESPONSIBLE_ISSUER -> CertificateActionType.RESPONSIBLE_ISSUER;
       default -> throw new IllegalArgumentException(
           "Cannot convert %s to certificate action type!".formatted(this)
       );

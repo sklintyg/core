@@ -587,6 +587,20 @@ class CertificateModelFactoryFK7809Test {
           ),
           "Expected type: %s".formatted(expectedType));
     }
+
+    @Test
+    void shallIncludeCertificateActionResponsibleIssuer() {
+      final var expectedSpecification = CertificateActionSpecification.builder()
+          .certificateActionType(CertificateActionType.RESPONSIBLE_ISSUER)
+          .allowedRoles(List.of(Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
+          .build();
+
+      final var certificateModel = certificateModelFactoryFK7809.create();
+
+      assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
+              expectedSpecification::equals),
+          "Expected type: %s".formatted(expectedSpecification));
+    }
   }
 
   @Nested
