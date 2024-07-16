@@ -17,8 +17,8 @@ public class GetPatientCertificatesWithQARequest {
   PersonIdDTO personId;
   List<String> unitIds;
   String careProviderId;
-  LocalDateTime fromDate;
-  LocalDateTime toDate;
+  LocalDateTime from;
+  LocalDateTime to;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class GetPatientCertificatesWithQARequestBuilder {
