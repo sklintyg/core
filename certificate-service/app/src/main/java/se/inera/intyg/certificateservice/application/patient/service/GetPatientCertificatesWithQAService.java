@@ -20,7 +20,10 @@ public class GetPatientCertificatesWithQAService {
     requestValidator.validate(request);
     final var certificatesWithQARequest = certificatesWithQARequestFactory.create(request);
     final var certificates = getPatientCertificatesWithQADomainService.get(
-        certificatesWithQARequest);
-    return GetPatientCertificatesWithQAResponse.builder().build();
+        certificatesWithQARequest
+    );
+
+    return GetPatientCertificatesWithQAResponse.builder()
+        .build();
   }
 }
