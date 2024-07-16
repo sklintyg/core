@@ -158,15 +158,15 @@ public class ValidationUtil {
     }
   }
 
-  public static void validateCitizenId(PersonIdDTO citizenId) {
-    if (citizenId == null) {
-      throw new IllegalArgumentException("Required parameter missing: CitizenId");
+  public static void validatePersonId(PersonIdDTO personId) {
+    if (personId == null) {
+      throw new IllegalArgumentException("Required parameter missing: PersonId");
     }
-    if (citizenId.getId() == null || citizenId.getId().isBlank()) {
-      throw new IllegalArgumentException("Required parameter missing: CitizenId.id");
+    if (personId.getId() == null || personId.getId().isBlank()) {
+      throw new IllegalArgumentException("Required parameter missing: PersonId.id");
     }
-    if (citizenId.getType() == null) {
-      throw new IllegalArgumentException("Required parameter missing: CitizenId.type");
+    if (personId.getType() == null) {
+      throw new IllegalArgumentException("Required parameter missing: PersonId.type");
     }
   }
 
