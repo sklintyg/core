@@ -48,6 +48,4 @@ public class CertificateInternalApiController {
       @PathVariable("certificateId") String certificateId) {
     return getCertificateInternalService.get(certificateId);
   }
-
-
 }
