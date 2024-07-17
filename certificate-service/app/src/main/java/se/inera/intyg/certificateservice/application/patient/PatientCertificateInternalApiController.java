@@ -9,12 +9,12 @@ import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCerti
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesWithQAResponse;
 import se.inera.intyg.certificateservice.application.patient.service.GetPatientCertificatesWithQAService;
 
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/internalapi/patient/certificates")
 public class PatientCertificateInternalApiController {
 
-  GetPatientCertificatesWithQAService getPatientCertificatesWithQAService;
+  private final GetPatientCertificatesWithQAService getPatientCertificatesWithQAService;
 
   @PostMapping("/qa")
   GetPatientCertificatesWithQAResponse getPatientCertificatesWithQA(

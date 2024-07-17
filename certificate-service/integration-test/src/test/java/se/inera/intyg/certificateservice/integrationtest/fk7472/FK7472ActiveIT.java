@@ -32,6 +32,7 @@ import se.inera.intyg.certificateservice.integrationtest.AccessLevelsDeepIntegra
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsSVODIT;
 import se.inera.intyg.certificateservice.integrationtest.AnswerComplementIT;
 import se.inera.intyg.certificateservice.integrationtest.CertificateFromMessageIT;
+import se.inera.intyg.certificateservice.integrationtest.CertificatesWithQAForCareIT;
 import se.inera.intyg.certificateservice.integrationtest.ComplementIT;
 import se.inera.intyg.certificateservice.integrationtest.CreateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.DeleteCertificateIT;
@@ -696,6 +697,26 @@ public class FK7472ActiveIT {
     @Override
     protected String typeVersion() {
       return ACTIVE_VERSION;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "ListCertificatesForCareWithQA")
+  class IncludeCerificatesWithQA extends CertificatesWithQAForCareIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+
+    @Override
+    protected boolean canRecieveQuestions() {
+      return false;
     }
   }
 }

@@ -70,13 +70,13 @@ public class CertificateEntitySpecificationFactory {
   public Specification<CertificateEntity> create(CertificatesWithQARequest certificatesRequest) {
     //TODO: If from or two is provided in the request, they should be used to find certificates with events
     Specification<CertificateEntity> specification = where(null);
-    if (certificatesRequest.careProviderId() != null) {
-      specification = specification.and(
-          equalsCareProvider(certificatesRequest.careProviderId())
-      );
-    } else if (certificatesRequest.unitIds() != null) {
+    if (certificatesRequest.unitIds() != null) {
       specification = specification.and(
           issuedOnUnitIdIn(certificatesRequest.unitIds())
+      );
+    } else if (certificatesRequest.careProviderId() != null) {
+      specification = specification.and(
+          equalsCareProvider(certificatesRequest.careProviderId())
       );
     }
 
