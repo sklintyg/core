@@ -7,7 +7,6 @@ import jakarta.xml.bind.JAXBContext;
 import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.function.Function;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import lombok.RequiredArgsConstructor;
@@ -207,35 +206,6 @@ public class XmlGeneratorMessageV4 implements XmlGeneratorMessage {
     } catch (Exception e) {
       throw new IllegalStateException(e);
     }
-  }
-
-  private static <T, U> String getStringValue(T answer, Function<T, String> answerFunction,
-      U message,
-      Function<U, String> messageFunction) {
-    if (answer != null) {
-      return answerFunction.apply(answer);
-    }
-
-    return messageFunction.apply(message);
-  }
-
-  private static <T, U> LocalDateTime getDateValue(T answer,
-      Function<T, LocalDateTime> answerFunction, U message,
-      Function<U, LocalDateTime> messageFunction) {
-    if (answer != null) {
-      return answerFunction.apply(answer);
-    }
-
-    return messageFunction.apply(message);
-  }
-
-  private static <T, U> Staff getStaffValue(T answer,
-      Function<T, Staff> answerFunction, U message, Function<U, Staff> messageFunction) {
-    if (answer != null) {
-      return answerFunction.apply(answer);
-    }
-
-    return messageFunction.apply(message);
   }
 }
 

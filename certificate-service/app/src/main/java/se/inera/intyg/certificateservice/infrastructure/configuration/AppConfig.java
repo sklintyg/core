@@ -23,6 +23,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.SignCertific
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ValidateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
+import se.inera.intyg.certificateservice.domain.certificate.service.XmlGeneratorCertificatesForCareWithQA;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.citizen.service.GetCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.citizen.service.PrintCitizenCertificateDomainService;
@@ -51,6 +52,7 @@ import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificates
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesInfoDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitMessagesDomainService;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorCertificateV4;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorCertificateWithQAV3;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorValue;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.message.XmlGeneratorMessageV4;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.validation.SchemaValidatorV4;
@@ -349,8 +351,16 @@ public class AppConfig {
   }
 
   @Bean
+  public XmlGeneratorCertificateWithQAV3 xmlGeneratorCertificateWithQAV3(
+      XmlGeneratorValue xmlGeneratorValue) {
+    return new XmlGeneratorCertificateWithQAV3(xmlGeneratorValue);
+  }
+
+  @Bean
   public GetPatientCertificatesWithQADomainService getPatientCertificatesWithQADomainService(
-      CertificateRepository certificateRepository) {
-    return new GetPatientCertificatesWithQADomainService(certificateRepository);
+      CertificateRepository certificateRepository,
+      XmlGeneratorCertificatesForCareWithQA xmlGeneratorCertificatesForCareWithQA) {
+    return new GetPatientCertificatesWithQADomainService(certificateRepository,
+        xmlGeneratorCertificatesForCareWithQA);
   }
 }

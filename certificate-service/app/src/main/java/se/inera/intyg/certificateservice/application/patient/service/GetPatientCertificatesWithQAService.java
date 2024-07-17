@@ -19,11 +19,12 @@ public class GetPatientCertificatesWithQAService {
   public GetPatientCertificatesWithQAResponse get(GetPatientCertificatesWithQARequest request) {
     requestValidator.validate(request);
     final var certificatesWithQARequest = certificatesWithQARequestFactory.create(request);
-    final var certificates = getPatientCertificatesWithQADomainService.get(
+    final var certificatesXml = getPatientCertificatesWithQADomainService.get(
         certificatesWithQARequest
     );
 
     return GetPatientCertificatesWithQAResponse.builder()
+        .list(certificatesXml.base64())
         .build();
   }
 }

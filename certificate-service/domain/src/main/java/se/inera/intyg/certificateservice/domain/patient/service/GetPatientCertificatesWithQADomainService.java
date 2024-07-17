@@ -1,20 +1,23 @@
 package se.inera.intyg.certificateservice.domain.patient.service;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.certificate.service.XmlGeneratorCertificatesForCareWithQA;
 import se.inera.intyg.certificateservice.domain.patient.model.CertificatesWithQARequest;
 
 @RequiredArgsConstructor
 public class GetPatientCertificatesWithQADomainService {
 
   private final CertificateRepository certificateRepository;
+  private final XmlGeneratorCertificatesForCareWithQA xmlGeneratorCertificatesForCareWithQA;
 
-  public List<Certificate> get(CertificatesWithQARequest request) {
-    return certificateRepository.findByCertificatesWithQARequest(
+  public Xml get(CertificatesWithQARequest request) {
+    final var certificates = certificateRepository.findByCertificatesWithQARequest(
         request
     );
+
+    return xmlGeneratorCertificatesForCareWithQA.generate(certificates);
   }
 }
 
