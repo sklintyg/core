@@ -14,18 +14,19 @@ public class PdfElementValueGenerator {
 
   private final List<PdfElementValue> pdfElementValues;
 
-  public List<PdfField> getFields(Certificate certificate) {
+  public List<PdfField> generate(Certificate certificate) {
     return certificate.certificateModel().pdfSpecification().pdfQuestionFields()
         .stream()
         .map(
-            questions -> generate(certificate, questions.questionId(), questions.pdfFieldId(),
-                questions.pdfValueType())
+            pdfQuestion -> getFields(certificate, pdfQuestion.questionId(),
+                pdfQuestion.pdfFieldId().id(),
+                pdfQuestion.pdfValueType())
         )
         .flatMap(List::stream)
         .toList();
   }
 
-  private List<PdfField> generate(Certificate certificate, ElementId questionId, String pdfFieldId,
+  private List<PdfField> getFields(Certificate certificate, ElementId questionId, String pdfFieldId,
       PdfValueType pdfValueType) {
     return pdfElementValues.stream()
         .filter(types -> types.getType().equals(pdfValueType))

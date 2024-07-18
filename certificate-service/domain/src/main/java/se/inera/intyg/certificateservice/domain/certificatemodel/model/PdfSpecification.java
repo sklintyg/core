@@ -9,9 +9,9 @@ import lombok.Value;
 public class PdfSpecification {
 
   CertificateType certificateType;
-  int mcid;
-  int signatureWithAddressTagIndex;
-  int signatureWithoutAddressTagIndex;
-  String patiendIdFieldId;
+  Mcid mcid;
+  PdfTagIndex signatureWithAddressTagIndex;
+  PdfTagIndex signatureWithoutAddressTagIndex;
+  PdfFieldId patientIdFieldId;
   List<PdfQuestionField> pdfQuestionFields;
 }

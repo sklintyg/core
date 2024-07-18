@@ -30,7 +30,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfQuestionField;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
@@ -476,11 +478,11 @@ class CertificateModelFactoryFK7210Test {
 
       @Test
       void shallIncludePatientFieldId() {
-        final var expected = "form1[0].#subform[0].flt_txtPersonNr[0]";
+        final var expected = new PdfFieldId("form1[0].#subform[0].flt_txtPersonNr[0]");
 
         final var certificateModel = certificateModelFactoryFK7210.create();
 
-        assertEquals(expected, certificateModel.pdfSpecification().patiendIdFieldId());
+        assertEquals(expected, certificateModel.pdfSpecification().patientIdFieldId());
       }
 
       @Test
@@ -488,12 +490,12 @@ class CertificateModelFactoryFK7210Test {
         final var expected = 100;
         final var certificateModel = certificateModelFactoryFK7210.create();
 
-        assertEquals(expected, certificateModel.pdfSpecification().mcid());
+        assertEquals(expected, certificateModel.pdfSpecification().mcid().value());
       }
 
       @Test
       void shallIncludeSignatureWithAddressTagIndex() {
-        final var expected = 15;
+        final var expected = new PdfTagIndex(15);
         final var certificateModel = certificateModelFactoryFK7210.create();
 
         assertEquals(expected, certificateModel.pdfSpecification().signatureWithAddressTagIndex());
@@ -501,7 +503,7 @@ class CertificateModelFactoryFK7210Test {
 
       @Test
       void shallIncludeSignatureWithoutAddressTagIndex() {
-        final var expected = 7;
+        final var expected = new PdfTagIndex(7);
         final var certificateModel = certificateModelFactoryFK7210.create();
 
         assertEquals(expected,
@@ -513,7 +515,7 @@ class CertificateModelFactoryFK7210Test {
         final var expected = List.of(
             PdfQuestionField.builder()
                 .questionId(new ElementId("54"))
-                .pdfFieldId("form1[0].#subform[0].flt_dat[0]")
+                .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_dat[0]"))
                 .pdfValueType(PdfValueType.DATE)
                 .build()
         );

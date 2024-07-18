@@ -60,9 +60,10 @@ public class CertificatePdfFillService {
 
   private static int getSignatureTagIndex(Certificate certificate, boolean isCitizenFormat) {
     if (isCitizenFormat) {
-      return certificate.certificateModel().pdfSpecification().signatureWithoutAddressTagIndex();
+      return certificate.certificateModel().pdfSpecification().signatureWithoutAddressTagIndex()
+          .value();
     }
-    return certificate.certificateModel().pdfSpecification().signatureWithAddressTagIndex();
+    return certificate.certificateModel().pdfSpecification().signatureWithAddressTagIndex().value();
   }
 
   private static boolean includeAddress(Certificate certificate, boolean isCitizenFormat) {
@@ -77,16 +78,17 @@ public class CertificatePdfFillService {
     if (certificate.status() == Status.SIGNED) {
       setFieldValues(document, pdfSignatureValueGenerator.generate(certificate));
     }
-    setFieldValues(document, pdfElementValueGenerator.getFields(certificate));
+    setFieldValues(document, pdfElementValueGenerator.generate(certificate));
     setFieldValues(document, pdfUnitValueGenerator.generate(certificate));
     setFieldValues(document, pdfPatientValueGenerator.generate(certificate,
-        certificate.certificateModel().pdfSpecification().patiendIdFieldId()));
+        certificate.certificateModel().pdfSpecification().patientIdFieldId().id()));
   }
 
   private void addTexts(Certificate certificate, String additionalInfoText, PDDocument document,
       boolean isCitizenFormat)
       throws IOException {
-    final var mcid = new AtomicInteger(certificate.certificateModel().pdfSpecification().mcid());
+    final var mcid = new AtomicInteger(
+        certificate.certificateModel().pdfSpecification().mcid().value());
 
     setDraftWatermark(document, certificate, mcid);
     setSignatureText(

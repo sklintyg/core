@@ -94,7 +94,7 @@ class CertificatePdfFillServiceTest {
     when(pdfUnitValueGenerator.generate(any(Certificate.class)))
         .thenReturn(List.of(UNIT_FIELD));
 
-    when(pdfElementValueGenerator.getFields(any(Certificate.class)))
+    when(pdfElementValueGenerator.generate(any(Certificate.class)))
         .thenReturn(List.of(SYMPTOM_FIELD));
   }
 

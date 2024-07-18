@@ -8,6 +8,6 @@ import lombok.Value;
 public class PdfQuestionField {
 
   ElementId questionId;
-  String pdfFieldId;
+  PdfFieldId pdfFieldId;
   PdfValueType pdfValueType;
 }

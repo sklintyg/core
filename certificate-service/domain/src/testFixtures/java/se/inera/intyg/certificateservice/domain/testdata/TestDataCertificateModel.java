@@ -10,19 +10,25 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_FODELSEDATUM_FIELD_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_MCID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_PATH_NO_ADDRESS;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_PATIENT_ID_FIELD_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_QUESTION_BERAKNAT_FODELSEDATUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_MCID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_PATH_NO_ADDRESS;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_PATIENT_ID_FIELD_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_PERIOD_FIELD_ID_PREFIX;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_SYMPTOM_FIELD_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_QUESTION_PERIOD_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_QUESTION_SYMPTOM_ID;
@@ -69,10 +75,10 @@ public class TestDataCertificateModel {
         .recipient(FK_RECIPIENT)
         .pdfSpecification(PdfSpecification.builder()
             .certificateType(FK7210_TYPE)
-            .patiendIdFieldId(FK7210_PDF_PATIENT_ID_FIELD_ID)
-            .mcid(100)
-            .signatureWithAddressTagIndex(15)
-            .signatureWithoutAddressTagIndex(7)
+            .patientIdFieldId(FK7210_PDF_PATIENT_ID_FIELD_ID)
+            .mcid(FK7210_PDF_MCID)
+            .signatureWithAddressTagIndex(FK7210_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
+            .signatureWithoutAddressTagIndex(FK7210_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
             .pdfQuestionFields(
                 List.of(
                     PdfQuestionField.builder()
@@ -120,10 +126,10 @@ public class TestDataCertificateModel {
         .pdfNoAddressTemplatePath(FK7472_PDF_PATH_NO_ADDRESS)
         .pdfSpecification(PdfSpecification.builder()
             .certificateType(FK7472_TYPE)
-            .patiendIdFieldId(FK7472_PDF_PATIENT_ID_FIELD_ID)
-            .mcid(120)
-            .signatureWithAddressTagIndex(50)
-            .signatureWithoutAddressTagIndex(42)
+            .patientIdFieldId(FK7472_PDF_PATIENT_ID_FIELD_ID)
+            .mcid(FK7472_PDF_MCID)
+            .signatureWithAddressTagIndex(FK7472_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
+            .signatureWithoutAddressTagIndex(FK7472_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
             .pdfQuestionFields(
                 List.of(
                     PdfQuestionField.builder()
