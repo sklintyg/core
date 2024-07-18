@@ -21,7 +21,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.Mcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfQuestionField;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
@@ -75,6 +81,15 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
 
   public static final String PDF_FK_7472_PDF = "fk7472/pdf/fk7472_v1.pdf";
   public static final String PDF_NO_ADDRESS_FK_7472_PDF = "fk7472/pdf/fk7472_v1_no_address.pdf";
+  public static final PdfFieldId PDF_PATIENT_ID_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtPersonNrBarn[0]");
+  public static final PdfFieldId PDF_SYMPTOM_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiagnos[0]");
+  public static final PdfFieldId PDF_PERIOD_FIELD_ID_PREFIX = new PdfFieldId(
+      "form1[0].#subform[0]");
+  private static final Mcid PDF_MCID = new Mcid(120);
+  private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(50);
+  private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(42);
 
   @Override
   public CertificateModel create() {
@@ -202,6 +217,27 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
         .pdfTemplatePath(PDF_FK_7472_PDF)
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7472_PDF)
         .schematronPath(SCHEMATRON_PATH)
+        .pdfSpecification(PdfSpecification.builder()
+            .certificateType(FK7472_V1_0.type())
+            .patientIdFieldId(PDF_PATIENT_ID_FIELD_ID)
+            .mcid(PDF_MCID)
+            .signatureWithAddressTagIndex(PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
+            .signatureWithoutAddressTagIndex(PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
+            .pdfQuestionFields(
+                List.of(
+                    PdfQuestionField.builder()
+                        .questionId(QUESTION_SYMPTOM_ID)
+                        .pdfFieldId(PDF_SYMPTOM_FIELD_ID)
+                        .pdfValueType(PdfValueType.TEXT)
+                        .build(),
+                    PdfQuestionField.builder()
+                        .questionId(QUESTION_PERIOD_ID)
+                        .pdfFieldId(PDF_PERIOD_FIELD_ID_PREFIX)
+                        .pdfValueType(PdfValueType.DATE_RANGE_LIST)
+                        .build()
+                )
+            )
+            .build())
         .build();
   }
 

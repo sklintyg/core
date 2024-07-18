@@ -41,6 +41,7 @@ public class CertificateModel {
   CertificateSummaryProvider summaryProvider;
   List<Role> rolesWithAccess;
   List<CertificateMessageType> messageTypes;
+  PdfSpecification pdfSpecification;
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()

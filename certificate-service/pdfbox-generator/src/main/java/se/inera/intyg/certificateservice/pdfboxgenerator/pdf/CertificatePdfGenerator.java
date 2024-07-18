@@ -3,7 +3,6 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
@@ -14,20 +13,14 @@ import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator
 @RequiredArgsConstructor
 public class CertificatePdfGenerator implements PdfGenerator {
 
-  private final List<CertificateTypePdfFillService> certificateTypePdfFillServices;
   private final CertificatePdfFillService certificatePdfFillService;
 
   public Pdf generate(Certificate certificate, String additionalInfoText, boolean isCitizenFormat) {
 
     try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-      final var certificateTypeSpecificFillService = certificateTypePdfFillServices.stream()
-          .filter(generator -> isCertificateTypeEqual(certificate, generator))
-          .findFirst().orElseThrow(() -> throwPdfFillServiceDoesNotExistForType(certificate));
-
       final var filledPdf = certificatePdfFillService.fillDocument(
           certificate,
           additionalInfoText,
-          certificateTypeSpecificFillService,
           isCitizenFormat
       );
 
@@ -42,21 +35,6 @@ public class CertificatePdfGenerator implements PdfGenerator {
     } catch (Exception e) {
       throw new IllegalStateException("Could not create Pdf", e);
     }
-  }
-
-  private static IllegalStateException throwPdfFillServiceDoesNotExistForType(
-      Certificate certificate) {
-    return new IllegalStateException(
-        String.format(
-            "Could not find pdf fill service for certificate type: '%s'",
-            certificate.certificateModel().id().type().type()
-        )
-    );
-  }
-
-  private static boolean isCertificateTypeEqual(Certificate certificate,
-      CertificateTypePdfFillService generator) {
-    return generator.getType().equals(certificate.certificateModel().id().type());
   }
 
   private String getFileName(Certificate certificate) {

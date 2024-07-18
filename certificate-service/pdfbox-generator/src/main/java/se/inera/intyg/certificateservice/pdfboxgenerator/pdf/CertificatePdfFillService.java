@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAdditionalInformationTextGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfElementValueGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfPatientValueGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfSignatureValueGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfUnitValueGenerator;
@@ -32,9 +33,10 @@ public class CertificatePdfFillService {
   private final PdfPatientValueGenerator pdfPatientValueGenerator;
   private final PdfSignatureValueGenerator pdfSignatureValueGenerator;
   private final PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
+  private final PdfElementValueGenerator pdfElementValueGenerator;
 
   public PDDocument fillDocument(Certificate certificate, String additionalInfoText,
-      CertificateTypePdfFillService certificateValueGenerator, boolean isCitizenFormat) {
+      boolean isCitizenFormat) {
     final var template = getTemplatePath(certificate, isCitizenFormat);
     try (final var inputStream = getClass().getClassLoader().getResourceAsStream(template)) {
       if (inputStream == null) {
@@ -42,9 +44,8 @@ public class CertificatePdfFillService {
       }
 
       final var document = Loader.loadPDF(inputStream.readAllBytes());
-      setFields(certificate, certificateValueGenerator, document);
-      addTexts(certificate, additionalInfoText, certificateValueGenerator, document,
-          isCitizenFormat);
+      setFields(certificate, document);
+      addTexts(certificate, additionalInfoText, document, isCitizenFormat);
 
       return document;
     } catch (Exception e) {
@@ -57,6 +58,14 @@ public class CertificatePdfFillService {
         .pdfTemplatePath() : certificate.certificateModel().pdfNoAddressTemplatePath();
   }
 
+  private static int getSignatureTagIndex(Certificate certificate, boolean isCitizenFormat) {
+    if (isCitizenFormat) {
+      return certificate.certificateModel().pdfSpecification().signatureWithoutAddressTagIndex()
+          .value();
+    }
+    return certificate.certificateModel().pdfSpecification().signatureWithAddressTagIndex().value();
+  }
+
   private static boolean includeAddress(Certificate certificate, boolean isCitizenFormat) {
     if (isCitizenFormat) {
       return false;
@@ -65,28 +74,26 @@ public class CertificatePdfFillService {
     return certificate.sent() == null || certificate.sent().sentAt() == null;
   }
 
-  private void setFields(Certificate certificate,
-      CertificateTypePdfFillService certificateValueGenerator, PDDocument document) {
+  private void setFields(Certificate certificate, PDDocument document) {
     if (certificate.status() == Status.SIGNED) {
       setFieldValues(document, pdfSignatureValueGenerator.generate(certificate));
     }
-    setFieldValues(document, certificateValueGenerator.getFields(certificate));
+    setFieldValues(document, pdfElementValueGenerator.generate(certificate));
     setFieldValues(document, pdfUnitValueGenerator.generate(certificate));
     setFieldValues(document, pdfPatientValueGenerator.generate(certificate,
-        certificateValueGenerator.getPatientIdFieldId()));
+        certificate.certificateModel().pdfSpecification().patientIdFieldId().id()));
   }
 
-  private void addTexts(Certificate certificate, String additionalInfoText,
-      CertificateTypePdfFillService certificateValueGenerator, PDDocument document,
+  private void addTexts(Certificate certificate, String additionalInfoText, PDDocument document,
       boolean isCitizenFormat)
       throws IOException {
-    final var mcid = new AtomicInteger(certificateValueGenerator.getAvailableMcid());
+    final var mcid = new AtomicInteger(
+        certificate.certificateModel().pdfSpecification().mcid().value());
 
     setDraftWatermark(document, certificate, mcid);
     setSignatureText(
         document,
         certificate,
-        certificateValueGenerator,
         mcid,
         isCitizenFormat
     );
@@ -136,14 +143,14 @@ public class CertificatePdfFillService {
   }
 
   private void setSignatureText(PDDocument document, Certificate certificate,
-      CertificateTypePdfFillService pdfFillService, AtomicInteger mcid, boolean isCitizenFormat)
+      AtomicInteger mcid, boolean isCitizenFormat)
       throws IOException {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
     if (certificate.status() == Status.SIGNED) {
       pdfAdditionalInformationTextGenerator.addDigitalSignatureText(
           document, getSignatureOffsetX(acroForm), getSignatureOffsetY(acroForm),
           mcid.getAndIncrement(),
-          pdfFillService.getSignatureTagIndex(includeAddress(certificate, isCitizenFormat))
+          getSignatureTagIndex(certificate, includeAddress(certificate, isCitizenFormat))
       );
     }
   }
