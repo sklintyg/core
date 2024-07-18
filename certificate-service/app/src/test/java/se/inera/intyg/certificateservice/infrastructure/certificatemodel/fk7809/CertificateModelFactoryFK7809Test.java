@@ -50,6 +50,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisTerminology;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -1456,7 +1457,7 @@ class CertificateModelFactoryFK7809Test {
     @Nested
     class QuestionPagaendeOchPlaneradeBehandlingar {
 
-      private static final ElementId ELEMENT_ID = new ElementId("50.1");
+      private static final ElementId ELEMENT_ID = new ElementId("50");
 
       @Test
       void shallIncludeId() {
@@ -1487,7 +1488,7 @@ class CertificateModelFactoryFK7809Test {
       void shallIncludeRules() {
         final var expectedRules = List.of(
             ElementRuleLimit.builder()
-                .id(new ElementId("50.1"))
+                .id(new ElementId("50"))
                 .type(ElementRuleType.TEXT_LIMIT)
                 .limit(new RuleLimit((short) 4000))
                 .build()
@@ -1563,7 +1564,7 @@ class CertificateModelFactoryFK7809Test {
                 .limit(new RuleLimit((short) 4000))
                 .build(),
             ElementRuleExpression.builder()
-                .id(new ElementId("50.1"))
+                .id(new ElementId("50"))
                 .type(ElementRuleType.SHOW)
                 .expression(new RuleExpression("$50.1"))
                 .build()
@@ -1589,6 +1590,15 @@ class CertificateModelFactoryFK7809Test {
 
         assertEquals(expectedValidations,
             certificateModel.elementSpecification(ELEMENT_ID).validations()
+        );
+      }
+
+      @Test
+      void shallIncludeMapping() {
+        final var expectedMapping = new ElementMapping(new ElementId("50"), null);
+        final var certificateModel = certificateModelFactoryFK7809.create();
+        assertEquals(expectedMapping,
+            certificateModel.elementSpecification(ELEMENT_ID).mapping()
         );
       }
     }
@@ -1939,7 +1949,7 @@ class CertificateModelFactoryFK7809Test {
       void shallIncludeConfiguration() {
         final var expectedConfiguration = ElementConfigurationTextArea.builder()
             .name("Sammanfatta historiken för diagnoserna")
-            .id(new FieldId("5"))
+            .id(new FieldId("5.1"))
             .build();
 
         final var certificateModel = certificateModelFactoryFK7809.create();
@@ -1955,7 +1965,7 @@ class CertificateModelFactoryFK7809Test {
             ElementRuleExpression.builder()
                 .id(ELEMENT_ID)
                 .type(ElementRuleType.MANDATORY)
-                .expression(new RuleExpression("$5"))
+                .expression(new RuleExpression("$5.1"))
                 .build(),
             ElementRuleLimit.builder()
                 .id(ELEMENT_ID)
