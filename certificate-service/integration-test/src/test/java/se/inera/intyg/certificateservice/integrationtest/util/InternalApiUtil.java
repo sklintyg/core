@@ -121,7 +121,7 @@ public class InternalApiUtil {
 
   public ResponseEntity<GetPatientCertificatesWithQAResponse> getPatientCertificatesWithQA(
       GetPatientCertificatesWithQARequest request) {
-    final var requestUrl = "http://localhost:%s/internalapi/patient/certificate/qa".formatted(
+    final var requestUrl = "http://localhost:%s/internalapi/patient/certificates/qa".formatted(
         port
     );
 
