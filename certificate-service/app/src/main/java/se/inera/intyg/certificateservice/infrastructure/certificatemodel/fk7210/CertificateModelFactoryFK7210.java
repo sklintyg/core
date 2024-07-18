@@ -19,6 +19,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfQuestionField;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
@@ -56,6 +59,9 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
   public static final FieldId QUESTION_BERAKNAT_FODELSEDATUM_FIELD_ID = new FieldId("54.1");
   public static final String PDF_FK_7210_PDF = "fk7210/pdf/fk7210_v1.pdf";
   public static final String PDF_NO_ADDRESS_FK_7210_PDF = "fk7210/pdf/fk7210_v1_no_address.pdf";
+  public static final String PDF_PATIENT_ID_FIELD_ID = "form1[0].#subform[0].flt_txtPersonNr[0]";
+  public static final String PDF_FODELSEDATUM_FIELD_ID = "form1[0].#subform[0].flt_dat[0]";
+
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk7210/schematron/igrav.v1.sch");
   public static final String LINK_FK_ID = "LINK_FK";
@@ -158,6 +164,22 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
                     .build()
             )
         )
+        .pdfSpecification(PdfSpecification.builder()
+            .certificateType(FK7210_V1_0.type())
+            .patiendIdFieldId(PDF_PATIENT_ID_FIELD_ID)
+            .mcid(100)
+            .signatureWithAddressTagIndex(15)
+            .signatureWithoutAddressTagIndex(7)
+            .pdfQuestionFields(
+                List.of(
+                    PdfQuestionField.builder()
+                        .questionId(QUESTION_BERAKNAT_FODELSEDATUM_ID)
+                        .pdfFieldId(PDF_FODELSEDATUM_FIELD_ID)
+                        .pdfValueType(PdfValueType.DATE)
+                        .build()
+                )
+            )
+            .build())
         .build();
   }
 

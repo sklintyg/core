@@ -1,11 +1,11 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CodeSystemKvFkmu0008.EN_ATTONDEL;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CodeSystemKvFkmu0008.EN_FJARDEDEL;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CodeSystemKvFkmu0008.HALVA;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CodeSystemKvFkmu0008.HELA;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CodeSystemKvFkmu0008.TRE_FJARDEDELAR;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.CHECKED_BOX_VALUE;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.CodeSystemKvFkmu0008.EN_ATTONDEL;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.CodeSystemKvFkmu0008.EN_FJARDEDEL;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.CodeSystemKvFkmu0008.HALVA;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.CodeSystemKvFkmu0008.HELA;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.fk7472.CodeSystemKvFkmu0008.TRE_FJARDEDELAR;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,15 +16,21 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 @Component
-public class PdfDateRangeListValueGenerator implements PdfElementValueGenerator {
+public class PdfDateRangeListValueGenerator implements PdfElementValue {
 
   private static final String CHECKBOX_PERIOD_PREFIX_ID = ".ksr_";
   private static final String DATE_FROM_PERIOD_PREFIX_ID = ".flt_datFranMed";
   private static final String DATE_TO_PERIOD_PREFIX_ID = ".flt_datLangstTillMed";
   private static final String PERIOD_SUFFIX_ID = "[0]";
+
+  @Override
+  public PdfValueType getType() {
+    return PdfValueType.DATE_RANGE_LIST;
+  }
 
   @Override
   public List<PdfField> generate(Certificate certificate, ElementId questionId, String fieldId) {

@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.testdata;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
@@ -67,4 +68,15 @@ public class TestDataCertificateModelConstants {
   public static final Recipient FK_RECIPIENT = new Recipient(
       new RecipientId("FKASSA"), "Försäkringskassan"
   );
+
+  public static final String FK7210_PDF_PATIENT_ID_FIELD_ID = "form1[0].#subform[0].flt_txtPersonNr[0]";
+  public static final String FK7210_PDF_FODELSEDATUM_FIELD_ID = "form1[0].#subform[0].flt_dat[0]";
+  public static final ElementId FK7210_QUESTION_BERAKNAT_FODELSEDATUM_ID = new ElementId("54");
+
+  public static final String FK7472_PDF_PATIENT_ID_FIELD_ID = "form1[0].#subform[0].flt_txtPersonNrBarn[0]";
+  public static final String FK7472_PDF_SYMPTOM_FIELD_ID = "form1[0].#subform[0].flt_txtDiagnos[0]";
+  public static final String FK7472_PDF_PERIOD_FIELD_ID_PREFIX = "form1[0].#subform[0]";
+  public static final ElementId FK7472_QUESTION_SYMPTOM_ID = new ElementId("55");
+  public static final ElementId FK7472_QUESTION_PERIOD_ID = new ElementId("56");
+
 }
