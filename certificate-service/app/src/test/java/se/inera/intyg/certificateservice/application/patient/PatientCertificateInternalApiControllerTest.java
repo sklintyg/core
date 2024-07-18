@@ -8,23 +8,23 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesWithQARequest;
-import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesWithQAResponse;
-import se.inera.intyg.certificateservice.application.patient.service.GetPatientCertificatesWithQAService;
+import se.inera.intyg.certificateservice.application.patient.dto.PatientCertificatesWithQARequest;
+import se.inera.intyg.certificateservice.application.patient.dto.PatientCertificatesWithQAResponse;
+import se.inera.intyg.certificateservice.application.patient.service.GetPatientCertificatesWithQAInternalService;
 
 @ExtendWith(MockitoExtension.class)
 class PatientCertificateInternalApiControllerTest {
 
   @Mock
-  GetPatientCertificatesWithQAService getPatientCertificatesWithQAService;
+  GetPatientCertificatesWithQAInternalService getPatientCertificatesWithQAInternalService;
   @InjectMocks
   PatientCertificateInternalApiController patientCertificateInternalApiController;
 
   @Test
   void shallReturnGetPatientCertificatesWithQAResponse() {
-    final var expectedResponse = GetPatientCertificatesWithQAResponse.builder().build();
-    final var request = GetPatientCertificatesWithQARequest.builder().build();
-    doReturn(expectedResponse).when(getPatientCertificatesWithQAService).get(request);
+    final var expectedResponse = PatientCertificatesWithQAResponse.builder().build();
+    final var request = PatientCertificatesWithQARequest.builder().build();
+    doReturn(expectedResponse).when(getPatientCertificatesWithQAInternalService).get(request);
 
     final var actualResponse = patientCertificateInternalApiController.getPatientCertificatesWithQA(
         request);

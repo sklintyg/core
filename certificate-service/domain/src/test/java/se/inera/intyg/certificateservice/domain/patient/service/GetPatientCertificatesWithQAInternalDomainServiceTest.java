@@ -16,14 +16,14 @@ import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator
 import se.inera.intyg.certificateservice.domain.patient.model.CertificatesWithQARequest;
 
 @ExtendWith(MockitoExtension.class)
-class GetPatientCertificatesWithQADomainServiceTest {
+class GetPatientCertificatesWithQAInternalDomainServiceTest {
 
   @Mock
   CertificateRepository certificateRepository;
   @Mock
   XmlGeneratorCertificatesForCareWithQA xmlGeneratorCertificatesForCareWithQA;
   @InjectMocks
-  GetPatientCertificatesWithQADomainService getPatientCertificatesWithQADomainService;
+  GetPatientCertificatesWithQAInternalDomainService getPatientCertificatesWithQAInternalDomainService;
 
   @Test
   void shallReturnXml() {
@@ -33,7 +33,7 @@ class GetPatientCertificatesWithQADomainServiceTest {
     doReturn(certificates).when(certificateRepository).findByCertificatesWithQARequest(request);
     doReturn(expectedXml).when(xmlGeneratorCertificatesForCareWithQA).generate(certificates);
 
-    final var actualXml = getPatientCertificatesWithQADomainService.get(request);
+    final var actualXml = getPatientCertificatesWithQAInternalDomainService.get(request);
     assertEquals(expectedXml, actualXml);
   }
 }

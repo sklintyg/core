@@ -13,45 +13,46 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.patient.CertificatesWithQARequestFactory;
-import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesWithQARequest;
-import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesWithQAResponse;
+import se.inera.intyg.certificateservice.application.patient.dto.PatientCertificatesWithQARequest;
+import se.inera.intyg.certificateservice.application.patient.dto.PatientCertificatesWithQAResponse;
 import se.inera.intyg.certificateservice.application.patient.service.validator.GetPatientCertificatesWithQARequestValidator;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.patient.model.CertificatesWithQARequest;
-import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesWithQADomainService;
+import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesWithQAInternalDomainService;
 
 @ExtendWith(MockitoExtension.class)
-class GetPatientCertificatesWithQAServiceTest {
+class GetPatientCertificatesWithQAInternalServiceTest {
 
   @Mock
   GetPatientCertificatesWithQARequestValidator requestValidator;
   @Mock
-  GetPatientCertificatesWithQADomainService getPatientCertificatesWithQADomainService;
+  GetPatientCertificatesWithQAInternalDomainService getPatientCertificatesWithQAInternalDomainService;
   @Mock
   CertificatesWithQARequestFactory certificatesWithQARequestFactory;
   @InjectMocks
-  GetPatientCertificatesWithQAService getPatientCertificatesWithQAService;
+  GetPatientCertificatesWithQAInternalService getPatientCertificatesWithQAInternalService;
 
   @Test
   void shallThrowIfRequestIsInvalid() {
-    final var request = GetPatientCertificatesWithQARequest.builder().build();
+    final var request = PatientCertificatesWithQARequest.builder().build();
     doThrow(IllegalArgumentException.class).when(requestValidator).validate(request);
 
     assertThrows(IllegalArgumentException.class,
-        () -> getPatientCertificatesWithQAService.get(request));
+        () -> getPatientCertificatesWithQAInternalService.get(request));
   }
 
   @Test
   void shallBuildCertificatesWithQARequestFromFactory() {
     final var xml = new Xml("xml");
     final var certificatesWithQARequest = CertificatesWithQARequest.builder().build();
-    final var request = GetPatientCertificatesWithQARequest.builder().build();
-    final var argumentCaptor = ArgumentCaptor.forClass(GetPatientCertificatesWithQARequest.class);
+    final var request = PatientCertificatesWithQARequest.builder().build();
+    final var argumentCaptor = ArgumentCaptor.forClass(PatientCertificatesWithQARequest.class);
 
     doReturn(certificatesWithQARequest).when(certificatesWithQARequestFactory).create(request);
-    doReturn(xml).when(getPatientCertificatesWithQADomainService).get(certificatesWithQARequest);
+    doReturn(xml).when(getPatientCertificatesWithQAInternalDomainService)
+        .get(certificatesWithQARequest);
 
-    getPatientCertificatesWithQAService.get(request);
+    getPatientCertificatesWithQAInternalService.get(request);
 
     verify(certificatesWithQARequestFactory).create(argumentCaptor.capture());
     assertEquals(request, argumentCaptor.getValue());
@@ -60,17 +61,18 @@ class GetPatientCertificatesWithQAServiceTest {
   @Test
   void shallReturnGetPatientCertificatesWithQAResponseWithBase64EncodedXml() {
     final var xml = new Xml("xml");
-    final var expectedResponse = GetPatientCertificatesWithQAResponse.builder()
+    final var expectedResponse = PatientCertificatesWithQAResponse.builder()
         .list(xml.base64())
         .build();
 
     final var certificatesWithQARequest = CertificatesWithQARequest.builder().build();
-    final var request = GetPatientCertificatesWithQARequest.builder().build();
+    final var request = PatientCertificatesWithQARequest.builder().build();
 
     doReturn(certificatesWithQARequest).when(certificatesWithQARequestFactory).create(request);
-    doReturn(xml).when(getPatientCertificatesWithQADomainService).get(certificatesWithQARequest);
+    doReturn(xml).when(getPatientCertificatesWithQAInternalDomainService)
+        .get(certificatesWithQARequest);
 
-    final var actualResponse = getPatientCertificatesWithQAService.get(
+    final var actualResponse = getPatientCertificatesWithQAInternalService.get(
         request);
     assertEquals(expectedResponse, actualResponse);
   }

@@ -2,26 +2,23 @@ package se.inera.intyg.certificateservice.application.patient.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
-import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesWithQARequest.GetPatientCertificatesWithQARequestBuilder;
+import se.inera.intyg.certificateservice.application.patient.dto.PatientCertificatesWithQARequest.PatientCertificatesWithQARequestBuilder;
 
 @Value
 @Builder
-@JsonDeserialize(builder = GetPatientCertificatesWithQARequestBuilder.class)
-public class GetPatientCertificatesWithQARequest {
+@JsonDeserialize(builder = PatientCertificatesWithQARequestBuilder.class)
+public class PatientCertificatesWithQARequest {
 
   PersonIdDTO personId;
   List<String> unitIds;
   String careProviderId;
-  LocalDateTime from;
-  LocalDateTime to;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class GetPatientCertificatesWithQARequestBuilder {
+  public static class PatientCertificatesWithQARequestBuilder {
 
   }
 }

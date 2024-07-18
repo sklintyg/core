@@ -10,7 +10,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGeneratorCertificatesForCareWithQA;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.common.XmlGeneratorIntyg;
-import se.riv.clinicalprocess.healthcond.certificate.listCertificatesForCareWithQA.v3.HandelseList;
 import se.riv.clinicalprocess.healthcond.certificate.listCertificatesForCareWithQA.v3.List;
 import se.riv.clinicalprocess.healthcond.certificate.listCertificatesForCareWithQA.v3.ListCertificatesForCareWithQAResponseType;
 import se.riv.clinicalprocess.healthcond.certificate.listCertificatesForCareWithQA.v3.ListItem;
@@ -59,8 +58,6 @@ public class XmlGeneratorCertificateWithQAV3 implements XmlGeneratorCertificates
       listItem.setRef(
           certificate.externalReference() != null ? certificate.externalReference().value() : null
       );
-      //TODO: Implement when we introduce events.
-      listItem.setHandelser(new HandelseList());
       list.getItem().add(listItem);
     });
 

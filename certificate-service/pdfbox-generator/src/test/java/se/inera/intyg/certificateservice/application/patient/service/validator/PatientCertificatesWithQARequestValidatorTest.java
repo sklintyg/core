@@ -10,20 +10,20 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
-import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesWithQARequest;
+import se.inera.intyg.certificateservice.application.patient.dto.PatientCertificatesWithQARequest;
 
-class GetPatientCertificatesWithQARequestValidatorTest {
+class PatientCertificatesWithQARequestValidatorTest {
 
   private static final String CARE_PROVIDER_ID = "careProviderId";
   private static final String PERSON_ID = "19121212121212";
   private static final List<String> UNIT_IDS = List.of("unitId1", "unitId2", "unitId3");
   private GetPatientCertificatesWithQARequestValidator validator;
-  private GetPatientCertificatesWithQARequest.GetPatientCertificatesWithQARequestBuilder requestBuilder;
+  private PatientCertificatesWithQARequest.PatientCertificatesWithQARequestBuilder requestBuilder;
 
   @BeforeEach
   void setUp() {
     validator = new GetPatientCertificatesWithQARequestValidator();
-    requestBuilder = GetPatientCertificatesWithQARequest.builder()
+    requestBuilder = PatientCertificatesWithQARequest.builder()
         .careProviderId(CARE_PROVIDER_ID)
         .personId(
             PersonIdDTO.builder()

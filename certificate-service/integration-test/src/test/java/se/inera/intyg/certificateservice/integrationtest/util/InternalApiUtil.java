@@ -15,8 +15,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageInternalResponse;
-import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesWithQARequest;
-import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesWithQAResponse;
+import se.inera.intyg.certificateservice.application.patient.dto.PatientCertificatesWithQARequest;
+import se.inera.intyg.certificateservice.application.patient.dto.PatientCertificatesWithQAResponse;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -119,8 +119,8 @@ public class InternalApiUtil {
     );
   }
 
-  public ResponseEntity<GetPatientCertificatesWithQAResponse> getPatientCertificatesWithQA(
-      GetPatientCertificatesWithQARequest request) {
+  public ResponseEntity<PatientCertificatesWithQAResponse> getPatientCertificatesWithQA(
+      PatientCertificatesWithQARequest request) {
     final var requestUrl = "http://localhost:%s/internalapi/patient/certificates/qa".formatted(
         port
     );

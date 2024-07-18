@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.application.patient;
 
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesWithQARequest;
+import se.inera.intyg.certificateservice.application.patient.dto.PatientCertificatesWithQARequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.patient.model.CertificatesWithQARequest;
@@ -10,10 +10,8 @@ import se.inera.intyg.certificateservice.domain.patient.model.CertificatesWithQA
 public class CertificatesWithQARequestFactory {
 
   public CertificatesWithQARequest create(
-      GetPatientCertificatesWithQARequest request) {
+      PatientCertificatesWithQARequest request) {
     return CertificatesWithQARequest.builder()
-        .from(request.getFrom())
-        .to(request.getTo())
         .personId(
             PersonId.builder()
                 .id(request.getPersonId().getId())

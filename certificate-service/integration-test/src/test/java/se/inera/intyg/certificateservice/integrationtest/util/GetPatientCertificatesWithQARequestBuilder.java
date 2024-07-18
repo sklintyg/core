@@ -5,7 +5,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 
 import java.util.List;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
-import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesWithQARequest;
+import se.inera.intyg.certificateservice.application.patient.dto.PatientCertificatesWithQARequest;
 
 public class GetPatientCertificatesWithQARequestBuilder {
 
@@ -36,8 +36,8 @@ public class GetPatientCertificatesWithQARequestBuilder {
     return this;
   }
 
-  public GetPatientCertificatesWithQARequest build() {
-    return GetPatientCertificatesWithQARequest.builder()
+  public PatientCertificatesWithQARequest build() {
+    return PatientCertificatesWithQARequest.builder()
         .personId(personId)
         .careProviderId(careProviderId)
         .unitIds(unitIds)
