@@ -13,6 +13,7 @@ public class GetPatientCertificatesWithQADomainService {
   private final XmlGeneratorCertificatesForCareWithQA xmlGeneratorCertificatesForCareWithQA;
 
   public Xml get(CertificatesWithQARequest request) {
+    //TODO: Once we introduce events, we might wanna update so that we go towards that repository instead.
     final var certificates = certificateRepository.findByCertificatesWithQARequest(
         request
     );
