@@ -553,4 +553,50 @@ class MessageTest {
       assertFalse(message.forwarded().value());
     }
   }
+
+  @Nested
+  class HasAnswerTests {
+
+    @Test
+    void shallReturnTrueIfMessageHasAnswer() {
+      final var messageWithAnswer = Message.builder()
+          .answer(
+              Answer.builder().build()
+          )
+          .build();
+
+      assertTrue(messageWithAnswer.hasAnswer());
+    }
+
+    @Test
+    void shallReturnFalseIfMessageDontHaveAnswer() {
+      final var messageWithAnswer = Message.builder()
+          .build();
+
+      assertFalse(messageWithAnswer.hasAnswer());
+    }
+  }
+
+  @Nested
+  class HasAuthoredStaffTests {
+
+    @Test
+    void shallReturnTrueIfMessageHasAuthoredStaff() {
+      final var messageWithAnswer = Message.builder()
+          .authoredStaff(
+              Staff.builder().build()
+          )
+          .build();
+
+      assertTrue(messageWithAnswer.hasAuthoredStaff());
+    }
+
+    @Test
+    void shallReturnFalseIfMessageDontHaveAuthoredStaff() {
+      final var messageWithAnswer = Message.builder()
+          .build();
+
+      assertFalse(messageWithAnswer.hasAuthoredStaff());
+    }
+  }
 }

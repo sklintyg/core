@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
@@ -22,11 +23,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.jpa.domain.Specification;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
+import se.inera.intyg.certificateservice.domain.patient.model.CertificatesWithQARequest;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateModelEntity;
@@ -39,11 +42,14 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateModelEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
 
 @ExtendWith(MockitoExtension.class)
 class JpaCertificateRepositoryTest {
 
+  @Mock
+  CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;
   @Mock
   CertificateRelationRepository certificateRelationRepository;
   @Mock
@@ -320,6 +326,7 @@ class JpaCertificateRepositoryTest {
     }
   }
 
+
   @Nested
   class Exists {
 
@@ -390,6 +397,25 @@ class JpaCertificateRepositoryTest {
       );
 
       verify(certificateRelationRepository).deleteRelations(CERTIFICATE_ENTITY);
+    }
+  }
+
+  @Nested
+  class FindByCertificatesWithQARequestTests {
+
+    @Test
+    void shouldReturnListOfCertificateWithSpecificationFromRequest() {
+      final var expectedCertificates = List.of(CERTIFICATE);
+      final var request = CertificatesWithQARequest.builder().build();
+      final var specification = mock(Specification.class);
+      doReturn(specification).when(certificateEntitySpecificationFactory).create(request);
+      doReturn(List.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository)
+          .findAll(specification);
+      doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
+
+      final var actualCertificates = jpaCertificateRepository.findByCertificatesWithQARequest(
+          request);
+      assertEquals(expectedCertificates, actualCertificates);
     }
   }
 }
