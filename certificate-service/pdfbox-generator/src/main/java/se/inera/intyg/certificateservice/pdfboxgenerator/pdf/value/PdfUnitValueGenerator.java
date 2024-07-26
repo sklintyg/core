@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_CARE_UNIT_CONTACT_INFORMATION_FIELD_ID;
 
 import java.util.List;
 import org.springframework.stereotype.Component;
@@ -22,7 +21,8 @@ public class PdfUnitValueGenerator {
 
     return List.of(
         PdfField.builder()
-            .id(SIGNATURE_CARE_UNIT_CONTACT_INFORMATION_FIELD_ID)
+            .id(certificate.certificateModel().pdfSpecification().signature().contactInformation()
+                .id())
             .value(contactInfo)
             .build()
     );

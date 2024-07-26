@@ -1,12 +1,5 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_DATE_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_FULL_NAME_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_HSA_ID_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_PA_TITLE_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_SPECIALITY_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_WORKPLACE_CODE_FIELD_ID;
-
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,14 +29,15 @@ public class PdfSignatureValueGenerator {
 
   private PdfField getSignedDate(Certificate certificate) {
     return PdfField.builder()
-        .id(SIGNATURE_DATE_FIELD_ID)
+        .id(certificate.certificateModel().pdfSpecification().signature().signedDateFieldId().id())
         .value(certificate.signed().format(DateTimeFormatter.ISO_DATE))
         .build();
   }
 
   private PdfField getIssuerFullName(Certificate certificate) {
     return PdfField.builder()
-        .id(SIGNATURE_FULL_NAME_FIELD_ID)
+        .id(certificate.certificateModel().pdfSpecification().signature().signedByNameFieldId()
+            .id())
         .value(certificate.certificateMetaData().issuer().name().fullName())
         .build();
   }
@@ -56,7 +50,7 @@ public class PdfSignatureValueGenerator {
           .collect(Collectors.joining(", "));
 
       return Optional.of(PdfField.builder()
-          .id(SIGNATURE_PA_TITLE_FIELD_ID)
+          .id(certificate.certificateModel().pdfSpecification().signature().paTitleFieldId().id())
           .value(paTitleCodes)
           .build());
     }
@@ -72,7 +66,7 @@ public class PdfSignatureValueGenerator {
           .collect(Collectors.joining(", "));
 
       return Optional.of(PdfField.builder()
-          .id(SIGNATURE_SPECIALITY_FIELD_ID)
+          .id(certificate.certificateModel().pdfSpecification().signature().specialtyFieldId().id())
           .value(mappedSpecialities)
           .build()
       );
@@ -84,7 +78,7 @@ public class PdfSignatureValueGenerator {
   private PdfField getHsaId(Certificate certificate) {
     final var hsaId = certificate.certificateMetaData().issuer().hsaId().id();
     return PdfField.builder()
-        .id(SIGNATURE_HSA_ID_FIELD_ID)
+        .id(certificate.certificateModel().pdfSpecification().signature().hsaIdFieldId().id())
         .value(hsaId)
         .build();
   }
@@ -94,7 +88,8 @@ public class PdfSignatureValueGenerator {
     if (workplaceCode != null) {
       return Optional.of(
           PdfField.builder()
-              .id(SIGNATURE_WORKPLACE_CODE_FIELD_ID)
+              .id(certificate.certificateModel().pdfSpecification().signature()
+                  .workplaceCodeFieldId().id())
               .value(workplaceCode.code())
               .build()
       );

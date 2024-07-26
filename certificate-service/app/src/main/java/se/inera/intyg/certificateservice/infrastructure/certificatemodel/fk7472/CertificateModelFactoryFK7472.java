@@ -25,6 +25,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Mcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfQuestionField;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
@@ -43,6 +44,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.Certifi
 public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
 
   private static final short LIMIT = 318;
+
   @Value("${certificate.model.fk7472.v1_0.active.from}")
   private LocalDateTime activeFrom;
   private static final String TYPE = "fk7472";
@@ -81,15 +83,29 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
 
   public static final String PDF_FK_7472_PDF = "fk7472/pdf/fk7472_v1.pdf";
   public static final String PDF_NO_ADDRESS_FK_7472_PDF = "fk7472/pdf/fk7472_v1_no_address.pdf";
-  public static final PdfFieldId PDF_PATIENT_ID_FIELD_ID = new PdfFieldId(
+  private static final PdfFieldId PDF_PATIENT_ID_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_txtPersonNrBarn[0]");
-  public static final PdfFieldId PDF_SYMPTOM_FIELD_ID = new PdfFieldId(
+  private static final PdfFieldId PDF_SYMPTOM_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_txtDiagnos[0]");
-  public static final PdfFieldId PDF_PERIOD_FIELD_ID_PREFIX = new PdfFieldId(
+  private static final PdfFieldId PDF_PERIOD_FIELD_ID_PREFIX = new PdfFieldId(
       "form1[0].#subform[0]");
   private static final Mcid PDF_MCID = new Mcid(120);
   private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(50);
   private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(42);
+  private static final PdfFieldId PDF_SIGNED_DATE_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].flt_datUnderskrift[0]");
+  private static final PdfFieldId PDF_SIGNED_BY_NAME_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtNamnfortydligande[0]");
+  private static final PdfFieldId PDF_PA_TITLE_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtBefattning[0]");
+  private static final PdfFieldId PDF_SPECIALTY_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtEventuellSpecialistkompetens[0]");
+  private static final PdfFieldId PDF_HSA_ID_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtLakarensHSA-ID[0]");
+  private static final PdfFieldId PDF_WORKPLACE_CODE_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtArbetsplatskod[0]");
+  private static final PdfFieldId PDF_CONTACT_INFORMATION = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtVardgivarensNamnAdressTelefon[0]");
 
   @Override
   public CertificateModel create() {
@@ -214,16 +230,25 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
                 issuingUnitContactInfo()
             )
         )
-        .pdfTemplatePath(PDF_FK_7472_PDF)
-        .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7472_PDF)
         .schematronPath(SCHEMATRON_PATH)
         .pdfSpecification(PdfSpecification.builder()
             .certificateType(FK7472_V1_0.type())
+            .pdfTemplatePath(PDF_FK_7472_PDF)
+            .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7472_PDF)
             .patientIdFieldId(PDF_PATIENT_ID_FIELD_ID)
+            .signature(PdfSignature.builder()
+                .signedDateFieldId(PDF_SIGNED_DATE_FIELD_ID)
+                .signedByNameFieldId(PDF_SIGNED_BY_NAME_FIELD_ID)
+                .paTitleFieldId(PDF_PA_TITLE_FIELD_ID)
+                .specialtyFieldId(PDF_SPECIALTY_FIELD_ID)
+                .hsaIdFieldId(PDF_HSA_ID_FIELD_ID)
+                .workplaceCodeFieldId(PDF_WORKPLACE_CODE_FIELD_ID)
+                .contactInformation(PDF_CONTACT_INFORMATION)
+                .build())
             .mcid(PDF_MCID)
             .signatureWithAddressTagIndex(PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
             .signatureWithoutAddressTagIndex(PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
-            .pdfQuestionFields(
+            .questionFields(
                 List.of(
                     PdfQuestionField.builder()
                         .questionId(QUESTION_SYMPTOM_ID)

@@ -34,8 +34,6 @@ public class CertificateModel {
   @Builder.Default
   List<MessageActionSpecification> messageActionSpecifications = Collections.emptyList();
   List<ElementSpecification> elementSpecifications;
-  String pdfTemplatePath;
-  String pdfNoAddressTemplatePath;
   SchematronPath schematronPath;
   List<CertificateText> texts;
   CertificateSummaryProvider summaryProvider;

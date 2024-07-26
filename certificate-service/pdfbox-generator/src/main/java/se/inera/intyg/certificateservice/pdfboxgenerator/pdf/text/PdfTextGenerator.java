@@ -44,7 +44,8 @@ public class PdfTextGenerator {
       int mcid,
       PDStructureElement section
   ) throws IOException {
-    final var page = pdf.getPage(0);
+    final var page = pdf.getPage(
+        0); //TODO: index for signature can differ depending on certificate type
     final var contentStream = createContentStream(pdf, page);
 
     if (matrix != null) {

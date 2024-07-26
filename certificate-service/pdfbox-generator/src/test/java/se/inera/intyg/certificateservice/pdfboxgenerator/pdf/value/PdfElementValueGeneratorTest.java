@@ -9,10 +9,10 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7472_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_FODELSEDATUM_FIELD_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_QUESTION_BERAKNAT_FODELSEDATUM_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_PERIOD_FIELD_ID_PREFIX;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_SYMPTOM_FIELD_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_QUESTION_PERIOD_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_QUESTION_SYMPTOM_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_PERIOD_FIELD_ID_PREFIX;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_SYMPTOM_FIELD_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_QUESTION_PERIOD_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_QUESTION_SYMPTOM_ID;
 
 import java.time.LocalDate;
 import java.util.List;

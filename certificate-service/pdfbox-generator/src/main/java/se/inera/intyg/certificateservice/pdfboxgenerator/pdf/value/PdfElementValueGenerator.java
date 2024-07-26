@@ -15,7 +15,7 @@ public class PdfElementValueGenerator {
   private final List<PdfElementValue> pdfElementValues;
 
   public List<PdfField> generate(Certificate certificate) {
-    return certificate.certificateModel().pdfSpecification().pdfQuestionFields()
+    return certificate.certificateModel().pdfSpecification().questionFields()
         .stream()
         .map(
             pdfQuestion -> getFields(certificate, pdfQuestion.questionId(),

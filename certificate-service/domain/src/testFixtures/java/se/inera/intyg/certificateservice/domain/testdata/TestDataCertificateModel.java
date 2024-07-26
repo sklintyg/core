@@ -2,36 +2,16 @@ package se.inera.intyg.certificateservice.domain.testdata;
 
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_PDF_PATH;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_PDF_PATH_NO_ADDRESS;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_FODELSEDATUM_FIELD_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_MCID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_PATH;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_PATH_NO_ADDRESS;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_PATIENT_ID_FIELD_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_QUESTION_BERAKNAT_FODELSEDATUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_MCID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_PATH;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_PATH_NO_ADDRESS;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_PATIENT_ID_FIELD_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_PERIOD_FIELD_ID_PREFIX;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_PDF_SYMPTOM_FIELD_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_QUESTION_PERIOD_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_QUESTION_SYMPTOM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_VERSION;
@@ -41,14 +21,13 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK_RECIPIENT;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecification.FK3226_PDF_SPECIFICATION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecification.FK7210_PDF_SPECIFICATION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecification.FK7472_PDF_SPECIFICATION;
 
 import java.util.Collections;
-import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfQuestionField;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
 
 public class TestDataCertificateModel {
 
@@ -69,26 +48,9 @@ public class TestDataCertificateModel {
         .type(FK7210_CODE_TYPE)
         .availableForCitizen(true)
         .certificateActionSpecifications(Collections.emptyList())
-        .pdfTemplatePath(FK7210_PDF_PATH)
-        .pdfNoAddressTemplatePath(FK7210_PDF_PATH_NO_ADDRESS)
         .schematronPath(FK7210_SCHEMATRON_PATH)
         .recipient(FK_RECIPIENT)
-        .pdfSpecification(PdfSpecification.builder()
-            .certificateType(FK7210_TYPE)
-            .patientIdFieldId(FK7210_PDF_PATIENT_ID_FIELD_ID)
-            .mcid(FK7210_PDF_MCID)
-            .signatureWithAddressTagIndex(FK7210_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
-            .signatureWithoutAddressTagIndex(FK7210_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
-            .pdfQuestionFields(
-                List.of(
-                    PdfQuestionField.builder()
-                        .questionId(FK7210_QUESTION_BERAKNAT_FODELSEDATUM_ID)
-                        .pdfFieldId(FK7210_PDF_FODELSEDATUM_FIELD_ID)
-                        .pdfValueType(PdfValueType.DATE)
-                        .build()
-                )
-            )
-            .build());
+        .pdfSpecification(FK7210_PDF_SPECIFICATION);
   }
 
   public static CertificateModel.CertificateModelBuilder fk3226certificateModelBuilder() {
@@ -103,10 +65,9 @@ public class TestDataCertificateModel {
         .name(FK3226_NAME)
         .type(FK3226_CODE_TYPE)
         .availableForCitizen(true)
-        .pdfTemplatePath(FK3226_PDF_PATH)
-        .pdfNoAddressTemplatePath(FK3226_PDF_PATH_NO_ADDRESS)
         .schematronPath(FK3226_SCHEMATRON_PATH)
-        .recipient(FK_RECIPIENT);
+        .recipient(FK_RECIPIENT)
+        .pdfSpecification(FK3226_PDF_SPECIFICATION);
   }
 
 
@@ -122,31 +83,9 @@ public class TestDataCertificateModel {
         .certificateActionSpecifications(Collections.emptyList())
         .type(FK7472_CODE_TYPE)
         .availableForCitizen(false)
-        .pdfTemplatePath(FK7472_PDF_PATH)
-        .pdfNoAddressTemplatePath(FK7472_PDF_PATH_NO_ADDRESS)
-        .pdfSpecification(PdfSpecification.builder()
-            .certificateType(FK7472_TYPE)
-            .patientIdFieldId(FK7472_PDF_PATIENT_ID_FIELD_ID)
-            .mcid(FK7472_PDF_MCID)
-            .signatureWithAddressTagIndex(FK7472_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
-            .signatureWithoutAddressTagIndex(FK7472_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
-            .pdfQuestionFields(
-                List.of(
-                    PdfQuestionField.builder()
-                        .questionId(FK7472_QUESTION_SYMPTOM_ID)
-                        .pdfFieldId(FK7472_PDF_SYMPTOM_FIELD_ID)
-                        .pdfValueType(PdfValueType.TEXT)
-                        .build(),
-                    PdfQuestionField.builder()
-                        .questionId(FK7472_QUESTION_PERIOD_ID)
-                        .pdfFieldId(FK7472_PDF_PERIOD_FIELD_ID_PREFIX)
-                        .pdfValueType(PdfValueType.DATE_RANGE_LIST)
-                        .build()
-                )
-            )
-            .build())
         .schematronPath(FK7472_SCHEMATRON_PATH)
-        .recipient(FK_RECIPIENT);
+        .recipient(FK_RECIPIENT)
+        .pdfSpecification(FK7472_PDF_SPECIFICATION);
   }
 
   public static CertificateModel.CertificateModelBuilder fk7809certificateModelBuilder() {
@@ -161,8 +100,6 @@ public class TestDataCertificateModel {
         .name(FK7809_NAME)
         .type(FK7809_CODE_TYPE)
         .availableForCitizen(true)
-        .pdfTemplatePath(null)
-        .pdfNoAddressTemplatePath(null)
         .schematronPath(FK7809_SCHEMATRON_PATH)
         .recipient(FK_RECIPIENT);
   }

@@ -1,7 +1,5 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_DATE_FIELD_ID;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -55,7 +53,8 @@ public class CertificatePdfFillService {
 
   private static String getTemplatePath(Certificate certificate, boolean isCitizenFormat) {
     return includeAddress(certificate, isCitizenFormat) ? certificate.certificateModel()
-        .pdfTemplatePath() : certificate.certificateModel().pdfNoAddressTemplatePath();
+        .pdfSpecification().pdfTemplatePath()
+        : certificate.certificateModel().pdfSpecification().pdfNoAddressTemplatePath();
   }
 
   private static int getSignatureTagIndex(Certificate certificate, boolean isCitizenFormat) {
@@ -148,7 +147,8 @@ public class CertificatePdfFillService {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
     if (certificate.status() == Status.SIGNED) {
       pdfAdditionalInformationTextGenerator.addDigitalSignatureText(
-          document, getSignatureOffsetX(acroForm), getSignatureOffsetY(acroForm),
+          document, getSignatureOffsetX(acroForm, certificate),
+          getSignatureOffsetY(acroForm, certificate),
           mcid.getAndIncrement(),
           getSignatureTagIndex(certificate, includeAddress(certificate, isCitizenFormat))
       );
@@ -162,18 +162,19 @@ public class CertificatePdfFillService {
     }
   }
 
-  private float getSignatureOffsetY(PDAcroForm acroForm) {
-    final var rectangle = getSignedDateRectangle(acroForm);
+  private float getSignatureOffsetY(PDAcroForm acroForm, Certificate certificate) {
+    final var rectangle = getSignedDateRectangle(acroForm, certificate);
     return rectangle.getLowerLeftY() + SIGNATURE_Y_PADDING;
   }
 
-  private float getSignatureOffsetX(PDAcroForm acroForm) {
-    final var rectangle = getSignedDateRectangle(acroForm);
+  private float getSignatureOffsetX(PDAcroForm acroForm, Certificate certificate) {
+    final var rectangle = getSignedDateRectangle(acroForm, certificate);
     return rectangle.getUpperRightX() + SIGNATURE_X_PADDING;
   }
 
-  private static PDRectangle getSignedDateRectangle(PDAcroForm acroForm) {
-    final var signedDate = acroForm.getField(SIGNATURE_DATE_FIELD_ID);
+  private static PDRectangle getSignedDateRectangle(PDAcroForm acroForm, Certificate certificate) {
+    final var signedDate = acroForm.getField(
+        certificate.certificateModel().pdfSpecification().signature().signedDateFieldId().id());
     return signedDate.getWidgets().get(0).getRectangle();
   }
 

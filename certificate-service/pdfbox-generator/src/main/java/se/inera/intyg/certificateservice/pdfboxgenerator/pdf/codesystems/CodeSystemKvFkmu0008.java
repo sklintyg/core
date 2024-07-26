@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.codesystems;
 
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 
