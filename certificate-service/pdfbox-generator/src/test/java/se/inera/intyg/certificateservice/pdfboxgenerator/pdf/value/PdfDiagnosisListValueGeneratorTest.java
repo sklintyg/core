@@ -131,9 +131,7 @@ class PdfDiagnosisListValueGeneratorTest {
       final var result = PDF_DIAGNOSIS_LIST_VALUE_GENERATOR.generate(certificate,
           QUESTION_DIAGNOSIS_ID, DESCRIPTION_FIELD_ID);
 
-      //TODO check if possible to modify testdataCertificate to add and test ids
       assertEquals(expected, result);
-
     }
 
     @Test

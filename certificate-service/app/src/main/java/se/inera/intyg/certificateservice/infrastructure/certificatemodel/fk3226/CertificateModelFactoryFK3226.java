@@ -163,8 +163,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
 
   public static final String PDF_FK_3226_PDF = "fk3226/pdf/fk3226_v1_no_address.pdf"; //TODO: update when new template has been provided
   public static final String PDF_NO_ADDRESS_FK_3226_PDF = "fk3226/pdf/fk3226_v1_no_address.pdf";
-  public static final Mcid PDF_MCID = new Mcid(
-      100); //TODO: update when id has been found through availability testing
+  public static final Mcid PDF_MCID = new Mcid(100);
   private static final int PDF_SIGNATURE_PAGE_INDEX = 1;
   private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(50);
   private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(42);

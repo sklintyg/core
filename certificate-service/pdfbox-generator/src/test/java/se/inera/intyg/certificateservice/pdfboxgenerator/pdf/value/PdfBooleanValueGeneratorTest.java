@@ -22,7 +22,8 @@ class PdfBooleanValueGeneratorTest {
 
   private static final ElementId QUESTION_ELEMENT_ID = new ElementId("52.5");
   private static final FieldId QUESTION_FIELD_ID = new FieldId("52.5");
-  private static final String PDF_FIELD_ID = "form1[0].#subform[1].ksr_Ja[0]";
+  private static final String YES_PDF_FIELD_ID = "form1[0].#subform[1].ksr_Ja[0]";
+  private static final String NO_PDF_FIELD_ID = "form1[0].#subform[1].ksr_Nej[0]";
   private static final String CHECKBOX_VALUE = "1";
 
   private static final PdfBooleanValueGenerator pdfBooleanValueGenerator = new PdfBooleanValueGenerator();
@@ -41,7 +42,7 @@ class PdfBooleanValueGeneratorTest {
 
       assertDoesNotThrow(
           () -> pdfBooleanValueGenerator.generate(certificate,
-              QUESTION_ELEMENT_ID, PDF_FIELD_ID)
+              QUESTION_ELEMENT_ID, YES_PDF_FIELD_ID)
       );
     }
 
@@ -50,7 +51,7 @@ class PdfBooleanValueGeneratorTest {
       final var certificate = buildCertificate(null);
 
       final var result = pdfBooleanValueGenerator.generate(certificate,
-          QUESTION_ELEMENT_ID, PDF_FIELD_ID);
+          QUESTION_ELEMENT_ID, YES_PDF_FIELD_ID);
 
       assertEquals(Collections.emptyList(), result);
     }
@@ -61,7 +62,7 @@ class PdfBooleanValueGeneratorTest {
 
       assertDoesNotThrow(
           () -> pdfBooleanValueGenerator.generate(certificate,
-              QUESTION_ELEMENT_ID, PDF_FIELD_ID)
+              QUESTION_ELEMENT_ID, YES_PDF_FIELD_ID)
       );
     }
 
@@ -70,7 +71,7 @@ class PdfBooleanValueGeneratorTest {
       final var certificate = buildCertificate(Collections.emptyList());
 
       final var result = pdfBooleanValueGenerator.generate(certificate,
-          QUESTION_ELEMENT_ID, PDF_FIELD_ID);
+          QUESTION_ELEMENT_ID, YES_PDF_FIELD_ID);
 
       assertEquals(Collections.emptyList(), result);
     }
@@ -83,7 +84,7 @@ class PdfBooleanValueGeneratorTest {
     void shouldSetValueIfElementDataWithBooleanValueTrue() {
       final var expected = List.of(
           PdfField.builder()
-              .id(PDF_FIELD_ID)
+              .id(YES_PDF_FIELD_ID)
               .value(CHECKBOX_VALUE)
               .build()
       );
@@ -100,7 +101,7 @@ class PdfBooleanValueGeneratorTest {
       );
 
       final var result = pdfBooleanValueGenerator.generate(certificate,
-          QUESTION_ELEMENT_ID, PDF_FIELD_ID);
+          QUESTION_ELEMENT_ID, YES_PDF_FIELD_ID);
 
       assertEquals(expected, result);
     }
@@ -109,7 +110,7 @@ class PdfBooleanValueGeneratorTest {
     void shouldSetValueIfElementDataWithBooleanValueFalse() {
       final var expected = List.of(
           PdfField.builder()
-              .id(PDF_FIELD_ID)
+              .id(NO_PDF_FIELD_ID)
               .value(CHECKBOX_VALUE)
               .build()
       );
@@ -126,10 +127,9 @@ class PdfBooleanValueGeneratorTest {
       );
 
       final var result = pdfBooleanValueGenerator.generate(certificate,
-          QUESTION_ELEMENT_ID, PDF_FIELD_ID);
+          QUESTION_ELEMENT_ID, YES_PDF_FIELD_ID);
 
-      //TODO check if possible to modify testdataCertificate to test pdf ids
-      assertEquals(expected.get(0).getValue(), result.get(0).getValue());
+      assertEquals(expected, result);
     }
 
     @Test
@@ -151,7 +151,7 @@ class PdfBooleanValueGeneratorTest {
           IllegalStateException.class,
           () -> pdfBooleanValueGenerator.generate(certificate,
               QUESTION_ELEMENT_ID,
-              PDF_FIELD_ID)
+              YES_PDF_FIELD_ID)
       );
     }
 
@@ -173,7 +173,7 @@ class PdfBooleanValueGeneratorTest {
       assertEquals(Collections.emptyList(),
           pdfBooleanValueGenerator.generate(certificate,
               QUESTION_ELEMENT_ID,
-              PDF_FIELD_ID)
+              YES_PDF_FIELD_ID)
       );
     }
   }
