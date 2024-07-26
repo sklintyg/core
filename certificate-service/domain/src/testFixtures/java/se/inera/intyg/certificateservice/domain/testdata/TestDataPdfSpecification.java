@@ -3,14 +3,8 @@ package se.inera.intyg.certificateservice.domain.testdata;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_PDF_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_PDF_PATH_NO_ADDRESS;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_TYPE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_FODELSEDATUM_FIELD_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_MCID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_PATH_NO_ADDRESS;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_PATIENT_ID_FIELD_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_QUESTION_BERAKNAT_FODELSEDATUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK3226_AKUT_LIVSHOTANDE_FIELD_ID;
@@ -37,6 +31,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpeci
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK3226_PDF_ONLY_PALLIATIVE_CARE_FIELD_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK3226_PDF_OTHER_THREAT_FIELD_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK3226_PDF_PATIENT_ID_FIELD_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK3226_PDF_SIGNATURE_PAGE_INDEX;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK3226_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK3226_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK3226_PDF_SIGNED_BY_NAME_FIELD_ID;
@@ -70,12 +65,19 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpeci
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK3226_UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK3226_UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7210_PDF_CONTACT_INFORMATION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7210_PDF_FODELSEDATUM_FIELD_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7210_PDF_HSA_ID_FIELD_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7210_PDF_MCID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7210_PDF_PATIENT_ID_FIELD_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7210_PDF_PA_TITLE_FIELD_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7210_PDF_SIGNATURE_PAGE_INDEX;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7210_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7210_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7210_PDF_SIGNED_BY_NAME_FIELD_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7210_PDF_SIGNED_DATE_FIELD_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7210_PDF_SPECIALTY_FIELD_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7210_PDF_WORKPLACE_CODE_FIELD_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7210_QUESTION_BERAKNAT_FODELSEDATUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_CONTACT_INFORMATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_HSA_ID_FIELD_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_MCID;
@@ -84,6 +86,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpeci
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_PATIENT_ID_FIELD_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_PA_TITLE_FIELD_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_PERIOD_FIELD_ID_PREFIX;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_SIGNATURE_PAGE_INDEX;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_SIGNED_BY_NAME_FIELD_ID;
@@ -148,6 +151,9 @@ public class TestDataPdfSpecification {
     return PdfSpecification.builder()
         .certificateType(FK7210_TYPE)
         .signature(PdfSignature.builder()
+            .signaturePageIndex(FK7210_PDF_SIGNATURE_PAGE_INDEX)
+            .signatureWithAddressTagIndex(FK7210_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
+            .signatureWithoutAddressTagIndex(FK7210_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
             .signedDateFieldId(FK7210_PDF_SIGNED_DATE_FIELD_ID)
             .signedByNameFieldId(FK7210_PDF_SIGNED_BY_NAME_FIELD_ID)
             .paTitleFieldId(FK7210_PDF_PA_TITLE_FIELD_ID)
@@ -160,8 +166,6 @@ public class TestDataPdfSpecification {
         .pdfNoAddressTemplatePath(FK7210_PDF_PATH_NO_ADDRESS)
         .patientIdFieldId(FK7210_PDF_PATIENT_ID_FIELD_ID)
         .mcid(FK7210_PDF_MCID)
-        .signatureWithAddressTagIndex(FK7210_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
-        .signatureWithoutAddressTagIndex(FK7210_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
         .questionFields(
             List.of(
                 PdfQuestionField.builder()
@@ -178,6 +182,9 @@ public class TestDataPdfSpecification {
     return PdfSpecification.builder()
         .certificateType(FK3226_TYPE)
         .signature(PdfSignature.builder()
+            .signaturePageIndex(FK3226_PDF_SIGNATURE_PAGE_INDEX)
+            .signatureWithAddressTagIndex(FK3226_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
+            .signatureWithoutAddressTagIndex(FK3226_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
             .signedDateFieldId(FK3226_PDF_SIGNED_DATE_FIELD_ID)
             .signedByNameFieldId(FK3226_PDF_SIGNED_BY_NAME_FIELD_ID)
             .paTitleFieldId(FK3226_PDF_SIGNED_BY_PA_TITLE)
@@ -190,8 +197,6 @@ public class TestDataPdfSpecification {
         .pdfNoAddressTemplatePath(FK3226_PDF_PATH_NO_ADDRESS)
         .patientIdFieldId(FK3226_PDF_PATIENT_ID_FIELD_ID)
         .mcid(FK3226_PDF_MCID)
-        .signatureWithAddressTagIndex(FK3226_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
-        .signatureWithoutAddressTagIndex(FK3226_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
         .questionFields(
             List.of(
                 PdfQuestionField.builder()
@@ -353,6 +358,9 @@ public class TestDataPdfSpecification {
     return PdfSpecification.builder()
         .certificateType(FK7472_TYPE)
         .signature(PdfSignature.builder()
+            .signaturePageIndex(FK7472_PDF_SIGNATURE_PAGE_INDEX)
+            .signatureWithAddressTagIndex(FK7472_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
+            .signatureWithoutAddressTagIndex(FK7472_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
             .signedDateFieldId(FK7472_PDF_SIGNED_DATE_FIELD_ID)
             .signedByNameFieldId(FK7472_PDF_SIGNED_BY_NAME_FIELD_ID)
             .paTitleFieldId(FK7472_PDF_PA_TITLE_FIELD_ID)
@@ -365,8 +373,6 @@ public class TestDataPdfSpecification {
         .pdfNoAddressTemplatePath(FK7472_PDF_PATH_NO_ADDRESS)
         .patientIdFieldId(FK7472_PDF_PATIENT_ID_FIELD_ID)
         .mcid(FK7472_PDF_MCID)
-        .signatureWithAddressTagIndex(FK7472_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
-        .signatureWithoutAddressTagIndex(FK7472_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
         .questionFields(
             List.of(
                 PdfQuestionField.builder()

@@ -792,8 +792,11 @@ class CertificateModelFactoryFK7472Test {
     }
 
     @Test
-    void shallIncludeSignatureFieldIds() {
+    void shallIncludeSignatureFields() {
       final var expected = PdfSignature.builder()
+          .signaturePageIndex(0)
+          .signatureWithAddressTagIndex(new PdfTagIndex(50))
+          .signatureWithoutAddressTagIndex(new PdfTagIndex(42))
           .signedDateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datUnderskrift[0]"))
           .signedByNameFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtNamnfortydligande[0]"))
           .paTitleFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtBefattning[0]"))
@@ -816,23 +819,6 @@ class CertificateModelFactoryFK7472Test {
       final var certificateModel = certificateModelFactoryFK7472.create();
 
       assertEquals(expected, certificateModel.pdfSpecification().mcid().value());
-    }
-
-    @Test
-    void shallIncludeSignatureWithAddressTagIndex() {
-      final var expected = new PdfTagIndex(50);
-      final var certificateModel = certificateModelFactoryFK7472.create();
-
-      assertEquals(expected, certificateModel.pdfSpecification().signatureWithAddressTagIndex());
-    }
-
-    @Test
-    void shallIncludeSignatureWithoutAddressTagIndex() {
-      final var expected = new PdfTagIndex(42);
-      final var certificateModel = certificateModelFactoryFK7472.create();
-
-      assertEquals(expected,
-          certificateModel.pdfSpecification().signatureWithoutAddressTagIndex());
     }
 
     @Test

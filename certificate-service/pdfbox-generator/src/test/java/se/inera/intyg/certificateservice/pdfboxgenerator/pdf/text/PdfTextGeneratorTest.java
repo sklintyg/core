@@ -130,13 +130,13 @@ class PdfTextGeneratorTest {
     void shouldThrowErrorIfTryingToPlaceSignatureInIndexThatDoesntExist() {
       assertThrows(
           IllegalStateException.class,
-          () -> pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 500)
+          () -> pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 500, 0)
       );
     }
 
     @Test
     void shouldAddSignatureInCorrectDiv() throws IOException {
-      pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 18);
+      pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 18, 0);
 
       final var pageTag = getPageTag();
       final var questionDiv = (PDStructureElement) pageTag.getKids().get(0);
@@ -146,7 +146,7 @@ class PdfTextGeneratorTest {
 
     @Test
     void shouldAddSignatureTextInCorrectDiv() throws IOException {
-      pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 18);
+      pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 18, 0);
 
       final var pageTag = getPageTag();
       final var questionDiv = (PDStructureElement) pageTag.getKids().get(0);
@@ -284,13 +284,13 @@ class PdfTextGeneratorTest {
     void shouldThrowErrorIfTryingToPlaceSignatureInIndexThatDoesntExist() {
       assertThrows(
           IllegalStateException.class,
-          () -> pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 500)
+          () -> pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 500, 0)
       );
     }
 
     @Test
     void shouldAddSignatureToDocument() throws IOException {
-      pdfTextGenerator.addDigitalSignatureText(document, VALUE, 10F, 10F, 100, 34);
+      pdfTextGenerator.addDigitalSignatureText(document, VALUE, 10F, 10F, 100, 34, 0);
 
       final var pdfText = getTextForDocument();
       assertTrue(pdfText.contains(VALUE),
@@ -302,7 +302,7 @@ class PdfTextGeneratorTest {
 
     @Test
     void shouldAddSignatureInCorrectDiv() throws IOException {
-      pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 34);
+      pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 34, 0);
 
       final var pageTag = getPageTag();
       final var questionDiv = (PDStructureElement) pageTag.getKids().get(0);
@@ -312,7 +312,7 @@ class PdfTextGeneratorTest {
 
     @Test
     void shouldAddSignatureTextInCorrectDiv() throws IOException {
-      pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 34);
+      pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 34, 0);
 
       final var pageTag = getPageTag();
       final var questionDiv = (PDStructureElement) pageTag.getKids().get(0);

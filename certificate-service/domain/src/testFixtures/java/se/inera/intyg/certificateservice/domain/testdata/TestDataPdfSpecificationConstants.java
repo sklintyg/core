@@ -9,6 +9,17 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagInd
 public class TestDataPdfSpecificationConstants {
 
   //7210
+  public static final PdfFieldId FK7210_PDF_PATIENT_ID_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtPersonNr[0]");
+  public static final PdfFieldId FK7210_PDF_FODELSEDATUM_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].flt_dat[0]");
+  public static final ElementId FK7210_QUESTION_BERAKNAT_FODELSEDATUM_ID = new ElementId("54");
+  public static final Mcid FK7210_PDF_MCID = new Mcid(100);
+  public static final PdfTagIndex FK7210_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(15);
+  public static final PdfTagIndex FK7210_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(
+      7);
+  public static final int FK7210_PDF_SIGNATURE_PAGE_INDEX = 0;
+
   public static final PdfFieldId FK7210_PDF_SIGNED_DATE_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_datUnderskrift[0]");
   public static final PdfFieldId FK7210_PDF_SIGNED_BY_NAME_FIELD_ID = new PdfFieldId(
@@ -28,6 +39,7 @@ public class TestDataPdfSpecificationConstants {
   public static final PdfFieldId FK3226_PDF_PATIENT_ID_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_txtPnr[0]");
   public static final Mcid FK3226_PDF_MCID = new Mcid(100);
+  public static final int FK3226_PDF_SIGNATURE_PAGE_INDEX = 1;
   public static final PdfTagIndex FK3226_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(15);
   public static final PdfTagIndex FK3226_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(
       7);
@@ -209,6 +221,7 @@ public class TestDataPdfSpecificationConstants {
   public static final String FK7472_PDF_PATH_NO_ADDRESS = "fk7472/pdf/fk7472_v1_no_address.pdf";
 
   public static final Mcid FK7472_PDF_MCID = new Mcid(120);
+  public static final int FK7472_PDF_SIGNATURE_PAGE_INDEX = 0;
   public static final PdfTagIndex FK7472_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(50);
   public static final PdfTagIndex FK7472_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(
       42);

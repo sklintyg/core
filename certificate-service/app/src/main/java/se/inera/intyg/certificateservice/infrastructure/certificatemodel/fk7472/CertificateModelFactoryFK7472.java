@@ -92,6 +92,7 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
   private static final Mcid PDF_MCID = new Mcid(120);
   private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(50);
   private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(42);
+  private static final int PDF_SIGNATURE_PAGE_INDEX = 0;
   private static final PdfFieldId PDF_SIGNED_DATE_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_datUnderskrift[0]");
   private static final PdfFieldId PDF_SIGNED_BY_NAME_FIELD_ID = new PdfFieldId(
@@ -237,6 +238,9 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
             .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7472_PDF)
             .patientIdFieldId(PDF_PATIENT_ID_FIELD_ID)
             .signature(PdfSignature.builder()
+                .signaturePageIndex(PDF_SIGNATURE_PAGE_INDEX)
+                .signatureWithAddressTagIndex(PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
+                .signatureWithoutAddressTagIndex(PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
                 .signedDateFieldId(PDF_SIGNED_DATE_FIELD_ID)
                 .signedByNameFieldId(PDF_SIGNED_BY_NAME_FIELD_ID)
                 .paTitleFieldId(PDF_PA_TITLE_FIELD_ID)
@@ -246,8 +250,6 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
                 .contactInformation(PDF_CONTACT_INFORMATION)
                 .build())
             .mcid(PDF_MCID)
-            .signatureWithAddressTagIndex(PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
-            .signatureWithoutAddressTagIndex(PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
             .questionFields(
                 List.of(
                     PdfQuestionField.builder()

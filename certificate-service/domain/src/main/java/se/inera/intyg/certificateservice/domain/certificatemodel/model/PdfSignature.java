@@ -7,6 +7,9 @@ import lombok.Value;
 @Builder
 public class PdfSignature {
 
+  PdfTagIndex signatureWithAddressTagIndex;
+  PdfTagIndex signatureWithoutAddressTagIndex;
+  int signaturePageIndex;
   PdfFieldId signedDateFieldId;
   PdfFieldId signedByNameFieldId;
   PdfFieldId paTitleFieldId;

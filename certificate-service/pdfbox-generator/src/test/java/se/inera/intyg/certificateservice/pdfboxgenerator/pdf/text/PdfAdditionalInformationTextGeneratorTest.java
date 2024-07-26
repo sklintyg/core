@@ -90,7 +90,7 @@ class PdfAdditionalInformationTextGeneratorTest {
 
   @Test
   void shouldSetDigitalSignature() throws IOException {
-    pdfAdditionalInformationTextGenerator.addDigitalSignatureText(document, 10F, 20F, 100, 34);
+    pdfAdditionalInformationTextGenerator.addDigitalSignatureText(document, 10F, 20F, 100, 34, 0);
 
     verify(pdfTextGenerator).addDigitalSignatureText(
         document,
@@ -98,8 +98,8 @@ class PdfAdditionalInformationTextGeneratorTest {
         10F,
         20F,
         100,
-        34
-    );
+        34,
+        0);
   }
 
   @Test

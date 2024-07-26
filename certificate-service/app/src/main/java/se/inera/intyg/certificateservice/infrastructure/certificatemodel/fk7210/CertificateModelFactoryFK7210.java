@@ -70,6 +70,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
   private static final Mcid PDF_MCID = new Mcid(100);
   private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(15);
   private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(7);
+  private static final int PDF_SIGNATURE_PAGE_INDEX = 0;
   private static final PdfFieldId PDF_SIGNED_DATE_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_datUnderskrift[0]");
   private static final PdfFieldId PDF_SIGNED_BY_NAME_FIELD_ID = new PdfFieldId(
@@ -191,6 +192,9 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
             .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7210_PDF)
             .patientIdFieldId(PDF_PATIENT_ID_FIELD_ID)
             .signature(PdfSignature.builder()
+                .signatureWithAddressTagIndex(PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
+                .signatureWithoutAddressTagIndex(PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
+                .signaturePageIndex(PDF_SIGNATURE_PAGE_INDEX)
                 .signedDateFieldId(PDF_SIGNED_DATE_FIELD_ID)
                 .signedByNameFieldId(PDF_SIGNED_BY_NAME_FIELD_ID)
                 .paTitleFieldId(PDF_PA_TITLE_FIELD_ID)
@@ -200,8 +204,6 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
                 .contactInformation(PDF_CONTACT_INFORMATION)
                 .build())
             .mcid(PDF_MCID)
-            .signatureWithAddressTagIndex(PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
-            .signatureWithoutAddressTagIndex(PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
             .questionFields(
                 List.of(
                     PdfQuestionField.builder()
@@ -237,7 +239,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
             ElementConfigurationDate.builder()
                 .name("Datum")
                 .id(QUESTION_BERAKNAT_FODELSEDATUM_FIELD_ID)
-                .min(Period.ofDays(0))
+                .min(Period.ofDays(PDF_SIGNATURE_PAGE_INDEX))
                 .max(Period.ofYears(1))
                 .build()
         )
@@ -253,7 +255,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
             List.of(
                 ElementValidationDate.builder()
                     .mandatory(true)
-                    .min(Period.ofDays(0))
+                    .min(Period.ofDays(PDF_SIGNATURE_PAGE_INDEX))
                     .max(Period.ofYears(1))
                     .build()
             )

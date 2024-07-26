@@ -59,10 +59,12 @@ public class CertificatePdfFillService {
 
   private static int getSignatureTagIndex(Certificate certificate, boolean isCitizenFormat) {
     if (isCitizenFormat) {
-      return certificate.certificateModel().pdfSpecification().signatureWithoutAddressTagIndex()
+      return certificate.certificateModel().pdfSpecification().signature()
+          .signatureWithoutAddressTagIndex()
           .value();
     }
-    return certificate.certificateModel().pdfSpecification().signatureWithAddressTagIndex().value();
+    return certificate.certificateModel().pdfSpecification().signature()
+        .signatureWithAddressTagIndex().value();
   }
 
   private static boolean includeAddress(Certificate certificate, boolean isCitizenFormat) {
@@ -145,12 +147,13 @@ public class CertificatePdfFillService {
       AtomicInteger mcid, boolean isCitizenFormat)
       throws IOException {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
+    final var pageIndex = certificate.certificateModel().pdfSpecification().signature()
+        .signaturePageIndex();
     if (certificate.status() == Status.SIGNED) {
       pdfAdditionalInformationTextGenerator.addDigitalSignatureText(
           document, getSignatureOffsetX(acroForm, certificate),
-          getSignatureOffsetY(acroForm, certificate),
-          mcid.getAndIncrement(),
-          getSignatureTagIndex(certificate, includeAddress(certificate, isCitizenFormat))
+          getSignatureOffsetY(acroForm, certificate), mcid.getAndIncrement(),
+          getSignatureTagIndex(certificate, includeAddress(certificate, isCitizenFormat)), pageIndex
       );
     }
   }

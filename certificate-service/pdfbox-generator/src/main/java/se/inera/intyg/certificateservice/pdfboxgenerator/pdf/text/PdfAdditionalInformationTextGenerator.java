@@ -53,7 +53,7 @@ public class PdfAdditionalInformationTextGenerator {
   }
 
   public void addDigitalSignatureText(PDDocument pdDocument, Float xPosition, Float yPosition,
-      int mcid, int signatureIndex)
+      int mcid, int signatureIndex, int pageIndex)
       throws IOException {
     pdfTextGenerator.addDigitalSignatureText(
         pdDocument,
@@ -61,7 +61,8 @@ public class PdfAdditionalInformationTextGenerator {
         xPosition,
         yPosition,
         mcid,
-        signatureIndex
+        signatureIndex,
+        pageIndex
     );
   }
 }
