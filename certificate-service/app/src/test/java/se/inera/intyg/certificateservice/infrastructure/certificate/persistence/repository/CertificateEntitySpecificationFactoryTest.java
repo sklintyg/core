@@ -178,7 +178,7 @@ class CertificateEntitySpecificationFactoryTest {
     @Test
     void shallIncludeModifiedFrom() {
       final var certificatesRequest = CertificatesRequest.builder()
-          .from(LocalDateTime.now(ZoneId.systemDefault()))
+          .modifiedFrom(LocalDateTime.now(ZoneId.systemDefault()))
           .build();
       try (
           MockedStatic<CertificateEntitySpecification> specification = mockStatic(
@@ -186,7 +186,7 @@ class CertificateEntitySpecificationFactoryTest {
       ) {
         specification.when(
                 () -> CertificateEntitySpecification.modifiedEqualsAndGreaterThan(
-                    certificatesRequest.from())
+                    certificatesRequest.modifiedFrom())
             )
             .thenReturn(mock(Specification.class));
 
@@ -194,7 +194,7 @@ class CertificateEntitySpecificationFactoryTest {
 
         specification.verify(
             () -> CertificateEntitySpecification.modifiedEqualsAndGreaterThan(
-                certificatesRequest.from())
+                certificatesRequest.modifiedFrom())
         );
       }
     }
@@ -216,7 +216,7 @@ class CertificateEntitySpecificationFactoryTest {
     @Test
     void shallIncludeModifiedTo() {
       final var certificatesRequest = CertificatesRequest.builder()
-          .to(LocalDateTime.now(ZoneId.systemDefault()))
+          .modifiedTo(LocalDateTime.now(ZoneId.systemDefault()))
           .build();
       try (
           MockedStatic<CertificateEntitySpecification> specification = mockStatic(
@@ -224,7 +224,7 @@ class CertificateEntitySpecificationFactoryTest {
       ) {
         specification.when(
                 () -> CertificateEntitySpecification.modifiedEqualsAndLesserThan(
-                    certificatesRequest.to())
+                    certificatesRequest.modifiedTo())
             )
             .thenReturn(mock(Specification.class));
 
@@ -232,13 +232,89 @@ class CertificateEntitySpecificationFactoryTest {
 
         specification.verify(
             () -> CertificateEntitySpecification.modifiedEqualsAndLesserThan(
-                certificatesRequest.to())
+                certificatesRequest.modifiedTo())
         );
       }
     }
 
     @Test
     void shallNotIncludeModifiedTo() {
+      final var certificatesRequest = CertificatesRequest.builder()
+          .build();
+      try (
+          MockedStatic<CertificateEntitySpecification> specification = mockStatic(
+              CertificateEntitySpecification.class)
+      ) {
+        assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
+
+        specification.verifyNoInteractions();
+      }
+    }
+
+    @Test
+    void shallIncludeCreatedFrom() {
+      final var certificatesRequest = CertificatesRequest.builder()
+          .createdFrom(LocalDateTime.now(ZoneId.systemDefault()))
+          .build();
+      try (
+          MockedStatic<CertificateEntitySpecification> specification = mockStatic(
+              CertificateEntitySpecification.class)
+      ) {
+        specification.when(
+                () -> CertificateEntitySpecification.createdEqualsAndGreaterThan(
+                    certificatesRequest.createdFrom())
+            )
+            .thenReturn(mock(Specification.class));
+
+        assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
+
+        specification.verify(
+            () -> CertificateEntitySpecification.createdEqualsAndGreaterThan(
+                certificatesRequest.createdFrom())
+        );
+      }
+    }
+
+    @Test
+    void shallNotIncludeCreatedFrom() {
+      final var certificatesRequest = CertificatesRequest.builder()
+          .build();
+      try (
+          MockedStatic<CertificateEntitySpecification> specification = mockStatic(
+              CertificateEntitySpecification.class)
+      ) {
+        assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
+
+        specification.verifyNoInteractions();
+      }
+    }
+
+    @Test
+    void shallIncludeCreatedTo() {
+      final var certificatesRequest = CertificatesRequest.builder()
+          .createdTo(LocalDateTime.now(ZoneId.systemDefault()))
+          .build();
+      try (
+          MockedStatic<CertificateEntitySpecification> specification = mockStatic(
+              CertificateEntitySpecification.class)
+      ) {
+        specification.when(
+                () -> CertificateEntitySpecification.createdEqualsAndLesserThan(
+                    certificatesRequest.createdTo())
+            )
+            .thenReturn(mock(Specification.class));
+
+        assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
+
+        specification.verify(
+            () -> CertificateEntitySpecification.createdEqualsAndLesserThan(
+                certificatesRequest.createdTo())
+        );
+      }
+    }
+
+    @Test
+    void shallNotIncludeCreatedTo() {
       final var certificatesRequest = CertificatesRequest.builder()
           .build();
       try (

@@ -229,6 +229,20 @@ class JpaCertificateRepositoryTest {
     }
 
     @Test
+    void shouldDeleteRelationsIfStatusLockedDraft() {
+      final var expectedResult = Certificate.builder()
+          .id(CERTIFICATE_ID)
+          .status(Status.LOCKED_DRAFT)
+          .build();
+
+      doReturn(Optional.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository)
+          .findByCertificateId(CERTIFICATE_ID.id());
+      jpaCertificateRepository.save(expectedResult);
+
+      verify(certificateRelationRepository).deleteRelations(CERTIFICATE_ENTITY);
+    }
+
+    @Test
     void shouldSaveCertificateRelations() {
       final var certificate = Certificate.builder().build();
 

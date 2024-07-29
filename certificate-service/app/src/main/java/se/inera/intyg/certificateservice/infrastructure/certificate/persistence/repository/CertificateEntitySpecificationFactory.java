@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository;
 
 import static org.springframework.data.jpa.domain.Specification.where;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.createdEqualsAndGreaterThan;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.createdEqualsAndLesserThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.modifiedEqualsAndGreaterThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.modifiedEqualsAndLesserThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntitySpecification.equalsPatient;
@@ -22,15 +24,27 @@ public class CertificateEntitySpecificationFactory {
 
   public Specification<CertificateEntity> create(CertificatesRequest certificatesRequest) {
     Specification<CertificateEntity> specification = where(null);
-    if (certificatesRequest.from() != null) {
+    if (certificatesRequest.modifiedFrom() != null) {
       specification = specification.and(
-          modifiedEqualsAndGreaterThan(certificatesRequest.from())
+          modifiedEqualsAndGreaterThan(certificatesRequest.modifiedFrom())
       );
     }
 
-    if (certificatesRequest.to() != null) {
+    if (certificatesRequest.modifiedTo() != null) {
       specification = specification.and(
-          modifiedEqualsAndLesserThan(certificatesRequest.to())
+          modifiedEqualsAndLesserThan(certificatesRequest.modifiedTo())
+      );
+    }
+
+    if (certificatesRequest.createdFrom() != null) {
+      specification = specification.and(
+          createdEqualsAndGreaterThan(certificatesRequest.createdFrom())
+      );
+    }
+
+    if (certificatesRequest.createdTo() != null) {
+      specification = specification.and(
+          createdEqualsAndLesserThan(certificatesRequest.createdTo())
       );
     }
 

@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCerti
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificatePdfDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateXmlDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.LockCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
 import se.inera.intyg.certificateservice.domain.certificate.service.RenewCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ReplaceCertificateDomainService;
@@ -362,5 +363,11 @@ public class AppConfig {
       XmlGeneratorCertificatesForCareWithQA xmlGeneratorCertificatesForCareWithQA) {
     return new GetPatientCertificatesWithQAInternalDomainService(certificateRepository,
         xmlGeneratorCertificatesForCareWithQA);
+  }
+
+  @Bean
+  public LockCertificateDomainService setCertificatesToLockedDomainService(
+      CertificateRepository certificateRepository) {
+    return new LockCertificateDomainService(certificateRepository);
   }
 }

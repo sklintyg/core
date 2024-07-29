@@ -22,8 +22,8 @@ public class CertificatesRequestFactory {
 
   public CertificatesRequest create(CertificatesQueryCriteriaDTO queryCriteria) {
     return CertificatesRequest.builder()
-        .from(queryCriteria.getFrom())
-        .to(queryCriteria.getTo())
+        .modifiedFrom(queryCriteria.getFrom())
+        .modifiedTo(queryCriteria.getTo())
         .issuedByStaffId(
             queryCriteria.getIssuedByStaffId() != null
                 ? new HsaId(queryCriteria.getIssuedByStaffId())

@@ -39,6 +39,9 @@
       <column name="revoked" type="datetime">
         <constraints nullable="true"/>
       </column>
+      <column name="locked" type="datetime">
+        <constraints nullable="true"/>
+      </column>
       <column name="issued_by_staff_key" type="integer unsigned">
         <constraints nullable="false"/>
       </column>
@@ -92,6 +95,9 @@
     </insert>
     <insert tableName="certificate_status">
       <column name="status" value="REVOKED"/>
+    </insert>
+    <insert tableName="certificate_status">
+      <column name="status" value="LOCKED_DRAFT"/>
     </insert>
 
     <createTable tableName="certificate_model">
