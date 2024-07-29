@@ -88,6 +88,7 @@ public class CertificateEntityMapper {
               result.setRevision(certificate.revision().value());
               result.setModified(LocalDateTime.now());
               result.setSigned(certificate.signed());
+              result.setLocked(certificate.locked());
               return result;
             }
         )
@@ -217,6 +218,7 @@ public class CertificateEntityMapper {
         .signed(certificate.signed())
         .revision(certificate.revision().value())
         .modified(LocalDateTime.now())
+        .locked(certificate.locked())
         .build();
   }
 
@@ -238,6 +240,7 @@ public class CertificateEntityMapper {
         .created(certificateEntity.getCreated())
         .signed(certificateEntity.getSigned())
         .modified(certificateEntity.getModified())
+        .locked(certificateEntity.getLocked())
         .status(Status.valueOf(certificateEntity.getStatus().getStatus()))
         .revision(new Revision(certificateEntity.getRevision()))
         .certificateModel(model)

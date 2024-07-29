@@ -28,6 +28,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificate.persi
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -170,6 +171,18 @@ class CertificateEntityMapperTest {
       final var response = certificateEntityMapper.toEntity(FK7210_CERTIFICATE);
 
       assertEquals(CERTIFICATE_ENTITY.getSent(), response.getSent());
+    }
+
+    @Test
+    void shouldMapLockedIfLockedIsNotNull() {
+      final var lockedCertificate = fk7210CertificateBuilder()
+          .status(Status.LOCKED_DRAFT)
+          .locked(LocalDateTime.now(ZoneId.systemDefault()))
+          .build();
+
+      final var response = certificateEntityMapper.toEntity(lockedCertificate);
+
+      assertEquals(CERTIFICATE_ENTITY.getLocked(), response.getLocked());
     }
 
     @Nested

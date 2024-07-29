@@ -2550,6 +2550,17 @@ class CertificateTest {
     }
 
     @Test
+    void shallIncludeLockedTimestampWhenDraftIsLocked() {
+      final var draftCertificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      draftCertificate.lock();
+
+      assertNotNull(draftCertificate.locked());
+    }
+
+    @Test
     void shallSetParentToNull() {
       final var draftCertificate = certificateBuilder
           .status(Status.DRAFT)

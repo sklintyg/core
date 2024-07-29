@@ -43,6 +43,7 @@ public class Certificate {
   private final LocalDateTime created;
   private LocalDateTime signed;
   private LocalDateTime modified;
+  private LocalDateTime locked;
   private CertificateMetaData certificateMetaData;
   @Builder.Default
   private List<ElementData> elementData = Collections.emptyList();
@@ -452,6 +453,7 @@ public class Certificate {
     this.status = Status.LOCKED_DRAFT;
     this.parent = null;
     this.children = Collections.emptyList();
+    this.locked = LocalDateTime.now(ZoneId.systemDefault());
   }
 }
 

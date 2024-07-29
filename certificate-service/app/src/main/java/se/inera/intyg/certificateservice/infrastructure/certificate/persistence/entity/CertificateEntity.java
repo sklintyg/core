@@ -45,6 +45,8 @@ public class CertificateEntity {
   private LocalDateTime sent;
   @Column(name = "revoked")
   private LocalDateTime revoked;
+  @Column(name = "locked")
+  private LocalDateTime locked;
   @Column(name = "revision")
   private Long revision;
   @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
