@@ -5,17 +5,17 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.LockOldDraftsRequest.LockOldDraftsRequestBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsRequest.LockDraftsRequestBuilder;
 
-@JsonDeserialize(builder = LockOldDraftsRequestBuilder.class)
+@JsonDeserialize(builder = LockDraftsRequestBuilder.class)
 @Value
 @Builder
-public class LockOldDraftsRequest {
+public class LockDraftsRequest {
 
   LocalDateTime cutoffDate;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class LockOldDraftsRequestBuilder {
+  public static class LockDraftsRequestBuilder {
 
   }
 }

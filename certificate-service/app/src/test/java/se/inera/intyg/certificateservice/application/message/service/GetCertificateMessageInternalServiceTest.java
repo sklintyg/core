@@ -62,7 +62,7 @@ class GetCertificateMessageInternalServiceTest {
         .build();
 
     doReturn(false).when(certificateRepository).exists(new CertificateId(CERTIFICATE_ID));
-    
+
     final var actualResult = getCertificateMessageInternalService.get(CERTIFICATE_ID);
 
     assertEquals(expectedResponse, actualResult);

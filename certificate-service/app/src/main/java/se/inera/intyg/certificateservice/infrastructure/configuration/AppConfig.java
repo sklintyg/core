@@ -13,12 +13,12 @@ import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCerti
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificatePdfDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateXmlDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.LockCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
 import se.inera.intyg.certificateservice.domain.certificate.service.RenewCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ReplaceCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.RevokeCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SendCertificateDomainService;
-import se.inera.intyg.certificateservice.domain.certificate.service.SetCertificatesToLockedDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SignCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SignCertificateWithoutSignatureDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertificateDomainService;
@@ -366,8 +366,8 @@ public class AppConfig {
   }
 
   @Bean
-  public SetCertificatesToLockedDomainService setCertificatesToLockedDomainService(
+  public LockCertificateDomainService setCertificatesToLockedDomainService(
       CertificateRepository certificateRepository) {
-    return new SetCertificatesToLockedDomainService(certificateRepository);
+    return new LockCertificateDomainService(certificateRepository);
   }
 }

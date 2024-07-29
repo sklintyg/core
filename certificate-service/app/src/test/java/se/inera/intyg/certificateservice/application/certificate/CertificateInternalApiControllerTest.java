@@ -15,19 +15,19 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.LockOldDraftsRequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.LockOldDraftsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalMetadataService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalXmlService;
-import se.inera.intyg.certificateservice.application.certificate.service.LockOldDraftsInternalService;
+import se.inera.intyg.certificateservice.application.certificate.service.LockDraftsInternalService;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateInternalApiControllerTest {
 
   @Mock
-  private LockOldDraftsInternalService lockOldDraftsInternalService;
+  private LockDraftsInternalService lockDraftsInternalService;
   @Mock
   private CertificateExistsService certificateExistsService;
   @Mock
@@ -95,12 +95,12 @@ class CertificateInternalApiControllerTest {
   }
 
   @Test
-  void shallReturnLockOldDraftsResponse() {
-    final var expectedResult = LockOldDraftsResponse.builder().build();
-    final var request = LockOldDraftsRequest.builder().build();
-    doReturn(expectedResult).when(lockOldDraftsInternalService).lock(request);
+  void shallReturnLockDraftsResponse() {
+    final var expectedResult = LockDraftsResponse.builder().build();
+    final var request = LockDraftsRequest.builder().build();
+    doReturn(expectedResult).when(lockDraftsInternalService).lock(request);
 
-    final var actualResult = certificateInternalApiController.lockOldDrafts(request);
+    final var actualResult = certificateInternalApiController.lockDrafts(request);
     assertEquals(expectedResult, actualResult);
   }
 }

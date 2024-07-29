@@ -11,13 +11,13 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.LockOldDraftsRequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.LockOldDraftsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalMetadataService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalXmlService;
-import se.inera.intyg.certificateservice.application.certificate.service.LockOldDraftsInternalService;
+import se.inera.intyg.certificateservice.application.certificate.service.LockDraftsInternalService;
 
 @RequiredArgsConstructor
 @RestController
@@ -28,7 +28,7 @@ public class CertificateInternalApiController {
   private final GetCertificateInternalMetadataService getCertificateInternalMetadataService;
   private final GetCertificateInternalService getCertificateInternalService;
   private final CertificateExistsService certificateExistsService;
-  private final LockOldDraftsInternalService lockOldDraftsInternalService;
+  private final LockDraftsInternalService lockDraftsInternalService;
 
   @GetMapping("/{certificateId}/exists")
   CertificateExistsResponse findExistingCertificate(
@@ -54,8 +54,8 @@ public class CertificateInternalApiController {
     return getCertificateInternalService.get(certificateId);
   }
 
-  @PostMapping("/lockOldDrafts")
-  LockOldDraftsResponse lockOldDrafts(@RequestBody LockOldDraftsRequest request) {
-    return lockOldDraftsInternalService.lock(request);
+  @PostMapping("/lock")
+  LockDraftsResponse lockDrafts(@RequestBody LockDraftsRequest request) {
+    return lockDraftsInternalService.lock(request);
   }
 }
