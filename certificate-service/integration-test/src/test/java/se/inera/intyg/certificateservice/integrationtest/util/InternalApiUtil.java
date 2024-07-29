@@ -15,6 +15,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageInternalResponse;
+import se.inera.intyg.certificateservice.application.patient.dto.PatientCertificatesWithQARequest;
+import se.inera.intyg.certificateservice.application.patient.dto.PatientCertificatesWithQAResponse;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -111,6 +113,25 @@ public class InternalApiUtil {
         requestUrl,
         HttpMethod.POST,
         new HttpEntity<>(null, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<PatientCertificatesWithQAResponse> getPatientCertificatesWithQA(
+      PatientCertificatesWithQARequest request) {
+    final var requestUrl = "http://localhost:%s/internalapi/patient/certificates/qa".formatted(
+        port
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
         new ParameterizedTypeReference<>() {
         },
         Collections.emptyMap()

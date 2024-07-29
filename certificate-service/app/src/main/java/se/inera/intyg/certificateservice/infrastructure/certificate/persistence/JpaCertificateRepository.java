@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
+import se.inera.intyg.certificateservice.domain.patient.model.CertificatesWithQARequest;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
@@ -139,6 +140,15 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
   @Override
   public List<Certificate> findByCertificatesRequest(CertificatesRequest request) {
+    final var specification = certificateEntitySpecificationFactory.create(request);
+
+    return certificateEntityRepository.findAll(specification).stream()
+        .map(certificateEntityMapper::toDomain)
+        .toList();
+  }
+
+  @Override
+  public List<Certificate> findByCertificatesWithQARequest(CertificatesWithQARequest request) {
     final var specification = certificateEntitySpecificationFactory.create(request);
 
     return certificateEntityRepository.findAll(specification).stream()

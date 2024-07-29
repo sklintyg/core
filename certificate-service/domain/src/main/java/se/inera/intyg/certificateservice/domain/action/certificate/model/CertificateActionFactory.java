@@ -286,7 +286,10 @@ public class CertificateActionFactory {
                   new ActionRuleProtectedPerson(),
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
-                  new ActionRuleUserAllowCopy()
+                  new ActionRuleUserAllowCopy(),
+                  new ActionRuleUserHasAccessScope(
+                      List.of(AccessScope.WITHIN_CARE_UNIT)
+                  )
               )
           )
           .build();
@@ -301,7 +304,10 @@ public class CertificateActionFactory {
                   new ActionRuleProtectedPerson(),
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
-                  new ActionRuleUserAllowCopy()
+                  new ActionRuleUserAllowCopy(),
+                  new ActionRuleUserHasAccessScope(
+                      List.of(AccessScope.WITHIN_CARE_UNIT)
+                  )
               )
           )
           .build();
@@ -392,6 +398,18 @@ public class CertificateActionFactory {
                   new ActionRuleSent(true),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleProtectedPerson()
+              )
+          )
+          .build();
+      case RESPONSIBLE_ISSUER -> CertificateActionResponsibleIssuer.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(
+                      List.of(Status.DRAFT)),
+                  new ActionRuleRole(actionSpecification.allowedRoles()),
+                  new ActionRuleUserHasAccessScope(
+                      List.of(AccessScope.WITHIN_CARE_PROVIDER, AccessScope.ALL_CARE_PROVIDERS))
               )
           )
           .build();

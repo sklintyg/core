@@ -11,6 +11,7 @@ import org.springframework.test.context.DynamicPropertySource;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsDeepIntegrationIT;
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsSVODIT;
+import se.inera.intyg.certificateservice.integrationtest.CertificatesWithQAForCareIT;
 import se.inera.intyg.certificateservice.integrationtest.CreateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.DeleteCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateIT;
@@ -27,6 +28,7 @@ import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesWhen
 import se.inera.intyg.certificateservice.integrationtest.InternalApiIT;
 import se.inera.intyg.certificateservice.integrationtest.MessagingNotAvailableIT;
 import se.inera.intyg.certificateservice.integrationtest.ReplaceCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.ResponsibleIssuerIT;
 import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SendCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateIT;
@@ -442,6 +444,41 @@ public class FK7210ActiveIT {
     @Override
     protected String typeVersion() {
       return ACTIVE_VERSION;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Ansvarig intygsutfärdare")
+  class ResponsibleIssuer extends ResponsibleIssuerIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "ListCertificatesForCareWithQA")
+  class IncludeCerificatesWithQA extends CertificatesWithQAForCareIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+
+    @Override
+    protected boolean canRecieveQuestions() {
+      return false;
     }
   }
 }

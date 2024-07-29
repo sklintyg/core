@@ -15,6 +15,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 class PdfTextValueGeneratorTest {
@@ -23,8 +24,12 @@ class PdfTextValueGeneratorTest {
   private static final String VALUE = "Diagnos är okänd men symtomen är hosta.";
   private static final ElementId QUESTION_SYMPTOM_ID = new ElementId("2");
 
-
   private static final PdfTextValueGenerator pdfTextValueGenerator = new PdfTextValueGenerator();
+
+  @Test
+  void shouldReturnType() {
+    assertEquals(PdfValueType.TEXT, pdfTextValueGenerator.getType());
+  }
 
   @Nested
   class NoElementData {

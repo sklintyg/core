@@ -192,9 +192,21 @@ public class Message {
     return this.status == MessageStatus.SENT;
   }
 
+  public boolean isHandled() {
+    return this.status == MessageStatus.HANDLED;
+  }
+
   public void forward() {
     if (isSent()) {
       this.forwarded = new Forwarded(true);
     }
+  }
+
+  public boolean hasAnswer() {
+    return this.answer != null;
+  }
+
+  public boolean hasAuthoredStaff() {
+    return this.authoredStaff != null;
   }
 }

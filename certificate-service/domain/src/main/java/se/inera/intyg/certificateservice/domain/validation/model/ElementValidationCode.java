@@ -23,7 +23,7 @@ public class ElementValidationCode implements ElementValidation {
   public List<ValidationError> validate(ElementData data, Optional<ElementId> categoryId) {
     validateElementData(data);
     final var code = getValue(data.value());
-    if (mandatory && !ElementValidator.isTextDefined(code.code())) {
+    if (mandatory && code.isEmpty()) {
       return List.of(
           ValidationError.builder()
               .elementId(data.id())

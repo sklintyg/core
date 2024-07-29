@@ -152,7 +152,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
 
   private static final ElementId MEDICINSK_BEHANDLING_CATEGORY_ID = new ElementId("KAT_7");
   public static final ElementId QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_ID = new ElementId(
-      "50.1");
+      "50");
   private static final FieldId QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_FIELD_ID = new FieldId(
       "50.1");
   public static final ElementId QUESTION_VARDENHET_OCH_TIDPLAN_ID = new ElementId(
@@ -174,7 +174,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
       "58.1");
   public static final ElementId DIAGNOSIS_ID = new ElementId("58");
   public static final ElementId DIAGNOSIS_MOTIVATION_ID = new ElementId("5");
-  public static final FieldId DIAGNOSIS_MOTIVATION_FIELD_ID = new FieldId("5");
+  public static final FieldId DIAGNOSIS_MOTIVATION_FIELD_ID = new FieldId("5.1");
   public static final FieldId DIAGNOS_1 = new FieldId("huvuddiagnos");
   public static final FieldId DIAGNOS_2 = new FieldId("diagnos2");
   public static final FieldId DIAGNOS_3 = new FieldId("diagnos3");
@@ -384,6 +384,10 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     .build(),
                 CertificateActionSpecification.builder()
                     .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
+                    .build(),
+                CertificateActionSpecification.builder()
+                    .certificateActionType(CertificateActionType.RESPONSIBLE_ISSUER)
+                    .allowedRoles(List.of(Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
                     .build()
             )
         )
@@ -928,6 +932,9 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     .limit(4000)
                     .build()
             )
+        )
+        .mapping(
+            new ElementMapping(QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_ID, null)
         )
         .shouldValidate(
             elementData -> elementData.stream()

@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 public class UnitEntitySpecification {
 
   private static final String HSA_ID = "hsaId";
+  private static final String ISSUED_ON_UNIT = "issuedOnUnit";
 
   private UnitEntitySpecification() {
   }
@@ -18,7 +19,7 @@ public class UnitEntitySpecification {
   public static Specification<CertificateEntity> equalsIssuedOnUnit(HsaId issuedOnUnit) {
     return (root, query, criteriaBuilder) ->
     {
-      Join<UnitEntity, CertificateEntity> certificateIssuedOn = root.join("issuedOnUnit");
+      Join<UnitEntity, CertificateEntity> certificateIssuedOn = root.join(ISSUED_ON_UNIT);
       return criteriaBuilder.equal(certificateIssuedOn.get(HSA_ID), issuedOnUnit.id());
     };
   }
@@ -27,7 +28,19 @@ public class UnitEntitySpecification {
     return (root, query, criteriaBuilder) ->
     {
       Join<CertificateEntity, MessageEntity> certificate = root.join("certificate");
-      Join<UnitEntity, CertificateEntity> certificateIssuedOn = certificate.join("issuedOnUnit");
+      Join<UnitEntity, CertificateEntity> certificateIssuedOn = certificate.join(ISSUED_ON_UNIT);
+      return certificateIssuedOn.get(HSA_ID).in(
+          unitIds.stream()
+              .map(HsaId::id)
+              .toList()
+      );
+    };
+  }
+
+  public static Specification<CertificateEntity> issuedOnUnitIdIn(List<HsaId> unitIds) {
+    return (root, query, criteriaBuilder) ->
+    {
+      Join<UnitEntity, CertificateEntity> certificateIssuedOn = root.join(ISSUED_ON_UNIT);
       return certificateIssuedOn.get(HSA_ID).in(
           unitIds.stream()
               .map(HsaId::id)
@@ -41,6 +54,14 @@ public class UnitEntitySpecification {
     {
       Join<UnitEntity, CertificateEntity> certificateCareUnit = root.join("careUnit");
       return criteriaBuilder.equal(certificateCareUnit.get(HSA_ID), careUnit.id());
+    };
+  }
+
+  public static Specification<CertificateEntity> equalsCareProvider(HsaId careProvider) {
+    return (root, query, criteriaBuilder) ->
+    {
+      Join<UnitEntity, CertificateEntity> certificateCareUnit = root.join("careProvider");
+      return criteriaBuilder.equal(certificateCareUnit.get(HSA_ID), careProvider.id());
     };
   }
 }

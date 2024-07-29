@@ -325,6 +325,13 @@ class CertificateMetadataConverterTest {
     );
   }
 
+  @Test
+  void shallIncludeTestCertificate() {
+    assertEquals(ATHENA_REACT_ANDERSSON_TEST_INDICATED.value(),
+        certificateMetadataConverter.convert(certificate).isTestCertificate()
+    );
+  }
+
   @Nested
   class PatientConvert {
 

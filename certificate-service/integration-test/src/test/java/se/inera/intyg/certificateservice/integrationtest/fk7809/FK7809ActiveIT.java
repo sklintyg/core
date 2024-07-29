@@ -12,6 +12,7 @@ import se.inera.intyg.certificateservice.integrationtest.AccessLevelsSVODIT;
 import se.inera.intyg.certificateservice.integrationtest.AdministrativeMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.AnswerComplementIT;
 import se.inera.intyg.certificateservice.integrationtest.CertificateFromMessageIT;
+import se.inera.intyg.certificateservice.integrationtest.CertificatesWithQAForCareIT;
 import se.inera.intyg.certificateservice.integrationtest.ComplementIT;
 import se.inera.intyg.certificateservice.integrationtest.CreateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.DeleteCertificateIT;
@@ -32,6 +33,7 @@ import se.inera.intyg.certificateservice.integrationtest.MessageExistsIT;
 import se.inera.intyg.certificateservice.integrationtest.MessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.RenewCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ReplaceCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.ResponsibleIssuerIT;
 import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SendCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateIT;
@@ -589,6 +591,41 @@ public class FK7809ActiveIT {
     @Override
     protected String questionId() {
       return ELEMENT_ID.id();
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Ansvarig intygsutfärdare")
+  class ResponsibleIssuer extends ResponsibleIssuerIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "ListCertificatesForCareWithQA")
+  class IncludeCerificatesWithQA extends CertificatesWithQAForCareIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+
+    @Override
+    protected boolean canRecieveQuestions() {
+      return true;
     }
   }
 }

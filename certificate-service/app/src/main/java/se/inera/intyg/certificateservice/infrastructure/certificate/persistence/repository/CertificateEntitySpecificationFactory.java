@@ -6,12 +6,15 @@ import static se.inera.intyg.certificateservice.infrastructure.certificate.persi
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntitySpecification.equalsPatient;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntitySpecification.equalsIssuedByStaff;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StatusEntitySpecification.containsStatus;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.equalsCareProvider;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.equalsCareUnit;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.equalsIssuedOnUnit;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.issuedOnUnitIdIn;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
+import se.inera.intyg.certificateservice.domain.patient.model.CertificatesWithQARequest;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 
 @Component
@@ -60,6 +63,25 @@ public class CertificateEntitySpecificationFactory {
           containsStatus(certificatesRequest.statuses())
       );
     }
+
+    return specification;
+  }
+
+  public Specification<CertificateEntity> create(CertificatesWithQARequest certificatesRequest) {
+    Specification<CertificateEntity> specification = where(null);
+    if (certificatesRequest.unitIds() != null) {
+      specification = specification.and(
+          issuedOnUnitIdIn(certificatesRequest.unitIds())
+      );
+    } else if (certificatesRequest.careProviderId() != null) {
+      specification = specification.and(
+          equalsCareProvider(certificatesRequest.careProviderId())
+      );
+    }
+
+    specification = specification.and(
+        equalsPatient(certificatesRequest.personId())
+    );
 
     return specification;
   }

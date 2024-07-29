@@ -13,4 +13,13 @@ public class ElementValueDateList implements ElementValue {
   FieldId dateListId;
   @With
   List<ElementValueDate> dateList;
+
+  @Override
+  public boolean isEmpty() {
+    if (dateList == null || dateList().isEmpty()) {
+      return true;
+    }
+
+    return dateList.stream().allMatch(ElementValueDate::isEmpty);
+  }
 }

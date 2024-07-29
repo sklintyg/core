@@ -71,7 +71,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
               data,
               medicalInvestigationList.list().get(0).id(),
               categoryId,
-              ErrorMessageFactory.missingText())),
+              ErrorMessageFactory.missingAnswer())),
           getRowEmptyFieldErrors(medicalInvestigationList.list().get(0), data, categoryId).stream()
       ).toList();
     }
@@ -207,7 +207,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
           data,
           medicalInvestigation.informationSource().textId(),
           categoryId,
-          ErrorMessageFactory.missingText()));
+          ErrorMessageFactory.missingAnswer()));
     }
     return errors;
   }

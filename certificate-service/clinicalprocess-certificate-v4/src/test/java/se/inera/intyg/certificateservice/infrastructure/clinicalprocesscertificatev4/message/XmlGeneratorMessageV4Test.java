@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7473_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7472_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK_RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.ANSWER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
@@ -73,7 +73,7 @@ class XmlGeneratorMessageV4Test {
 
     @Test
     void shouldReturnXmlThatCanBeSuccessfullyUnmarshalled() {
-      final var response = xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7473_CERTIFICATE);
+      final var response = xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE);
 
       assertDoesNotThrow(
           () -> unmarshal(response), () -> "Could not unmarshall xml '%s'".formatted(response)
@@ -83,7 +83,7 @@ class XmlGeneratorMessageV4Test {
     @Test
     void shouldIncludeMeddelandeIdFromAnswer() {
       final var meddelandeId = unmarshal(
-          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getMeddelandeId();
 
       assertEquals(MESSAGE_ID, meddelandeId);
@@ -93,7 +93,7 @@ class XmlGeneratorMessageV4Test {
     @Test
     void shouldIncludeReferensId() {
       final var referensId = unmarshal(
-          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getReferensId();
 
       assertEquals(REFERENCE_ID, referensId);
@@ -107,7 +107,7 @@ class XmlGeneratorMessageV4Test {
 
       final var referensId = unmarshal(
           xmlGeneratorMessageV4.generateAnswer(answerWithoutReference, CONTACT_MESSAGE,
-              FK7473_CERTIFICATE)
+              FK7472_CERTIFICATE)
       ).getReferensId();
 
       assertNull(referensId);
@@ -121,7 +121,7 @@ class XmlGeneratorMessageV4Test {
           .build();
 
       final var skickatTidpunkt = unmarshal(
-          xmlGeneratorMessageV4.generate(message, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(message, FK7472_CERTIFICATE)
       ).getSkickatTidpunkt();
 
       assertEquals(expectedValue, skickatTidpunkt.toString());
@@ -135,7 +135,7 @@ class XmlGeneratorMessageV4Test {
           .build();
 
       final var skickatTidpunkt = unmarshal(
-          xmlGeneratorMessageV4.generate(message, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(message, FK7472_CERTIFICATE)
       ).getSkickatTidpunkt();
 
       assertEquals(expectedValue, skickatTidpunkt.toString());
@@ -148,7 +148,7 @@ class XmlGeneratorMessageV4Test {
       expected.setRoot(ALFA_ALLERGIMOTTAGNINGEN.hsaId().id());
 
       final var intygsId = unmarshal(
-          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getIntygsId();
 
       assertAll(
@@ -164,7 +164,7 @@ class XmlGeneratorMessageV4Test {
       expected.setRoot(ATHENA_REACT_ANDERSSON.id().type().oid());
 
       final var patientPersonId = unmarshal(
-          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getPatientPersonId();
 
       assertAll(
@@ -176,7 +176,7 @@ class XmlGeneratorMessageV4Test {
     @Test
     void shouldIncludeLogiskAdressMottagare() {
       final var logiskAdressMottagare = unmarshal(
-          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getLogiskAdressMottagare();
 
       assertEquals(FK_RECIPIENT.id().id(), logiskAdressMottagare);
@@ -190,7 +190,7 @@ class XmlGeneratorMessageV4Test {
       expected.setDisplayName("Kontakt");
 
       final var amneskod = unmarshal(
-          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getAmne();
 
       assertAll(
@@ -203,7 +203,7 @@ class XmlGeneratorMessageV4Test {
     @Test
     void shouldIncludeRubrikFromAnswer() {
       final var rubrik = unmarshal(
-          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getRubrik();
 
       assertEquals(SUBJECT, rubrik);
@@ -213,7 +213,7 @@ class XmlGeneratorMessageV4Test {
     @Test
     void shouldIncludeMeddelandeFromAnswer() {
       final var meddelande = unmarshal(
-          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getMeddelande();
 
       assertEquals(CONTENT, meddelande);
@@ -223,7 +223,7 @@ class XmlGeneratorMessageV4Test {
     @Test
     void shouldIncludeSvarPa() {
       final var svarPa = unmarshal(
-          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getSvarPa();
 
       assertNull(svarPa);
@@ -236,7 +236,7 @@ class XmlGeneratorMessageV4Test {
           .reference(null)
           .build();
       final var svarPa = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, messageWithoutReference, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, messageWithoutReference, FK7472_CERTIFICATE)
       ).getSvarPa();
 
       assertAll(
@@ -256,7 +256,7 @@ class XmlGeneratorMessageV4Test {
       expected.setFullstandigtNamn(AJLA_DOCTOR_FULLNAME);
 
       final var skapadAv = unmarshal(
-          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getSkickatAv();
 
       assertAll(
@@ -281,7 +281,7 @@ class XmlGeneratorMessageV4Test {
       expectedTwo.setDisplayName(AJLA_DOCTOR_PA_TITLES.get(1).description());
 
       final var befattningar = unmarshal(
-          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getSkickatAv().getBefattning();
 
       assertAll(
@@ -304,7 +304,7 @@ class XmlGeneratorMessageV4Test {
       expectedTwo.setDisplayName(AJLA_DOCTOR_SPECIALITIES.get(1).value());
 
       final var specialistkompetens = unmarshal(
-          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getSkickatAv().getSpecialistkompetens();
 
       assertAll(
@@ -325,7 +325,7 @@ class XmlGeneratorMessageV4Test {
       expectedOne.setDisplayName(AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES.get(0).value());
 
       final var legitimeradeYrken = unmarshal(
-          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getSkickatAv().getLegitimeratYrke();
 
       assertAll(
@@ -351,7 +351,7 @@ class XmlGeneratorMessageV4Test {
       expected.setEpost(ALFA_ALLERGIMOTTAGNINGEN_EMAIL);
 
       final var enhet = unmarshal(
-          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getSkickatAv().getEnhet();
 
       assertAll(
@@ -374,7 +374,7 @@ class XmlGeneratorMessageV4Test {
       expected.setExtension(ALFA_ALLERGIMOTTAGNINGEN_WORKPLACE_CODE);
 
       final var arbetsplatskod = unmarshal(
-          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getSkickatAv().getEnhet().getArbetsplatskod();
 
       assertAll(
@@ -393,7 +393,7 @@ class XmlGeneratorMessageV4Test {
       expected.setVardgivarnamn(ALFA_REGIONEN_NAME);
 
       final var vardgivare = unmarshal(
-          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getSkickatAv().getEnhet().getVardgivare();
 
       assertAll(
@@ -413,7 +413,7 @@ class XmlGeneratorMessageV4Test {
     @Test
     void shouldReturnXmlThatCanBeSuccessfullyUnmarshalled() {
       final var response = xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE,
-          FK7473_CERTIFICATE);
+          FK7472_CERTIFICATE);
 
       assertDoesNotThrow(
           () -> unmarshal(response), () -> "Could not unmarshall xml '%s'".formatted(response)
@@ -423,7 +423,7 @@ class XmlGeneratorMessageV4Test {
     @Test
     void shouldIncludeMeddelandeIdFromAnswer() {
       final var meddelandeId = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getMeddelandeId();
 
       assertEquals(ANSWER_ID, meddelandeId);
@@ -433,7 +433,7 @@ class XmlGeneratorMessageV4Test {
     @Test
     void shouldIncludeReferensId() {
       final var referensId = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getReferensId();
 
       assertEquals(ANSWER_REFERENCE_ID, referensId);
@@ -447,7 +447,7 @@ class XmlGeneratorMessageV4Test {
 
       final var referensId = unmarshal(
           xmlGeneratorMessageV4.generateAnswer(answerWithoutReference, COMPLEMENT_MESSAGE,
-              FK7473_CERTIFICATE)
+              FK7472_CERTIFICATE)
       ).getReferensId();
 
       assertNull(referensId);
@@ -461,7 +461,7 @@ class XmlGeneratorMessageV4Test {
           .build();
 
       final var skickatTidpunkt = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(answer, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(answer, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getSkickatTidpunkt();
 
       assertEquals(expectedValue, skickatTidpunkt.toString());
@@ -475,7 +475,7 @@ class XmlGeneratorMessageV4Test {
           .build();
 
       final var skickatTidpunkt = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(answer, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(answer, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getSkickatTidpunkt();
 
       assertEquals(expectedValue, skickatTidpunkt.toString());
@@ -488,7 +488,7 @@ class XmlGeneratorMessageV4Test {
       expected.setRoot(ALFA_ALLERGIMOTTAGNINGEN.hsaId().id());
 
       final var intygsId = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getIntygsId();
 
       assertAll(
@@ -504,7 +504,7 @@ class XmlGeneratorMessageV4Test {
       expected.setRoot(ATHENA_REACT_ANDERSSON.id().type().oid());
 
       final var patientPersonId = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getPatientPersonId();
 
       assertAll(
@@ -516,7 +516,7 @@ class XmlGeneratorMessageV4Test {
     @Test
     void shouldIncludeLogiskAdressMottagare() {
       final var logiskAdressMottagare = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getLogiskAdressMottagare();
 
       assertEquals(FK_RECIPIENT.id().id(), logiskAdressMottagare);
@@ -530,7 +530,7 @@ class XmlGeneratorMessageV4Test {
       expected.setDisplayName("Komplettering");
 
       final var amneskod = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getAmne();
 
       assertAll(
@@ -543,7 +543,7 @@ class XmlGeneratorMessageV4Test {
     @Test
     void shouldIncludeRubrikFromAnswer() {
       final var rubrik = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getRubrik();
 
       assertEquals(SUBJECT, rubrik);
@@ -553,7 +553,7 @@ class XmlGeneratorMessageV4Test {
     @Test
     void shouldIncludeMeddelandeFromAnswer() {
       final var meddelande = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getMeddelande();
 
       assertEquals(CONTENT, meddelande);
@@ -563,7 +563,7 @@ class XmlGeneratorMessageV4Test {
     @Test
     void shouldIncludeSvarPa() {
       final var svarPa = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getSvarPa();
 
       assertAll(
@@ -579,7 +579,7 @@ class XmlGeneratorMessageV4Test {
           .reference(null)
           .build();
       final var svarPa = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, messageWithoutReference, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, messageWithoutReference, FK7472_CERTIFICATE)
       ).getSvarPa();
 
       assertAll(
@@ -599,7 +599,7 @@ class XmlGeneratorMessageV4Test {
       expected.setFullstandigtNamn(AJLA_DOCTOR_FULLNAME);
 
       final var skapadAv = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getSkickatAv();
 
       assertAll(
@@ -624,7 +624,7 @@ class XmlGeneratorMessageV4Test {
       expectedTwo.setDisplayName(AJLA_DOCTOR_PA_TITLES.get(1).description());
 
       final var befattningar = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getSkickatAv().getBefattning();
 
       assertAll(
@@ -647,7 +647,7 @@ class XmlGeneratorMessageV4Test {
       expectedTwo.setDisplayName(AJLA_DOCTOR_SPECIALITIES.get(1).value());
 
       final var specialistkompetens = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getSkickatAv().getSpecialistkompetens();
 
       assertAll(
@@ -668,7 +668,7 @@ class XmlGeneratorMessageV4Test {
       expectedOne.setDisplayName(AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES.get(0).value());
 
       final var legitimeradeYrken = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getSkickatAv().getLegitimeratYrke();
 
       assertAll(
@@ -694,7 +694,7 @@ class XmlGeneratorMessageV4Test {
       expected.setEpost(ALFA_ALLERGIMOTTAGNINGEN_EMAIL);
 
       final var enhet = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getSkickatAv().getEnhet();
 
       assertAll(
@@ -717,7 +717,7 @@ class XmlGeneratorMessageV4Test {
       expected.setExtension(ALFA_ALLERGIMOTTAGNINGEN_WORKPLACE_CODE);
 
       final var arbetsplatskod = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getSkickatAv().getEnhet().getArbetsplatskod();
 
       assertAll(
@@ -736,7 +736,7 @@ class XmlGeneratorMessageV4Test {
       expected.setVardgivarnamn(ALFA_REGIONEN_NAME);
 
       final var vardgivare = unmarshal(
-          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7473_CERTIFICATE)
+          xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getSkickatAv().getEnhet().getVardgivare();
 
       assertAll(
