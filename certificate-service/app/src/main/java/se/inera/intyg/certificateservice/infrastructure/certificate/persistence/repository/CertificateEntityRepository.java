@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -20,6 +19,4 @@ public interface CertificateEntityRepository extends CrudRepository<CertificateE
 
   void deleteAllByCertificateIdIn(List<String> certificateIds);
 
-  List<CertificateEntity> findCertificateEntitiesByCreatedBeforeAndAndStatus(
-      LocalDateTime cutoffDate, String status);
 }

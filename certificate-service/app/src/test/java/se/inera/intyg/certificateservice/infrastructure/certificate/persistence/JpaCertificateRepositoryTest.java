@@ -432,19 +432,4 @@ class JpaCertificateRepositoryTest {
       assertEquals(expectedCertificates, actualCertificates);
     }
   }
-
-  @Nested
-  class DraftsCreatedBeforeTests {
-
-    @Test
-    void shallReturnListOfDrafts() {
-      final var expectedDrafts = List.of(CERTIFICATE);
-      final var cutoffDate = LocalDateTime.now().minusDays(14);
-      doReturn(List.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository)
-          .findCertificateEntitiesByCreatedBeforeAndAndStatus(cutoffDate, Status.DRAFT.name());
-      doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
-      final var actualDrafts = jpaCertificateRepository.draftsCreatedBefore(cutoffDate);
-      assertEquals(expectedDrafts, actualDrafts);
-    }
-  }
 }

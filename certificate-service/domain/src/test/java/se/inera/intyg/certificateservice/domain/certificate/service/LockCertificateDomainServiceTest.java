@@ -13,7 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 
 @ExtendWith(MockitoExtension.class)
 class LockCertificateDomainServiceTest {
@@ -23,11 +25,16 @@ class LockCertificateDomainServiceTest {
   @InjectMocks
   private LockCertificateDomainService service;
 
+  private LocalDateTime cutoffDate = LocalDateTime.now().minusDays(1);
+  private CertificatesRequest request = CertificatesRequest.builder()
+      .createdTo(cutoffDate)
+      .statuses(List.of(Status.DRAFT))
+      .build();
+
   @Test
   void shallLockDraft() {
-    final var cutoffDate = LocalDateTime.now();
     final var certificate = mock(Certificate.class);
-    doReturn(List.of(certificate)).when(certificateRepository).draftsCreatedBefore(cutoffDate);
+    doReturn(List.of(certificate)).when(certificateRepository).findByCertificatesRequest(request);
 
     service.lock(cutoffDate);
 
@@ -36,9 +43,8 @@ class LockCertificateDomainServiceTest {
 
   @Test
   void shallPersistLockedDraft() {
-    final var cutoffDate = LocalDateTime.now();
     final var certificate = mock(Certificate.class);
-    doReturn(List.of(certificate)).when(certificateRepository).draftsCreatedBefore(cutoffDate);
+    doReturn(List.of(certificate)).when(certificateRepository).findByCertificatesRequest(request);
 
     service.lock(cutoffDate);
 
@@ -47,11 +53,10 @@ class LockCertificateDomainServiceTest {
 
   @Test
   void shallReturnLockedDrafts() {
-    final var cutoffDate = LocalDateTime.now();
     final var certificate = mock(Certificate.class);
     final var lockedCertificate = mock(Certificate.class);
 
-    doReturn(List.of(certificate)).when(certificateRepository).draftsCreatedBefore(cutoffDate);
+    doReturn(List.of(certificate)).when(certificateRepository).findByCertificatesRequest(request);
     doReturn(lockedCertificate).when(certificateRepository).save(certificate);
 
     final var lockedCertificates = service.lock(cutoffDate);

@@ -157,17 +157,6 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   }
 
   @Override
-  public List<Certificate> draftsCreatedBefore(LocalDateTime cutoffDate) {
-    final var certificateEntities = certificateEntityRepository.findCertificateEntitiesByCreatedBeforeAndAndStatus(
-        cutoffDate, Status.DRAFT.name()
-    );
-
-    return certificateEntities.stream()
-        .map(certificateEntityMapper::toDomain)
-        .toList();
-  }
-
-  @Override
   public Certificate insert(Certificate certificate) {
     final var savedEntity = certificateEntityRepository.save(
         certificateEntityMapper.toEntity(certificate)
