@@ -61,6 +61,11 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
       return certificate;
     }
 
+    if (Status.LOCKED_DRAFT.equals(certificate.status())) {
+      certificateEntityRepository.findByCertificateId(certificate.id().id())
+          .ifPresent(certificateRelationRepository::deleteRelations);
+    }
+
     final var savedEntity = certificateEntityRepository.save(
         certificateEntityMapper.toEntity(certificate)
     );

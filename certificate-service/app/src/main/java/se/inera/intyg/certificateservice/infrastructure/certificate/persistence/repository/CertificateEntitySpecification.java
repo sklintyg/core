@@ -18,4 +18,14 @@ public class CertificateEntitySpecification {
     return (root, query, criteriaBuilder) ->
         criteriaBuilder.lessThanOrEqualTo(root.get("modified"), to);
   }
+
+  public static Specification<CertificateEntity> createdEqualsAndGreaterThan(LocalDateTime from) {
+    return (root, query, criteriaBuilder) ->
+        criteriaBuilder.greaterThanOrEqualTo(root.get("created"), from);
+  }
+
+  public static Specification<CertificateEntity> createdEqualsAndLesserThan(LocalDateTime to) {
+    return (root, query, criteriaBuilder) ->
+        criteriaBuilder.lessThanOrEqualTo(root.get("created"), to);
+  }
 }

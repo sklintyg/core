@@ -43,6 +43,7 @@ public class Certificate {
   private final LocalDateTime created;
   private LocalDateTime signed;
   private LocalDateTime modified;
+  private LocalDateTime locked;
   private CertificateMetaData certificateMetaData;
   @Builder.Default
   private List<ElementData> elementData = Collections.emptyList();
@@ -442,6 +443,17 @@ public class Certificate {
     }
 
     this.forwarded = new Forwarded(true);
+  }
+
+  public void lock() {
+    if (!status.equals(Status.DRAFT)) {
+      throw new IllegalStateException("Cannot lock certificate with status '%s'".formatted(status));
+    }
+
+    this.status = Status.LOCKED_DRAFT;
+    this.parent = null;
+    this.children = Collections.emptyList();
+    this.locked = LocalDateTime.now(ZoneId.systemDefault());
   }
 }
 

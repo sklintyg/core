@@ -12,8 +12,10 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 @Builder
 public class CertificatesRequest {
 
-  LocalDateTime from;
-  LocalDateTime to;
+  LocalDateTime modifiedFrom;
+  LocalDateTime modifiedTo;
+  LocalDateTime createdFrom;
+  LocalDateTime createdTo;
   List<Status> statuses;
   HsaId issuedByStaffId;
   @With

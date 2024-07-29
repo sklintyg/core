@@ -50,7 +50,7 @@ class CertificatesRequestFactoryTest {
           .build();
 
       assertEquals(expectedFrom,
-          certificatesRequestFactory.create(queryCriteriaDTO).from()
+          certificatesRequestFactory.create(queryCriteriaDTO).modifiedFrom()
       );
     }
 
@@ -62,7 +62,7 @@ class CertificatesRequestFactoryTest {
           .build();
 
       assertEquals(expectedTo,
-          certificatesRequestFactory.create(queryCriteriaDTO).to()
+          certificatesRequestFactory.create(queryCriteriaDTO).modifiedTo()
       );
     }
 
