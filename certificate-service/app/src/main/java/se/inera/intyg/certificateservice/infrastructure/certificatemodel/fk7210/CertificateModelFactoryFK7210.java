@@ -239,7 +239,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
             ElementConfigurationDate.builder()
                 .name("Datum")
                 .id(QUESTION_BERAKNAT_FODELSEDATUM_FIELD_ID)
-                .min(Period.ofDays(PDF_SIGNATURE_PAGE_INDEX))
+                .min(Period.ofDays(0))
                 .max(Period.ofYears(1))
                 .build()
         )
@@ -255,7 +255,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
             List.of(
                 ElementValidationDate.builder()
                     .mandatory(true)
-                    .min(Period.ofDays(PDF_SIGNATURE_PAGE_INDEX))
+                    .min(Period.ofDays(0))
                     .max(Period.ofYears(1))
                     .build()
             )
