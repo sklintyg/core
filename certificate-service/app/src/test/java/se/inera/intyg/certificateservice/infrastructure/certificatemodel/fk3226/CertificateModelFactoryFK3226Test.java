@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CertificateModelFactoryFK3226.PDF_FK_3226_PDF;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CertificateModelFactoryFK3226.PDF_NO_ADDRESS_FK_3226_PDF;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CertificateModelFactoryFK3226.SCHEMATRON_PATH;
 
 import java.time.LocalDateTime;
@@ -51,6 +52,15 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfQuestionField;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationDateList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationDiagnose;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
@@ -118,13 +128,6 @@ class CertificateModelFactoryFK3226Test {
     final var certificateModel = certificateModelFactoryFK3226.create();
 
     assertFalse(certificateModel.detailedDescription().isBlank());
-  }
-
-  @Test
-  void shallIncludePdfTemplatePath() {
-    final var certificateModel = certificateModelFactoryFK3226.create();
-
-    assertEquals(PDF_FK_3226_PDF, certificateModel.pdfTemplatePath());
   }
 
   @Test
@@ -2210,6 +2213,329 @@ class CertificateModelFactoryFK3226Test {
       assertEquals(expectedConfiguration,
           certificateModel.elementSpecification(ELEMENT_ID).configuration()
       );
+    }
+  }
+
+  @Nested
+  class
+  PdfSpecificationTest {
+
+    @Test
+    void shallIncludeCertificateType() {
+      final var expected = new CertificateType("fk3226");
+
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(expected, certificateModel.pdfSpecification().certificateType());
+    }
+
+    @Test
+    void shallIncludePdfTemplatePathWithAddress() {
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(PDF_FK_3226_PDF, certificateModel.pdfSpecification().pdfTemplatePath());
+    }
+
+    @Test
+    void shallIncludePdfTemplatePathNoAddress() {
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(PDF_NO_ADDRESS_FK_3226_PDF,
+          certificateModel.pdfSpecification().pdfNoAddressTemplatePath());
+    }
+
+    @Test
+    void shallIncludePatientFieldId() {
+      final var expected = new PdfFieldId("form1[0].#subform[0].flt_txtPnr[0]");
+
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(expected, certificateModel.pdfSpecification().patientIdFieldId());
+    }
+
+    @Test
+    void shallIncludeSignatureFields() {
+      final var expected = PdfSignature.builder()
+          .signaturePageIndex(1)
+          .signatureWithAddressTagIndex(new PdfTagIndex(50))
+          .signatureWithoutAddressTagIndex(new PdfTagIndex(42))
+          .signedDateFieldId(new PdfFieldId("form1[0].#subform[1].flt_datUnderskrift[0]"))
+          .signedByNameFieldId(new PdfFieldId("form1[0].#subform[1].flt_txtNamnfortydligande[0]"))
+          .paTitleFieldId(new PdfFieldId("form1[0].#subform[1].flt_txtBefattning[0]"))
+          .specialtyFieldId(
+              new PdfFieldId("form1[0].#subform[1].flt_txtEventuellSpecialistkompetens[0]"))
+          .hsaIdFieldId(new PdfFieldId("form1[0].#subform[1].flt_txtLakarensHSA-ID[0]"))
+          .workplaceCodeFieldId(new PdfFieldId("form1[0].#subform[1].flt_txtArbetsplatskod[0]"))
+          .contactInformation(
+              new PdfFieldId("form1[0].#subform[1].flt_txtVardgivarensNamnAdressTelefon[0]"))
+          .build();
+
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(expected, certificateModel.pdfSpecification().signature());
+    }
+
+    @Test
+    void shallIncludeMcid() {
+      final var expected = 100;
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(expected, certificateModel.pdfSpecification().mcid().value());
+    }
+
+    @Test
+    void shallIncludeAllQuestions() {
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(11, certificateModel.pdfSpecification().questionFields().size());
+    }
+
+    @Test
+    void shallIncludePdfQuestionFieldUtlatandeBaserasPa() {
+      final var expected =
+          PdfQuestionField.builder()
+              .questionId(new ElementId("1"))
+              .pdfFieldId(new PdfFieldId("form1[0].#subform[0]."))
+              .pdfValueType(PdfValueType.DATE_LIST)
+              .questionConfiguration(List.of(
+                  QuestionConfigurationDateList.builder()
+                      .questionFieldId(new FieldId("undersokningAvPatienten"))
+                      .checkboxFieldId(
+                          new PdfFieldId("form1[0].#subform[0].ksr_UndersokningPatient[0]"))
+                      .dateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datUl_1[0]"))
+                      .build(),
+                  QuestionConfigurationDateList.builder()
+                      .questionFieldId(
+                          new FieldId("journaluppgifter"))
+                      .checkboxFieldId(
+                          new PdfFieldId("form1[0].#subform[0].ksr_Journaluppgifter[0]"))
+                      .dateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datUl_2[0]"))
+                      .build(),
+                  QuestionConfigurationDateList.builder()
+                      .questionFieldId(new FieldId("annat"))
+                      .checkboxFieldId(new PdfFieldId("form1[0].#subform[0].ksr_Annat[0]"))
+                      .dateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datUl_3[0]"))
+                      .build())
+              )
+              .build();
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(expected, certificateModel.pdfSpecification().questionFields().get(0));
+    }
+
+    @Test
+    void shallIncludePdfQuestionFieldBaserasPaAnnat() {
+      final var expected =
+          PdfQuestionField.builder()
+              .questionId(new ElementId("1.3"))
+              .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtAnnatAngeVad[0]"))
+              .pdfValueType(PdfValueType.TEXT)
+              .build();
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(expected, certificateModel.pdfSpecification().questionFields().get(1));
+    }
+
+    @Test
+    void shallIncludePdfQuestionFieldDiagnos() {
+      final var expected =
+          PdfQuestionField.builder()
+              .questionId(new ElementId("58"))
+              .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txt"))
+              .pdfValueType(PdfValueType.DIAGNOSE_LIST)
+              .questionConfiguration(List.of(
+                  QuestionConfigurationDiagnose.builder()
+                      .questionId(new FieldId("huvuddiagnos"))
+                      .diagnoseNameFieldId(
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiagnoser[0]"))
+                      .diagnoseCodeFieldIds(List.of(
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod1[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod2[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod3[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod4[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod5[0]")
+                      )).build(),
+                  QuestionConfigurationDiagnose.builder()
+                      .questionId(new FieldId("diagnos2"))
+                      .diagnoseNameFieldId(
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiagnoser2[0]"))
+                      .diagnoseCodeFieldIds(List.of(
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod6[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod7[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod8[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod9[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod10[0]")
+                      )).build(),
+                  QuestionConfigurationDiagnose.builder()
+                      .questionId(new FieldId("diagnos3"))
+                      .diagnoseNameFieldId(
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiagnoser3[0]"))
+                      .diagnoseCodeFieldIds(List.of(
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod11[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod12[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod13[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod14[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod15[0]")
+                      )).build(),
+                  QuestionConfigurationDiagnose.builder()
+                      .questionId(new FieldId("diagnos4"))
+                      .diagnoseNameFieldId(
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiagnoser4[0]"))
+                      .diagnoseCodeFieldIds(List.of(
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod16[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod17[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod18[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod19[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod20[0]")
+                      )).build(),
+                  QuestionConfigurationDiagnose.builder()
+                      .questionId(new FieldId("diagnos5"))
+                      .diagnoseNameFieldId(
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiagnoser5[0]"))
+                      .diagnoseCodeFieldIds(List.of(
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod21[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod22[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod23[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod24[0]"),
+                          new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod25[0]")
+                      )).build()
+              ))
+              .build();
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(expected, certificateModel.pdfSpecification().questionFields().get(2));
+    }
+
+    @Test
+    void shallIncludePdfQuestionFieldBehandlingOchVardsituation() {
+      final var expected =
+          PdfQuestionField.builder()
+              .questionId(new ElementId("52"))
+              .pdfFieldId(new PdfFieldId("defaultPdfFieldId"))
+              .pdfValueType(PdfValueType.CODE)
+              .questionConfiguration(List.of(
+                  QuestionConfigurationCode.builder()
+                      .questionFieldId(new FieldId("ENDAST_PALLIATIV"))
+                      .pdfFieldId(new PdfFieldId("form1[0].#subform[1].ksr_PalliativVard[0]"))
+                      .build(),
+                  QuestionConfigurationCode.builder()
+                      .questionFieldId(new FieldId("AKUT_LIVSHOTANDE"))
+                      .pdfFieldId(new PdfFieldId("form1[0].#subform[1].ksr_AkutLivshotande[0]"))
+                      .build(),
+                  QuestionConfigurationCode.builder()
+                      .questionFieldId(new FieldId("ANNAT"))
+                      .pdfFieldId(new PdfFieldId("form1[0].#subform[1].ksr_Annat2[0]"))
+                      .build()
+              )).build();
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(expected, certificateModel.pdfSpecification().questionFields().get(3));
+    }
+
+    @Test
+    void shallIncludePdfQuestionFieldNarAktivBehandlingAvslutades() {
+      final var expected =
+          PdfQuestionField.builder()
+              .questionId(new ElementId("52.2"))
+              .pdfFieldId(new PdfFieldId("form1[0].#subform[1].flt_datumBehandlingenAvslutad[0]"))
+              .pdfValueType(PdfValueType.DATE)
+              .build();
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(expected, certificateModel.pdfSpecification().questionFields().get(4));
+    }
+
+    @Test
+    void shallIncludePdfQuestionFieldNarTillstandetBlevLivshotande() {
+      final var expected =
+          PdfQuestionField.builder()
+              .questionId(new ElementId("52.3"))
+              .pdfFieldId(new PdfFieldId("form1[0].#subform[1].flt_datumAkutLivshotande[0]"))
+              .pdfValueType(PdfValueType.DATE)
+              .build();
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(expected, certificateModel.pdfSpecification().questionFields().get(5));
+    }
+
+    @Test
+    void shallIncludePdfQuestionFieldPatagligtHotMotPatientensLiv() {
+      final var expected =
+          PdfQuestionField.builder()
+              .questionId(new ElementId("52.4"))
+              .pdfFieldId(new PdfFieldId("form1[0].#subform[1].flt_txtSjukdomstillstand[0]"))
+              .pdfValueType(PdfValueType.TEXT)
+              .build();
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(expected, certificateModel.pdfSpecification().questionFields().get(6));
+    }
+
+    @Test
+    void shallIncludePdfQuestionFieldUppskattaHurLange() {
+      final var expected =
+          PdfQuestionField.builder()
+              .questionId(new ElementId("52.5"))
+              .pdfFieldId(new PdfFieldId("defaultPdfFieldId"))
+              .pdfValueType(PdfValueType.BOOLEAN)
+              .questionConfiguration(List.of(
+                  QuestionConfigurationBoolean.builder()
+                      .questionId(
+                          new FieldId("52.5"))
+                      .checkboxTrue(new PdfFieldId("form1[0].#subform[1].ksr_Ja[0]"))
+                      .checkboxFalse(new PdfFieldId("form1[0].#subform[1].ksr_Nej[0]"))
+                      .build()
+              )).build();
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(expected, certificateModel.pdfSpecification().questionFields().get(7));
+    }
+
+    @Test
+    void shallIncludePdfQuestionFieldLivshotandeTillOchMed() {
+      final var expected =
+          PdfQuestionField.builder()
+              .questionId(new ElementId("52.6"))
+              .pdfFieldId(new PdfFieldId("form1[0].#subform[1].flt_datumTillMed[0]"))
+              .pdfValueType(PdfValueType.DATE)
+              .build();
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(expected, certificateModel.pdfSpecification().questionFields().get(8));
+    }
+
+    @Test
+    void shallIncludePdfQuestionFieldPatagligtHotAnnat() {
+      final var expected =
+          PdfQuestionField.builder()
+              .questionId(new ElementId("52.7"))
+              .pdfFieldId(
+                  new PdfFieldId("form1[0].#subform[1].flt_txtBeskrivSjukdomstillstandet[0]"))
+              .pdfValueType(PdfValueType.TEXT)
+              .build();
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(expected, certificateModel.pdfSpecification().questionFields().get(9));
+    }
+
+    @Test
+    void shallIncludePdfQuestionFieldForutsattningarForAttSamtycka() {
+      final var expected =
+          PdfQuestionField.builder()
+              .questionId(new ElementId("53"))
+              .pdfFieldId(new PdfFieldId("defaultPdfFieldId"))
+              .pdfValueType(PdfValueType.BOOLEAN)
+              .questionConfiguration(List.of(
+                  QuestionConfigurationBoolean.builder()
+                      .questionId(
+                          new FieldId("53.1"))
+                      .checkboxTrue(new PdfFieldId("form1[0].#subform[1].ksr_Ja_Modul3[0]"))
+                      .checkboxFalse(new PdfFieldId("form1[0].#subform[1].ksr_Nej_Modul3[0]"))
+                      .build()
+              )).build();
+      final var certificateModel = certificateModelFactoryFK3226.create();
+
+      assertEquals(expected, certificateModel.pdfSpecification().questionFields().get(10));
     }
   }
 }

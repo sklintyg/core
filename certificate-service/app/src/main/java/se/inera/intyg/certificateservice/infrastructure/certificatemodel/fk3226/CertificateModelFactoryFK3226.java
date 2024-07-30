@@ -39,7 +39,18 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMe
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.Mcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfQuestionField;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationDateList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationDiagnose;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
@@ -150,8 +161,137 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk3226/schematron/lunsp.v1.sch");
 
-  public static final String PDF_FK_3226_PDF = "fk3226/pdf/fk3226_v1.pdf";
-  public static final String PDF_NO_ADDRESS_FK_7472_PDF = "fk3226/pdf/fk3226_v1_no_address.pdf";
+  public static final String PDF_FK_3226_PDF = "fk3226/pdf/fk3226_v1_no_address.pdf"; //TODO: update when new template has been provided
+  public static final String PDF_NO_ADDRESS_FK_3226_PDF = "fk3226/pdf/fk3226_v1_no_address.pdf";
+  public static final Mcid PDF_MCID = new Mcid(100);
+  private static final int PDF_SIGNATURE_PAGE_INDEX = 1;
+  private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(50);
+  private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(42);
+  private static final PdfFieldId DEFAULT_PDF_FIELD_ID = new PdfFieldId(
+      "defaultPdfFieldId");
+  private static final PdfFieldId PDF_PATIENT_ID_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtPnr[0]");
+  private static final PdfFieldId PDF_STATEMENT_BASED_ON_FIELD_ID_PREFIX = new PdfFieldId(
+      "form1[0].#subform[0].");
+  private static final PdfFieldId PDF_STATEMENT_BASED_ON_INVESTIGATION_CHECKBOX_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].ksr_UndersokningPatient[0]");
+  private static final PdfFieldId PDF_STATEMENT_BASED_ON_JOURNAL_CHECKBOX_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].ksr_Journaluppgifter[0]");
+  private static final PdfFieldId PDF_STATEMENT_BASED_ON_OTHER_CHECKBOX_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].ksr_Annat[0]");
+  private static final PdfFieldId PDF_STATEMENT_BASED_ON_INVESTIGATION_DATE_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].flt_datUl_1[0]");
+  private static final PdfFieldId PDF_STATEMENT_BASED_ON_JOURNAL_DATE_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].flt_datUl_2[0]");
+  private static final PdfFieldId PDF_STATEMENT_BASED_ON_OTHER_DATE_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].flt_datUl_3[0]");
+  private static final PdfFieldId PDF_STATEMENT_BASED_ON_OTHER_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtAnnatAngeVad[0]");
+  private static final PdfFieldId PDF_DIAGNOSIS_FIELD_ID_PREFIX = new PdfFieldId(
+      "form1[0].#subform[0].flt_txt");
+  private static final PdfFieldId PDF_WHEN_ACTIVE_TREATMENT_WAS_STOPPED_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[1].flt_datumBehandlingenAvslutad[0]");
+  private static final PdfFieldId PDF_WHEN_CONDITION_BECAME_LIFE_THREATENING_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[1].flt_datumAkutLivshotande[0]");
+  private static final PdfFieldId PDF_THREAT_TO_PATIENTS_LIFE_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[1].flt_txtSjukdomstillstand[0]");
+  private static final PdfFieldId PDF_CONDITION_IS_LIFE_THREATENING_TO_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[1].flt_datumTillMed[0]");
+  private static final PdfFieldId PDF_CONDITION_IS_LIFE_THREATENING_OTHER_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[1].flt_txtBeskrivSjukdomstillstandet[0]");
+  private static final PdfFieldId PDF_DIAGNOSE_ID_1 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiagnoser[0]");
+  private static final PdfFieldId PDF_CODE_ID_1_1 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod1[0]");
+  private static final PdfFieldId PDF_CODE_ID_1_2 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod2[0]");
+  private static final PdfFieldId PDF_CODE_ID_1_3 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod3[0]");
+  private static final PdfFieldId PDF_CODE_ID_1_4 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod4[0]");
+  private static final PdfFieldId PDF_CODE_ID_1_5 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod5[0]");
+
+  private static final PdfFieldId PDF_DIAGNOSE_ID_2 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiagnoser2[0]");
+  private static final PdfFieldId PDF_CODE_ID_2_1 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod6[0]");
+  private static final PdfFieldId PDF_CODE_ID_2_2 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod7[0]");
+  private static final PdfFieldId PDF_CODE_ID_2_3 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod8[0]");
+  private static final PdfFieldId PDF_CODE_ID_2_4 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod9[0]");
+  private static final PdfFieldId PDF_CODE_ID_2_5 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod10[0]");
+
+  private static final PdfFieldId PDF_DIAGNOSE_ID_3 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiagnoser3[0]");
+  private static final PdfFieldId PDF_CODE_ID_3_1 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod11[0]");
+  private static final PdfFieldId PDF_CODE_ID_3_2 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod12[0]");
+  private static final PdfFieldId PDF_CODE_ID_3_3 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod13[0]");
+  private static final PdfFieldId PDF_CODE_ID_3_4 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod14[0]");
+  private static final PdfFieldId PDF_CODE_ID_3_5 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod15[0]");
+
+  private static final PdfFieldId PDF_DIAGNOSE_ID_4 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiagnoser4[0]");
+  private static final PdfFieldId PDF_CODE_ID_4_1 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod16[0]");
+  private static final PdfFieldId PDF_CODE_ID_4_2 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod17[0]");
+  private static final PdfFieldId PDF_CODE_ID_4_3 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod18[0]");
+  private static final PdfFieldId PDF_CODE_ID_4_4 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod19[0]");
+  private static final PdfFieldId PDF_CODE_ID_4_5 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod20[0]");
+
+  private static final PdfFieldId PDF_DIAGNOSE_ID_5 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiagnoser5[0]");
+  private static final PdfFieldId PDF_CODE_ID_5_1 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod21[0]");
+  private static final PdfFieldId PDF_CODE_ID_5_2 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod22[0]");
+  private static final PdfFieldId PDF_CODE_ID_5_3 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod23[0]");
+  private static final PdfFieldId PDF_CODE_ID_5_4 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod24[0]");
+  private static final PdfFieldId PDF_CODE_ID_5_5 = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtDiaKod25[0]");
+  private static final PdfFieldId PDF_ONLY_PALLIATIVE_CARE_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[1].ksr_PalliativVard[0]");
+  private static final PdfFieldId PDF_ACUTE_LIFE_THREATENING_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[1].ksr_AkutLivshotande[0]");
+  private static final PdfFieldId PDF_OTHER_THREAT_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[1].ksr_Annat2[0]");
+  private static final PdfFieldId PDF_ESTIMATE_YES_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[1].ksr_Ja[0]");
+  private static final PdfFieldId PDF_ESTIMATE_NO_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[1].ksr_Nej[0]");
+  private static final PdfFieldId PDF_CAN_CONSENT_YES_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[1].ksr_Ja_Modul3[0]");
+  private static final PdfFieldId PDF_CAN_CONSENT_NO_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[1].ksr_Nej_Modul3[0]");
+
+  private static final PdfFieldId PDF_SIGNED_DATE_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[1].flt_datUnderskrift[0]");
+  private static final PdfFieldId PDF_SIGNED_BY_NAME_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[1].flt_txtNamnfortydligande[0]");
+  private static final PdfFieldId PDF_SIGNED_BY_PA_TITLE = new PdfFieldId(
+      "form1[0].#subform[1].flt_txtBefattning[0]");
+  private static final PdfFieldId PDF_SIGNED_BY_SPECIALTY = new PdfFieldId(
+      "form1[0].#subform[1].flt_txtEventuellSpecialistkompetens[0]");
+  private static final PdfFieldId PDF_HSA_ID_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[1].flt_txtLakarensHSA-ID[0]");
+  private static final PdfFieldId PDF_WORKPLACE_CODE_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[1].flt_txtArbetsplatskod[0]");
+  private static final PdfFieldId PDF_CONTACT_INFORMATION = new PdfFieldId(
+      "form1[0].#subform[1].flt_txtVardgivarensNamnAdressTelefon[0]");
 
   @Override
   public CertificateModel create() {
@@ -358,12 +498,179 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                 issuingUnitContactInfo()
             )
         )
-        .pdfTemplatePath(PDF_FK_3226_PDF)
-        .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7472_PDF)
         .schematronPath(SCHEMATRON_PATH)
+        .pdfSpecification(PdfSpecification.builder()
+            .certificateType(FK3226_V1_0.type())
+            .pdfTemplatePath(PDF_FK_3226_PDF)
+            .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_3226_PDF)
+            .patientIdFieldId(PDF_PATIENT_ID_FIELD_ID)
+            .mcid(PDF_MCID)
+            .signature(PdfSignature.builder()
+                .signatureWithAddressTagIndex(PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
+                .signatureWithoutAddressTagIndex(PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
+                .signaturePageIndex(PDF_SIGNATURE_PAGE_INDEX)
+                .signedDateFieldId(PDF_SIGNED_DATE_FIELD_ID)
+                .signedByNameFieldId(PDF_SIGNED_BY_NAME_FIELD_ID)
+                .paTitleFieldId(PDF_SIGNED_BY_PA_TITLE)
+                .specialtyFieldId(PDF_SIGNED_BY_SPECIALTY)
+                .hsaIdFieldId(PDF_HSA_ID_FIELD_ID)
+                .workplaceCodeFieldId(PDF_WORKPLACE_CODE_FIELD_ID)
+                .contactInformation(PDF_CONTACT_INFORMATION)
+                .build())
+            .questionFields(
+                List.of(
+                    PdfQuestionField.builder()
+                        .questionId(QUESTION_UTLATANDE_BASERAT_PA_ID)
+                        .pdfFieldId(
+                            PDF_STATEMENT_BASED_ON_FIELD_ID_PREFIX)
+                        .pdfValueType(PdfValueType.DATE_LIST)
+                        .questionConfiguration(List.of(
+                            QuestionConfigurationDateList.builder()
+                                .questionFieldId(
+                                    new FieldId(
+                                        UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID))
+                                .checkboxFieldId(
+                                    PDF_STATEMENT_BASED_ON_INVESTIGATION_CHECKBOX_FIELD_ID)
+                                .dateFieldId(PDF_STATEMENT_BASED_ON_INVESTIGATION_DATE_FIELD_ID)
+                                .build(),
+                            QuestionConfigurationDateList.builder()
+                                .questionFieldId(
+                                    new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID))
+                                .checkboxFieldId(PDF_STATEMENT_BASED_ON_JOURNAL_CHECKBOX_FIELD_ID)
+                                .dateFieldId(PDF_STATEMENT_BASED_ON_JOURNAL_DATE_FIELD_ID)
+                                .build(),
+                            QuestionConfigurationDateList.builder()
+                                .questionFieldId(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID)
+                                .checkboxFieldId(PDF_STATEMENT_BASED_ON_OTHER_CHECKBOX_FIELD_ID)
+                                .dateFieldId(PDF_STATEMENT_BASED_ON_OTHER_DATE_FIELD_ID)
+                                .build()
+                        ))
+                        .build(),
+                    PdfQuestionField.builder()
+                        .questionId(QUESTION_UTLATANDE_BASERAT_PA_ANNAT_ID)
+                        .pdfFieldId(PDF_STATEMENT_BASED_ON_OTHER_FIELD_ID)
+                        .pdfValueType(PdfValueType.TEXT)
+                        .build(),
+                    PdfQuestionField.builder()
+                        .questionId(DIAGNOSIS_ID)
+                        .pdfFieldId(PDF_DIAGNOSIS_FIELD_ID_PREFIX)
+                        .pdfValueType(PdfValueType.DIAGNOSE_LIST)
+                        .questionConfiguration(List.of(
+                            QuestionConfigurationDiagnose.builder()
+                                .questionId(DIAGNOS_1)
+                                .diagnoseNameFieldId(PDF_DIAGNOSE_ID_1)
+                                .diagnoseCodeFieldIds(List.of(
+                                    PDF_CODE_ID_1_1, PDF_CODE_ID_1_2, PDF_CODE_ID_1_3,
+                                    PDF_CODE_ID_1_4, PDF_CODE_ID_1_5
+                                )).build(),
+                            QuestionConfigurationDiagnose.builder()
+                                .questionId(DIAGNOS_2)
+                                .diagnoseNameFieldId(PDF_DIAGNOSE_ID_2)
+                                .diagnoseCodeFieldIds(List.of(
+                                    PDF_CODE_ID_2_1, PDF_CODE_ID_2_2, PDF_CODE_ID_2_3,
+                                    PDF_CODE_ID_2_4, PDF_CODE_ID_2_5
+                                )).build(),
+                            QuestionConfigurationDiagnose.builder()
+                                .questionId(DIAGNOS_3)
+                                .diagnoseNameFieldId(PDF_DIAGNOSE_ID_3)
+                                .diagnoseCodeFieldIds(List.of(
+                                    PDF_CODE_ID_3_1, PDF_CODE_ID_3_2, PDF_CODE_ID_3_3,
+                                    PDF_CODE_ID_3_4, PDF_CODE_ID_3_5
+                                )).build(),
+                            QuestionConfigurationDiagnose.builder()
+                                .questionId(DIAGNOS_4)
+                                .diagnoseNameFieldId(PDF_DIAGNOSE_ID_4)
+                                .diagnoseCodeFieldIds(List.of(
+                                    PDF_CODE_ID_4_1, PDF_CODE_ID_4_2, PDF_CODE_ID_4_3,
+                                    PDF_CODE_ID_4_4, PDF_CODE_ID_4_5
+                                )).build(),
+                            QuestionConfigurationDiagnose.builder()
+                                .questionId(DIAGNOS_5)
+                                .diagnoseNameFieldId(PDF_DIAGNOSE_ID_5)
+                                .diagnoseCodeFieldIds(List.of(
+                                    PDF_CODE_ID_5_1, PDF_CODE_ID_5_2, PDF_CODE_ID_5_3,
+                                    PDF_CODE_ID_5_4, PDF_CODE_ID_5_5
+                                )).build()
+                        ))
+                        .build(),
+                    PdfQuestionField.builder()
+                        .questionId(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID)
+                        .pdfFieldId(
+                            DEFAULT_PDF_FIELD_ID)
+                        .pdfValueType(PdfValueType.CODE)
+                        .questionConfiguration(List.of(
+                            QuestionConfigurationCode.builder()
+                                .questionFieldId(ENDAST_PALLIATIV_FIELD_ID)
+                                .pdfFieldId(PDF_ONLY_PALLIATIVE_CARE_FIELD_ID)
+                                .build(),
+                            QuestionConfigurationCode.builder()
+                                .questionFieldId(AKUT_LIVSHOTANDE_FIELD_ID)
+                                .pdfFieldId(PDF_ACUTE_LIFE_THREATENING_FIELD_ID)
+                                .build(),
+                            QuestionConfigurationCode.builder()
+                                .questionFieldId(ANNAT_FIELD_ID)
+                                .pdfFieldId(PDF_OTHER_THREAT_FIELD_ID)
+                                .build()
+                        ))
+                        .build(),
+                    PdfQuestionField.builder()
+                        .questionId(QUESTION_NAR_AKTIVA_BEHANDLINGEN_AVSLUTADES_ID)
+                        .pdfFieldId(PDF_WHEN_ACTIVE_TREATMENT_WAS_STOPPED_FIELD_ID)
+                        .pdfValueType(PdfValueType.DATE)
+                        .build(),
+                    PdfQuestionField.builder()
+                        .questionId(QUESTION_NAR_TILLSTANDET_BLEV_AKUT_LIVSHOTANDE_ID)
+                        .pdfFieldId(PDF_WHEN_CONDITION_BECAME_LIFE_THREATENING_FIELD_ID)
+                        .pdfValueType(PdfValueType.DATE)
+                        .build(),
+                    PdfQuestionField.builder()
+                        .questionId(QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_AKUT_LIVSHOTANDE_ID)
+                        .pdfFieldId(PDF_THREAT_TO_PATIENTS_LIFE_FIELD_ID)
+                        .pdfValueType(PdfValueType.TEXT)
+                        .build(),
+                    PdfQuestionField.builder()
+                        .questionId(
+                            QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_ID)
+                        .pdfFieldId(
+                            DEFAULT_PDF_FIELD_ID)
+                        .pdfValueType(PdfValueType.BOOLEAN)
+                        .questionConfiguration(List.of(
+                            QuestionConfigurationBoolean.builder()
+                                .questionId(
+                                    QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_FIELD_ID)
+                                .checkboxTrue(PDF_ESTIMATE_YES_FIELD_ID)
+                                .checkboxFalse(PDF_ESTIMATE_NO_FIELD_ID)
+                                .build()
+                        ))
+                        .build(),
+                    PdfQuestionField.builder()
+                        .questionId(QUESTION_TILLSTANDET_UPPSKATTAS_LIVSHOTANDE_TILL_OCH_MED_ID)
+                        .pdfFieldId(PDF_CONDITION_IS_LIFE_THREATENING_TO_FIELD_ID)
+                        .pdfValueType(PdfValueType.DATE)
+                        .build(),
+                    PdfQuestionField.builder()
+                        .questionId(QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_ANNAT_ID)
+                        .pdfFieldId(PDF_CONDITION_IS_LIFE_THREATENING_OTHER_FIELD_ID)
+                        .pdfValueType(PdfValueType.TEXT)
+                        .build(),
+                    PdfQuestionField.builder()
+                        .questionId(FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_ID)
+                        .pdfFieldId(DEFAULT_PDF_FIELD_ID)
+                        .pdfValueType(PdfValueType.BOOLEAN)
+                        .questionConfiguration(List.of(
+                            QuestionConfigurationBoolean.builder()
+                                .questionId(
+                                    FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_FIELD_ID)
+                                .checkboxTrue(PDF_CAN_CONSENT_YES_FIELD_ID)
+                                .checkboxFalse(PDF_CAN_CONSENT_NO_FIELD_ID)
+                                .build()
+                        ))
+                        .build()
+                )
+            )
+            .build())
         .build();
   }
-
 
   private ElementSpecification questionDiagnos() {
     return ElementSpecification.builder()

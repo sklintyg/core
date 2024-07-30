@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.FK_NAME;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.LINK_FK_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.PDF_FK_7210_PDF;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.PDF_NO_ADDRESS_FK_7210_PDF;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.PREAMBLE_TEXT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.URL_FK;
@@ -32,6 +33,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfQuestionField;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
@@ -274,13 +276,6 @@ class CertificateModelFactoryFK7210Test {
   }
 
   @Test
-  void shallIncludePdfTemplatePath() {
-    final var certificateModel = certificateModelFactoryFK7210.create();
-
-    assertEquals(PDF_FK_7210_PDF, certificateModel.pdfTemplatePath());
-  }
-
-  @Test
   void shallIncludeSchematronPath() {
     final var certificateModel = certificateModelFactoryFK7210.create();
 
@@ -477,6 +472,21 @@ class CertificateModelFactoryFK7210Test {
       }
 
       @Test
+      void shallIncludePdfTemplatePathWithAddress() {
+        final var certificateModel = certificateModelFactoryFK7210.create();
+
+        assertEquals(PDF_FK_7210_PDF, certificateModel.pdfSpecification().pdfTemplatePath());
+      }
+
+      @Test
+      void shallIncludePdfTemplatePathNoAddress() {
+        final var certificateModel = certificateModelFactoryFK7210.create();
+
+        assertEquals(PDF_NO_ADDRESS_FK_7210_PDF,
+            certificateModel.pdfSpecification().pdfNoAddressTemplatePath());
+      }
+
+      @Test
       void shallIncludePatientFieldId() {
         final var expected = new PdfFieldId("form1[0].#subform[0].flt_txtPersonNr[0]");
 
@@ -486,28 +496,33 @@ class CertificateModelFactoryFK7210Test {
       }
 
       @Test
+      void shallIncludeSignatureFields() {
+        final var expected = PdfSignature.builder()
+            .signaturePageIndex(0)
+            .signatureWithAddressTagIndex(new PdfTagIndex(15))
+            .signatureWithoutAddressTagIndex(new PdfTagIndex(7))
+            .signedDateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datUnderskrift[0]"))
+            .signedByNameFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtNamnfortydligande[0]"))
+            .paTitleFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtBefattning[0]"))
+            .specialtyFieldId(
+                new PdfFieldId("form1[0].#subform[0].flt_txtEventuellSpecialistkompetens[0]"))
+            .hsaIdFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtLakarensHSA-ID[0]"))
+            .workplaceCodeFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtArbetsplatskod[0]"))
+            .contactInformation(
+                new PdfFieldId("form1[0].#subform[0].flt_txtVardgivarensNamnAdressTelefon[0]"))
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK7210.create();
+
+        assertEquals(expected, certificateModel.pdfSpecification().signature());
+      }
+
+      @Test
       void shallIncludeMcid() {
         final var expected = 100;
         final var certificateModel = certificateModelFactoryFK7210.create();
 
         assertEquals(expected, certificateModel.pdfSpecification().mcid().value());
-      }
-
-      @Test
-      void shallIncludeSignatureWithAddressTagIndex() {
-        final var expected = new PdfTagIndex(15);
-        final var certificateModel = certificateModelFactoryFK7210.create();
-
-        assertEquals(expected, certificateModel.pdfSpecification().signatureWithAddressTagIndex());
-      }
-
-      @Test
-      void shallIncludeSignatureWithoutAddressTagIndex() {
-        final var expected = new PdfTagIndex(7);
-        final var certificateModel = certificateModelFactoryFK7210.create();
-
-        assertEquals(expected,
-            certificateModel.pdfSpecification().signatureWithoutAddressTagIndex());
       }
 
       @Test
@@ -521,7 +536,7 @@ class CertificateModelFactoryFK7210Test {
         );
         final var certificateModel = certificateModelFactoryFK7210.create();
 
-        assertEquals(expected, certificateModel.pdfSpecification().pdfQuestionFields());
+        assertEquals(expected, certificateModel.pdfSpecification().questionFields());
       }
     }
   }

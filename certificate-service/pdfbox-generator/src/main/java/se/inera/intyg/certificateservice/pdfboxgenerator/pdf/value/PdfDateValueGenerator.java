@@ -41,7 +41,7 @@ public class PdfDateValueGenerator implements PdfElementValue {
     return List.of(
         PdfField.builder()
             .id(fieldId)
-            .value(elementValueDate.date().toString())
+            .value(elementValueDate.date() != null ? elementValueDate.date().toString() : "")
             .build()
     );
 

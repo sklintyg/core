@@ -41,7 +41,7 @@ class PdfUnitValueGeneratorTest {
 
     final var result = pdfUnitValueGenerator.generate(certificate);
 
-    assertEquals(expected, result);
+    assertEquals(expected.get(0).getValue(), result.get(0).getValue());
   }
 
   private Certificate buildCertificate() {

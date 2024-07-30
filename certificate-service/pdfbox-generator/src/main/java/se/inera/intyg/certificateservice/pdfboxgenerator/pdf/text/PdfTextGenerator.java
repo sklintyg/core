@@ -29,7 +29,7 @@ public class PdfTextGenerator {
       Color strokingColor,
       int mcid, PDStructureElement section)
       throws IOException {
-    addText(pdf, text, fontSize, matrix, strokingColor, null, null, false, mcid, section);
+    addText(pdf, text, fontSize, matrix, strokingColor, null, null, false, mcid, section, 0);
   }
 
   private void addText(
@@ -42,9 +42,10 @@ public class PdfTextGenerator {
       Float offsetY,
       boolean isBold,
       int mcid,
-      PDStructureElement section
+      PDStructureElement section,
+      int pageIndex
   ) throws IOException {
-    final var page = pdf.getPage(0);
+    final var page = pdf.getPage(pageIndex);
     final var contentStream = createContentStream(pdf, page);
 
     if (matrix != null) {
@@ -96,12 +97,13 @@ public class PdfTextGenerator {
         30F,
         false,
         mcid,
-        getLastDiv(document)
+        getLastDiv(document),
+        0
     );
   }
 
   public void addDigitalSignatureText(PDDocument pdDocument, String text, Float xPosition,
-      Float yPosition, int mcid, int index)
+      Float yPosition, int mcid, int index, int pageIndex)
       throws IOException {
     addText(
         pdDocument,
@@ -113,7 +115,8 @@ public class PdfTextGenerator {
         yPosition,
         true,
         mcid,
-        getDivInQuestionSection(pdDocument, index)
+        getDivInQuestionSection(pdDocument, index),
+        pageIndex
     );
   }
 

@@ -12,8 +12,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7472CertificateBuilder;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_CARE_UNIT_CONTACT_INFORMATION_FIELD_ID;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.SIGNATURE_DATE_FIELD_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_CONTACT_INFORMATION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_SIGNED_DATE_FIELD_ID;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -47,7 +47,7 @@ class CertificatePdfFillServiceTest {
   public static final String SYMPTOM_FIELD_ID = "form1[0].#subform[0].flt_txtDiagnos[0]";
 
   private static final PdfField SIGNED_DATE_FIELD = PdfField.builder()
-      .id(SIGNATURE_DATE_FIELD_ID)
+      .id(FK7472_PDF_SIGNED_DATE_FIELD_ID.id())
       .value(LocalDate.now().toString())
       .build();
 
@@ -57,7 +57,7 @@ class CertificatePdfFillServiceTest {
       .build();
 
   private static final PdfField UNIT_FIELD = PdfField.builder()
-      .id(SIGNATURE_CARE_UNIT_CONTACT_INFORMATION_FIELD_ID)
+      .id(FK7472_PDF_CONTACT_INFORMATION.id())
       .value("Contact information")
       .build();
 
@@ -119,7 +119,7 @@ class CertificatePdfFillServiceTest {
       certificatePdfFillService.fillDocument(certificate, TEXT, false);
 
       verify(pdfAdditionalInformationTextGenerator, times(0))
-          .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt());
+          .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt(), anyInt());
     }
 
     @Test
@@ -214,7 +214,7 @@ class CertificatePdfFillServiceTest {
       certificatePdfFillService.fillDocument(certificate, TEXT, false);
 
       verify(pdfAdditionalInformationTextGenerator, times(1))
-          .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt());
+          .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt(), anyInt());
     }
 
     @Test
@@ -316,7 +316,7 @@ class CertificatePdfFillServiceTest {
       certificatePdfFillService.fillDocument(certificate, TEXT, false);
 
       verify(pdfAdditionalInformationTextGenerator, times(1))
-          .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt());
+          .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt(), anyInt());
     }
 
     @Test

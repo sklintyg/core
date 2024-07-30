@@ -1,11 +1,11 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CodeSystemKvFkmu0008.EN_ATTONDEL;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CodeSystemKvFkmu0008.EN_FJARDEDEL;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CodeSystemKvFkmu0008.HALVA;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CodeSystemKvFkmu0008.HELA;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CodeSystemKvFkmu0008.TRE_FJARDEDELAR;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.CHECKED_BOX_VALUE;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.codesystems.CodeSystemKvFkmu0008.EN_ATTONDEL;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.codesystems.CodeSystemKvFkmu0008.EN_FJARDEDEL;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.codesystems.CodeSystemKvFkmu0008.HALVA;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.codesystems.CodeSystemKvFkmu0008.HELA;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.codesystems.CodeSystemKvFkmu0008.TRE_FJARDEDELAR;
 
 import java.util.ArrayList;
 import java.util.Collection;

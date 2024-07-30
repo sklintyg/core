@@ -3,10 +3,6 @@ package se.inera.intyg.certificateservice.domain.testdata;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.Mcid;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
@@ -60,10 +56,8 @@ public class TestDataCertificateModelConstants {
       "fk7809/schematron/lumek.v1.sch");
   public static final String FK7210_PDF_PATH = "fk7210/pdf/fk7210_v1.pdf";
   public static final String FK3226_PDF_PATH = "fk3226/pdf/fk3226_v1.pdf";
-  public static final String FK7472_PDF_PATH = "fk7472/pdf/fk7472_v1.pdf";
   public static final String FK7210_PDF_PATH_NO_ADDRESS = "fk7210/pdf/fk7210_v1_no_address.pdf";
   public static final String FK3226_PDF_PATH_NO_ADDRESS = "fk3226/pdf/fk3226_v1_no_address.pdf";
-  public static final String FK7472_PDF_PATH_NO_ADDRESS = "fk7472/pdf/fk7472_v1_no_address.pdf";
   public static final String FK7210_NAME = "Intyg om graviditet";
   public static final String FK3226_NAME = "Läkarutlåtande för närståendepenning";
   public static final String FK7472_NAME = "Intyg om tillfällig föräldrapenning";
@@ -71,27 +65,4 @@ public class TestDataCertificateModelConstants {
   public static final Recipient FK_RECIPIENT = new Recipient(
       new RecipientId("FKASSA"), "Försäkringskassan"
   );
-
-  public static final PdfFieldId FK7210_PDF_PATIENT_ID_FIELD_ID = new PdfFieldId(
-      "form1[0].#subform[0].flt_txtPersonNr[0]");
-  public static final PdfFieldId FK7210_PDF_FODELSEDATUM_FIELD_ID = new PdfFieldId(
-      "form1[0].#subform[0].flt_dat[0]");
-  public static final ElementId FK7210_QUESTION_BERAKNAT_FODELSEDATUM_ID = new ElementId("54");
-  public static final Mcid FK7210_PDF_MCID = new Mcid(100);
-  public static final PdfTagIndex FK7210_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(15);
-  public static final PdfTagIndex FK7210_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(
-      7);
-
-  public static final PdfFieldId FK7472_PDF_PATIENT_ID_FIELD_ID = new PdfFieldId(
-      "form1[0].#subform[0].flt_txtPersonNrBarn[0]");
-  public static final PdfFieldId FK7472_PDF_SYMPTOM_FIELD_ID = new PdfFieldId(
-      "form1[0].#subform[0].flt_txtDiagnos[0]");
-  public static final PdfFieldId FK7472_PDF_PERIOD_FIELD_ID_PREFIX = new PdfFieldId(
-      "form1[0].#subform[0]");
-  public static final ElementId FK7472_QUESTION_SYMPTOM_ID = new ElementId("55");
-  public static final ElementId FK7472_QUESTION_PERIOD_ID = new ElementId("56");
-  public static final Mcid FK7472_PDF_MCID = new Mcid(120);
-  public static final PdfTagIndex FK7472_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(50);
-  public static final PdfTagIndex FK7472_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(
-      42);
 }
