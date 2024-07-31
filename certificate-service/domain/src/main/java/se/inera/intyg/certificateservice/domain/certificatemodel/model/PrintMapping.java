@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 
@@ -8,4 +9,5 @@ import lombok.Value;
 public class PrintMapping {
 
   PdfFieldId pdfFieldId;
+  List<QuestionConfiguration> questionConfiguration;
 }

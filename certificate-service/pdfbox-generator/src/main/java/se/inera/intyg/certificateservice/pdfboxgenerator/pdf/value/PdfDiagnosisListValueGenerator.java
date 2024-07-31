@@ -18,14 +18,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionC
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 @Component
-public class PdfDiagnosisListValueGenerator implements PdfElementValue {
+public class PdfDiagnosisListValueGenerator {
 
-  @Override
   public Class<? extends ElementValue> getType() {
     return ElementValueDiagnosis.class;
   }
 
-  @Override
   public List<PdfField> generate(Certificate certificate, ElementId questionId, String fieldId) {
     if (certificate.elementData() == null || certificate.elementData().isEmpty()) {
       return Collections.emptyList();

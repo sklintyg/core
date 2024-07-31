@@ -47,6 +47,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignat
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PrintMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationDateList;
@@ -547,11 +548,6 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                         ))
                         .build(),
                     PdfQuestionField.builder()
-                        .questionId(QUESTION_UTLATANDE_BASERAT_PA_ANNAT_ID)
-                        .pdfFieldId(PDF_STATEMENT_BASED_ON_OTHER_FIELD_ID)
-                        .pdfValueType(PdfValueType.TEXT)
-                        .build(),
-                    PdfQuestionField.builder()
                         .questionId(DIAGNOSIS_ID)
                         .pdfFieldId(PDF_DIAGNOSIS_FIELD_ID_PREFIX)
                         .pdfValueType(PdfValueType.DIAGNOSE_LIST)
@@ -610,59 +606,6 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                             QuestionConfigurationCode.builder()
                                 .questionFieldId(ANNAT_FIELD_ID)
                                 .pdfFieldId(PDF_OTHER_THREAT_FIELD_ID)
-                                .build()
-                        ))
-                        .build(),
-                    PdfQuestionField.builder()
-                        .questionId(QUESTION_NAR_AKTIVA_BEHANDLINGEN_AVSLUTADES_ID)
-                        .pdfFieldId(PDF_WHEN_ACTIVE_TREATMENT_WAS_STOPPED_FIELD_ID)
-                        .pdfValueType(PdfValueType.DATE)
-                        .build(),
-                    PdfQuestionField.builder()
-                        .questionId(QUESTION_NAR_TILLSTANDET_BLEV_AKUT_LIVSHOTANDE_ID)
-                        .pdfFieldId(PDF_WHEN_CONDITION_BECAME_LIFE_THREATENING_FIELD_ID)
-                        .pdfValueType(PdfValueType.DATE)
-                        .build(),
-                    PdfQuestionField.builder()
-                        .questionId(QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_AKUT_LIVSHOTANDE_ID)
-                        .pdfFieldId(PDF_THREAT_TO_PATIENTS_LIFE_FIELD_ID)
-                        .pdfValueType(PdfValueType.TEXT)
-                        .build(),
-                    PdfQuestionField.builder()
-                        .questionId(
-                            QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_ID)
-                        .pdfFieldId(
-                            DEFAULT_PDF_FIELD_ID)
-                        .pdfValueType(PdfValueType.BOOLEAN)
-                        .questionConfiguration(List.of(
-                            QuestionConfigurationBoolean.builder()
-                                .questionId(
-                                    QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_FIELD_ID)
-                                .checkboxTrue(PDF_ESTIMATE_YES_FIELD_ID)
-                                .checkboxFalse(PDF_ESTIMATE_NO_FIELD_ID)
-                                .build()
-                        ))
-                        .build(),
-                    PdfQuestionField.builder()
-                        .questionId(QUESTION_TILLSTANDET_UPPSKATTAS_LIVSHOTANDE_TILL_OCH_MED_ID)
-                        .pdfFieldId(PDF_CONDITION_IS_LIFE_THREATENING_TO_FIELD_ID)
-                        .pdfValueType(PdfValueType.DATE)
-                        .build(),
-                    PdfQuestionField.builder()
-                        .questionId(QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_ANNAT_ID)
-                        .pdfFieldId(PDF_CONDITION_IS_LIFE_THREATENING_OTHER_FIELD_ID)
-                        .pdfValueType(PdfValueType.TEXT)
-                        .build(),
-                    PdfQuestionField.builder()
-                        .questionId(FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_ID)
-                        .pdfFieldId(DEFAULT_PDF_FIELD_ID)
-                        .pdfValueType(PdfValueType.BOOLEAN)
-                        .questionConfiguration(List.of(
-                            QuestionConfigurationBoolean.builder()
-                                .questionId(
-                                    FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_FIELD_ID)
-                                .checkboxTrue(PDF_CAN_CONSENT_YES_FIELD_ID)
-                                .checkboxFalse(PDF_CAN_CONSENT_NO_FIELD_ID)
                                 .build()
                         ))
                         .build()
@@ -769,6 +712,19 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .build()
             )
         )
+        .printMapping(
+            PrintMapping.builder()
+                .pdfFieldId(DEFAULT_PDF_FIELD_ID)
+                .questionConfiguration(List.of(
+                        QuestionConfigurationBoolean.builder()
+                            .questionId(FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_FIELD_ID)
+                            .checkboxTrue(PDF_CAN_CONSENT_YES_FIELD_ID)
+                            .checkboxFalse(PDF_CAN_CONSENT_NO_FIELD_ID)
+                            .build()
+                    )
+                )
+                .build()
+        )
         .build();
   }
 
@@ -815,6 +771,11 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .mapping(
             new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
         )
+        .printMapping(
+            PrintMapping.builder()
+                .pdfFieldId(PDF_CONDITION_IS_LIFE_THREATENING_OTHER_FIELD_ID)
+                .build()
+        )
         .build();
   }
 
@@ -858,6 +819,11 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .mapping(
             new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
         )
+        .printMapping(
+            PrintMapping.builder()
+                .pdfFieldId(PDF_CONDITION_IS_LIFE_THREATENING_TO_FIELD_ID)
+                .build()
+        )
         .build();
   }
 
@@ -900,6 +866,22 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         )
         .mapping(
             new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
+        )
+        .printMapping(
+            PrintMapping.builder()
+                .pdfFieldId(
+                    DEFAULT_PDF_FIELD_ID)
+                .questionConfiguration(
+                    List.of(
+                        QuestionConfigurationBoolean.builder()
+                            .questionId(
+                                QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_FIELD_ID)
+                            .checkboxTrue(PDF_ESTIMATE_YES_FIELD_ID)
+                            .checkboxFalse(PDF_ESTIMATE_NO_FIELD_ID)
+                            .build()
+                    )
+                )
+                .build()
         )
         .build();
   }
@@ -946,6 +928,11 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .mapping(
             new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
         )
+        .printMapping(
+            PrintMapping.builder()
+                .pdfFieldId(PDF_THREAT_TO_PATIENTS_LIFE_FIELD_ID)
+                .build()
+        )
         .build();
   }
 
@@ -989,6 +976,11 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .mapping(
             new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
         )
+        .printMapping(
+            PrintMapping.builder()
+                .pdfFieldId(PDF_WHEN_ACTIVE_TREATMENT_WAS_STOPPED_FIELD_ID)
+                .build()
+        )
         .build();
   }
 
@@ -1031,6 +1023,11 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         )
         .mapping(
             new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
+        )
+        .printMapping(
+            PrintMapping.builder()
+                .pdfFieldId(PDF_WHEN_CONDITION_BECAME_LIFE_THREATENING_FIELD_ID)
+                .build()
         )
         .build();
   }
@@ -1199,6 +1196,11 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                 .anyMatch(value -> value.dateList().stream().anyMatch(
                     valueDate -> valueDate.dateId().equals(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID))
                 )
+        )
+        .printMapping(
+            PrintMapping.builder()
+                .pdfFieldId(PDF_STATEMENT_BASED_ON_OTHER_FIELD_ID)
+                .build()
         )
         .build();
   }
