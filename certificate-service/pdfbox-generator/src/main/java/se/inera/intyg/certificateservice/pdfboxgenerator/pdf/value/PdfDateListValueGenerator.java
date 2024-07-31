@@ -8,45 +8,28 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfQuestionField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationDateList;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 @Component
-public class PdfDateListValueGenerator {
+public class PdfDateListValueGenerator implements PdfElementValue<ElementValueDateList> {
 
-  public Class<? extends ElementValue> getType() {
+  @Override
+  public Class<ElementValueDateList> getType() {
     return ElementValueDateList.class;
   }
 
-  public List<PdfField> generate(Certificate certificate, ElementId questionId, String fieldId) {
-    if (certificate.elementData() == null || certificate.elementData().isEmpty()) {
-      return Collections.emptyList();
-    }
-
-    final var question = certificate.getElementDataById(questionId);
-
-    if (question.isEmpty()) {
-      return Collections.emptyList();
-    }
-
-    if (!(question.get().value() instanceof ElementValueDateList elementValueDateList)) {
-      throw new IllegalStateException(
-          String.format(
-              "Expected ElementValueDateList but was: '%s'",
-              question.get().value().getClass()
-          )
-      );
-    }
-
+  @Override
+  public List<PdfField> generate(ElementSpecification elementSpecification,
+      ElementValueDateList elementValueDateList) {
+    final var questionConfigurations = (List<QuestionConfigurationDateList>) (List<?>)
+        elementSpecification.printMapping().questionConfiguration();
     return elementValueDateList.dateList().stream()
-        .map(date -> getFields(date, getQuestionConfig(certificate)))
+        .map(date -> getFields(date, questionConfigurations))
         .flatMap(Collection::stream)
         .toList();
   }
@@ -70,21 +53,6 @@ public class PdfDateListValueGenerator {
           .toList();
     }
     return Collections.emptyList();
-  }
-
-  private static List<QuestionConfigurationDateList> getQuestionConfig(
-      Certificate certificate) {
-    final var questionFields = certificate.certificateModel().pdfSpecification()
-        .questionFields();
-
-    return questionFields.stream()
-        .map(PdfQuestionField::questionConfiguration)
-        .filter(Objects::nonNull)
-        .flatMap(Collection::stream)
-        .filter(Objects::nonNull)
-        .filter(QuestionConfigurationDateList.class::isInstance)
-        .map(QuestionConfigurationDateList.class::cast)
-        .toList();
   }
 
   private static List<QuestionConfigurationDateList> getConfigByFieldId(
@@ -120,6 +88,5 @@ public class PdfDateListValueGenerator {
             "Could not get PdfFieldId from QuestionConfiguration in '%s'"
                 .formatted(PdfDateListValueGenerator.class.getSimpleName()))
         );
-
   }
 }
