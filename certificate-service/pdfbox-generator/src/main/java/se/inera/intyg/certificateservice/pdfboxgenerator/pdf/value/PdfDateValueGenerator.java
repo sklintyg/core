@@ -4,17 +4,17 @@ import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 @Component
 public class PdfDateValueGenerator implements PdfElementValue {
 
   @Override
-  public PdfValueType getType() {
-    return PdfValueType.DATE;
+  public Class<? extends ElementValue> getType() {
+    return ElementValueDate.class;
   }
 
   @Override

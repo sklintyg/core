@@ -14,9 +14,9 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 @Component
@@ -28,8 +28,8 @@ public class PdfDateRangeListValueGenerator implements PdfElementValue {
   private static final String PERIOD_SUFFIX_ID = "[0]";
 
   @Override
-  public PdfValueType getType() {
-    return PdfValueType.DATE_RANGE_LIST;
+  public Class<? extends ElementValue> getType() {
+    return ElementValueDateRangeList.class;
   }
 
   @Override

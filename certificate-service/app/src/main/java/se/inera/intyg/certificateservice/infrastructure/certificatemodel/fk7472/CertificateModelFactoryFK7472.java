@@ -24,11 +24,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.Mcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfQuestionField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PrintMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
@@ -250,20 +249,6 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
                 .contactInformation(PDF_CONTACT_INFORMATION)
                 .build())
             .mcid(PDF_MCID)
-            .questionFields(
-                List.of(
-                    PdfQuestionField.builder()
-                        .questionId(QUESTION_SYMPTOM_ID)
-                        .pdfFieldId(PDF_SYMPTOM_FIELD_ID)
-                        .pdfValueType(PdfValueType.TEXT)
-                        .build(),
-                    PdfQuestionField.builder()
-                        .questionId(QUESTION_PERIOD_ID)
-                        .pdfFieldId(PDF_PERIOD_FIELD_ID_PREFIX)
-                        .pdfValueType(PdfValueType.DATE_RANGE_LIST)
-                        .build()
-                )
-            )
             .build())
         .build();
   }
@@ -323,6 +308,11 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
                     .limit(318)
                     .build()
             )
+        )
+        .printMapping(
+            PrintMapping.builder()
+                .pdfFieldId(PDF_SYMPTOM_FIELD_ID)
+                .build()
         )
         .build();
   }
@@ -384,6 +374,11 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
                     .mandatory(true)
                     .build()
             )
+        )
+        .printMapping(
+            PrintMapping.builder()
+                .pdfFieldId(PDF_PERIOD_FIELD_ID_PREFIX)
+                .build()
         )
         .build();
   }

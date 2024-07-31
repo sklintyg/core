@@ -8,12 +8,12 @@ import java.util.Objects;
 import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfQuestionField;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationDiagnose;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
@@ -21,8 +21,8 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 public class PdfDiagnosisListValueGenerator implements PdfElementValue {
 
   @Override
-  public PdfValueType getType() {
-    return PdfValueType.DIAGNOSE_LIST;
+  public Class<? extends ElementValue> getType() {
+    return ElementValueDiagnosis.class;
   }
 
   @Override

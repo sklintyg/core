@@ -21,11 +21,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.Mcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfQuestionField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PrintMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
@@ -204,15 +203,6 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
                 .contactInformation(PDF_CONTACT_INFORMATION)
                 .build())
             .mcid(PDF_MCID)
-            .questionFields(
-                List.of(
-                    PdfQuestionField.builder()
-                        .questionId(QUESTION_BERAKNAT_FODELSEDATUM_ID)
-                        .pdfFieldId(PDF_FODELSEDATUM_FIELD_ID)
-                        .pdfValueType(PdfValueType.DATE)
-                        .build()
-                )
-            )
             .build())
         .build();
   }
@@ -259,6 +249,11 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
                     .max(Period.ofYears(1))
                     .build()
             )
+        )
+        .printMapping(
+            PrintMapping.builder()
+                .pdfFieldId(PDF_FODELSEDATUM_FIELD_ID)
+                .build()
         )
         .build();
   }
