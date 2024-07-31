@@ -1,14 +1,11 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
-import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 
 @Value
 @Builder
-public class PrintMapping {
+public class PdfConfigurationText implements PdfConfiguration {
 
   PdfFieldId pdfFieldId;
-  List<QuestionConfiguration> questionConfiguration;
-  PdfConfiguration pdfConfiguration;
 }

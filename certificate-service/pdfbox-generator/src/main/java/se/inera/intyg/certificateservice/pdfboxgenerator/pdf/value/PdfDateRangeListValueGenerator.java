@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeList;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 @Component
@@ -33,9 +34,12 @@ public class PdfDateRangeListValueGenerator implements PdfElementValue<ElementVa
   public List<PdfField> generate(ElementSpecification elementSpecification,
       ElementValueDateRangeList elementValue) {
 
+    final var pdfConfiguration = (PdfConfigurationDateRangeList) elementSpecification.printMapping()
+        .pdfConfiguration();
+
     return elementValue.dateRangeList().stream()
         .map(dateRange ->
-            getPeriodFields(dateRange, elementSpecification.printMapping().pdfFieldId().id())
+            getPeriodFields(dateRange, pdfConfiguration.pdfFieldId().id())
         )
         .flatMap(Collection::stream)
         .toList();

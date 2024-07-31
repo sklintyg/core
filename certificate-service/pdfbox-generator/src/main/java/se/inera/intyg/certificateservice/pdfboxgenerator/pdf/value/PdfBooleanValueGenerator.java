@@ -8,8 +8,8 @@ import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationBoolean;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 @Component
@@ -24,16 +24,18 @@ public class PdfBooleanValueGenerator implements PdfElementValue<ElementValueBoo
   public List<PdfField> generate(ElementSpecification elementSpecification,
       ElementValueBoolean elementValue) {
 
-    return getFields(elementValue,
-        (List<QuestionConfigurationBoolean>) (List<?>) elementSpecification.printMapping()
-            .questionConfiguration()
-    );
+    if (!(elementSpecification.printMapping()
+        .pdfConfiguration() instanceof PdfConfigurationBoolean pdfConfigurationBoolean)) {
+      throw new IllegalArgumentException(
+          "Not a Boolean mapping: " + elementSpecification.printMapping());
+    }
+
+    return getFields(elementValue, pdfConfigurationBoolean);
   }
 
   private List<PdfField> getFields(ElementValueBoolean valueBoolean,
-      List<QuestionConfigurationBoolean> configuration) {
-    final var configForField = getConfigByFieldId(valueBoolean, configuration);
-    final var pdfFieldId = getCheckboxId(configForField, valueBoolean);
+      PdfConfigurationBoolean configuration) {
+    final var pdfFieldId = getCheckboxId(configuration, valueBoolean);
 
     if (valueBoolean.value() != null) {
       return Stream.of(
@@ -46,35 +48,13 @@ public class PdfBooleanValueGenerator implements PdfElementValue<ElementValueBoo
     return Collections.emptyList();
   }
 
-  private static List<QuestionConfigurationBoolean> getConfigByFieldId(
-      ElementValueBoolean value, List<QuestionConfigurationBoolean> configuration) {
-    return configuration.stream()
-        .filter(config -> config.questionId().equals(value.booleanId()))
-        .findFirst()
-        .stream()
-        .toList();
-  }
-
-  private static PdfFieldId getCheckboxId(List<QuestionConfigurationBoolean> configForQuestion,
+  private static PdfFieldId getCheckboxId(PdfConfigurationBoolean configForQuestion,
       ElementValueBoolean valueBoolean) {
-
     if (Boolean.FALSE.equals(valueBoolean.value())) {
-      return configForQuestion.stream()
-          .map(QuestionConfigurationBoolean::checkboxFalse)
-          .findFirst()
-          .orElseThrow(() -> new IllegalStateException(
-              "Could not find PdfFieldId for ElementValue with FieldId '%s'"
-                  .formatted(valueBoolean.booleanId().value()))
-          );
+      return configForQuestion.checkboxFalse();
     }
     if (Boolean.TRUE.equals(valueBoolean.value())) {
-      return configForQuestion.stream()
-          .map(QuestionConfigurationBoolean::checkboxTrue)
-          .findFirst()
-          .orElseThrow(() -> new IllegalStateException(
-              "Could not find PdfFieldId for ElementValue with FieldId '%s'"
-                  .formatted(valueBoolean.booleanId().value()))
-          );
+      return configForQuestion.checkboxTrue();
     }
     return null;
   }

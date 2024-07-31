@@ -41,12 +41,14 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.Mcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PrintMapping;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationDateList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationDiagnose;
@@ -662,14 +664,11 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         )
         .printMapping(
             PrintMapping.builder()
-                .pdfFieldId(DEFAULT_PDF_FIELD_ID)
-                .questionConfiguration(List.of(
-                        QuestionConfigurationBoolean.builder()
-                            .questionId(FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_FIELD_ID)
-                            .checkboxTrue(PDF_CAN_CONSENT_YES_FIELD_ID)
-                            .checkboxFalse(PDF_CAN_CONSENT_NO_FIELD_ID)
-                            .build()
-                    )
+                .pdfConfiguration(
+                    PdfConfigurationBoolean.builder()
+                        .checkboxTrue(PDF_CAN_CONSENT_YES_FIELD_ID)
+                        .checkboxFalse(PDF_CAN_CONSENT_NO_FIELD_ID)
+                        .build()
                 )
                 .build()
         )
@@ -721,7 +720,11 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         )
         .printMapping(
             PrintMapping.builder()
-                .pdfFieldId(PDF_CONDITION_IS_LIFE_THREATENING_OTHER_FIELD_ID)
+                .pdfConfiguration(
+                    PdfConfigurationText.builder()
+                        .pdfFieldId(PDF_CONDITION_IS_LIFE_THREATENING_OTHER_FIELD_ID)
+                        .build()
+                )
                 .build()
         )
         .build();
@@ -769,7 +772,11 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         )
         .printMapping(
             PrintMapping.builder()
-                .pdfFieldId(PDF_CONDITION_IS_LIFE_THREATENING_TO_FIELD_ID)
+                .pdfConfiguration(
+                    PdfConfigurationDate.builder()
+                        .pdfFieldId(PDF_CONDITION_IS_LIFE_THREATENING_TO_FIELD_ID)
+                        .build()
+                )
                 .build()
         )
         .build();
@@ -817,17 +824,11 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         )
         .printMapping(
             PrintMapping.builder()
-                .pdfFieldId(
-                    DEFAULT_PDF_FIELD_ID)
-                .questionConfiguration(
-                    List.of(
-                        QuestionConfigurationBoolean.builder()
-                            .questionId(
-                                QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_FIELD_ID)
-                            .checkboxTrue(PDF_ESTIMATE_YES_FIELD_ID)
-                            .checkboxFalse(PDF_ESTIMATE_NO_FIELD_ID)
-                            .build()
-                    )
+                .pdfConfiguration(
+                    PdfConfigurationBoolean.builder()
+                        .checkboxTrue(PDF_ESTIMATE_YES_FIELD_ID)
+                        .checkboxFalse(PDF_ESTIMATE_NO_FIELD_ID)
+                        .build()
                 )
                 .build()
         )
@@ -878,7 +879,11 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         )
         .printMapping(
             PrintMapping.builder()
-                .pdfFieldId(PDF_THREAT_TO_PATIENTS_LIFE_FIELD_ID)
+                .pdfConfiguration(
+                    PdfConfigurationText.builder()
+                        .pdfFieldId(PDF_THREAT_TO_PATIENTS_LIFE_FIELD_ID)
+                        .build()
+                )
                 .build()
         )
         .build();
@@ -926,7 +931,11 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         )
         .printMapping(
             PrintMapping.builder()
-                .pdfFieldId(PDF_WHEN_ACTIVE_TREATMENT_WAS_STOPPED_FIELD_ID)
+                .pdfConfiguration(
+                    PdfConfigurationDate.builder()
+                        .pdfFieldId(PDF_WHEN_ACTIVE_TREATMENT_WAS_STOPPED_FIELD_ID)
+                        .build()
+                )
                 .build()
         )
         .build();
@@ -974,7 +983,11 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         )
         .printMapping(
             PrintMapping.builder()
-                .pdfFieldId(PDF_WHEN_CONDITION_BECAME_LIFE_THREATENING_FIELD_ID)
+                .pdfConfiguration(
+                    PdfConfigurationDate.builder()
+                        .pdfFieldId(PDF_WHEN_CONDITION_BECAME_LIFE_THREATENING_FIELD_ID)
+                        .build()
+                )
                 .build()
         )
         .build();
@@ -1191,7 +1204,11 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         )
         .printMapping(
             PrintMapping.builder()
-                .pdfFieldId(PDF_STATEMENT_BASED_ON_OTHER_FIELD_ID)
+                .pdfConfiguration(
+                    PdfConfigurationText.builder()
+                        .pdfFieldId(PDF_STATEMENT_BASED_ON_OTHER_FIELD_ID)
+                        .build()
+                )
                 .build()
         )
         .build();

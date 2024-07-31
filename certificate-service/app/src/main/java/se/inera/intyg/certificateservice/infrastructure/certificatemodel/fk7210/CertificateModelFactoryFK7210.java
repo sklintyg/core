@@ -20,6 +20,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.Mcid;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
@@ -252,7 +253,11 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
         )
         .printMapping(
             PrintMapping.builder()
-                .pdfFieldId(PDF_FODELSEDATUM_FIELD_ID)
+                .pdfConfiguration(
+                    PdfConfigurationDate.builder()
+                        .pdfFieldId(PDF_FODELSEDATUM_FIELD_ID)
+                        .build()
+                )
                 .build()
         )
         .build();
