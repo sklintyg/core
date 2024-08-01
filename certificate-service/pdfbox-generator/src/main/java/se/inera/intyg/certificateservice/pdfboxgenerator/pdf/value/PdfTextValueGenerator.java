@@ -3,44 +3,30 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 @Component
-public class PdfTextValueGenerator implements PdfElementValue {
+public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> {
 
   @Override
-  public PdfValueType getType() {
-    return PdfValueType.TEXT;
+  public Class<ElementValueText> getType() {
+    return ElementValueText.class;
   }
 
   @Override
-  public List<PdfField> generate(Certificate certificate, ElementId questionId, String fieldId) {
-    if (certificate.elementData() == null || certificate.elementData().isEmpty()) {
+  public List<PdfField> generate(ElementSpecification elementSpecification,
+      ElementValueText elementValueText) {
+    if (elementValueText.text() == null) {
       return Collections.emptyList();
     }
-
-    final var question = certificate.getElementDataById(questionId);
-
-    if (question.isEmpty()) {
-      return Collections.emptyList();
-    }
-
-    if (!(question.get().value() instanceof ElementValueText elementValueText)) {
-      throw new IllegalStateException(
-          String.format(
-              "Expected class ElementValueText but was: '%s'",
-              question.get().value().getClass()
-          )
-      );
-    }
-
+    
+    final var pdfConfiguration = (PdfConfigurationText) elementSpecification.pdfConfiguration();
     return List.of(
         PdfField.builder()
-            .id(fieldId)
+            .id(pdfConfiguration.pdfFieldId().id())
             .value(elementValueText.text())
             .build()
     );

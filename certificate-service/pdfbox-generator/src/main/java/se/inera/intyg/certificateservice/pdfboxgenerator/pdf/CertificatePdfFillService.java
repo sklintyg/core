@@ -89,7 +89,8 @@ public class CertificatePdfFillService {
       boolean isCitizenFormat)
       throws IOException {
     final var mcid = new AtomicInteger(
-        certificate.certificateModel().pdfSpecification().mcid().value());
+        certificate.certificateModel().pdfSpecification().pdfMcid().value()
+    );
 
     setDraftWatermark(document, certificate, mcid);
     setSignatureText(

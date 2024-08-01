@@ -9,18 +9,16 @@ import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.codesystems.
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeList;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 @Component
-public class PdfDateRangeListValueGenerator implements PdfElementValue {
+public class PdfDateRangeListValueGenerator implements PdfElementValue<ElementValueDateRangeList> {
 
   private static final String CHECKBOX_PERIOD_PREFIX_ID = ".ksr_";
   private static final String DATE_FROM_PERIOD_PREFIX_ID = ".flt_datFranMed";
@@ -28,33 +26,19 @@ public class PdfDateRangeListValueGenerator implements PdfElementValue {
   private static final String PERIOD_SUFFIX_ID = "[0]";
 
   @Override
-  public PdfValueType getType() {
-    return PdfValueType.DATE_RANGE_LIST;
+  public Class<ElementValueDateRangeList> getType() {
+    return ElementValueDateRangeList.class;
   }
 
   @Override
-  public List<PdfField> generate(Certificate certificate, ElementId questionId, String fieldId) {
-    if (certificate.elementData() == null || certificate.elementData().isEmpty()) {
-      return Collections.emptyList();
-    }
+  public List<PdfField> generate(ElementSpecification elementSpecification,
+      ElementValueDateRangeList elementValue) {
+    final var pdfConfiguration = (PdfConfigurationDateRangeList) elementSpecification.pdfConfiguration();
 
-    final var question = certificate.getElementDataById(questionId);
-
-    if (question.isEmpty()) {
-      return Collections.emptyList();
-    }
-
-    if (!(question.get().value() instanceof ElementValueDateRangeList elementValueDateRangeList)) {
-      throw new IllegalStateException(
-          String.format(
-              "Expected ElementValueDateRangeList but was: '%s'",
-              question.get().value().getClass()
-          )
-      );
-    }
-
-    return elementValueDateRangeList.dateRangeList().stream()
-        .map(dateRange -> getPeriodFields(dateRange, fieldId))
+    return elementValue.dateRangeList().stream()
+        .map(dateRange ->
+            getPeriodFields(dateRange, pdfConfiguration.pdfFieldId().id())
+        )
         .flatMap(Collection::stream)
         .toList();
   }

@@ -19,13 +19,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.Mcid;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfQuestionField;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfMcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
@@ -67,7 +66,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
       "form1[0].#subform[0].flt_txtPersonNr[0]");
   private static final PdfFieldId PDF_FODELSEDATUM_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_dat[0]");
-  private static final Mcid PDF_MCID = new Mcid(100);
+  private static final PdfMcid PDF_PDF_MCID = new PdfMcid(100);
   private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(15);
   private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(7);
   private static final int PDF_SIGNATURE_PAGE_INDEX = 0;
@@ -203,16 +202,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
                 .workplaceCodeFieldId(PDF_WORKPLACE_CODE_FIELD_ID)
                 .contactInformation(PDF_CONTACT_INFORMATION)
                 .build())
-            .mcid(PDF_MCID)
-            .questionFields(
-                List.of(
-                    PdfQuestionField.builder()
-                        .questionId(QUESTION_BERAKNAT_FODELSEDATUM_ID)
-                        .pdfFieldId(PDF_FODELSEDATUM_FIELD_ID)
-                        .pdfValueType(PdfValueType.DATE)
-                        .build()
-                )
-            )
+            .pdfMcid(PDF_PDF_MCID)
             .build())
         .build();
   }
@@ -259,6 +249,11 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
                     .max(Period.ofYears(1))
                     .build()
             )
+        )
+        .pdfConfiguration(
+            PdfConfigurationDate.builder()
+                .pdfFieldId(PDF_FODELSEDATUM_FIELD_ID)
+                .build()
         )
         .build();
   }

@@ -5,9 +5,8 @@ import lombok.Value;
 
 @Value
 @Builder
-public class QuestionConfigurationBoolean implements QuestionConfiguration {
+public class PdfConfigurationBoolean implements PdfConfiguration {
 
-  FieldId questionId;
   PdfFieldId checkboxTrue;
   PdfFieldId checkboxFalse;
 }

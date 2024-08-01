@@ -5,10 +5,8 @@ import lombok.Value;
 
 @Value
 @Builder
-public class QuestionConfigurationDateList implements QuestionConfiguration {
+public class PdfConfigurationDateCheckbox implements PdfConfiguration {
 
-  FieldId questionFieldId;
   PdfFieldId checkboxFieldId;
   PdfFieldId dateFieldId;
-
 }

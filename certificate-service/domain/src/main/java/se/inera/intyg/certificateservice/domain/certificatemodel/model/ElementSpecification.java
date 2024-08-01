@@ -24,6 +24,7 @@ public class ElementSpecification {
   @Builder.Default
   List<ElementValidation> validations = Collections.emptyList();
   ElementMapping mapping;
+  PdfConfiguration pdfConfiguration;
   @Builder.Default
   List<ElementSpecification> children = Collections.emptyList();
   Predicate<List<ElementData>> shouldValidate;
