@@ -12,7 +12,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.URL_FK;
 
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.ZoneId;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,26 +23,16 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 
 class CertificateModelFactoryFK7210Test {
 
@@ -310,232 +299,113 @@ class CertificateModelFactoryFK7210Test {
   @Nested
   class CertificateSpecifications {
 
-    @Nested
-    class CategoryBeraknatFodelsedatum {
+    @Test
+    void shallIncludeCategoryBeraknatFodelsedatum() {
+      final var certificateModel = certificateModelFactoryFK7210.create();
 
-      private static final ElementId ELEMENT_ID = new ElementId("KAT_1");
-
-      @Test
-      void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7210.create();
-
-        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
-                certificateModel.elementSpecifications())
-        );
-      }
-
-      @Test
-      void shallIncludeConfiguration() {
-        final var expectedConfiguration = ElementConfigurationCategory.builder()
-            .name("Beräknat födelsedatum")
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7210.create();
-
-        assertEquals(expectedConfiguration,
-            certificateModel.elementSpecification(ELEMENT_ID).configuration()
-        );
-      }
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("KAT_1")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'"
+              .formatted(new ElementId("KAT_1"), certificateModel.elementSpecifications())
+      );
     }
 
-    @Nested
-    class QuestionBeraknatFodelsedatum {
+    @Test
+    void shallIncludeQuestionBeraknatFodelsedatum() {
+      final var certificateModel = certificateModelFactoryFK7210.create();
 
-      private static final ElementId ELEMENT_ID = new ElementId("54");
-
-      @Test
-      void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7210.create();
-
-        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
-                certificateModel.elementSpecifications())
-        );
-      }
-
-      @Test
-      void shallIncludeConfiguration() {
-        final var expectedConfiguration = ElementConfigurationDate.builder()
-            .name("Datum")
-            .id(new FieldId("54.1"))
-            .min(Period.ofDays(0))
-            .max(Period.ofYears(1))
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7210.create();
-
-        assertEquals(expectedConfiguration,
-            certificateModel.elementSpecification(ELEMENT_ID).configuration()
-        );
-      }
-
-      @Test
-      void shallIncludeRules() {
-        final var expectedRules = List.of(
-            ElementRuleExpression.builder()
-                .id(new ElementId("54"))
-                .type(ElementRuleType.MANDATORY)
-                .expression(
-                    new RuleExpression("$54.1")
-                )
-                .build()
-        );
-
-        final var certificateModel = certificateModelFactoryFK7210.create();
-
-        assertEquals(expectedRules,
-            certificateModel.elementSpecification(ELEMENT_ID).rules()
-        );
-      }
-
-      @Test
-      void shallIncludeValidations() {
-        final var expectedValidations = List.of(
-            ElementValidationDate.builder()
-                .mandatory(true)
-                .min(Period.ofDays(0))
-                .max(Period.ofYears(1))
-                .build()
-        );
-
-        final var certificateModel = certificateModelFactoryFK7210.create();
-
-        assertEquals(expectedValidations,
-            certificateModel.elementSpecification(ELEMENT_ID).validations()
-        );
-      }
-
-      @Test
-      void shallIncludePdfConfiguration() {
-        final var expected = PdfConfigurationDate.builder()
-            .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_dat[0]"))
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7210.create();
-
-        assertEquals(expected,
-            certificateModel.elementSpecification(ELEMENT_ID).pdfConfiguration()
-        );
-      }
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("54")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'"
+              .formatted(new ElementId("54"), certificateModel.elementSpecifications())
+      );
     }
 
-    @Nested
-    class IssuingUnitContactInfo {
+    @Test
+    void shallIncludeIssuingUnitContactInfo() {
+      final var certificateModel = certificateModelFactoryFK7210.create();
 
-      private static final ElementId ELEMENT_ID = new ElementId("UNIT_CONTACT_INFORMATION");
+      assertTrue(
+          certificateModel.elementSpecificationExists(new ElementId("UNIT_CONTACT_INFORMATION")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'"
+              .formatted(new ElementId("UNIT_CONTACT_INFORMATION"),
+                  certificateModel.elementSpecifications())
+      );
+    }
+  }
 
-      @Test
-      void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7210.create();
+  @Test
+  void shallIncludeActiveForRoles() {
+    final var expected = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+        Role.CARE_ADMIN);
 
-        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(ELEMENT_ID,
-                certificateModel.elementSpecifications())
-        );
-      }
+    final var certificateModel = certificateModelFactoryFK7210.create();
 
-      @Test
-      void shallIncludeConfiguration() {
-        final var expectedConfiguration = ElementConfigurationUnitContactInformation.builder()
-            .build();
+    assertEquals(expected, certificateModel.rolesWithAccess());
+  }
 
-        final var certificateModel = certificateModelFactoryFK7210.create();
+  @Nested
+  class PdfSpecificationTest {
 
-        assertEquals(expectedConfiguration,
-            certificateModel.elementSpecification(ELEMENT_ID).configuration()
-        );
-      }
+    @Test
+    void shallIncludeCertificateType() {
+      final var expected = new CertificateType("fk7210");
 
-      @Test
-      void shallIncludeValidation() {
-        final var expectedValidation = List.of(
-            ElementValidationUnitContactInformation.builder().build()
-        );
+      final var certificateModel = certificateModelFactoryFK7210.create();
 
-        final var certificateModel = certificateModelFactoryFK7210.create();
-
-        assertEquals(expectedValidation,
-            certificateModel.elementSpecification(ELEMENT_ID).validations()
-        );
-      }
-
-      @Test
-      void shallIncludeActiveForRoles() {
-        final var expected = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-            Role.CARE_ADMIN);
-
-        final var certificateModel = certificateModelFactoryFK7210.create();
-
-        assertEquals(expected, certificateModel.rolesWithAccess());
-      }
+      assertEquals(expected, certificateModel.pdfSpecification().certificateType());
     }
 
-    @Nested
-    class PdfSpecificationTest {
+    @Test
+    void shallIncludePdfTemplatePathWithAddress() {
+      final var certificateModel = certificateModelFactoryFK7210.create();
 
-      @Test
-      void shallIncludeCertificateType() {
-        final var expected = new CertificateType("fk7210");
+      assertEquals(PDF_FK_7210_PDF, certificateModel.pdfSpecification().pdfTemplatePath());
+    }
 
-        final var certificateModel = certificateModelFactoryFK7210.create();
+    @Test
+    void shallIncludePdfTemplatePathNoAddress() {
+      final var certificateModel = certificateModelFactoryFK7210.create();
 
-        assertEquals(expected, certificateModel.pdfSpecification().certificateType());
-      }
+      assertEquals(PDF_NO_ADDRESS_FK_7210_PDF,
+          certificateModel.pdfSpecification().pdfNoAddressTemplatePath());
+    }
 
-      @Test
-      void shallIncludePdfTemplatePathWithAddress() {
-        final var certificateModel = certificateModelFactoryFK7210.create();
+    @Test
+    void shallIncludePatientFieldId() {
+      final var expected = new PdfFieldId("form1[0].#subform[0].flt_txtPersonNr[0]");
 
-        assertEquals(PDF_FK_7210_PDF, certificateModel.pdfSpecification().pdfTemplatePath());
-      }
+      final var certificateModel = certificateModelFactoryFK7210.create();
 
-      @Test
-      void shallIncludePdfTemplatePathNoAddress() {
-        final var certificateModel = certificateModelFactoryFK7210.create();
+      assertEquals(expected, certificateModel.pdfSpecification().patientIdFieldId());
+    }
 
-        assertEquals(PDF_NO_ADDRESS_FK_7210_PDF,
-            certificateModel.pdfSpecification().pdfNoAddressTemplatePath());
-      }
+    @Test
+    void shallIncludeSignatureFields() {
+      final var expected = PdfSignature.builder()
+          .signaturePageIndex(0)
+          .signatureWithAddressTagIndex(new PdfTagIndex(15))
+          .signatureWithoutAddressTagIndex(new PdfTagIndex(7))
+          .signedDateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datUnderskrift[0]"))
+          .signedByNameFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtNamnfortydligande[0]"))
+          .paTitleFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtBefattning[0]"))
+          .specialtyFieldId(
+              new PdfFieldId("form1[0].#subform[0].flt_txtEventuellSpecialistkompetens[0]"))
+          .hsaIdFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtLakarensHSA-ID[0]"))
+          .workplaceCodeFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtArbetsplatskod[0]"))
+          .contactInformation(
+              new PdfFieldId("form1[0].#subform[0].flt_txtVardgivarensNamnAdressTelefon[0]"))
+          .build();
 
-      @Test
-      void shallIncludePatientFieldId() {
-        final var expected = new PdfFieldId("form1[0].#subform[0].flt_txtPersonNr[0]");
+      final var certificateModel = certificateModelFactoryFK7210.create();
 
-        final var certificateModel = certificateModelFactoryFK7210.create();
+      assertEquals(expected, certificateModel.pdfSpecification().signature());
+    }
 
-        assertEquals(expected, certificateModel.pdfSpecification().patientIdFieldId());
-      }
+    @Test
+    void shallIncludeMcid() {
+      final var expected = 100;
+      final var certificateModel = certificateModelFactoryFK7210.create();
 
-      @Test
-      void shallIncludeSignatureFields() {
-        final var expected = PdfSignature.builder()
-            .signaturePageIndex(0)
-            .signatureWithAddressTagIndex(new PdfTagIndex(15))
-            .signatureWithoutAddressTagIndex(new PdfTagIndex(7))
-            .signedDateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datUnderskrift[0]"))
-            .signedByNameFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtNamnfortydligande[0]"))
-            .paTitleFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtBefattning[0]"))
-            .specialtyFieldId(
-                new PdfFieldId("form1[0].#subform[0].flt_txtEventuellSpecialistkompetens[0]"))
-            .hsaIdFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtLakarensHSA-ID[0]"))
-            .workplaceCodeFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtArbetsplatskod[0]"))
-            .contactInformation(
-                new PdfFieldId("form1[0].#subform[0].flt_txtVardgivarensNamnAdressTelefon[0]"))
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7210.create();
-
-        assertEquals(expected, certificateModel.pdfSpecification().signature());
-      }
-
-      @Test
-      void shallIncludeMcid() {
-        final var expected = 100;
-        final var certificateModel = certificateModelFactoryFK7210.create();
-
-        assertEquals(expected, certificateModel.pdfSpecification().pdfMcid().value());
-      }
+      assertEquals(expected, certificateModel.pdfSpecification().pdfMcid().value());
     }
   }
 }

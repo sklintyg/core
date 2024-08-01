@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.QUESTION_BERAKNAT_FODELSEDATUM_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.elements.QuestionBeraknatFodelsedatum.QUESTION_BERAKNAT_FODELSEDATUM_ID;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

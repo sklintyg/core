@@ -1,9 +1,10 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210;
 
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.elements.CategoryBeraknatFodelsedatum.categoryBeraknatFodelsedatum;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.elements.QuestionBeraknatFodelsedatum.questionBeraknatFodelsedatum;
 
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -13,13 +14,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfMcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
@@ -31,9 +25,6 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateRecipientFactory;
 
@@ -56,16 +47,11 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
       .type(new CertificateType(FK_7210))
       .version(new CertificateVersion(VERSION))
       .build();
-  public static final ElementId QUESTION_BERAKNAT_FODELSEDATUM_CATEGORY_ID = new ElementId(
-      "KAT_1");
-  public static final ElementId QUESTION_BERAKNAT_FODELSEDATUM_ID = new ElementId("54");
-  public static final FieldId QUESTION_BERAKNAT_FODELSEDATUM_FIELD_ID = new FieldId("54.1");
+
   public static final String PDF_FK_7210_PDF = "fk7210/pdf/fk7210_v1.pdf";
   public static final String PDF_NO_ADDRESS_FK_7210_PDF = "fk7210/pdf/fk7210_v1_no_address.pdf";
   private static final PdfFieldId PDF_PATIENT_ID_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_txtPersonNr[0]");
-  private static final PdfFieldId PDF_FODELSEDATUM_FIELD_ID = new PdfFieldId(
-      "form1[0].#subform[0].flt_dat[0]");
   private static final PdfMcid PDF_PDF_MCID = new PdfMcid(100);
   private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(15);
   private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(7);
@@ -204,71 +190,6 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
                 .build())
             .pdfMcid(PDF_PDF_MCID)
             .build())
-        .build();
-  }
-
-  private static ElementSpecification categoryBeraknatFodelsedatum(
-      ElementSpecification... children) {
-    return ElementSpecification.builder()
-        .id(QUESTION_BERAKNAT_FODELSEDATUM_CATEGORY_ID)
-        .configuration(
-            ElementConfigurationCategory.builder()
-                .name("Beräknat födelsedatum")
-                .build()
-        )
-        .children(
-            List.of(children)
-        )
-        .build();
-  }
-
-  private static ElementSpecification questionBeraknatFodelsedatum() {
-    return ElementSpecification.builder()
-        .id(QUESTION_BERAKNAT_FODELSEDATUM_ID)
-        .configuration(
-            ElementConfigurationDate.builder()
-                .name("Datum")
-                .id(QUESTION_BERAKNAT_FODELSEDATUM_FIELD_ID)
-                .min(Period.ofDays(0))
-                .max(Period.ofYears(1))
-                .build()
-        )
-        .rules(
-            List.of(
-                CertificateElementRuleFactory.mandatory(
-                    QUESTION_BERAKNAT_FODELSEDATUM_ID,
-                    QUESTION_BERAKNAT_FODELSEDATUM_FIELD_ID
-                )
-            )
-        )
-        .validations(
-            List.of(
-                ElementValidationDate.builder()
-                    .mandatory(true)
-                    .min(Period.ofDays(0))
-                    .max(Period.ofYears(1))
-                    .build()
-            )
-        )
-        .pdfConfiguration(
-            PdfConfigurationDate.builder()
-                .pdfFieldId(PDF_FODELSEDATUM_FIELD_ID)
-                .build()
-        )
-        .build();
-  }
-
-  private static ElementSpecification issuingUnitContactInfo() {
-    return ElementSpecification.builder()
-        .id(UNIT_CONTACT_INFORMATION)
-        .configuration(
-            ElementConfigurationUnitContactInformation.builder().build()
-        )
-        .validations(
-            List.of(
-                ElementValidationUnitContactInformation.builder().build()
-            )
-        )
         .build();
   }
 }
