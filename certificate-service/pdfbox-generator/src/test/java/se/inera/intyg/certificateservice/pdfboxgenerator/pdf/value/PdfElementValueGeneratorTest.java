@@ -3,139 +3,106 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7472_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7210_PDF_FODELSEDATUM_FIELD_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7210_QUESTION_BERAKNAT_FODELSEDATUM_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_PERIOD_FIELD_ID_PREFIX;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_SYMPTOM_FIELD_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_QUESTION_PERIOD_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_QUESTION_SYMPTOM_ID;
 
 import java.time.LocalDate;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 @ExtendWith(MockitoExtension.class)
 class PdfElementValueGeneratorTest {
 
   @Mock
-  PdfDateValueGenerator pdfDateValueGenerator;
-
+  private PdfDateValueGenerator pdfDateValueGenerator;
   @Mock
-  PdfTextValueGenerator pdfTextValueGenerator;
-
+  private PdfTextValueGenerator pdfTextValueGenerator;
   @Mock
-  PdfDateRangeListValueGenerator pdfDateRangeListValueGenerator;
+  private CertificateModel certificateModel;
 
-  PdfElementValueGenerator pdfElementValueGenerator;
+  private PdfElementValueGenerator pdfElementValueGenerator;
+
+  private final Certificate.CertificateBuilder certificateBuilder = fk7210CertificateBuilder();
+  private final ElementSpecification elementSpecification = ElementSpecification.builder().build();
+
+  @BeforeEach
+  void setUp() {
+    doReturn(ElementValueDate.class).when(pdfDateValueGenerator).getType();
+    doReturn(ElementValueText.class).when(pdfTextValueGenerator).getType();
+
+    pdfElementValueGenerator = new PdfElementValueGenerator(
+        List.of(pdfDateValueGenerator, pdfTextValueGenerator)
+    );
+
+    certificateBuilder.certificateModel(certificateModel);
+  }
 
   @Test
   void shouldReturnListOfPdfFields() {
-    pdfElementValueGenerator = new PdfElementValueGenerator(
-        List.of(pdfDateValueGenerator)
-    );
-    final var dateField = List.of(PdfField.builder()
-        .id(FK7210_PDF_FODELSEDATUM_FIELD_ID.id())
-        .value(LocalDate.now().toString())
-        .build());
-
-    doReturn(PdfValueType.DATE).when(pdfDateValueGenerator).getType();
-    doReturn(dateField).when(pdfDateValueGenerator).generate(
-        FK7210_CERTIFICATE, FK7210_QUESTION_BERAKNAT_FODELSEDATUM_ID,
-        FK7210_PDF_FODELSEDATUM_FIELD_ID.id()
-    );
-    final var response = pdfElementValueGenerator.generate(FK7210_CERTIFICATE);
-    assertEquals(dateField, response);
-  }
-
-  @Test
-  void shouldUseDateValueGeneratorIfPdfValueTypeIsDate() {
-    pdfElementValueGenerator = new PdfElementValueGenerator(
-        List.of(pdfDateValueGenerator)
+    final var expected = List.of(
+        PdfField.builder()
+            .id(FK7210_PDF_FODELSEDATUM_FIELD_ID.id())
+            .value(LocalDate.now().toString())
+            .build()
     );
 
-    doReturn(PdfValueType.DATE).when(pdfDateValueGenerator).getType();
+    final var elementValue = ElementValueDate.builder().build();
 
-    pdfElementValueGenerator.generate(FK7210_CERTIFICATE);
+    final var certificate = certificateBuilder.elementData(
+            List.of(
+                ElementData.builder()
+                    .id(new ElementId("999"))
+                    .value(elementValue)
+                    .build()
+            )
+        )
+        .build();
 
-    verify(pdfDateValueGenerator, times(1))
-        .generate(FK7210_CERTIFICATE, FK7210_QUESTION_BERAKNAT_FODELSEDATUM_ID,
-            FK7210_PDF_FODELSEDATUM_FIELD_ID.id());
+    doReturn(elementSpecification).when(certificateModel)
+        .elementSpecification(new ElementId("999"));
 
-  }
-
-  @Test
-  void shouldUseTextValueGeneratorIfPdfValueTypeIsText() {
-    pdfElementValueGenerator = new PdfElementValueGenerator(
-        List.of(pdfTextValueGenerator, pdfDateRangeListValueGenerator)
+    doReturn(expected).when(pdfDateValueGenerator).generate(
+        elementSpecification, ElementValueDate.builder().build()
     );
 
-    doReturn(PdfValueType.DATE_RANGE_LIST).when(pdfDateRangeListValueGenerator).getType();
-    doReturn(PdfValueType.TEXT).when(pdfTextValueGenerator).getType();
+    final var response = pdfElementValueGenerator.generate(certificate);
 
-    pdfElementValueGenerator.generate(FK7472_CERTIFICATE);
-
-    verify(pdfTextValueGenerator, times(1))
-        .generate(FK7472_CERTIFICATE, FK7472_QUESTION_SYMPTOM_ID,
-            FK7472_PDF_SYMPTOM_FIELD_ID.id());
-  }
-
-  @Test
-  void shouldUseDateRangeListValueGeneratorIfPdfValueTypeIsDateRangeList() {
-    pdfElementValueGenerator = new PdfElementValueGenerator(
-        List.of(pdfTextValueGenerator, pdfDateRangeListValueGenerator)
-    );
-
-    doReturn(PdfValueType.TEXT).when(pdfTextValueGenerator).getType();
-    doReturn(PdfValueType.DATE_RANGE_LIST).when(pdfDateRangeListValueGenerator).getType();
-
-    pdfElementValueGenerator.generate(FK7472_CERTIFICATE);
-
-    verify(pdfDateRangeListValueGenerator, times(1))
-        .generate(FK7472_CERTIFICATE, FK7472_QUESTION_PERIOD_ID,
-            FK7472_PDF_PERIOD_FIELD_ID_PREFIX.id());
-  }
-
-  @Test
-  void shouldUseMultipleValueGeneratorsIfMultiplePdfValueTypesInCertificate() {
-    pdfElementValueGenerator = new PdfElementValueGenerator(
-        List.of(pdfTextValueGenerator, pdfDateRangeListValueGenerator)
-    );
-
-    doReturn(PdfValueType.TEXT).when(pdfTextValueGenerator).getType();
-    doReturn(PdfValueType.DATE_RANGE_LIST).when(pdfDateRangeListValueGenerator).getType();
-
-    pdfElementValueGenerator.generate(FK7472_CERTIFICATE);
-
-    verify(pdfDateRangeListValueGenerator, times(1))
-        .generate(FK7472_CERTIFICATE, FK7472_QUESTION_PERIOD_ID,
-            FK7472_PDF_PERIOD_FIELD_ID_PREFIX.id());
-
-    verify(pdfTextValueGenerator, times(1))
-        .generate(FK7472_CERTIFICATE, FK7472_QUESTION_SYMPTOM_ID,
-            FK7472_PDF_SYMPTOM_FIELD_ID.id());
-
+    assertEquals(expected, response);
   }
 
   @Test
   void shouldThrowIllegalStateExceptionIfUnableToFindGeneratorForType() {
-    pdfElementValueGenerator = new PdfElementValueGenerator(
-        List.of(pdfDateValueGenerator)
-    );
+    final var elementValue = ElementValueBoolean.builder().build();
 
-    doReturn(PdfValueType.DATE).when(pdfDateValueGenerator).getType();
+    final var certificate = certificateBuilder.elementData(
+            List.of(
+                ElementData.builder()
+                    .id(new ElementId("999"))
+                    .value(elementValue)
+                    .build()
+            )
+        )
+        .build();
 
-    pdfElementValueGenerator.generate(FK7210_CERTIFICATE);
+    doReturn(elementSpecification).when(certificateModel)
+        .elementSpecification(new ElementId("999"));
 
     assertThrows(IllegalStateException.class,
-        () -> pdfElementValueGenerator.generate(FK7472_CERTIFICATE));
+        () -> pdfElementValueGenerator.generate(certificate)
+    );
   }
 }
 

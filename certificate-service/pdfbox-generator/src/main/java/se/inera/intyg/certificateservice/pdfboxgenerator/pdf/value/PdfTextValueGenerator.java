@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
+import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
@@ -18,6 +19,10 @@ public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> 
   @Override
   public List<PdfField> generate(ElementSpecification elementSpecification,
       ElementValueText elementValueText) {
+    if (elementValueText.text() == null) {
+      return Collections.emptyList();
+    }
+    
     final var pdfConfiguration = (PdfConfigurationText) elementSpecification.pdfConfiguration();
     return List.of(
         PdfField.builder()

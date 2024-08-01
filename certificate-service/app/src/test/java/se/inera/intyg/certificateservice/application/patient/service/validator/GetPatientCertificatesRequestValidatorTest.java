@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.application.patient.service;
+package se.inera.intyg.certificateservice.application.patient.service.validator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
-import se.inera.intyg.certificateservice.application.patient.service.validator.GetPatientCertificatesRequestValidator;
 
 class GetPatientCertificatesRequestValidatorTest {
 
