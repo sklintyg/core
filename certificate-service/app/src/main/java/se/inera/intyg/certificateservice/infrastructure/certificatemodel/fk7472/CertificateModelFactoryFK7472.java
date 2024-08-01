@@ -21,7 +21,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.Mcid;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfMcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
@@ -89,7 +89,7 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
       "form1[0].#subform[0].flt_txtDiagnos[0]");
   private static final PdfFieldId PDF_PERIOD_FIELD_ID_PREFIX = new PdfFieldId(
       "form1[0].#subform[0]");
-  private static final Mcid PDF_MCID = new Mcid(120);
+  private static final PdfMcid PDF_PDF_MCID = new PdfMcid(120);
   private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(50);
   private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(42);
   private static final int PDF_SIGNATURE_PAGE_INDEX = 0;
@@ -249,7 +249,7 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
                 .workplaceCodeFieldId(PDF_WORKPLACE_CODE_FIELD_ID)
                 .contactInformation(PDF_CONTACT_INFORMATION)
                 .build())
-            .mcid(PDF_MCID)
+            .pdfMcid(PDF_PDF_MCID)
             .build())
         .build();
   }

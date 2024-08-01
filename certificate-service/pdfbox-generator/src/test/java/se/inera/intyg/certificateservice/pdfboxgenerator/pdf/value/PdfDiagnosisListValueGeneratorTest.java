@@ -18,7 +18,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDi
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 class PdfDiagnosisListValueGeneratorTest {

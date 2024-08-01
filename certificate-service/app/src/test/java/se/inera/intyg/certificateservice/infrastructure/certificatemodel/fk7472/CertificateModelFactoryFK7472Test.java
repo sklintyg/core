@@ -33,10 +33,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfQuestionField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
@@ -818,7 +816,7 @@ class CertificateModelFactoryFK7472Test {
       final var expected = 120;
       final var certificateModel = certificateModelFactoryFK7472.create();
 
-      assertEquals(expected, certificateModel.pdfSpecification().mcid().value());
+      assertEquals(expected, certificateModel.pdfSpecification().pdfMcid().value());
     }
 
     @Test

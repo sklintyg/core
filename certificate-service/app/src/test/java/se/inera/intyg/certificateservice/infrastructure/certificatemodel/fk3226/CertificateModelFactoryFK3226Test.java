@@ -53,14 +53,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfQuestionField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationBoolean;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationCode;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationDateList;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationDiagnose;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
@@ -2280,7 +2274,7 @@ class CertificateModelFactoryFK3226Test {
       final var expected = 100;
       final var certificateModel = certificateModelFactoryFK3226.create();
 
-      assertEquals(expected, certificateModel.pdfSpecification().mcid().value());
+      assertEquals(expected, certificateModel.pdfSpecification().pdfMcid().value());
     }
 
     @Test

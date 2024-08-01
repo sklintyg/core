@@ -19,7 +19,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CodeSystemKvFkmu0008;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 

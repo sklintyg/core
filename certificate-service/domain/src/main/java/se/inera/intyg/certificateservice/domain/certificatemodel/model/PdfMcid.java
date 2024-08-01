@@ -1,5 +1,5 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
-public interface QuestionConfiguration {
+public record PdfMcid(int value) {
 
 }

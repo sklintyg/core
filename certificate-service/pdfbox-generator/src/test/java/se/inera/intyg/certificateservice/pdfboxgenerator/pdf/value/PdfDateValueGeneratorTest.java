@@ -15,7 +15,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfValueType;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 class PdfDateValueGeneratorTest {
@@ -23,7 +22,7 @@ class PdfDateValueGeneratorTest {
   private static final String FIELD_ID = "form1[0].#subform[0].flt_dat[0]";
   private static final LocalDate VALUE = LocalDate.now();
   private static final ElementId QUESTION_ID = new ElementId("1");
-  
+
   private static final PdfDateValueGenerator pdfDateValueGenerator = new PdfDateValueGenerator();
 
   @Test
