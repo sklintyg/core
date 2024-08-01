@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -42,16 +43,17 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.Mcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateCheckbox;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDiagnoses;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PrintMapping;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationCode;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationDateList;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.QuestionConfigurationDiagnose;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
@@ -168,12 +170,8 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
   private static final int PDF_SIGNATURE_PAGE_INDEX = 1;
   private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(50);
   private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(42);
-  private static final PdfFieldId DEFAULT_PDF_FIELD_ID = new PdfFieldId(
-      "defaultPdfFieldId");
   private static final PdfFieldId PDF_PATIENT_ID_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_txtPnr[0]");
-  private static final PdfFieldId PDF_STATEMENT_BASED_ON_FIELD_ID_PREFIX = new PdfFieldId(
-      "form1[0].#subform[0].");
   private static final PdfFieldId PDF_STATEMENT_BASED_ON_INVESTIGATION_CHECKBOX_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].ksr_UndersokningPatient[0]");
   private static final PdfFieldId PDF_STATEMENT_BASED_ON_JOURNAL_CHECKBOX_FIELD_ID = new PdfFieldId(
@@ -573,46 +571,63 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .build()
             )
         )
-        .printMapping(
-            PrintMapping.builder()
-                .pdfFieldId(PDF_DIAGNOSIS_FIELD_ID_PREFIX)
-                .questionConfiguration(List.of(
-                    QuestionConfigurationDiagnose.builder()
-                        .questionId(DIAGNOS_1)
-                        .diagnoseNameFieldId(PDF_DIAGNOSE_ID_1)
-                        .diagnoseCodeFieldIds(List.of(
-                            PDF_CODE_ID_1_1, PDF_CODE_ID_1_2, PDF_CODE_ID_1_3,
-                            PDF_CODE_ID_1_4, PDF_CODE_ID_1_5
-                        )).build(),
-                    QuestionConfigurationDiagnose.builder()
-                        .questionId(DIAGNOS_2)
-                        .diagnoseNameFieldId(PDF_DIAGNOSE_ID_2)
-                        .diagnoseCodeFieldIds(List.of(
-                            PDF_CODE_ID_2_1, PDF_CODE_ID_2_2, PDF_CODE_ID_2_3,
-                            PDF_CODE_ID_2_4, PDF_CODE_ID_2_5
-                        )).build(),
-                    QuestionConfigurationDiagnose.builder()
-                        .questionId(DIAGNOS_3)
-                        .diagnoseNameFieldId(PDF_DIAGNOSE_ID_3)
-                        .diagnoseCodeFieldIds(List.of(
-                            PDF_CODE_ID_3_1, PDF_CODE_ID_3_2, PDF_CODE_ID_3_3,
-                            PDF_CODE_ID_3_4, PDF_CODE_ID_3_5
-                        )).build(),
-                    QuestionConfigurationDiagnose.builder()
-                        .questionId(DIAGNOS_4)
-                        .diagnoseNameFieldId(PDF_DIAGNOSE_ID_4)
-                        .diagnoseCodeFieldIds(List.of(
-                            PDF_CODE_ID_4_1, PDF_CODE_ID_4_2, PDF_CODE_ID_4_3,
-                            PDF_CODE_ID_4_4, PDF_CODE_ID_4_5
-                        )).build(),
-                    QuestionConfigurationDiagnose.builder()
-                        .questionId(DIAGNOS_5)
-                        .diagnoseNameFieldId(PDF_DIAGNOSE_ID_5)
-                        .diagnoseCodeFieldIds(List.of(
-                            PDF_CODE_ID_5_1, PDF_CODE_ID_5_2, PDF_CODE_ID_5_3,
-                            PDF_CODE_ID_5_4, PDF_CODE_ID_5_5
-                        )).build()
-                ))
+        .pdfConfiguration(
+            PdfConfigurationDiagnoses.builder()
+                .prefix(PDF_DIAGNOSIS_FIELD_ID_PREFIX)
+                .diagnoses(
+                    Map.of(
+                        DIAGNOS_1,
+                        PdfConfigurationDiagnosis.builder()
+                            .pdfNameFieldId(PDF_DIAGNOSE_ID_1)
+                            .pdfCodeFieldIds(
+                                List.of(
+                                    PDF_CODE_ID_1_1, PDF_CODE_ID_1_2, PDF_CODE_ID_1_3,
+                                    PDF_CODE_ID_1_4, PDF_CODE_ID_1_5
+                                )
+                            )
+                            .build(),
+                        DIAGNOS_2,
+                        PdfConfigurationDiagnosis.builder()
+                            .pdfNameFieldId(PDF_DIAGNOSE_ID_2)
+                            .pdfCodeFieldIds(
+                                List.of(
+                                    PDF_CODE_ID_2_1, PDF_CODE_ID_2_2, PDF_CODE_ID_2_3,
+                                    PDF_CODE_ID_2_4, PDF_CODE_ID_2_5
+                                )
+                            )
+                            .build(),
+                        DIAGNOS_3,
+                        PdfConfigurationDiagnosis.builder()
+                            .pdfNameFieldId(PDF_DIAGNOSE_ID_3)
+                            .pdfCodeFieldIds(
+                                List.of(
+                                    PDF_CODE_ID_3_1, PDF_CODE_ID_3_2, PDF_CODE_ID_3_3,
+                                    PDF_CODE_ID_3_4, PDF_CODE_ID_3_5
+                                )
+                            )
+                            .build(),
+                        DIAGNOS_4,
+                        PdfConfigurationDiagnosis.builder()
+                            .pdfNameFieldId(PDF_DIAGNOSE_ID_4)
+                            .pdfCodeFieldIds(
+                                List.of(
+                                    PDF_CODE_ID_4_1, PDF_CODE_ID_4_2, PDF_CODE_ID_4_3,
+                                    PDF_CODE_ID_4_4, PDF_CODE_ID_4_5
+                                )
+                            )
+                            .build(),
+                        DIAGNOS_5,
+                        PdfConfigurationDiagnosis.builder()
+                            .pdfNameFieldId(PDF_DIAGNOSE_ID_5)
+                            .pdfCodeFieldIds(
+                                List.of(
+                                    PDF_CODE_ID_5_1, PDF_CODE_ID_5_2, PDF_CODE_ID_5_3,
+                                    PDF_CODE_ID_5_4, PDF_CODE_ID_5_5
+                                )
+                            )
+                            .build()
+                    )
+                )
                 .build()
         )
         .build();
@@ -662,14 +677,10 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .build()
             )
         )
-        .printMapping(
-            PrintMapping.builder()
-                .pdfConfiguration(
-                    PdfConfigurationBoolean.builder()
-                        .checkboxTrue(PDF_CAN_CONSENT_YES_FIELD_ID)
-                        .checkboxFalse(PDF_CAN_CONSENT_NO_FIELD_ID)
-                        .build()
-                )
+        .pdfConfiguration(
+            PdfConfigurationBoolean.builder()
+                .checkboxTrue(PDF_CAN_CONSENT_YES_FIELD_ID)
+                .checkboxFalse(PDF_CAN_CONSENT_NO_FIELD_ID)
                 .build()
         )
         .build();
@@ -718,13 +729,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .mapping(
             new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
         )
-        .printMapping(
-            PrintMapping.builder()
-                .pdfConfiguration(
-                    PdfConfigurationText.builder()
-                        .pdfFieldId(PDF_CONDITION_IS_LIFE_THREATENING_OTHER_FIELD_ID)
-                        .build()
-                )
+        .pdfConfiguration(
+            PdfConfigurationText.builder()
+                .pdfFieldId(PDF_CONDITION_IS_LIFE_THREATENING_OTHER_FIELD_ID)
                 .build()
         )
         .build();
@@ -770,13 +777,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .mapping(
             new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
         )
-        .printMapping(
-            PrintMapping.builder()
-                .pdfConfiguration(
-                    PdfConfigurationDate.builder()
-                        .pdfFieldId(PDF_CONDITION_IS_LIFE_THREATENING_TO_FIELD_ID)
-                        .build()
-                )
+        .pdfConfiguration(
+            PdfConfigurationDate.builder()
+                .pdfFieldId(PDF_CONDITION_IS_LIFE_THREATENING_TO_FIELD_ID)
                 .build()
         )
         .build();
@@ -822,14 +825,10 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .mapping(
             new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
         )
-        .printMapping(
-            PrintMapping.builder()
-                .pdfConfiguration(
-                    PdfConfigurationBoolean.builder()
-                        .checkboxTrue(PDF_ESTIMATE_YES_FIELD_ID)
-                        .checkboxFalse(PDF_ESTIMATE_NO_FIELD_ID)
-                        .build()
-                )
+        .pdfConfiguration(
+            PdfConfigurationBoolean.builder()
+                .checkboxTrue(PDF_ESTIMATE_YES_FIELD_ID)
+                .checkboxFalse(PDF_ESTIMATE_NO_FIELD_ID)
                 .build()
         )
         .build();
@@ -877,13 +876,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .mapping(
             new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
         )
-        .printMapping(
-            PrintMapping.builder()
-                .pdfConfiguration(
-                    PdfConfigurationText.builder()
-                        .pdfFieldId(PDF_THREAT_TO_PATIENTS_LIFE_FIELD_ID)
-                        .build()
-                )
+        .pdfConfiguration(
+            PdfConfigurationText.builder()
+                .pdfFieldId(PDF_THREAT_TO_PATIENTS_LIFE_FIELD_ID)
                 .build()
         )
         .build();
@@ -929,13 +924,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .mapping(
             new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
         )
-        .printMapping(
-            PrintMapping.builder()
-                .pdfConfiguration(
-                    PdfConfigurationDate.builder()
-                        .pdfFieldId(PDF_WHEN_ACTIVE_TREATMENT_WAS_STOPPED_FIELD_ID)
-                        .build()
-                )
+        .pdfConfiguration(
+            PdfConfigurationDate.builder()
+                .pdfFieldId(PDF_WHEN_ACTIVE_TREATMENT_WAS_STOPPED_FIELD_ID)
                 .build()
         )
         .build();
@@ -981,13 +972,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .mapping(
             new ElementMapping(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID, null)
         )
-        .printMapping(
-            PrintMapping.builder()
-                .pdfConfiguration(
-                    PdfConfigurationDate.builder()
-                        .pdfFieldId(PDF_WHEN_CONDITION_BECAME_LIFE_THREATENING_FIELD_ID)
-                        .build()
-                )
+        .pdfConfiguration(
+            PdfConfigurationDate.builder()
+                .pdfFieldId(PDF_WHEN_CONDITION_BECAME_LIFE_THREATENING_FIELD_ID)
                 .build()
         )
         .build();
@@ -1039,22 +1026,15 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
             )
         )
         .children(List.of(children))
-        .printMapping(
-            PrintMapping.builder()
-                .questionConfiguration(List.of(
-                    QuestionConfigurationCode.builder()
-                        .questionFieldId(ENDAST_PALLIATIV_FIELD_ID)
-                        .pdfFieldId(PDF_ONLY_PALLIATIVE_CARE_FIELD_ID)
-                        .build(),
-                    QuestionConfigurationCode.builder()
-                        .questionFieldId(AKUT_LIVSHOTANDE_FIELD_ID)
-                        .pdfFieldId(PDF_ACUTE_LIFE_THREATENING_FIELD_ID)
-                        .build(),
-                    QuestionConfigurationCode.builder()
-                        .questionFieldId(ANNAT_FIELD_ID)
-                        .pdfFieldId(PDF_OTHER_THREAT_FIELD_ID)
-                        .build()
-                ))
+        .pdfConfiguration(
+            PdfConfigurationCode.builder()
+                .codes(
+                    Map.of(
+                        ENDAST_PALLIATIV_FIELD_ID, PDF_ONLY_PALLIATIVE_CARE_FIELD_ID,
+                        AKUT_LIVSHOTANDE_FIELD_ID, PDF_ACUTE_LIFE_THREATENING_FIELD_ID,
+                        ANNAT_FIELD_ID, PDF_OTHER_THREAT_FIELD_ID
+                    )
+                )
                 .build()
         )
         .build();
@@ -1126,30 +1106,30 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
             )
         )
         .children(List.of(children))
-        .printMapping(
-            PrintMapping.builder()
-                .pdfFieldId(PDF_STATEMENT_BASED_ON_FIELD_ID_PREFIX)
-                .questionConfiguration(List.of(
-                    QuestionConfigurationDateList.builder()
-                        .questionFieldId(
-                            new FieldId(
-                                UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID))
-                        .checkboxFieldId(
-                            PDF_STATEMENT_BASED_ON_INVESTIGATION_CHECKBOX_FIELD_ID)
-                        .dateFieldId(PDF_STATEMENT_BASED_ON_INVESTIGATION_DATE_FIELD_ID)
-                        .build(),
-                    QuestionConfigurationDateList.builder()
-                        .questionFieldId(
-                            new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID))
-                        .checkboxFieldId(PDF_STATEMENT_BASED_ON_JOURNAL_CHECKBOX_FIELD_ID)
-                        .dateFieldId(PDF_STATEMENT_BASED_ON_JOURNAL_DATE_FIELD_ID)
-                        .build(),
-                    QuestionConfigurationDateList.builder()
-                        .questionFieldId(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID)
-                        .checkboxFieldId(PDF_STATEMENT_BASED_ON_OTHER_CHECKBOX_FIELD_ID)
-                        .dateFieldId(PDF_STATEMENT_BASED_ON_OTHER_DATE_FIELD_ID)
-                        .build()
-                ))
+        .pdfConfiguration(
+            PdfConfigurationDateList.builder()
+                .dateCheckboxes(
+                    Map.of(
+                        new FieldId(
+                            UTLATANDE_BASERAT_PA_UNDERSOKNING_AV_PATIENTEN_FIELD_ID),
+                        PdfConfigurationDateCheckbox.builder()
+                            .checkboxFieldId(
+                                PDF_STATEMENT_BASED_ON_INVESTIGATION_CHECKBOX_FIELD_ID)
+                            .dateFieldId(PDF_STATEMENT_BASED_ON_INVESTIGATION_DATE_FIELD_ID)
+                            .build(),
+                        new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID),
+                        PdfConfigurationDateCheckbox.builder()
+                            .checkboxFieldId(
+                                PDF_STATEMENT_BASED_ON_JOURNAL_CHECKBOX_FIELD_ID)
+                            .dateFieldId(PDF_STATEMENT_BASED_ON_JOURNAL_DATE_FIELD_ID)
+                            .build(),
+                        UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID,
+                        PdfConfigurationDateCheckbox.builder()
+                            .checkboxFieldId(PDF_STATEMENT_BASED_ON_OTHER_CHECKBOX_FIELD_ID)
+                            .dateFieldId(PDF_STATEMENT_BASED_ON_OTHER_DATE_FIELD_ID)
+                            .build()
+                    )
+                )
                 .build()
         )
         .build();
@@ -1202,13 +1182,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     valueDate -> valueDate.dateId().equals(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID))
                 )
         )
-        .printMapping(
-            PrintMapping.builder()
-                .pdfConfiguration(
-                    PdfConfigurationText.builder()
-                        .pdfFieldId(PDF_STATEMENT_BASED_ON_OTHER_FIELD_ID)
-                        .build()
-                )
+        .pdfConfiguration(
+            PdfConfigurationText.builder()
+                .pdfFieldId(PDF_STATEMENT_BASED_ON_OTHER_FIELD_ID)
                 .build()
         )
         .build();

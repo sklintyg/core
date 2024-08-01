@@ -18,8 +18,7 @@ public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> 
   @Override
   public List<PdfField> generate(ElementSpecification elementSpecification,
       ElementValueText elementValueText) {
-    final var pdfConfiguration = (PdfConfigurationText) elementSpecification.printMapping()
-        .pdfConfiguration();
+    final var pdfConfiguration = (PdfConfigurationText) elementSpecification.pdfConfiguration();
     return List.of(
         PdfField.builder()
             .id(pdfConfiguration.pdfFieldId().id())

@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -49,12 +48,11 @@ public class PdfElementValueGenerator {
     final var pdfElementValue = pdfElementValues.get(elementValue.getClass());
 
     if (pdfElementValue == null) {
-      return Collections.emptyList();
-//      throw new IllegalStateException(
-//          String.format(
-//              "Could not find value generator for pdf value type: '%s'", elementValue.getClass()
-//          )
-//      );
+      throw new IllegalStateException(
+          String.format(
+              "Could not find value generator for pdf value type: '%s'", elementValue.getClass()
+          )
+      );
     }
 
     return pdfElementValue.generate(elementSpecification, elementValue);

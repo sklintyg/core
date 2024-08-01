@@ -18,8 +18,7 @@ public class PdfDateValueGenerator implements PdfElementValue<ElementValueDate> 
   @Override
   public List<PdfField> generate(ElementSpecification elementSpecification,
       ElementValueDate elementValueDate) {
-    final var pdfConfiguration = (PdfConfigurationDate) elementSpecification.printMapping()
-        .pdfConfiguration();
+    final var pdfConfiguration = (PdfConfigurationDate) elementSpecification.pdfConfiguration();
     return List.of(
         PdfField.builder()
             .id(pdfConfiguration.pdfFieldId().id())

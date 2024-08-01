@@ -33,9 +33,7 @@ public class PdfDateRangeListValueGenerator implements PdfElementValue<ElementVa
   @Override
   public List<PdfField> generate(ElementSpecification elementSpecification,
       ElementValueDateRangeList elementValue) {
-
-    final var pdfConfiguration = (PdfConfigurationDateRangeList) elementSpecification.printMapping()
-        .pdfConfiguration();
+    final var pdfConfiguration = (PdfConfigurationDateRangeList) elementSpecification.pdfConfiguration();
 
     return elementValue.dateRangeList().stream()
         .map(dateRange ->

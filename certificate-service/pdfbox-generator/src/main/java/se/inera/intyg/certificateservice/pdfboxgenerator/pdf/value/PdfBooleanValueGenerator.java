@@ -4,7 +4,6 @@ import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -23,29 +22,24 @@ public class PdfBooleanValueGenerator implements PdfElementValue<ElementValueBoo
   @Override
   public List<PdfField> generate(ElementSpecification elementSpecification,
       ElementValueBoolean elementValue) {
-
-    if (!(elementSpecification.printMapping()
-        .pdfConfiguration() instanceof PdfConfigurationBoolean pdfConfigurationBoolean)) {
-      throw new IllegalArgumentException(
-          "Not a Boolean mapping: " + elementSpecification.printMapping());
-    }
-
-    return getFields(elementValue, pdfConfigurationBoolean);
+    final var pdfConfiguration = (PdfConfigurationBoolean) elementSpecification.pdfConfiguration();
+    return getFields(elementValue, pdfConfiguration);
   }
 
   private List<PdfField> getFields(ElementValueBoolean valueBoolean,
       PdfConfigurationBoolean configuration) {
+    if (valueBoolean.value() == null) {
+      return Collections.emptyList();
+    }
+
     final var pdfFieldId = getCheckboxId(configuration, valueBoolean);
 
-    if (valueBoolean.value() != null) {
-      return Stream.of(
-              PdfField.builder()
-                  .id(pdfFieldId != null ? pdfFieldId.id() : "")
-                  .value(CHECKED_BOX_VALUE)
-                  .build())
-          .toList();
-    }
-    return Collections.emptyList();
+    return List.of(
+        PdfField.builder()
+            .id(pdfFieldId.id())
+            .value(CHECKED_BOX_VALUE)
+            .build()
+    );
   }
 
   private static PdfFieldId getCheckboxId(PdfConfigurationBoolean configForQuestion,
@@ -53,9 +47,6 @@ public class PdfBooleanValueGenerator implements PdfElementValue<ElementValueBoo
     if (Boolean.FALSE.equals(valueBoolean.value())) {
       return configForQuestion.checkboxFalse();
     }
-    if (Boolean.TRUE.equals(valueBoolean.value())) {
-      return configForQuestion.checkboxTrue();
-    }
-    return null;
+    return configForQuestion.checkboxTrue();
   }
 }

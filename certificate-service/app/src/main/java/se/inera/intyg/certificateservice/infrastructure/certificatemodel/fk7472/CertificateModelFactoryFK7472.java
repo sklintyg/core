@@ -29,7 +29,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldI
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PrintMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
@@ -311,13 +310,9 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
                     .build()
             )
         )
-        .printMapping(
-            PrintMapping.builder()
-                .pdfConfiguration(
-                    PdfConfigurationText.builder()
-                        .pdfFieldId(PDF_SYMPTOM_FIELD_ID)
-                        .build()
-                )
+        .pdfConfiguration(
+            PdfConfigurationText.builder()
+                .pdfFieldId(PDF_SYMPTOM_FIELD_ID)
                 .build()
         )
         .build();
@@ -381,13 +376,9 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
                     .build()
             )
         )
-        .printMapping(
-            PrintMapping.builder()
-                .pdfConfiguration(
-                    PdfConfigurationDateRangeList.builder()
-                        .pdfFieldId(PDF_PERIOD_FIELD_ID_PREFIX)
-                        .build()
-                )
+        .pdfConfiguration(
+            PdfConfigurationDateRangeList.builder()
+                .pdfFieldId(PDF_PERIOD_FIELD_ID_PREFIX)
                 .build()
         )
         .build();
