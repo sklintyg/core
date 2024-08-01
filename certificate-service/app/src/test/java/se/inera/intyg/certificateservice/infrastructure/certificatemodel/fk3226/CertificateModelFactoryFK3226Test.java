@@ -2467,15 +2467,6 @@ class CertificateModelFactoryFK3226Test {
   PdfSpecificationTest {
 
     @Test
-    void shallIncludeCertificateType() {
-      final var expected = new CertificateType("fk3226");
-
-      final var certificateModel = certificateModelFactoryFK3226.create();
-
-      assertEquals(expected, certificateModel.pdfSpecification().certificateType());
-    }
-
-    @Test
     void shallIncludePdfTemplatePathWithAddress() {
       final var certificateModel = certificateModelFactoryFK3226.create();
 

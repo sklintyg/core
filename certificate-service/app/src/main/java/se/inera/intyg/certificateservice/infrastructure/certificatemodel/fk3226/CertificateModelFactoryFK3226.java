@@ -70,9 +70,9 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDiagnosis;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateRecipientFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CodeSystemKvFkmu0001;
 
 @Component
@@ -499,7 +499,6 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         )
         .schematronPath(SCHEMATRON_PATH)
         .pdfSpecification(PdfSpecification.builder()
-            .certificateType(FK3226_V1_0.type())
             .pdfTemplatePath(PDF_FK_3226_PDF)
             .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_3226_PDF)
             .patientIdFieldId(PDF_PATIENT_ID_FIELD_ID)

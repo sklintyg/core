@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.common;
 
 import java.util.Arrays;
 import java.util.List;
