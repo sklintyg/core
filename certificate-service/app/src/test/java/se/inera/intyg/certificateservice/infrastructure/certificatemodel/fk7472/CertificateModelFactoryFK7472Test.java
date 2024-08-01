@@ -32,6 +32,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
@@ -559,6 +561,19 @@ class CertificateModelFactoryFK7472Test {
             certificateModel.elementSpecification(ELEMENT_ID).includeWhenRenewing()
         );
       }
+
+      @Test
+      void shallIncludePdfConfiguration() {
+        final var expected = PdfConfigurationText.builder()
+            .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtDiagnos[0]"))
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK7472.create();
+
+        assertEquals(expected,
+            certificateModel.elementSpecification(ELEMENT_ID).pdfConfiguration()
+        );
+      }
     }
 
     @Nested
@@ -698,6 +713,19 @@ class CertificateModelFactoryFK7472Test {
             certificateModel.elementSpecification(ELEMENT_ID).includeWhenRenewing()
         );
       }
+
+      @Test
+      void shallIncludePdfConfiguration() {
+        final var expected = PdfConfigurationDateRangeList.builder()
+            .pdfFieldId(new PdfFieldId("form1[0].#subform[0]"))
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK7472.create();
+
+        assertEquals(expected,
+            certificateModel.elementSpecification(ELEMENT_ID).pdfConfiguration()
+        );
+      }
     }
 
     @Nested
@@ -817,25 +845,6 @@ class CertificateModelFactoryFK7472Test {
       final var certificateModel = certificateModelFactoryFK7472.create();
 
       assertEquals(expected, certificateModel.pdfSpecification().pdfMcid().value());
-    }
-
-    @Test
-    void shallIncludePdfQuestionFields() {
-      final var expected = List.of(
-          PdfQuestionField.builder()
-              .questionId(new ElementId("55"))
-              .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtDiagnos[0]"))
-              .pdfValueType(PdfValueType.TEXT)
-              .build(),
-          PdfQuestionField.builder()
-              .questionId(new ElementId("56"))
-              .pdfFieldId(new PdfFieldId("form1[0].#subform[0]"))
-              .pdfValueType(PdfValueType.DATE_RANGE_LIST)
-              .build()
-      );
-      final var certificateModel = certificateModelFactoryFK7472.create();
-
-      assertEquals(expected, certificateModel.pdfSpecification().questionFields());
     }
   }
 }

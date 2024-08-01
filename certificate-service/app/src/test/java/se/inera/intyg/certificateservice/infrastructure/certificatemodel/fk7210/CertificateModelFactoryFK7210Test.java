@@ -31,6 +31,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
@@ -404,6 +405,19 @@ class CertificateModelFactoryFK7210Test {
             certificateModel.elementSpecification(ELEMENT_ID).validations()
         );
       }
+
+      @Test
+      void shallIncludePdfConfiguration() {
+        final var expected = PdfConfigurationDate.builder()
+            .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_dat[0]"))
+            .build();
+
+        final var certificateModel = certificateModelFactoryFK7210.create();
+
+        assertEquals(expected,
+            certificateModel.elementSpecification(ELEMENT_ID).pdfConfiguration()
+        );
+      }
     }
 
     @Nested
@@ -521,20 +535,6 @@ class CertificateModelFactoryFK7210Test {
         final var certificateModel = certificateModelFactoryFK7210.create();
 
         assertEquals(expected, certificateModel.pdfSpecification().pdfMcid().value());
-      }
-
-      @Test
-      void shallIncludePdfQuestionFields() {
-        final var expected = List.of(
-            PdfQuestionField.builder()
-                .questionId(new ElementId("54"))
-                .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_dat[0]"))
-                .pdfValueType(PdfValueType.DATE)
-                .build()
-        );
-        final var certificateModel = certificateModelFactoryFK7210.create();
-
-        assertEquals(expected, certificateModel.pdfSpecification().questionFields());
       }
     }
   }
