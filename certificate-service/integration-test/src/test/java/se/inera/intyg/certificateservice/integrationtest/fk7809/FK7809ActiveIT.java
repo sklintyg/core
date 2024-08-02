@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.integrationtest.fk7809;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CertificateModelFactoryFK7809.QUESTION_PROGNOS_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionPrognos.QUESTION_PROGNOS_ID;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

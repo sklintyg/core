@@ -7,7 +7,6 @@ import lombok.Value;
 @Builder
 public class PdfSpecification {
 
-  CertificateType certificateType;
   String pdfTemplatePath;
   String pdfNoAddressTemplatePath;
   String certificateName;

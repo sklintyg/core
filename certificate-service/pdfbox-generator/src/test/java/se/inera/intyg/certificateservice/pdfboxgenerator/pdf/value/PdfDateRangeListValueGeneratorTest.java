@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CodeSystemKvFkmu0008;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0008;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 class PdfDateRangeListValueGeneratorTest {

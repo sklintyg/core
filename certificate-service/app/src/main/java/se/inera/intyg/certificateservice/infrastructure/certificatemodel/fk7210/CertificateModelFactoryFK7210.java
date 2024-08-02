@@ -1,41 +1,25 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210;
 
-import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.elements.CategoryBeraknatFodelsedatum.categoryBeraknatFodelsedatum;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.elements.QuestionBeraknatFodelsedatum.questionBeraknatFodelsedatum;
 
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDate;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfMcid;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateRecipientFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
 
 @Component
 public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
@@ -45,48 +29,29 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
   private static final String FK_7210 = "fk7210";
   private static final String VERSION = "1.0";
   private static final String NAME = "Intyg om graviditet";
+
+  private static final Code IGRAV = new Code(
+      "IGRAV",
+      "b64ea353-e8f6-4832-b563-fc7d46f29548",
+      NAME
+  );
+
+  private static final String DESCRIPTION = """
+          När en person är gravid ska hen få ett intyg om graviditet av hälso- och sjukvården. Intyget behövs om den gravida begär ersättning från Försäkringskassan innan barnet är fött.
+      """;
   private static final String DETAILED_DESCRIPTION = """
       <b>Vad är intyg om graviditet?</b>
       När en person är gravid ska hen få ett intyg om graviditet av hälso- och sjukvården. Intyget behövs om den gravida begär ersättning från Försäkringskassan innan barnet är fött.<br><br> Intyget skickas till Försäkringskassan digitalt av hälso- och sjukvården eller av den gravida.
       """;
-  private static final String DESCRIPTION = """
-          När en person är gravid ska hen få ett intyg om graviditet av hälso- och sjukvården. Intyget behövs om den gravida begär ersättning från Försäkringskassan innan barnet är fött.
-      """;
+
   public static final CertificateModelId FK7210_V1_0 = CertificateModelId.builder()
       .type(new CertificateType(FK_7210))
       .version(new CertificateVersion(VERSION))
       .build();
-  public static final ElementId QUESTION_BERAKNAT_FODELSEDATUM_CATEGORY_ID = new ElementId(
-      "KAT_1");
-  public static final ElementId QUESTION_BERAKNAT_FODELSEDATUM_ID = new ElementId("54");
-  public static final FieldId QUESTION_BERAKNAT_FODELSEDATUM_FIELD_ID = new FieldId("54.1");
-  public static final String PDF_FK_7210_PDF = "fk7210/pdf/fk7210_v1.pdf";
-  public static final String PDF_NO_ADDRESS_FK_7210_PDF = "fk7210/pdf/fk7210_v1_no_address.pdf";
-  private static final PdfFieldId PDF_PATIENT_ID_FIELD_ID = new PdfFieldId(
-      "form1[0].#subform[0].flt_txtPersonNr[0]");
-  private static final PdfFieldId PDF_FODELSEDATUM_FIELD_ID = new PdfFieldId(
-      "form1[0].#subform[0].flt_dat[0]");
-  private static final PdfMcid PDF_PDF_MCID = new PdfMcid(100);
-  private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(15);
-  private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(7);
-  private static final int PDF_SIGNATURE_PAGE_INDEX = 0;
-  private static final PdfFieldId PDF_SIGNED_DATE_FIELD_ID = new PdfFieldId(
-      "form1[0].#subform[0].flt_datUnderskrift[0]");
-  private static final PdfFieldId PDF_SIGNED_BY_NAME_FIELD_ID = new PdfFieldId(
-      "form1[0].#subform[0].flt_txtNamnfortydligande[0]");
-  private static final PdfFieldId PDF_PA_TITLE_FIELD_ID = new PdfFieldId(
-      "form1[0].#subform[0].flt_txtBefattning[0]");
-  private static final PdfFieldId PDF_SPECIALTY_FIELD_ID = new PdfFieldId(
-      "form1[0].#subform[0].flt_txtEventuellSpecialistkompetens[0]");
-  private static final PdfFieldId PDF_HSA_ID_FIELD_ID = new PdfFieldId(
-      "form1[0].#subform[0].flt_txtLakarensHSA-ID[0]");
-  private static final PdfFieldId PDF_WORKPLACE_CODE_FIELD_ID = new PdfFieldId(
-      "form1[0].#subform[0].flt_txtArbetsplatskod[0]");
-  private static final PdfFieldId PDF_CONTACT_INFORMATION = new PdfFieldId(
-      "form1[0].#subform[0].flt_txtVardgivarensNamnAdressTelefon[0]");
 
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk7210/schematron/igrav.v1.sch");
+
   public static final String LINK_FK_ID = "LINK_FK";
   public static final String PREAMBLE_TEXT =
       "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
@@ -99,79 +64,26 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
   public CertificateModel create() {
     return CertificateModel.builder()
         .id(FK7210_V1_0)
-        .type(
-            new Code(
-                "IGRAV",
-                "b64ea353-e8f6-4832-b563-fc7d46f29548",
-                NAME
-            )
-        )
+        .type(IGRAV)
         .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)
         .availableForCitizen(true)
-        .rolesWithAccess(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-            Role.CARE_ADMIN))
         .recipient(CertificateRecipientFactory.fkassa())
-        .certificateActionSpecifications(
-            List.of(
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.CREATE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.READ)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.UPDATE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.DELETE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.SIGN)
-                    .allowedRoles(
-                        List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.SEND)
-                    .allowedRoles(
-                        List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.PRINT)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.REVOKE)
-                    .allowedRoles(
-                        List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.REPLACE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.REPLACE_CONTINUE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.RESPONSIBLE_ISSUER)
-                    .allowedRoles(List.of(Role.CARE_ADMIN))
-                    .build()
-
-            )
-        )
-        .elementSpecifications(
-            List.of(
-                categoryBeraknatFodelsedatum(
-                    questionBeraknatFodelsedatum()
-                ),
-                issuingUnitContactInfo()
-            )
-        )
+        .certificateActionSpecifications(FK7210CertificateActionSpecification.create())
         .schematronPath(SCHEMATRON_PATH)
         .summaryProvider(new FK7210CertificateSummaryProvider())
+        .pdfSpecification(FK7210PdfSpecification.create())
+        .rolesWithAccess(
+            List.of(
+                Role.DOCTOR,
+                Role.PRIVATE_DOCTOR,
+                Role.NURSE,
+                Role.MIDWIFE,
+                Role.CARE_ADMIN
+            )
+        )
         .texts(
             List.of(
                 CertificateText.builder()
@@ -185,88 +97,12 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
                     .build()
             )
         )
-        .pdfSpecification(PdfSpecification.builder()
-            .certificateType(FK7210_V1_0.type())
-            .pdfTemplatePath(PDF_FK_7210_PDF)
-            .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7210_PDF)
-            .patientIdFieldId(PDF_PATIENT_ID_FIELD_ID)
-            .signature(PdfSignature.builder()
-                .signatureWithAddressTagIndex(PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
-                .signatureWithoutAddressTagIndex(PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)
-                .signaturePageIndex(PDF_SIGNATURE_PAGE_INDEX)
-                .signedDateFieldId(PDF_SIGNED_DATE_FIELD_ID)
-                .signedByNameFieldId(PDF_SIGNED_BY_NAME_FIELD_ID)
-                .paTitleFieldId(PDF_PA_TITLE_FIELD_ID)
-                .specialtyFieldId(PDF_SPECIALTY_FIELD_ID)
-                .hsaIdFieldId(PDF_HSA_ID_FIELD_ID)
-                .workplaceCodeFieldId(PDF_WORKPLACE_CODE_FIELD_ID)
-                .contactInformation(PDF_CONTACT_INFORMATION)
-                .build())
-            .pdfMcid(PDF_PDF_MCID)
-            .build())
-        .build();
-  }
-
-  private static ElementSpecification categoryBeraknatFodelsedatum(
-      ElementSpecification... children) {
-    return ElementSpecification.builder()
-        .id(QUESTION_BERAKNAT_FODELSEDATUM_CATEGORY_ID)
-        .configuration(
-            ElementConfigurationCategory.builder()
-                .name("Beräknat födelsedatum")
-                .build()
-        )
-        .children(
-            List.of(children)
-        )
-        .build();
-  }
-
-  private static ElementSpecification questionBeraknatFodelsedatum() {
-    return ElementSpecification.builder()
-        .id(QUESTION_BERAKNAT_FODELSEDATUM_ID)
-        .configuration(
-            ElementConfigurationDate.builder()
-                .name("Datum")
-                .id(QUESTION_BERAKNAT_FODELSEDATUM_FIELD_ID)
-                .min(Period.ofDays(0))
-                .max(Period.ofYears(1))
-                .build()
-        )
-        .rules(
+        .elementSpecifications(
             List.of(
-                CertificateElementRuleFactory.mandatory(
-                    QUESTION_BERAKNAT_FODELSEDATUM_ID,
-                    QUESTION_BERAKNAT_FODELSEDATUM_FIELD_ID
-                )
-            )
-        )
-        .validations(
-            List.of(
-                ElementValidationDate.builder()
-                    .mandatory(true)
-                    .min(Period.ofDays(0))
-                    .max(Period.ofYears(1))
-                    .build()
-            )
-        )
-        .pdfConfiguration(
-            PdfConfigurationDate.builder()
-                .pdfFieldId(PDF_FODELSEDATUM_FIELD_ID)
-                .build()
-        )
-        .build();
-  }
-
-  private static ElementSpecification issuingUnitContactInfo() {
-    return ElementSpecification.builder()
-        .id(UNIT_CONTACT_INFORMATION)
-        .configuration(
-            ElementConfigurationUnitContactInformation.builder().build()
-        )
-        .validations(
-            List.of(
-                ElementValidationUnitContactInformation.builder().build()
+                categoryBeraknatFodelsedatum(
+                    questionBeraknatFodelsedatum()
+                ),
+                issuingUnitContactInfo()
             )
         )
         .build();

@@ -2,11 +2,8 @@ package se.inera.intyg.certificateservice.domain.testdata;
 
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_PDF_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_PDF_PATH_NO_ADDRESS;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_PDF_PATH_NO_ADDRESS;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_TYPE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK3226_PDF_CONTACT_INFORMATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK3226_PDF_HSA_ID_FIELD_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK3226_PDF_PATIENT_ID_FIELD_ID;
@@ -58,7 +55,6 @@ public class TestDataPdfSpecification {
 
   public static PdfSpecification fk7210PdfSpecification() {
     return PdfSpecification.builder()
-        .certificateType(FK7210_TYPE)
         .signature(PdfSignature.builder()
             .signaturePageIndex(FK7210_PDF_SIGNATURE_PAGE_INDEX)
             .signatureWithAddressTagIndex(FK7210_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
@@ -80,7 +76,6 @@ public class TestDataPdfSpecification {
 
   public static PdfSpecification fk3226PdfSpecification() {
     return PdfSpecification.builder()
-        .certificateType(FK3226_TYPE)
         .signature(PdfSignature.builder()
             .signaturePageIndex(FK3226_PDF_SIGNATURE_PAGE_INDEX)
             .signatureWithAddressTagIndex(FK3226_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
@@ -102,7 +97,6 @@ public class TestDataPdfSpecification {
 
   public static PdfSpecification fk7472PdfSpecification() {
     return PdfSpecification.builder()
-        .certificateType(FK7472_TYPE)
         .signature(PdfSignature.builder()
             .signaturePageIndex(FK7472_PDF_SIGNATURE_PAGE_INDEX)
             .signatureWithAddressTagIndex(FK7472_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)

@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210.QUESTION_BERAKNAT_FODELSEDATUM_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.elements.QuestionBeraknatFodelsedatum.QUESTION_BERAKNAT_FODELSEDATUM_ID;
 
 import java.time.format.DateTimeFormatter;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;

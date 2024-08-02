@@ -1,14 +1,13 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.PDF_FK_7472_PDF;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.PDF_NO_ADDRESS_FK_7472_PDF;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.SCHEMATRON_PATH;
 
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.ZoneId;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,35 +16,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxDateRangeList;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeList;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
-import se.inera.intyg.certificateservice.domain.message.model.MessageActionType;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateModelFactoryFK7472Test {
@@ -129,722 +106,103 @@ class CertificateModelFactoryFK7472Test {
   }
 
   @Test
-  void shallIncludeCertificateActionCreate() {
-    final var expectedType = CertificateActionType.CREATE;
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream()
-        .anyMatch(actionSpecification ->
-            expectedType.equals(actionSpecification.certificateActionType())
-        ), "Expected type: %s".formatted(expectedType)
-    );
-  }
-
-  @Test
-  void shallIncludeCertificateActionRead() {
-    final var expectedType = CertificateActionType.READ;
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream()
-        .anyMatch(actionSpecification ->
-            expectedType.equals(actionSpecification.certificateActionType()
-            )
-        ), "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
-  void shallIncludeCertificateActionUpdate() {
-    final var expectedType = CertificateActionType.UPDATE;
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
-  void shallIncludeCertificateActionDelete() {
-    final var expectedType = CertificateActionType.DELETE;
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
-  void shallIncludeCertificateActionSign() {
-    final var expectedSpecification = CertificateActionSpecification.builder()
-        .certificateActionType(CertificateActionType.SIGN)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
-        .build();
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected specification: %s".formatted(expectedSpecification));
-  }
-
-  @Test
-  void shallIncludeCertificateActionSend() {
-    final var expectedSpecification = CertificateActionSpecification.builder()
-        .certificateActionType(CertificateActionType.SEND)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
-        .build();
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected type: %s".formatted(expectedSpecification));
-  }
-
-  @Test
-  void shallIncludeCertificateActionPrint() {
-    final var expectedType = CertificateActionType.PRINT;
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
-  void shallIncludeCertificateActionRevoke() {
-    final var expectedSpecification = CertificateActionSpecification.builder()
-        .certificateActionType(CertificateActionType.REVOKE)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
-        .build();
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected type: %s".formatted(expectedSpecification));
-  }
-
-  @Test
-  void shallIncludeCertificateActionReplace() {
-    final var expectedType = CertificateActionType.REPLACE;
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
-  void shallIncludeCertificateActionReplaceContinue() {
-    final var expectedType = CertificateActionType.REPLACE_CONTINUE;
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
-  void shallIncludeCertificateActionRenew() {
-    final var expectedType = CertificateActionType.RENEW;
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
-  void shallIncludeCertificateActionMessages() {
-    final var expectedType = CertificateActionType.MESSAGES;
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
-  void shallIncludeCertificateActionMessagesAdministrative() {
-    final var expectedType = CertificateActionType.MESSAGES_ADMINISTRATIVE;
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
-  void shallIncludeCertificateActionReceiveComplement() {
-    final var expectedType = CertificateActionType.RECEIVE_COMPLEMENT;
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
-  void shallIncludeCertificateActionRecieveReminder() {
-    final var expectedType = CertificateActionType.RECEIVE_REMINDER;
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
-  void shallIncludeCertificateActionComplement() {
-    final var expectedType = CertificateActionType.COMPLEMENT;
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
-  void shallIncludeCertificateActionCannotComplement() {
-    final var expectedType = CertificateActionType.CANNOT_COMPLEMENT;
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
-  void shallIncludeCertificateActionForwardMessage() {
-    final var expectedType = CertificateActionType.FORWARD_MESSAGE;
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
-  void shallIncludeCertificateActionForwardCertificate() {
-    final var expectedType = CertificateActionType.FORWARD_CERTIFICATE;
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
-  void shallIncludeCertificateActionHandleComplement() {
-    final var expectedType = CertificateActionType.HANDLE_COMPLEMENT;
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
-  void shallIncludeCertificateActionResponsibleIssuer() {
-    final var expectedSpecification = CertificateActionSpecification.builder()
-        .certificateActionType(CertificateActionType.RESPONSIBLE_ISSUER)
-        .allowedRoles(List.of(Role.CARE_ADMIN))
-        .build();
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertTrue(certificateModel.certificateActionSpecifications().stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected type: %s".formatted(expectedSpecification));
-  }
-
-  @Test
   void shallIncludeSchematronPath() {
     final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertEquals(SCHEMATRON_PATH, certificateModel.schematronPath());
   }
 
-  @Nested
-  class MessageActionSpecificationsTests {
+  @Test
+  void shallIncludeActiveForRoles() {
+    final var expected = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+        Role.CARE_ADMIN);
 
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
-    @Test
-    void shallIncludeMessageActionHandleComplement() {
-      final var expectedType = MessageActionType.HANDLE_COMPLEMENT;
+    assertEquals(expected, certificateModel.rolesWithAccess());
+  }
 
-      final var certificateModel = certificateModelFactoryFK7472.create();
+  @Test
+  void shallIncludePdfSpecifications() {
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
-      assertTrue(certificateModel.messageActionSpecifications().stream().anyMatch(
-              actionSpecification -> expectedType.equals(actionSpecification.messageActionType())
-          ),
-          "Expected type: %s".formatted(expectedType));
-    }
+    assertNotNull(certificateModel.pdfSpecification());
+  }
 
-    @Test
-    void shallIncludeMessageActionCannotComplement() {
-      final var expectedType = MessageActionType.CANNOT_COMPLEMENT;
+  @Test
+  void shallIncludeCertificateActionSpecifications() {
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
-      final var certificateModel = certificateModelFactoryFK7472.create();
+    assertAll(
+        () -> assertNotNull(certificateModel.certificateActionSpecifications()),
+        () -> assertFalse(certificateModel.certificateActionSpecifications().isEmpty())
+    );
+  }
 
-      assertTrue(certificateModel.messageActionSpecifications().stream().anyMatch(
-              actionSpecification -> expectedType.equals(actionSpecification.messageActionType())
-          ),
-          "Expected type: %s".formatted(expectedType));
-    }
+  @Test
+  void shallIncludeMessageActionSpecifications() {
+    final var certificateModel = certificateModelFactoryFK7472.create();
 
-    @Test
-    void shallIncludeMessageActionComplement() {
-      final var expectedType = MessageActionType.COMPLEMENT;
-
-      final var certificateModel = certificateModelFactoryFK7472.create();
-
-      assertTrue(certificateModel.messageActionSpecifications().stream().anyMatch(
-              actionSpecification -> expectedType.equals(actionSpecification.messageActionType())
-          ),
-          "Expected type: %s".formatted(expectedType));
-    }
-
-    @Test
-    void shallIncludeMessageActionForward() {
-      final var expectedType = MessageActionType.FORWARD;
-
-      final var certificateModel = certificateModelFactoryFK7472.create();
-
-      assertTrue(certificateModel.messageActionSpecifications().stream().anyMatch(
-              actionSpecification -> expectedType.equals(actionSpecification.messageActionType())
-          ),
-          "Expected type: %s".formatted(expectedType));
-    }
+    assertAll(
+        () -> assertNotNull(certificateModel.messageActionSpecifications()),
+        () -> assertFalse(certificateModel.messageActionSpecifications().isEmpty())
+    );
   }
 
   @Nested
   class CertificateSpecifications {
 
-    @Nested
-    class CategorySymptom {
+    @Test
+    void shallIncludeCategorySymptom() {
+      final var certificateModel = certificateModelFactoryFK7472.create();
 
-      private static final ElementId ELEMENT_ID = new ElementId("KAT_1");
-
-      @Test
-      void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-                ELEMENT_ID,
-                certificateModel.elementSpecifications())
-        );
-      }
-
-      @Test
-      void shallIncludeConfiguration() {
-        final var expectedConfiguration = ElementConfigurationCategory.builder()
-            .name("Barnets diagnos eller symtom")
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedConfiguration,
-            certificateModel.elementSpecification(ELEMENT_ID).configuration()
-        );
-      }
-    }
-
-    @Nested
-    class QuestionSymptom {
-
-      private static final ElementId ELEMENT_ID = new ElementId("55");
-
-      @Test
-      void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-                ELEMENT_ID,
-                certificateModel.elementSpecifications())
-        );
-      }
-
-      @Test
-      void shallIncludeConfiguration() {
-        final var expectedConfiguration = ElementConfigurationTextArea.builder()
-            .name("Ange diagnos eller symtom")
-            .id(new FieldId("55.1"))
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedConfiguration,
-            certificateModel.elementSpecification(ELEMENT_ID).configuration()
-        );
-      }
-
-      @Test
-      void shallIncludeRules() {
-        final var expectedRules = List.of(
-            ElementRuleExpression.builder()
-                .id(new ElementId("55"))
-                .type(ElementRuleType.MANDATORY)
-                .expression(
-                    new RuleExpression("$55.1")
-                )
-                .build(),
-            ElementRuleLimit.builder()
-                .id(new ElementId("55"))
-                .type(ElementRuleType.TEXT_LIMIT)
-                .limit(new RuleLimit((short) 318))
-                .build()
-        );
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedRules,
-            certificateModel.elementSpecification(ELEMENT_ID).rules()
-        );
-      }
-
-      @Test
-      void shallIncludeValidations() {
-        final var expectedValidations = List.of(
-            ElementValidationText.builder()
-                .mandatory(true)
-                .limit(318)
-                .build()
-        );
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedValidations,
-            certificateModel.elementSpecification(ELEMENT_ID).validations()
-        );
-      }
-
-      @Test
-      void shallIncludeWhenRenewingTrue() {
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(Boolean.TRUE,
-            certificateModel.elementSpecification(ELEMENT_ID).includeWhenRenewing()
-        );
-      }
-
-      @Test
-      void shallIncludePdfConfiguration() {
-        final var expected = PdfConfigurationText.builder()
-            .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtDiagnos[0]"))
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expected,
-            certificateModel.elementSpecification(ELEMENT_ID).pdfConfiguration()
-        );
-      }
-    }
-
-    @Nested
-    class CategoryPeriod {
-
-      private static final ElementId ELEMENT_ID = new ElementId("KAT_2");
-
-      @Test
-      void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-                ELEMENT_ID,
-                certificateModel.elementSpecifications())
-        );
-      }
-
-      @Test
-      void shallIncludeConfiguration() {
-        final var expectedConfiguration = ElementConfigurationCategory.builder()
-            .name("Period som barnet inte bör vårdas i ordinarie tillsynsform")
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedConfiguration,
-            certificateModel.elementSpecification(ELEMENT_ID).configuration()
-        );
-      }
-    }
-
-    @Nested
-    class QuestionPrognos {
-
-      private static final ElementId ELEMENT_ID = new ElementId("56");
-
-      @Test
-      void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-                ELEMENT_ID,
-                certificateModel.elementSpecifications())
-        );
-      }
-
-      @Test
-      void shallIncludeConfiguration() {
-        final var expectedConfiguration = ElementConfigurationCheckboxDateRangeList.builder()
-            .name("Jag bedömer att barnet inte ska vårdas i ordinarie tillsynsform")
-            .label("Andel av ordinarie tid:")
-            .id(new FieldId("56.1"))
-            .hideWorkingHours(true)
-            .min(Period.ofMonths(-1))
-            .dateRanges(
-                List.of(
-                    new ElementConfigurationCode(
-                        new FieldId("EN_ATTONDEL"),
-                        "12,5 procent",
-                        CodeSystemKvFkmu0008.EN_ATTONDEL
-                    ),
-                    new ElementConfigurationCode(
-                        new FieldId("EN_FJARDEDEL"),
-                        "25 procent",
-                        CodeSystemKvFkmu0008.EN_FJARDEDEL
-                    ),
-                    new ElementConfigurationCode(
-                        new FieldId("HALVA"),
-                        "50 procent",
-                        CodeSystemKvFkmu0008.HALVA
-                    ),
-                    new ElementConfigurationCode(
-                        new FieldId("TRE_FJARDEDELAR"),
-                        "75 procent",
-                        CodeSystemKvFkmu0008.TRE_FJARDEDELAR
-                    ),
-                    new ElementConfigurationCode(
-                        new FieldId("HELA"),
-                        "100 procent",
-                        CodeSystemKvFkmu0008.HELA
-                    )
-                )
-            )
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedConfiguration,
-            certificateModel.elementSpecification(ELEMENT_ID).configuration()
-        );
-      }
-
-      @Test
-      void shallIncludeRules() {
-        final var expectedRules = List.of(
-            ElementRuleExpression.builder()
-                .id(ELEMENT_ID)
-                .type(ElementRuleType.MANDATORY)
-                .expression(
-                    new RuleExpression(
-                        "$EN_ATTONDEL || $EN_FJARDEDEL || $HALVA || $TRE_FJARDEDELAR || $HELA"
-                    )
-                )
-                .build()
-        );
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedRules,
-            certificateModel.elementSpecification(ELEMENT_ID).rules()
-        );
-      }
-
-      @Test
-      void shallIncludeValidations() {
-        final var expectedValidations = List.of(
-            ElementValidationDateRangeList.builder()
-                .min(Period.ofMonths(-1))
-                .mandatory(true)
-                .build()
-        );
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedValidations,
-            certificateModel.elementSpecification(ELEMENT_ID).validations()
-        );
-      }
-
-      @Test
-      void shallIncludeWhenRenewingFalse() {
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(Boolean.FALSE,
-            certificateModel.elementSpecification(ELEMENT_ID).includeWhenRenewing()
-        );
-      }
-
-      @Test
-      void shallIncludePdfConfiguration() {
-        final var expected = PdfConfigurationDateRangeList.builder()
-            .pdfFieldId(new PdfFieldId("form1[0].#subform[0]"))
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expected,
-            certificateModel.elementSpecification(ELEMENT_ID).pdfConfiguration()
-        );
-      }
-    }
-
-    @Nested
-    class IssuingUnitContactInfo {
-
-      private static final ElementId ELEMENT_ID = new ElementId("UNIT_CONTACT_INFORMATION");
-
-      @Test
-      void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-                ELEMENT_ID,
-                certificateModel.elementSpecifications())
-        );
-      }
-
-      @Test
-      void shallIncludeConfiguration() {
-        final var expectedConfiguration = ElementConfigurationUnitContactInformation.builder()
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedConfiguration,
-            certificateModel.elementSpecification(ELEMENT_ID).configuration()
-        );
-      }
-
-      @Test
-      void shallIncludeValidation() {
-        final var expectedValidation = List.of(
-            ElementValidationUnitContactInformation.builder().build()
-        );
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedValidation,
-            certificateModel.elementSpecification(ELEMENT_ID).validations()
-        );
-      }
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("KAT_1")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("KAT_1"), certificateModel.elementSpecifications())
+      );
     }
 
     @Test
-    void shallIncludeActiveForRoles() {
-      final var expected = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-          Role.CARE_ADMIN);
-
+    void shallIncludeQuestionSymptom() {
       final var certificateModel = certificateModelFactoryFK7472.create();
 
-      assertEquals(expected, certificateModel.rolesWithAccess());
-    }
-  }
-
-  @Nested
-  class PdfSpecificationTest {
-
-    @Test
-    void shallIncludeCertificateType() {
-      final var expected = new CertificateType("fk7472");
-
-      final var certificateModel = certificateModelFactoryFK7472.create();
-
-      assertEquals(expected, certificateModel.pdfSpecification().certificateType());
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("55")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("55"), certificateModel.elementSpecifications())
+      );
     }
 
     @Test
-    void shallIncludePdfTemplatePathWithAddress() {
+    void shallIncludeCategoryPrognos() {
       final var certificateModel = certificateModelFactoryFK7472.create();
 
-      assertEquals(PDF_FK_7472_PDF, certificateModel.pdfSpecification().pdfTemplatePath());
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("KAT_2")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("KAT_2"), certificateModel.elementSpecifications())
+      );
     }
 
     @Test
-    void shallIncludePdfTemplatePathNoAddress() {
+    void shallIncludeQuestionPrognos() {
       final var certificateModel = certificateModelFactoryFK7472.create();
 
-      assertEquals(PDF_NO_ADDRESS_FK_7472_PDF,
-          certificateModel.pdfSpecification().pdfNoAddressTemplatePath());
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("56")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("56"),
+              certificateModel.elementSpecifications())
+      );
     }
 
     @Test
-    void shallIncludePatientFieldId() {
-      final var expected = new PdfFieldId("form1[0].#subform[0].flt_txtPersonNrBarn[0]");
-
+    void shallIncludeIssuingUnitContactInfo() {
       final var certificateModel = certificateModelFactoryFK7472.create();
 
-      assertEquals(expected, certificateModel.pdfSpecification().patientIdFieldId());
-    }
-
-    @Test
-    void shallIncludeSignatureFields() {
-      final var expected = PdfSignature.builder()
-          .signaturePageIndex(0)
-          .signatureWithAddressTagIndex(new PdfTagIndex(50))
-          .signatureWithoutAddressTagIndex(new PdfTagIndex(42))
-          .signedDateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datUnderskrift[0]"))
-          .signedByNameFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtNamnfortydligande[0]"))
-          .paTitleFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtBefattning[0]"))
-          .specialtyFieldId(
-              new PdfFieldId("form1[0].#subform[0].flt_txtEventuellSpecialistkompetens[0]"))
-          .hsaIdFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtLakarensHSA-ID[0]"))
-          .workplaceCodeFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtArbetsplatskod[0]"))
-          .contactInformation(
-              new PdfFieldId("form1[0].#subform[0].flt_txtVardgivarensNamnAdressTelefon[0]"))
-          .build();
-
-      final var certificateModel = certificateModelFactoryFK7472.create();
-
-      assertEquals(expected, certificateModel.pdfSpecification().signature());
-    }
-
-    @Test
-    void shallIncludeMcid() {
-      final var expected = 120;
-      final var certificateModel = certificateModelFactoryFK7472.create();
-
-      assertEquals(expected, certificateModel.pdfSpecification().pdfMcid().value());
+      assertTrue(
+          certificateModel.elementSpecificationExists(new ElementId("UNIT_CONTACT_INFORMATION")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'"
+              .formatted(new ElementId("UNIT_CONTACT_INFORMATION"),
+                  certificateModel.elementSpecifications())
+      );
     }
   }
 }
