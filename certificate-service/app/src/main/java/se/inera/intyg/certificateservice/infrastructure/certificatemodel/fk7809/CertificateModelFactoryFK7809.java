@@ -37,21 +37,17 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateMessageType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
-import se.inera.intyg.certificateservice.domain.message.model.MessageActionType;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
@@ -61,7 +57,6 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 @RequiredArgsConstructor
 public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
 
-
   @Value("${certificate.model.fk7809.v1_0.active.from}")
   private LocalDateTime activeFrom;
 
@@ -70,6 +65,13 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   private static final String FK_7809 = "fk7809";
   private static final String VERSION = "1.0";
   private static final String NAME = "Läkarutlåtande för merkostnadsersättning";
+  private static final String DESCRIPTION = """
+      <b className="iu-fw-heading">Vem kan få merkostnadsersättnig?</b>
+            
+      En person kan ha rätt till merkostnadsersättning för kostnader som beror på att hen fått en varaktig funktionsnedsättning som kan antas finnas i minst ett år. Funktionsnedsättningen ska ha uppstått innan hen fyllde 66 år. Om personen är född 1957 eller tidigare kan hen även få ersättning för kostnader som beror på att hen fått en funktionsnedsättning innan hen fyllde 65 år. För att få merkostnadsersättning ska merkostnaderna uppgå till minst 25 procent av ett prisbasbelopp per år.
+            
+      Den som anses vara blind eller gravt hörselskadad kan få en garanterad nivå av merkostnadsersättning utan att ha några merkostnader.
+      """;
   private static final String DETAILED_DESCRIPTION = """
        <b className="iu-fw-heading">Vem kan få merkostnadsersättnig?</b>
             
@@ -91,22 +93,15 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
        </ul>
        Den som anses vara blind eller gravt hörselskadad kan få en garanterad nivå av merkostnadsersättning utan att ha några merkostnader.
       """;
-  private static final String DESCRIPTION = """
-      <b className="iu-fw-heading">Vem kan få merkostnadsersättnig?</b>
-            
-      En person kan ha rätt till merkostnadsersättning för kostnader som beror på att hen fått en varaktig funktionsnedsättning som kan antas finnas i minst ett år. Funktionsnedsättningen ska ha uppstått innan hen fyllde 66 år. Om personen är född 1957 eller tidigare kan hen även få ersättning för kostnader som beror på att hen fått en funktionsnedsättning innan hen fyllde 65 år. För att få merkostnadsersättning ska merkostnaderna uppgå till minst 25 procent av ett prisbasbelopp per år.
-            
-      Den som anses vara blind eller gravt hörselskadad kan få en garanterad nivå av merkostnadsersättning utan att ha några merkostnader.
-      """;
+  private static final String PREAMBLE_TEXT =
+      "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
+          + "Har du frågor kontaktar du den som skrivit ditt intyg.";
+
   public static final CertificateModelId FK7809_V1_0 = CertificateModelId.builder()
       .type(new CertificateType(FK_7809))
       .version(new CertificateVersion(VERSION))
       .build();
 
-
-  private static final String PREAMBLE_TEXT =
-      "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
-          + "Har du frågor kontaktar du den som skrivit ditt intyg.";
   private static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk7809/schematron/lumek.v1.sch");
 
@@ -137,8 +132,15 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     .build()
             )
         )
-        .rolesWithAccess(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-            Role.CARE_ADMIN))
+        .rolesWithAccess(
+            List.of(
+                Role.DOCTOR,
+                Role.PRIVATE_DOCTOR,
+                Role.NURSE,
+                Role.MIDWIFE,
+                Role.CARE_ADMIN
+            )
+        )
         .recipient(CertificateRecipientFactory.fkassa())
         .messageTypes(
             List.of(
@@ -156,133 +158,8 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     .build()
             )
         )
-        .certificateActionSpecifications(
-            List.of(
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.CREATE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.READ)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.UPDATE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.DELETE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.SIGN)
-                    .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.SEND)
-                    .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.PRINT)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.REVOKE)
-                    .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.REPLACE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.REPLACE_CONTINUE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.RENEW)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.MESSAGES)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
-                    .enabled(true)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.RECEIVE_COMPLEMENT)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.RECEIVE_QUESTION)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.RECEIVE_ANSWER)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.RECEIVE_REMINDER)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.COMPLEMENT)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.CANNOT_COMPLEMENT)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.FORWARD_MESSAGE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.HANDLE_COMPLEMENT)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.CREATE_MESSAGE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.ANSWER_MESSAGE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.SAVE_MESSAGE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.DELETE_MESSAGE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.SEND_MESSAGE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.SAVE_ANSWER)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.DELETE_ANSWER)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.SEND_ANSWER)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.HANDLE_MESSAGE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
-                    .build(),
-                CertificateActionSpecification.builder()
-                    .certificateActionType(CertificateActionType.RESPONSIBLE_ISSUER)
-                    .allowedRoles(List.of(Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
-                    .build()
-            )
-        )
-        .messageActionSpecifications(
-            List.of(
-                MessageActionSpecification.builder()
-                    .messageActionType(MessageActionType.ANSWER)
-                    .build(),
-                MessageActionSpecification.builder()
-                    .messageActionType(MessageActionType.HANDLE_COMPLEMENT)
-                    .build(),
-                MessageActionSpecification.builder()
-                    .messageActionType(MessageActionType.COMPLEMENT)
-                    .build(),
-                MessageActionSpecification.builder()
-                    .messageActionType(MessageActionType.CANNOT_COMPLEMENT)
-                    .build(),
-                MessageActionSpecification.builder()
-                    .messageActionType(MessageActionType.FORWARD)
-                    .build(),
-                MessageActionSpecification.builder()
-                    .messageActionType(MessageActionType.HANDLE_MESSAGE)
-                    .build()
-            )
-        )
+        .certificateActionSpecifications(FK7809CertificateActionSpecification.create())
+        .messageActionSpecifications(FK7809MessageActionSpecification.create())
         .elementSpecifications(
             List.of(
                 categoryGrundForMedicinsktUnderlag(
