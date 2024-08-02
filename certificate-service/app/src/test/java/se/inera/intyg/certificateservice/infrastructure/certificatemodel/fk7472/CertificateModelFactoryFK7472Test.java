@@ -123,6 +123,13 @@ class CertificateModelFactoryFK7472Test {
   }
 
   @Test
+  void shallIncludePdfSpecifications() {
+    final var certificateModel = certificateModelFactoryFK7472.create();
+
+    assertNotNull(certificateModel.pdfSpecification());
+  }
+
+  @Test
   void shallIncludeCertificateActionSpecifications() {
     final var certificateModel = certificateModelFactoryFK7472.create();
 
