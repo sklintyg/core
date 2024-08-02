@@ -199,7 +199,7 @@ class SchematronValidationFK7472Test {
   }
 
   @Nested
-  class QuestionPeriod {
+  class QuestionPerioda {
 
     private static final ElementData QUESTION_SYMTOM = ElementData.builder()
         .id(new ElementId("55"))

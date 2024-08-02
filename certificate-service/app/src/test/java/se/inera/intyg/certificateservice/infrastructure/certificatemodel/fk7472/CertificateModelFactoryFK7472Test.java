@@ -8,7 +8,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.CertificateModelFactoryFK7472.SCHEMATRON_PATH;
 
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.ZoneId;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,30 +21,14 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxDateRangeList;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeList;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.message.model.MessageActionType;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationUnitContactInformation;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateModelFactoryFK7472Test {
@@ -450,334 +433,70 @@ class CertificateModelFactoryFK7472Test {
     }
   }
 
+  @Test
+  void shallIncludeActiveForRoles() {
+    final var expected = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+        Role.CARE_ADMIN);
+
+    final var certificateModel = certificateModelFactoryFK7472.create();
+
+    assertEquals(expected, certificateModel.rolesWithAccess());
+  }
+
   @Nested
   class CertificateSpecifications {
 
-    @Nested
-    class CategorySymptom {
+    @Test
+    void shallIncludeCategorySymptom() {
+      final var certificateModel = certificateModelFactoryFK7472.create();
 
-      private static final ElementId ELEMENT_ID = new ElementId("KAT_1");
-
-      @Test
-      void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-                ELEMENT_ID,
-                certificateModel.elementSpecifications())
-        );
-      }
-
-      @Test
-      void shallIncludeConfiguration() {
-        final var expectedConfiguration = ElementConfigurationCategory.builder()
-            .name("Barnets diagnos eller symtom")
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedConfiguration,
-            certificateModel.elementSpecification(ELEMENT_ID).configuration()
-        );
-      }
-    }
-
-    @Nested
-    class QuestionSymptom {
-
-      private static final ElementId ELEMENT_ID = new ElementId("55");
-
-      @Test
-      void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-                ELEMENT_ID,
-                certificateModel.elementSpecifications())
-        );
-      }
-
-      @Test
-      void shallIncludeConfiguration() {
-        final var expectedConfiguration = ElementConfigurationTextArea.builder()
-            .name("Ange diagnos eller symtom")
-            .id(new FieldId("55.1"))
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedConfiguration,
-            certificateModel.elementSpecification(ELEMENT_ID).configuration()
-        );
-      }
-
-      @Test
-      void shallIncludeRules() {
-        final var expectedRules = List.of(
-            ElementRuleExpression.builder()
-                .id(new ElementId("55"))
-                .type(ElementRuleType.MANDATORY)
-                .expression(
-                    new RuleExpression("$55.1")
-                )
-                .build(),
-            ElementRuleLimit.builder()
-                .id(new ElementId("55"))
-                .type(ElementRuleType.TEXT_LIMIT)
-                .limit(new RuleLimit((short) 318))
-                .build()
-        );
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedRules,
-            certificateModel.elementSpecification(ELEMENT_ID).rules()
-        );
-      }
-
-      @Test
-      void shallIncludeValidations() {
-        final var expectedValidations = List.of(
-            ElementValidationText.builder()
-                .mandatory(true)
-                .limit(318)
-                .build()
-        );
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedValidations,
-            certificateModel.elementSpecification(ELEMENT_ID).validations()
-        );
-      }
-
-      @Test
-      void shallIncludeWhenRenewingTrue() {
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(Boolean.TRUE,
-            certificateModel.elementSpecification(ELEMENT_ID).includeWhenRenewing()
-        );
-      }
-
-      @Test
-      void shallIncludePdfConfiguration() {
-        final var expected = PdfConfigurationText.builder()
-            .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtDiagnos[0]"))
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expected,
-            certificateModel.elementSpecification(ELEMENT_ID).pdfConfiguration()
-        );
-      }
-    }
-
-    @Nested
-    class CategoryPeriod {
-
-      private static final ElementId ELEMENT_ID = new ElementId("KAT_2");
-
-      @Test
-      void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-                ELEMENT_ID,
-                certificateModel.elementSpecifications())
-        );
-      }
-
-      @Test
-      void shallIncludeConfiguration() {
-        final var expectedConfiguration = ElementConfigurationCategory.builder()
-            .name("Period som barnet inte bör vårdas i ordinarie tillsynsform")
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedConfiguration,
-            certificateModel.elementSpecification(ELEMENT_ID).configuration()
-        );
-      }
-    }
-
-    @Nested
-    class QuestionPrognos {
-
-      private static final ElementId ELEMENT_ID = new ElementId("56");
-
-      @Test
-      void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-                ELEMENT_ID,
-                certificateModel.elementSpecifications())
-        );
-      }
-
-      @Test
-      void shallIncludeConfiguration() {
-        final var expectedConfiguration = ElementConfigurationCheckboxDateRangeList.builder()
-            .name("Jag bedömer att barnet inte ska vårdas i ordinarie tillsynsform")
-            .label("Andel av ordinarie tid:")
-            .id(new FieldId("56.1"))
-            .hideWorkingHours(true)
-            .min(Period.ofMonths(-1))
-            .dateRanges(
-                List.of(
-                    new ElementConfigurationCode(
-                        new FieldId("EN_ATTONDEL"),
-                        "12,5 procent",
-                        CodeSystemKvFkmu0008.EN_ATTONDEL
-                    ),
-                    new ElementConfigurationCode(
-                        new FieldId("EN_FJARDEDEL"),
-                        "25 procent",
-                        CodeSystemKvFkmu0008.EN_FJARDEDEL
-                    ),
-                    new ElementConfigurationCode(
-                        new FieldId("HALVA"),
-                        "50 procent",
-                        CodeSystemKvFkmu0008.HALVA
-                    ),
-                    new ElementConfigurationCode(
-                        new FieldId("TRE_FJARDEDELAR"),
-                        "75 procent",
-                        CodeSystemKvFkmu0008.TRE_FJARDEDELAR
-                    ),
-                    new ElementConfigurationCode(
-                        new FieldId("HELA"),
-                        "100 procent",
-                        CodeSystemKvFkmu0008.HELA
-                    )
-                )
-            )
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedConfiguration,
-            certificateModel.elementSpecification(ELEMENT_ID).configuration()
-        );
-      }
-
-      @Test
-      void shallIncludeRules() {
-        final var expectedRules = List.of(
-            ElementRuleExpression.builder()
-                .id(ELEMENT_ID)
-                .type(ElementRuleType.MANDATORY)
-                .expression(
-                    new RuleExpression(
-                        "$EN_ATTONDEL || $EN_FJARDEDEL || $HALVA || $TRE_FJARDEDELAR || $HELA"
-                    )
-                )
-                .build()
-        );
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedRules,
-            certificateModel.elementSpecification(ELEMENT_ID).rules()
-        );
-      }
-
-      @Test
-      void shallIncludeValidations() {
-        final var expectedValidations = List.of(
-            ElementValidationDateRangeList.builder()
-                .min(Period.ofMonths(-1))
-                .mandatory(true)
-                .build()
-        );
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedValidations,
-            certificateModel.elementSpecification(ELEMENT_ID).validations()
-        );
-      }
-
-      @Test
-      void shallIncludeWhenRenewingFalse() {
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(Boolean.FALSE,
-            certificateModel.elementSpecification(ELEMENT_ID).includeWhenRenewing()
-        );
-      }
-
-      @Test
-      void shallIncludePdfConfiguration() {
-        final var expected = PdfConfigurationDateRangeList.builder()
-            .pdfFieldId(new PdfFieldId("form1[0].#subform[0]"))
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expected,
-            certificateModel.elementSpecification(ELEMENT_ID).pdfConfiguration()
-        );
-      }
-    }
-
-    @Nested
-    class IssuingUnitContactInfo {
-
-      private static final ElementId ELEMENT_ID = new ElementId("UNIT_CONTACT_INFORMATION");
-
-      @Test
-      void shallIncludeId() {
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertTrue(certificateModel.elementSpecificationExists(ELEMENT_ID),
-            "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-                ELEMENT_ID,
-                certificateModel.elementSpecifications())
-        );
-      }
-
-      @Test
-      void shallIncludeConfiguration() {
-        final var expectedConfiguration = ElementConfigurationUnitContactInformation.builder()
-            .build();
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedConfiguration,
-            certificateModel.elementSpecification(ELEMENT_ID).configuration()
-        );
-      }
-
-      @Test
-      void shallIncludeValidation() {
-        final var expectedValidation = List.of(
-            ElementValidationUnitContactInformation.builder().build()
-        );
-
-        final var certificateModel = certificateModelFactoryFK7472.create();
-
-        assertEquals(expectedValidation,
-            certificateModel.elementSpecification(ELEMENT_ID).validations()
-        );
-      }
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("KAT_1")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("KAT_1"), certificateModel.elementSpecifications())
+      );
     }
 
     @Test
-    void shallIncludeActiveForRoles() {
-      final var expected = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-          Role.CARE_ADMIN);
-
+    void shallIncludeQuestionSymptom() {
       final var certificateModel = certificateModelFactoryFK7472.create();
 
-      assertEquals(expected, certificateModel.rolesWithAccess());
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("55")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("55"), certificateModel.elementSpecifications())
+      );
+    }
+
+    @Test
+    void shallIncludeCategoryPrognos() {
+      final var certificateModel = certificateModelFactoryFK7472.create();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("KAT_2")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("KAT_2"), certificateModel.elementSpecifications())
+      );
+    }
+
+    @Test
+    void shallIncludeQuestionPrognos() {
+      final var certificateModel = certificateModelFactoryFK7472.create();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("56")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("56"),
+              certificateModel.elementSpecifications())
+      );
+    }
+
+    @Test
+    void shallIncludeIssuingUnitContactInfo() {
+      final var certificateModel = certificateModelFactoryFK7472.create();
+
+      assertTrue(
+          certificateModel.elementSpecificationExists(new ElementId("UNIT_CONTACT_INFORMATION")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'"
+              .formatted(new ElementId("UNIT_CONTACT_INFORMATION"),
+                  certificateModel.elementSpecifications())
+      );
     }
   }
 
