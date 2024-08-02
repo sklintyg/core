@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CertificateModelFactoryFK7809.DIAGNOSIS_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CertificateModelFactoryFK7809.DIAGNOS_1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionDiagnos.DIAGNOSIS_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionDiagnos.DIAGNOS_1;
 
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummary;

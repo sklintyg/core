@@ -3,8 +3,8 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CertificateModelFactoryFK7809.DIAGNOSIS_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.CertificateModelFactoryFK7809.DIAGNOS_1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionDiagnos.DIAGNOSIS_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionDiagnos.DIAGNOS_1;
 
 import java.time.LocalDateTime;
 import java.util.List;

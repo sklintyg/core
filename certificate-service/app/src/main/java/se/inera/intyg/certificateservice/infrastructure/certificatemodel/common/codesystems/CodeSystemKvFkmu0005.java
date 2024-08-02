@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems;
 
 import java.util.List;
 import java.util.stream.Stream;

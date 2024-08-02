@@ -1,10 +1,14 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems;
 
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 public class CodeSystemFunktionsnedsattning {
 
   public static final String CODE_SYSTEM = "FUNKTIONSNEDSATTNING";
+
+  private CodeSystemFunktionsnedsattning() {
+    throw new IllegalStateException("Utility class");
+  }
 
   public static final Code INTELLEKTUELL_FUNKTION = new Code(
       "INTELLEKTUELL_FUNKTION",
@@ -58,8 +62,4 @@ public class CodeSystemFunktionsnedsattning {
       CODE_SYSTEM,
       "Annan kroppslig funktion"
   );
-
-  private CodeSystemFunktionsnedsattning() {
-    throw new IllegalStateException("Utility class");
-  }
 }
