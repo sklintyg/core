@@ -71,7 +71,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
         .activeFrom(activeFrom)
         .availableForCitizen(true)
         .recipient(CertificateRecipientFactory.fkassa())
-        .certificateActionSpecifications(FK7210ActionSpecification.create())
+        .certificateActionSpecifications(FK7210CertificateActionSpecification.create())
         .schematronPath(SCHEMATRON_PATH)
         .summaryProvider(new FK7210CertificateSummaryProvider())
         .pdfSpecification(FK7210PdfSpecification.create())

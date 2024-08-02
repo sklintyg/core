@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems;
 
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 

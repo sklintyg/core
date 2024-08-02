@@ -5,7 +5,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 
-public class FK7210ActionSpecification {
+public class FK7210CertificateActionSpecification {
 
   public static List<CertificateActionSpecification> create() {
     return List.of(
