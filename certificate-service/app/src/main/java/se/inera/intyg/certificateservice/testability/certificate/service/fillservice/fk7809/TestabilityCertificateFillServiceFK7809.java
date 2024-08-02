@@ -76,7 +76,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CodeSystemIcd10Se;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemIcd10Se;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO;
 import se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityCertificateFillService;
 
