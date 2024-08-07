@@ -86,7 +86,8 @@ public class PdfTextGenerator {
     );
   }
 
-  public void addMarginText(PDDocument document, String text, int mcid) throws IOException {
+  public void addMarginText(PDDocument document, String text, int mcid, int pageIndex)
+      throws IOException {
     addText(
         document,
         text,
@@ -97,8 +98,8 @@ public class PdfTextGenerator {
         30F,
         false,
         mcid,
-        getLastDiv(document),
-        0
+        getLastDivOfPage(document, pageIndex),
+        pageIndex
     );
   }
 
@@ -115,7 +116,7 @@ public class PdfTextGenerator {
         yPosition,
         true,
         mcid,
-        getDivInQuestionSection(pdDocument, index),
+        getDivInQuestionSection(pdDocument, index, pageIndex),
         pageIndex
     );
   }
@@ -162,7 +163,7 @@ public class PdfTextGenerator {
   private static PDStructureElement createNewDivOnTop(PDDocument pdf) {
     final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
 
-    final var pageTag = getPageTag(structuredTree);
+    final var pageTag = getPageTag(structuredTree, 0);
 
     final var newDiv = new PDStructureElement(StandardStructureTypes.DIV, pageTag);
 
@@ -176,7 +177,7 @@ public class PdfTextGenerator {
   private static PDStructureElement getFirstDiv(PDDocument pdf) {
     final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
 
-    final var pageTag = getPageTag(structuredTree);
+    final var pageTag = getPageTag(structuredTree, 0);
 
     if (pageTag.getKids().isEmpty()) {
       return pageTag;
@@ -185,10 +186,10 @@ public class PdfTextGenerator {
     return (PDStructureElement) pageTag.getKids().get(0);
   }
 
-  private static PDStructureElement getLastDiv(PDDocument pdf) {
+  private static PDStructureElement getLastDivOfPage(PDDocument pdf, int pageIndex) {
     final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
 
-    final var pageTag = getPageTag(structuredTree);
+    final var pageTag = getPageTag(structuredTree, pageIndex);
 
     if (pageTag.getKids().isEmpty()) {
       return pageTag;
@@ -197,10 +198,11 @@ public class PdfTextGenerator {
     return (PDStructureElement) pageTag.getKids().get(pageTag.getKids().size() - 1);
   }
 
-  private static PDStructureElement getDivInQuestionSection(PDDocument pdf, int index) {
+  private static PDStructureElement getDivInQuestionSection(PDDocument pdf, int index,
+      int pageIndex) {
     final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
 
-    final var pageTag = getPageTag(structuredTree);
+    final var pageTag = getPageTag(structuredTree, pageIndex);
 
     if (pageTag.getKids().isEmpty()) {
       return pageTag;
@@ -218,15 +220,15 @@ public class PdfTextGenerator {
     return (PDStructureElement) containerWithMostKids.get().get(index);
   }
 
-  private static PDStructureElement getPageTag(PDStructureTreeRoot structuredTree) {
+  private static PDStructureElement getPageTag(PDStructureTreeRoot structuredTree, int pageIndex) {
     final var documentTag = getFirstChildFromStructuredElement(
         structuredTree.getKids(),
         "Pdf doesnt have expected root element for tags"
     );
 
-    return getFirstChildFromStructuredElement(
+    return getChildFromStructuredElement(
         documentTag.getKids(),
-        "Pdf doesnt have expected section element for tags"
+        pageIndex
     );
   }
 
@@ -237,6 +239,15 @@ public class PdfTextGenerator {
     }
 
     return (PDStructureElement) kids.get(0);
+  }
+
+  private static PDStructureElement getChildFromStructuredElement(List<Object> kids,
+      int index) {
+    if (kids.isEmpty()) {
+      throw new IllegalStateException("Pdf doesnt have expected div/section element");
+    }
+
+    return (PDStructureElement) kids.get(index);
   }
 
   private PDPageContentStream createContentStream(PDDocument document, PDPage currentPage)

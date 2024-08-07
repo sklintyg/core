@@ -101,7 +101,7 @@ class PdfTextGeneratorTest {
 
     @Test
     void shouldAddMarginText() throws IOException {
-      pdfTextGenerator.addMarginText(document, VALUE, 100);
+      pdfTextGenerator.addMarginText(document, VALUE, 100, 0);
 
       final var pdfText = getTextForDocument();
       assertAll(
@@ -118,7 +118,7 @@ class PdfTextGeneratorTest {
       final var lastDiv = getLastDivInTree();
       final var kidsOfLastDivBeforeAddedText = lastDiv.getKids().size();
 
-      pdfTextGenerator.addMarginText(document, VALUE, 100);
+      pdfTextGenerator.addMarginText(document, VALUE, 100, 0);
       final var addedTag = (PDStructureElement) lastDiv.getKids()
           .get(lastDiv.getKids().size() - 1);
 
@@ -255,7 +255,7 @@ class PdfTextGeneratorTest {
 
     @Test
     void shouldAddMarginText() throws IOException {
-      pdfTextGenerator.addMarginText(document, VALUE, 100);
+      pdfTextGenerator.addMarginText(document, VALUE, 100, 0);
 
       final var pdfText = getTextForDocument();
       assertAll(
@@ -272,7 +272,7 @@ class PdfTextGeneratorTest {
       final var lastDiv = getLastDivInTree();
       final var kidsOfLastDivBeforeAddedText = lastDiv.getKids().size();
 
-      pdfTextGenerator.addMarginText(document, VALUE, 100);
+      pdfTextGenerator.addMarginText(document, VALUE, 100, 0);
       final var addedTag = (PDStructureElement) lastDiv.getKids()
           .get(lastDiv.getKids().size() - 1);
 

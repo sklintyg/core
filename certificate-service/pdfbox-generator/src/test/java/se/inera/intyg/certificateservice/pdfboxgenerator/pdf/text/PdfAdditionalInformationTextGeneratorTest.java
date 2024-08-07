@@ -74,11 +74,12 @@ class PdfAdditionalInformationTextGeneratorTest {
   void shouldSetMarginText() throws IOException {
     final var captor = ArgumentCaptor.forClass(String.class);
     pdfAdditionalInformationTextGenerator.addMarginAdditionalInfoText(document, "ID",
-        "Additional info.", 100);
+        "Additional info.", 100, 1);
 
     verify(pdfTextGenerator).addMarginText(
         any(PDDocument.class),
         captor.capture(),
+        anyInt(),
         anyInt()
     );
 

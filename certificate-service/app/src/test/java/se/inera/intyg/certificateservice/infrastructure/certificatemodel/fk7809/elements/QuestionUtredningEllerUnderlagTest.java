@@ -1,9 +1,26 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements;
 
+import static java.util.Map.entry;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.ARBETSTERAPEUT;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.AUDIONOM;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.DIETIST;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.FYSIOTERAPEUT;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.HABILITERING;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.HORSELHABILITERING;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.LOGOPED;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.NEUROPSYKIATRISKT;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.ORTOPEDTEKNIKER;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.ORTOPTIST;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.OVRIGT;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.PSYKOLOG;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SPECIALISTKLINIK;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SYNHABILITERING;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.VARD_UTOMLANDS;
 
 import java.time.Period;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -11,6 +28,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MedicalInvestigationConfig;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationMedicalInvestigation;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationMedicalInvestigationList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005;
@@ -29,21 +49,21 @@ class QuestionUtredningEllerUnderlagTest {
   @Test
   void shallIncludeConfiguration() {
     final var codes = List.of(
-        CodeSystemKvFkmu0005.NEUROPSYKIATRISKT,
-        CodeSystemKvFkmu0005.HABILITERING,
-        CodeSystemKvFkmu0005.ARBETSTERAPEUT,
-        CodeSystemKvFkmu0005.FYSIOTERAPEUT,
-        CodeSystemKvFkmu0005.LOGOPED,
-        CodeSystemKvFkmu0005.PSYKOLOG,
-        CodeSystemKvFkmu0005.SPECIALISTKLINIK,
-        CodeSystemKvFkmu0005.VARD_UTOMLANDS,
-        CodeSystemKvFkmu0005.HORSELHABILITERING,
-        CodeSystemKvFkmu0005.SYNHABILITERING,
-        CodeSystemKvFkmu0005.AUDIONOM,
-        CodeSystemKvFkmu0005.DIETIST,
+        NEUROPSYKIATRISKT,
+        HABILITERING,
+        ARBETSTERAPEUT,
+        FYSIOTERAPEUT,
+        LOGOPED,
+        PSYKOLOG,
+        SPECIALISTKLINIK,
+        VARD_UTOMLANDS,
+        HORSELHABILITERING,
+        SYNHABILITERING,
+        AUDIONOM,
+        DIETIST,
         CodeSystemKvFkmu0005.ORTOPTIST,
         CodeSystemKvFkmu0005.ORTOPEDTEKNIKER,
-        CodeSystemKvFkmu0005.OVRIGT
+        OVRIGT
     );
     final var expectedConfiguration = ElementConfigurationMedicalInvestigationList.builder()
         .name(
@@ -134,6 +154,83 @@ class QuestionUtredningEllerUnderlagTest {
     final var element = QuestionUtredningEllerUnderlag.questionUtredningEllerUnderlag();
 
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Test
+  void shallIncludePdfConfiguration() {
+    final var expectedOptions = Map.ofEntries(
+        entry(NEUROPSYKIATRISKT.code(),
+            "Neuropsykiatriskt utlåtande"),
+        entry(HABILITERING.code(),
+            "Underlag från habiliteringen"),
+        entry(ARBETSTERAPEUT.code(),
+            "Underlag från arbetsterapeut"),
+        entry(FYSIOTERAPEUT.code(),
+            "Underlag från fysioterapeut"),
+        entry(LOGOPED.code(),
+            "Underlag från logoped"),
+        entry(PSYKOLOG.code(),
+            "Underlag från psykolog"),
+        entry(SPECIALISTKLINIK.code(),
+            "Utredning av annan specialistklinik"),
+        entry(VARD_UTOMLANDS.code(),
+            "Utredning från vårdinrättning utomlands"),
+        entry(HORSELHABILITERING.code(),
+            "Underlag från hörselhabiliteringen"),
+        entry(SYNHABILITERING.code(),
+            "Underlag från synhabiliteringen"),
+        entry(AUDIONOM.code(),
+            "Underlag från audionom"),
+        entry(DIETIST.code(),
+            "Underlag från dietist"),
+        entry(ORTOPTIST.code(),
+            "Underlag från ortopist"),
+        entry(ORTOPEDTEKNIKER.code(),
+            "Underlag från ortopedtekniker eller ortopedingenjör"),
+        entry(OVRIGT.code(),
+            "Övrigt")
+    );
+
+    final var expected = PdfConfigurationMedicalInvestigationList.builder()
+        .list(
+            Map.of(
+                new FieldId("medicalInvestigation1"),
+                PdfConfigurationMedicalInvestigation.builder()
+                    .datePdfFieldId(
+                        new PdfFieldId("form1[0].#subform[0].flt_datumUnderlagUtredning[0]"))
+                    .investigationPdfFieldId(
+                        new PdfFieldId("form1[0].#subform[0].lbx_listVardeUtredningUnderlag[0]"))
+                    .sourceTypePdfFieldId(new PdfFieldId(
+                        "form1[0].#subform[0].flt_txtVilkenVardgivare[0]"))
+                    .investigationPdfOptions(expectedOptions)
+                    .build(),
+                new FieldId("medicalInvestigation2"),
+                PdfConfigurationMedicalInvestigation.builder()
+                    .datePdfFieldId(
+                        new PdfFieldId("form1[0].#subform[0].flt_datumUnderlagUtredning2[0]"))
+                    .investigationPdfFieldId(
+                        new PdfFieldId("form1[0].#subform[0].lbx_listVardeUtredningUnderlag2[0]"))
+                    .sourceTypePdfFieldId(new PdfFieldId(
+                        "form1[0].#subform[0].flt_txtVilkenVardgivare2[0]"))
+                    .investigationPdfOptions(expectedOptions)
+                    .build(),
+                new FieldId("medicalInvestigation3"),
+                PdfConfigurationMedicalInvestigation.builder()
+                    .datePdfFieldId(
+                        new PdfFieldId("form1[0].#subform[0].flt_datumUnderlagUtredning3[0]"))
+                    .investigationPdfFieldId(
+                        new PdfFieldId("form1[0].#subform[0].lbx_listVardeUtredningUnderlag3[0]"))
+                    .sourceTypePdfFieldId(new PdfFieldId(
+                        "form1[0].#subform[0].flt_txtVilkenVardgivare3[0]"))
+                    .investigationPdfOptions(expectedOptions)
+                    .build()
+            )
+        )
+        .build();
+
+    final var element = QuestionUtredningEllerUnderlag.questionUtredningEllerUnderlag();
+
+    assertEquals(expected, element.pdfConfiguration());
   }
 
 }

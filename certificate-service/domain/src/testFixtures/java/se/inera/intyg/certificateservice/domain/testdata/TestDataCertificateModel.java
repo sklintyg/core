@@ -24,6 +24,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecification.FK3226_PDF_SPECIFICATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecification.FK7210_PDF_SPECIFICATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecification.FK7472_PDF_SPECIFICATION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecification.FK7809_PDF_SPECIFICATION;
 
 import java.util.Collections;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -101,6 +102,7 @@ public class TestDataCertificateModel {
         .type(FK7809_CODE_TYPE)
         .availableForCitizen(true)
         .schematronPath(FK7809_SCHEMATRON_PATH)
+        .pdfSpecification(FK7809_PDF_SPECIFICATION)
         .recipient(FK_RECIPIENT);
   }
 }

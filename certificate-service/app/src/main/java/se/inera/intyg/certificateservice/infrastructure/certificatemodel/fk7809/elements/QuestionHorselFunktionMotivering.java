@@ -5,6 +5,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 
 public class QuestionHorselFunktionMotivering extends AbstractFunktionsnedsattningMotivering {
 
@@ -12,6 +13,8 @@ public class QuestionHorselFunktionMotivering extends AbstractFunktionsnedsattni
       "48");
   private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_HORSELFUNKTION_FIELD_ID = new FieldId(
       "48.1");
+  private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
+      "form1[0].Sida3[0].flt_txtIntellektuellFunktion[0]");
 
   public static ElementSpecification questionHorselFunktionMotivering() {
     return getFunktionsnedsattningMotivering(
@@ -30,7 +33,8 @@ public class QuestionHorselFunktionMotivering extends AbstractFunktionsnedsattni
             Du kan skicka in
             <ul>
             <li>resultat av hörseltester – tonaudiogram med ben och luftledning</li><li>resultat av maximal taluppfattning med angiven stimuleringsnivå i decibel (dB)</li><li>taluppfattning i ljudfält 65dB med optimalt anpassade hörhjälpmedel</li><li>resultat av eventuella objektiva hörselmätningar</li><li>underlag från andra bedömningar som gäller kommunikation.</li></ul>
-            """
+            """,
+        PDF_FIELD_ID
     );
   }
 }

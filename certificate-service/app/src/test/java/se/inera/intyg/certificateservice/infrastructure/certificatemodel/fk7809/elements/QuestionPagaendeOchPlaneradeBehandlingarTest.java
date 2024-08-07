@@ -9,6 +9,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
@@ -62,5 +64,16 @@ class QuestionPagaendeOchPlaneradeBehandlingarTest {
     final var element = QuestionPagaendeOchPlaneradeBehandlingar.questionPagaendeOchPlaneradeBehandlingar();
 
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Test
+  void shallIncludePdfConfiguration() {
+    final var expected = PdfConfigurationText.builder()
+        .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_txtPlaneradMedicinskBehandling[0]"))
+        .build();
+
+    final var element = QuestionPagaendeOchPlaneradeBehandlingar.questionPagaendeOchPlaneradeBehandlingar();
+
+    assertEquals(expected, element.pdfConfiguration());
   }
 }

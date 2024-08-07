@@ -20,6 +20,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLa
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationHidden;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCodeList;
 
@@ -97,5 +98,15 @@ class QuestionFunktionsnedsattningTest {
     final var element = QuestionFunktionsnedsattning.questionFunktionsnedsattning();
 
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Test
+  void shallIncludePdfConfiguration() {
+    final var expected = PdfConfigurationHidden.builder()
+        .build();
+
+    final var element = QuestionFunktionsnedsattning.questionFunktionsnedsattning();
+
+    assertEquals(expected, element.pdfConfiguration());
   }
 }

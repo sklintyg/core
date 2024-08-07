@@ -82,7 +82,7 @@ public class CertificatePdfFillService {
     setFieldValues(document, pdfElementValueGenerator.generate(certificate));
     setFieldValues(document, pdfUnitValueGenerator.generate(certificate));
     setFieldValues(document, pdfPatientValueGenerator.generate(certificate,
-        certificate.certificateModel().pdfSpecification().patientIdFieldId().id()));
+        certificate.certificateModel().pdfSpecification().patientIdFieldIds()));
   }
 
   private void addTexts(Certificate certificate, String additionalInfoText, PDDocument document,
@@ -100,7 +100,11 @@ public class CertificatePdfFillService {
         isCitizenFormat
     );
     setSentText(document, certificate, mcid);
-    setMarginText(document, certificate, additionalInfoText, mcid);
+
+    final var nbrOfPages = document.getNumberOfPages();
+    for (int i = 0; i < nbrOfPages; i++) {
+      setMarginText(document, certificate, additionalInfoText, mcid, i);
+    }
   }
 
   private void setFieldValues(PDDocument document, List<PdfField> fields) {
@@ -132,14 +136,15 @@ public class CertificatePdfFillService {
   }
 
   private void setMarginText(PDDocument document, Certificate certificate,
-      String additionalInfoText, AtomicInteger mcid)
+      String additionalInfoText, AtomicInteger mcid, int pageIndex)
       throws IOException {
     if (certificate.status() == Status.SIGNED) {
       pdfAdditionalInformationTextGenerator.addMarginAdditionalInfoText(
           document,
           certificate.id().id(),
           additionalInfoText,
-          mcid.getAndIncrement()
+          mcid.getAndIncrement(),
+          pageIndex
       );
     }
   }

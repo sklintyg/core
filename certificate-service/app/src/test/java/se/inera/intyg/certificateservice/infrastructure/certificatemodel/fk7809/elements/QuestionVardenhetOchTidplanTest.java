@@ -11,6 +11,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
@@ -84,5 +86,16 @@ class QuestionVardenhetOchTidplanTest {
     final var expectedMapping = new ElementMapping(new ElementId("50"), null);
     final var element = QuestionVardenhetOchTidplan.questionVardenhetOchTidplan();
     assertEquals(expectedMapping, element.mapping());
+  }
+
+  @Test
+  void shallIncludePdfConfiguration() {
+    final var expected = PdfConfigurationText.builder()
+        .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_txtVardenhetTidplan[0]"))
+        .build();
+
+    final var element = QuestionVardenhetOchTidplan.questionVardenhetOchTidplan();
+
+    assertEquals(expected, element.pdfConfiguration());
   }
 }

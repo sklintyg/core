@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionGrundForMedicinsktUnderlag.QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID;
@@ -10,6 +10,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0001;
@@ -20,6 +22,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
       "1.3");
   private static final FieldId QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_FIELD_ID = new FieldId(
       "1.3");
+  public static final String PDF_FIELD_ID = "form1[0].#subform[0].flt_txtAnhorig[0]";
 
   public static ElementSpecification questionAnnanGrundForMedicinsktUnderlag() {
     return ElementSpecification.builder()
@@ -67,6 +70,11 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
                 .anyMatch(value -> value.dateList().stream().anyMatch(
                     valueDate -> valueDate.dateId().equals(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID))
                 )
+        )
+        .pdfConfiguration(
+            PdfConfigurationText.builder()
+                .pdfFieldId(new PdfFieldId(PDF_FIELD_ID))
+                .build()
         )
         .build();
   }

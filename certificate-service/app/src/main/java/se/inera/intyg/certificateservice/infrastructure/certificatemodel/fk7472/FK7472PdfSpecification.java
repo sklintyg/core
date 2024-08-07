@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472;
 
+import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfMcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
@@ -35,7 +36,7 @@ public class FK7472PdfSpecification {
     return PdfSpecification.builder()
         .pdfTemplatePath(PDF_FK_7472_PDF)
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7472_PDF)
-        .patientIdFieldId(PDF_PATIENT_ID_FIELD_ID)
+        .patientIdFieldIds(List.of(PDF_PATIENT_ID_FIELD_ID))
         .signature(PdfSignature.builder()
             .signaturePageIndex(PDF_SIGNATURE_PAGE_INDEX)
             .signatureWithAddressTagIndex(PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)

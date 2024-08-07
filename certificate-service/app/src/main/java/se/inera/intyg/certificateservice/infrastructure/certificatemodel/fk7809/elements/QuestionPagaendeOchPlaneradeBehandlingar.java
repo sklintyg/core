@@ -5,6 +5,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
@@ -14,6 +16,8 @@ public class QuestionPagaendeOchPlaneradeBehandlingar {
       "50");
   public static final FieldId QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_FIELD_ID = new FieldId(
       "50.1");
+  private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
+      "form1[0].Sida3[0].flt_txtPlaneradMedicinskBehandling[0]");
 
   public static ElementSpecification questionPagaendeOchPlaneradeBehandlingar(
       ElementSpecification... children) {
@@ -40,6 +44,11 @@ public class QuestionPagaendeOchPlaneradeBehandlingar {
                     .limit(4000)
                     .build()
             )
+        )
+        .pdfConfiguration(
+            PdfConfigurationText.builder()
+                .pdfFieldId(PDF_FIELD_ID)
+                .build()
         )
         .children(List.of(children))
         .build();
