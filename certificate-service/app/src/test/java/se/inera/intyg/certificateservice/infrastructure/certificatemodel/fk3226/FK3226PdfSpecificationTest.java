@@ -31,7 +31,7 @@ class FK3226PdfSpecificationTest {
   void shallIncludePatientFieldId() {
     final var expected = List.of(
         new PdfFieldId("form1[0].#subform[0].flt_txtPnr[0]"),
-        new PdfFieldId("form1[0].#subform[1].flt_datUnderskrift[0]")
+        new PdfFieldId("form1[0].#subform[1].flt_txtPnr[1]")
     );
 
     final var certificateModel = FK3226PdfSpecification.create();
@@ -43,8 +43,8 @@ class FK3226PdfSpecificationTest {
   void shallIncludeSignatureFields() {
     final var expected = PdfSignature.builder()
         .signaturePageIndex(1)
-        .signatureWithAddressTagIndex(new PdfTagIndex(50))
-        .signatureWithoutAddressTagIndex(new PdfTagIndex(42))
+        .signatureWithAddressTagIndex(new PdfTagIndex(35))
+        .signatureWithoutAddressTagIndex(new PdfTagIndex(35))
         .signedDateFieldId(new PdfFieldId("form1[0].#subform[1].flt_datUnderskrift[0]"))
         .signedByNameFieldId(new PdfFieldId("form1[0].#subform[1].flt_txtNamnfortydligande[0]"))
         .paTitleFieldId(new PdfFieldId("form1[0].#subform[1].flt_txtBefattning[0]"))

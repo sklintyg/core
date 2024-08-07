@@ -13,8 +13,8 @@ public class FK3226PdfSpecification {
   public static final String PDF_NO_ADDRESS_FK_3226_PDF = "fk3226/pdf/fk3226_v1_no_address.pdf";
   public static final PdfMcid PDF_MCID = new PdfMcid(100);
   private static final int PDF_SIGNATURE_PAGE_INDEX = 1;
-  private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(50);
-  private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(42);
+  private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(35);
+  private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(35);
   private static final PdfFieldId PDF_PATIENT_ID_FIELD_ID_1 = new PdfFieldId(
       "form1[0].#subform[0].flt_txtPnr[0]");
   private static final PdfFieldId PDF_PATIENT_ID_FIELD_ID_2 = new PdfFieldId(
