@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210;
 
+import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfMcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
@@ -36,7 +37,7 @@ public class FK7210PdfSpecification {
     return PdfSpecification.builder()
         .pdfTemplatePath(PDF_FK_7210_PDF)
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7210_PDF)
-        .patientIdFieldId(PDF_PATIENT_ID_FIELD_ID)
+        .patientIdFieldIds(List.of(PDF_PATIENT_ID_FIELD_ID))
         .signature(PdfSignature.builder()
             .signatureWithAddressTagIndex(PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
             .signatureWithoutAddressTagIndex(PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)

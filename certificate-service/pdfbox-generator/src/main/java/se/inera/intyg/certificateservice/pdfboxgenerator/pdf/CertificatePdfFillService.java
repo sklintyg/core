@@ -82,7 +82,7 @@ public class CertificatePdfFillService {
     setFieldValues(document, pdfElementValueGenerator.generate(certificate));
     setFieldValues(document, pdfUnitValueGenerator.generate(certificate));
     setFieldValues(document, pdfPatientValueGenerator.generate(certificate,
-        certificate.certificateModel().pdfSpecification().patientIdFieldId().id()));
+        certificate.certificateModel().pdfSpecification().patientIdFieldIds()));
   }
 
   private void addTexts(Certificate certificate, String additionalInfoText, PDDocument document,

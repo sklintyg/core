@@ -35,6 +35,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAdditionalInformationTextGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfElementValueGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfPatientValueGenerator;
@@ -93,7 +94,8 @@ class CertificatePdfFillServiceTest {
 
     @BeforeEach
     void setup() {
-      when(pdfPatientValueGenerator.generate(any(Certificate.class), eq(PATIENT_ID_FIELD_ID)))
+      when(pdfPatientValueGenerator.generate(any(Certificate.class),
+          eq(List.of(new PdfFieldId(PATIENT_ID_FIELD_ID)))))
           .thenReturn(List.of(PATIENT_FIELD));
 
       when(pdfUnitValueGenerator.generate(any(Certificate.class)))

@@ -9,12 +9,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 @ExtendWith(MockitoExtension.class)
 class PdfPatientValueGeneratorTest {
 
   private static final String FIELD_ID = "FIELD_ID";
+  private static final String FIELD_ID_2 = "FIELD_ID_2";
 
   @InjectMocks
   PdfPatientValueGenerator patientInformationHelper;
@@ -30,7 +32,29 @@ class PdfPatientValueGeneratorTest {
         .build()
     );
 
-    final var result = patientInformationHelper.generate(certificate, FIELD_ID);
+    final var result = patientInformationHelper.generate(certificate,
+        List.of(new PdfFieldId(FIELD_ID)));
+
+    assertEquals(expected, result);
+  }
+
+  @Test
+  void shouldSetPatientIdToFieldForSeveralFields() {
+    final var certificate = buildCertificate();
+
+    final var expected = List.of(
+        PdfField.builder()
+            .id(FIELD_ID)
+            .value(certificate.certificateMetaData().patient().id().id())
+            .build(),
+        PdfField.builder()
+            .id(FIELD_ID_2)
+            .value(certificate.certificateMetaData().patient().id().id())
+            .build()
+    );
+
+    final var result = patientInformationHelper.generate(certificate,
+        List.of(new PdfFieldId(FIELD_ID), new PdfFieldId(FIELD_ID_2)));
 
     assertEquals(expected, result);
   }

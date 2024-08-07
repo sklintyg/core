@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 
@@ -13,7 +14,7 @@ public class PdfSpecification {
   PdfMcid pdfMcid;
   PdfTagIndex signatureWithAddressTagIndex;
   PdfTagIndex signatureWithoutAddressTagIndex;
-  PdfFieldId patientIdFieldId;
+  List<PdfFieldId> patientIdFieldIds;
   PdfFieldId overflowSheetFieldId;
   PdfSignature signature;
 }

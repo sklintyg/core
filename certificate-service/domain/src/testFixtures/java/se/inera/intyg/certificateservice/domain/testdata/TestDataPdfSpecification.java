@@ -57,6 +57,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpeci
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK_7210_PDF_PDF_MCID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK_7472_PDF_PDF_MCID;
 
+import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
 
@@ -83,7 +84,7 @@ public class TestDataPdfSpecification {
             .build())
         .pdfTemplatePath(FK7210_PDF_PATH)
         .pdfNoAddressTemplatePath(FK7210_PDF_PATH_NO_ADDRESS)
-        .patientIdFieldId(FK7210_PDF_PATIENT_ID_FIELD_ID)
+        .patientIdFieldIds(List.of(FK7210_PDF_PATIENT_ID_FIELD_ID))
         .pdfMcid(FK_7210_PDF_PDF_MCID)
         .build();
   }
@@ -104,7 +105,7 @@ public class TestDataPdfSpecification {
             .build())
         .pdfTemplatePath(FK3226_PDF_PATH)
         .pdfNoAddressTemplatePath(FK3226_PDF_PATH_NO_ADDRESS)
-        .patientIdFieldId(FK3226_PDF_PATIENT_ID_FIELD_ID)
+        .patientIdFieldIds(List.of(FK3226_PDF_PATIENT_ID_FIELD_ID))
         .pdfMcid(FK_3226_PDF_PDF_MCID)
         .build();
   }
@@ -125,7 +126,7 @@ public class TestDataPdfSpecification {
             .build())
         .pdfTemplatePath(FK7472_PDF_PATH)
         .pdfNoAddressTemplatePath(FK7472_PDF_PATH_NO_ADDRESS)
-        .patientIdFieldId(FK7472_PDF_PATIENT_ID_FIELD_ID)
+        .patientIdFieldIds(List.of(FK7472_PDF_PATIENT_ID_FIELD_ID))
         .pdfMcid(FK_7472_PDF_PDF_MCID)
         .build();
   }
@@ -146,7 +147,7 @@ public class TestDataPdfSpecification {
             .build())
         .pdfTemplatePath(FK7809_PDF_PATH)
         .pdfNoAddressTemplatePath(FK7809_PDF_PATH_NO_ADDRESS)
-        .patientIdFieldId(FK7809_PDF_PATIENT_ID_FIELD_ID)
+        .patientIdFieldIds(List.of(FK7809_PDF_PATIENT_ID_FIELD_ID))
         .pdfMcid(FK7809_PDF_MCID)
         .build();
   }

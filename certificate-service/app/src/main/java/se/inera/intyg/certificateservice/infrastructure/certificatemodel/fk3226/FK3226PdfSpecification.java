@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226;
 
+import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfMcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
@@ -14,8 +15,10 @@ public class FK3226PdfSpecification {
   private static final int PDF_SIGNATURE_PAGE_INDEX = 1;
   private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(50);
   private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(42);
-  private static final PdfFieldId PDF_PATIENT_ID_FIELD_ID = new PdfFieldId(
+  private static final PdfFieldId PDF_PATIENT_ID_FIELD_ID_1 = new PdfFieldId(
       "form1[0].#subform[0].flt_txtPnr[0]");
+  private static final PdfFieldId PDF_PATIENT_ID_FIELD_ID_2 = new PdfFieldId(
+      "form1[0].#subform[1].flt_txtPnr[1]");
   private static final PdfFieldId PDF_SIGNED_DATE_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[1].flt_datUnderskrift[0]");
   private static final PdfFieldId PDF_SIGNED_BY_NAME_FIELD_ID = new PdfFieldId(
@@ -30,12 +33,12 @@ public class FK3226PdfSpecification {
       "form1[0].#subform[1].flt_txtArbetsplatskod[0]");
   private static final PdfFieldId PDF_CONTACT_INFORMATION = new PdfFieldId(
       "form1[0].#subform[1].flt_txtVardgivarensNamnAdressTelefon[0]");
-  
+
   public static PdfSpecification create() {
     return PdfSpecification.builder()
         .pdfTemplatePath(PDF_FK_3226_PDF)
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_3226_PDF)
-        .patientIdFieldId(PDF_PATIENT_ID_FIELD_ID)
+        .patientIdFieldIds(List.of(PDF_PATIENT_ID_FIELD_ID_1, PDF_PATIENT_ID_FIELD_ID_2))
         .pdfMcid(PDF_MCID)
         .signature(PdfSignature.builder()
             .signatureWithAddressTagIndex(PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)

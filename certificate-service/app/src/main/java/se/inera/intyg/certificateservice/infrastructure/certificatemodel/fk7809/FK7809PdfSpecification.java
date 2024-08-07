@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809;
 
+import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfMcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
@@ -14,8 +15,13 @@ public class FK7809PdfSpecification {
   private static final int PDF_SIGNATURE_PAGE_INDEX = 3;
   private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(10);
   private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(10);
-  private static final PdfFieldId PDF_PATIENT_ID_FIELD_ID = new PdfFieldId(
-      "form1[0].#subform[0].flt_txtPersonNr[0]");
+  private static final List<PdfFieldId> PDF_PATIENT_ID_FIELD_IDS = List.of(
+      new PdfFieldId("form1[0].#subform[0].flt_txtPersonNr[0]"),
+      new PdfFieldId("form1[0].Sida2[0].flt_txtPersonNr[0]"),
+      new PdfFieldId("form1[0].Sida3[0].flt_txtPersonNr[0]"),
+      new PdfFieldId("form1[0].Sida4[0].flt_txtPersonNr[0]"),
+      new PdfFieldId("form1[0].#subform[4].flt_txtPersonNr[1]")
+  );
   private static final PdfFieldId PDF_SIGNED_DATE_FIELD_ID = new PdfFieldId(
       "form1[0].Sida4[0].flt_datUnderskrift[0]");
   private static final PdfFieldId PDF_SIGNED_BY_NAME_FIELD_ID = new PdfFieldId(
@@ -37,7 +43,7 @@ public class FK7809PdfSpecification {
     return PdfSpecification.builder()
         .pdfTemplatePath(PDF_FK_7809_PDF)
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7809_PDF)
-        .patientIdFieldId(PDF_PATIENT_ID_FIELD_ID)
+        .patientIdFieldIds(PDF_PATIENT_ID_FIELD_IDS)
         .pdfMcid(PDF_MCID)
         .overflowSheetFieldId(PDF_FIELD_OVERFLOW_SHEET)
         .signature(PdfSignature.builder()

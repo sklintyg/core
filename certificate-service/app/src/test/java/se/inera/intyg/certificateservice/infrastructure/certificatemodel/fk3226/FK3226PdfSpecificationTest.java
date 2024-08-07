@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.FK3226PdfSpecification.PDF_FK_3226_PDF;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.FK3226PdfSpecification.PDF_NO_ADDRESS_FK_3226_PDF;
 
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
@@ -28,11 +29,14 @@ class FK3226PdfSpecificationTest {
 
   @Test
   void shallIncludePatientFieldId() {
-    final var expected = new PdfFieldId("form1[0].#subform[0].flt_txtPnr[0]");
+    final var expected = List.of(
+        new PdfFieldId("form1[0].#subform[0].flt_txtPnr[0]"),
+        new PdfFieldId("form1[0].#subform[1].flt_datUnderskrift[0]")
+    );
 
     final var certificateModel = FK3226PdfSpecification.create();
 
-    assertEquals(expected, certificateModel.patientIdFieldId());
+    assertEquals(expected, certificateModel.patientIdFieldIds());
   }
 
   @Test
