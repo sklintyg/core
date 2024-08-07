@@ -5,6 +5,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
@@ -12,7 +14,9 @@ public class QuestionAktivitetsbegransningar {
 
   public static final ElementId QUESTION_AKTIVITETSBEGRANSNINGAR_ID = new ElementId("17");
   private static final FieldId QUESTION_AKTIVITETSBEGRANSNINGAR_FIELD_ID = new FieldId("17.1");
-  
+  private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
+      "form1[0].Sida3[0].flt_txtFlerradig[0]");
+
   public static ElementSpecification questionAktivitetsbegransningar() {
     return ElementSpecification.builder()
         .id(QUESTION_AKTIVITETSBEGRANSNINGAR_ID)
@@ -37,6 +41,11 @@ public class QuestionAktivitetsbegransningar {
                     .limit(4000)
                     .build()
             )
+        )
+        .pdfConfiguration(
+            PdfConfigurationText.builder()
+                .pdfFieldId(PDF_FIELD_ID)
+                .build()
         )
         .build();
   }

@@ -8,6 +8,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
@@ -17,7 +19,7 @@ public abstract class AbstractFunktionsnedsattningMotivering {
 
   protected static ElementSpecification getFunktionsnedsattningMotivering(ElementId questionId,
       FieldId questionFieldId, FieldId parentFieldId, String name,
-      String label, String description) {
+      String label, String description, PdfFieldId pdfFieldId) {
     return ElementSpecification.builder()
         .id(questionId)
         .configuration(
@@ -58,6 +60,11 @@ public abstract class AbstractFunktionsnedsattningMotivering {
                     .stream()
                     .anyMatch(codeValue -> codeValue.codeId().equals(parentFieldId))
                 )
+        )
+        .pdfConfiguration(
+            PdfConfigurationText.builder()
+                .pdfFieldId(pdfFieldId)
+                .build()
         )
         .build();
   }

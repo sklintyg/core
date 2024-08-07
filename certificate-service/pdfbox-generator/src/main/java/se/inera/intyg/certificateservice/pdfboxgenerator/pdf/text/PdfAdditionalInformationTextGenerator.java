@@ -40,11 +40,12 @@ public class PdfAdditionalInformationTextGenerator {
   }
 
   public void addMarginAdditionalInfoText(PDDocument document, String id,
-      String additionalInfoText, int mcid) throws IOException {
+      String additionalInfoText, int mcid, int pageIndex) throws IOException {
     pdfTextGenerator.addMarginText(
         document,
         "Intygsid: %s. %s".formatted(id, additionalInfoText),
-        mcid
+        mcid,
+        pageIndex
     );
   }
 

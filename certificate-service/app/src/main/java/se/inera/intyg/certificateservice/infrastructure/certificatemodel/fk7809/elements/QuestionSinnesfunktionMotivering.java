@@ -5,6 +5,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 
 public class QuestionSinnesfunktionMotivering extends AbstractFunktionsnedsattningMotivering {
 
@@ -12,6 +13,8 @@ public class QuestionSinnesfunktionMotivering extends AbstractFunktionsnedsattni
       "12");
   private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_SINNESFUNKTION_FIELD_ID = new FieldId(
       "12.1");
+  private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
+      "form1[0].Sida3[0].flt_txtIntellektuellFunktion[2]");
 
   public static ElementSpecification questionSinnesfunktionMotivering() {
     return getFunktionsnedsattningMotivering(
@@ -20,7 +23,8 @@ public class QuestionSinnesfunktionMotivering extends AbstractFunktionsnedsattni
         FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID,
         "Övriga sinnesfunktioner och smärta",
         GENERAL_LABEL_FUNKTIONSNEDSATTNING,
-        "Med övriga sinnesfunktioner menas exempelvis känslighet eller upplevelse av obehag vid ljud, ljus, temperatur, beröring, smak eller lukt. Med smärta menas förnimmelse av en obehaglig känsla som tyder på tänkbar eller faktisk skada i någon del av kroppen. Det innefattar förnimmelser av generell eller lokal smärta i en eller flera kroppsdelar, eller i ett dermatom (hudavsnitt). Det kan till exempel vara huggande, brännande, molande smärta och värk."
+        "Med övriga sinnesfunktioner menas exempelvis känslighet eller upplevelse av obehag vid ljud, ljus, temperatur, beröring, smak eller lukt. Med smärta menas förnimmelse av en obehaglig känsla som tyder på tänkbar eller faktisk skada i någon del av kroppen. Det innefattar förnimmelser av generell eller lokal smärta i en eller flera kroppsdelar, eller i ett dermatom (hudavsnitt). Det kan till exempel vara huggande, brännande, molande smärta och värk.",
+        PDF_FIELD_ID
     );
   }
 }

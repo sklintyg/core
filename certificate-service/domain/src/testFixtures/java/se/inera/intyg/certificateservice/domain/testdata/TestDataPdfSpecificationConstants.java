@@ -2,8 +2,8 @@ package se.inera.intyg.certificateservice.domain.testdata;
 
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfMcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfMcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
 
 public class TestDataPdfSpecificationConstants {
@@ -247,4 +247,30 @@ public class TestDataPdfSpecificationConstants {
       "form1[0].#subform[0].flt_txtDiagnos[0]");
   public static final PdfFieldId FK7472_PDF_PERIOD_FIELD_ID_PREFIX = new PdfFieldId(
       "form1[0].#subform[0]");
+
+  public static final String FK7809_PDF_PATH = "fk7809/pdf/fk7809_v1_no_address.pdf"; //TODO: update when new template has been provided
+  public static final String FK7809_PDF_PATH_NO_ADDRESS = "fk7809/pdf/fk7809_v1_no_address.pdf";
+  public static final PdfMcid FK7809_PDF_MCID = new PdfMcid(200);
+  public static final int FK7809_PDF_SIGNATURE_PAGE_INDEX = 3;
+  public static final PdfTagIndex FK7809_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(10);
+  public static final PdfTagIndex FK7809_PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(
+      10);
+  public static final PdfFieldId FK7809_PDF_PATIENT_ID_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].flt_txtPersonNr[0]");
+  public static final PdfFieldId FK7809_PDF_SIGNED_DATE_FIELD_ID = new PdfFieldId(
+      "form1[0].Sida4[0].flt_datUnderskrift[0]");
+  public static final PdfFieldId FK7809_PDF_SIGNED_BY_NAME_FIELD_ID = new PdfFieldId(
+      "form1[0].Sida4[0].flt_txtNamnfortydligande[0]");
+  public static final PdfFieldId FK7809_PDF_SIGNED_BY_PA_TITLE = new PdfFieldId(
+      "form1[0].Sida4[0].flt_txtBefattning[0]");
+  public static final PdfFieldId FK7809_PDF_SIGNED_BY_SPECIALTY = new PdfFieldId(
+      "form1[0].Sida4[0].flt_txtEventuellSpecialistkompetens[0]");
+  public static final PdfFieldId FK7809_PDF_HSA_ID_FIELD_ID = new PdfFieldId(
+      "form1[0].Sida4[0].flt_txtLakarensHSA-ID[0]");
+  public static final PdfFieldId FK7809_PDF_WORKPLACE_CODE_FIELD_ID = new PdfFieldId(
+      "form1[0].Sida4[0].flt_txtArbetsplatskod[0]");
+  public static final PdfFieldId FK7809_PDF_CONTACT_INFORMATION = new PdfFieldId(
+      "form1[0].Sida4[0].flt_txtVardgivarensNamnAdressTelefon[0]");
+  public static final PdfFieldId FK7809_PDF_FIELD_OVERFLOW_SHEET = new PdfFieldId(
+      "form1[0].#subform[4].flt_txtFortsattningsblad[0]");
 }

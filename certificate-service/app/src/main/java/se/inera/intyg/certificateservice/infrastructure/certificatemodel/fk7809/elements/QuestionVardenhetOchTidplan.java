@@ -10,6 +10,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
@@ -18,6 +20,8 @@ public class QuestionVardenhetOchTidplan {
   public static final ElementId QUESTION_VARDENHET_OCH_TIDPLAN_ID = new ElementId(
       "50.2");
   private static final FieldId QUESTION_VARDENHET_OCH_TIDPLAN_FIELD_ID = new FieldId("50.2");
+  private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
+      "form1[0].Sida3[0].flt_txtVardenhetTidplan[0]");
 
   public static ElementSpecification questionVardenhetOchTidplan() {
     return ElementSpecification.builder()
@@ -53,6 +57,11 @@ public class QuestionVardenhetOchTidplan {
         )
         .mapping(
             new ElementMapping(QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_ID, null)
+        )
+        .pdfConfiguration(
+            PdfConfigurationText.builder()
+                .pdfFieldId(PDF_FIELD_ID)
+                .build()
         )
         .shouldValidate(
             elementData -> elementData.stream()

@@ -12,12 +12,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7472CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7809CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_CONTACT_INFORMATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK7472_PDF_SIGNED_DATE_FIELD_ID;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
@@ -86,311 +88,335 @@ class CertificatePdfFillServiceTest {
 
   private Certificate certificate;
 
-  @BeforeEach
-  void setup() {
-    when(pdfPatientValueGenerator.generate(any(Certificate.class), eq(PATIENT_ID_FIELD_ID)))
-        .thenReturn(List.of(PATIENT_FIELD));
-
-    when(pdfUnitValueGenerator.generate(any(Certificate.class)))
-        .thenReturn(List.of(UNIT_FIELD));
-
-    when(pdfElementValueGenerator.generate(any(Certificate.class)))
-        .thenReturn(List.of(SYMPTOM_FIELD));
-  }
-
   @Nested
-  class NotSignedCertificate {
+  class SinglePagePdf {
 
     @BeforeEach
     void setup() {
-      certificate = getDraft();
+      when(pdfPatientValueGenerator.generate(any(Certificate.class), eq(PATIENT_ID_FIELD_ID)))
+          .thenReturn(List.of(PATIENT_FIELD));
+
+      when(pdfUnitValueGenerator.generate(any(Certificate.class)))
+          .thenReturn(List.of(UNIT_FIELD));
+
+      when(pdfElementValueGenerator.generate(any(Certificate.class)))
+          .thenReturn(List.of(SYMPTOM_FIELD));
     }
 
-    @Test
-    void shouldNotSetMarginText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, false);
+    @Nested
+    class NotSignedCertificate {
 
-      verify(pdfAdditionalInformationTextGenerator, times(0))
-          .addMarginAdditionalInfoText(any(), anyString(), anyString(), anyInt());
+      @BeforeEach
+      void setup() {
+        certificate = getDraft();
+      }
+
+      @Test
+      void shouldNotSetMarginText() throws IOException {
+        certificatePdfFillService.fillDocument(certificate, TEXT, false);
+
+        verify(pdfAdditionalInformationTextGenerator, times(0))
+            .addMarginAdditionalInfoText(any(), anyString(), anyString(), anyInt(), anyInt());
+      }
+
+      @Test
+      void shouldNotSetSignatureText() throws IOException {
+        certificatePdfFillService.fillDocument(certificate, TEXT, false);
+
+        verify(pdfAdditionalInformationTextGenerator, times(0))
+            .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt(), anyInt());
+      }
+
+      @Test
+      void shouldSetDraftWatermark() throws IOException {
+        certificatePdfFillService.fillDocument(certificate, TEXT, false);
+
+        verify(pdfAdditionalInformationTextGenerator, times(1))
+            .addDraftWatermark(any(), anyInt());
+      }
+
+      @Test
+      void shouldNotSetSentText() throws IOException {
+        certificatePdfFillService.fillDocument(certificate, TEXT, false);
+
+        verify(pdfAdditionalInformationTextGenerator, times(0))
+            .addSentText(any(), any(), anyInt());
+      }
+
+      @Test
+      void shouldSetSentVisibilityText() throws IOException {
+        certificatePdfFillService.fillDocument(certificate, TEXT, false);
+
+        verify(pdfAdditionalInformationTextGenerator, times(0))
+            .addSentVisibilityText(any(), anyInt());
+      }
+
+      @Test
+      void shouldNotSetSignedValues() {
+        final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+        final var field = getField(document, SIGNED_DATE_FIELD.getId());
+
+        assertEquals("", field.getValueAsString());
+      }
+
+      @Test
+      void shouldSetPatientValues() {
+        final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+        final var field = getField(document, PATIENT_FIELD.getId());
+
+        assertEquals(PATIENT_FIELD.getValue(), field.getValueAsString());
+      }
+
+      @Test
+      void shouldSetUnitContactInformation() {
+        final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+        final var field = getField(document, UNIT_FIELD.getId());
+
+        assertEquals(UNIT_FIELD.getValue(), field.getValueAsString());
+      }
+
+      @Test
+      void shouldFillPdfWithCertificateTypeSpecificValues() {
+        final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+        final var field = getField(document, SYMPTOM_FIELD.getId());
+
+        assertEquals(SYMPTOM_FIELD.getValue(), field.getValueAsString());
+      }
+
+      @Test
+      void shouldUseAddressTemplate() throws IOException {
+        final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+
+        final var texts = getTextForDocument(document);
+        assertTrue(texts.contains("Skicka blanketten till"));
+      }
     }
 
-    @Test
-    void shouldNotSetSignatureText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, false);
+    @Nested
+    class SignedCertificate {
 
-      verify(pdfAdditionalInformationTextGenerator, times(0))
-          .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt(), anyInt());
+      @BeforeEach
+      void setup() {
+        certificate = getCertificate();
+        when(pdfSignatureValueGenerator.generate(any(Certificate.class)))
+            .thenReturn(List.of(SIGNED_DATE_FIELD));
+      }
+
+      @Test
+      void shouldSetMarginText() throws IOException {
+        final var captor = ArgumentCaptor.forClass(String.class);
+        certificatePdfFillService.fillDocument(certificate, TEXT, false);
+
+        verify(pdfAdditionalInformationTextGenerator, times(1))
+            .addMarginAdditionalInfoText(any(), anyString(), captor.capture(), anyInt(), anyInt());
+
+        assertEquals(TEXT, captor.getValue());
+      }
+
+      @Test
+      void shouldSetSignatureText() throws IOException {
+        certificatePdfFillService.fillDocument(certificate, TEXT, false);
+
+        verify(pdfAdditionalInformationTextGenerator, times(1))
+            .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt(), anyInt());
+      }
+
+      @Test
+      void shouldNotSetDraftWatermark() throws IOException {
+        certificatePdfFillService.fillDocument(certificate, TEXT, false);
+
+        verify(pdfAdditionalInformationTextGenerator, times(0))
+            .addDraftWatermark(any(), anyInt());
+      }
+
+      @Test
+      void shouldNotSetSentText() throws IOException {
+        certificatePdfFillService.fillDocument(certificate, TEXT, false);
+
+        verify(pdfAdditionalInformationTextGenerator, times(0))
+            .addSentText(any(), any(), anyInt());
+      }
+
+      @Test
+      void shouldNotSetSentVisibilityText() throws IOException {
+        certificatePdfFillService.fillDocument(certificate, TEXT, false);
+
+        verify(pdfAdditionalInformationTextGenerator, times(0))
+            .addSentVisibilityText(any(), anyInt());
+      }
+
+      @Test
+      void shouldSetSignedValues() {
+        final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+        final var field = getField(document, SIGNED_DATE_FIELD.getId());
+
+        assertEquals(SIGNED_DATE_FIELD.getValue(), field.getValueAsString());
+      }
+
+      @Test
+      void shouldSetPatientValues() {
+        final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+        final var field = getField(document, PATIENT_FIELD.getId());
+
+        assertEquals(PATIENT_FIELD.getValue(), field.getValueAsString());
+      }
+
+      @Test
+      void shouldSetUnitContactInformation() {
+        final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+        final var field = getField(document, UNIT_FIELD.getId());
+
+        assertEquals(UNIT_FIELD.getValue(), field.getValueAsString());
+      }
+
+      @Test
+      void shouldFillPdfWithCertificateTypeSpecificValues() {
+        final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+        final var field = getField(document, SYMPTOM_FIELD.getId());
+
+        assertEquals(SYMPTOM_FIELD.getValue(), field.getValueAsString());
+      }
+
+      @Test
+      void shouldUseAddressTemplate() throws IOException {
+        final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+
+        final var texts = getTextForDocument(document);
+        assertTrue(texts.contains("Skicka blanketten till"));
+      }
+
+      @Test
+      void shouldUseNoAddressTemplateIfCitizenFormat() throws IOException {
+        final var document = certificatePdfFillService.fillDocument(certificate, TEXT, true);
+
+        final var texts = getTextForDocument(document);
+        assertFalse(texts.contains("Skicka blanketten till"));
+      }
     }
 
-    @Test
-    void shouldSetDraftWatermark() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, false);
+    @Nested
+    class SentCertificate {
 
-      verify(pdfAdditionalInformationTextGenerator, times(1))
-          .addDraftWatermark(any(), anyInt());
-    }
+      @BeforeEach
+      void setup() {
+        certificate = getSentCertificate();
+        when(pdfSignatureValueGenerator.generate(any(Certificate.class)))
+            .thenReturn(List.of(SIGNED_DATE_FIELD));
+      }
 
-    @Test
-    void shouldNotSetSentText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, false);
+      @Test
+      void shouldSetMarginText() throws IOException {
+        final var captor = ArgumentCaptor.forClass(String.class);
+        certificatePdfFillService.fillDocument(certificate, TEXT, false);
 
-      verify(pdfAdditionalInformationTextGenerator, times(0))
-          .addSentText(any(), any(), anyInt());
-    }
+        verify(pdfAdditionalInformationTextGenerator, times(1))
+            .addMarginAdditionalInfoText(any(), anyString(), captor.capture(), anyInt(), anyInt());
 
-    @Test
-    void shouldSetSentVisibilityText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, false);
+        assertEquals(TEXT, captor.getValue());
+      }
 
-      verify(pdfAdditionalInformationTextGenerator, times(0))
-          .addSentVisibilityText(any(), anyInt());
-    }
+      @Test
+      void shouldSetSignatureText() throws IOException {
+        certificatePdfFillService.fillDocument(certificate, TEXT, false);
 
-    @Test
-    void shouldNotSetSignedValues() {
-      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
-      final var field = getField(document, SIGNED_DATE_FIELD.getId());
+        verify(pdfAdditionalInformationTextGenerator, times(1))
+            .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt(), anyInt());
+      }
 
-      assertEquals("", field.getValueAsString());
-    }
+      @Test
+      void shouldNotSetDraftWatermark() throws IOException {
+        certificatePdfFillService.fillDocument(certificate, TEXT, false);
 
-    @Test
-    void shouldSetPatientValues() {
-      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
-      final var field = getField(document, PATIENT_FIELD.getId());
+        verify(pdfAdditionalInformationTextGenerator, times(0))
+            .addDraftWatermark(any(), anyInt());
+      }
 
-      assertEquals(PATIENT_FIELD.getValue(), field.getValueAsString());
-    }
+      @Test
+      void shouldSetSentText() throws IOException {
+        certificatePdfFillService.fillDocument(certificate, TEXT, false);
 
-    @Test
-    void shouldSetUnitContactInformation() {
-      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
-      final var field = getField(document, UNIT_FIELD.getId());
+        verify(pdfAdditionalInformationTextGenerator, times(1))
+            .addSentText(any(), any(), anyInt());
+      }
 
-      assertEquals(UNIT_FIELD.getValue(), field.getValueAsString());
-    }
+      @Test
+      void shouldNotSetSentVisibilityTextIfNotAvailableForCitizen() throws IOException {
+        certificatePdfFillService.fillDocument(certificate, TEXT, false);
 
-    @Test
-    void shouldFillPdfWithCertificateTypeSpecificValues() {
-      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
-      final var field = getField(document, SYMPTOM_FIELD.getId());
+        verify(pdfAdditionalInformationTextGenerator, times(0))
+            .addSentVisibilityText(any(), anyInt());
+      }
 
-      assertEquals(SYMPTOM_FIELD.getValue(), field.getValueAsString());
-    }
+      @Test
+      void shouldSetSentVisibilityTextIfAvailableForCitizen() throws IOException {
+        certificatePdfFillService.fillDocument(certificate, TEXT, false);
 
-    @Test
-    void shouldUseAddressTemplate() throws IOException {
-      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+        verify(pdfAdditionalInformationTextGenerator, times(0))
+            .addSentVisibilityText(any(), anyInt());
+      }
 
-      final var texts = getTextForDocument(document);
-      assertTrue(texts.contains("Skicka blanketten till"));
+      @Test
+      void shouldSetSignedValues() {
+        final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+        final var field = getField(document, SIGNED_DATE_FIELD.getId());
+
+        assertEquals(SIGNED_DATE_FIELD.getValue(), field.getValueAsString());
+      }
+
+      @Test
+      void shouldSetPatientValues() {
+        final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+        final var field = getField(document, PATIENT_FIELD.getId());
+
+        assertEquals(PATIENT_FIELD.getValue(), field.getValueAsString());
+      }
+
+      @Test
+      void shouldSetUnitContactInformation() {
+        final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+        final var field = getField(document, UNIT_FIELD.getId());
+
+        assertEquals(UNIT_FIELD.getValue(), field.getValueAsString());
+      }
+
+      @Test
+      void shouldFillPdfWithCertificateTypeSpecificValues() {
+        final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+        final var field = getField(document, SYMPTOM_FIELD.getId());
+
+        assertEquals(SYMPTOM_FIELD.getValue(), field.getValueAsString());
+      }
+
+      @Test
+      void shouldUseNoAddressTemplate() throws IOException {
+        final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+
+        final var texts = getTextForDocument(document);
+        assertFalse(texts.contains("Skicka blanketten till"));
+      }
     }
   }
 
-
   @Nested
-  class SignedCertificate {
+  class MultiplePagesPdf {
 
     @BeforeEach
     void setup() {
-      certificate = getCertificate();
+      certificate = getCertificateWithSeveralPages();
       when(pdfSignatureValueGenerator.generate(any(Certificate.class)))
-          .thenReturn(List.of(SIGNED_DATE_FIELD));
+          .thenReturn(Collections.emptyList());
     }
 
     @Test
-    void shouldSetMarginText() throws IOException {
+    void shouldSetMarginTextOnEachPage() throws IOException {
       final var captor = ArgumentCaptor.forClass(String.class);
       certificatePdfFillService.fillDocument(certificate, TEXT, false);
 
-      verify(pdfAdditionalInformationTextGenerator, times(1))
-          .addMarginAdditionalInfoText(any(), anyString(), captor.capture(), anyInt());
+      verify(pdfAdditionalInformationTextGenerator, times(5))
+          .addMarginAdditionalInfoText(any(), anyString(), captor.capture(), anyInt(), anyInt());
 
       assertEquals(TEXT, captor.getValue());
     }
-
-    @Test
-    void shouldSetSignatureText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, false);
-
-      verify(pdfAdditionalInformationTextGenerator, times(1))
-          .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt(), anyInt());
-    }
-
-    @Test
-    void shouldNotSetDraftWatermark() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, false);
-
-      verify(pdfAdditionalInformationTextGenerator, times(0))
-          .addDraftWatermark(any(), anyInt());
-    }
-
-    @Test
-    void shouldNotSetSentText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, false);
-
-      verify(pdfAdditionalInformationTextGenerator, times(0))
-          .addSentText(any(), any(), anyInt());
-    }
-
-    @Test
-    void shouldNotSetSentVisibilityText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, false);
-
-      verify(pdfAdditionalInformationTextGenerator, times(0))
-          .addSentVisibilityText(any(), anyInt());
-    }
-
-    @Test
-    void shouldSetSignedValues() {
-      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
-      final var field = getField(document, SIGNED_DATE_FIELD.getId());
-
-      assertEquals(SIGNED_DATE_FIELD.getValue(), field.getValueAsString());
-    }
-
-    @Test
-    void shouldSetPatientValues() {
-      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
-      final var field = getField(document, PATIENT_FIELD.getId());
-
-      assertEquals(PATIENT_FIELD.getValue(), field.getValueAsString());
-    }
-
-    @Test
-    void shouldSetUnitContactInformation() {
-      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
-      final var field = getField(document, UNIT_FIELD.getId());
-
-      assertEquals(UNIT_FIELD.getValue(), field.getValueAsString());
-    }
-
-    @Test
-    void shouldFillPdfWithCertificateTypeSpecificValues() {
-      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
-      final var field = getField(document, SYMPTOM_FIELD.getId());
-
-      assertEquals(SYMPTOM_FIELD.getValue(), field.getValueAsString());
-    }
-
-    @Test
-    void shouldUseAddressTemplate() throws IOException {
-      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
-
-      final var texts = getTextForDocument(document);
-      assertTrue(texts.contains("Skicka blanketten till"));
-    }
-
-    @Test
-    void shouldUseNoAddressTemplateIfCitizenFormat() throws IOException {
-      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, true);
-
-      final var texts = getTextForDocument(document);
-      assertFalse(texts.contains("Skicka blanketten till"));
-    }
-  }
-
-  @Nested
-  class SentCertificate {
-
-    @BeforeEach
-    void setup() {
-      certificate = getSentCertificate();
-      when(pdfSignatureValueGenerator.generate(any(Certificate.class)))
-          .thenReturn(List.of(SIGNED_DATE_FIELD));
-    }
-
-    @Test
-    void shouldSetMarginText() throws IOException {
-      final var captor = ArgumentCaptor.forClass(String.class);
-      certificatePdfFillService.fillDocument(certificate, TEXT, false);
-
-      verify(pdfAdditionalInformationTextGenerator, times(1))
-          .addMarginAdditionalInfoText(any(), anyString(), captor.capture(), anyInt());
-
-      assertEquals(TEXT, captor.getValue());
-    }
-
-    @Test
-    void shouldSetSignatureText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, false);
-
-      verify(pdfAdditionalInformationTextGenerator, times(1))
-          .addDigitalSignatureText(any(), anyFloat(), anyFloat(), anyInt(), anyInt(), anyInt());
-    }
-
-    @Test
-    void shouldNotSetDraftWatermark() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, false);
-
-      verify(pdfAdditionalInformationTextGenerator, times(0))
-          .addDraftWatermark(any(), anyInt());
-    }
-
-    @Test
-    void shouldSetSentText() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, false);
-
-      verify(pdfAdditionalInformationTextGenerator, times(1))
-          .addSentText(any(), any(), anyInt());
-    }
-
-    @Test
-    void shouldNotSetSentVisibilityTextIfNotAvailableForCitizen() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, false);
-
-      verify(pdfAdditionalInformationTextGenerator, times(0))
-          .addSentVisibilityText(any(), anyInt());
-    }
-
-    @Test
-    void shouldSetSentVisibilityTextIfAvailableForCitizen() throws IOException {
-      certificatePdfFillService.fillDocument(certificate, TEXT, false);
-
-      verify(pdfAdditionalInformationTextGenerator, times(0))
-          .addSentVisibilityText(any(), anyInt());
-    }
-
-    @Test
-    void shouldSetSignedValues() {
-      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
-      final var field = getField(document, SIGNED_DATE_FIELD.getId());
-
-      assertEquals(SIGNED_DATE_FIELD.getValue(), field.getValueAsString());
-    }
-
-    @Test
-    void shouldSetPatientValues() {
-      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
-      final var field = getField(document, PATIENT_FIELD.getId());
-
-      assertEquals(PATIENT_FIELD.getValue(), field.getValueAsString());
-    }
-
-    @Test
-    void shouldSetUnitContactInformation() {
-      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
-      final var field = getField(document, UNIT_FIELD.getId());
-
-      assertEquals(UNIT_FIELD.getValue(), field.getValueAsString());
-    }
-
-    @Test
-    void shouldFillPdfWithCertificateTypeSpecificValues() {
-      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
-      final var field = getField(document, SYMPTOM_FIELD.getId());
-
-      assertEquals(SYMPTOM_FIELD.getValue(), field.getValueAsString());
-    }
-
-    @Test
-    void shouldUseNoAddressTemplate() throws IOException {
-      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
-
-      final var texts = getTextForDocument(document);
-      assertFalse(texts.contains("Skicka blanketten till"));
-    }
-
   }
 
   private static Certificate getSentCertificate() {
@@ -407,6 +433,14 @@ class CertificatePdfFillServiceTest {
 
   private static Certificate getCertificate() {
     return fk7472CertificateBuilder()
+        .signed(LocalDateTime.now())
+        .status(Status.SIGNED)
+        .sent(null)
+        .build();
+  }
+
+  private static Certificate getCertificateWithSeveralPages() {
+    return fk7809CertificateBuilder()
         .signed(LocalDateTime.now())
         .status(Status.SIGNED)
         .sent(null)

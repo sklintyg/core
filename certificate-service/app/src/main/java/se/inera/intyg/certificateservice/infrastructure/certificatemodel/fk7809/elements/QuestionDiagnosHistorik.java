@@ -5,6 +5,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
@@ -12,7 +14,9 @@ public class QuestionDiagnosHistorik {
 
   public static final ElementId DIAGNOSIS_MOTIVATION_ID = new ElementId("5");
   public static final FieldId DIAGNOSIS_MOTIVATION_FIELD_ID = new FieldId("5.1");
-  
+  public static final PdfFieldId DIAGNOSIS_MOTIVATION_PDF_FIELD_ID = new PdfFieldId(
+      "form1[0].Sida2[0].flt_txtBeskrivRelevantHistorikDiagnos[0]");
+
   public static ElementSpecification questionDiagnosHistorik() {
     return ElementSpecification.builder()
         .id(DIAGNOSIS_MOTIVATION_ID)
@@ -41,6 +45,11 @@ public class QuestionDiagnosHistorik {
                     .limit(4000)
                     .build()
             )
+        )
+        .pdfConfiguration(
+            PdfConfigurationText.builder()
+                .pdfFieldId(DIAGNOSIS_MOTIVATION_PDF_FIELD_ID)
+                .build()
         )
         .build();
   }

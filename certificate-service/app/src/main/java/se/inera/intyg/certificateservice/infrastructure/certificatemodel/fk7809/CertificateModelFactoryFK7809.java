@@ -1,8 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.elements.QuestionDiagnos.questionDiagnos;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.CategoryAktivitetsbegransningar.categoryAktivitetsbegransningar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.CategoryDiagnos.categoryDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.CategoryFunktionsnedsattning.categoryFunktionsnedsattning;
@@ -11,8 +9,10 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.CategoryOvrigt.categoryOvrigt;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.CategoryPrognos.categoryPrognos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionAktivitetsbegransningar.questionAktivitetsbegransningar;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionAnnanKroppsligFunktionMotivering.questionAnnanKroppsligFunktionMotivering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionBaseratPaAnnatMedicinsktUnderlag.questionBaseratPaAnnatMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionDiagnos.questionDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionDiagnosHistorik.questionDiagnosHistorik;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionFunktionsnedsattning.questionFunktionsnedsattning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
@@ -203,6 +203,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                 issuingUnitContactInfo()
             )
         )
+        .pdfSpecification(FK7809PdfSpecification.create())
         .build();
   }
 }

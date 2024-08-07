@@ -60,6 +60,13 @@ class CertificateModelFactoryFK7809Test {
   }
 
   @Test
+  void shallIncludePdfSpecifications() {
+    final var certificateModel = certificateModelFactoryFK7809.create();
+
+    assertNotNull(certificateModel.pdfSpecification());
+  }
+
+  @Test
   void shallIncludeName() {
     final var expectedName = "Läkarutlåtande för merkostnadsersättning";
 
