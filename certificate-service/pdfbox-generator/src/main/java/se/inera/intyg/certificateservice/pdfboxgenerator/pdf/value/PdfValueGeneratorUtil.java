@@ -38,7 +38,7 @@ public class PdfValueGeneratorUtil {
     }
     return List.of(
         firstPart + " " + informationText,
-        SMALL_OVERFLOW_MESSAGE + " " + secondPart
+        SMALL_OVERFLOW_MESSAGE + " " + secondPart + "\n"
     );
   }
 
