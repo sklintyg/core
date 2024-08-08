@@ -17,10 +17,10 @@ class PdfTextValueGeneratorTest {
 
   private static final String FIELD_ID = "form1[0].#subform[0].flt_txtDiagnos[0]";
   private static final String VALUE = "Diagnos är okänd men symtomen är hosta.";
-  private static final String START_VALUE = "Diagno...";
-  private static final String END_VALUE = "...s är okänd men symtomen är hosta.\n";
-  private static final String LARGE_START_VALUE = "Diag... Se fortsättningsblad!";
-  private static final String LARGE_END_VALUE = "...nos är okänd men symtomen är hosta.\n";
+  private static final String START_VALUE = "Diagnos ...";
+  private static final String END_VALUE = "... är okänd men symtomen är hosta.";
+  private static final String LARGE_START_VALUE = "Diagnos är ... Se fortsättningsblad!";
+  private static final String LARGE_END_VALUE = "... okänd men symtomen är hosta.";
 
   private static final PdfTextValueGenerator pdfTextValueGenerator = new PdfTextValueGenerator();
   private static final PdfFieldId OVERFLOW_SHEET_ID = new PdfFieldId("OVERFLOW_ID");
@@ -144,7 +144,7 @@ class PdfTextValueGeneratorTest {
         .pdfConfiguration(
             PdfConfigurationText.builder()
                 .pdfFieldId(new PdfFieldId(FIELD_ID))
-                .maxLength(10)
+                .maxLength(12)
                 .overflowSheetFieldId(OVERFLOW_SHEET_ID)
                 .build()
         )
@@ -187,7 +187,7 @@ class PdfTextValueGeneratorTest {
         .pdfConfiguration(
             PdfConfigurationText.builder()
                 .pdfFieldId(new PdfFieldId(FIELD_ID))
-                .maxLength(30)
+                .maxLength(35)
                 .overflowSheetFieldId(OVERFLOW_SHEET_ID)
                 .build()
         )

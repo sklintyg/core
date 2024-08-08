@@ -15,8 +15,6 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 @Component
 public class PdfDiagnosisListValueGenerator implements PdfElementValue<ElementValueDiagnosisList> {
 
-  private static final String OVERFLOW_MESSAGE = "... Se fortsättningsblad!";
-
   @Override
   public Class<ElementValueDiagnosisList> getType() {
     return ElementValueDiagnosisList.class;
@@ -69,12 +67,12 @@ public class PdfDiagnosisListValueGenerator implements PdfElementValue<ElementVa
       ElementValueDiagnosis diagnosis, String pdfFieldId) {
     if (pdfConfiguration.maxLength() != null && isDiagnosisDescriptionOverflowing(pdfConfiguration,
         diagnosis)) {
-      final var firstBreakpoint = pdfConfiguration.maxLength() - OVERFLOW_MESSAGE.length() - 1;
-
+      final var splitText = PdfValueGeneratorUtil.splitByLimit(pdfConfiguration.maxLength(),
+          diagnosis.description());
       return List.of(
           PdfField.builder()
               .id(pdfFieldId)
-              .value(diagnosis.description().substring(0, firstBreakpoint) + OVERFLOW_MESSAGE)
+              .value(splitText.get(0))
               .build(),
           PdfField.builder()
               .id(pdfConfiguration.overflowSheetFieldId().id())
@@ -83,7 +81,7 @@ public class PdfDiagnosisListValueGenerator implements PdfElementValue<ElementVa
               .build(),
           PdfField.builder()
               .id(pdfConfiguration.overflowSheetFieldId().id())
-              .value("..." + diagnosis.description().substring(firstBreakpoint) + "\n")
+              .value(splitText.get(1))
               .append(true)
               .build()
       );

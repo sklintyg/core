@@ -1,0 +1,45 @@
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
+
+import java.util.List;
+
+public class PdfValueGeneratorUtil {
+
+  private static final String OVERFLOW_MESSAGE = "... Se fortsättningsblad!";
+  private static final String SMALL_OVERFLOW_MESSAGE = "...";
+
+  private PdfValueGeneratorUtil() {
+    throw new IllegalStateException("Utility class");
+  }
+
+  public static List<String> splitByLimit(Integer limit, String s) {
+    final var informationText =
+        limit <= OVERFLOW_MESSAGE.length() ? SMALL_OVERFLOW_MESSAGE : OVERFLOW_MESSAGE;
+    final var updatedLimit = limit - informationText.length();
+    final var noLineBreak = s.replace("\n", "");
+    final var words = noLineBreak.split(" ");
+
+    final var firstPart = new StringBuilder();
+    final var secondPart = new StringBuilder();
+    boolean limitReached = false;
+
+    for (String word : words) {
+      if (!limitReached && firstPart.length() + word.length() + 1 <= updatedLimit) {
+        if (!firstPart.isEmpty()) {
+          firstPart.append(" ");
+        }
+        firstPart.append(word);
+      } else {
+        if (!secondPart.isEmpty()) {
+          secondPart.append(" ");
+        }
+        secondPart.append(word);
+        limitReached = true;
+      }
+    }
+    return List.of(
+        firstPart + " " + informationText,
+        SMALL_OVERFLOW_MESSAGE + " " + secondPart
+    );
+  }
+
+}

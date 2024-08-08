@@ -11,9 +11,6 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 @Component
 public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> {
 
-  private static final String OVERFLOW_MESSAGE = "... Se fortsättningsblad!";
-  private static final String SMALL_OVERFLOW_MESSAGE = "...";
-
   @Override
   public Class<ElementValueText> getType() {
     return ElementValueText.class;
@@ -29,16 +26,12 @@ public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> 
     final var pdfConfiguration = (PdfConfigurationText) elementSpecification.pdfConfiguration();
     if (pdfConfiguration.maxLength() != null
         && pdfConfiguration.maxLength() < elementValueText.text().length()) {
-      final var hasSpaceForOverflowMessage =
-          pdfConfiguration.maxLength() > OVERFLOW_MESSAGE.length();
-      final var firstBreakpoint =
-          hasSpaceForOverflowMessage ? pdfConfiguration.maxLength() - OVERFLOW_MESSAGE.length() - 1
-              : pdfConfiguration.maxLength() - 1 - SMALL_OVERFLOW_MESSAGE.length();
+      final var splitText = PdfValueGeneratorUtil.splitByLimit(pdfConfiguration.maxLength(),
+          elementValueText.text());
       return List.of(
           PdfField.builder()
               .id(pdfConfiguration.pdfFieldId().id())
-              .value(elementValueText.text().substring(0, firstBreakpoint)
-                  + (hasSpaceForOverflowMessage ? OVERFLOW_MESSAGE : SMALL_OVERFLOW_MESSAGE))
+              .value(splitText.get(0))
               .build(),
           PdfField.builder()
               .id(pdfConfiguration.overflowSheetFieldId().id())
@@ -47,8 +40,7 @@ public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> 
               .build(),
           PdfField.builder()
               .id(pdfConfiguration.overflowSheetFieldId().id())
-              .value(SMALL_OVERFLOW_MESSAGE + elementValueText.text().substring(firstBreakpoint)
-                  + "\n")
+              .value(splitText.get(1))
               .append(true)
               .build()
       );

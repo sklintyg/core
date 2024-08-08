@@ -25,7 +25,7 @@ class PdfDiagnosisListValueGeneratorTest {
   private static final String CODE_FIELD_ID_3 = "form1[0].#subform[0].flt_txtDiaKod3[0]";
   private static final String DESCRIPTION_FIELD_ID = "form1[0].#subform[0].flt_txtDiagnoser[0]";
 
-  private PdfDiagnosisListValueGenerator pdfDiagnosisListValueGenerator = new PdfDiagnosisListValueGenerator();
+  private final PdfDiagnosisListValueGenerator pdfDiagnosisListValueGenerator = new PdfDiagnosisListValueGenerator();
 
   @Test
   void shouldReturnType() {
@@ -188,7 +188,7 @@ class PdfDiagnosisListValueGeneratorTest {
               .build(),
           PdfField.builder()
               .id(DESCRIPTION_FIELD_ID)
-              .value("desc... Se fortsättningsblad!")
+              .value("description is ... Se fortsättningsblad!")
               .build(),
           PdfField.builder()
               .id("OVER_FLOW_SHEET_ID")
@@ -198,7 +198,7 @@ class PdfDiagnosisListValueGeneratorTest {
           PdfField.builder()
               .id("OVER_FLOW_SHEET_ID")
               .value(
-                  "...ription is over max length since max length is only 30 characters and this message is longer.\n")
+                  "... over max length since max length is only 30 characters and this message is longer.")
               .append(true)
               .build(),
           PdfField.builder()
@@ -223,7 +223,7 @@ class PdfDiagnosisListValueGeneratorTest {
           )
           .pdfConfiguration(
               PdfConfigurationDiagnoses.builder()
-                  .maxLength(30)
+                  .maxLength(40)
                   .overflowSheetFieldId(new PdfFieldId("OVER_FLOW_SHEET_ID"))
                   .diagnoses(
                       Map.of(
