@@ -8,4 +8,6 @@ import lombok.Value;
 public class PdfConfigurationText implements PdfConfiguration {
 
   PdfFieldId pdfFieldId;
+  Integer maxLength;
+  PdfFieldId overflowSheetFieldId;
 }

@@ -46,6 +46,9 @@ public class QuestionOvrigt {
         .pdfConfiguration(
             PdfConfigurationText.builder()
                 .pdfFieldId(PDF_FIELD_ID)
+                .maxLength(371)
+                .overflowSheetFieldId(
+                    new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
                 .build()
         )
         .build();

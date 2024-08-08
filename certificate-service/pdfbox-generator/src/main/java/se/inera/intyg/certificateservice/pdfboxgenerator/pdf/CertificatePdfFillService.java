@@ -114,7 +114,7 @@ public class CertificatePdfFillService {
         .filter(Objects::nonNull)
         .forEach(field -> {
           try {
-            setFieldValue(acroForm, field.getId(), field.getValue());
+            setFieldValue(acroForm, field);
           } catch (IOException e) {
             throw new RuntimeException(e);
           }
@@ -187,12 +187,17 @@ public class CertificatePdfFillService {
     return signedDate.getWidgets().get(0).getRectangle();
   }
 
-  private void setFieldValue(PDAcroForm acroForm, String fieldId, String value)
+  private void setFieldValue(PDAcroForm acroForm, PdfField field)
       throws IOException {
-    if (value != null) {
-      final var field = acroForm.getField(fieldId);
-      validateField(fieldId, field);
-      field.setValue(value);
+    if (field.getValue() != null) {
+      final var extractedField = acroForm.getField(field.getId());
+      validateField(field.getId(), extractedField);
+
+      if (field.getAppend() != null && field.getAppend()) {
+        extractedField.setValue(extractedField.getValueAsString() + "\n" + field.getValue());
+      } else {
+        extractedField.setValue(field.getValue());
+      }
     }
   }
 

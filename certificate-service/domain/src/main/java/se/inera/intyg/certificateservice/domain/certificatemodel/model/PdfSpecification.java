@@ -15,6 +15,5 @@ public class PdfSpecification {
   PdfTagIndex signatureWithAddressTagIndex;
   PdfTagIndex signatureWithoutAddressTagIndex;
   List<PdfFieldId> patientIdFieldIds;
-  PdfFieldId overflowSheetFieldId;
   PdfSignature signature;
 }
