@@ -130,7 +130,7 @@ class PdfTextValueGeneratorTest {
             .build(),
         PdfField.builder()
             .id(OVERFLOW_SHEET_ID.id())
-            .value(END_VALUE)
+            .value(END_VALUE + "\n")
             .append(true)
             .build()
     );
@@ -173,7 +173,7 @@ class PdfTextValueGeneratorTest {
             .build(),
         PdfField.builder()
             .id(OVERFLOW_SHEET_ID.id())
-            .value(LARGE_END_VALUE)
+            .value(LARGE_END_VALUE + "\n")
             .append(true)
             .build()
     );

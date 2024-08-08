@@ -198,7 +198,7 @@ class PdfDiagnosisListValueGeneratorTest {
           PdfField.builder()
               .id("OVER_FLOW_SHEET_ID")
               .value(
-                  "... over max length since max length is only 30 characters and this message is longer.")
+                  "... over max length since max length is only 30 characters and this message is longer.\n")
               .append(true)
               .build(),
           PdfField.builder()
@@ -250,7 +250,7 @@ class PdfDiagnosisListValueGeneratorTest {
                   ElementValueDiagnosis.builder()
                       .id(new FieldId("huvuddiagnos"))
                       .description(
-                          "description is over max length since max length is only 30 characters and this message is longer.")
+                          "description is over max length since max length is only 30 characters and this message is longer.\n")
                       .terminology("terminology")
                       .code("ABC")
                       .build()
