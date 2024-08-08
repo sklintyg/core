@@ -64,6 +64,9 @@ public abstract class AbstractFunktionsnedsattningMotivering {
         .pdfConfiguration(
             PdfConfigurationText.builder()
                 .pdfFieldId(pdfFieldId)
+                .maxLength(265)
+                .overflowSheetFieldId(
+                    new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
                 .build()
         )
         .build();

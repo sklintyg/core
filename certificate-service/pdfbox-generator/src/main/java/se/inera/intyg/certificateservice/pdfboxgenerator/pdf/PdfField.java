@@ -9,4 +9,6 @@ public class PdfField {
 
   String id;
   String value;
+  @Builder.Default
+  Boolean append = false;
 }

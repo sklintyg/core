@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements;
 
 import static java.util.Map.entry;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.ARBETSTERAPEUT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.AUDIONOM;
@@ -230,7 +231,59 @@ class QuestionUtredningEllerUnderlagTest {
 
     final var element = QuestionUtredningEllerUnderlag.questionUtredningEllerUnderlag();
 
-    assertEquals(expected, element.pdfConfiguration());
+    final var configuration = (PdfConfigurationMedicalInvestigationList) element.pdfConfiguration();
+
+    assertAll(
+        () -> assertEquals(3, configuration.list().size()),
+        () -> assertEquals(
+            new PdfFieldId("form1[0].#subform[0].flt_datumUnderlagUtredning[0]"),
+            configuration.list().get(new FieldId("medicalInvestigation1")).datePdfFieldId()
+        ),
+        () -> assertEquals(
+            new PdfFieldId("form1[0].#subform[0].lbx_listVardeUtredningUnderlag[0]"),
+            configuration.list().get(new FieldId("medicalInvestigation1")).investigationPdfFieldId()
+        ),
+        () -> assertEquals(
+            new PdfFieldId("form1[0].#subform[0].flt_txtVilkenVardgivare[0]"),
+            configuration.list().get(new FieldId("medicalInvestigation1")).sourceTypePdfFieldId()
+        ),
+        () -> assertEquals(
+            new PdfFieldId("form1[0].#subform[0].flt_datumUnderlagUtredning2[0]"),
+            configuration.list().get(new FieldId("medicalInvestigation2")).datePdfFieldId()
+        ),
+        () -> assertEquals(
+            new PdfFieldId("form1[0].#subform[0].lbx_listVardeUnderlagUtredning2[0]"),
+            configuration.list().get(new FieldId("medicalInvestigation2")).investigationPdfFieldId()
+        ),
+        () -> assertEquals(
+            new PdfFieldId("form1[0].#subform[0].flt_txtVilkenVardgivare2[0]"),
+            configuration.list().get(new FieldId("medicalInvestigation2")).sourceTypePdfFieldId()
+        ),
+        () -> assertEquals(
+            new PdfFieldId("form1[0].#subform[0].flt_datumUnderlagUtredning3[0]"),
+            configuration.list().get(new FieldId("medicalInvestigation3")).datePdfFieldId()
+        ),
+        () -> assertEquals(
+            new PdfFieldId("form1[0].#subform[0].lbx_listVardeUnderlagUtredning3[0]"),
+            configuration.list().get(new FieldId("medicalInvestigation3")).investigationPdfFieldId()
+        ),
+        () -> assertEquals(
+            new PdfFieldId("form1[0].#subform[0].flt_txtVilkenVardgivare3[0]"),
+            configuration.list().get(new FieldId("medicalInvestigation3")).sourceTypePdfFieldId()
+        ),
+        () -> assertEquals(
+            configuration.list().get(new FieldId("medicalInvestigation1")).investigationPdfOptions()
+                .size(), expectedOptions.size()
+        ),
+        () -> assertEquals(
+            configuration.list().get(new FieldId("medicalInvestigation2")).investigationPdfOptions()
+                .size(), expectedOptions.size()
+        ),
+        () -> assertEquals(
+            configuration.list().get(new FieldId("medicalInvestigation3")).investigationPdfOptions()
+                .size(), expectedOptions.size()
+        )
+    );
   }
 
 }

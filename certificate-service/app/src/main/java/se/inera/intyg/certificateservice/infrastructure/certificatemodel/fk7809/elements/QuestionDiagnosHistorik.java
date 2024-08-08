@@ -49,6 +49,9 @@ public class QuestionDiagnosHistorik {
         .pdfConfiguration(
             PdfConfigurationText.builder()
                 .pdfFieldId(DIAGNOSIS_MOTIVATION_PDF_FIELD_ID)
+                .maxLength(265)
+                .overflowSheetFieldId(
+                    new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
                 .build()
         )
         .build();

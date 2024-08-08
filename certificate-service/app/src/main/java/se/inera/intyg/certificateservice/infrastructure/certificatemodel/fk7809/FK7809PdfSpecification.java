@@ -36,8 +36,6 @@ public class FK7809PdfSpecification {
       "form1[0].Sida4[0].flt_txtArbetsplatskod[0]");
   private static final PdfFieldId PDF_CONTACT_INFORMATION = new PdfFieldId(
       "form1[0].Sida4[0].flt_txtVardgivarensNamnAdressTelefon[0]");
-  private static final PdfFieldId PDF_FIELD_OVERFLOW_SHEET = new PdfFieldId(
-      "form1[0].#subform[4].flt_txtFortsattningsblad[0]");
 
   public static PdfSpecification create() {
     return PdfSpecification.builder()
@@ -45,7 +43,6 @@ public class FK7809PdfSpecification {
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7809_PDF)
         .patientIdFieldIds(PDF_PATIENT_ID_FIELD_IDS)
         .pdfMcid(PDF_MCID)
-        .overflowSheetFieldId(PDF_FIELD_OVERFLOW_SHEET)
         .signature(PdfSignature.builder()
             .signatureWithAddressTagIndex(PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
             .signatureWithoutAddressTagIndex(PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX)

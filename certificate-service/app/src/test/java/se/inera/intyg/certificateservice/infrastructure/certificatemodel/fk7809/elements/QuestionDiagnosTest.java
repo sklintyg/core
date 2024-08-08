@@ -122,6 +122,8 @@ class QuestionDiagnosTest {
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationDiagnoses.builder()
         .prefix(new PdfFieldId("form1[0].Sida2[0].flt_txt"))
+        .maxLength(39)
+        .overflowSheetFieldId(new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
         .diagnoses(
             Map.of(
                 new FieldId("huvuddiagnos"),

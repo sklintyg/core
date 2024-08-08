@@ -22,8 +22,30 @@ public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> 
     if (elementValueText.text() == null) {
       return Collections.emptyList();
     }
-    
+
     final var pdfConfiguration = (PdfConfigurationText) elementSpecification.pdfConfiguration();
+    if (pdfConfiguration.maxLength() != null
+        && pdfConfiguration.maxLength() < elementValueText.text().length()) {
+      final var splitText = PdfValueGeneratorUtil.splitByLimit(pdfConfiguration.maxLength(),
+          elementValueText.text());
+      return List.of(
+          PdfField.builder()
+              .id(pdfConfiguration.pdfFieldId().id())
+              .value(splitText.get(0))
+              .build(),
+          PdfField.builder()
+              .id(pdfConfiguration.overflowSheetFieldId().id())
+              .value(elementSpecification.configuration().name())
+              .append(true)
+              .build(),
+          PdfField.builder()
+              .id(pdfConfiguration.overflowSheetFieldId().id())
+              .value(splitText.get(1))
+              .append(true)
+              .build()
+      );
+    }
+
     return List.of(
         PdfField.builder()
             .id(pdfConfiguration.pdfFieldId().id())

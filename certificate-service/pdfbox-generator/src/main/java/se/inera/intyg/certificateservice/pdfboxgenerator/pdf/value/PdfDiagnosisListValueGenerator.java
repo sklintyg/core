@@ -24,56 +24,98 @@ public class PdfDiagnosisListValueGenerator implements PdfElementValue<ElementVa
   public List<PdfField> generate(ElementSpecification elementSpecification,
       ElementValueDiagnosisList elementValueDiagnosisList) {
     final var pdfConfiguration = (PdfConfigurationDiagnoses) elementSpecification.pdfConfiguration();
-    return elementValueDiagnosisList.diagnoses().stream()
+
+    final var hasOverflow = elementValueDiagnosisList.diagnoses().stream()
+        .anyMatch(diagnosis -> isDiagnosisDescriptionOverflowing(pdfConfiguration, diagnosis));
+
+    final var fields = new ArrayList<>(elementValueDiagnosisList.diagnoses().stream()
         .map(diagnose -> getFields(diagnose, pdfConfiguration))
         .flatMap(Collection::stream)
-        .toList();
+        .toList());
+
+    if (hasOverflow) {
+      fields.add(0,
+          PdfField.builder()
+              .id(pdfConfiguration.overflowSheetFieldId().id())
+              .value(elementSpecification.configuration().name())
+              .append(true)
+              .build());
+    }
+
+    return fields;
   }
 
-  private List<PdfField> getFields(ElementValueDiagnosis diagnose,
+  private List<PdfField> getFields(ElementValueDiagnosis diagnosis,
       PdfConfigurationDiagnoses configuration) {
-    final var pdfConfigurationDiagnosis = configuration.diagnoses().get(diagnose.id());
+    final var pdfConfigurationDiagnosis = configuration.diagnoses().get(diagnosis.id());
     if (pdfConfigurationDiagnosis == null) {
-      throw new IllegalArgumentException("Diagnosis " + diagnose.id() + " not found");
+      throw new IllegalArgumentException("Diagnosis " + diagnosis.id() + " not found");
     }
 
     final var diagnoseNameId = pdfConfigurationDiagnosis.pdfNameFieldId();
     final var diagnoseCodeIds = pdfConfigurationDiagnosis.pdfCodeFieldIds();
 
     return Stream.of(
-            getDiagnoseNameValues(diagnose, diagnoseNameId.id()),
-            getDiagnoseCodeValues(diagnose, diagnoseCodeIds)
+            getDiagnosisNameValues(configuration, diagnosis, diagnoseNameId.id()),
+            getDiagnosisCodeValues(diagnosis, diagnoseCodeIds)
         )
         .flatMap(Collection::stream)
         .toList();
   }
 
-  private static List<PdfField> getDiagnoseNameValues(ElementValueDiagnosis diagnose,
-      String pdfFieldId) {
+  private static List<PdfField> getDiagnosisNameValues(PdfConfigurationDiagnoses pdfConfiguration,
+      ElementValueDiagnosis diagnosis, String pdfFieldId) {
+    if (pdfConfiguration.maxLength() != null && isDiagnosisDescriptionOverflowing(pdfConfiguration,
+        diagnosis)) {
+      final var splitText = PdfValueGeneratorUtil.splitByLimit(pdfConfiguration.maxLength(),
+          diagnosis.description());
+      return List.of(
+          PdfField.builder()
+              .id(pdfFieldId)
+              .value(splitText.get(0))
+              .build(),
+          PdfField.builder()
+              .id(pdfConfiguration.overflowSheetFieldId().id())
+              .value("Diagnosbeskrivning för diagnoskod " + diagnosis.code())
+              .append(true)
+              .build(),
+          PdfField.builder()
+              .id(pdfConfiguration.overflowSheetFieldId().id())
+              .value(splitText.get(1))
+              .append(true)
+              .build()
+      );
+    }
+
     return List.of(
         PdfField.builder()
             .id(pdfFieldId)
-            .value(diagnose.description())
+            .value(diagnosis.description())
             .build()
     );
   }
 
-  private static List<PdfField> getDiagnoseCodeValues(ElementValueDiagnosis diagnose,
+  private static boolean isDiagnosisDescriptionOverflowing(
+      PdfConfigurationDiagnoses pdfConfiguration,
+      ElementValueDiagnosis diagnosis) {
+    return pdfConfiguration.maxLength() != null
+        && pdfConfiguration.maxLength() < diagnosis.description().length();
+  }
+
+  private static List<PdfField> getDiagnosisCodeValues(ElementValueDiagnosis diagnose,
       List<PdfFieldId> codeIds) {
     final var fields = new ArrayList<PdfField>();
     final var codes = diagnose.code().toCharArray();
 
     for (var i = 0; i < codes.length; i++) {
-      fields.add(getDiagnoseCode(String.valueOf(codes[i]), codeIds.get(i).id()));
+      fields.add(
+          PdfField.builder()
+              .id(codeIds.get(i).id())
+              .value(String.valueOf(codes[i]))
+              .build()
+      );
     }
 
     return fields;
-  }
-
-  private static PdfField getDiagnoseCode(String value, String pdfFieldId) {
-    return PdfField.builder()
-        .id(pdfFieldId)
-        .value(value)
-        .build();
   }
 }

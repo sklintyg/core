@@ -97,6 +97,8 @@ class QuestionKommunikationSocialInteraktionMotiveringTest {
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].Sida2[0].flt_txtIntellektuellFunktion[1]"))
+        .maxLength(265)
+        .overflowSheetFieldId(new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
         .build();
 
     final var element = QuestionKommunikationSocialInteraktionMotivering.questionKommunikationSocialInteraktionMotivering();

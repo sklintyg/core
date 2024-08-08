@@ -67,6 +67,13 @@ class CertificatePdfFillServiceTest {
   private static final PdfField SYMPTOM_FIELD = PdfField.builder()
       .id(SYMPTOM_FIELD_ID)
       .value("Symptom")
+      .append(true)
+      .build();
+
+  private static final PdfField SYMPTOM_FIELD_1 = PdfField.builder()
+      .id(SYMPTOM_FIELD_ID)
+      .value("Symptom 1")
+      .append(true)
       .build();
 
   @Mock
@@ -102,7 +109,7 @@ class CertificatePdfFillServiceTest {
           .thenReturn(List.of(UNIT_FIELD));
 
       when(pdfElementValueGenerator.generate(any(Certificate.class)))
-          .thenReturn(List.of(SYMPTOM_FIELD));
+          .thenReturn(List.of(SYMPTOM_FIELD_1, SYMPTOM_FIELD));
     }
 
     @Nested
@@ -182,7 +189,8 @@ class CertificatePdfFillServiceTest {
         final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
         final var field = getField(document, SYMPTOM_FIELD.getId());
 
-        assertEquals(SYMPTOM_FIELD.getValue(), field.getValueAsString());
+        assertEquals(SYMPTOM_FIELD_1.getValue() + "\n" + SYMPTOM_FIELD.getValue(),
+            field.getValueAsString());
       }
 
       @Test
@@ -276,7 +284,8 @@ class CertificatePdfFillServiceTest {
         final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
         final var field = getField(document, SYMPTOM_FIELD.getId());
 
-        assertEquals(SYMPTOM_FIELD.getValue(), field.getValueAsString());
+        assertEquals(SYMPTOM_FIELD_1.getValue() + "\n" + SYMPTOM_FIELD.getValue(),
+            field.getValueAsString());
       }
 
       @Test
@@ -386,7 +395,8 @@ class CertificatePdfFillServiceTest {
         final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
         final var field = getField(document, SYMPTOM_FIELD.getId());
 
-        assertEquals(SYMPTOM_FIELD.getValue(), field.getValueAsString());
+        assertEquals(SYMPTOM_FIELD_1.getValue() + "\n" + SYMPTOM_FIELD.getValue(),
+            field.getValueAsString());
       }
 
       @Test
