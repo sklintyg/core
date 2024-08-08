@@ -194,7 +194,11 @@ public class CertificatePdfFillService {
       validateField(field.getId(), extractedField);
 
       if (field.getAppend() != null && field.getAppend()) {
-        extractedField.setValue(extractedField.getValueAsString() + "\n" + field.getValue());
+        extractedField.setValue(
+            extractedField.getValueAsString()
+                + (extractedField.getValueAsString().isEmpty() ? "" : "\n")
+                + field.getValue()
+        );
       } else {
         extractedField.setValue(field.getValue());
       }
