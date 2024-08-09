@@ -21,6 +21,7 @@ import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateTypeIn
 import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateMessageIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.GetCertificatePdfIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateXmlIT;
 import se.inera.intyg.certificateservice.integrationtest.GetPatientCertificatesIT;
@@ -242,8 +243,7 @@ public class FK7809ActiveIT {
     }
   }
 
-  //TODO Uncomment PDF test class when functionality has been implemented
-  /*@Nested
+  @Nested
   @DisplayName(TYPE + "Hämta intygspdf")
   class GetCertificatePdf extends GetCertificatePdfIT {
 
@@ -256,7 +256,7 @@ public class FK7809ActiveIT {
     protected String typeVersion() {
       return ACTIVE_VERSION;
     }
-  }*/
+  }
 
   @Nested
   @DisplayName(TYPE + "Hämta intygstyp när den är aktiv")
