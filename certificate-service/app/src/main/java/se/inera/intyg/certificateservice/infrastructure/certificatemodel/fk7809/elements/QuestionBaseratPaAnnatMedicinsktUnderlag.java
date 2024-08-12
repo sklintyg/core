@@ -19,6 +19,10 @@ public class QuestionBaseratPaAnnatMedicinsktUnderlag {
   public static final PdfFieldId PDF_FIELD_FALSE = new PdfFieldId(
       "form1[0].#subform[0].ksr_2_1[0]");
 
+  private QuestionBaseratPaAnnatMedicinsktUnderlag() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionBaseratPaAnnatMedicinsktUnderlag() {
     return ElementSpecification.builder()
         .id(QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID)

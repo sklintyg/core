@@ -38,6 +38,10 @@ public class QuestionFunktionsnedsattning {
   public static final FieldId FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID = new FieldId(
       "14.2");
 
+  private QuestionFunktionsnedsattning() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionFunktionsnedsattning() {
     final var checkboxes = List.of(
         getCodeConfig(FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID, INTELLEKTUELL_FUNKTION),

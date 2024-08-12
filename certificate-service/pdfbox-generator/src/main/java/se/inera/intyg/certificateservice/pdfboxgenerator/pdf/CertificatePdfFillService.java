@@ -116,7 +116,7 @@ public class CertificatePdfFillService {
           try {
             setFieldValue(acroForm, field);
           } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
           }
         });
   }

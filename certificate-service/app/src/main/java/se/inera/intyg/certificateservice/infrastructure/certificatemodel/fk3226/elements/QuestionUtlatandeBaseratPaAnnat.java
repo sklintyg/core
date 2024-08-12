@@ -22,7 +22,11 @@ public class QuestionUtlatandeBaseratPaAnnat {
   public static final FieldId QUESTION_UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID = new FieldId("1.3");
   private static final PdfFieldId PDF_STATEMENT_BASED_ON_OTHER_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_txtAnnatAngeVad[0]");
-  
+
+  private QuestionUtlatandeBaseratPaAnnat() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionUtlatandeBaseratPaAnnat() {
     return ElementSpecification.builder()
         .id(QUESTION_UTLATANDE_BASERAT_PA_ANNAT_ID)

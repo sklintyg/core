@@ -24,6 +24,10 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
       "1.3");
   public static final String PDF_FIELD_ID = "form1[0].#subform[0].flt_txtAnhorig[0]";
 
+  private QuestionAnnanGrundForMedicinsktUnderlag() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionAnnanGrundForMedicinsktUnderlag() {
     return ElementSpecification.builder()
         .id(QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID)

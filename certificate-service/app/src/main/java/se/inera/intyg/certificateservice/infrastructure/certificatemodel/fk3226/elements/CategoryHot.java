@@ -9,6 +9,10 @@ public class CategoryHot {
 
   private static final ElementId CATEGORY_HOT_ID = new ElementId("KAT_2");
 
+  private CategoryHot() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification categoryHot(
       ElementSpecification... children) {
     return ElementSpecification.builder()

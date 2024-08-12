@@ -42,6 +42,10 @@ public class QuestionGrundForMedicinsktUnderlag {
   public static final PdfFieldId PDF_OTHER_DATE_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_datumAnnat[0]");
 
+  private QuestionGrundForMedicinsktUnderlag() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionGrundForMedicinsktUnderlag(
       ElementSpecification... children) {
     final var checkboxDates = List.of(

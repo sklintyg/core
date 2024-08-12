@@ -22,6 +22,10 @@ public class QuestionRelationTillPatienten {
   private static final FieldId QUESTION_RELATION_TILL_PATIENTEN_FIELD_ID = new FieldId("1.4");
   public static final String PDF_FIELD_ID = "form1[0].#subform[0].flt_txtAnhorigAnnan[0]";
 
+  private QuestionRelationTillPatienten() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionRelationTillPatienten() {
     return ElementSpecification.builder()
         .id(QUESTION_RELATION_TILL_PATIENTEN_ID)

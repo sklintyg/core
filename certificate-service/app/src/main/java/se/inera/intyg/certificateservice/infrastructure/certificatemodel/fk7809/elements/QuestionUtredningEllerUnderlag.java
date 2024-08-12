@@ -48,6 +48,10 @@ public class QuestionUtredningEllerUnderlag {
   public static final PdfFieldId INVESTIGATION_PDF_FIELD_ID_3 = new PdfFieldId(
       "form1[0].#subform[0].lbx_listVardeUnderlagUtredning3[0]");
 
+  private QuestionUtredningEllerUnderlag() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionUtredningEllerUnderlag(
       ElementSpecification... children) {
     final var medicalInvestigations = List.of(

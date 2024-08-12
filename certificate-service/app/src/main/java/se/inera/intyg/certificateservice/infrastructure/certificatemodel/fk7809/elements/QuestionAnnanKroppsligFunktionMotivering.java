@@ -17,6 +17,10 @@ public class QuestionAnnanKroppsligFunktionMotivering extends
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].Sida3[0].flt_txtIntellektuellFunktion[4]");
 
+  private QuestionAnnanKroppsligFunktionMotivering() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionAnnanKroppsligFunktionMotivering() {
     return getFunktionsnedsattningMotivering(
         FUNKTIONSNEDSATTNING_MOTIVERING_ANNAN_KROPPSILIG_FUNKTION_ID,

@@ -8,7 +8,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 public class CategoryFunktionsnedsattning {
 
   private static final ElementId FUNKTIONSNEDSATTNING_CATEGORY_ID = new ElementId("KAT_5");
-  
+
+  private CategoryFunktionsnedsattning() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification categoryFunktionsnedsattning(
       ElementSpecification... children) {
     return ElementSpecification.builder()

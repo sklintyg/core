@@ -5,10 +5,14 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 
-public class CategoryAktivitetsbegransningar extends AbstractFunktionsnedsattningMotivering {
+public class CategoryAktivitetsbegransningar {
 
   private static final ElementId AKTIVITETSBEGRANSNINGAR_CATEGORY_ID = new ElementId("KAT_6");
-  
+
+  private CategoryAktivitetsbegransningar() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification categoryAktivitetsbegransningar(
       ElementSpecification... children) {
     return ElementSpecification.builder()

@@ -17,6 +17,10 @@ public abstract class AbstractFunktionsnedsattningMotivering {
 
   protected static final String GENERAL_LABEL_FUNKTIONSNEDSATTNING = "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.";
 
+  AbstractFunktionsnedsattningMotivering() {
+    throw new IllegalStateException("Utility class");
+  }
+
   protected static ElementSpecification getFunktionsnedsattningMotivering(ElementId questionId,
       FieldId questionFieldId, FieldId parentFieldId, String name,
       String label, String description, PdfFieldId pdfFieldId) {

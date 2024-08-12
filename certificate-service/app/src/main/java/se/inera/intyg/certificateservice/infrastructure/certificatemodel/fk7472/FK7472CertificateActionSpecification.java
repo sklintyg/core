@@ -7,6 +7,10 @@ import se.inera.intyg.certificateservice.domain.common.model.Role;
 
 public class FK7472CertificateActionSpecification {
 
+  private FK7472CertificateActionSpecification() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static List<CertificateActionSpecification> create() {
     return List.of(
         CertificateActionSpecification.builder()

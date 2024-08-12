@@ -17,6 +17,10 @@ public class QuestionIntellektuellFunktionMotivering extends
   private static final PdfFieldId FUNKTIONSNEDSATTNING_MOTIVERING_INTELLEKTUELL_FUNKTION_PDF_FIELD_ID = new PdfFieldId(
       "form1[0].Sida2[0].flt_txtIntellektuellFunktion[0]");
 
+  private QuestionIntellektuellFunktionMotivering() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionIntellektuellFunktionMotivering() {
     return getFunktionsnedsattningMotivering(
         FUNKTIONSNEDSATTNING_MOTIVERING_INTELLEKTUELL_FUNKTION_ID,

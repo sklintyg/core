@@ -19,6 +19,10 @@ public class QuestionPagaendeOchPlaneradeBehandlingar {
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].Sida3[0].flt_txtPlaneradMedicinskBehandling[0]");
 
+  private QuestionPagaendeOchPlaneradeBehandlingar() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionPagaendeOchPlaneradeBehandlingar(
       ElementSpecification... children) {
     return ElementSpecification.builder()

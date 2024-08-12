@@ -26,6 +26,10 @@ public class QuestionUppskattaHurLangeTillstandetKommerVaraLivshotande {
   private static final PdfFieldId PDF_ESTIMATE_NO_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[1].ksr_Nej[0]");
 
+  private QuestionUppskattaHurLangeTillstandetKommerVaraLivshotande() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionUppskattaHurLangeTillstandetKommerVaraLivshotande() {
     return ElementSpecification.builder()
         .id(QUESTION_UPSKATTA_HUR_LANGE_TILLSTANDET_KOMMER_VARA_LIVSHOTANDE_ID)

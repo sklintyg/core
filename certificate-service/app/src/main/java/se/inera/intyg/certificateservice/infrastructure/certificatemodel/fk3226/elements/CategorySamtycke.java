@@ -8,7 +8,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 public class CategorySamtycke {
 
   private static final ElementId QUESTION_SAMTYCKE_CATEGORY_ID = new ElementId("KAT_3");
-  
+
+  private CategorySamtycke() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification categorySamtycke(
       ElementSpecification... children) {
     return ElementSpecification.builder()

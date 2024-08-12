@@ -25,6 +25,10 @@ public class QuestionNarTillstandetBlevAkutLivshotande {
   private static final PdfFieldId PDF_WHEN_CONDITION_BECAME_LIFE_THREATENING_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[1].flt_datumAkutLivshotande[0]");
 
+  private QuestionNarTillstandetBlevAkutLivshotande() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionNarTillstandetBlevAkutLivshotande() {
     return ElementSpecification.builder()
         .id(QUESTION_NAR_TILLSTANDET_BLEV_AKUT_LIVSHOTANDE_ID)

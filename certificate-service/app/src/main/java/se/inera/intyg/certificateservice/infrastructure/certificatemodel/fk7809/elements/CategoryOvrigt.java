@@ -8,7 +8,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 public class CategoryOvrigt {
 
   private static final ElementId OVRIGT_CATEGORY_ID = new ElementId("KAT_9");
-  
+
+  private CategoryOvrigt() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification categoryOvrigt(
       ElementSpecification... children) {
     return ElementSpecification.builder()

@@ -16,6 +16,10 @@ public class QuestionPsykiskFunktionMotivering extends AbstractFunktionsnedsattn
   private static final PdfFieldId FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_PDF_FIELD_ID = new PdfFieldId(
       "form1[0].Sida2[0].flt_txtIntellektuellFunktion[3]");
 
+  private QuestionPsykiskFunktionMotivering() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionPsykiskFunktionMotivering() {
     return getFunktionsnedsattningMotivering(
         FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_ID,

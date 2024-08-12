@@ -9,6 +9,10 @@ public class CategorySymptom {
 
   public static final ElementId QUESTION_SYMPTOM_CATEGORY_ID = new ElementId("KAT_1");
 
+  private CategorySymptom() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification categorySymptom(
       ElementSpecification... children) {
     return ElementSpecification.builder()

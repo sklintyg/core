@@ -6,6 +6,10 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageActionType;
 
 public class FK7809MessageActionSpecification {
 
+  private FK7809MessageActionSpecification() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static List<MessageActionSpecification> create() {
     return List.of(
         MessageActionSpecification.builder()

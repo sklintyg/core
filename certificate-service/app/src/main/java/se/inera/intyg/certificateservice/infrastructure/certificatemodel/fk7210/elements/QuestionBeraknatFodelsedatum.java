@@ -18,6 +18,10 @@ public class QuestionBeraknatFodelsedatum {
   private static final PdfFieldId PDF_FODELSEDATUM_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_dat[0]");
 
+  private QuestionBeraknatFodelsedatum() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionBeraknatFodelsedatum() {
     return ElementSpecification.builder()
         .id(QUESTION_BERAKNAT_FODELSEDATUM_ID)

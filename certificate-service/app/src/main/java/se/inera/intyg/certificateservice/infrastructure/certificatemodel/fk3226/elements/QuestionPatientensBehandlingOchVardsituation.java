@@ -31,6 +31,10 @@ public class QuestionPatientensBehandlingOchVardsituation {
   private static final PdfFieldId PDF_OTHER_THREAT_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[1].ksr_Annat2[0]");
 
+  private QuestionPatientensBehandlingOchVardsituation() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionPatientBehandlingOchVardsituation(
       ElementSpecification... children) {
     final var radioMultipleCodes = List.of(

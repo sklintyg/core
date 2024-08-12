@@ -18,6 +18,10 @@ public class QuestionOvrigt {
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].Sida4[0].flt_OvrigaUpplysningar[0]");
 
+  private QuestionOvrigt() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionOvrigt() {
     return ElementSpecification.builder()
         .id(QUESTION_OVRIGT_ID)

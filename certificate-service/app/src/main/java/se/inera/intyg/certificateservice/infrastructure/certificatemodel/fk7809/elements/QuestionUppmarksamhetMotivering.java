@@ -17,6 +17,10 @@ public class QuestionUppmarksamhetMotivering extends
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].Sida2[0].flt_txtIntellektuellFunktion[2]");
 
+  private QuestionUppmarksamhetMotivering() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionUppmarksamhetMotivering() {
     return getFunktionsnedsattningMotivering(
         FUNKTIONSNEDSATTNING_MOTIVERING_UPPMAKRMSAHET_ID,
