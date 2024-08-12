@@ -8,7 +8,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 public class CategoryDiagnos {
 
   private static final ElementId DIAGNOS_CATEGORY_ID = new ElementId("KAT_4");
-  
+
+  private CategoryDiagnos() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification categoryDiagnos(
       ElementSpecification... children) {
     return ElementSpecification.builder()

@@ -24,6 +24,10 @@ public class QuestionPatagligtHotMotPatientensLivAkutLivshotande {
   private static final PdfFieldId PDF_THREAT_TO_PATIENTS_LIFE_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[1].flt_txtSjukdomstillstand[0]");
 
+  private QuestionPatagligtHotMotPatientensLivAkutLivshotande() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionPatagligtHotMotPatientensLivAkutLivshotande() {
     return ElementSpecification.builder()
         .id(QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_AKUT_LIVSHOTANDE_ID)

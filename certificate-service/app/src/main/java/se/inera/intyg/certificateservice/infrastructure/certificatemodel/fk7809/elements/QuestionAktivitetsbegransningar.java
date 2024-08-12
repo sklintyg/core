@@ -17,6 +17,10 @@ public class QuestionAktivitetsbegransningar {
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].Sida3[0].flt_txtFlerradig[0]");
 
+  private QuestionAktivitetsbegransningar() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionAktivitetsbegransningar() {
     return ElementSpecification.builder()
         .id(QUESTION_AKTIVITETSBEGRANSNINGAR_ID)

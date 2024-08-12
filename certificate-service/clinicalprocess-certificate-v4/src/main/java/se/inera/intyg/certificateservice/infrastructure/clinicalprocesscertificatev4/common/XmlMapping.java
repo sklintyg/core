@@ -8,7 +8,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 
 @Value
 @Builder
-public class Mapping {
+public class XmlMapping {
 
   ElementMapping mapping;
   List<Svar> answers;

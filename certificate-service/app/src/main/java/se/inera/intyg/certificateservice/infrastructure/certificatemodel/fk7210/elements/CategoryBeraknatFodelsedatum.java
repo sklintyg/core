@@ -9,6 +9,10 @@ public class CategoryBeraknatFodelsedatum {
 
   public static final ElementId QUESTION_BERAKNAT_FODELSEDATUM_CATEGORY_ID = new ElementId("KAT_1");
 
+  private CategoryBeraknatFodelsedatum() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification categoryBeraknatFodelsedatum(
       ElementSpecification... children) {
     return ElementSpecification.builder()

@@ -16,6 +16,10 @@ public class QuestionHorselFunktionMotivering extends AbstractFunktionsnedsattni
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].Sida3[0].flt_txtIntellektuellFunktion[0]");
 
+  private QuestionHorselFunktionMotivering() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionHorselFunktionMotivering() {
     return getFunktionsnedsattningMotivering(
         FUNKTIONSNEDSATTNING_MOTIVERING_HORSELFUNKTION_ID,

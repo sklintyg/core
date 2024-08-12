@@ -16,6 +16,10 @@ public class QuestionSynfunktionMotivering extends AbstractFunktionsnedsattningM
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].Sida3[0].flt_txtIntellektuellFunktion[1]");
 
+  private QuestionSynfunktionMotivering() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionSynfunktionMotivering() {
     return getFunktionsnedsattningMotivering(
         FUNKTIONSNEDSATTNING_MOTIVERING_SYNFUNKTION_ID,

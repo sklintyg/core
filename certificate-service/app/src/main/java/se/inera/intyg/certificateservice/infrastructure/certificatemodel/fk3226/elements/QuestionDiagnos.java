@@ -96,6 +96,10 @@ public class QuestionDiagnos {
   private static final PdfFieldId PDF_CODE_ID_5_5 = new PdfFieldId(
       "form1[0].#subform[0].flt_txtDiaKod25[0]");
 
+  private QuestionDiagnos() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionDiagnos(
       DiagnosisCodeRepository diagnosisCodeRepository) {
     return ElementSpecification.builder()

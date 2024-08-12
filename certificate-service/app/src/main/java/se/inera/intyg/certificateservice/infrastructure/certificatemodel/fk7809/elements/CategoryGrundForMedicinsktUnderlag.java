@@ -9,6 +9,10 @@ public class CategoryGrundForMedicinsktUnderlag {
 
   private static final ElementId GRUND_FOR_MEDICINSKT_UNDERLAG_CATEGORY_ID = new ElementId("KAT_1");
 
+  private CategoryGrundForMedicinsktUnderlag() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification categoryGrundForMedicinsktUnderlag(
       ElementSpecification... children) {
     return ElementSpecification.builder()

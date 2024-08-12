@@ -8,7 +8,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 public class CategoryPeriod {
 
   private static final ElementId QUESTION_PERIOD_CATEGORY_ID = new ElementId("KAT_2");
-  
+
+  private CategoryPeriod() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification categoryPeriod(
       ElementSpecification... children) {
     return ElementSpecification.builder()

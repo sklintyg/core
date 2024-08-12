@@ -25,6 +25,10 @@ public class QuestionNarAktivaBehandlingenAvslutades {
   private static final PdfFieldId PDF_WHEN_ACTIVE_TREATMENT_WAS_STOPPED_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[1].flt_datumBehandlingenAvslutad[0]");
 
+  private QuestionNarAktivaBehandlingenAvslutades() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionNarAktivaBehandlingenAvslutades() {
     return ElementSpecification.builder()
         .id(QUESTION_NAR_AKTIVA_BEHANDLINGEN_AVSLUTADES_ID)

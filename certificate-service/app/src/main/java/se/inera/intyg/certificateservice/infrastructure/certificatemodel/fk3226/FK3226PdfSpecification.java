@@ -34,6 +34,10 @@ public class FK3226PdfSpecification {
   private static final PdfFieldId PDF_CONTACT_INFORMATION = new PdfFieldId(
       "form1[0].#subform[1].flt_txtVardgivarensNamnAdressTelefon[0]");
 
+  private FK3226PdfSpecification() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static PdfSpecification create() {
     return PdfSpecification.builder()
         .pdfTemplatePath(PDF_FK_3226_PDF)

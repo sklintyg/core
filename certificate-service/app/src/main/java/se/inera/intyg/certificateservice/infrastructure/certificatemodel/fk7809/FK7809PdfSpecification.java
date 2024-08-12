@@ -37,6 +37,10 @@ public class FK7809PdfSpecification {
   private static final PdfFieldId PDF_CONTACT_INFORMATION = new PdfFieldId(
       "form1[0].Sida4[0].flt_txtVardgivarensNamnAdressTelefon[0]");
 
+  private FK7809PdfSpecification() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static PdfSpecification create() {
     return PdfSpecification.builder()
         .pdfTemplatePath(PDF_FK_7809_PDF)

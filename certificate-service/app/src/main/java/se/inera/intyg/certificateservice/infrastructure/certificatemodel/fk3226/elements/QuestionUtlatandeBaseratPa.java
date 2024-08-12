@@ -34,7 +34,11 @@ public class QuestionUtlatandeBaseratPa {
       "form1[0].#subform[0].flt_datUl_2[0]");
   private static final PdfFieldId PDF_STATEMENT_BASED_ON_OTHER_DATE_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_datUl_3[0]");
-  
+
+  private QuestionUtlatandeBaseratPa() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionUtlatandeBaseratPa(ElementSpecification... children) {
     final var checkboxDates = List.of(
         CheckboxDate.builder()

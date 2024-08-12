@@ -17,6 +17,10 @@ public class QuestionKommunikationSocialInteraktionMotivering extends
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].Sida2[0].flt_txtIntellektuellFunktion[1]");
 
+  private QuestionKommunikationSocialInteraktionMotivering() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionKommunikationSocialInteraktionMotivering() {
     return getFunktionsnedsattningMotivering(
         FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID,

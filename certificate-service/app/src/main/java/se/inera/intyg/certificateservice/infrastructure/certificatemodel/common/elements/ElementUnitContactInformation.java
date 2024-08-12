@@ -9,6 +9,10 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 
 public class ElementUnitContactInformation {
 
+  private ElementUnitContactInformation() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification issuingUnitContactInfo() {
     return ElementSpecification.builder()
         .id(UNIT_CONTACT_INFORMATION)

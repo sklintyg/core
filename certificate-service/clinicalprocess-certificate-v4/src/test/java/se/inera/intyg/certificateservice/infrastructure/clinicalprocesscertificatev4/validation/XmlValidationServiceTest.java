@@ -83,10 +83,11 @@ class XmlValidationServiceTest {
 
     @Test
     void shallThrowIfSchematronPathIsEmpty() {
+      final var schematronPath = new SchematronPath("");
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
           () -> xmlValidationService.validate(
               XML,
-              new SchematronPath(""),
+              schematronPath,
               CERTIFICATE_ID)
       );
       assertTrue(illegalArgumentException.getMessage()
@@ -109,11 +110,12 @@ class XmlValidationServiceTest {
 
     @Test
     void shallThrowIfCertificateIdIsEmpty() {
+      final var certificateId = new CertificateId("");
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
           () -> xmlValidationService.validate(
               XML,
               SCHEMATRON_PATH,
-              new CertificateId(""))
+              certificateId)
       );
       assertTrue(illegalArgumentException.getMessage()
           .contains("Missing required parameter certificateId")

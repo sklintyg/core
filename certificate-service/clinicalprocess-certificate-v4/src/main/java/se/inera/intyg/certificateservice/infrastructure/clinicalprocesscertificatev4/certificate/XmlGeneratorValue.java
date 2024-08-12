@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.common.Mapping;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.common.XmlMapping;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 
@@ -56,7 +56,7 @@ public class XmlGeneratorValue {
     return answerList;
   }
 
-  private List<Mapping> mappings(CertificateModel certificateModel,
+  private List<XmlMapping> mappings(CertificateModel certificateModel,
       List<ElementData> elementData) {
     return elementData.stream()
         .filter(data -> !(data.value() instanceof ElementValueUnitContactInformation))
@@ -68,7 +68,7 @@ public class XmlGeneratorValue {
                     "Converter for '%s' not found".formatted(data.value().getClass())
                 );
               }
-              return Mapping.builder()
+              return XmlMapping.builder()
                   .mapping(
                       certificateModel
                           .elementSpecification(data.id())
@@ -82,11 +82,11 @@ public class XmlGeneratorValue {
         .toList();
   }
 
-  private static boolean noCustomMapping(Mapping mapping) {
+  private static boolean noCustomMapping(XmlMapping mapping) {
     return mapping.getMapping() == null;
   }
 
-  private static Optional<Svar> answerToMapTo(Mapping mapping, ArrayList<Svar> answerList) {
+  private static Optional<Svar> answerToMapTo(XmlMapping mapping, ArrayList<Svar> answerList) {
     return answerList.stream()
         .filter(svar ->
             svar.getId().equalsIgnoreCase(mapping.getMapping().elementId().id())

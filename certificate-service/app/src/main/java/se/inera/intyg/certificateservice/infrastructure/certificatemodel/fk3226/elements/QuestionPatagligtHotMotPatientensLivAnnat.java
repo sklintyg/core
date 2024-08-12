@@ -24,6 +24,10 @@ public class QuestionPatagligtHotMotPatientensLivAnnat {
   private static final PdfFieldId PDF_CONDITION_IS_LIFE_THREATENING_OTHER_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[1].flt_txtBeskrivSjukdomstillstandet[0]");
 
+  private QuestionPatagligtHotMotPatientensLivAnnat() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionPatagligtHotMotPatientensLivAnnat() {
     return ElementSpecification.builder()
         .id(QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_ANNAT_ID)

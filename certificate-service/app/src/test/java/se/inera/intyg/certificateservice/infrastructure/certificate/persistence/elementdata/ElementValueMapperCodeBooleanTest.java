@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
-class ElementValueMapperCodeBoolean {
+class ElementValueMapperCodeBooleanTest {
 
   private static final String ID = "id";
   private ElementValueMapperBoolean elementValueMapperBoolean;

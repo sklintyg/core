@@ -18,6 +18,10 @@ public class QuestionPrognos {
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].Sida4[0].flt_txtPatientenslFunktionsnedsattning[0]");
 
+  private QuestionPrognos() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionPrognos() {
     return ElementSpecification.builder()
         .id(QUESTION_PROGNOS_ID)

@@ -20,6 +20,10 @@ public class QuestionPeriod {
   private static final PdfFieldId PDF_PERIOD_FIELD_ID_PREFIX = new PdfFieldId(
       "form1[0].#subform[0]");
 
+  private QuestionPeriod() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionPeriod() {
     final var dateRanges = List.of(
         new ElementConfigurationCode(

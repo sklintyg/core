@@ -4,11 +4,11 @@ public enum MessageEventType {
 
 
   ANSWER_COMPLEMENT("answer-complement-message", Constants.ACTION_TYPE_CREATION,
-      "message-sent"),
+      Constants.MESSAGE_TYPE_SENT),
   SEND_QUESTION("send-question-message", Constants.ACTION_TYPE_CREATION,
-      "message-sent"),
+      Constants.MESSAGE_TYPE_SENT),
   SEND_ANSWER("send-answer-message", Constants.ACTION_TYPE_CREATION,
-      "message-sent");
+      Constants.MESSAGE_TYPE_SENT);
 
   private final String action;
   private final String actionType;
@@ -39,5 +39,6 @@ public enum MessageEventType {
   private static class Constants {
 
     private static final String ACTION_TYPE_CREATION = "creation";
+    private static final String MESSAGE_TYPE_SENT = "message-sent";
   }
 }

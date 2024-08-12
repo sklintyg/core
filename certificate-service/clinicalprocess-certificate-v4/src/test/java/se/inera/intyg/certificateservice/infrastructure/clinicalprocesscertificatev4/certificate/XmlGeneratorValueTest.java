@@ -134,7 +134,7 @@ class XmlGeneratorValueTest {
   }
 
   @Nested
-  class TestStandardMapping {
+  class TestStandardXmlMapping {
 
     @BeforeEach
     void setUp() {
@@ -206,7 +206,7 @@ class XmlGeneratorValueTest {
   }
 
   @Nested
-  class TestCustomMapping {
+  class TestCustomXmlMapping {
 
     @BeforeEach
     void setUp() {

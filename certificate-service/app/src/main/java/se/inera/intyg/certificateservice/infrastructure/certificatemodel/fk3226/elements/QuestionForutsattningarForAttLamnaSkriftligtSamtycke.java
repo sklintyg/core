@@ -21,6 +21,10 @@ public class QuestionForutsattningarForAttLamnaSkriftligtSamtycke {
   private static final PdfFieldId PDF_CAN_CONSENT_NO_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[1].ksr_Nej_Modul3[0]");
 
+  private QuestionForutsattningarForAttLamnaSkriftligtSamtycke() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionForutsattningarForAttLamnaSkriftligtSamtycke() {
     return ElementSpecification.builder()
         .id(FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_ID)

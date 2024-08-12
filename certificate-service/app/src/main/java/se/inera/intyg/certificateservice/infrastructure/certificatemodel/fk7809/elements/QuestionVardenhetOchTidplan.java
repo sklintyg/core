@@ -23,6 +23,10 @@ public class QuestionVardenhetOchTidplan {
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].Sida3[0].flt_txtVardenhetTidplan[0]");
 
+  private QuestionVardenhetOchTidplan() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionVardenhetOchTidplan() {
     return ElementSpecification.builder()
         .id(QUESTION_VARDENHET_OCH_TIDPLAN_ID)

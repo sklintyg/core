@@ -8,6 +8,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 
 public class MessageForutsattningarForAttLamnaSkriftligtSamtycke {
 
+  private MessageForutsattningarForAttLamnaSkriftligtSamtycke() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification messageForutsattningarForAttLamnaSkriftligtSamtycke() {
     return ElementSpecification.builder()
         .id(new ElementId("forutsattningar"))

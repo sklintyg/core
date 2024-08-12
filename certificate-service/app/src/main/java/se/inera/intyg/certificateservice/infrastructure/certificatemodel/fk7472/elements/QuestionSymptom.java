@@ -18,6 +18,10 @@ public class QuestionSymptom {
       "form1[0].#subform[0].flt_txtDiagnos[0]");
   private static final short LIMIT = 318;
 
+  private QuestionSymptom() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static ElementSpecification questionSymptom() {
     return ElementSpecification.builder()
         .id(QUESTION_SYMPTOM_ID)

@@ -6,8 +6,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 
 public class CategoryGrund {
-  
+
   public static final ElementId QUESTION_GRUND_CATEGORY_ID = new ElementId("KAT_1");
+
+  private CategoryGrund() {
+    throw new IllegalStateException("Utility class");
+  }
 
   public static ElementSpecification categoryGrund(
       ElementSpecification... children) {
