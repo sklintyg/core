@@ -25,14 +25,14 @@ public class ActionRuleWithinAccessScope implements ActionRule {
       case WITHIN_CARE_UNIT -> {
         return certificate
             .filter(value ->
-                isWithinCareUnit(actionEvaluation.get(), value)
+                value.isWithinCareUnit(actionEvaluation.get())
             )
             .isPresent();
       }
       case WITHIN_CARE_PROVIDER -> {
         return certificate
             .filter(value ->
-                isWithinCareProvider(actionEvaluation.get(), value)
+                value.isWithinCareProvider(actionEvaluation.get())
             )
             .isPresent();
       }
@@ -62,31 +62,5 @@ public class ActionRuleWithinAccessScope implements ActionRule {
     }
 
     return AccessScope.ALL_CARE_PROVIDERS;
-  }
-
-  private static boolean isWithinCareUnit(ActionEvaluation actionEvaluation, Certificate value) {
-    return isIssuingUnitMatchingSubUnit(actionEvaluation, value)
-        || isCareUnitMatchingSubUnit(actionEvaluation, value);
-  }
-
-  private static boolean isWithinCareProvider(ActionEvaluation actionEvaluation,
-      Certificate value) {
-    return value.certificateMetaData().careProvider().hsaId().equals(
-        actionEvaluation.careProvider().hsaId()
-    );
-  }
-
-  private static boolean isCareUnitMatchingSubUnit(ActionEvaluation actionEvaluation,
-      Certificate value) {
-    return value.certificateMetaData().careUnit().hsaId().equals(
-        actionEvaluation.subUnit().hsaId()
-    );
-  }
-
-  private static boolean isIssuingUnitMatchingSubUnit(ActionEvaluation actionEvaluation,
-      Certificate value) {
-    return value.certificateMetaData().issuingUnit().hsaId().equals(
-        actionEvaluation.subUnit().hsaId()
-    );
   }
 }
