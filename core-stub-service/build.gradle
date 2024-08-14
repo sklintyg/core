@@ -3,7 +3,7 @@ plugins {
 }
 
 ext {
-    springbootMavenBomVersion = '3.2.5'
+    springbootMavenBomVersion = '3.2.8'
     greenMailVersion = "2.0.1"
 }
 
