@@ -14,7 +14,7 @@ ext {
     jakartaWsVersion = "4.0.1"
     guavaVersion = '33.0.0-jre'
     logbackEcsEncoderVersion = '1.6.0'
-    springbootMavenBomVersion = '3.2.2'
+    springbootMavenBomVersion = '3.2.5'
     testContainersMysqlVersion = '1.19.4'
     testContainersActivemqVersion = '1.19.7'
     schematronVersion = '8.0.0'
