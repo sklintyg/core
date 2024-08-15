@@ -1,0 +1,96 @@
+package se.inera.intyg.certificateservice.application.unit.service;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
+
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
+import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsDTO;
+import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsRequest;
+import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsResponse;
+import se.inera.intyg.certificateservice.application.unit.service.validator.UnitStatisticsRequestValidator;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitStatistics;
+import se.inera.intyg.certificateservice.domain.unit.service.GetUnitStatisticsDomainService;
+
+@ExtendWith(MockitoExtension.class)
+class GetUnitStatisticsServiceTest {
+
+  private static final List<String> UNIT_IDS = List.of("unit1", "unit2");
+  private static final String UNIT_1 = "unit1";
+  private static final String UNIT_2 = "unit2";
+  @Mock
+  private UnitStatisticsRequestValidator unitStatisticsRequestValidator;
+  @Mock
+  private ActionEvaluationFactory actionEvaluationFactory;
+  @Mock
+  private GetUnitStatisticsDomainService getUnitStatisticsDomainService;
+  @InjectMocks
+  private GetUnitStatisticsService getUnitStatisticsService;
+
+  @Test
+  void shallThrowIfRequestIsInvalid() {
+    final var request = UnitStatisticsRequest.builder().build();
+    doThrow(IllegalArgumentException.class).when(unitStatisticsRequestValidator).validate(request);
+
+    assertThrows(IllegalArgumentException.class, () -> getUnitStatisticsService.get(request));
+  }
+
+  @Test
+  void shallReturnUnitStatisticsResponse() {
+    final var expectedResult = UnitStatisticsResponse.builder()
+        .unitStatistics(
+            List.of(
+                UnitStatisticsDTO.builder()
+                    .unitId(UNIT_1)
+                    .draftCount(5)
+                    .unhandledMessageCount(5)
+                    .build(),
+                UnitStatisticsDTO.builder()
+                    .unitId(UNIT_2)
+                    .draftCount(5)
+                    .unhandledMessageCount(5)
+                    .build()
+            )
+        )
+        .build();
+    final var actionEvaluation = ActionEvaluation.builder().build();
+    doReturn(actionEvaluation).when(actionEvaluationFactory).create(
+        AJLA_DOCTOR_DTO,
+        ALFA_ALLERGIMOTTAGNINGEN_DTO,
+        ALFA_MEDICINCENTRUM_DTO,
+        ALFA_REGIONEN_DTO
+    );
+
+    final var statisticsMap = Map.of(
+        UNIT_1, new UnitStatistics(5, 5),
+        UNIT_2, new UnitStatistics(5, 5)
+    );
+
+    doReturn(statisticsMap).when(getUnitStatisticsDomainService).get(actionEvaluation, UNIT_IDS);
+
+    final var actualResult = getUnitStatisticsService.get(
+        UnitStatisticsRequest.builder()
+            .user(AJLA_DOCTOR_DTO)
+            .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
+            .careUnit(ALFA_MEDICINCENTRUM_DTO)
+            .careProvider(ALFA_REGIONEN_DTO)
+            .unitIds(UNIT_IDS)
+            .build()
+    );
+
+    assertEquals(expectedResult, actualResult);
+  }
+}

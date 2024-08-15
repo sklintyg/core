@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.certificate.repository.StatisticsRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.AnswerComplementDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ComplementCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateDomainService;
@@ -52,6 +53,7 @@ import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertif
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesInfoDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitMessagesDomainService;
+import se.inera.intyg.certificateservice.domain.unit.service.GetUnitStatisticsDomainService;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorCertificateV4;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorCertificateWithQAV3;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorValue;
@@ -369,5 +371,11 @@ public class AppConfig {
   public LockCertificateDomainService setCertificatesToLockedDomainService(
       CertificateRepository certificateRepository) {
     return new LockCertificateDomainService(certificateRepository);
+  }
+
+  @Bean
+  public GetUnitStatisticsDomainService getUnitStatisticsDomainService(
+      StatisticsRepository statisticsRepository) {
+    return new GetUnitStatisticsDomainService(statisticsRepository);
   }
 }

@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.common.validator;
 
+import java.util.List;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.RevokeInformationDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
@@ -176,6 +177,12 @@ public class ValidationUtil {
     }
     if (question.getType() == null) {
       throw new IllegalArgumentException("Required parameter missing: Question.type");
+    }
+  }
+
+  public static <T> void validateList(List<T> list, String parameter) {
+    if (list == null || list.isEmpty()) {
+      throw new IllegalArgumentException("Required parameter missing: %s".formatted(parameter));
     }
   }
 }

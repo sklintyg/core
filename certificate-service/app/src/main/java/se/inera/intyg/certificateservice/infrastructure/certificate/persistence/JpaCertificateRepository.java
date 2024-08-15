@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
+import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -24,6 +25,7 @@ import se.inera.intyg.certificateservice.testability.certificate.service.reposit
 @RequiredArgsConstructor
 public class JpaCertificateRepository implements TestabilityCertificateRepository {
 
+  private final EntityManager entityManager;
   private final CertificateEntityRepository certificateEntityRepository;
   private final CertificateEntityMapper certificateEntityMapper;
   private final CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;
