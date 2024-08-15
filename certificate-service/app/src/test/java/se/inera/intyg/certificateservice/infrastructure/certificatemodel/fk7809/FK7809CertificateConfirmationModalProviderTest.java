@@ -38,6 +38,7 @@ class FK7809CertificateConfirmationModalProviderTest {
 
   @Test
   void shouldReturnNullIfActionEvaluationIsNull() {
+    actionEvaluation = null;
     assertNull(provider.of(certificate, actionEvaluation));
   }
 
