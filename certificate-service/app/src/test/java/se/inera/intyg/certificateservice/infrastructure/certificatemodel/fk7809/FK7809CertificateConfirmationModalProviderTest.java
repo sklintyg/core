@@ -28,7 +28,7 @@ class FK7809CertificateConfirmationModalProviderTest {
   private static Certificate certificate;
   private static ActionEvaluation actionEvaluation;
   private static AccessScope accessScope;
-  private static final FK7809CertificateConfirmationConfirmationModalProvider provider = new FK7809CertificateConfirmationConfirmationModalProvider();
+  private static final FK7809CertificateConfirmationModalProvider provider = new FK7809CertificateConfirmationModalProvider();
 
   private static final String PATIENT_NAME = "First";
   private static final String PATIENT_MIDDLE_NAME = "Middle";
@@ -36,6 +36,10 @@ class FK7809CertificateConfirmationModalProviderTest {
   private static final String PATIENT_ID = "201212121212";
   private static final String OLD_PATIENT_ID = "191212121212";
 
+  @Test
+  void shouldReturnNullIfActionEvaluationIsNull() {
+    assertNull(provider.of(certificate, actionEvaluation));
+  }
 
   @Nested
   class WithinCareUnit {

@@ -9,7 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 
-public class FK7809CertificateConfirmationConfirmationModalProvider implements
+public class FK7809CertificateConfirmationModalProvider implements
     CertificateConfirmationModalProvider {
 
   @Override

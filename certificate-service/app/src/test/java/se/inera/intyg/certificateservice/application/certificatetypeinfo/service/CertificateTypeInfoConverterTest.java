@@ -26,7 +26,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.FK7809CertificateConfirmationConfirmationModalProvider;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateTypeInfoConverterTest {
