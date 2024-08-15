@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.application.certificatetypeinfo.dto;
 
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.util.List;
