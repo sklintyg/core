@@ -21,7 +21,7 @@ public class GetCertificateInternalMetadataService {
 
     final var certificate = certificateRepository.getById(new CertificateId(certificateId));
     return GetCertificateInternalMetadataResponse.builder()
-        .certificateMetadata(certificateMetadataConverter.convert(certificate))
+        .certificateMetadata(certificateMetadataConverter.convert(certificate, null))
         .build();
   }
 }

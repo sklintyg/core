@@ -138,7 +138,7 @@ class UpdateCertificateServiceTest {
       doReturn(resourceLinkDTO).when(resourceLinkConverter)
           .convert(certificateAction, Optional.of(certificate), actionEvaluation);
       doReturn(expectedCertificateDTO).when(certificateConverter)
-          .convert(certificate, List.of(resourceLinkDTO));
+          .convert(certificate, List.of(resourceLinkDTO), actionEvaluation);
     }
 
     @Test

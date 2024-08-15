@@ -19,21 +19,23 @@ import se.inera.intyg.certificateservice.application.certificate.service.convert
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateDataConverter;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateMetadataConverter;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateConverterTest {
 
   private final List<ResourceLinkDTO> resourceLinkDTOs = Collections.emptyList();
+  private static final ActionEvaluation ACTION_EVALUATION = ActionEvaluation.builder().build();
   @Mock
   private CertificateMetadataConverter certificateMetadataConverter;
   @Mock
   private CertificateDataConverter certificateDataConverter;
   @InjectMocks
   private CertificateConverter certificateConverter;
+
   private Certificate certificate;
   private static final String KEY = "key";
-  private static final String CERTIFICATE_ID = "certificateId";
 
   @BeforeEach
   void setUp() {
@@ -46,8 +48,10 @@ class CertificateConverterTest {
     @Test
     void shallIncludeMetadata() {
       final var expectedMetadata = CertificateMetadataDTO.builder().build();
-      doReturn(expectedMetadata).when(certificateMetadataConverter).convert(certificate);
-      final var actualMetadata = certificateMetadataConverter.convert(certificate);
+      doReturn(expectedMetadata).when(certificateMetadataConverter)
+          .convert(certificate, ACTION_EVALUATION);
+      final var actualMetadata = certificateMetadataConverter.convert(certificate,
+          ACTION_EVALUATION);
       assertEquals(expectedMetadata, actualMetadata);
     }
   }
@@ -63,7 +67,7 @@ class CertificateConverterTest {
           .convert(certificate);
 
       assertEquals(expectedValue,
-          certificateConverter.convert(certificate, resourceLinkDTOs).getData());
+          certificateConverter.convert(certificate, resourceLinkDTOs, ACTION_EVALUATION).getData());
     }
   }
 
@@ -75,7 +79,7 @@ class CertificateConverterTest {
       final var resourceLinkDTO = ResourceLinkDTO.builder().build();
       final var expectedLinks = List.of(resourceLinkDTO);
       assertEquals(expectedLinks,
-          certificateConverter.convert(certificate, expectedLinks).getLinks());
+          certificateConverter.convert(certificate, expectedLinks, ACTION_EVALUATION).getLinks());
     }
   }
 }

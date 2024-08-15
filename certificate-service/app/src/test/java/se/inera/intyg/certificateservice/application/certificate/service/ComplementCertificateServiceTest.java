@@ -107,7 +107,7 @@ class ComplementCertificateServiceTest {
         Optional.of(certificate), actionEvaluation);
 
     doReturn(expectedResponse.getCertificate()).when(certificateConverter)
-        .convert(certificate, List.of(resourceLinkDTO));
+        .convert(certificate, List.of(resourceLinkDTO), actionEvaluation);
 
     final var actualResponse = complementCertificateService.complement(
         COMPLEMENT_CERTIFICATE_REQUEST,

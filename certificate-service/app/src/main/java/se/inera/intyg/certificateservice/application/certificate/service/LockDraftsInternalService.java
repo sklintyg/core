@@ -28,7 +28,7 @@ public class LockDraftsInternalService {
         .certificates(
             lockedCertificates.stream()
                 .map(draft ->
-                    converter.convert(draft, Collections.emptyList())
+                    converter.convert(draft, Collections.emptyList(), null)
                 )
                 .toList()
         )

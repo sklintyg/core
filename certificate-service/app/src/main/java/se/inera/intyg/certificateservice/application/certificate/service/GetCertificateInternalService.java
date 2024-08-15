@@ -25,7 +25,8 @@ public class GetCertificateInternalService {
         .certificate(
             certificateConverter.convert(
                 certificate,
-                Collections.emptyList()
+                Collections.emptyList(),
+                null
             )
         )
         .build();

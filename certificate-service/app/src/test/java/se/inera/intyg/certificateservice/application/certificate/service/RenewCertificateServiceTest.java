@@ -107,7 +107,7 @@ class RenewCertificateServiceTest {
         Optional.of(certificate), actionEvaluation);
 
     doReturn(expectedResponse.getCertificate()).when(certificateConverter)
-        .convert(certificate, List.of(resourceLinkDTO));
+        .convert(certificate, List.of(resourceLinkDTO), actionEvaluation);
 
     final var actualResponse = renewCertificateService.renew(RENEW_CERTIFICATE_REQUEST,
         CERTIFICATE_ID);

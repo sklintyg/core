@@ -117,7 +117,9 @@ public class TestabilityCertificateService {
                             actionEvaluation
                         )
                     )
-                    .toList())
+                    .toList(),
+                actionEvaluation
+            )
         )
         .build();
   }

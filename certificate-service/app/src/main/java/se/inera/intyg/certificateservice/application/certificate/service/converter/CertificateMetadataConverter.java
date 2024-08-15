@@ -17,6 +17,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.StaffDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.UnitDTO;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
@@ -31,8 +32,10 @@ public class CertificateMetadataConverter {
   private static final boolean LATEST_MAJOR_VERSION = true;
   private final CertificateUnitConverter certificateUnitConverter;
   private final CertificateMessageTypeConverter certificateMessageTypeConverter;
+  private final CertificateConfirmationModalConverter confirmationModalConverter;
 
-  public CertificateMetadataDTO convert(Certificate certificate) {
+  public CertificateMetadataDTO convert(Certificate certificate,
+      ActionEvaluation actionEvaluation) {
     return CertificateMetadataDTO.builder()
         .id(certificate.id().id())
         .type(certificate.certificateModel().id().type().type())
@@ -116,6 +119,12 @@ public class CertificateMetadataConverter {
         .responsibleHospName(certificate.certificateMetaData().responsibleIssuer() != null
             ? certificate.certificateMetaData().responsibleIssuer().value()
             : null)
+        .confirmationModal(
+            confirmationModalConverter.convert(
+                certificate.certificateModel().confirmationModalProvider()
+                    .of(certificate, actionEvaluation)
+            )
+        )
         .build();
   }
 

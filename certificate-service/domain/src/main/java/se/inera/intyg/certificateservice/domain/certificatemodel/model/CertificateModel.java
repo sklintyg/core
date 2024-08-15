@@ -40,6 +40,7 @@ public class CertificateModel {
   List<Role> rolesWithAccess;
   List<CertificateMessageType> messageTypes;
   PdfSpecification pdfSpecification;
+  CertificateConfirmationModalProvider confirmationModalProvider;
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()
