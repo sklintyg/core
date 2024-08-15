@@ -120,10 +120,11 @@ public class CertificateMetadataConverter {
             ? certificate.certificateMetaData().responsibleIssuer().value()
             : null)
         .confirmationModal(
-            confirmationModalConverter.convert(
-                certificate.certificateModel().confirmationModalProvider()
-                    .of(certificate, actionEvaluation)
-            )
+            certificate.certificateModel().confirmationModalProvider() != null ?
+                confirmationModalConverter.convert(
+                    certificate.certificateModel().confirmationModalProvider()
+                        .of(certificate, actionEvaluation)
+                ) : null
         )
         .build();
   }

@@ -123,6 +123,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         .activeFrom(activeFrom)
         .availableForCitizen(true)
         .summaryProvider(new FK7809CertificateSummaryProvider())
+        .confirmationModalProvider(new FK7809CertificateConfirmationModalProvider())
         .texts(
             List.of(
                 CertificateText.builder()

@@ -36,9 +36,10 @@ public class CertificateTypeInfoConverter {
                 .toList()
         )
         .confirmationModal(
-            confirmationModalConverter.convert(
-                certificateModel.confirmationModalProvider().of(null, actionEvaluation)
-            )
+            certificateModel.confirmationModalProvider() != null ?
+                confirmationModalConverter.convert(
+                    certificateModel.confirmationModalProvider().of(null, actionEvaluation)
+                ) : null
         )
         .build();
   }
