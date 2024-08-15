@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,6 +26,7 @@ import se.inera.intyg.certificateservice.application.unit.service.GetUnitStatist
 @ExtendWith(MockitoExtension.class)
 class UnitCertificateControllerTest {
 
+  private static final String UNIT = "unit";
   @Mock
   private GetUnitStatisticsService getUnitStatisticsService;
   @Mock
@@ -65,7 +67,7 @@ class UnitCertificateControllerTest {
   @Test
   void shallReturnUnitStatisticsResponse() {
     final var expectedResult = UnitStatisticsResponse.builder()
-        .unitStatistics(List.of(UnitStatisticsDTO.builder().build()))
+        .unitStatistics(Map.of(UNIT, UnitStatisticsDTO.builder().build()))
         .build();
 
     final var request = UnitStatisticsRequest.builder().build();

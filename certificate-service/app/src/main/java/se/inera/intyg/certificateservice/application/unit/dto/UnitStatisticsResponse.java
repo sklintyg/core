@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.application.unit.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import java.util.List;
+import java.util.Map;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsResponse.StatisticsResponseBuilder;
@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsResp
 @Builder
 public class UnitStatisticsResponse {
 
-  List<UnitStatisticsDTO> unitStatistics;
+  Map<String, UnitStatisticsDTO> unitStatistics;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class StatisticsResponseBuilder {

@@ -52,14 +52,14 @@ class GetUnitStatisticsServiceTest {
   void shallReturnUnitStatisticsResponse() {
     final var expectedResult = UnitStatisticsResponse.builder()
         .unitStatistics(
-            List.of(
+            Map.of(
+                UNIT_1,
                 UnitStatisticsDTO.builder()
-                    .unitId(UNIT_1)
                     .draftCount(5)
                     .unhandledMessageCount(5)
                     .build(),
+                UNIT_2,
                 UnitStatisticsDTO.builder()
-                    .unitId(UNIT_2)
                     .draftCount(5)
                     .unhandledMessageCount(5)
                     .build()

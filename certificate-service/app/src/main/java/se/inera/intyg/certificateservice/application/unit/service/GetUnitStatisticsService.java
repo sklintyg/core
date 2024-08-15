@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.application.unit.service;
 
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
@@ -34,17 +36,15 @@ public class GetUnitStatisticsService {
 
     return UnitStatisticsResponse.builder()
         .unitStatistics(
-            statisticsMap.keySet().stream()
-                .map(key -> {
-                      final var unitStatistics = statisticsMap.get(key);
-                      return UnitStatisticsDTO.builder()
-                          .unitId(key)
-                          .draftCount(unitStatistics.certificateCount())
-                          .unhandledMessageCount(unitStatistics.messageCount())
-                          .build();
-                    }
-                )
-                .toList()
+            statisticsMap.entrySet().stream()
+                .collect(
+                    Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> UnitStatisticsDTO.builder()
+                            .draftCount(entry.getValue().certificateCount())
+                            .unhandledMessageCount(entry.getValue().messageCount())
+                            .build()
+                    ))
         )
         .build();
   }

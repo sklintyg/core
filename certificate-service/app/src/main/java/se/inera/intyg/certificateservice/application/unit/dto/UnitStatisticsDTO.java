@@ -10,8 +10,7 @@ import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsDTO.
 @Value
 @Builder
 public class UnitStatisticsDTO {
-
-  String unitId;
+  
   long draftCount;
   long unhandledMessageCount;
 
