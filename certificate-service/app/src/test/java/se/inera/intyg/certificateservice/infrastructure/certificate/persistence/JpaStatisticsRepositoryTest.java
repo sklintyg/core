@@ -19,6 +19,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitStatistics;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatus;
 
@@ -30,7 +31,7 @@ class JpaStatisticsRepositoryTest {
       "LEFT JOIN UnitEntity u ON c.issuedOnUnit.key = u.key " +
       "LEFT JOIN c.patient p " +
       "WHERE u.hsaId IN :hsaIds " +
-      "AND c.status.key IN :statusKey " +
+      "AND c.status.status IN :certificateStatusesForDrafts " +
       "AND (p.protectedPerson = false "
       + "OR (:allowedToViewProtectedPerson = true AND p.protectedPerson = true)) " +
       "GROUP BY u.hsaId";
@@ -41,7 +42,7 @@ class JpaStatisticsRepositoryTest {
       "LEFT JOIN c.issuedOnUnit u " +
       "LEFT JOIN c.patient p " +
       "WHERE u.hsaId IN :hsaIds " +
-      "AND m.status.key != :statusKey " +
+      "AND (m.status.status != :messageStatusHandled AND m.status.status != :messageStatusDraft) " +
       "AND (p.protectedPerson = false "
       + "OR (:allowedToViewProtectedPerson = true AND p.protectedPerson = true)) " +
       "GROUP BY u.hsaId";
@@ -117,20 +118,21 @@ class JpaStatisticsRepositoryTest {
     jpaStatisticsRepository.getStatisticsForUnits(List.of(UNIT_1), true);
 
     final var hsaIdsCaptor = ArgumentCaptor.forClass(List.class);
-    final var statusKeyCaptor = ArgumentCaptor.forClass(List.class);
+    final var statusCaptor = ArgumentCaptor.forClass(List.class);
     final var allowedToViewProtectedPersonCaptor = ArgumentCaptor.forClass(
         Boolean.class);
 
     verify(certificateQuery).setParameter(eq("hsaIds"), hsaIdsCaptor.capture());
-    verify(certificateQuery).setParameter(eq("statusKey"), statusKeyCaptor.capture());
+    verify(certificateQuery).setParameter(eq("certificateStatusesForDrafts"),
+        statusCaptor.capture());
     verify(certificateQuery).setParameter(eq("allowedToViewProtectedPerson"),
         allowedToViewProtectedPersonCaptor.capture());
-    
+
     assertAll(
         () -> assertEquals(List.of(UNIT_1), hsaIdsCaptor.getValue()),
         () -> assertEquals(
-            List.of(CertificateStatus.DRAFT.getKey(), CertificateStatus.LOCKED_DRAFT.getKey()),
-            statusKeyCaptor.getValue()),
+            List.of(CertificateStatus.DRAFT.name(), CertificateStatus.LOCKED_DRAFT.name()),
+            statusCaptor.getValue()),
         () -> assertTrue(allowedToViewProtectedPersonCaptor.getValue())
     );
   }
@@ -153,18 +155,21 @@ class JpaStatisticsRepositoryTest {
     jpaStatisticsRepository.getStatisticsForUnits(List.of(UNIT_1), true);
 
     final var hsaIdsCaptor = ArgumentCaptor.forClass(List.class);
-    final var statusKeyCaptor = ArgumentCaptor.forClass(Long.class);
+    final var statusCaptorHandled = ArgumentCaptor.forClass(String.class);
+    final var statusCaptorDraft = ArgumentCaptor.forClass(String.class);
     final var allowedToViewProtectedPersonCaptor = ArgumentCaptor.forClass(
         Boolean.class);
 
     verify(query).setParameter(eq("hsaIds"), hsaIdsCaptor.capture());
-    verify(query).setParameter(eq("statusKey"), statusKeyCaptor.capture());
+    verify(query).setParameter(eq("messageStatusHandled"), statusCaptorHandled.capture());
+    verify(query).setParameter(eq("messageStatusDraft"), statusCaptorDraft.capture());
     verify(query).setParameter(eq("allowedToViewProtectedPerson"),
         allowedToViewProtectedPersonCaptor.capture());
 
     assertAll(
         () -> assertEquals(List.of(UNIT_1), hsaIdsCaptor.getValue()),
-        () -> assertEquals(3L, statusKeyCaptor.getValue()),
+        () -> assertEquals(MessageStatus.HANDLED.name(), statusCaptorHandled.getValue()),
+        () -> assertEquals(MessageStatus.DRAFT.name(), statusCaptorDraft.getValue()),
         () -> assertTrue(allowedToViewProtectedPersonCaptor.getValue())
     );
   }

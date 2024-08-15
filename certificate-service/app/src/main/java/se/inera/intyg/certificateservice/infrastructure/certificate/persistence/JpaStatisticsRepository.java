@@ -7,6 +7,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.repository.StatisticsRepository;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitStatistics;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatus;
 
@@ -19,7 +20,7 @@ public class JpaStatisticsRepository implements StatisticsRepository {
       "LEFT JOIN UnitEntity u ON c.issuedOnUnit.key = u.key " +
       "LEFT JOIN c.patient p " +
       "WHERE u.hsaId IN :hsaIds " +
-      "AND c.status.key IN :statusKey " +
+      "AND c.status.status IN :certificateStatusesForDrafts " +
       "AND (p.protectedPerson = false "
       + "OR (:allowedToViewProtectedPerson = true AND p.protectedPerson = true)) " +
       "GROUP BY u.hsaId";
@@ -30,7 +31,7 @@ public class JpaStatisticsRepository implements StatisticsRepository {
       "LEFT JOIN c.issuedOnUnit u " +
       "LEFT JOIN c.patient p " +
       "WHERE u.hsaId IN :hsaIds " +
-      "AND m.status.key != :statusKey " +
+      "AND (m.status.status != :messageStatusHandled AND m.status.status != :messageStatusDraft) " +
       "AND (p.protectedPerson = false "
       + "OR (:allowedToViewProtectedPerson = true AND p.protectedPerson = true)) " +
       "GROUP BY u.hsaId";
@@ -43,8 +44,8 @@ public class JpaStatisticsRepository implements StatisticsRepository {
     final var draftCertificatesOnAvailableUnits = entityManager.createQuery(CERTIFICATE_JPQL,
             Object[].class)
         .setParameter("hsaIds", unitIds)
-        .setParameter("statusKey",
-            List.of(CertificateStatus.DRAFT.getKey(), CertificateStatus.LOCKED_DRAFT.getKey()))
+        .setParameter("certificateStatusesForDrafts",
+            List.of(CertificateStatus.DRAFT.name(), CertificateStatus.LOCKED_DRAFT.name()))
         .setParameter("allowedToViewProtectedPerson", allowedToViewProtectedPerson)
         .getResultList();
 
@@ -52,8 +53,9 @@ public class JpaStatisticsRepository implements StatisticsRepository {
             MESSAGE_JPQL,
             Object[].class)
         .setParameter("hsaIds", unitIds)
-        .setParameter("statusKey", 3L)
+        .setParameter("messageStatusHandled", MessageStatus.HANDLED.name())
         .setParameter("allowedToViewProtectedPerson", allowedToViewProtectedPerson)
+        .setParameter("messageStatusDraft", MessageStatus.DRAFT.name())
         .getResultList();
 
     final var statisticsMap = new HashMap<String, UnitStatistics>();
