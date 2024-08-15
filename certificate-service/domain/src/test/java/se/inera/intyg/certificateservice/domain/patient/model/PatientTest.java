@@ -2,6 +2,8 @@ package se.inera.intyg.certificateservice.domain.patient.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 
@@ -12,7 +14,7 @@ class PatientTest {
     final var patient = Patient.builder()
         .id(
             PersonId.builder()
-                .id("20240101-1111")
+                .id(LocalDate.now().minusDays(1).format(DateTimeFormatter.BASIC_ISO_DATE) + "-0101")
                 .build()
         )
         .build();
@@ -25,7 +27,8 @@ class PatientTest {
     final var patient = Patient.builder()
         .id(
             PersonId.builder()
-                .id("20230101-1111")
+                .id(LocalDate.now().minusDays(1).minusYears(1)
+                    .format(DateTimeFormatter.BASIC_ISO_DATE) + "-0101")
                 .build()
         )
         .build();
@@ -38,8 +41,8 @@ class PatientTest {
     final var patient = Patient.builder()
         .id(
             PersonId.builder()
-                .id("20140101-1111")
-                .build()
+                .id(LocalDate.now().minusDays(1).minusYears(10)
+                    .format(DateTimeFormatter.BASIC_ISO_DATE) + "-0101").build()
         )
         .build();
 
