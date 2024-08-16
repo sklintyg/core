@@ -28,7 +28,7 @@ import se.inera.intyg.certificateservice.domain.unit.service.GetUnitStatisticsDo
 @ExtendWith(MockitoExtension.class)
 class GetUnitStatisticsServiceTest {
 
-  private static final List<String> UNIT_IDS = List.of("unit1", "unit2");
+  private static final List<String> AVAILABLE_UNIT_IDS = List.of("unit1", "unit2");
   private static final String UNIT_1 = "unit1";
   private static final String UNIT_2 = "unit2";
   @Mock
@@ -79,7 +79,8 @@ class GetUnitStatisticsServiceTest {
         UNIT_2, new UnitStatistics(5, 5)
     );
 
-    doReturn(statisticsMap).when(getUnitStatisticsDomainService).get(actionEvaluation, UNIT_IDS);
+    doReturn(statisticsMap).when(getUnitStatisticsDomainService).get(actionEvaluation,
+        AVAILABLE_UNIT_IDS);
 
     final var actualResult = getUnitStatisticsService.get(
         UnitStatisticsRequest.builder()
@@ -87,7 +88,7 @@ class GetUnitStatisticsServiceTest {
             .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
             .careUnit(ALFA_MEDICINCENTRUM_DTO)
             .careProvider(ALFA_REGIONEN_DTO)
-            .unitIds(UNIT_IDS)
+            .availableUnitIds(AVAILABLE_UNIT_IDS)
             .build()
     );
 

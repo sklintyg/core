@@ -39,11 +39,11 @@ public class JpaStatisticsRepository implements StatisticsRepository {
   private final EntityManager entityManager;
 
   @Override
-  public Map<String, UnitStatistics> getStatisticsForUnits(List<String> unitIds,
+  public Map<String, UnitStatistics> getStatisticsForUnits(List<String> availableUnitIds,
       boolean allowedToViewProtectedPerson) {
     final var draftCertificatesOnAvailableUnits = entityManager.createQuery(CERTIFICATE_JPQL,
             Object[].class)
-        .setParameter("hsaIds", unitIds)
+        .setParameter("hsaIds", availableUnitIds)
         .setParameter("certificateStatusesForDrafts",
             List.of(CertificateStatus.DRAFT.name(), CertificateStatus.LOCKED_DRAFT.name()))
         .setParameter("allowedToViewProtectedPerson", allowedToViewProtectedPerson)
@@ -52,7 +52,7 @@ public class JpaStatisticsRepository implements StatisticsRepository {
     final var messagesWithUnhandledQuestionsOnAvailableUnits = entityManager.createQuery(
             MESSAGE_JPQL,
             Object[].class)
-        .setParameter("hsaIds", unitIds)
+        .setParameter("hsaIds", availableUnitIds)
         .setParameter("messageStatusHandled", MessageStatus.HANDLED.name())
         .setParameter("allowedToViewProtectedPerson", allowedToViewProtectedPerson)
         .setParameter("messageStatusDraft", MessageStatus.DRAFT.name())

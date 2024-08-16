@@ -18,7 +18,7 @@ public class UnitStatisticsRequest {
   UnitDTO unit;
   UnitDTO careUnit;
   UnitDTO careProvider;
-  List<String> unitIds;
+  List<String> availableUnitIds;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class UnitStatisticsRequestBuilder {

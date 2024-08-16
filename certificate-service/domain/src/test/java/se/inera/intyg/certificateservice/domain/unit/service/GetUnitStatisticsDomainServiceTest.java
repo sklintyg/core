@@ -25,7 +25,7 @@ import se.inera.intyg.certificateservice.domain.unit.model.UnitStatistics;
 @ExtendWith(MockitoExtension.class)
 class GetUnitStatisticsDomainServiceTest {
 
-  private static final List<String> UNIT_IDS = List.of("unit1");
+  private static final List<String> AVAILABLE_UNIT_IDS = List.of("unit1");
   @Mock
   private StatisticsRepository statisticsRepository;
   @InjectMocks
@@ -69,10 +69,10 @@ class GetUnitStatisticsDomainServiceTest {
         .build();
 
     doReturn(expectedUnitStatisticsMap).when(statisticsRepository)
-        .getStatisticsForUnits(UNIT_IDS, true);
+        .getStatisticsForUnits(AVAILABLE_UNIT_IDS, true);
 
     final var actualUnitStatisticsMap = getUnitStatisticsDomainService.get(actionEvaluation,
-        UNIT_IDS);
+        AVAILABLE_UNIT_IDS);
 
     assertEquals(expectedUnitStatisticsMap, actualUnitStatisticsMap);
   }

@@ -14,13 +14,17 @@ public class GetUnitStatisticsDomainService {
 
   private final StatisticsRepository statisticsRepository;
 
-  public Map<String, UnitStatistics> get(ActionEvaluation actionEvaluation, List<String> unitIds) {
+  public Map<String, UnitStatistics> get(ActionEvaluation actionEvaluation,
+      List<String> availableUnitIds) {
     final var allowedToViewProtectedPerson = !CARE_ADMIN.equals(actionEvaluation.user().role());
-    return getUnitStatistics(unitIds, allowedToViewProtectedPerson);
+    return getUnitStatistics(availableUnitIds, allowedToViewProtectedPerson);
   }
 
-  private Map<String, UnitStatistics> getUnitStatistics(List<String> unitIds,
+  private Map<String, UnitStatistics> getUnitStatistics(List<String> availableUnitIds,
       boolean allowedToViewProtectedPerson) {
-    return statisticsRepository.getStatisticsForUnits(unitIds, allowedToViewProtectedPerson);
+    return statisticsRepository.getStatisticsForUnits(
+        availableUnitIds,
+        allowedToViewProtectedPerson
+    );
   }
 }

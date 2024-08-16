@@ -33,7 +33,7 @@ class UnitStatisticsRequestValidatorTest {
         .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
         .careUnit(ALFA_MEDICINCENTRUM_DTO)
         .careProvider(ALFA_REGIONEN_DTO)
-        .unitIds(List.of(UNIT_ID));
+        .availableUnitIds(List.of(UNIT_ID));
   }
 
   @Test
@@ -332,26 +332,26 @@ class UnitStatisticsRequestValidatorTest {
     @Test
     void shallThrowIfListIsNull() {
       final var request = requestBuilder
-          .unitIds(null)
+          .availableUnitIds(null)
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
           () -> getUnitCertificatesInfoRequestValidator.validate(request));
 
-      assertEquals("Required parameter missing: UnitIds",
+      assertEquals("Required parameter missing: AvailableUnitIds",
           illegalArgumentException.getMessage());
     }
 
     @Test
     void shallThrowIfListIsEmpty() {
       final var request = requestBuilder
-          .unitIds(Collections.emptyList())
+          .availableUnitIds(Collections.emptyList())
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
           () -> getUnitCertificatesInfoRequestValidator.validate(request));
 
-      assertEquals("Required parameter missing: UnitIds",
+      assertEquals("Required parameter missing: AvailableUnitIds",
           illegalArgumentException.getMessage());
     }
   }

@@ -31,7 +31,7 @@ public class GetUnitStatisticsService {
 
     final var statisticsMap = getUnitStatisticsDomainService.get(
         actionEvaluation,
-        request.getUnitIds()
+        request.getAvailableUnitIds()
     );
 
     return UnitStatisticsResponse.builder()
