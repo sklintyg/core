@@ -54,7 +54,6 @@ public class JpaStatisticsRepository implements StatisticsRepository {
         .setParameter("hsaIds", hsaIds)
         .setParameter("certificateStatusesForDrafts",
             List.of(CertificateStatus.DRAFT.name(), CertificateStatus.LOCKED_DRAFT.name()))
-        .setParameter("allowedToViewProtectedPerson", allowedToViewProtectedPerson)
         .getResultList();
 
     final var messagesWithUnhandledQuestionsOnAvailableUnits = entityManager.createQuery(
@@ -63,7 +62,6 @@ public class JpaStatisticsRepository implements StatisticsRepository {
         .setParameter("hsaIds", hsaIds)
         .setParameter("messageStatusHandledOrDraft",
             List.of(MessageStatus.HANDLED.name(), MessageStatus.DRAFT.name()))
-        .setParameter("allowedToViewProtectedPerson", allowedToViewProtectedPerson)
         .getResultList();
 
     final var statisticsMap = new HashMap<HsaId, UnitStatistics>();

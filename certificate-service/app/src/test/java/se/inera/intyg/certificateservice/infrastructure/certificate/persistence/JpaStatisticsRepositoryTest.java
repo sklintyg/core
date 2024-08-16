@@ -123,15 +123,12 @@ class JpaStatisticsRepositoryTest {
     verify(certificateQuery).setParameter(eq("hsaIds"), hsaIdsCaptor.capture());
     verify(certificateQuery).setParameter(eq("certificateStatusesForDrafts"),
         statusCaptor.capture());
-    verify(certificateQuery).setParameter(eq("allowedToViewProtectedPerson"),
-        allowedToViewProtectedPersonCaptor.capture());
 
     assertAll(
         () -> assertEquals(List.of(UNIT_1), hsaIdsCaptor.getValue()),
         () -> assertEquals(
             List.of(CertificateStatus.DRAFT.name(), CertificateStatus.LOCKED_DRAFT.name()),
-            statusCaptor.getValue()),
-        () -> assertTrue(allowedToViewProtectedPersonCaptor.getValue())
+            statusCaptor.getValue())
     );
   }
 
@@ -160,14 +157,11 @@ class JpaStatisticsRepositoryTest {
     verify(query).setParameter(eq("hsaIds"), hsaIdsCaptor.capture());
     verify(query).setParameter(eq("messageStatusHandledOrDraft"),
         statusCaptorHandledOrDraft.capture());
-    verify(query).setParameter(eq("allowedToViewProtectedPerson"),
-        allowedToViewProtectedPersonCaptor.capture());
 
     assertAll(
         () -> assertEquals(List.of(UNIT_1), hsaIdsCaptor.getValue()),
         () -> assertEquals(List.of(MessageStatus.HANDLED.name(), MessageStatus.DRAFT.name()),
-            statusCaptorHandledOrDraft.getValue()),
-        () -> assertTrue(allowedToViewProtectedPersonCaptor.getValue())
+            statusCaptorHandledOrDraft.getValue())
     );
   }
 }
