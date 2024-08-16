@@ -15,33 +15,36 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 @RequiredArgsConstructor
 public class JpaStatisticsRepository implements StatisticsRepository {
 
-  private static final String CERTIFICATE_JPQL = "SELECT u.hsaId, COUNT(c.id) " +
-      "FROM CertificateEntity c " +
-      "LEFT JOIN UnitEntity u ON c.issuedOnUnit.key = u.key " +
-      "LEFT JOIN c.patient p " +
-      "WHERE u.hsaId IN :hsaIds " +
-      "AND c.status.status IN :certificateStatusesForDrafts " +
-      "AND (p.protectedPerson = false "
-      + "OR (:allowedToViewProtectedPerson = true AND p.protectedPerson = true)) " +
-      "GROUP BY u.hsaId";
-
-  private static final String MESSAGE_JPQL = "SELECT u.hsaId, COUNT(m.id) " +
-      "FROM MessageEntity m " +
-      "LEFT JOIN m.certificate c " +
-      "LEFT JOIN c.issuedOnUnit u " +
-      "LEFT JOIN c.patient p " +
-      "WHERE u.hsaId IN :hsaIds " +
-      "AND (m.status.status != :messageStatusHandled AND m.status.status != :messageStatusDraft) " +
-      "AND (p.protectedPerson = false "
-      + "OR (:allowedToViewProtectedPerson = true AND p.protectedPerson = true)) " +
-      "GROUP BY u.hsaId";
-
   private final EntityManager entityManager;
 
   @Override
   public Map<String, UnitStatistics> getStatisticsForUnits(List<String> availableUnitIds,
       boolean allowedToViewProtectedPerson) {
-    final var draftCertificatesOnAvailableUnits = entityManager.createQuery(CERTIFICATE_JPQL,
+    final var certificateJpql =
+        "SELECT u.hsaId, COUNT(c.id) " +
+            "FROM CertificateEntity c " +
+            "LEFT JOIN UnitEntity u ON c.issuedOnUnit.key = u.key " +
+            "LEFT JOIN c.patient p " +
+            "WHERE u.hsaId IN :hsaIds " +
+            "AND c.status.status IN :certificateStatusesForDrafts " +
+            (allowedToViewProtectedPerson
+                ? ""
+                : "AND p.protectedPerson = false ") +
+            "GROUP BY u.hsaId";
+
+    final var messageJpql = "SELECT u.hsaId, COUNT(m.id) " +
+        "FROM MessageEntity m " +
+        "LEFT JOIN m.certificate c " +
+        "LEFT JOIN c.issuedOnUnit u " +
+        "LEFT JOIN c.patient p " +
+        "WHERE u.hsaId IN :hsaIds " +
+        "AND m.status.status NOT IN :messageStatusHandledOrDraft " +
+        (allowedToViewProtectedPerson
+            ? ""
+            : "AND p.protectedPerson = false ") +
+        "GROUP BY u.hsaId";
+
+    final var draftCertificatesOnAvailableUnits = entityManager.createQuery(certificateJpql,
             Object[].class)
         .setParameter("hsaIds", availableUnitIds)
         .setParameter("certificateStatusesForDrafts",
@@ -50,12 +53,12 @@ public class JpaStatisticsRepository implements StatisticsRepository {
         .getResultList();
 
     final var messagesWithUnhandledQuestionsOnAvailableUnits = entityManager.createQuery(
-            MESSAGE_JPQL,
+            messageJpql,
             Object[].class)
         .setParameter("hsaIds", availableUnitIds)
-        .setParameter("messageStatusHandled", MessageStatus.HANDLED.name())
+        .setParameter("messageStatusHandledOrDraft",
+            List.of(MessageStatus.HANDLED.name(), MessageStatus.DRAFT.name()))
         .setParameter("allowedToViewProtectedPerson", allowedToViewProtectedPerson)
-        .setParameter("messageStatusDraft", MessageStatus.DRAFT.name())
         .getResultList();
 
     final var statisticsMap = new HashMap<String, UnitStatistics>();

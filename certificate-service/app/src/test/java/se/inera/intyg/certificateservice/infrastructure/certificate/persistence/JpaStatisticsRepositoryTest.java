@@ -32,8 +32,6 @@ class JpaStatisticsRepositoryTest {
       "LEFT JOIN c.patient p " +
       "WHERE u.hsaId IN :hsaIds " +
       "AND c.status.status IN :certificateStatusesForDrafts " +
-      "AND (p.protectedPerson = false "
-      + "OR (:allowedToViewProtectedPerson = true AND p.protectedPerson = true)) " +
       "GROUP BY u.hsaId";
 
   private static final String MESSAGE_JPQL = "SELECT u.hsaId, COUNT(m.id) " +
@@ -42,10 +40,9 @@ class JpaStatisticsRepositoryTest {
       "LEFT JOIN c.issuedOnUnit u " +
       "LEFT JOIN c.patient p " +
       "WHERE u.hsaId IN :hsaIds " +
-      "AND (m.status.status != :messageStatusHandled AND m.status.status != :messageStatusDraft) " +
-      "AND (p.protectedPerson = false "
-      + "OR (:allowedToViewProtectedPerson = true AND p.protectedPerson = true)) " +
+      "AND m.status.status NOT IN :messageStatusHandledOrDraft " +
       "GROUP BY u.hsaId";
+
   private static final String UNIT_1 = "unit1";
   private static final String UNIT_2 = "unit2";
   @Mock
@@ -155,21 +152,20 @@ class JpaStatisticsRepositoryTest {
     jpaStatisticsRepository.getStatisticsForUnits(List.of(UNIT_1), true);
 
     final var hsaIdsCaptor = ArgumentCaptor.forClass(List.class);
-    final var statusCaptorHandled = ArgumentCaptor.forClass(String.class);
-    final var statusCaptorDraft = ArgumentCaptor.forClass(String.class);
+    final var statusCaptorHandledOrDraft = ArgumentCaptor.forClass(List.class);
     final var allowedToViewProtectedPersonCaptor = ArgumentCaptor.forClass(
         Boolean.class);
 
     verify(query).setParameter(eq("hsaIds"), hsaIdsCaptor.capture());
-    verify(query).setParameter(eq("messageStatusHandled"), statusCaptorHandled.capture());
-    verify(query).setParameter(eq("messageStatusDraft"), statusCaptorDraft.capture());
+    verify(query).setParameter(eq("messageStatusHandledOrDraft"),
+        statusCaptorHandledOrDraft.capture());
     verify(query).setParameter(eq("allowedToViewProtectedPerson"),
         allowedToViewProtectedPersonCaptor.capture());
 
     assertAll(
         () -> assertEquals(List.of(UNIT_1), hsaIdsCaptor.getValue()),
-        () -> assertEquals(MessageStatus.HANDLED.name(), statusCaptorHandled.getValue()),
-        () -> assertEquals(MessageStatus.DRAFT.name(), statusCaptorDraft.getValue()),
+        () -> assertEquals(List.of(MessageStatus.HANDLED.name(), MessageStatus.DRAFT.name()),
+            statusCaptorHandledOrDraft.getValue()),
         () -> assertTrue(allowedToViewProtectedPersonCaptor.getValue())
     );
   }
