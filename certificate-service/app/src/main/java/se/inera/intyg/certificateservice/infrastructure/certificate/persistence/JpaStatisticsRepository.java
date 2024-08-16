@@ -67,15 +67,15 @@ public class JpaStatisticsRepository implements StatisticsRepository {
     final var statisticsMap = new HashMap<HsaId, UnitStatistics>();
     for (var result : draftCertificatesOnAvailableUnits) {
       final var hsaId = (String) result[0];
-      final var certificateCount = (int) result[1];
-      statisticsMap.put(new HsaId(hsaId), new UnitStatistics(certificateCount, 0));
+      final var certificateCount = (Long) result[1];
+      statisticsMap.put(new HsaId(hsaId), new UnitStatistics(certificateCount.intValue(), 0));
     }
 
     for (var result : messagesWithUnhandledQuestionsOnAvailableUnits) {
       final var hsaId = (String) result[0];
-      final var messageCount = (int) result[1];
+      final var messageCount = (Long) result[1];
       statisticsMap.merge(new HsaId(hsaId),
-          new UnitStatistics(0, messageCount),
+          new UnitStatistics(0, messageCount.intValue()),
           (existing, newStat) -> {
             existing.messageCount(newStat.messageCount());
             return existing;
