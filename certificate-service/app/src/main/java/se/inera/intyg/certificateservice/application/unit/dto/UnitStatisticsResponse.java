@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.util.Map;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsResponse.StatisticsResponseBuilder;
+import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsResponse.UnitStatisticsResponseBuilder;
 
-@JsonDeserialize(builder = StatisticsResponseBuilder.class)
+@JsonDeserialize(builder = UnitStatisticsResponseBuilder.class)
 @Value
 @Builder
 public class UnitStatisticsResponse {
@@ -15,7 +15,7 @@ public class UnitStatisticsResponse {
   Map<String, UnitStatisticsDTO> unitStatistics;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class StatisticsResponseBuilder {
+  public static class UnitStatisticsResponseBuilder {
 
   }
 }

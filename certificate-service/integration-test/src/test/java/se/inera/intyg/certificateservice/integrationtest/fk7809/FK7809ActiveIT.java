@@ -38,6 +38,7 @@ import se.inera.intyg.certificateservice.integrationtest.ResponsibleIssuerIT;
 import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SendCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateFK7809IT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
@@ -625,6 +626,26 @@ public class FK7809ActiveIT {
 
     @Override
     protected boolean canRecieveQuestions() {
+      return true;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Hämta statistik")
+  class IncludeUnitStatistics extends UnitStatisticsIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+
+    @Override
+    protected Boolean canHandleQuestions() {
       return true;
     }
   }
