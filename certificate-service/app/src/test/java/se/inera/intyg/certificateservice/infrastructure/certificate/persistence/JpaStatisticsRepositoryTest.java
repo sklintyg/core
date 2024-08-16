@@ -48,7 +48,6 @@ class JpaStatisticsRepositoryTest {
   private static final String UNIT_2 = "unit2";
   @Mock
   private EntityManager entityManager;
-
   @Mock
   private TypedQuery<Object[]> certificateQuery;
   @Mock
@@ -73,12 +72,12 @@ class JpaStatisticsRepositoryTest {
   @Test
   void shallMergeStatisticsCorrectlyForMultipleUnits() {
     final var draftCertificatesResult = List.of(
-        new Object[]{UNIT_1, 3L},
-        new Object[]{UNIT_2, 3L}
+        new Object[]{UNIT_1, 3},
+        new Object[]{UNIT_2, 3}
     );
     final var messagesResult = List.of(
-        new Object[]{UNIT_1, 3L},
-        new Object[]{UNIT_2, 3L}
+        new Object[]{UNIT_1, 3},
+        new Object[]{UNIT_2, 3}
     );
 
     doReturn(certificateQuery).when(entityManager).createQuery(eq(CERTIFICATE_JPQL), any());
@@ -102,8 +101,8 @@ class JpaStatisticsRepositoryTest {
   @Test
   void shallSetCorrectParametersForCertificateQuery() {
     final var draftCertificatesResult = List.of(
-        new Object[]{UNIT_1, 3L},
-        new Object[]{UNIT_2, 3L}
+        new Object[]{UNIT_1, 3},
+        new Object[]{UNIT_2, 3}
     );
 
     doReturn(query).when(entityManager).createQuery(eq(MESSAGE_JPQL), any());
@@ -139,8 +138,8 @@ class JpaStatisticsRepositoryTest {
   @Test
   void shallSetCorrectParametersForMessageQuery() {
     final var messagesResult = List.of(
-        new Object[]{UNIT_1, 3L},
-        new Object[]{UNIT_2, 3L}
+        new Object[]{UNIT_1, 3},
+        new Object[]{UNIT_2, 3}
     );
 
     doReturn(certificateQuery).when(entityManager).createQuery(eq(CERTIFICATE_JPQL), any());
