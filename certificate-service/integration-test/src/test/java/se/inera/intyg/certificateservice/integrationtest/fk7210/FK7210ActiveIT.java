@@ -498,7 +498,7 @@ public class FK7210ActiveIT {
     }
 
     @Override
-    protected Boolean canHandleQuestions() {
+    protected Boolean canRecieveQuestions() {
       return false;
     }
   }

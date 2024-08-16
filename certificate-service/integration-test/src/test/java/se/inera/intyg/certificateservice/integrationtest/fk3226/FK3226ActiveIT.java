@@ -646,7 +646,7 @@ public class FK3226ActiveIT {
     }
 
     @Override
-    protected Boolean canHandleQuestions() {
+    protected Boolean canRecieveQuestions() {
       return true;
     }
   }

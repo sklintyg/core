@@ -28,7 +28,7 @@ public abstract class UnitStatisticsIT extends BaseIntegrationIT {
 
   protected abstract String typeVersion();
 
-  protected abstract Boolean canHandleQuestions();
+  protected abstract Boolean canRecieveQuestions();
 
   @Test
   @DisplayName("Skall returnera antalet utkast utfärdade på en enhet")
@@ -93,7 +93,7 @@ public abstract class UnitStatisticsIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Skall returnera antalet ohanterade frågor på en enhet")
   void shallReturnCountOfAllUnhandledQuestionsOnUnit() {
-    if (!canHandleQuestions()) {
+    if (!canRecieveQuestions()) {
       return;
     }
 
@@ -154,7 +154,7 @@ public abstract class UnitStatisticsIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Skall returnera antalet ohanterade frågor på flera enheter")
   void shallReturnCountOfAllUnhandledQuestionsOnUnits() {
-    if (!canHandleQuestions()) {
+    if (!canRecieveQuestions()) {
       return;
     }
 
