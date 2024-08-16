@@ -455,5 +455,28 @@ public class Certificate {
     this.children = Collections.emptyList();
     this.locked = LocalDateTime.now(ZoneId.systemDefault());
   }
+
+  public boolean isWithinCareUnit(ActionEvaluation actionEvaluation) {
+    return isIssuingUnitMatchingSubUnit(actionEvaluation)
+        || isCareUnitMatchingSubUnit(actionEvaluation);
+  }
+
+  public boolean isWithinCareProvider(ActionEvaluation actionEvaluation) {
+    return certificateMetaData.careProvider().hsaId().equals(
+        actionEvaluation.careProvider().hsaId()
+    );
+  }
+
+  private boolean isCareUnitMatchingSubUnit(ActionEvaluation actionEvaluation) {
+    return certificateMetaData.careUnit().hsaId().equals(
+        actionEvaluation.subUnit().hsaId()
+    );
+  }
+
+  private boolean isIssuingUnitMatchingSubUnit(ActionEvaluation actionEvaluation) {
+    return certificateMetaData.issuingUnit().hsaId().equals(
+        actionEvaluation.subUnit().hsaId()
+    );
+  }
 }
 

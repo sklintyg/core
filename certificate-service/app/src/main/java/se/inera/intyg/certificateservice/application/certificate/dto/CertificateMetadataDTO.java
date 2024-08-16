@@ -44,6 +44,7 @@ public class CertificateMetadataDTO {
   boolean validForSign;
   String externalReference;
   List<CertificateMessageTypeDTO> messageTypes;
+  CertificateConfirmationModalDTO confirmationModal;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class CertificateMetadataDTOBuilder {

@@ -53,7 +53,8 @@ public class DeleteCertificateService {
                         actionEvaluation
                     )
                 )
-                .toList())
+                .toList(),
+            actionEvaluation)
         )
         .build();
   }

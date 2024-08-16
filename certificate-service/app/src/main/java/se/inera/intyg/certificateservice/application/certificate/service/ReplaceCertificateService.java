@@ -57,7 +57,8 @@ public class ReplaceCertificateService {
                             actionEvaluation
                         )
                     )
-                    .toList()
+                    .toList(),
+                actionEvaluation
             )
         )
         .build();

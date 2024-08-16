@@ -40,7 +40,6 @@ import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCerti
 class ForwardCertificateServiceTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
-  private static final String MESSAGE = "message";
   @Mock
   CertificateRepository certificateRepository;
   @Mock
@@ -177,7 +176,7 @@ class ForwardCertificateServiceTest {
     doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction,
         Optional.of(certificate), actionEvaluation);
     doReturn(certificateDTO).when(certificateConverter)
-        .convert(certificate, List.of(resourceLinkDTO));
+        .convert(certificate, List.of(resourceLinkDTO), actionEvaluation);
 
     final var actualResult = forwardCertificateService.forward(request, CERTIFICATE_ID);
 

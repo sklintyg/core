@@ -120,7 +120,7 @@ class CreateCertificateServiceTest {
         Optional.of(certificate), actionEvaluation);
 
     doReturn(expectedReponse.getCertificate()).when(certificateConverter)
-        .convert(certificate, List.of(resourceLinkDTO));
+        .convert(certificate, List.of(resourceLinkDTO), actionEvaluation);
 
     final var actualResponse = createCertificateService.create(CREATE_CERTIFICATE_REQUEST);
     assertEquals(expectedReponse, actualResponse);

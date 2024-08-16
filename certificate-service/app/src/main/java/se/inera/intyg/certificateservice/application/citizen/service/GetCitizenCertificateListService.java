@@ -42,7 +42,8 @@ public class GetCitizenCertificateListService {
             .filter(
                 certificate -> !certificate.certificateMetaData().patient().testIndicated().value()
             )
-            .map(certificate -> certificateConverter.convert(certificate, Collections.emptyList()))
+            .map(certificate -> certificateConverter.convert(certificate, Collections.emptyList(),
+                null))
             .toList()
         )
         .build();

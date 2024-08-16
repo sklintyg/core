@@ -107,7 +107,7 @@ class SignCertificateWithoutSignatureServiceTest {
       doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction,
           Optional.of(CERTIFICATE), actionEvaluation);
       doReturn(CERTIFICATE_DTO).when(certificateConverter)
-          .convert(CERTIFICATE, List.of(resourceLinkDTO));
+          .convert(CERTIFICATE, List.of(resourceLinkDTO), actionEvaluation);
     }
 
     @Test

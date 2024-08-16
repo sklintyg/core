@@ -85,7 +85,7 @@ class GetCitizenCertificateListServiceTest {
     when(certificateRepository.findByCertificatesRequest(CERTIFICATES_REQUEST))
         .thenReturn(List.of(FK7210, FK7472, FK7210_TEST));
 
-    when(certificateConverter.convert(FK7210, Collections.emptyList()))
+    when(certificateConverter.convert(FK7210, Collections.emptyList(), null))
         .thenReturn(CONVERTED_CERTIFICATE);
   }
 

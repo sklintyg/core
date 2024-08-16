@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonWebcertUnitDTO.alfaMedicincentrumDtoBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
@@ -53,6 +54,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateConfirmationModalDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMessageTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRecipientDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationDTO;
@@ -61,6 +63,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateSummaryDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
@@ -71,6 +74,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateConfirmationModal;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateConfirmationModalProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummary;
@@ -116,14 +121,23 @@ class CertificateMetadataConverterTest {
   private static final String CERTIFICATE_SUMMARY_VALUE = "SummaryValue";
   private static final Forwarded FORWARDED = new Forwarded(true);
   private static final String RESPONSIBLE_ISSUER = "ResponsibleIssuer";
+  private static final ActionEvaluation ACTION_EVALUATION = ActionEvaluation.builder().build();
+  private static final CertificateConfirmationModalDTO CONVERTED_MODAL = CertificateConfirmationModalDTO.builder()
+      .build();
+
   @Mock
   private CertificateMessageTypeConverter certificateMessageTypeConverter;
   @Mock
   private CertificateSummaryProvider certificateSummaryProvider;
   @Mock
+  private CertificateConfirmationModalProvider certificateConfirmationModalProvider;
+  @Mock
   private CertificateUnitConverter certificateUnitConverter;
+  @Mock
+  private CertificateConfirmationModalConverter certificateConfirmationModalConverter;
   @InjectMocks
   private CertificateMetadataConverter certificateMetadataConverter;
+
   private static final String CERTIFICATE_ID = "certificateId";
   private Certificate certificate;
   private Certificate.CertificateBuilder certificateBuilder;
@@ -198,6 +212,7 @@ class CertificateMetadataConverterTest {
                     )
                 )
                 .summaryProvider(certificateSummaryProvider)
+                .confirmationModalProvider(certificateConfirmationModalProvider)
                 .build()
         )
         .certificateMetaData(
@@ -239,40 +254,53 @@ class CertificateMetadataConverterTest {
             EXTERNAL_REFERENCE
         );
     certificate = certificateBuilder.build();
+
     final var certificateSummary = CertificateSummary.builder()
         .label(CERTIFICATE_SUMMARY_LABEL)
         .value(CERTIFICATE_SUMMARY_VALUE)
         .build();
     doReturn(certificateSummary).when(certificateSummaryProvider)
         .summaryOf(any(Certificate.class));
+
+    final var confirmationModal = CertificateConfirmationModal.builder().build();
+    doReturn(confirmationModal).when(certificateConfirmationModalProvider)
+        .of(any(Certificate.class), any(ActionEvaluation.class));
+    when(certificateConfirmationModalConverter.convert(confirmationModal))
+        .thenReturn(CONVERTED_MODAL);
   }
 
+  @Test
+  void shallIncludeConfirmationModal() {
+    assertEquals(CONVERTED_MODAL,
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getConfirmationModal()
+    );
+  }
 
   @Test
   void shallIncludeCertificateId() {
     assertEquals(CERTIFICATE_ID,
-        certificateMetadataConverter.convert(certificate).getId()
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getId()
     );
   }
 
   @Test
   void shallIncludeCertificateType() {
     assertEquals(TYPE,
-        certificateMetadataConverter.convert(certificate).getType()
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getType()
     );
   }
 
   @Test
   void shallIncludeCertificateTypeName() {
     assertEquals(TYPE,
-        certificateMetadataConverter.convert(certificate).getTypeName()
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getTypeName()
     );
   }
 
   @Test
   void shallIncludeCertificateTypeVersion() {
     assertEquals(VERSION,
-        certificateMetadataConverter.convert(certificate)
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION)
             .getTypeVersion()
     );
   }
@@ -280,14 +308,14 @@ class CertificateMetadataConverterTest {
   @Test
   void shallIncludeCertificateName() {
     assertEquals(TYPE_NAME,
-        certificateMetadataConverter.convert(certificate).getName()
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getName()
     );
   }
 
   @Test
   void shallIncludeCertificateTypeDescription() {
     assertEquals(TYPE_DESCRIPTION,
-        certificateMetadataConverter.convert(certificate)
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION)
             .getDescription()
     );
   }
@@ -295,14 +323,14 @@ class CertificateMetadataConverterTest {
   @Test
   void shallIncludeCreated() {
     assertEquals(CREATED,
-        certificateMetadataConverter.convert(certificate).getCreated()
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getCreated()
     );
   }
 
   @Test
   void shallIncludeVersion() {
     assertEquals(REVISION.value(),
-        certificateMetadataConverter.convert(certificate).getVersion()
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getVersion()
     );
   }
 
@@ -314,21 +342,22 @@ class CertificateMetadataConverterTest {
         .build();
 
     assertEquals(expectedSummary,
-        certificateMetadataConverter.convert(certificate).getSummary()
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getSummary()
     );
   }
 
   @Test
   void shallIncludeResponsibleIssuer() {
     assertEquals(RESPONSIBLE_ISSUER,
-        certificateMetadataConverter.convert(certificate).getResponsibleHospName()
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION)
+            .getResponsibleHospName()
     );
   }
 
   @Test
   void shallIncludeTestCertificate() {
     assertEquals(ATHENA_REACT_ANDERSSON_TEST_INDICATED.value(),
-        certificateMetadataConverter.convert(certificate).isTestCertificate()
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).isTestCertificate()
     );
   }
 
@@ -343,7 +372,7 @@ class CertificateMetadataConverterTest {
           .build();
 
       assertEquals(expectedId,
-          certificateMetadataConverter.convert(certificate).getPatient()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getPatient()
               .getPersonId()
       );
     }
@@ -351,7 +380,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeFirstName() {
       assertEquals(ATHENA_REACT_ANDERSSON_FIRST_NAME,
-          certificateMetadataConverter.convert(certificate).getPatient()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getPatient()
               .getFirstName()
       );
     }
@@ -359,7 +388,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeMiddleName() {
       assertEquals(ATHENA_REACT_ANDERSSON_MIDDLE_NAME,
-          certificateMetadataConverter.convert(certificate).getPatient()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getPatient()
               .getMiddleName()
       );
     }
@@ -367,7 +396,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeLastName() {
       assertEquals(ATHENA_REACT_ANDERSSON_LAST_NAME,
-          certificateMetadataConverter.convert(certificate).getPatient()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getPatient()
               .getLastName()
       );
     }
@@ -375,7 +404,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeFullName() {
       assertEquals(ATHENA_REACT_ANDERSSON_FULL_NAME,
-          certificateMetadataConverter.convert(certificate).getPatient()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getPatient()
               .getFullName()
       );
     }
@@ -383,7 +412,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeStreet() {
       assertEquals(ATHENA_REACT_ANDERSSON_STREET,
-          certificateMetadataConverter.convert(certificate).getPatient()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getPatient()
               .getStreet()
       );
     }
@@ -391,7 +420,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeCity() {
       assertEquals(ATHENA_REACT_ANDERSSON_CITY,
-          certificateMetadataConverter.convert(certificate).getPatient()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getPatient()
               .getCity()
       );
     }
@@ -399,7 +428,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeZipCode() {
       assertEquals(ATHENA_REACT_ANDERSSON_ZIP_CODE,
-          certificateMetadataConverter.convert(certificate).getPatient()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getPatient()
               .getZipCode()
       );
     }
@@ -407,7 +436,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeDeceased() {
       assertEquals(ATHENA_REACT_ANDERSSON_DECEASED.value(),
-          certificateMetadataConverter.convert(certificate).getPatient()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getPatient()
               .getDeceased()
       );
     }
@@ -415,7 +444,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeTestIndicated() {
       assertEquals(ATHENA_REACT_ANDERSSON_TEST_INDICATED.value(),
-          certificateMetadataConverter.convert(certificate).getPatient()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getPatient()
               .getTestIndicated()
       );
     }
@@ -423,7 +452,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeProtectedPerson() {
       assertEquals(ATHENA_REACT_ANDERSSON_PROTECTED_PERSON.value(),
-          certificateMetadataConverter.convert(certificate).getPatient()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getPatient()
               .getProtectedPerson()
       );
     }
@@ -431,7 +460,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeValidForSignTrueIfDraftAndValid() {
       assertTrue(
-          certificateMetadataConverter.convert(certificate)
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION)
               .isValidForSign()
       );
     }
@@ -442,7 +471,7 @@ class CertificateMetadataConverterTest {
           .elementData(Collections.emptyList())
           .build();
       assertFalse(
-          certificateMetadataConverter.convert(invalidCertificate)
+          certificateMetadataConverter.convert(invalidCertificate, ACTION_EVALUATION)
               .isValidForSign()
       );
     }
@@ -453,7 +482,7 @@ class CertificateMetadataConverterTest {
           .status(Status.DELETED_DRAFT)
           .build();
       assertFalse(
-          certificateMetadataConverter.convert(invalidCertificate)
+          certificateMetadataConverter.convert(invalidCertificate, ACTION_EVALUATION)
               .isValidForSign()
       );
     }
@@ -461,14 +490,14 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeSigned() {
       assertEquals(SIGNED,
-          certificateMetadataConverter.convert(certificate).getSigned()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getSigned()
       );
     }
 
     @Test
     void shallIncludeModified() {
       assertEquals(MODIFIED,
-          certificateMetadataConverter.convert(certificate).getModified()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getModified()
       );
     }
   }
@@ -484,7 +513,7 @@ class CertificateMetadataConverterTest {
           Optional.empty()
       );
       assertEquals(expectedUnit,
-          certificateMetadataConverter.convert(certificate).getUnit()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getUnit()
       );
     }
   }
@@ -495,7 +524,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeId() {
       assertEquals(ALFA_MEDICINCENTRUM_ID,
-          certificateMetadataConverter.convert(certificate).getCareUnit()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getCareUnit()
               .getUnitId()
       );
     }
@@ -503,7 +532,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeName() {
       assertEquals(ALFA_MEDICINCENTRUM_NAME,
-          certificateMetadataConverter.convert(certificate).getCareUnit()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getCareUnit()
               .getUnitName()
       );
     }
@@ -515,7 +544,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeId() {
       assertEquals(ALFA_REGIONEN_ID,
-          certificateMetadataConverter.convert(certificate)
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION)
               .getCareProvider().getUnitId()
       );
     }
@@ -523,7 +552,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeName() {
       assertEquals(ALFA_REGIONEN_NAME,
-          certificateMetadataConverter.convert(certificate)
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION)
               .getCareProvider().getUnitName()
       );
     }
@@ -535,7 +564,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeId() {
       assertEquals(AJLA_DOCTOR_HSA_ID,
-          certificateMetadataConverter.convert(certificate).getIssuedBy()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getIssuedBy()
               .getPersonId()
       );
     }
@@ -543,7 +572,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeFirstName() {
       assertEquals(AJLA_DOCTOR_FIRST_NAME,
-          certificateMetadataConverter.convert(certificate).getIssuedBy()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getIssuedBy()
               .getFirstName()
       );
     }
@@ -551,7 +580,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeLastMiddle() {
       assertEquals(AJLA_DOCTOR_MIDDLE_NAME,
-          certificateMetadataConverter.convert(certificate).getIssuedBy()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getIssuedBy()
               .getMiddleName()
       );
     }
@@ -559,7 +588,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeLastName() {
       assertEquals(AJLA_DOCTOR_LAST_NAME,
-          certificateMetadataConverter.convert(certificate).getIssuedBy()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getIssuedBy()
               .getLastName()
       );
     }
@@ -567,7 +596,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallIncludeFullName() {
       assertEquals(AJLA_DOCTOR_FULLNAME,
-          certificateMetadataConverter.convert(certificate).getIssuedBy()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getIssuedBy()
               .getFullName()
       );
     }
@@ -576,7 +605,7 @@ class CertificateMetadataConverterTest {
   @Test
   void shallIncludeExternalSetExternalReference() {
     assertEquals(EXTERNAL_REF,
-        certificateMetadataConverter.convert(certificate)
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION)
             .getExternalReference()
     );
   }
@@ -590,7 +619,7 @@ class CertificateMetadataConverterTest {
       assertEquals(
           CertificateStatusTypeDTO.UNSIGNED,
           certificateMetadataConverter.convert(
-                  certificate
+                  certificate, ACTION_EVALUATION
               )
               .getStatus()
       );
@@ -601,7 +630,7 @@ class CertificateMetadataConverterTest {
       assertEquals(
           CertificateStatusTypeDTO.UNSIGNED,
           certificateMetadataConverter.convert(
-                  certificateBuilder.status(Status.DELETED_DRAFT).build())
+                  certificateBuilder.status(Status.DELETED_DRAFT).build(), ACTION_EVALUATION)
               .getStatus()
       );
     }
@@ -610,7 +639,8 @@ class CertificateMetadataConverterTest {
     void shallConvertSignedToSigned() {
       assertEquals(
           CertificateStatusTypeDTO.SIGNED,
-          certificateMetadataConverter.convert(certificateBuilder.status(Status.SIGNED).build())
+          certificateMetadataConverter.convert(certificateBuilder.status(Status.SIGNED).build(),
+                  ACTION_EVALUATION)
               .getStatus()
       );
     }
@@ -620,7 +650,7 @@ class CertificateMetadataConverterTest {
       assertEquals(
           CertificateStatusTypeDTO.REVOKED,
           certificateMetadataConverter.convert(
-              certificateBuilder.status(Status.REVOKED).build()).getStatus()
+              certificateBuilder.status(Status.REVOKED).build(), ACTION_EVALUATION).getStatus()
       );
     }
   }
@@ -631,7 +661,7 @@ class CertificateMetadataConverterTest {
     @Test
     void shallSetSentTrueIfSentNotNull() {
       assertTrue(
-          certificateMetadataConverter.convert(certificate).isSent()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).isSent()
       );
     }
 
@@ -639,14 +669,14 @@ class CertificateMetadataConverterTest {
     void shallSetSentFalseIfSentNull() {
       final var certificate = certificateBuilder.sent(null).build();
       assertFalse(
-          certificateMetadataConverter.convert(certificate).isSent()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).isSent()
       );
     }
 
     @Test
     void shallIncludeSentToIfSentNotNull() {
       assertEquals(RECIPIENT.name(),
-          certificateMetadataConverter.convert(certificate).getSentTo()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getSentTo()
       );
     }
 
@@ -655,7 +685,7 @@ class CertificateMetadataConverterTest {
       final var certificate = certificateBuilder.sent(null).build();
 
       assertNull(
-          certificateMetadataConverter.convert(certificate).getSentTo()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getSentTo()
       );
     }
 
@@ -667,7 +697,7 @@ class CertificateMetadataConverterTest {
           .sent(SENT.sentAt())
           .build();
       assertEquals(expectedCertificateRecipient,
-          certificateMetadataConverter.convert(certificate).getRecipient()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getRecipient()
       );
     }
 
@@ -681,7 +711,7 @@ class CertificateMetadataConverterTest {
       final var certificate = certificateBuilder.sent(null).build();
 
       assertEquals(expectedCertificateRecipient,
-          certificateMetadataConverter.convert(certificate).getRecipient()
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getRecipient()
       );
     }
   }
@@ -726,7 +756,8 @@ class CertificateMetadataConverterTest {
           .build();
 
       assertEquals(expectedValue,
-          certificateMetadataConverter.convert(replacedCertificate).getRelations()
+          certificateMetadataConverter.convert(replacedCertificate, ACTION_EVALUATION)
+              .getRelations()
       );
     }
 
@@ -750,7 +781,8 @@ class CertificateMetadataConverterTest {
           .build();
 
       assertEquals(expectedValue,
-          certificateMetadataConverter.convert(replacedCertificate).getRelations()
+          certificateMetadataConverter.convert(replacedCertificate, ACTION_EVALUATION)
+              .getRelations()
       );
     }
 
@@ -778,7 +810,8 @@ class CertificateMetadataConverterTest {
           .build();
 
       assertEquals(expectedValue,
-          certificateMetadataConverter.convert(replacedCertificate).getRelations()
+          certificateMetadataConverter.convert(replacedCertificate, ACTION_EVALUATION)
+              .getRelations()
       );
     }
 
@@ -797,7 +830,8 @@ class CertificateMetadataConverterTest {
           .build();
 
       assertEquals(expectedValue,
-          certificateMetadataConverter.convert(replacedCertificate).getRelations()
+          certificateMetadataConverter.convert(replacedCertificate, ACTION_EVALUATION)
+              .getRelations()
       );
     }
   }
@@ -810,14 +844,14 @@ class CertificateMetadataConverterTest {
         .convert(CERTIFICATE_MESSAGE_TYPES.get(0));
 
     assertEquals(expectedMessageTypes,
-        certificateMetadataConverter.convert(certificate).getMessageTypes()
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getMessageTypes()
     );
   }
 
   @Test
   void shallIncludeForwarded() {
     assertEquals(FORWARDED.value(),
-        certificateMetadataConverter.convert(certificate).isForwarded()
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).isForwarded()
     );
   }
 }

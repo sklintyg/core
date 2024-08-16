@@ -92,7 +92,7 @@ class GetPatientCertificateServiceTest {
     doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction,
         Optional.of(certificate), actionEvaluation);
     doReturn(certificateDTO).when(certificateConverter)
-        .convert(certificate, List.of(resourceLinkDTO));
+        .convert(certificate, List.of(resourceLinkDTO), actionEvaluation);
 
     final var actualResult = getPatientCertificateService.get(
         GetPatientCertificatesRequest.builder()

@@ -47,7 +47,8 @@ public class GetPatientCertificateService {
                                 actionEvaluation
                             )
                         )
-                        .toList()
+                        .toList(),
+                    actionEvaluation
                 )
             )
             .toList()

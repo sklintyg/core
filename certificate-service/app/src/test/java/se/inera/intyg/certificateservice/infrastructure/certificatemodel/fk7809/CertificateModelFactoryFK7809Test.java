@@ -119,6 +119,14 @@ class CertificateModelFactoryFK7809Test {
   }
 
   @Test
+  void shallIncludeCertificateConfirmationModalProvider() {
+    final var certificateModel = certificateModelFactoryFK7809.create();
+
+    assertEquals(FK7809CertificateConfirmationModalProvider.class,
+        certificateModel.confirmationModalProvider().getClass());
+  }
+
+  @Test
   void shallIncludeMessageTypes() {
     final var expectedMessageTypes = List.of(
         CertificateMessageType.builder()

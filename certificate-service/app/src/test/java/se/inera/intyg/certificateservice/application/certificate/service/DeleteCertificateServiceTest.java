@@ -101,7 +101,7 @@ class DeleteCertificateServiceTest {
     doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction,
         Optional.of(certificate), actionEvaluation);
     doReturn(certificateDTO).when(certificateConverter)
-        .convert(certificate, List.of(resourceLinkDTO));
+        .convert(certificate, List.of(resourceLinkDTO), actionEvaluation);
 
     final var actualResult = deleteCertificateService.delete(
         DELETE_CERTIFICATE_REQUEST, CERTIFICATE_ID, VERSION

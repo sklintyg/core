@@ -128,7 +128,7 @@ class GetUnitMessagesServiceTest {
     doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction,
         Optional.of(certificate), actionEvaluation);
     doReturn(certificateDTO).when(certificateConverter)
-        .convert(certificate, List.of(resourceLinkDTO));
+        .convert(certificate, List.of(resourceLinkDTO), actionEvaluation);
     doReturn(questionDTO).when(questionConverter)
         .convert(message, messageActions);
 

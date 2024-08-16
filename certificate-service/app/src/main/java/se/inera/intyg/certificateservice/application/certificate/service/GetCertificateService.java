@@ -38,16 +38,18 @@ public class GetCertificateService {
 
     return GetCertificateResponse.builder()
         .certificate(certificateConverter.convert(
-            certificate,
-            certificate.actionsInclude(Optional.of(actionEvaluation)).stream()
-                .map(certificateAction ->
-                    resourceLinkConverter.convert(
-                        certificateAction,
-                        Optional.of(certificate),
-                        actionEvaluation
+                certificate,
+                certificate.actionsInclude(Optional.of(actionEvaluation)).stream()
+                    .map(certificateAction ->
+                        resourceLinkConverter.convert(
+                            certificateAction,
+                            Optional.of(certificate),
+                            actionEvaluation
+                        )
                     )
-                )
-                .toList())
+                    .toList(),
+                actionEvaluation
+            )
         )
         .build();
   }

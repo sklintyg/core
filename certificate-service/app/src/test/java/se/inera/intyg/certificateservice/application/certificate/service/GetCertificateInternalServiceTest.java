@@ -37,7 +37,7 @@ class GetCertificateInternalServiceTest {
 
     doReturn(certificate).when(certificateRepository).getById(new CertificateId(CERTIFICATE_ID));
     doReturn(certificateDto).when(certificateConverter)
-        .convert(certificate, Collections.emptyList());
+        .convert(certificate, Collections.emptyList(), null);
     final var actualResponse = getCertificateInternalService.get(CERTIFICATE_ID);
     assertEquals(expectedResponse, actualResponse);
   }

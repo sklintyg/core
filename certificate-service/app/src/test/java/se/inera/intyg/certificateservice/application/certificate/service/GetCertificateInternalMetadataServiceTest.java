@@ -48,7 +48,7 @@ class GetCertificateInternalMetadataServiceTest {
         .build();
 
     doReturn(certificate).when(certificateRepository).getById(new CertificateId(CERTIFICATE_ID));
-    doReturn(metadata).when(certificateMetadataConverter).convert(certificate);
+    doReturn(metadata).when(certificateMetadataConverter).convert(certificate, null);
     final var actualResponse = getCertificateInternalMetadataService.get(CERTIFICATE_ID);
     assertEquals(expectedResponse, actualResponse);
   }

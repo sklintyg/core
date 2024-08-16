@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.application.certificatetypeinfo.servic
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
 
 import java.util.List;
@@ -13,11 +14,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateConfirmationModalDTO;
+import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConfirmationModalConverter;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.converter.CertificateTypeInfoConverter;
 import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateConfirmationModal;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateConfirmationModalProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -32,10 +37,20 @@ class CertificateTypeInfoConverterTest {
       CertificateActionSpecification.builder().build();
   private static final CertificateAction CERTIFICATE_ACTION = mock(CertificateAction.class);
   private static final List<CertificateAction> CERTIFICATE_ACTIONS = List.of(CERTIFICATE_ACTION);
+  private static final CertificateConfirmationModal MODAL = CertificateConfirmationModal.builder()
+      .build();
+  private static final CertificateConfirmationModalDTO CONVERTED_MODAL = CertificateConfirmationModalDTO.builder()
+      .build();
+
   @Mock
   private ResourceLinkConverter resourceLinkConverter;
+  @Mock
+  CertificateConfirmationModalConverter confirmationModalConverter;
+  @Mock
+  CertificateConfirmationModalProvider modalProvider;
   @InjectMocks
   private CertificateTypeInfoConverter certificateTypeInfoConverter;
+
   private CertificateModel certificateModel;
 
   @BeforeEach
@@ -51,7 +66,20 @@ class CertificateTypeInfoConverterTest {
         .certificateActionSpecifications(
             List.of(CERTIFICATE_ACTION_SPECIFICATION)
         )
+        .confirmationModalProvider(modalProvider)
         .build();
+
+    when(modalProvider.of(null, ACTION_EVALUATION))
+        .thenReturn(MODAL);
+    when(confirmationModalConverter.convert(MODAL))
+        .thenReturn(CONVERTED_MODAL);
+  }
+
+  @Test
+  void shallIncludeModal() {
+    final var result = certificateTypeInfoConverter.convert(certificateModel, CERTIFICATE_ACTIONS,
+        ACTION_EVALUATION);
+    assertEquals(CONVERTED_MODAL, result.getConfirmationModal());
   }
 
   @Test

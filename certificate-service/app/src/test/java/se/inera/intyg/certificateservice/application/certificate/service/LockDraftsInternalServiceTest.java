@@ -50,7 +50,8 @@ class LockDraftsInternalServiceTest {
     final var certificate = mock(Certificate.class);
     final var certificates = List.of(certificate);
     doReturn(certificates).when(lockCertificateDomainService).lock(request.getCutoffDate());
-    doReturn(expectedCertificate).when(converter).convert(certificate, Collections.emptyList());
+    doReturn(expectedCertificate).when(converter)
+        .convert(certificate, Collections.emptyList(), null);
 
     final var actualResponse = lockDraftsInternalService.lock(request);
     assertEquals(expectedResponse, actualResponse);
