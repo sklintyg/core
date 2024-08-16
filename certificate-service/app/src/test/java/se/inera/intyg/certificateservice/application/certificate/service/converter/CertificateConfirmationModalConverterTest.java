@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.application.certificate.service.converter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateConfirmationModalDTO;
@@ -9,6 +10,13 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateConfirmationModal;
 
 class CertificateConfirmationModalConverterTest {
+
+  @Test
+  void shouldConvertNullToNull() {
+    assertNull(
+        new CertificateConfirmationModalConverter().convert(null)
+    );
+  }
 
   @Test
   void shouldConvertConfirmationModal() {

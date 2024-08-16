@@ -10,6 +10,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 public class CertificateConfirmationModalConverter {
 
   public CertificateConfirmationModalDTO convert(CertificateConfirmationModal modal) {
+    if (modal == null) {
+      return null;
+    }
+
     return CertificateConfirmationModalDTO.builder()
         .title(modal.title())
         .alert(modal.alert())
