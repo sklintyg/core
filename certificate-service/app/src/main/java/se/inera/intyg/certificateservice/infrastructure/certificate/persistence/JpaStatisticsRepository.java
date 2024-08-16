@@ -7,6 +7,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.repository.StatisticsRepository;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitStatistics;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatus;
@@ -18,7 +19,7 @@ public class JpaStatisticsRepository implements StatisticsRepository {
   private final EntityManager entityManager;
 
   @Override
-  public Map<String, UnitStatistics> getStatisticsForUnits(List<String> availableUnitIds,
+  public Map<HsaId, UnitStatistics> getStatisticsForUnits(List<HsaId> availableUnitIds,
       boolean allowedToViewProtectedPerson) {
     final var certificateJpql =
         "SELECT u.hsaId, COUNT(c.id) " +
@@ -44,9 +45,13 @@ public class JpaStatisticsRepository implements StatisticsRepository {
             : "AND p.protectedPerson = false ") +
         "GROUP BY u.hsaId";
 
+    final var hsaIds = availableUnitIds.stream()
+        .map(HsaId::id)
+        .toList();
+
     final var draftCertificatesOnAvailableUnits = entityManager.createQuery(certificateJpql,
             Object[].class)
-        .setParameter("hsaIds", availableUnitIds)
+        .setParameter("hsaIds", hsaIds)
         .setParameter("certificateStatusesForDrafts",
             List.of(CertificateStatus.DRAFT.name(), CertificateStatus.LOCKED_DRAFT.name()))
         .setParameter("allowedToViewProtectedPerson", allowedToViewProtectedPerson)
@@ -55,23 +60,23 @@ public class JpaStatisticsRepository implements StatisticsRepository {
     final var messagesWithUnhandledQuestionsOnAvailableUnits = entityManager.createQuery(
             messageJpql,
             Object[].class)
-        .setParameter("hsaIds", availableUnitIds)
+        .setParameter("hsaIds", hsaIds)
         .setParameter("messageStatusHandledOrDraft",
             List.of(MessageStatus.HANDLED.name(), MessageStatus.DRAFT.name()))
         .setParameter("allowedToViewProtectedPerson", allowedToViewProtectedPerson)
         .getResultList();
 
-    final var statisticsMap = new HashMap<String, UnitStatistics>();
+    final var statisticsMap = new HashMap<HsaId, UnitStatistics>();
     for (var result : draftCertificatesOnAvailableUnits) {
       final var hsaId = (String) result[0];
       final var certificateCount = (Long) result[1];
-      statisticsMap.put(hsaId, new UnitStatistics(certificateCount, 0));
+      statisticsMap.put(new HsaId(hsaId), new UnitStatistics(certificateCount, 0));
     }
 
     for (var result : messagesWithUnhandledQuestionsOnAvailableUnits) {
       final var hsaId = (String) result[0];
       final var messageCount = (Long) result[1];
-      statisticsMap.merge(hsaId,
+      statisticsMap.merge(new HsaId(hsaId),
           new UnitStatistics(0, messageCount),
           (existing, newStat) -> {
             existing.messageCount(newStat.messageCount());

@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.application.unit.service;
 
-import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,6 +8,7 @@ import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsResponse;
 import se.inera.intyg.certificateservice.application.unit.service.validator.UnitStatisticsRequestValidator;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitStatisticsDomainService;
 
 @Service
@@ -31,7 +31,9 @@ public class GetUnitStatisticsService {
 
     final var statisticsMap = getUnitStatisticsDomainService.get(
         actionEvaluation,
-        request.getAvailableUnitIds()
+        request.getAvailableUnitIds().stream()
+            .map(HsaId::new)
+            .toList()
     );
 
     return UnitStatisticsResponse.builder()
@@ -39,7 +41,7 @@ public class GetUnitStatisticsService {
             statisticsMap.entrySet().stream()
                 .collect(
                     Collectors.toMap(
-                        Map.Entry::getKey,
+                        entry -> entry.getKey().id(),
                         entry -> UnitStatisticsDTO.builder()
                             .draftCount(entry.getValue().certificateCount())
                             .unhandledMessageCount(entry.getValue().messageCount())

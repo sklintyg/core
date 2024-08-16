@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.repository.StatisticsRepository;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitStatistics;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,7 +64,7 @@ class GetUnitStatisticsDomainServiceTest {
 
   @Test
   void shallReturnMapOfUnitStatistics() {
-    final var expectedUnitStatisticsMap = Map.of("unit1", new UnitStatistics(1, 4));
+    final var expectedUnitStatisticsMap = Map.of(new HsaId("unit1"), new UnitStatistics(1, 4));
     final var actionEvaluation = ActionEvaluation.builder()
         .user(AJLA_DOKTOR)
         .build();

@@ -19,6 +19,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitStatistics;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatus;
@@ -62,7 +63,8 @@ class JpaStatisticsRepositoryTest {
     doReturn(query).when(query).setParameter(any(String.class), any());
     doReturn(List.of()).when(query).getResultList();
 
-    final var actualStatistics = jpaStatisticsRepository.getStatisticsForUnits(List.of(UNIT_1),
+    final var actualStatistics = jpaStatisticsRepository.getStatisticsForUnits(
+        List.of(new HsaId(UNIT_1)),
         true);
 
     assertTrue(actualStatistics.isEmpty());
@@ -88,11 +90,11 @@ class JpaStatisticsRepositoryTest {
     doReturn(messagesResult).when(query).getResultList();
 
     final var expectedStatistics = Map.of(
-        UNIT_2, new UnitStatistics(3L, 3L),
-        UNIT_1, new UnitStatistics(3L, 3L)
+        new HsaId(UNIT_2), new UnitStatistics(3L, 3L),
+        new HsaId(UNIT_1), new UnitStatistics(3L, 3L)
     );
     final var actualStatistics = jpaStatisticsRepository.getStatisticsForUnits(
-        List.of(UNIT_1, UNIT_2), true);
+        List.of(new HsaId(UNIT_1), new HsaId(UNIT_2)), true);
 
     assertEquals(expectedStatistics, actualStatistics);
   }
@@ -112,7 +114,7 @@ class JpaStatisticsRepositoryTest {
     doReturn(certificateQuery).when(certificateQuery).setParameter(any(String.class), any());
     doReturn(draftCertificatesResult).when(certificateQuery).getResultList();
 
-    jpaStatisticsRepository.getStatisticsForUnits(List.of(UNIT_1), true);
+    jpaStatisticsRepository.getStatisticsForUnits(List.of(new HsaId(UNIT_1)), true);
 
     final var hsaIdsCaptor = ArgumentCaptor.forClass(List.class);
     final var statusCaptor = ArgumentCaptor.forClass(List.class);
@@ -149,7 +151,7 @@ class JpaStatisticsRepositoryTest {
     doReturn(query).when(query).setParameter(any(String.class), any());
     doReturn(messagesResult).when(query).getResultList();
 
-    jpaStatisticsRepository.getStatisticsForUnits(List.of(UNIT_1), true);
+    jpaStatisticsRepository.getStatisticsForUnits(List.of(new HsaId(UNIT_1)), true);
 
     final var hsaIdsCaptor = ArgumentCaptor.forClass(List.class);
     final var statusCaptorHandledOrDraft = ArgumentCaptor.forClass(List.class);
