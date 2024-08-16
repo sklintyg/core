@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.DeleteCertif
 import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCertificateMessagesDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateEventsDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificatePdfDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateXmlDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.LockCertificateDomainService;
@@ -369,5 +370,11 @@ public class AppConfig {
   public LockCertificateDomainService setCertificatesToLockedDomainService(
       CertificateRepository certificateRepository) {
     return new LockCertificateDomainService(certificateRepository);
+  }
+
+  @Bean
+  public GetCertificateEventsDomainService getCertificateEventsDomainService(
+      CertificateRepository certificateRepository) {
+    return new GetCertificateEventsDomainService(certificateRepository);
   }
 }

@@ -20,6 +20,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateEventsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateEventsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
@@ -47,6 +49,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.Complem
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ForwardCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateEventsService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificatePdfService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateXmlService;
@@ -81,6 +84,7 @@ public class CertificateController {
   private final ComplementCertificateService complementCertificateService;
   private final AnswerComplementService answerComplementService;
   private final ForwardCertificateService forwardCertificateService;
+  private final GetCertificateEventsService getCertificateEventsService;
 
   @PostMapping
   CreateCertificateResponse createCertificate(
@@ -198,5 +202,12 @@ public class CertificateController {
       @RequestBody ForwardCertificateRequest forwardCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
     return forwardCertificateService.forward(forwardCertificateRequest, certificateId);
+  }
+
+  @PostMapping("/{certificateId}/events")
+  GetCertificateEventsResponse getCertificateEvents(
+      @RequestBody GetCertificateEventsRequest request,
+      @PathVariable("certificateId") String certificateId) {
+    return getCertificateEventsService.get(request, certificateId);
   }
 }

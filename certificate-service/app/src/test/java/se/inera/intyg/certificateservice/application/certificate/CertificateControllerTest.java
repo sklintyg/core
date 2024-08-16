@@ -21,6 +21,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateEventsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateEventsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
@@ -48,6 +50,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.Complem
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ForwardCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateEventsService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificatePdfService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateXmlService;
@@ -99,6 +102,8 @@ class CertificateControllerTest {
   private ComplementCertificateService complementCertificateService;
   @Mock
   private ForwardCertificateService forwardCertificateService;
+  @Mock
+  private GetCertificateEventsService getCertificateEventsService;
   @InjectMocks
   private CertificateController certificateController;
 
@@ -339,6 +344,17 @@ class CertificateControllerTest {
     doReturn(expectedResult).when(forwardCertificateService).forward(request, CERTIFICATE_ID);
 
     final var actualResult = certificateController.forwardCertificate(request, CERTIFICATE_ID);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnGetCertificateEventsResponse() {
+    final var request = GetCertificateEventsRequest.builder().build();
+    final var expectedResult = GetCertificateEventsResponse.builder().build();
+    doReturn(expectedResult).when(getCertificateEventsService).get(request, CERTIFICATE_ID);
+
+    final var actualResult = certificateController.getCertificateEvents(request, CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
   }
