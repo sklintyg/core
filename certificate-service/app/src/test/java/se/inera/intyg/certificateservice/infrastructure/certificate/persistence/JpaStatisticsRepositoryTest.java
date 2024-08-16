@@ -90,8 +90,8 @@ class JpaStatisticsRepositoryTest {
     doReturn(messagesResult).when(query).getResultList();
 
     final var expectedStatistics = Map.of(
-        new HsaId(UNIT_2), new UnitStatistics(3L, 3L),
-        new HsaId(UNIT_1), new UnitStatistics(3L, 3L)
+        new HsaId(UNIT_2), new UnitStatistics(3, 3),
+        new HsaId(UNIT_1), new UnitStatistics(3, 3)
     );
     final var actualStatistics = jpaStatisticsRepository.getStatisticsForUnits(
         List.of(new HsaId(UNIT_1), new HsaId(UNIT_2)), true);

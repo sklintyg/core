@@ -10,9 +10,9 @@ import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsDTO.
 @Value
 @Builder
 public class UnitStatisticsDTO {
-  
-  long draftCount;
-  long unhandledMessageCount;
+
+  int draftCount;
+  int unhandledMessageCount;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class UnitStatisticsDTOBuilder {

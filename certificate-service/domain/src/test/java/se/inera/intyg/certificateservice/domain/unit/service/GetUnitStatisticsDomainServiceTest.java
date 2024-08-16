@@ -26,7 +26,7 @@ import se.inera.intyg.certificateservice.domain.unit.model.UnitStatistics;
 @ExtendWith(MockitoExtension.class)
 class GetUnitStatisticsDomainServiceTest {
 
-  private static final List<String> AVAILABLE_UNIT_IDS = List.of("unit1");
+  private static final List<HsaId> AVAILABLE_UNIT_IDS = List.of(new HsaId("unit1"));
   @Mock
   private StatisticsRepository statisticsRepository;
   @InjectMocks

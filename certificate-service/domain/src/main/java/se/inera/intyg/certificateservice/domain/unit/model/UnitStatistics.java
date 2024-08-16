@@ -9,10 +9,10 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class UnitStatistics {
 
-  private long certificateCount;
-  private long messageCount;
+  private int certificateCount;
+  private int messageCount;
 
-  public UnitStatistics(long certificateCount, long messageCount) {
+  public UnitStatistics(int certificateCount, int messageCount) {
     this.certificateCount = certificateCount;
     this.messageCount = messageCount;
   }
