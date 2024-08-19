@@ -24,8 +24,8 @@ public class JpaStatisticsRepository implements StatisticsRepository {
     final var certificateJpql =
         "SELECT u.hsaId, COUNT(c.id) " +
             "FROM CertificateEntity c " +
-            "LEFT JOIN UnitEntity u ON c.issuedOnUnit.key = u.key " +
-            "LEFT JOIN c.patient p " +
+            "INNER JOIN UnitEntity u ON c.issuedOnUnit.key = u.key " +
+            "INNER JOIN c.patient p " +
             "WHERE u.hsaId IN :hsaIds " +
             "AND c.status.status IN :certificateStatusesForDrafts " +
             (allowedToViewProtectedPerson
@@ -35,9 +35,9 @@ public class JpaStatisticsRepository implements StatisticsRepository {
 
     final var messageJpql = "SELECT u.hsaId, COUNT(m.id) " +
         "FROM MessageEntity m " +
-        "LEFT JOIN m.certificate c " +
-        "LEFT JOIN c.issuedOnUnit u " +
-        "LEFT JOIN c.patient p " +
+        "INNER JOIN m.certificate c " +
+        "INNER JOIN c.issuedOnUnit u " +
+        "INNER JOIN c.patient p " +
         "WHERE u.hsaId IN :hsaIds " +
         "AND m.status.status NOT IN :messageStatusHandledOrDraft " +
         (allowedToViewProtectedPerson

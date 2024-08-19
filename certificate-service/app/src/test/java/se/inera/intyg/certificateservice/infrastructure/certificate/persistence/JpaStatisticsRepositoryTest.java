@@ -29,17 +29,17 @@ class JpaStatisticsRepositoryTest {
 
   private static final String CERTIFICATE_JPQL = "SELECT u.hsaId, COUNT(c.id) " +
       "FROM CertificateEntity c " +
-      "LEFT JOIN UnitEntity u ON c.issuedOnUnit.key = u.key " +
-      "LEFT JOIN c.patient p " +
+      "INNER JOIN UnitEntity u ON c.issuedOnUnit.key = u.key " +
+      "INNER JOIN c.patient p " +
       "WHERE u.hsaId IN :hsaIds " +
       "AND c.status.status IN :certificateStatusesForDrafts " +
       "GROUP BY u.hsaId";
 
   private static final String MESSAGE_JPQL = "SELECT u.hsaId, COUNT(m.id) " +
       "FROM MessageEntity m " +
-      "LEFT JOIN m.certificate c " +
-      "LEFT JOIN c.issuedOnUnit u " +
-      "LEFT JOIN c.patient p " +
+      "INNER JOIN m.certificate c " +
+      "INNER JOIN c.issuedOnUnit u " +
+      "INNER JOIN c.patient p " +
       "WHERE u.hsaId IN :hsaIds " +
       "AND m.status.status NOT IN :messageStatusHandledOrDraft " +
       "GROUP BY u.hsaId";
@@ -72,12 +72,12 @@ class JpaStatisticsRepositoryTest {
   @Test
   void shallMergeStatisticsCorrectlyForMultipleUnits() {
     final var draftCertificatesResult = List.of(
-        new Object[]{UNIT_1, 3},
-        new Object[]{UNIT_2, 3}
+        new Object[]{UNIT_1, 3L},
+        new Object[]{UNIT_2, 3L}
     );
     final var messagesResult = List.of(
-        new Object[]{UNIT_1, 3},
-        new Object[]{UNIT_2, 3}
+        new Object[]{UNIT_1, 3L},
+        new Object[]{UNIT_2, 3L}
     );
 
     doReturn(certificateQuery).when(entityManager).createQuery(eq(CERTIFICATE_JPQL), any());
@@ -101,8 +101,8 @@ class JpaStatisticsRepositoryTest {
   @Test
   void shallSetCorrectParametersForCertificateQuery() {
     final var draftCertificatesResult = List.of(
-        new Object[]{UNIT_1, 3},
-        new Object[]{UNIT_2, 3}
+        new Object[]{UNIT_1, 3L},
+        new Object[]{UNIT_2, 3L}
     );
 
     doReturn(query).when(entityManager).createQuery(eq(MESSAGE_JPQL), any());
@@ -117,8 +117,6 @@ class JpaStatisticsRepositoryTest {
 
     final var hsaIdsCaptor = ArgumentCaptor.forClass(List.class);
     final var statusCaptor = ArgumentCaptor.forClass(List.class);
-    final var allowedToViewProtectedPersonCaptor = ArgumentCaptor.forClass(
-        Boolean.class);
 
     verify(certificateQuery).setParameter(eq("hsaIds"), hsaIdsCaptor.capture());
     verify(certificateQuery).setParameter(eq("certificateStatusesForDrafts"),
@@ -135,8 +133,8 @@ class JpaStatisticsRepositoryTest {
   @Test
   void shallSetCorrectParametersForMessageQuery() {
     final var messagesResult = List.of(
-        new Object[]{UNIT_1, 3},
-        new Object[]{UNIT_2, 3}
+        new Object[]{UNIT_1, 3L},
+        new Object[]{UNIT_2, 3L}
     );
 
     doReturn(certificateQuery).when(entityManager).createQuery(eq(CERTIFICATE_JPQL), any());
@@ -151,8 +149,6 @@ class JpaStatisticsRepositoryTest {
 
     final var hsaIdsCaptor = ArgumentCaptor.forClass(List.class);
     final var statusCaptorHandledOrDraft = ArgumentCaptor.forClass(List.class);
-    final var allowedToViewProtectedPersonCaptor = ArgumentCaptor.forClass(
-        Boolean.class);
 
     verify(query).setParameter(eq("hsaIds"), hsaIdsCaptor.capture());
     verify(query).setParameter(eq("messageStatusHandledOrDraft"),
