@@ -838,7 +838,7 @@ class GetCertificateEventsOfTypeDomainServiceTest {
   }
 
   @Nested
-  class OutgoingMessageTes {
+  class OutgoingMessageTest {
 
     @Test
     void shouldReturnEventIfMessageFromWC() {

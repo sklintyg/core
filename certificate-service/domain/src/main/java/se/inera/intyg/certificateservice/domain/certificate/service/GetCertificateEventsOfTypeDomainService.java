@@ -112,8 +112,7 @@ public class GetCertificateEventsOfTypeDomainService {
                 certificate, certificate.parent().certificate(), certificate.parent().created(),
                 type
             )
-        )
-        : Collections.emptyList();
+        ) : Collections.emptyList();
   }
 
   private static CertificateEvent eventFromRelation(Certificate certificate,

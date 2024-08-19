@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateEventsRequest;
@@ -20,7 +19,6 @@ public class GetCertificateEventsService {
   private final ActionEvaluationFactory actionEvaluationFactory;
   private final CertificateEventConverter certificateEventConverter;
 
-  @Transactional
   public GetCertificateEventsResponse get(GetCertificateEventsRequest request,
       String certificateId) {
     getCertificateEventsRequestValidator.validate(request, certificateId);

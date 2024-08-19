@@ -8,8 +8,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateEve
 
 @Component
 public class CertificateEventConverter {
-
-
+  
   public CertificateEventDTO convert(CertificateEvent event) {
     return CertificateEventDTO.builder()
         .certificateId(event.certificateId().id())
