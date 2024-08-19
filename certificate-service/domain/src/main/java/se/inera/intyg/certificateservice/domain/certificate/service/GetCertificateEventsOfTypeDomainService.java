@@ -74,7 +74,7 @@ public class GetCertificateEventsOfTypeDomainService {
         return certificateEventsForChildRelation(certificate, type, RelationType.COMPLEMENT);
       }
       case EXTENDED -> {
-        return certificateEventsForChildRelation(certificate, type, RelationType.RENEW);
+        return certificateEventsForParentRelation(certificate, type, RelationType.RENEW);
       }
       case DELETED, LOCKED, READY_FOR_SIGN, INCOMING_MESSAGE_HANDLED, INCOMING_MESSAGE_REMINDER,
            OUTGOING_MESSAGE_HANDLED,

@@ -334,20 +334,20 @@ class GetCertificateEventsOfTypeDomainServiceTest {
   @Nested
   class ExtendedTest {
 
+    // Opposite behaviour from other relations to match behaviour in frontend
+
     @Test
-    void shouldReturnEventIfChildRelationExists() {
-      final var child = fk7809CertificateBuilder()
+    void shouldReturnEventIfParentRelationExists() {
+      final var parent = fk7809CertificateBuilder()
           .id(CERTIFICATE_ID)
           .build();
       final var certificate = fk7809CertificateBuilder()
-          .children(
-              List.of(
-                  Relation.builder()
-                      .certificate(child)
-                      .created(NOW)
-                      .type(RelationType.RENEW)
-                      .build()
-              )
+          .parent(
+              Relation.builder()
+                  .certificate(parent)
+                  .created(NOW)
+                  .type(RelationType.RENEW)
+                  .build()
           )
           .build();
 
@@ -355,8 +355,8 @@ class GetCertificateEventsOfTypeDomainServiceTest {
           .certificateId(certificate.id())
           .timestamp(NOW)
           .type(CertificateEventType.EXTENDED)
-          .relatedCertificateId(child.id())
-          .relatedCertificateStatus(child.status())
+          .relatedCertificateId(parent.id())
+          .relatedCertificateStatus(parent.status())
           .build();
 
       assertEquals(
@@ -366,48 +366,7 @@ class GetCertificateEventsOfTypeDomainServiceTest {
     }
 
     @Test
-    void shouldReturnEventIfSeveralChildRelationsExists() {
-      final var child = fk7809CertificateBuilder()
-          .id(CERTIFICATE_ID)
-          .build();
-      final var certificate = fk7809CertificateBuilder()
-          .children(
-              List.of(
-                  Relation.builder()
-                      .certificate(child)
-                      .created(NOW)
-                      .type(RelationType.RENEW)
-                      .build(),
-                  Relation.builder()
-                      .certificate(child)
-                      .created(NOW)
-                      .type(RelationType.RENEW)
-                      .build(),
-                  Relation.builder()
-                      .certificate(child)
-                      .created(NOW)
-                      .type(RelationType.COMPLEMENT)
-                      .build()
-              )
-          )
-          .build();
-
-      final var expected = CertificateEvent.builder()
-          .certificateId(certificate.id())
-          .timestamp(NOW)
-          .type(CertificateEventType.EXTENDED)
-          .relatedCertificateId(child.id())
-          .relatedCertificateStatus(child.status())
-          .build();
-
-      assertEquals(
-          List.of(expected, expected),
-          getCertificateEventsOfTypeDomainService.events(certificate, CertificateEventType.EXTENDED)
-      );
-    }
-
-    @Test
-    void shouldReturnEmptyListIfNoChildRelation() {
+    void shouldReturnEmptyListIfNoParentRelation() {
       final var certificate = fk7809CertificateBuilder()
           .build();
 
