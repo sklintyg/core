@@ -23,7 +23,7 @@ import se.inera.intyg.certificateservice.testability.certificate.service.reposit
 @Repository
 @RequiredArgsConstructor
 public class JpaCertificateRepository implements TestabilityCertificateRepository {
-
+  
   private final CertificateEntityRepository certificateEntityRepository;
   private final CertificateEntityMapper certificateEntityMapper;
   private final CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;

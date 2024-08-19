@@ -33,6 +33,7 @@ import se.inera.intyg.certificateservice.application.patient.dto.PatientCertific
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitMessagesRequest;
+import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsRequest;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityCertificateRequest;
 
 public class ApiRequestUtil {
@@ -180,6 +181,10 @@ public class ApiRequestUtil {
     return CreateMessageRequestBuilder.create().build();
   }
 
+  public static CreateMessageRequestBuilder customCreateMessageRequest() {
+    return CreateMessageRequestBuilder.create();
+  }
+
   public static SaveMessageRequest defaultSaveMessageRequest() {
     return SaveMessageRequestBuilder.create().build();
   }
@@ -190,6 +195,10 @@ public class ApiRequestUtil {
 
   public static SendMessageRequest defaultSendMessageRequest() {
     return SendMessageRequestBuilder.create().build();
+  }
+
+  public static SendMessageRequestBuilder customSendMessageRequest() {
+    return SendMessageRequestBuilder.create();
   }
 
   public static DeleteMessageRequest defaultDeleteMessageRequest() {
@@ -316,6 +325,14 @@ public class ApiRequestUtil {
 
   public static GetPatientCertificatesWithQARequestBuilder customGetPatientCertificatesWithQARequest() {
     return GetPatientCertificatesWithQARequestBuilder.create();
+  }
+
+  public static UnitStatisticsRequest defaultUnitStatisticsRequest() {
+    return UnitStatisticsRequestBuilder.create().build();
+  }
+
+  public static UnitStatisticsRequestBuilder customUnitStatisticsRequest() {
+    return UnitStatisticsRequestBuilder.create();
   }
 }
 
