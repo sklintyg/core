@@ -47,7 +47,9 @@ import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCer
 import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoResponse;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetLatestCertificateExternalTypeVersionResponse;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetLatestCertificateTypeVersionResponse;
+import se.inera.intyg.certificateservice.application.citizen.dto.CitizenCertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateListRequest;
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateListResponse;
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateRequest;
@@ -206,6 +208,38 @@ public class ApiUtil {
       String type) {
     final var requestUrl = "http://localhost:%s/api/certificatetypeinfo/%s/exists"
         .formatted(port, type);
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.GET,
+        new HttpEntity<>(headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<GetLatestCertificateExternalTypeVersionResponse> findLatestCertificateExternalTypeVersion(
+      String codeSystem, String code) {
+    final var requestUrl = "http://localhost:%s/api/certificatetypeinfo/%s/%s/exists"
+        .formatted(port, codeSystem, code);
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.GET,
+        new HttpEntity<>(headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<CitizenCertificateExistsResponse> findExistingCitizenCertificate(
+      String certificateId) {
+    final var requestUrl = "http://localhost:%s/api/citizen/certificate/%s/exists"
+        .formatted(port, certificateId);
     final var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     return this.restTemplate.exchange(
