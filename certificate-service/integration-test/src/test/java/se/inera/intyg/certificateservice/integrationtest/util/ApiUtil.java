@@ -83,6 +83,8 @@ import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificate
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesResponse;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitMessagesRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitMessagesResponse;
+import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsRequest;
+import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsResponse;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityResetCertificateRequest;
 
 @Slf4j
@@ -539,6 +541,15 @@ public class ApiUtil {
     );
 
     return sendRequest(request, requestUrl, GetCertificatePdfResponse.class);
+  }
+
+  public ResponseEntity<UnitStatisticsResponse> getUnitStatistics(
+      UnitStatisticsRequest request) {
+    final var requestUrl = "http://localhost:%s/api/unit/certificates/statistics".formatted(
+        port
+    );
+
+    return sendRequest(request, requestUrl, UnitStatisticsResponse.class);
   }
 
   private <T, R> ResponseEntity<T> sendRequest(R request, String requestUrl, Class<T> clazz) {

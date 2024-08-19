@@ -9,8 +9,11 @@ import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificate
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoResponse;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesResponse;
+import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsRequest;
+import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsResponse;
 import se.inera.intyg.certificateservice.application.unit.service.GetUnitCertificatesInfoService;
 import se.inera.intyg.certificateservice.application.unit.service.GetUnitCertificatesService;
+import se.inera.intyg.certificateservice.application.unit.service.GetUnitStatisticsService;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,6 +22,7 @@ public class UnitCertificateController {
 
   private final GetUnitCertificatesService getUnitCertificatesService;
   private final GetUnitCertificatesInfoService getUnitCertificatesInfoService;
+  private final GetUnitStatisticsService getUnitStatisticsService;
 
   @PostMapping
   public GetUnitCertificatesResponse getUnitCertificates(
@@ -30,5 +34,11 @@ public class UnitCertificateController {
   public GetUnitCertificatesInfoResponse getUnitCertificatesInfo(
       @RequestBody GetUnitCertificatesInfoRequest getUnitCertificatesInfoRequest) {
     return getUnitCertificatesInfoService.get(getUnitCertificatesInfoRequest);
+  }
+
+  @PostMapping("/statistics")
+  public UnitStatisticsResponse getUnitStatistics(
+      @RequestBody UnitStatisticsRequest unitStatisticsRequest) {
+    return getUnitStatisticsService.get(unitStatisticsRequest);
   }
 }

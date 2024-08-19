@@ -39,6 +39,7 @@ import se.inera.intyg.certificateservice.integrationtest.ResponsibleIssuerIT;
 import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SendCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateFK3226IT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
@@ -626,6 +627,26 @@ public class FK3226ActiveIT {
 
     @Override
     protected boolean canRecieveQuestions() {
+      return true;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Hämta statistik")
+  class IncludeUnitStatistics extends UnitStatisticsIT {
+
+    @Override
+    protected String type() {
+      return FK3226Constants.FK3226;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return FK3226Constants.VERSION;
+    }
+
+    @Override
+    protected Boolean canRecieveQuestions() {
       return true;
     }
   }
