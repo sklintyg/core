@@ -91,7 +91,7 @@ class GetUnitStatisticsServiceTest {
             .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
             .careUnit(ALFA_MEDICINCENTRUM_DTO)
             .careProvider(ALFA_REGIONEN_DTO)
-            .availableUnitIds(AVAILABLE_UNIT_IDS)
+            .issuedByUnitIds(AVAILABLE_UNIT_IDS)
             .build()
     );
 

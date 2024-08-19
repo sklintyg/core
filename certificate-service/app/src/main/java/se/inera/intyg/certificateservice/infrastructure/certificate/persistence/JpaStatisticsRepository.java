@@ -19,7 +19,7 @@ public class JpaStatisticsRepository implements StatisticsRepository {
   private final EntityManager entityManager;
 
   @Override
-  public Map<HsaId, UnitStatistics> getStatisticsForUnits(List<HsaId> availableUnitIds,
+  public Map<HsaId, UnitStatistics> getStatisticsForUnits(List<HsaId> issuedByUnitIds,
       boolean allowedToViewProtectedPerson) {
     final var certificateJpql =
         "SELECT u.hsaId, COUNT(c.id) " +
@@ -45,18 +45,18 @@ public class JpaStatisticsRepository implements StatisticsRepository {
             : "AND p.protectedPerson = false ") +
         "GROUP BY u.hsaId";
 
-    final var hsaIds = availableUnitIds.stream()
+    final var hsaIds = issuedByUnitIds.stream()
         .map(HsaId::id)
         .toList();
 
-    final var draftCertificatesOnAvailableUnits = entityManager.createQuery(certificateJpql,
+    final var draftCertificatesIssuedOnUnits = entityManager.createQuery(certificateJpql,
             Object[].class)
         .setParameter("hsaIds", hsaIds)
         .setParameter("certificateStatusesForDrafts",
             List.of(CertificateStatus.DRAFT.name(), CertificateStatus.LOCKED_DRAFT.name()))
         .getResultList();
 
-    final var messagesWithUnhandledQuestionsOnAvailableUnits = entityManager.createQuery(
+    final var messagesWithUnhandledQuestionsIssuedOnUnits = entityManager.createQuery(
             messageJpql,
             Object[].class)
         .setParameter("hsaIds", hsaIds)
@@ -65,21 +65,19 @@ public class JpaStatisticsRepository implements StatisticsRepository {
         .getResultList();
 
     final var statisticsMap = new HashMap<HsaId, UnitStatistics>();
-    for (var result : draftCertificatesOnAvailableUnits) {
+    for (var result : draftCertificatesIssuedOnUnits) {
       final var hsaId = (String) result[0];
       final var certificateCount = (Long) result[1];
       statisticsMap.put(new HsaId(hsaId), new UnitStatistics(certificateCount.intValue(), 0));
     }
 
-    for (var result : messagesWithUnhandledQuestionsOnAvailableUnits) {
+    for (var result : messagesWithUnhandledQuestionsIssuedOnUnits) {
       final var hsaId = (String) result[0];
       final var messageCount = (Long) result[1];
       statisticsMap.merge(new HsaId(hsaId),
           new UnitStatistics(0, messageCount.intValue()),
-          (existing, newStat) -> {
-            existing.messageCount(newStat.messageCount());
-            return existing;
-          });
+          (existing, newStat) -> existing.withMessageCount(newStat.messageCount())
+      );
     }
 
     return statisticsMap;

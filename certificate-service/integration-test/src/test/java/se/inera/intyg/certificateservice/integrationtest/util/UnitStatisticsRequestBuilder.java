@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.application.unit.dto.UnitStatisticsRequ
 
 public class UnitStatisticsRequestBuilder {
 
-  private List<String> availableUnitIds = List.of(ALFA_ALLERGIMOTTAGNINGEN_DTO.getId());
+  private List<String> issuedByUnitIds = List.of(ALFA_ALLERGIMOTTAGNINGEN_DTO.getId());
   private UnitDTO unit = ALFA_ALLERGIMOTTAGNINGEN_DTO;
   private UnitDTO careUnit = ALFA_MEDICINCENTRUM_DTO;
   private UserDTO user = AJLA_DOCTOR_DTO;
@@ -41,7 +41,7 @@ public class UnitStatisticsRequestBuilder {
   }
 
   public UnitStatisticsRequestBuilder availableUnitIds(List<String> availableUnitIds) {
-    this.availableUnitIds = availableUnitIds;
+    this.issuedByUnitIds = availableUnitIds;
     return this;
   }
 
@@ -51,7 +51,7 @@ public class UnitStatisticsRequestBuilder {
         .careProvider(ALFA_REGIONEN_DTO)
         .unit(unit)
         .careUnit(careUnit)
-        .availableUnitIds(availableUnitIds)
+        .issuedByUnitIds(issuedByUnitIds)
         .build();
   }
 }

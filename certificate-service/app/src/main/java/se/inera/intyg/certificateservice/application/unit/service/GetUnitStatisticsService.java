@@ -31,7 +31,7 @@ public class GetUnitStatisticsService {
 
     final var statisticsMap = getUnitStatisticsDomainService.get(
         actionEvaluation,
-        request.getAvailableUnitIds().stream()
+        request.getIssuedByUnitIds().stream()
             .map(HsaId::new)
             .toList()
     );

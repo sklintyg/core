@@ -1,19 +1,12 @@
 package se.inera.intyg.certificateservice.domain.unit.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Value;
+import lombok.With;
 
-@Setter
-@Getter
-@EqualsAndHashCode
+@Value
 public class UnitStatistics {
 
-  private int certificateCount;
-  private int messageCount;
-
-  public UnitStatistics(int certificateCount, int messageCount) {
-    this.certificateCount = certificateCount;
-    this.messageCount = messageCount;
-  }
+  int certificateCount;
+  @With
+  int messageCount;
 }

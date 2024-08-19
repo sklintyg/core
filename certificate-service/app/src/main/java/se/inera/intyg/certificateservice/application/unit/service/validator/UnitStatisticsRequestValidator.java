@@ -16,6 +16,6 @@ public class UnitStatisticsRequestValidator {
     validateUnitExtended(request.getUnit(), "Unit");
     validateUnit(request.getCareUnit(), "CareUnit");
     validateUnit(request.getCareProvider(), "CareProvider");
-    validateList(request.getAvailableUnitIds(), "AvailableUnitIds");
+    validateList(request.getIssuedByUnitIds(), "IssuedByUnitIds");
   }
 }
