@@ -4,8 +4,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import se.inera.intyg.certificateservice.integrationtest.ExistsCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCitizenCertificateListIT;
+import se.inera.intyg.certificateservice.integrationtest.PrintCitizenCertificateIT;
 
 class FK7809CitizenIT {
 
@@ -48,8 +50,7 @@ class FK7809CitizenIT {
     }
   }
 
-  //TODO Uncomment print test class when pdf functionality has been implemented
-  /*@Nested
+  @Nested
   @DisplayName(TYPE + "Skriv ut intyg för invånare")
   class PrintCitizenCertificate extends PrintCitizenCertificateIT {
 
@@ -62,5 +63,20 @@ class FK7809CitizenIT {
     protected String typeVersion() {
       return ACTIVE_VERSION;
     }
-  }*/
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Finns intyg för invånare")
+  class ExistsCitizenCertificate extends ExistsCitizenCertificateIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+  }
 }

@@ -2,6 +2,8 @@ package se.inera.intyg.certificateservice.integrationtest.fk3226;
 
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.elements.QuestionForutsattningarForAttLamnaSkriftligtSamtycke.FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_ID;
+import static se.inera.intyg.certificateservice.integrationtest.fk3226.FK3226Constants.CODE;
+import static se.inera.intyg.certificateservice.integrationtest.fk3226.FK3226Constants.CODE_SYSTEM;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -17,6 +19,7 @@ import se.inera.intyg.certificateservice.integrationtest.CertificatesWithQAForCa
 import se.inera.intyg.certificateservice.integrationtest.ComplementIT;
 import se.inera.intyg.certificateservice.integrationtest.CreateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.DeleteCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateExternalTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateIT;
@@ -648,6 +651,32 @@ public class FK3226ActiveIT {
     @Override
     protected Boolean canRecieveQuestions() {
       return true;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Aktiva versioner utifrån intygstyp och kodsystem")
+  class IncludeExistsCertificateExternalTypeInfo extends ExistsCertificateExternalTypeInfoIT {
+
+
+    @Override
+    protected String type() {
+      return FK3226Constants.FK3226;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return FK3226Constants.VERSION;
+    }
+
+    @Override
+    protected String codeSystem() {
+      return CODE_SYSTEM;
+    }
+
+    @Override
+    protected String code() {
+      return CODE;
     }
   }
 }

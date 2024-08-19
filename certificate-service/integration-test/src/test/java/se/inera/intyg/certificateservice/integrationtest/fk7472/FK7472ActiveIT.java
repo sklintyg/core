@@ -6,6 +6,8 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataInc
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.elements.QuestionPeriod.QUESTION_PERIOD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.elements.QuestionSymptom.QUESTION_SYMPTOM_ID;
+import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.CODE;
+import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.CODE_SYSTEM;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customUpdateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateMessageRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultRenewCertificateRequest;
@@ -36,6 +38,7 @@ import se.inera.intyg.certificateservice.integrationtest.CertificatesWithQAForCa
 import se.inera.intyg.certificateservice.integrationtest.ComplementIT;
 import se.inera.intyg.certificateservice.integrationtest.CreateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.DeleteCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateExternalTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateIT;
@@ -740,4 +743,31 @@ public class FK7472ActiveIT {
       return false;
     }
   }
+
+  @Nested
+  @DisplayName(TYPE + "Aktiva versioner utifrån intygstyp och kodsystem")
+  class IncludeExistsCertificateExternalTypeInfo extends ExistsCertificateExternalTypeInfoIT {
+
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+
+    @Override
+    protected String codeSystem() {
+      return CODE_SYSTEM;
+    }
+
+    @Override
+    protected String code() {
+      return CODE;
+    }
+  }
+
 }

@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.integrationtest.fk7809;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionPrognos.QUESTION_PROGNOS_ID;
+import static se.inera.intyg.certificateservice.integrationtest.fk7809.FK7809Constants.CODE;
+import static se.inera.intyg.certificateservice.integrationtest.fk7809.FK7809Constants.CODE_SYSTEM;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,6 +18,7 @@ import se.inera.intyg.certificateservice.integrationtest.CertificatesWithQAForCa
 import se.inera.intyg.certificateservice.integrationtest.ComplementIT;
 import se.inera.intyg.certificateservice.integrationtest.CreateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.DeleteCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateExternalTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateIT;
@@ -647,6 +650,33 @@ public class FK7809ActiveIT {
     @Override
     protected Boolean canRecieveQuestions() {
       return true;
+    }
+  }
+
+
+  @Nested
+  @DisplayName(TYPE + "Aktiva versioner utifrån intygstyp och kodsystem")
+  class IncludeExistsCertificateExternalTypeInfo extends ExistsCertificateExternalTypeInfoIT {
+
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+
+    @Override
+    protected String codeSystem() {
+      return CODE_SYSTEM;
+    }
+
+    @Override
+    protected String code() {
+      return CODE;
     }
   }
 }
