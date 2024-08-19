@@ -16,15 +16,15 @@ public class GetUnitStatisticsDomainService {
   private final StatisticsRepository statisticsRepository;
 
   public Map<HsaId, UnitStatistics> get(ActionEvaluation actionEvaluation,
-      List<HsaId> issuedOnUnits) {
+      List<HsaId> issuedByUnitIds) {
     final var allowedToViewProtectedPerson = !CARE_ADMIN.equals(actionEvaluation.user().role());
-    return getUnitStatistics(issuedOnUnits, allowedToViewProtectedPerson);
+    return getUnitStatistics(issuedByUnitIds, allowedToViewProtectedPerson);
   }
 
-  private Map<HsaId, UnitStatistics> getUnitStatistics(List<HsaId> issuedOnUnits,
+  private Map<HsaId, UnitStatistics> getUnitStatistics(List<HsaId> issuedByUnitIds,
       boolean allowedToViewProtectedPerson) {
     return statisticsRepository.getStatisticsForUnits(
-        issuedOnUnits,
+        issuedByUnitIds,
         allowedToViewProtectedPerson
     );
   }
