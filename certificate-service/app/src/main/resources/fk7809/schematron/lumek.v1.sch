@@ -410,4 +410,11 @@
     </iso:rule>
   </iso:pattern>
 
+    <iso:pattern id="boolean-pattern">
+      <iso:rule id="boolean" abstract="true">
+        <iso:assert test="count(*) = 0">Booleskt värde får inte vara inbäddat i något element.</iso:assert>
+        <iso:assert test=". castable as xs:boolean">Kan bara vara 'true/1' eller 'false/0'</iso:assert>
+      </iso:rule>
+    </iso:pattern>
+
 </iso:schema>
