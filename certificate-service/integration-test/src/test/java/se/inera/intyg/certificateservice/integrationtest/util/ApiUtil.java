@@ -346,7 +346,6 @@ public class ApiUtil {
 
     final var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-
     return this.restTemplate.exchange(
         requestUrl,
         HttpMethod.PUT,
