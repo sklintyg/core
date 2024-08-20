@@ -52,7 +52,7 @@
           Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för synfunktion'
         </iso:assert>
         <iso:assert test="count(gn:svar[@id='12']) le 1">
-          Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för sinnesfunktioner och smärta
+          Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för sinnesfunktioner och smärta'
         </iso:assert>
        <iso:assert test="count(gn:svar[@id='13']) le 1">
         Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för balans, koordination och motorik'
@@ -235,7 +235,7 @@
     </iso:pattern>
 
     <iso:pattern id="q58.2">
-      <iso:rule context="//gn:delsvar[@id='58.2']"> 
+      <iso:rule context="//gn:delsvar[@id='58.2']">
         <iso:extends rule="cv"/>
         <iso:assert test="matches(normalize-space(tp:cv/tp:codeSystem), '(1.2.752.116.1.1.1.1.8)')">
           Diagnoskodsystem måste vara OID för ICD-10-SE
@@ -258,7 +258,7 @@
     </iso:pattern>
 
     <iso:pattern id="q58.4">
-      <iso:rule context="//gn:delsvar[@id='58.4']"> 
+      <iso:rule context="//gn:delsvar[@id='58.4']">
         <iso:extends rule="cv"/>
         <iso:assert test="matches(normalize-space(tp:cv/tp:codeSystem), '(1.2.752.116.1.1.1.1.8)')">
           Diagnoskodsystem måste vara OID för ICD-10-SE
@@ -281,7 +281,7 @@
     </iso:pattern>
 
     <iso:pattern id="q58.6">
-      <iso:rule context="//gn:delsvar[@id='58.6']"> 
+      <iso:rule context="//gn:delsvar[@id='58.6']">
         <iso:extends rule="cv"/>
         <iso:assert test="matches(normalize-space(tp:cv/tp:codeSystem), '(1.2.752.116.1.1.1.1.8)')">
           Diagnoskodsystem måste vara OID för ICD-10-SE
@@ -304,7 +304,7 @@
         </iso:pattern>
 
         <iso:pattern id="q58.8">
-          <iso:rule context="//gn:delsvar[@id='58.6']"> 
+          <iso:rule context="//gn:delsvar[@id='58.6']">
             <iso:extends rule="cv"/>
             <iso:assert test="matches(normalize-space(tp:cv/tp:codeSystem), '(1.2.752.116.1.1.1.1.8)')">
               Diagnoskodsystem måste vara OID för ICD-10-SE
@@ -327,7 +327,7 @@
       </iso:pattern>
 
       <iso:pattern id="q58.10">
-        <iso:rule context="//gn:delsvar[@id='58.6']"> 
+        <iso:rule context="//gn:delsvar[@id='58.6']">
           <iso:extends rule="cv"/>
           <iso:assert test="matches(normalize-space(tp:cv/tp:codeSystem), '(1.2.752.116.1.1.1.1.8)')">
             Diagnoskodsystem måste vara OID för ICD-10-SE
@@ -409,5 +409,12 @@
       <iso:assert test="string-length(normalize-space(text())) > 0">Sträng kan inte vara tom.</iso:assert>
     </iso:rule>
   </iso:pattern>
+
+    <iso:pattern id="boolean-pattern">
+      <iso:rule id="boolean" abstract="true">
+        <iso:assert test="count(*) = 0">Booleskt värde får inte vara inbäddat i något element.</iso:assert>
+        <iso:assert test=". castable as xs:boolean">Kan bara vara 'true/1' eller 'false/0'</iso:assert>
+      </iso:rule>
+    </iso:pattern>
 
 </iso:schema>
