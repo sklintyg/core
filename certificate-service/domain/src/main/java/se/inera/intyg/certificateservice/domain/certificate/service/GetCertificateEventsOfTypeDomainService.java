@@ -12,77 +12,51 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 public class GetCertificateEventsOfTypeDomainService {
 
   public List<CertificateEvent> events(Certificate certificate, CertificateEventType type) {
-    switch (type) {
-      case CREATED -> {
-        return List.of(eventFromTimestamp(certificate, certificate.created(), type));
-      }
-      case SIGNED, AVAILABLE_FOR_PATIENT -> {
-        return List.of(eventFromTimestamp(certificate, certificate.signed(), type));
-      }
-      case SENT -> {
-        return certificate.sent() != null
-            ? List.of(eventFromTimestamp(certificate, certificate.sent().sentAt(), type))
-            : Collections.emptyList();
-      }
-      case INCOMING_MESSAGE -> {
-        return certificate.messages()
-            .stream()
-            .filter(message -> message.type() != MessageType.ANSWER
-                && message.type() != MessageType.COMPLEMENT)
-            .filter(message -> message.author().author().equals("FK"))
-            .map(message -> eventFromTimestamp(certificate, message.sent(), type))
-            .toList();
-      }
-      case OUTGOING_MESSAGE -> {
-        return certificate.messages()
-            .stream()
-            .filter(message -> message.type() != MessageType.ANSWER
-                && message.type() != MessageType.COMPLEMENT)
-            .filter(message -> !message.author().author().equals("FK"))
-            .map(message -> eventFromTimestamp(certificate, message.sent(), type))
-            .toList();
-      }
-      case INCOMING_ANSWER -> {
-        return certificate.messages(MessageType.ANSWER)
-            .stream()
-            .filter(message -> message.author().author().equals("FK"))
-            .map(message -> eventFromTimestamp(certificate, message.sent(), type))
-            .toList();
-      }
-      case REQUEST_FOR_COMPLEMENT -> {
-        return certificate.messages()
-            .stream()
-            .filter(message -> !message.complements().isEmpty())
-            .map(complement -> eventFromTimestamp(certificate, complement.sent(), type))
-            .toList();
-      }
-      case REVOKED -> {
-        return certificate.revoked() != null
-            ? List.of(eventFromTimestamp(certificate, certificate.revoked().revokedAt(), type))
-            : Collections.emptyList();
-      }
-      case REPLACED -> {
-        return certificateEventsForChildRelation(certificate, type, RelationType.REPLACE);
-      }
-      case REPLACES -> {
-        return certificateEventsForParentRelation(certificate, type, RelationType.REPLACE);
-      }
-      case COMPLEMENTS -> {
-        return certificateEventsForParentRelation(certificate, type, RelationType.COMPLEMENT);
-      }
-      case COMPLEMENTED -> {
-        return certificateEventsForChildRelation(certificate, type, RelationType.COMPLEMENT);
-      }
-      case EXTENDED -> {
-        return certificateEventsForParentRelation(certificate, type, RelationType.RENEW);
-      }
+    return switch (type) {
+      case CREATED -> List.of(eventFromTimestamp(certificate, certificate.created(), type));
+      case SIGNED, AVAILABLE_FOR_PATIENT ->
+          List.of(eventFromTimestamp(certificate, certificate.signed(), type));
+      case SENT -> certificate.sent() != null
+          ? List.of(eventFromTimestamp(certificate, certificate.sent().sentAt(), type))
+          : Collections.emptyList();
+      case INCOMING_MESSAGE -> certificate.messages()
+          .stream()
+          .filter(message -> message.type() != MessageType.ANSWER
+              && message.type() != MessageType.COMPLEMENT)
+          .filter(message -> message.author().fromFK())
+          .map(message -> eventFromTimestamp(certificate, message.sent(), type))
+          .toList();
+      case OUTGOING_MESSAGE -> certificate.messages()
+          .stream()
+          .filter(message -> message.type() != MessageType.ANSWER
+              && message.type() != MessageType.COMPLEMENT)
+          .filter(message -> !message.author().fromFK())
+          .map(message -> eventFromTimestamp(certificate, message.sent(), type))
+          .toList();
+      case INCOMING_ANSWER -> certificate.messages(MessageType.ANSWER)
+          .stream()
+          .filter(message -> message.author().fromFK())
+          .map(message -> eventFromTimestamp(certificate, message.sent(), type))
+          .toList();
+      case REQUEST_FOR_COMPLEMENT -> certificate.messages()
+          .stream()
+          .filter(message -> !message.complements().isEmpty())
+          .map(complement -> eventFromTimestamp(certificate, complement.sent(), type))
+          .toList();
+      case REVOKED -> certificate.revoked() != null
+          ? List.of(eventFromTimestamp(certificate, certificate.revoked().revokedAt(), type))
+          : Collections.emptyList();
+      case REPLACED -> certificateEventsForChildRelation(certificate, type, RelationType.REPLACE);
+      case REPLACES -> certificateEventsForParentRelation(certificate, type, RelationType.REPLACE);
+      case COMPLEMENTS ->
+          certificateEventsForParentRelation(certificate, type, RelationType.COMPLEMENT);
+      case COMPLEMENTED ->
+          certificateEventsForChildRelation(certificate, type, RelationType.COMPLEMENT);
+      case EXTENDED -> certificateEventsForParentRelation(certificate, type, RelationType.RENEW);
       case DELETED, LOCKED, READY_FOR_SIGN, INCOMING_MESSAGE_HANDLED, INCOMING_MESSAGE_REMINDER,
-           OUTGOING_MESSAGE_HANDLED,
-           COPIED_BY, COPIED_FROM, CREATED_FROM, RELATED_CERTIFICATE_REVOKED -> {
-        return Collections.emptyList();
-      }
-    }
-    return Collections.emptyList();
+           OUTGOING_MESSAGE_HANDLED, COPIED_BY, COPIED_FROM, CREATED_FROM,
+           RELATED_CERTIFICATE_REVOKED -> Collections.emptyList();
+    };
   }
 
   private static List<CertificateEvent> certificateEventsForChildRelation(Certificate certificate,

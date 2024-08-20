@@ -189,7 +189,7 @@ public abstract class GetCertificateEventsIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Om intyget är utfärdat på en patient som har skyddade personuppgifter skall dess händelser returneras")
+  @DisplayName("Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall dess händelser returneras")
   void shallReturnCertificateEventsIfPatientIsProtectedPersonAndUserIsDoctor() {
     final var testCertificates = testabilityApi.addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
