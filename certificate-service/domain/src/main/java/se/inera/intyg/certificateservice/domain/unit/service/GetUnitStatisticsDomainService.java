@@ -5,9 +5,9 @@ import static se.inera.intyg.certificateservice.domain.common.model.Role.CARE_AD
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.repository.StatisticsRepository;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitStatistics;
 
 @RequiredArgsConstructor
@@ -15,9 +15,8 @@ public class GetUnitStatisticsDomainService {
 
   private final StatisticsRepository statisticsRepository;
 
-  public Map<HsaId, UnitStatistics> get(ActionEvaluation actionEvaluation,
-      List<HsaId> issuedByUnitIds) {
-    final var allowedToViewProtectedPerson = !CARE_ADMIN.equals(actionEvaluation.user().role());
+  public Map<HsaId, UnitStatistics> get(Role userRole, List<HsaId> issuedByUnitIds) {
+    final var allowedToViewProtectedPerson = !CARE_ADMIN.equals(userRole);
     return getUnitStatistics(issuedByUnitIds, allowedToViewProtectedPerson);
   }
 
