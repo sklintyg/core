@@ -25,6 +25,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.CreateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateEventsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateEventsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
@@ -128,6 +130,16 @@ public class ApiUtil {
     );
 
     return sendRequest(request, requestUrl, GetCertificateResponse.class);
+  }
+
+  public ResponseEntity<GetCertificateEventsResponse> getCertificateEvents(
+      GetCertificateEventsRequest request, String certificateId) {
+    final var requestUrl = "http://localhost:%s/api/certificate/%s/events".formatted(
+        port,
+        certificateId
+    );
+
+    return sendRequest(request, requestUrl, GetCertificateEventsResponse.class);
   }
 
   public ResponseEntity<GetCitizenCertificateResponse> getCitizenCertificate(
