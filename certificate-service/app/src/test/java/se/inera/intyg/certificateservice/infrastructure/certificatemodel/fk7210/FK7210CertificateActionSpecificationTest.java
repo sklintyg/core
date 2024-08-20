@@ -76,7 +76,8 @@ class FK7210CertificateActionSpecificationTest {
   void shallIncludeCertificateActionSend() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.SEND)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
+        .allowedRoles(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
         .build();
 
     final var actionSpecifications = FK7210CertificateActionSpecification.create();

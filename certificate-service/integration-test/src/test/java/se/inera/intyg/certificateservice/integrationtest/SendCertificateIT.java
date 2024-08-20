@@ -30,6 +30,8 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
 
   protected abstract String typeVersion();
 
+  protected abstract boolean careAdminCanSendCertificate();
+
   @Test
   @DisplayName("Om intyget är utfärdat på samma mottagning skall det gå att skicka")
   void shallSuccessfullySendIfUnitIsSubUnitAndIssuedOnSameSubUnit() {
@@ -159,6 +161,9 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Vårdadministratör - Felkod 403 (FORBIDDEN) returneras")
   void shallReturn403UserIsCareAdmin() {
+    if (careAdminCanSendCertificate()) {
+      return;
+    }
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
