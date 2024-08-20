@@ -21,6 +21,7 @@ import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateMessageIT;
+import se.inera.intyg.certificateservice.integrationtest.GetCertificateEventsIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificatePdfIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateTypeInfoIT;
@@ -233,6 +234,21 @@ public class FK3226ActiveIT {
   @Nested
   @DisplayName(TYPE + "Hämta intyg")
   class GetCertificate extends GetCertificateIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Hämta intygets händelser")
+  class GetCertificateEvents extends GetCertificateEventsIT {
 
     @Override
     protected String type() {
