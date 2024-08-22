@@ -494,7 +494,7 @@ public class FK3226ActiveIT {
 
     @Override
     protected boolean careAdminCanSendCertificate() {
-      return false;
+      return true;
     }
   }
 

@@ -563,7 +563,7 @@ public class FK7472ActiveIT {
 
     @Override
     protected boolean careAdminCanSendCertificate() {
-      return false;
+      return true;
     }
   }
 
