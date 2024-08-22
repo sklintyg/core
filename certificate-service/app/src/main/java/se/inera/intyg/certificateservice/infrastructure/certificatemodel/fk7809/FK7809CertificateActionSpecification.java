@@ -31,7 +31,7 @@ public class FK7809CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.SEND)
-            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.CARE_ADMIN))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.PRINT)

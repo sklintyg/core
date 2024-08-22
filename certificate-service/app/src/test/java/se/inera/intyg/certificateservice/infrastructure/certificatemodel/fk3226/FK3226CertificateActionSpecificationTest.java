@@ -78,7 +78,7 @@ class FK3226CertificateActionSpecificationTest {
   void shallIncludeCertificateActionSend() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.SEND)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.CARE_ADMIN))
         .build();
 
     final var certificateModel = FK3226CertificateActionSpecification.create();
