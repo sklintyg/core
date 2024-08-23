@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionE
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateModalActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
@@ -88,59 +89,8 @@ class FK7809CertificateConfirmationModalProviderTest {
       }
 
       @Test
-      void shouldReturnTitle() {
-        final var result = provider.of(certificate, actionEvaluation);
-
-        assertEquals("Kontrollera att du använder dig av rätt läkarutlåtande", result.title());
-      }
-
-      @Test
-      void shouldReturnAlert() {
-        final var result = provider.of(certificate, actionEvaluation);
-
-        assertEquals(
-            "Du är på väg att utfärda Läkarutlåtande för merkostnadsersättning för First Middle Last - 20121212-1212.",
-            result.alert());
-      }
-
-      @Test
-      void shouldReturnText() {
-        final var result = provider.of(certificate, actionEvaluation);
-
-        assertEquals(
-            "Läkarutlåtande för merkostnadsersättning är till för personer över 18 år som inte har en underhållsskyldig förälder. Om det gäller ett barn ska du istället använda läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning (FK3220).",
-            result.text()
-        );
-      }
-
-      @Test
-      void shouldReturnCheckboxText() {
-        final var result = provider.of(certificate, actionEvaluation);
-
-        assertEquals(
-            "Jag är säker på att jag vill utfärda Läkarutlåtande för merkostnadsersättning.",
-            result.checkboxText()
-        );
-      }
-
-      @Test
-      void shouldReturnPrimaryAction() {
-        final var result = provider.of(certificate, actionEvaluation);
-
-        assertEquals(
-            CertificateModalActionType.READ,
-            result.primaryAction()
-        );
-      }
-
-      @Test
-      void shouldReturnSecondaryAction() {
-        final var result = provider.of(certificate, actionEvaluation);
-
-        assertEquals(
-            CertificateModalActionType.CANCEL,
-            result.secondaryAction()
-        );
+      void shouldReturnNull() {
+        assertNull(provider.of(certificate, actionEvaluation));
       }
     }
 
@@ -346,6 +296,57 @@ class FK7809CertificateConfirmationModalProviderTest {
     @BeforeEach
     void setup() {
       accessScope = AccessScope.WITHIN_CARE_PROVIDER;
+    }
+
+    @Nested
+    class Under18YearsAndSameUnitButRevisionNot0 {
+
+      @BeforeEach
+      void setup() {
+        certificate = fk7809CertificateBuilder()
+            .revision(new Revision(10))
+            .certificateMetaData(
+                CertificateMetaData.builder()
+                    .issuingUnit(ALFA_MEDICINCENTRUM)
+                    .patient(
+                        Patient.builder()
+                            .name(
+                                Name.builder()
+                                    .firstName(PATIENT_NAME)
+                                    .middleName(PATIENT_MIDDLE_NAME)
+                                    .lastName(PATIENT_LAST_NAME)
+                                    .build()
+                            )
+                            .id(
+                                PersonId.builder()
+                                    .id(PATIENT_ID)
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .careUnit(ALFA_MEDICINCENTRUM)
+                    .build()
+            )
+            .build();
+        actionEvaluation = ActionEvaluation.builder()
+            .careUnit(ALFA_MEDICINCENTRUM)
+            .subUnit(
+                SubUnit.builder()
+                    .hsaId(ALFA_MEDICINCENTRUM.hsaId())
+                    .build()
+            )
+            .user(
+                ajlaDoctorBuilder()
+                    .accessScope(accessScope)
+                    .build()
+            )
+            .build();
+      }
+
+      @Test
+      void shouldReturnNull() {
+        assertNull(provider.of(certificate, actionEvaluation));
+      }
     }
 
     @Nested
@@ -702,6 +703,57 @@ class FK7809CertificateConfirmationModalProviderTest {
     @BeforeEach
     void setup() {
       accessScope = AccessScope.ALL_CARE_PROVIDERS;
+    }
+
+    @Nested
+    class Under18YearsAndSameUnitButRevisionNot0 {
+
+      @BeforeEach
+      void setup() {
+        certificate = fk7809CertificateBuilder()
+            .revision(new Revision(10))
+            .certificateMetaData(
+                CertificateMetaData.builder()
+                    .issuingUnit(ALFA_MEDICINCENTRUM)
+                    .patient(
+                        Patient.builder()
+                            .name(
+                                Name.builder()
+                                    .firstName(PATIENT_NAME)
+                                    .middleName(PATIENT_MIDDLE_NAME)
+                                    .lastName(PATIENT_LAST_NAME)
+                                    .build()
+                            )
+                            .id(
+                                PersonId.builder()
+                                    .id(PATIENT_ID)
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .careUnit(ALFA_MEDICINCENTRUM)
+                    .build()
+            )
+            .build();
+        actionEvaluation = ActionEvaluation.builder()
+            .careUnit(ALFA_MEDICINCENTRUM)
+            .subUnit(
+                SubUnit.builder()
+                    .hsaId(ALFA_MEDICINCENTRUM.hsaId())
+                    .build()
+            )
+            .user(
+                ajlaDoctorBuilder()
+                    .accessScope(accessScope)
+                    .build()
+            )
+            .build();
+      }
+
+      @Test
+      void shouldReturnNull() {
+        assertNull(provider.of(certificate, actionEvaluation));
+      }
     }
 
     @Nested

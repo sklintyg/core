@@ -50,10 +50,11 @@ public class FK7809CertificateConfirmationModalProvider implements
     }
 
     if (accessScope == AccessScope.WITHIN_CARE_UNIT) {
-      return certificate == null || certificate.revision().value() == 0;
+      return certificate == null;
     }
 
-    return certificate == null || certificate.isWithinCareUnit(actionEvaluation);
+    return certificate == null
+        || (certificate.revision().value() == 0 && certificate.isWithinCareUnit(actionEvaluation));
   }
 
   private static Patient getPatient(Certificate certificate, ActionEvaluation actionEvaluation) {
