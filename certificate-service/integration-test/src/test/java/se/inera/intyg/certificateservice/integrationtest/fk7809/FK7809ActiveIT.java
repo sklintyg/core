@@ -506,6 +506,11 @@ public class FK7809ActiveIT {
     protected String typeVersion() {
       return ACTIVE_VERSION;
     }
+
+    @Override
+    protected boolean careAdminCanSendCertificate() {
+      return true;
+    }
   }
 
   @Nested
