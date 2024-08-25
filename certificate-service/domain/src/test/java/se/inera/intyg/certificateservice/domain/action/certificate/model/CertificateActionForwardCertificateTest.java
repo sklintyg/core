@@ -209,7 +209,7 @@ class CertificateActionForwardCertificateTest {
         )
         .build();
     final var certificate = certificateBuilder.build();
-    assertFalse(
+    assertTrue(
         certificateActionForwardCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(Optional.empty(), actionEvaluation)

@@ -29,10 +29,6 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionComplement;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
@@ -336,7 +332,7 @@ class CertificateActionComplementTest {
 
     final var certificate = certificateBuilder.build();
 
-    assertFalse(
+    assertTrue(
         certificateActionComplement.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(Optional.empty(), actionEvaluation)

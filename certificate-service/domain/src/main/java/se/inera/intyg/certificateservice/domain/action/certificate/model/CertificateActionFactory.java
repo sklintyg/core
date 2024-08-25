@@ -214,7 +214,6 @@ public class CertificateActionFactory {
                   new ActionRuleProtectedPerson(),
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
-                  new ActionRuleUserAllowCopy(),
                   new ActionRuleComplementMessages(),
                   new ActionRuleChildRelationNoMatch(List.of(RelationType.COMPLEMENT),
                       List.of(Status.REVOKED))
@@ -230,7 +229,6 @@ public class CertificateActionFactory {
                   new ActionRuleProtectedPerson(),
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
-                  new ActionRuleUserAllowCopy(),
                   new ActionRuleChildRelationNoMatch(List.of(RelationType.COMPLEMENT),
                       List.of(Status.REVOKED))
               )
@@ -286,7 +284,6 @@ public class CertificateActionFactory {
                   new ActionRuleProtectedPerson(),
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
-                  new ActionRuleUserAllowCopy(),
                   new ActionRuleUserHasAccessScope(
                       List.of(AccessScope.WITHIN_CARE_UNIT)
                   )
@@ -304,7 +301,6 @@ public class CertificateActionFactory {
                   new ActionRuleProtectedPerson(),
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
-                  new ActionRuleUserAllowCopy(),
                   new ActionRuleUserHasAccessScope(
                       List.of(AccessScope.WITHIN_CARE_UNIT)
                   )
@@ -319,8 +315,7 @@ public class CertificateActionFactory {
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleProtectedPerson(),
                   new ActionRuleInactiveUnit(),
-                  new ActionRulePatientAlive(),
-                  new ActionRuleUserAllowCopy()
+                  new ActionRulePatientAlive()
               )
           )
           .build();
