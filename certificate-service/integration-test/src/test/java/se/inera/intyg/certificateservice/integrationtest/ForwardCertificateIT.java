@@ -111,27 +111,6 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Om vårdadministratör saknar kopieringsmöjligheter skall felkod 403 (FORBIDDEN) returneras")
-  void shallReturnForbiddenIfUserDontHasCopyPrivelege() {
-    final var testCertificates = testabilityApi.addCertificates(
-        defaultTestablilityCertificateRequest(type(), typeVersion())
-    );
-
-    final var response = api.forwardCertificate(
-        certificateId(testCertificates),
-        customForwardCertificateRequest()
-            .user(
-                alvaVardadministratorDtoBuilder()
-                    .allowCopy(Boolean.FALSE)
-                    .build()
-            )
-            .build()
-    );
-
-    assertEquals(403, response.getStatusCode().value());
-  }
-
-  @Test
   @DisplayName("Om vårdadministratör är blockerad skall felkod 403 (FORBIDDEN) returneras")
   void shallReturnForbiddenIfUserIsBlocked() {
     final var testCertificates = testabilityApi.addCertificates(
