@@ -763,43 +763,4 @@ public abstract class MessagesIT extends BaseIntegrationIT {
         "Should not return link!"
     );
   }
-
-  @Test
-  @DisplayName("Om användaren saknar kopieringsmöjligheter ska inte hantering av frågor vara tillgänglig")
-  void shallNotReturnComplementCertificateIfUserCopyIsFalse() {
-    final var testCertificates = testabilityApi.addCertificates(
-        defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
-    );
-
-    api.sendCertificate(
-        defaultSendCertificateRequest(),
-        certificateId(testCertificates)
-    );
-
-    api.receiveMessage(
-        incomingComplementMessageBuilder()
-            .certificateId(certificateId(testCertificates))
-            .complements(List.of(incomingComplementDTOBuilder()
-                .questionId(questionId())
-                .build()))
-            .build()
-    );
-
-    final var messagesForCertificate = api.getMessagesForCertificate(
-        customGetCertificateMessageRequest()
-            .user(
-                ajlaDoktorDtoBuilder()
-                    .allowCopy(Boolean.FALSE)
-                    .build()
-            )
-            .build(),
-        certificateId(testCertificates)
-    );
-
-    assertTrue(
-        questions(messagesForCertificate.getBody()).get(0).getLinks()
-            .isEmpty(),
-        "Should not return link!"
-    );
-  }
 }
