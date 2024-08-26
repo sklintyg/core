@@ -224,7 +224,7 @@ class CertificateActionHandleComplementTest {
   }
 
   @Test
-  void shallReturnFalseIfUserHasAllowCopyFalse() {
+  void shallReturnTrueIfUserHasAllowCopyFalse() {
     final var actionEvaluation = actionEvaluationBuilder()
         .user(
             ajlaDoctorBuilder()
