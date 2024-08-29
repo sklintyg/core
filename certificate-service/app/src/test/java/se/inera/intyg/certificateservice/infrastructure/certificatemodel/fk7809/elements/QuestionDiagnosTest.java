@@ -122,7 +122,7 @@ class QuestionDiagnosTest {
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationDiagnoses.builder()
         .prefix(new PdfFieldId("form1[0].#subform[1].flt_txt"))
-        .maxLength(39)
+        .maxLength(81)
         .overflowSheetFieldId(new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
         .diagnoses(
             Map.of(
