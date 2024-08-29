@@ -31,10 +31,10 @@ class FK7809PdfSpecificationTest {
   void shallIncludePatientFieldId() {
     final var expected = List.of(
         new PdfFieldId("form1[0].#subform[0].flt_txtPersonNr[0]"),
-        new PdfFieldId("form1[0].#subform[1].flt_txtPersonNr[0]"),
-        new PdfFieldId("form1[0].#subform[2].flt_txtPersonNr[0]"),
-        new PdfFieldId("form1[0].#subform[3].flt_txtPersonNr[0]"),
-        new PdfFieldId("form1[0].#subform[4].flt_txtPersonNr[1]")
+        new PdfFieldId("form1[0].#subform[1].flt_txtPersonNr[1]"),
+        new PdfFieldId("form1[0].#subform[2].flt_txtPersonNr[2]"),
+        new PdfFieldId("form1[0].#subform[3].flt_txtPersonNr[3]"),
+        new PdfFieldId("form1[0].#subform[4].flt_txtPersonNr[4]")
     );
 
     final var pdfSpecification = FK7809PdfSpecification.create();
