@@ -27,72 +27,72 @@ public class QuestionDiagnos {
   private static final short DIAGNOSIS_CODE_LIMIT = (short) 81;
 
   private static final PdfFieldId PDF_DIAGNOSIS_FIELD_ID_PREFIX = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txt");
+      "form1[0].#subform[1].flt_txt");
 
   private static final PdfFieldId PDF_DIAGNOSIS_ID_1 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtAngeFunktionsnedsattning[0]");
+      "form1[0].#subform[1].flt_txtAngeFunktionsnedsattning[0]");
   private static final PdfFieldId PDF_CODE_ID_1_1 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod1[0]");
+      "form1[0].#subform[1].flt_txtDiaKod1[0]");
   private static final PdfFieldId PDF_CODE_ID_1_2 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod2[0]");
+      "form1[0].#subform[1].flt_txtDiaKod2[0]");
   private static final PdfFieldId PDF_CODE_ID_1_3 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod3[0]");
+      "form1[0].#subform[1].flt_txtDiaKod3[0]");
   private static final PdfFieldId PDF_CODE_ID_1_4 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod4[0]");
+      "form1[0].#subform[1].flt_txtDiaKod4[0]");
   private static final PdfFieldId PDF_CODE_ID_1_5 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod5[0]");
+      "form1[0].#subform[1].flt_txtDiaKod5[0]");
 
   private static final PdfFieldId PDF_DIAGNOSIS_ID_2 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtAngeFunktionsnedsattning2[0]");
+      "form1[0].#subform[1].flt_txtAngeFunktionsnedsattning2[0]");
   private static final PdfFieldId PDF_CODE_ID_2_1 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod6[0]");
+      "form1[0].#subform[1].flt_txtDiaKod6[0]");
   private static final PdfFieldId PDF_CODE_ID_2_2 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod7[0]");
+      "form1[0].#subform[1].flt_txtDiaKod7[0]");
   private static final PdfFieldId PDF_CODE_ID_2_3 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod8[0]");
+      "form1[0].#subform[1].flt_txtDiaKod8[0]");
   private static final PdfFieldId PDF_CODE_ID_2_4 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod9[0]");
+      "form1[0].#subform[1].flt_txtDiaKod9[0]");
   private static final PdfFieldId PDF_CODE_ID_2_5 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod10[0]");
+      "form1[0].#subform[1].flt_txtDiaKod10[0]");
 
   private static final PdfFieldId PDF_DIAGNOSIS_ID_3 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtAngeFunktionsnedsattning3[0]");
+      "form1[0].#subform[1].flt_txtAngeFunktionsnedsattning3[0]");
   private static final PdfFieldId PDF_CODE_ID_3_1 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod11[0]");
+      "form1[0].#subform[1].flt_txtDiaKod11[0]");
   private static final PdfFieldId PDF_CODE_ID_3_2 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod12[0]");
+      "form1[0].#subform[1].flt_txtDiaKod12[0]");
   private static final PdfFieldId PDF_CODE_ID_3_3 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod13[0]");
+      "form1[0].#subform[1].flt_txtDiaKod13[0]");
   private static final PdfFieldId PDF_CODE_ID_3_4 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod14[0]");
+      "form1[0].#subform[1].flt_txtDiaKod14[0]");
   private static final PdfFieldId PDF_CODE_ID_3_5 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod15[0]");
+      "form1[0].#subform[1].flt_txtDiaKod15[0]");
 
   private static final PdfFieldId PDF_DIAGNOSIS_ID_4 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtAngeFunktionsnedsattning4[0]");
+      "form1[0].#subform[1].flt_txtAngeFunktionsnedsattning4[0]");
   private static final PdfFieldId PDF_CODE_ID_4_1 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod16[0]");
+      "form1[0].#subform[1].flt_txtDiaKod16[0]");
   private static final PdfFieldId PDF_CODE_ID_4_2 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod17[0]");
+      "form1[0].#subform[1].flt_txtDiaKod17[0]");
   private static final PdfFieldId PDF_CODE_ID_4_3 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod18[0]");
+      "form1[0].#subform[1].flt_txtDiaKod18[0]");
   private static final PdfFieldId PDF_CODE_ID_4_4 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod19[0]");
+      "form1[0].#subform[1].flt_txtDiaKod19[0]");
   private static final PdfFieldId PDF_CODE_ID_4_5 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod20[0]");
+      "form1[0].#subform[1].flt_txtDiaKod20[0]");
 
   private static final PdfFieldId PDF_DIAGNOSIS_ID_5 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtAngeFunktionsnedsattning5[0]");
+      "form1[0].#subform[1].flt_txtAngeFunktionsnedsattning5[0]");
   private static final PdfFieldId PDF_CODE_ID_5_1 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod21[0]");
+      "form1[0].#subform[1].flt_txtDiaKod21[0]");
   private static final PdfFieldId PDF_CODE_ID_5_2 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod22[0]");
+      "form1[0].#subform[1].flt_txtDiaKod22[0]");
   private static final PdfFieldId PDF_CODE_ID_5_3 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod23[0]");
+      "form1[0].#subform[1].flt_txtDiaKod23[0]");
   private static final PdfFieldId PDF_CODE_ID_5_4 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod24[0]");
+      "form1[0].#subform[1].flt_txtDiaKod24[0]");
   private static final PdfFieldId PDF_CODE_ID_5_5 = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtDiaKod25[0]");
+      "form1[0].#subform[1].flt_txtDiaKod25[0]");
 
   private QuestionDiagnos() {
     throw new IllegalStateException("Utility class");
@@ -146,7 +146,7 @@ public class QuestionDiagnos {
         .pdfConfiguration(
             PdfConfigurationDiagnoses.builder()
                 .prefix(PDF_DIAGNOSIS_FIELD_ID_PREFIX)
-                .maxLength(39)
+                .maxLength(81)
                 .overflowSheetFieldId(
                     new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
                 .diagnoses(

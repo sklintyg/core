@@ -17,25 +17,25 @@ public class FK7809PdfSpecification {
   private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(10);
   private static final List<PdfFieldId> PDF_PATIENT_ID_FIELD_IDS = List.of(
       new PdfFieldId("form1[0].#subform[0].flt_txtPersonNr[0]"),
-      new PdfFieldId("form1[0].Sida2[0].flt_txtPersonNr[0]"),
-      new PdfFieldId("form1[0].Sida3[0].flt_txtPersonNr[0]"),
-      new PdfFieldId("form1[0].Sida4[0].flt_txtPersonNr[0]"),
-      new PdfFieldId("form1[0].#subform[4].flt_txtPersonNr[1]")
+      new PdfFieldId("form1[0].#subform[1].flt_txtPersonNr[1]"),
+      new PdfFieldId("form1[0].#subform[2].flt_txtPersonNr[2]"),
+      new PdfFieldId("form1[0].#subform[3].flt_txtPersonNr[3]"),
+      new PdfFieldId("form1[0].#subform[4].flt_txtPersonNr[4]")
   );
   private static final PdfFieldId PDF_SIGNED_DATE_FIELD_ID = new PdfFieldId(
-      "form1[0].Sida4[0].flt_datUnderskrift[0]");
+      "form1[0].#subform[3].flt_datUnderskrift[0]");
   private static final PdfFieldId PDF_SIGNED_BY_NAME_FIELD_ID = new PdfFieldId(
-      "form1[0].Sida4[0].flt_txtNamnfortydligande[0]");
+      "form1[0].#subform[3].flt_txtNamnfortydligande[0]");
   private static final PdfFieldId PDF_SIGNED_BY_PA_TITLE = new PdfFieldId(
-      "form1[0].Sida4[0].flt_txtBefattning[0]");
+      "form1[0].#subform[3].flt_txtBefattning[0]");
   private static final PdfFieldId PDF_SIGNED_BY_SPECIALTY = new PdfFieldId(
-      "form1[0].Sida4[0].flt_txtEventuellSpecialistkompetens[0]");
+      "form1[0].#subform[3].flt_txtEventuellSpecialistkompetens[0]");
   private static final PdfFieldId PDF_HSA_ID_FIELD_ID = new PdfFieldId(
-      "form1[0].Sida4[0].flt_txtLakarensHSA-ID[0]");
+      "form1[0].#subform[3].flt_txtLakarensHSA-ID[0]");
   private static final PdfFieldId PDF_WORKPLACE_CODE_FIELD_ID = new PdfFieldId(
-      "form1[0].Sida4[0].flt_txtArbetsplatskod[0]");
+      "form1[0].#subform[3].flt_txtArbetsplatskod[0]");
   private static final PdfFieldId PDF_CONTACT_INFORMATION = new PdfFieldId(
-      "form1[0].Sida4[0].flt_txtVardgivarensNamnAdressTelefon[0]");
+      "form1[0].#subform[3].flt_txtVardgivarensNamnAdressTelefon[0]");
 
   private FK7809PdfSpecification() {
     throw new IllegalStateException("Utility class");

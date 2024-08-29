@@ -16,7 +16,7 @@ public class QuestionOvrigt {
       "25");
   private static final FieldId QUESTION_OVRIGT_FIELD_ID = new FieldId("25.1");
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
-      "form1[0].Sida4[0].flt_OvrigaUpplysningar[0]");
+      "form1[0].#subform[3].flt_OvrigaUpplysningar[0]");
 
   private QuestionOvrigt() {
     throw new IllegalStateException("Utility class");

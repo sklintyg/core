@@ -258,19 +258,19 @@ public class TestDataPdfSpecificationConstants {
   public static final PdfFieldId FK7809_PDF_PATIENT_ID_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_txtPersonNr[0]");
   public static final PdfFieldId FK7809_PDF_SIGNED_DATE_FIELD_ID = new PdfFieldId(
-      "form1[0].Sida4[0].flt_datUnderskrift[0]");
+      "form1[0].#subform[3].flt_datUnderskrift[0]");
   public static final PdfFieldId FK7809_PDF_SIGNED_BY_NAME_FIELD_ID = new PdfFieldId(
-      "form1[0].Sida4[0].flt_txtNamnfortydligande[0]");
+      "form1[0].#subform[3].flt_txtNamnfortydligande[0]");
   public static final PdfFieldId FK7809_PDF_SIGNED_BY_PA_TITLE = new PdfFieldId(
-      "form1[0].Sida4[0].flt_txtBefattning[0]");
+      "form1[0].#subform[3].flt_txtBefattning[0]");
   public static final PdfFieldId FK7809_PDF_SIGNED_BY_SPECIALTY = new PdfFieldId(
-      "form1[0].Sida4[0].flt_txtEventuellSpecialistkompetens[0]");
+      "form1[0].#subform[3].flt_txtEventuellSpecialistkompetens[0]");
   public static final PdfFieldId FK7809_PDF_HSA_ID_FIELD_ID = new PdfFieldId(
-      "form1[0].Sida4[0].flt_txtLakarensHSA-ID[0]");
+      "form1[0].#subform[3].flt_txtLakarensHSA-ID[0]");
   public static final PdfFieldId FK7809_PDF_WORKPLACE_CODE_FIELD_ID = new PdfFieldId(
-      "form1[0].Sida4[0].flt_txtArbetsplatskod[0]");
+      "form1[0].#subform[3].flt_txtArbetsplatskod[0]");
   public static final PdfFieldId FK7809_PDF_CONTACT_INFORMATION = new PdfFieldId(
-      "form1[0].Sida4[0].flt_txtVardgivarensNamnAdressTelefon[0]");
+      "form1[0].#subform[3].flt_txtVardgivarensNamnAdressTelefon[0]");
   public static final PdfFieldId FK7809_PDF_FIELD_OVERFLOW_SHEET = new PdfFieldId(
       "form1[0].#subform[4].flt_txtFortsattningsblad[0]");
 }

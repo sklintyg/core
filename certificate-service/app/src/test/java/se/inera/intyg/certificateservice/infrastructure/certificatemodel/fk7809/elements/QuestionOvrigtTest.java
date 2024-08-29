@@ -69,7 +69,7 @@ class QuestionOvrigtTest {
   @Test
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
-        .pdfFieldId(new PdfFieldId("form1[0].Sida4[0].flt_OvrigaUpplysningar[0]"))
+        .pdfFieldId(new PdfFieldId("form1[0].#subform[3].flt_OvrigaUpplysningar[0]"))
         .maxLength(371)
         .overflowSheetFieldId(new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
         .build();

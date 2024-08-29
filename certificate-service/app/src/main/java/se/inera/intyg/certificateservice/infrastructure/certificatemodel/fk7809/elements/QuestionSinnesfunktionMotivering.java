@@ -14,7 +14,7 @@ public class QuestionSinnesfunktionMotivering extends AbstractFunktionsnedsattni
   private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_SINNESFUNKTION_FIELD_ID = new FieldId(
       "12.1");
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
-      "form1[0].Sida3[0].flt_txtIntellektuellFunktion[2]");
+      "form1[0].#subform[2].flt_txtIntellektuellFunktion[2]");
 
   private QuestionSinnesfunktionMotivering() {
     throw new IllegalStateException("Utility class");

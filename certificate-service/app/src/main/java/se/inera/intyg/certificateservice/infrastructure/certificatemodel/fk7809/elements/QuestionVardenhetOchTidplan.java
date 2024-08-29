@@ -21,7 +21,7 @@ public class QuestionVardenhetOchTidplan {
       "50.2");
   private static final FieldId QUESTION_VARDENHET_OCH_TIDPLAN_FIELD_ID = new FieldId("50.2");
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
-      "form1[0].Sida3[0].flt_txtVardenhetTidplan[0]");
+      "form1[0].#subform[2].flt_txtVardenhetTidplan[0]");
 
   private QuestionVardenhetOchTidplan() {
     throw new IllegalStateException("Utility class");
