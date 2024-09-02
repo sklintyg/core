@@ -23,16 +23,13 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionCreateMessage;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.common.model.Blocked;
 
 class CertificateActionCreateMessageTest {
 
@@ -397,5 +394,24 @@ class CertificateActionCreateMessageTest {
         );
       }
     }
+  }
+
+  @Test
+  void shallReturnFalseIfUserIsBlocked() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ANONYMA_REACT_ATTILA)
+        .user(ajlaDoctorBuilder()
+            .blocked(new Blocked(true))
+            .build())
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+        .build();
+
+    final var certificate = certificateBuilder.build();
+
+    assertFalse(
+        certificateActionCreateMessage.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
   }
 }

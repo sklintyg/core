@@ -94,7 +94,7 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Om patienten är avliden skall felkod 403 (FORBIDDEN) returneras")
+  @DisplayName("Om patienten är avliden skall intyget vidarebefordras")
   void shallReturnForbiddenIfPatientIsDeceased() {
     final var testCertificates = testabilityApi.addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
@@ -107,7 +107,7 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
         defaultForwardCertificateRequest()
     );
 
-    assertEquals(403, response.getStatusCode().value());
+    assertEquals(200, response.getStatusCode().value());
   }
 
   @Test

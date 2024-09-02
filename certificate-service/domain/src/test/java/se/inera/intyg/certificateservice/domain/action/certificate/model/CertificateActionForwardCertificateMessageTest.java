@@ -10,7 +10,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.BETA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.relationReplaceBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_HUDMOTTAGNINGEN;
@@ -79,36 +78,6 @@ class CertificateActionForwardCertificateMessageTest {
     assertEquals(
         "Skapar ett e-postmeddelande i din e-postklient med en direktlänk till frågan/svaret.",
         certificateActionForwardMessage.getDescription(Optional.empty()));
-  }
-
-  @Test
-  void shallReturnFalseIfPatientIsDeceased() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ATLAS_REACT_ABRAHAMSSON)
-        .user(AJLA_DOKTOR)
-        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
-        .build();
-
-    final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionForwardMessage.evaluate(Optional.of(certificate),
-        Optional.of(actionEvaluation));
-
-    assertFalse(actualResult);
-  }
-
-  @Test
-  void shallReturnTrueIfPatientIsNotDeceased() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ATHENA_REACT_ANDERSSON)
-        .user(AJLA_DOKTOR)
-        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
-        .build();
-
-    final var certificate = certificateBuilder.build();
-    final var actualResult = certificateActionForwardMessage.evaluate(Optional.of(certificate),
-        Optional.of(actionEvaluation));
-
-    assertTrue(actualResult);
   }
 
   @Test
