@@ -49,14 +49,17 @@ public class QuestionPatagligtHotMotPatientensLivAkutLivshotande {
                 CertificateElementRuleFactory.show(
                     QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID,
                     AKUT_LIVSHOTANDE_FIELD_ID
-                )
+                ),
+                CertificateElementRuleFactory.limit(
+                    QUESTION_PATAGLIGT_HOT_MOT_PATIENTENS_LIV_AKUT_LIVSHOTANDE_ID,
+                    (short) 265)
             )
         )
         .validations(
             List.of(
                 ElementValidationText.builder()
                     .mandatory(true)
-                    .limit(4000)
+                    .limit(265)
                     .build()
             )
         )
@@ -73,6 +76,7 @@ public class QuestionPatagligtHotMotPatientensLivAkutLivshotande {
         .pdfConfiguration(
             PdfConfigurationText.builder()
                 .pdfFieldId(PDF_THREAT_TO_PATIENTS_LIFE_FIELD_ID)
+                .maxLength(265)
                 .build()
         )
         .build();

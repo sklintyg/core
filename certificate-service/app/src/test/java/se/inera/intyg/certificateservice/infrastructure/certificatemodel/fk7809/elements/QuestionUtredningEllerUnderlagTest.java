@@ -29,7 +29,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MedicalInvestigationConfig;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationMedicalInvestigation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
@@ -71,7 +70,7 @@ class QuestionUtredningEllerUnderlagTest {
             "Ange utredning eller underlag")
         .id(new FieldId("4.1"))
         .informationSourceDescription(
-            "Skriv exempelvis Neuropsykiatriska kliniken på X-stads sjukhus eller om patienten själv kommer att bifoga utredningen till sin ansökan.")
+            "Skriv från vilken vårdgivare Försäkringskassan kan hämta information om utredningen/underlaget, exempelvis Neuropsykiatriska kliniken på X-stads sjukhus eller om patienten själv kommer att bifoga utredningen till sin ansökan.")
         .informationSourceText("Från vilken vårdgivare")
         .dateText("Datum")
         .typeText("Utredning eller underlag")
@@ -191,43 +190,6 @@ class QuestionUtredningEllerUnderlagTest {
         entry(OVRIGT.code(),
             "Övrigt")
     );
-
-    final var expected = PdfConfigurationMedicalInvestigationList.builder()
-        .list(
-            Map.of(
-                new FieldId("medicalInvestigation1"),
-                PdfConfigurationMedicalInvestigation.builder()
-                    .datePdfFieldId(
-                        new PdfFieldId("form1[0].#subform[0].flt_datumUnderlagUtredning[0]"))
-                    .investigationPdfFieldId(
-                        new PdfFieldId("form1[0].#subform[0].lbx_listVardeUtredningUnderlag[0]"))
-                    .sourceTypePdfFieldId(new PdfFieldId(
-                        "form1[0].#subform[0].flt_txtVilkenVardgivare[0]"))
-                    .investigationPdfOptions(expectedOptions)
-                    .build(),
-                new FieldId("medicalInvestigation2"),
-                PdfConfigurationMedicalInvestigation.builder()
-                    .datePdfFieldId(
-                        new PdfFieldId("form1[0].#subform[0].flt_datumUnderlagUtredning2[0]"))
-                    .investigationPdfFieldId(
-                        new PdfFieldId("form1[0].#subform[0].lbx_listVardeUtredningUnderlag2[0]"))
-                    .sourceTypePdfFieldId(new PdfFieldId(
-                        "form1[0].#subform[0].flt_txtVilkenVardgivare2[0]"))
-                    .investigationPdfOptions(expectedOptions)
-                    .build(),
-                new FieldId("medicalInvestigation3"),
-                PdfConfigurationMedicalInvestigation.builder()
-                    .datePdfFieldId(
-                        new PdfFieldId("form1[0].#subform[0].flt_datumUnderlagUtredning3[0]"))
-                    .investigationPdfFieldId(
-                        new PdfFieldId("form1[0].#subform[0].lbx_listVardeUtredningUnderlag3[0]"))
-                    .sourceTypePdfFieldId(new PdfFieldId(
-                        "form1[0].#subform[0].flt_txtVilkenVardgivare3[0]"))
-                    .investigationPdfOptions(expectedOptions)
-                    .build()
-            )
-        )
-        .build();
 
     final var element = QuestionUtredningEllerUnderlag.questionUtredningEllerUnderlag();
 

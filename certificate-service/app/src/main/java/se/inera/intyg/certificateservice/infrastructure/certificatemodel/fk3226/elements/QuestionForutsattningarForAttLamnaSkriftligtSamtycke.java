@@ -32,7 +32,7 @@ public class QuestionForutsattningarForAttLamnaSkriftligtSamtycke {
             ElementConfigurationRadioBoolean.builder()
                 .id(FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_FIELD_ID)
                 .name(
-                    "Har patienten de medicinska förutsättningarna för att kunna lämna sitt samtycke?")
+                    "Har patienten de medicinska förutsättningarna för att kunna lämna samtycke?")
                 .selectedText("Ja")
                 .unselectedText("Nej")
                 .build()

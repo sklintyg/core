@@ -5,7 +5,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -31,7 +31,7 @@ public class QuestionVardenhetOchTidplan {
     return ElementSpecification.builder()
         .id(QUESTION_VARDENHET_OCH_TIDPLAN_ID)
         .configuration(
-            ElementConfigurationTextArea.builder()
+            ElementConfigurationTextField.builder()
                 .id(QUESTION_VARDENHET_OCH_TIDPLAN_FIELD_ID)
                 .name("Ange ansvarig vårdenhet och tidplan")
                 .build()

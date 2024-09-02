@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
@@ -30,7 +30,7 @@ class QuestionVardenhetOchTidplanTest {
 
   @Test
   void shallIncludeConfiguration() {
-    final var expectedConfiguration = ElementConfigurationTextArea.builder()
+    final var expectedConfiguration = ElementConfigurationTextField.builder()
         .name("Ange ansvarig vårdenhet och tidplan")
         .label(null)
         .description(null)

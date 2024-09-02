@@ -5,7 +5,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -31,7 +31,7 @@ public class QuestionUtlatandeBaseratPaAnnat {
     return ElementSpecification.builder()
         .id(QUESTION_UTLATANDE_BASERAT_PA_ANNAT_ID)
         .configuration(
-            ElementConfigurationTextArea.builder()
+            ElementConfigurationTextField.builder()
                 .id(QUESTION_UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID)
                 .name(
                     "Ange vad annat är")
@@ -45,7 +45,7 @@ public class QuestionUtlatandeBaseratPaAnnat {
                 ),
                 CertificateElementRuleFactory.limit(
                     QUESTION_UTLATANDE_BASERAT_PA_ANNAT_ID,
-                    (short) 4000),
+                    (short) 50),
                 CertificateElementRuleFactory.show(
                     QUESTION_UTLATANDE_BASERAT_PA_ID,
                     UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID
@@ -56,7 +56,7 @@ public class QuestionUtlatandeBaseratPaAnnat {
             List.of(
                 ElementValidationText.builder()
                     .mandatory(true)
-                    .limit(4000)
+                    .limit(50)
                     .build()
             )
         )

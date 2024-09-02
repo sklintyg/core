@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
@@ -36,7 +36,7 @@ class QuestionUtlatandeBaseratPaAnnatTest {
 
   @Test
   void shallIncludeConfiguration() {
-    final var expectedConfiguration = ElementConfigurationTextArea.builder()
+    final var expectedConfiguration = ElementConfigurationTextField.builder()
         .name(
             "Ange vad annat är")
         .id(new FieldId("1.3"))
@@ -62,7 +62,7 @@ class QuestionUtlatandeBaseratPaAnnatTest {
         ElementRuleLimit.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.TEXT_LIMIT)
-            .limit(new RuleLimit((short) 4000))
+            .limit(new RuleLimit((short) 50))
             .build(),
         ElementRuleExpression.builder()
             .id(new ElementId("1"))
