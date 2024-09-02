@@ -14,6 +14,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.relationReplaceBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_HUDMOTTAGNINGEN;
@@ -670,5 +671,34 @@ class CertificateActionReplaceTest {
         Optional.of(actionEvaluation));
 
     assertTrue(actualResult);
+  }
+
+  @Test
+  void shallReturnFalseIfPatientNotAlive() {
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .sent(null)
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                .careUnit(ALFA_MEDICINCENTRUM)
+                .careProvider(ALFA_REGIONEN)
+                .patient(ATLAS_REACT_ABRAHAMSSON)
+                .build()
+        )
+        .build();
+
+    final var actionEvaluation = ActionEvaluation.builder()
+        .user(AJLA_DOKTOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+        .patient(ATLAS_REACT_ABRAHAMSSON)
+        .careProvider(ALFA_REGIONEN)
+        .careUnit(ALFA_MEDICINCENTRUM)
+        .build();
+
+    assertFalse(
+        certificateActionReplace.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
   }
 }

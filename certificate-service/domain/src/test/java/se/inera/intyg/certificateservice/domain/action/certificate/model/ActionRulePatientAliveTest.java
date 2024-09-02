@@ -9,9 +9,10 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJL
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionRulePatientAlive;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 
 class ActionRulePatientAliveTest {
 
@@ -22,27 +23,91 @@ class ActionRulePatientAliveTest {
     actionRulePatientAlive = new ActionRulePatientAlive();
   }
 
-  @Test
-  void shallReturnFalseIfPatientIsDeceased() {
-    final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ATLAS_REACT_ABRAHAMSSON)
-        .user(AJLA_DOKTOR)
-        .build();
+  @Nested
+  class PatientInActionEvaluation {
 
-    final var actualResult = actionRulePatientAlive.evaluate(Optional.empty(),
-        Optional.of(actionEvaluation));
+    @Test
+    void shallReturnTrueIfPatientIsNotDeceased() {
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .user(AJLA_DOKTOR)
+          .build();
 
-    assertFalse(actualResult);
+      final var actualResult = actionRulePatientAlive.evaluate(Optional.empty(),
+          Optional.of(actionEvaluation));
+
+      assertTrue(actualResult);
+    }
+
+    @Test
+    void shallReturnFalseIfPatientIsDeceased() {
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATLAS_REACT_ABRAHAMSSON)
+          .user(AJLA_DOKTOR)
+          .build();
+
+      final var actualResult = actionRulePatientAlive.evaluate(Optional.empty(),
+          Optional.of(actionEvaluation));
+
+      assertFalse(actualResult);
+    }
   }
 
+  @Nested
+  class PatientInCertificate {
+
+    @Test
+    void shallReturnTrueIfPatientIsNotDeceased() {
+      final var actionEvaluation = ActionEvaluation.builder()
+          .user(AJLA_DOKTOR)
+          .build();
+
+      final var certificate = Certificate.builder()
+          .certificateMetaData(
+              CertificateMetaData.builder()
+                  .patient(ATHENA_REACT_ANDERSSON)
+                  .build()
+          )
+          .build();
+      final var actualResult = actionRulePatientAlive.evaluate(Optional.of(certificate),
+          Optional.of(actionEvaluation));
+
+      assertTrue(actualResult);
+    }
+
+    @Test
+    void shallReturnFalseIfPatientIsNotDeceased() {
+      final var actionEvaluation = ActionEvaluation.builder()
+          .user(AJLA_DOKTOR)
+          .build();
+
+      final var certificate = Certificate.builder()
+          .certificateMetaData(
+              CertificateMetaData.builder()
+                  .patient(ATHENA_REACT_ANDERSSON)
+                  .build()
+          )
+          .build();
+      final var actualResult = actionRulePatientAlive.evaluate(Optional.of(certificate),
+          Optional.of(actionEvaluation));
+
+      assertTrue(actualResult);
+    }
+  }
+
+
   @Test
-  void shallReturnTrueIfPatientIsNotDeceased() {
+  void shallReturnTrueIfNoPatientInActionEvaluationOrCertificate() {
     final var actionEvaluation = ActionEvaluation.builder()
-        .patient(ATHENA_REACT_ANDERSSON)
         .user(AJLA_DOKTOR)
         .build();
 
-    final var actualResult = actionRulePatientAlive.evaluate(Optional.empty(),
+    final var certificate = Certificate.builder()
+        .certificateMetaData(CertificateMetaData.builder()
+            .build())
+        .build();
+
+    final var actualResult = actionRulePatientAlive.evaluate(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
     assertTrue(actualResult);

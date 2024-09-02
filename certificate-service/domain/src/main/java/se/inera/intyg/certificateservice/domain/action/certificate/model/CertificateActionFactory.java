@@ -132,7 +132,8 @@ public class CertificateActionFactory {
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleNoComplementMessages(),
                   new ActionRuleProtectedPerson(),
-                  new ActionRuleInactiveUnit()
+                  new ActionRuleInactiveUnit(),
+                  new ActionRulePatientAlive()
               )
           )
           .build();
