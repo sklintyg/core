@@ -57,7 +57,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
             List.of(
                 ElementValidationText.builder()
                     .mandatory(true)
-                    .limit(400)
+                    .limit(4000)
                     .build()
             )
         )
