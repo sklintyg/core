@@ -67,7 +67,7 @@ public class QuestionUtredningEllerUnderlag {
                 .id(QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_FIELD_ID)
                 .name("Ange utredning eller underlag")
                 .informationSourceDescription(
-                    "Skriv exempelvis Neuropsykiatriska kliniken på X-stads sjukhus eller om patienten själv kommer att bifoga utredningen till sin ansökan.")
+                    "Skriv från vilken vårdgivare Försäkringskassan kan hämta information om utredningen/underlaget, exempelvis Neuropsykiatriska kliniken på X-stads sjukhus eller om patienten själv kommer att bifoga utredningen till sin ansökan.")
                 .dateText("Datum")
                 .typeText("Utredning eller underlag")
                 .informationSourceText("Från vilken vårdgivare")

@@ -5,7 +5,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -32,7 +32,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
     return ElementSpecification.builder()
         .id(QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID)
         .configuration(
-            ElementConfigurationTextArea.builder()
+            ElementConfigurationTextField.builder()
                 .id(QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_FIELD_ID)
                 .name(
                     "Ange vad annat är")

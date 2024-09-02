@@ -30,7 +30,7 @@ class QuestionForutsattningarForAttLamnaSkriftligtSamtyckeTest {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
         .id(new FieldId("53.1"))
         .name(
-            "Har patienten de medicinska förutsättningarna för att kunna lämna sitt samtycke?")
+            "Har patienten de medicinska förutsättningarna för att kunna lämna samtycke?")
         .selectedText("Ja")
         .unselectedText("Nej")
         .build();
