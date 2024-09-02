@@ -31,10 +31,10 @@ class FK7809PdfSpecificationTest {
   void shallIncludePatientFieldId() {
     final var expected = List.of(
         new PdfFieldId("form1[0].#subform[0].flt_txtPersonNr[0]"),
-        new PdfFieldId("form1[0].Sida2[0].flt_txtPersonNr[0]"),
-        new PdfFieldId("form1[0].Sida3[0].flt_txtPersonNr[0]"),
-        new PdfFieldId("form1[0].Sida4[0].flt_txtPersonNr[0]"),
-        new PdfFieldId("form1[0].#subform[4].flt_txtPersonNr[1]")
+        new PdfFieldId("form1[0].#subform[1].flt_txtPersonNr[1]"),
+        new PdfFieldId("form1[0].#subform[2].flt_txtPersonNr[2]"),
+        new PdfFieldId("form1[0].#subform[3].flt_txtPersonNr[3]"),
+        new PdfFieldId("form1[0].#subform[4].flt_txtPersonNr[4]")
     );
 
     final var pdfSpecification = FK7809PdfSpecification.create();
@@ -48,15 +48,15 @@ class FK7809PdfSpecificationTest {
         .signaturePageIndex(3)
         .signatureWithAddressTagIndex(new PdfTagIndex(10))
         .signatureWithoutAddressTagIndex(new PdfTagIndex(10))
-        .signedDateFieldId(new PdfFieldId("form1[0].Sida4[0].flt_datUnderskrift[0]"))
-        .signedByNameFieldId(new PdfFieldId("form1[0].Sida4[0].flt_txtNamnfortydligande[0]"))
-        .paTitleFieldId(new PdfFieldId("form1[0].Sida4[0].flt_txtBefattning[0]"))
+        .signedDateFieldId(new PdfFieldId("form1[0].#subform[3].flt_datUnderskrift[0]"))
+        .signedByNameFieldId(new PdfFieldId("form1[0].#subform[3].flt_txtNamnfortydligande[0]"))
+        .paTitleFieldId(new PdfFieldId("form1[0].#subform[3].flt_txtBefattning[0]"))
         .specialtyFieldId(
-            new PdfFieldId("form1[0].Sida4[0].flt_txtEventuellSpecialistkompetens[0]"))
-        .hsaIdFieldId(new PdfFieldId("form1[0].Sida4[0].flt_txtLakarensHSA-ID[0]"))
-        .workplaceCodeFieldId(new PdfFieldId("form1[0].Sida4[0].flt_txtArbetsplatskod[0]"))
+            new PdfFieldId("form1[0].#subform[3].flt_txtEventuellSpecialistkompetens[0]"))
+        .hsaIdFieldId(new PdfFieldId("form1[0].#subform[3].flt_txtLakarensHSA-ID[0]"))
+        .workplaceCodeFieldId(new PdfFieldId("form1[0].#subform[3].flt_txtArbetsplatskod[0]"))
         .contactInformation(
-            new PdfFieldId("form1[0].Sida4[0].flt_txtVardgivarensNamnAdressTelefon[0]"))
+            new PdfFieldId("form1[0].#subform[3].flt_txtVardgivarensNamnAdressTelefon[0]"))
         .build();
 
     final var pdfSpecification = FK7809PdfSpecification.create();

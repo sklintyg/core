@@ -15,7 +15,7 @@ public class QuestionDiagnosHistorik {
   public static final ElementId DIAGNOSIS_MOTIVATION_ID = new ElementId("5");
   public static final FieldId DIAGNOSIS_MOTIVATION_FIELD_ID = new FieldId("5.1");
   public static final PdfFieldId DIAGNOSIS_MOTIVATION_PDF_FIELD_ID = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtBeskrivRelevantHistorikDiagnos[0]");
+      "form1[0].#subform[1].flt_txtBeskrivRelevantHistorikDiagnos[0]");
 
   private QuestionDiagnosHistorik() {
     throw new IllegalStateException("Utility class");

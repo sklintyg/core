@@ -16,7 +16,7 @@ public class QuestionPrognos {
       "51");
   private static final FieldId QUESTION_PROGNOS_FIELD_ID = new FieldId("51.1");
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
-      "form1[0].Sida4[0].flt_txtPatientenslFunktionsnedsattning[0]");
+      "form1[0].#subform[3].flt_txtPatientenslFunktionsnedsattning[0]");
 
   private QuestionPrognos() {
     throw new IllegalStateException("Utility class");

@@ -14,7 +14,7 @@ public class QuestionPsykiskFunktionMotivering extends AbstractFunktionsnedsattn
   private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_FIELD_ID = new FieldId(
       "11.1");
   private static final PdfFieldId FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_PDF_FIELD_ID = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txtIntellektuellFunktion[3]");
+      "form1[0].#subform[1].flt_txtIntellektuellFunktion[3]");
 
   private QuestionPsykiskFunktionMotivering() {
     throw new IllegalStateException("Utility class");

@@ -17,7 +17,7 @@ public class QuestionPagaendeOchPlaneradeBehandlingar {
   public static final FieldId QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_FIELD_ID = new FieldId(
       "50.1");
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
-      "form1[0].Sida3[0].flt_txtPlaneradMedicinskBehandling[0]");
+      "form1[0].#subform[2].flt_txtPlaneradMedicinskBehandling[0]");
 
   private QuestionPagaendeOchPlaneradeBehandlingar() {
     throw new IllegalStateException("Utility class");
