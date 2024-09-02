@@ -46,7 +46,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
                 ),
                 CertificateElementRuleFactory.limit(
                     QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID,
-                    (short) 50),
+                    (short) 4000),
                 CertificateElementRuleFactory.show(
                     QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID,
                     UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID
@@ -57,7 +57,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
             List.of(
                 ElementValidationText.builder()
                     .mandatory(true)
-                    .limit(50)
+                    .limit(400)
                     .build()
             )
         )
