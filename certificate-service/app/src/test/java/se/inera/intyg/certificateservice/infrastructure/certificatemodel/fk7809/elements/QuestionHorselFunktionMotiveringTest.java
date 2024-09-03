@@ -101,7 +101,7 @@ class QuestionHorselFunktionMotiveringTest {
   @Test
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
-        .pdfFieldId(new PdfFieldId("form1[0].#subform[2].flt_txtIntellektuellFunktion[0]"))
+        .pdfFieldId(new PdfFieldId("form1[0].#subform[2].flt_txtIntellektuellFunktion[4]"))
         .maxLength(265)
         .overflowSheetFieldId(new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
         .build();
