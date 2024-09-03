@@ -55,9 +55,9 @@ class TextfieldAppearanceTest {
     }
 
     private void assertPDRectangleEquals(PDRectangle expected, PDRectangle actual) {
-        assertEquals(expected.getLowerLeftX(), actual.getLowerLeftX(), 0.001);
-        assertEquals(expected.getLowerLeftY(), actual.getLowerLeftY(), 0.001);
-        assertEquals(expected.getWidth(), actual.getWidth(), 0.001);
-        assertEquals(expected.getHeight(), actual.getHeight(), 0.001);
+        assertEquals(expected.getLowerLeftX(), actual.getLowerLeftX());
+        assertEquals(expected.getLowerLeftY(), actual.getLowerLeftY());
+        assertEquals(expected.getWidth(), actual.getWidth());
+        assertEquals(expected.getHeight(), actual.getHeight());
     }
 }
