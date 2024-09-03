@@ -22,6 +22,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.RenewCertifi
 import se.inera.intyg.certificateservice.domain.certificate.service.ReplaceCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.RevokeCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SendCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.SetCertificateReadyForSignDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SignCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SignCertificateWithoutSignatureDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertificateDomainService;
@@ -392,5 +393,13 @@ public class AppConfig {
   public GetUnitStatisticsDomainService getUnitStatisticsDomainService(
       StatisticsRepository statisticsRepository) {
     return new GetUnitStatisticsDomainService(statisticsRepository);
+  }
+
+  @Bean
+  public SetCertificateReadyForSignDomainService setCertificateReadyForSignDomainService(
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new SetCertificateReadyForSignDomainService(certificateRepository,
+        certificateEventDomainService);
   }
 }

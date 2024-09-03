@@ -13,6 +13,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.AnswerCompl
 import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateReadyForSignRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateReadyForSignResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
@@ -58,6 +60,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.RenewCe
 import se.inera.intyg.certificateservice.application.certificate.service.ReplaceCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.RevokeCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SendCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.SetCertificateReadyForSignService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateWithoutSignatureService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
@@ -104,6 +107,8 @@ class CertificateControllerTest {
   private ForwardCertificateService forwardCertificateService;
   @Mock
   private GetCertificateEventsService getCertificateEventsService;
+  @Mock
+  private SetCertificateReadyForSignService setCertificateReadyForSignService;
   @InjectMocks
   private CertificateController certificateController;
 
@@ -355,6 +360,18 @@ class CertificateControllerTest {
     doReturn(expectedResult).when(getCertificateEventsService).get(request, CERTIFICATE_ID);
 
     final var actualResult = certificateController.getCertificateEvents(request, CERTIFICATE_ID);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnSetReadyForSignResponse() {
+    final var request = CertificateReadyForSignRequest.builder().build();
+    final var expectedResult = CertificateReadyForSignResponse.builder().build();
+    doReturn(expectedResult).when(setCertificateReadyForSignService).set(request, CERTIFICATE_ID);
+
+    final var actualResult = certificateController.setCertificateReadyForSign(request,
+        CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
   }

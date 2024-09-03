@@ -52,6 +52,8 @@ public class TestDataCertificateEntity {
         .revokedMessage(REVOKED_MESSAGE)
         .externalReference(EXTERNAL_REFERENCE)
         .certificateModel(CERTIFICATE_MODEL_ENTITY)
+        .readyForSignBy(AJLA_DOKTOR_ENTITY)
+        .readyForSign(LocalDateTime.now())
         .forwarded(true);
   }
 

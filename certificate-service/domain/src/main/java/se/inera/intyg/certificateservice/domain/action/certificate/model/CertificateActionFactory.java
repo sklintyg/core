@@ -418,6 +418,20 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case READY_FOR_SIGN -> CertificateActionReadyForSign.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(
+                      List.of(Status.DRAFT)),
+                  new ActionRuleUserHasAccessScope(
+                      List.of(AccessScope.WITHIN_CARE_PROVIDER, AccessScope.ALL_CARE_PROVIDERS)),
+                  new ActionRuleRole(
+                      List.of(Role.CARE_ADMIN)
+                  )
+              )
+          )
+          .build();
     };
   }
 }
