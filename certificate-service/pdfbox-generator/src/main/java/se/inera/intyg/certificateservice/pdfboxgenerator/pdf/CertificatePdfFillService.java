@@ -10,6 +10,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
+import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
@@ -192,6 +193,11 @@ public class CertificatePdfFillService {
     if (field.getValue() != null) {
       final var extractedField = acroForm.getField(field.getId());
       validateField(field.getId(), extractedField);
+
+      if (extractedField instanceof PDTextField textField && textField.isMultiline()) {
+        final var textAppearance = new TextfieldAppearance(textField);
+        textAppearance.adjustMultilineFieldHeight();
+      }
 
       if (field.getAppend() != null && field.getAppend()) {
         extractedField.setValue(
