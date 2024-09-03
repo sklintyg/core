@@ -193,7 +193,11 @@ public class CertificatePdfFillService {
     if (field.getValue() != null) {
       final var extractedField = acroForm.getField(field.getId());
       validateField(field.getId(), extractedField);
-      adjustMultilineFieldHeight(extractedField);
+
+      if (extractedField instanceof PDTextField textField && textField.isMultiline()) {
+        final var textAppearance = new TextfieldAppearance(textField);
+        textAppearance.adjustMultilineFieldHeight();
+      }
 
       if (field.getAppend() != null && field.getAppend()) {
         extractedField.setValue(
@@ -203,22 +207,6 @@ public class CertificatePdfFillService {
         );
       } else {
         extractedField.setValue(field.getValue());
-      }
-    }
-  }
-
-  private void adjustMultilineFieldHeight(PDField field) {
-    if (field instanceof PDTextField textField && textField.isMultiline()) {
-      final var widgetIterator = textField.getWidgets().iterator();
-      final var appearance = new TextfieldAppearance(textField);
-      while (widgetIterator.hasNext()) {
-        final var widget = widgetIterator.next();
-        final var rec = widget.getRectangle();
-
-        widget.setRectangle(new PDRectangle(rec.getLowerLeftX(),
-                rec.getLowerLeftY(),
-                rec.getWidth(),
-                rec.getHeight()  + (int) Math.round(appearance.fontSize) - 1));
       }
     }
   }
