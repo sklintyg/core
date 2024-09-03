@@ -27,7 +27,7 @@ public class SetCertificateReadyForSignDomainService {
     final var certificate = certificateRepository.getById(certificateId);
     if (!certificate.allowTo(CertificateActionType.READY_FOR_SIGN, Optional.of(actionEvaluation))) {
       throw new CertificateActionForbidden(
-          "Not allowed to update certificate %s, cannot set ready for sign".formatted(
+          "Not allowed to set certificate %s as ready for sign".formatted(
               certificate.id()),
           certificate.reasonNotAllowed(CertificateActionType.READY_FOR_SIGN,
               Optional.of(actionEvaluation))
