@@ -287,6 +287,12 @@ public class Certificate {
       );
     }
 
+    if (this.readyForSign != null) {
+      throw new IllegalStateException(
+          "Certificate with id '%s' has already been marked as ready for sign.".formatted(id())
+      );
+    }
+
     this.readyForSign = ReadyForSign.builder()
         .readyForSignAt(LocalDateTime.now(ZoneId.systemDefault()))
         .readyForSignBy(Staff.create(actionEvaluation.user()))

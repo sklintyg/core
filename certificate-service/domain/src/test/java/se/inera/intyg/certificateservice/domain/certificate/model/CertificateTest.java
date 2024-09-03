@@ -1339,6 +1339,27 @@ class CertificateTest {
           () -> "Received message was: %s".formatted(illegalStateException.getMessage())
       );
     }
+
+    @Test
+    void shallThrowIfCertificateAlreadyBeenMarked() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.DRAFT)
+          .readyForSign(
+              ReadyForSign.builder()
+                  .readyForSignAt(LocalDateTime.now())
+                  .build()
+          )
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.readyForSign(actionEvaluation));
+
+      assertTrue(
+          illegalStateException.getMessage().contains("has already been marked as ready for sign"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
   }
 
   @Nested
