@@ -5,17 +5,15 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionSendAfterSign;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
@@ -84,5 +82,53 @@ class CertificateActionSendAfterSignTest {
     final var actionEvaluation = actionEvaluationBuilder.build();
     assertFalse(
         certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)));
+  }
+
+  @Test
+  void shallReturnFalseIfUserIsCareAdminAndPatientIsProtectedPerson() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .user(ALVA_VARDADMINISTRATOR)
+        .build();
+
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                .careUnit(ALFA_MEDICINCENTRUM)
+                .careProvider(ALFA_REGIONEN)
+                .patient(ANONYMA_REACT_ATTILA)
+                .build()
+        )
+        .build();
+
+    assertFalse(
+        certificateActionSign.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfUserIsDoctorAndPatientIsProtectedPerson() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                .careUnit(ALFA_MEDICINCENTRUM)
+                .careProvider(ALFA_REGIONEN)
+                .patient(ANONYMA_REACT_ATTILA)
+                .build()
+        )
+        .build();
+
+    assertTrue(
+        certificateActionSign.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
   }
 }

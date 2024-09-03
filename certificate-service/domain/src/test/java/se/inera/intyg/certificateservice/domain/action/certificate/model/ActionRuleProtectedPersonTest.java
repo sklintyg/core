@@ -15,7 +15,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALV
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionRuleProtectedPerson;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 
 class ActionRuleProtectedPersonTest {
@@ -39,7 +38,7 @@ class ActionRuleProtectedPersonTest {
   }
 
   @Test
-  void shallReturnFalseIfPatientIsProtectedAndUserIsDoctor() {
+  void shallReturnFalseIfPatientIsProtectedAndUserIsNotDoctor() {
     final var actionEvaluation = actionEvaluationBuilder()
         .patient(ANONYMA_REACT_ATTILA)
         .user(ALVA_VARDADMINISTRATOR)

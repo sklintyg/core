@@ -166,7 +166,7 @@ public abstract class ForwardCertificateMessageIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Om patienten är avliden skall felkod 403 (FORBIDDEN) returneras")
+  @DisplayName("Om patienten är avliden skall meddelandet vidarebefordras")
   void shallReturnForbiddenIfPatientIsDeceased() {
     final var testCertificates = testabilityApi.addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion(), CertificateStatusTypeDTO.SIGNED)
@@ -179,12 +179,22 @@ public abstract class ForwardCertificateMessageIT extends BaseIntegrationIT {
         certificateId(testCertificates)
     );
 
+    api.receiveMessage(
+        incomingComplementMessageBuilder()
+            .personId(ATLAS_REACT_ABRAHAMSSON_DTO.getId())
+            .certificateId(certificateId(testCertificates))
+            .complements(List.of(incomingComplementDTOBuilder()
+                .questionId(questionId())
+                .build()))
+            .build()
+    );
+
     final var response = api.forwardCertificate(
         certificateId(testCertificates),
         defaultForwardCertificateMessageRequest()
     );
 
-    assertEquals(403, response.getStatusCode().value());
+    assertEquals(200, response.getStatusCode().value());
   }
 
   @Test

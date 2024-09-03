@@ -7,6 +7,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.alfaAllergimottagningenBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ANNA_SJUKSKOTERKSA;
@@ -19,11 +20,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionCreate;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.unit.model.Inactive;
 
 class CertificateActionCreateTest {
 
@@ -295,5 +293,37 @@ class CertificateActionCreateTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
     assertFalse(certificateActionCreate.isEnabled(Optional.empty(), Optional.of(actionEvaluation)));
+  }
+
+  @Test
+  void shallReturnFalseIfUnitIsInactive() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ATHENA_REACT_ANDERSSON)
+        .user(AJLA_DOKTOR)
+        .subUnit(alfaAllergimottagningenBuilder()
+            .inactive(new Inactive(true))
+            .build())
+        .build();
+
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
+
+    assertFalse(actualResult);
+  }
+
+  @Test
+  void shallReturnTrueIfUnitIsNotInactive() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .patient(ATHENA_REACT_ANDERSSON)
+        .user(AJLA_DOKTOR)
+        .subUnit(alfaAllergimottagningenBuilder()
+            .inactive(new Inactive(false))
+            .build())
+        .build();
+
+    final var actualResult = certificateActionCreate.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
+
+    assertTrue(actualResult);
   }
 }
