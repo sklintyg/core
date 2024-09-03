@@ -282,7 +282,8 @@ public class Certificate {
   public void readyForSign(ActionEvaluation actionEvaluation) {
     if (this.status != Status.DRAFT) {
       throw new IllegalStateException(
-          "Incorrect status '%s' - required status is '%s' to send".formatted(this.status,
+          "Incorrect status '%s' - required status is '%s' to set ready for sign".formatted(
+              this.status,
               Status.DRAFT)
       );
     }
