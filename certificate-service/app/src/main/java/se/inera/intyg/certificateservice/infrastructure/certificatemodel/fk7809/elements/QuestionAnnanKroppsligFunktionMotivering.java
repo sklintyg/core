@@ -15,7 +15,7 @@ public class QuestionAnnanKroppsligFunktionMotivering extends
   private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_ANNAN_KROPPSILIG_FUNKTION_FIELD_ID = new FieldId(
       "14.1");
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
-      "form1[0].#subform[2].flt_txtIntellektuellFunktion[4]");
+      "form1[0].#subform[2].flt_txtIntellektuellFunktion[8]");
 
   private QuestionAnnanKroppsligFunktionMotivering() {
     throw new IllegalStateException("Utility class");
