@@ -1299,6 +1299,70 @@ class CertificateTest {
   }
 
   @Nested
+  class TestReadyForSign {
+
+    @Test
+    void shallIncludeSentTimestamp() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      certificate.readyForSign(actionEvaluation);
+
+      assertNotNull(certificate.readyForSign().readyForSignAt());
+    }
+
+    @Test
+    void shallIncludeStaff() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      certificate.readyForSign(actionEvaluation);
+
+      assertEquals(TestDataStaff.AJLA_DOKTOR, certificate.readyForSign().readyForSignBy());
+    }
+
+    @Test
+    void shallThrowIfStatusIsSigned() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.readyForSign(actionEvaluation));
+
+      assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowIfCertificateAlreadyBeenMarked() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.DRAFT)
+          .readyForSign(
+              ReadyForSign.builder()
+                  .readyForSignAt(LocalDateTime.now())
+                  .build()
+          )
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.readyForSign(actionEvaluation));
+
+      assertTrue(
+          illegalStateException.getMessage().contains("has already been marked as ready for sign"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+  }
+
+  @Nested
   class TestRevoke {
 
     private static final String MESSAGE = "message";

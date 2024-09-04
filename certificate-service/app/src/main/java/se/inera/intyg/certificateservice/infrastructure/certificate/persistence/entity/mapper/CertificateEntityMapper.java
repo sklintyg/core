@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ReadyForSign;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
@@ -154,6 +155,16 @@ public class CertificateEntityMapper {
       );
     }
 
+    if (certificate.readyForSign() != null) {
+      certificateEntity.setReadyForSignBy(
+          staffMap.get(certificate.readyForSign().readyForSignBy().hsaId().id())
+      );
+
+      certificateEntity.setReadyForSign(
+          certificate.readyForSign().readyForSignAt()
+      );
+    }
+
     if (certificate.revoked() != null) {
       handleRevoked(certificate, certificateEntity, staffMap);
     }
@@ -288,6 +299,13 @@ public class CertificateEntityMapper {
                     new RevokedInformation(certificateEntity.getRevokedReason().getReason(),
                         certificateEntity.getRevokedMessage())
                 )
+                .build() : null
+        )
+        .readyForSign(
+            certificateEntity.getReadyForSign() != null
+                ? ReadyForSign.builder()
+                .readyForSignBy(StaffEntityMapper.toDomain(certificateEntity.getReadyForSignBy()))
+                .readyForSignAt(certificateEntity.getReadyForSign())
                 .build() : null
         )
         .externalReference(

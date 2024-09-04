@@ -9,6 +9,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 
 import java.time.LocalDate;
@@ -30,6 +31,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDi
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalInvestigation;
+import se.inera.intyg.certificateservice.domain.certificate.model.ReadyForSign;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
@@ -85,7 +87,6 @@ public class TestDataCertificate {
       .build();
   public static final Certificate FK7210_CERTIFICATE = fk7210CertificateBuilder().build();
   public static final Certificate FK3226_CERTIFICATE = fk3226CertificateBuilder().build();
-  public static final Certificate FK7809_CERTIFICATE = fk7809CertificateBuilder().build();
 
   public static Certificate.CertificateBuilder fk7210CertificateBuilder() {
     return Certificate.builder()
@@ -108,6 +109,12 @@ public class TestDataCertificate {
                             .build()
                     ).build()
             )
+        )
+        .readyForSign(
+            ReadyForSign.builder()
+                .readyForSignAt(LocalDateTime.now())
+                .readyForSignBy(ALVA_VARDADMINISTRATOR)
+                .build()
         )
         .certificateMetaData(
             CertificateMetaData.builder()

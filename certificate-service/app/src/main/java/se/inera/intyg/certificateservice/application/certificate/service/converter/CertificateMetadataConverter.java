@@ -126,6 +126,8 @@ public class CertificateMetadataConverter {
                         .of(certificate, actionEvaluation)
                 ) : null
         )
+        .readyForSign(
+            certificate.readyForSign() != null ? certificate.readyForSign().readyForSignAt() : null)
         .build();
   }
 

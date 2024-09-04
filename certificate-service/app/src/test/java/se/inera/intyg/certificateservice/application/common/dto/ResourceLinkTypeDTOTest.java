@@ -102,6 +102,13 @@ class ResourceLinkTypeDTOTest {
           ResourceLinkTypeDTO.RESPONSIBLE_ISSUER.toCertificateActionType()
       );
     }
+
+    @Test
+    void shallReturnCertificateActionTypeReadyForSign() {
+      assertEquals(CertificateActionType.READY_FOR_SIGN,
+          ResourceLinkTypeDTO.READY_FOR_SIGN.toCertificateActionType()
+      );
+    }
   }
 
   @Nested
@@ -272,6 +279,12 @@ class ResourceLinkTypeDTOTest {
     void shallReturnCertificateActionTypeResponsibleIssuer() {
       assertEquals(ResourceLinkTypeDTO.RESPONSIBLE_ISSUER,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.RESPONSIBLE_ISSUER));
+    }
+
+    @Test
+    void shallReturnCertificateActionTypeReadyForSign() {
+      assertEquals(ResourceLinkTypeDTO.READY_FOR_SIGN,
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.READY_FOR_SIGN));
     }
   }
 }

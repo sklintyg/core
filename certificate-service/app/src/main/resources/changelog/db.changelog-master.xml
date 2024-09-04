@@ -42,6 +42,9 @@
       <column name="locked" type="datetime">
         <constraints nullable="true"/>
       </column>
+      <column name="ready_for_sign" type="datetime">
+        <constraints nullable="true"/>
+      </column>
       <column name="issued_by_staff_key" type="integer unsigned">
         <constraints nullable="false"/>
       </column>
@@ -49,6 +52,9 @@
         <constraints nullable="true"/>
       </column>
       <column name="revoked_by_staff_key" type="integer unsigned">
+        <constraints nullable="true"/>
+      </column>
+      <column name="ready_for_sign_by_staff_key" type="integer unsigned">
         <constraints nullable="true"/>
       </column>
       <column name="issued_on_unit_key" type="integer unsigned">

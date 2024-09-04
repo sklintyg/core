@@ -44,6 +44,7 @@ public class Certificate {
   private LocalDateTime signed;
   private LocalDateTime modified;
   private LocalDateTime locked;
+  private ReadyForSign readyForSign;
   private CertificateMetaData certificateMetaData;
   @Builder.Default
   private List<ElementData> elementData = Collections.emptyList();
@@ -275,6 +276,27 @@ public class Certificate {
         .revokedInformation(revokedInformation)
         .revokedBy(Staff.create(actionEvaluation.user()))
         .revokedAt(LocalDateTime.now(ZoneId.systemDefault()))
+        .build();
+  }
+
+  public void readyForSign(ActionEvaluation actionEvaluation) {
+    if (this.status != Status.DRAFT) {
+      throw new IllegalStateException(
+          "Incorrect status '%s' - required status is '%s' to set ready for sign.".formatted(
+              this.status,
+              Status.DRAFT)
+      );
+    }
+
+    if (this.readyForSign != null) {
+      throw new IllegalStateException(
+          "Certificate with id '%s' has already been marked as ready for sign.".formatted(id())
+      );
+    }
+
+    this.readyForSign = ReadyForSign.builder()
+        .readyForSignAt(LocalDateTime.now(ZoneId.systemDefault()))
+        .readyForSignBy(Staff.create(actionEvaluation.user()))
         .build();
   }
 

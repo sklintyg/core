@@ -69,6 +69,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ReadyForSign;
 import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
@@ -93,6 +94,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpre
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
+import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.user.model.ResponsibleIssuer;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 
@@ -153,6 +155,12 @@ class CertificateMetadataConverterTest {
         .signed(SIGNED)
         .modified(MODIFIED)
         .forwarded(FORWARDED)
+        .readyForSign(
+            ReadyForSign.builder()
+                .readyForSignAt(LocalDateTime.now())
+                .readyForSignBy(Staff.builder().build())
+                .build()
+        )
         .certificateModel(
             CertificateModel.builder()
                 .id(
@@ -852,6 +860,13 @@ class CertificateMetadataConverterTest {
   void shallIncludeForwarded() {
     assertEquals(FORWARDED.value(),
         certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).isForwarded()
+    );
+  }
+
+  @Test
+  void shallIncludeReadyForSign() {
+    assertEquals(certificate.readyForSign().readyForSignAt(),
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getReadyForSign()
     );
   }
 }

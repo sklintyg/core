@@ -174,6 +174,20 @@ class CertificateEntityMapperTest {
     }
 
     @Test
+    void shouldMapReadyForSignByIfReadyForSignIsNotNull() {
+      final var response = certificateEntityMapper.toEntity(FK7210_CERTIFICATE);
+
+      assertEquals(CERTIFICATE_ENTITY.getReadyForSignBy(), response.getReadyForSignBy());
+    }
+
+    @Test
+    void shouldMapReadyForSignIfReadyForSignIsNotNull() {
+      final var response = certificateEntityMapper.toEntity(FK7210_CERTIFICATE);
+
+      assertEquals(FK7210_CERTIFICATE.readyForSign().readyForSignAt(), response.getReadyForSign());
+    }
+
+    @Test
     void shouldMapLockedIfLockedIsNotNull() {
       final var lockedCertificate = fk7210CertificateBuilder()
           .status(Status.LOCKED_DRAFT)
@@ -403,6 +417,22 @@ class CertificateEntityMapperTest {
           FK7210_CERTIFICATE_MODEL);
 
       assertNotNull(response.sent().sentAt());
+    }
+
+    @Test
+    void shouldMapReadyForSignBy() {
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7210_CERTIFICATE_MODEL);
+
+      assertEquals(AJLA_DOKTOR, response.readyForSign().readyForSignBy());
+    }
+
+    @Test
+    void shouldMapReadyForSign() {
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7210_CERTIFICATE_MODEL);
+
+      assertNotNull(response.readyForSign().readyForSignAt());
     }
 
     @Test

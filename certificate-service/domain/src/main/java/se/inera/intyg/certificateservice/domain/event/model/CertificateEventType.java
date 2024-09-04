@@ -15,7 +15,8 @@ public enum CertificateEventType {
   COMPLEMENT("complement-certificate", Constants.ACTION_TYPE_CREATION, null),
   ANSWER_COMPLEMENT("answer-complement-message", Constants.ACTION_TYPE_CREATION,
       "message-sent"),
-  REVOKED("revoked-certificate", Constants.ACTION_TYPE_CHANGE, "certificate-revoked");
+  REVOKED("revoked-certificate", Constants.ACTION_TYPE_CHANGE, "certificate-revoked"),
+  READY_FOR_SIGN("ready-for-sign-certificate", Constants.ACTION_TYPE_CHANGE, null);
 
   private final String action;
   private final String actionType;

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateReadyForSignRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateReadyForSignResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
@@ -57,6 +59,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.RenewCe
 import se.inera.intyg.certificateservice.application.certificate.service.ReplaceCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.RevokeCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SendCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.SetCertificateReadyForSignService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateWithoutSignatureService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
@@ -85,6 +88,7 @@ public class CertificateController {
   private final AnswerComplementService answerComplementService;
   private final ForwardCertificateService forwardCertificateService;
   private final GetCertificateEventsService getCertificateEventsService;
+  private final SetCertificateReadyForSignService setCertificateReadyForSignService;
 
   @PostMapping
   CreateCertificateResponse createCertificate(
@@ -209,5 +213,12 @@ public class CertificateController {
       @RequestBody GetCertificateEventsRequest request,
       @PathVariable("certificateId") String certificateId) {
     return getCertificateEventsService.get(request, certificateId);
+  }
+
+  @PostMapping("/{certificateId}/readyForSign")
+  CertificateReadyForSignResponse setCertificateReadyForSign(
+      @RequestBody CertificateReadyForSignRequest request,
+      @PathVariable("certificateId") String certificateId) {
+    return setCertificateReadyForSignService.set(request, certificateId);
   }
 }
