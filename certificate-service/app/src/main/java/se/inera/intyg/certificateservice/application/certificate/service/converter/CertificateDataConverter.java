@@ -40,10 +40,10 @@ public class CertificateDataConverter {
   private final List<CertificateDataValueConverter> certificateDataValueConverter;
   private final List<CertificateDataValidationConverter> certificateDataValidationConverters;
 
-  public Map<String, CertificateDataElement> convert(Certificate certificate) {
+  public Map<String, CertificateDataElement> convert(Certificate certificate, boolean forCitizen) {
     final var childParentMap = certificate.certificateModel().elementSpecifications().stream()
         .flatMap(elementSpecification ->
-            mapChildrenToParents(elementSpecification, certificate.status())
+            mapChildrenToParents(elementSpecification, certificate.status(), forCitizen)
         )
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
@@ -62,8 +62,8 @@ public class CertificateDataConverter {
         elementIdElementValueMap,
         atomicInteger,
         childParentMap,
-        certificate
-    );
+        certificate,
+        forCitizen);
 
     return collectStreamOfCertificateDataElementsToMap(certificateDataElementStream);
   }
@@ -71,7 +71,7 @@ public class CertificateDataConverter {
   private Map<String, CertificateDataElement> convertData(
       Map<ElementId, ElementValue> elementIdElementValueMap,
       ElementSpecification elementSpecification, AtomicInteger atomicInteger,
-      Map<String, String> childParentMap, Certificate certificate) {
+      Map<String, String> childParentMap, Certificate certificate, boolean forCitizen) {
     final var certificateDataElementHashMap = new HashMap<String, CertificateDataElement>();
     final var questionId = elementSpecification.id().id();
     final var value = elementIdElementValueMap.getOrDefault(elementSpecification.id(), null);
@@ -83,8 +83,8 @@ public class CertificateDataConverter {
         elementIdElementValueMap,
         atomicInteger,
         childParentMap,
-        certificate
-    );
+        certificate,
+        forCitizen);
 
     final var certificateDataElement = CertificateDataElement.builder()
         .id(questionId)
@@ -177,11 +177,12 @@ public class CertificateDataConverter {
   private Stream<Set<Entry<String, CertificateDataElement>>> toCertificateDataElementMap(
       List<ElementSpecification> elementSpecifications,
       Map<ElementId, ElementValue> elementIdElementValueMap, AtomicInteger atomicInteger,
-      Map<String, String> childParentMap, Certificate certificate) {
+      Map<String, String> childParentMap, Certificate certificate, boolean forCitizen) {
     return elementSpecifications.stream()
         .filter(removeMessagesIfNotUnsigned(certificate.status()))
         .filter(
             removeQuestionIfNotDraftWithoutValue(elementIdElementValueMap, certificate).negate())
+        .filter(removeElementsForCitizenCertificate(forCitizen))
         .flatMap(
             specification -> {
               final var dataElementMap = convertData(
@@ -189,8 +190,8 @@ public class CertificateDataConverter {
                   specification,
                   atomicInteger,
                   childParentMap,
-                  certificate
-              );
+                  certificate,
+                  forCitizen);
 
               return Stream.of(dataElementMap.entrySet());
             }
@@ -206,16 +207,17 @@ public class CertificateDataConverter {
   }
 
   private Stream<Map.Entry<String, String>> mapChildrenToParents(ElementSpecification parent,
-      Status status) {
+      Status status, boolean forCitizen) {
     return Optional.ofNullable(parent.children())
         .orElse(Collections.emptyList())
         .stream()
         .filter(removeMessagesIfNotUnsigned(status))
+        .filter(removeElementsForCitizenCertificate(forCitizen))
         .flatMap(child -> {
               final var childToParent = Stream.of(
                   new AbstractMap.SimpleEntry<>(child.id().id(), parent.id().id())
               );
-              final var subChildren = mapChildrenToParents(child, status);
+              final var subChildren = mapChildrenToParents(child, status, forCitizen);
               return Stream.concat(childToParent, subChildren);
             }
         );
@@ -228,5 +230,11 @@ public class CertificateDataConverter {
   private static Predicate<ElementSpecification> removeMessagesIfNotUnsigned(Status status) {
     return elementSpecification -> !MESSAGE.equals(elementSpecification.configuration().type())
         || DRAFT.equals(status);
+  }
+
+  private static Predicate<ElementSpecification> removeElementsForCitizenCertificate(
+      boolean forCitizen) {
+    return specification -> !forCitizen || specification.includeForCitizen();
+
   }
 }

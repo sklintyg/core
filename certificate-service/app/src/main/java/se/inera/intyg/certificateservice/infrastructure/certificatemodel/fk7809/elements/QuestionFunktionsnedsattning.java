@@ -59,6 +59,7 @@ public class QuestionFunktionsnedsattning {
     return ElementSpecification.builder()
         .id(FUNKTIONSNEDSATTNING_ID)
         .includeInXml(false)
+        .includeForCitizen(false)
         .configuration(
             ElementConfigurationCheckboxMultipleCode.builder()
                 .id(FUNKTIONSNEDSATNING_FIELD_ID)

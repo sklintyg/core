@@ -27,6 +27,9 @@ class CertificateConverterTest {
 
   private final List<ResourceLinkDTO> resourceLinkDTOs = Collections.emptyList();
   private static final ActionEvaluation ACTION_EVALUATION = ActionEvaluation.builder().build();
+  private Certificate certificate;
+  private static final String KEY = "key";
+
   @Mock
   private CertificateMetadataConverter certificateMetadataConverter;
   @Mock
@@ -34,52 +37,109 @@ class CertificateConverterTest {
   @InjectMocks
   private CertificateConverter certificateConverter;
 
-  private Certificate certificate;
-  private static final String KEY = "key";
-
-  @BeforeEach
-  void setUp() {
-    certificate = Certificate.builder().build();
-  }
-
   @Nested
-  class CertificateMetadataTest {
+  class ConvertForCare {
 
-    @Test
-    void shallIncludeMetadata() {
-      final var expectedMetadata = CertificateMetadataDTO.builder().build();
-      doReturn(expectedMetadata).when(certificateMetadataConverter)
-          .convert(certificate, ACTION_EVALUATION);
-      final var actualMetadata = certificateMetadataConverter.convert(certificate,
-          ACTION_EVALUATION);
-      assertEquals(expectedMetadata, actualMetadata);
+    @BeforeEach
+    void setUp() {
+      certificate = Certificate.builder().build();
+    }
+
+    @Nested
+    class CertificateMetadataTest {
+
+      @Test
+      void shallIncludeMetadata() {
+        final var expectedMetadata = CertificateMetadataDTO.builder().build();
+        doReturn(expectedMetadata).when(certificateMetadataConverter)
+            .convert(certificate, ACTION_EVALUATION);
+        final var actualMetadata = certificateMetadataConverter.convert(certificate,
+            ACTION_EVALUATION);
+        assertEquals(expectedMetadata, actualMetadata);
+      }
+    }
+
+    @Nested
+    class CertificateData {
+
+      @Test
+      void shallIncludeData() {
+        final var expectedValue = Map.of(KEY, CertificateDataElement.builder().build());
+
+        doReturn(expectedValue).when(certificateDataConverter)
+            .convert(certificate, false);
+
+        assertEquals(expectedValue,
+            certificateConverter.convert(certificate, resourceLinkDTOs, ACTION_EVALUATION)
+                .getData());
+      }
+    }
+
+    @Nested
+    class CertificateResourceLinks {
+
+      @Test
+      void shallIncludeLinks() {
+        final var resourceLinkDTO = ResourceLinkDTO.builder().build();
+        final var expectedLinks = List.of(resourceLinkDTO);
+        assertEquals(expectedLinks,
+            certificateConverter.convert(certificate, expectedLinks, ACTION_EVALUATION).getLinks());
+      }
     }
   }
 
   @Nested
-  class CertificateData {
+  class ConvertForCitizen {
 
-    @Test
-    void shallIncludeData() {
-      final var expectedValue = Map.of(KEY, CertificateDataElement.builder().build());
-
-      doReturn(expectedValue).when(certificateDataConverter)
-          .convert(certificate);
-
-      assertEquals(expectedValue,
-          certificateConverter.convert(certificate, resourceLinkDTOs, ACTION_EVALUATION).getData());
+    @BeforeEach
+    void setUp() {
+      certificate = Certificate.builder().build();
     }
-  }
 
-  @Nested
-  class CertificateResourceLinks {
+    @Nested
+    class CertificateMetadataTest {
 
-    @Test
-    void shallIncludeLinks() {
-      final var resourceLinkDTO = ResourceLinkDTO.builder().build();
-      final var expectedLinks = List.of(resourceLinkDTO);
-      assertEquals(expectedLinks,
-          certificateConverter.convert(certificate, expectedLinks, ACTION_EVALUATION).getLinks());
+      @Test
+      void shallIncludeMetadata() {
+        final var expectedMetadata = CertificateMetadataDTO.builder().build();
+
+        doReturn(expectedMetadata).when(certificateMetadataConverter)
+            .convert(certificate, ACTION_EVALUATION);
+
+        final var actualMetadata = certificateMetadataConverter.convert(certificate,
+            ACTION_EVALUATION);
+
+        assertEquals(expectedMetadata, actualMetadata);
+      }
+    }
+
+    @Nested
+    class CertificateData {
+
+      @Test
+      void shallIncludeData() {
+        final var expectedValue = Map.of(KEY, CertificateDataElement.builder().build());
+
+        doReturn(expectedValue).when(certificateDataConverter)
+            .convert(certificate, true);
+
+        assertEquals(expectedValue,
+            certificateConverter.convertForCitizen(certificate, resourceLinkDTOs)
+                .getData());
+      }
+    }
+
+    @Nested
+    class CertificateResourceLinks {
+
+      @Test
+      void shallIncludeLinks() {
+        final var resourceLinkDTO = ResourceLinkDTO.builder().build();
+        final var expectedLinks = List.of(resourceLinkDTO);
+
+        assertEquals(expectedLinks,
+            certificateConverter.convertForCitizen(certificate, expectedLinks).getLinks());
+      }
     }
   }
 }

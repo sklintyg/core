@@ -82,7 +82,7 @@ class GetCitizenCertificateServiceTest {
         new CertificateId(CERTIFICATE_ID), CONVERTED_PERSON_ID)
     ).thenReturn(CERTIFICATE);
 
-    when(certificateConverter.convert(CERTIFICATE, Collections.emptyList(), null))
+    when(certificateConverter.convertForCitizen(CERTIFICATE, Collections.emptyList()))
         .thenReturn(CONVERTED_CERTIFICATE);
 
     when(certificateTextConverter.convert(CERTIFICATE_TEXT))

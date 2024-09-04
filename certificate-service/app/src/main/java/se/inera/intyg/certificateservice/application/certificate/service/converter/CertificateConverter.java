@@ -22,9 +22,23 @@ public class CertificateConverter {
             certificateMetadataConverter.convert(certificate, actionEvaluation)
         )
         .data(
-            certificateDataConverter.convert(certificate)
+            certificateDataConverter.convert(certificate, false)
         )
         .links(resourceLinks)
         .build();
   }
+
+  public CertificateDTO convertForCitizen(Certificate certificate,
+      List<ResourceLinkDTO> resourceLinks) {
+    return CertificateDTO.builder()
+        .metadata(
+            certificateMetadataConverter.convert(certificate, null)
+        )
+        .data(
+            certificateDataConverter.convert(certificate, true)
+        )
+        .links(resourceLinks)
+        .build();
+  }
+
 }
