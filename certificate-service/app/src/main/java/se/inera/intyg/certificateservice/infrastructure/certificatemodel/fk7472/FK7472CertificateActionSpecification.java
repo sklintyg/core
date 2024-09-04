@@ -28,7 +28,7 @@ public class FK7472CertificateActionSpecification {
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.SIGN)
             .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
+                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
             )
             .build(),
         CertificateActionSpecification.builder()
@@ -43,7 +43,7 @@ public class FK7472CertificateActionSpecification {
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.REVOKE)
             .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
+                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
             )
             .build(),
         CertificateActionSpecification.builder()
