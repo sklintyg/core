@@ -57,7 +57,7 @@ class PdfCodeValueGeneratorTest {
   }
 
   @Test
-  void shouldReturnEmptyListIfElementDataWithoutCodeValue() {
+  void shouldReturnEmptyListIfElementDataWithoutCode() {
     final var elementSpecification = ElementSpecification.builder()
         .pdfConfiguration(
             PdfConfigurationCode.builder()
@@ -69,6 +69,42 @@ class PdfCodeValueGeneratorTest {
         .build();
 
     final var result = pdfCodeValueGenerator.generate(elementSpecification, null);
+
+    assertEquals(Collections.emptyList(), result);
+  }
+
+  @Test
+  void shouldReturnEmptyListIfElementDataWithoutCodeId() {
+    final var elementSpecification = ElementSpecification.builder()
+        .pdfConfiguration(
+            PdfConfigurationCode.builder()
+                .codes(
+                    Map.of(CODE_FIELD_ID, new PdfFieldId(PDF_FIELD_ID))
+                )
+                .build()
+        )
+        .build();
+
+    final var result = pdfCodeValueGenerator.generate(elementSpecification,
+        ElementValueCode.builder().build());
+
+    assertEquals(Collections.emptyList(), result);
+  }
+
+  @Test
+  void shouldReturnEmptyListIfElementDataWithoutCodeIdValue() {
+    final var elementSpecification = ElementSpecification.builder()
+        .pdfConfiguration(
+            PdfConfigurationCode.builder()
+                .codes(
+                    Map.of(CODE_FIELD_ID, new PdfFieldId(PDF_FIELD_ID))
+                )
+                .build()
+        )
+        .build();
+
+    final var result = pdfCodeValueGenerator.generate(elementSpecification,
+        ElementValueCode.builder().codeId(new FieldId(null)).build());
 
     assertEquals(Collections.emptyList(), result);
   }
