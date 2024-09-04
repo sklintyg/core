@@ -34,6 +34,7 @@ import se.inera.intyg.certificateservice.integrationtest.AccessLevelsDeepIntegra
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsSVODIT;
 import se.inera.intyg.certificateservice.integrationtest.AnswerComplementIT;
 import se.inera.intyg.certificateservice.integrationtest.CertificateFromMessageIT;
+import se.inera.intyg.certificateservice.integrationtest.CertificateReadyForSignIT;
 import se.inera.intyg.certificateservice.integrationtest.CertificatesWithQAForCareIT;
 import se.inera.intyg.certificateservice.integrationtest.ComplementIT;
 import se.inera.intyg.certificateservice.integrationtest.CreateCertificateIT;
@@ -580,6 +581,21 @@ public class FK7472ActiveIT {
     @Override
     protected boolean careAdminCanSendCertificate() {
       return true;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Markera klar för signering")
+  class ReadyForSignCertificate extends CertificateReadyForSignIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
     }
   }
 

@@ -274,6 +274,10 @@ public class ApiRequestUtil {
     return SendCertificateRequestBuilder.create();
   }
 
+  public static CertificateReadyForSignRequestBuilder customReadyForSignCertificateRequest() {
+    return CertificateReadyForSignRequestBuilder.create();
+  }
+
   public static TestabilityCertificateRequestBuilder customTestabilityCertificateRequest(
       String type,
       String version) {

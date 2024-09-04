@@ -13,6 +13,7 @@ import org.springframework.test.context.DynamicPropertySource;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsDeepIntegrationIT;
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsSVODIT;
+import se.inera.intyg.certificateservice.integrationtest.CertificateReadyForSignIT;
 import se.inera.intyg.certificateservice.integrationtest.CertificatesWithQAForCareIT;
 import se.inera.intyg.certificateservice.integrationtest.CreateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.DeleteCertificateIT;
@@ -369,6 +370,21 @@ public class FK7210ActiveIT {
     @Override
     protected boolean careAdminCanSendCertificate() {
       return true;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Markera klar för signering")
+  class ReadyForSignCertificate extends CertificateReadyForSignIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
     }
   }
 

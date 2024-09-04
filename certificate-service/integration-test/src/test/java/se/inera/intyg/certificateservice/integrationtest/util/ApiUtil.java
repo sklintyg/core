@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateReadyForSignRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateReadyForSignResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
@@ -487,6 +489,17 @@ public class ApiUtil {
     );
 
     return sendRequest(request, requestUrl, SendCertificateResponse.class);
+  }
+
+  public ResponseEntity<CertificateReadyForSignResponse> readyForSignCertificate(
+      CertificateReadyForSignRequest request,
+      String certificateId) {
+    final var requestUrl = "http://localhost:%s/api/certificate/%s/readyForSign".formatted(
+        port,
+        certificateId
+    );
+
+    return sendRequest(request, requestUrl, CertificateReadyForSignResponse.class);
   }
 
   public ResponseEntity<Void> receiveMessage(IncomingMessageRequest request) {
