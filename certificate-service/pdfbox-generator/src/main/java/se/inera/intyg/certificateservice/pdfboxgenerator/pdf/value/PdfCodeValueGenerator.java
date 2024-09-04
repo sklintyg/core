@@ -26,7 +26,7 @@ public class PdfCodeValueGenerator implements PdfElementValue<ElementValueCode> 
   }
 
   private List<PdfField> getField(ElementValueCode code, PdfConfigurationCode configuration) {
-    if (code == null) {
+    if (codeIsInvalid(code)) {
       return Collections.emptyList();
     }
 
@@ -41,5 +41,9 @@ public class PdfCodeValueGenerator implements PdfElementValue<ElementValueCode> 
             .value(CHECKED_BOX_VALUE)
             .build()
     );
+  }
+
+  private static boolean codeIsInvalid(ElementValueCode code) {
+    return code == null || code.codeId() == null || code.codeId().value() == null;
   }
 }
