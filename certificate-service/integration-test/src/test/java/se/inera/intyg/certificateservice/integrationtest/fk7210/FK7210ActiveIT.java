@@ -36,7 +36,8 @@ import se.inera.intyg.certificateservice.integrationtest.ResponsibleIssuerIT;
 import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SendCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.SignCertificateNurseMidwifeIT;
+import se.inera.intyg.certificateservice.integrationtest.SignCertificateMidwifeIT;
+import se.inera.intyg.certificateservice.integrationtest.SignCertificateNurseIT;
 import se.inera.intyg.certificateservice.integrationtest.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
@@ -387,8 +388,23 @@ public class FK7210ActiveIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Signera som sjuksköterska och barnmorska")
-  class SignCertificateNurseMidwife extends SignCertificateNurseMidwifeIT {
+  @DisplayName(TYPE + "Signera som sjuksköterska")
+  class SignCertificateNurse extends SignCertificateNurseIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Signera som barnmorska")
+  class SignCertificateMidwife extends SignCertificateMidwifeIT {
 
     @Override
     protected String type() {

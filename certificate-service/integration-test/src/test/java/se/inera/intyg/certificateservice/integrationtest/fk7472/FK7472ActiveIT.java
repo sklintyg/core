@@ -62,7 +62,7 @@ import se.inera.intyg.certificateservice.integrationtest.ResponsibleIssuerIT;
 import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SendCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.SignCertificateNurseMidwifeIT;
+import se.inera.intyg.certificateservice.integrationtest.SignCertificateNurseIT;
 import se.inera.intyg.certificateservice.integrationtest.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateFK7472IT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateIT;
@@ -599,8 +599,8 @@ public class FK7472ActiveIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Signera som sjuksköterska och barnmorska")
-  class SignCertificateNurseMidwife extends SignCertificateNurseMidwifeIT {
+  @DisplayName(TYPE + "Signera som sjuksköterska")
+  class SignCertificateNurse extends SignCertificateNurseIT {
 
     @Override
     protected String type() {

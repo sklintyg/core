@@ -64,7 +64,7 @@ class FK7472CertificateActionSpecificationTest {
   void shallIncludeCertificateActionSign() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.SIGN)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE))
         .build();
 
     final var actions = FK7472CertificateActionSpecification.create();
@@ -105,7 +105,7 @@ class FK7472CertificateActionSpecificationTest {
   void shallIncludeCertificateActionRevoke() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.REVOKE)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE))
         .build();
 
     final var actions = FK7472CertificateActionSpecification.create();
