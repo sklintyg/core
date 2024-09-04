@@ -83,12 +83,12 @@ public class XmlGeneratorMedicalInvestigationList implements XmlGeneratorElement
   }
 
   private static boolean isDateDefined(MedicalInvestigation row) {
-    return row.date() != null;
+    return row.date() != null && row.date().date() != null;
   }
 
   private static boolean isTypeDefined(MedicalInvestigation row) {
-    return row.investigationType() != null && !row.investigationType().code()
-        .isEmpty();
+    return row.investigationType() != null && row.investigationType().code() != null
+        && !row.investigationType().code().isEmpty();
   }
 
   private static String getCvId(String id) {

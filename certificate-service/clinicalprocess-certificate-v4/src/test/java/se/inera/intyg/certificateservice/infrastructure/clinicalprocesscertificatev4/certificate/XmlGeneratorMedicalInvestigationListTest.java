@@ -184,6 +184,123 @@ class XmlGeneratorMedicalInvestigationListTest {
           () -> assertEquals(TEXT_ONE, delsvarTextAsStr)
       );
     }
+
+    @Test
+    void shallMapEmptyIfEmptyCode() {
+      final var data = ElementData.builder()
+          .id(new ElementId(QUESTION_ID))
+          .value(
+              ElementValueMedicalInvestigationList.builder()
+                  .id(new FieldId(VALUE_ID))
+                  .list(
+                      List.of(
+                          MedicalInvestigation.builder()
+                              .id(new FieldId("ROW1"))
+                              .date(
+                                  ElementValueDate.builder()
+                                      .dateId(new FieldId(DATE_ID_ONE))
+                                      .date(DATE_ONE)
+                                      .build()
+                              )
+                              .investigationType(
+                                  ElementValueCode.builder()
+                                      .build()
+                              )
+                              .informationSource(
+                                  ElementValueText.builder()
+                                      .textId(new FieldId(TEXT_ID_ONE))
+                                      .text(TEXT_ONE)
+                                      .build()
+                              )
+                              .build()
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      final var response = xmlGenerator.generate(data, elementSpecification);
+
+      assertTrue(response.isEmpty());
+    }
+
+    @Test
+    void shallMapEmptyIfEmptyDate() {
+      final var data = ElementData.builder()
+          .id(new ElementId(QUESTION_ID))
+          .value(
+              ElementValueMedicalInvestigationList.builder()
+                  .id(new FieldId(VALUE_ID))
+                  .list(
+                      List.of(
+                          MedicalInvestigation.builder()
+                              .id(new FieldId("ROW1"))
+                              .date(
+                                  ElementValueDate.builder()
+                                      .build()
+                              )
+                              .investigationType(
+                                  ElementValueCode.builder()
+                                      .codeId(new FieldId(CODE_ID_ONE))
+                                      .code(CODE_ONE)
+                                      .build()
+                              )
+                              .informationSource(
+                                  ElementValueText.builder()
+                                      .textId(new FieldId(TEXT_ID_ONE))
+                                      .text(TEXT_ONE)
+                                      .build()
+                              )
+                              .build()
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      final var response = xmlGenerator.generate(data, elementSpecification);
+
+      assertTrue(response.isEmpty());
+    }
+
+    @Test
+    void shallMapEmptyIfEmptyInformationSource() {
+      final var data = ElementData.builder()
+          .id(new ElementId(QUESTION_ID))
+          .value(
+              ElementValueMedicalInvestigationList.builder()
+                  .id(new FieldId(VALUE_ID))
+                  .list(
+                      List.of(
+                          MedicalInvestigation.builder()
+                              .id(new FieldId("ROW1"))
+                              .date(
+                                  ElementValueDate.builder()
+                                      .dateId(new FieldId(DATE_ID_ONE))
+                                      .date(DATE_ONE)
+                                      .build()
+                              )
+                              .investigationType(
+                                  ElementValueCode.builder()
+                                      .codeId(new FieldId(CODE_ID_ONE))
+                                      .code(CODE_ONE)
+                                      .build()
+                              )
+                              .informationSource(
+                                  ElementValueText.builder()
+                                      .build()
+                              )
+                              .build()
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      final var response = xmlGenerator.generate(data, elementSpecification);
+
+      assertTrue(response.isEmpty());
+    }
   }
 
   @Nested
