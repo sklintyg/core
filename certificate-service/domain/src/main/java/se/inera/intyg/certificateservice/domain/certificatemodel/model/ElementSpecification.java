@@ -30,6 +30,8 @@ public class ElementSpecification {
   Predicate<List<ElementData>> shouldValidate;
   @Builder.Default
   boolean includeInXml = Boolean.TRUE;
+  @Builder.Default
+  boolean includeForCitizen = Boolean.TRUE;
 
   public boolean exists(ElementId id) {
     if (id().equals(id)) {

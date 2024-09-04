@@ -116,7 +116,7 @@ class CertificateDataConverterTest {
           .certificateModel(certificateModel)
           .build();
 
-      final var result = certificateDataConverter.convert(certificate);
+      final var result = certificateDataConverter.convert(certificate, false);
       assertInstanceOf(CertificateDataElement.class, result.get(ID_1),
           "Should return map of CertificateDataElementDTO"
       );
@@ -132,7 +132,7 @@ class CertificateDataConverterTest {
           .certificateModel(certificateModel)
           .build();
 
-      final var result = certificateDataConverter.convert(certificate);
+      final var result = certificateDataConverter.convert(certificate, false);
 
       assertTrue(result.containsKey(ID_1), "Map should contain the key 'id'");
     }
@@ -165,7 +165,7 @@ class CertificateDataConverterTest {
           .certificateModel(certificateModel)
           .build();
 
-      final var result = certificateDataConverter.convert(certificate);
+      final var result = certificateDataConverter.convert(certificate, false);
 
       assertEquals(2, result.size(), "Map should contain two entries");
       assertTrue(result.containsKey(ID_1) && result.containsKey(ID_2),
@@ -198,7 +198,7 @@ class CertificateDataConverterTest {
           .certificateModel(certificateModel)
           .build();
 
-      final var result = certificateDataConverter.convert(certificate);
+      final var result = certificateDataConverter.convert(certificate, false);
 
       assertTrue(result.get(ID_1).getIndex() < result.get(ID_2).getIndex(),
           "First element should have a lower index than the second element");
@@ -240,7 +240,7 @@ class CertificateDataConverterTest {
           .certificateModel(certificateModel)
           .build();
 
-      final var result = certificateDataConverter.convert(certificate);
+      final var result = certificateDataConverter.convert(certificate, false);
 
       assertEquals(1, result.get(ID_1).getIndex());
       assertEquals(2, result.get(CHILD_ID).getIndex());
@@ -264,7 +264,7 @@ class CertificateDataConverterTest {
           .certificateModel(certificateModel)
           .build();
 
-      final var result = certificateDataConverter.convert(certificate);
+      final var result = certificateDataConverter.convert(certificate, false);
 
       final var certificateDataElement = result.get(ID_1);
       assertNull(certificateDataElement.getParent(),
@@ -299,7 +299,7 @@ class CertificateDataConverterTest {
           .certificateModel(certificateModel)
           .build();
 
-      final var result = certificateDataConverter.convert(certificate);
+      final var result = certificateDataConverter.convert(certificate, false);
 
       final var certificateDataElement = result.get(childElementId);
       assertEquals(parentElementId, certificateDataElement.getParent());
@@ -345,7 +345,7 @@ class CertificateDataConverterTest {
           .certificateModel(certificateModel)
           .build();
 
-      final var result = certificateDataConverter.convert(certificate);
+      final var result = certificateDataConverter.convert(certificate, false);
 
       final var certificateDataElement = result.get(subQuestionId);
       assertEquals(childElementId, certificateDataElement.getParent());
@@ -361,7 +361,7 @@ class CertificateDataConverterTest {
           .certificateModel(certificateModel)
           .build();
 
-      final var result = certificateDataConverter.convert(certificate);
+      final var result = certificateDataConverter.convert(certificate, false);
 
       assertNotNull(result.get(ID_1).getConfig(),
           "CertificateDataElementDTO should contain config");
@@ -402,7 +402,7 @@ class CertificateDataConverterTest {
           .certificateModel(certificateModel)
           .build();
 
-      final var result = certificateDataConverter.convert(certificate);
+      final var result = certificateDataConverter.convert(certificate, false);
 
       assertNotNull(result.get(ID_1).getValidation(),
           "CertificateDataElementDTO should contain validation");
@@ -430,7 +430,7 @@ class CertificateDataConverterTest {
           .certificateModel(certificateModel)
           .build();
 
-      final var result = certificateDataConverter.convert(certificate);
+      final var result = certificateDataConverter.convert(certificate, false);
 
       assertEquals(0, result.get(ID_1).getValidation().length,
           "CertificateDataElementDTO should contain empty validation");
@@ -464,11 +464,12 @@ class CertificateDataConverterTest {
           .elementData(List.of(elementData))
           .build();
 
-      final var result = certificateDataConverter.convert(certificate);
+      final var result = certificateDataConverter.convert(certificate, false);
 
       assertNotNull(result.get(ID_1).getValue(),
           "CertificateDataElementDTO should contain value");
     }
+
   }
 
   @Test
@@ -512,7 +513,7 @@ class CertificateDataConverterTest {
         );
 
     final var illegalStateException = assertThrows(IllegalStateException.class,
-        () -> certificateDataConverter.convert(certificate));
+        () -> certificateDataConverter.convert(certificate, false));
 
     assertTrue(illegalStateException.getMessage().contains("Could not find value converter"),
         "Message was %s".formatted(illegalStateException.getMessage())
@@ -556,7 +557,7 @@ class CertificateDataConverterTest {
             CertificateDataConfigDate.builder().build()
         );
 
-    final var result = certificateDataConverter.convert(certificate);
+    final var result = certificateDataConverter.convert(certificate, false);
 
     assertNull(result.get(ID_1).getValue(),
         "CertificateDataElementDTO should be null if category");
@@ -599,7 +600,7 @@ class CertificateDataConverterTest {
             CertificateDataConfigDate.builder().build()
         );
 
-    final var result = certificateDataConverter.convert(certificate);
+    final var result = certificateDataConverter.convert(certificate, false);
 
     assertNull(result.get(ID_1).getValue(),
         "CertificateDataElementDTO should be null if message configuration");
@@ -649,7 +650,7 @@ class CertificateDataConverterTest {
             CertificateDataConfigDate.builder().build()
         );
 
-    final var result = certificateDataConverter.convert(certificate);
+    final var result = certificateDataConverter.convert(certificate, false);
 
     assertNull(result.get(ID_2),
         "Should not include CertificateDataElementDTO if certificate is signed and missing element data");
@@ -715,7 +716,7 @@ class CertificateDataConverterTest {
             CertificateDataValueDate.builder().build()
         );
 
-    final var result = certificateDataConverter.convert(certificate);
+    final var result = certificateDataConverter.convert(certificate, false);
 
     assertNotNull(result.get(ID_2),
         "Should include CertificateDataElementDTO if certificate is draft and missing element data");
@@ -741,7 +742,7 @@ class CertificateDataConverterTest {
         .certificateModel(certificateModel)
         .build();
 
-    final var result = certificateDataConverter.convert(certificate);
+    final var result = certificateDataConverter.convert(certificate, false);
 
     assertTrue(result.isEmpty(),
         "Should not convert ElementConfigurationMetaData");
@@ -768,9 +769,142 @@ class CertificateDataConverterTest {
         .certificateModel(certificateModel)
         .build();
 
-    final var result = certificateDataConverter.convert(certificate);
+    final var result = certificateDataConverter.convert(certificate, false);
 
     assertTrue(result.isEmpty(),
         "Should not convert message");
+  }
+
+  @Nested
+  class ConverterForCitizenCertificate {
+
+    @BeforeEach
+    void setUp() {
+      when(certificateDataDateConfigConverter.getType())
+          .thenReturn(ElementType.DATE);
+      when(certificateDataValueConverterDate.getType())
+          .thenReturn(ElementType.DATE);
+      when(certificateDataDateConfigConverter.convert(any(ElementSpecification.class),
+          any(Certificate.class)))
+          .thenReturn(
+              CertificateDataConfigDate.builder().build()
+          );
+      when(certificateDataValueConverterDate.convert(any(), any()))
+          .thenReturn(
+              CertificateDataValueDate.builder().build()
+          );
+    }
+
+    @Test
+    void shallRemoveChildElementSpecificationIfIncludeForCitizenIsFalseAndCertificateIsForCitizen() {
+      final var elementId1 = new ElementId(ID_1);
+      final var elementId2 = new ElementId(ID_2);
+
+      final var elementSpecifications = List.of(
+          ElementSpecification.builder()
+              .id(elementId1)
+              .includeForCitizen(true)
+              .configuration(
+                  ElementConfigurationDate.builder().build()
+              )
+              .children(List.of(ElementSpecification.builder()
+                  .includeForCitizen(false)
+                  .id(elementId2)
+                  .configuration(
+                      ElementConfigurationDate.builder().build()
+                  )
+                  .build()))
+              .build()
+      );
+
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(elementSpecifications)
+          .build();
+
+      final var certificate = certificateBuilder
+          .certificateModel(certificateModel)
+          .build();
+
+      final var result = certificateDataConverter.convert(certificate, true);
+
+      assertEquals(1, result.size(), "Map should contain one entry");
+      assertTrue(result.containsKey(ID_1),
+          "Map should only contain key 'id1'");
+    }
+
+    @Test
+    void shallRemoveParentElementSpecificationIfIncludeForCitizenIsFalseAndCertificateIsForCitizen() {
+      final var elementId1 = new ElementId(ID_1);
+      final var elementId2 = new ElementId(ID_2);
+
+      final var elementSpecifications = List.of(
+          ElementSpecification.builder()
+              .id(elementId1)
+              .includeForCitizen(true)
+              .configuration(
+                  ElementConfigurationDate.builder().build()
+              )
+              .build(),
+          ElementSpecification.builder()
+              .includeForCitizen(false)
+              .id(elementId2)
+              .configuration(
+                  ElementConfigurationDate.builder().build()
+              )
+              .build()
+      );
+
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(elementSpecifications)
+          .build();
+
+      final var certificate = certificateBuilder
+          .certificateModel(certificateModel)
+          .build();
+
+      final var result = certificateDataConverter.convert(certificate, true);
+
+      assertEquals(1, result.size(), "Map should contain one entry");
+      assertTrue(result.containsKey(ID_1),
+          "Map should only contain key 'id1'");
+    }
+
+    @Test
+    void shallNotRemoveElementSpecificationIfCertificateIsForCare() {
+      final var elementId1 = new ElementId(ID_1);
+      final var elementId2 = new ElementId(ID_2);
+
+      final var elementSpecifications = List.of(
+          ElementSpecification.builder()
+              .id(elementId1)
+              .includeForCitizen(true)
+              .configuration(
+                  ElementConfigurationDate.builder().build()
+              )
+              .build(),
+          ElementSpecification.builder()
+              .id(elementId2)
+              .includeForCitizen(false)
+              .configuration(
+                  ElementConfigurationDate.builder().build()
+              )
+              .build()
+      );
+
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(elementSpecifications)
+          .build();
+
+      final var certificate = certificateBuilder
+          .certificateModel(certificateModel)
+          .build();
+
+      final var result = certificateDataConverter.convert(certificate, false);
+
+      assertEquals(2, result.size(), "Map should contain two entries");
+      assertTrue(result.containsKey(ID_1) && result.containsKey(ID_2),
+          "Map should contain keys 'id1' and 'id2' ");
+    }
+
   }
 }
