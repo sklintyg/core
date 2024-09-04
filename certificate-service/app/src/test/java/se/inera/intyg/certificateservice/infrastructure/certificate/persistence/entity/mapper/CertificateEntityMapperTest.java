@@ -23,6 +23,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason.INCORRECT_PATIENT;
 
@@ -40,6 +41,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ReadyForSign;
 import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
@@ -182,9 +184,17 @@ class CertificateEntityMapperTest {
 
     @Test
     void shouldMapReadyForSignIfReadyForSignIsNotNull() {
-      final var response = certificateEntityMapper.toEntity(FK7210_CERTIFICATE);
+      final var certificate = fk7210CertificateBuilder()
+          .readyForSign(
+              ReadyForSign.builder()
+                  .readyForSignAt(LocalDateTime.now())
+                  .readyForSignBy(ALVA_VARDADMINISTRATOR)
+                  .build()
+          )
+          .build();
+      final var response = certificateEntityMapper.toEntity(certificate);
 
-      assertEquals(FK7210_CERTIFICATE.readyForSign().readyForSignAt(), response.getReadyForSign());
+      assertEquals(certificate.readyForSign().readyForSignAt(), response.getReadyForSign());
     }
 
     @Test

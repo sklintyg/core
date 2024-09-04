@@ -39,6 +39,10 @@ public class StaffRepository {
       staffs.add(certificate.revoked().revokedBy());
     }
 
+    if (certificate.readyForSign() != null && certificate.readyForSign().readyForSignBy() != null) {
+      staffs.add(certificate.readyForSign().readyForSignBy());
+    }
+
     final var staffEntities = staffEntityRepository.findStaffEntitiesByHsaIdIn(
         staffs.stream()
             .map(staff -> staff.hsaId().id())
