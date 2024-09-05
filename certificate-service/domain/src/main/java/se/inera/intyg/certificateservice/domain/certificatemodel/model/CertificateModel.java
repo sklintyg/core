@@ -16,7 +16,6 @@ import se.inera.intyg.certificateservice.domain.action.message.model.MessageActi
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
 
 @Value
 @Builder
@@ -37,7 +36,6 @@ public class CertificateModel {
   SchematronPath schematronPath;
   List<CertificateText> texts;
   CertificateSummaryProvider summaryProvider;
-  List<Role> rolesWithAccess;
   List<CertificateMessageType> messageTypes;
   PdfSpecification pdfSpecification;
   CertificateConfirmationModalProvider confirmationModalProvider;
@@ -68,10 +66,6 @@ public class CertificateModel {
     return actions().stream()
         .filter(certificateAction -> certificateAction.include(Optional.empty(), actionEvaluation))
         .toList();
-  }
-
-  public boolean activeForUserRole(ActionEvaluation actionEvaluation) {
-    return this.rolesWithAccess.contains(actionEvaluation.user().role());
   }
 
   public boolean allowTo(CertificateActionType certificateActionType,

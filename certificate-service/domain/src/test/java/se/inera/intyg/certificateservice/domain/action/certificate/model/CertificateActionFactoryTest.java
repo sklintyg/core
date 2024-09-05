@@ -402,4 +402,17 @@ class CertificateActionFactoryTest {
     assert certificateAction != null;
     assertEquals(certificateAction.getClass(), CertificateActionResponsibleIssuer.class);
   }
+
+
+  @Test
+  void shallReturnCertificateActionAccessForRolesIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.ACCESS_FOR_ROLES)
+        .build();
+
+    final var certificateAction = CertificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionAccessForRoles.class);
+  }
 }

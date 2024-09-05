@@ -92,6 +92,11 @@ public class FK7472CertificateActionSpecification {
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.READY_FOR_SIGN)
             .allowedRoles(List.of(Role.CARE_ADMIN))
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.ACCESS_FOR_ROLES)
+            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+                Role.CARE_ADMIN))
             .build()
     );
   }

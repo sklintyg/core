@@ -432,6 +432,10 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case ACCESS_FOR_ROLES -> CertificateActionAccessForRoles.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(List.of(new ActionRuleRole(actionSpecification.allowedRoles())))
+          .build();
     };
   }
 }

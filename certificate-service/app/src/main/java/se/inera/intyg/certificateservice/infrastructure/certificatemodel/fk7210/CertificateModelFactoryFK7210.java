@@ -17,7 +17,6 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
 
@@ -75,15 +74,6 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
         .schematronPath(SCHEMATRON_PATH)
         .summaryProvider(new FK7210CertificateSummaryProvider())
         .pdfSpecification(FK7210PdfSpecification.create())
-        .rolesWithAccess(
-            List.of(
-                Role.DOCTOR,
-                Role.PRIVATE_DOCTOR,
-                Role.NURSE,
-                Role.MIDWIFE,
-                Role.CARE_ADMIN
-            )
-        )
         .texts(
             List.of(
                 CertificateText.builder()

@@ -26,7 +26,6 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -140,16 +139,6 @@ class CertificateModelFactoryFK3226Test {
     final var certificateModel = certificateModelFactoryFK3226.create();
 
     assertEquals(SCHEMATRON_PATH, certificateModel.schematronPath());
-  }
-
-  @Test
-  void shallIncludeActiveForRoles() {
-    final var expected = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-        Role.CARE_ADMIN);
-
-    final var certificateModel = certificateModelFactoryFK3226.create();
-
-    assertEquals(expected, certificateModel.rolesWithAccess());
   }
 
   @Test

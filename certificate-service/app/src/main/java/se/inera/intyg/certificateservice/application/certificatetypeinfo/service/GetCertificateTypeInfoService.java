@@ -29,11 +29,11 @@ public class GetCertificateTypeInfoService {
         getCertificateTypeInfoRequest.getCareUnit(),
         getCertificateTypeInfoRequest.getCareProvider()
     );
+
     final var certificateModels = certificateModelRepository.findAllActive();
     return GetCertificateTypeInfoResponse.builder()
         .list(
             certificateModels.stream()
-                .filter(certificateModel -> certificateModel.activeForUserRole(actionEvaluation))
                 .map(certificateModel ->
                     certificateTypeInfoConverter.convert(
                         certificateModel,

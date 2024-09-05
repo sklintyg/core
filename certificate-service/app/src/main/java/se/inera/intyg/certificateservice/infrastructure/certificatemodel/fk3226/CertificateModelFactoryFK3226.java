@@ -32,7 +32,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Schematro
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
@@ -100,15 +99,6 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .type(CertificateTextType.PREAMBLE_TEXT)
                     .links(Collections.emptyList())
                     .build()
-            )
-        )
-        .rolesWithAccess(
-            List.of(
-                Role.DOCTOR,
-                Role.PRIVATE_DOCTOR,
-                Role.NURSE,
-                Role.MIDWIFE,
-                Role.CARE_ADMIN
             )
         )
         .recipient(CertificateRecipientFactory.fkassa())

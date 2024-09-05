@@ -27,7 +27,6 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
 
 class CertificateModelFactoryFK7210Test {
 
@@ -137,16 +136,6 @@ class CertificateModelFactoryFK7210Test {
     final var certificateModel = certificateModelFactoryFK7210.create();
 
     assertEquals(List.of(expectedText), certificateModel.texts());
-  }
-
-  @Test
-  void shallIncludeActiveForRoles() {
-    final var expected = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-        Role.CARE_ADMIN);
-
-    final var certificateModel = certificateModelFactoryFK7210.create();
-
-    assertEquals(expected, certificateModel.rolesWithAccess());
   }
 
   @Test

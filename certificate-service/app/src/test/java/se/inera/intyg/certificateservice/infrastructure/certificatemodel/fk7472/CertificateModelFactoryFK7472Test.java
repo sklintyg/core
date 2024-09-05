@@ -9,7 +9,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateModelFactoryFK7472Test {
@@ -110,16 +108,6 @@ class CertificateModelFactoryFK7472Test {
     final var certificateModel = certificateModelFactoryFK7472.create();
 
     assertEquals(SCHEMATRON_PATH, certificateModel.schematronPath());
-  }
-
-  @Test
-  void shallIncludeActiveForRoles() {
-    final var expected = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-        Role.CARE_ADMIN);
-
-    final var certificateModel = certificateModelFactoryFK7472.create();
-
-    assertEquals(expected, certificateModel.rolesWithAccess());
   }
 
   @Test
