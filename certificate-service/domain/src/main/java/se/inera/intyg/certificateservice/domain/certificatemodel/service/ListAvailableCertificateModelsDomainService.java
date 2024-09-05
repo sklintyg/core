@@ -20,10 +20,14 @@ public class ListAvailableCertificateModelsDomainService {
     final var certificateModels = certificateModelRepository.findAllActive();
     return certificateModels.stream()
         .filter(roleHasAccess(actionEvaluation))
-        .filter(
-            certificateModel -> certificateUnitAccessEvaluationRepository.evaluate(actionEvaluation,
-                certificateModel))
+        .filter(unitAccessEvaluation(actionEvaluation))
         .toList();
+  }
+
+  private Predicate<CertificateModel> unitAccessEvaluation(
+      ActionEvaluation actionEvaluation) {
+    return certificateModel -> certificateUnitAccessEvaluationRepository.evaluate(actionEvaluation,
+        certificateModel);
   }
 
   private static Predicate<CertificateModel> roleHasAccess(
