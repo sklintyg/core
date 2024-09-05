@@ -30,8 +30,7 @@ import se.inera.intyg.certificateservice.application.common.ActionEvaluationFact
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.certificatemodel.service.ListAvailableCertificateModelsDomainService;
 
 @ExtendWith(MockitoExtension.class)
 class GetCertificateTypeInfoServiceTest {
@@ -41,19 +40,15 @@ class GetCertificateTypeInfoServiceTest {
   private static final List<CertificateAction> CERTIFICATE_ACTIONS = List.of(
       mock(CertificateAction.class)
   );
-  private static final List<Role> ROLES = List.of(
-      Role.DOCTOR
-  );
   private static final ActionEvaluation ACTION_EVALUATION = ActionEvaluation.builder().build();
 
+  @Mock
+  ListAvailableCertificateModelsDomainService availableCertificateModelsDomainService;
   @Mock
   CertificateTypeInfoValidator certificateTypeInfoValidator;
 
   @Mock
   CertificateTypeInfoConverter certificateTypeInfoConverter;
-
-  @Mock
-  CertificateModelRepository certificateModelRepository;
 
   @Mock
   ActionEvaluationFactory actionEvaluationFactory;
@@ -112,7 +107,8 @@ class GetCertificateTypeInfoServiceTest {
         certificateTypeInfoRequest.getCareUnit(),
         certificateTypeInfoRequest.getCareProvider()
     )).thenReturn(ACTION_EVALUATION);
-    when(certificateModelRepository.findAllActive()).thenReturn(certificateModels);
+    when(availableCertificateModelsDomainService.get(ACTION_EVALUATION)).thenReturn(
+        certificateModels);
     when(certificateTypeInfoConverter.convert(certificateModels.get(0),
         CERTIFICATE_ACTIONS, ACTION_EVALUATION)).thenReturn(
         certificateTypeInfoDTO1);
