@@ -52,4 +52,9 @@ class CertificateActionAccessForRolesTest {
         certificateActionAccessForRoles.evaluate(Optional.empty(), Optional.of(actionEvaluation))
     );
   }
+
+  @Test
+  void shallReturnFalseForInclude() {
+    assertFalse(certificateActionAccessForRoles.include(Optional.empty(), Optional.empty()));
+  }
 }

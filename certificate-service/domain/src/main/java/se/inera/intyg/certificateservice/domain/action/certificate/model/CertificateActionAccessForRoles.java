@@ -36,4 +36,10 @@ public class CertificateActionAccessForRoles implements CertificateAction {
         .filter(value -> value.evaluate(certificate, actionEvaluation))
         .count() == actionRules.size();
   }
+
+  @Override
+  public boolean include(Optional<Certificate> certificate,
+      Optional<ActionEvaluation> actionEvaluation) {
+    return false;
+  }
 }
