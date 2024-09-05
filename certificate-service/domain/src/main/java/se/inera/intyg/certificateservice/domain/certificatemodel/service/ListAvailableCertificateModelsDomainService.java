@@ -8,16 +8,21 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionE
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
 
 @RequiredArgsConstructor
 public class ListAvailableCertificateModelsDomainService {
 
   private final CertificateModelRepository certificateModelRepository;
+  private final CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
 
   public List<CertificateModel> get(ActionEvaluation actionEvaluation) {
     final var certificateModels = certificateModelRepository.findAllActive();
     return certificateModels.stream()
         .filter(roleHasAccess(actionEvaluation))
+        .filter(
+            certificateModel -> certificateUnitAccessEvaluationRepository.evaluate(actionEvaluation,
+                certificateModel))
         .toList();
   }
 

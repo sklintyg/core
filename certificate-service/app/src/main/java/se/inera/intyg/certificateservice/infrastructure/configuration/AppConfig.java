@@ -30,6 +30,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.ValidateCert
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGeneratorCertificatesForCareWithQA;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.service.ListAvailableCertificateModelsDomainService;
 import se.inera.intyg.certificateservice.domain.citizen.service.GetCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.citizen.service.PrintCitizenCertificateDomainService;
@@ -406,7 +407,9 @@ public class AppConfig {
 
   @Bean
   public ListAvailableCertificateModelsDomainService listAvailableCertificateModelsDomainService(
-      CertificateModelRepository certificateModelRepository) {
-    return new ListAvailableCertificateModelsDomainService(certificateModelRepository);
+      CertificateModelRepository certificateModelRepository,
+      CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository) {
+    return new ListAvailableCertificateModelsDomainService(certificateModelRepository,
+        certificateUnitAccessEvaluationRepository);
   }
 }
