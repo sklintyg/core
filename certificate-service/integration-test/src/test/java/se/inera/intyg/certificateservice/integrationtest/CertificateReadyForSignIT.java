@@ -20,8 +20,8 @@ public abstract class CertificateReadyForSignIT extends BaseIntegrationIT {
   protected abstract String typeVersion();
 
   @Test
-  @DisplayName("Vårdadministratör - Om användaren är en vårdadministratör ska intyget gå att markera som redo för signering")
-  void shallAllowIfCareAdmin() {
+  @DisplayName("Vårdadministratör - Om användaren är en vårdadministratör som loggat in djupintegrerat skall utkastet gå att markera som redo för signering")
+  void shallAllowIfCareAdminAndOriginIsDjupintegrerad() {
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
@@ -41,7 +41,28 @@ public abstract class CertificateReadyForSignIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Läkare - Om användaren är en läkare ska intyget inte gå att markera som redo för signering")
+  @DisplayName("Vårdadministratör - Om användaren är en vårdadministratör som loggat in fristående skall utkastet inte gå att markera som redo för signering")
+  void shallNotAllowIfCareAdminAndOriginIsNormal() {
+    final var testCertificates = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion())
+    );
+
+    final var response = api.readyForSignCertificate(
+        customReadyForSignCertificateRequest()
+            .user(
+                alvaVardadministratorDtoBuilder()
+                    .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
+                    .build()
+            )
+            .build(),
+        certificateId(testCertificates)
+    );
+
+    assertEquals(403, response.getStatusCode().value());
+  }
+
+  @Test
+  @DisplayName("Läkare - Om användaren är en läkare skall utkastet inte gå att markera som redo för signering")
   void shallNotAllowIfDoctor() {
     final var testCertificates = testabilityApi.addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
