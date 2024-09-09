@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.action.certificate.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.BETA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
@@ -16,6 +17,8 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJL
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,14 +34,26 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
+import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateUnitAccessConfiguration;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateActionSignTest {
 
+  private static final CertificateType CERTIFICATE_TYPE = new CertificateType("type");
+  private static final CertificateModel CERTIFICATE_MODEL = CertificateModel.builder()
+      .id(
+          CertificateModelId.builder()
+              .type(CERTIFICATE_TYPE)
+              .build()
+      )
+      .build();
   private CertificateActionSign certificateActionSign;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
   private CertificateBuilder certificateBuilder;
@@ -58,6 +73,7 @@ class CertificateActionSignTest {
     certificateActionSign = (CertificateActionSign) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION);
     certificateBuilder = Certificate.builder()
+        .certificateModel(CERTIFICATE_MODEL)
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -277,9 +293,12 @@ class CertificateActionSignTest {
 
     @BeforeEach
     void setUp() {
+      doReturn(Collections.emptyList()).when(certificateUnitAccessEvaluationRepository)
+          .get(CERTIFICATE_TYPE);
       certificateActionSign = (CertificateActionSign) certificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION);
       certificateBuilder = Certificate.builder()
+          .certificateModel(CERTIFICATE_MODEL)
           .status(Status.DRAFT)
           .certificateMetaData(
               CertificateMetaData.builder()
@@ -484,5 +503,98 @@ class CertificateActionSignTest {
         certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
+  }
+
+  @Nested
+  class UnitAccessEvaluationTests {
+
+    @BeforeEach
+    void setUp() {
+      certificateActionSign = (CertificateActionSign) certificateActionFactory.create(
+          CERTIFICATE_ACTION_SPECIFICATION);
+      certificateBuilder = Certificate.builder()
+          .certificateModel(CERTIFICATE_MODEL)
+          .status(Status.DRAFT)
+          .certificateMetaData(
+              CertificateMetaData.builder()
+                  .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                  .careUnit(ALFA_MEDICINCENTRUM)
+                  .careProvider(ALFA_REGIONEN)
+                  .patient(ATHENA_REACT_ANDERSSON)
+                  .build()
+          );
+      actionEvaluationBuilder = ActionEvaluation.builder()
+          .user(AJLA_DOKTOR)
+          .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+          .patient(ATHENA_REACT_ANDERSSON)
+          .careProvider(ALFA_REGIONEN)
+          .careUnit(ALFA_MEDICINCENTRUM);
+    }
+
+    @Test
+    void shallReturnTrueIfUnitHasAccess() {
+      final var certificateAccessConfigurations = List.of(
+          CertificateAccessConfiguration.builder()
+              .certificateType(CERTIFICATE_TYPE.type())
+              .configuration(
+                  List.of(
+                      CertificateUnitAccessConfiguration.builder()
+                          .type("allow")
+                          .fromDateTime(LocalDateTime.now().minusDays(1))
+                          .careProviders(List.of(ALFA_REGIONEN.hsaId().id()))
+                          .build()
+                  )
+              )
+              .build()
+      );
+      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
+          .get(CERTIFICATE_TYPE);
+      final var certificateActionSign = (CertificateActionSign) certificateActionFactory.create(
+          CERTIFICATE_ACTION_SPECIFICATION
+      );
+
+      final var actionEvaluation = actionEvaluationBuilder
+          .build();
+
+      final var certificate = certificateBuilder.build();
+
+      assertTrue(
+          certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+          () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+      );
+    }
+
+    @Test
+    void shallReturnFalseIfUnitDontHaveAccess() {
+      final var certificateAccessConfigurations = List.of(
+          CertificateAccessConfiguration.builder()
+              .certificateType(CERTIFICATE_TYPE.type())
+              .configuration(
+                  List.of(
+                      CertificateUnitAccessConfiguration.builder()
+                          .type("block")
+                          .fromDateTime(LocalDateTime.now().minusDays(1))
+                          .careProviders(List.of(ALFA_REGIONEN.hsaId().id()))
+                          .build()
+                  )
+              )
+              .build()
+      );
+      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
+          .get(CERTIFICATE_TYPE);
+      final var certificateActionSign = (CertificateActionSign) certificateActionFactory.create(
+          CERTIFICATE_ACTION_SPECIFICATION
+      );
+
+      final var actionEvaluation = actionEvaluationBuilder
+          .build();
+
+      final var certificate = certificateBuilder.build();
+
+      assertFalse(
+          certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+          () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+      );
+    }
   }
 }
