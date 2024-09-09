@@ -77,9 +77,10 @@ public class AppConfig {
   public CreateCertificateDomainService createCertificateDomainService(
       CertificateModelRepository certificateModelRepository,
       CertificateRepository certificateRepository,
-      CertificateEventDomainService certificateEventDomainService) {
+      CertificateEventDomainService certificateEventDomainService,
+      CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository) {
     return new CreateCertificateDomainService(certificateModelRepository, certificateRepository,
-        certificateEventDomainService);
+        certificateEventDomainService, certificateUnitAccessEvaluationRepository);
   }
 
   @Bean

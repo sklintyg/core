@@ -27,8 +27,7 @@ public class CertificateActionFactory {
                   new ActionRuleRole(
                       List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
                           Role.CARE_ADMIN)
-                  ),
-                  new ActionRuleUnitAccess(certificateUnitAccessEvaluationRepository)
+                  )
               )
           )
           .build();
