@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.configuration;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -20,10 +21,11 @@ public class UnitAccessConfiguration {
   @Value("${unit.access.configuration.path:}")
   private String unitAccessConfigurationPath;
   private List<CertificateAccessConfiguration> certificateAccessConfigurations;
-  private final ObjectMapper objectMapper;
 
   public List<CertificateAccessConfiguration> get() {
     if (certificateAccessConfigurations == null) {
+      final var objectMapper = new ObjectMapper();
+      objectMapper.registerModule(new JavaTimeModule());
       certificateAccessConfigurations = new ArrayList<>();
       try (final var resourceAsStream = new FileInputStream(unitAccessConfigurationPath)) {
         certificateAccessConfigurations = objectMapper.readValue(
