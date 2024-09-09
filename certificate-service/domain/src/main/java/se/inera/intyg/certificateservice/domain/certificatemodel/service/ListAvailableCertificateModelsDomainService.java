@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionRuleUnitAccess;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
@@ -20,14 +21,17 @@ public class ListAvailableCertificateModelsDomainService {
     final var certificateModels = certificateModelRepository.findAllActive();
     return certificateModels.stream()
         .filter(roleHasAccess(actionEvaluation))
-        .filter(unitAccessEvaluation(actionEvaluation))
+        .filter(model -> unitAccessEvaluation(model, actionEvaluation))
         .toList();
   }
 
-  private Predicate<CertificateModel> unitAccessEvaluation(
+  private boolean unitAccessEvaluation(CertificateModel certificateModel,
       ActionEvaluation actionEvaluation) {
-    return certificateModel -> certificateUnitAccessEvaluationRepository.evaluate(actionEvaluation,
-        certificateModel);
+    final var actionRuleUnitAccess = new ActionRuleUnitAccess(
+        certificateUnitAccessEvaluationRepository
+    );
+
+    return actionRuleUnitAccess.evaluate(certificateModel.id().type(), actionEvaluation);
   }
 
   private static Predicate<CertificateModel> roleHasAccess(

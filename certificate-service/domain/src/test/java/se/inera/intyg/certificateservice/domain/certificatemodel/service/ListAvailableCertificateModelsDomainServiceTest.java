@@ -2,57 +2,46 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.ACCESS_FOR_ROLES;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_VARDCENTRAL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
+import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateUnitAccessConfiguration;
 
 @ExtendWith(MockitoExtension.class)
 class ListAvailableCertificateModelsDomainServiceTest {
 
-  private static final CertificateModel CERTIFICATE_MODEL_FOR_DOCTORS_1 = CertificateModel.builder()
-      .description("forDoctor1")
-      .certificateActionSpecifications(
-          List.of(
-              CertificateActionSpecification.builder()
-                  .certificateActionType(CertificateActionType.ACCESS_FOR_ROLES)
-                  .allowedRoles(List.of(Role.DOCTOR))
-                  .build()
-          )
-      )
+  private static final CertificateType CERTIFICATE_TYPE_1 = new CertificateType("type1");
+  private static final CertificateType CERTIFICATE_TYPE_2 = new CertificateType("type2");
+  private static final CertificateModelId CERTIFICATE_MODEL_ID_1 = CertificateModelId.builder()
+      .type(CERTIFICATE_TYPE_1)
       .build();
-  private static final CertificateModel CERTIFICATE_MODEL_FOR_DOCTORS_2 = CertificateModel.builder()
-      .description("forDoctor2")
-      .certificateActionSpecifications(
-          List.of(
-              CertificateActionSpecification.builder()
-                  .certificateActionType(CertificateActionType.ACCESS_FOR_ROLES)
-                  .allowedRoles(List.of(Role.DOCTOR))
-                  .build()
-          )
-      )
+  private static final CertificateModelId CERTIFICATE_MODEL_ID_2 = CertificateModelId.builder()
+      .type(CERTIFICATE_TYPE_2)
       .build();
-  private static final CertificateModel CERTIFICATE_MODEL_FOR_CARE_ADMIN = CertificateModel.builder()
-      .certificateActionSpecifications(
-          List.of(
-              CertificateActionSpecification.builder()
-                  .certificateActionType(CertificateActionType.ACCESS_FOR_ROLES)
-                  .allowedRoles(List.of(Role.CARE_ADMIN))
-                  .build()
-          )
-      )
-      .build();
+  private static final String BLOCK = "block";
+  @Mock
+  CertificateModel certificateModelOne;
+  @Mock
+  CertificateModel certificateModelTwo;
   @Mock
   CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
   @Mock
@@ -63,8 +52,8 @@ class ListAvailableCertificateModelsDomainServiceTest {
   @Test
   void shallFilterOnCertificateActionTypeAccessForRole() {
     final var certificateModels = List.of(
-        CERTIFICATE_MODEL_FOR_DOCTORS_1,
-        CERTIFICATE_MODEL_FOR_CARE_ADMIN
+        certificateModelOne,
+        certificateModelTwo
     );
 
     final var actionEvaluation = ActionEvaluation.builder()
@@ -72,36 +61,67 @@ class ListAvailableCertificateModelsDomainServiceTest {
         .build();
 
     doReturn(certificateModels).when(certificateModelRepository).findAllActive();
-    doReturn(true).when(certificateUnitAccessEvaluationRepository)
-        .evaluate(actionEvaluation, CERTIFICATE_MODEL_FOR_DOCTORS_1);
+    doReturn(CERTIFICATE_MODEL_ID_1).when(certificateModelOne).id();
+
+    doReturn(true).when(certificateModelOne)
+        .allowTo(ACCESS_FOR_ROLES, Optional.of(actionEvaluation));
+    doReturn(false).when(certificateModelTwo)
+        .allowTo(ACCESS_FOR_ROLES, Optional.of(actionEvaluation));
 
     final var actualCertificateModels = listAvailableCertificateModelsDomainService.get(
         actionEvaluation);
 
-    assertEquals(List.of(CERTIFICATE_MODEL_FOR_DOCTORS_1), actualCertificateModels);
+    assertEquals(List.of(certificateModelOne), actualCertificateModels);
   }
+
 
   @Test
   void shallFilterOnUnitAccessEvaluation() {
     final var certificateModels = List.of(
-        CERTIFICATE_MODEL_FOR_DOCTORS_1,
-        CERTIFICATE_MODEL_FOR_DOCTORS_2,
-        CERTIFICATE_MODEL_FOR_CARE_ADMIN
+        certificateModelOne,
+        certificateModelTwo
     );
 
     final var actionEvaluation = ActionEvaluation.builder()
         .user(AJLA_DOKTOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+        .careProvider(ALFA_REGIONEN)
+        .careUnit(ALFA_VARDCENTRAL)
         .build();
 
     doReturn(certificateModels).when(certificateModelRepository).findAllActive();
-    doReturn(true).when(certificateUnitAccessEvaluationRepository)
-        .evaluate(actionEvaluation, CERTIFICATE_MODEL_FOR_DOCTORS_1);
-    doReturn(false).when(certificateUnitAccessEvaluationRepository)
-        .evaluate(actionEvaluation, CERTIFICATE_MODEL_FOR_DOCTORS_2);
+    doReturn(CERTIFICATE_MODEL_ID_1).when(certificateModelOne).id();
+    doReturn(CERTIFICATE_MODEL_ID_2).when(certificateModelTwo).id();
+
+    doReturn(true).when(certificateModelOne)
+        .allowTo(ACCESS_FOR_ROLES, Optional.of(actionEvaluation));
+    doReturn(true).when(certificateModelTwo)
+        .allowTo(ACCESS_FOR_ROLES, Optional.of(actionEvaluation));
+
+    final var certificateAccessConfigurations = List.of(
+        CertificateAccessConfiguration.builder()
+            .configuration(
+                List.of(
+                    CertificateUnitAccessConfiguration.builder()
+                        .fromDateTime(LocalDateTime.now().minusDays(1))
+                        .type("block")
+                        .issuedOnUnit(
+                            List.of(ALFA_ALLERGIMOTTAGNINGEN.hsaId().id())
+                        )
+                        .build()
+                )
+            )
+            .build()
+    );
+
+    doReturn(Collections.emptyList()).when(certificateUnitAccessEvaluationRepository)
+        .get(CERTIFICATE_TYPE_1);
+    doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
+        .get(CERTIFICATE_TYPE_2);
 
     final var actualCertificateModels = listAvailableCertificateModelsDomainService.get(
         actionEvaluation);
 
-    assertEquals(List.of(CERTIFICATE_MODEL_FOR_DOCTORS_1), actualCertificateModels);
+    assertEquals(List.of(certificateModelOne), actualCertificateModels);
   }
 }

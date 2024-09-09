@@ -17,6 +17,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
@@ -25,9 +26,15 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.action.message.model.MessageAction;
 import se.inera.intyg.certificateservice.domain.action.message.model.MessageActionFactory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateModelTest {
+
+  @Mock
+  CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
+  @Mock
+  CertificateActionFactory certificateActionFactory;
 
   @Nested
   class TestActions {
@@ -44,19 +51,15 @@ class CertificateModelTest {
                   certificateActionSpecification
               )
           )
+          .certificateActionFactory(certificateActionFactory)
           .build();
 
-      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
-          CertificateActionFactory.class)) {
+      doReturn(certificateAction).when(certificateActionFactory)
+          .create(certificateActionSpecification);
 
-        certificateActionFactory
-            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
-            .thenReturn(certificateAction);
+      final var actualActions = certificateModel.actions();
 
-        final var actualActions = certificateModel.actions();
-
-        assertEquals(expectedActions, actualActions);
-      }
+      assertEquals(expectedActions, actualActions);
     }
 
     @Test
@@ -70,19 +73,15 @@ class CertificateModelTest {
                   certificateActionSpecification
               )
           )
+          .certificateActionFactory(certificateActionFactory)
           .build();
 
-      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
-          CertificateActionFactory.class)) {
+      doReturn(null).when(certificateActionFactory)
+          .create(certificateActionSpecification);
 
-        certificateActionFactory
-            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
-            .thenReturn(null);
+      final var actualActions = certificateModel.actions();
 
-        final var actualActions = certificateModel.actions();
-
-        assertEquals(expectedActions, actualActions);
-      }
+      assertEquals(expectedActions, actualActions);
     }
 
     @Test
@@ -93,6 +92,7 @@ class CertificateModelTest {
           .certificateActionSpecifications(
               Collections.emptyList()
           )
+          .certificateActionFactory(certificateActionFactory)
           .build();
 
       final var actualActions = certificateModel.actions();
@@ -116,6 +116,7 @@ class CertificateModelTest {
                   messageActionSpecification
               )
           )
+          .certificateActionFactory(certificateActionFactory)
           .build();
 
       try (MockedStatic<MessageActionFactory> messageActionFactory = mockStatic(
@@ -189,22 +190,18 @@ class CertificateModelTest {
                   certificateActionSpecification
               )
           )
+          .certificateActionFactory(certificateActionFactory)
           .build();
 
-      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
-          CertificateActionFactory.class)) {
+      doReturn(certificateAction).when(certificateActionFactory)
+          .create(certificateActionSpecification);
 
-        certificateActionFactory
-            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
-            .thenReturn(certificateAction);
+      doReturn(true).when(certificateAction)
+          .evaluate(Optional.empty(), Optional.of(actionEvaluation));
 
-        doReturn(true).when(certificateAction)
-            .evaluate(Optional.empty(), Optional.of(actionEvaluation));
+      final var actualActions = certificateModel.actions(Optional.of(actionEvaluation));
 
-        final var actualActions = certificateModel.actions(Optional.of(actionEvaluation));
-
-        assertEquals(expectedActions, actualActions);
-      }
+      assertEquals(expectedActions, actualActions);
     }
 
     @Test
@@ -220,22 +217,18 @@ class CertificateModelTest {
                   certificateActionSpecification
               )
           )
+          .certificateActionFactory(certificateActionFactory)
           .build();
 
-      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
-          CertificateActionFactory.class)) {
+      doReturn(certificateAction).when(certificateActionFactory)
+          .create(certificateActionSpecification);
 
-        certificateActionFactory
-            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
-            .thenReturn(certificateAction);
+      doReturn(false).when(certificateAction)
+          .evaluate(Optional.empty(), Optional.of(actionEvaluation));
 
-        doReturn(false).when(certificateAction)
-            .evaluate(Optional.empty(), Optional.of(actionEvaluation));
+      final var actualActions = certificateModel.actions(Optional.of(actionEvaluation));
 
-        final var actualActions = certificateModel.actions(Optional.of(actionEvaluation));
-
-        assertEquals(expectedActions, actualActions);
-      }
+      assertEquals(expectedActions, actualActions);
     }
 
     @Test
@@ -250,19 +243,15 @@ class CertificateModelTest {
                   certificateActionSpecification
               )
           )
+          .certificateActionFactory(certificateActionFactory)
           .build();
 
-      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
-          CertificateActionFactory.class)) {
+      doReturn(null).when(certificateActionFactory)
+          .create(certificateActionSpecification);
 
-        certificateActionFactory
-            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
-            .thenReturn(null);
+      final var actualActions = certificateModel.actions(Optional.of(actionEvaluation));
 
-        final var actualActions = certificateModel.actions(Optional.of(actionEvaluation));
-
-        assertEquals(expectedActions, actualActions);
-      }
+      assertEquals(expectedActions, actualActions);
     }
 
     @Test
@@ -274,6 +263,7 @@ class CertificateModelTest {
           .certificateActionSpecifications(
               Collections.emptyList()
           )
+          .certificateActionFactory(certificateActionFactory)
           .build();
 
       final var actualActions = certificateModel.actions(Optional.of(actionEvaluation));
@@ -298,22 +288,18 @@ class CertificateModelTest {
                   certificateActionSpecification
               )
           )
+          .certificateActionFactory(certificateActionFactory)
           .build();
 
-      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
-          CertificateActionFactory.class)) {
+      doReturn(certificateAction).when(certificateActionFactory)
+          .create(certificateActionSpecification);
 
-        certificateActionFactory
-            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
-            .thenReturn(certificateAction);
+      doReturn(true).when(certificateAction)
+          .include(Optional.empty(), Optional.of(actionEvaluation));
 
-        doReturn(true).when(certificateAction)
-            .include(Optional.empty(), Optional.of(actionEvaluation));
+      final var actualActions = certificateModel.actionsInclude(Optional.of(actionEvaluation));
 
-        final var actualActions = certificateModel.actionsInclude(Optional.of(actionEvaluation));
-
-        assertEquals(expectedActions, actualActions);
-      }
+      assertEquals(expectedActions, actualActions);
     }
 
     @Test
@@ -329,22 +315,18 @@ class CertificateModelTest {
                   certificateActionSpecification
               )
           )
+          .certificateActionFactory(certificateActionFactory)
           .build();
 
-      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
-          CertificateActionFactory.class)) {
+      doReturn(certificateAction).when(certificateActionFactory)
+          .create(certificateActionSpecification);
 
-        certificateActionFactory
-            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
-            .thenReturn(certificateAction);
+      doReturn(false).when(certificateAction)
+          .include(Optional.empty(), Optional.of(actionEvaluation));
 
-        doReturn(false).when(certificateAction)
-            .include(Optional.empty(), Optional.of(actionEvaluation));
+      final var actualActions = certificateModel.actionsInclude(Optional.of(actionEvaluation));
 
-        final var actualActions = certificateModel.actionsInclude(Optional.of(actionEvaluation));
-
-        assertEquals(expectedActions, actualActions);
-      }
+      assertEquals(expectedActions, actualActions);
     }
 
     @Test
@@ -359,19 +341,15 @@ class CertificateModelTest {
                   certificateActionSpecification
               )
           )
+          .certificateActionFactory(certificateActionFactory)
           .build();
 
-      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
-          CertificateActionFactory.class)) {
+      doReturn(null).when(certificateActionFactory)
+          .create(certificateActionSpecification);
 
-        certificateActionFactory
-            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
-            .thenReturn(null);
+      final var actualActions = certificateModel.actionsInclude(Optional.of(actionEvaluation));
 
-        final var actualActions = certificateModel.actionsInclude(Optional.of(actionEvaluation));
-
-        assertEquals(expectedActions, actualActions);
-      }
+      assertEquals(expectedActions, actualActions);
     }
 
     @Test
@@ -383,6 +361,7 @@ class CertificateModelTest {
           .certificateActionSpecifications(
               Collections.emptyList()
           )
+          .certificateActionFactory(certificateActionFactory)
           .build();
 
       final var actualActions = certificateModel.actionsInclude(Optional.of(actionEvaluation));
@@ -406,24 +385,20 @@ class CertificateModelTest {
                   certificateActionSpecification
               )
           )
+          .certificateActionFactory(certificateActionFactory)
           .build();
 
-      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
-          CertificateActionFactory.class)) {
+      doReturn(certificateAction).when(certificateActionFactory)
+          .create(certificateActionSpecification);
 
-        certificateActionFactory
-            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
-            .thenReturn(certificateAction);
+      doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
+      doReturn(true).when(certificateAction)
+          .evaluate(Optional.empty(), Optional.of(actionEvaluation));
 
-        doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
-        doReturn(true).when(certificateAction)
-            .evaluate(Optional.empty(), Optional.of(actionEvaluation));
+      final var actualResult = certificateModel.allowTo(CertificateActionType.CREATE,
+          Optional.of(actionEvaluation));
 
-        final var actualResult = certificateModel.allowTo(CertificateActionType.CREATE,
-            Optional.of(actionEvaluation));
-
-        assertTrue(actualResult, "Expected allowTo to return 'true'");
-      }
+      assertTrue(actualResult, "Expected allowTo to return 'true'");
     }
 
     @Test
@@ -438,24 +413,20 @@ class CertificateModelTest {
                   certificateActionSpecification
               )
           )
+          .certificateActionFactory(certificateActionFactory)
           .build();
 
-      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
-          CertificateActionFactory.class)) {
+      doReturn(certificateAction).when(certificateActionFactory)
+          .create(certificateActionSpecification);
 
-        certificateActionFactory
-            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
-            .thenReturn(certificateAction);
+      doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
+      doReturn(false).when(certificateAction)
+          .evaluate(Optional.empty(), Optional.of(actionEvaluation));
 
-        doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
-        doReturn(false).when(certificateAction)
-            .evaluate(Optional.empty(), Optional.of(actionEvaluation));
+      final var actualResult = certificateModel.allowTo(CertificateActionType.CREATE,
+          Optional.of(actionEvaluation));
 
-        final var actualResult = certificateModel.allowTo(CertificateActionType.CREATE,
-            Optional.of(actionEvaluation));
-
-        assertFalse(actualResult, "Expected allowTo to return 'false'");
-      }
+      assertFalse(actualResult, "Expected allowTo to return 'false'");
     }
 
     @Test
@@ -470,20 +441,17 @@ class CertificateModelTest {
                   certificateActionSpecification
               )
           )
+          .certificateActionFactory(certificateActionFactory)
           .build();
 
-      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
-          CertificateActionFactory.class)) {
+      doReturn(certificateAction).when(certificateActionFactory)
+          .create(certificateActionSpecification);
 
-        certificateActionFactory
-            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
-            .thenReturn(certificateAction);
+      final var actualResult = certificateModel.allowTo(CertificateActionType.CREATE,
+          Optional.of(actionEvaluation));
 
-        final var actualResult = certificateModel.allowTo(CertificateActionType.CREATE,
-            Optional.of(actionEvaluation));
+      assertFalse(actualResult, "Expected allowTo to return 'false'");
 
-        assertFalse(actualResult, "Expected allowTo to return 'false'");
-      }
     }
   }
 
@@ -502,24 +470,20 @@ class CertificateModelTest {
                   certificateActionSpecification
               )
           )
+          .certificateActionFactory(certificateActionFactory)
           .build();
 
-      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
-          CertificateActionFactory.class)) {
+      doReturn(certificateAction).when(certificateActionFactory)
+          .create(certificateActionSpecification);
 
-        certificateActionFactory
-            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
-            .thenReturn(certificateAction);
+      doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
+      doReturn(Collections.emptyList()).when(certificateAction)
+          .reasonNotAllowed(Optional.empty(), Optional.of(actionEvaluation));
 
-        doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
-        doReturn(Collections.emptyList()).when(certificateAction)
-            .reasonNotAllowed(Optional.empty(), Optional.of(actionEvaluation));
+      final var actualResult = certificateModel.reasonNotAllowed(CertificateActionType.CREATE,
+          Optional.of(actionEvaluation));
 
-        final var actualResult = certificateModel.reasonNotAllowed(CertificateActionType.CREATE,
-            Optional.of(actionEvaluation));
-
-        assertTrue(actualResult.isEmpty(), "Expected reasonNotAllowed to return empty list");
-      }
+      assertTrue(actualResult.isEmpty(), "Expected reasonNotAllowed to return empty list");
     }
 
     @Test
@@ -535,24 +499,20 @@ class CertificateModelTest {
                   certificateActionSpecification
               )
           )
+          .certificateActionFactory(certificateActionFactory)
           .build();
 
-      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
-          CertificateActionFactory.class)) {
+      doReturn(certificateAction).when(certificateActionFactory)
+          .create(certificateActionSpecification);
 
-        certificateActionFactory
-            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
-            .thenReturn(certificateAction);
+      doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
+      doReturn(expectedReasons).when(certificateAction)
+          .reasonNotAllowed(Optional.empty(), Optional.of(actionEvaluation));
 
-        doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
-        doReturn(expectedReasons).when(certificateAction)
-            .reasonNotAllowed(Optional.empty(), Optional.of(actionEvaluation));
+      final var actualResult = certificateModel.reasonNotAllowed(CertificateActionType.CREATE,
+          Optional.of(actionEvaluation));
 
-        final var actualResult = certificateModel.reasonNotAllowed(CertificateActionType.CREATE,
-            Optional.of(actionEvaluation));
-
-        assertEquals(expectedReasons, actualResult);
-      }
+      assertEquals(expectedReasons, actualResult);
     }
   }
 

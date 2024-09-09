@@ -29,6 +29,7 @@ import se.inera.intyg.certificateservice.application.common.converter.ResourceLi
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
@@ -40,6 +41,8 @@ import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCerti
 class ForwardCertificateServiceTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
+  @Mock
+  CertificateActionFactory certificateActionFactory;
   @Mock
   CertificateRepository certificateRepository;
   @Mock

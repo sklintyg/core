@@ -23,16 +23,18 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionRead;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
 
+@ExtendWith(MockitoExtension.class)
 class CertificateActionReadTest {
 
   private CertificateActionRead certificateActionRead;
@@ -43,10 +45,14 @@ class CertificateActionReadTest {
       CertificateActionSpecification.builder()
           .certificateActionType(CertificateActionType.READ)
           .build();
+  @Mock
+  CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
+  @InjectMocks
+  CertificateActionFactory certificateActionFactory;
 
   @BeforeEach
   void setUp() {
-    certificateActionRead = (CertificateActionRead) CertificateActionFactory.create(
+    certificateActionRead = (CertificateActionRead) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION);
     certificateBuilder = Certificate.builder()
         .certificateMetaData(
@@ -228,7 +234,7 @@ class CertificateActionReadTest {
 
     @BeforeEach
     void setUp() {
-      certificateActionRead = (CertificateActionRead) CertificateActionFactory.create(
+      certificateActionRead = (CertificateActionRead) certificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION);
       certificateBuilder = Certificate.builder()
           .status(Status.DRAFT)

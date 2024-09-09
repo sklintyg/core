@@ -258,6 +258,12 @@ class ResourceLinkTypeDTOTest {
     }
 
     @Test
+    void shallThrowIfCertificateActionTypeAccessForUnit() {
+      assertThrows(IllegalArgumentException.class, () ->
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.ACCESS_FOR_UNIT));
+    }
+
+    @Test
     void shallThrowIfCertificateActionTypeSaveAnswer() {
       assertThrows(IllegalArgumentException.class, () ->
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SAVE_ANSWER));

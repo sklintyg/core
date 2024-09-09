@@ -7,6 +7,8 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
+    testCompileOnly 'com.fasterxml.jackson.core:jackson-annotations'
+    testCompileOnly 'com.fasterxml.jackson.core:jackson-databind'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-test'

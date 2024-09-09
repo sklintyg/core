@@ -1,19 +1,20 @@
 package se.inera.intyg.certificateservice.domain.action.certificate.model;
 
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 
+@RequiredArgsConstructor
 public class CertificateActionFactory {
 
-  private CertificateActionFactory() {
-    throw new IllegalStateException("Utility class");
-  }
+  private final CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
 
-  public static CertificateAction create(CertificateActionSpecification actionSpecification) {
+  public CertificateAction create(CertificateActionSpecification actionSpecification) {
     return switch (actionSpecification.certificateActionType()) {
       case CREATE -> CertificateActionCreate.builder()
           .certificateActionSpecification(actionSpecification)
@@ -435,6 +436,14 @@ public class CertificateActionFactory {
       case ACCESS_FOR_ROLES -> CertificateActionAccessForRoles.builder()
           .certificateActionSpecification(actionSpecification)
           .actionRules(List.of(new ActionRuleRole(actionSpecification.allowedRoles())))
+          .build();
+      case ACCESS_FOR_UNIT -> CertificateActionAccessForUnit.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleUnitAccess(certificateUnitAccessEvaluationRepository)
+              )
+          )
           .build();
     };
   }

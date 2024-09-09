@@ -96,7 +96,7 @@ public enum ResourceLinkTypeDTO {
       case READY_FOR_SIGN -> READY_FOR_SIGN;
       case RECEIVE_COMPLEMENT, RECEIVE_ANSWER, RECEIVE_QUESTION, RECEIVE_REMINDER, SAVE_MESSAGE,
            DELETE_MESSAGE, SEND_MESSAGE, SAVE_ANSWER, DELETE_ANSWER, SEND_ANSWER,
-           ACCESS_FOR_ROLES ->
+           ACCESS_FOR_ROLES, ACCESS_FOR_UNIT ->
           throw new IllegalArgumentException("%s is not a valid type!".formatted(type));
     };
   }

@@ -20,6 +20,7 @@ ext {
     schematronVersion = '8.0.0'
     ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
     nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'
+    applicationDir = "${rootProject.projectDir}/devops/dev"
 }
 
 group = 'se.inera.intyg.certificateservice'

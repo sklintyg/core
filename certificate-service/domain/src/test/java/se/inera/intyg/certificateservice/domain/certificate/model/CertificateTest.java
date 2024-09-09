@@ -12,7 +12,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.common.model.PersonIdType.COORDINATION_NUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
@@ -80,7 +79,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
@@ -116,6 +114,8 @@ class CertificateTest {
 
   @Mock
   private XmlGenerator xmlGenerator = mock(XmlGenerator.class);
+  @Mock
+  private CertificateActionFactory certificateActionFactory;
 
   @BeforeEach
   void setUp() {
@@ -1486,23 +1486,15 @@ class CertificateTest {
       final var certificateAction = mock(CertificateAction.class);
       final var actions = List.of(certificateAction);
 
-      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
-          CertificateActionFactory.class)) {
+      doReturn(actions).when(certificate.certificateModel()).actions();
+      doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
+      doReturn(Collections.emptyList()).when(certificateAction)
+          .reasonNotAllowed(Optional.of(certificate), Optional.of(actionEvaluation));
 
-        certificateActionFactory
-            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
-            .thenReturn(certificateAction);
+      final var actualResult = certificate.reasonNotAllowed(CertificateActionType.CREATE,
+          Optional.of(actionEvaluation));
 
-        doReturn(actions).when(certificate.certificateModel()).actions();
-        doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
-        doReturn(Collections.emptyList()).when(certificateAction)
-            .reasonNotAllowed(Optional.of(certificate), Optional.of(actionEvaluation));
-
-        final var actualResult = certificate.reasonNotAllowed(CertificateActionType.CREATE,
-            Optional.of(actionEvaluation));
-
-        assertTrue(actualResult.isEmpty(), "Expected reasonNotAllowed to return empty list");
-      }
+      assertTrue(actualResult.isEmpty(), "Expected reasonNotAllowed to return empty list");
     }
 
     @Test
@@ -1515,23 +1507,15 @@ class CertificateTest {
       final var certificateAction = mock(CertificateAction.class);
       final var actions = List.of(certificateAction);
 
-      try (MockedStatic<CertificateActionFactory> certificateActionFactory = mockStatic(
-          CertificateActionFactory.class)) {
+      doReturn(actions).when(certificate.certificateModel()).actions();
+      doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
+      doReturn(expectedReasons).when(certificateAction)
+          .reasonNotAllowed(Optional.of(certificate), Optional.of(actionEvaluation));
 
-        certificateActionFactory
-            .when(() -> CertificateActionFactory.create(certificateActionSpecification))
-            .thenReturn(certificateAction);
+      final var actualResult = certificate.reasonNotAllowed(CertificateActionType.CREATE,
+          Optional.of(actionEvaluation));
 
-        doReturn(actions).when(certificate.certificateModel()).actions();
-        doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
-        doReturn(expectedReasons).when(certificateAction)
-            .reasonNotAllowed(Optional.of(certificate), Optional.of(actionEvaluation));
-
-        final var actualResult = certificate.reasonNotAllowed(CertificateActionType.CREATE,
-            Optional.of(actionEvaluation));
-
-        assertEquals(expectedReasons, actualResult);
-      }
+      assertEquals(expectedReasons, actualResult);
     }
   }
 

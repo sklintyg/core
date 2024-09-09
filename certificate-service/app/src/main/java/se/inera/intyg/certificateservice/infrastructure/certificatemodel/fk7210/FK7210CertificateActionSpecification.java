@@ -68,6 +68,9 @@ public class FK7210CertificateActionSpecification {
             .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
                 Role.CARE_ADMIN)
             )
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.ACCESS_FOR_UNIT)
             .build()
     );
   }

@@ -1,9 +1,10 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.repository;
 
-import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import java.util.List;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
 
 public interface CertificateUnitAccessEvaluationRepository {
 
-  boolean evaluate(ActionEvaluation actionEvaluation, CertificateModel certificateModel);
+  List<CertificateAccessConfiguration> get(CertificateType certificateType);
 }

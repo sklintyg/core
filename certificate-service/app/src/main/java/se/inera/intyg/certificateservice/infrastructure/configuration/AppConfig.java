@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.configuration;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.repository.StatisticsRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.AnswerComplementDomainService;
@@ -411,5 +412,11 @@ public class AppConfig {
       CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository) {
     return new ListAvailableCertificateModelsDomainService(certificateModelRepository,
         certificateUnitAccessEvaluationRepository);
+  }
+
+  @Bean
+  public CertificateActionFactory certificateActionFactory(
+      CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository) {
+    return new CertificateActionFactory(certificateUnitAccessEvaluationRepository);
   }
 }

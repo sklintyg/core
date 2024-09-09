@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -27,11 +28,13 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
 
   private final List<CertificateModelFactory> certificateModelFactories;
   private Map<CertificateModelId, CertificateModel> certificateModelMap;
+  private final CertificateActionFactory certificateActionFactory;
 
   @Override
   public List<CertificateModel> findAllActive() {
     return getCertificateModelMap().values().stream()
         .filter(filterActiveCertificateModels())
+        .map(model -> model.withCertificateActionFactory(certificateActionFactory))
         .toList();
   }
 
@@ -81,7 +84,7 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
       );
     }
 
-    return certificateModel;
+    return certificateModel.withCertificateActionFactory(certificateActionFactory);
   }
 
   @Override
@@ -95,7 +98,9 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
       certificateModelMap = new HashMap<>();
       certificateModelFactories.forEach(certificateModelFactory -> {
             final var certificateModel = certificateModelFactory.create();
-            certificateModelMap.put(certificateModel.id(), certificateModel);
+            certificateModelMap.put(certificateModel.id(),
+                certificateModel.withCertificateActionFactory(certificateActionFactory)
+            );
             log.info("Loaded certificate model '{}' to repository", certificateModel.id());
           }
       );

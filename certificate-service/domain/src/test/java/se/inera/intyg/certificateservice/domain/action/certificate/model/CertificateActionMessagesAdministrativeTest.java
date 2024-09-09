@@ -14,18 +14,20 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJL
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation.ActionEvaluationBuilder;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionMessagesAdministrative;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 
+@ExtendWith(MockitoExtension.class)
 class CertificateActionMessagesAdministrativeTest {
 
   private CertificateActionMessagesAdministrative certificateActionMessagesAdministrative;
@@ -36,10 +38,14 @@ class CertificateActionMessagesAdministrativeTest {
           .build();
   private CertificateBuilder certificateBuilder;
   private ActionEvaluationBuilder actionEvaluationBuilder;
+  @Mock
+  CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
+  @InjectMocks
+  CertificateActionFactory certificateActionFactory;
 
   @BeforeEach
   void setUp() {
-    certificateActionMessagesAdministrative = (CertificateActionMessagesAdministrative) CertificateActionFactory.create(
+    certificateActionMessagesAdministrative = (CertificateActionMessagesAdministrative) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION
     );
 
@@ -83,7 +89,7 @@ class CertificateActionMessagesAdministrativeTest {
         .enabled(false)
         .build();
 
-    final var actionMessagesAdministrative = (CertificateActionMessagesAdministrative) CertificateActionFactory.create(
+    final var actionMessagesAdministrative = (CertificateActionMessagesAdministrative) certificateActionFactory.create(
         certificateActionSpecification
     );
 
@@ -98,7 +104,7 @@ class CertificateActionMessagesAdministrativeTest {
         .enabled(true)
         .build();
 
-    final var actionMessagesAdministrative = (CertificateActionMessagesAdministrative) CertificateActionFactory.create(
+    final var actionMessagesAdministrative = (CertificateActionMessagesAdministrative) certificateActionFactory.create(
         certificateActionSpecification
     );
 
@@ -266,7 +272,7 @@ class CertificateActionMessagesAdministrativeTest {
             .enabled(true)
             .build();
 
-    final var actionMessagesAdministrative = (CertificateActionMessagesAdministrative) CertificateActionFactory.create(
+    final var actionMessagesAdministrative = (CertificateActionMessagesAdministrative) certificateActionFactory.create(
         specification
     );
 

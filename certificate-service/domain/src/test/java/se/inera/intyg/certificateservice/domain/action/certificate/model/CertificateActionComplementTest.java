@@ -29,16 +29,22 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 
+@ExtendWith(MockitoExtension.class)
 class CertificateActionComplementTest {
 
   private CertificateActionComplement certificateActionComplement;
@@ -50,9 +56,14 @@ class CertificateActionComplementTest {
           .certificateActionType(CertificateActionType.COMPLEMENT)
           .build();
 
+  @Mock
+  CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
+  @InjectMocks
+  CertificateActionFactory certificateActionFactory;
+
   @BeforeEach
   void setUp() {
-    certificateActionComplement = (CertificateActionComplement) CertificateActionFactory.create(
+    certificateActionComplement = (CertificateActionComplement) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION
     );
 
@@ -369,7 +380,7 @@ class CertificateActionComplementTest {
 
     @BeforeEach
     void setUp() {
-      certificateActionComplement = (CertificateActionComplement) CertificateActionFactory.create(
+      certificateActionComplement = (CertificateActionComplement) certificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION);
       certificateBuilder = Certificate.builder()
           .status(Status.SIGNED)

@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.With;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
@@ -19,6 +21,7 @@ import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 
 @Value
 @Builder
+@RequiredArgsConstructor
 public class CertificateModel {
 
   CertificateModelId id;
@@ -39,10 +42,12 @@ public class CertificateModel {
   List<CertificateMessageType> messageTypes;
   PdfSpecification pdfSpecification;
   CertificateConfirmationModalProvider confirmationModalProvider;
+  @With
+  CertificateActionFactory certificateActionFactory;
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()
-        .map(CertificateActionFactory::create)
+        .map(certificateActionFactory::create)
         .filter(Objects::nonNull)
         .toList();
   }

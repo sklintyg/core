@@ -192,4 +192,17 @@ class FK7210CertificateActionSpecificationTest {
             expectedSpecification::equals),
         "Expected type: %s".formatted(expectedSpecification));
   }
+
+  @Test
+  void shallIncludeCertificateActionAccessForUnit() {
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.ACCESS_FOR_UNIT)
+        .build();
+
+    final var actionSpecifications = FK7210CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
+  }
 }
