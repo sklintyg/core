@@ -418,24 +418,12 @@ class certificateActionFactoryTest {
   @Test
   void shallReturnCertificateActionAccessForRolesIfExistInSpecification() {
     final var certificateActionSpecification = CertificateActionSpecification.builder()
-        .certificateActionType(CertificateActionType.ACCESS_FOR_ROLES)
+        .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
         .build();
 
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
     assertEquals(certificateAction.getClass(), CertificateActionAccessForRoles.class);
-  }
-
-  @Test
-  void shallReturnCertificateActionAccessForUnitIfExistInSpecification() {
-    final var certificateActionSpecification = CertificateActionSpecification.builder()
-        .certificateActionType(CertificateActionType.ACCESS_FOR_UNIT)
-        .build();
-
-    final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
-
-    assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionAccessForUnit.class);
   }
 }

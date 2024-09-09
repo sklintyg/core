@@ -180,23 +180,10 @@ class FK7210CertificateActionSpecificationTest {
   @Test
   void shallIncludeCertificateActionAccessForRoles() {
     final var expectedSpecification = CertificateActionSpecification.builder()
-        .certificateActionType(CertificateActionType.ACCESS_FOR_ROLES)
+        .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
         .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
             Role.CARE_ADMIN)
         )
-        .build();
-
-    final var actionSpecifications = FK7210CertificateActionSpecification.create();
-
-    assertTrue(actionSpecifications.stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected type: %s".formatted(expectedSpecification));
-  }
-
-  @Test
-  void shallIncludeCertificateActionAccessForUnit() {
-    final var expectedSpecification = CertificateActionSpecification.builder()
-        .certificateActionType(CertificateActionType.ACCESS_FOR_UNIT)
         .build();
 
     final var actionSpecifications = FK7210CertificateActionSpecification.create();

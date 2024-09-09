@@ -36,7 +36,7 @@ public class ListAvailableCertificateModelsDomainService {
 
   private static Predicate<CertificateModel> roleHasAccess(
       ActionEvaluation actionEvaluation) {
-    return certificateModel -> certificateModel.allowTo(CertificateActionType.ACCESS_FOR_ROLES,
+    return certificateModel -> certificateModel.allowTo(CertificateActionType.LIST_CERTIFICATE_TYPE,
         Optional.of(actionEvaluation));
   }
 }

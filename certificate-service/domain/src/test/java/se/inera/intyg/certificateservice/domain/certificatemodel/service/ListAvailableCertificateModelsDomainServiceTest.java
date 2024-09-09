@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
-import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.ACCESS_FOR_ROLES;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.LIST_CERTIFICATE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
@@ -64,9 +64,9 @@ class ListAvailableCertificateModelsDomainServiceTest {
     doReturn(CERTIFICATE_MODEL_ID_1).when(certificateModelOne).id();
 
     doReturn(true).when(certificateModelOne)
-        .allowTo(ACCESS_FOR_ROLES, Optional.of(actionEvaluation));
+        .allowTo(LIST_CERTIFICATE_TYPE, Optional.of(actionEvaluation));
     doReturn(false).when(certificateModelTwo)
-        .allowTo(ACCESS_FOR_ROLES, Optional.of(actionEvaluation));
+        .allowTo(LIST_CERTIFICATE_TYPE, Optional.of(actionEvaluation));
 
     final var actualCertificateModels = listAvailableCertificateModelsDomainService.get(
         actionEvaluation);
@@ -94,9 +94,9 @@ class ListAvailableCertificateModelsDomainServiceTest {
     doReturn(CERTIFICATE_MODEL_ID_2).when(certificateModelTwo).id();
 
     doReturn(true).when(certificateModelOne)
-        .allowTo(ACCESS_FOR_ROLES, Optional.of(actionEvaluation));
+        .allowTo(LIST_CERTIFICATE_TYPE, Optional.of(actionEvaluation));
     doReturn(true).when(certificateModelTwo)
-        .allowTo(ACCESS_FOR_ROLES, Optional.of(actionEvaluation));
+        .allowTo(LIST_CERTIFICATE_TYPE, Optional.of(actionEvaluation));
 
     final var certificateAccessConfigurations = List.of(
         CertificateAccessConfiguration.builder()

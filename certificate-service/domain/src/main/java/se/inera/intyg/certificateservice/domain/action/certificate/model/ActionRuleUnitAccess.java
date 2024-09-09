@@ -5,28 +5,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
 import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
 import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateUnitAccessConfiguration;
 
-@Builder
-@Getter(AccessLevel.NONE)
+@RequiredArgsConstructor
 public class ActionRuleUnitAccess implements ActionRule {
 
   private static final String ALLOW = "allow";
   private static final LocalDateTime NOW = LocalDateTime.now();
   private static final String BLOCK = "block";
   private final CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
-
-  public ActionRuleUnitAccess(
-      CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository) {
-    this.certificateUnitAccessEvaluationRepository = certificateUnitAccessEvaluationRepository;
-  }
 
   @Override
   public boolean evaluate(Optional<Certificate> certificate,

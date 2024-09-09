@@ -24,7 +24,7 @@ class CertificateActionAccessForRolesTest {
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
-          .certificateActionType(CertificateActionType.ACCESS_FOR_ROLES)
+          .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
           .allowedRoles(List.of(Role.DOCTOR))
           .build();
 

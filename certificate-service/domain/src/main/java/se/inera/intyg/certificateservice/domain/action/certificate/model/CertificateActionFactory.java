@@ -27,7 +27,8 @@ public class CertificateActionFactory {
                   new ActionRuleRole(
                       List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
                           Role.CARE_ADMIN)
-                  )
+                  ),
+                  new ActionRuleUnitAccess(certificateUnitAccessEvaluationRepository)
               )
           )
           .build();
@@ -79,7 +80,8 @@ public class CertificateActionFactory {
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleRole(actionSpecification.allowedRoles()),
                   new ActionRuleStatus(List.of(Status.DRAFT)),
-                  new ActionRuleProtectedPerson()
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleUnitAccess(certificateUnitAccessEvaluationRepository)
               )
           )
           .build();
@@ -433,17 +435,9 @@ public class CertificateActionFactory {
               )
           )
           .build();
-      case ACCESS_FOR_ROLES -> CertificateActionAccessForRoles.builder()
+      case LIST_CERTIFICATE_TYPE -> CertificateActionAccessForRoles.builder()
           .certificateActionSpecification(actionSpecification)
           .actionRules(List.of(new ActionRuleRole(actionSpecification.allowedRoles())))
-          .build();
-      case ACCESS_FOR_UNIT -> CertificateActionAccessForUnit.builder()
-          .certificateActionSpecification(actionSpecification)
-          .actionRules(
-              List.of(
-                  new ActionRuleUnitAccess(certificateUnitAccessEvaluationRepository)
-              )
-          )
           .build();
     };
   }
