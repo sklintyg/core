@@ -6,7 +6,7 @@
         "label": "Test 1",
         "type": "allow",
         "fromDateTime": "",
-        "toDateTime": "2025-08-01T08:00",
+        "toDateTime": "",
         "careProviders": [
           "TSTNMT2321000156-ALFA"
         ],
@@ -22,7 +22,7 @@
         "label": "Test 2",
         "type": "block",
         "fromDateTime": "",
-        "toDateTime": "2025-08-01T08:00",
+        "toDateTime": "",
         "careProviders": [
           "TSTNMT2321000156-BETA"
         ],
