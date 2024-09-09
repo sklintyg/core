@@ -5,12 +5,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
 import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
 import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateUnitAccessConfiguration;
 
+@Builder
+@Getter(AccessLevel.NONE)
 public class ActionRuleUnitAccess implements ActionRule {
 
   private static final String ALLOW = "allow";
