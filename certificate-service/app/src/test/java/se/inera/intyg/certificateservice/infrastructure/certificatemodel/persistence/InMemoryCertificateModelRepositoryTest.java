@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -32,8 +31,6 @@ class InMemoryCertificateModelRepositoryTest {
   private static final String TYPE_TWO = "type2";
   private static final String VERSION_TWO = "version2";
   @Mock
-  private CertificateActionFactory certificateActionFactory;
-  @Mock
   private CertificateModelFactory certificateModelFactoryOne;
 
   @Mock
@@ -47,7 +44,7 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallReturnActiveCertificateModels() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne), certificateActionFactory
+          List.of(certificateModelFactoryOne)
       );
 
       final var expectedModel = CertificateModel.builder()
@@ -58,7 +55,6 @@ class InMemoryCertificateModelRepositoryTest {
                   .build()
           )
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
@@ -71,7 +67,7 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallExcludeInactiveCertificateModels() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne), certificateActionFactory
+          List.of(certificateModelFactoryOne)
       );
 
       final var expectedModel = CertificateModel.builder()
@@ -82,7 +78,6 @@ class InMemoryCertificateModelRepositoryTest {
                   .build()
           )
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
@@ -95,7 +90,7 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallReturnListOfActiveCertificateModels() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne, certificateModelFactoryTwo), certificateActionFactory
+          List.of(certificateModelFactoryOne, certificateModelFactoryTwo)
       );
 
       final var expectedModelOne = CertificateModel.builder()
@@ -106,7 +101,6 @@ class InMemoryCertificateModelRepositoryTest {
                   .build()
           )
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       doReturn(expectedModelOne).when(certificateModelFactoryOne).create();
@@ -119,7 +113,6 @@ class InMemoryCertificateModelRepositoryTest {
                   .build()
           )
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       doReturn(expectedModelTwo).when(certificateModelFactoryTwo).create();
@@ -142,7 +135,7 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallReturnCertificateModelIfActiveAndMatchType() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne), certificateActionFactory
+          List.of(certificateModelFactoryOne)
       );
 
       final var expectedModel = CertificateModel.builder()
@@ -153,7 +146,6 @@ class InMemoryCertificateModelRepositoryTest {
                   .build()
           )
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
@@ -167,7 +159,7 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallReturnEmptyIfNotActiveAndMatchType() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne), certificateActionFactory
+          List.of(certificateModelFactoryOne)
       );
 
       final var model = CertificateModel.builder()
@@ -178,7 +170,6 @@ class InMemoryCertificateModelRepositoryTest {
                   .build()
           )
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       doReturn(model).when(certificateModelFactoryOne).create();
@@ -194,7 +185,7 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallReturnEmptyIfActiveAndDifferentType() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne), certificateActionFactory
+          List.of(certificateModelFactoryOne)
       );
 
       final var model = CertificateModel.builder()
@@ -205,7 +196,6 @@ class InMemoryCertificateModelRepositoryTest {
                   .build()
           )
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       doReturn(model).when(certificateModelFactoryOne).create();
@@ -221,7 +211,7 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallReturnLatestCertificateModelIfActiveAndMatchType() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne, certificateModelFactoryTwo), certificateActionFactory
+          List.of(certificateModelFactoryOne, certificateModelFactoryTwo)
       );
 
       final var modelOne = CertificateModel.builder()
@@ -232,7 +222,6 @@ class InMemoryCertificateModelRepositoryTest {
                   .build()
           )
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(5))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       final var expectedModel = CertificateModel.builder()
@@ -243,7 +232,6 @@ class InMemoryCertificateModelRepositoryTest {
                   .build()
           )
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       doReturn(modelOne).when(certificateModelFactoryOne).create();
@@ -258,7 +246,7 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallThrowExceptionIfCertificateTypeIsNull() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne), certificateActionFactory
+          List.of(certificateModelFactoryOne)
       );
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
@@ -275,7 +263,7 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallReturnCertificateModelIfIdExistsAndIsActive() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne), certificateActionFactory
+          List.of(certificateModelFactoryOne)
       );
 
       final var expectedModel = CertificateModel.builder()
@@ -286,7 +274,6 @@ class InMemoryCertificateModelRepositoryTest {
                   .build()
           )
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
@@ -299,7 +286,7 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallThrowExceptionIfIdIsMissing() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne), certificateActionFactory
+          List.of(certificateModelFactoryOne)
       );
 
       final var expectedModel = CertificateModel.builder()
@@ -310,7 +297,6 @@ class InMemoryCertificateModelRepositoryTest {
                   .build()
           )
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
@@ -331,7 +317,7 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallThrowExceptionIfCertificateModelNotActive() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne), certificateActionFactory
+          List.of(certificateModelFactoryOne)
       );
 
       final var expectedModel = CertificateModel.builder()
@@ -342,7 +328,6 @@ class InMemoryCertificateModelRepositoryTest {
                   .build()
           )
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       final var certificateModelId = expectedModel.id();
@@ -365,7 +350,7 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallThrowExceptionIfCertificateModelIdIsNull() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne), certificateActionFactory
+          List.of(certificateModelFactoryOne)
       );
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
@@ -384,7 +369,7 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallReturnListOfAllCertificateModelsEvenIfTheyAreNotActive() {
       testabilityCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne, certificateModelFactoryTwo), certificateActionFactory
+          List.of(certificateModelFactoryOne, certificateModelFactoryTwo)
       );
 
       final var expectedModelOne = CertificateModel.builder()
@@ -395,7 +380,6 @@ class InMemoryCertificateModelRepositoryTest {
                   .build()
           )
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       doReturn(expectedModelOne).when(certificateModelFactoryOne).create();
@@ -408,7 +392,6 @@ class InMemoryCertificateModelRepositoryTest {
                   .build()
           )
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       doReturn(expectedModelTwo).when(certificateModelFactoryTwo).create();
@@ -437,7 +420,7 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallThrowIfCodeIsNull() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne), certificateActionFactory
+          List.of(certificateModelFactoryOne)
       );
 
       assertThrows(IllegalArgumentException.class,
@@ -447,13 +430,12 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallReturnCertificateModelIfActiveAndMatchCode() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne), certificateActionFactory
+          List.of(certificateModelFactoryOne)
       );
 
       final var expectedModel = CertificateModel.builder()
           .type(new Code(CODE_1, CODE_SYSTEM_1, DISPLAY_NAME))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
@@ -468,13 +450,12 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallReturnEmptyIfNotActiveAndMatchType() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne), certificateActionFactory
+          List.of(certificateModelFactoryOne)
       );
 
       final var expectedModel = CertificateModel.builder()
           .type(new Code(CODE_1, CODE_SYSTEM_1, DISPLAY_NAME))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
@@ -491,13 +472,12 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallReturnEmptyIfActiveAndDifferentCode() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne), certificateActionFactory
+          List.of(certificateModelFactoryOne)
       );
 
       final var expectedModel = CertificateModel.builder()
           .type(new Code(CODE_1, CODE_SYSTEM_1, DISPLAY_NAME))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
@@ -513,13 +493,12 @@ class InMemoryCertificateModelRepositoryTest {
     @Test
     void shallReturnEmptyIfActiveAndDifferentCodeSystem() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne), certificateActionFactory
+          List.of(certificateModelFactoryOne)
       );
 
       final var expectedModel = CertificateModel.builder()
           .type(new Code(CODE_1, CODE_SYSTEM_1, DISPLAY_NAME))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
-          .certificateActionFactory(certificateActionFactory)
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
