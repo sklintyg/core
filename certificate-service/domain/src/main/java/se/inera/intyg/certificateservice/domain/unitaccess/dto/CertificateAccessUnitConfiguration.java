@@ -9,10 +9,10 @@ import java.util.Collections;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessUnitConfiguration.CertificateUnitAccessConfigurationBuilder;
+import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessUnitConfiguration.CertificateAccessUnitConfigurationBuilder;
 
 @JsonInclude
-@JsonDeserialize(builder = CertificateUnitAccessConfigurationBuilder.class)
+@JsonDeserialize(builder = CertificateAccessUnitConfigurationBuilder.class)
 @Builder
 @Value
 public class CertificateAccessUnitConfiguration {
@@ -36,7 +36,7 @@ public class CertificateAccessUnitConfiguration {
   List<String> issuedOnUnit = Collections.emptyList();
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class CertificateUnitAccessConfigurationBuilder {
+  public static class CertificateAccessUnitConfigurationBuilder {
 
   }
 }
