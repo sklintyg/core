@@ -37,6 +37,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateMessageType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
@@ -56,6 +57,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 @RequiredArgsConstructor
 public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
 
+  private final CertificateActionFactory certificateActionFactory;
   @Value("${certificate.model.fk7809.v1_0.active.from}")
   private LocalDateTime activeFrom;
 
@@ -186,6 +188,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                 issuingUnitContactInfo()
             )
         )
+        .certificateActionFactory(certificateActionFactory)
         .pdfSpecification(FK7809PdfSpecification.create())
         .build();
   }

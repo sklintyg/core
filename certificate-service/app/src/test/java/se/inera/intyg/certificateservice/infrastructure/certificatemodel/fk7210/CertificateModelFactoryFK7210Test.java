@@ -17,7 +17,11 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
@@ -28,15 +32,18 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 
+@ExtendWith(MockitoExtension.class)
 class CertificateModelFactoryFK7210Test {
 
+  @Mock
+  private CertificateActionFactory certificateActionFactory;
   private static final String FK_7210 = "fk7210";
   private static final String VERSION = "1.0";
   private CertificateModelFactoryFK7210 certificateModelFactoryFK7210;
 
   @BeforeEach
   void setUp() {
-    certificateModelFactoryFK7210 = new CertificateModelFactoryFK7210();
+    certificateModelFactoryFK7210 = new CertificateModelFactoryFK7210(certificateActionFactory);
   }
 
   @Test
@@ -189,5 +196,12 @@ class CertificateModelFactoryFK7210Test {
                   certificateModel.elementSpecifications())
       );
     }
+  }
+
+  @Test
+  void shallIncludeCertificateActionFactory() {
+    final var certificateModel = certificateModelFactoryFK7210.create();
+
+    assertEquals(certificateActionFactory, certificateModel.certificateActionFactory());
   }
 }

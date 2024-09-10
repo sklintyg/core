@@ -19,9 +19,9 @@ import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateModelRepository;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
-@Slf4j
 public class InMemoryCertificateModelRepository implements CertificateModelRepository,
     TestabilityCertificateModelRepository {
 
