@@ -164,7 +164,11 @@ public class CertificateActionFactory {
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleUserAllowCopy(),
                   new ActionRuleProtectedPerson(),
-                  new ActionRulePatientAlive()
+                  new ActionRulePatientAlive(),
+                  new ActionRuleChildRelationNoMatch(
+                      List.of(RelationType.REPLACE, RelationType.COMPLEMENT),
+                      List.of(Status.DRAFT, Status.REVOKED)
+                  )
               )
           )
           .build();

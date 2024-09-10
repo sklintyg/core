@@ -8,8 +8,11 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.relationComplementBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.relationReplaceBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_HUDMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
@@ -20,6 +23,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajl
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALLOW_COPY_FALSE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -379,6 +383,140 @@ class CertificateActionRenewTest {
         .build();
 
     assertFalse(
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfReplacedByDraftCertificate() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .children(
+            List.of(
+                relationReplaceBuilder()
+                    .build()
+            )
+        )
+        .build();
+
+    assertTrue(
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfReplacedBySignedCertificate() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .children(
+            List.of(
+                relationReplaceBuilder()
+                    .certificate(
+                        fk7210CertificateBuilder()
+                            .status(Status.SIGNED)
+                            .build()
+                    )
+                    .build()
+            )
+        )
+        .build();
+
+    assertFalse(
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfReplacedByRevokedCertificate() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .children(
+            List.of(
+                relationReplaceBuilder()
+                    .certificate(
+                        fk7210CertificateBuilder()
+                            .status(Status.REVOKED)
+                            .build()
+                    )
+                    .build()
+            )
+        )
+        .build();
+
+    assertTrue(
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfComplementedByDraftCertificate() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .children(
+            List.of(
+                relationComplementBuilder()
+                    .build()
+            )
+        )
+        .build();
+
+    assertTrue(
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfComplementedBySignedCertificate() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .children(
+            List.of(
+                relationComplementBuilder()
+                    .certificate(
+                        fk7210CertificateBuilder()
+                            .status(Status.SIGNED)
+                            .build()
+                    )
+                    .build()
+            )
+        )
+        .build();
+
+    assertFalse(
+        certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfComplementedByRevokedCertificate() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .children(
+            List.of(
+                relationComplementBuilder()
+                    .certificate(
+                        fk7210CertificateBuilder()
+                            .status(Status.REVOKED)
+                            .build()
+                    )
+                    .build()
+            )
+        )
+        .build();
+
+    assertTrue(
         certificateActionRenew.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
