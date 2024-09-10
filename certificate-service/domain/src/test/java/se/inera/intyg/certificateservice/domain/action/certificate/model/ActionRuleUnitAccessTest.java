@@ -741,8 +741,7 @@ class ActionRuleUnitAccessTest {
     }
 
     @Test
-    void shallReturnFalseIfTypeIsBlockedAndUnitNotFoundInConfigurationThatIsActive() {
-
+    void shallReturnTrueIfTypeIsBlockedAndUnitNotFoundInConfigurationThatIsActive() {
       final var actionEvaluation = ActionEvaluation.builder()
           .subUnit(ALFA_MEDICINSKT_CENTRUM)
           .careUnit(ALFA_VARDCENTRAL)
@@ -777,7 +776,7 @@ class ActionRuleUnitAccessTest {
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
 
-      assertFalse(result);
+      assertTrue(result);
     }
   }
 

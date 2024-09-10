@@ -56,7 +56,7 @@ public class ActionRuleUnitAccess implements ActionRule {
       return false;
     }
 
-    return activeAllowConfiguration.stream()
+    return activeAllowConfiguration.isEmpty() || activeAllowConfiguration.stream()
         .anyMatch(config -> containsUnit(config, actionEvaluation));
   }
 
