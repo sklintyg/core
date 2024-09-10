@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccess
 import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessUnitConfiguration;
 
 @RequiredArgsConstructor
-public class ActionRuleUnitAccess implements ActionRule {
+public class ActionRuleCertificateTypeActiveForUnit implements ActionRule {
 
   private static final String ALLOW = "allow";
   private static final LocalDateTime NOW = LocalDateTime.now();

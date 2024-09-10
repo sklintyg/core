@@ -5,7 +5,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionRuleUnitAccess;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionRuleCertificateTypeActiveForUnit;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
@@ -27,7 +27,7 @@ public class ListAvailableCertificateModelsDomainService {
 
   private boolean unitAccessEvaluation(CertificateModel certificateModel,
       ActionEvaluation actionEvaluation) {
-    final var actionRuleUnitAccess = new ActionRuleUnitAccess(
+    final var actionRuleUnitAccess = new ActionRuleCertificateTypeActiveForUnit(
         certificateActionConfigurationRepository
     );
 

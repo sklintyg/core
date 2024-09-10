@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionRuleUnitAccess;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionRuleCertificateTypeActiveForUnit;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
@@ -72,7 +72,7 @@ public class CreateCertificateDomainService {
 
   private boolean unitDontHaveAccess(CertificateType certificateType,
       ActionEvaluation actionEvaluation) {
-    final var actionRuleUnitAccess = new ActionRuleUnitAccess(
+    final var actionRuleUnitAccess = new ActionRuleCertificateTypeActiveForUnit(
         certificateActionConfigurationRepository
     );
 

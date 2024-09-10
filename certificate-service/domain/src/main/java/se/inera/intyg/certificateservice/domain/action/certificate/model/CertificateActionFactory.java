@@ -80,7 +80,8 @@ public class CertificateActionFactory {
                   new ActionRuleRole(actionSpecification.allowedRoles()),
                   new ActionRuleStatus(List.of(Status.DRAFT)),
                   new ActionRuleProtectedPerson(),
-                  new ActionRuleUnitAccess(certificateActionConfigurationRepository)
+                  new ActionRuleCertificateTypeActiveForUnit(
+                      certificateActionConfigurationRepository)
               )
           )
           .build();
