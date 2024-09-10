@@ -35,7 +35,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.Ce
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateActionHandleComplementTest {
@@ -48,7 +48,7 @@ class CertificateActionHandleComplementTest {
           .build();
   private CertificateBuilder certificateBuilder;
   @Mock
-  CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
+  CertificateActionConfigurationRepository certificateActionConfigurationRepository;
   @InjectMocks
   CertificateActionFactory certificateActionFactory;
 

@@ -23,9 +23,9 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateUnitAccessConfiguration;
+import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessUnitConfiguration;
 
 @ExtendWith(MockitoExtension.class)
 class ActionRuleUnitAccessTest {
@@ -35,7 +35,7 @@ class ActionRuleUnitAccessTest {
   private static final String ALLOW = "allow";
   private static final String BLOCK = "block";
   @Mock
-  CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
+  CertificateActionConfigurationRepository certificateActionConfigurationRepository;
   @InjectMocks
   private ActionRuleUnitAccess actionRuleUnitAccess;
   private Certificate certificate;
@@ -79,8 +79,8 @@ class ActionRuleUnitAccessTest {
 
   @Test
   void shallReturnTrueIfNoConfigurationForTypeExists() {
-    doReturn(Collections.emptyList()).when(certificateUnitAccessEvaluationRepository)
-        .get(CERTIFICATE_TYPE);
+    doReturn(Collections.emptyList()).when(certificateActionConfigurationRepository)
+        .find(CERTIFICATE_TYPE);
     final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
@@ -103,7 +103,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(ALLOW)
                           .issuedOnUnit(List.of(ALFA_MEDICINSKT_CENTRUM.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
@@ -114,8 +114,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -136,7 +136,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(ALLOW)
                           .issuedOnUnit(List.of(ALFA_MEDICINSKT_CENTRUM.hsaId().id()))
                           .fromDateTime(null)
@@ -147,8 +147,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -171,7 +171,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(ALLOW)
                           .careUnit(List.of(ALFA_VARDCENTRAL.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
@@ -182,8 +182,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -205,7 +205,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(ALLOW)
                           .careUnit(List.of(ALFA_VARDCENTRAL.hsaId().id()))
                           .fromDateTime(null)
@@ -216,8 +216,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -239,7 +239,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(ALLOW)
                           .careProviders(List.of(ALFA_REGIONEN.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
@@ -250,8 +250,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -273,7 +273,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(ALLOW)
                           .careProviders(List.of(ALFA_REGIONEN.hsaId().id()))
                           .fromDateTime(null)
@@ -284,8 +284,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -307,7 +307,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(ALLOW)
                           .careProviders(List.of(ALFA_REGIONEN.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
@@ -318,8 +318,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -341,7 +341,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(ALLOW)
                           .careProviders(List.of(ALFA_REGIONEN.hsaId().id()))
                           .fromDateTime(null)
@@ -352,8 +352,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -375,7 +375,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(ALLOW)
                           .careProviders(List.of(BETA_HUDMOTTAGNINGEN.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().plusDays(1))
@@ -386,8 +386,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -409,7 +409,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(ALLOW)
                           .careProviders(List.of(BETA_HUDMOTTAGNINGEN.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
@@ -420,8 +420,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -447,7 +447,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .issuedOnUnit(List.of(ALFA_MEDICINSKT_CENTRUM.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
@@ -458,8 +458,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -481,7 +481,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .issuedOnUnit(List.of(ALFA_MEDICINSKT_CENTRUM.hsaId().id()))
                           .fromDateTime(null)
@@ -492,8 +492,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -516,7 +516,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .careUnit(List.of(ALFA_VARDCENTRAL.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
@@ -527,8 +527,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -550,7 +550,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .careUnit(List.of(ALFA_VARDCENTRAL.hsaId().id()))
                           .fromDateTime(null)
@@ -561,8 +561,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -584,7 +584,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .careProviders(List.of(ALFA_REGIONEN.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
@@ -595,8 +595,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -618,7 +618,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .careProviders(List.of(ALFA_REGIONEN.hsaId().id()))
                           .fromDateTime(null)
@@ -629,8 +629,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -652,7 +652,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .careProviders(List.of(ALFA_REGIONEN.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
@@ -663,8 +663,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -686,7 +686,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .careProviders(List.of(ALFA_REGIONEN.hsaId().id()))
                           .fromDateTime(null)
@@ -697,8 +697,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -720,7 +720,7 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .careProviders(List.of(BETA_HUDMOTTAGNINGEN.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().plusDays(1))
@@ -731,8 +731,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -754,13 +754,13 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .careProviders(List.of(BETA_HUDMOTTAGNINGEN.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().plusDays(1))
                           .toDateTime(null)
                           .build(),
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .careProviders(List.of(BETA_HUDMOTTAGNINGEN.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
@@ -771,8 +771,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -798,13 +798,13 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(ALLOW)
                           .issuedOnUnit(List.of(ALFA_MEDICINSKT_CENTRUM.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
                           .toDateTime(LocalDateTime.now().plusDays(1))
                           .build(),
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .issuedOnUnit(List.of(ALFA_MEDICINSKT_CENTRUM.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
@@ -815,8 +815,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -838,13 +838,13 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(ALLOW)
                           .issuedOnUnit(List.of(ALFA_MEDICINSKT_CENTRUM.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
                           .toDateTime(LocalDateTime.now().plusDays(1))
                           .build(),
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .issuedOnUnit(List.of(ALFA_MEDICINSKT_CENTRUM.hsaId().id()))
                           .fromDateTime(null)
@@ -855,8 +855,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -879,13 +879,13 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(ALLOW)
                           .careUnit(List.of(ALFA_VARDCENTRAL.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
                           .toDateTime(LocalDateTime.now().plusDays(1))
                           .build(),
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .careUnit(List.of(ALFA_VARDCENTRAL.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
@@ -896,8 +896,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -919,13 +919,13 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(ALLOW)
                           .careUnit(List.of(ALFA_VARDCENTRAL.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
                           .toDateTime(LocalDateTime.now().plusDays(1))
                           .build(),
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .careUnit(List.of(ALFA_VARDCENTRAL.hsaId().id()))
                           .fromDateTime(null)
@@ -936,8 +936,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -959,13 +959,13 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(ALLOW)
                           .careProviders(List.of(ALFA_REGIONEN.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
                           .toDateTime(LocalDateTime.now().plusDays(1))
                           .build(),
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .careProviders(List.of(ALFA_REGIONEN.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
@@ -976,8 +976,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -999,13 +999,13 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(ALLOW)
                           .careProviders(List.of(ALFA_REGIONEN.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
                           .toDateTime(LocalDateTime.now().plusDays(1))
                           .build(),
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .careProviders(List.of(ALFA_REGIONEN.hsaId().id()))
                           .fromDateTime(null)
@@ -1016,8 +1016,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -1039,13 +1039,13 @@ class ActionRuleUnitAccessTest {
               .certificateType(FK_3226_TYPE)
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(ALLOW)
                           .careProviders(List.of(BETA_HUDMOTTAGNINGEN.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
                           .toDateTime(LocalDateTime.now().plusDays(1))
                           .build(),
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type(BLOCK)
                           .careProviders(List.of(BETA_HUDMOTTAGNINGEN.hsaId().id()))
                           .fromDateTime(LocalDateTime.now().minusDays(1))
@@ -1056,8 +1056,8 @@ class ActionRuleUnitAccessTest {
               .build()
       );
 
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
 
       final var result = actionRuleUnitAccess.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));

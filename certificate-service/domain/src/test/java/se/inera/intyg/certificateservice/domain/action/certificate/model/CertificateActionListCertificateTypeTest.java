@@ -14,13 +14,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 
 @ExtendWith(MockitoExtension.class)
-class CertificateActionAccessForRolesTest {
+class CertificateActionListCertificateTypeTest {
 
-  private CertificateActionAccessForRoles certificateActionAccessForRoles;
+  private CertificateActionListCertificateType certificateActionListCertificateType;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
@@ -29,13 +29,13 @@ class CertificateActionAccessForRolesTest {
           .build();
 
   @Mock
-  CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
+  CertificateActionConfigurationRepository certificateActionConfigurationRepository;
   @InjectMocks
   CertificateActionFactory certificateActionFactory;
 
   @BeforeEach
   void setUp() {
-    certificateActionAccessForRoles = (CertificateActionAccessForRoles) certificateActionFactory.create(
+    certificateActionListCertificateType = (CertificateActionListCertificateType) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION
     );
 
@@ -50,7 +50,8 @@ class CertificateActionAccessForRolesTest {
         .build();
 
     assertFalse(
-        certificateActionAccessForRoles.evaluate(Optional.empty(), Optional.of(actionEvaluation))
+        certificateActionListCertificateType.evaluate(Optional.empty(),
+            Optional.of(actionEvaluation))
     );
   }
 
@@ -60,12 +61,13 @@ class CertificateActionAccessForRolesTest {
         .build();
 
     assertTrue(
-        certificateActionAccessForRoles.evaluate(Optional.empty(), Optional.of(actionEvaluation))
+        certificateActionListCertificateType.evaluate(Optional.empty(),
+            Optional.of(actionEvaluation))
     );
   }
 
   @Test
   void shallReturnFalseForInclude() {
-    assertFalse(certificateActionAccessForRoles.include(Optional.empty(), Optional.empty()));
+    assertFalse(certificateActionListCertificateType.include(Optional.empty(), Optional.empty()));
   }
 }

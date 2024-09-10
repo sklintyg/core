@@ -26,13 +26,13 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.action.message.model.MessageAction;
 import se.inera.intyg.certificateservice.domain.action.message.model.MessageActionFactory;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateModelTest {
 
   @Mock
-  CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
+  CertificateActionConfigurationRepository certificateActionConfigurationRepository;
   @Mock
   CertificateActionFactory certificateActionFactory;
 

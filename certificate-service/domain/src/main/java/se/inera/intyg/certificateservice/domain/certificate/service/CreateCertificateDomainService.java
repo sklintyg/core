@@ -12,8 +12,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
@@ -26,7 +26,7 @@ public class CreateCertificateDomainService {
   private final CertificateModelRepository certificateModelRepository;
   private final CertificateRepository certificateRepository;
   private final CertificateEventDomainService certificateEventDomainService;
-  private final CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
+  private final CertificateActionConfigurationRepository certificateActionConfigurationRepository;
 
   public Certificate create(CertificateModelId certificateModelId,
       ActionEvaluation actionEvaluation, ExternalReference externalReference) {
@@ -73,7 +73,7 @@ public class CreateCertificateDomainService {
   private boolean unitDontHaveAccess(CertificateType certificateType,
       ActionEvaluation actionEvaluation) {
     final var actionRuleUnitAccess = new ActionRuleUnitAccess(
-        certificateUnitAccessEvaluationRepository
+        certificateActionConfigurationRepository
     );
 
     return !actionRuleUnitAccess.evaluate(certificateType, actionEvaluation);

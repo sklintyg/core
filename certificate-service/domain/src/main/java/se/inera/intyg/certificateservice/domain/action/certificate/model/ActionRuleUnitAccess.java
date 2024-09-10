@@ -8,9 +8,9 @@ import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateUnitAccessConfiguration;
+import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessUnitConfiguration;
 
 @RequiredArgsConstructor
 public class ActionRuleUnitAccess implements ActionRule {
@@ -18,7 +18,7 @@ public class ActionRuleUnitAccess implements ActionRule {
   private static final String ALLOW = "allow";
   private static final LocalDateTime NOW = LocalDateTime.now();
   private static final String BLOCK = "block";
-  private final CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
+  private final CertificateActionConfigurationRepository certificateActionConfigurationRepository;
 
   @Override
   public boolean evaluate(Optional<Certificate> certificate,
@@ -31,7 +31,7 @@ public class ActionRuleUnitAccess implements ActionRule {
   }
 
   public boolean evaluate(CertificateType certificateType, ActionEvaluation actionEvaluation) {
-    final var accessConfigurationForType = certificateUnitAccessEvaluationRepository.get(
+    final var accessConfigurationForType = certificateActionConfigurationRepository.find(
         certificateType
     );
 
@@ -60,7 +60,7 @@ public class ActionRuleUnitAccess implements ActionRule {
         .anyMatch(config -> containsUnit(config, actionEvaluation));
   }
 
-  private static Function<CertificateAccessConfiguration, Stream<CertificateUnitAccessConfiguration>> hasActiveType(
+  private static Function<CertificateAccessConfiguration, Stream<CertificateAccessUnitConfiguration>> hasActiveType(
       String type) {
     return accessConfiguration -> accessConfiguration.configuration().stream()
         .filter(configuration -> configuration.type().equals(type))
@@ -68,12 +68,12 @@ public class ActionRuleUnitAccess implements ActionRule {
   }
 
   private static boolean noActiveConfiguration(
-      List<CertificateUnitAccessConfiguration> activeBlockConfiguration,
-      List<CertificateUnitAccessConfiguration> activeAllowConfiguration) {
+      List<CertificateAccessUnitConfiguration> activeBlockConfiguration,
+      List<CertificateAccessUnitConfiguration> activeAllowConfiguration) {
     return activeBlockConfiguration.isEmpty() && activeAllowConfiguration.isEmpty();
   }
 
-  private static Function<CertificateUnitAccessConfiguration, Boolean> configurationIsActive() {
+  private static Function<CertificateAccessUnitConfiguration, Boolean> configurationIsActive() {
     return configuration -> (configuration.fromDateTime() != null
         && configuration.fromDateTime().isBefore(NOW))
         && (configuration.toDateTime() == null
@@ -86,7 +86,7 @@ public class ActionRuleUnitAccess implements ActionRule {
   }
 
   private static boolean containsUnit(
-      CertificateUnitAccessConfiguration accessConfiguration, ActionEvaluation actionEvaluation) {
+      CertificateAccessUnitConfiguration accessConfiguration, ActionEvaluation actionEvaluation) {
     final var subUnitId = actionEvaluation.subUnit().hsaId().id();
     final var careUnitId = actionEvaluation.careUnit().hsaId().id();
     final var careProviderId = actionEvaluation.careProvider().hsaId().id();

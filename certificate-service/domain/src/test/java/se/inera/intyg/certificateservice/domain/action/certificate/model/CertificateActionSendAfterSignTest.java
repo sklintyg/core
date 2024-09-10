@@ -24,7 +24,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateActionSendAfterSignTest {
@@ -37,7 +37,7 @@ class CertificateActionSendAfterSignTest {
           .certificateActionType(CertificateActionType.SEND_AFTER_SIGN)
           .build();
   @Mock
-  CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
+  CertificateActionConfigurationRepository certificateActionConfigurationRepository;
   @InjectMocks
   CertificateActionFactory certificateActionFactory;
 

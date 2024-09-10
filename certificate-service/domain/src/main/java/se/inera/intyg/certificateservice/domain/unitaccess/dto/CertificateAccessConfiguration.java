@@ -18,7 +18,7 @@ public class CertificateAccessConfiguration {
   @JsonProperty("certificateType")
   String certificateType;
   @JsonProperty("configuration")
-  List<CertificateUnitAccessConfiguration> configuration;
+  List<CertificateAccessUnitConfiguration> configuration;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class CertificateAccessConfigurationBuilder {

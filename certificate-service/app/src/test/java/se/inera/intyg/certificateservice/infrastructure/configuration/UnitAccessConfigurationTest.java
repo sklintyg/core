@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateUnitAccessConfiguration;
+import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessUnitConfiguration;
 
 @ExtendWith(MockitoExtension.class)
 class UnitAccessConfigurationTest {
@@ -41,7 +41,7 @@ class UnitAccessConfigurationTest {
             .certificateType("fk7809")
             .configuration(
                 List.of(
-                    CertificateUnitAccessConfiguration.builder()
+                    CertificateAccessUnitConfiguration.builder()
                         .label("Test 1")
                         .type("allow")
                         .fromDateTime(LocalDateTime.of(2024, 8, 1, 8, 0, 0))
@@ -57,7 +57,7 @@ class UnitAccessConfigurationTest {
             .certificateType("fk3226")
             .configuration(
                 List.of(
-                    CertificateUnitAccessConfiguration.builder()
+                    CertificateAccessUnitConfiguration.builder()
                         .label("Test 2")
                         .type("block")
                         .fromDateTime(LocalDateTime.of(2024, 8, 1, 8, 0, 0))
@@ -85,7 +85,7 @@ class UnitAccessConfigurationTest {
             .certificateType("fk7809")
             .configuration(
                 List.of(
-                    CertificateUnitAccessConfiguration.builder()
+                    CertificateAccessUnitConfiguration.builder()
                         .label("Test 1")
                         .type("allow")
                         .fromDateTime(null)
@@ -101,7 +101,7 @@ class UnitAccessConfigurationTest {
             .certificateType("fk3226")
             .configuration(
                 List.of(
-                    CertificateUnitAccessConfiguration.builder()
+                    CertificateAccessUnitConfiguration.builder()
                         .label("Test 2")
                         .type("block")
                         .fromDateTime(null)

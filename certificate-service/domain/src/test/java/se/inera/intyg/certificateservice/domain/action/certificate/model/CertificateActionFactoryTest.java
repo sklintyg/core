@@ -8,13 +8,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 
 @ExtendWith(MockitoExtension.class)
 class certificateActionFactoryTest {
 
   @Mock
-  CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
+  CertificateActionConfigurationRepository certificateActionConfigurationRepository;
   @InjectMocks
   CertificateActionFactory certificateActionFactory;
 
@@ -424,6 +424,6 @@ class certificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionAccessForRoles.class);
+    assertEquals(certificateAction.getClass(), CertificateActionListCertificateType.class);
   }
 }

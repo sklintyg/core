@@ -17,16 +17,16 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
 import se.inera.intyg.certificateservice.infrastructure.configuration.UnitAccessConfiguration;
-import se.inera.intyg.certificateservice.infrastructure.unitaccess.InMemoryCertificateUnitAccessEvaluationRepository;
+import se.inera.intyg.certificateservice.infrastructure.unitaccess.InMemoryCertificateAccessConfigurationRepository;
 
 @ExtendWith(MockitoExtension.class)
-class InMemoryCertificateUnitAccessEvaluationRepositoryTest {
+class InMemoryCertificateAccessConfigurationRepositoryTest {
 
   private static final String TYPE = "type";
   @Mock
   UnitAccessConfiguration unitAccessConfiguration;
   @InjectMocks
-  InMemoryCertificateUnitAccessEvaluationRepository inMemoryCertificateUnitAccessEvaluationRepository;
+  InMemoryCertificateAccessConfigurationRepository inMemoryCertificateAccessConfigurationRepository;
   private CertificateModel.CertificateModelBuilder certificateModelBuilder;
 
   @BeforeEach
@@ -45,7 +45,7 @@ class InMemoryCertificateUnitAccessEvaluationRepositoryTest {
 
     doReturn(Collections.emptyList()).when(unitAccessConfiguration).get();
 
-    final var result = inMemoryCertificateUnitAccessEvaluationRepository.get(
+    final var result = inMemoryCertificateAccessConfigurationRepository.find(
         certificateModel.id().type()
     );
 
@@ -72,7 +72,7 @@ class InMemoryCertificateUnitAccessEvaluationRepositoryTest {
 
     doReturn(certificateUnitAccessConfigurations).when(unitAccessConfiguration).get();
 
-    final var result = inMemoryCertificateUnitAccessEvaluationRepository.get(
+    final var result = inMemoryCertificateAccessConfigurationRepository.find(
         certificateModel.id().type());
 
     assertEquals(List.of(expectedConfiguration), result);
@@ -92,7 +92,7 @@ class InMemoryCertificateUnitAccessEvaluationRepositoryTest {
 
     doReturn(certificateUnitAccessConfigurations).when(unitAccessConfiguration).get();
 
-    final var result = inMemoryCertificateUnitAccessEvaluationRepository.get(
+    final var result = inMemoryCertificateAccessConfigurationRepository.find(
         certificateModel.id().type()
     );
 

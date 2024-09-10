@@ -8,14 +8,14 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionE
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionRuleUnitAccess;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
 
 @RequiredArgsConstructor
 public class ListAvailableCertificateModelsDomainService {
 
   private final CertificateModelRepository certificateModelRepository;
-  private final CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
+  private final CertificateActionConfigurationRepository certificateActionConfigurationRepository;
 
   public List<CertificateModel> get(ActionEvaluation actionEvaluation) {
     final var certificateModels = certificateModelRepository.findAllActive();
@@ -28,7 +28,7 @@ public class ListAvailableCertificateModelsDomainService {
   private boolean unitAccessEvaluation(CertificateModel certificateModel,
       ActionEvaluation actionEvaluation) {
     final var actionRuleUnitAccess = new ActionRuleUnitAccess(
-        certificateUnitAccessEvaluationRepository
+        certificateActionConfigurationRepository
     );
 
     return actionRuleUnitAccess.evaluate(certificateModel.id().type(), actionEvaluation);

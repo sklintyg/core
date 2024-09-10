@@ -30,8 +30,8 @@ import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertif
 import se.inera.intyg.certificateservice.domain.certificate.service.ValidateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGeneratorCertificatesForCareWithQA;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.service.ListAvailableCertificateModelsDomainService;
 import se.inera.intyg.certificateservice.domain.citizen.service.GetCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.citizen.service.PrintCitizenCertificateDomainService;
@@ -78,9 +78,9 @@ public class AppConfig {
       CertificateModelRepository certificateModelRepository,
       CertificateRepository certificateRepository,
       CertificateEventDomainService certificateEventDomainService,
-      CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository) {
+      CertificateActionConfigurationRepository certificateActionConfigurationRepository) {
     return new CreateCertificateDomainService(certificateModelRepository, certificateRepository,
-        certificateEventDomainService, certificateUnitAccessEvaluationRepository);
+        certificateEventDomainService, certificateActionConfigurationRepository);
   }
 
   @Bean
@@ -410,14 +410,14 @@ public class AppConfig {
   @Bean
   public ListAvailableCertificateModelsDomainService listAvailableCertificateModelsDomainService(
       CertificateModelRepository certificateModelRepository,
-      CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository) {
+      CertificateActionConfigurationRepository certificateActionConfigurationRepository) {
     return new ListAvailableCertificateModelsDomainService(certificateModelRepository,
-        certificateUnitAccessEvaluationRepository);
+        certificateActionConfigurationRepository);
   }
 
   @Bean
   public CertificateActionFactory certificateActionFactory(
-      CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository) {
-    return new CertificateActionFactory(certificateUnitAccessEvaluationRepository);
+      CertificateActionConfigurationRepository certificateActionConfigurationRepository) {
+    return new CertificateActionFactory(certificateActionConfigurationRepository);
   }
 }

@@ -9,13 +9,13 @@ import java.util.Collections;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateUnitAccessConfiguration.CertificateUnitAccessConfigurationBuilder;
+import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessUnitConfiguration.CertificateUnitAccessConfigurationBuilder;
 
 @JsonInclude
 @JsonDeserialize(builder = CertificateUnitAccessConfigurationBuilder.class)
 @Builder
 @Value
-public class CertificateUnitAccessConfiguration {
+public class CertificateAccessUnitConfiguration {
 
   @JsonProperty("label")
   String label;

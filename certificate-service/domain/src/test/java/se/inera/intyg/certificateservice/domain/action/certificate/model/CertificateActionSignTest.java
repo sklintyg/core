@@ -36,12 +36,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateUnitAccessConfiguration;
+import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessUnitConfiguration;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateActionSignTest {
@@ -64,7 +64,7 @@ class CertificateActionSignTest {
           .build();
 
   @Mock
-  CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
+  CertificateActionConfigurationRepository certificateActionConfigurationRepository;
   @InjectMocks
   CertificateActionFactory certificateActionFactory;
 
@@ -293,8 +293,8 @@ class CertificateActionSignTest {
 
     @BeforeEach
     void setUp() {
-      doReturn(Collections.emptyList()).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(Collections.emptyList()).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
       certificateActionSign = (CertificateActionSign) certificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION);
       certificateBuilder = Certificate.builder()
@@ -538,7 +538,7 @@ class CertificateActionSignTest {
               .certificateType(CERTIFICATE_TYPE.type())
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type("allow")
                           .fromDateTime(LocalDateTime.now().minusDays(1))
                           .careProviders(List.of(ALFA_REGIONEN.hsaId().id()))
@@ -547,8 +547,8 @@ class CertificateActionSignTest {
               )
               .build()
       );
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
       final var certificateActionSign = (CertificateActionSign) certificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION
       );
@@ -571,7 +571,7 @@ class CertificateActionSignTest {
               .certificateType(CERTIFICATE_TYPE.type())
               .configuration(
                   List.of(
-                      CertificateUnitAccessConfiguration.builder()
+                      CertificateAccessUnitConfiguration.builder()
                           .type("block")
                           .fromDateTime(LocalDateTime.now().minusDays(1))
                           .careProviders(List.of(ALFA_REGIONEN.hsaId().id()))
@@ -580,8 +580,8 @@ class CertificateActionSignTest {
               )
               .build()
       );
-      doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_TYPE);
+      doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_TYPE);
       final var certificateActionSign = (CertificateActionSign) certificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION
       );

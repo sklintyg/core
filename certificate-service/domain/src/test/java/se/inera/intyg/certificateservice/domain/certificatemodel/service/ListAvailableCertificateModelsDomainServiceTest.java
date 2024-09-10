@@ -21,10 +21,10 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionE
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
 import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateUnitAccessConfiguration;
+import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessUnitConfiguration;
 
 @ExtendWith(MockitoExtension.class)
 class ListAvailableCertificateModelsDomainServiceTest {
@@ -43,7 +43,7 @@ class ListAvailableCertificateModelsDomainServiceTest {
   @Mock
   CertificateModel certificateModelTwo;
   @Mock
-  CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
+  CertificateActionConfigurationRepository certificateActionConfigurationRepository;
   @Mock
   CertificateModelRepository certificateModelRepository;
   @InjectMocks
@@ -102,7 +102,7 @@ class ListAvailableCertificateModelsDomainServiceTest {
         CertificateAccessConfiguration.builder()
             .configuration(
                 List.of(
-                    CertificateUnitAccessConfiguration.builder()
+                    CertificateAccessUnitConfiguration.builder()
                         .fromDateTime(LocalDateTime.now().minusDays(1))
                         .type("block")
                         .issuedOnUnit(
@@ -114,10 +114,10 @@ class ListAvailableCertificateModelsDomainServiceTest {
             .build()
     );
 
-    doReturn(Collections.emptyList()).when(certificateUnitAccessEvaluationRepository)
-        .get(CERTIFICATE_TYPE_1);
-    doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-        .get(CERTIFICATE_TYPE_2);
+    doReturn(Collections.emptyList()).when(certificateActionConfigurationRepository)
+        .find(CERTIFICATE_TYPE_1);
+    doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+        .find(CERTIFICATE_TYPE_2);
 
     final var actualCertificateModels = listAvailableCertificateModelsDomainService.get(
         actionEvaluation);

@@ -32,20 +32,20 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateUnitAccessEvaluationRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateUnitAccessConfiguration;
+import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessUnitConfiguration;
 
 @ExtendWith(MockitoExtension.class)
 class CreateCertificateDomainServiceTest {
 
   @Mock
-  private CertificateUnitAccessEvaluationRepository certificateUnitAccessEvaluationRepository;
+  private CertificateActionConfigurationRepository certificateActionConfigurationRepository;
   @Mock
   private CertificateModelRepository certificateModelRepository;
   @Mock
@@ -74,8 +74,8 @@ class CreateCertificateDomainServiceTest {
     @BeforeEach
     void setUp() {
       doReturn(CERTIFICATE_MODEL_ID).when(certificateModel).id();
-      doReturn(Collections.emptyList()).when(certificateUnitAccessEvaluationRepository)
-          .get(CERTIFICATE_MODEL_ID.type());
+      doReturn(Collections.emptyList()).when(certificateActionConfigurationRepository)
+          .find(CERTIFICATE_MODEL_ID.type());
       doReturn(certificateModel).when(certificateModelRepository).getById(CERTIFICATE_MODEL_ID);
       doReturn(certificate).when(certificateRepository).create(certificateModel);
       doReturn(true).when(certificateModel)
@@ -178,7 +178,7 @@ class CreateCertificateDomainServiceTest {
                 .certificateType(TYPE)
                 .configuration(
                     List.of(
-                        CertificateUnitAccessConfiguration.builder()
+                        CertificateAccessUnitConfiguration.builder()
                             .type("block")
                             .fromDateTime(LocalDateTime.now().minusDays(1))
                             .careUnit(List.of(ALFA_VARDCENTRAL.hsaId().id()))
@@ -188,8 +188,8 @@ class CreateCertificateDomainServiceTest {
                 .build()
         );
         doReturn(CERTIFICATE_MODEL_ID).when(certificateModel).id();
-        doReturn(certificateAccessConfigurations).when(certificateUnitAccessEvaluationRepository)
-            .get(CERTIFICATE_MODEL_ID.type());
+        doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
+            .find(CERTIFICATE_MODEL_ID.type());
         doReturn(certificateModel).when(certificateModelRepository).getById(CERTIFICATE_MODEL_ID);
         doReturn(true).when(certificateModel)
             .allowTo(CertificateActionType.CREATE, Optional.of(ACTION_EVALUATION));
