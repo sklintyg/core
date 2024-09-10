@@ -95,7 +95,8 @@ public enum ResourceLinkTypeDTO {
       case RESPONSIBLE_ISSUER -> RESPONSIBLE_ISSUER;
       case READY_FOR_SIGN -> READY_FOR_SIGN;
       case RECEIVE_COMPLEMENT, RECEIVE_ANSWER, RECEIVE_QUESTION, RECEIVE_REMINDER, SAVE_MESSAGE,
-           DELETE_MESSAGE, SEND_MESSAGE, SAVE_ANSWER, DELETE_ANSWER, SEND_ANSWER ->
+           DELETE_MESSAGE, SEND_MESSAGE, SAVE_ANSWER, DELETE_ANSWER, SEND_ANSWER,
+           LIST_CERTIFICATE_TYPE ->
           throw new IllegalArgumentException("%s is not a valid type!".formatted(type));
     };
   }

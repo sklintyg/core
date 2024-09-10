@@ -8,21 +8,24 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
 
 @Component
+@RequiredArgsConstructor
 public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
 
+  private final CertificateActionFactory certificateActionFactory;
   @Value("${certificate.model.fk7472.v1_0.active.from}")
   private LocalDateTime activeFrom;
   private static final String TYPE = "fk7472";
@@ -69,15 +72,6 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
         .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)
         .availableForCitizen(false)
-        .rolesWithAccess(
-            List.of(
-                Role.DOCTOR,
-                Role.PRIVATE_DOCTOR,
-                Role.NURSE,
-                Role.MIDWIFE,
-                Role.CARE_ADMIN
-            )
-        )
         .recipient(CertificateRecipientFactory.fkassa())
         .schematronPath(SCHEMATRON_PATH)
         .certificateActionSpecifications(FK7472CertificateActionSpecification.create())
@@ -94,6 +88,7 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
                 issuingUnitContactInfo()
             )
         )
+        .certificateActionFactory(certificateActionFactory)
         .build();
   }
 }

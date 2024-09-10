@@ -9,6 +9,10 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
@@ -26,8 +30,11 @@ import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertifica
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.validation.SchematronValidator;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.validation.XmlValidationService;
 
+@ExtendWith(MockitoExtension.class)
 class SchematronValidationFK7472Test {
 
+  @Mock
+  private CertificateActionFactory certificateActionFactory;
   private SchematronValidator schematronValidator;
   private final XmlGeneratorCertificateV4 generator = new XmlGeneratorCertificateV4(
       new XmlGeneratorValue(
@@ -43,7 +50,7 @@ class SchematronValidationFK7472Test {
   @BeforeEach
   void setUp() {
     schematronValidator = new SchematronValidator();
-    certificateModelFactoryFK7472 = new CertificateModelFactoryFK7472();
+    certificateModelFactoryFK7472 = new CertificateModelFactoryFK7472(certificateActionFactory);
   }
 
   @Test

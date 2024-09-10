@@ -1,19 +1,20 @@
 package se.inera.intyg.certificateservice.domain.action.certificate.model;
 
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 
+@RequiredArgsConstructor
 public class CertificateActionFactory {
 
-  private CertificateActionFactory() {
-    throw new IllegalStateException("Utility class");
-  }
+  private final CertificateActionConfigurationRepository certificateActionConfigurationRepository;
 
-  public static CertificateAction create(CertificateActionSpecification actionSpecification) {
+  public CertificateAction create(CertificateActionSpecification actionSpecification) {
     return switch (actionSpecification.certificateActionType()) {
       case CREATE -> CertificateActionCreate.builder()
           .certificateActionSpecification(actionSpecification)
@@ -78,7 +79,9 @@ public class CertificateActionFactory {
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleRole(actionSpecification.allowedRoles()),
                   new ActionRuleStatus(List.of(Status.DRAFT)),
-                  new ActionRuleProtectedPerson()
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleCertificateTypeActiveForUnit(
+                      certificateActionConfigurationRepository)
               )
           )
           .build();
@@ -435,6 +438,10 @@ public class CertificateActionFactory {
                   )
               )
           )
+          .build();
+      case LIST_CERTIFICATE_TYPE -> CertificateActionListCertificateType.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(List.of(new ActionRuleRole(actionSpecification.allowedRoles())))
           .build();
     };
   }

@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.With;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
@@ -16,10 +18,10 @@ import se.inera.intyg.certificateservice.domain.action.message.model.MessageActi
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
 
 @Value
 @Builder
+@RequiredArgsConstructor
 public class CertificateModel {
 
   CertificateModelId id;
@@ -37,14 +39,15 @@ public class CertificateModel {
   SchematronPath schematronPath;
   List<CertificateText> texts;
   CertificateSummaryProvider summaryProvider;
-  List<Role> rolesWithAccess;
   List<CertificateMessageType> messageTypes;
   PdfSpecification pdfSpecification;
   CertificateConfirmationModalProvider confirmationModalProvider;
+  @With
+  CertificateActionFactory certificateActionFactory;
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()
-        .map(CertificateActionFactory::create)
+        .map(certificateActionFactory::create)
         .filter(Objects::nonNull)
         .toList();
   }
@@ -68,10 +71,6 @@ public class CertificateModel {
     return actions().stream()
         .filter(certificateAction -> certificateAction.include(Optional.empty(), actionEvaluation))
         .toList();
-  }
-
-  public boolean activeForUserRole(ActionEvaluation actionEvaluation) {
-    return this.rolesWithAccess.contains(actionEvaluation.user().role());
   }
 
   public boolean allowTo(CertificateActionType certificateActionType,

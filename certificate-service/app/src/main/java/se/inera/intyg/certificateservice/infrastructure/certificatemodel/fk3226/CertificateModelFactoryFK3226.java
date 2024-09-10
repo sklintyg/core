@@ -23,6 +23,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateMessageType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
@@ -32,7 +33,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Schematro
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
@@ -43,7 +43,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 @RequiredArgsConstructor
 public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
 
-  private final DiagnosisCodeRepository diagnosisCodeRepositoy;
+  private final DiagnosisCodeRepository diagnosisCodeRepository;
+  private final CertificateActionFactory certificateActionFactory;
 
   @Value("${certificate.model.fk3226.v1_0.active.from}")
   private LocalDateTime activeFrom;
@@ -102,15 +103,6 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     .build()
             )
         )
-        .rolesWithAccess(
-            List.of(
-                Role.DOCTOR,
-                Role.PRIVATE_DOCTOR,
-                Role.NURSE,
-                Role.MIDWIFE,
-                Role.CARE_ADMIN
-            )
-        )
         .recipient(CertificateRecipientFactory.fkassa())
         .messageTypes(
             List.of(
@@ -140,7 +132,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                     )
                 ),
                 categoryHot(
-                    questionDiagnos(diagnosisCodeRepositoy),
+                    questionDiagnos(diagnosisCodeRepository),
                     questionPatientBehandlingOchVardsituation(
                         questionNarAktivaBehandlingenAvslutades(),
                         questionNarTillstandetBlevAkutLivshotande(),
@@ -157,6 +149,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                 issuingUnitContactInfo()
             )
         )
+        .certificateActionFactory(certificateActionFactory)
         .build();
   }
 }

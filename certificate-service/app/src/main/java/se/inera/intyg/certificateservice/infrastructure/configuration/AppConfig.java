@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.configuration;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.repository.StatisticsRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.AnswerComplementDomainService;
@@ -29,7 +30,9 @@ import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertif
 import se.inera.intyg.certificateservice.domain.certificate.service.ValidateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGeneratorCertificatesForCareWithQA;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.domain.certificatemodel.service.ListAvailableCertificateModelsDomainService;
 import se.inera.intyg.certificateservice.domain.citizen.service.GetCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.citizen.service.PrintCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
@@ -74,9 +77,10 @@ public class AppConfig {
   public CreateCertificateDomainService createCertificateDomainService(
       CertificateModelRepository certificateModelRepository,
       CertificateRepository certificateRepository,
-      CertificateEventDomainService certificateEventDomainService) {
+      CertificateEventDomainService certificateEventDomainService,
+      CertificateActionConfigurationRepository certificateActionConfigurationRepository) {
     return new CreateCertificateDomainService(certificateModelRepository, certificateRepository,
-        certificateEventDomainService);
+        certificateEventDomainService, certificateActionConfigurationRepository);
   }
 
   @Bean
@@ -401,5 +405,19 @@ public class AppConfig {
       CertificateEventDomainService certificateEventDomainService) {
     return new SetCertificateReadyForSignDomainService(certificateRepository,
         certificateEventDomainService);
+  }
+
+  @Bean
+  public ListAvailableCertificateModelsDomainService listAvailableCertificateModelsDomainService(
+      CertificateModelRepository certificateModelRepository,
+      CertificateActionConfigurationRepository certificateActionConfigurationRepository) {
+    return new ListAvailableCertificateModelsDomainService(certificateModelRepository,
+        certificateActionConfigurationRepository);
+  }
+
+  @Bean
+  public CertificateActionFactory certificateActionFactory(
+      CertificateActionConfigurationRepository certificateActionConfigurationRepository) {
+    return new CertificateActionFactory(certificateActionConfigurationRepository);
   }
 }

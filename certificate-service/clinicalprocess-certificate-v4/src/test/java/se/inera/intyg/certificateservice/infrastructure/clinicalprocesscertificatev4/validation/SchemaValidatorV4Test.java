@@ -5,6 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorCertificateV4;
@@ -13,15 +17,18 @@ import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertifica
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorText;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorValue;
 
+@ExtendWith(MockitoExtension.class)
 class SchemaValidatorV4Test {
 
+  @Mock
+  private CertificateActionFactory certificateActionFactory;
   private SchemaValidatorV4 schemaValidatorV4;
   private CertificateModelFactoryFK7210 certificateModelFactoryFK7210;
 
   @BeforeEach
   void setUp() {
     schemaValidatorV4 = new SchemaValidatorV4();
-    certificateModelFactoryFK7210 = new CertificateModelFactoryFK7210();
+    certificateModelFactoryFK7210 = new CertificateModelFactoryFK7210(certificateActionFactory);
   }
 
   @Test

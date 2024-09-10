@@ -18,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
@@ -26,7 +27,6 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,11 +37,14 @@ class CertificateModelFactoryFK3226Test {
   private CertificateModelFactoryFK3226 certificateModelFactoryFK3226;
 
   @Mock
+  private CertificateActionFactory certificateActionFactory;
+  @Mock
   private DiagnosisCodeRepository diagnosisCodeRepository;
 
   @BeforeEach
   void setUp() {
-    certificateModelFactoryFK3226 = new CertificateModelFactoryFK3226(diagnosisCodeRepository);
+    certificateModelFactoryFK3226 = new CertificateModelFactoryFK3226(diagnosisCodeRepository,
+        certificateActionFactory);
   }
 
   @Test
@@ -140,16 +143,6 @@ class CertificateModelFactoryFK3226Test {
     final var certificateModel = certificateModelFactoryFK3226.create();
 
     assertEquals(SCHEMATRON_PATH, certificateModel.schematronPath());
-  }
-
-  @Test
-  void shallIncludeActiveForRoles() {
-    final var expected = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-        Role.CARE_ADMIN);
-
-    final var certificateModel = certificateModelFactoryFK3226.create();
-
-    assertEquals(expected, certificateModel.rolesWithAccess());
   }
 
   @Test
@@ -358,5 +351,12 @@ class CertificateModelFactoryFK3226Test {
                   certificateModel.elementSpecifications())
       );
     }
+  }
+
+  @Test
+  void shallIncludeCertificateActionFactory() {
+    final var certificateModel = certificateModelFactoryFK3226.create();
+
+    assertEquals(certificateActionFactory, certificateModel.certificateActionFactory());
   }
 }

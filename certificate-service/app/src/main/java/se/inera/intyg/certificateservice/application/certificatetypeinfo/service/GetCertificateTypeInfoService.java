@@ -8,16 +8,16 @@ import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.Get
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.converter.CertificateTypeInfoConverter;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.service.validator.CertificateTypeInfoValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.domain.certificatemodel.service.ListAvailableCertificateModelsDomainService;
 
 @Service
 @RequiredArgsConstructor
 public class GetCertificateTypeInfoService {
 
   private final CertificateTypeInfoValidator certificateTypeInfoValidator;
-  private final CertificateModelRepository certificateModelRepository;
   private final CertificateTypeInfoConverter certificateTypeInfoConverter;
   private final ActionEvaluationFactory actionEvaluationFactory;
+  private final ListAvailableCertificateModelsDomainService availableCertificateModelsDomainService;
 
   public GetCertificateTypeInfoResponse getActiveCertificateTypeInfos(
       GetCertificateTypeInfoRequest getCertificateTypeInfoRequest) {
@@ -29,11 +29,11 @@ public class GetCertificateTypeInfoService {
         getCertificateTypeInfoRequest.getCareUnit(),
         getCertificateTypeInfoRequest.getCareProvider()
     );
-    final var certificateModels = certificateModelRepository.findAllActive();
+
+    final var certificateModels = availableCertificateModelsDomainService.get(actionEvaluation);
     return GetCertificateTypeInfoResponse.builder()
         .list(
             certificateModels.stream()
-                .filter(certificateModel -> certificateModel.activeForUserRole(actionEvaluation))
                 .map(certificateModel ->
                     certificateTypeInfoConverter.convert(
                         certificateModel,

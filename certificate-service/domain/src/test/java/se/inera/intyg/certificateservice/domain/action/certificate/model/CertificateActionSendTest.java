@@ -21,17 +21,23 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 
+@ExtendWith(MockitoExtension.class)
 class CertificateActionSendTest {
 
   private CertificateActionSend certificateActionSend;
@@ -43,9 +49,14 @@ class CertificateActionSendTest {
           .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
           .build();
 
+  @Mock
+  CertificateActionConfigurationRepository certificateActionConfigurationRepository;
+  @InjectMocks
+  CertificateActionFactory certificateActionFactory;
+
   @BeforeEach
   void setUp() {
-    certificateActionSend = (CertificateActionSend) CertificateActionFactory.create(
+    certificateActionSend = (CertificateActionSend) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION);
 
     certificateBuilder = Certificate.builder()
@@ -274,7 +285,7 @@ class CertificateActionSendTest {
 
     @BeforeEach
     void setUp() {
-      certificateActionSend = (CertificateActionSend) CertificateActionFactory.create(
+      certificateActionSend = (CertificateActionSend) certificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION);
       certificateBuilder = Certificate.builder()
           .status(Status.SIGNED)

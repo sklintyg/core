@@ -13,18 +13,20 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJL
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation.ActionEvaluationBuilder;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionMessages;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 
+@ExtendWith(MockitoExtension.class)
 class CertificateActionMessagesTest {
 
   private CertificateActionMessages certificateActionMessages;
@@ -35,10 +37,14 @@ class CertificateActionMessagesTest {
           .build();
   private CertificateBuilder certificateBuilder;
   private ActionEvaluationBuilder actionEvaluationBuilder;
+  @Mock
+  CertificateActionConfigurationRepository certificateActionConfigurationRepository;
+  @InjectMocks
+  CertificateActionFactory certificateActionFactory;
 
   @BeforeEach
   void setUp() {
-    certificateActionMessages = (CertificateActionMessages) CertificateActionFactory.create(
+    certificateActionMessages = (CertificateActionMessages) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION
     );
 

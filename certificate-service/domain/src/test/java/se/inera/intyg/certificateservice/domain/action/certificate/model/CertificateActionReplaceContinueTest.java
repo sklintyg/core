@@ -30,14 +30,20 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 
+@ExtendWith(MockitoExtension.class)
 class CertificateActionReplaceContinueTest {
 
   private CertificateActionReplaceContinue certificateActionReplaceContinue;
@@ -47,10 +53,14 @@ class CertificateActionReplaceContinueTest {
       CertificateActionSpecification.builder()
           .certificateActionType(CertificateActionType.REPLACE_CONTINUE)
           .build();
+  @Mock
+  CertificateActionConfigurationRepository certificateActionConfigurationRepository;
+  @InjectMocks
+  CertificateActionFactory certificateActionFactory;
 
   @BeforeEach
   void setUp() {
-    certificateActionReplaceContinue = (CertificateActionReplaceContinue) CertificateActionFactory.create(
+    certificateActionReplaceContinue = (CertificateActionReplaceContinue) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION);
 
     certificateBuilder = Certificate.builder()
@@ -382,7 +392,7 @@ class CertificateActionReplaceContinueTest {
 
     @BeforeEach
     void setUp() {
-      certificateActionReplaceContinue = (CertificateActionReplaceContinue) CertificateActionFactory.create(
+      certificateActionReplaceContinue = (CertificateActionReplaceContinue) certificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION);
       certificateBuilder = Certificate.builder()
           .status(Status.SIGNED)

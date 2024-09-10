@@ -6,8 +6,10 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -17,13 +19,14 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
 
 @Component
+@RequiredArgsConstructor
 public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
 
+  private final CertificateActionFactory certificateActionFactory;
   @Value("${certificate.model.fk7210.v1_0.active.from}")
   private LocalDateTime activeFrom;
   private static final String FK_7210 = "fk7210";
@@ -75,15 +78,6 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
         .schematronPath(SCHEMATRON_PATH)
         .summaryProvider(new FK7210CertificateSummaryProvider())
         .pdfSpecification(FK7210PdfSpecification.create())
-        .rolesWithAccess(
-            List.of(
-                Role.DOCTOR,
-                Role.PRIVATE_DOCTOR,
-                Role.NURSE,
-                Role.MIDWIFE,
-                Role.CARE_ADMIN
-            )
-        )
         .texts(
             List.of(
                 CertificateText.builder()
@@ -105,6 +99,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
                 issuingUnitContactInfo()
             )
         )
+        .certificateActionFactory(certificateActionFactory)
         .build();
   }
 }

@@ -286,4 +286,19 @@ class FK7472CertificateActionSpecificationTest {
             expectedSpecification::equals),
         "Expected type: %s".formatted(expectedSpecification));
   }
+
+  @Test
+  void shallIncludeCertificateActionAccessForRoles() {
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+            Role.CARE_ADMIN))
+        .build();
+
+    final var actionSpecifications = FK7472CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
+  }
 }

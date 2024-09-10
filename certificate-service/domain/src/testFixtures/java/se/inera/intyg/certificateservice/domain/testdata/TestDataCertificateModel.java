@@ -27,6 +27,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpeci
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecification.FK7809_PDF_SPECIFICATION;
 
 import java.util.Collections;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 
@@ -51,7 +52,8 @@ public class TestDataCertificateModel {
         .certificateActionSpecifications(Collections.emptyList())
         .schematronPath(FK7210_SCHEMATRON_PATH)
         .recipient(FK_RECIPIENT)
-        .pdfSpecification(FK7210_PDF_SPECIFICATION);
+        .pdfSpecification(FK7210_PDF_SPECIFICATION)
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
   public static CertificateModel.CertificateModelBuilder fk3226certificateModelBuilder() {
@@ -68,7 +70,8 @@ public class TestDataCertificateModel {
         .availableForCitizen(true)
         .schematronPath(FK3226_SCHEMATRON_PATH)
         .recipient(FK_RECIPIENT)
-        .pdfSpecification(FK3226_PDF_SPECIFICATION);
+        .pdfSpecification(FK3226_PDF_SPECIFICATION)
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
 
@@ -86,7 +89,8 @@ public class TestDataCertificateModel {
         .availableForCitizen(false)
         .schematronPath(FK7472_SCHEMATRON_PATH)
         .recipient(FK_RECIPIENT)
-        .pdfSpecification(FK7472_PDF_SPECIFICATION);
+        .pdfSpecification(FK7472_PDF_SPECIFICATION)
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
   public static CertificateModel.CertificateModelBuilder fk7809certificateModelBuilder() {
@@ -103,6 +107,7 @@ public class TestDataCertificateModel {
         .availableForCitizen(true)
         .schematronPath(FK7809_SCHEMATRON_PATH)
         .pdfSpecification(FK7809_PDF_SPECIFICATION)
-        .recipient(FK_RECIPIENT);
+        .recipient(FK_RECIPIENT)
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 }

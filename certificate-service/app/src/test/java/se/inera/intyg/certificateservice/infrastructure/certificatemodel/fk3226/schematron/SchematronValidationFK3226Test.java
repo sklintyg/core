@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
@@ -42,6 +43,8 @@ import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertifica
 class SchematronValidationFK3226Test {
 
   @Mock
+  private CertificateActionFactory certificateActionFactory;
+  @Mock
   private DiagnosisCodeRepository diagnosisCodeRepository;
   private SchematronValidator schematronValidator;
   private final XmlGeneratorCertificateV4 generator = new XmlGeneratorCertificateV4(
@@ -65,7 +68,8 @@ class SchematronValidationFK3226Test {
   @BeforeEach
   void setUp() {
     schematronValidator = new SchematronValidator();
-    certificateModelFactoryFK3226 = new CertificateModelFactoryFK3226(diagnosisCodeRepository);
+    certificateModelFactoryFK3226 = new CertificateModelFactoryFK3226(diagnosisCodeRepository,
+        certificateActionFactory);
   }
 
   @Nested
