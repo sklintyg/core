@@ -13,7 +13,8 @@ public class GetCertificateEventsOfTypeDomainService {
 
   public List<CertificateEvent> events(Certificate certificate, CertificateEventType type) {
     return switch (type) {
-      case CREATED -> List.of(eventFromTimestamp(certificate, certificate.created(), type));
+      case CREATED ->
+          List.of(eventFromTimestampAndRelation(certificate, certificate.created(), type));
       case SIGNED, AVAILABLE_FOR_PATIENT ->
           List.of(eventFromTimestamp(certificate, certificate.signed(), type));
       case SENT -> certificate.sent() != null
@@ -116,5 +117,16 @@ public class GetCertificateEventsOfTypeDomainService {
         .type(type)
         .timestamp(timestamp)
         .build();
+  }
+
+  private static CertificateEvent eventFromTimestampAndRelation(Certificate certificate,
+      LocalDateTime timestamp, CertificateEventType type) {
+
+    if (certificate.parent() != null && (certificate.parent().type().equals(RelationType.REPLACE)
+        || certificate.parent().type().equals(RelationType.COMPLEMENT))) {
+      return CertificateEvent.builder().build();
+
+    }
+    return eventFromTimestamp(certificate, timestamp, type);
   }
 }

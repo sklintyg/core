@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificate.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7809CertificateBuilder;
 
 import java.time.LocalDateTime;
@@ -55,6 +56,62 @@ class GetCertificateEventsOfTypeDomainServiceTest {
           List.of(expected),
           getCertificateEventsOfTypeDomainService.events(certificate, CertificateEventType.CREATED)
       );
+    }
+
+    @Test
+    void shouldNotReturnCreatedEventIfCertificateHasParentRelationReplace() {
+      final var parent = fk7809CertificateBuilder()
+          .id(CERTIFICATE_ID)
+          .build();
+      final var certificate = fk7809CertificateBuilder()
+          .created(LocalDateTime.now())
+          .parent(
+              Relation.builder()
+                  .certificate(parent)
+                  .created(NOW)
+                  .type(RelationType.REPLACE)
+                  .build()
+
+          )
+          .build();
+
+      final var createdEvent = CertificateEvent.builder()
+          .certificateId(certificate.id())
+          .timestamp(certificate.created())
+          .type(CertificateEventType.CREATED)
+          .build();
+
+      assertFalse(
+          getCertificateEventsOfTypeDomainService.events(certificate, CertificateEventType.CREATED)
+              .contains(createdEvent));
+    }
+
+    @Test
+    void shouldNotReturnCreatedEventIfCertificateHasParentRelationComplement() {
+      final var parent = fk7809CertificateBuilder()
+          .id(CERTIFICATE_ID)
+          .build();
+      final var certificate = fk7809CertificateBuilder()
+          .created(LocalDateTime.now())
+          .parent(
+              Relation.builder()
+                  .certificate(parent)
+                  .created(NOW)
+                  .type(RelationType.COMPLEMENT)
+                  .build()
+
+          )
+          .build();
+
+      final var createdEvent = CertificateEvent.builder()
+          .certificateId(certificate.id())
+          .timestamp(certificate.created())
+          .type(CertificateEventType.CREATED)
+          .build();
+
+      assertFalse(
+          getCertificateEventsOfTypeDomainService.events(certificate, CertificateEventType.CREATED)
+              .contains(createdEvent));
     }
   }
 
