@@ -664,11 +664,6 @@ public class FK3226ActiveIT {
     protected String typeVersion() {
       return FK3226Constants.VERSION;
     }
-
-    @Override
-    protected boolean canRecieveQuestions() {
-      return true;
-    }
   }
 
   @Nested

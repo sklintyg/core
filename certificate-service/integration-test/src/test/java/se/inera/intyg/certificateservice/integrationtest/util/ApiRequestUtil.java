@@ -332,12 +332,12 @@ public class ApiRequestUtil {
     return ForwardCertificateMessageRequestBuilder.create();
   }
 
-  public static CertificatesInternalWithQARequest defaultGetPatientCertificatesWithQARequest() {
-    return GetPatientCertificatesWithQARequestBuilder.create().build();
+  public static CertificatesInternalWithQARequest defaultGetCertificatesInternalWithQARequest() {
+    return GetCertificatesInternalWithQARequestBuilder.create().build();
   }
 
-  public static GetPatientCertificatesWithQARequestBuilder customGetPatientCertificatesWithQARequest() {
-    return GetPatientCertificatesWithQARequestBuilder.create();
+  public static GetCertificatesInternalWithQARequestBuilder customGetCertificatesInternalWithQARequest() {
+    return GetCertificatesInternalWithQARequestBuilder.create();
   }
 
   public static UnitStatisticsRequest defaultUnitStatisticsRequest() {

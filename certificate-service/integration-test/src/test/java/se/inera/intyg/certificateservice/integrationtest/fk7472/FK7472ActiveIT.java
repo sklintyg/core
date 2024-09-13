@@ -754,11 +754,6 @@ public class FK7472ActiveIT {
     protected String typeVersion() {
       return ACTIVE_VERSION;
     }
-
-    @Override
-    protected boolean canRecieveQuestions() {
-      return false;
-    }
   }
 
   @Nested
