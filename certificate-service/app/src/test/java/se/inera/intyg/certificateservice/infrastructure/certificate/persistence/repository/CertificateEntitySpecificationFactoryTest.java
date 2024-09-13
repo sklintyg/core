@@ -19,7 +19,6 @@ import org.mockito.MockedStatic;
 import org.springframework.data.jpa.domain.Specification;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
-import se.inera.intyg.certificateservice.domain.patient.model.CertificatesWithQARequest;
 
 class CertificateEntitySpecificationFactoryTest {
 
@@ -371,101 +370,6 @@ class CertificateEntitySpecificationFactoryTest {
               StatusEntitySpecification.class)
       ) {
         assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
-        specification.verifyNoInteractions();
-      }
-    }
-  }
-
-  @Nested
-  class CertificatesWithQARequestTests {
-
-    @Test
-    void shallIncludePatientId() {
-      final var certificatesRequest = CertificatesWithQARequest.builder()
-          .personId(ATHENA_REACT_ANDERSSON.id())
-          .build();
-      try (
-          MockedStatic<PatientEntitySpecification> specification = mockStatic(
-              PatientEntitySpecification.class)
-      ) {
-        specification.when(
-                () -> PatientEntitySpecification.equalsPatient(certificatesRequest.personId()))
-            .thenReturn(mock(Specification.class));
-
-        assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
-
-        specification.verify(
-            () -> PatientEntitySpecification.equalsPatient(certificatesRequest.personId())
-        );
-      }
-    }
-
-    @Test
-    void shallIncludeCareProviderId() {
-      final var certificatesRequest = CertificatesWithQARequest.builder()
-          .careProviderId(ALFA_MEDICINSKT_CENTRUM.hsaId())
-          .build();
-      try (
-          MockedStatic<UnitEntitySpecification> specification = mockStatic(
-              UnitEntitySpecification.class)
-      ) {
-        specification.when(
-                () -> UnitEntitySpecification.equalsCareProvider(certificatesRequest.careProviderId()))
-            .thenReturn(mock(Specification.class));
-
-        assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
-
-        specification.verify(
-            () -> UnitEntitySpecification.equalsCareProvider(certificatesRequest.careProviderId())
-        );
-      }
-    }
-
-    @Test
-    void shallNotIncludeCareProviderId() {
-      final var certificatesRequest = CertificatesWithQARequest.builder()
-          .build();
-      try (
-          MockedStatic<UnitEntitySpecification> specification = mockStatic(
-              UnitEntitySpecification.class)
-      ) {
-        assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
-
-        specification.verifyNoInteractions();
-      }
-    }
-
-    @Test
-    void shallIncludeIssuedOnUnitIds() {
-      final var certificatesRequest = CertificatesWithQARequest.builder()
-          .unitIds(List.of(ALFA_MEDICINSKT_CENTRUM.hsaId()))
-          .build();
-      try (
-          MockedStatic<UnitEntitySpecification> specification = mockStatic(
-              UnitEntitySpecification.class)
-      ) {
-        specification.when(
-                () -> UnitEntitySpecification.issuedOnUnitIdIn(certificatesRequest.unitIds()))
-            .thenReturn(mock(Specification.class));
-
-        assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
-
-        specification.verify(
-            () -> UnitEntitySpecification.issuedOnUnitIdIn(certificatesRequest.unitIds())
-        );
-      }
-    }
-
-    @Test
-    void shallNotIncludeIssuedOnUnitIds() {
-      final var certificatesRequest = CertificatesWithQARequest.builder()
-          .build();
-      try (
-          MockedStatic<UnitEntitySpecification> specification = mockStatic(
-              UnitEntitySpecification.class)
-      ) {
-        assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
-
         specification.verifyNoInteractions();
       }
     }

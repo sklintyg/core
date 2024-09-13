@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
@@ -23,13 +22,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.jpa.domain.Specification;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
-import se.inera.intyg.certificateservice.domain.patient.model.CertificatesWithQARequest;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateModelEntity;
@@ -415,21 +412,42 @@ class JpaCertificateRepositoryTest {
   }
 
   @Nested
-  class FindByCertificatesWithQARequestTests {
+  class FindByIdsTests {
 
     @Test
-    void shouldReturnListOfCertificateWithSpecificationFromRequest() {
+    void shallReturnListOfCertificate() {
       final var expectedCertificates = List.of(CERTIFICATE);
-      final var request = CertificatesWithQARequest.builder().build();
-      final var specification = mock(Specification.class);
-      doReturn(specification).when(certificateEntitySpecificationFactory).create(request);
+      final var request = List.of(CERTIFICATE_ID);
+      final var certificateIds = List.of(CERTIFICATE_ID.id());
+
       doReturn(List.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository)
-          .findAll(specification);
+          .findCertificateEntitiesByCertificateIdIn(certificateIds);
       doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
 
-      final var actualCertificates = jpaCertificateRepository.findByCertificatesWithQARequest(
-          request);
+      final var actualCertificates = jpaCertificateRepository.findByIds(request);
       assertEquals(expectedCertificates, actualCertificates);
+    }
+
+    @Test
+    void shallReturnEmptyListIfNoCertificateIdsArePresent() {
+      final var expectedCertificates = Collections.emptyList();
+      final var request = List.of(CERTIFICATE_ID);
+      final var certificateIds = List.of(CERTIFICATE_ID.id());
+
+      doReturn(Collections.emptyList()).when(certificateEntityRepository)
+          .findCertificateEntitiesByCertificateIdIn(certificateIds);
+
+      final var actualCertificates = jpaCertificateRepository.findByIds(request);
+      assertEquals(expectedCertificates, actualCertificates);
+    }
+
+    @Test
+    void shallThrowIfCertificateIdsIsNull() {
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> jpaCertificateRepository.findByIds(null));
+
+      assertEquals("Cannot get certificate if certificateIds is null",
+          illegalArgumentException.getMessage());
     }
   }
 }

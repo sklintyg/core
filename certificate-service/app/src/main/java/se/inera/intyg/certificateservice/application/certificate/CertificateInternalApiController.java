@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesInternalWithQARequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesInternalWithQAResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
@@ -18,6 +20,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.GetCert
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalXmlService;
 import se.inera.intyg.certificateservice.application.certificate.service.LockDraftsInternalService;
+import se.inera.intyg.certificateservice.application.patient.service.GetCertificatesWithQAInternalService;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,6 +32,7 @@ public class CertificateInternalApiController {
   private final GetCertificateInternalService getCertificateInternalService;
   private final CertificateExistsService certificateExistsService;
   private final LockDraftsInternalService lockDraftsInternalService;
+  private final GetCertificatesWithQAInternalService getCertificatesWithQAInternalService;
 
   @GetMapping("/{certificateId}/exists")
   CertificateExistsResponse findExistingCertificate(
@@ -57,5 +61,11 @@ public class CertificateInternalApiController {
   @PostMapping("/lock")
   LockDraftsResponse lockDrafts(@RequestBody LockDraftsRequest request) {
     return lockDraftsInternalService.lock(request);
+  }
+
+  @PostMapping("/qa")
+  CertificatesInternalWithQAResponse getCertificatesWithQA(
+      @RequestBody CertificatesInternalWithQARequest request) {
+    return getCertificatesWithQAInternalService.get(request);
   }
 }

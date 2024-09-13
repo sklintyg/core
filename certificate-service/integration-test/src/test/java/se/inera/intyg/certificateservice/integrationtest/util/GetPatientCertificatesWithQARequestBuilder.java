@@ -4,8 +4,8 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
 
 import java.util.List;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesInternalWithQARequest;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
-import se.inera.intyg.certificateservice.application.patient.dto.PatientCertificatesWithQARequest;
 
 public class GetPatientCertificatesWithQARequestBuilder {
 
@@ -36,11 +36,11 @@ public class GetPatientCertificatesWithQARequestBuilder {
     return this;
   }
 
-  public PatientCertificatesWithQARequest build() {
-    return PatientCertificatesWithQARequest.builder()
+  public CertificatesInternalWithQARequest build() {
+    return CertificatesInternalWithQARequest.builder()
         .personId(personId)
         .careProviderId(careProviderId)
-        .unitIds(unitIds)
+        .certificateIds(unitIds)
         .build();
   }
 }

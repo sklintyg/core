@@ -7,14 +7,14 @@ import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator
 import se.inera.intyg.certificateservice.domain.patient.model.CertificatesWithQARequest;
 
 @RequiredArgsConstructor
-public class GetPatientCertificatesWithQAInternalDomainService {
+public class GetCertificatesWithQAInternalDomainService {
 
   private final CertificateRepository certificateRepository;
   private final XmlGeneratorCertificatesForCareWithQA xmlGeneratorCertificatesForCareWithQA;
 
   public Xml get(CertificatesWithQARequest request) {
-    final var certificates = certificateRepository.findByCertificatesWithQARequest(
-        request
+    final var certificates = certificateRepository.findByIds(
+        request.certificateIds()
     );
 
     return xmlGeneratorCertificatesForCareWithQA.generate(certificates);
