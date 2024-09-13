@@ -113,6 +113,34 @@ class GetCertificateEventsOfTypeDomainServiceTest {
           getCertificateEventsOfTypeDomainService.events(certificate, CertificateEventType.CREATED)
               .contains(createdEvent));
     }
+
+    @Test
+    void shouldNotReturnCreatedEventIfCertificateHasParentRelationRenew() {
+      final var parent = fk7809CertificateBuilder()
+          .id(CERTIFICATE_ID)
+          .build();
+      final var certificate = fk7809CertificateBuilder()
+          .created(LocalDateTime.now())
+          .parent(
+              Relation.builder()
+                  .certificate(parent)
+                  .created(NOW)
+                  .type(RelationType.RENEW)
+                  .build()
+
+          )
+          .build();
+
+      final var createdEvent = CertificateEvent.builder()
+          .certificateId(certificate.id())
+          .timestamp(certificate.created())
+          .type(CertificateEventType.CREATED)
+          .build();
+
+      assertFalse(
+          getCertificateEventsOfTypeDomainService.events(certificate, CertificateEventType.CREATED)
+              .contains(createdEvent));
+    }
   }
 
   @Nested
