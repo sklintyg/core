@@ -11,9 +11,13 @@ public class PdfValueGeneratorUtil {
     throw new IllegalStateException("Utility class");
   }
 
-  public static List<String> splitByLimit(Integer limit, String s) {
+  public static List<String> splitByLimit(Integer limit, String s,
+      boolean addOverflowOnContinuationSheet) {
+
     final var informationText =
-        limit <= OVERFLOW_MESSAGE.length() ? SMALL_OVERFLOW_MESSAGE : OVERFLOW_MESSAGE;
+        limit <= OVERFLOW_MESSAGE.length() || !addOverflowOnContinuationSheet
+            ? SMALL_OVERFLOW_MESSAGE
+            : OVERFLOW_MESSAGE;
     final var updatedLimit = limit - informationText.length();
     final var noLineBreak = s.replace("\n", "");
     final var words = noLineBreak.split(" ");

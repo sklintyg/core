@@ -131,6 +131,8 @@ class QuestionDiagnosTest {
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationDiagnoses.builder()
         .prefix(new PdfFieldId("form1[0].#subform[0].flt_txt"))
+        .maxLength(172)
+        .appearance("/ArialMT 9.00 Tf 0 g")
         .diagnoses(
             Map.of(
                 new FieldId("huvuddiagnos"),

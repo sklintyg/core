@@ -154,6 +154,8 @@ public class QuestionDiagnos {
         .pdfConfiguration(
             PdfConfigurationDiagnoses.builder()
                 .prefix(PDF_DIAGNOSIS_FIELD_ID_PREFIX)
+                .maxLength(172)
+                .appearance("/ArialMT 9.00 Tf 0 g")
                 .diagnoses(
                     Map.of(
                         DIAGNOS_1,

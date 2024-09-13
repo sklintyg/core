@@ -146,9 +146,8 @@ public class QuestionDiagnos {
         .pdfConfiguration(
             PdfConfigurationDiagnoses.builder()
                 .prefix(PDF_DIAGNOSIS_FIELD_ID_PREFIX)
-                .maxLength(81)
-                .overflowSheetFieldId(
-                    new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
+                .maxLength(172)
+                .appearance("/ArialMT 9.00 Tf 0 g")
                 .diagnoses(
                     Map.of(
                         DIAGNOS_1,

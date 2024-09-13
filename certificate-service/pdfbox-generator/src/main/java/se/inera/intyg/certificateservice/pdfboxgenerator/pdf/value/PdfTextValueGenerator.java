@@ -27,7 +27,7 @@ public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> 
     if (pdfConfiguration.maxLength() != null
         && pdfConfiguration.maxLength() < elementValueText.text().length()) {
       final var splitText = PdfValueGeneratorUtil.splitByLimit(pdfConfiguration.maxLength(),
-          elementValueText.text());
+          elementValueText.text(), true);
       return List.of(
           PdfField.builder()
               .id(pdfConfiguration.pdfFieldId().id())

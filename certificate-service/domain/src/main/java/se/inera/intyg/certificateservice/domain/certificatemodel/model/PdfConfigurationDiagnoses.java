@@ -11,5 +11,6 @@ public class PdfConfigurationDiagnoses implements PdfConfiguration {
   PdfFieldId prefix;
   Map<FieldId, PdfConfigurationDiagnosis> diagnoses;
   Integer maxLength;
+  String appearance;
   PdfFieldId overflowSheetFieldId;
 }

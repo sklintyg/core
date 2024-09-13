@@ -25,24 +25,10 @@ public class PdfDiagnosisListValueGenerator implements PdfElementValue<ElementVa
       ElementValueDiagnosisList elementValueDiagnosisList) {
     final var pdfConfiguration = (PdfConfigurationDiagnoses) elementSpecification.pdfConfiguration();
 
-    final var hasOverflow = elementValueDiagnosisList.diagnoses().stream()
-        .anyMatch(diagnosis -> isDiagnosisDescriptionOverflowing(pdfConfiguration, diagnosis));
-
-    final var fields = new ArrayList<>(elementValueDiagnosisList.diagnoses().stream()
+    return new ArrayList<>(elementValueDiagnosisList.diagnoses().stream()
         .map(diagnose -> getFields(diagnose, pdfConfiguration))
         .flatMap(Collection::stream)
         .toList());
-
-    if (hasOverflow) {
-      fields.add(0,
-          PdfField.builder()
-              .id(pdfConfiguration.overflowSheetFieldId().id())
-              .value(elementSpecification.configuration().name())
-              .append(true)
-              .build());
-    }
-
-    return fields;
   }
 
   private List<PdfField> getFields(ElementValueDiagnosis diagnosis,
@@ -67,22 +53,13 @@ public class PdfDiagnosisListValueGenerator implements PdfElementValue<ElementVa
       ElementValueDiagnosis diagnosis, String pdfFieldId) {
     if (pdfConfiguration.maxLength() != null && isDiagnosisDescriptionOverflowing(pdfConfiguration,
         diagnosis)) {
-      final var splitText = PdfValueGeneratorUtil.splitByLimit(pdfConfiguration.maxLength(),
-          diagnosis.description());
+      final var truncatedText = PdfValueGeneratorUtil.splitByLimit(pdfConfiguration.maxLength(),
+          diagnosis.description(), false);
       return List.of(
           PdfField.builder()
               .id(pdfFieldId)
-              .value(splitText.get(0))
-              .build(),
-          PdfField.builder()
-              .id(pdfConfiguration.overflowSheetFieldId().id())
-              .value("Diagnosbeskrivning för diagnoskod " + diagnosis.code())
-              .append(true)
-              .build(),
-          PdfField.builder()
-              .id(pdfConfiguration.overflowSheetFieldId().id())
-              .value(splitText.get(1))
-              .append(true)
+              .value(truncatedText.get(0))
+              .appearance(pdfConfiguration.appearance())
               .build()
       );
     }
@@ -91,6 +68,7 @@ public class PdfDiagnosisListValueGenerator implements PdfElementValue<ElementVa
         PdfField.builder()
             .id(pdfFieldId)
             .value(diagnosis.description())
+            .appearance(pdfConfiguration.appearance())
             .build()
     );
   }

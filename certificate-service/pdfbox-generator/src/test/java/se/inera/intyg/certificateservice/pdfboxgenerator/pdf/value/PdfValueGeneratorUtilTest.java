@@ -13,7 +13,7 @@ class PdfValueGeneratorUtilTest {
     final var expected = List.of("This is ... Se fortsättningsblad!",
         "... the value if was planning on testing for splitting text.\n");
 
-    assertEquals(expected, PdfValueGeneratorUtil.splitByLimit(35, value));
+    assertEquals(expected, PdfValueGeneratorUtil.splitByLimit(35, value, true));
   }
 
   @Test
@@ -22,7 +22,16 @@ class PdfValueGeneratorUtilTest {
     final var expected = List.of("This is ...",
         "... the value if was planning on testing for splitting text.\n");
 
-    assertEquals(expected, PdfValueGeneratorUtil.splitByLimit(10, value));
+    assertEquals(expected, PdfValueGeneratorUtil.splitByLimit(10, value, true));
+  }
+
+  @Test
+  void shouldSplitTextUsingShortInformationTextIfSplitTextShouldNotContinueOnOverFLowSheet() {
+    final var value = "This is the value if was planning on testing for splitting text.";
+    final var expected = List.of("This is ...",
+        "... the value if was planning on testing for splitting text.\n");
+
+    assertEquals(expected, PdfValueGeneratorUtil.splitByLimit(10, value, false));
   }
 
 }
