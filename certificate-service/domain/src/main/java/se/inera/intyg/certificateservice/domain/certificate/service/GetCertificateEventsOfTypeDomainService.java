@@ -123,10 +123,11 @@ public class GetCertificateEventsOfTypeDomainService {
       LocalDateTime timestamp, CertificateEventType type) {
 
     if (certificate.parent() != null && (certificate.parent().type().equals(RelationType.REPLACE)
-        || certificate.parent().type().equals(RelationType.COMPLEMENT))) {
+        || certificate.parent().type().equals(RelationType.COMPLEMENT)
+        || certificate.parent().type().equals(RelationType.RENEW))) {
       return CertificateEvent.builder().build();
-
     }
+
     return eventFromTimestamp(certificate, timestamp, type);
   }
 }
