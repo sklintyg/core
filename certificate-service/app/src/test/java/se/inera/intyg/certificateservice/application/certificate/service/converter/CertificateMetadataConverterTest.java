@@ -547,7 +547,7 @@ class CertificateMetadataConverterTest {
     }
 
     @Test
-    void shallAvailableToCitizen() {
+    void shallIncludeAvailableToCitizen() {
       assertTrue(certificateMetadataConverter.convert(certificate, ACTION_EVALUATION)
           .isAvailableForCitizen());
     }
