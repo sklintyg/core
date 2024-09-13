@@ -12,8 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
-import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesInternalWithQARequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesInternalWithQAResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
@@ -111,8 +111,8 @@ class CertificateInternalApiControllerTest {
 
   @Test
   void shallReturnGetCertificateInternalResponse() {
-    final var expectedResult = CertificatesInternalWithQAResponse.builder().build();
-    final var request = CertificatesInternalWithQARequest.builder().build();
+    final var expectedResult = CertificatesWithQAInternalResponse.builder().build();
+    final var request = CertificatesWithQAInternalRequest.builder().build();
     doReturn(expectedResult).when(getCertificatesWithQAInternalService).get(request);
 
     final var actualResult = certificateInternalApiController.getCertificatesWithQA(request);

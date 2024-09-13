@@ -7,19 +7,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesInternalWithQARequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 
-class CertificatesInternalWithQARequestValidatorTest {
+class CertificatesWithQAInternalRequestValidatorTest {
 
   private static final List<String> CERTIFICATE_IDS = List.of("certificateId1", "certificateId2",
       "certificateId3");
   private CertificatesWithQARequestValidator validator;
-  private CertificatesInternalWithQARequest.CertificatesInternalWithQARequestBuilder requestBuilder;
+  private CertificatesWithQAInternalRequest.CertificatesWithQAInternalRequestBuilder requestBuilder;
 
   @BeforeEach
   void setUp() {
     validator = new CertificatesWithQARequestValidator();
-    requestBuilder = CertificatesInternalWithQARequest.builder()
+    requestBuilder = CertificatesWithQAInternalRequest.builder()
         .certificateIds(CERTIFICATE_IDS);
   }
 

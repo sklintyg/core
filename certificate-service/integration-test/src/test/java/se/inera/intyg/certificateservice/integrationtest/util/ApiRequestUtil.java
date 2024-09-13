@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.integrationtest.util;
 
 import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
-import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesInternalWithQARequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
@@ -332,7 +332,7 @@ public class ApiRequestUtil {
     return ForwardCertificateMessageRequestBuilder.create();
   }
 
-  public static CertificatesInternalWithQARequest defaultGetCertificatesInternalWithQARequest() {
+  public static CertificatesWithQAInternalRequest defaultGetCertificatesInternalWithQARequest() {
     return GetCertificatesInternalWithQARequestBuilder.create().build();
   }
 

@@ -7,8 +7,8 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificatesInternalWithQARequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificatesWithQAResponse;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.decodeXml;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.patientCertificatesWithQAResponse;
 
 import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
@@ -37,7 +37,7 @@ public abstract class CertificatesWithQAForCareIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var getCertificatesWithQAResponse = patientCertificatesWithQAResponse(
+    final var getCertificatesWithQAResponse = certificatesWithQAResponse(
         certificatesWithQA
     );
 
@@ -56,7 +56,7 @@ public abstract class CertificatesWithQAForCareIT extends BaseIntegrationIT {
         defaultGetCertificatesInternalWithQARequest()
     );
 
-    final var getCertificatesWithQAResponse = patientCertificatesWithQAResponse(
+    final var getCertificatesWithQAResponse = certificatesWithQAResponse(
         certificatesWithQA
     );
 

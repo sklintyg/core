@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.integrationtest.util;
 
 import java.util.Collections;
 import java.util.List;
-import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesInternalWithQARequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 
 public class GetCertificatesInternalWithQARequestBuilder {
 
@@ -21,8 +21,8 @@ public class GetCertificatesInternalWithQARequestBuilder {
     return this;
   }
 
-  public CertificatesInternalWithQARequest build() {
-    return CertificatesInternalWithQARequest.builder()
+  public CertificatesWithQAInternalRequest build() {
+    return CertificatesWithQAInternalRequest.builder()
         .certificateIds(certificateIds)
         .build();
   }

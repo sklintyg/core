@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesInternalWithQARequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesInternalWithQAResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
@@ -64,8 +64,8 @@ public class CertificateInternalApiController {
   }
 
   @PostMapping("/qa")
-  CertificatesInternalWithQAResponse getCertificatesWithQA(
-      @RequestBody CertificatesInternalWithQARequest request) {
+  CertificatesWithQAInternalResponse getCertificatesWithQA(
+      @RequestBody CertificatesWithQAInternalRequest request) {
     return getCertificatesWithQAInternalService.get(request);
   }
 }

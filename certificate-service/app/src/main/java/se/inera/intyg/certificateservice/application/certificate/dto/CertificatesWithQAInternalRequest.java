@@ -5,17 +5,17 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesInternalWithQARequest.CertificatesInternalWithQARequestBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest.CertificatesWithQAInternalRequestBuilder;
 
 @Value
 @Builder
-@JsonDeserialize(builder = CertificatesInternalWithQARequestBuilder.class)
-public class CertificatesInternalWithQARequest {
+@JsonDeserialize(builder = CertificatesWithQAInternalRequestBuilder.class)
+public class CertificatesWithQAInternalRequest {
 
   List<String> certificateIds;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class CertificatesInternalWithQARequestBuilder {
+  public static class CertificatesWithQAInternalRequestBuilder {
 
   }
 }

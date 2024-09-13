@@ -14,7 +14,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGeneratorCertificatesForCareWithQA;
-import se.inera.intyg.certificateservice.domain.patient.model.CertificatesWithQARequest;
 
 @ExtendWith(MockitoExtension.class)
 class GetCertificatesWithQAInternalDomainServiceTest {
@@ -30,15 +29,12 @@ class GetCertificatesWithQAInternalDomainServiceTest {
   void shallReturnXml() {
     final var expectedXml = new Xml("expectedXml");
     final var certificates = List.of(Certificate.builder().build(), Certificate.builder().build());
-    final var request = CertificatesWithQARequest.builder()
-        .certificateIds(
-            List.of(new CertificateId("ID1"), new CertificateId("ID2")))
-        .build();
- 
-    doReturn(certificates).when(certificateRepository).findByIds(request.certificateIds());
+    final var certificateIds = List.of(new CertificateId("ID1"), new CertificateId("ID2"));
+
+    doReturn(certificates).when(certificateRepository).findByIds(certificateIds);
     doReturn(expectedXml).when(xmlGeneratorCertificatesForCareWithQA).generate(certificates);
 
-    final var actualXml = getCertificatesWithQAInternalDomainService.get(request);
+    final var actualXml = getCertificatesWithQAInternalDomainService.get(certificateIds);
     assertEquals(expectedXml, actualXml);
   }
 }

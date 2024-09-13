@@ -11,8 +11,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesInternalWithQARequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesInternalWithQAResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
@@ -119,8 +119,8 @@ public class InternalApiUtil {
     );
   }
 
-  public ResponseEntity<CertificatesInternalWithQAResponse> getCertificatesInternalWithQA(
-      CertificatesInternalWithQARequest request) {
+  public ResponseEntity<CertificatesWithQAInternalResponse> getCertificatesInternalWithQA(
+      CertificatesWithQAInternalRequest request) {
     final var requestUrl = "http://localhost:%s/internalapi/certificate/qa".formatted(
         port
     );

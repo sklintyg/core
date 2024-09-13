@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRecipientDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateRelationsDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
-import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesInternalWithQAResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateResponse;
@@ -456,8 +456,8 @@ public class CertificateUtil {
     return response.getBody();
   }
 
-  public static CertificatesInternalWithQAResponse patientCertificatesWithQAResponse(
-      ResponseEntity<CertificatesInternalWithQAResponse> response) {
+  public static CertificatesWithQAInternalResponse certificatesWithQAResponse(
+      ResponseEntity<CertificatesWithQAInternalResponse> response) {
     if (response == null || response.getBody() == null) {
       throw new IllegalArgumentException("Missing response!");
     }
