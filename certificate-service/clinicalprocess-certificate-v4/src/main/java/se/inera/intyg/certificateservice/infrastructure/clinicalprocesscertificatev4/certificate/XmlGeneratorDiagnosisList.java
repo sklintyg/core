@@ -38,19 +38,21 @@ public class XmlGeneratorDiagnosisList implements XmlGeneratorElementData {
       return Collections.emptyList();
     }
 
-    final var diagnosisAnswer = new Svar();
-    diagnosisAnswer.setId(data.id().id());
-
     final var objectFactory = new ObjectFactory();
     final var atomicInteger = new AtomicInteger(1);
-    diagnosisList.diagnoses()
-        .forEach(diagnosis -> {
+    return diagnosisList.diagnoses().stream()
+        .map(diagnosis -> {
+              final var diagnosisAnswer = new Svar();
+              diagnosisAnswer.setId(data.id().id());
+              diagnosisAnswer.setInstans(atomicInteger.getAndIncrement());
+
               final var subAnswerDiagnosisDescription = new Delsvar();
-              subAnswerDiagnosisDescription.setId(getId(data, atomicInteger));
+              subAnswerDiagnosisDescription.setId(getIdDescription(data));
               subAnswerDiagnosisDescription.getContent().add(diagnosis.description());
 
               final var subAnswerDiagnosisCode = new Delsvar();
-              subAnswerDiagnosisCode.setId(getId(data, atomicInteger));
+              subAnswerDiagnosisCode.setId(getIdCode(data));
+              
               final var cvType = new CVType();
               cvType.setCode(diagnosis.code());
               cvType.setDisplayName(diagnosis.description());
@@ -61,13 +63,17 @@ public class XmlGeneratorDiagnosisList implements XmlGeneratorElementData {
 
               diagnosisAnswer.getDelsvar().add(subAnswerDiagnosisCode);
               diagnosisAnswer.getDelsvar().add(subAnswerDiagnosisDescription);
+              return diagnosisAnswer;
             }
-        );
-
-    return List.of(diagnosisAnswer);
+        )
+        .toList();
   }
 
-  private static String getId(ElementData data, AtomicInteger atomicInteger) {
-    return data.id().id() + "." + atomicInteger.getAndIncrement();
+  private static String getIdDescription(ElementData data) {
+    return data.id().id() + ".1";
+  }
+
+  private static String getIdCode(ElementData data) {
+    return data.id().id() + ".2";
   }
 }
