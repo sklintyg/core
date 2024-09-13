@@ -221,6 +221,7 @@ class CertificateMetadataConverterTest {
                 )
                 .summaryProvider(certificateSummaryProvider)
                 .confirmationModalProvider(certificateConfirmationModalProvider)
+                .availableForCitizen(true)
                 .build()
         )
         .certificateMetaData(
@@ -543,6 +544,12 @@ class CertificateMetadataConverterTest {
           certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getCareUnit()
               .getUnitName()
       );
+    }
+
+    @Test
+    void shallAvailableToCitizen() {
+      assertTrue(certificateMetadataConverter.convert(certificate, ACTION_EVALUATION)
+          .isAvailableForCitizen());
     }
   }
 
