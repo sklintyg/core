@@ -532,11 +532,6 @@ public class FK7210ActiveIT {
     protected String typeVersion() {
       return ACTIVE_VERSION;
     }
-
-    @Override
-    protected boolean canRecieveQuestions() {
-      return false;
-    }
   }
 
   @Nested

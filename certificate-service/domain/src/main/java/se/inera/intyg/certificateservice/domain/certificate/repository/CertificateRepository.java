@@ -5,7 +5,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
-import se.inera.intyg.certificateservice.domain.patient.model.CertificatesWithQARequest;
 
 public interface CertificateRepository {
 
@@ -17,9 +16,9 @@ public interface CertificateRepository {
 
   List<Certificate> getByIds(List<CertificateId> certificateIds);
 
+  List<Certificate> findByIds(List<CertificateId> certificateIds);
+
   boolean exists(CertificateId certificateId);
 
   List<Certificate> findByCertificatesRequest(CertificatesRequest request);
-
-  List<Certificate> findByCertificatesWithQARequest(CertificatesWithQARequest request);
 }

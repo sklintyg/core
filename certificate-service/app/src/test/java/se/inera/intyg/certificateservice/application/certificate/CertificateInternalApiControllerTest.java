@@ -12,6 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
@@ -22,10 +24,13 @@ import se.inera.intyg.certificateservice.application.certificate.service.GetCert
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalXmlService;
 import se.inera.intyg.certificateservice.application.certificate.service.LockDraftsInternalService;
+import se.inera.intyg.certificateservice.application.patient.service.GetCertificatesWithQAInternalService;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateInternalApiControllerTest {
 
+  @Mock
+  private GetCertificatesWithQAInternalService getCertificatesWithQAInternalService;
   @Mock
   private LockDraftsInternalService lockDraftsInternalService;
   @Mock
@@ -101,6 +106,16 @@ class CertificateInternalApiControllerTest {
     doReturn(expectedResult).when(lockDraftsInternalService).lock(request);
 
     final var actualResult = certificateInternalApiController.lockDrafts(request);
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnGetCertificateInternalResponse() {
+    final var expectedResult = CertificatesWithQAInternalResponse.builder().build();
+    final var request = CertificatesWithQAInternalRequest.builder().build();
+    doReturn(expectedResult).when(getCertificatesWithQAInternalService).get(request);
+
+    final var actualResult = certificateInternalApiController.getCertificatesWithQA(request);
     assertEquals(expectedResult, actualResult);
   }
 }

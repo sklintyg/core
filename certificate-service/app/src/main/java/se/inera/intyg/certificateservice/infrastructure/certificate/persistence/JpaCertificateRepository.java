@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -13,7 +14,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
-import se.inera.intyg.certificateservice.domain.patient.model.CertificatesWithQARequest;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
@@ -23,7 +23,7 @@ import se.inera.intyg.certificateservice.testability.certificate.service.reposit
 @Repository
 @RequiredArgsConstructor
 public class JpaCertificateRepository implements TestabilityCertificateRepository {
-  
+
   private final CertificateEntityRepository certificateEntityRepository;
   private final CertificateEntityMapper certificateEntityMapper;
   private final CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;
@@ -94,6 +94,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     return certificateEntityMapper.toDomain(certificateEntity);
   }
 
+
   @Override
   public List<Certificate> getByIds(List<CertificateId> certificateIds) {
     if (certificateIds == null || certificateIds.isEmpty()) {
@@ -129,6 +130,29 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   }
 
   @Override
+  public List<Certificate> findByIds(List<CertificateId> certificateIds) {
+    if (certificateIds == null) {
+      throw new IllegalArgumentException(
+          "Cannot get certificate if certificateIds is null"
+      );
+    }
+
+    if (certificateIds.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    final var certificateEntities = certificateEntityRepository.findCertificateEntitiesByCertificateIdIn(
+        certificateIds.stream()
+            .map(CertificateId::id)
+            .toList()
+    );
+
+    return certificateEntities.stream()
+        .map(certificateEntityMapper::toDomain)
+        .toList();
+  }
+
+  @Override
   public boolean exists(CertificateId certificateId) {
     if (certificateId == null) {
       throw new IllegalArgumentException(
@@ -140,15 +164,6 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
   @Override
   public List<Certificate> findByCertificatesRequest(CertificatesRequest request) {
-    final var specification = certificateEntitySpecificationFactory.create(request);
-
-    return certificateEntityRepository.findAll(specification).stream()
-        .map(certificateEntityMapper::toDomain)
-        .toList();
-  }
-
-  @Override
-  public List<Certificate> findByCertificatesWithQARequest(CertificatesWithQARequest request) {
     final var specification = certificateEntitySpecificationFactory.create(request);
 
     return certificateEntityRepository.findAll(specification).stream()

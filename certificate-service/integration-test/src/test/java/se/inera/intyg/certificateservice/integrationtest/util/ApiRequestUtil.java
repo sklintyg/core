@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.integrationtest.util;
 
 import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
@@ -30,7 +31,6 @@ import se.inera.intyg.certificateservice.application.message.dto.SaveMessageRequ
 import se.inera.intyg.certificateservice.application.message.dto.SendAnswerRequest;
 import se.inera.intyg.certificateservice.application.message.dto.SendMessageRequest;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
-import se.inera.intyg.certificateservice.application.patient.dto.PatientCertificatesWithQARequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitMessagesRequest;
@@ -332,12 +332,12 @@ public class ApiRequestUtil {
     return ForwardCertificateMessageRequestBuilder.create();
   }
 
-  public static PatientCertificatesWithQARequest defaultGetPatientCertificatesWithQARequest() {
-    return GetPatientCertificatesWithQARequestBuilder.create().build();
+  public static CertificatesWithQAInternalRequest defaultGetCertificatesInternalWithQARequest() {
+    return GetCertificatesInternalWithQARequestBuilder.create().build();
   }
 
-  public static GetPatientCertificatesWithQARequestBuilder customGetPatientCertificatesWithQARequest() {
-    return GetPatientCertificatesWithQARequestBuilder.create();
+  public static GetCertificatesInternalWithQARequestBuilder customGetCertificatesInternalWithQARequest() {
+    return GetCertificatesInternalWithQARequestBuilder.create();
   }
 
   public static UnitStatisticsRequest defaultUnitStatisticsRequest() {

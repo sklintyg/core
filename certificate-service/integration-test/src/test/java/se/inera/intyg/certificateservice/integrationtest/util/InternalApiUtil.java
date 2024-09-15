@@ -11,12 +11,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageInternalResponse;
-import se.inera.intyg.certificateservice.application.patient.dto.PatientCertificatesWithQARequest;
-import se.inera.intyg.certificateservice.application.patient.dto.PatientCertificatesWithQAResponse;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -119,9 +119,9 @@ public class InternalApiUtil {
     );
   }
 
-  public ResponseEntity<PatientCertificatesWithQAResponse> getPatientCertificatesWithQA(
-      PatientCertificatesWithQARequest request) {
-    final var requestUrl = "http://localhost:%s/internalapi/patient/certificates/qa".formatted(
+  public ResponseEntity<CertificatesWithQAInternalResponse> getCertificatesInternalWithQA(
+      CertificatesWithQAInternalRequest request) {
+    final var requestUrl = "http://localhost:%s/internalapi/certificate/qa".formatted(
         port
     );
 

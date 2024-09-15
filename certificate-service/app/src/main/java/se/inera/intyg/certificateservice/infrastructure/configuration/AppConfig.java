@@ -54,8 +54,8 @@ import se.inera.intyg.certificateservice.domain.message.service.SendAnswerDomain
 import se.inera.intyg.certificateservice.domain.message.service.SendMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.XmlGeneratorMessage;
+import se.inera.intyg.certificateservice.domain.patient.service.GetCertificatesWithQAInternalDomainService;
 import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
-import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesWithQAInternalDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesInfoDomainService;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitMessagesDomainService;
@@ -367,10 +367,10 @@ public class AppConfig {
   }
 
   @Bean
-  public GetPatientCertificatesWithQAInternalDomainService getPatientCertificatesWithQADomainService(
+  public GetCertificatesWithQAInternalDomainService getPatientCertificatesWithQADomainService(
       CertificateRepository certificateRepository,
       XmlGeneratorCertificatesForCareWithQA xmlGeneratorCertificatesForCareWithQA) {
-    return new GetPatientCertificatesWithQAInternalDomainService(certificateRepository,
+    return new GetCertificatesWithQAInternalDomainService(certificateRepository,
         xmlGeneratorCertificatesForCareWithQA);
   }
 
