@@ -47,6 +47,7 @@ public class CertificateMetadataConverter {
         .validForSign(certificate.isDraft() && certificate.validate().isValid())
         .created(certificate.created())
         .testCertificate(certificate.certificateMetaData().patient().testIndicated().value())
+        .availableForCitizen(certificate.certificateModel().availableForCitizen())
         .patient(
             toPatientDTO(certificate)
         )

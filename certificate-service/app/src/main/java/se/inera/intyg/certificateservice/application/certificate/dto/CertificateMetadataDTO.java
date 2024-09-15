@@ -25,6 +25,7 @@ public class CertificateMetadataDTO {
   boolean testCertificate;
   boolean forwarded;
   boolean sent;
+  boolean availableForCitizen;
   String sentTo;
   CertificateRelationsDTO relations;
   @With
