@@ -35,7 +35,6 @@ class XmlGeneratorDiagnosisListTest {
   private static final String ICD_10_SE = "icd-10-se";
 
   private static ElementData data;
-  private ElementSpecification elementSpecification;
 
   private XmlGeneratorDiagnosisList xmlGenerator;
 
@@ -46,6 +45,8 @@ class XmlGeneratorDiagnosisListTest {
 
   @Nested
   class TestOneDiagnosis {
+
+    private ElementSpecification elementSpecification;
 
     @BeforeEach
     void setup() {
@@ -128,6 +129,8 @@ class XmlGeneratorDiagnosisListTest {
   @Nested
   class TestMultipleDiagnoses {
 
+    private ElementSpecification elementSpecification;
+
     @BeforeEach
     void setup() {
       data = ElementData.builder()
@@ -168,183 +171,174 @@ class XmlGeneratorDiagnosisListTest {
     }
 
     @Test
-    void shallMapSvar() {
+    void shallMapMultipleSvar() {
       final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var first = response.get(0);
+      final var second = response.get(1);
       assertAll(
-          () -> assertEquals(1, response.size()),
-          () -> assertEquals(QUESTION_ID, first.getId())
+          () -> assertEquals(2, response.size()),
+          () -> assertEquals(QUESTION_ID, first.getId()),
+          () -> assertEquals(QUESTION_ID, second.getId())
       );
     }
 
     @Test
-    void shallMapFirstDelsvarForCode() {
+    void shallMapDelsvarForCodeForMultipleSvar() {
       final var response = xmlGenerator.generate(data, elementSpecification);
 
-      final var delsvar = response.get(0).getDelsvar();
-      final var delsvarCode = delsvar.get(0);
-      final var jaxbElement = (JAXBElement<CVType>) delsvarCode.getContent().get(0);
-      final var cvType = jaxbElement.getValue();
+      final var delsvarFirst = response.get(0).getDelsvar();
+      final var delsvarFirstCode = delsvarFirst.get(0);
+      final var delsvarSecond = response.get(1).getDelsvar();
+      final var delsvarSecondCode = delsvarSecond.get(0);
+      final var jaxbElement1 = (JAXBElement<CVType>) delsvarFirstCode.getContent().get(0);
+      final var jaxbElement2 = (JAXBElement<CVType>) delsvarSecondCode.getContent().get(0);
+      final var cvType1 = jaxbElement1.getValue();
+      final var cvType2 = jaxbElement2.getValue();
 
       assertAll(
-          () -> assertEquals(4, delsvar.size()),
-          () -> assertEquals(QUESTION_ID + ".2", delsvarCode.getId()),
-          () -> assertEquals(CODE_ONE, cvType.getCode()),
-          () -> assertEquals(CODE_SYSTEM, cvType.getCodeSystem()),
-          () -> assertEquals(DESCRIPTION_ONE, cvType.getDisplayName())
+          () -> assertEquals(2, response.size()),
+          () -> assertEquals(2, delsvarFirst.size()),
+          () -> assertEquals(2, delsvarSecond.size()),
+          () -> assertEquals(QUESTION_ID + ".2", delsvarFirstCode.getId()),
+          () -> assertEquals(QUESTION_ID + ".2", delsvarSecondCode.getId()),
+          () -> assertEquals(CODE_ONE, cvType1.getCode()),
+          () -> assertEquals(CODE_SYSTEM, cvType1.getCodeSystem()),
+          () -> assertEquals(DESCRIPTION_ONE, cvType1.getDisplayName()),
+          () -> assertEquals(CODE_TWO, cvType2.getCode()),
+          () -> assertEquals(CODE_SYSTEM, cvType2.getCodeSystem()),
+          () -> assertEquals(DESCRIPTION_TWO, cvType2.getDisplayName())
+      );
+    }
+
+
+    @Test
+    void shallMapDescriptionForMultipleSvar() {
+      final var response = xmlGenerator.generate(data, elementSpecification);
+
+      final var delsvarFirst = response.get(0).getDelsvar();
+      final var delsvarFirstDescription = delsvarFirst.get(1);
+      final var delsvarSecond = response.get(1).getDelsvar();
+      final var delsvarSecondDescription = delsvarSecond.get(1);
+
+      assertAll(
+          () -> assertEquals(2, delsvarFirst.size()),
+          () -> assertEquals(2, delsvarSecond.size()),
+          () -> assertEquals(QUESTION_ID + ".1", delsvarFirstDescription.getId()),
+          () -> assertEquals(DESCRIPTION_ONE, delsvarFirstDescription.getContent().get(0)),
+          () -> assertEquals(QUESTION_ID + ".1", delsvarSecondDescription.getId()),
+          () -> assertEquals(DESCRIPTION_TWO, delsvarSecondDescription.getContent().get(0))
+      );
+    }
+  }
+
+  @Nested
+  class IncompleDataTests {
+
+    private ElementSpecification elementSpecification;
+
+    @Test
+    void shallMapEmptyIfNoValue() {
+
+      final var data = ElementData.builder()
+          .id(new ElementId(QUESTION_ID))
+          .value(
+              ElementValueDiagnosis.builder()
+                  .id(new FieldId(FIELD_ID))
+                  .build()
+          )
+          .build();
+
+      final var response = xmlGenerator.generate(data, elementSpecification);
+
+      assertTrue(response.isEmpty());
+    }
+
+    @Test
+    void shallThrowIfIncorrectConfiguration() {
+      final var data = ElementData.builder()
+          .id(new ElementId(QUESTION_ID))
+          .value(
+              ElementValueDiagnosisList.builder()
+                  .diagnoses(
+                      List.of(
+                          ElementValueDiagnosis.builder()
+                              .code(CODE_ONE)
+                              .id(new FieldId("CODE_ID"))
+                              .description(DESCRIPTION_ONE)
+                              .build()
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      elementSpecification = ElementSpecification.builder()
+          .configuration(
+              ElementConfigurationDate.builder().build()
+          )
+          .build();
+
+      assertThrows(IllegalArgumentException.class,
+          () -> xmlGenerator.generate(data, elementSpecification)
       );
     }
 
     @Test
-    void shallMapSecondDelsvarForCode() {
+    void shallMapEmptyIfValueIsNotDiagnosis() {
+      final var data = ElementData.builder()
+          .id(new ElementId(QUESTION_ID))
+          .value(
+              ElementValueUnitContactInformation.builder()
+                  .build()
+          )
+          .build();
+
       final var response = xmlGenerator.generate(data, elementSpecification);
 
-      final var delsvar = response.get(0).getDelsvar();
-      final var delsvarCode = delsvar.get(2);
-      final var jaxbElement = (JAXBElement<CVType>) delsvarCode.getContent().get(0);
-      final var cvType = jaxbElement.getValue();
-
-      assertAll(
-          () -> assertEquals(4, delsvar.size()),
-          () -> assertEquals(QUESTION_ID + ".4", delsvarCode.getId()),
-          () -> assertEquals(CODE_TWO, cvType.getCode()),
-          () -> assertEquals(CODE_SYSTEM, cvType.getCodeSystem()),
-          () -> assertEquals(DESCRIPTION_TWO, cvType.getDisplayName())
-      );
+      assertTrue(response.isEmpty());
     }
 
     @Test
-    void shallMapFirstDelsvarForDescription() {
+    void shallReturnEmptyIfDiagnosesIsNull() {
+      elementSpecification = ElementSpecification.builder()
+          .configuration(
+              ElementConfigurationDiagnosis.builder().build()
+          )
+          .build();
+      final var data = ElementData.builder()
+          .id(new ElementId(QUESTION_ID))
+          .value(
+              ElementValueDiagnosisList.builder()
+                  .diagnoses(null)
+                  .build()
+          )
+          .build();
+
       final var response = xmlGenerator.generate(data, elementSpecification);
 
-      final var delsvar = response.get(0).getDelsvar();
-      final var delsvarDate = delsvar.get(1);
-      final var delsvarDateAsStr = delsvarDate.getContent().get(0);
-
-      assertAll(
-          () -> assertEquals(4, delsvar.size()),
-          () -> assertEquals(QUESTION_ID + ".1", delsvarDate.getId()),
-          () -> assertEquals(DESCRIPTION_ONE, delsvarDateAsStr)
-      );
+      assertTrue(response.isEmpty());
     }
 
     @Test
-    void shallMapSecondDelsvarForDescription() {
+    void shallReturnEmptyIfDiagnosesIsEmpty() {
+      elementSpecification = ElementSpecification.builder()
+          .configuration(
+              ElementConfigurationDiagnosis.builder().build()
+          )
+          .build();
+      final var data = ElementData.builder()
+          .id(new ElementId(QUESTION_ID))
+          .value(
+              ElementValueDiagnosisList.builder()
+                  .diagnoses(Collections.emptyList())
+                  .build()
+          )
+          .build();
+
       final var response = xmlGenerator.generate(data, elementSpecification);
 
-      final var delsvar = response.get(0).getDelsvar();
-      final var delsvarDate = delsvar.get(3);
-      final var delsvarDateAsStr = delsvarDate.getContent().get(0);
-
-      assertAll(
-          () -> assertEquals(4, delsvar.size()),
-          () -> assertEquals(QUESTION_ID + ".3", delsvarDate.getId()),
-          () -> assertEquals(DESCRIPTION_TWO, delsvarDateAsStr)
-      );
+      assertTrue(response.isEmpty());
     }
-  }
-
-  @Test
-  void shallMapEmptyIfNoValue() {
-    final var data = ElementData.builder()
-        .id(new ElementId(QUESTION_ID))
-        .value(
-            ElementValueDiagnosis.builder()
-                .id(new FieldId(FIELD_ID))
-                .build()
-        )
-        .build();
-
-    final var response = xmlGenerator.generate(data, elementSpecification);
-
-    assertTrue(response.isEmpty());
-  }
-
-  @Test
-  void shallThrowIfIncorrectConfiguration() {
-    final var data = ElementData.builder()
-        .id(new ElementId(QUESTION_ID))
-        .value(
-            ElementValueDiagnosisList.builder()
-                .diagnoses(
-                    List.of(
-                        ElementValueDiagnosis.builder()
-                            .code(CODE_ONE)
-                            .id(new FieldId("CODE_ID"))
-                            .description(DESCRIPTION_ONE)
-                            .build()
-                    )
-                )
-                .build()
-        )
-        .build();
-
-    elementSpecification = ElementSpecification.builder()
-        .configuration(
-            ElementConfigurationDate.builder().build()
-        )
-        .build();
-
-    assertThrows(IllegalArgumentException.class,
-        () -> xmlGenerator.generate(data, elementSpecification)
-    );
-  }
-
-  @Test
-  void shallMapEmptyIfValueIsNotDiagnosis() {
-    final var data = ElementData.builder()
-        .id(new ElementId(QUESTION_ID))
-        .value(
-            ElementValueUnitContactInformation.builder()
-                .build()
-        )
-        .build();
-
-    final var response = xmlGenerator.generate(data, elementSpecification);
-
-    assertTrue(response.isEmpty());
-  }
-
-  @Test
-  void shallReturnEmptyIfDiagnosesIsNull() {
-    elementSpecification = ElementSpecification.builder()
-        .configuration(
-            ElementConfigurationDiagnosis.builder().build()
-        )
-        .build();
-    final var data = ElementData.builder()
-        .id(new ElementId(QUESTION_ID))
-        .value(
-            ElementValueDiagnosisList.builder()
-                .diagnoses(null)
-                .build()
-        )
-        .build();
-
-    final var response = xmlGenerator.generate(data, elementSpecification);
-
-    assertTrue(response.isEmpty());
-  }
-
-  @Test
-  void shallReturnEmptyIfDiagnosesIsEmpty() {
-    elementSpecification = ElementSpecification.builder()
-        .configuration(
-            ElementConfigurationDiagnosis.builder().build()
-        )
-        .build();
-    final var data = ElementData.builder()
-        .id(new ElementId(QUESTION_ID))
-        .value(
-            ElementValueDiagnosisList.builder()
-                .diagnoses(Collections.emptyList())
-                .build()
-        )
-        .build();
-
-    final var response = xmlGenerator.generate(data, elementSpecification);
-
-    assertTrue(response.isEmpty());
   }
 }
