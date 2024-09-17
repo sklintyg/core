@@ -413,18 +413,6 @@ public class CertificateActionFactory {
               )
           )
           .build();
-      case RESPONSIBLE_ISSUER -> CertificateActionResponsibleIssuer.builder()
-          .certificateActionSpecification(actionSpecification)
-          .actionRules(
-              List.of(
-                  new ActionRuleStatus(
-                      List.of(Status.DRAFT)),
-                  new ActionRuleRole(actionSpecification.allowedRoles()),
-                  new ActionRuleUserHasAccessScope(
-                      List.of(AccessScope.WITHIN_CARE_PROVIDER, AccessScope.ALL_CARE_PROVIDERS))
-              )
-          )
-          .build();
       case READY_FOR_SIGN -> CertificateActionReadyForSign.builder()
           .certificateActionSpecification(actionSpecification)
           .actionRules(

@@ -260,20 +260,6 @@ class FK7472CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionResponsibleIssuer() {
-    final var expectedSpecification = CertificateActionSpecification.builder()
-        .certificateActionType(CertificateActionType.RESPONSIBLE_ISSUER)
-        .allowedRoles(List.of(Role.CARE_ADMIN))
-        .build();
-
-    final var actions = FK7472CertificateActionSpecification.create();
-
-    assertTrue(actions.stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected type: %s".formatted(expectedSpecification));
-  }
-
-  @Test
   void shallIncludeCertificateActionReadyForSign() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.READY_FOR_SIGN)

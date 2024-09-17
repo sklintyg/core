@@ -117,10 +117,6 @@ public class FK3226CertificateActionSpecification {
             .certificateActionType(CertificateActionType.FORWARD_MESSAGE)
             .build(),
         CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.RESPONSIBLE_ISSUER)
-            .allowedRoles(List.of(Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
-            .build(),
-        CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.READY_FOR_SIGN)
             .allowedRoles(List.of(Role.CARE_ADMIN))
             .build(),

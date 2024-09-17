@@ -407,20 +407,6 @@ class FK3226CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionResponsibleIssuer() {
-    final var expectedSpecification = CertificateActionSpecification.builder()
-        .certificateActionType(CertificateActionType.RESPONSIBLE_ISSUER)
-        .allowedRoles(List.of(Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
-        .build();
-
-    final var certificateModel = FK3226CertificateActionSpecification.create();
-
-    assertTrue(certificateModel.stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected type: %s".formatted(expectedSpecification));
-  }
-
-  @Test
   void shallIncludeCertificateActionReadyForSign() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.READY_FOR_SIGN)
