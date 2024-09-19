@@ -182,8 +182,24 @@ class PdfDiagnosisListValueGeneratorTest {
     void shouldSplitValueIfOverMaxLength() {
       final var expected = List.of(
           PdfField.builder()
+              .id("OVER_FLOW_SHEET_ID")
+              .value("Diagnoser frågenamn")
+              .append(true)
+              .build(),
+          PdfField.builder()
               .id(DESCRIPTION_FIELD_ID)
-              .value("description is ...")
+              .value("description is over max length since ...")
+              .build(),
+          PdfField.builder()
+              .id("OVER_FLOW_SHEET_ID")
+              .value("Diagnosbeskrivning för diagnoskod ABC")
+              .append(true)
+              .build(),
+          PdfField.builder()
+              .id("OVER_FLOW_SHEET_ID")
+              .value(
+                  "... max length is only 30 characters and this message is longer.\n")
+              .append(true)
               .build(),
           PdfField.builder()
               .id(CODE_FIELD_ID_1)
@@ -207,7 +223,8 @@ class PdfDiagnosisListValueGeneratorTest {
           )
           .pdfConfiguration(
               PdfConfigurationDiagnoses.builder()
-                  .maxLength(20)
+                  .maxLength(40)
+                  .overflowSheetFieldId(new PdfFieldId("OVER_FLOW_SHEET_ID"))
                   .diagnoses(
                       Map.of(
                           new FieldId("huvuddiagnos"),
