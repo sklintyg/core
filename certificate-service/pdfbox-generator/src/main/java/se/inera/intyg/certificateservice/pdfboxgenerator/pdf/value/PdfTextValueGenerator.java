@@ -24,8 +24,7 @@ public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> 
     }
 
     final var pdfConfiguration = (PdfConfigurationText) elementSpecification.pdfConfiguration();
-    if (pdfConfiguration.maxLength() != null
-        && pdfConfiguration.maxLength() < elementValueText.text().length()) {
+    if (hasOverflow(elementValueText, pdfConfiguration)) {
       final var splitText = PdfValueGeneratorUtil.splitByLimit(pdfConfiguration.maxLength(),
           elementValueText.text());
       if (hasOverFlowSheet(pdfConfiguration)) {
@@ -40,6 +39,12 @@ public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> 
             .value(elementValueText.text())
             .build()
     );
+  }
+
+  private static boolean hasOverflow(ElementValueText elementValueText,
+      PdfConfigurationText pdfConfiguration) {
+    return pdfConfiguration.maxLength() != null
+        && pdfConfiguration.maxLength() < elementValueText.text().length();
   }
 
   private static List<PdfField> getFieldsWithoutOverflowSheet(ElementValueText elementValueText,
