@@ -33,7 +33,6 @@ import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesWhen
 import se.inera.intyg.certificateservice.integrationtest.InternalApiIT;
 import se.inera.intyg.certificateservice.integrationtest.MessagingNotAvailableIT;
 import se.inera.intyg.certificateservice.integrationtest.ReplaceCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.ResponsibleIssuerIT;
 import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SendCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateIT;
@@ -492,21 +491,6 @@ public class FK7210ActiveIT {
   @Nested
   @DisplayName(TYPE + "Vidarebefodra utkast")
   class ForwardCertificate extends ForwardCertificateIT {
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-  }
-
-  @Nested
-  @DisplayName(TYPE + "Ansvarig intygsutfärdare")
-  class ResponsibleIssuer extends ResponsibleIssuerIT {
 
     @Override
     protected String type() {
