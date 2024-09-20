@@ -194,12 +194,18 @@ public class CertificatePdfFillService {
       final var extractedField = acroForm.getField(field.getId());
       validateField(field.getId(), extractedField);
 
-      if (extractedField instanceof PDTextField textField && textField.isMultiline()) {
-        final var textAppearance = new TextfieldAppearance(textField);
+      final var append = field.getAppend() != null && field.getAppend();
+
+      if (extractedField instanceof PDTextField textField && field.getAppearance() != null) {
+        textField.setDefaultAppearance(field.getAppearance());
+      }
+
+      if (extractedField instanceof PDTextField textField && textField.isMultiline() && !append) {
+        final var textAppearance = new TextFieldAppearance(textField);
         textAppearance.adjustMultilineFieldHeight();
       }
 
-      if (field.getAppend() != null && field.getAppend()) {
+      if (append) {
         extractedField.setValue(
             extractedField.getValueAsString()
                 + (extractedField.getValueAsString().isEmpty() ? "" : "\n")

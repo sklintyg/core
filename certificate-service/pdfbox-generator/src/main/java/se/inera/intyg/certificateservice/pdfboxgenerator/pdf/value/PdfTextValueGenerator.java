@@ -24,26 +24,13 @@ public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> 
     }
 
     final var pdfConfiguration = (PdfConfigurationText) elementSpecification.pdfConfiguration();
-    if (pdfConfiguration.maxLength() != null
-        && pdfConfiguration.maxLength() < elementValueText.text().length()) {
+    if (hasOverflow(elementValueText, pdfConfiguration)) {
       final var splitText = PdfValueGeneratorUtil.splitByLimit(pdfConfiguration.maxLength(),
           elementValueText.text());
-      return List.of(
-          PdfField.builder()
-              .id(pdfConfiguration.pdfFieldId().id())
-              .value(splitText.get(0))
-              .build(),
-          PdfField.builder()
-              .id(pdfConfiguration.overflowSheetFieldId().id())
-              .value(elementSpecification.configuration().name())
-              .append(true)
-              .build(),
-          PdfField.builder()
-              .id(pdfConfiguration.overflowSheetFieldId().id())
-              .value(splitText.get(1))
-              .append(true)
-              .build()
-      );
+      if (hasOverFlowSheet(pdfConfiguration)) {
+        return getFieldsWithOverflowSheet(elementSpecification, pdfConfiguration, splitText);
+      }
+      return getFieldsWithoutOverflowSheet(elementValueText, pdfConfiguration);
     }
 
     return List.of(
@@ -52,5 +39,50 @@ public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> 
             .value(elementValueText.text())
             .build()
     );
+  }
+
+  private static boolean hasOverflow(ElementValueText elementValueText,
+      PdfConfigurationText pdfConfiguration) {
+    return pdfConfiguration.maxLength() != null
+        && pdfConfiguration.maxLength() < elementValueText.text().length();
+  }
+
+  private static List<PdfField> getFieldsWithoutOverflowSheet(ElementValueText elementValueText,
+      PdfConfigurationText pdfConfiguration) {
+    return List.of(
+        PdfField.builder()
+            .id(pdfConfiguration.pdfFieldId().id())
+            .value(
+                PdfValueGeneratorUtil.splitByLimit(
+                    pdfConfiguration.maxLength(), elementValueText.text(), "...").get(0)
+            )
+            .build()
+    );
+  }
+
+  private static List<PdfField> getFieldsWithOverflowSheet(
+      ElementSpecification elementSpecification,
+      PdfConfigurationText pdfConfiguration, List<String> splitText) {
+    return List.of(
+        PdfField.builder()
+            .id(pdfConfiguration.pdfFieldId().id())
+            .value(splitText.get(0))
+            .build(),
+        PdfField.builder()
+            .id(pdfConfiguration.overflowSheetFieldId().id())
+            .value(elementSpecification.configuration().name())
+            .append(true)
+            .build(),
+        PdfField.builder()
+            .id(pdfConfiguration.overflowSheetFieldId().id())
+            .value(splitText.get(1) + "\n")
+            .append(true)
+            .build()
+    );
+  }
+
+  private static boolean hasOverFlowSheet(PdfConfigurationText pdfConfiguration) {
+    return pdfConfiguration.overflowSheetFieldId() != null
+        && !pdfConfiguration.overflowSheetFieldId().id().isEmpty();
   }
 }

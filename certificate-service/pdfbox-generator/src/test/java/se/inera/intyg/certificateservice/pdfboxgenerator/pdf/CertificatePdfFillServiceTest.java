@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
+import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -74,6 +75,17 @@ class CertificatePdfFillServiceTest {
       .id(SYMPTOM_FIELD_ID)
       .value("Symptom 1")
       .append(true)
+      .build();
+
+  private static final PdfField DIAGNOSE_DESCRIPTION_1 = PdfField.builder()
+      .id("form1[0].#subform[1].flt_txtAngeFunktionsnedsattning[0]")
+      .value("Description 1")
+      .appearance("/ArialMT 9.00 Tf 0 g")
+      .build();
+
+  private static final PdfField DIAGNOSE_DESCRIPTION_2 = PdfField.builder()
+      .id("form1[0].#subform[1].flt_txtAngeFunktionsnedsattning2[0]")
+      .value("Description 2")
       .build();
 
   @Mock
@@ -410,6 +422,35 @@ class CertificatePdfFillServiceTest {
   }
 
   @Nested
+  class AppearanceExists {
+
+    @BeforeEach
+    void setup() {
+      certificate = getfk7809Certificate();
+      when(pdfElementValueGenerator.generate(any(Certificate.class)))
+          .thenReturn(List.of(DIAGNOSE_DESCRIPTION_1, DIAGNOSE_DESCRIPTION_2));
+    }
+
+    @Test
+    void shouldSetAppearanceIfTextFieldAndAppearanceNotNull() {
+      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+      final var field = getTextField(document, DIAGNOSE_DESCRIPTION_1.getId());
+      final var expected = "/ArialMT 9.00 Tf 0 g";
+
+      assertEquals(expected, field.getDefaultAppearance());
+    }
+
+    @Test
+    void shouldNotSetAppearanceIfTextFieldAndAppearanceIsNull() {
+      final var document = certificatePdfFillService.fillDocument(certificate, TEXT, false);
+      final var field = getTextField(document, DIAGNOSE_DESCRIPTION_2.getId());
+      final var expected = "/ArialMT 10.00 Tf 0 g";
+
+      assertEquals(expected, field.getDefaultAppearance());
+    }
+  }
+
+  @Nested
   class MultiplePagesPdf {
 
     @BeforeEach
@@ -467,8 +508,21 @@ class CertificatePdfFillServiceTest {
         .build();
   }
 
+  private static Certificate getfk7809Certificate() {
+    return fk7809CertificateBuilder()
+        .status(Status.SIGNED)
+        .sent(null)
+        .signed(null)
+        .build();
+  }
+
   private static PDField getField(PDDocument document, String fieldId) {
     return document.getDocumentCatalog().getAcroForm().getField(fieldId);
+  }
+
+  private static PDTextField getTextField(PDDocument document, String fieldId) {
+    return (PDTextField) document.getDocumentCatalog().getAcroForm()
+        .getField(fieldId);
   }
 
   private String getTextForDocument(PDDocument document) throws IOException {

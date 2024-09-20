@@ -12,8 +12,14 @@ public class PdfValueGeneratorUtil {
   }
 
   public static List<String> splitByLimit(Integer limit, String s) {
-    final var informationText =
-        limit <= OVERFLOW_MESSAGE.length() ? SMALL_OVERFLOW_MESSAGE : OVERFLOW_MESSAGE;
+    return splitByLimit(limit, s, null);
+  }
+
+  public static List<String> splitByLimit(Integer limit, String s, String message) {
+    final var informationText = message != null
+        ? message
+        : getInformationText(limit);
+
     final var updatedLimit = limit - informationText.length();
     final var noLineBreak = s.replace("\n", "");
     final var words = noLineBreak.split(" ");
@@ -38,8 +44,13 @@ public class PdfValueGeneratorUtil {
     }
     return List.of(
         firstPart + " " + informationText,
-        SMALL_OVERFLOW_MESSAGE + " " + secondPart + "\n"
+        SMALL_OVERFLOW_MESSAGE + " " + secondPart
     );
   }
 
+  private static String getInformationText(Integer limit) {
+    return limit <= OVERFLOW_MESSAGE.length()
+        ? SMALL_OVERFLOW_MESSAGE
+        : OVERFLOW_MESSAGE;
+  }
 }

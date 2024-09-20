@@ -11,7 +11,7 @@ class PdfValueGeneratorUtilTest {
   void shouldSplitTextUsingLongInformationTextIfLimitIsOver25() {
     final var value = "This is the value if was planning on testing for splitting text.";
     final var expected = List.of("This is ... Se fortsättningsblad!",
-        "... the value if was planning on testing for splitting text.\n");
+        "... the value if was planning on testing for splitting text.");
 
     assertEquals(expected, PdfValueGeneratorUtil.splitByLimit(35, value));
   }
@@ -20,9 +20,18 @@ class PdfValueGeneratorUtilTest {
   void shouldSplitTextUsingShortInformationTextIfLimitIsUnder25() {
     final var value = "This is the value if was planning on testing for splitting text.";
     final var expected = List.of("This is ...",
-        "... the value if was planning on testing for splitting text.\n");
+        "... the value if was planning on testing for splitting text.");
 
     assertEquals(expected, PdfValueGeneratorUtil.splitByLimit(10, value));
   }
 
+  @Test
+  void shouldSplitTextUsingMessageIfProvided() {
+    final var value = "This is the value if was planning on testing for splitting text.";
+    final var message = "xxx";
+    final var expected = List.of("This is xxx",
+        "... the value if was planning on testing for splitting text.");
+
+    assertEquals(expected, PdfValueGeneratorUtil.splitByLimit(10, value, message));
+  }
 }

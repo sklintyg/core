@@ -201,4 +201,36 @@ class PdfTextValueGeneratorTest {
 
     assertEquals(expected, result);
   }
+
+  @Test
+  void shouldNotReturnFieldsForOverflowSheetIfNoOverFlowSheetIsProvided() {
+    final var expected = List.of(
+        PdfField.builder()
+            .id(FIELD_ID)
+            .value(START_VALUE)
+            .build()
+    );
+
+    final var elementSpecification = ElementSpecification.builder()
+        .configuration(
+            ElementConfigurationTextField.builder()
+                .name(QUESTION_NAME)
+                .build()
+        )
+        .pdfConfiguration(
+            PdfConfigurationText.builder()
+                .pdfFieldId(new PdfFieldId(FIELD_ID))
+                .maxLength(12)
+                .build()
+        )
+        .build();
+
+    final var elementValue = ElementValueText.builder()
+        .text(VALUE)
+        .build();
+
+    final var result = pdfTextValueGenerator.generate(elementSpecification, elementValue);
+
+    assertEquals(expected, result);
+  }
 }

@@ -33,13 +33,14 @@ public class PdfDiagnosisListValueGenerator implements PdfElementValue<ElementVa
         .flatMap(Collection::stream)
         .toList());
 
-    if (hasOverflow) {
+    if (hasOverflow && hasOverflowSheet(pdfConfiguration)) {
       fields.add(0,
           PdfField.builder()
               .id(pdfConfiguration.overflowSheetFieldId().id())
               .value(elementSpecification.configuration().name())
               .append(true)
               .build());
+
     }
 
     return fields;
@@ -68,29 +69,58 @@ public class PdfDiagnosisListValueGenerator implements PdfElementValue<ElementVa
     if (pdfConfiguration.maxLength() != null && isDiagnosisDescriptionOverflowing(pdfConfiguration,
         diagnosis)) {
       final var splitText = PdfValueGeneratorUtil.splitByLimit(pdfConfiguration.maxLength(),
-          diagnosis.description());
-      return List.of(
-          PdfField.builder()
-              .id(pdfFieldId)
-              .value(splitText.get(0))
-              .build(),
-          PdfField.builder()
-              .id(pdfConfiguration.overflowSheetFieldId().id())
-              .value("Diagnosbeskrivning för diagnoskod " + diagnosis.code())
-              .append(true)
-              .build(),
-          PdfField.builder()
-              .id(pdfConfiguration.overflowSheetFieldId().id())
-              .value(splitText.get(1))
-              .append(true)
-              .build()
-      );
+          diagnosis.description(), "...");
+      if (hasOverflowSheet(pdfConfiguration)) {
+        return getFieldsWithOverFlowSheet(pdfConfiguration, diagnosis, pdfFieldId, splitText);
+      }
+      return getFieldsWithoutOverflowSheet(pdfConfiguration, pdfFieldId, splitText);
     }
 
     return List.of(
         PdfField.builder()
             .id(pdfFieldId)
             .value(diagnosis.description())
+            .appearance(pdfConfiguration.appearance())
+            .build()
+    );
+  }
+
+  private static boolean hasOverflowSheet(PdfConfigurationDiagnoses pdfConfiguration) {
+    return pdfConfiguration.overflowSheetFieldId() != null
+        && !pdfConfiguration.overflowSheetFieldId().id().isEmpty();
+  }
+
+  private static List<PdfField> getFieldsWithoutOverflowSheet(
+      PdfConfigurationDiagnoses pdfConfiguration,
+      String pdfFieldId, List<String> splitText) {
+    return List.of(
+        PdfField.builder()
+            .id(pdfFieldId)
+            .value(splitText.get(0))
+            .appearance(pdfConfiguration.appearance())
+            .build()
+    );
+  }
+
+  private static List<PdfField> getFieldsWithOverFlowSheet(
+      PdfConfigurationDiagnoses pdfConfiguration,
+      ElementValueDiagnosis diagnosis, String pdfFieldId, List<String> splitText) {
+    return List.of(
+        PdfField.builder()
+            .id(pdfFieldId)
+            .value(splitText.get(0))
+            .build(),
+        PdfField.builder()
+            .id(pdfConfiguration.overflowSheetFieldId().id())
+            .value("Diagnosbeskrivning för diagnoskod " + diagnosis.code())
+            .appearance(pdfConfiguration.appearance())
+            .append(true)
+            .build(),
+        PdfField.builder()
+            .id(pdfConfiguration.overflowSheetFieldId().id())
+            .value(splitText.get(1) + "\n")
+            .appearance(pdfConfiguration.appearance())
+            .append(true)
             .build()
     );
   }
