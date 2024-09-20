@@ -393,20 +393,6 @@ class FK7809CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionResponsibleIssuer() {
-    final var expectedSpecification = CertificateActionSpecification.builder()
-        .certificateActionType(CertificateActionType.RESPONSIBLE_ISSUER)
-        .allowedRoles(List.of(Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
-        .build();
-
-    final var actionSpecifications = FK7809CertificateActionSpecification.create();
-
-    assertTrue(actionSpecifications.stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected type: %s".formatted(expectedSpecification));
-  }
-
-  @Test
   void shallIncludeCertificateActionReadyForSign() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.READY_FOR_SIGN)

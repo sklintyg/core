@@ -86,10 +86,6 @@ public class FK7472CertificateActionSpecification {
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
             .build(),
         CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.RESPONSIBLE_ISSUER)
-            .allowedRoles(List.of(Role.CARE_ADMIN))
-            .build(),
-        CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.READY_FOR_SIGN)
             .allowedRoles(List.of(Role.CARE_ADMIN))
             .build(),

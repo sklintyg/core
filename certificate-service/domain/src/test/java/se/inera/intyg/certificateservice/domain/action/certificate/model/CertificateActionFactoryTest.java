@@ -403,19 +403,6 @@ class certificateActionFactoryTest {
   }
 
   @Test
-  void shallReturnCertificateActionResponsibleIssuerIfExistInSpecification() {
-    final var certificateActionSpecification = CertificateActionSpecification.builder()
-        .certificateActionType(CertificateActionType.RESPONSIBLE_ISSUER)
-        .build();
-
-    final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
-
-    assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionResponsibleIssuer.class);
-  }
-
-
-  @Test
   void shallReturnCertificateActionAccessForRolesIfExistInSpecification() {
     final var certificateActionSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)

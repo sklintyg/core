@@ -97,13 +97,6 @@ class ResourceLinkTypeDTOTest {
     }
 
     @Test
-    void shallReturnCertificateActionTypeResponsibleIssuer() {
-      assertEquals(CertificateActionType.RESPONSIBLE_ISSUER,
-          ResourceLinkTypeDTO.RESPONSIBLE_ISSUER.toCertificateActionType()
-      );
-    }
-
-    @Test
     void shallReturnCertificateActionTypeReadyForSign() {
       assertEquals(CertificateActionType.READY_FOR_SIGN,
           ResourceLinkTypeDTO.READY_FOR_SIGN.toCertificateActionType()
@@ -279,12 +272,6 @@ class ResourceLinkTypeDTOTest {
     void shallReturnCertificateActionTypeForwardCertificate() {
       assertEquals(ResourceLinkTypeDTO.FORWARD_CERTIFICATE,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.FORWARD_CERTIFICATE));
-    }
-
-    @Test
-    void shallReturnCertificateActionTypeResponsibleIssuer() {
-      assertEquals(ResourceLinkTypeDTO.RESPONSIBLE_ISSUER,
-          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.RESPONSIBLE_ISSUER));
     }
 
     @Test
