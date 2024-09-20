@@ -269,6 +269,7 @@ class PdfDiagnosisListValueGeneratorTest {
       final var expected = List.of(
           PdfField.builder()
               .id(DESCRIPTION_FIELD_ID)
+              .appearance("/ArialMT 9.00 Tf 0 g")
               .value("description is over max length since ...")
               .build(),
           PdfField.builder()
@@ -294,6 +295,7 @@ class PdfDiagnosisListValueGeneratorTest {
           .pdfConfiguration(
               PdfConfigurationDiagnoses.builder()
                   .maxLength(40)
+                  .appearance("/ArialMT 9.00 Tf 0 g")
                   .diagnoses(
                       Map.of(
                           new FieldId("huvuddiagnos"),
