@@ -1873,7 +1873,7 @@ class SchematronValidationFK7809Test {
                                               ElementValueCode.builder()
                                                   .codeId(new FieldId(
                                                       "medicalInvestigation1_INVESTIGATION_TYPE"))
-                                                  .code("LOGOPED")
+                                                  .code("OVRIGT_UTLATANDE")
                                                   .build()
                                           )
                                           .date(

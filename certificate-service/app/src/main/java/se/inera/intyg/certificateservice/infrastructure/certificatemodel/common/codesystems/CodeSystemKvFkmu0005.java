@@ -78,7 +78,7 @@ public class CodeSystemKvFkmu0005 {
   );
 
   public static final Code OVRIGT = new Code(
-      "OVRIGT",
+      "OVRIGT_UTLATANDE",
       CODE_SYSTEM,
       "Övrigt"
   );
