@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.integrationtest;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO.SIGNED;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ALVE_REACT_ALFREDSSON_DTO;
@@ -21,6 +22,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customSendCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateMessageRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSendCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
@@ -34,6 +36,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
+import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.MessagesQueryCriteriaDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.QuestionSenderTypeDTO;
@@ -761,6 +764,52 @@ public abstract class MessagesIT extends BaseIntegrationIT {
         questions(messagesForCertificate.getBody()).get(0).getLinks()
             .isEmpty(),
         "Should not return link!"
+    );
+  }
+
+  @Test
+  @DisplayName("Om intyget inte är skickat skall information om att meddelanden ej är tillgängliga visas")
+  void shallDisplayMessagesNotAvailableIfCertificateIsNotSent() {
+    final var testCertificates = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
+    );
+
+    final var response = api.getCertificate(
+        defaultGetCertificateRequest(),
+        certificateId(testCertificates)
+    );
+    final var resourceLinkTypes = Objects.requireNonNull(response.getBody()).getCertificate()
+        .getLinks()
+        .stream()
+        .map(ResourceLinkDTO::getType)
+        .toList();
+
+    assertTrue(resourceLinkTypes.contains(ResourceLinkTypeDTO.QUESTIONS_NOT_AVAILABLE),
+        "Should return true if resource link questions not available is included"
+    );
+  }
+
+  @Test
+  @DisplayName("Om intyget är skickat skall information om att meddelanden ej är tillgängliga inte visas")
+  void shallNotDisplayMessagesNotAvailableIfCertificateIsSent() {
+    final var testCertificates = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
+    );
+
+    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+
+    final var response = api.getCertificate(
+        defaultGetCertificateRequest(),
+        certificateId(testCertificates)
+    );
+    final var resourceLinkTypes = Objects.requireNonNull(response.getBody()).getCertificate()
+        .getLinks()
+        .stream()
+        .map(ResourceLinkDTO::getType)
+        .toList();
+
+    assertFalse(resourceLinkTypes.contains(ResourceLinkTypeDTO.QUESTIONS_NOT_AVAILABLE),
+        "Should return false if resource link questions not available is included"
     );
   }
 }

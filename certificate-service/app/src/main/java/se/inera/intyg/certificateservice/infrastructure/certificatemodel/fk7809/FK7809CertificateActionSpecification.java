@@ -118,6 +118,9 @@ public class FK7809CertificateActionSpecification {
             .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
             .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
                 Role.CARE_ADMIN))
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.QUESTIONS_NOT_AVAILABLE)
             .build()
     );
   }
