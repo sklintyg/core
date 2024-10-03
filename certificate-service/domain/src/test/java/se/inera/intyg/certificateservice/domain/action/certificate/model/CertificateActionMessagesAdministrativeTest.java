@@ -51,7 +51,7 @@ class CertificateActionMessagesAdministrativeTest {
 
     certificateBuilder = Certificate.builder()
         .status(Status.SIGNED)
-        .sent(null)
+        .sent(TestDataCertificate.SENT)
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -190,17 +190,18 @@ class CertificateActionMessagesAdministrativeTest {
   }
 
   @Test
-  void shallReturnTrueIfNotSent() {
+  void shallReturnFalseIfNotSent() {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     final var certificate = certificateBuilder
         .status(Status.SIGNED)
+        .sent(null)
         .build();
 
-    assertTrue(
+    assertFalse(
         certificateActionMessagesAdministrative.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
-        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
 
@@ -210,7 +211,6 @@ class CertificateActionMessagesAdministrativeTest {
 
     final var certificate = certificateBuilder
         .status(Status.SIGNED)
-        .sent(TestDataCertificate.SENT)
         .build();
 
     assertTrue(

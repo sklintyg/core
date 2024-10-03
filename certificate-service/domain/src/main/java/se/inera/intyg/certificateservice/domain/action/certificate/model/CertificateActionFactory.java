@@ -255,6 +255,7 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
+                  new ActionRuleSent(true),
                   new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED))
               )
           )
@@ -288,6 +289,7 @@ public class CertificateActionFactory {
           .enabled(actionSpecification.enabled())
           .actionRules(
               List.of(
+                  new ActionRuleSent(true),
                   new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED))
               )
           )
@@ -328,6 +330,7 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
+                  new ActionRuleSent(true),
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleProtectedPerson(),
@@ -429,8 +432,20 @@ public class CertificateActionFactory {
           .build();
       case LIST_CERTIFICATE_TYPE -> CertificateActionListCertificateType.builder()
           .certificateActionSpecification(actionSpecification)
-          .actionRules(List.of(new ActionRuleRole(actionSpecification.allowedRoles())))
+          .actionRules(
+              List.of(
+                  new ActionRuleRole(actionSpecification.allowedRoles())
+              )
+          )
           .build();
+      case QUESTIONS_NOT_AVAILABLE -> CertificateActionQuestionsNotAvailable.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleSent(false))
+          )
+          .build();
+
     };
   }
 }

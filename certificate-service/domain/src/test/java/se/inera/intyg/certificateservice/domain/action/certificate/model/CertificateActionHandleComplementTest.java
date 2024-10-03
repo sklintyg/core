@@ -36,6 +36,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
+import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateActionHandleComplementTest {
@@ -60,7 +61,7 @@ class CertificateActionHandleComplementTest {
 
     certificateBuilder = Certificate.builder()
         .status(Status.SIGNED)
-        .sent(null)
+        .sent(TestDataCertificate.SENT)
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -262,6 +263,34 @@ class CertificateActionHandleComplementTest {
     );
   }
 
+  @Test
+  void shallReturnFalseIfNotSent() {
+    final var actionEvaluation = actionEvaluationBuilder().build();
+
+    final var certificate = certificateBuilder
+        .sent(null)
+        .build();
+
+    assertFalse(
+        certificateActionHandleComplement.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfSent() {
+    final var actionEvaluation = actionEvaluationBuilder().build();
+
+    final var certificate = certificateBuilder.build();
+
+    assertTrue(
+        certificateActionHandleComplement.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
   @Nested
   class AccessScope {
 
@@ -271,7 +300,7 @@ class CertificateActionHandleComplementTest {
     void setUp() {
       certificateBuilder = Certificate.builder()
           .status(Status.SIGNED)
-          .sent(null)
+          .sent(TestDataCertificate.SENT)
           .certificateMetaData(
               CertificateMetaData.builder()
                   .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
