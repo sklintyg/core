@@ -2,17 +2,17 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
-import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
+import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
 
 public class TextFieldAppearance {
 
-  private final PDTextField field;
+  private final PDVariableText field;
 
-  public TextFieldAppearance(PDTextField field) {
+  public TextFieldAppearance(PDVariableText field) {
     this.field = field;
   }
 
-  public void adjustMultilineFieldHeight() {
+  public void adjustFieldHeight() {
     final var fontSize = getFontSize();
     for (PDAnnotationWidget widget : field.getWidgets()) {
       final var rec = widget.getRectangle();
