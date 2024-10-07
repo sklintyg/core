@@ -8,7 +8,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProv
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7472_CERTIFICATE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK_RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.ANSWER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.CONTACT_MESSAGE;
@@ -179,7 +178,7 @@ class XmlGeneratorMessageV4Test {
           xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getLogiskAdressMottagare();
 
-      assertEquals(FK_RECIPIENT.id().id(), logiskAdressMottagare);
+      assertEquals("2021005521", logiskAdressMottagare);
     }
 
     @Test
@@ -519,7 +518,7 @@ class XmlGeneratorMessageV4Test {
           xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getLogiskAdressMottagare();
 
-      assertEquals(FK_RECIPIENT.id().id(), logiskAdressMottagare);
+      assertEquals("2021005521", logiskAdressMottagare);
     }
 
     @Test

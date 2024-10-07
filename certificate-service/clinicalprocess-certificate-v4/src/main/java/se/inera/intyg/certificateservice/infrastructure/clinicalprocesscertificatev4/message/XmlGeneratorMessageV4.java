@@ -164,7 +164,7 @@ public class XmlGeneratorMessageV4 implements XmlGeneratorMessage {
   }
 
   private static String logiskAdressMottagare(Certificate certificate) {
-    return certificate.certificateModel().recipient().id().id();
+    return certificate.certificateModel().recipient().getLogicalAddress();
   }
 
   private static Amneskod amneskod(MessageType messageType) {
