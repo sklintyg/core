@@ -40,11 +40,13 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
 import java.io.StringReader;
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
 import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
@@ -64,8 +66,16 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Vardgivare;
 @ExtendWith(MockitoExtension.class)
 class XmlGeneratorMessageV4Test {
 
+  private static final String LOGICAL_ADDRESS = "L-A";
+
   @InjectMocks
   private XmlGeneratorMessageV4 xmlGeneratorMessageV4;
+
+  @BeforeEach
+  void setUp() {
+    ReflectionTestUtils.setField(xmlGeneratorMessageV4, "fkLogicalAddress",
+        LOGICAL_ADDRESS);
+  }
 
   @Nested
   class GenerateTests {
@@ -178,7 +188,7 @@ class XmlGeneratorMessageV4Test {
           xmlGeneratorMessageV4.generate(CONTACT_MESSAGE, FK7472_CERTIFICATE)
       ).getLogiskAdressMottagare();
 
-      assertEquals("2021005521", logiskAdressMottagare);
+      assertEquals(LOGICAL_ADDRESS, logiskAdressMottagare);
     }
 
     @Test
@@ -518,7 +528,7 @@ class XmlGeneratorMessageV4Test {
           xmlGeneratorMessageV4.generateAnswer(ANSWER, COMPLEMENT_MESSAGE, FK7472_CERTIFICATE)
       ).getLogiskAdressMottagare();
 
-      assertEquals("2021005521", logiskAdressMottagare);
+      assertEquals(LOGICAL_ADDRESS, logiskAdressMottagare);
     }
 
     @Test
