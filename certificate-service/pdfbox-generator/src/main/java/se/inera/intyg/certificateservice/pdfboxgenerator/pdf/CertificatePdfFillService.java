@@ -11,6 +11,7 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
+import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
@@ -200,9 +201,9 @@ public class CertificatePdfFillService {
         textField.setDefaultAppearance(field.getAppearance());
       }
 
-      if (extractedField instanceof PDTextField textField && textField.isMultiline() && !append) {
+      if ((extractedField instanceof PDVariableText textField) && !append) {
         final var textAppearance = new TextFieldAppearance(textField);
-        textAppearance.adjustMultilineFieldHeight();
+        textAppearance.adjustFieldHeight();
       }
 
       if (append) {

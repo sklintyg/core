@@ -28,7 +28,7 @@ class TextFieldAppearanceTest {
   }
 
   @Test
-  void shouldAdjustMultilineFieldHeight() {
+  void shouldAdjustFieldHeight() {
     final var widget1 = mock(PDAnnotationWidget.class);
     final var widget2 = mock(PDAnnotationWidget.class);
     final var captor1 = ArgumentCaptor.forClass(PDRectangle.class);
@@ -40,7 +40,7 @@ class TextFieldAppearanceTest {
     when(field.getWidgets()).thenReturn(Arrays.asList(widget1, widget2));
     when(field.getDefaultAppearance()).thenReturn("/ArialMT 12.0");
 
-    textfieldAppearance.adjustMultilineFieldHeight();
+    textfieldAppearance.adjustFieldHeight();
 
     verify(widget1).setRectangle(captor1.capture());
     verify(widget2).setRectangle(captor2.capture());
