@@ -162,9 +162,10 @@ public class AppConfig {
   public SignCertificateDomainService signCertificateDomainService(
       CertificateRepository certificateRepository,
       CertificateEventDomainService certificateEventDomainService, XmlGenerator xmlGenerator,
-      SetMessagesToHandleDomainService setMessagesToHandleDomainService) {
+      SetMessagesToHandleDomainService setMessagesToHandleDomainService,
+      SendCertificateDomainService sendCertificateDomainService) {
     return new SignCertificateDomainService(certificateRepository, certificateEventDomainService,
-        xmlGenerator, setMessagesToHandleDomainService);
+        xmlGenerator, setMessagesToHandleDomainService, sendCertificateDomainService);
   }
 
   @Bean

@@ -13,6 +13,8 @@ import static se.inera.intyg.certificateservice.domain.certificate.model.Relatio
 import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.REPLACE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 
 import java.util.List;
@@ -28,7 +30,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Signature;
-import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
@@ -42,7 +43,6 @@ class SignCertificateDomainServiceTest {
 
   private static final Revision REVISION = new Revision(1);
   private static final Signature SIGNATURE = new Signature("signature");
-  public static final Xml XML = new Xml("XML");
 
   @Mock
   private CertificateRepository certificateRepository;
@@ -52,6 +52,8 @@ class SignCertificateDomainServiceTest {
   private XmlGenerator xmlGenerator;
   @Mock
   private SetMessagesToHandleDomainService setMessagesToHandleDomainService;
+  @Mock
+  private SendCertificateDomainService sendCertificateDomainService;
   @InjectMocks
   private SignCertificateDomainService signCertificateDomainService;
 
@@ -173,5 +175,30 @@ class SignCertificateDomainServiceTest {
     verify(setMessagesToHandleDomainService).handle(messagesCaptor.capture());
 
     assertEquals(expectedMessages, messagesCaptor.getValue());
+  }
+
+  @Test
+  void shallSendCertificateIfComplemented() {
+    final var expectedCertificate = fk7210CertificateBuilder()
+        .parent(
+            Relation.builder()
+                .type(COMPLEMENT)
+                .certificate(FK7210_CERTIFICATE)
+                .build()
+        ).build();
+    final var sentCertificate = mock(Certificate.class);
+
+    final var certificate = mock(Certificate.class);
+    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
+    doReturn(true).when(certificate).allowTo(SIGN, Optional.of(ACTION_EVALUATION));
+    doReturn(expectedCertificate).when(certificateRepository).save(certificate);
+
+    doReturn(sentCertificate).when(sendCertificateDomainService)
+        .send(CERTIFICATE_ID, ACTION_EVALUATION);
+
+    final var actualCertificate = signCertificateDomainService.sign(CERTIFICATE_ID, REVISION,
+        SIGNATURE, ACTION_EVALUATION);
+
+    assertEquals(sentCertificate, actualCertificate);
   }
 }
