@@ -14,13 +14,13 @@ dependencies {
     compileOnly "org.slf4j:slf4j-api"
     annotationProcessor "org.projectlombok:lombok"
 
-    wsdl2java "com.sun.xml.bind:jaxb-impl:${jaxbImplVersion}"
-    wsdl2java "org.apache.cxf.xjc-utils:cxf-xjc-runtime:${cxfVersion}"
-    wsdl2java "jakarta.xml.ws:jakarta.xml.ws-api:${jakartaWsVersion}"
-    wsdl2java "com.sun.xml.ws:rt:${jaxsWsVersion}"
-    wsdl2java "org.jvnet.jaxb2_commons:jaxb2-namespace-prefix:${jaxb2NamespacePrefixVersion}"
-    wsdl2java "codes.rafael.jaxb2_commons:jaxb2-basics-runtime:${jaxb2Version}"
     wsdl2java "codes.rafael.jaxb2_commons:jaxb2-basics:${jaxb2Version}"
+    wsdl2java "codes.rafael.jaxb2_commons:jaxb2-basics-runtime:${jaxb2Version}"
+    wsdl2java "com.sun.xml.bind:jaxb-impl"
+    wsdl2java "com.sun.xml.ws:rt:${xmlWsRtVersion}"
+    wsdl2java "jakarta.xml.ws:jakarta.xml.ws-api"
+    wsdl2java "org.apache.cxf.xjc-utils:cxf-xjc-runtime:${cxfPluginVersion}"
+    wsdl2java "org.jvnet.jaxb2_commons:jaxb2-namespace-prefix:${jaxb2NamespacePrefixVersion}"
 
     testImplementation "org.springframework:spring-context"
     testImplementation "org.springframework:spring-test"
@@ -38,13 +38,13 @@ wsdl2java {
     wsdlDir = file("src/main/resources/schemas")
     cxfVersion = project.getProperties().get("cxfVersion")
     cxfPluginVersion = project.getProperties().get("cxfPluginVersion")
+    includeJava8XmlDependencies = false
 
     def authorizationManagementVersion = "2.4.3"
     def employeeVersion = "3.0.1"
     def organizationVersion = "4.1"
 
     def commonOptions = [
-            "-xjc", "-b", "$wsdlDir/general-binding.xjb",
             "-p",
             "urn:riv:itintegration:registry:1=se.riv.itintegration.registry.v1",
     ]
