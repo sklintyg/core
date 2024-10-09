@@ -71,7 +71,7 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
   }
 
   private MeddelandeReferens svarPa(Certificate certificate) {
-    if (certificate.parent() != null && certificate.parent().type() == RelationType.COMPLEMENT) {
+    if (certificate.hasParent(RelationType.COMPLEMENT)) {
       final var svarPa = new MeddelandeReferens();
       final var unhandledComplements = certificate.messages(MessageType.COMPLEMENT)
           .stream()
