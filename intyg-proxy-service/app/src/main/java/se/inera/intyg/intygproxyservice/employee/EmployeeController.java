@@ -19,6 +19,9 @@
 
 package se.inera.intyg.intygproxyservice.employee;
 
+import static se.inera.intyg.intygproxyservice.logging.MdcLogConstants.EVENT_TYPE_ACCESSED;
+import static se.inera.intyg.intygproxyservice.logging.MdcLogConstants.EVENT_TYPE_CHANGE;
+
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.intygproxyservice.employee.dto.EmployeeRequest;
 import se.inera.intyg.intygproxyservice.employee.dto.EmployeeResponse;
 import se.inera.intyg.intygproxyservice.employee.service.EmployeeService;
+import se.inera.intyg.intygproxyservice.logging.PerformanceLogging;
 
 @RestController()
 @RequestMapping("/api/v2/employee")
@@ -36,6 +40,7 @@ public class EmployeeController {
   private final EmployeeService employeeService;
 
   @PostMapping("")
+  @PerformanceLogging(eventAction = "retrieve-employee", eventType = EVENT_TYPE_ACCESSED)
   EmployeeResponse getEmployee(@RequestBody EmployeeRequest employeeRequest) {
     return employeeService.getEmployee(employeeRequest);
   }

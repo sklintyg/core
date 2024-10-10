@@ -19,11 +19,14 @@
 
 package se.inera.intyg.intygproxyservice.organization;
 
+import static se.inera.intyg.intygproxyservice.logging.MdcLogConstants.EVENT_TYPE_ACCESSED;
+
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import se.inera.intyg.intygproxyservice.logging.PerformanceLogging;
 import se.inera.intyg.intygproxyservice.organization.dto.HealthCareProviderRequest;
 import se.inera.intyg.intygproxyservice.organization.dto.HealthCareProviderResponse;
 import se.inera.intyg.intygproxyservice.organization.service.HealthCareProviderService;
@@ -36,6 +39,7 @@ public class HealthCareProviderController {
   private final HealthCareProviderService healthCareProviderService;
 
   @PostMapping
+  @PerformanceLogging(eventAction = "retrieve-health-care-provider", eventType = EVENT_TYPE_ACCESSED)
   HealthCareProviderResponse getHealthCareProvider(@RequestBody HealthCareProviderRequest request) {
     return healthCareProviderService.get(request);
   }
