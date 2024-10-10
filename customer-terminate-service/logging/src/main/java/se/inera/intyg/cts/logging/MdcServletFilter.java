@@ -1,8 +1,8 @@
-package se.inera.intyg.intygproxyservice.logging;
+package se.inera.intyg.cts.logging;
 
-import static se.inera.intyg.intygproxyservice.logging.MdcLogConstants.SESSION_ID_KEY;
-import static se.inera.intyg.intygproxyservice.logging.MdcLogConstants.SPAN_ID_KEY;
-import static se.inera.intyg.intygproxyservice.logging.MdcLogConstants.TRACE_ID_KEY;
+import static se.inera.intyg.cts.logging.MdcLogConstants.SESSION_ID_KEY;
+import static se.inera.intyg.cts.logging.MdcLogConstants.SPAN_ID_KEY;
+import static se.inera.intyg.cts.logging.MdcLogConstants.TRACE_ID_KEY;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;

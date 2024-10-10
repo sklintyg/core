@@ -1,4 +1,4 @@
-package se.inera.intyg.intygproxyservice.logging;
+package se.inera.intyg.cts.logging;
 
 public class MdcLogConstants {
 
