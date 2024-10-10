@@ -5,8 +5,10 @@ import static se.inera.intyg.certificateservice.application.certificate.dto.Cert
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementDTOBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultAnswerComplementRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultComplementCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateMessageRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSendCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSignCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.questions;
@@ -57,6 +59,44 @@ public abstract class AnswerComplementIT extends BaseIntegrationIT {
     assertTrue(
         questions(messagesForCertificate.getBody()).get(0).isHandled(),
         "Should return true when answer complement is handled!"
+    );
+  }
+
+  @Test
+  @DisplayName("Skall skicka det nya intyget om kompletteringen besvaras med ett nytt intyg")
+  void shallSendComplementingCertificateAfterSign() {
+    final var testCertificates = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
+    );
+
+    api.sendCertificate(
+        defaultSendCertificateRequest(),
+        certificateId(testCertificates)
+    );
+
+    api.receiveMessage(
+        incomingComplementMessageBuilder()
+            .certificateId(certificateId(testCertificates))
+            .complements(List.of(incomingComplementDTOBuilder()
+                .questionId(questionId())
+                .build()))
+            .build()
+    );
+
+    final var complementResponse = api.complementCertificate(
+        defaultComplementCertificateRequest(),
+        certificateId(testCertificates)
+    );
+
+    final var complementingCertificate = api.signCertificate(
+        defaultSignCertificateRequest(),
+        complementResponse.getBody().getCertificate().getMetadata().getId(),
+        complementResponse.getBody().getCertificate().getMetadata().getVersion()
+    ).getBody().getCertificate();
+
+    assertTrue(
+        complementingCertificate.getMetadata().isSent(),
+        "Should send complementing certificate after sign!"
     );
   }
 }

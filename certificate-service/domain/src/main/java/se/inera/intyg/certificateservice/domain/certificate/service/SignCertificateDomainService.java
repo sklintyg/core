@@ -29,6 +29,7 @@ public class SignCertificateDomainService {
   private final CertificateEventDomainService certificateEventDomainService;
   private final XmlGenerator xmlGenerator;
   private final SetMessagesToHandleDomainService setMessagesToHandleDomainService;
+  private final SendCertificateDomainService sendCertificateDomainService;
 
   public Certificate sign(CertificateId certificateId, Revision revision, Signature signature,
       ActionEvaluation actionEvaluation) {
@@ -66,6 +67,8 @@ public class SignCertificateDomainService {
             .build()
     );
 
-    return signedCertificate;
+    return signedCertificate.hasParent(COMPLEMENT)
+        ? sendCertificateDomainService.send(certificateId, actionEvaluation)
+        : signedCertificate;
   }
 }
