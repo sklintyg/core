@@ -11,9 +11,10 @@ dependencies {
     runtimeOnly project(':integration-hsa')
     runtimeOnly project(':integration-fakehsa')
 
+    implementation "co.elastic.logging:logback-ecs-encoder:${logbackEcsEncoderVersion}"
+    implementation "com.google.guava:guava-gwt:${guavaVersion}"
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation "com.google.guava:guava-gwt:${guavaVersion}"
 
     compileOnly 'org.projectlombok:lombok'
 

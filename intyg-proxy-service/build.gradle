@@ -12,6 +12,7 @@ ext {
     jakartaActivationVersion = "2.0.1"
     jaxb2Version = "3.0.0"
     jaxb2NamespacePrefixVersion = "2.0"
+    logbackEcsEncoderVersion = '1.6.0'
     phSchematronVersion = "7.1.2"
     xmlWsRtVersion = "4.0.2"
 
