@@ -4,6 +4,7 @@ import static se.inera.intyg.intygproxyservice.integration.pu.configuration.PuCo
 import static se.inera.intyg.intygproxyservice.integration.pu.configuration.PuConstants.KODVERK_SAMORDNINGSNUMMER;
 import static se.inera.intyg.intygproxyservice.integration.pu.configuration.PuConstants.SAMORDNING_MONTH_INDEX;
 import static se.inera.intyg.intygproxyservice.integration.pu.configuration.PuConstants.SAMORDNING_MONTH_VALUE_MIN;
+import static se.inera.intyg.intygproxyservice.logging.MdcLogConstants.EVENT_TYPE_ACCESSED;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
+import se.inera.intyg.intygproxyservice.logging.PerformanceLogging;
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofile.v3.rivtabp21.GetPersonsForProfileResponderInterface;
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofileresponder.v3.GetPersonsForProfileType;
 import se.riv.strategicresourcemanagement.persons.person.v3.IIType;
@@ -28,6 +30,7 @@ public class PuClient {
   @Value("${integration.pu.logical.address}")
   private String logicalAddress;
 
+  @PerformanceLogging(eventAction = "get-persons-for-profile", eventType = EVENT_TYPE_ACCESSED)
   public PuResponse findPerson(PuRequest puRequest) {
     final GetPersonsForProfileType parameters = getParameters(puRequest.getPersonId());
 
