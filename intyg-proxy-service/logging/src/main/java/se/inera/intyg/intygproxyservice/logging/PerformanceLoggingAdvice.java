@@ -39,7 +39,9 @@ public class PerformanceLoggingAdvice {
                 .put(MdcLogConstants.EVENT_CATEGORY, performanceLogging.eventCategory())
                 .put(MdcLogConstants.EVENT_CLASS, className)
                 .put(MdcLogConstants.EVENT_METHOD, methodName)
-                .put(MdcLogConstants.EVENT_OUTCOME, success ? "success" : "failure")
+                .put(MdcLogConstants.EVENT_OUTCOME, success ? MdcLogConstants.EVENT_OUTCOME_SUCCESS
+                        : MdcLogConstants.EVENT_OUTCOME_FAILURE
+                )
                 .build()
         ) {
           log.info("Class: {} Method: {} Duration: {} ms",
