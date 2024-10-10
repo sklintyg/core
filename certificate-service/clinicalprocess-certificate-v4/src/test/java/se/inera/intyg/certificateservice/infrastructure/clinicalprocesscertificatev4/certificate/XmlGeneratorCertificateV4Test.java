@@ -48,6 +48,11 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Signature;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
+import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageId;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.message.model.SenderReference;
 import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.validation.XmlValidationService;
 import se.riv.clinicalprocess.healthcond.certificate.registerCertificate.v3.RegisterCertificateType;
@@ -61,6 +66,7 @@ import se.riv.clinicalprocess.healthcond.certificate.types.v3.Specialistkompeten
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.TypAvIntyg;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Enhet;
 import se.riv.clinicalprocess.healthcond.certificate.v3.HosPersonal;
+import se.riv.clinicalprocess.healthcond.certificate.v3.MeddelandeReferens;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Patient;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
@@ -492,6 +498,83 @@ class XmlGeneratorCertificateV4Test {
         () -> assertEquals(parentCertificate.id().id(),
             relation.get(0).getIntygsId().getExtension())
     );
+  }
+
+  @Test
+  void shouldIncludeMeddelandeReferensBasedOnLatestNotHandledComplement() {
+    final var expected = new MeddelandeReferens();
+    expected.setMeddelandeId("MESSAGE_ID");
+    expected.setReferensId("REFERENCE_ID");
+
+    final var certificate = fk7210CertificateBuilder()
+        .parent(
+            Relation.builder()
+                .type(RelationType.COMPLEMENT)
+                .certificate(FK7210_CERTIFICATE)
+                .build()
+        )
+        .messages(
+            List.of(
+                Message.builder()
+                    .type(MessageType.ANSWER)
+                    .build(),
+                Message.builder()
+                    .type(MessageType.COMPLEMENT)
+                    .sent(LocalDateTime.now().minusDays(5))
+                    .id(new MessageId("MESSAGE_ID"))
+                    .reference(new SenderReference("REFERENCE_ID"))
+                    .build(),
+                Message.builder()
+                    .type(MessageType.COMPLEMENT)
+                    .sent(LocalDateTime.now().minusDays(10))
+                    .build(),
+                Message.builder()
+                    .type(MessageType.COMPLEMENT)
+                    .status(MessageStatus.HANDLED)
+                    .sent(LocalDateTime.now())
+                    .build()
+            )
+        )
+        .build();
+
+    final var svarPa = unmarshal(
+        xmlGeneratorCertificateV4.generate(certificate, true)
+    ).getSvarPa();
+
+    assertAll(
+        () -> assertEquals(expected.getMeddelandeId(), svarPa.getMeddelandeId()),
+        () -> assertEquals(expected.getReferensId(), svarPa.getReferensId())
+    );
+  }
+
+  @Test
+  void shouldNotIncludeMeddelandeReferensIfNotComplemented() {
+    final var expected = new MeddelandeReferens();
+    expected.setMeddelandeId("MESSAGE_ID");
+    expected.setReferensId("REFERENCE_ID");
+
+    final var parentCertificate = FK7210_CERTIFICATE;
+    final var certificate = fk7210CertificateBuilder()
+        .parent(
+            Relation.builder()
+                .type(RelationType.RENEW)
+                .certificate(parentCertificate)
+                .build()
+        )
+        .messages(
+            List.of(
+                Message.builder()
+                    .type(MessageType.ANSWER)
+                    .build()
+            )
+        )
+        .build();
+
+    final var svarPa = unmarshal(
+        xmlGeneratorCertificateV4.generate(certificate, true)
+    ).getSvarPa();
+
+    assertNull(svarPa);
   }
 
   private RegisterCertificateType unmarshal(Xml response) {
