@@ -19,6 +19,8 @@
 
 package se.inera.intyg.intygproxyservice.integration.employee.client;
 
+import static se.inera.intyg.intygproxyservice.logging.MdcLogConstants.EVENT_TYPE_ACCESSED;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.employee.Employee;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.employee.client.converter.GetEmployeeIncludingProtectedPersonResponseTypeConverter;
+import se.inera.intyg.intygproxyservice.logging.PerformanceLogging;
 import se.riv.infrastructure.directory.employee.getemployeeincludingprotectedperson.v3.rivtabp21.GetEmployeeIncludingProtectedPersonResponderInterface;
 import se.riv.infrastructure.directory.employee.getemployeeincludingprotectedpersonresponder.v3.GetEmployeeIncludingProtectedPersonType;
 
@@ -42,6 +45,7 @@ public class HsaEmployeeClient {
   @Value("${integration.hsa.logical.address}")
   private String logicalAddress;
 
+  @PerformanceLogging(eventAction = "get-employee-including-protected-person", eventType = EVENT_TYPE_ACCESSED)
   public Employee getEmployee(GetEmployeeIntegrationRequest request) {
     final var parameters = getParameters(request.getHsaId(), request.getPersonId());
     final var type = getEmployeeIncludingProtectedPersonResponderInterface

@@ -19,6 +19,8 @@
 
 package se.inera.intyg.intygproxyservice.integration.organization.client;
 
+import static se.inera.intyg.intygproxyservice.logging.MdcLogConstants.EVENT_TYPE_ACCESSED;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,7 @@ import se.inera.intyg.intygproxyservice.integration.organization.client.converte
 import se.inera.intyg.intygproxyservice.integration.organization.client.converter.GetHealthCareUnitMembersResponseTypeConverter;
 import se.inera.intyg.intygproxyservice.integration.organization.client.converter.GetHealthCareUnitResponseTypeConverter;
 import se.inera.intyg.intygproxyservice.integration.organization.client.converter.GetUnitResponseTypeConverter;
+import se.inera.intyg.intygproxyservice.logging.PerformanceLogging;
 import se.riv.infrastructure.directory.organization.gethealthcareprovider.v1.rivtabp21.GetHealthCareProviderResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareproviderresponder.v1.GetHealthCareProviderType;
 import se.riv.infrastructure.directory.organization.gethealthcareunit.v2.rivtabp21.GetHealthCareUnitResponderInterface;
@@ -65,6 +68,7 @@ public class HsaOrganizationClient {
   @Value("${integration.hsa.logical.address}")
   private String logicalAddress;
 
+  @PerformanceLogging(eventAction = "get-unit", eventType = EVENT_TYPE_ACCESSED)
   public Unit getUnit(GetUnitIntegrationRequest request) {
     final var parameters = getUnitParameters(request.getHsaId());
 
@@ -76,6 +80,7 @@ public class HsaOrganizationClient {
     return getUnitResponseTypeConverter.convert(type);
   }
 
+  @PerformanceLogging(eventAction = "get-health-care-unit", eventType = EVENT_TYPE_ACCESSED)
   public HealthCareUnit getHealthCareUnit(GetHealthCareUnitIntegrationRequest request) {
     final var parameters = getHealthCareUnitParameters(request.getHsaId());
 
@@ -87,6 +92,7 @@ public class HsaOrganizationClient {
     return getHealthCareUnitResponseTypeConverter.convert(type);
   }
 
+  @PerformanceLogging(eventAction = "get-health-care-provider", eventType = EVENT_TYPE_ACCESSED)
   public List<HealthCareProvider> getHealthCareProvider(
       GetHealthCareProviderIntegrationRequest request) {
     final var parameters = getProviderParameters(request.getHsaId(),
@@ -100,6 +106,7 @@ public class HsaOrganizationClient {
     return getHealthCareProviderResponseTypeConverter.convert(type);
   }
 
+  @PerformanceLogging(eventAction = "get-health-care-unit-members", eventType = EVENT_TYPE_ACCESSED)
   public HealthCareUnitMembers getHealthCareUnitMembers(
       GetHealthCareUnitMembersIntegrationRequest request) {
     final var parameters = getHealthCareUnitMembersParameters(request.getHsaId());
