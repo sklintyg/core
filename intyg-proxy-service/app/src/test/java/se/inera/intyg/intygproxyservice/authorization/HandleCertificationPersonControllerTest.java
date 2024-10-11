@@ -44,10 +44,10 @@ class HandleCertificationPersonControllerTest {
   @Test
   void shallReturnValueFromService() {
     final var expectedResponse = HandleCertificationPersonResponse.builder().build();
-    when(handleCertificationPersonService.get(any(HandleCertificationPersonRequest.class)))
+    when(handleCertificationPersonService.handle(any(HandleCertificationPersonRequest.class)))
         .thenReturn(expectedResponse);
 
-    final var response = handleCertificationPersonController.getCredentialsForPerson(
+    final var response = handleCertificationPersonController.handleCertificationForPerson(
         HandleCertificationPersonRequest.builder().build()
     );
 

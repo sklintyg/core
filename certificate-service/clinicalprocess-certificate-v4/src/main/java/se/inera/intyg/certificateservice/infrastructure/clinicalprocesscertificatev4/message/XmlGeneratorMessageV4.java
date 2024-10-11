@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.message.model.Answer;
@@ -28,6 +29,9 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.MeddelandeReferens;
 
 @RequiredArgsConstructor
 public class XmlGeneratorMessageV4 implements XmlGeneratorMessage {
+
+  @Value("${sendmessagetofk.logicaladdress}")
+  private static String fkLogicalAddress;
 
   private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(
       "yyyy-MM-dd'T'HH:mm:ss");
@@ -164,7 +168,11 @@ public class XmlGeneratorMessageV4 implements XmlGeneratorMessage {
   }
 
   private static String logiskAdressMottagare(Certificate certificate) {
-    return certificate.certificateModel().recipient().id().id();
+    if (!certificate.certificateModel().recipient().id().id().equals("FKASSA")) {
+      return certificate.certificateModel().recipient().id().id();
+    }
+
+    return fkLogicalAddress;
   }
 
   private static Amneskod amneskod(MessageType messageType) {

@@ -37,7 +37,7 @@ public class HandleCertificationPersonService {
 
   private final HandleCertificationPersonIntegrationService handleCertificationPersonIntegrationService;
 
-  public HandleCertificationPersonResponse get(HandleCertificationPersonRequest request) {
+  public HandleCertificationPersonResponse handle(HandleCertificationPersonRequest request) {
     validateRequest(request);
 
     log.info(
