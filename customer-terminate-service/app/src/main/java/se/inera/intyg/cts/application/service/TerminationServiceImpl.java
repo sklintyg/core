@@ -3,10 +3,8 @@ package se.inera.intyg.cts.application.service;
 import static se.inera.intyg.cts.application.dto.TerminationDTOMapper.toDTO;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -80,7 +78,7 @@ public class TerminationServiceImpl implements TerminationService {
   public List<TerminationDTO> findAll() {
     return terminationRepository.findAll().stream()
         .map(TerminationDTOMapper::toDTO)
-        .collect(Collectors.toList());
+        .toList();
   }
 
   /**
@@ -93,7 +91,7 @@ public class TerminationServiceImpl implements TerminationService {
   @Transactional
   public TerminationDTO resendPassword(UUID terminationId) throws IllegalArgumentException {
     Termination termination = terminationRepository.findByTerminationId(new TerminationId(terminationId)).orElseThrow(
-        () -> new IllegalArgumentException (String.format("Termination for id #s not found", terminationId))
+        () -> new IllegalArgumentException (String.format("Termination for id %s not found", terminationId))
       );
       return TerminationDTOMapper.toDTO(sendPackagePassword.resendPassword(termination));
   }
