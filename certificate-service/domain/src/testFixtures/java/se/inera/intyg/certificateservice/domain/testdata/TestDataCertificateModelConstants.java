@@ -63,6 +63,6 @@ public class TestDataCertificateModelConstants {
   public static final String FK7472_NAME = "Intyg om tillfällig föräldrapenning";
   public static final String FK7809_NAME = "Läkarutlåtande för merkostnadsersättning";
   public static final Recipient FK_RECIPIENT = new Recipient(
-      new RecipientId("FKASSA"), "Försäkringskassan"
+      new RecipientId("FKASSA"), "Försäkringskassan", "Logisk adress"
   );
 }

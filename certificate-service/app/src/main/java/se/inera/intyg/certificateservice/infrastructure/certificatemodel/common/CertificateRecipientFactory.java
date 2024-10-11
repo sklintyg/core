@@ -9,10 +9,11 @@ public class CertificateRecipientFactory {
     throw new IllegalStateException("Utility class");
   }
 
-  public static Recipient fkassa() {
+  public static Recipient fkassa(String logicalAddress) {
     return new Recipient(
         new RecipientId("FKASSA"),
-        "Försäkringskassan"
+        "Försäkringskassan",
+        logicalAddress
     );
   }
 }

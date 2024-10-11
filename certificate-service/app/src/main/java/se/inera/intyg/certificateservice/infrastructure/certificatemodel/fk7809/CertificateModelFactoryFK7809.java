@@ -61,6 +61,9 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   @Value("${certificate.model.fk7809.v1_0.active.from}")
   private LocalDateTime activeFrom;
 
+  @Value("${sendmessagetofk.logicaladdress}")
+  private String fkLogicalAddress;
+
   private final DiagnosisCodeRepository diagnosisCodeRepository;
 
   private static final String FK_7809 = "fk7809";
@@ -126,7 +129,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
                     .build()
             )
         )
-        .recipient(CertificateRecipientFactory.fkassa())
+        .recipient(CertificateRecipientFactory.fkassa(fkLogicalAddress))
         .messageTypes(
             List.of(
                 CertificateMessageType.builder()

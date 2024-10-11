@@ -29,6 +29,10 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
   private final CertificateActionFactory certificateActionFactory;
   @Value("${certificate.model.fk7210.v1_0.active.from}")
   private LocalDateTime activeFrom;
+
+  @Value("${sendmessagetofk.logicaladdress}")
+  private String fkLogicalAddress;
+
   private static final String FK_7210 = "fk7210";
   private static final String VERSION = "1.0";
   private static final String NAME = "Intyg om graviditet";
@@ -73,7 +77,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
         .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)
         .availableForCitizen(true)
-        .recipient(CertificateRecipientFactory.fkassa())
+        .recipient(CertificateRecipientFactory.fkassa(fkLogicalAddress))
         .certificateActionSpecifications(FK7210CertificateActionSpecification.create())
         .schematronPath(SCHEMATRON_PATH)
         .summaryProvider(new FK7210CertificateSummaryProvider())

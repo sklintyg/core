@@ -12,10 +12,11 @@ class CertificateRecipientFactoryTest {
   void shouldReturnFkassa() {
     final var expected = new Recipient(
         new RecipientId("FKASSA"),
-        "Försäkringskassan"
+        "Försäkringskassan",
+        "Logisk adress"
     );
 
-    final var response = CertificateRecipientFactory.fkassa();
+    final var response = CertificateRecipientFactory.fkassa("Logisk adress");
 
     assertEquals(expected, response);
   }
