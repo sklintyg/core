@@ -9,19 +9,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.cts.application.service.MessageService;
+import se.inera.intyg.cts.logging.MdcHelper;
 
 @ExtendWith(MockitoExtension.class)
 class SendNotificationTaskTest {
 
-    @Mock
-    MessageService messageService;
+  @Mock
+  private MdcHelper mdcHelper;
 
-    @InjectMocks
-    SendNotificationTask sendNotificationTask;
+  @Mock
+  MessageService messageService;
 
-    @Test
-    void testSendExportedPackageNotification() {
-        sendNotificationTask.sendNotification();
-        verify(messageService, times(1)).sendNotification();
-    }
+  @InjectMocks
+  SendNotificationTask sendNotificationTask;
+
+  @Test
+  void testSendExportedPackageNotification() {
+    sendNotificationTask.sendNotification();
+    verify(messageService, times(1)).sendNotification();
+  }
 }

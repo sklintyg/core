@@ -9,19 +9,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.cts.application.service.MessageService;
+import se.inera.intyg.cts.logging.MdcHelper;
 
 @ExtendWith(MockitoExtension.class)
 class SendReminderTaskTest {
 
-    @Mock
-    MessageService messageService;
+  @Mock
+  private MdcHelper mdcHelper;
 
-    @InjectMocks
-    SendReminderTask sendReminderTask;
+  @Mock
+  MessageService messageService;
 
-    @Test
-    void testSendExportedPackageReminder() {
-        sendReminderTask.sendReminder();
-        verify(messageService, times(1)).sendReminder();
-    }
+  @InjectMocks
+  SendReminderTask sendReminderTask;
+
+  @Test
+  void testSendExportedPackageReminder() {
+    sendReminderTask.sendReminder();
+    verify(messageService, times(1)).sendReminder();
+  }
 }

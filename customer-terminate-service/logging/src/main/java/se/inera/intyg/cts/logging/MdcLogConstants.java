@@ -23,6 +23,9 @@ public class MdcLogConstants {
   public static final String SPAN_ID_KEY = "span.id";
   public static final String TRACE_ID_KEY = "trace.id";
 
-  public static final String EVENT_TYPE_CHANGE = "change";
   public static final String EVENT_TYPE_ACCESSED = "accessed";
+  public static final String EVENT_TYPE_CHANGE = "change";
+  public static final String EVENT_TYPE_CREATION = "creation";
+  public static final String EVENT_TYPE_DELETION = "deletion";
+  public static final String EVENT_TYPE_INFO = "info";
 }
