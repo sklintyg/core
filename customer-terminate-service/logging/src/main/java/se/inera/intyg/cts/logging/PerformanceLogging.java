@@ -1,6 +1,6 @@
-package se.inera.intyg.intygproxyservice.logging;
+package se.inera.intyg.cts.logging;
 
-import static se.inera.intyg.intygproxyservice.logging.MdcLogConstants.EVENT_CATEGORY_API;
+import static se.inera.intyg.cts.logging.MdcLogConstants.EVENT_CATEGORY_API;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

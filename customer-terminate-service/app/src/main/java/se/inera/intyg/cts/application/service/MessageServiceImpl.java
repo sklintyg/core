@@ -45,7 +45,7 @@ public class MessageServiceImpl implements MessageService {
     for (Termination termination : terminationRepository
         .findByStatuses(List.of(TerminationStatus.RECEIPT_RECEIVED))) {
 
-      if (sendPasswordActive) {
+      if (Boolean.TRUE.equals(sendPasswordActive)) {
         sendPassword(termination);
 
       } else {

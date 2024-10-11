@@ -1,7 +1,7 @@
-package se.inera.intyg.intygproxyservice.logging;
+package se.inera.intyg.cts.logging;
 
-import static se.inera.intyg.intygproxyservice.logging.MdcLogConstants.EVENT_CATEGORY;
-import static se.inera.intyg.intygproxyservice.logging.MdcLogConstants.EVENT_CATEGORY_PROCESS;
+import static se.inera.intyg.cts.logging.MdcLogConstants.EVENT_CATEGORY;
+import static se.inera.intyg.cts.logging.MdcLogConstants.EVENT_CATEGORY_PROCESS;
 
 import java.io.Closeable;
 import java.util.Collections;

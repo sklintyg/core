@@ -9,20 +9,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.cts.application.service.ExportService;
+import se.inera.intyg.cts.logging.MdcHelper;
 
 
 @ExtendWith(MockitoExtension.class)
 class CollectCertificatesTaskTest {
 
-    @Mock
-    private ExportService exportService;
-    @InjectMocks
-    private CollectCertificatesTask collectCertificatesTask;
+  @Mock
+  private MdcHelper mdcHelper;
+  @Mock
+  private ExportService exportService;
+  @InjectMocks
+  private CollectCertificatesTask collectCertificatesTask;
 
-    @Test
-    void collectCertificates() {
-        collectCertificatesTask.collectCertificates();
+  @Test
+  void collectCertificates() {
+    collectCertificatesTask.collectCertificates();
 
-        verify(exportService, times(1)).collectCertificatesToExport();
-    }
+    verify(exportService, times(1)).collectCertificatesToExport();
+  }
 }

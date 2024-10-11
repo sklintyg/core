@@ -1,11 +1,11 @@
-package se.inera.intyg.intygproxyservice.logging;
+package se.inera.intyg.cts.logging;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static se.inera.intyg.intygproxyservice.logging.MdcHelper.LOG_SESSION_ID_HEADER;
-import static se.inera.intyg.intygproxyservice.logging.MdcHelper.LOG_TRACE_ID_HEADER;
+import static se.inera.intyg.cts.logging.MdcHelper.LOG_SESSION_ID_HEADER;
+import static se.inera.intyg.cts.logging.MdcHelper.LOG_TRACE_ID_HEADER;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;

@@ -9,10 +9,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.cts.application.service.EraseService;
+import se.inera.intyg.cts.logging.MdcHelper;
 
 @ExtendWith(MockitoExtension.class)
 class EraseCareProviderTaskTest {
 
+  @Mock
+  private MdcHelper mdcHelper;
+  
   @Mock
   private EraseService eraseService;
 

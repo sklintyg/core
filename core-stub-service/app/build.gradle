@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '3.2.8'
+    id 'org.springframework.boot' version '3.3.4'
 }
 
 dependencies {
@@ -20,4 +20,21 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform {
     }
+}
+
+tasks.register("appRunDebug") {
+    println("######## Running in Debug mode ########")
+    doFirst {
+        bootRun.configure {
+            jvmArgs = [
+                    "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=18001",
+            ]
+        }
+    }
+    finalizedBy("bootRun")
+}
+
+tasks.register("appRun") {
+    println("######## Running in normal mode ########")
+    finalizedBy("bootRun")
 }

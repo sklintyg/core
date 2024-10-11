@@ -1,5 +1,7 @@
 package se.inera.intyg.cts.infrastructure.integration.tellustalk;
 
+import static se.inera.intyg.cts.logging.MdcLogConstants.EVENT_TYPE_INFO;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -10,6 +12,7 @@ import reactor.core.publisher.Mono;
 import se.inera.intyg.cts.infrastructure.integration.SendSMS;
 import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.SMSRequestDTO;
 import se.inera.intyg.cts.infrastructure.integration.tellustalk.dto.TellusTalkResponseDTO;
+import se.inera.intyg.cts.logging.PerformanceLogging;
 
 @Service
 public class SendSMSWithTellusTalk implements SendSMS {
@@ -44,6 +47,7 @@ public class SendSMSWithTellusTalk implements SendSMS {
   }
 
   @Override
+  @PerformanceLogging(eventAction = "send-sms", eventType = EVENT_TYPE_INFO)
   public TellusTalkResponseDTO sendSMS(String phonenumber, String message) {
     SMSRequestDTO smsRequestDTO = new SMSRequestDTO(phonenumber, message, smsOriginatorText);
 

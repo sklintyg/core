@@ -1,4 +1,4 @@
-package se.inera.intyg.intygproxyservice.logging;
+package se.inera.intyg.cts.logging;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.nio.CharBuffer;
