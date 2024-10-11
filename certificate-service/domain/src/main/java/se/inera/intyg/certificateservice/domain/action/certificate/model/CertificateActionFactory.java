@@ -213,7 +213,20 @@ public class CertificateActionFactory {
               List.of(
                   new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleSent(false),
-                  new ActionRuleProtectedPerson()
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleBlockTestIndicatedPerson()
+              )
+          )
+          .build();
+      case SEND_AFTER_COMPLEMENT -> CertificateActionSendAfterComplement.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleParentRelationMatch(List.of(RelationType.COMPLEMENT)),
+                  new ActionRuleStatus(List.of(Status.SIGNED)),
+                  new ActionRuleSent(false),
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleBlockTestIndicatedPerson()
               )
           )
           .build();

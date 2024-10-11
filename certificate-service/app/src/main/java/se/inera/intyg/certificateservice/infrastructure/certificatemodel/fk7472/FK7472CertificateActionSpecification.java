@@ -74,6 +74,9 @@ public class FK7472CertificateActionSpecification {
             .certificateActionType(CertificateActionType.COMPLEMENT)
             .build(),
         CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.SEND_AFTER_COMPLEMENT)
+            .build(),
+        CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.CANNOT_COMPLEMENT)
             .build(),
         CertificateActionSpecification.builder()

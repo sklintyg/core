@@ -90,6 +90,19 @@ class FK7809CertificateActionSpecificationTest {
   }
 
   @Test
+  void shallIncludeCertificateActionSendAfterComplement() {
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.SEND_AFTER_COMPLEMENT)
+        .build();
+
+    final var actionSpecifications = FK7809CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
+  }
+
+  @Test
   void shallIncludeCertificateActionPrint() {
     final var expectedType = CertificateActionType.PRINT;
 

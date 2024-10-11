@@ -8,7 +8,6 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultComplementCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateMessageRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSendCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSignCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.questions;
@@ -16,6 +15,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 
 public abstract class AnswerComplementIT extends BaseIntegrationIT {
 
@@ -83,19 +83,14 @@ public abstract class AnswerComplementIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var complementResponse = api.complementCertificate(
+    final var complementingCertificate = api.complementCertificate(
         defaultComplementCertificateRequest(),
         certificateId(testCertificates)
-    );
-
-    final var complementingCertificate = api.signCertificate(
-        defaultSignCertificateRequest(),
-        complementResponse.getBody().getCertificate().getMetadata().getId(),
-        complementResponse.getBody().getCertificate().getMetadata().getVersion()
     ).getBody().getCertificate();
 
     assertTrue(
-        complementingCertificate.getMetadata().isSent(),
+        complementingCertificate.getLinks().stream()
+            .anyMatch(link -> link.getType() == ResourceLinkTypeDTO.SEND_AFTER_SIGN_CERTIFICATE),
         "Should send complementing certificate after sign!"
     );
   }

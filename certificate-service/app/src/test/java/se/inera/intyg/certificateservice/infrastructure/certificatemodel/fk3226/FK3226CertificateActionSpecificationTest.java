@@ -89,6 +89,19 @@ class FK3226CertificateActionSpecificationTest {
   }
 
   @Test
+  void shallIncludeCertificateActionSendAfterComplement() {
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.SEND_AFTER_COMPLEMENT)
+        .build();
+
+    final var certificateModel = FK3226CertificateActionSpecification.create();
+
+    assertTrue(certificateModel.stream().anyMatch(
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
+  }
+
+  @Test
   void shallIncludeCertificateActionPrint() {
     final var expectedType = CertificateActionType.PRINT;
 
