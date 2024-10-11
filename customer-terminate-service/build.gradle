@@ -6,11 +6,13 @@ plugins {
 }
 
 ext {
-    springbootMavenBomVersion = '3.3.4'
+    logbackEcsEncoderVersion = '1.6.0'
     okhttpVersion = '4.12.0'
-    zip4jVersion = '2.11.5'
     shedlockVersion = '5.16.0'
     springDocVersion = '1.8.0'
+    zip4jVersion = '2.11.5'
+
+    springbootMavenBomVersion = '3.3.4'
 
     nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'
 }
@@ -37,7 +39,7 @@ dependencyCheck {
     formats = List.of("HTML", "JSON")
 
     nvd {
-        datafeedUrl="${nvdMirror}"
+        datafeedUrl = "${nvdMirror}"
     }
 }
 
