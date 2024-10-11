@@ -1,5 +1,7 @@
 package se.inera.intyg.cts.infrastructure.integration.email;
 
+import static se.inera.intyg.cts.logging.MdcLogConstants.EVENT_TYPE_INFO;
+
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -9,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.cts.infrastructure.integration.SendEmail;
+import se.inera.intyg.cts.logging.PerformanceLogging;
 
 @Service
 public class SendEmailWithJava implements SendEmail {
@@ -23,6 +26,7 @@ public class SendEmailWithJava implements SendEmail {
   }
 
   @Override
+  @PerformanceLogging(eventAction = "send-email", eventType = EVENT_TYPE_INFO)
   public void sendEmail(String emailAddress, String emailBody, String emailSubject)
       throws MessagingException {
     final var message = createMessage(emailAddress, emailSubject, emailBody);

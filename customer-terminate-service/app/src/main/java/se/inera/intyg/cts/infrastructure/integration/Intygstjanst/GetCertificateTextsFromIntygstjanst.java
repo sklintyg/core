@@ -1,5 +1,7 @@
 package se.inera.intyg.cts.infrastructure.integration.Intygstjanst;
 
+import static se.inera.intyg.cts.logging.MdcLogConstants.EVENT_TYPE_ACCESSED;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,6 +15,7 @@ import se.inera.intyg.cts.domain.model.CertificateTypeVersion;
 import se.inera.intyg.cts.domain.model.CertificateXML;
 import se.inera.intyg.cts.infrastructure.integration.GetCertificateTexts;
 import se.inera.intyg.cts.infrastructure.integration.Intygstjanst.dto.CertificateTextDTO;
+import se.inera.intyg.cts.logging.PerformanceLogging;
 
 @Service
 public class GetCertificateTextsFromIntygstjanst implements GetCertificateTexts {
@@ -37,6 +40,7 @@ public class GetCertificateTextsFromIntygstjanst implements GetCertificateTexts 
   }
 
   @Override
+  @PerformanceLogging(eventAction = "get-certificate-texts", eventType = EVENT_TYPE_ACCESSED)
   public List<CertificateText> get() {
     final List<CertificateTextDTO> certificateExportPageDTOMono = webClient.get()
         .uri(uriBuilder -> uriBuilder

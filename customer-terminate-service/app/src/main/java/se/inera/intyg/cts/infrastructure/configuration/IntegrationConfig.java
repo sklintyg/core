@@ -16,6 +16,7 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
+import se.inera.intyg.cts.infrastructure.integration.ExchangeFilterFunctionProvider;
 
 @Configuration
 public class IntegrationConfig {
@@ -48,6 +49,7 @@ public class IntegrationConfig {
         .build();
 
     return WebClient.builder()
+        .filter(ExchangeFilterFunctionProvider.addHeadersFromMDCToRequest())
         .exchangeStrategies(strategies)
         .build();
   }
@@ -59,6 +61,7 @@ public class IntegrationConfig {
         .secure(sslSpec -> sslSpec.sslContext(sslContext));
 
     return WebClient.builder()
+        .filter(ExchangeFilterFunctionProvider.addHeadersFromMDCToRequest())
         .clientConnector(new ReactorClientHttpConnector(httpClient))
         .build();
   }
@@ -66,24 +69,28 @@ public class IntegrationConfig {
   @Bean(name = "tellusTalkWebClient")
   public WebClient webClientForTellusTalk() {
     return WebClient.builder()
+        .filter(ExchangeFilterFunctionProvider.addHeadersFromMDCToRequest())
         .build();
   }
 
   @Bean(name = "webcertWebClient")
   public WebClient webClientForWebcert() {
     return WebClient.builder()
+        .filter(ExchangeFilterFunctionProvider.addHeadersFromMDCToRequest())
         .build();
   }
 
   @Bean(name = "intygsstatistikWebClient")
   public WebClient webClientForIntygsstatistik() {
     return WebClient.builder()
+        .filter(ExchangeFilterFunctionProvider.addHeadersFromMDCToRequest())
         .build();
   }
 
   @Bean(name = "privatePractitionerWebClient")
   public WebClient webClientForPrivatePractitioner() {
     return WebClient.builder()
+        .filter(ExchangeFilterFunctionProvider.addHeadersFromMDCToRequest())
         .build();
   }
 
