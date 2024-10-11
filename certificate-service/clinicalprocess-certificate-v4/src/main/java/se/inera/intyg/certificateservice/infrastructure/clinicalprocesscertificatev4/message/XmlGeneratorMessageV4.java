@@ -31,7 +31,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.MeddelandeReferens;
 public class XmlGeneratorMessageV4 implements XmlGeneratorMessage {
 
   @Value("${sendmessagetofk.logicaladdress}")
-  private static String fkLogicalAddress;
+  private String fkLogicalAddress;
 
   private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(
       "yyyy-MM-dd'T'HH:mm:ss");
@@ -57,7 +57,7 @@ public class XmlGeneratorMessageV4 implements XmlGeneratorMessage {
     );
   }
 
-  private static SendMessageToRecipientType sendMessageToRecipientType(Message message,
+  private SendMessageToRecipientType sendMessageToRecipientType(Message message,
       Certificate certificate) {
     final var sendMessageToRecipientType = new SendMessageToRecipientType();
     sendMessageToRecipientType.setMeddelandeId(
@@ -98,7 +98,7 @@ public class XmlGeneratorMessageV4 implements XmlGeneratorMessage {
     return sendMessageToRecipientType;
   }
 
-  private static SendMessageToRecipientType sendMessageToRecipientType(Answer answer,
+  private SendMessageToRecipientType sendMessageToRecipientType(Answer answer,
       Message message, Certificate certificate) {
     final var sendMessageToRecipientType = new SendMessageToRecipientType();
     sendMessageToRecipientType.setMeddelandeId(
@@ -167,7 +167,7 @@ public class XmlGeneratorMessageV4 implements XmlGeneratorMessage {
     return personId;
   }
 
-  private static String logiskAdressMottagare(Certificate certificate) {
+  private String logiskAdressMottagare(Certificate certificate) {
     if (!certificate.certificateModel().recipient().id().id().equals("FKASSA")) {
       return certificate.certificateModel().recipient().id().id();
     }
