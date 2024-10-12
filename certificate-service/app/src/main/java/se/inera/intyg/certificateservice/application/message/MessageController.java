@@ -1,5 +1,10 @@
 package se.inera.intyg.certificateservice.application.message;
 
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE_ACCESSED;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE_CHANGE;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE_CREATION;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE_DELETION;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +46,7 @@ import se.inera.intyg.certificateservice.application.message.service.SaveAnswerS
 import se.inera.intyg.certificateservice.application.message.service.SaveMessageService;
 import se.inera.intyg.certificateservice.application.message.service.SendAnswerService;
 import se.inera.intyg.certificateservice.application.message.service.SendMessageService;
+import se.inera.intyg.certificateservice.logging.PerformanceLogging;
 
 @RequiredArgsConstructor
 @RestController
@@ -66,6 +72,7 @@ public class MessageController {
   }
 
   @PostMapping("/{certificateId}")
+  @PerformanceLogging(eventAction = "retrieve-message-list-for-certificate", eventType = EVENT_TYPE_ACCESSED)
   GetCertificateMessageResponse getMessagesForCertificate(
       @RequestBody GetCertificateMessageRequest getCertificateMessageRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -73,12 +80,14 @@ public class MessageController {
   }
 
   @GetMapping("/{messageId}/exists")
+  @PerformanceLogging(eventAction = "find-existing-message", eventType = EVENT_TYPE_ACCESSED)
   MessageExistsResponse findExistingMessage(
       @PathVariable("messageId") String messageId) {
     return messageExistsService.exist(messageId);
   }
 
   @PostMapping("/{messageId}/certificate")
+  @PerformanceLogging(eventAction = "retrieve-certificate-from-message", eventType = EVENT_TYPE_ACCESSED)
   GetCertificateFromMessageResponse getCertificateFromMessage(
       @RequestBody GetCertificateFromMessageRequest getCertificateFromMessageRequest,
       @PathVariable("messageId") String messageId) {
@@ -86,6 +95,7 @@ public class MessageController {
   }
 
   @PostMapping("/{messageId}/handle")
+  @PerformanceLogging(eventAction = "handle-message", eventType = EVENT_TYPE_CHANGE)
   HandleMessageResponse handleMessage(
       @RequestBody HandleMessageRequest request,
       @PathVariable("messageId") String messageId) {
@@ -93,6 +103,7 @@ public class MessageController {
   }
 
   @PostMapping("/{certificateId}/create")
+  @PerformanceLogging(eventAction = "create-message", eventType = EVENT_TYPE_CREATION)
   CreateMessageResponse createMessage(
       @RequestBody CreateMessageRequest request,
       @PathVariable("certificateId") String certificateId) {
@@ -100,6 +111,7 @@ public class MessageController {
   }
 
   @PostMapping("/{messageId}/save")
+  @PerformanceLogging(eventAction = "update-message", eventType = EVENT_TYPE_CHANGE)
   SaveMessageResponse saveMessage(
       @RequestBody SaveMessageRequest request,
       @PathVariable("messageId") String messageId) {
@@ -107,6 +119,7 @@ public class MessageController {
   }
 
   @DeleteMapping("/{messageId}/delete")
+  @PerformanceLogging(eventAction = "delete-message", eventType = EVENT_TYPE_DELETION)
   void deleteMessage(
       @RequestBody DeleteMessageRequest request,
       @PathVariable("messageId") String messageId) {
@@ -114,6 +127,7 @@ public class MessageController {
   }
 
   @PostMapping("/{messageId}/send")
+  @PerformanceLogging(eventAction = "send-message", eventType = EVENT_TYPE_CHANGE)
   SendMessageResponse sendMessage(
       @RequestBody SendMessageRequest request,
       @PathVariable("messageId") String messageId) {
@@ -121,6 +135,7 @@ public class MessageController {
   }
 
   @PostMapping("/{messageId}/saveanswer")
+  @PerformanceLogging(eventAction = "save-answer", eventType = EVENT_TYPE_CHANGE)
   SaveAnswerResponse saveAnswer(
       @RequestBody SaveAnswerRequest request,
       @PathVariable("messageId") String messageId) {
@@ -128,6 +143,7 @@ public class MessageController {
   }
 
   @DeleteMapping("/{messageId}/deleteanswer")
+  @PerformanceLogging(eventAction = "delete-answer", eventType = EVENT_TYPE_DELETION)
   DeleteAnswerResponse deleteAnswer(
       @RequestBody DeleteAnswerRequest request,
       @PathVariable("messageId") String messageId) {
@@ -135,6 +151,7 @@ public class MessageController {
   }
 
   @PostMapping("/{messageId}/sendanswer")
+  @PerformanceLogging(eventAction = "send-answer", eventType = EVENT_TYPE_CHANGE)
   SendAnswerResponse sendAnswer(
       @RequestBody SendAnswerRequest request,
       @PathVariable("messageId") String messageId) {

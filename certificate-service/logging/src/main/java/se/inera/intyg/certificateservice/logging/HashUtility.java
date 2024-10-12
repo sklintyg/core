@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.logging;
+package se.inera.intyg.certificateservice.logging;
 
 import com.google.common.base.Strings;
 import com.google.common.hash.HashFunction;

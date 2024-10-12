@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.logging;
+package se.inera.intyg.certificateservice.logging;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

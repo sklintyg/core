@@ -1,8 +1,9 @@
 rootProject.name = 'certificate-service'
 
 include 'app'
+include 'clinicalprocess-certificate-v4'
 include 'domain'
 include 'integration-test'
-include 'clinicalprocess-certificate-v4'
+include 'logging'
 include 'pdfbox-generator'
 
