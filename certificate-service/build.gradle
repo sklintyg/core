@@ -1,7 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '3.3.4'
     id 'io.spring.dependency-management' version '1.1.4'
-    id 'org.sonarqube' version '4.4.1.3373'
+    id 'org.sonarqube' version '5.1.0.4882'
     id "org.owasp.dependencycheck" version "10.0.4"
     id 'test-report-aggregation'
     id 'application'
@@ -30,8 +30,8 @@ sonar {
     properties {
         property "sonar.projectKey", "intyg-certificate-service"
         property "sonar.projectName", "intyg-certificate-service"
-        property "sonar.dependencyCheck.htmlReportPath", "${buildDir}/reports/dependency-check-report.html"
-        property "sonar.dependencyCheck.jsonReportPath", "${buildDir}/reports/dependency-check-report.json"
+        property "sonar.dependencyCheck.jsonReportPath", "${layout.buildDirectory.get()}/reports/dependency-check-report.json" as String
+        property "sonar.dependencyCheck.htmlReportPath", "${layout.buildDirectory.get()}/reports/dependency-check-report.html" as String
     }
 }
 
@@ -45,17 +45,13 @@ allprojects {
 
 dependencyCheck {
     formats = List.of("HTML", "JSON")
-
-    nvd {
-        datafeedUrl = "${nvdMirror}"
-    }
+    nvd.setDatafeedUrl(nvdMirror)
+    analyzers.setAssemblyEnabled(false)
 }
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
-    apply plugin: 'org.sonarqube'
-    apply plugin: 'org.owasp.dependencycheck'
 
     sourceCompatibility = '21'
     targetCompatibility = '21'
