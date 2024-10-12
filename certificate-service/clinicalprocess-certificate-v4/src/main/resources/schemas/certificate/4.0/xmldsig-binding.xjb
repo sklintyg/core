@@ -17,12 +17,12 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+<jaxb:bindings xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb"
                xmlns:namespace="http://jaxb2-commons.dev.java.net/namespace-prefix"
                jaxb:extensionBindingPrefixes="xjc"
-               jaxb:version="2.1">
+               jaxb:version="3.0">
 
-    <jaxb:bindings schemaLocation="schemas/core_components/xmldsig-core-schema_0.1.xsd">
+    <jaxb:bindings schemaLocation="core_components/xmldsig-core-schema_0.1.xsd">
         <jaxb:schemaBindings>
             <jaxb:package name="org.w3._2000._09.xmldsig_" />
         </jaxb:schemaBindings>
@@ -31,7 +31,7 @@
         </jaxb:bindings>
     </jaxb:bindings>
 
-    <jaxb:bindings schemaLocation="schemas/core_components/xmldsig-filter2.xsd">
+    <jaxb:bindings schemaLocation="core_components/xmldsig-filter2.xsd">
         <jaxb:schemaBindings>
             <jaxb:package name="org.w3._2002._06.xmldsig_filter2" />
         </jaxb:schemaBindings>
