@@ -8,7 +8,7 @@ plugins {
 ext {
     cxfPluginVersion = "4.0.0"
     cxfVersion = "4.0.5"
-    guavaVersion = "32.1.3-jre"
+    guavaVersion = "33.0.0-jre"
     jakartaActivationVersion = "2.0.1"
     jaxb2Version = "3.0.0"
     jaxb2NamespacePrefixVersion = "2.0"
@@ -46,7 +46,7 @@ dependencyCheck {
     formats = List.of("HTML", "JSON")
 
     nvd {
-        datafeedUrl="${nvdMirror}"
+        datafeedUrl = "${nvdMirror}"
     }
 }
 
