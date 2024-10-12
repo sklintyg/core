@@ -28,7 +28,7 @@ class UnitMessagesControllerTest {
     when(getUnitMessagesService.get(request))
         .thenReturn(expectedResponse);
 
-    final var response = unitMessagesController.getUnitCertificates(request);
+    final var response = unitMessagesController.getUnitMessages(request);
 
     assertEquals(expectedResponse, response);
   }

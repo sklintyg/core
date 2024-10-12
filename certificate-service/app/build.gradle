@@ -8,10 +8,10 @@ def applicationDir = "${rootProject.projectDir}/devops/dev"
 dependencies {
     implementation project(':domain')
     implementation project(':clinicalprocess-certificate-v4')
+    implementation project(':logging')
 
     implementation "co.elastic.logging:logback-ecs-encoder:${logbackEcsEncoderVersion}"
     implementation 'com.fasterxml.jackson.core:jackson-annotations'
-    implementation "com.google.guava:guava:${guavaVersion}"
     implementation 'org.liquibase:liquibase-core'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

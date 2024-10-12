@@ -13,24 +13,24 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ROLE;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_ACTION;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CATEGORY;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_CARE_PROVIDER_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_CARE_UNIT_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_PATIENT_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_TYPE;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_UNIT_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_VERSION;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_DURATION;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_END;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_START;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_TYPE;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.ORGANIZATION_CARE_PROVIDER_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.ORGANIZATION_CARE_UNIT_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.ORGANIZATION_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.USER_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.USER_ROLE;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_ACTION;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CATEGORY;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_CARE_PROVIDER_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_CARE_UNIT_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_PATIENT_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_TYPE;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_UNIT_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_VERSION;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_DURATION;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_END;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_START;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.ORGANIZATION_CARE_PROVIDER_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.ORGANIZATION_CARE_UNIT_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.ORGANIZATION_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.USER_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.USER_ROLE;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -50,6 +50,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
+import se.inera.intyg.certificateservice.logging.HashUtility;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateEventLogServiceTest {

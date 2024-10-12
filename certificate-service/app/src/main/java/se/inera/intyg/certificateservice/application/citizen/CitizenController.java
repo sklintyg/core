@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.application.citizen;
 
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE_ACCESSED;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +20,7 @@ import se.inera.intyg.certificateservice.application.citizen.service.CitizenCert
 import se.inera.intyg.certificateservice.application.citizen.service.GetCitizenCertificateListService;
 import se.inera.intyg.certificateservice.application.citizen.service.GetCitizenCertificateService;
 import se.inera.intyg.certificateservice.application.citizen.service.PrintCitizenCertificateService;
+import se.inera.intyg.certificateservice.logging.PerformanceLogging;
 
 
 @RequiredArgsConstructor
@@ -31,12 +34,14 @@ public class CitizenController {
   private final PrintCitizenCertificateService printCitizenCertificateService;
 
   @GetMapping("/certificate/{certificateId}/exists")
+  @PerformanceLogging(eventAction = "citizen-find-existing-certificate", eventType = EVENT_TYPE_ACCESSED)
   CitizenCertificateExistsResponse findExistingCertificate(
       @PathVariable("certificateId") String certificateId) {
     return citizenCertificateExistsService.exist(certificateId);
   }
 
   @PostMapping("/certificate/{certificateId}")
+  @PerformanceLogging(eventAction = "citizen-retrieve-certificate", eventType = EVENT_TYPE_ACCESSED)
   GetCitizenCertificateResponse getCertificate(
       @RequestBody GetCitizenCertificateRequest getCitizenCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -44,12 +49,14 @@ public class CitizenController {
   }
 
   @PostMapping("/certificate")
+  @PerformanceLogging(eventAction = "citizen-retrieve-certificate-list", eventType = EVENT_TYPE_ACCESSED)
   GetCitizenCertificateListResponse getCertificateList(
       @RequestBody GetCitizenCertificateListRequest getCitizenCertificateListRequest) {
     return getCitizenCertificateListService.get(getCitizenCertificateListRequest);
   }
 
   @PostMapping("/certificate/{certificateId}/print")
+  @PerformanceLogging(eventAction = "citizen-retrieve-certificate-pdf", eventType = EVENT_TYPE_ACCESSED)
   PrintCitizenCertificateResponse printCertificate(
       @RequestBody PrintCitizenCertificateRequest printCitizenCertificateRequest,
       @PathVariable("certificateId") String certificateId) {

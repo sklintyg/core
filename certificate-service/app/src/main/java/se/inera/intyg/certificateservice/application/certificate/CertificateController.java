@@ -1,5 +1,10 @@
 package se.inera.intyg.certificateservice.application.certificate;
 
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE_ACCESSED;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE_CHANGE;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE_CREATION;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE_DELETION;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,6 +69,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.SignCer
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateWithoutSignatureService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ValidateCertificateService;
+import se.inera.intyg.certificateservice.logging.PerformanceLogging;
 
 @RequiredArgsConstructor
 @RestController
@@ -91,18 +97,21 @@ public class CertificateController {
   private final SetCertificateReadyForSignService setCertificateReadyForSignService;
 
   @PostMapping
+  @PerformanceLogging(eventAction = "create-certificate", eventType = EVENT_TYPE_CREATION)
   CreateCertificateResponse createCertificate(
       @RequestBody CreateCertificateRequest createCertificateRequest) {
     return createCertificateService.create(createCertificateRequest);
   }
 
   @GetMapping("/{certificateId}/exists")
+  @PerformanceLogging(eventAction = "find-existing-certificate", eventType = EVENT_TYPE_ACCESSED)
   CertificateExistsResponse findExistingCertificate(
       @PathVariable("certificateId") String certificateId) {
     return certificateExistsService.exist(certificateId);
   }
 
   @PostMapping("/{certificateId}")
+  @PerformanceLogging(eventAction = "retrieve-certificate", eventType = EVENT_TYPE_ACCESSED)
   GetCertificateResponse getCertificate(
       @RequestBody GetCertificateRequest getCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -110,6 +119,7 @@ public class CertificateController {
   }
 
   @PutMapping("/{certificateId}")
+  @PerformanceLogging(eventAction = "update-certificate", eventType = EVENT_TYPE_CHANGE)
   UpdateCertificateResponse updateCertificate(
       @RequestBody UpdateCertificateRequest updateCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -117,6 +127,7 @@ public class CertificateController {
   }
 
   @DeleteMapping("/{certificateId}/{version}")
+  @PerformanceLogging(eventAction = "delete-certificate", eventType = EVENT_TYPE_DELETION)
   DeleteCertificateResponse deleteCertificate(
       @RequestBody DeleteCertificateRequest deleteCertificateRequest,
       @PathVariable("certificateId") String certificateId, @PathVariable("version") Long version) {
@@ -124,6 +135,7 @@ public class CertificateController {
   }
 
   @PostMapping("/{certificateId}/validate")
+  @PerformanceLogging(eventAction = "validate-certificate", eventType = EVENT_TYPE_ACCESSED)
   ValidateCertificateResponse validateCertificate(
       @RequestBody ValidateCertificateRequest validateCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -131,6 +143,7 @@ public class CertificateController {
   }
 
   @PostMapping("/{certificateId}/xml")
+  @PerformanceLogging(eventAction = "retrieve-certificate-xml", eventType = EVENT_TYPE_ACCESSED)
   GetCertificateXmlResponse getCertificateXml(
       @RequestBody GetCertificateXmlRequest getCertificateXmlRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -138,6 +151,7 @@ public class CertificateController {
   }
 
   @PostMapping("/{certificateId}/sign/{version}")
+  @PerformanceLogging(eventAction = "sign-certificate", eventType = EVENT_TYPE_CHANGE)
   SignCertificateResponse signCertificate(
       @RequestBody SignCertificateRequest signCertificateRequest,
       @PathVariable("certificateId") String certificateId, @PathVariable("version") Long version) {
@@ -145,6 +159,7 @@ public class CertificateController {
   }
 
   @PostMapping("/{certificateId}/signwithoutsignature/{version}")
+  @PerformanceLogging(eventAction = "sign-certificate-without-signature", eventType = EVENT_TYPE_CHANGE)
   SignCertificateResponse signCertificateWithoutSignature(
       @RequestBody SignCertificateWithoutSignatureRequest signCertificateRequest,
       @PathVariable("certificateId") String certificateId, @PathVariable("version") Long version) {
@@ -153,6 +168,7 @@ public class CertificateController {
   }
 
   @PostMapping("/{certificateId}/send")
+  @PerformanceLogging(eventAction = "send-certificate", eventType = EVENT_TYPE_CHANGE)
   SendCertificateResponse sendCertificate(
       @RequestBody SendCertificateRequest sendCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -160,6 +176,7 @@ public class CertificateController {
   }
 
   @PostMapping("/{certificateId}/pdf")
+  @PerformanceLogging(eventAction = "retrieve-certificate-pdf", eventType = EVENT_TYPE_ACCESSED)
   GetCertificatePdfResponse getCertificatePdf(
       @RequestBody GetCertificatePdfRequest getCertificatePdfRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -167,6 +184,7 @@ public class CertificateController {
   }
 
   @PostMapping("/{certificateId}/revoke")
+  @PerformanceLogging(eventAction = "revoke-certificate", eventType = EVENT_TYPE_CHANGE)
   RevokeCertificateResponse revokeCertificate(
       @RequestBody RevokeCertificateRequest revokeCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -174,6 +192,7 @@ public class CertificateController {
   }
 
   @PostMapping("/{certificateId}/replace")
+  @PerformanceLogging(eventAction = "replace-certificate", eventType = EVENT_TYPE_CREATION)
   ReplaceCertificateResponse replaceCertificate(
       @RequestBody ReplaceCertificateRequest replaceCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -181,6 +200,7 @@ public class CertificateController {
   }
 
   @PostMapping("/{certificateId}/renew")
+  @PerformanceLogging(eventAction = "renew-certificate", eventType = EVENT_TYPE_CREATION)
   RenewCertificateResponse renewCertificate(
       @RequestBody RenewCertificateRequest renewCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -188,6 +208,7 @@ public class CertificateController {
   }
 
   @PostMapping("/{certificateId}/complement")
+  @PerformanceLogging(eventAction = "complement-certificate", eventType = EVENT_TYPE_CREATION)
   ComplementCertificateResponse complementCertificate(
       @RequestBody ComplementCertificateRequest request,
       @PathVariable("certificateId") String certificateId) {
@@ -195,6 +216,7 @@ public class CertificateController {
   }
 
   @PostMapping("/{certificateId}/answerComplement")
+  @PerformanceLogging(eventAction = "answer-complement", eventType = EVENT_TYPE_CHANGE)
   AnswerComplementResponse answerComplement(
       @RequestBody AnswerComplementRequest answerComplementRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -202,6 +224,7 @@ public class CertificateController {
   }
 
   @PostMapping("/{certificateId}/forward")
+  @PerformanceLogging(eventAction = "forward-certificate", eventType = EVENT_TYPE_CHANGE)
   ForwardCertificateResponse forwardCertificate(
       @RequestBody ForwardCertificateRequest forwardCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -209,6 +232,7 @@ public class CertificateController {
   }
 
   @PostMapping("/{certificateId}/events")
+  @PerformanceLogging(eventAction = "retrieve-certificate-events", eventType = EVENT_TYPE_ACCESSED)
   GetCertificateEventsResponse getCertificateEvents(
       @RequestBody GetCertificateEventsRequest request,
       @PathVariable("certificateId") String certificateId) {
@@ -216,6 +240,7 @@ public class CertificateController {
   }
 
   @PostMapping("/{certificateId}/readyForSign")
+  @PerformanceLogging(eventAction = "ready-for-sign-certificate", eventType = EVENT_TYPE_CHANGE)
   CertificateReadyForSignResponse setCertificateReadyForSign(
       @RequestBody CertificateReadyForSignRequest request,
       @PathVariable("certificateId") String certificateId) {

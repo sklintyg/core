@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateservice.application.certificate;
 
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE_ACCESSED;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE_CHANGE;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +24,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.GetCert
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalXmlService;
 import se.inera.intyg.certificateservice.application.certificate.service.LockDraftsInternalService;
 import se.inera.intyg.certificateservice.application.patient.service.GetCertificatesWithQAInternalService;
+import se.inera.intyg.certificateservice.logging.PerformanceLogging;
 
 @RequiredArgsConstructor
 @RestController
@@ -35,35 +39,41 @@ public class CertificateInternalApiController {
   private final GetCertificatesWithQAInternalService getCertificatesWithQAInternalService;
 
   @GetMapping("/{certificateId}/exists")
+  @PerformanceLogging(eventAction = "internal-find-existing-certificate", eventType = EVENT_TYPE_ACCESSED)
   CertificateExistsResponse findExistingCertificate(
       @PathVariable("certificateId") String certificateId) {
     return certificateExistsService.exist(certificateId);
   }
 
   @PostMapping("/{certificateId}/xml")
+  @PerformanceLogging(eventAction = "internal-retrieve-certificate-xml", eventType = EVENT_TYPE_ACCESSED)
   GetCertificateInternalXmlResponse getCertificateXml(
       @PathVariable("certificateId") String certificateId) {
     return getCertificateInternalXmlService.get(certificateId);
   }
 
   @GetMapping("/{certificateId}/metadata")
+  @PerformanceLogging(eventAction = "internal-retrieve-certificate-metadata", eventType = EVENT_TYPE_ACCESSED)
   GetCertificateInternalMetadataResponse getCertificateMetadata(
       @PathVariable("certificateId") String certificateId) {
     return getCertificateInternalMetadataService.get(certificateId);
   }
 
   @PostMapping("/{certificateId}")
+  @PerformanceLogging(eventAction = "internal-retrieve-certificate", eventType = EVENT_TYPE_ACCESSED)
   GetCertificateInternalResponse getCertificate(
       @PathVariable("certificateId") String certificateId) {
     return getCertificateInternalService.get(certificateId);
   }
 
   @PostMapping("/lock")
+  @PerformanceLogging(eventAction = "internal-lock-certificate", eventType = EVENT_TYPE_CHANGE)
   LockDraftsResponse lockDrafts(@RequestBody LockDraftsRequest request) {
     return lockDraftsInternalService.lock(request);
   }
 
   @PostMapping("/qa")
+  @PerformanceLogging(eventAction = "internal-retrieve-certificate-with-qa", eventType = EVENT_TYPE_ACCESSED)
   CertificatesWithQAInternalResponse getCertificatesWithQA(
       @RequestBody CertificatesWithQAInternalRequest request) {
     return getCertificatesWithQAInternalService.get(request);
