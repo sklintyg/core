@@ -42,6 +42,7 @@ class AvailableFunctionsFactoryTest {
                       .build()
               )
           )
+          .enabled(true)
           .build();
 
   public static final AvailableFunctionDTO EXPECTED_SEND =
@@ -50,6 +51,7 @@ class AvailableFunctionsFactoryTest {
           .name(SEND_CERTIFICATE_NAME)
           .type(AvailableFunctionType.SEND_CERTIFICATE)
           .body(SEND_CERTIFICATE_BODY)
+          .enabled(true)
           .build();
 
   @InjectMocks

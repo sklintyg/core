@@ -37,6 +37,7 @@ public class AvailableFunctionsFactory {
                 .name(SEND_CERTIFICATE_NAME)
                 .type(AvailableFunctionType.SEND_CERTIFICATE)
                 .body(SEND_CERTIFICATE_BODY)
+                .enabled(true)
                 .build()
         )
         : Optional.empty();
@@ -55,6 +56,7 @@ public class AvailableFunctionsFactory {
                         .build()
                 )
             )
+            .enabled(true)
             .build()
     );
   }
