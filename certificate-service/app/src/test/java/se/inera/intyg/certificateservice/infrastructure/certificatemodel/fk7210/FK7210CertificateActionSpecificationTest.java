@@ -139,14 +139,16 @@ class FK7210CertificateActionSpecificationTest {
 
   @Test
   void shallIncludeCertificateActionForwardCertificate() {
-    final var expectedType = CertificateActionType.FORWARD_CERTIFICATE;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
+        .allowedRoles(List.of(Role.CARE_ADMIN))
+        .build();
 
     final var actionSpecifications = FK7210CertificateActionSpecification.create();
 
     assertTrue(actionSpecifications.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
   }
 
   @Test

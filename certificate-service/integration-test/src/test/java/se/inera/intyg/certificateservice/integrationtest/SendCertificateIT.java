@@ -10,6 +10,8 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_VARDCENTRAL_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ANNA_SJUKSKOTERSKA_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customSendCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultReplaceCertificateRequest;
@@ -29,8 +31,6 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
   protected abstract String type();
 
   protected abstract String typeVersion();
-
-  protected abstract boolean careAdminCanSendCertificate();
 
   @Test
   @DisplayName("Om intyget är utfärdat på samma mottagning skall det gå att skicka")
@@ -159,11 +159,8 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Vårdadministratör - Felkod 403 (FORBIDDEN) returneras")
-  void shallReturn403UserIsCareAdmin() {
-    if (careAdminCanSendCertificate()) {
-      return;
-    }
+  @DisplayName("Vårdadministratör - Om intyget är signerat ska intyget gå att skicka")
+  void shallReturnBeAbleToSendIfUserIsCareAdmin() {
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
@@ -175,7 +172,53 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
         certificateId(testCertificates)
     );
 
-    assertEquals(403, response.getStatusCode().value());
+    assertAll(
+        () -> assertEquals("FKASSA", recipient(response).getId()),
+        () -> assertEquals("Försäkringskassan", recipient(response).getName()),
+        () -> assertNotNull(recipient(response).getSent())
+    );
+  }
+
+  @Test
+  @DisplayName("Barnmorska - Om intyget är signerat ska intyget gå att skicka")
+  void shallReturnBeAbleToSendIfUserIsMidWife() {
+    final var testCertificates = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
+    );
+
+    final var response = api.sendCertificate(
+        customSendCertificateRequest()
+            .user(BERTIL_BARNMORSKA_DTO)
+            .build(),
+        certificateId(testCertificates)
+    );
+
+    assertAll(
+        () -> assertEquals("FKASSA", recipient(response).getId()),
+        () -> assertEquals("Försäkringskassan", recipient(response).getName()),
+        () -> assertNotNull(recipient(response).getSent())
+    );
+  }
+
+  @Test
+  @DisplayName("Sjuksköterska - Om intyget är signerat ska intyget gå att skicka")
+  void shallReturnBeAbleToSendIfUserIsNurse() {
+    final var testCertificates = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
+    );
+
+    final var response = api.sendCertificate(
+        customSendCertificateRequest()
+            .user(ANNA_SJUKSKOTERSKA_DTO)
+            .build(),
+        certificateId(testCertificates)
+    );
+
+    assertAll(
+        () -> assertEquals("FKASSA", recipient(response).getId()),
+        () -> assertEquals("Försäkringskassan", recipient(response).getName()),
+        () -> assertNotNull(recipient(response).getSent())
+    );
   }
 
   @Test

@@ -21,6 +21,10 @@ public abstract class CertificateReadyForSignIT extends BaseIntegrationIT {
 
   protected abstract String typeVersion();
 
+  protected abstract boolean nurseCanMarkReadyForSignCertificate();
+
+  protected abstract boolean midwifeCanMarkReadyForSignCertificate();
+
   @Test
   @DisplayName("Vårdadministratör - Om användaren är en vårdadministratör som loggat in djupintegrerat skall utkastet gå att markera som redo för signering")
   void shallAllowIfCareAdminAndOriginIsDjupintegrerad() {
@@ -45,6 +49,9 @@ public abstract class CertificateReadyForSignIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Barnmorska - Om användaren är en barnmorska som loggat in djupintegrerat skall utkastet gå att markera som redo för signering")
   void shallAllowIfMidWifeAndOriginIsDjupintegrerad() {
+    if (!midwifeCanMarkReadyForSignCertificate()) {
+      return;
+    }
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
@@ -66,6 +73,9 @@ public abstract class CertificateReadyForSignIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Sjuksköterska - Om användaren är en sjuksköterska som loggat in djupintegrerat skall utkastet gå att markera som redo för signering")
   void shallAllowIfNurseAndOriginIsDjupintegrerad() {
+    if (!nurseCanMarkReadyForSignCertificate()) {
+      return;
+    }
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );

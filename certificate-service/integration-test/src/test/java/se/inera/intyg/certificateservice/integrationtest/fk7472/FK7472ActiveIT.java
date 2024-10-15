@@ -576,11 +576,6 @@ public class FK7472ActiveIT {
     protected String typeVersion() {
       return ACTIVE_VERSION;
     }
-
-    @Override
-    protected boolean careAdminCanSendCertificate() {
-      return true;
-    }
   }
 
   @Nested
@@ -595,6 +590,16 @@ public class FK7472ActiveIT {
     @Override
     protected String typeVersion() {
       return ACTIVE_VERSION;
+    }
+
+    @Override
+    protected boolean nurseCanMarkReadyForSignCertificate() {
+      return false;
+    }
+
+    @Override
+    protected boolean midwifeCanMarkReadyForSignCertificate() {
+      return true;
     }
   }
 
@@ -702,6 +707,16 @@ public class FK7472ActiveIT {
     @Override
     protected String typeVersion() {
       return ACTIVE_VERSION;
+    }
+
+    @Override
+    protected boolean nurseCanForwardCertificate() {
+      return false;
+    }
+
+    @Override
+    protected boolean midwifeCanForwardCertificate() {
+      return true;
     }
   }
 

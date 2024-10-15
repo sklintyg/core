@@ -54,6 +54,7 @@ public class FK7210CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
+            .allowedRoles(List.of(Role.CARE_ADMIN))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.READY_FOR_SIGN)

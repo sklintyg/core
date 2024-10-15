@@ -27,6 +27,10 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
 
   protected abstract String typeVersion();
 
+  protected abstract boolean nurseCanForwardCertificate();
+
+  protected abstract boolean midwifeCanForwardCertificate();
+
   @Test
   @DisplayName("Om användaren har rollen vårdadministratör och intyget inte är signerat skall intyget gå att vidarebefodra")
   void shallUpdateCertificateWithForwardedTrueIfUserIsCareAdminAndStatusOnCertificateIsDraft() {
@@ -48,6 +52,9 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om användaren har rollen sjuksköterska och intyget inte är signerat skall intyget gå att vidarebefodra")
   void shallUpdateCertificateWithForwardedTrueIfUserIsNurseAndStatusOnCertificateIsDraft() {
+    if (!nurseCanForwardCertificate()) {
+      return;
+    }
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
@@ -68,6 +75,9 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om användaren har rollen barnmorska och intyget inte är signerat skall intyget gå att vidarebefodra")
   void shallUpdateCertificateWithForwardedTrueIfUserIsMidWifeAndStatusOnCertificateIsDraft() {
+    if (!midwifeCanForwardCertificate()) {
+      return;
+    }
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );

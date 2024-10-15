@@ -237,14 +237,16 @@ class FK7472CertificateActionSpecificationTest {
 
   @Test
   void shallIncludeCertificateActionForwardCertificate() {
-    final var expectedType = CertificateActionType.FORWARD_CERTIFICATE;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
+        .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE))
+        .build();
 
-    final var actions = FK7472CertificateActionSpecification.create();
+    final var actionSpecifications = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+    assertTrue(actionSpecifications.stream().anyMatch(
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
   }
 
   @Test
@@ -263,7 +265,7 @@ class FK7472CertificateActionSpecificationTest {
   void shallIncludeCertificateActionReadyForSign() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.READY_FOR_SIGN)
-        .allowedRoles(List.of(Role.CARE_ADMIN))
+        .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE))
         .build();
 
     final var actionSpecifications = FK7472CertificateActionSpecification.create();
