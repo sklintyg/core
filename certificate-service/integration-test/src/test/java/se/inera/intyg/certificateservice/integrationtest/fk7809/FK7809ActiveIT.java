@@ -507,10 +507,6 @@ public class FK7809ActiveIT {
       return ACTIVE_VERSION;
     }
 
-    @Override
-    protected boolean careAdminCanSendCertificate() {
-      return true;
-    }
   }
 
   @Nested
@@ -525,6 +521,16 @@ public class FK7809ActiveIT {
     @Override
     protected String typeVersion() {
       return ACTIVE_VERSION;
+    }
+
+    @Override
+    protected boolean nurseCanMarkReadyForSignCertificate() {
+      return true;
+    }
+
+    @Override
+    protected boolean midwifeCanMarkReadyForSignCertificate() {
+      return true;
     }
   }
 
@@ -611,6 +617,16 @@ public class FK7809ActiveIT {
     @Override
     protected String typeVersion() {
       return ACTIVE_VERSION;
+    }
+
+    @Override
+    protected boolean nurseCanForwardCertificate() {
+      return true;
+    }
+
+    @Override
+    protected boolean midwifeCanForwardCertificate() {
+      return true;
     }
   }
 

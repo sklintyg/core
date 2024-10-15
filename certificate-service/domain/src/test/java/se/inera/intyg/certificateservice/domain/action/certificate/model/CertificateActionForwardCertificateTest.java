@@ -16,6 +16,8 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.BETA_HUDMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ANNA_SJUKSKOTERKSA;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.BERTIL_BARNMORSKA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.alvaVardadministratorBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALLOW_COPY_FALSE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
@@ -35,6 +37,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateActionForwardCertificateTest {
@@ -44,6 +47,7 @@ class CertificateActionForwardCertificateTest {
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
           .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
+          .allowedRoles(List.of(Role.CARE_ADMIN, Role.NURSE, Role.MIDWIFE))
           .build();
   private CertificateBuilder certificateBuilder;
   @Mock
@@ -394,6 +398,34 @@ class CertificateActionForwardCertificateTest {
         .build();
     final var actionEvaluation = actionEvaluationBuilder()
         .user(ALVA_VARDADMINISTRATOR)
+        .build();
+
+    assertTrue(
+        certificateActionForwardCertificate.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)));
+  }
+
+  @Test
+  void shallReturnTrueIfUserIsNurse() {
+    final var certificate = certificateBuilder
+        .status(Status.DRAFT)
+        .build();
+    final var actionEvaluation = actionEvaluationBuilder()
+        .user(ANNA_SJUKSKOTERKSA)
+        .build();
+
+    assertTrue(
+        certificateActionForwardCertificate.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)));
+  }
+
+  @Test
+  void shallReturnTrueIfUserIsMidWife() {
+    final var certificate = certificateBuilder
+        .status(Status.DRAFT)
+        .build();
+    final var actionEvaluation = actionEvaluationBuilder()
+        .user(BERTIL_BARNMORSKA)
         .build();
 
     assertTrue(

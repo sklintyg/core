@@ -79,7 +79,8 @@ class FK7809CertificateActionSpecificationTest {
   void shallIncludeCertificateActionSend() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.SEND)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.CARE_ADMIN))
+        .allowedRoles(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.CARE_ADMIN, Role.NURSE, Role.MIDWIFE))
         .build();
 
     final var actionSpecifications = FK7809CertificateActionSpecification.create();
@@ -250,14 +251,16 @@ class FK7809CertificateActionSpecificationTest {
 
   @Test
   void shallIncludeCertificateActionForwardCertificate() {
-    final var expectedType = CertificateActionType.FORWARD_CERTIFICATE;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
+        .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
+        .build();
 
     final var actionSpecifications = FK7809CertificateActionSpecification.create();
 
     assertTrue(actionSpecifications.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
   }
 
   @Test
@@ -396,7 +399,7 @@ class FK7809CertificateActionSpecificationTest {
   void shallIncludeCertificateActionReadyForSign() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.READY_FOR_SIGN)
-        .allowedRoles(List.of(Role.CARE_ADMIN))
+        .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
         .build();
 
     final var actionSpecifications = FK7809CertificateActionSpecification.create();
