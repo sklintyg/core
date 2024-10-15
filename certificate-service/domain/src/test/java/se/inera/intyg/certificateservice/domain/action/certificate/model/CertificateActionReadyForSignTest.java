@@ -109,7 +109,7 @@ class CertificateActionReadyForSignTest {
   }
 
   @Test
-  void shallReturnFalseIfNurse() {
+  void shallReturnTrueIfNurse() {
     final var actionEvaluation = actionEvaluationBuilder
         .user(annaSjukskoterskaBuilder()
             .accessScope(AccessScope.ALL_CARE_PROVIDERS)
@@ -118,7 +118,7 @@ class CertificateActionReadyForSignTest {
 
     final var certificate = certificateBuilder.build();
 
-    assertFalse(
+    assertTrue(
         certificateActionReadyForSign.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
@@ -126,7 +126,7 @@ class CertificateActionReadyForSignTest {
   }
 
   @Test
-  void shallReturnFalseIfMidwife() {
+  void shallReturnTrueIfMidwife() {
     final var actionEvaluation = actionEvaluationBuilder
         .user(bertilBarnmorskaBuilder()
             .accessScope(AccessScope.ALL_CARE_PROVIDERS)
@@ -135,7 +135,7 @@ class CertificateActionReadyForSignTest {
 
     final var certificate = certificateBuilder.build();
 
-    assertFalse(
+    assertTrue(
         certificateActionReadyForSign.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)

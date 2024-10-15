@@ -7,6 +7,8 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_HUDMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ANNA_SJUKSKOTERSKA_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.alvaVardadministratorDtoBuilder;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customForwardCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
@@ -35,6 +37,46 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
     final var response = api.forwardCertificate(
         certificateId(testCertificates),
         defaultForwardCertificateRequest()
+    );
+
+    assertTrue(
+        forwarded(response.getBody()),
+        "Should return true if certificate is forwarded!"
+    );
+  }
+
+  @Test
+  @DisplayName("Om användaren har rollen sjuksköterska och intyget inte är signerat skall intyget gå att vidarebefodra")
+  void shallUpdateCertificateWithForwardedTrueIfUserIsNurseAndStatusOnCertificateIsDraft() {
+    final var testCertificates = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion())
+    );
+
+    final var response = api.forwardCertificate(
+        certificateId(testCertificates),
+        customForwardCertificateRequest()
+            .user(ANNA_SJUKSKOTERSKA_DTO)
+            .build()
+    );
+
+    assertTrue(
+        forwarded(response.getBody()),
+        "Should return true if certificate is forwarded!"
+    );
+  }
+
+  @Test
+  @DisplayName("Om användaren har rollen barnmorska och intyget inte är signerat skall intyget gå att vidarebefodra")
+  void shallUpdateCertificateWithForwardedTrueIfUserIsMidWifeAndStatusOnCertificateIsDraft() {
+    final var testCertificates = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion())
+    );
+
+    final var response = api.forwardCertificate(
+        certificateId(testCertificates),
+        customForwardCertificateRequest()
+            .user(BERTIL_BARNMORSKA_DTO)
+            .build()
     );
 
     assertTrue(

@@ -299,7 +299,7 @@ public class CertificateActionFactory {
           .actionRules(
               List.of(
                   new ActionRuleStatus(List.of(Status.DRAFT)),
-                  new ActionRuleRole(List.of(Role.CARE_ADMIN)),
+                  new ActionRuleRole(List.of(Role.CARE_ADMIN, Role.NURSE, Role.MIDWIFE)),
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleProtectedPerson(),
@@ -425,7 +425,7 @@ public class CertificateActionFactory {
                   new ActionRuleUserHasAccessScope(
                       List.of(AccessScope.WITHIN_CARE_PROVIDER, AccessScope.ALL_CARE_PROVIDERS)),
                   new ActionRuleRole(
-                      List.of(Role.CARE_ADMIN)
+                      List.of(Role.CARE_ADMIN, Role.NURSE, Role.MIDWIFE)
                   )
               )
           )
@@ -449,4 +449,3 @@ public class CertificateActionFactory {
     };
   }
 }
-
