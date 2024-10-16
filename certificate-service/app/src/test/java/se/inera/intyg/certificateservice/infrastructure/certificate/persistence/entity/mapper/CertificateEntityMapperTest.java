@@ -2,10 +2,12 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateEntity.CERTIFICATE_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateEntity.certificateEntityBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRelationEntity.CERTIFICATE_PARENT_RELATION_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRelationEntity.CERTIFICATE_RELATION_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateRevokedEntity.REVOKED_MESSAGE;
@@ -15,6 +17,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REF;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.PARENT_CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7210_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_ID;
@@ -44,6 +47,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificate.model.ReadyForSign;
 import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
+import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -166,6 +170,23 @@ class CertificateEntityMapperTest {
       final var response = certificateEntityMapper.toEntity(FK7210_CERTIFICATE);
 
       assertEquals(CERTIFICATE_ENTITY.getSentBy(), response.getSentBy());
+    }
+
+    @Test
+    void shouldMapSentByIfSentIsNotNullAndSentByIsNull() {
+      final var certificate = fk7210CertificateBuilder()
+          .sent(
+              Sent.builder()
+                  .recipient(RECIPIENT)
+                  .sentAt(LocalDateTime.now(ZoneId.systemDefault()))
+                  .sentBy(null)
+                  .build()
+          )
+          .build();
+      final var response = certificateEntityMapper.toEntity(certificate);
+
+      assertNotNull(response.getSent());
+      assertNull(response.getSentBy());
     }
 
     @Test
@@ -419,6 +440,17 @@ class CertificateEntityMapperTest {
           FK7210_CERTIFICATE_MODEL);
 
       assertEquals(AJLA_DOKTOR, response.sent().sentBy());
+    }
+
+    @Test
+    void shouldMapSentByWithNullValues() {
+      final var certificateEntity = certificateEntityBuilder()
+          .sentBy(null)
+          .build();
+      final var response = certificateEntityMapper.toDomain(certificateEntity,
+          FK7210_CERTIFICATE_MODEL);
+      
+      assertNull(response.sent().sentBy());
     }
 
     @Test

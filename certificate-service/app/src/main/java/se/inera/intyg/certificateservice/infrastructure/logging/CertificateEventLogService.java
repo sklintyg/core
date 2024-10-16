@@ -21,6 +21,7 @@ import static se.inera.intyg.certificateservice.logging.MdcLogConstants.USER_ID;
 import static se.inera.intyg.certificateservice.logging.MdcLogConstants.USER_ROLE;
 
 import java.util.Arrays;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
@@ -34,6 +35,7 @@ public class CertificateEventLogService implements CertificateEventSubscriber {
 
   @Override
   public void event(CertificateEvent event) {
+    final var actionEvaluation = Optional.ofNullable(event.actionEvaluation());
     try (MdcCloseableMap mdc = MdcCloseableMap.builder()
         .put(EVENT_ACTION, eventAction(event))
         .put(EVENT_CATEGORY, eventCategory())
@@ -48,11 +50,17 @@ public class CertificateEventLogService implements CertificateEventSubscriber {
         .put(EVENT_CERTIFICATE_CARE_UNIT_ID, eventCertificateCareUnitId(event))
         .put(EVENT_CERTIFICATE_CARE_PROVIDER_ID, eventCertificateCareProviderId(event))
         .put(EVENT_CERTIFICATE_PATIENT_ID, eventCertificatePatientId(event))
-        .put(USER_ID, userId(event))
-        .put(USER_ROLE, userRoles(event))
-        .put(ORGANIZATION_ID, organizationId(event))
-        .put(ORGANIZATION_CARE_UNIT_ID, organizationCareUnitId(event))
-        .put(ORGANIZATION_CARE_PROVIDER_ID, organizationCareProviderId(event))
+        .put(USER_ID,
+            actionEvaluation.isPresent() ? userId(event) : eventCertificatePatientId(event)
+        )
+        .put(USER_ROLE, actionEvaluation.isPresent() ? userRoles(event) : "-")
+        .put(ORGANIZATION_ID, actionEvaluation.isPresent() ? organizationId(event) : "-")
+        .put(ORGANIZATION_CARE_UNIT_ID,
+            actionEvaluation.isPresent() ? organizationCareUnitId(event) : "-"
+        )
+        .put(ORGANIZATION_CARE_PROVIDER_ID,
+            actionEvaluation.isPresent() ? organizationCareProviderId(event) : "-"
+        )
         .build()) {
       log.info("CertificateEvent '{}' occurred on certificate '{}'.",
           event.type().name(), event.certificate().id().id()

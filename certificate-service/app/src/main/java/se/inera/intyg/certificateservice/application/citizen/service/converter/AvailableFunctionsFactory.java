@@ -40,7 +40,15 @@ public class AvailableFunctionsFactory {
                 .enabled(true)
                 .build()
         )
-        : Optional.empty();
+        : Optional.of(
+            AvailableFunctionDTO.builder()
+                .title(SEND_CERTIFICATE_TITLE)
+                .name(SEND_CERTIFICATE_NAME)
+                .type(AvailableFunctionType.SEND_CERTIFICATE)
+                .body(SEND_CERTIFICATE_BODY)
+                .enabled(false)
+                .build()
+        );
   }
 
   private Optional<AvailableFunctionDTO> getPrintAvailableFunction(Certificate certificate) {

@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.application.citizen.service.converter;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.application.citizen.service.converter.AvailableFunctionsFactory.AVAILABLE_FUNCTION_PRINT_NAME;
 import static se.inera.intyg.certificateservice.application.citizen.service.converter.AvailableFunctionsFactory.SEND_CERTIFICATE_BODY;
@@ -45,13 +44,22 @@ class AvailableFunctionsFactoryTest {
           .enabled(true)
           .build();
 
-  public static final AvailableFunctionDTO EXPECTED_SEND =
+  public static final AvailableFunctionDTO SEND_ENABLED =
       AvailableFunctionDTO.builder()
           .title(SEND_CERTIFICATE_TITLE)
           .name(SEND_CERTIFICATE_NAME)
           .type(AvailableFunctionType.SEND_CERTIFICATE)
           .body(SEND_CERTIFICATE_BODY)
           .enabled(true)
+          .build();
+
+  public static final AvailableFunctionDTO SEND_DISABLED =
+      AvailableFunctionDTO.builder()
+          .title(SEND_CERTIFICATE_TITLE)
+          .name(SEND_CERTIFICATE_NAME)
+          .type(AvailableFunctionType.SEND_CERTIFICATE)
+          .body(SEND_CERTIFICATE_BODY)
+          .enabled(false)
           .build();
 
   @InjectMocks
@@ -61,7 +69,7 @@ class AvailableFunctionsFactoryTest {
   class Send {
 
     @Test
-    void shouldNotReturnSendIfNoRecipient() {
+    void shouldReturnSendDisabledIfNoRecipient() {
       final var result = availableFunctionsFactory.get(
           fk7210CertificateBuilder()
               .sent(null)
@@ -72,11 +80,11 @@ class AvailableFunctionsFactoryTest {
               .build()
       );
 
-      assertFalse(result.contains(EXPECTED_SEND));
+      assertTrue(result.contains(SEND_DISABLED));
     }
 
     @Test
-    void shouldNotReturnSendIfDraft() {
+    void shouldReturnSendDisabledIfDraft() {
       final var result = availableFunctionsFactory.get(
           fk7210CertificateBuilder()
               .sent(null)
@@ -84,11 +92,11 @@ class AvailableFunctionsFactoryTest {
               .build()
       );
 
-      assertFalse(result.contains(EXPECTED_SEND));
+      assertTrue(result.contains(SEND_DISABLED));
     }
 
     @Test
-    void shouldNotReturnSendIfAlreadySent() {
+    void shouldReturnSendDisabledIfAlreadySent() {
       final var result = availableFunctionsFactory.get(
           fk7210CertificateBuilder()
               .status(Status.SIGNED)
@@ -98,11 +106,11 @@ class AvailableFunctionsFactoryTest {
               .build()
       );
 
-      assertFalse(result.contains(EXPECTED_SEND));
+      assertTrue(result.contains(SEND_DISABLED));
     }
 
     @Test
-    void shouldNotReturnSendIfReplacedBySignedCertificate() {
+    void shouldReturnSendDisabledIfReplacedBySignedCertificate() {
       final var result = availableFunctionsFactory.get(
           fk7210CertificateBuilder()
               .sent(null)
@@ -120,7 +128,7 @@ class AvailableFunctionsFactoryTest {
               .build()
       );
 
-      assertFalse(result.contains(EXPECTED_SEND));
+      assertTrue(result.contains(SEND_DISABLED));
     }
 
     @Test
@@ -140,7 +148,7 @@ class AvailableFunctionsFactoryTest {
               .build()
       );
 
-      assertTrue(result.contains(EXPECTED_SEND));
+      assertTrue(result.contains(SEND_ENABLED));
     }
 
     @Test
@@ -160,7 +168,7 @@ class AvailableFunctionsFactoryTest {
               .build()
       );
 
-      assertTrue(result.contains(EXPECTED_SEND));
+      assertTrue(result.contains(SEND_ENABLED));
     }
 
     @Test
@@ -172,7 +180,7 @@ class AvailableFunctionsFactoryTest {
               .build()
       );
 
-      assertTrue(result.contains(EXPECTED_SEND));
+      assertTrue(result.contains(SEND_ENABLED));
     }
   }
 

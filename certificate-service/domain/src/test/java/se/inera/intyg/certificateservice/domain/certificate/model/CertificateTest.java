@@ -1263,6 +1263,18 @@ class CertificateTest {
     }
 
     @Test
+    void shallExcludeSentByIfActionEvaluationIsNull() {
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      doReturn(RECIPIENT).when(certificateModel).recipient();
+      certificate.send(null);
+
+      assertNull(certificate.sent().sentBy());
+    }
+
+    @Test
     void shallThrowIfStatusIsNotSigned() {
       final var actionEvaluation = actionEvaluationBuilder.build();
       final var certificate = certificateBuilder
