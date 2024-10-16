@@ -60,7 +60,8 @@ public class TestDataCertificate {
   public static final Xml XML = new Xml("xml");
   public static final Recipient RECIPIENT = new Recipient(
       new RecipientId("recipientId"),
-      "Recipient"
+      "Recipient",
+      "LOGICAL_ADDRESS"
   );
   public static final List<CertificateMessageType> CERTIFICATE_MESSAGE_TYPES = List.of(
       CertificateMessageType.builder()

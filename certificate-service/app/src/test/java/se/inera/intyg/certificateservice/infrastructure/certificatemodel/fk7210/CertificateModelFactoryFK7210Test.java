@@ -41,9 +41,14 @@ class CertificateModelFactoryFK7210Test {
   private static final String VERSION = "1.0";
   private CertificateModelFactoryFK7210 certificateModelFactoryFK7210;
 
+  private static final String LOGICAL_ADDRESS = "L-A";
+
   @BeforeEach
   void setUp() {
     certificateModelFactoryFK7210 = new CertificateModelFactoryFK7210(certificateActionFactory);
+
+    ReflectionTestUtils.setField(certificateModelFactoryFK7210, "fkLogicalAddress",
+        LOGICAL_ADDRESS);
   }
 
   @Test
@@ -104,7 +109,8 @@ class CertificateModelFactoryFK7210Test {
   void shallIncludeRecipient() {
     final var expectedRecipient = new Recipient(
         new RecipientId("FKASSA"),
-        "Försäkringskassan"
+        "Försäkringskassan",
+        LOGICAL_ADDRESS
     );
 
     final var certificateModel = certificateModelFactoryFK7210.create();

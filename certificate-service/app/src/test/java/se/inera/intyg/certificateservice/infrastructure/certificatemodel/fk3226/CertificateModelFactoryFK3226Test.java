@@ -35,6 +35,7 @@ class CertificateModelFactoryFK3226Test {
   private static final String TYPE = "fk3226";
   private static final String VERSION = "1.0";
   private CertificateModelFactoryFK3226 certificateModelFactoryFK3226;
+  private static final String LOGICAL_ADDRESS = "L-A";
 
   @Mock
   private CertificateActionFactory certificateActionFactory;
@@ -45,6 +46,9 @@ class CertificateModelFactoryFK3226Test {
   void setUp() {
     certificateModelFactoryFK3226 = new CertificateModelFactoryFK3226(diagnosisCodeRepository,
         certificateActionFactory);
+
+    ReflectionTestUtils.setField(certificateModelFactoryFK3226, "fkLogicalAddress",
+        LOGICAL_ADDRESS);
   }
 
   @Test
@@ -130,7 +134,8 @@ class CertificateModelFactoryFK3226Test {
   void shallIncludeRecipient() {
     final var expectedRecipient = new Recipient(
         new RecipientId("FKASSA"),
-        "Försäkringskassan"
+        "Försäkringskassan",
+        LOGICAL_ADDRESS
     );
 
     final var certificateModel = certificateModelFactoryFK3226.create();

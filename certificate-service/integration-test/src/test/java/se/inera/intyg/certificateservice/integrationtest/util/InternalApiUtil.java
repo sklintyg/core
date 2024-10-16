@@ -17,6 +17,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageInternalResponse;
+import se.inera.intyg.certificateservice.application.message.dto.GetMessageInternalXmlResponse;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -104,6 +105,25 @@ public class InternalApiUtil {
     final var requestUrl = "http://localhost:%s/internalapi/message/%s".formatted(
         port,
         certificateId
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(null, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<GetMessageInternalXmlResponse> getMessageXml(String messageId) {
+    final var requestUrl = "http://localhost:%s/internalapi/message/%s/xml".formatted(
+        port,
+        messageId
     );
 
     final var headers = new HttpHeaders();
