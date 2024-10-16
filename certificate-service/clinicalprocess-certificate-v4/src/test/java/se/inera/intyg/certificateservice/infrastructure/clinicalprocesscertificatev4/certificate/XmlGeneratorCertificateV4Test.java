@@ -201,9 +201,9 @@ class XmlGeneratorCertificateV4Test {
   @Test
   void shouldIncludeHoSPersonalBefattningar() {
     final var expectedOne = new Befattning();
-    expectedOne.setCode(AJLA_DOCTOR_PA_TITLES.get(0).code());
+    expectedOne.setCode(AJLA_DOCTOR_PA_TITLES.getFirst().code());
     expectedOne.setCodeSystem(PaTitle.OID);
-    expectedOne.setDisplayName(AJLA_DOCTOR_PA_TITLES.get(0).description());
+    expectedOne.setDisplayName(AJLA_DOCTOR_PA_TITLES.getFirst().description());
     final var expectedTwo = new Befattning();
     expectedTwo.setCode(AJLA_DOCTOR_PA_TITLES.get(1).code());
     expectedTwo.setCodeSystem(PaTitle.OID);
@@ -214,9 +214,9 @@ class XmlGeneratorCertificateV4Test {
     ).getIntyg().getSkapadAv().getBefattning();
 
     assertAll(
-        () -> assertEquals(expectedOne.getCode(), befattningar.get(0).getCode()),
-        () -> assertEquals(expectedOne.getCodeSystem(), befattningar.get(0).getCodeSystem()),
-        () -> assertEquals(expectedOne.getDisplayName(), befattningar.get(0).getDisplayName()),
+        () -> assertEquals(expectedOne.getCode(), befattningar.getFirst().getCode()),
+        () -> assertEquals(expectedOne.getCodeSystem(), befattningar.getFirst().getCodeSystem()),
+        () -> assertEquals(expectedOne.getDisplayName(), befattningar.getFirst().getDisplayName()),
         () -> assertEquals(expectedTwo.getCode(), befattningar.get(1).getCode()),
         () -> assertEquals(expectedTwo.getCodeSystem(), befattningar.get(1).getCodeSystem()),
         () -> assertEquals(expectedTwo.getDisplayName(), befattningar.get(1).getDisplayName())
@@ -227,7 +227,7 @@ class XmlGeneratorCertificateV4Test {
   void shouldIncludeHoSPersonalSpecialistkompetens() {
     final var expectedOne = new Specialistkompetens();
     expectedOne.setCode("N/A");
-    expectedOne.setDisplayName(AJLA_DOCTOR_SPECIALITIES.get(0).value());
+    expectedOne.setDisplayName(AJLA_DOCTOR_SPECIALITIES.getFirst().value());
     final var expectedTwo = new Specialistkompetens();
     expectedTwo.setCode("N/A");
     expectedTwo.setDisplayName(AJLA_DOCTOR_SPECIALITIES.get(1).value());
@@ -237,9 +237,9 @@ class XmlGeneratorCertificateV4Test {
     ).getIntyg().getSkapadAv().getSpecialistkompetens();
 
     assertAll(
-        () -> assertEquals(expectedOne.getCode(), specialistkompetens.get(0).getCode()),
+        () -> assertEquals(expectedOne.getCode(), specialistkompetens.getFirst().getCode()),
         () -> assertEquals(expectedOne.getDisplayName(),
-            specialistkompetens.get(0).getDisplayName()),
+            specialistkompetens.getFirst().getDisplayName()),
         () -> assertEquals(expectedTwo.getCode(), specialistkompetens.get(1).getCode()),
         () -> assertEquals(expectedTwo.getDisplayName(),
             specialistkompetens.get(1).getDisplayName())
@@ -251,16 +251,18 @@ class XmlGeneratorCertificateV4Test {
     final var expectedOne = new LegitimeratYrkeType();
     expectedOne.setCodeSystem("1.2.752.29.23.1.6");
     expectedOne.setCode("LK");
-    expectedOne.setDisplayName(AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES.get(0).value());
+    expectedOne.setDisplayName(AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES.getFirst().value());
 
     final var legitimeradeYrken = unmarshal(
         xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
     ).getIntyg().getSkapadAv().getLegitimeratYrke();
 
     assertAll(
-        () -> assertEquals(expectedOne.getCode(), legitimeradeYrken.get(0).getCode()),
-        () -> assertEquals(expectedOne.getDisplayName(), legitimeradeYrken.get(0).getDisplayName()),
-        () -> assertEquals(expectedOne.getCodeSystem(), legitimeradeYrken.get(0).getCodeSystem())
+        () -> assertEquals(expectedOne.getCode(), legitimeradeYrken.getFirst().getCode()),
+        () -> assertEquals(expectedOne.getDisplayName(),
+            legitimeradeYrken.getFirst().getDisplayName()),
+        () -> assertEquals(expectedOne.getCodeSystem(),
+            legitimeradeYrken.getFirst().getCodeSystem())
     );
   }
 
@@ -348,8 +350,8 @@ class XmlGeneratorCertificateV4Test {
     ).getIntyg().getSvar();
 
     assertAll(
-        () -> assertEquals(ANSWER_ID, answers.get(0).getId()),
-        () -> assertEquals(SUB_ANSWER_ID, answers.get(0).getDelsvar().get(0).getId())
+        () -> assertEquals(ANSWER_ID, answers.getFirst().getId()),
+        () -> assertEquals(SUB_ANSWER_ID, answers.getFirst().getDelsvar().getFirst().getId())
     );
   }
 
@@ -492,11 +494,11 @@ class XmlGeneratorCertificateV4Test {
 
     assertAll(
         () -> assertEquals("c2362fcd-eda0-4f9a-bd13-b3bbaf7f2146",
-            relation.get(0).getTyp().getCodeSystem()),
-        () -> assertEquals("ERSATT", relation.get(0).getTyp().getCode()),
-        () -> assertEquals("Ersätter", relation.get(0).getTyp().getDisplayName()),
+            relation.getFirst().getTyp().getCodeSystem()),
+        () -> assertEquals("ERSATT", relation.getFirst().getTyp().getCode()),
+        () -> assertEquals("Ersätter", relation.getFirst().getTyp().getDisplayName()),
         () -> assertEquals(parentCertificate.id().id(),
-            relation.get(0).getIntygsId().getExtension())
+            relation.getFirst().getIntygsId().getExtension())
     );
   }
 
@@ -510,32 +512,33 @@ class XmlGeneratorCertificateV4Test {
         .parent(
             Relation.builder()
                 .type(RelationType.COMPLEMENT)
-                .certificate(FK7210_CERTIFICATE)
+                .certificate(
+                    fk7210CertificateBuilder()
+                        .messages(
+                            List.of(
+                                Message.builder()
+                                    .type(MessageType.ANSWER)
+                                    .build(),
+                                Message.builder()
+                                    .type(MessageType.COMPLEMENT)
+                                    .sent(LocalDateTime.now().minusDays(5))
+                                    .id(new MessageId("MESSAGE_ID"))
+                                    .reference(new SenderReference("REFERENCE_ID"))
+                                    .build(),
+                                Message.builder()
+                                    .type(MessageType.COMPLEMENT)
+                                    .sent(LocalDateTime.now().minusDays(10))
+                                    .build(),
+                                Message.builder()
+                                    .type(MessageType.COMPLEMENT)
+                                    .status(MessageStatus.HANDLED)
+                                    .sent(LocalDateTime.now())
+                                    .build()
+                            )
+                        ).build()
+                )
                 .build()
-        )
-        .messages(
-            List.of(
-                Message.builder()
-                    .type(MessageType.ANSWER)
-                    .build(),
-                Message.builder()
-                    .type(MessageType.COMPLEMENT)
-                    .sent(LocalDateTime.now().minusDays(5))
-                    .id(new MessageId("MESSAGE_ID"))
-                    .reference(new SenderReference("REFERENCE_ID"))
-                    .build(),
-                Message.builder()
-                    .type(MessageType.COMPLEMENT)
-                    .sent(LocalDateTime.now().minusDays(10))
-                    .build(),
-                Message.builder()
-                    .type(MessageType.COMPLEMENT)
-                    .status(MessageStatus.HANDLED)
-                    .sent(LocalDateTime.now())
-                    .build()
-            )
-        )
-        .build();
+        ).build();
 
     final var svarPa = unmarshal(
         xmlGeneratorCertificateV4.generate(certificate, true)
@@ -553,12 +556,11 @@ class XmlGeneratorCertificateV4Test {
     expected.setMeddelandeId("MESSAGE_ID");
     expected.setReferensId("REFERENCE_ID");
 
-    final var parentCertificate = FK7210_CERTIFICATE;
     final var certificate = fk7210CertificateBuilder()
         .parent(
             Relation.builder()
                 .type(RelationType.RENEW)
-                .certificate(parentCertificate)
+                .certificate(FK7210_CERTIFICATE)
                 .build()
         )
         .messages(

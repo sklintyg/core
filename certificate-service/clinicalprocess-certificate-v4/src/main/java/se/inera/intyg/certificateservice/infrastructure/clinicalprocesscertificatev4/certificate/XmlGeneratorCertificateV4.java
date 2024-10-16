@@ -73,7 +73,8 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
   private MeddelandeReferens svarPa(Certificate certificate) {
     if (certificate.hasParent(RelationType.COMPLEMENT)) {
       final var svarPa = new MeddelandeReferens();
-      final var unhandledComplements = certificate.messages(MessageType.COMPLEMENT)
+      final var unhandledComplements = certificate.parent().certificate()
+          .messages(MessageType.COMPLEMENT)
           .stream()
           .filter(message -> !message.isHandled())
           .sorted(Comparator.comparing(Message::sent))
@@ -83,7 +84,7 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
         return null;
       }
 
-      final var complement = unhandledComplements.get(unhandledComplements.size() - 1);
+      final var complement = unhandledComplements.getLast();
       svarPa.setMeddelandeId(complement.id().id());
       svarPa.setReferensId(complement.reference().reference());
       return svarPa;
