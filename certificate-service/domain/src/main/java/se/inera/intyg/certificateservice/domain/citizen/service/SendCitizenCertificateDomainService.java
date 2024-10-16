@@ -35,7 +35,7 @@ public class SendCitizenCertificateDomainService {
       );
     }
 
-    certificate.send(null);
+    certificate.sendByCitizen();
 
     final var sentCertificate = certificateRepository.save(certificate);
 

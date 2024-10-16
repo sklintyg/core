@@ -81,7 +81,7 @@ class SendCitizenCertificateDomainServiceTest {
 
     sendCitizenCertificateDomainService.send(CERTIFICATE_ID, PERSON_ID);
 
-    verify(certificate).send(null);
+    verify(certificate).sendByCitizen();
   }
 
   @Test
