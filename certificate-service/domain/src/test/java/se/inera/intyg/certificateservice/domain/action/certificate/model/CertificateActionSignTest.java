@@ -252,7 +252,8 @@ class CertificateActionSignTest {
                   .recipient(
                       new Recipient(
                           new RecipientId("id"),
-                          "Försäkringskassan"
+                          "Försäkringskassan",
+                          "LOGICAL_ADDRESS"
                       )
                   )
                   .build()

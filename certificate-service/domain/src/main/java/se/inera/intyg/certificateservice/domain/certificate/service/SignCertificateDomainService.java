@@ -1,5 +1,9 @@
 package se.inera.intyg.certificateservice.domain.certificate.service;
 
+import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.COMPLEMENT;
+import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.RENEW;
+import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.REPLACE;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
@@ -15,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.common.exception.CertificateActi
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
 
 @RequiredArgsConstructor
@@ -24,7 +29,6 @@ public class SignCertificateDomainService {
   private final CertificateEventDomainService certificateEventDomainService;
   private final XmlGenerator xmlGenerator;
   private final SetMessagesToHandleDomainService setMessagesToHandleDomainService;
-  private final SendCertificateDomainService sendCertificateDomainService;
 
   public Certificate sign(CertificateId certificateId, Revision revision, Signature signature,
       ActionEvaluation actionEvaluation) {
@@ -43,6 +47,14 @@ public class SignCertificateDomainService {
     certificate.sign(xmlGenerator, signature, revision, actionEvaluation);
 
     final var signedCertificate = certificateRepository.save(certificate);
+
+    if (signedCertificate.hasParent(COMPLEMENT, RENEW, REPLACE)) {
+      setMessagesToHandleDomainService.handle(
+          signedCertificate.parent().certificate().messages().stream()
+              .filter(message -> message.type() == MessageType.COMPLEMENT)
+              .toList()
+      );
+    }
 
     certificateEventDomainService.publish(
         CertificateEvent.builder()
