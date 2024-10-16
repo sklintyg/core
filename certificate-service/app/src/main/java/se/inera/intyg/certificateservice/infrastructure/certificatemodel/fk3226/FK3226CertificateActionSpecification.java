@@ -54,6 +54,9 @@ public class FK3226CertificateActionSpecification {
             .certificateActionType(CertificateActionType.SEND_AFTER_SIGN)
             .build(),
         CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.SEND_AFTER_COMPLEMENT)
+            .build(),
+        CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.MESSAGES)
             .build(),
         CertificateActionSpecification.builder()

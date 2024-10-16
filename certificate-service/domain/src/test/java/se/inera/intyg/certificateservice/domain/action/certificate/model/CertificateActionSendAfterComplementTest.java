@@ -22,6 +22,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
+import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
@@ -29,14 +31,14 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.repository.Cert
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 
 @ExtendWith(MockitoExtension.class)
-class CertificateActionSendAfterSignTest {
+class CertificateActionSendAfterComplementTest {
 
-  private CertificateActionSendAfterSign certificateActionSign;
+  private CertificateActionSendAfterComplement certificateActionSendAfterComplement;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
   private CertificateBuilder certificateBuilder;
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
-          .certificateActionType(CertificateActionType.SEND_AFTER_SIGN)
+          .certificateActionType(CertificateActionType.SEND_AFTER_COMPLEMENT)
           .build();
   @Mock
   CertificateActionConfigurationRepository certificateActionConfigurationRepository;
@@ -45,7 +47,7 @@ class CertificateActionSendAfterSignTest {
 
   @BeforeEach
   void setUp() {
-    certificateActionSign = (CertificateActionSendAfterSign) certificateActionFactory.create(
+    certificateActionSendAfterComplement = (CertificateActionSendAfterComplement) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION
     );
 
@@ -69,23 +71,50 @@ class CertificateActionSendAfterSignTest {
 
   @Test
   void shallReturnTypeFromSpecification() {
-    assertEquals(CertificateActionType.SEND_AFTER_SIGN, certificateActionSign.getType());
+    assertEquals(CertificateActionType.SEND_AFTER_COMPLEMENT,
+        certificateActionSendAfterComplement.getType());
   }
 
   @Test
-  void shallReturnTrueIfCertificateIsSigned() {
-    final var certificate = certificateBuilder.status(Status.SIGNED).build();
+  void shallReturnTrueIfCertificateIsSignedAndHasParentOfTypeComplement() {
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .parent(
+            Relation.builder()
+                .type(RelationType.COMPLEMENT)
+                .build()
+        )
+        .build();
     final var actionEvaluation = actionEvaluationBuilder.build();
     assertTrue(
-        certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)));
+        certificateActionSendAfterComplement.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)));
   }
+
+  @Test
+  void shallReturnFalseIfCertificateIsSignedAndHasParentOfTypeNotComplement() {
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .parent(
+            Relation.builder()
+                .type(RelationType.REPLACE)
+                .build()
+        )
+        .build();
+    final var actionEvaluation = actionEvaluationBuilder.build();
+    assertFalse(
+        certificateActionSendAfterComplement.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)));
+  }
+
 
   @Test
   void shallReturnFalseIfCertificateIsNotSigned() {
     final var certificate = certificateBuilder.status(Status.DRAFT).build();
     final var actionEvaluation = actionEvaluationBuilder.build();
     assertFalse(
-        certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)));
+        certificateActionSendAfterComplement.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)));
   }
 
   @Test
@@ -93,7 +122,8 @@ class CertificateActionSendAfterSignTest {
     final var certificate = certificateBuilder.sent(Sent.builder().build()).build();
     final var actionEvaluation = actionEvaluationBuilder.build();
     assertFalse(
-        certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)));
+        certificateActionSendAfterComplement.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)));
   }
 
   @Test
@@ -115,7 +145,7 @@ class CertificateActionSendAfterSignTest {
         .build();
 
     assertFalse(
-        certificateActionSign.evaluate(Optional.of(certificate),
+        certificateActionSendAfterComplement.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -127,6 +157,11 @@ class CertificateActionSendAfterSignTest {
 
     final var certificate = certificateBuilder
         .status(Status.SIGNED)
+        .parent(
+            Relation.builder()
+                .type(RelationType.COMPLEMENT)
+                .build()
+        )
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -138,7 +173,7 @@ class CertificateActionSendAfterSignTest {
         .build();
 
     assertTrue(
-        certificateActionSign.evaluate(Optional.of(certificate),
+        certificateActionSendAfterComplement.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -162,7 +197,7 @@ class CertificateActionSendAfterSignTest {
         .build();
 
     assertFalse(
-        certificateActionSign.evaluate(Optional.of(certificate),
+        certificateActionSendAfterComplement.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );

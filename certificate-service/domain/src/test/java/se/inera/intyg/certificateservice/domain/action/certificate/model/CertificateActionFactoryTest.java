@@ -11,7 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 
 @ExtendWith(MockitoExtension.class)
-class certificateActionFactoryTest {
+class CertificateActionFactoryTest {
 
   @Mock
   CertificateActionConfigurationRepository certificateActionConfigurationRepository;
@@ -124,6 +124,18 @@ class certificateActionFactoryTest {
 
     assert certificateAction != null;
     assertEquals(certificateAction.getClass(), CertificateActionSendAfterSign.class);
+  }
+
+  @Test
+  void shallReturnCertificateActionSendAfterComplementIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.SEND_AFTER_COMPLEMENT)
+        .build();
+
+    final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionSendAfterComplement.class);
   }
 
   @Test
