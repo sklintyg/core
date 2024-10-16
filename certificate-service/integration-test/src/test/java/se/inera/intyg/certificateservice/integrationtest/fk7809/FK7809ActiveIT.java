@@ -41,6 +41,7 @@ import se.inera.intyg.certificateservice.integrationtest.RenewCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ReplaceCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SendCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.SendCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateFK7809IT;
@@ -709,6 +710,27 @@ public class FK7809ActiveIT {
     @Override
     protected String code() {
       return CODE;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Skicka intyg som invånare från 1177 Intyg")
+  class IncludeSendCitizenCertificateIT extends SendCitizenCertificateIT {
+
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+
+    @Override
+    protected boolean availableForCitizen() {
+      return true;
     }
   }
 }

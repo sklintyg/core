@@ -44,6 +44,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDiagnosisList;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
 import se.inera.intyg.certificateservice.application.citizen.dto.CitizenCertificateExistsResponse;
+import se.inera.intyg.certificateservice.application.citizen.dto.SendCitizenCertificateResponse;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.application.message.dto.CreateMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateFromMessageResponse;
@@ -604,5 +605,13 @@ public class CertificateUtil {
     return ((CertificateDataValueCodeList) response.getBody().getCertificate().getData()
         .get(questionId)
         .getValue());
+  }
+
+  public static CertificateDTO getCitizenCertificate(
+      ResponseEntity<SendCitizenCertificateResponse> response) {
+    if (response == null || response.getBody() == null) {
+      return null;
+    }
+    return response.getBody().getCitizenCertificate();
   }
 }

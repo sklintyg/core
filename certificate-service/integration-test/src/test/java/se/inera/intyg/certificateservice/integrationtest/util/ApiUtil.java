@@ -60,6 +60,8 @@ import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCerti
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateResponse;
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateRequest;
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateResponse;
+import se.inera.intyg.certificateservice.application.citizen.dto.SendCitizenCertificateRequest;
+import se.inera.intyg.certificateservice.application.citizen.dto.SendCitizenCertificateResponse;
 import se.inera.intyg.certificateservice.application.message.dto.CreateMessageRequest;
 import se.inera.intyg.certificateservice.application.message.dto.CreateMessageResponse;
 import se.inera.intyg.certificateservice.application.message.dto.DeleteAnswerRequest;
@@ -168,6 +170,14 @@ public class ApiUtil {
         certificateId);
 
     return sendRequest(request, requestUrl, PrintCitizenCertificateResponse.class);
+  }
+
+  public ResponseEntity<SendCitizenCertificateResponse> sendCitizenCertificate(
+      SendCitizenCertificateRequest request, String certificateId) {
+    final var requestUrl = "http://localhost:%s/api/citizen/certificate/%s/send".formatted(port,
+        certificateId);
+
+    return sendRequest(request, requestUrl, SendCitizenCertificateResponse.class);
   }
 
   public ResponseEntity<GetPatientCertificatesResponse> getPatientCertificates(
