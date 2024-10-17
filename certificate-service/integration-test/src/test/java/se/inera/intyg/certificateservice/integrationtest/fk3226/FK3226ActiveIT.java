@@ -42,6 +42,7 @@ import se.inera.intyg.certificateservice.integrationtest.RenewCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ReplaceCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SendCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.SendCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateFK3226IT;
@@ -708,6 +709,27 @@ public class FK3226ActiveIT {
     @Override
     protected String code() {
       return CODE;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Skicka intyg som invånare från 1177 Intyg")
+  class IncludeSendCitizenCertificateIT extends SendCitizenCertificateIT {
+
+
+    @Override
+    protected String type() {
+      return FK3226Constants.FK3226;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return FK3226Constants.VERSION;
+    }
+
+    @Override
+    protected boolean availableForCitizen() {
+      return true;
     }
   }
 }

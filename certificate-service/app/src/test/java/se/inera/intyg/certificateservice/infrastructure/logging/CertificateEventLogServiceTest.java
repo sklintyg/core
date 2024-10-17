@@ -49,6 +49,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
+import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent.CertificateEventBuilder;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.logging.HashUtility;
 
@@ -69,13 +70,17 @@ class CertificateEventLogServiceTest {
     logger.addAppender(mockAppender);
 
     final var now = LocalDateTime.now(ZoneId.systemDefault());
-    certificateEvent = CertificateEvent.builder()
+    certificateEvent = getCertificateEventBuilder(now)
+        .build();
+  }
+
+  private static CertificateEventBuilder getCertificateEventBuilder(LocalDateTime now) {
+    return CertificateEvent.builder()
         .start(now.minusSeconds(1))
         .end(now)
         .type(CertificateEventType.READ)
         .certificate(FK7210_CERTIFICATE)
-        .actionEvaluation(ACTION_EVALUATION)
-        .build();
+        .actionEvaluation(ACTION_EVALUATION);
   }
 
   @AfterEach
@@ -203,6 +208,58 @@ class CertificateEventLogServiceTest {
   void shallIncludeOrganizationCareProviderIdInMDC() {
     certificateEventLogService.event(certificateEvent);
     assertEquals(ALFA_REGIONEN_ID, getValueFromMDC(ORGANIZATION_CARE_PROVIDER_ID));
+  }
+
+  @Test
+  void shallIncludeUserIdInMDCWithPatientId() {
+    final var now = LocalDateTime.now(ZoneId.systemDefault());
+    final var event = getCertificateEventBuilder(now)
+        .actionEvaluation(null)
+        .build();
+    certificateEventLogService.event(event);
+    assertEquals(
+        HashUtility.hash(ATHENA_REACT_ANDERSSON_ID),
+        getValueFromMDC(USER_ID));
+  }
+
+  @Test
+  void shallExcludeUserRoleInMDC() {
+    final var now = LocalDateTime.now(ZoneId.systemDefault());
+    final var event = getCertificateEventBuilder(now)
+        .actionEvaluation(null)
+        .build();
+    certificateEventLogService.event(event);
+    assertEquals("-", getValueFromMDC(USER_ROLE));
+  }
+
+  @Test
+  void shallExcludeOrganizationUnitIdInMDC() {
+    final var now = LocalDateTime.now(ZoneId.systemDefault());
+    final var event = getCertificateEventBuilder(now)
+        .actionEvaluation(null)
+        .build();
+    certificateEventLogService.event(event);
+    assertEquals("-", getValueFromMDC(ORGANIZATION_ID));
+  }
+
+  @Test
+  void shallExcludeOrganizationCareUnitIdInMDC() {
+    final var now = LocalDateTime.now(ZoneId.systemDefault());
+    final var event = getCertificateEventBuilder(now)
+        .actionEvaluation(null)
+        .build();
+    certificateEventLogService.event(event);
+    assertEquals("-", getValueFromMDC(ORGANIZATION_CARE_UNIT_ID));
+  }
+
+  @Test
+  void shallExcludeOrganizationCareProviderIdInMDC() {
+    final var now = LocalDateTime.now(ZoneId.systemDefault());
+    final var event = getCertificateEventBuilder(now)
+        .actionEvaluation(null)
+        .build();
+    certificateEventLogService.event(event);
+    assertEquals("-", getValueFromMDC(ORGANIZATION_CARE_PROVIDER_ID));
   }
 
   private String getValueFromMDC(String key) {

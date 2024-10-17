@@ -24,6 +24,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.repository.Cert
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
+import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.PatientRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.StaffRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.UnitRepository;
@@ -147,7 +148,9 @@ public class CertificateEntityMapper {
 
     if (certificate.sent() != null) {
       certificateEntity.setSentBy(
-          staffMap.get(certificate.sent().sentBy().hsaId().id())
+          certificate.sent().sentBy() != null
+              ? staffMap.get(certificate.sent().sentBy().hsaId().id())
+              : null
       );
 
       certificateEntity.setSent(
@@ -285,7 +288,7 @@ public class CertificateEntityMapper {
         .sent(
             certificateEntity.getSent() != null
                 ? Sent.builder()
-                .sentBy(StaffEntityMapper.toDomain(certificateEntity.getSentBy()))
+                .sentBy(getSentBy(certificateEntity))
                 .sentAt(certificateEntity.getSent())
                 .recipient(model.recipient())
                 .build() : null
@@ -347,6 +350,12 @@ public class CertificateEntityMapper {
                 : null
         )
         .build();
+  }
+
+  private static Staff getSentBy(CertificateEntity certificateEntity) {
+    return certificateEntity.getSentBy() != null
+        ? StaffEntityMapper.toDomain(certificateEntity.getSentBy())
+        : null;
   }
 
   private static Predicate<MessageEntity> removeRemindersAndAnswers() {

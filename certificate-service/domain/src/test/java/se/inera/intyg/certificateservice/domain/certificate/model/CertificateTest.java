@@ -1299,6 +1299,79 @@ class CertificateTest {
   }
 
   @Nested
+  class TestSendByCitizen {
+
+    @Test
+    void shallIncludeRecipientWhenSent() {
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      doReturn(RECIPIENT).when(certificateModel).recipient();
+      certificate.sendByCitizen();
+
+      assertEquals(RECIPIENT, certificate.sent().recipient());
+    }
+
+    @Test
+    void shallIncludeSentTimestampWhenSent() {
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      doReturn(RECIPIENT).when(certificateModel).recipient();
+      certificate.sendByCitizen();
+
+      assertNotNull(certificate.sent().sentAt());
+    }
+
+    @Test
+    void shallExcludeSentByWhenSent() {
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      doReturn(RECIPIENT).when(certificateModel).recipient();
+      certificate.sendByCitizen();
+
+      assertNull(certificate.sent().sentBy());
+    }
+
+    @Test
+    void shallThrowIfStatusIsNotSigned() {
+      final var certificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          certificate::sendByCitizen);
+
+      assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowIfCertificateAlreadyBeenSent() {
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .sent(
+              Sent.builder()
+                  .recipient(RECIPIENT)
+                  .build()
+          )
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          certificate::sendByCitizen);
+
+      assertTrue(illegalStateException.getMessage().contains("has already been sent to"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+  }
+
+  @Nested
   class TestReadyForSign {
 
     @Test

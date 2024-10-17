@@ -35,6 +35,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.repository.Cert
 import se.inera.intyg.certificateservice.domain.certificatemodel.service.ListAvailableCertificateModelsDomainService;
 import se.inera.intyg.certificateservice.domain.citizen.service.GetCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.citizen.service.PrintCitizenCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.citizen.service.SendCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventSubscriber;
 import se.inera.intyg.certificateservice.domain.event.service.MessageEventDomainService;
@@ -240,6 +241,14 @@ public class AppConfig {
   public PrintCitizenCertificateDomainService printCitizenCertificateDomainService(
       CertificateRepository certificateRepository, PdfGenerator pdfGenerator) {
     return new PrintCitizenCertificateDomainService(certificateRepository, pdfGenerator);
+  }
+
+  @Bean
+  public SendCitizenCertificateDomainService sendCitizenCertificateDomainService(
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new SendCitizenCertificateDomainService(certificateRepository,
+        certificateEventDomainService);
   }
 
   @Bean

@@ -17,17 +17,21 @@ import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCerti
 import se.inera.intyg.certificateservice.application.citizen.dto.GetCitizenCertificateResponse;
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateRequest;
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateResponse;
+import se.inera.intyg.certificateservice.application.citizen.dto.SendCitizenCertificateRequest;
+import se.inera.intyg.certificateservice.application.citizen.dto.SendCitizenCertificateResponse;
 import se.inera.intyg.certificateservice.application.citizen.service.CitizenCertificateExistsService;
 import se.inera.intyg.certificateservice.application.citizen.service.GetCitizenCertificateListService;
 import se.inera.intyg.certificateservice.application.citizen.service.GetCitizenCertificateService;
 import se.inera.intyg.certificateservice.application.citizen.service.PrintCitizenCertificateService;
+import se.inera.intyg.certificateservice.application.citizen.service.SendCitizenCertificateService;
 
 @ExtendWith(MockitoExtension.class)
 class CitizenControllerTest {
 
   private static final String CERTIFICATE_ID = "CERTIFICATE_ID";
   private static final CertificateDTO CERTIFICATE = CertificateDTO.builder().build();
-
+  @Mock
+  SendCitizenCertificateService sendCitizenCertificateService;
   @Mock
   GetCitizenCertificateService getCitizenCertificateService;
 
@@ -86,6 +90,18 @@ class CitizenControllerTest {
     when(printCitizenCertificateService.get(request, CERTIFICATE_ID)).thenReturn(expected);
 
     final var result = citizenController.printCertificate(request, CERTIFICATE_ID);
+
+    assertEquals(expected, result);
+  }
+
+  @Test
+  void shouldReturnSendCitizenCertificateResponse() {
+    final var request = SendCitizenCertificateRequest.builder().build();
+    final var expected = SendCitizenCertificateResponse.builder().build();
+
+    when(sendCitizenCertificateService.send(request, CERTIFICATE_ID)).thenReturn(expected);
+
+    final var result = citizenController.sendCertificate(request, CERTIFICATE_ID);
 
     assertEquals(expected, result);
   }

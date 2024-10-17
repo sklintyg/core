@@ -236,6 +236,23 @@ public class Certificate {
   }
 
   public void send(ActionEvaluation actionEvaluation) {
+    validateCertificateValidToSend();
+    this.sent = Sent.builder()
+        .recipient(certificateModel.recipient())
+        .sentBy(Staff.create(actionEvaluation.user()))
+        .sentAt(LocalDateTime.now(ZoneId.systemDefault()))
+        .build();
+  }
+
+  public void sendByCitizen() {
+    validateCertificateValidToSend();
+    this.sent = Sent.builder()
+        .recipient(certificateModel.recipient())
+        .sentAt(LocalDateTime.now(ZoneId.systemDefault()))
+        .build();
+  }
+
+  private void validateCertificateValidToSend() {
     if (this.status != Status.SIGNED) {
       throw new IllegalStateException(
           "Incorrect status '%s' - required status is '%s' to send".formatted(this.status,
@@ -249,12 +266,6 @@ public class Certificate {
               this.sent.recipient().name())
       );
     }
-
-    this.sent = Sent.builder()
-        .recipient(certificateModel.recipient())
-        .sentBy(Staff.create(actionEvaluation.user()))
-        .sentAt(LocalDateTime.now(ZoneId.systemDefault()))
-        .build();
   }
 
   public void revoke(ActionEvaluation actionEvaluation, RevokedInformation revokedInformation) {
@@ -501,4 +512,3 @@ public class Certificate {
     );
   }
 }
-
