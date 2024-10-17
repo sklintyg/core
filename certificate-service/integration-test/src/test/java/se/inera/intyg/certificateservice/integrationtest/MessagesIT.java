@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO.SIGNED;
+import static se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO.UNSIGNED;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ALVE_REACT_ALFREDSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ANONYMA_REACT_ATTILA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
@@ -797,6 +798,28 @@ public abstract class MessagesIT extends BaseIntegrationIT {
     );
 
     api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+
+    final var response = api.getCertificate(
+        defaultGetCertificateRequest(),
+        certificateId(testCertificates)
+    );
+    final var resourceLinkTypes = Objects.requireNonNull(response.getBody()).getCertificate()
+        .getLinks()
+        .stream()
+        .map(ResourceLinkDTO::getType)
+        .toList();
+
+    assertFalse(resourceLinkTypes.contains(ResourceLinkTypeDTO.QUESTIONS_NOT_AVAILABLE),
+        "Should return false if resource link questions not available is included"
+    );
+  }
+
+  @Test
+  @DisplayName("Om intyget är osignerat skall information om att meddelanden ej är tillgängliga inte visas")
+  void shallNotDisplayMessagesNotAvailableIfCertificateIsUnsigned() {
+    final var testCertificates = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion(), UNSIGNED)
+    );
 
     final var response = api.getCertificate(
         defaultGetCertificateRequest(),
