@@ -8,6 +8,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultComplementCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateMessageRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSendCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSignCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.questions;
@@ -88,10 +89,16 @@ public abstract class AnswerComplementIT extends BaseIntegrationIT {
         certificateId(testCertificates)
     ).getBody().getCertificate();
 
+    final var signedComplement = api.signCertificate(
+        defaultSignCertificateRequest(),
+        complementingCertificate.getMetadata().getId(),
+        complementingCertificate.getMetadata().getVersion()
+    ).getBody().getCertificate();
+
     assertTrue(
-        complementingCertificate.getLinks().stream()
+        signedComplement.getLinks().stream()
             .anyMatch(link -> link.getType() == ResourceLinkTypeDTO.SEND_AFTER_SIGN_CERTIFICATE),
-        "Should send complementing certificate after sign!"
+        "Should send certificate after sign when complementing certificate!"
     );
   }
 }
