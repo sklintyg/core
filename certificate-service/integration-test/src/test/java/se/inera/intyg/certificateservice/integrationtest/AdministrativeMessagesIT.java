@@ -30,6 +30,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.messageId;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.messages;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.metadata;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.question;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.questions;
@@ -496,5 +497,29 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
     assertNull(questionsAfter.get(0).getAnswer(),
         "Should delete answer draft when certificate i revoked"
     );
+  }
+
+  @Test
+  @DisplayName("Xml för ärendekommunikation skall gå att hämta")
+  void shallReturnMessageXml() {
+    final var testCertificates = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
+
+    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+
+    final var createdQuestion = question(api.createMessage(defaultCreateMessageRequest(),
+        certificateId(testCertificates)).getBody());
+
+    api.sendMessage(defaultSendMessageRequest(), messageId(createdQuestion));
+
+    final var response = internalApi.getMessages(
+        certificateId(testCertificates)
+    );
+
+    final var messages = messages(response.getBody());
+
+    final var xml = internalApi.getMessageXml(messages.get(0).getId()).getBody().getXml();
+
+    assertNotNull(xml);
   }
 }
