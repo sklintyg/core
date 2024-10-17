@@ -454,10 +454,11 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
-                  new ActionRuleSent(false))
+                  new ActionRuleSent(false),
+                  new ActionRuleStatus(List.of(Status.SIGNED))
+              )
           )
           .build();
-
     };
   }
 }

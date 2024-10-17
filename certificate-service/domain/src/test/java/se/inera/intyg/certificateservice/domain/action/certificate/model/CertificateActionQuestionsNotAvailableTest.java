@@ -9,6 +9,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.alvaVardadministratorBuilder;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.Ce
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 
 @ExtendWith(MockitoExtension.class)
@@ -105,6 +107,40 @@ class CertificateActionQuestionsNotAvailableTest {
         certificateActionQuestionsNotAvailable.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfSigned() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .user(alvaVardadministratorBuilder()
+            .accessScope(AccessScope.ALL_CARE_PROVIDERS)
+            .build())
+        .build();
+
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .build();
+
+    assertTrue(
+        certificateActionQuestionsNotAvailable.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnFalseIfNotSigned() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .status(Status.DRAFT)
+        .build();
+
+    assertFalse(
+        certificateActionQuestionsNotAvailable.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
 
