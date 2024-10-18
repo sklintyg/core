@@ -42,11 +42,25 @@ class ForwardCertificateDomainServiceTest {
   }
 
   @Test
-  void shallForwardCertificate() {
+  void shallForwardIfAllowedToForwardCertificate() {
     final var certificate = mock(Certificate.class);
     doReturn(true).when(certificate)
-        .allowTo(CertificateActionType.FORWARD_CERTIFICATE, Optional.of(ACTION_EVALUATION));
+        .allowTo(CertificateActionType.FORWARD_CERTIFICATE,
+            Optional.of(ACTION_EVALUATION));
+    forwardCertificateDomainService.forward(certificate, ACTION_EVALUATION);
 
+    verify(certificate).forward();
+  }
+
+  @Test
+  void shallForwardIfAllowedToForwardCertificateFromList() {
+    final var certificate = mock(Certificate.class);
+    doReturn(false).when(certificate)
+        .allowTo(CertificateActionType.FORWARD_CERTIFICATE,
+            Optional.of(ACTION_EVALUATION));
+    doReturn(true).when(certificate)
+        .allowTo(CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST,
+            Optional.of(ACTION_EVALUATION));
     forwardCertificateDomainService.forward(certificate, ACTION_EVALUATION);
 
     verify(certificate).forward();

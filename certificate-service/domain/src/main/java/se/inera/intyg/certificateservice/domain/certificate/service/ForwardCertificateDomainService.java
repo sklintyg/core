@@ -15,7 +15,8 @@ public class ForwardCertificateDomainService {
 
   public Certificate forward(Certificate certificate, ActionEvaluation actionEvaluation) {
     if (!certificate.allowTo(CertificateActionType.FORWARD_CERTIFICATE,
-        Optional.of(actionEvaluation))) {
+        Optional.of(actionEvaluation)) && !certificate.allowTo(
+        CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST, Optional.of(actionEvaluation))) {
       throw new CertificateActionForbidden(
           "Not allowed to forward certificate %s".formatted(certificate.id()),
           certificate.reasonNotAllowed(CertificateActionType.FORWARD_CERTIFICATE,

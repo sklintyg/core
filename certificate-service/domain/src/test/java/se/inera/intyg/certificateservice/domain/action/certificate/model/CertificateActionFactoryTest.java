@@ -425,4 +425,16 @@ class CertificateActionFactoryTest {
     assert certificateAction != null;
     assertEquals(certificateAction.getClass(), CertificateActionListCertificateType.class);
   }
+
+  @Test
+  void shallReturnCertificateActionForwardCertificateFromListIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST)
+        .build();
+
+    final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(certificateAction.getClass(), CertificateActionForwardCertificateFromList.class);
+  }
 }

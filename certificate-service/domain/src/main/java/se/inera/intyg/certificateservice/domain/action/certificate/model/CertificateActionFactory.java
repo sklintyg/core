@@ -459,6 +459,21 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case FORWARD_CERTIFICATE_FROM_LIST -> CertificateActionForwardCertificateFromList.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.DRAFT)),
+                  new ActionRuleUserNotBlocked(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson(),
+                  new ActionRuleInactiveUnit(),
+                  new ActionRuleUserHasAccessScope(
+                      List.of(AccessScope.WITHIN_CARE_UNIT)
+                  )
+              )
+          )
+          .build();
     };
   }
 }

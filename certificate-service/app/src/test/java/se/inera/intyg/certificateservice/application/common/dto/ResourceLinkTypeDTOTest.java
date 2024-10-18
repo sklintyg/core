@@ -285,5 +285,12 @@ class ResourceLinkTypeDTOTest {
       assertEquals(ResourceLinkTypeDTO.READY_FOR_SIGN,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.READY_FOR_SIGN));
     }
+
+    @Test
+    void shallReturnCertificateActionTypeForwardCertificateFromList() {
+      assertEquals(ResourceLinkTypeDTO.FORWARD_CERTIFICATE_FROM_LIST,
+          ResourceLinkTypeDTO.toResourceLinkType(
+              CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST));
+    }
   }
 }
