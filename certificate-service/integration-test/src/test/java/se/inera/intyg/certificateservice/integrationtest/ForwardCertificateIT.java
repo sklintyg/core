@@ -11,15 +11,19 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.alvaVardadministratorDtoBuilder;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customForwardCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultForwardCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.forwarded;
 
+import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
+import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
+import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 
 public abstract class ForwardCertificateIT extends BaseIntegrationIT {
 
@@ -258,5 +262,105 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
     );
 
     assertEquals(403, response.getStatusCode().value());
+  }
+
+  @Test
+  @DisplayName("Intyget ska gå att vidarebefordra av läkare från utkastlistan")
+  void shallBeAbleToForwardCertificateFromDraftListForDoctor() {
+    final var testCertificates = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion())
+    );
+
+    final var response = api.getCertificate(
+        customGetCertificateRequest()
+            .user(AJLA_DOCTOR_DTO)
+            .build(),
+        certificateId(testCertificates)
+    );
+
+    final var resourceLinkTypes = Objects.requireNonNull(response.getBody()).getCertificate()
+        .getLinks()
+        .stream()
+        .map(ResourceLinkDTO::getType)
+        .toList();
+
+    assertTrue(resourceLinkTypes.contains(ResourceLinkTypeDTO.FORWARD_CERTIFICATE_FROM_LIST),
+        "Should return true if resource link forward certificate from list is included"
+    );
+  }
+
+  @Test
+  @DisplayName("Intyget ska gå att vidarebefordra av barnmorska från utkastlistan")
+  void shallBeAbleToForwardCertificateFromDraftListForMidwife() {
+    final var testCertificates = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion())
+    );
+
+    final var response = api.getCertificate(
+        customGetCertificateRequest()
+            .user(BERTIL_BARNMORSKA_DTO)
+            .build(),
+        certificateId(testCertificates)
+    );
+
+    final var resourceLinkTypes = Objects.requireNonNull(response.getBody()).getCertificate()
+        .getLinks()
+        .stream()
+        .map(ResourceLinkDTO::getType)
+        .toList();
+
+    assertTrue(resourceLinkTypes.contains(ResourceLinkTypeDTO.FORWARD_CERTIFICATE_FROM_LIST),
+        "Should return true if resource link forward certificate from list is included"
+    );
+  }
+
+  @Test
+  @DisplayName("Intyget ska gå att vidarebefordra av sjuksköterska från utkastlistan")
+  void shallBeAbleToForwardCertificateFromDraftListForNurse() {
+    final var testCertificates = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion())
+    );
+
+    final var response = api.getCertificate(
+        customGetCertificateRequest()
+            .user(ANNA_SJUKSKOTERSKA_DTO)
+            .build(),
+        certificateId(testCertificates)
+    );
+
+    final var resourceLinkTypes = Objects.requireNonNull(response.getBody()).getCertificate()
+        .getLinks()
+        .stream()
+        .map(ResourceLinkDTO::getType)
+        .toList();
+
+    assertTrue(resourceLinkTypes.contains(ResourceLinkTypeDTO.FORWARD_CERTIFICATE_FROM_LIST),
+        "Should return true if resource link forward certificate from list is included"
+    );
+  }
+
+  @Test
+  @DisplayName("Intyget ska gå att vidarebefordra av sjuksköterska från utkastlistan")
+  void shallBeAbleToForwardCertificateFromDraftListForCareAdmin() {
+    final var testCertificates = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion())
+    );
+
+    final var response = api.getCertificate(
+        customGetCertificateRequest()
+            .user(AJLA_DOCTOR_DTO)
+            .build(),
+        certificateId(testCertificates)
+    );
+
+    final var resourceLinkTypes = Objects.requireNonNull(response.getBody()).getCertificate()
+        .getLinks()
+        .stream()
+        .map(ResourceLinkDTO::getType)
+        .toList();
+
+    assertTrue(resourceLinkTypes.contains(ResourceLinkTypeDTO.FORWARD_CERTIFICATE_FROM_LIST),
+        "Should return true if resource link forward certificate from list is included"
+    );
   }
 }
