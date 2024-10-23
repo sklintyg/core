@@ -132,6 +132,9 @@ public class FK3226CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.QUESTIONS_NOT_AVAILABLE)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST)
             .build()
     );
   }
