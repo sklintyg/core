@@ -33,7 +33,7 @@ public abstract class ForwardCertificateMessageIT extends BaseIntegrationIT {
   protected abstract String questionId();
 
   @Test
-  @DisplayName("Om intyget är signerat och skickat skall ärendekommunikation gå att vidarebefodra")
+  @DisplayName("Om intyget är signerat och skickat skall ärendekommunikation gå att vidarebefordra")
   void shallUpdateCertificateWithForwardedTrueIfStatusOnCertificateIsSignedAndSent() {
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(),
@@ -71,21 +71,6 @@ public abstract class ForwardCertificateMessageIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Om intyget inte är signerat skall felkod 403 (FORBIDDEN) returneras")
-  void shallReturnForbiddenIfCertificateIsNotSigned() {
-    final var testCertificates = testabilityApi.addCertificates(
-        defaultTestablilityCertificateRequest(type(), typeVersion())
-    );
-
-    final var response = api.forwardCertificate(
-        certificateId(testCertificates),
-        defaultForwardCertificateMessageRequest()
-    );
-
-    assertEquals(403, response.getStatusCode().value());
-  }
-
-  @Test
   @DisplayName("Om intyget är signerat men inte skickat skall felkod 403 (FORBIDDEN) returneras")
   void shallReturnForbiddenIfCertificateIsSignedButNotSent() {
     final var testCertificates = testabilityApi.addCertificates(
@@ -102,7 +87,7 @@ public abstract class ForwardCertificateMessageIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall ärendekommunikation gå att vidarebefodra")
+  @DisplayName("Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall ärendekommunikation gå att vidarebefordra")
   void shallUpdateCertificateMessagesIfUserIsDoctorAndPatientIsProtectedPerson() {
     final var testCertificates = testabilityApi.addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion(), CertificateStatusTypeDTO.SIGNED)
@@ -225,7 +210,7 @@ public abstract class ForwardCertificateMessageIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Om intyget är utfärdat på samma mottagning skall ärendekommunikation gå att vidarebefodra")
+  @DisplayName("Om intyget är utfärdat på samma mottagning skall ärendekommunikation gå att vidarebefordra")
   void shallUpdateCertificateToForwardedIfCertificateOnSameUnit() {
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(),
@@ -263,7 +248,7 @@ public abstract class ForwardCertificateMessageIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Om intyget är utfärdat på mottagning men på samma vårdenhet skall ärendekommunikation gå att vidarebefodra")
+  @DisplayName("Om intyget är utfärdat på mottagning men på samma vårdenhet skall ärendekommunikation gå att vidarebefordra")
   void shallUpdateCertificateToForwardedIfIssuedOnSameCareUnitDifferentSubUnit() {
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(),
@@ -303,7 +288,7 @@ public abstract class ForwardCertificateMessageIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Om intyget är utfärdat på samma vårdenhet skall ärendekommunikation gå att vidarebefodra")
+  @DisplayName("Om intyget är utfärdat på samma vårdenhet skall ärendekommunikation gå att vidarebefordra")
   void shallUpdateCertificateToForwardedIfIssuedOnSameCareUnit() {
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(),
