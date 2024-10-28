@@ -15,8 +15,11 @@ public class GetCertificateEventsOfTypeDomainService {
     return switch (type) {
       case CREATED ->
           List.of(eventFromTimestampAndRelation(certificate, certificate.created(), type));
-      case SIGNED, AVAILABLE_FOR_PATIENT ->
-          List.of(eventFromTimestamp(certificate, certificate.signed(), type));
+      case AVAILABLE_FOR_PATIENT ->
+          Boolean.TRUE.equals(certificate.certificateModel().availableForCitizen()) ? List.of(
+              eventFromTimestamp(certificate, certificate.signed(), type))
+              : Collections.emptyList();
+      case SIGNED -> List.of(eventFromTimestamp(certificate, certificate.signed(), type));
       case SENT -> certificate.sent() != null
           ? List.of(eventFromTimestamp(certificate, certificate.sent().sentAt(), type))
           : Collections.emptyList();

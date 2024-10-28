@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.certificate.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7472CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7809CertificateBuilder;
 
 import java.time.LocalDateTime;
@@ -147,7 +148,7 @@ class GetCertificateEventsOfTypeDomainServiceTest {
   class AvailableForPatient {
 
     @Test
-    void shouldReturnEventIfSigned() {
+    void shouldReturnEventIfSignedAndAvailableForPatient() {
       final var certificate = fk7809CertificateBuilder()
           .signed(NOW)
           .build();
@@ -160,6 +161,19 @@ class GetCertificateEventsOfTypeDomainServiceTest {
 
       assertEquals(
           List.of(expected),
+          getCertificateEventsOfTypeDomainService.events(certificate,
+              CertificateEventType.AVAILABLE_FOR_PATIENT)
+      );
+    }
+
+    @Test
+    void shouldReturnEmptyListIfSignedAndNotAvailableForPatient() {
+      final var certificate = fk7472CertificateBuilder()
+          .signed(NOW)
+          .build();
+
+      assertEquals(
+          Collections.emptyList(),
           getCertificateEventsOfTypeDomainService.events(certificate,
               CertificateEventType.AVAILABLE_FOR_PATIENT)
       );
