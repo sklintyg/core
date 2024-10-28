@@ -10,11 +10,13 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7809CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.relationComplementBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.relationReplaceBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_HUDMOTTAGNINGEN;
@@ -291,6 +293,78 @@ class CertificateActionReplaceTest {
                 relationReplaceBuilder()
                     .certificate(
                         fk7210CertificateBuilder()
+                            .status(Status.REVOKED)
+                            .build()
+                    )
+                    .build()
+            )
+        )
+        .build();
+
+    assertTrue(
+        certificateActionReplace.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnFalseIfComplementedBySignedCertificate() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .children(
+            List.of(
+                relationComplementBuilder()
+                    .certificate(
+                        fk7809CertificateBuilder()
+                            .status(Status.SIGNED)
+                            .build()
+                    )
+                    .build()
+            )
+        )
+        .build();
+
+    assertFalse(
+        certificateActionReplace.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfComplementedByUnsignedCertificate() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .children(
+            List.of(
+                relationComplementBuilder()
+                    .certificate(
+                        fk7809CertificateBuilder()
+                            .status(Status.DRAFT)
+                            .build()
+                    )
+                    .build()
+            )
+        )
+        .build();
+
+    assertTrue(
+        certificateActionReplace.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfComplementedByRevokedCertificate() {
+    final var actionEvaluation = actionEvaluationBuilder.build();
+
+    final var certificate = certificateBuilder
+        .children(
+            List.of(
+                relationComplementBuilder()
+                    .certificate(
+                        fk7809CertificateBuilder()
                             .status(Status.REVOKED)
                             .build()
                     )
