@@ -47,6 +47,7 @@ public class QuestionUtredningEllerUnderlag {
       "form1[0].#subform[0].lbx_listVardeUnderlagUtredning2[0]");
   public static final PdfFieldId INVESTIGATION_PDF_FIELD_ID_3 = new PdfFieldId(
       "form1[0].#subform[0].lbx_listVardeUnderlagUtredning3[0]");
+  public static final int LIMIT = 53;
 
   private QuestionUtredningEllerUnderlag() {
     throw new IllegalStateException("Utility class");
@@ -87,6 +88,10 @@ public class QuestionUtredningEllerUnderlag {
                 CertificateElementRuleFactory.show(
                     QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID,
                     QUESTION_BASERAT_PA_ANNAT_UNDERLAG_FIELD_ID
+                ),
+                CertificateElementRuleFactory.limit(
+                    QUESTION_ANDRA_MEDICINSKA_UTREDNINGAR_ID,
+                    (short) LIMIT
                 )
             )
         )
@@ -95,7 +100,7 @@ public class QuestionUtredningEllerUnderlag {
                 ElementValidationMedicalInvestigationList.builder()
                     .mandatory(true)
                     .max(Period.ofDays(0))
-                    .limit(4000)
+                    .limit(LIMIT)
                     .build()
             )
         )
