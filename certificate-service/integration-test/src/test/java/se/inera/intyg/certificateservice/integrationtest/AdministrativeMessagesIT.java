@@ -37,7 +37,6 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.application.message.dto.CreateMessageResponse;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants;
 
 public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
@@ -69,7 +68,7 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
     api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
     final var createdQuestion = question(
-        (CreateMessageResponse) api.createMessage(defaultCreateMessageRequest(),
+        api.createMessage(defaultCreateMessageRequest(),
             certificateId(testCertificates)).getBody());
 
     api.saveMessage(customSaveMessageRequest()
