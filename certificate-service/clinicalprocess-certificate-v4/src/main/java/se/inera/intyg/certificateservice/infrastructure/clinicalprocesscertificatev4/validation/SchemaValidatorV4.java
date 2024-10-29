@@ -25,7 +25,7 @@ public class SchemaValidatorV4 implements XmlSchemaValidator {
       final var schema = factory.newSchema(getFileStreamSource());
       final var validator = schema.newValidator();
       final var xsdErrorHandler = new SchemaValidatorErrorHandler();
-      validator.setErrorHandler(xsdErrorHandler);
+      validator.setErrorHandler(new SchemaValidatorErrorHandler());
       validator.validate(
           new StreamSource(new ByteArrayInputStream(xml.xml().getBytes()))
       );
