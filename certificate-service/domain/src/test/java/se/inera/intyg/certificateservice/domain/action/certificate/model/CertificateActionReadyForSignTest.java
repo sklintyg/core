@@ -18,6 +18,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajl
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.alvaVardadministratorBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.annaSjukskoterskaBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.bertilBarnmorskaBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AGREEMENT_FALSE;
 
 import java.util.List;
 import java.util.Optional;
@@ -271,5 +272,44 @@ class CertificateActionReadyForSignTest {
         );
       }
     }
+  }
+
+  @Test
+  void shallReturnFalseIfUserMissingAgreement() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .user(
+            alvaVardadministratorBuilder()
+                .agreement(AGREEMENT_FALSE)
+                .accessScope(AccessScope.ALL_CARE_PROVIDERS)
+                .build()
+        )
+        .build();
+
+    final var certificate = certificateBuilder.build();
+
+    assertFalse(
+        certificateActionReadyForSign.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfUserHasAgreement() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .user(
+            alvaVardadministratorBuilder()
+                .accessScope(AccessScope.ALL_CARE_PROVIDERS)
+                .build()
+        )
+        .build();
+
+    final var certificate = certificateBuilder.build();
+
+    assertTrue(
+        certificateActionReadyForSign.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
   }
 }

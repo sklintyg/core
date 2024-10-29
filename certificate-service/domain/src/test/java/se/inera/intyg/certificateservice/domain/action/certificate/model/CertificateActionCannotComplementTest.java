@@ -20,6 +20,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AGREEMENT_FALSE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALLOW_COPY_FALSE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
@@ -49,6 +50,7 @@ class CertificateActionCannotComplementTest {
           .certificateActionType(CertificateActionType.CANNOT_COMPLEMENT)
           .build();
   private CertificateBuilder certificateBuilder;
+  private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
 
   @Mock
   CertificateActionConfigurationRepository certificateActionConfigurationRepository;
@@ -60,6 +62,13 @@ class CertificateActionCannotComplementTest {
     certificateActionCannotComplement = (CertificateActionCannotComplement) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION
     );
+
+    actionEvaluationBuilder = ActionEvaluation.builder()
+        .user(AJLA_DOKTOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+        .patient(ATHENA_REACT_ANDERSSON)
+        .careProvider(ALFA_REGIONEN)
+        .careUnit(ALFA_MEDICINCENTRUM);
 
     certificateBuilder = Certificate.builder()
         .status(Status.SIGNED)
@@ -481,6 +490,39 @@ class CertificateActionCannotComplementTest {
             )
         )
         .build();
+
+    assertTrue(
+        certificateActionCannotComplement.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnFalseIfUserMissingAgreement() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .user(
+            ajlaDoctorBuilder()
+                .agreement(AGREEMENT_FALSE)
+                .build()
+        )
+        .build();
+
+    final var certificate = certificateBuilder.build();
+
+    assertFalse(
+        certificateActionCannotComplement.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfUserHasAgreement() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .build();
+
+    final var certificate = certificateBuilder.build();
 
     assertTrue(
         certificateActionCannotComplement.evaluate(Optional.of(certificate),

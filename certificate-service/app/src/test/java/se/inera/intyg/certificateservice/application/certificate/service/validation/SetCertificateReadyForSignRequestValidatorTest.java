@@ -20,12 +20,12 @@ class SetCertificateReadyForSignRequestValidatorTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
 
-  private SetCertificateReadyForSignRequestValidator SetCertificateReadyForSignRequestValidator;
+  private SetCertificateReadyForSignRequestValidator setCertificateReadyForSignRequestValidator;
   private CertificateReadyForSignRequest.CertificateReadyForSignRequestBuilder requestBuilder;
 
   @BeforeEach
   void setUp() {
-    SetCertificateReadyForSignRequestValidator = new SetCertificateReadyForSignRequestValidator();
+    setCertificateReadyForSignRequestValidator = new SetCertificateReadyForSignRequestValidator();
     requestBuilder = CertificateReadyForSignRequest.builder()
         .user(AJLA_DOCTOR_DTO)
         .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
@@ -35,7 +35,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
 
   @Test
   void validRequest() {
-    SetCertificateReadyForSignRequestValidator.validate(requestBuilder.build(), CERTIFICATE_ID);
+    setCertificateReadyForSignRequestValidator.validate(requestBuilder.build(), CERTIFICATE_ID);
   }
 
   @Nested
@@ -48,7 +48,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: User", illegalArgumentException.getMessage());
     }
@@ -64,7 +64,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: User.id", illegalArgumentException.getMessage());
     }
@@ -80,7 +80,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: User.id", illegalArgumentException.getMessage());
     }
@@ -96,7 +96,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: User.firstName",
           illegalArgumentException.getMessage());
@@ -113,7 +113,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: User.firstName",
           illegalArgumentException.getMessage());
@@ -130,7 +130,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: User.lastName",
           illegalArgumentException.getMessage());
@@ -147,7 +147,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: User.lastName",
           illegalArgumentException.getMessage());
@@ -164,7 +164,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: User.role", illegalArgumentException.getMessage());
     }
@@ -180,9 +180,26 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: User.blocked",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfAgreementIsNull() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .agreement(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: User.agreement",
           illegalArgumentException.getMessage());
     }
 
@@ -197,7 +214,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: User.allowCopy",
           illegalArgumentException.getMessage());
@@ -214,7 +231,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: User.healthCareProfessionalLicence",
           illegalArgumentException.getMessage());
@@ -231,7 +248,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: Unit",
           illegalArgumentException.getMessage());
@@ -248,7 +265,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: Unit.id",
           illegalArgumentException.getMessage());
@@ -265,7 +282,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: Unit.id",
           illegalArgumentException.getMessage());
@@ -282,7 +299,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: Unit.isInactive",
           illegalArgumentException.getMessage());
@@ -299,7 +316,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: CareUnit",
           illegalArgumentException.getMessage());
@@ -316,7 +333,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: CareUnit.id",
           illegalArgumentException.getMessage());
@@ -333,7 +350,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: CareUnit.id",
           illegalArgumentException.getMessage());
@@ -350,7 +367,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: CareProvider",
           illegalArgumentException.getMessage());
@@ -367,7 +384,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: CareProvider.id",
           illegalArgumentException.getMessage());
@@ -384,7 +401,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: CareProvider.id",
           illegalArgumentException.getMessage());
@@ -398,7 +415,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
     void shallThrowIfCertificateIdIsNull() {
       final var request = requestBuilder.build();
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, null));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, null));
 
       assertEquals("Required parameter missing: certificateId",
           illegalArgumentException.getMessage());
@@ -408,7 +425,7 @@ class SetCertificateReadyForSignRequestValidatorTest {
     void shallThrowIfCertificateIdIsEmpty() {
       final var request = requestBuilder.build();
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> SetCertificateReadyForSignRequestValidator.validate(request, ""));
+          () -> setCertificateReadyForSignRequestValidator.validate(request, ""));
 
       assertEquals("Required parameter missing: certificateId",
           illegalArgumentException.getMessage());

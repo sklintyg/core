@@ -11,6 +11,8 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AGREEMENT_FALSE;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -197,6 +199,53 @@ class CertificateActionSendAfterComplementTest {
         .build();
 
     assertFalse(
+        certificateActionSendAfterComplement.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnFalseIfUserMissingAgreement() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .user(
+            ajlaDoctorBuilder()
+                .agreement(AGREEMENT_FALSE)
+                .build()
+        )
+        .build();
+
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .parent(
+            Relation.builder()
+                .type(RelationType.COMPLEMENT)
+                .build()
+        )
+        .build();
+
+    assertFalse(
+        certificateActionSendAfterComplement.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfUserHasAgreement() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .build();
+
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .parent(
+            Relation.builder()
+                .type(RelationType.COMPLEMENT)
+                .build()
+        )
+        .build();
+
+    assertTrue(
         certificateActionSendAfterComplement.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)

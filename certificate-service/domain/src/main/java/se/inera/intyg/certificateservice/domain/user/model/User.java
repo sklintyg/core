@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
+import se.inera.intyg.certificateservice.domain.common.model.Agreement;
 import se.inera.intyg.certificateservice.domain.common.model.AllowCopy;
 import se.inera.intyg.certificateservice.domain.common.model.Blocked;
 import se.inera.intyg.certificateservice.domain.common.model.HealthCareProfessionalLicence;
@@ -23,6 +24,7 @@ public class User {
   List<PaTitle> paTitles;
   List<Speciality> specialities;
   Blocked blocked;
+  Agreement agreement;
   AllowCopy allowCopy;
   AccessScope accessScope;
   List<HealthCareProfessionalLicence> healthCareProfessionalLicence;

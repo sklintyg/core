@@ -18,6 +18,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ANN
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.BERTIL_BARNMORSKA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.DAN_DENTIST;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AGREEMENT_FALSE;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -446,5 +447,36 @@ class CertificateActionUpdateTest {
         );
       }
     }
+  }
+
+  @Test
+  void shallReturnFalseIfUserMissingAgreement() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .user(
+            ajlaDoctorBuilder()
+                .agreement(AGREEMENT_FALSE)
+                .build()
+        )
+        .build();
+
+    final var certificate = certificateBuilder.build();
+
+    assertFalse(
+        certificateActionUpdate.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfUserHasAgreement() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .build();
+
+    final var certificate = certificateBuilder.build();
+
+    assertTrue(
+        certificateActionUpdate.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
   }
 }

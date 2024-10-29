@@ -206,6 +206,23 @@ class GetUnitCertificatesRequestValidatorTest {
       assertEquals("Required parameter missing: User.blocked",
           illegalArgumentException.getMessage());
     }
+
+    @Test
+    void shallThrowIfAgreementIsNull() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .agreement(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getUnitCertificatesRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: User.agreement",
+          illegalArgumentException.getMessage());
+    }
   }
 
   @Nested

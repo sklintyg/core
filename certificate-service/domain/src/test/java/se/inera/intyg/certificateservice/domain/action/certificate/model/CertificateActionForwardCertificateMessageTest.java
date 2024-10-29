@@ -18,6 +18,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJL
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.alvaVardadministratorBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AGREEMENT_FALSE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALLOW_COPY_FALSE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
@@ -30,6 +31,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation.ActionEvaluationBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
@@ -48,6 +50,8 @@ class CertificateActionForwardCertificateMessageTest {
           .certificateActionType(CertificateActionType.FORWARD_MESSAGE)
           .build();
   private CertificateBuilder certificateBuilder;
+  private ActionEvaluationBuilder actionEvaluationBuilder;
+  
   @Mock
   CertificateActionConfigurationRepository certificateActionConfigurationRepository;
   @InjectMocks
@@ -58,6 +62,13 @@ class CertificateActionForwardCertificateMessageTest {
     certificateActionForwardMessage = (CertificateActionForwardMessage) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION
     );
+
+    actionEvaluationBuilder = ActionEvaluation.builder()
+        .user(AJLA_DOKTOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+        .patient(ATHENA_REACT_ANDERSSON)
+        .careProvider(ALFA_REGIONEN)
+        .careUnit(ALFA_MEDICINCENTRUM);
 
     certificateBuilder = Certificate.builder()
         .status(Status.SIGNED)
@@ -443,5 +454,38 @@ class CertificateActionForwardCertificateMessageTest {
     assertFalse(
         certificateActionForwardMessage.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)));
+  }
+
+  @Test
+  void shallReturnFalseIfUserMissingAgreement() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .user(
+            ajlaDoctorBuilder()
+                .agreement(AGREEMENT_FALSE)
+                .build()
+        )
+        .build();
+
+    final var certificate = certificateBuilder.build();
+
+    assertFalse(
+        certificateActionForwardMessage.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfUserHasAgreement() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .build();
+
+    final var certificate = certificateBuilder.build();
+
+    assertTrue(
+        certificateActionForwardMessage.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
   }
 }
