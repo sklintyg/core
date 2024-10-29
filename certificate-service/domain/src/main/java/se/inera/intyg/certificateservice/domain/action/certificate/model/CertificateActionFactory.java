@@ -130,8 +130,12 @@ public class CertificateActionFactory {
                       List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
                   ),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
-                  new ActionRuleChildRelationNoMatch(List.of(RelationType.REPLACE),
+                  new ActionRuleChildRelationNoMatch(
+                      List.of(RelationType.REPLACE),
                       List.of(Status.REVOKED)),
+                  new ActionRuleChildRelationNoMatch(
+                      List.of(RelationType.COMPLEMENT),
+                      List.of(Status.DRAFT, Status.REVOKED)),
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleNoComplementMessages(),
                   new ActionRuleProtectedPerson(),

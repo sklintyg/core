@@ -315,7 +315,7 @@ public abstract class ComplementIT extends BaseIntegrationIT {
 
     final var response = api.handleMessage(
         defaultHandleMessageRequest(),
-        messageId(questions.get(0))
+        messageId(questions.getFirst())
     );
 
     assertTrue(Objects.requireNonNull(response.getBody()).getQuestion().isHandled(),
@@ -353,18 +353,58 @@ public abstract class ComplementIT extends BaseIntegrationIT {
 
     api.handleMessage(
         defaultHandleMessageRequest(),
-        messageId(questions.get(0))
+        messageId(questions.getFirst())
     );
 
     final var response = api.handleMessage(
         customHandleMessageRequest()
             .handled(false)
             .build(),
-        messageId(questions.get(0))
+        messageId(questions.getFirst())
     );
 
     assertTrue(Objects.requireNonNull(response.getBody()).getQuestion().isHandled(),
         "Expected that complement message was handled, but it was not!"
     );
+  }
+
+  @Test
+  @DisplayName("Om intyget redan kompletterats så ska felkod 403 (FORBIDDEN) returneras vid försök att ersätta")
+  void shallReturn403IfCertificateAlreadyIsComplemented() {
+    final var testCertificates = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
+    );
+
+    api.sendCertificate(
+        defaultSendCertificateRequest(),
+        certificateId(testCertificates)
+    );
+
+    api.receiveMessage(
+        incomingComplementMessageBuilder()
+            .certificateId(certificateId(testCertificates))
+            .complements(List.of(incomingComplementDTOBuilder()
+                .questionId(questionId())
+                .build()))
+            .build()
+    );
+
+    final var complement = api.complementCertificate(
+        defaultComplementCertificateRequest(),
+        certificateId(testCertificates)
+    );
+
+    api.signCertificate(
+        defaultSignCertificateRequest(),
+        complement.getBody().getCertificate().getMetadata().getId(),
+        complement.getBody().getCertificate().getMetadata().getVersion()
+    );
+
+    final var response = api.replaceCertificate(
+        defaultReplaceCertificateRequest(),
+        certificateId(testCertificates)
+    );
+
+    assertEquals(403, response.getStatusCode().value());
   }
 }
