@@ -233,7 +233,7 @@ public class FK7472ActiveIT {
           certificateId(testCertificates)
       );
 
-      assertTrue(questions(messagesForCertificate.getBody()).get(0).isHandled(),
+      assertTrue(questions(messagesForCertificate.getBody()).getFirst().isHandled(),
           "Expected that complement message was handled, but it was not!"
       );
     }
@@ -322,6 +322,11 @@ public class FK7472ActiveIT {
   @Nested
   @DisplayName(TYPE + "Hämta intygets händelser")
   class GetCertificateEvents extends GetCertificateEventsIT {
+
+    @Override
+    protected boolean isAvailableForPatient() {
+      return false;
+    }
 
     @Override
     protected String type() {

@@ -26,6 +26,8 @@ public abstract class GetCertificateEventsIT extends BaseIntegrationIT {
 
   protected abstract String typeVersion();
 
+  protected abstract boolean isAvailableForPatient();
+
   @Test
   @DisplayName("Om intyget är utfärdat på samma mottagning skall dess händelser returneras")
   void shallReturnCertificateEventsIfUnitIsSubUnitAndOnSameUnit() {
@@ -59,13 +61,13 @@ public abstract class GetCertificateEventsIT extends BaseIntegrationIT {
     assertAll(
         () -> assertEquals(1, response.getBody().getEvents().size()),
         () -> assertEquals(CertificateEventTypeDTO.CREATED,
-            response.getBody().getEvents().get(0).getType(),
+            response.getBody().getEvents().getFirst().getType(),
             "Should return certificate event created for draft")
     );
   }
 
   @Test
-  @DisplayName("Om intyget är signerat ska tre event returneras")
+  @DisplayName("Om intyget är signerat ska event returneras")
   void shallReturnCertificateEventsForSignedCertificate() {
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(
@@ -81,17 +83,20 @@ public abstract class GetCertificateEventsIT extends BaseIntegrationIT {
     );
 
     assertAll(
-        () -> assertEquals(3, response.getBody().getEvents().size()),
+        () -> assertEquals(isAvailableForPatient() ? 3 : 2, response.getBody().getEvents().size()),
         () -> assertEquals(CertificateEventTypeDTO.CREATED,
-            response.getBody().getEvents().get(0).getType(),
+            response.getBody().getEvents().getFirst().getType(),
             "Should return certificate event created for signed certificate"),
         () -> assertEquals(CertificateEventTypeDTO.SIGNED,
             response.getBody().getEvents().get(1).getType(),
-            "Should return certificate event signed for signed certificate"),
-        () -> assertEquals(CertificateEventTypeDTO.AVAILABLE_FOR_PATIENT,
-            response.getBody().getEvents().get(2).getType(),
-            "Should return certificate event available for patient for signed certificate")
+            "Should return certificate event signed for signed certificate")
     );
+
+    if (isAvailableForPatient()) {
+      assertEquals(CertificateEventTypeDTO.AVAILABLE_FOR_PATIENT,
+          response.getBody().getEvents().get(2).getType(),
+          "Should return certificate event available for patient for signed certificate");
+    }
   }
 
   @Test
