@@ -26,12 +26,14 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MedicalInvestigationConfig;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005;
 
@@ -132,6 +134,11 @@ class QuestionUtredningEllerUnderlagTest {
                     "$3.1"
                 )
             )
+            .build(),
+        ElementRuleLimit.builder()
+            .id(new ElementId("4"))
+            .type(ElementRuleType.TEXT_LIMIT)
+            .limit(new RuleLimit((short) 53))
             .build()
     );
 
@@ -147,7 +154,7 @@ class QuestionUtredningEllerUnderlagTest {
             .mandatory(true)
             .max(Period.ofDays(0))
             .min(null)
-            .limit(4000)
+            .limit(53)
             .build()
     );
 
