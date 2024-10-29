@@ -21,6 +21,7 @@ public class UserDTO {
   List<PaTitleDTO> paTitles;
   List<String> specialities;
   Boolean blocked;
+  Boolean agreement;
   Boolean allowCopy;
   AccessScopeTypeDTO accessScope;
   List<String> healthCareProfessionalLicence;

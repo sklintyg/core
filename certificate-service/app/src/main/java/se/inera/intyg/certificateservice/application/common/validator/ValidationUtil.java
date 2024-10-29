@@ -81,6 +81,9 @@ public class ValidationUtil {
     if (user.getBlocked() == null) {
       throw new IllegalArgumentException("Required parameter missing: User.blocked");
     }
+    if (user.getAgreement() == null) {
+      throw new IllegalArgumentException("Required parameter missing: User.agreement");
+    }
     if (user.getAllowCopy() == null) {
       throw new IllegalArgumentException("Required parameter missing: User.allowCopy");
     }

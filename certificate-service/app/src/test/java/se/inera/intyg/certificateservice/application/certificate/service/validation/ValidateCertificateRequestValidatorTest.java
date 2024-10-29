@@ -202,6 +202,23 @@ class ValidateCertificateRequestValidatorTest {
     }
 
     @Test
+    void shallThrowIfAgreementIsNull() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .agreement(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> validateCertificateRequestValidator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: User.agreement",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
     void shallThrowIfAllowCopyIsNull() {
       final var request = requestBuilder
           .user(

@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.testdata;
 
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_AGREEMENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FIRST_NAME;
@@ -12,6 +13,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_RESPONSIBLE_ISSUER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ROLE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_SPECIALITIES;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_AGREEMENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_FIRST_NAME;
@@ -20,6 +22,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_AGREEMENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_FIRST_NAME;
@@ -29,6 +32,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_AGREEMENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_FIRST_NAME;
@@ -38,6 +42,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_AGREEMENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_BLOCKED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_FIRST_NAME;
@@ -94,6 +99,7 @@ public class TestDataCommonUserDTO {
         )
         .blocked(AJLA_DOCTOR_BLOCKED.value())
         .allowCopy(AJLA_DOCTOR_ALLOW_COPY.value())
+        .agreement(AJLA_DOCTOR_AGREEMENT.value())
         .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
         .healthCareProfessionalLicence(
             AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES.stream()
@@ -114,6 +120,7 @@ public class TestDataCommonUserDTO {
         .paTitles(Collections.emptyList())
         .specialities(Collections.emptyList())
         .blocked(ALVA_VARDADMINISTRATOR_BLOCKED.value())
+        .agreement(ALVA_VARDADMINISTRATOR_AGREEMENT.value())
         .allowCopy(ALVA_VARDADMINISTRATOR_ALLOW_COPY.value())
         .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
         .healthCareProfessionalLicence(Collections.emptyList());
@@ -130,6 +137,7 @@ public class TestDataCommonUserDTO {
         .paTitles(Collections.emptyList())
         .specialities(Collections.emptyList())
         .blocked(ANNA_SJUKSKOTERSKA_BLOCKED.value())
+        .agreement(ANNA_SJUKSKOTERSKA_AGREEMENT.value())
         .allowCopy(ANNA_SJUKSKOTERSKA_ALLOW_COPY.value())
         .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
         .healthCareProfessionalLicence(
@@ -150,6 +158,7 @@ public class TestDataCommonUserDTO {
         .paTitles(Collections.emptyList())
         .specialities(Collections.emptyList())
         .blocked(BERTIL_BARNMORSKA_BLOCKED.value())
+        .agreement(BERTIL_BARNMORSKA_AGREEMENT.value())
         .allowCopy(BERTIL_BARNMORSKA_ALLOW_COPY.value())
         .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
         .healthCareProfessionalLicence(
@@ -170,6 +179,7 @@ public class TestDataCommonUserDTO {
         .paTitles(Collections.emptyList())
         .specialities(Collections.emptyList())
         .blocked(DAN_DENTIST_BLOCKED.value())
+        .agreement(DAN_DENTIST_AGREEMENT.value())
         .allowCopy(DAN_DENTIST_ALLOW_COPY.value())
         .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
         .healthCareProfessionalLicence(

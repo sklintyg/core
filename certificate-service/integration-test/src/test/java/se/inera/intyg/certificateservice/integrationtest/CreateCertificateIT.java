@@ -64,6 +64,22 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
   }
 
   @Test
+  @DisplayName("Om användaren saknar avtal skall felkod 403 (FORBIDDEN) returneras")
+  void shallReturn403UserMissingAgreement() {
+    final var response = api.createCertificate(
+        customCreateCertificateRequest(type(), typeVersion())
+            .user(
+                ajlaDoktorDtoBuilder()
+                    .agreement(Boolean.FALSE)
+                    .build()
+            )
+            .build()
+    );
+
+    assertEquals(403, response.getStatusCode().value());
+  }
+
+  @Test
   @DisplayName("Om patient är avliden och användaren är blockerad skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403PatientIsDeceasedAndUserIsBlocked() {
     final var response = api.createCertificate(

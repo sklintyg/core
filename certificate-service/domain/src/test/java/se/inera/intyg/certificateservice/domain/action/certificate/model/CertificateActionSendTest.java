@@ -15,6 +15,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AGREEMENT_FALSE;
 
 import java.util.List;
 import java.util.Optional;
@@ -487,6 +488,37 @@ class CertificateActionSendTest {
                 .build()
         )
         .build();
+
+    assertTrue(
+        certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnFalseIfUserMissingAgreement() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .user(
+            ajlaDoctorBuilder()
+                .agreement(AGREEMENT_FALSE)
+                .build()
+        )
+        .build();
+
+    final var certificate = certificateBuilder.build();
+
+    assertFalse(
+        certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnTrueIfUserHasAgreement() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .build();
+
+    final var certificate = certificateBuilder.build();
 
     assertTrue(
         certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),

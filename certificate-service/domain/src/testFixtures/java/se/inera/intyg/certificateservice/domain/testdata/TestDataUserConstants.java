@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.testdata;
 import java.util.Collections;
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
+import se.inera.intyg.certificateservice.domain.common.model.Agreement;
 import se.inera.intyg.certificateservice.domain.common.model.AllowCopy;
 import se.inera.intyg.certificateservice.domain.common.model.Blocked;
 import se.inera.intyg.certificateservice.domain.common.model.HealthCareProfessionalLicence;
@@ -17,6 +18,8 @@ public class TestDataUserConstants {
   public static final Blocked BLOCKED_FALSE = new Blocked(false);
   public static final AllowCopy ALLOW_COPY_TRUE = new AllowCopy(true);
   public static final AllowCopy ALLOW_COPY_FALSE = new AllowCopy(false);
+  public static final Agreement AGREEMENT_TRUE = new Agreement(true);
+  public static final Agreement AGREEMENT_FALSE = new Agreement(false);
   public static final String AJLA_DOCTOR_HSA_ID = "TSTNMT2321000156-DRAA";
   public static final String AJLA_DOCTOR_FIRST_NAME = "Ajla";
   public static final String AJLA_DOCTOR_MIDDLE_NAME = "";
@@ -33,6 +36,7 @@ public class TestDataUserConstants {
   );
   public static final Blocked AJLA_DOCTOR_BLOCKED = BLOCKED_FALSE;
   public static final AllowCopy AJLA_DOCTOR_ALLOW_COPY = ALLOW_COPY_TRUE;
+  public static final Agreement AJLA_DOCTOR_AGREEMENT = AGREEMENT_TRUE;
   public static final AccessScope AJLA_DOCTOR_ACCESS_SCOPE = AccessScope.WITHIN_CARE_UNIT;
   public static final List<HealthCareProfessionalLicence> AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES = List.of(
       new HealthCareProfessionalLicence("Läkare"));
@@ -54,6 +58,7 @@ public class TestDataUserConstants {
       new Speciality("Allmänmedicin")
   );
   public static final Blocked ALF_DOKTOR_BLOCKED = BLOCKED_FALSE;
+  public static final Agreement ALF_DOKTOR_AGREEMENT = AGREEMENT_TRUE;
   public static final AllowCopy ALF_DOKTOR_ALLOW_COPY = ALLOW_COPY_TRUE;
 
   public static final String ALVA_VARDADMINISTRATOR_HSA_ID = "TSTNMT2321000156-VAAA";
@@ -65,6 +70,7 @@ public class TestDataUserConstants {
   public static final List<PaTitle> ALVA_VARDADMINISTRATOR_PA_TITLES = Collections.emptyList();
   public static final List<Speciality> ALVA_VARDADMINISTRATOR_SPECIALITIES = Collections.emptyList();
   public static final Blocked ALVA_VARDADMINISTRATOR_BLOCKED = BLOCKED_FALSE;
+  public static final Agreement ALVA_VARDADMINISTRATOR_AGREEMENT = AGREEMENT_TRUE;
   public static final AllowCopy ALVA_VARDADMINISTRATOR_ALLOW_COPY = ALLOW_COPY_TRUE;
 
   public static final String ANNA_SJUKSKOTERSKA_HSA_ID = "TSTNMT2321000156-SKAA";
@@ -79,6 +85,7 @@ public class TestDataUserConstants {
   public static final List<PaTitle> ANNA_SJUKSKOTERSKA_PA_TITLES = Collections.emptyList();
   public static final List<Speciality> ANNA_SJUKSKOTERSKA_SPECIALITIES = Collections.emptyList();
   public static final Blocked ANNA_SJUKSKOTERSKA_BLOCKED = BLOCKED_FALSE;
+  public static final Agreement ANNA_SJUKSKOTERSKA_AGREEMENT = AGREEMENT_TRUE;
   public static final AllowCopy ANNA_SJUKSKOTERSKA_ALLOW_COPY = ALLOW_COPY_TRUE;
 
   public static final String BERTIL_BARNMORSKA_HSA_ID = "TSTNMT2321000156-BMBL";
@@ -90,6 +97,7 @@ public class TestDataUserConstants {
   public static final List<PaTitle> BERTIL_BARNMORSKA_PA_TITLES = Collections.emptyList();
   public static final List<Speciality> BERTIL_BARNMORSKA_SPECIALITIES = Collections.emptyList();
   public static final Blocked BERTIL_BARNMORSKA_BLOCKED = BLOCKED_FALSE;
+  public static final Agreement BERTIL_BARNMORSKA_AGREEMENT = AGREEMENT_TRUE;
   public static final AllowCopy BERTIL_BARNMORSKA_ALLOW_COPY = ALLOW_COPY_TRUE;
   public static final List<HealthCareProfessionalLicence> BERTIL_BARNMORSKA_HEALTH_CARE_PROFESSIONAL_LICENCES = List.of(
       new HealthCareProfessionalLicence("Sjuksköterska"),
@@ -106,6 +114,7 @@ public class TestDataUserConstants {
   public static final List<Speciality> DAN_DENTIST_SPECIALITIES = Collections.emptyList();
   public static final Blocked DAN_DENTIST_BLOCKED = BLOCKED_FALSE;
   public static final AllowCopy DAN_DENTIST_ALLOW_COPY = ALLOW_COPY_TRUE;
+  public static final Agreement DAN_DENTIST_AGREEMENT = AGREEMENT_TRUE;
   public static final List<HealthCareProfessionalLicence> DAN_DENTIST_HEALTH_CARE_PROFESSIONAL_LICENCES = List.of(
       new HealthCareProfessionalLicence("Tandläkare")
   );
