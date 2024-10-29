@@ -347,7 +347,7 @@ public class TestDataCertificate {
                     .id(new ElementId("5"))
                     .value(
                         ElementValueText.builder()
-                            .textId(new FieldId("5"))
+                            .textId(new FieldId("5.1"))
                             .text("TEXT")
                             .build()
                     )
@@ -365,7 +365,7 @@ public class TestDataCertificate {
                     .id(new ElementId("51"))
                     .value(
                         ElementValueText.builder()
-                            .textId(new FieldId("51"))
+                            .textId(new FieldId("51.1"))
                             .text("TEXT")
                             .build()
                     )
