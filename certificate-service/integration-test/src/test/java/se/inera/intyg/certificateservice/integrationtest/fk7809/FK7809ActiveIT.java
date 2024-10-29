@@ -254,6 +254,11 @@ public class FK7809ActiveIT {
   class GetCertificateEvents extends GetCertificateEventsIT {
 
     @Override
+    protected boolean isAvailableForPatient() {
+      return true;
+    }
+
+    @Override
     protected String type() {
       return CERTIFICATE_TYPE;
     }
