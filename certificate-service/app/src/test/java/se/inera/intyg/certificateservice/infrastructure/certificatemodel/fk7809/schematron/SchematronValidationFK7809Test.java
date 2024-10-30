@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.schematron;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_SCHEMATRON_PATH;
 
@@ -105,6 +106,130 @@ class SchematronValidationFK7809Test {
       assertFalse(schematronValidator.validate(certificate.id(), xml,
           FK7809_SCHEMATRON_PATH));
     }
+
+    @Test
+    void shallReturnFalseIfSchemaRulesAreNotRespected() {
+      final var certificate = TestDataCertificate.fk7809CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK7809.create())
+          .elementData(
+              List.of(
+                  ElementData.builder()
+                      .id(new ElementId("1"))
+                      .value(
+                          ElementValueDateList.builder()
+                              .dateListId(new FieldId("1.1"))
+                              .dateList(
+                                  List.of(
+                                      ElementValueDate.builder()
+                                          .dateId(new FieldId("annat"))
+                                          .date(LocalDate.now())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("3"))
+                      .value(
+                          ElementValueBoolean.builder()
+                              .booleanId(new FieldId("3.1"))
+                              .value(true)
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("4"))
+                      .value(
+                          ElementValueMedicalInvestigationList.builder()
+                              .id(new FieldId("52.2"))
+                              .list(
+                                  List.of(
+                                      MedicalInvestigation.builder()
+                                          .id(new FieldId("medicalInvestigation1"))
+                                          .informationSource(
+                                              ElementValueText.builder()
+                                                  .textId(new FieldId(
+                                                      "medicalInvestigation1_INFORMATION_SOURCE"))
+                                                  .text("Example text")
+                                                  .build()
+                                          )
+                                          .investigationType(
+                                              ElementValueCode.builder()
+                                                  .codeId(new FieldId(
+                                                      "medicalInvestigation1_INVESTIGATION_TYPE"))
+                                                  .code("LOGOPED")
+                                                  .build()
+                                          )
+                                          .date(
+                                              ElementValueDate.builder()
+                                                  .dateId(
+                                                      new FieldId("medicalInvestigation1_DATE"))
+                                                  .date(LocalDate.now())
+                                                  .build())
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("58"))
+                      .value(
+                          ElementValueDiagnosisList.builder()
+                              .diagnoses(
+                                  List.of(
+                                      ElementValueDiagnosis.builder()
+                                          .code("A013")
+                                          .description("Paratyfoidfeber C")
+                                          .terminology("ICD_10_SE")
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("5"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("5.1"))
+                              .text("Historiken för diagnoserna")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("9"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("9.1"))
+                              .text("Funktionsnedsättning")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("51"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("51.1"))
+                              .text("prognos")
+                              .build()
+                      )
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId("1.3"))
+                      .value(
+                          ElementValueText.builder()
+                              .textId(new FieldId("1"))
+                              .text("Ange vad annat är")
+                              .build()
+                      ).build()
+              )
+          )
+          .build();
+
+      assertThrows(IllegalStateException.class, () -> generator.generate(certificate, true));
+    }
   }
 
   @Nested
@@ -196,7 +321,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -323,7 +448,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -442,7 +567,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -561,7 +686,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -689,7 +814,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -803,7 +928,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -919,7 +1044,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -1037,7 +1162,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -1155,7 +1280,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -1274,7 +1399,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -1393,7 +1518,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -1532,7 +1657,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -1676,7 +1801,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -1908,7 +2033,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -2026,7 +2151,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -2153,7 +2278,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -2266,7 +2391,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -2384,7 +2509,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -2502,7 +2627,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -2620,7 +2745,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -2738,7 +2863,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -2856,7 +2981,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -2974,7 +3099,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -3092,7 +3217,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -3210,7 +3335,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -3328,7 +3453,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -3455,7 +3580,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -3564,7 +3689,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -3733,7 +3858,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -3828,7 +3953,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -3940,7 +4065,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -4057,7 +4182,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -4168,7 +4293,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -4286,7 +4411,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -4473,7 +4598,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -4637,7 +4762,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -4755,7 +4880,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
@@ -4849,7 +4974,7 @@ class SchematronValidationFK7809Test {
                       .id(new ElementId("5"))
                       .value(
                           ElementValueText.builder()
-                              .textId(new FieldId("5"))
+                              .textId(new FieldId("5.1"))
                               .text("Historiken för diagnoserna")
                               .build()
                       )
