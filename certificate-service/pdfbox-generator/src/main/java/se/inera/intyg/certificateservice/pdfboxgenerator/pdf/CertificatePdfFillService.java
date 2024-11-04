@@ -1,10 +1,11 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
+import static java.lang.System.currentTimeMillis;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -99,7 +100,11 @@ public class CertificatePdfFillService {
     final var pdfFields = pdfElementValueGenerator.generate(certificate);
     final var appendedFields = pdfFields.stream().filter(f -> Boolean.TRUE.equals(f.getAppend()))
         .collect(Collectors.toList());
-    setFieldValuesAppendix(document, appendedFields);
+    try {
+      setFieldValuesAppendix(document, appendedFields);
+    } catch (IOException e) {
+      throw new IllegalStateException(e);
+    }
 //    setPnrAppended(document, certificate);
 
     pdfFields.removeAll(appendedFields);
@@ -111,67 +116,84 @@ public class CertificatePdfFillService {
   }
 
   private void setFieldValuesAppendix(PDDocument document,
-      List<PdfField> appendedFields) {
+      List<PdfField> appendedFields) throws IOException {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
+    final var overflowField = acroForm.getField(appendedFields.getFirst().getId());
+    final var rectangle = overflowField.getWidgets().getFirst().getRectangle();
 
-    AtomicBoolean np = new AtomicBoolean(false);
-    appendedFields
-        .stream()
-        .filter(Objects::nonNull)
-        .forEach(field -> {
-          try {
-            if (isHeightOverFlow(acroForm, field)) {
+    int start = 0;
+    int count = 0;
+    while (count < appendedFields.size()) {
+      if (isHeightOverFlow(appendedFields.subList(start, count), appendedFields.get(count),
+          rectangle)) {
+        if (start == 0) {
+          fillOverflowPage(appendedFields.subList(start, count), acroForm);
+        } else {
+          addAndFillOverflowPage(document, appendedFields.subList(start, count), acroForm);
+        }
+        start = count;
+      }
+      count++;
+    }
 
-              if (!np.get()) {
-                np.set(true);
-                PDPage pageToClone = document.getPage(4);
-                var mediabox = new PDRectangle(pageToClone.getMediaBox().getLowerLeftX(),
-                    pageToClone.getMediaBox().getLowerLeftY(), pageToClone.getMediaBox().getWidth(),
-                    pageToClone.getMediaBox().getHeight());
-                PDPage clonedPage = new PDPage(mediabox);
+    addAndFillOverflowPage(document, appendedFields.subList(start, count), acroForm);
+  }
 
-                // Copy the content from the original page to the cloned page
-                try (PDPageContentStream contentStream = new PDPageContentStream(document,
-                    clonedPage)) {
-                  contentStream.appendRawCommands(pageToClone.getContents().readAllBytes());
-                }
+  private static void fillOverflowPage(List<PdfField> fields, PDAcroForm acroForm) {
+    final var field = acroForm.getField(fields.getFirst().getId());
+    try {
+      field.setValue(
+          fields.stream()
+              .map(PdfField::getValue)
+              .collect(Collectors.joining("\n"))
+      );
+    } catch (IOException e) {
+      throw new IllegalStateException(e);
+    }
+  }
 
-                final var originalField = acroForm.getField(field.getId());
-                final var originalWidgetRectangle = originalField.getWidgets().get(0)
-                    .getRectangle();
+  private static void addAndFillOverflowPage(PDDocument document, List<PdfField> fields,
+      PDAcroForm acroForm)
+      throws IOException {
+    PDPage pageToClone = document.getPage(4);
+    var mediabox = new PDRectangle(pageToClone.getMediaBox().getLowerLeftX(),
+        pageToClone.getMediaBox().getLowerLeftY(), pageToClone.getMediaBox().getWidth(),
+        pageToClone.getMediaBox().getHeight());
+    PDPage clonedPage = new PDPage(mediabox);
 
-                PDAnnotationWidget widget1 = new PDAnnotationWidget();
-                PDRectangle rect = new PDRectangle(originalWidgetRectangle.getLowerLeftX(),
-                    originalWidgetRectangle.getLowerLeftY(), originalWidgetRectangle.getWidth(),
-                    originalWidgetRectangle.getHeight());
-                widget1.setRectangle(rect);
-                PDTextField textField = new PDTextField(acroForm);
-                textField.setPartialName("append_2");
+    // Copy the content from the original page to the cloned page
+    try (PDPageContentStream contentStream = new PDPageContentStream(document,
+        clonedPage)) {
+      contentStream.appendRawCommands(pageToClone.getContents().readAllBytes());
+    }
 
-                textField.setValue("hejsan hopopasn");
-                textField.getWidgets().add(widget1);
-                textField.setMultiline(true);
-                widget1.getCOSObject().setItem(COSName.PARENT, textField);
+    final var originalField = acroForm.getField(fields.getFirst().getId());
+    final var originalWidgetRectangle = originalField.getWidgets().getFirst().getRectangle();
 
-                PDAppearanceCharacteristicsDictionary fieldAppearance = new PDAppearanceCharacteristicsDictionary(
-                    new COSDictionary());
-                widget1.setAppearanceCharacteristics(fieldAppearance);
-                widget1.setPrinted(true);
+    PDAnnotationWidget widget1 = new PDAnnotationWidget();
+    PDRectangle rect = new PDRectangle(originalWidgetRectangle.getLowerLeftX(),
+        originalWidgetRectangle.getLowerLeftY(), originalWidgetRectangle.getWidth(),
+        originalWidgetRectangle.getHeight());
+    widget1.setRectangle(rect);
+    PDTextField textField = new PDTextField(acroForm);
+    textField.setPartialName(originalField.getPartialName() + currentTimeMillis());
 
-                clonedPage.getAnnotations().add(widget1);
-                acroForm.getFields().add(textField);
-                document.addPage(clonedPage);
+    textField.setValue(
+        fields.stream()
+            .map(PdfField::getValue)
+            .collect(Collectors.joining("\n"))
+    );
+    textField.getWidgets().add(widget1);
+    textField.setMultiline(true);
+    widget1.getCOSObject().setItem(COSName.PARENT, textField);
 
-              }
-              field.setId("append_2");
-              setFieldValue(acroForm, field);
-            } else {
-              setFieldValue(acroForm, field);
-            }
-          } catch (IOException e) {
-            throw new IllegalStateException(e);
-          }
-        });
+    PDAppearanceCharacteristicsDictionary fieldAppearance = new PDAppearanceCharacteristicsDictionary(
+        new COSDictionary());
+    widget1.setAppearanceCharacteristics(fieldAppearance);
+    widget1.setPrinted(true);
+
+    clonedPage.getAnnotations().add(widget1);
+    document.addPage(clonedPage);
   }
 
 
@@ -213,30 +235,19 @@ public class CertificatePdfFillService {
     return clone;
   }
 
-  private static boolean isHeightOverFlow(PDAcroForm acroForm, PdfField textField) {
-    final var acroFormField = acroForm.getField(textField.getId());
-    String text =
-        acroFormField.getValueAsString() + (acroFormField.getValueAsString().isEmpty() ? "" : "\n")
-            + textField.getValue();
-    PDRectangle rect = acroFormField.getWidgets().get(0).getRectangle();
+  private static boolean isHeightOverFlow(List<PdfField> currentFields, PdfField newTextField,
+      PDRectangle rectangle) {
+    final var currentText = currentFields.stream()
+        .map(PdfField::getValue)
+        .collect(Collectors.joining("\n"));
+
+    String newText = currentText + (currentText.isEmpty() ? "" : "\n") + newTextField.getValue();
 
     // Assuming the font size is 12
     float fontSize = 12;
+    float textHeight = calculateTextHeight(newText, fontSize, rectangle.getWidth());
 
-    // Calculate the text height
-    float textHeight = calculateTextHeight(text, fontSize, rect.getWidth());
-
-    // Compare text height with rectangle height
-    final var rectHeight = rect.getHeight();
-    if (textHeight > rectHeight) {
-      log.info(
-          "Text field \"" + acroFormField.getPartialName() + "\" is overflowing in height!");
-      return true;
-    } else {
-      log.info(
-          "Text field \"" + acroFormField.getPartialName() + "\" is not overflowing in height.");
-      return false;
-    }
+    return textHeight > rectangle.getHeight();
   }
 
   private static float calculateTextHeight(String text, float fontSize, float width) {
