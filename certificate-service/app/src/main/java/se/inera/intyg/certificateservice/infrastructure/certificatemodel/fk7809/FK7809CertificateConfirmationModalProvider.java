@@ -4,6 +4,8 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionE
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateModalActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.Alert;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.AlertType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateConfirmationModal;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateConfirmationModalProvider;
 import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
@@ -24,10 +26,15 @@ public class FK7809CertificateConfirmationModalProvider implements
     final var patient = getPatient(certificate, actionEvaluation);
     return CertificateConfirmationModal.builder()
         .title("Kontrollera att du använder dig av rätt läkarutlåtande")
-        .alert(String.format(
-            "Du är på väg att utfärda Läkarutlåtande för merkostnadsersättning för %s - %s.",
-            patient.name().fullName(),
-            patient.id().idWithDash())
+        .alert(
+            Alert.builder()
+                .type(AlertType.INFO)
+                .text(
+                    String.format(
+                        "Du är på väg att utfärda Läkarutlåtande för merkostnadsersättning för %s - %s.",
+                        patient.name().fullName(),
+                        patient.id().idWithDash())
+                ).build()
         ).text(
             "Läkarutlåtande för merkostnadsersättning är till för personer över 18 år som inte har en underhållsskyldig förälder. Om det gäller ett barn ska du istället använda läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning (FK3220)."
         ).checkboxText(

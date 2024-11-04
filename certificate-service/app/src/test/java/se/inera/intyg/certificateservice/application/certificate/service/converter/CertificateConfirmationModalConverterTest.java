@@ -4,9 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.application.certificate.dto.AlertDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateConfirmationModalDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateModalActionTypeDTO;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateModalActionType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.Alert;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.AlertType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateConfirmationModal;
 
 class CertificateConfirmationModalConverterTest {
@@ -23,7 +26,12 @@ class CertificateConfirmationModalConverterTest {
     final var expected = CertificateConfirmationModalDTO.builder()
         .text("TEXT")
         .title("TITLE")
-        .alert("ALERT")
+        .alert(
+            AlertDTO.builder()
+                .text("ALERT")
+                .type(AlertType.INFO)
+                .build()
+        )
         .checkboxText("CHECKBOX")
         .primaryAction(CertificateModalActionTypeDTO.READ)
         .secondaryAction(CertificateModalActionTypeDTO.CANCEL)
@@ -33,8 +41,12 @@ class CertificateConfirmationModalConverterTest {
         CertificateConfirmationModal.builder()
             .text("TEXT")
             .title("TITLE")
-            .alert("ALERT")
-            .checkboxText("CHECKBOX")
+            .alert(
+                Alert.builder()
+                    .text("ALERT")
+                    .type(AlertType.INFO)
+                    .build()
+            ).checkboxText("CHECKBOX")
             .primaryAction(CertificateModalActionType.READ)
             .secondaryAction(CertificateModalActionType.CANCEL)
             .build()
