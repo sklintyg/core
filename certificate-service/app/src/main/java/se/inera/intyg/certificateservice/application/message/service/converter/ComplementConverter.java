@@ -12,10 +12,12 @@ public class ComplementConverter {
     return ComplementDTO.builder()
         .questionId(complement.elementId().id())
         .questionText(
-            certificate.certificateModel()
-                .elementSpecification(complement.elementId())
-                .configuration()
-                .name()
+            certificate.certificateModel().elementSpecificationExists(complement.elementId()) ?
+                certificate.certificateModel()
+                    .elementSpecification(complement.elementId())
+                    .configuration()
+                    .name() :
+                complement.elementId().id()
         )
         .message(complement.content().content())
         .build();

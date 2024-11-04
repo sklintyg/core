@@ -25,7 +25,7 @@ public class Answer {
   private Staff authoredStaff;
 
   public void send(Staff staff, Content content) {
-    this.status = MessageStatus.SENT;
+    this.status = MessageStatus.HANDLED;
     this.content = content;
     this.authoredStaff = staff;
     this.sent = LocalDateTime.now();
