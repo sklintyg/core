@@ -42,7 +42,7 @@ public class PdfElementValueGenerator {
             }
         )
         .flatMap(List::stream)
-        .toList();
+        .collect(Collectors.toList());
   }
 
   private List<PdfField> getFields(ElementSpecification elementSpecification,

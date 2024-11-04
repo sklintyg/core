@@ -19,8 +19,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.graphics.color.PDColor;
-import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAppearanceCharacteristicsDictionary;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
@@ -104,7 +102,9 @@ public class CertificatePdfFillService {
     setFieldValuesAppendix(document, appendedFields);
 //    setPnrAppended(document, certificate);
 
-    setFieldValues(document, pdfElementValueGenerator.generate(certificate));
+    pdfFields.removeAll(appendedFields);
+
+    setFieldValues(document, pdfFields);
     setFieldValues(document, pdfUnitValueGenerator.generate(certificate));
     setFieldValues(document, pdfPatientValueGenerator.generate(certificate,
         certificate.certificateModel().pdfSpecification().patientIdFieldIds()));
@@ -123,7 +123,7 @@ public class CertificatePdfFillService {
             if (isHeightOverFlow(acroForm, field)) {
 
               if (!np.get()) {
-
+                np.set(true);
                 PDPage pageToClone = document.getPage(4);
                 var mediabox = new PDRectangle(pageToClone.getMediaBox().getLowerLeftX(),
                     pageToClone.getMediaBox().getLowerLeftY(), pageToClone.getMediaBox().getWidth(),
@@ -137,9 +137,8 @@ public class CertificatePdfFillService {
                 }
 
                 final var originalField = acroForm.getField(field.getId());
-                COSDictionary originalDictionary = originalField.getCOSObject();
-                final var originalWidget = originalField.getWidgets().get(0);
-                final var originalWidgetRectangle = originalWidget.getRectangle();
+                final var originalWidgetRectangle = originalField.getWidgets().get(0)
+                    .getRectangle();
 
                 PDAnnotationWidget widget1 = new PDAnnotationWidget();
                 PDRectangle rect = new PDRectangle(originalWidgetRectangle.getLowerLeftX(),
@@ -149,25 +148,23 @@ public class CertificatePdfFillService {
                 PDTextField textField = new PDTextField(acroForm);
                 textField.setPartialName("append_2");
 
-                textField.setValue("hejsan hoppasn");
+                textField.setValue("hejsan hopopasn");
                 textField.getWidgets().add(widget1);
+                textField.setMultiline(true);
                 widget1.getCOSObject().setItem(COSName.PARENT, textField);
 
                 PDAppearanceCharacteristicsDictionary fieldAppearance = new PDAppearanceCharacteristicsDictionary(
                     new COSDictionary());
-                fieldAppearance.setBorderColour(
-                    new PDColor(new float[]{0, 1, 0}, PDDeviceRGB.INSTANCE));
-                fieldAppearance.setBackground(
-                    new PDColor(new float[]{1, 1, 0}, PDDeviceRGB.INSTANCE));
                 widget1.setAppearanceCharacteristics(fieldAppearance);
                 widget1.setPrinted(true);
 
                 clonedPage.getAnnotations().add(widget1);
-
+                acroForm.getFields().add(textField);
                 document.addPage(clonedPage);
-              }
 
-              np.set(true);
+              }
+              field.setId("append_2");
+              setFieldValue(acroForm, field);
             } else {
               setFieldValue(acroForm, field);
             }
