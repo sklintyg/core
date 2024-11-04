@@ -19,6 +19,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
@@ -141,24 +142,23 @@ public class CertificatePdfFillService {
                 PDTextField textField = new PDTextField(acroForm);
                 textField.setPartialName("append_2");
                 textField.setValue("hejsan hoppasn");
-//                PDAnnotationWidget widget1 = new PDAnnotationWidget();
-                var widget1 = textField.getWidgets().get(0);
+                PDAnnotationWidget widget1 = new PDAnnotationWidget();
+//                var widget1 = textField.getWidgets().get(0);
+                textField.getWidgets().add(widget1);
                 PDRectangle rect = new PDRectangle(50, 750, 250, 50);
                 widget1.setRectangle(rect);
 
-                widget1.setPage(clonedPage);
+//                widget1.setPage(clonedPage);
 //                widget1.getCOSObject().setItem(COSName.PARENT, textField);
                 clonedPage.getAnnotations().add(widget1);
                 // Update the name to avoid conflicts
 
                 // Add the cloned field to the document
-                acroForm.getFields().add(textField);
+//                acroForm.getFields().add(textField);
                 document.addPage(clonedPage);
               }
 
               np.set(true);
-              field.setId("flt_txtFortsattningsblad[0]_copy");
-              setFieldValue(acroForm, field);
             } else {
               setFieldValue(acroForm, field);
             }
