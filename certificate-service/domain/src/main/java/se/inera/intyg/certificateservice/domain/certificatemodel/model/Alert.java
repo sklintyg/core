@@ -7,6 +7,6 @@ import lombok.Value;
 @Builder
 public class Alert {
 
-  AlertType type;
+  MessageLevel type;
   String text;
 }

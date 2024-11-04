@@ -14,11 +14,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisTerminology;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessage;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDiagnoses;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
@@ -52,7 +52,7 @@ class QuestionDiagnosTest {
             ElementMessage.builder()
                 .content(
                     "Ange alla diagnoser som sammantaget medför ett påtagligt hot mot patientens liv.")
-                .level(ElementMessageLevel.OBSERVE)
+                .level(MessageLevel.OBSERVE)
                 .includedForStatuses(List.of(Status.DRAFT))
                 .build()
         )

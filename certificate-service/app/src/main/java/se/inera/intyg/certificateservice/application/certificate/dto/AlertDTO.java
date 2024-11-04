@@ -5,14 +5,14 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.application.certificate.dto.AlertDTO.AlertBuilder;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AlertType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageLevel;
 
 @JsonDeserialize(builder = AlertBuilder.class)
 @Value
 @Builder
 public class AlertDTO {
 
-  AlertType type;
+  MessageLevel type;
   String text;
 
   @JsonPOJOBuilder(withPrefix = "")

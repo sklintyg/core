@@ -9,8 +9,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateModalActionTypeDTO;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateModalActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.Alert;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AlertType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateConfirmationModal;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageLevel;
 
 class CertificateConfirmationModalConverterTest {
 
@@ -29,7 +29,7 @@ class CertificateConfirmationModalConverterTest {
         .alert(
             AlertDTO.builder()
                 .text("ALERT")
-                .type(AlertType.INFO)
+                .type(MessageLevel.INFO)
                 .build()
         )
         .checkboxText("CHECKBOX")
@@ -44,7 +44,7 @@ class CertificateConfirmationModalConverterTest {
             .alert(
                 Alert.builder()
                     .text("ALERT")
-                    .type(AlertType.INFO)
+                    .type(MessageLevel.INFO)
                     .build()
             ).checkboxText("CHECKBOX")
             .primaryAction(CertificateModalActionType.READ)

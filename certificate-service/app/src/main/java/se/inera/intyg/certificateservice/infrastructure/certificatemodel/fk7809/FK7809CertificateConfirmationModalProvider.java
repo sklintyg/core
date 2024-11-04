@@ -5,9 +5,9 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.Alert;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AlertType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateConfirmationModal;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateConfirmationModalProvider;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageLevel;
 import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 
@@ -28,7 +28,7 @@ public class FK7809CertificateConfirmationModalProvider implements
         .title("Kontrollera att du använder dig av rätt läkarutlåtande")
         .alert(
             Alert.builder()
-                .type(AlertType.INFO)
+                .type(MessageLevel.INFO)
                 .text(
                     String.format(
                         "Du är på väg att utfärda Läkarutlåtande för merkostnadsersättning för %s - %s.",
