@@ -425,7 +425,7 @@ class MessageTest {
           .build();
 
       message.sendAnswer(AJLA_DOKTOR, CONTENT);
-      assertEquals(MessageStatus.SENT, message.answer().status());
+      assertEquals(MessageStatus.HANDLED, message.answer().status());
     }
 
     @Test
