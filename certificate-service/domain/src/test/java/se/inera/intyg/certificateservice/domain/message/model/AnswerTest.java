@@ -9,17 +9,16 @@ import org.junit.jupiter.api.Test;
 
 class AnswerTest {
 
-
   private static final Content CONTENT = new Content("content");
 
   @Nested
   class SendTests {
 
     @Test
-    void shallUpdateStatus() {
+    void shallUpdateStatusToHandled() {
       final var answer = Answer.builder().build();
       answer.send(AJLA_DOKTOR, CONTENT);
-      assertEquals(MessageStatus.SENT, answer.status());
+      assertEquals(MessageStatus.HANDLED, answer.status());
     }
 
     @Test
