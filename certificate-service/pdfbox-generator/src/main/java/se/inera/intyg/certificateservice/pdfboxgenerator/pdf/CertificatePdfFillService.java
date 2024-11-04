@@ -3,10 +3,21 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.cos.COSArray;
+import org.apache.pdfbox.cos.COSBase;
+import org.apache.pdfbox.cos.COSDictionary;
+import org.apache.pdfbox.cos.COSName;
+import org.apache.pdfbox.cos.COSString;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
@@ -24,6 +35,7 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfUnitValueG
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CertificatePdfFillService {
 
   public static final int SIGNATURE_X_PADDING = 60;
@@ -81,11 +93,179 @@ public class CertificatePdfFillService {
     if (certificate.status() == Status.SIGNED) {
       setFieldValues(document, pdfSignatureValueGenerator.generate(certificate));
     }
+
+    final var pdfFields = pdfElementValueGenerator.generate(certificate);
+    final var appendedFields = pdfFields.stream().filter(f -> Boolean.TRUE.equals(f.getAppend()))
+        .collect(Collectors.toList());
+    setFieldValuesAppendix(document, appendedFields);
+//    setPnrAppended(document, certificate);
+
     setFieldValues(document, pdfElementValueGenerator.generate(certificate));
     setFieldValues(document, pdfUnitValueGenerator.generate(certificate));
     setFieldValues(document, pdfPatientValueGenerator.generate(certificate,
         certificate.certificateModel().pdfSpecification().patientIdFieldIds()));
   }
+
+  private void setFieldValuesAppendix(PDDocument document,
+      List<PdfField> appendedFields) {
+    final var acroForm = document.getDocumentCatalog().getAcroForm();
+
+    AtomicBoolean np = new AtomicBoolean(false);
+    appendedFields
+        .stream()
+        .filter(Objects::nonNull)
+        .forEach(field -> {
+          try {
+            if (isHeightOverFlow(acroForm, field)) {
+
+              if (!np.get()) {
+
+                PDPage pageToClone = document.getPage(4);
+                var mediabox = new PDRectangle(pageToClone.getMediaBox().getLowerLeftX(),
+                    pageToClone.getMediaBox().getLowerLeftY(), pageToClone.getMediaBox().getWidth(),
+                    pageToClone.getMediaBox().getHeight());
+                PDPage clonedPage = new PDPage(mediabox);
+
+                // Copy the content from the original page to the cloned page
+                try (PDPageContentStream contentStream = new PDPageContentStream(document,
+                    clonedPage)) {
+                  contentStream.appendRawCommands(pageToClone.getContents().readAllBytes());
+                }
+                final var originalField = acroForm.getField(field.getId());
+                COSDictionary originalDictionary = originalField.getCOSObject();
+
+                // Clone the AcroForm fields
+//                PDField clonedField = PDFieldFactory.createField(acroForm);
+//                clonedField.setPartialName(originalField.getPartialName() + "_copy");
+//
+                PDTextField textField = new PDTextField(acroForm);
+                textField.setPartialName("append_2");
+                textField.setValue("hejsan hoppasn");
+//                PDAnnotationWidget widget1 = new PDAnnotationWidget();
+                var widget1 = textField.getWidgets().get(0);
+                PDRectangle rect = new PDRectangle(50, 750, 250, 50);
+                widget1.setRectangle(rect);
+
+                widget1.setPage(clonedPage);
+//                widget1.getCOSObject().setItem(COSName.PARENT, textField);
+                clonedPage.getAnnotations().add(widget1);
+                // Update the name to avoid conflicts
+
+                // Add the cloned field to the document
+                acroForm.getFields().add(textField);
+                document.addPage(clonedPage);
+              }
+
+              np.set(true);
+              field.setId("flt_txtFortsattningsblad[0]_copy");
+              setFieldValue(acroForm, field);
+            } else {
+              setFieldValue(acroForm, field);
+            }
+          } catch (IOException e) {
+            throw new IllegalStateException(e);
+          }
+        });
+  }
+
+
+  public static COSDictionary deepCloneDictionary(COSDictionary original) {
+    // Create a new COSDictionary
+    COSDictionary clone = new COSDictionary();
+
+    // Iterate through each entry in the original dictionary
+    Set<COSName> keys = original.keySet();
+    for (COSName key : keys) {
+      COSBase value = original.getItem(key);
+      // Deep copy the value
+      COSBase clonedValue = deepCloneValue(value);
+      clone.setItem(key, clonedValue);
+    }
+
+    return clone;
+  }
+
+  private static COSBase deepCloneValue(COSBase value) {
+    if (value instanceof COSDictionary) {
+      return deepCloneDictionary((COSDictionary) value);
+    } else if (value instanceof COSArray) {
+      return deepCloneArray((COSArray) value);
+    } else if (value instanceof COSString) {
+      return new COSString(
+          ((COSString) value).getBytes()); // Return other types as-is (immutable types)
+    } else {
+      return value;
+    }
+  }
+
+  private static COSArray deepCloneArray(COSArray original) {
+    COSArray clone = new COSArray();
+    for (COSBase item : original) {
+      COSBase clonedItem = deepCloneValue(item);
+      clone.add(clonedItem);
+    }
+    return clone;
+  }
+
+  private static boolean isHeightOverFlow(PDAcroForm acroForm, PdfField textField) {
+    final var acroFormField = acroForm.getField(textField.getId());
+    String text =
+        acroFormField.getValueAsString() + (acroFormField.getValueAsString().isEmpty() ? "" : "\n")
+            + textField.getValue();
+    PDRectangle rect = acroFormField.getWidgets().get(0).getRectangle();
+
+    // Assuming the font size is 12
+    float fontSize = 12;
+
+    // Calculate the text height
+    float textHeight = calculateTextHeight(text, fontSize, rect.getWidth());
+
+    // Compare text height with rectangle height
+    final var rectHeight = rect.getHeight();
+    if (textHeight > rectHeight) {
+      log.error(
+          "Text field \"" + acroFormField.getPartialName() + "\" is overflowing in height!");
+      return true;
+    } else {
+      log.error(
+          "Text field \"" + acroFormField.getPartialName() + "\" is not overflowing in height.");
+      return false;
+    }
+  }
+
+  private static float calculateTextHeight(String text, float fontSize, float width) {
+    // Assuming single line height plus some extra space for line height
+    float lineHeight = fontSize * 1.2f; // Adjust line height factor as needed
+    float averageCharWidth = fontSize * 0.6f; // Adjust based on font characteristics
+
+    String[] lines = text.split("\n"); // Split by new line feeds
+    int totalLines = 0;
+
+    for (String line : lines) {
+      float currentLineWidth = 0;
+      String[] words = line.split(" "); // Split line into words
+
+      for (String word : words) {
+        float wordWidth = word.length() * averageCharWidth;
+
+        // If adding this word exceeds the rectangle width, wrap to the next line
+        if (currentLineWidth + wordWidth > width) {
+          totalLines++; // Increment line count
+          currentLineWidth = wordWidth; // Start a new line with the current word
+        } else {
+          currentLineWidth += wordWidth + (fontSize * 0.2f); // Add some spacing
+        }
+      }
+
+      // Account for the last line if there's any content
+      if (currentLineWidth > 0) {
+        totalLines++;
+      }
+    }
+
+    return totalLines * lineHeight; // To
+  }
+
 
   private void addTexts(Certificate certificate, String additionalInfoText, PDDocument document,
       boolean isCitizenFormat)
@@ -207,6 +387,10 @@ public class CertificatePdfFillService {
       }
 
       if (append) {
+        if (field.getValue().contains("kanske potatismos")) {
+          log.info(
+              "potatismospotatismospotatismospotatismospotatismospotatismospotatismospotatismospotatismospotatismos");
+        }
         extractedField.setValue(
             extractedField.getValueAsString()
                 + (extractedField.getValueAsString().isEmpty() ? "" : "\n")

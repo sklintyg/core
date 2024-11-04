@@ -9,7 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagInd
 
 public class FK7809PdfSpecification {
 
-  public static final String PDF_FK_7809_PDF = "fk7809/pdf/fk7809_v1_no_address.pdf"; //TODO: update when new template has been provided
+  public static final String PDF_FK_7809_PDF = "fk7809/pdf/fk7809_1.pdf"; //TODO: update when new template has been provided
   public static final String PDF_NO_ADDRESS_FK_7809_PDF = "fk7809/pdf/fk7809_v1_no_address.pdf";
   public static final PdfMcid PDF_MCID = new PdfMcid(200);
   private static final int PDF_SIGNATURE_PAGE_INDEX = 3;
