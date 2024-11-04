@@ -35,14 +35,15 @@ class JpaStatisticsRepositoryTest {
       "AND c.status.status IN :certificateStatusesForDrafts " +
       "GROUP BY u.hsaId";
 
-  private static final String MESSAGE_JPQL = "SELECT u.hsaId, COUNT(m.id) " +
-      "FROM MessageEntity m " +
-      "INNER JOIN m.certificate c " +
-      "INNER JOIN c.issuedOnUnit u " +
-      "INNER JOIN c.patient p " +
-      "WHERE u.hsaId IN :hsaIds " +
-      "AND m.status.status NOT IN :messageStatusHandledOrDraft " +
-      "GROUP BY u.hsaId";
+  private static final String MESSAGE_JPQL = "SELECT u.hsaId, COUNT(m.id) "
+      + "FROM MessageEntity m INNER JOIN m.certificate c "
+      + "INNER JOIN c.issuedOnUnit u "
+      + "INNER JOIN c.patient p "
+      + "LEFT JOIN MessageRelationEntity mr on m.key = mr.childMessage.key "
+      + "WHERE u.hsaId IN :hsaIds "
+      + "AND m.status.status NOT IN :messageStatusHandledOrDraft "
+      + "AND mr.parentMessage IS NULL "
+      + "GROUP BY u.hsaId";
 
   private static final String UNIT_1 = "unit1";
   private static final String UNIT_2 = "unit2";
