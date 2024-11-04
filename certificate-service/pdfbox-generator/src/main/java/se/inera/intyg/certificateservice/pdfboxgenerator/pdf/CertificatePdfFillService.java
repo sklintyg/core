@@ -155,6 +155,9 @@ public class CertificatePdfFillService {
   private static void addAndFillOverflowPage(PDDocument document, List<PdfField> fields,
       PDAcroForm acroForm)
       throws IOException {
+    // TODO: Add patient id should be able to use same logic as adding overflow sheet field
+    // TODO: Add page nr, check is this field or not? This needs to be done on ALL pages since the total number of pages will be dynamic now
+
     PDPage pageToClone = document.getPage(4);
     var mediabox = new PDRectangle(pageToClone.getMediaBox().getLowerLeftX(),
         pageToClone.getMediaBox().getLowerLeftY(), pageToClone.getMediaBox().getWidth(),
@@ -237,6 +240,8 @@ public class CertificatePdfFillService {
 
   private static boolean isHeightOverFlow(List<PdfField> currentFields, PdfField newTextField,
       PDRectangle rectangle) {
+    // TODO: Do we want to break fields if they're very long? Or should one field always be on the same overflow sheet? What do we do then if headline and text are separated on two pages?
+    // TODO: If we want to break up text then we need to go over line by line of field, create a new field, return this field if max is met and then add the new field to the appendedFields list in parent function
     final var currentText = currentFields.stream()
         .map(PdfField::getValue)
         .collect(Collectors.joining("\n"));
