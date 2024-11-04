@@ -8,7 +8,6 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_VARDCENTRAL_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetCertificatePdfRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
@@ -160,7 +159,7 @@ public abstract class GetCertificatePdfIT extends BaseIntegrationIT {
 
     final var response = api.getCertificatePdf(
         customGetCertificatePdfRequest()
-            .user(ALVA_VARDADMINISTRATOR_DTO)
+            .user(userDTO)
             .build(),
         certificateId(testCertificates)
     );

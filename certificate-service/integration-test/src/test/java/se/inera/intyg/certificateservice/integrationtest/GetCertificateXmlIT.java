@@ -7,7 +7,6 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_HUDMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_VARDCENTRAL_DTO;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetCertificateXmlRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateXmlRequest;
@@ -151,7 +150,7 @@ public abstract class GetCertificateXmlIT extends BaseIntegrationIT {
 
     final var response = api.getCertificateXml(
         customGetCertificateXmlRequest()
-            .user(ALVA_VARDADMINISTRATOR_DTO)
+            .user(userDTO)
             .build(),
         certificateId(testCertificates)
     );

@@ -7,8 +7,6 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ANONYMA_REACT_ATTILA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_VARDCENTRAL_DTO;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetPatientCertificatesRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetPatientCertificateRequest;
@@ -124,7 +122,7 @@ public abstract class GetPatientCertificatesIT extends BaseIntegrationIT {
     final var response = api.getPatientCertificates(
         customGetPatientCertificatesRequest()
             .patient(ANONYMA_REACT_ATTILA_DTO)
-            .user(AJLA_DOCTOR_DTO)
+            .user(userDTO)
             .build()
     );
 
@@ -149,7 +147,7 @@ public abstract class GetPatientCertificatesIT extends BaseIntegrationIT {
     final var response = api.getPatientCertificates(
         customGetPatientCertificatesRequest()
             .patient(ANONYMA_REACT_ATTILA_DTO)
-            .user(ALVA_VARDADMINISTRATOR_DTO)
+            .user(userDTO)
             .build()
     );
 

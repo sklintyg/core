@@ -13,7 +13,6 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_HUDMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementDTOBuilder;
@@ -686,7 +685,7 @@ public abstract class MessagesIT extends BaseIntegrationIT {
 
     final var messagesForCertificate = api.getMessagesForCertificate(
         customGetCertificateMessageRequest()
-            .user(ALVA_VARDADMINISTRATOR_DTO)
+            .user(userDTO)
             .build(),
         certificateId(testCertificates)
     );
@@ -766,7 +765,7 @@ public abstract class MessagesIT extends BaseIntegrationIT {
     );
 
     assertTrue(
-        questions(messagesForCertificate.getBody()).get(0).getLinks()
+        questions(messagesForCertificate.getBody()).getFirst().getLinks()
             .isEmpty(),
         "Should not return link!"
     );

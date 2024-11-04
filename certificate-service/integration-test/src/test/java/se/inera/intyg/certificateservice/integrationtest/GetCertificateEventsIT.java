@@ -8,7 +8,6 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_VARDCENTRAL_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customGetCertificateEventsRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateEventsRequest;
@@ -189,7 +188,7 @@ public abstract class GetCertificateEventsIT extends BaseIntegrationIT {
 
     final var response = api.getCertificateEvents(
         customGetCertificateEventsRequest()
-            .user(ALVA_VARDADMINISTRATOR_DTO)
+            .user(userDTO)
             .build(),
         certificateId(testCertificates)
     );
