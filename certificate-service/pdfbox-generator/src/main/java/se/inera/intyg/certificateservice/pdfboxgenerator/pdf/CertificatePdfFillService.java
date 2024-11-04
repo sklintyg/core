@@ -19,7 +19,10 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.color.PDColor;
+import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAppearanceCharacteristicsDictionary;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
@@ -132,29 +135,35 @@ public class CertificatePdfFillService {
                     clonedPage)) {
                   contentStream.appendRawCommands(pageToClone.getContents().readAllBytes());
                 }
+
                 final var originalField = acroForm.getField(field.getId());
                 COSDictionary originalDictionary = originalField.getCOSObject();
+                final var originalWidget = originalField.getWidgets().get(0);
+                final var originalWidgetRectangle = originalWidget.getRectangle();
 
-                // Clone the AcroForm fields
-//                PDField clonedField = PDFieldFactory.createField(acroForm);
-//                clonedField.setPartialName(originalField.getPartialName() + "_copy");
-//
+                PDAnnotationWidget widget1 = new PDAnnotationWidget();
+                PDRectangle rect = new PDRectangle(originalWidgetRectangle.getLowerLeftX(),
+                    originalWidgetRectangle.getLowerLeftY(), originalWidgetRectangle.getWidth(),
+                    originalWidgetRectangle.getHeight());
+                widget1.setRectangle(rect);
                 PDTextField textField = new PDTextField(acroForm);
                 textField.setPartialName("append_2");
+
                 textField.setValue("hejsan hoppasn");
-                PDAnnotationWidget widget1 = new PDAnnotationWidget();
-//                var widget1 = textField.getWidgets().get(0);
                 textField.getWidgets().add(widget1);
-                PDRectangle rect = new PDRectangle(50, 750, 250, 50);
-                widget1.setRectangle(rect);
+                widget1.getCOSObject().setItem(COSName.PARENT, textField);
 
-//                widget1.setPage(clonedPage);
-//                widget1.getCOSObject().setItem(COSName.PARENT, textField);
+                PDAppearanceCharacteristicsDictionary fieldAppearance = new PDAppearanceCharacteristicsDictionary(
+                    new COSDictionary());
+                fieldAppearance.setBorderColour(
+                    new PDColor(new float[]{0, 1, 0}, PDDeviceRGB.INSTANCE));
+                fieldAppearance.setBackground(
+                    new PDColor(new float[]{1, 1, 0}, PDDeviceRGB.INSTANCE));
+                widget1.setAppearanceCharacteristics(fieldAppearance);
+                widget1.setPrinted(true);
+
                 clonedPage.getAnnotations().add(widget1);
-                // Update the name to avoid conflicts
 
-                // Add the cloned field to the document
-//                acroForm.getFields().add(textField);
                 document.addPage(clonedPage);
               }
 
@@ -223,11 +232,11 @@ public class CertificatePdfFillService {
     // Compare text height with rectangle height
     final var rectHeight = rect.getHeight();
     if (textHeight > rectHeight) {
-      log.error(
+      log.info(
           "Text field \"" + acroFormField.getPartialName() + "\" is overflowing in height!");
       return true;
     } else {
-      log.error(
+      log.info(
           "Text field \"" + acroFormField.getPartialName() + "\" is not overflowing in height.");
       return false;
     }
@@ -387,10 +396,6 @@ public class CertificatePdfFillService {
       }
 
       if (append) {
-        if (field.getValue().contains("kanske potatismos")) {
-          log.info(
-              "potatismospotatismospotatismospotatismospotatismospotatismospotatismospotatismospotatismospotatismos");
-        }
         extractedField.setValue(
             extractedField.getValueAsString()
                 + (extractedField.getValueAsString().isEmpty() ? "" : "\n")
