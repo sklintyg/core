@@ -38,11 +38,13 @@ public class JpaStatisticsRepository implements StatisticsRepository {
         "INNER JOIN m.certificate c " +
         "INNER JOIN c.issuedOnUnit u " +
         "INNER JOIN c.patient p " +
+        "LEFT JOIN MessageRelationEntity mr on m.key = mr.childMessage.key " +
         "WHERE u.hsaId IN :hsaIds " +
         "AND m.status.status NOT IN :messageStatusHandledOrDraft " +
         (allowedToViewProtectedPerson
             ? ""
             : "AND p.protectedPerson = false ") +
+        "AND mr.parentMessage IS NULL " +
         "GROUP BY u.hsaId";
 
     final var hsaIds = issuedByUnitIds.stream()
