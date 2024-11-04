@@ -35,10 +35,13 @@ import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
+import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.MessagesQueryCriteriaDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.QuestionSenderTypeDTO;
 import se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil;
@@ -656,9 +659,10 @@ public abstract class MessagesIT extends BaseIntegrationIT {
   }
 
 
-  @Test
-  @DisplayName("Vårdadministratör - Om intyget är utfärdat på en patient som har skyddade personuppgifter ska inte hantering av frågor vara tillgänglig")
-  void shallReturn403IfPatientIsProtectedPersonAndUserIsCareAdmin() {
+  @ParameterizedTest
+  @DisplayName("Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
+  @MethodSource("rolesNoAccessToProtectedPerson")
+  void shallReturn403IfPatientIsProtectedPerson(UserDTO userDTO) {
     final var testCertificates = testabilityApi.addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion(), SIGNED)
             .patient(ANONYMA_REACT_ATTILA_DTO)

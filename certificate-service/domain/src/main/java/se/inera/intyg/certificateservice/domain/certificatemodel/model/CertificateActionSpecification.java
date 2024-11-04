@@ -16,4 +16,10 @@ public class CertificateActionSpecification {
   Boolean enabled;
   @Default
   List<Role> allowedRoles = Collections.emptyList();
+  @Default
+  List<Role> allowedRolesForProtectedPersons = List.of(
+      Role.DOCTOR,
+      Role.PRIVATE_DOCTOR,
+      Role.DENTIST
+  );
 }

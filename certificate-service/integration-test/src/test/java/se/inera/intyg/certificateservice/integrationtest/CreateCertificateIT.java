@@ -13,6 +13,9 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
 public abstract class CreateCertificateIT extends BaseIntegrationIT {
 
@@ -96,9 +99,10 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
     assertEquals(403, response.getStatusCode().value());
   }
 
-  @Test
-  @DisplayName("Läkare - Om patienten har skyddade personuppgifter skall utkastet returneras")
-  void shallReturnCertificateIfPatientIsProtectedPersonAndUserDoctor() {
+  @ParameterizedTest
+  @DisplayName("Om utkastet är utfärdat på en patient som har skyddade personuppgifter skall det returneras")
+  @MethodSource("rolesAccessToProtectedPerson")
+  void shallReturnCertificateIfPatientIsProtectedPerson(UserDTO userDTO) {
     final var response = api.createCertificate(
         customCreateCertificateRequest(type(), typeVersion())
             .patient(ANONYMA_REACT_ATTILA_DTO)

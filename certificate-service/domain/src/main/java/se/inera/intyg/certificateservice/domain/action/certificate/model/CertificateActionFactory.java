@@ -20,7 +20,9 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRulePatientAlive(),
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleInactiveUnit(),
@@ -37,7 +39,9 @@ public class CertificateActionFactory {
           .actionRules(
               List.of(
                   new ActionRuleWithinAccessScope(AccessScope.ALL_CARE_PROVIDERS),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleRole(
                       List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
                           Role.CARE_ADMIN)
@@ -50,7 +54,9 @@ public class CertificateActionFactory {
           .actionRules(
               List.of(
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleStatus(List.of(Status.DRAFT)),
                   new ActionRuleRole(
                       List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
@@ -65,7 +71,9 @@ public class CertificateActionFactory {
           .actionRules(
               List.of(
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleStatus(List.of(Status.DRAFT)),
                   new ActionRuleRole(
                       List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
@@ -81,7 +89,9 @@ public class CertificateActionFactory {
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleRole(actionSpecification.allowedRoles()),
                   new ActionRuleStatus(List.of(Status.DRAFT)),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleCertificateTypeActiveForUnit(
                       certificateActionConfigurationRepository
                   ),
@@ -100,7 +110,9 @@ public class CertificateActionFactory {
                   new ActionRuleSent(false),
                   new ActionRuleChildRelationNoMatch(List.of(RelationType.REPLACE),
                       List.of(Status.DRAFT, Status.REVOKED)),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleUserAgreement()
               )
           )
@@ -110,7 +122,9 @@ public class CertificateActionFactory {
           .actionRules(
               List.of(
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_PROVIDER),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleStatus(List.of(Status.SIGNED, Status.DRAFT))
               )
           )
@@ -122,7 +136,9 @@ public class CertificateActionFactory {
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleRole(actionSpecification.allowedRoles()),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
-                  new ActionRuleProtectedPerson()
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  )
               )
           )
           .build();
@@ -143,7 +159,9 @@ public class CertificateActionFactory {
                       List.of(Status.DRAFT, Status.REVOKED)),
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleNoComplementMessages(),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
                   new ActionRuleUserAgreement()
@@ -161,7 +179,9 @@ public class CertificateActionFactory {
                   new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleChildRelationMatch(List.of(RelationType.REPLACE)),
                   new ActionRuleNoComplementMessages(),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleUserAgreement()
               )
           )
@@ -177,7 +197,9 @@ public class CertificateActionFactory {
                   new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleUserAllowCopy(),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRulePatientAlive(),
                   new ActionRuleChildRelationNoMatch(
                       List.of(RelationType.REPLACE, RelationType.COMPLEMENT),
@@ -225,7 +247,9 @@ public class CertificateActionFactory {
               List.of(
                   new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleSent(false),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleBlockTestIndicatedPerson(),
                   new ActionRuleUserAgreement()
               )
@@ -238,7 +262,9 @@ public class CertificateActionFactory {
                   new ActionRuleParentRelationMatch(List.of(RelationType.COMPLEMENT)),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleSent(false),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleBlockTestIndicatedPerson(),
                   new ActionRuleUserAgreement()
               )
@@ -255,7 +281,9 @@ public class CertificateActionFactory {
                   new ActionRuleSent(true),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
                   new ActionRuleComplementMessages(),
@@ -273,7 +301,9 @@ public class CertificateActionFactory {
               List.of(
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
                   new ActionRuleChildRelationNoMatch(
@@ -300,7 +330,9 @@ public class CertificateActionFactory {
                   new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleSent(true),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleUserAgreement()
               )
@@ -313,7 +345,9 @@ public class CertificateActionFactory {
                   new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
                   new ActionRuleSent(true),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleUserAgreement()
               )
@@ -337,7 +371,9 @@ public class CertificateActionFactory {
                   new ActionRuleRole(actionSpecification.allowedRoles()),
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleInactiveUnit(),
                   new ActionRuleUserHasAccessScope(
                       List.of(AccessScope.WITHIN_CARE_UNIT)
@@ -354,7 +390,9 @@ public class CertificateActionFactory {
                   new ActionRuleSent(true),
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleInactiveUnit(),
                   new ActionRuleUserHasAccessScope(
                       List.of(AccessScope.WITHIN_CARE_UNIT)
@@ -370,7 +408,9 @@ public class CertificateActionFactory {
                   new ActionRuleSent(true),
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
                   new ActionRuleUserAgreement()
@@ -384,7 +424,9 @@ public class CertificateActionFactory {
                   new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
                   new ActionRuleSent(true),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleUserAgreement()
               )
           )
@@ -396,7 +438,9 @@ public class CertificateActionFactory {
                   new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
                   new ActionRuleSent(true),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleUserAgreement()
               )
           )
@@ -408,7 +452,9 @@ public class CertificateActionFactory {
                   new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
                   new ActionRuleSent(true),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleUserAgreement(),
                   new ActionRuleUserAgreement()
               )
@@ -421,7 +467,9 @@ public class CertificateActionFactory {
                   new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
                   new ActionRuleSent(true),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleUserAgreement()
               )
           )
@@ -433,7 +481,9 @@ public class CertificateActionFactory {
                   new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
                   new ActionRuleSent(true),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleUserAgreement()
               )
           )
@@ -445,7 +495,9 @@ public class CertificateActionFactory {
                   new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
                   new ActionRuleSent(true),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleUserAgreement()
               )
           )
@@ -457,7 +509,9 @@ public class CertificateActionFactory {
                   new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleSent(true),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleUserAgreement()
               )
           )
@@ -499,7 +553,9 @@ public class CertificateActionFactory {
                   new ActionRuleStatus(List.of(Status.DRAFT)),
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
-                  new ActionRuleProtectedPerson(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
                   new ActionRuleInactiveUnit(),
                   new ActionRuleUserHasAccessScope(
                       List.of(AccessScope.WITHIN_CARE_UNIT)

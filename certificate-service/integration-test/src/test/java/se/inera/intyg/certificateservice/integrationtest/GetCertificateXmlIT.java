@@ -19,6 +19,9 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
 public abstract class GetCertificateXmlIT extends BaseIntegrationIT {
 
@@ -136,9 +139,10 @@ public abstract class GetCertificateXmlIT extends BaseIntegrationIT {
     assertEquals(403, response.getStatusCode().value());
   }
 
-  @Test
-  @DisplayName("Vårdadministratör - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
-  void shallReturn403IfPatientIsProtectedPersonAndUserIsCareAdmin() {
+  @ParameterizedTest
+  @DisplayName("Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
+  @MethodSource("rolesNoAccessToProtectedPerson")
+  void shallReturn403IfPatientIsProtectedPerson(UserDTO userDTO) {
     final var testCertificates = testabilityApi.addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .patient(ANONYMA_REACT_ATTILA_DTO)
