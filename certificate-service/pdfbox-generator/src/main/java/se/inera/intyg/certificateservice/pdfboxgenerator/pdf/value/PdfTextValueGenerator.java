@@ -54,7 +54,7 @@ public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> 
             .id(pdfConfiguration.pdfFieldId().id())
             .value(
                 PdfValueGeneratorUtil.splitByLimit(
-                    pdfConfiguration.maxLength(), elementValueText.text(), "...").get(0)
+                    pdfConfiguration.maxLength(), elementValueText.text(), "...").getFirst()
             )
             .build()
     );
@@ -70,12 +70,12 @@ public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> 
             .build(),
         PdfField.builder()
             .id(pdfConfiguration.overflowSheetFieldId().id())
-            .value(elementSpecification.configuration().name())
+            .value(splitText.get(1) + "\n")
             .append(true)
             .build(),
         PdfField.builder()
             .id(pdfConfiguration.overflowSheetFieldId().id())
-            .value(splitText.get(1) + "\n")
+            .value(elementSpecification.configuration().name())
             .append(true)
             .build()
     );

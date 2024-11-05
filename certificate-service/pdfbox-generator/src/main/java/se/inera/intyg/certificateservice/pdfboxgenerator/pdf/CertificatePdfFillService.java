@@ -99,7 +99,8 @@ public class CertificatePdfFillService {
     final var pdfFields = pdfElementValueGenerator.generate(certificate);
     final var appendedFields = pdfFields.stream()
         .filter(f -> Boolean.TRUE.equals(f.getAppend()))
-        .toList();
+        .toList()
+        .reversed();
 
     try {
       final var patientField = PdfField.builder()
@@ -359,7 +360,7 @@ public class CertificatePdfFillService {
   private static PDRectangle getSignedDateRectangle(PDAcroForm acroForm, Certificate certificate) {
     final var signedDate = acroForm.getField(
         certificate.certificateModel().pdfSpecification().signature().signedDateFieldId().id());
-    return signedDate.getWidgets().get(0).getRectangle();
+    return signedDate.getWidgets().getFirst().getRectangle();
   }
 
   private void setFieldValue(PDAcroForm acroForm, PdfField field)
