@@ -26,6 +26,13 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 @ExtendWith(MockitoExtension.class)
 class PdfElementValueGeneratorTest {
 
+  private static final ElementId ELEMENT_ID = new ElementId("1");
+
+  private final Certificate.CertificateBuilder certificateBuilder = fk7210CertificateBuilder();
+  private final ElementSpecification elementSpecification = ElementSpecification.builder()
+      .id(ELEMENT_ID)
+      .build();
+
   @Mock
   private PdfDateValueGenerator pdfDateValueGenerator;
   @Mock
@@ -34,9 +41,6 @@ class PdfElementValueGeneratorTest {
   private CertificateModel certificateModel;
 
   private PdfElementValueGenerator pdfElementValueGenerator;
-
-  private final Certificate.CertificateBuilder certificateBuilder = fk7210CertificateBuilder();
-  private final ElementSpecification elementSpecification = ElementSpecification.builder().build();
 
   @BeforeEach
   void setUp() {
@@ -60,19 +64,20 @@ class PdfElementValueGeneratorTest {
     );
 
     final var elementValue = ElementValueDate.builder().build();
+    final var elementData = ElementData.builder()
+        .id(ELEMENT_ID)
+        .value(elementValue)
+        .build();
 
     final var certificate = certificateBuilder.elementData(
             List.of(
-                ElementData.builder()
-                    .id(new ElementId("999"))
-                    .value(elementValue)
-                    .build()
+                elementData
             )
         )
         .build();
 
-    doReturn(elementSpecification).when(certificateModel)
-        .elementSpecification(new ElementId("999"));
+    doReturn(List.of(elementSpecification)).when(certificateModel)
+        .elementSpecifications();
 
     doReturn(expected).when(pdfDateValueGenerator).generate(
         elementSpecification, ElementValueDate.builder().build()
@@ -90,15 +95,15 @@ class PdfElementValueGeneratorTest {
     final var certificate = certificateBuilder.elementData(
             List.of(
                 ElementData.builder()
-                    .id(new ElementId("999"))
+                    .id(ELEMENT_ID)
                     .value(elementValue)
                     .build()
             )
         )
         .build();
 
-    doReturn(elementSpecification).when(certificateModel)
-        .elementSpecification(new ElementId("999"));
+    doReturn(List.of(elementSpecification)).when(certificateModel)
+        .elementSpecifications();
 
     assertThrows(IllegalStateException.class,
         () -> pdfElementValueGenerator.generate(certificate)

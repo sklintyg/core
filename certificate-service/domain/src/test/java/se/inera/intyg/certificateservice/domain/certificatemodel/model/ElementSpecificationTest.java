@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -347,5 +348,20 @@ class ElementSpecificationTest {
 
       assertEquals(expectedCategory, elementDataArgumentCaptor.getValue().orElseThrow());
     }
+  }
+
+  @Test
+  void shallReturnStreamOfElementSpecificationIncludingChildrenIfFlatten() {
+    final var element = dateElementSpecificationBuilder()
+        .id(new ElementId("ANOTHER_ELEMENT_ID"))
+        .children(List.of(DATE_ELEMENT_SPECIFICATION))
+        .build();
+
+    final var response = element.flatten().toList();
+    assertAll(
+        () -> assertEquals(2, response.size()),
+        () -> assertEquals(element, response.getFirst()),
+        () -> assertEquals(DATE_ELEMENT_SPECIFICATION, response.getLast())
+    );
   }
 }

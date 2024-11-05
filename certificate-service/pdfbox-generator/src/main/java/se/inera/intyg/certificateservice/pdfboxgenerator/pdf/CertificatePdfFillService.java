@@ -99,8 +99,11 @@ public class CertificatePdfFillService {
     final var pdfFields = pdfElementValueGenerator.generate(certificate);
     final var appendedFields = pdfFields.stream()
         .filter(f -> Boolean.TRUE.equals(f.getAppend()))
-        .toList()
-        .reversed();
+        .toList();
+
+    final var fieldsWithoutAppend = pdfFields.stream()
+        .filter(field -> !field.getAppend())
+        .toList();
 
     try {
       final var patientField = PdfField.builder()
@@ -112,9 +115,7 @@ public class CertificatePdfFillService {
       throw new IllegalStateException(e);
     }
 
-    pdfFields.removeAll(appendedFields);
-
-    setFieldValues(document, pdfFields);
+    setFieldValues(document, fieldsWithoutAppend);
     setFieldValues(document, pdfUnitValueGenerator.generate(certificate));
     setFieldValues(document, pdfPatientValueGenerator.generate(certificate,
         certificate.certificateModel().pdfSpecification().patientIdFieldIds()));

@@ -34,7 +34,7 @@ public class PdfDiagnosisListValueGenerator implements PdfElementValue<ElementVa
         .toList());
 
     if (hasOverflow && hasOverflowSheet(pdfConfiguration)) {
-      fields.addLast(PdfField.builder()
+      fields.addFirst(PdfField.builder()
           .id(pdfConfiguration.overflowSheetFieldId().id())
           .value(elementSpecification.configuration().name())
           .append(true)
@@ -111,13 +111,13 @@ public class PdfDiagnosisListValueGenerator implements PdfElementValue<ElementVa
             .build(),
         PdfField.builder()
             .id(pdfConfiguration.overflowSheetFieldId().id())
-            .value(splitText.get(1) + "\n")
+            .value("Diagnosbeskrivning för diagnoskod " + diagnosis.code())
             .appearance(pdfConfiguration.appearance())
             .append(true)
             .build(),
         PdfField.builder()
             .id(pdfConfiguration.overflowSheetFieldId().id())
-            .value("Diagnosbeskrivning för diagnoskod " + diagnosis.code())
+            .value(splitText.get(1) + "\n")
             .appearance(pdfConfiguration.appearance())
             .append(true)
             .build()
