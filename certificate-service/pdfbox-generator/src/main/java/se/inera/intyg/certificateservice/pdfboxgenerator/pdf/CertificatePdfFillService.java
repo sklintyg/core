@@ -125,12 +125,12 @@ public class CertificatePdfFillService {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
     final var overflowField = acroForm.getField(appendedFields.getFirst().getId());
     final var rectangle = overflowField.getWidgets().getFirst().getRectangle();
-
+    final var fontSize = new TextFieldAppearance((PDVariableText) overflowField).getFontSize();
     int start = 0;
     int count = 0;
     while (count < appendedFields.size()) {
       if (isHeightOverFlow(appendedFields.subList(start, count), appendedFields.get(count),
-          rectangle)) {
+          rectangle, fontSize)) {
         if (start == 0) {
           fillOverflowPage(appendedFields.subList(start, count), acroForm);
         } else {
@@ -141,9 +141,12 @@ public class CertificatePdfFillService {
       }
       count++;
     }
-
-    addAndFillOverflowPage(document, appendedFields.subList(start, count), acroForm,
-        patientIdField);
+    if (start == 0) {
+      fillOverflowPage(appendedFields.subList(start, count), acroForm);
+    } else {
+      addAndFillOverflowPage(document, appendedFields.subList(start, count), acroForm,
+          patientIdField);
+    }
   }
 
   private static void fillOverflowPage(List<PdfField> fields, PDAcroForm acroForm) {
@@ -177,25 +180,23 @@ public class CertificatePdfFillService {
     final var value = fields.stream()
         .map(PdfField::getValue)
         .collect(Collectors.joining("\n"));
-    final var widget = addAndFillTextField(value, acroForm, originalField);
+    final var widget = addAndFillTextField(value, acroForm, originalField, false);
 
     final var originalFieldPatientId = acroForm.getField(patientIdField.getId());
-    final var textAppearance = new TextFieldAppearance((PDTextField) originalFieldPatientId);
-    textAppearance.adjustFieldHeight();
     final var widgetPatientId = addAndFillTextField(patientIdField.getValue(), acroForm,
-        originalFieldPatientId);
+        originalFieldPatientId, true);
 
     clonedPage.getAnnotations().add(widget);
     clonedPage.getAnnotations().add(widgetPatientId);
     document.addPage(clonedPage);
   }
 
+
   private static PDAnnotationWidget addAndFillTextField(String value, PDAcroForm acroForm,
-      PDField originalField)
+      PDField originalField, boolean adjustHeight)
       throws IOException {
     final var widget = new PDAnnotationWidget();
-    final var originalWidgetRectangle = originalField.getWidgets().getFirst().getRectangle();
-    widget.setRectangle(originalWidgetRectangle);
+
     final var textField = new PDTextField(acroForm);
     textField.setPartialName(originalField.getPartialName() + currentTimeMillis());
     textField.setDefaultAppearance(originalField.getCOSObject().getString(COSName.DA));
@@ -203,6 +204,16 @@ public class CertificatePdfFillService {
     textField.getWidgets().add(widget);
     textField.setMultiline(true);
     textField.setReadOnly(true);
+
+    final var originalWidgetRectangle = originalField.getWidgets().getFirst().getRectangle();
+    if (adjustHeight) {
+      widget.setRectangle(new PDRectangle(originalWidgetRectangle.getLowerLeftX(),
+          originalWidgetRectangle.getLowerLeftY(), originalWidgetRectangle.getWidth(),
+          originalWidgetRectangle.getHeight() + Math.round(
+              new TextFieldAppearance(textField).getFontSize()) - 1));
+    } else {
+      widget.setRectangle(originalWidgetRectangle);
+    }
     widget.getCOSObject().setItem(COSName.PARENT, textField);
 
     final var fieldAppearance = new PDAppearanceCharacteristicsDictionary(
@@ -214,7 +225,7 @@ public class CertificatePdfFillService {
 
 
   private static boolean isHeightOverFlow(List<PdfField> currentFields, PdfField newTextField,
-      PDRectangle rectangle) {
+      PDRectangle rectangle, float fontSize) {
     // TODO: Do we want to break fields if they're very long? Or should one field always be on the same overflow sheet? What do we do then if headline and text are separated on two pages?
     // TODO: If we want to break up text then we need to go over line by line of field, create a new field, return this field if max is met and then add the new field to the appendedFields list in parent function
     final var currentText = currentFields.stream()
@@ -223,24 +234,22 @@ public class CertificatePdfFillService {
 
     String newText = currentText + (currentText.isEmpty() ? "" : "\n") + newTextField.getValue();
 
-    // Assuming the font size is 12
-    float fontSize = 12;
     float textHeight = calculateTextHeight(newText, fontSize, rectangle.getWidth());
 
     return textHeight > rectangle.getHeight();
   }
 
   private static float calculateTextHeight(String text, float fontSize, float width) {
-    // Assuming single line height plus some extra space for line height
-    float lineHeight = fontSize * 1.2f; // Adjust line height factor as needed
-    float averageCharWidth = fontSize * 0.6f; // Adjust based on font characteristics
 
-    String[] lines = text.split("\n"); // Split by new line feeds
+    float lineHeight = fontSize * 1.2f;
+    float averageCharWidth = fontSize * 0.6f;
+
+    String[] lines = text.split("\n");
     int totalLines = 0;
 
     for (String line : lines) {
       float currentLineWidth = 0;
-      String[] words = line.split(" "); // Split line into words
+      String[] words = line.split(" ");
 
       for (String word : words) {
         float wordWidth = word.length() * averageCharWidth;
@@ -260,7 +269,7 @@ public class CertificatePdfFillService {
       }
     }
 
-    return totalLines * lineHeight; // To
+    return totalLines * lineHeight;
   }
 
 
