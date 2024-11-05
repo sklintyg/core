@@ -1,12 +1,9 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Value;
 
-//@Value
-@Getter
-@Setter
+@Value
 @Builder
 public class PdfField {
 

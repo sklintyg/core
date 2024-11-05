@@ -29,7 +29,6 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAdditionalInformationTextGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfElementValueGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfPatientValueGenerator;
@@ -105,8 +104,11 @@ public class CertificatePdfFillService {
         .toList();
 
     try {
-      setFieldValuesAppendix(document, appendedFields,
-          pdfSpecification.patientIdFieldIds().getFirst());
+      final var patientField = PdfField.builder()
+          .id(pdfSpecification.patientIdFieldIds().getLast().id())
+          .value(certificate.certificateMetaData().patient().id().idWithDash())
+          .build();
+      setFieldValuesAppendix(document, appendedFields, patientField);
     } catch (IOException e) {
       throw new IllegalStateException(e);
     }
@@ -120,7 +122,7 @@ public class CertificatePdfFillService {
   }
 
   private void setFieldValuesAppendix(PDDocument document,
-      List<PdfField> appendedFields, PdfFieldId patientIdFieldId) throws IOException {
+      List<PdfField> appendedFields, PdfField patientIdField) throws IOException {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
     final var overflowField = acroForm.getField(appendedFields.getFirst().getId());
     final var rectangle = overflowField.getWidgets().getFirst().getRectangle();
@@ -134,7 +136,7 @@ public class CertificatePdfFillService {
           fillOverflowPage(appendedFields.subList(start, count), acroForm);
         } else {
           addAndFillOverflowPage(document, appendedFields.subList(start, count), acroForm,
-              patientIdFieldId);
+              patientIdField);
         }
         start = count;
       }
@@ -142,7 +144,7 @@ public class CertificatePdfFillService {
     }
 
     addAndFillOverflowPage(document, appendedFields.subList(start, count), acroForm,
-        patientIdFieldId);
+        patientIdField);
   }
 
   private static void fillOverflowPage(List<PdfField> fields, PDAcroForm acroForm) {
@@ -159,7 +161,7 @@ public class CertificatePdfFillService {
   }
 
   private static void addAndFillOverflowPage(PDDocument document, List<PdfField> fields,
-      PDAcroForm acroForm, PdfFieldId patientIdFieldId)
+      PDAcroForm acroForm, PdfField patientIdField)
       throws IOException {
     final var pageToClone = document.getPage(4);
     final var mediabox = new PDRectangle(pageToClone.getMediaBox().getLowerLeftX(),
@@ -178,7 +180,12 @@ public class CertificatePdfFillService {
         .collect(Collectors.joining("\n"));
     final var widget = addAndFillTextField(value, acroForm, originalField);
 
+    final var originalFieldPatientId = acroForm.getField(patientIdField.getId());
+    final var widgetPatientId = addAndFillTextField(patientIdField.getValue(), acroForm,
+        originalFieldPatientId);
+
     clonedPage.getAnnotations().add(widget);
+    clonedPage.getAnnotations().add(widgetPatientId);
     document.addPage(clonedPage);
   }
 
@@ -187,10 +194,7 @@ public class CertificatePdfFillService {
       throws IOException {
     final var widget = new PDAnnotationWidget();
     final var originalWidgetRectangle = originalField.getWidgets().getFirst().getRectangle();
-    final var rect = new PDRectangle(originalWidgetRectangle.getLowerLeftX(),
-        originalWidgetRectangle.getLowerLeftY(), originalWidgetRectangle.getWidth(),
-        originalWidgetRectangle.getHeight());
-    widget.setRectangle(rect);
+    widget.setRectangle(originalWidgetRectangle);
     final var textField = new PDTextField(acroForm);
     textField.setPartialName(originalField.getPartialName() + currentTimeMillis());
 
