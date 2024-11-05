@@ -105,7 +105,7 @@ public class CertificatePdfFillService {
     try {
       final var patientField = PdfField.builder()
           .id(pdfSpecification.patientIdFieldIds().getLast().id())
-          .value(certificate.certificateMetaData().patient().id().idWithDash())
+          .value(certificate.certificateMetaData().patient().id().idWithoutDash())
           .build();
       setFieldValuesAppendix(document, appendedFields, patientField);
     } catch (IOException e) {
@@ -202,6 +202,7 @@ public class CertificatePdfFillService {
     textField.setValue(value);
     textField.getWidgets().add(widget);
     textField.setMultiline(true);
+    textField.setReadOnly(true);
     widget.getCOSObject().setItem(COSName.PARENT, textField);
 
     final var fieldAppearance = new PDAppearanceCharacteristicsDictionary(
