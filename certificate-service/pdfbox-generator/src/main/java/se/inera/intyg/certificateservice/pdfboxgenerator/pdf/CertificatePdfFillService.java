@@ -5,21 +5,19 @@ import static java.lang.System.currentTimeMillis;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.cos.COSArray;
-import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.cos.COSString;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAppearanceCharacteristicsDictionary;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
@@ -61,7 +59,7 @@ public class CertificatePdfFillService {
       final var document = Loader.loadPDF(inputStream.readAllBytes());
       setFields(certificate, document);
       addTexts(certificate, additionalInfoText, document, isCitizenFormat);
-
+      setPageNumbers(document);
       return document;
     } catch (Exception e) {
       throw new IllegalStateException("Could not create Pdf", e);
@@ -199,44 +197,6 @@ public class CertificatePdfFillService {
     document.addPage(clonedPage);
   }
 
-
-  public static COSDictionary deepCloneDictionary(COSDictionary original) {
-    // Create a new COSDictionary
-    COSDictionary clone = new COSDictionary();
-
-    // Iterate through each entry in the original dictionary
-    Set<COSName> keys = original.keySet();
-    for (COSName key : keys) {
-      COSBase value = original.getItem(key);
-      // Deep copy the value
-      COSBase clonedValue = deepCloneValue(value);
-      clone.setItem(key, clonedValue);
-    }
-
-    return clone;
-  }
-
-  private static COSBase deepCloneValue(COSBase value) {
-    if (value instanceof COSDictionary) {
-      return deepCloneDictionary((COSDictionary) value);
-    } else if (value instanceof COSArray) {
-      return deepCloneArray((COSArray) value);
-    } else if (value instanceof COSString) {
-      return new COSString(
-          ((COSString) value).getBytes()); // Return other types as-is (immutable types)
-    } else {
-      return value;
-    }
-  }
-
-  private static COSArray deepCloneArray(COSArray original) {
-    COSArray clone = new COSArray();
-    for (COSBase item : original) {
-      COSBase clonedItem = deepCloneValue(item);
-      clone.add(clonedItem);
-    }
-    return clone;
-  }
 
   private static boolean isHeightOverFlow(List<PdfField> currentFields, PdfField newTextField,
       PDRectangle rectangle) {
@@ -416,6 +376,30 @@ public class CertificatePdfFillService {
         );
       } else {
         extractedField.setValue(field.getValue());
+      }
+    }
+  }
+
+  private void setPageNumbers(PDDocument document) throws IOException {
+
+    final float MARGIN_LEFT = 63.5F;
+    final float MARGIN_TOP = 37;
+
+    final var totalPages = document.getNumberOfPages();
+    for (int i = 0; i < totalPages; i++) {
+      PDPage page = document.getPage(i);
+
+      try (PDPageContentStream contentStream = new PDPageContentStream(document, page,
+          PDPageContentStream.AppendMode.APPEND, true, true)) {
+
+        contentStream.setFont(new PDType1Font(FontName.HELVETICA), 10);
+        final var x = page.getMediaBox().getWidth() - MARGIN_LEFT;
+        final var y = page.getMediaBox().getHeight() - MARGIN_TOP;
+
+        contentStream.beginText();
+        contentStream.newLineAtOffset(x, y);
+        contentStream.showText("%d (%s)".formatted(i + 1, totalPages));
+        contentStream.endText();
       }
     }
   }
