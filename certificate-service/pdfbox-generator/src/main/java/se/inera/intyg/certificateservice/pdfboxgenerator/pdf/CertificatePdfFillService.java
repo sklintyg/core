@@ -91,19 +91,25 @@ public class CertificatePdfFillService {
   }
 
   private void setFields(Certificate certificate, PDDocument document) {
+    final var pdfSpecification = certificate.certificateModel().pdfSpecification();
     if (certificate.status() == Status.SIGNED) {
       setFieldValues(document, pdfSignatureValueGenerator.generate(certificate));
     }
 
     final var pdfFields = pdfElementValueGenerator.generate(certificate);
-    final var appendedFields = pdfFields.stream().filter(f -> Boolean.TRUE.equals(f.getAppend()))
-        .collect(Collectors.toList());
+    final var appendedFields = pdfFields.stream()
+        .filter(f -> Boolean.TRUE.equals(f.getAppend()))
+        .toList();
+
     try {
-      setFieldValuesAppendix(document, appendedFields);
+      final var patientField = PdfField.builder()
+          .id(pdfSpecification.patientIdFieldIds().getLast().id())
+          .value(certificate.certificateMetaData().patient().id().idWithDash())
+          .build();
+      setFieldValuesAppendix(document, appendedFields, patientField);
     } catch (IOException e) {
       throw new IllegalStateException(e);
     }
-//    setPnrAppended(document, certificate);
 
     pdfFields.removeAll(appendedFields);
 
@@ -114,7 +120,7 @@ public class CertificatePdfFillService {
   }
 
   private void setFieldValuesAppendix(PDDocument document,
-      List<PdfField> appendedFields) throws IOException {
+      List<PdfField> appendedFields, PdfField patientIdField) throws IOException {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
     final var overflowField = acroForm.getField(appendedFields.getFirst().getId());
     final var rectangle = overflowField.getWidgets().getFirst().getRectangle();
@@ -127,14 +133,16 @@ public class CertificatePdfFillService {
         if (start == 0) {
           fillOverflowPage(appendedFields.subList(start, count), acroForm);
         } else {
-          addAndFillOverflowPage(document, appendedFields.subList(start, count), acroForm);
+          addAndFillOverflowPage(document, appendedFields.subList(start, count), acroForm,
+              patientIdField);
         }
         start = count;
       }
       count++;
     }
 
-    addAndFillOverflowPage(document, appendedFields.subList(start, count), acroForm);
+    addAndFillOverflowPage(document, appendedFields.subList(start, count), acroForm,
+        patientIdField);
   }
 
   private static void fillOverflowPage(List<PdfField> fields, PDAcroForm acroForm) {
@@ -151,50 +159,53 @@ public class CertificatePdfFillService {
   }
 
   private static void addAndFillOverflowPage(PDDocument document, List<PdfField> fields,
-      PDAcroForm acroForm)
+      PDAcroForm acroForm, PdfField patientIdField)
       throws IOException {
-    // TODO: Add patient id should be able to use same logic as adding overflow sheet field
-    // TODO: Add page nr, check is this field or not? This needs to be done on ALL pages since the total number of pages will be dynamic now
-
-    PDPage pageToClone = document.getPage(4);
-    var mediabox = new PDRectangle(pageToClone.getMediaBox().getLowerLeftX(),
+    final var pageToClone = document.getPage(4);
+    final var mediabox = new PDRectangle(pageToClone.getMediaBox().getLowerLeftX(),
         pageToClone.getMediaBox().getLowerLeftY(), pageToClone.getMediaBox().getWidth(),
         pageToClone.getMediaBox().getHeight());
-    PDPage clonedPage = new PDPage(mediabox);
+    final var clonedPage = new PDPage(mediabox);
 
-    // Copy the content from the original page to the cloned page
     try (PDPageContentStream contentStream = new PDPageContentStream(document,
         clonedPage)) {
       contentStream.appendRawCommands(pageToClone.getContents().readAllBytes());
     }
 
     final var originalField = acroForm.getField(fields.getFirst().getId());
-    final var originalWidgetRectangle = originalField.getWidgets().getFirst().getRectangle();
+    final var value = fields.stream()
+        .map(PdfField::getValue)
+        .collect(Collectors.joining("\n"));
+    final var widget = addAndFillTextField(value, acroForm, originalField);
 
-    PDAnnotationWidget widget1 = new PDAnnotationWidget();
-    PDRectangle rect = new PDRectangle(originalWidgetRectangle.getLowerLeftX(),
-        originalWidgetRectangle.getLowerLeftY(), originalWidgetRectangle.getWidth(),
-        originalWidgetRectangle.getHeight());
-    widget1.setRectangle(rect);
-    PDTextField textField = new PDTextField(acroForm);
+    final var originalFieldPatientId = acroForm.getField(patientIdField.getId());
+    final var widgetPatientId = addAndFillTextField(patientIdField.getValue(), acroForm,
+        originalFieldPatientId);
+
+    clonedPage.getAnnotations().add(widget);
+    clonedPage.getAnnotations().add(widgetPatientId);
+    document.addPage(clonedPage);
+  }
+
+  private static PDAnnotationWidget addAndFillTextField(String value, PDAcroForm acroForm,
+      PDField originalField)
+      throws IOException {
+    final var widget = new PDAnnotationWidget();
+    final var originalWidgetRectangle = originalField.getWidgets().getFirst().getRectangle();
+    widget.setRectangle(originalWidgetRectangle);
+    final var textField = new PDTextField(acroForm);
     textField.setPartialName(originalField.getPartialName() + currentTimeMillis());
 
-    textField.setValue(
-        fields.stream()
-            .map(PdfField::getValue)
-            .collect(Collectors.joining("\n"))
-    );
-    textField.getWidgets().add(widget1);
+    textField.setValue(value);
+    textField.getWidgets().add(widget);
     textField.setMultiline(true);
-    widget1.getCOSObject().setItem(COSName.PARENT, textField);
+    widget.getCOSObject().setItem(COSName.PARENT, textField);
 
-    PDAppearanceCharacteristicsDictionary fieldAppearance = new PDAppearanceCharacteristicsDictionary(
+    final var fieldAppearance = new PDAppearanceCharacteristicsDictionary(
         new COSDictionary());
-    widget1.setAppearanceCharacteristics(fieldAppearance);
-    widget1.setPrinted(true);
-
-    clonedPage.getAnnotations().add(widget1);
-    document.addPage(clonedPage);
+    widget.setAppearanceCharacteristics(fieldAppearance);
+    widget.setPrinted(true);
+    return widget;
   }
 
 
