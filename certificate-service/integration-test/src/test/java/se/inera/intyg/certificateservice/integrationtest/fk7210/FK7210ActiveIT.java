@@ -1,13 +1,19 @@
 package se.inera.intyg.certificateservice.integrationtest.fk7210;
 
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ANNA_SJUKSKOTERSKA_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.elements.QuestionBeraknatFodelsedatum.QUESTION_BERAKNAT_FODELSEDATUM_ID;
 import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.CODE;
 import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.CODE_SYSTEM;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -106,6 +112,14 @@ public class FK7210ActiveIT {
     protected String wrongVersion() {
       return WRONG_VERSION;
     }
+
+    protected static Stream<Arguments> rolesAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(AJLA_DOCTOR_DTO),
+          Arguments.of(BERTIL_BARNMORSKA_DTO),
+          Arguments.of(ANNA_SJUKSKOTERSKA_DTO)
+      );
+    }
   }
 
   @Nested
@@ -166,6 +180,20 @@ public class FK7210ActiveIT {
     protected String typeVersion() {
       return ACTIVE_VERSION;
     }
+
+    protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(ALVA_VARDADMINISTRATOR_DTO)
+      );
+    }
+
+    protected static Stream<Arguments> rolesAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(AJLA_DOCTOR_DTO),
+          Arguments.of(ANNA_SJUKSKOTERSKA_DTO),
+          Arguments.of(BERTIL_BARNMORSKA_DTO)
+      );
+    }
   }
 
   @Nested
@@ -186,6 +214,12 @@ public class FK7210ActiveIT {
     protected String typeVersion() {
       return ACTIVE_VERSION;
     }
+
+    protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(ALVA_VARDADMINISTRATOR_DTO)
+      );
+    }
   }
 
   @Nested
@@ -200,6 +234,12 @@ public class FK7210ActiveIT {
     @Override
     protected String typeVersion() {
       return ACTIVE_VERSION;
+    }
+
+    protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(ALVA_VARDADMINISTRATOR_DTO)
+      );
     }
   }
 
@@ -226,6 +266,12 @@ public class FK7210ActiveIT {
     protected String typeVersion() {
       return ACTIVE_VERSION;
     }
+
+    protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(ALVA_VARDADMINISTRATOR_DTO)
+      );
+    }
   }
 
   @Nested
@@ -240,6 +286,20 @@ public class FK7210ActiveIT {
     @Override
     protected String typeVersion() {
       return ACTIVE_VERSION;
+    }
+
+    protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(ALVA_VARDADMINISTRATOR_DTO)
+      );
+    }
+
+    protected static Stream<Arguments> rolesAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(AJLA_DOCTOR_DTO),
+          Arguments.of(ANNA_SJUKSKOTERSKA_DTO),
+          Arguments.of(BERTIL_BARNMORSKA_DTO)
+      );
     }
   }
 
@@ -556,6 +616,20 @@ public class FK7210ActiveIT {
     @Override
     protected Boolean canRecieveQuestions() {
       return false;
+    }
+
+    protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(ALVA_VARDADMINISTRATOR_DTO)
+      );
+    }
+
+    protected static Stream<Arguments> rolesAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(AJLA_DOCTOR_DTO),
+          Arguments.of(BERTIL_BARNMORSKA_DTO),
+          Arguments.of(ANNA_SJUKSKOTERSKA_DTO)
+      );
     }
   }
 

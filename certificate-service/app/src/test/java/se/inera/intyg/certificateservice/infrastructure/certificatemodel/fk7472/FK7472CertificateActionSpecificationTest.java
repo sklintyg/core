@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -12,52 +13,66 @@ class FK7472CertificateActionSpecificationTest {
 
   @Test
   void shallIncludeCertificateActionCreate() {
-    final var expectedType = CertificateActionType.CREATE;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.CREATE)
+        .allowedRolesForProtectedPersons(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+        )
+        .build();
 
     final var actions = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream()
-        .anyMatch(actionSpecification ->
-            expectedType.equals(actionSpecification.certificateActionType())
-        ), "Expected type: %s".formatted(expectedType)
+    assertEquals(expectedSpecification,
+        actualSpecification(actions, expectedSpecification.certificateActionType())
     );
   }
 
   @Test
   void shallIncludeCertificateActionRead() {
-    final var expectedType = CertificateActionType.READ;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.READ)
+        .allowedRolesForProtectedPersons(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+        )
+        .build();
 
     final var actions = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream()
-        .anyMatch(actionSpecification ->
-            expectedType.equals(actionSpecification.certificateActionType()
-            )
-        ), "Expected type: %s".formatted(expectedType));
+    assertEquals(expectedSpecification,
+        actualSpecification(actions, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
   void shallIncludeCertificateActionUpdate() {
-    final var expectedType = CertificateActionType.UPDATE;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.UPDATE)
+        .allowedRolesForProtectedPersons(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+        )
+        .build();
 
     final var actions = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+    assertEquals(expectedSpecification,
+        actualSpecification(actions, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
   void shallIncludeCertificateActionDelete() {
-    final var expectedType = CertificateActionType.DELETE;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.DELETE)
+        .allowedRolesForProtectedPersons(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+        )
+        .build();
 
     final var actions = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+    assertEquals(expectedSpecification,
+        actualSpecification(actions, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
@@ -65,13 +80,16 @@ class FK7472CertificateActionSpecificationTest {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.SIGN)
         .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE))
+        .allowedRolesForProtectedPersons(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+        )
         .build();
 
     final var actions = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected specification: %s".formatted(expectedSpecification));
+    assertEquals(expectedSpecification,
+        actualSpecification(actions, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
@@ -80,38 +98,48 @@ class FK7472CertificateActionSpecificationTest {
         .certificateActionType(CertificateActionType.SEND)
         .allowedRoles(
             List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
+        .allowedRolesForProtectedPersons(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+        )
         .build();
 
     final var actions = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected type: %s".formatted(expectedSpecification));
+    assertEquals(expectedSpecification,
+        actualSpecification(actions, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
   void shallIncludeCertificateActionSendAfterComplement() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.SEND_AFTER_COMPLEMENT)
+        .allowedRolesForProtectedPersons(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+        )
         .build();
 
     final var actions = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected type: %s".formatted(expectedSpecification));
+    assertEquals(expectedSpecification,
+        actualSpecification(actions, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
   void shallIncludeCertificateActionPrint() {
-    final var expectedType = CertificateActionType.PRINT;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.PRINT)
+        .allowedRolesForProtectedPersons(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+        )
+        .build();
 
     final var actions = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+    assertEquals(expectedSpecification,
+        actualSpecification(actions, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
@@ -119,73 +147,93 @@ class FK7472CertificateActionSpecificationTest {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.REVOKE)
         .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE))
+        .allowedRolesForProtectedPersons(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+        )
         .build();
 
     final var actions = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected type: %s".formatted(expectedSpecification));
+    assertEquals(expectedSpecification,
+        actualSpecification(actions, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
   void shallIncludeCertificateActionReplace() {
-    final var expectedType = CertificateActionType.REPLACE;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.REPLACE)
+        .allowedRolesForProtectedPersons(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+        )
+        .build();
 
     final var actions = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+    assertEquals(expectedSpecification,
+        actualSpecification(actions, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
   void shallIncludeCertificateActionReplaceContinue() {
-    final var expectedType = CertificateActionType.REPLACE_CONTINUE;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.REPLACE_CONTINUE)
+        .allowedRolesForProtectedPersons(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+        )
+        .build();
 
     final var actions = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+    assertEquals(expectedSpecification,
+        actualSpecification(actions, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
   void shallIncludeCertificateActionRenew() {
-    final var expectedType = CertificateActionType.RENEW;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.RENEW)
+        .allowedRolesForProtectedPersons(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+        )
+        .build();
 
     final var actions = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+    assertEquals(expectedSpecification,
+        actualSpecification(actions, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
   void shallIncludeCertificateActionMessages() {
-    final var expectedType = CertificateActionType.MESSAGES;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.MESSAGES)
+        .allowedRolesForProtectedPersons(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+        )
+        .build();
 
     final var actions = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+    assertEquals(expectedSpecification,
+        actualSpecification(actions, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
   void shallIncludeCertificateActionMessagesAdministrative() {
-    final var expectedType = CertificateActionType.MESSAGES_ADMINISTRATIVE;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
+        .build();
 
     final var actions = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+    assertEquals(expectedSpecification,
+        actualSpecification(actions, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
@@ -214,38 +262,47 @@ class FK7472CertificateActionSpecificationTest {
 
   @Test
   void shallIncludeCertificateActionComplement() {
-    final var expectedType = CertificateActionType.COMPLEMENT;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.COMPLEMENT)
+        .allowedRolesForProtectedPersons(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+        )
+        .build();
 
-    final var actions = FK7472CertificateActionSpecification.create();
+    final var actionSpecifications = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+    assertEquals(expectedSpecification,
+        actualSpecification(actionSpecifications, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
   void shallIncludeCertificateActionCannotComplement() {
-    final var expectedType = CertificateActionType.CANNOT_COMPLEMENT;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.CANNOT_COMPLEMENT)
+        .allowedRolesForProtectedPersons(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+        )
+        .build();
 
-    final var actions = FK7472CertificateActionSpecification.create();
+    final var actionSpecifications = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+    assertEquals(expectedSpecification,
+        actualSpecification(actionSpecifications, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
   void shallIncludeCertificateActionForwardMessage() {
-    final var expectedType = CertificateActionType.FORWARD_MESSAGE;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.FORWARD_MESSAGE)
+        .build();
 
-    final var actions = FK7472CertificateActionSpecification.create();
+    final var actionSpecifications = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+    assertEquals(expectedSpecification,
+        actualSpecification(actionSpecifications, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
@@ -257,21 +314,25 @@ class FK7472CertificateActionSpecificationTest {
 
     final var actionSpecifications = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actionSpecifications.stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected type: %s".formatted(expectedSpecification));
+    assertEquals(expectedSpecification,
+        actualSpecification(actionSpecifications, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
   void shallIncludeCertificateActionHandleComplement() {
-    final var expectedType = CertificateActionType.HANDLE_COMPLEMENT;
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.HANDLE_COMPLEMENT)
+        .allowedRolesForProtectedPersons(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+        )
+        .build();
 
-    final var actions = FK7472CertificateActionSpecification.create();
+    final var actionSpecifications = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actions.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
+    assertEquals(expectedSpecification,
+        actualSpecification(actionSpecifications, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
@@ -283,9 +344,9 @@ class FK7472CertificateActionSpecificationTest {
 
     final var actionSpecifications = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actionSpecifications.stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected type: %s".formatted(expectedSpecification));
+    assertEquals(expectedSpecification,
+        actualSpecification(actionSpecifications, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
@@ -294,13 +355,16 @@ class FK7472CertificateActionSpecificationTest {
         .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
         .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
             Role.CARE_ADMIN))
+        .allowedRolesForProtectedPersons(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+        )
         .build();
 
     final var actionSpecifications = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actionSpecifications.stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected type: %s".formatted(expectedSpecification));
+    assertEquals(expectedSpecification,
+        actualSpecification(actionSpecifications, expectedSpecification.certificateActionType())
+    );
   }
 
   @Test
@@ -311,8 +375,16 @@ class FK7472CertificateActionSpecificationTest {
 
     final var actionSpecifications = FK7472CertificateActionSpecification.create();
 
-    assertTrue(actionSpecifications.stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected type: %s".formatted(expectedSpecification));
+    assertEquals(expectedSpecification,
+        actualSpecification(actionSpecifications, expectedSpecification.certificateActionType())
+    );
+  }
+
+  private static CertificateActionSpecification actualSpecification(
+      List<CertificateActionSpecification> actionSpecifications,
+      CertificateActionType certificateActionType) {
+    return actionSpecifications.stream()
+        .filter(spec -> spec.certificateActionType() == certificateActionType)
+        .findAny().orElseThrow();
   }
 }

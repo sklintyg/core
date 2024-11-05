@@ -7,6 +7,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.repository.StatisticsRepository;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitStatistics;
@@ -20,18 +21,21 @@ public class JpaStatisticsRepository implements StatisticsRepository {
 
   @Override
   public Map<HsaId, UnitStatistics> getStatisticsForUnits(List<HsaId> issuedByUnitIds,
-      boolean allowedToViewProtectedPerson) {
-    final var certificateJpql =
-        "SELECT u.hsaId, COUNT(c.id) " +
-            "FROM CertificateEntity c " +
-            "INNER JOIN UnitEntity u ON c.issuedOnUnit.key = u.key " +
-            "INNER JOIN c.patient p " +
-            "WHERE u.hsaId IN :hsaIds " +
-            "AND c.status.status IN :certificateStatusesForDrafts " +
-            (allowedToViewProtectedPerson
-                ? ""
-                : "AND p.protectedPerson = false ") +
-            "GROUP BY u.hsaId";
+      List<CertificateModelId> allowedTypesToViewProtectedPerson) {
+
+    final var certificateModelTypes = allowedTypesToViewProtectedPerson.stream()
+        .map(certificateModelId -> certificateModelId.type().type())
+        .toList();
+
+    final var certificateJpql = "SELECT u.hsaId, COUNT(c.id) " +
+        "FROM CertificateEntity c " +
+        "INNER JOIN UnitEntity u ON c.issuedOnUnit.key = u.key " +
+        "INNER JOIN c.patient p " +
+        "WHERE u.hsaId IN :hsaIds " +
+        "AND c.status.status IN :certificateStatusesForDrafts " +
+        "AND (p.protectedPerson = false " +
+        "OR (p.protectedPerson = true AND c.certificateModel.type IN (:certificateModelTypes))) " +
+        "GROUP BY u.hsaId";
 
     final var messageJpql = "SELECT u.hsaId, COUNT(m.id) " +
         "FROM MessageEntity m " +
@@ -41,9 +45,8 @@ public class JpaStatisticsRepository implements StatisticsRepository {
         "LEFT JOIN MessageRelationEntity mr on m.key = mr.childMessage.key " +
         "WHERE u.hsaId IN :hsaIds " +
         "AND m.status.status NOT IN :messageStatusHandledOrDraft " +
-        (allowedToViewProtectedPerson
-            ? ""
-            : "AND p.protectedPerson = false ") +
+        "AND (p.protectedPerson = false " +
+        "OR (p.protectedPerson = true AND c.certificateModel.type IN (:certificateModelTypes)))" +
         "AND mr.parentMessage IS NULL " +
         "GROUP BY u.hsaId";
 
@@ -56,6 +59,7 @@ public class JpaStatisticsRepository implements StatisticsRepository {
         .setParameter("hsaIds", hsaIds)
         .setParameter("certificateStatusesForDrafts",
             List.of(CertificateStatus.DRAFT.name(), CertificateStatus.LOCKED_DRAFT.name()))
+        .setParameter("certificateModelTypes", certificateModelTypes)
         .getResultList();
 
     final var messagesWithUnhandledQuestionsIssuedOnUnits = entityManager.createQuery(
@@ -64,6 +68,7 @@ public class JpaStatisticsRepository implements StatisticsRepository {
         .setParameter("hsaIds", hsaIds)
         .setParameter("messageStatusHandledOrDraft",
             List.of(MessageStatus.HANDLED.name(), MessageStatus.DRAFT.name()))
+        .setParameter("certificateModelTypes", certificateModelTypes)
         .getResultList();
 
     final var statisticsMap = new HashMap<HsaId, UnitStatistics>();

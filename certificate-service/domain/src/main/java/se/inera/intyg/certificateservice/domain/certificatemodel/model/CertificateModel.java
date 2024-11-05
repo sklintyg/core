@@ -115,4 +115,13 @@ public class CertificateModel {
             specification -> specification.certificateActionType().equals(certificateActionType)
         );
   }
+
+  public Optional<CertificateActionSpecification> certificateAction(
+      CertificateActionType certificateActionType) {
+    return certificateActionSpecifications().stream()
+        .filter(
+            specification -> specification.certificateActionType().equals(certificateActionType)
+        )
+        .findFirst();
+  }
 }

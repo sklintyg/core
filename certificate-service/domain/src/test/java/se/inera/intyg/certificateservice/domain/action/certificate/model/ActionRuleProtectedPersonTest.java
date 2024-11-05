@@ -12,10 +12,12 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJ
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
 
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 
 class ActionRuleProtectedPersonTest {
 
@@ -23,11 +25,11 @@ class ActionRuleProtectedPersonTest {
 
   @BeforeEach
   void setUp() {
-    actionRuleProtectedPerson = new ActionRuleProtectedPerson();
+    actionRuleProtectedPerson = new ActionRuleProtectedPerson(List.of(Role.DOCTOR));
   }
 
   @Test
-  void shallReturnTrueIfPatientIsProtectedAndUserIsDoctor() {
+  void shallReturnTrueIfPatientIsProtectedAndUserIsWithinAllowedRoles() {
     final var actionEvaluation = actionEvaluationBuilder()
         .patient(ANONYMA_REACT_ATTILA)
         .build();
@@ -38,7 +40,7 @@ class ActionRuleProtectedPersonTest {
   }
 
   @Test
-  void shallReturnFalseIfPatientIsProtectedAndUserIsNotDoctor() {
+  void shallReturnFalseIfPatientIsProtectedAndUserIsNotWithinAllowedRoles() {
     final var actionEvaluation = actionEvaluationBuilder()
         .patient(ANONYMA_REACT_ATTILA)
         .user(ALVA_VARDADMINISTRATOR)
@@ -49,7 +51,7 @@ class ActionRuleProtectedPersonTest {
   }
 
   @Test
-  void shallReturnTrueIfPatientOnCertificateIsProtectedAndUserIsDoctor() {
+  void shallReturnTrueIfPatientOnCertificateIsProtectedAndUserIsWithinAllowedRoles() {
     final var actionEvaluation = actionEvaluationBuilder()
         .patient(ANONYMA_REACT_ATTILA)
         .build();
@@ -72,7 +74,7 @@ class ActionRuleProtectedPersonTest {
   }
 
   @Test
-  void shallReturnFalseIfPatientOnCertificateIsProtectedAndUserIsDoctor() {
+  void shallReturnFalseIfPatientOnCertificateIsProtectedAndUserIsNotWithinAllowedRoles() {
     final var actionEvaluation = actionEvaluationBuilder()
         .patient(ANONYMA_REACT_ATTILA)
         .user(ALVA_VARDADMINISTRATOR)
