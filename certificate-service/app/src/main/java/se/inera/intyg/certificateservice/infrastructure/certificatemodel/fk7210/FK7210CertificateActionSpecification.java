@@ -85,7 +85,6 @@ public class FK7210CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST)
-            .allowedRoles(List.of(Role.CARE_ADMIN))
             .build()
     );
   }
