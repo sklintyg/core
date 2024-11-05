@@ -180,6 +180,8 @@ public class CertificatePdfFillService {
     final var widget = addAndFillTextField(value, acroForm, originalField);
 
     final var originalFieldPatientId = acroForm.getField(patientIdField.getId());
+    final var textAppearance = new TextFieldAppearance((PDTextField) originalFieldPatientId);
+    textAppearance.adjustFieldHeight();
     final var widgetPatientId = addAndFillTextField(patientIdField.getValue(), acroForm,
         originalFieldPatientId);
 
@@ -196,7 +198,7 @@ public class CertificatePdfFillService {
     widget.setRectangle(originalWidgetRectangle);
     final var textField = new PDTextField(acroForm);
     textField.setPartialName(originalField.getPartialName() + currentTimeMillis());
-
+    textField.setDefaultAppearance(originalField.getCOSObject().getString(COSName.DA));
     textField.setValue(value);
     textField.getWidgets().add(widget);
     textField.setMultiline(true);
