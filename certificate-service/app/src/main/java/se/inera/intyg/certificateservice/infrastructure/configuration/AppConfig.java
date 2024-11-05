@@ -404,8 +404,9 @@ public class AppConfig {
 
   @Bean
   public GetUnitStatisticsDomainService getUnitStatisticsDomainService(
-      StatisticsRepository statisticsRepository) {
-    return new GetUnitStatisticsDomainService(statisticsRepository);
+      StatisticsRepository statisticsRepository,
+      CertificateModelRepository certificateModelRepository) {
+    return new GetUnitStatisticsDomainService(statisticsRepository, certificateModelRepository);
   }
 
   @Bean

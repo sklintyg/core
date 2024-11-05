@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.integrationtest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ANONYMA_REACT_ATTILA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_HUDMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
@@ -18,9 +19,12 @@ import static se.inera.intyg.certificateservice.integrationtest.util.UnitStatist
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
+import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
 public abstract class UnitStatisticsIT extends BaseIntegrationIT {
 
@@ -227,5 +231,177 @@ public abstract class UnitStatisticsIT extends BaseIntegrationIT {
             .build(),
         certificateId(createCertificateResponses)
     );
+  }
+
+  @ParameterizedTest
+  @DisplayName("Skall returnera antal utkast som är skapade på patient med skyddade personuppgifter")
+  @MethodSource("rolesNoAccessToProtectedPerson")
+  void shallReturnCountOfDraftsExcludingPatientIsProtectedPerson(UserDTO userDTO) {
+    testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion()),
+        defaultTestablilityCertificateRequest(type(), typeVersion()),
+        customTestabilityCertificateRequest(type(), typeVersion())
+            .patient(ANONYMA_REACT_ATTILA_DTO)
+            .build()
+    );
+
+    final var response = api.getUnitStatistics(
+        customUnitStatisticsRequest()
+            .user(userDTO)
+            .build()
+    );
+
+    final var unitStatistics = unitStatistics(response);
+    final var statisticsOnUnit = unitStatistics.getOrDefault(ALFA_ALLERGIMOTTAGNINGEN_ID, null);
+    assertEquals(2, statisticsOnUnit.getDraftCount());
+  }
+
+  @ParameterizedTest
+  @DisplayName("Skall returnera antal utkast som är skapade på patient med skyddade personuppgifter")
+  @MethodSource("rolesAccessToProtectedPerson")
+  void shallReturnCountOfDraftsIncludingPatientIsProtectedPerson(UserDTO userDTO) {
+    testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion()),
+        defaultTestablilityCertificateRequest(type(), typeVersion()),
+        customTestabilityCertificateRequest(type(), typeVersion())
+            .patient(ANONYMA_REACT_ATTILA_DTO)
+            .build()
+    );
+
+    final var response = api.getUnitStatistics(
+        customUnitStatisticsRequest()
+            .user(userDTO)
+            .build()
+    );
+
+    final var unitStatistics = unitStatistics(response);
+    final var statisticsOnUnit = unitStatistics.getOrDefault(ALFA_ALLERGIMOTTAGNINGEN_ID, null);
+    assertEquals(3, statisticsOnUnit.getDraftCount());
+  }
+
+  @ParameterizedTest
+  @DisplayName("Skall returnera antal ej hanterade ärenden som är skapade på patient med skyddade personuppgifter")
+  @MethodSource("rolesNoAccessToProtectedPerson")
+  void shallReturnCountOfUnhandledMessagesExcludingPatientIsProtectedPerson(UserDTO userDTO) {
+    if (!canRecieveQuestions()) {
+      return;
+    }
+
+    final var testCertificate1 = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(
+            type(),
+            typeVersion(),
+            CertificateStatusTypeDTO.SIGNED
+        )
+    );
+    final var testCertificate2 = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(
+            type(),
+            typeVersion(),
+            CertificateStatusTypeDTO.SIGNED
+        )
+    );
+    final var testCertificate3 = testabilityApi.addCertificates(
+        customTestabilityCertificateRequest(type(), typeVersion(), CertificateStatusTypeDTO.SIGNED)
+            .patient(ANONYMA_REACT_ATTILA_DTO)
+            .build()
+    );
+
+    sendCertificate(testCertificate1, ALFA_ALLERGIMOTTAGNINGEN_DTO);
+    sendCertificate(testCertificate2, ALFA_ALLERGIMOTTAGNINGEN_DTO);
+    sendCertificate(testCertificate3, ALFA_ALLERGIMOTTAGNINGEN_DTO);
+
+    api.receiveMessage(
+        incomingQuestionMessageBuilder()
+            .id("testCertificate1")
+            .certificateId(certificateId(testCertificate1))
+            .build()
+    );
+    api.receiveMessage(
+        incomingQuestionMessageBuilder()
+            .id("testCertificate2")
+            .certificateId(certificateId(testCertificate2))
+            .build()
+    );
+    api.receiveMessage(
+        incomingQuestionMessageBuilder()
+            .id("testCertificate3")
+            .certificateId(certificateId(testCertificate3))
+            .personId(ANONYMA_REACT_ATTILA_DTO.getId())
+            .build()
+    );
+
+    final var response = api.getUnitStatistics(
+        customUnitStatisticsRequest()
+            .user(userDTO)
+            .build()
+    );
+
+    final var unitStatistics = unitStatistics(response);
+    final var statisticsOnUnit = unitStatistics.getOrDefault(ALFA_ALLERGIMOTTAGNINGEN_ID, null);
+    assertEquals(2, statisticsOnUnit.getUnhandledMessageCount());
+  }
+
+  @ParameterizedTest
+  @DisplayName("Skall returnera antal ej hanterade ärenden som är skapade på patient med skyddade personuppgifter")
+  @MethodSource("rolesAccessToProtectedPerson")
+  void shallReturnCountOfUnhandledMessagesIncludingPatientIsProtectedPerson(UserDTO userDTO) {
+    if (!canRecieveQuestions()) {
+      return;
+    }
+
+    final var testCertificate1 = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(
+            type(),
+            typeVersion(),
+            CertificateStatusTypeDTO.SIGNED
+        )
+    );
+    final var testCertificate2 = testabilityApi.addCertificates(
+        defaultTestablilityCertificateRequest(
+            type(),
+            typeVersion(),
+            CertificateStatusTypeDTO.SIGNED
+        )
+    );
+    final var testCertificate3 = testabilityApi.addCertificates(
+        customTestabilityCertificateRequest(type(), typeVersion(), CertificateStatusTypeDTO.SIGNED)
+            .patient(ANONYMA_REACT_ATTILA_DTO)
+            .build()
+    );
+
+    sendCertificate(testCertificate1, ALFA_ALLERGIMOTTAGNINGEN_DTO);
+    sendCertificate(testCertificate2, ALFA_ALLERGIMOTTAGNINGEN_DTO);
+    sendCertificate(testCertificate3, ALFA_ALLERGIMOTTAGNINGEN_DTO);
+
+    api.receiveMessage(
+        incomingQuestionMessageBuilder()
+            .id("testCertificate1")
+            .certificateId(certificateId(testCertificate1))
+            .build()
+    );
+    api.receiveMessage(
+        incomingQuestionMessageBuilder()
+            .id("testCertificate2")
+            .certificateId(certificateId(testCertificate2))
+            .build()
+    );
+    api.receiveMessage(
+        incomingQuestionMessageBuilder()
+            .id("testCertificate3")
+            .certificateId(certificateId(testCertificate3))
+            .personId(ANONYMA_REACT_ATTILA_DTO.getId())
+            .build()
+    );
+
+    final var response = api.getUnitStatistics(
+        customUnitStatisticsRequest()
+            .user(userDTO)
+            .build()
+    );
+
+    final var unitStatistics = unitStatistics(response);
+    final var statisticsOnUnit = unitStatistics.getOrDefault(ALFA_ALLERGIMOTTAGNINGEN_ID, null);
+    assertEquals(3, statisticsOnUnit.getUnhandledMessageCount());
   }
 }

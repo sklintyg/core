@@ -761,6 +761,20 @@ public class FK7809ActiveIT {
     protected Boolean canRecieveQuestions() {
       return true;
     }
+
+    protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(ALVA_VARDADMINISTRATOR_DTO),
+          Arguments.of(BERTIL_BARNMORSKA_DTO),
+          Arguments.of(ANNA_SJUKSKOTERSKA_DTO)
+      );
+    }
+
+    protected static Stream<Arguments> rolesAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(AJLA_DOCTOR_DTO)
+      );
+    }
   }
 
 

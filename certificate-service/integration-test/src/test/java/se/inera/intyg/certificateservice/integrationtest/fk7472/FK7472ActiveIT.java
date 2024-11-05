@@ -848,6 +848,19 @@ public class FK7472ActiveIT {
     protected Boolean canRecieveQuestions() {
       return false;
     }
+
+    protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(ALVA_VARDADMINISTRATOR_DTO)
+      );
+    }
+
+    protected static Stream<Arguments> rolesAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(AJLA_DOCTOR_DTO),
+          Arguments.of(ANNA_SJUKSKOTERSKA_DTO)
+      );
+    }
   }
 
   @Nested

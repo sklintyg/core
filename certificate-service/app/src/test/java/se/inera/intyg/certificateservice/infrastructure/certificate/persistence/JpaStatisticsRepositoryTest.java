@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_ID;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -27,21 +28,26 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 @ExtendWith(MockitoExtension.class)
 class JpaStatisticsRepositoryTest {
 
-  private static final String CERTIFICATE_JPQL = "SELECT u.hsaId, COUNT(c.id) " +
-      "FROM CertificateEntity c " +
-      "INNER JOIN UnitEntity u ON c.issuedOnUnit.key = u.key " +
-      "INNER JOIN c.patient p " +
-      "WHERE u.hsaId IN :hsaIds " +
-      "AND c.status.status IN :certificateStatusesForDrafts " +
-      "GROUP BY u.hsaId";
+  private static final String CERTIFICATE_JPQL = "SELECT u.hsaId, COUNT(c.id) "
+      + "FROM CertificateEntity c "
+      + "INNER JOIN UnitEntity u ON c.issuedOnUnit.key = u.key "
+      + "INNER JOIN c.patient p "
+      + "WHERE u.hsaId IN :hsaIds "
+      + "AND c.status.status IN :certificateStatusesForDrafts "
+      + "AND (p.protectedPerson = false "
+      + "OR (p.protectedPerson = true AND c.certificateModel.type IN (:certificateModelTypes))) "
+      + "GROUP BY u.hsaId";
 
   private static final String MESSAGE_JPQL = "SELECT u.hsaId, COUNT(m.id) "
-      + "FROM MessageEntity m INNER JOIN m.certificate c "
+      + "FROM MessageEntity m "
+      + "INNER JOIN m.certificate c "
       + "INNER JOIN c.issuedOnUnit u "
       + "INNER JOIN c.patient p "
       + "LEFT JOIN MessageRelationEntity mr on m.key = mr.childMessage.key "
       + "WHERE u.hsaId IN :hsaIds "
       + "AND m.status.status NOT IN :messageStatusHandledOrDraft "
+      + "AND (p.protectedPerson = false "
+      + "OR (p.protectedPerson = true AND c.certificateModel.type IN (:certificateModelTypes)))"
       + "AND mr.parentMessage IS NULL "
       + "GROUP BY u.hsaId";
 
@@ -64,8 +70,7 @@ class JpaStatisticsRepositoryTest {
     doReturn(List.of()).when(query).getResultList();
 
     final var actualStatistics = jpaStatisticsRepository.getStatisticsForUnits(
-        List.of(new HsaId(UNIT_1)),
-        true);
+        List.of(new HsaId(UNIT_1)), List.of(FK7210_ID));
 
     assertTrue(actualStatistics.isEmpty());
   }
@@ -94,7 +99,7 @@ class JpaStatisticsRepositoryTest {
         new HsaId(UNIT_1), new UnitStatistics(3, 3)
     );
     final var actualStatistics = jpaStatisticsRepository.getStatisticsForUnits(
-        List.of(new HsaId(UNIT_1), new HsaId(UNIT_2)), true);
+        List.of(new HsaId(UNIT_1), new HsaId(UNIT_2)), List.of(FK7210_ID));
 
     assertEquals(expectedStatistics, actualStatistics);
   }
@@ -114,7 +119,7 @@ class JpaStatisticsRepositoryTest {
     doReturn(certificateQuery).when(certificateQuery).setParameter(any(String.class), any());
     doReturn(draftCertificatesResult).when(certificateQuery).getResultList();
 
-    jpaStatisticsRepository.getStatisticsForUnits(List.of(new HsaId(UNIT_1)), true);
+    jpaStatisticsRepository.getStatisticsForUnits(List.of(new HsaId(UNIT_1)), List.of(FK7210_ID));
 
     final var hsaIdsCaptor = ArgumentCaptor.forClass(List.class);
     final var statusCaptor = ArgumentCaptor.forClass(List.class);
@@ -146,7 +151,7 @@ class JpaStatisticsRepositoryTest {
     doReturn(query).when(query).setParameter(any(String.class), any());
     doReturn(messagesResult).when(query).getResultList();
 
-    jpaStatisticsRepository.getStatisticsForUnits(List.of(new HsaId(UNIT_1)), true);
+    jpaStatisticsRepository.getStatisticsForUnits(List.of(new HsaId(UNIT_1)), List.of(FK7210_ID));
 
     final var hsaIdsCaptor = ArgumentCaptor.forClass(List.class);
     final var statusCaptorHandledOrDraft = ArgumentCaptor.forClass(List.class);
