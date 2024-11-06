@@ -11,13 +11,15 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSDictionary;
+import org.apache.pdfbox.cos.COSFloat;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
@@ -26,6 +28,7 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
@@ -184,13 +187,17 @@ public class CertificatePdfFillService {
     try (PDPageContentStream contentStream = new PDPageContentStream(document,
         clonedPage)) {
       contentStream.appendRawCommands(pageToClone.getContents().readAllBytes());
-
       //TODO: Use or add this functionality to PdfTextGenerator class to improve accessability and testability
-      PDFont pdfFont = new PDType1Font(FontName.HELVETICA);
+
+      PDType0Font font = PDType0Font.load(document,
+          new ClassPathResource("fonts/verdana.ttf").getInputStream());
+
       float fontSize = 10;
+      contentStream.setFont(font, fontSize);
+
       float leading = 1.5f * fontSize;
 
-      float marginX = 54;
+      float marginX = 52;
       float marginY = 96;
       float width = mediabox.getWidth() - 2 * marginX;
       float startX = mediabox.getLowerLeftX() + marginX;
@@ -203,7 +210,7 @@ public class CertificatePdfFillService {
       List<String> lines = new ArrayList<>();
 
       for (String text : allText.split("\n")) {
-        final var textSize = fontSize * pdfFont.getStringWidth(text) / 1000;
+        final var textSize = fontSize * font.getStringWidth(text) / 1000;
 
         if (textSize < width) {
           lines.add(text);
@@ -217,7 +224,7 @@ public class CertificatePdfFillService {
               spaceIndex = text.length();
             }
             String subString = text.substring(0, spaceIndex);
-            float size = fontSize * pdfFont.getStringWidth(subString) / 1000;
+            float size = fontSize * font.getStringWidth(subString) / 1000;
             if (size > width) {
               if (lastSpace < 0) {
                 lastSpace = spaceIndex;
@@ -228,7 +235,6 @@ public class CertificatePdfFillService {
               lastSpace = -1;
             } else if (spaceIndex == text.length()) {
               lines.add(text);
-              log.info("{} is line\n", text);
               text = "";
             } else {
               lastSpace = spaceIndex;
@@ -238,7 +244,6 @@ public class CertificatePdfFillService {
       }
 
       contentStream.beginText();
-      contentStream.setFont(pdfFont, fontSize);
       contentStream.newLineAtOffset(startX, startY);
       for (String line : lines) {
         contentStream.showText(line);
@@ -246,8 +251,30 @@ public class CertificatePdfFillService {
       }
       contentStream.endText();
 
+      addPatientId(contentStream, patientIdField, acroForm, fontSize);
     }
     document.addPage(clonedPage);
+  }
+
+  private static void addPatientId(PDPageContentStream contentStream, PdfField patientIdField,
+      PDAcroForm acroForm, float fontSize) throws IOException {
+    final var patientIdRect = acroForm.getField(patientIdField.getId())
+        .getCOSObject().getCOSArray(COSName.RECT);
+    contentStream.setFont(new PDType1Font(FontName.HELVETICA), fontSize);
+    contentStream.beginText();
+    contentStream.newLineAtOffset(getPatientIdXOffset(patientIdRect),
+        getPatientIdYOffset(patientIdRect));
+    contentStream.showText(patientIdField.getValue());
+    contentStream.endText();
+  }
+
+  private static float getPatientIdYOffset(COSArray patientIdRect) {
+    // Adjust y cord as is done on all other pnr fields using TextFieldAppearance
+    return ((COSFloat) patientIdRect.get(1)).floatValue() + 8;
+  }
+
+  private static float getPatientIdXOffset(COSArray patientIdRect) {
+    return ((COSFloat) patientIdRect.get(0)).floatValue();
   }
 
   private static void addAndFillOverflowPage(PDDocument document, List<PdfField> fields,
