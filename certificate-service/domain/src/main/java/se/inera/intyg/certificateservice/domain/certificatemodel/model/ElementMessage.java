@@ -11,7 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 public class ElementMessage {
 
   String content;
-  ElementMessageLevel level;
+  MessageLevel level;
   List<Status> includedForStatuses;
 
   public boolean include(Certificate certificate) {

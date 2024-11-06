@@ -139,7 +139,7 @@ class FK7809CertificateConfirmationModalProviderTest {
 
         assertEquals(
             "Du är på väg att utfärda Läkarutlåtande för merkostnadsersättning för First Middle Last - 20121212-1212.",
-            result.alert());
+            result.alert().text());
       }
 
       @Test
@@ -405,7 +405,7 @@ class FK7809CertificateConfirmationModalProviderTest {
 
         assertEquals(
             "Du är på väg att utfärda Läkarutlåtande för merkostnadsersättning för First Middle Last - 20121212-1212.",
-            result.alert());
+            result.alert().text());
       }
 
       @Test
@@ -493,7 +493,7 @@ class FK7809CertificateConfirmationModalProviderTest {
 
         assertEquals(
             "Du är på väg att utfärda Läkarutlåtande för merkostnadsersättning för First Middle Last - 20121212-1212.",
-            result.alert());
+            result.alert().text());
       }
 
       @Test
@@ -813,7 +813,7 @@ class FK7809CertificateConfirmationModalProviderTest {
 
         assertEquals(
             "Du är på väg att utfärda Läkarutlåtande för merkostnadsersättning för First Middle Last - 20121212-1212.",
-            result.alert());
+            result.alert().text());
       }
 
       @Test
@@ -901,7 +901,7 @@ class FK7809CertificateConfirmationModalProviderTest {
 
         assertEquals(
             "Du är på väg att utfärda Läkarutlåtande för merkostnadsersättning för First Middle Last - 20121212-1212.",
-            result.alert());
+            result.alert().text());
       }
 
       @Test

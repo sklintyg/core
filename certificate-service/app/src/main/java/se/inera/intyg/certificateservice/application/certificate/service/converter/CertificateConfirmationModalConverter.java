@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.application.certificate.service.converter;
 
 import org.springframework.stereotype.Component;
+import se.inera.intyg.certificateservice.application.certificate.dto.AlertDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateConfirmationModalDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateModalActionTypeDTO;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateModalActionType;
@@ -16,7 +17,12 @@ public class CertificateConfirmationModalConverter {
 
     return CertificateConfirmationModalDTO.builder()
         .title(modal.title())
-        .alert(modal.alert())
+        .alert(
+            AlertDTO.builder()
+                .type(modal.alert().type())
+                .text(modal.alert().text())
+                .build()
+        )
         .checkboxText(modal.checkboxText())
         .primaryAction(convertAction(modal.primaryAction()))
         .secondaryAction(convertAction(modal.secondaryAction()))

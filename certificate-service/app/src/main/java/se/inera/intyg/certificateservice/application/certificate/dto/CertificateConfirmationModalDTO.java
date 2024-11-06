@@ -13,7 +13,7 @@ public class CertificateConfirmationModalDTO {
 
   String title;
   String text;
-  String alert;
+  AlertDTO alert;
   String checkboxText;
   CertificateModalActionTypeDTO primaryAction;
   CertificateModalActionTypeDTO secondaryAction;

@@ -8,13 +8,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigMessage;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.Message;
-import se.inera.intyg.certificateservice.application.certificate.dto.config.MessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessage;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageLevel;
 
 class CertificateDataMessageConfigConverterTest {
 
@@ -50,7 +49,8 @@ class CertificateDataMessageConfigConverterTest {
         .message(
             Message.builder()
                 .content("MESSAGE")
-                .level(MessageLevel.INFO)
+                .level(
+                    se.inera.intyg.certificateservice.application.certificate.dto.config.MessageLevel.INFO)
                 .build()
         )
         .build();
@@ -62,7 +62,7 @@ class CertificateDataMessageConfigConverterTest {
                     .message(
                         ElementMessage.builder()
                             .content("MESSAGE")
-                            .level(ElementMessageLevel.INFO)
+                            .level(MessageLevel.INFO)
                             .build()
                     )
                     .build()

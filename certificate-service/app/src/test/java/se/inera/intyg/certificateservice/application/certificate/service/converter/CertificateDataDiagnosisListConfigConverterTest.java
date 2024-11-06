@@ -14,17 +14,16 @@ import se.inera.intyg.certificateservice.application.certificate.dto.config.Cert
 import se.inera.intyg.certificateservice.application.certificate.dto.config.DiagnosesListItem;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.DiagnosesTerminology;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.Message;
-import se.inera.intyg.certificateservice.application.certificate.dto.config.MessageLevel;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisListItem;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisTerminology;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessage;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageLevel;
 
 class CertificateDataDiagnosisListConfigConverterTest {
 
@@ -63,7 +62,8 @@ class CertificateDataDiagnosisListConfigConverterTest {
   void shallConvertToCertificateDataConfigDiagnosesWithMessage() {
     final var expectedMessage = Message.builder()
         .content(EXPECTED_CONTENT)
-        .level(MessageLevel.INFO)
+        .level(
+            se.inera.intyg.certificateservice.application.certificate.dto.config.MessageLevel.INFO)
         .build();
 
     final var elementSpecification = ElementSpecification.builder()
@@ -72,7 +72,7 @@ class CertificateDataDiagnosisListConfigConverterTest {
                 .message(
                     ElementMessage.builder()
                         .content(EXPECTED_CONTENT)
-                        .level(ElementMessageLevel.INFO)
+                        .level(MessageLevel.INFO)
                         .includedForStatuses(List.of(Status.DRAFT))
                         .build()
                 )
@@ -111,7 +111,7 @@ class CertificateDataDiagnosisListConfigConverterTest {
                 .message(
                     ElementMessage.builder()
                         .content(EXPECTED_CONTENT)
-                        .level(ElementMessageLevel.INFO)
+                        .level(MessageLevel.INFO)
                         .includedForStatuses(List.of(Status.DRAFT))
                         .build()
                 )

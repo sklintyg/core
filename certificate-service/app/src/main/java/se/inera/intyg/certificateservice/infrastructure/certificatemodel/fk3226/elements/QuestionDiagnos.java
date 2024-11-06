@@ -7,9 +7,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisListItem;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessage;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDiagnoses;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
@@ -113,7 +113,7 @@ public class QuestionDiagnos {
                     ElementMessage.builder()
                         .content(
                             "Ange alla diagnoser som sammantaget medför ett påtagligt hot mot patientens liv.")
-                        .level(ElementMessageLevel.OBSERVE)
+                        .level(MessageLevel.OBSERVE)
                         .includedForStatuses(List.of(Status.DRAFT))
                         .build()
                 )
