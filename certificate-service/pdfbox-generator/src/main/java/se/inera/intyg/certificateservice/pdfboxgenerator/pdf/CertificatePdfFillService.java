@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 import static java.lang.System.currentTimeMillis;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,6 +17,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
@@ -135,8 +137,11 @@ public class CertificatePdfFillService {
         if (start == 0) {
           fillOverflowPage(appendedFields.subList(start, count), acroForm);
         } else {
-          addAndFillOverflowPage(document, appendedFields.subList(start, count), acroForm,
+          addAndFillOverflowPageWithoutAcroFormField(document, appendedFields.subList(start, count),
+              acroForm,
               patientIdField);
+//          addAndFillOverflowPage(document, appendedFields.subList(start, count), acroForm,
+//              patientIdField);
         }
         start = count;
       }
@@ -145,8 +150,11 @@ public class CertificatePdfFillService {
     if (start == 0) {
       fillOverflowPage(appendedFields.subList(start, count), acroForm);
     } else {
-      addAndFillOverflowPage(document, appendedFields.subList(start, count), acroForm,
+      addAndFillOverflowPageWithoutAcroFormField(document, appendedFields.subList(start, count),
+          acroForm,
           patientIdField);
+//      addAndFillOverflowPage(document, appendedFields.subList(start, count), acroForm,
+//          patientIdField);
     }
   }
 
@@ -161,6 +169,85 @@ public class CertificatePdfFillService {
     } catch (IOException e) {
       throw new IllegalStateException(e);
     }
+  }
+
+  private static void addAndFillOverflowPageWithoutAcroFormField(PDDocument document,
+      List<PdfField> fields,
+      PDAcroForm acroForm, PdfField patientIdField)
+      throws IOException {
+    final var pageToClone = document.getPage(4);
+    final var mediabox = new PDRectangle(pageToClone.getMediaBox().getLowerLeftX(),
+        pageToClone.getMediaBox().getLowerLeftY(), pageToClone.getMediaBox().getWidth(),
+        pageToClone.getMediaBox().getHeight());
+    final var clonedPage = new PDPage(mediabox);
+
+    try (PDPageContentStream contentStream = new PDPageContentStream(document,
+        clonedPage)) {
+      contentStream.appendRawCommands(pageToClone.getContents().readAllBytes());
+
+      //TODO: Use or add this functionality to PdfTextGenerator class to improve accessability and testability
+      PDFont pdfFont = new PDType1Font(FontName.HELVETICA);
+      float fontSize = 10;
+      float leading = 1.5f * fontSize;
+
+      float marginX = 54;
+      float marginY = 96;
+      float width = mediabox.getWidth() - 2 * marginX;
+      float startX = mediabox.getLowerLeftX() + marginX;
+      float startY = mediabox.getUpperRightY() - marginY;
+
+      String allText = fields.stream()
+          .map(PdfField::getValue)
+          .collect(Collectors.joining("\n"));
+
+      List<String> lines = new ArrayList<>();
+
+      for (String text : allText.split("\n")) {
+        final var textSize = fontSize * pdfFont.getStringWidth(text) / 1000;
+
+        if (textSize < width) {
+          lines.add(text);
+        } else {
+
+          int lastSpace = -1;
+          while (!text.isEmpty()) {
+
+            int spaceIndex = text.indexOf(' ', lastSpace + 1);
+            if (spaceIndex < 0) {
+              spaceIndex = text.length();
+            }
+            String subString = text.substring(0, spaceIndex);
+            float size = fontSize * pdfFont.getStringWidth(subString) / 1000;
+            if (size > width) {
+              if (lastSpace < 0) {
+                lastSpace = spaceIndex;
+              }
+              subString = text.substring(0, lastSpace);
+              lines.add(subString);
+              text = text.substring(lastSpace).trim();
+              lastSpace = -1;
+            } else if (spaceIndex == text.length()) {
+              lines.add(text);
+              log.info("{} is line\n", text);
+              text = "";
+            } else {
+              lastSpace = spaceIndex;
+            }
+          }
+        }
+      }
+
+      contentStream.beginText();
+      contentStream.setFont(pdfFont, fontSize);
+      contentStream.newLineAtOffset(startX, startY);
+      for (String line : lines) {
+        contentStream.showText(line);
+        contentStream.newLineAtOffset(0, -leading);
+      }
+      contentStream.endText();
+
+    }
+    document.addPage(clonedPage);
   }
 
   private static void addAndFillOverflowPage(PDDocument document, List<PdfField> fields,
@@ -226,7 +313,7 @@ public class CertificatePdfFillService {
 
 
   private static boolean isHeightOverFlow(List<PdfField> currentFields, PdfField newTextField,
-      PDRectangle rectangle, float fontSize) {
+      PDRectangle rectangle, float fontSize) throws IOException {
     // TODO: Do we want to break fields if they're very long? Or should one field always be on the same overflow sheet? What do we do then if headline and text are separated on two pages?
     // TODO: If we want to break up text then we need to go over line by line of field, create a new field, return this field if max is met and then add the new field to the appendedFields list in parent function
     final var currentText = currentFields.stream()
@@ -240,35 +327,28 @@ public class CertificatePdfFillService {
     return textHeight > rectangle.getHeight();
   }
 
-  private static float calculateTextHeight(String text, float fontSize, float width) {
+  private static float calculateTextHeight(String text, float fontSize, float width)
+      throws IOException {
 
-    float lineHeight = fontSize * 1.2f;
-    float averageCharWidth = fontSize * 0.6f;
-
+    //TODO: should calculate height based on font from field
+    PDType1Font font = new PDType1Font(FontName.HELVETICA);
     String[] lines = text.split("\n");
     int totalLines = 0;
 
     for (String line : lines) {
-      float currentLineWidth = 0;
-      String[] words = line.split(" ");
 
-      for (String word : words) {
-        float wordWidth = word.length() * averageCharWidth;
+      final var lineWidth = font.getStringWidth(line) / 1000 * fontSize;
 
-        // If adding this word exceeds the rectangle width, wrap to the next line
-        if (currentLineWidth + wordWidth > width) {
-          totalLines++; // Increment line count
-          currentLineWidth = wordWidth; // Start a new line with the current word
-        } else {
-          currentLineWidth += wordWidth + (fontSize * 0.2f); // Add some spacing
-        }
-      }
-
-      // Account for the last line if there's any content
-      if (currentLineWidth > 0) {
+      if (lineWidth > width) {
+        totalLines += lineWidth / width + 1;
+      } else {
         totalLines++;
       }
     }
+
+    float ascent = font.getFontDescriptor().getAscent() / 1000 * fontSize;
+    float descent = font.getFontDescriptor().getDescent() / 1000 * fontSize;
+    float lineHeight = ascent - descent + 5f;
 
     return totalLines * lineHeight;
   }
