@@ -1,7 +1,5 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
-import static java.lang.System.currentTimeMillis;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,23 +10,22 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.cos.COSArray;
-import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSFloat;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAppearanceCharacteristicsDictionary;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
@@ -52,6 +49,8 @@ public class CertificatePdfFillService {
   private final PdfSignatureValueGenerator pdfSignatureValueGenerator;
   private final PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
   private final PdfElementValueGenerator pdfElementValueGenerator;
+  @Value("classpath:fonts/verdana.ttf")
+  Resource fontResource;
 
   public PDDocument fillDocument(Certificate certificate, String additionalInfoText,
       boolean isCitizenFormat) {
@@ -64,7 +63,6 @@ public class CertificatePdfFillService {
       final var document = Loader.loadPDF(inputStream.readAllBytes());
       setFields(certificate, document);
       addTexts(certificate, additionalInfoText, document, isCitizenFormat);
-      setPageNumbers(document);
       return document;
     } catch (Exception e) {
       throw new IllegalStateException("Could not create Pdf", e);
@@ -140,11 +138,9 @@ public class CertificatePdfFillService {
         if (start == 0) {
           fillOverflowPage(appendedFields.subList(start, count), acroForm);
         } else {
-          addAndFillOverflowPageWithoutAcroFormField(document, appendedFields.subList(start, count),
+          addAndFillOverflowPage(document, appendedFields.subList(start, count),
               acroForm,
               patientIdField);
-//          addAndFillOverflowPage(document, appendedFields.subList(start, count), acroForm,
-//              patientIdField);
         }
         start = count;
       }
@@ -153,11 +149,9 @@ public class CertificatePdfFillService {
     if (start == 0) {
       fillOverflowPage(appendedFields.subList(start, count), acroForm);
     } else {
-      addAndFillOverflowPageWithoutAcroFormField(document, appendedFields.subList(start, count),
+      addAndFillOverflowPage(document, appendedFields.subList(start, count),
           acroForm,
           patientIdField);
-//      addAndFillOverflowPage(document, appendedFields.subList(start, count), acroForm,
-//          patientIdField);
     }
   }
 
@@ -174,98 +168,107 @@ public class CertificatePdfFillService {
     }
   }
 
-  private static void addAndFillOverflowPageWithoutAcroFormField(PDDocument document,
+  private void addAndFillOverflowPage(PDDocument document,
       List<PdfField> fields,
       PDAcroForm acroForm, PdfField patientIdField)
       throws IOException {
+
     final var pageToClone = document.getPage(4);
-    final var mediabox = new PDRectangle(pageToClone.getMediaBox().getLowerLeftX(),
-        pageToClone.getMediaBox().getLowerLeftY(), pageToClone.getMediaBox().getWidth(),
-        pageToClone.getMediaBox().getHeight());
+    final var meidaBoxToClone = document.getPage(4).getMediaBox();
+    final var mediabox = new PDRectangle(meidaBoxToClone.getLowerLeftX(),
+        meidaBoxToClone.getLowerLeftY(),
+        meidaBoxToClone.getWidth(), meidaBoxToClone.getHeight());
+
     final var clonedPage = new PDPage(mediabox);
+
+    List<String> lines = new ArrayList<>();
+    float fontSize = 10;
+    float leading = 1.5f * fontSize;
+    float marginX = 52;
+    float marginY = 96;
+    float width = mediabox.getWidth() - 2 * marginX;
+    float startX = mediabox.getLowerLeftX() + marginX;
+    float startY = mediabox.getUpperRightY() - marginY;
 
     try (PDPageContentStream contentStream = new PDPageContentStream(document,
         clonedPage)) {
       contentStream.appendRawCommands(pageToClone.getContents().readAllBytes());
-      //TODO: Use or add this functionality to PdfTextGenerator class to improve accessability and testability
-
-      PDType0Font font = PDType0Font.load(document,
-          new ClassPathResource("fonts/verdana.ttf").getInputStream());
-
-      float fontSize = 10;
-      contentStream.setFont(font, fontSize);
-
-      float leading = 1.5f * fontSize;
-
-      float marginX = 52;
-      float marginY = 96;
-      float width = mediabox.getWidth() - 2 * marginX;
-      float startX = mediabox.getLowerLeftX() + marginX;
-      float startY = mediabox.getUpperRightY() - marginY;
-
-      String allText = fields.stream()
-          .map(PdfField::getValue)
-          .collect(Collectors.joining("\n"));
-
-      List<String> lines = new ArrayList<>();
-
-      for (String text : allText.split("\n")) {
-        final var textSize = fontSize * font.getStringWidth(text) / 1000;
-
-        if (textSize < width) {
-          lines.add(text);
-        } else {
-
-          int lastSpace = -1;
-          while (!text.isEmpty()) {
-
-            int spaceIndex = text.indexOf(' ', lastSpace + 1);
-            if (spaceIndex < 0) {
-              spaceIndex = text.length();
-            }
-            String subString = text.substring(0, spaceIndex);
-            float size = fontSize * font.getStringWidth(subString) / 1000;
-            if (size > width) {
-              if (lastSpace < 0) {
-                lastSpace = spaceIndex;
-              }
-              subString = text.substring(0, lastSpace);
-              lines.add(subString);
-              text = text.substring(lastSpace).trim();
-              lastSpace = -1;
-            } else if (spaceIndex == text.length()) {
-              lines.add(text);
-              text = "";
-            } else {
-              lastSpace = spaceIndex;
-            }
-          }
-        }
-      }
-
-      contentStream.beginText();
-      contentStream.newLineAtOffset(startX, startY);
-      for (String line : lines) {
-        contentStream.showText(line);
-        contentStream.newLineAtOffset(0, -leading);
-      }
-      contentStream.endText();
-
-      addPatientId(contentStream, patientIdField, acroForm, fontSize);
     }
+
+    PDType0Font font = PDType0Font.load(document,
+        fontResource.getInputStream());
+
+    String allText = fields.stream()
+        .map(PdfField::getValue)
+        .collect(Collectors.joining("\n"));
+
+    for (String line : allText.split("\n")) {
+      lines.addAll(wrapLine(line, width, fontSize, font));
+    }
+
     document.addPage(clonedPage);
+    pdfAdditionalInformationTextGenerator.addOverFlowPageText(document, 4,
+        document.getNumberOfPages() - 1, lines, startX, startY, leading, fontSize);
+
+    addPatientId(document, document.getNumberOfPages() - 1, patientIdField, acroForm, fontSize);
   }
 
-  private static void addPatientId(PDPageContentStream contentStream, PdfField patientIdField,
+  public List<String> wrapLine(String line, float width, float fontSize, PDFont font)
+      throws IOException {
+    List<String> wrappedLines = new ArrayList<>();
+
+    final float lineWidth = fontSize * font.getStringWidth(line) / 1000;
+
+    // If the line fits, no need to wrap it
+    if (lineWidth <= width) {
+      wrappedLines.add(line);
+      return wrappedLines;
+    }
+
+    int lastSpaceIndex = -1;
+    while (!line.isEmpty()) {
+      int spaceIndex = line.indexOf(' ', lastSpaceIndex + 1);
+
+      if (spaceIndex == -1) {
+        // If no space found, take the entire remaining text
+        spaceIndex = line.length();
+      }
+
+      String substring = line.substring(0, spaceIndex);
+      float substringWidth = fontSize * font.getStringWidth(substring) / 1000;
+
+      // If the substring is too long, add the previous part to the line
+      if (substringWidth > width) {
+        // If the substring is one long word without spaces it will not wrap correctly
+        if (lastSpaceIndex != -1) {
+          substring = line.substring(0, lastSpaceIndex);
+        }
+
+        wrappedLines.add(substring);
+        line = line.substring(lastSpaceIndex == -1 ? spaceIndex : lastSpaceIndex).trim();
+        lastSpaceIndex = -1; // Reset to process the next part
+      } else if (spaceIndex == line.length()) {
+        // If we've reached the end of the line, add the last portion and break
+        wrappedLines.add(line);
+        break;
+      } else {
+        // Update lastSpaceIndex to continue wrapping
+        lastSpaceIndex = spaceIndex;
+      }
+    }
+
+    return wrappedLines;
+  }
+
+  private void addPatientId(PDDocument document, int pageIndex,
+      PdfField patientIdField,
       PDAcroForm acroForm, float fontSize) throws IOException {
     final var patientIdRect = acroForm.getField(patientIdField.getId())
         .getCOSObject().getCOSArray(COSName.RECT);
-    contentStream.setFont(new PDType1Font(FontName.HELVETICA), fontSize);
-    contentStream.beginText();
-    contentStream.newLineAtOffset(getPatientIdXOffset(patientIdRect),
-        getPatientIdYOffset(patientIdRect));
-    contentStream.showText(patientIdField.getValue());
-    contentStream.endText();
+    pdfAdditionalInformationTextGenerator.addPatientId(document, pageIndex,
+        getPatientIdXOffset(patientIdRect), getPatientIdYOffset(patientIdRect),
+        patientIdField.getValue(), fontSize);
+
   }
 
   private static float getPatientIdYOffset(COSArray patientIdRect) {
@@ -276,68 +279,6 @@ public class CertificatePdfFillService {
   private static float getPatientIdXOffset(COSArray patientIdRect) {
     return ((COSFloat) patientIdRect.get(0)).floatValue();
   }
-
-  private static void addAndFillOverflowPage(PDDocument document, List<PdfField> fields,
-      PDAcroForm acroForm, PdfField patientIdField)
-      throws IOException {
-    final var pageToClone = document.getPage(4);
-    final var mediabox = new PDRectangle(pageToClone.getMediaBox().getLowerLeftX(),
-        pageToClone.getMediaBox().getLowerLeftY(), pageToClone.getMediaBox().getWidth(),
-        pageToClone.getMediaBox().getHeight());
-    final var clonedPage = new PDPage(mediabox);
-
-    try (PDPageContentStream contentStream = new PDPageContentStream(document,
-        clonedPage)) {
-      contentStream.appendRawCommands(pageToClone.getContents().readAllBytes());
-    }
-
-    final var originalField = acroForm.getField(fields.getFirst().getId());
-    final var value = fields.stream()
-        .map(PdfField::getValue)
-        .collect(Collectors.joining("\n"));
-    final var widget = addAndFillTextField(value, acroForm, originalField, false);
-
-    final var originalFieldPatientId = acroForm.getField(patientIdField.getId());
-    final var widgetPatientId = addAndFillTextField(patientIdField.getValue(), acroForm,
-        originalFieldPatientId, true);
-
-    clonedPage.getAnnotations().add(widget);
-    clonedPage.getAnnotations().add(widgetPatientId);
-    document.addPage(clonedPage);
-  }
-
-
-  private static PDAnnotationWidget addAndFillTextField(String value, PDAcroForm acroForm,
-      PDField originalField, boolean adjustHeight)
-      throws IOException {
-    final var widget = new PDAnnotationWidget();
-
-    final var textField = new PDTextField(acroForm);
-    textField.setPartialName(originalField.getPartialName() + currentTimeMillis());
-    textField.setDefaultAppearance(originalField.getCOSObject().getString(COSName.DA));
-    textField.setValue(value);
-    textField.getWidgets().add(widget);
-    textField.setMultiline(true);
-    textField.setReadOnly(true);
-
-    final var originalWidgetRectangle = originalField.getWidgets().getFirst().getRectangle();
-    if (adjustHeight) {
-      widget.setRectangle(new PDRectangle(originalWidgetRectangle.getLowerLeftX(),
-          originalWidgetRectangle.getLowerLeftY(), originalWidgetRectangle.getWidth(),
-          originalWidgetRectangle.getHeight() + Math.round(
-              new TextFieldAppearance(textField).getFontSize()) - 1));
-    } else {
-      widget.setRectangle(originalWidgetRectangle);
-    }
-    widget.getCOSObject().setItem(COSName.PARENT, textField);
-
-    final var fieldAppearance = new PDAppearanceCharacteristicsDictionary(
-        new COSDictionary());
-    widget.setAppearanceCharacteristics(fieldAppearance);
-    widget.setPrinted(true);
-    return widget;
-  }
-
 
   private static boolean isHeightOverFlow(List<PdfField> currentFields, PdfField newTextField,
       PDRectangle rectangle, float fontSize) throws IOException {
@@ -367,7 +308,7 @@ public class CertificatePdfFillService {
       final var lineWidth = font.getStringWidth(line) / 1000 * fontSize;
 
       if (lineWidth > width) {
-        totalLines += lineWidth / width + 1;
+        totalLines += (int) Math.ceil(lineWidth / width);
       } else {
         totalLines++;
       }
@@ -400,6 +341,8 @@ public class CertificatePdfFillService {
     final var nbrOfPages = document.getNumberOfPages();
     for (int i = 0; i < nbrOfPages; i++) {
       setMarginText(document, certificate, additionalInfoText, mcid, i);
+      pdfAdditionalInformationTextGenerator.setPageNumber(document, i, nbrOfPages,
+          mcid.incrementAndGet());
     }
   }
 
@@ -500,41 +443,10 @@ public class CertificatePdfFillService {
         textAppearance.adjustFieldHeight();
       }
 
-      if (append) {
-        extractedField.setValue(
-            extractedField.getValueAsString()
-                + (extractedField.getValueAsString().isEmpty() ? "" : "\n")
-                + field.getValue()
-        );
-      } else {
-        extractedField.setValue(field.getValue());
-      }
+      extractedField.setValue(field.getValue());
     }
   }
 
-  private void setPageNumbers(PDDocument document) throws IOException {
-
-    final float MARGIN_LEFT = 63.5F;
-    final float MARGIN_TOP = 37;
-
-    final var totalPages = document.getNumberOfPages();
-    for (int i = 0; i < totalPages; i++) {
-      PDPage page = document.getPage(i);
-
-      try (PDPageContentStream contentStream = new PDPageContentStream(document, page,
-          PDPageContentStream.AppendMode.APPEND, true, true)) {
-
-        contentStream.setFont(new PDType1Font(FontName.HELVETICA), 10);
-        final var x = page.getMediaBox().getWidth() - MARGIN_LEFT;
-        final var y = page.getMediaBox().getHeight() - MARGIN_TOP;
-
-        contentStream.beginText();
-        contentStream.newLineAtOffset(x, y);
-        contentStream.showText("%d (%s)".formatted(i + 1, totalPages));
-        contentStream.endText();
-      }
-    }
-  }
 
   private static void validateField(String fieldId, PDField field) {
     if (field == null) {

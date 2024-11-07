@@ -32,7 +32,7 @@ public class PdfTextGenerator {
     addText(pdf, text, fontSize, matrix, strokingColor, null, null, false, mcid, section, 0);
   }
 
-  private void addText(
+  public void addText(
       PDDocument pdf,
       String text,
       int fontSize,
@@ -160,7 +160,7 @@ public class PdfTextGenerator {
     }
   }
 
-  private static PDStructureElement createNewDivOnTop(PDDocument pdf) {
+  public static PDStructureElement createNewDivOnTop(PDDocument pdf) {
     final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
 
     final var pageTag = getPageTag(structuredTree, 0);
@@ -173,6 +173,25 @@ public class PdfTextGenerator {
 
     return newDiv;
   }
+
+  public static PDStructureElement clonePage(PDDocument pdf, int pageIndex) {
+    final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
+    // TODO: must create a deep clone of page
+
+    final var pageTag = getPageTag(structuredTree, pageIndex);
+    final var newDiv = new PDStructureElement(StandardStructureTypes.PART, structuredTree);
+    newDiv.setTitle("Page " + pageIndex + 1);
+    final var sect = new PDStructureElement(StandardStructureTypes.SECT, newDiv);
+    sect.appendKid(new PDStructureElement(StandardStructureTypes.DIV, sect));
+    newDiv.appendKid(sect);
+
+    final var pageTagKids = pageTag.getKids();
+    pageTagKids.add(0, newDiv);
+    pageTag.setKids(pageTagKids);
+
+    return newDiv;
+  }
+
 
   private static PDStructureElement getFirstDiv(PDDocument pdf) {
     final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
@@ -282,4 +301,37 @@ public class PdfTextGenerator {
     newContent.appendKid(markedContent);
     currentSection.appendKid(newContent);
   }
+
+  public void addTextLines(PDDocument document, List<String> lines, int fontSize,
+      Color strokingColor, Float xPosition, Float yPosition,
+      float leading, int mcid, int originalPageIndex, int pageIndex)
+      throws IOException {
+
+    final var page = document.getPage(pageIndex);
+    final var contentStream = createContentStream(document, page);
+
+    contentStream.setNonStrokingColor(strokingColor);
+    final var font = new PDType1Font(FontName.HELVETICA);
+    contentStream.setFont(font, fontSize);
+
+    //TODO: need correct mcid and section
+    var section = PdfTextGenerator.clonePage(document, originalPageIndex);
+    final var dictionary = beginMarkedContent(contentStream, COSName.P, mcid);
+
+    contentStream.beginText();
+    if (xPosition != null && yPosition != null) {
+      contentStream.newLineAtOffset(xPosition, yPosition);
+    }
+
+    for (String line : lines) {
+      contentStream.showText(line);
+      contentStream.newLineAtOffset(0, -leading);
+    }
+    contentStream.endMarkedContent();
+    addContentToCurrentSection(page, dictionary, section, COSName.P, StandardStructureTypes.P,
+        String.join(" ", lines));
+    contentStream.endText();
+    contentStream.close();
+  }
+
 }
