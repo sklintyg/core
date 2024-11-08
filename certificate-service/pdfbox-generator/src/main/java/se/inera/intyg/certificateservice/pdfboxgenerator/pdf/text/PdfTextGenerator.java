@@ -248,6 +248,10 @@ public class PdfTextGenerator {
       throw new IllegalStateException("Pdf doesnt have expected div/section element");
     }
 
+    if (kids.size() <= index) {
+      return (PDStructureElement) kids.getLast();
+    }
+
     return (PDStructureElement) kids.get(index);
   }
 
