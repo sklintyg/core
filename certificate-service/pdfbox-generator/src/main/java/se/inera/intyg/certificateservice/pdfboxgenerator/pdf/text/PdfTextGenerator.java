@@ -16,6 +16,7 @@ import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructur
 import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDMarkedContent;
 import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyList;
 import org.apache.pdfbox.pdmodel.documentinterchange.taggedpdf.StandardStructureTypes;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
@@ -278,4 +279,67 @@ public class PdfTextGenerator {
     newContent.appendKid(markedContent);
     currentSection.appendKid(newContent);
   }
+
+  public void addTextLines(PDDocument document, List<String> lines, int fontSize,
+      PDFont font, Float xPosition, Float yPosition,
+      int mcid, int originalPageIndex, int pageIndex)
+      throws IOException {
+
+    final var page = document.getPage(pageIndex);
+    final var contentStream = createContentStream(document, page);
+
+    contentStream.setFont(font, fontSize);
+
+    //TODO: need correct mcid and accessibility section
+
+    contentStream.beginText();
+    if (xPosition != null && yPosition != null) {
+      contentStream.newLineAtOffset(xPosition, yPosition);
+    }
+
+    float leading = 1.5f * fontSize;
+    for (String line : lines) {
+      contentStream.showText(line);
+      contentStream.newLineAtOffset(0, -leading);
+    }
+
+    contentStream.endText();
+    contentStream.close();
+  }
+
+  public void addText(
+      PDDocument pdf,
+      String text,
+      int fontSize,
+      Matrix matrix,
+      Color strokingColor,
+      Float offsetX,
+      Float offsetY,
+      boolean isBold,
+      int mcid,
+      int pageIndex
+  ) throws IOException {
+    final var page = pdf.getPage(pageIndex);
+    final var contentStream = createContentStream(pdf, page);
+
+    if (matrix != null) {
+      contentStream.transform(matrix);
+    }
+    contentStream.beginText();
+
+    if (offsetX != null && offsetY != null) {
+      contentStream.newLineAtOffset(offsetX, offsetY);
+    }
+
+    contentStream.setNonStrokingColor(strokingColor);
+    contentStream.setFont(new PDType1Font(
+        isBold
+            ? FontName.HELVETICA_BOLD
+            : FontName.HELVETICA
+    ), fontSize);
+    contentStream.showText(text);
+    contentStream.endText();
+    contentStream.close();
+  }
+
 }

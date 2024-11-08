@@ -34,12 +34,11 @@ public class PdfDiagnosisListValueGenerator implements PdfElementValue<ElementVa
         .toList());
 
     if (hasOverflow && hasOverflowSheet(pdfConfiguration)) {
-      fields.add(0,
-          PdfField.builder()
-              .id(pdfConfiguration.overflowSheetFieldId().id())
-              .value(elementSpecification.configuration().name())
-              .append(true)
-              .build());
+      fields.addFirst(PdfField.builder()
+          .id(pdfConfiguration.overflowSheetFieldId().id())
+          .value(elementSpecification.configuration().name())
+          .append(true)
+          .build());
 
     }
 
@@ -96,7 +95,7 @@ public class PdfDiagnosisListValueGenerator implements PdfElementValue<ElementVa
     return List.of(
         PdfField.builder()
             .id(pdfFieldId)
-            .value(splitText.get(0))
+            .value(splitText.getFirst())
             .appearance(pdfConfiguration.appearance())
             .build()
     );

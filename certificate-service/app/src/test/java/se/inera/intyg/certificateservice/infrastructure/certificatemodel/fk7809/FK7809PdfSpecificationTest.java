@@ -71,4 +71,12 @@ class FK7809PdfSpecificationTest {
 
     assertEquals(expected, pdfSpecification.pdfMcid().value());
   }
+
+  @Test
+  void shallIncludeOverflowPageIndex() {
+    final var expected = 4;
+    final var pdfSpecification = FK7809PdfSpecification.create();
+
+    assertEquals(expected, pdfSpecification.overFlowPageIndex().value());
+  }
 }

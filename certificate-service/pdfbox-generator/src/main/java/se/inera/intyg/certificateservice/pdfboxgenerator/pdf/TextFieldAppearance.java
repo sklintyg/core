@@ -20,12 +20,12 @@ public class TextFieldAppearance {
       widget.setRectangle(new PDRectangle(rec.getLowerLeftX(),
           rec.getLowerLeftY(),
           rec.getWidth(),
-          rec.getHeight() + (int) Math.round(fontSize) - 1));
+          rec.getHeight() + Math.round(fontSize) - 1));
     }
   }
 
-  public double getFontSize() {
-    return Double.parseDouble(this.getAppearanceParts()[1]);
+  public float getFontSize() {
+    return Float.parseFloat(this.getAppearanceParts()[1]);
   }
 
   private String[] getAppearanceParts() {

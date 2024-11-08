@@ -64,6 +64,14 @@ public class ElementSpecification {
         );
   }
 
+  public Stream<ElementSpecification> flatten() {
+    return Stream.concat(
+        Stream.of(this),
+        children.stream()
+            .flatMap(ElementSpecification::flatten)
+    );
+  }
+
   public List<ValidationError> validate(List<ElementData> elementData,
       Optional<ElementId> categoryId) {
     if (shouldValidate != null && shouldValidate.negate().test(elementData)) {

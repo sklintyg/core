@@ -58,6 +58,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpeci
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecificationConstants.FK_7472_PDF_PDF_MCID;
 
 import java.util.List;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.OverflowPageIndex;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
 
@@ -149,6 +150,7 @@ public class TestDataPdfSpecification {
         .pdfNoAddressTemplatePath(FK7809_PDF_PATH_NO_ADDRESS)
         .patientIdFieldIds(List.of(FK7809_PDF_PATIENT_ID_FIELD_ID))
         .pdfMcid(FK7809_PDF_MCID)
+        .overFlowPageIndex(new OverflowPageIndex(4))
         .build();
   }
 }

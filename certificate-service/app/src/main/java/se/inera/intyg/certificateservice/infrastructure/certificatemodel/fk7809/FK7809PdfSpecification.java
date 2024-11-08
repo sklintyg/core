@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809;
 
 import java.util.List;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.OverflowPageIndex;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfMcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
@@ -9,7 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagInd
 
 public class FK7809PdfSpecification {
 
-  public static final String PDF_FK_7809_PDF = "fk7809/pdf/fk7809_v1_no_address.pdf"; //TODO: update when new template has been provided
+  public static final String PDF_FK_7809_PDF = "fk7809/pdf/fk7809_v1.pdf"; //TODO: update when new template has been provided
   public static final String PDF_NO_ADDRESS_FK_7809_PDF = "fk7809/pdf/fk7809_v1_no_address.pdf";
   public static final PdfMcid PDF_MCID = new PdfMcid(200);
   private static final int PDF_SIGNATURE_PAGE_INDEX = 3;
@@ -60,6 +61,7 @@ public class FK7809PdfSpecification {
             .contactInformation(PDF_CONTACT_INFORMATION)
             .build()
         )
+        .overFlowPageIndex(new OverflowPageIndex(4))
         .build();
   }
 }

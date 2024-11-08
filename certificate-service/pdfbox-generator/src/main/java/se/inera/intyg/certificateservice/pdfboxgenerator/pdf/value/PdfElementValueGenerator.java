@@ -30,19 +30,32 @@ public class PdfElementValueGenerator {
   }
 
   public List<PdfField> generate(Certificate certificate) {
-    return certificate.elementData().stream()
-        .filter(elementData -> !elementData.id().equals(UNIT_CONTACT_INFORMATION))
-        .map(elementData -> {
-              final var elementSpecification = certificate.certificateModel()
-                  .elementSpecification(elementData.id());
-              return getFields(
-                  elementSpecification,
-                  elementData.value()
-              );
-            }
+    final var elementSpecifications = certificate.certificateModel().elementSpecifications()
+        .stream()
+        .flatMap(ElementSpecification::flatten)
+        .toList();
+
+    return elementSpecifications.stream()
+        .filter(elementSpecification -> !elementSpecification.id().equals(UNIT_CONTACT_INFORMATION))
+        .map(elementSpecification -> getFieldsForElementSpecification(certificate,
+            elementSpecification)
         )
         .flatMap(List::stream)
         .toList();
+  }
+
+  private List<PdfField> getFieldsForElementSpecification(Certificate certificate,
+      ElementSpecification elementSpecification) {
+    final var elementData = certificate.getElementDataById(elementSpecification.id());
+
+    if (elementData.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    return getFields(
+        elementSpecification,
+        elementData.get().value()
+    );
   }
 
   private List<PdfField> getFields(ElementSpecification elementSpecification,

@@ -54,7 +54,7 @@ public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> 
             .id(pdfConfiguration.pdfFieldId().id())
             .value(
                 PdfValueGeneratorUtil.splitByLimit(
-                    pdfConfiguration.maxLength(), elementValueText.text(), "...").get(0)
+                    pdfConfiguration.maxLength(), elementValueText.text(), "...").getFirst()
             )
             .build()
     );
