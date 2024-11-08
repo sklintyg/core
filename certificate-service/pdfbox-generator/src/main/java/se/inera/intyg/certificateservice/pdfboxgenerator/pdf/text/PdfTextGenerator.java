@@ -16,6 +16,7 @@ import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructur
 import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDMarkedContent;
 import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyList;
 import org.apache.pdfbox.pdmodel.documentinterchange.taggedpdf.StandardStructureTypes;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
@@ -179,8 +180,12 @@ public class PdfTextGenerator {
     // TODO: must create a deep clone of page
 
     final var pageTag = getPageTag(structuredTree, pageIndex);
-    final var newDiv = new PDStructureElement(StandardStructureTypes.PART, structuredTree);
-    newDiv.setTitle("Page " + pageIndex + 1);
+
+    var documentTree = getFirstChildFromStructuredElement(structuredTree.getKids(),
+        "Pdf doesnt have expected root element for tags");
+    final var newDiv = new PDStructureElement(StandardStructureTypes.PART, documentTree);
+
+    newDiv.setTitle("Page " + (pageIndex + 1));
     final var sect = new PDStructureElement(StandardStructureTypes.SECT, newDiv);
     sect.appendKid(new PDStructureElement(StandardStructureTypes.DIV, sect));
     newDiv.appendKid(sect);
@@ -191,6 +196,46 @@ public class PdfTextGenerator {
 
     return newDiv;
   }
+
+//  public static COSDictionary deepCloneCOSDictionary(COSDictionary original) {
+//    // Create a new COSDictionary for the clone
+//    COSDictionary clone = new COSDictionary();
+//
+//    // Iterate through all the keys in the original dictionary
+//    for (COSName key : original.keySet()) {
+//      // Get the value associated with the key
+//      Object value = original.getCOSObject(key);
+//
+//      // If the value is an object that can be cloned, clone it.
+//      if (value instanceof COSDictionary) {
+//        // Recursively clone a nested COSDictionary
+//        COSDictionary nestedDict = (COSDictionary) value;
+//        clone.setItem(key, deepCloneCOSDictionary(nestedDict));
+//      } else if (value instanceof COSArray) {
+//        // Clone COSArray elements if they are also complex types
+//        COSArray array = (COSArray) value;
+//        COSArray clonedArray = new COSArray();
+//        for (int i = 0; i < array.size(); i++) {
+//          Object arrayElement = array.get(i);
+//          // You need to deep clone each element inside the array if it's a complex object
+//          if (arrayElement instanceof COSObjectable) {
+//            clonedArray.add(((COSObjectable) arrayElement).getCOSObject());
+//          } else {
+//            clonedArray.add(arrayElement);
+//          }
+//        }
+//        clone.setItem(key, clonedArray);
+//      } else if (value instanceof COSObjectable) {
+//        // Clone COSObjectable (e.g., COSName, COSInteger, COSFloat, etc.)
+//        clone.setItem(key, ((COSObjectable) value).getCOSObject());
+//      } else {
+//        // Directly copy primitive values (COSString, COSInteger, COSFloat, etc.)
+//        clone.setItem(key, value);
+//      }
+//    }
+//
+//    return clone;
+//  }
 
 
   private static PDStructureElement getFirstDiv(PDDocument pdf) {
@@ -303,33 +348,32 @@ public class PdfTextGenerator {
   }
 
   public void addTextLines(PDDocument document, List<String> lines, int fontSize,
-      Color strokingColor, Float xPosition, Float yPosition,
-      float leading, int mcid, int originalPageIndex, int pageIndex)
+      PDFont font, Float xPosition, Float yPosition,
+      int mcid, int originalPageIndex, int pageIndex)
       throws IOException {
 
     final var page = document.getPage(pageIndex);
     final var contentStream = createContentStream(document, page);
 
-    contentStream.setNonStrokingColor(strokingColor);
-    final var font = new PDType1Font(FontName.HELVETICA);
     contentStream.setFont(font, fontSize);
 
     //TODO: need correct mcid and section
-    var section = PdfTextGenerator.clonePage(document, originalPageIndex);
-    final var dictionary = beginMarkedContent(contentStream, COSName.P, mcid);
+//    var section = PdfTextGenerator.clonePage(document, originalPageIndex);
+//    final var dictionary = beginMarkedContent(contentStream, COSName.P, mcid);
 
     contentStream.beginText();
     if (xPosition != null && yPosition != null) {
       contentStream.newLineAtOffset(xPosition, yPosition);
     }
 
+    float leading = 1.5f * fontSize;
     for (String line : lines) {
       contentStream.showText(line);
       contentStream.newLineAtOffset(0, -leading);
     }
-    contentStream.endMarkedContent();
-    addContentToCurrentSection(page, dictionary, section, COSName.P, StandardStructureTypes.P,
-        String.join(" ", lines));
+//    contentStream.endMarkedContent();
+//    addContentToCurrentSection(page, dictionary, section, COSName.P, StandardStructureTypes.P,
+//        String.join(" ", lines));
     contentStream.endText();
     contentStream.close();
   }

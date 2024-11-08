@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809;
 
 import java.util.List;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.OverflowPageIndex;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfMcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
@@ -60,6 +61,7 @@ public class FK7809PdfSpecification {
             .contactInformation(PDF_CONTACT_INFORMATION)
             .build()
         )
+        .overFlowPageIndex(new OverflowPageIndex(4))
         .build();
   }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.util.Matrix;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
@@ -74,7 +75,7 @@ public class PdfAdditionalInformationTextGenerator {
       String patientId, float fontSize) throws IOException {
     //TODO: crteate new div with paragraph and marked content for patientId
     //TODO new correct mcid
-    var mcid = 1;
+    var mcid = 999;
     pdfTextGenerator.addText(document, patientId, (int) fontSize, null, Color.black, xPosition,
         yPosition,
         false,
@@ -101,11 +102,12 @@ public class PdfAdditionalInformationTextGenerator {
 
   public void addOverFlowPageText(PDDocument document, int originalPageIndex, int pageIndex,
       List<String> lines,
-      float xPosition, float yPosition, float leading, float fontSize) throws IOException {
+      float xPosition, float yPosition, float fontSize, PDFont font)
+      throws IOException {
 
-    pdfTextGenerator.addTextLines(document, lines, (int) fontSize, Color.black, xPosition,
-        yPosition, leading,
-        1, originalPageIndex, pageIndex);
+    pdfTextGenerator.addTextLines(document, lines, (int) fontSize, font, xPosition,
+        yPosition,
+        998, originalPageIndex, pageIndex);
 
   }
 }
