@@ -144,17 +144,22 @@ public class CertificatePdfFillService {
     while (count < appendedFields.size()) {
       if (isHeightOverFlow(appendedFields.subList(start, count), appendedFields.get(count),
           rectangle, fontSize, font)) {
-        if (start == 0) {
-          fillOverflowPage(appendedFields.subList(start, count), acroForm);
-        } else {
-          addAndFillOverflowPage(document, overFlowPageIndex, appendedFields.subList(start, count),
-              acroForm,
-              patientIdField, fontSize, font);
-        }
+        fillFieldsOnPage(document, overFlowPageIndex, appendedFields, patientIdField, start, count,
+            acroForm,
+            fontSize, font);
         start = count;
       }
       count++;
     }
+
+    fillFieldsOnPage(document, overFlowPageIndex, appendedFields, patientIdField, start, count,
+        acroForm, fontSize, font);
+  }
+
+  private void fillFieldsOnPage(PDDocument document, int overFlowPageIndex,
+      List<PdfField> appendedFields,
+      PdfField patientIdField, int start, int count, PDAcroForm acroForm, float fontSize,
+      PDType0Font font) throws IOException {
     if (start == 0) {
       fillOverflowPage(appendedFields.subList(start, count), acroForm);
     } else {
