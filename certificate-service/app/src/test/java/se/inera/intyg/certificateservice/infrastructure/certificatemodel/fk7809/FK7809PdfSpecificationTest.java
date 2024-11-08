@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.FK7809PdfSpecification.PDF_FK_7809_PDF;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.FK7809PdfSpecification.PDF_NO_ADDRESS_FK_7809_PDF;
 
@@ -78,5 +79,12 @@ class FK7809PdfSpecificationTest {
     final var pdfSpecification = FK7809PdfSpecification.create();
 
     assertEquals(expected, pdfSpecification.overFlowPageIndex().value());
+  }
+
+  @Test
+  void shallIncludeHasPageNumberFalse() {
+    final var pdfSpecification = FK7809PdfSpecification.create();
+
+    assertFalse(pdfSpecification.hasPageNbr());
   }
 }

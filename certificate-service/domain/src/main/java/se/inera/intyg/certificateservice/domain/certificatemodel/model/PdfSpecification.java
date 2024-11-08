@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import java.util.List;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Value;
 
 @Value
@@ -17,4 +18,6 @@ public class PdfSpecification {
   List<PdfFieldId> patientIdFieldIds;
   PdfSignature signature;
   OverflowPageIndex overFlowPageIndex;
+  @Default
+  boolean hasPageNbr = true;
 }
