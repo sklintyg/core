@@ -27,6 +27,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAdditionalInformationTextGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextUtil;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfElementValueGenerator;
@@ -104,11 +105,19 @@ public class CertificatePdfFillService {
     final var appendedFields = pdfFields.stream()
         .filter(f -> Boolean.TRUE.equals(f.getAppend()))
         .toList();
-
     final var fieldsWithoutAppend = pdfFields.stream()
         .filter(field -> !field.getAppend())
         .toList();
 
+    setFieldValuesAppendix(document, certificate, pdfSpecification, appendedFields);
+    setFieldValues(document, fieldsWithoutAppend);
+    setFieldValues(document, pdfUnitValueGenerator.generate(certificate));
+    setFieldValues(document, pdfPatientValueGenerator.generate(certificate,
+        certificate.certificateModel().pdfSpecification().patientIdFieldIds()));
+  }
+
+  private void setFieldValuesAppendix(PDDocument document, Certificate certificate,
+      PdfSpecification pdfSpecification, List<PdfField> appendedFields) {
     try {
       final var patientField = PdfField.builder()
           .id(pdfSpecification.patientIdFieldIds().getLast().id())
@@ -119,11 +128,6 @@ public class CertificatePdfFillService {
     } catch (IOException e) {
       throw new IllegalStateException(e);
     }
-
-    setFieldValues(document, fieldsWithoutAppend);
-    setFieldValues(document, pdfUnitValueGenerator.generate(certificate));
-    setFieldValues(document, pdfPatientValueGenerator.generate(certificate,
-        certificate.certificateModel().pdfSpecification().patientIdFieldIds()));
   }
 
   private void setFieldValuesAppendix(PDDocument document,
