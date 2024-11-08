@@ -266,8 +266,10 @@ public class CertificatePdfFillService {
     final var nbrOfPages = document.getNumberOfPages();
     for (int i = 0; i < nbrOfPages; i++) {
       setMarginText(document, certificate, additionalInfoText, mcid, i);
-      pdfAdditionalInformationTextGenerator.setPageNumber(document, i, nbrOfPages,
-          mcid.incrementAndGet());
+      if (!certificate.certificateModel().pdfSpecification().hasPageNbr()) {
+        pdfAdditionalInformationTextGenerator.setPageNumber(document, i, nbrOfPages,
+            mcid.incrementAndGet());
+      }
     }
   }
 

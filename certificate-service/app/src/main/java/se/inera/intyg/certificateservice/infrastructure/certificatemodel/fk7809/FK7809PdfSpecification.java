@@ -10,11 +10,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagInd
 
 public class FK7809PdfSpecification {
 
-  public static final String PDF_FK_7809_PDF = "fk7809/pdf/fk7809_v1.pdf"; //TODO: update when new template has been provided
+  public static final String PDF_FK_7809_PDF = "fk7809/pdf/fk7809_v1.pdf";
   public static final String PDF_NO_ADDRESS_FK_7809_PDF = "fk7809/pdf/fk7809_v1_no_address.pdf";
   public static final PdfMcid PDF_MCID = new PdfMcid(200);
   private static final int PDF_SIGNATURE_PAGE_INDEX = 3;
-  private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(10);
+  private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(
+      10); // TODO: Probably needs to be fixed when we removed page nbr
   private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(10);
   private static final List<PdfFieldId> PDF_PATIENT_ID_FIELD_IDS = List.of(
       new PdfFieldId("form1[0].#subform[0].flt_txtPersonNr[0]"),
@@ -61,6 +62,7 @@ public class FK7809PdfSpecification {
             .contactInformation(PDF_CONTACT_INFORMATION)
             .build()
         )
+        .hasPageNbr(false)
         .overFlowPageIndex(new OverflowPageIndex(4))
         .build();
   }
