@@ -73,30 +73,32 @@ public class PdfAdditionalInformationTextGenerator {
 
   public void addPatientId(PDDocument document, int pageIndex, float xPosition, float yPosition,
       String patientId, float fontSize) throws IOException {
-    //TODO: crteate new div with paragraph and marked content for patientId
+    //TODO: create new div with paragraph and marked content for patientId
     //TODO new correct mcid
     var mcid = 999;
     pdfTextGenerator.addText(document, patientId, (int) fontSize, null, Color.black, xPosition,
         yPosition,
         false,
-        mcid, PdfTextGenerator.createNewDivOnTop(document), pageIndex);
+        mcid, pageIndex);
   }
 
   public void setPageNumber(PDDocument document, int pageIndex, int nbrOfPages, int mcid)
       throws IOException {
     final float MARGIN_LEFT = 63.5F;
     final float MARGIN_TOP = 37;
-    //TODO: crteate new div with paragraph and marked content for pagenr
-    final var section = PdfTextGenerator.createNewDivOnTop(document);
+    final int fontSize = 10;
+    //TODO: create new div with paragraph and marked content for pagenr
 
     PDPage page = document.getPage(pageIndex);
     final var x = page.getMediaBox().getWidth() - MARGIN_LEFT;
     final var y = page.getMediaBox().getHeight() - MARGIN_TOP;
 
-    pdfTextGenerator.addText(document, "%d (%d)".formatted(pageIndex + 1, nbrOfPages), 10, null,
+    final var pageNumberText = "%d (%d)".formatted(pageIndex + 1, nbrOfPages);
+    pdfTextGenerator.addText(document, pageNumberText, fontSize,
+        null,
         Color.black, x, y,
         false,
-        mcid, section, pageIndex);
+        mcid, pageIndex);
   }
 
 
@@ -105,6 +107,7 @@ public class PdfAdditionalInformationTextGenerator {
       float xPosition, float yPosition, float fontSize, PDFont font)
       throws IOException {
 
+    //TODO: need correct mcid
     pdfTextGenerator.addTextLines(document, lines, (int) fontSize, font, xPosition,
         yPosition,
         998, originalPageIndex, pageIndex);

@@ -33,7 +33,7 @@ public class PdfTextGenerator {
     addText(pdf, text, fontSize, matrix, strokingColor, null, null, false, mcid, section, 0);
   }
 
-  public void addText(
+  private void addText(
       PDDocument pdf,
       String text,
       int fontSize,
@@ -161,7 +161,7 @@ public class PdfTextGenerator {
     }
   }
 
-  public static PDStructureElement createNewDivOnTop(PDDocument pdf) {
+  private static PDStructureElement createNewDivOnTop(PDDocument pdf) {
     final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
 
     final var pageTag = getPageTag(structuredTree, 0);
@@ -174,69 +174,6 @@ public class PdfTextGenerator {
 
     return newDiv;
   }
-
-  public static PDStructureElement clonePage(PDDocument pdf, int pageIndex) {
-    final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
-    // TODO: must create a deep clone of page
-
-    final var pageTag = getPageTag(structuredTree, pageIndex);
-
-    var documentTree = getFirstChildFromStructuredElement(structuredTree.getKids(),
-        "Pdf doesnt have expected root element for tags");
-    final var newDiv = new PDStructureElement(StandardStructureTypes.PART, documentTree);
-
-    newDiv.setTitle("Page " + (pageIndex + 1));
-    final var sect = new PDStructureElement(StandardStructureTypes.SECT, newDiv);
-    sect.appendKid(new PDStructureElement(StandardStructureTypes.DIV, sect));
-    newDiv.appendKid(sect);
-
-    final var pageTagKids = pageTag.getKids();
-    pageTagKids.add(0, newDiv);
-    pageTag.setKids(pageTagKids);
-
-    return newDiv;
-  }
-
-//  public static COSDictionary deepCloneCOSDictionary(COSDictionary original) {
-//    // Create a new COSDictionary for the clone
-//    COSDictionary clone = new COSDictionary();
-//
-//    // Iterate through all the keys in the original dictionary
-//    for (COSName key : original.keySet()) {
-//      // Get the value associated with the key
-//      Object value = original.getCOSObject(key);
-//
-//      // If the value is an object that can be cloned, clone it.
-//      if (value instanceof COSDictionary) {
-//        // Recursively clone a nested COSDictionary
-//        COSDictionary nestedDict = (COSDictionary) value;
-//        clone.setItem(key, deepCloneCOSDictionary(nestedDict));
-//      } else if (value instanceof COSArray) {
-//        // Clone COSArray elements if they are also complex types
-//        COSArray array = (COSArray) value;
-//        COSArray clonedArray = new COSArray();
-//        for (int i = 0; i < array.size(); i++) {
-//          Object arrayElement = array.get(i);
-//          // You need to deep clone each element inside the array if it's a complex object
-//          if (arrayElement instanceof COSObjectable) {
-//            clonedArray.add(((COSObjectable) arrayElement).getCOSObject());
-//          } else {
-//            clonedArray.add(arrayElement);
-//          }
-//        }
-//        clone.setItem(key, clonedArray);
-//      } else if (value instanceof COSObjectable) {
-//        // Clone COSObjectable (e.g., COSName, COSInteger, COSFloat, etc.)
-//        clone.setItem(key, ((COSObjectable) value).getCOSObject());
-//      } else {
-//        // Directly copy primitive values (COSString, COSInteger, COSFloat, etc.)
-//        clone.setItem(key, value);
-//      }
-//    }
-//
-//    return clone;
-//  }
-
 
   private static PDStructureElement getFirstDiv(PDDocument pdf) {
     final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
@@ -311,10 +248,6 @@ public class PdfTextGenerator {
       throw new IllegalStateException("Pdf doesnt have expected div/section element");
     }
 
-    if (index >= kids.size() - 1) {
-      return (PDStructureElement) kids.getLast();
-    }
-
     return (PDStructureElement) kids.get(index);
   }
 
@@ -357,9 +290,7 @@ public class PdfTextGenerator {
 
     contentStream.setFont(font, fontSize);
 
-    //TODO: need correct mcid and section
-//    var section = PdfTextGenerator.clonePage(document, originalPageIndex);
-//    final var dictionary = beginMarkedContent(contentStream, COSName.P, mcid);
+    //TODO: need correct mcid and accessibility section
 
     contentStream.beginText();
     if (xPosition != null && yPosition != null) {
@@ -371,9 +302,42 @@ public class PdfTextGenerator {
       contentStream.showText(line);
       contentStream.newLineAtOffset(0, -leading);
     }
-//    contentStream.endMarkedContent();
-//    addContentToCurrentSection(page, dictionary, section, COSName.P, StandardStructureTypes.P,
-//        String.join(" ", lines));
+
+    contentStream.endText();
+    contentStream.close();
+  }
+
+  public void addText(
+      PDDocument pdf,
+      String text,
+      int fontSize,
+      Matrix matrix,
+      Color strokingColor,
+      Float offsetX,
+      Float offsetY,
+      boolean isBold,
+      int mcid,
+      int pageIndex
+  ) throws IOException {
+    final var page = pdf.getPage(pageIndex);
+    final var contentStream = createContentStream(pdf, page);
+
+    if (matrix != null) {
+      contentStream.transform(matrix);
+    }
+    contentStream.beginText();
+
+    if (offsetX != null && offsetY != null) {
+      contentStream.newLineAtOffset(offsetX, offsetY);
+    }
+
+    contentStream.setNonStrokingColor(strokingColor);
+    contentStream.setFont(new PDType1Font(
+        isBold
+            ? FontName.HELVETICA_BOLD
+            : FontName.HELVETICA
+    ), fontSize);
+    contentStream.showText(text);
     contentStream.endText();
     contentStream.close();
   }
