@@ -2,16 +2,31 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.List;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 class TextUtilTest {
 
-  TextUtil textUtil = new TextUtil();
+  private static final String TEXT_LONGER_THAN_10_10 = "AAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAA BBBBBBBBBBBBBB BBBBBBBBBBB CCCCCCCCCCCC CCCCCCCCCCCCCCC";
+  private static final PdfField LONG_FIELD = PdfField.builder()
+      .value(TEXT_LONGER_THAN_10_10)
+      .id("ID1")
+      .build();
+  private static final String TEXT_SHORTER_THAN_10_10 = "A B C";
+  private static final PdfField SHORT_FIELD = PdfField.builder()
+      .value(TEXT_SHORTER_THAN_10_10)
+      .id("ID2")
+      .build();
 
+  TextUtil textUtil = new TextUtil();
 
   @Test
   void shallCalculateTextHeightWithNewLines() throws IOException {
@@ -65,5 +80,23 @@ class TextUtilTest {
         new PDType1Font(
             FontName.HELVETICA), 450);
     assertAll(() -> assertEquals(30F, helveticaFont), () -> assertEquals(15F, timesFont));
+  }
+
+  @Nested
+  class IsTextOverflowing {
+
+    @Test
+    void shouldReturnTrueIfOverflowingTextAndTryingToAddMore() {
+      final var rectangle = new PDRectangle(10, 10);
+      final var response = textUtil.isTextOverflowing(
+          List.of(LONG_FIELD),
+          SHORT_FIELD,
+          rectangle,
+          12,
+          new PDType1Font(FontName.HELVETICA)
+      );
+      assertTrue(response);
+    }
+
   }
 }

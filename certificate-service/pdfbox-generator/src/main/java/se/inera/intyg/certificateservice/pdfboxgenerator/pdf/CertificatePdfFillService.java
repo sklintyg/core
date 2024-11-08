@@ -139,10 +139,10 @@ public class CertificatePdfFillService {
     final var fontSize = new TextFieldAppearance((PDVariableText) overflowField).getFontSize();
     int start = 0;
     int count = 0;
-    PDType0Font font = PDType0Font.load(document,
-        fontResource.getInputStream());
+    final var font = PDType0Font.load(document, fontResource.getInputStream());
     while (count < appendedFields.size()) {
-      if (isHeightOverFlow(appendedFields.subList(start, count), appendedFields.get(count),
+      if (textUtil.isTextOverflowing(appendedFields.subList(start, count),
+          appendedFields.get(count),
           rectangle, fontSize, font)) {
         fillFieldsOnPage(document, overFlowPageIndex, appendedFields, patientIdField, start, count,
             acroForm,
@@ -240,22 +240,6 @@ public class CertificatePdfFillService {
 
   private static float getPatientIdXOffset(COSArray patientIdRect) {
     return ((COSFloat) patientIdRect.get(0)).floatValue();
-  }
-
-  private boolean isHeightOverFlow(List<PdfField> currentFields, PdfField newTextField,
-      PDRectangle rectangle, float fontSize, PDType0Font font) throws IOException {
-    // TODO: Do we want to break fields if they're very long? Or should one field always be on the same overflow sheet? What do we do then if headline and text are separated on two pages?
-    // TODO: If we want to break up text then we need to go over line by line of field, create a new field, return this field if max is met and then add the new field to the appendedFields list in parent function
-    final var currentText = currentFields.stream()
-        .map(PdfField::getValue)
-        .collect(Collectors.joining("\n"));
-
-    String newText = currentText + (currentText.isEmpty() ? "" : "\n") + newTextField.getValue();
-
-    float textHeight = textUtil.calculateTextHeight(newText, fontSize,
-        font, rectangle.getWidth());
-
-    return textHeight > rectangle.getHeight();
   }
 
 
