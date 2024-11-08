@@ -118,6 +118,10 @@ public class CertificatePdfFillService {
 
   private void setFieldValuesAppendix(PDDocument document, Certificate certificate,
       PdfSpecification pdfSpecification, List<PdfField> appendedFields) {
+    if (pdfSpecification.overFlowPageIndex() == null || appendedFields.isEmpty()) {
+      return;
+    }
+
     try {
       final var patientField = PdfField.builder()
           .id(pdfSpecification.patientIdFieldIds().getLast().id())
