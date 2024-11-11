@@ -15,7 +15,8 @@ public class FK7472CertificateActionSpecification {
     final var allowedRolesForProtectedPersons = List.of(
         Role.DOCTOR,
         Role.PRIVATE_DOCTOR,
-        Role.NURSE
+        Role.NURSE,
+        Role.MIDWIFE
     );
     return List.of(
         CertificateActionSpecification.builder()
@@ -37,7 +38,7 @@ public class FK7472CertificateActionSpecification {
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.SIGN)
             .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
             )
             .allowedRolesForProtectedPersons(allowedRolesForProtectedPersons)
             .build(),
@@ -55,7 +56,7 @@ public class FK7472CertificateActionSpecification {
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.REVOKE)
             .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE)
+                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
             )
             .allowedRolesForProtectedPersons(allowedRolesForProtectedPersons)
             .build(),
