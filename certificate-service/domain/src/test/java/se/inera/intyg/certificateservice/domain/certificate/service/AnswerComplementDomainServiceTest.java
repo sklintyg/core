@@ -97,7 +97,7 @@ class AnswerComplementDomainServiceTest {
   }
 
   @Test
-  void shallPublishAnswerComplementMessageEventWithLatestAnswer() {
+  void shallPublishAnswerComplementMessageEventWithLatestComplementMessage() {
     final var certificateEventCaptor = ArgumentCaptor.forClass(MessageEvent.class);
     final var certificate = mock(Certificate.class);
 
@@ -105,21 +105,13 @@ class AnswerComplementDomainServiceTest {
     doReturn(CERTIFICATE_ID).when(certificate).id();
     doReturn(true).when(certificate).allowTo(CANNOT_COMPLEMENT, Optional.of(ACTION_EVALUATION));
 
-    final var answer = Answer.builder()
-        .id(MESSAGE_ID)
-        .build();
     doReturn(List.of(
         Message.builder()
+            .id(MESSAGE_ID)
             .created(LocalDateTime.now())
-            .answer(
-                answer
-            )
             .build(),
         Message.builder()
             .created(LocalDateTime.now().minusDays(1))
-            .answer(
-                Answer.builder().build()
-            )
             .build()
     )).when(certificate).messages(MessageType.COMPLEMENT);
 

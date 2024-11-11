@@ -43,9 +43,8 @@ public class AnswerComplementDomainService {
 
     setMessagesToHandleDomainService.handle(certificate.messages(MessageType.COMPLEMENT));
 
-    final var latestAnswer = certificate.messages(MessageType.COMPLEMENT).stream()
+    final var latestComplementMessage = certificate.messages(MessageType.COMPLEMENT).stream()
         .max(Comparator.comparing(Message::created))
-        .map(Message::answer)
         .orElseThrow(() -> new IllegalStateException(
             "No answer found for certificate %s".formatted(certificateId)));
 
@@ -54,7 +53,7 @@ public class AnswerComplementDomainService {
             .type(MessageEventType.ANSWER_COMPLEMENT)
             .start(start)
             .end(LocalDateTime.now(ZoneId.systemDefault()))
-            .messageId(latestAnswer.id())
+            .messageId(latestComplementMessage.id())
             .certificateId(certificate.id())
             .actionEvaluation(actionEvaluation)
             .build()
