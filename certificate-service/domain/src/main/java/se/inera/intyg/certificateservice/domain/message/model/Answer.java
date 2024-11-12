@@ -29,6 +29,7 @@ public class Answer {
     this.content = content;
     this.authoredStaff = staff;
     this.sent = LocalDateTime.now();
+    this.author = new Author(staff.name().fullName());
   }
 
   public void delete() {

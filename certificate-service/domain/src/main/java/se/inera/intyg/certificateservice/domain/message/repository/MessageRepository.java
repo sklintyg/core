@@ -13,5 +13,7 @@ public interface MessageRepository {
 
   Message getById(MessageId messageId);
 
+  Message findById(MessageId messageId);
+
   List<Message> findByMessagesRequest(MessagesRequest messagesRequest);
 }
