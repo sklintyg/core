@@ -149,14 +149,16 @@ public class CertificatePdfFillService {
           appendFieldsMutable.get(count),
           rectangle, fontSize, font);
 
-      if (overFlowLines.getEnd() != null) {
-        if (overFlowLines.getStart() != null) {
-          appendFieldsMutable.get(count).setValue(overFlowLines.getStart());
+      if (overFlowLines.isPresent()) {
+        var parts = overFlowLines.get();
+
+        if (parts.getPartOne() != null) {
+          appendFieldsMutable.get(count).setValue(parts.getPartOne());
 
         }
-        if (overFlowLines.getEnd() != null) {
+        if (parts.getPartTwo() != null) {
           var part2 = new PdfField(appendFieldsMutable.get(count).getId(),
-              overFlowLines.getEnd(), true, null);
+              parts.getPartTwo(), true, null);
           appendFieldsMutable.add(count + 1, part2);
           count++;
         }

@@ -5,6 +5,7 @@ import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -111,7 +112,8 @@ public class TextUtil {
     return 3 > rectangle.getHeight();
   }
 
-  public OverFlowLineSplit getOverflowingLines(List<PdfField> currentFields, PdfField newTextField,
+  public Optional<OverFlowLineSplit> getOverflowingLines(List<PdfField> currentFields,
+      PdfField newTextField,
       PDRectangle rectangle, float fontSize, PDFont font) {
     final var currentText = currentFields.stream()
         .map(PdfField::getValue)
@@ -131,22 +133,21 @@ public class TextUtil {
       wrappedLines.addAll(wrapLine(line, rectangle.getWidth(), fontSize, font));
     }
 
-    var overFlowInfo = new OverFlowLineSplit();
     if (wrappedLines.size() > availableLineSpaces) {
-      overFlowInfo.start = wrappedLines.subList(0, availableLineSpaces).stream()
-          .collect(Collectors.joining(" "));
-      overFlowInfo.end = wrappedLines.subList(availableLineSpaces, wrappedLines.size()).stream()
-          .collect(
-              Collectors.joining(" ")) + "\n";
+      var overFlowInfo = new OverFlowLineSplit();
+      overFlowInfo.partOne = String.join(" ", wrappedLines.subList(0, availableLineSpaces));
+      overFlowInfo.partTwo = String.join(" ",
+          wrappedLines.subList(availableLineSpaces, wrappedLines.size())) + "\n";
+      return Optional.of(overFlowInfo);
+    } else {
+      return Optional.empty();
     }
-
-    return overFlowInfo;
   }
 
   @Getter
   public class OverFlowLineSplit {
 
-    String start;
-    String end;
+    String partOne;
+    String partTwo;
   }
 }
