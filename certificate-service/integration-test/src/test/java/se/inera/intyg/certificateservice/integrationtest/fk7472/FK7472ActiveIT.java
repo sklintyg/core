@@ -669,7 +669,7 @@ public class FK7472ActiveIT {
 
     @Override
     protected boolean midwifeCanMarkReadyForSignCertificate() {
-      return true;
+      return false;
     }
   }
 
