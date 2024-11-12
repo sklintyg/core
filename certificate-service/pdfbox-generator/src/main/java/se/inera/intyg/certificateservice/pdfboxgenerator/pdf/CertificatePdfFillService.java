@@ -145,38 +145,37 @@ public class CertificatePdfFillService {
     int count = 0;
     //TODO: Get font from pdfSepc
     final var font = PDType0Font.load(document, fontResource.getInputStream());
-    var appendFieldsMutable = new ArrayList<>(appendedFields);
-    while (count < appendFieldsMutable.size()) {
+    var appendedFieldsMutable = new ArrayList<>(appendedFields);
 
-      var overFlowLines = textUtil.getOverflowingLines(appendFieldsMutable.subList(start, count),
-          appendFieldsMutable.get(count),
+    while (count < appendedFieldsMutable.size()) {
+
+      var overFlowLines = textUtil.getOverflowingLines(appendedFieldsMutable.subList(start, count),
+          appendedFieldsMutable.get(count),
           rectangle, fontSize, font);
 
       if (overFlowLines.isPresent()) {
         var parts = overFlowLines.get();
 
-        if (parts.getPartOne() != null) {
-          appendFieldsMutable.get(count).setValue(parts.getPartOne());
-
+        if (parts.partOne() != null) {
+          appendedFieldsMutable.get(count).setValue(parts.partOne());
         }
-        if (parts.getPartTwo() != null) {
-          var part2 = new PdfField(appendFieldsMutable.get(count).getId(),
-              parts.getPartTwo(), true, null);
-          appendFieldsMutable.add(count + 1, part2);
+
+        if (parts.partTwo() != null) {
+          var part2 = new PdfField(appendedFieldsMutable.get(count).getId(),
+              parts.partTwo(), true, null);
+          appendedFieldsMutable.add(count + 1, part2);
           count++;
         }
 
-        fillFieldsOnPage(document, overFlowPageIndex, appendFieldsMutable, patientIdField, start,
-            count,
-            acroForm,
-            fontSize, font, rectangle);
+        fillFieldsOnPage(document, overFlowPageIndex, appendedFieldsMutable, patientIdField, start,
+            count, acroForm, fontSize, font, rectangle);
         start = count;
       }
       count++;
     }
 
-    fillFieldsOnPage(document, overFlowPageIndex, appendFieldsMutable, patientIdField, start, count,
-        acroForm, fontSize, font, rectangle);
+    fillFieldsOnPage(document, overFlowPageIndex, appendedFieldsMutable, patientIdField, start,
+        count, acroForm, fontSize, font, rectangle);
   }
 
   private void fillFieldsOnPage(PDDocument document, int overFlowPageIndex,

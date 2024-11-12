@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import lombok.Getter;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.springframework.stereotype.Component;
@@ -108,20 +107,12 @@ public class TextUtil {
     }
 
     if (wrappedLines.size() > availableLineSpaces) {
-      var overFlowInfo = new OverFlowLineSplit();
-      overFlowInfo.partOne = String.join(" ", wrappedLines.subList(0, availableLineSpaces));
-      overFlowInfo.partTwo = String.join(" ",
-          wrappedLines.subList(availableLineSpaces, wrappedLines.size())) + "\n";
+      var overFlowInfo = new OverFlowLineSplit(
+          String.join(" ", wrappedLines.subList(0, availableLineSpaces)), String.join(" ",
+          wrappedLines.subList(availableLineSpaces, wrappedLines.size())) + "\n");
       return Optional.of(overFlowInfo);
     } else {
       return Optional.empty();
     }
-  }
-
-  @Getter
-  public class OverFlowLineSplit {
-
-    String partOne;
-    String partTwo;
   }
 }
