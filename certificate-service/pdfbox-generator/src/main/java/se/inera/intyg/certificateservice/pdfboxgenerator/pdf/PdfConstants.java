@@ -15,4 +15,6 @@ public class PdfConstants {
   // VALUES
   public static final String CHECKED_BOX_VALUE = "1";
   public static final String UNCHECKED_BOX_VALUE = "Off";
+
+  public static final float TEXT_FIELD_LINE_HEIGHT = 1.35F;
 }

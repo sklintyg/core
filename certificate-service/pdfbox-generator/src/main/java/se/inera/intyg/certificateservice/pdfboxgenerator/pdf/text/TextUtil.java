@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text;
 
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.TEXT_FIELD_LINE_HEIGHT;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,7 @@ public class TextUtil {
       totalLines += wrapLine(line, width, fontSize, font).size();
     }
 
-    float lineHeight = fontSize * 1.5F;
+    float lineHeight = fontSize * TEXT_FIELD_LINE_HEIGHT;
     return totalLines * lineHeight;
   }
 
@@ -120,7 +122,7 @@ public class TextUtil {
 
     String[] lines = newTextField.getValue().split("\n");
     var wrappedLines = new ArrayList<String>();
-    float lineHeight = fontSize * 1.5F;
+    float lineHeight = fontSize * TEXT_FIELD_LINE_HEIGHT;
 
     var availableLineSpaces = (int) Math.max(Math.floor(
         (rectangle.getHeight() - currentTextHeight) / lineHeight), 0);
