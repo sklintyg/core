@@ -2528,7 +2528,7 @@ class CertificateTest {
       final var actionEvaluation = actionEvaluationBuilder.build();
       certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
       final var answer = certificateWithMessages.messages().get(0).answer();
-      assertEquals(new Author("WC"), answer.author());
+      assertEquals(new Author(AJLA_DOKTOR.name().fullName()), answer.author());
     }
 
     @Test

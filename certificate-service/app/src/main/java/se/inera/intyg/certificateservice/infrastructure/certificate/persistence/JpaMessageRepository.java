@@ -99,6 +99,26 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
   }
 
   @Override
+  public Message findById(MessageId messageId) {
+    if (messageId == null) {
+      throw new IllegalArgumentException("Cannot get message if messageId is null");
+
+    }
+    final var messageEntity = messageEntityRepository.findMessageEntityById(
+            messageId.id()
+        )
+        .orElseThrow(() ->
+            new IllegalArgumentException(
+                "MessgeId '%s' not present in repository".formatted(messageId)
+            )
+        );
+
+    return messageRelationEntityRepository.findByChildMessage(messageEntity)
+        .map(relation -> messageEntityMapper.toDomain(relation.getParentMessage()))
+        .orElse(messageEntityMapper.toDomain(messageEntity));
+  }
+
+  @Override
   public List<Message> findByMessagesRequest(MessagesRequest request) {
     final var specification = messageEntitySpecificationFactory.create(request);
 
