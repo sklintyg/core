@@ -44,7 +44,7 @@ class GetMessageInternalXmlServiceTest {
         .build();
 
     doReturn(complementMessageWithAnswer).when(messageRepository)
-        .getById(new MessageId(MESSAGE_ID));
+        .findById(new MessageId(MESSAGE_ID));
     doReturn(FK7472_CERTIFICATE).when(certificateRepository).getById(FK7472_CERTIFICATE.id());
     doReturn(new Xml(XML)).when(xmlGeneratorMessage)
         .generateAnswer(ANSWER, complementMessageWithAnswer, FK7472_CERTIFICATE);
@@ -64,7 +64,7 @@ class GetMessageInternalXmlServiceTest {
         .build();
 
     doReturn(complementMessageWithAnswer).when(messageRepository)
-        .getById(new MessageId(MESSAGE_ID));
+        .findById(new MessageId(MESSAGE_ID));
     doReturn(FK7472_CERTIFICATE).when(certificateRepository).getById(FK7472_CERTIFICATE.id());
     doReturn(new Xml(XML)).when(xmlGeneratorMessage)
         .generate(complementMessageWithAnswer, FK7472_CERTIFICATE);

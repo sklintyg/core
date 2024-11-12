@@ -444,7 +444,7 @@ public class Certificate {
                     .modified(LocalDateTime.now())
                     .sent(LocalDateTime.now())
                     .status(MessageStatus.HANDLED)
-                    .author(new Author("WC"))
+                    .author(new Author(actionEvaluation.user().name().fullName()))
                     .authoredStaff(Staff.create(actionEvaluation.user()))
                     .build()
             );

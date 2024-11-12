@@ -45,7 +45,7 @@ public class SendAnswerDomainService {
             .type(MessageEventType.SEND_ANSWER)
             .start(start)
             .end(LocalDateTime.now(ZoneId.systemDefault()))
-            .messageId(messageWithSentAnswer.id())
+            .messageId(messageWithSentAnswer.answer().id())
             .certificateId(certificate.id())
             .actionEvaluation(actionEvaluation)
             .build()

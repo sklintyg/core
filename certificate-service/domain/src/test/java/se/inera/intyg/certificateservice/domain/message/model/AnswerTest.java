@@ -41,6 +41,13 @@ class AnswerTest {
       answer.send(AJLA_DOKTOR, CONTENT);
       assertNotNull(answer.sent());
     }
+
+    @Test
+    void shallUpdateAuthor() {
+      final var answer = Answer.builder().build();
+      answer.send(AJLA_DOKTOR, CONTENT);
+      assertEquals(AJLA_DOKTOR.name().fullName(), answer.author().name());
+    }
   }
 
   @Nested

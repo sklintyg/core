@@ -21,7 +21,7 @@ public class GetMessageInternalXmlService {
   private final XmlGeneratorMessage xmlGeneratorMessage;
 
   public GetMessageInternalXmlResponse get(String messageId) {
-    final var message = messageRepository.getById(new MessageId(messageId));
+    final var message = messageRepository.findById(new MessageId(messageId));
     final var certificate = certificateRepository.getById(message.certificateId());
 
     return GetMessageInternalXmlResponse.builder()
