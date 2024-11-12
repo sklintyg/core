@@ -86,33 +86,6 @@ public class TextUtil {
     }
   }
 
-  public boolean isTextOverflowing(List<PdfField> currentFields, PdfField newTextField,
-      PDRectangle rectangle, float fontSize, PDFont font) {
-    final var currentText = currentFields.stream()
-        .map(PdfField::getValue)
-        .collect(Collectors.joining("\n"));
-    var currentTextHeight = calculateTextHeight(currentText + (currentText.isEmpty() ? "" : "\n"),
-        fontSize,
-        font, rectangle.getWidth());
-
-    String[] lines = newTextField.getValue().split("\n");
-    var wrappedLines = new ArrayList<String>();
-    float lineHeight = fontSize * 1.5F;
-
-    var availableLineSpaces = (int) Math.floor(
-        rectangle.getHeight() - currentTextHeight / lineHeight);
-
-    for (String line : lines) {
-      wrappedLines.addAll(wrapLine(line, rectangle.getWidth(), fontSize, font));
-    }
-
-    if (wrappedLines.size() > availableLineSpaces) {
-      wrappedLines.subList(0, availableLineSpaces);
-    }
-
-    return 3 > rectangle.getHeight();
-  }
-
   public Optional<OverFlowLineSplit> getOverflowingLines(List<PdfField> currentFields,
       PdfField newTextField,
       PDRectangle rectangle, float fontSize, PDFont font) {
