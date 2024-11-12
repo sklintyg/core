@@ -100,7 +100,7 @@ public class CertificatePdfFillService {
 
     final var pdfFields = pdfElementValueGenerator.generate(certificate);
     final var appendedFields = pdfFields.stream()
-        .filter(f -> Boolean.TRUE.equals(f.getAppend()))
+        .filter(PdfField::getAppend)
         .toList();
     final var fieldsWithoutAppend = pdfFields.stream()
         .filter(field -> !field.getAppend())
@@ -140,12 +140,29 @@ public class CertificatePdfFillService {
     final var fontSize = new TextFieldAppearance((PDVariableText) overflowField).getFontSize();
     int start = 0;
     int count = 0;
+    //TODO: Get font from pdfSepc
     final var font = PDType0Font.load(document, fontResource.getInputStream());
-    while (count < appendedFields.size()) {
-      if (textUtil.isTextOverflowing(appendedFields.subList(start, count),
-          appendedFields.get(count),
-          rectangle, fontSize, font)) {
-        fillFieldsOnPage(document, overFlowPageIndex, appendedFields, patientIdField, start, count,
+    var appendFieldsMutable = new ArrayList<>(appendedFields);
+    while (count < appendFieldsMutable.size()) {
+
+      var overFlowLines = textUtil.getOverflowingLines(appendFieldsMutable.subList(start, count),
+          appendFieldsMutable.get(count),
+          rectangle, fontSize, font);
+
+      if (overFlowLines.getEnd() != null) {
+        if (overFlowLines.getStart() != null) {
+          appendFieldsMutable.get(count).setValue(overFlowLines.getStart());
+
+        }
+        if (overFlowLines.getEnd() != null) {
+          var part2 = new PdfField(appendFieldsMutable.get(count).getId(),
+              overFlowLines.getEnd(), true, null);
+          appendFieldsMutable.add(count + 1, part2);
+          count++;
+        }
+
+        fillFieldsOnPage(document, overFlowPageIndex, appendFieldsMutable, patientIdField, start,
+            count,
             acroForm,
             fontSize, font, rectangle);
         start = count;
@@ -153,16 +170,15 @@ public class CertificatePdfFillService {
       count++;
     }
 
-    if (!appendedFields.subList(start, count).isEmpty()) {
-      fillFieldsOnPage(document, overFlowPageIndex, appendedFields, patientIdField, start, count,
-          acroForm, fontSize, font, rectangle);
-    }
+    fillFieldsOnPage(document, overFlowPageIndex, appendFieldsMutable, patientIdField, start, count,
+        acroForm, fontSize, font, rectangle);
   }
 
   private void fillFieldsOnPage(PDDocument document, int overFlowPageIndex,
       List<PdfField> appendedFields,
       PdfField patientIdField, int start, int count, PDAcroForm acroForm, float fontSize,
-      PDType0Font font, PDRectangle rectangle) throws IOException {
+      PDType0Font font, PDRectangle rectangle)
+      throws IOException {
     if (start == 0) {
       fillOverflowPage(appendedFields.subList(start, count), acroForm);
     } else {
@@ -229,9 +245,9 @@ public class CertificatePdfFillService {
   private void addPatientId(PDDocument document, int pageIndex,
       PdfField patientIdField,
       PDAcroForm acroForm, float fontSize) throws IOException {
-    final var marginY = 8;
     final var patientIdRect = acroForm.getField(patientIdField.getId()).getWidgets().getFirst()
         .getRectangle();
+    final var marginY = 8;
     pdfAdditionalInformationTextGenerator.addPatientId(document, pageIndex,
         patientIdRect.getLowerLeftX(), patientIdRect.getLowerLeftY() + marginY,
         patientIdField.getValue(), fontSize);
