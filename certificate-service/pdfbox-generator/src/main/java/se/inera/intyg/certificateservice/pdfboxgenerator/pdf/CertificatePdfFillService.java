@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.X_MAGIN_APPENDIX_PAGE;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.Y_MAGIN_APPENDIX_PAGE;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -217,10 +220,8 @@ public class CertificatePdfFillService {
 
     final var clonedPage = new PDPage(mediabox);
 
-    float marginX = 2;
-    float marginY = 12;
-    float startX = rectangle.getLowerLeftX() + marginX;
-    float startY = rectangle.getUpperRightY() - marginY;
+    float startX = rectangle.getLowerLeftX() + X_MAGIN_APPENDIX_PAGE;
+    float startY = rectangle.getUpperRightY() - Y_MAGIN_APPENDIX_PAGE;
 
     try (PDPageContentStream contentStream = new PDPageContentStream(document,
         clonedPage)) {
