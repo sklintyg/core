@@ -110,11 +110,11 @@ public class FK7472CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
-            .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE))
+            .allowedRoles(List.of(Role.CARE_ADMIN))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.READY_FOR_SIGN)
-            .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE))
+            .allowedRoles(List.of(Role.CARE_ADMIN))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
