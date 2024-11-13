@@ -1,8 +1,12 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text;
 
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.TEXT_FIELD_LINE_HEIGHT;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.Y_MAGIN_APPENDIX_PAGE;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
@@ -22,9 +26,10 @@ public class TextUtil {
       totalLines += wrapLine(line, width, fontSize, font).size();
     }
 
-    float lineHeight = fontSize * 1.5F;
+    float lineHeight = fontSize * TEXT_FIELD_LINE_HEIGHT;
     return totalLines * lineHeight;
   }
+
 
   public List<String> wrapLine(String line, float width, float fontSize, PDFont font) {
     List<String> wrappedLines = new ArrayList<>();
@@ -80,17 +85,34 @@ public class TextUtil {
     }
   }
 
-  public boolean isTextOverflowing(List<PdfField> currentFields, PdfField newTextField,
+  public Optional<OverFlowLineSplit> getOverflowingLines(List<PdfField> currentFields,
+      PdfField newTextField,
       PDRectangle rectangle, float fontSize, PDFont font) {
     final var currentText = currentFields.stream()
         .map(PdfField::getValue)
         .collect(Collectors.joining("\n"));
-
-    String newText = currentText + (currentText.isEmpty() ? "" : "\n") + newTextField.getValue();
-
-    float textHeight = calculateTextHeight(newText, fontSize,
+    var currentTextHeight = calculateTextHeight(currentText + (currentText.isEmpty() ? "" : "\n"),
+        fontSize,
         font, rectangle.getWidth());
 
-    return textHeight > rectangle.getHeight();
+    String[] lines = newTextField.getValue().split("\n");
+    var wrappedLines = new ArrayList<String>();
+    float lineHeight = fontSize * TEXT_FIELD_LINE_HEIGHT;
+
+    var availableLineSpaces = (int) Math.max(Math.floor(
+        (rectangle.getHeight() - Y_MAGIN_APPENDIX_PAGE - currentTextHeight) / lineHeight), 0);
+
+    for (String line : lines) {
+      wrappedLines.addAll(wrapLine(line, rectangle.getWidth(), fontSize, font));
+    }
+
+    if (wrappedLines.size() > availableLineSpaces) {
+      var overFlowInfo = new OverFlowLineSplit(
+          String.join(" ", wrappedLines.subList(0, availableLineSpaces)), String.join(" ",
+          wrappedLines.subList(availableLineSpaces, wrappedLines.size())) + "\n");
+      return Optional.of(overFlowInfo);
+    } else {
+      return Optional.empty();
+    }
   }
 }

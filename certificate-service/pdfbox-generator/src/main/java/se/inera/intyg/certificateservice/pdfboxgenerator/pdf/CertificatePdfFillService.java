@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.X_MAGIN_APPENDIX_PAGE;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.Y_MAGIN_APPENDIX_PAGE;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +12,6 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.cos.COSArray;
-import org.apache.pdfbox.cos.COSFloat;
-import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -103,7 +103,7 @@ public class CertificatePdfFillService {
 
     final var pdfFields = pdfElementValueGenerator.generate(certificate);
     final var appendedFields = pdfFields.stream()
-        .filter(f -> Boolean.TRUE.equals(f.getAppend()))
+        .filter(PdfField::getAppend)
         .toList();
     final var fieldsWithoutAppend = pdfFields.stream()
         .filter(field -> !field.getAppend())
@@ -143,33 +143,52 @@ public class CertificatePdfFillService {
     final var fontSize = new TextFieldAppearance((PDVariableText) overflowField).getFontSize();
     int start = 0;
     int count = 0;
+    //TODO: Get font from pdfSepc
     final var font = PDType0Font.load(document, fontResource.getInputStream());
-    while (count < appendedFields.size()) {
-      if (textUtil.isTextOverflowing(appendedFields.subList(start, count),
-          appendedFields.get(count),
-          rectangle, fontSize, font)) {
-        fillFieldsOnPage(document, overFlowPageIndex, appendedFields, patientIdField, start, count,
-            acroForm,
-            fontSize, font);
+    var appendedFieldsMutable = new ArrayList<>(appendedFields);
+
+    while (count < appendedFieldsMutable.size()) {
+
+      var overFlowLines = textUtil.getOverflowingLines(appendedFieldsMutable.subList(start, count),
+          appendedFieldsMutable.get(count),
+          rectangle, fontSize, font);
+
+      if (overFlowLines.isPresent()) {
+        var parts = overFlowLines.get();
+
+        if (parts.partOne() != null) {
+          appendedFieldsMutable.get(count).setValue(parts.partOne());
+        }
+
+        if (parts.partTwo() != null) {
+          var part2 = new PdfField(appendedFieldsMutable.get(count).getId(),
+              parts.partTwo(), true, null);
+          appendedFieldsMutable.add(count + 1, part2);
+          count++;
+        }
+
+        fillFieldsOnPage(document, overFlowPageIndex, appendedFieldsMutable, patientIdField, start,
+            count, acroForm, fontSize, font, rectangle);
         start = count;
       }
       count++;
     }
 
-    fillFieldsOnPage(document, overFlowPageIndex, appendedFields, patientIdField, start, count,
-        acroForm, fontSize, font);
+    fillFieldsOnPage(document, overFlowPageIndex, appendedFieldsMutable, patientIdField, start,
+        count, acroForm, fontSize, font, rectangle);
   }
 
   private void fillFieldsOnPage(PDDocument document, int overFlowPageIndex,
       List<PdfField> appendedFields,
       PdfField patientIdField, int start, int count, PDAcroForm acroForm, float fontSize,
-      PDType0Font font) throws IOException {
+      PDType0Font font, PDRectangle rectangle)
+      throws IOException {
     if (start == 0) {
       fillOverflowPage(appendedFields.subList(start, count), acroForm);
     } else {
       addAndFillOverflowPage(document, overFlowPageIndex, appendedFields.subList(start, count),
           acroForm,
-          patientIdField, fontSize, font);
+          patientIdField, fontSize, font, rectangle);
     }
   }
 
@@ -188,7 +207,8 @@ public class CertificatePdfFillService {
 
   private void addAndFillOverflowPage(PDDocument document,
       int overFlowPageIndex, List<PdfField> fields,
-      PDAcroForm acroForm, PdfField patientIdField, float fontSize, PDFont font)
+      PDAcroForm acroForm, PdfField patientIdField, float fontSize, PDFont font,
+      PDRectangle rectangle)
       throws IOException {
 
     final var pageToClone = document.getPage(overFlowPageIndex);
@@ -199,11 +219,8 @@ public class CertificatePdfFillService {
 
     final var clonedPage = new PDPage(mediabox);
 
-    float marginX = 52;
-    float marginY = 96;
-    float width = mediabox.getWidth() - 2 * marginX;
-    float startX = mediabox.getLowerLeftX() + marginX;
-    float startY = mediabox.getUpperRightY() - marginY;
+    float startX = rectangle.getLowerLeftX() + X_MAGIN_APPENDIX_PAGE;
+    float startY = rectangle.getUpperRightY() - Y_MAGIN_APPENDIX_PAGE;
 
     try (PDPageContentStream contentStream = new PDPageContentStream(document,
         clonedPage)) {
@@ -216,12 +233,13 @@ public class CertificatePdfFillService {
 
     List<String> lines = new ArrayList<>();
     for (String line : allText.split("\n")) {
-      lines.addAll(textUtil.wrapLine(line, width, fontSize, font));
+      lines.addAll(textUtil.wrapLine(line, rectangle.getWidth(), fontSize, font));
     }
 
     document.addPage(clonedPage);
     pdfAdditionalInformationTextGenerator.addOverFlowPageText(document, overFlowPageIndex,
-        document.getNumberOfPages() - 1, lines, startX, startY, fontSize, font);
+        document.getNumberOfPages() - 1, lines, startX,
+        startY, fontSize, font);
 
     addPatientId(document, document.getNumberOfPages() - 1, patientIdField, acroForm, fontSize);
   }
@@ -229,23 +247,14 @@ public class CertificatePdfFillService {
   private void addPatientId(PDDocument document, int pageIndex,
       PdfField patientIdField,
       PDAcroForm acroForm, float fontSize) throws IOException {
-    final var patientIdRect = acroForm.getField(patientIdField.getId())
-        .getCOSObject().getCOSArray(COSName.RECT);
+    final var patientIdRect = acroForm.getField(patientIdField.getId()).getWidgets().getFirst()
+        .getRectangle();
+    final var marginY = 8;
     pdfAdditionalInformationTextGenerator.addPatientId(document, pageIndex,
-        getPatientIdXOffset(patientIdRect), getPatientIdYOffset(patientIdRect),
+        patientIdRect.getLowerLeftX(), patientIdRect.getLowerLeftY() + marginY,
         patientIdField.getValue(), fontSize);
 
   }
-
-  private static float getPatientIdYOffset(COSArray patientIdRect) {
-    // Adjust y cord as is done on all other pnr fields using TextFieldAppearance
-    return ((COSFloat) patientIdRect.get(1)).floatValue() + 8;
-  }
-
-  private static float getPatientIdXOffset(COSArray patientIdRect) {
-    return ((COSFloat) patientIdRect.get(0)).floatValue();
-  }
-
 
   private void addTexts(Certificate certificate, String additionalInfoText, PDDocument document,
       boolean isCitizenFormat)
