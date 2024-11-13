@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text;
 
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.TEXT_FIELD_LINE_HEIGHT;
+
 import java.awt.Color;
 import java.io.IOException;
 import java.util.Comparator;
@@ -301,7 +303,7 @@ public class PdfTextGenerator {
       contentStream.newLineAtOffset(xPosition, yPosition);
     }
 
-    float leading = 1.5f * fontSize;
+    float leading = TEXT_FIELD_LINE_HEIGHT * fontSize;
     for (String line : lines) {
       contentStream.showText(line);
       contentStream.newLineAtOffset(0, -leading);
