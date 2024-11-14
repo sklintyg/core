@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 public class PdfPatientValueGenerator {
 
   public List<PdfField> generate(Certificate certificate, List<PdfFieldId> ids) {
-    final var patientId = certificate.certificateMetaData().patient().id().id();
+    final var patientId = certificate.certificateMetaData().patient().id().idWithoutDash();
     return ids.stream()
         .map(id ->
             PdfField.builder()

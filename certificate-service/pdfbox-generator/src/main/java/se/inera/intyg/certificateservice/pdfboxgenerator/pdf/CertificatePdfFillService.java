@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAdditionalInformationTextGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextUtil;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfElementValueGenerator;
@@ -77,14 +78,11 @@ public class CertificatePdfFillService {
         : certificate.certificateModel().pdfSpecification().pdfNoAddressTemplatePath();
   }
 
-  private static int getSignatureTagIndex(Certificate certificate, boolean isCitizenFormat) {
-    if (isCitizenFormat) {
-      return certificate.certificateModel().pdfSpecification().signature()
-          .signatureWithoutAddressTagIndex()
-          .value();
-    }
-    return certificate.certificateModel().pdfSpecification().signature()
-        .signatureWithAddressTagIndex().value();
+  private static PdfTagIndex getSignatureTagIndex(Certificate certificate, boolean includeAddress) {
+    final var signature = certificate.certificateModel().pdfSpecification().signature();
+
+    return includeAddress ? signature.signatureWithAddressTagIndex()
+        : signature.signatureWithoutAddressTagIndex();
   }
 
   private static boolean includeAddress(Certificate certificate, boolean isCitizenFormat) {
@@ -125,7 +123,7 @@ public class CertificatePdfFillService {
     try {
       final var patientField = PdfField.builder()
           .id(pdfSpecification.patientIdFieldIds().getLast().id())
-          .value(certificate.certificateMetaData().patient().id().id())
+          .value(certificate.certificateMetaData().patient().id().idWithoutDash())
           .build();
       setFieldValuesAppendix(document, pdfSpecification.overFlowPageIndex().value(), appendedFields,
           patientField);
@@ -334,7 +332,8 @@ public class CertificatePdfFillService {
       pdfAdditionalInformationTextGenerator.addDigitalSignatureText(
           document, getSignatureOffsetX(acroForm, certificate),
           getSignatureOffsetY(acroForm, certificate), mcid.getAndIncrement(),
-          getSignatureTagIndex(certificate, includeAddress(certificate, isCitizenFormat)), pageIndex
+          getSignatureTagIndex(certificate, includeAddress(certificate, isCitizenFormat)).value(),
+          pageIndex
       );
     }
   }
