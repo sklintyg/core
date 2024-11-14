@@ -79,15 +79,14 @@ public class PdfAdditionalInformationTextGenerator {
     pdfTextGenerator.addText(document, patientId, (int) fontSize, null, Color.black, xPosition,
         yPosition,
         false,
-        mcid, pageIndex);
+        mcid, null, pageIndex);
   }
 
   public void setPageNumber(PDDocument document, int pageIndex, int nbrOfPages, int mcid)
       throws IOException {
-    final float MARGIN_LEFT = 63.5F;
-    final float MARGIN_TOP = 37;
-    final int fontSize = 10;
-    //TODO: create new div with paragraph and marked content for pagenr
+    final var MARGIN_LEFT = 63.5F;
+    final var MARGIN_TOP = 37;
+    final var fontSize = 10;
 
     PDPage page = document.getPage(pageIndex);
     final var x = page.getMediaBox().getWidth() - MARGIN_LEFT;
@@ -98,7 +97,10 @@ public class PdfAdditionalInformationTextGenerator {
         null,
         Color.black, x, y,
         false,
-        mcid, pageIndex);
+        mcid,
+        PdfAccessibilityUtil.getDivInQuestionSection(document, 0, pageIndex),
+        pageIndex
+    );
   }
 
 

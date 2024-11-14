@@ -12,9 +12,10 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.cos.COSDictionary;
+import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
@@ -29,6 +30,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAdditionalInformationTextGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextUtil;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfElementValueGenerator;
@@ -141,7 +143,6 @@ public class CertificatePdfFillService {
     final var fontSize = new TextFieldAppearance((PDVariableText) overflowField).getFontSize();
     int start = 0;
     int count = 0;
-    //TODO: Get font from pdfSepc
     final var font = PDType0Font.load(document, fontResource.getInputStream());
     var appendedFieldsMutable = new ArrayList<>(appendedFields);
 
@@ -208,22 +209,13 @@ public class CertificatePdfFillService {
       PDAcroForm acroForm, PdfField patientIdField, float fontSize, PDFont font,
       PDRectangle rectangle)
       throws IOException {
-
     final var pageToClone = document.getPage(overFlowPageIndex);
-    final var meidaBoxToClone = document.getPage(overFlowPageIndex).getMediaBox();
-    final var mediabox = new PDRectangle(meidaBoxToClone.getLowerLeftX(),
-        meidaBoxToClone.getLowerLeftY(),
-        meidaBoxToClone.getWidth(), meidaBoxToClone.getHeight());
+    COSDictionary pageDict = pageToClone.getCOSObject();
+    COSDictionary newPageDict = new COSDictionary(pageDict);
 
-    final var clonedPage = new PDPage(mediabox);
+    newPageDict.removeItem(COSName.ANNOTS);
 
-    float startX = rectangle.getLowerLeftX() + X_MAGIN_APPENDIX_PAGE;
-    float startY = rectangle.getUpperRightY() - Y_MAGIN_APPENDIX_PAGE;
-
-    try (PDPageContentStream contentStream = new PDPageContentStream(document,
-        clonedPage)) {
-      contentStream.appendRawCommands(pageToClone.getContents().readAllBytes());
-    }
+    PDPage clonedPage = new PDPage(newPageDict);
 
     String allText = fields.stream()
         .map(PdfField::getValue)
@@ -235,6 +227,10 @@ public class CertificatePdfFillService {
     }
 
     document.addPage(clonedPage);
+    PdfAccessibilityUtil.createNewPage(document);
+
+    float startX = rectangle.getLowerLeftX() + X_MAGIN_APPENDIX_PAGE;
+    float startY = rectangle.getUpperRightY() - Y_MAGIN_APPENDIX_PAGE;
     pdfAdditionalInformationTextGenerator.addOverFlowPageText(document, overFlowPageIndex,
         document.getNumberOfPages() - 1, lines, startX,
         startY, fontSize, font);
@@ -271,12 +267,22 @@ public class CertificatePdfFillService {
     setSentText(document, certificate, mcid);
 
     final var nbrOfPages = document.getNumberOfPages();
-    for (int i = 0; i < nbrOfPages; i++) {
-      setMarginText(document, certificate, additionalInfoText, mcid, i);
-      if (!certificate.certificateModel().pdfSpecification().hasPageNbr()) {
-        pdfAdditionalInformationTextGenerator.setPageNumber(document, i, nbrOfPages,
-            mcid.incrementAndGet());
-      }
+    for (int pageIndex = 0; pageIndex < nbrOfPages; pageIndex++) {
+      setMarginText(document, certificate, additionalInfoText, mcid, pageIndex);
+      setPageNumber(document, certificate, pageIndex, nbrOfPages, mcid);
+    }
+  }
+
+  private void setPageNumber(PDDocument document, Certificate certificate, int pageIndex,
+      int nbrOfPages,
+      AtomicInteger mcid) throws IOException {
+    if (!certificate.certificateModel().pdfSpecification().hasPageNbr()) {
+      pdfAdditionalInformationTextGenerator.setPageNumber(
+          document,
+          pageIndex,
+          nbrOfPages,
+          mcid.incrementAndGet()
+      );
     }
   }
 

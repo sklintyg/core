@@ -52,7 +52,7 @@ class PdfTextGeneratorTest {
 
     @Test
     void shouldAddNewDivForTopWatermarkText() throws IOException {
-      final var pageTag = getPageTag();
+      final var pageTag = getMainTag();
       final var divsInPageBefore = pageTag.getKids().size();
       pdfTextGenerator.addTopWatermark(document, VALUE, Matrix.getTranslateInstance(40, 665), 10,
           100, false);
@@ -62,7 +62,7 @@ class PdfTextGeneratorTest {
 
     @Test
     void shouldNotAddNewDivForTopWatermarkTextIfBooleanIsTrue() throws IOException {
-      final var pageTag = getPageTag();
+      final var pageTag = getMainTag();
       final var divsInPageBefore = pageTag.getKids().size();
       pdfTextGenerator.addTopWatermark(document, VALUE, Matrix.getTranslateInstance(40, 665), 10,
           100, true);
@@ -138,7 +138,7 @@ class PdfTextGeneratorTest {
     void shouldAddSignatureInCorrectDiv() throws IOException {
       pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 18, 0);
 
-      final var pageTag = getPageTag();
+      final var pageTag = getMainTag();
       final var questionDiv = (PDStructureElement) pageTag.getKids().get(0);
       final var signatureDiv = (PDStructureElement) questionDiv.getKids().get(18);
       assertEquals(2, signatureDiv.getKids().size());
@@ -148,7 +148,7 @@ class PdfTextGeneratorTest {
     void shouldAddSignatureTextInCorrectDiv() throws IOException {
       pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 18, 0);
 
-      final var pageTag = getPageTag();
+      final var pageTag = getMainTag();
       final var questionDiv = (PDStructureElement) pageTag.getKids().get(0);
       final var signatureDiv = (PDStructureElement) questionDiv.getKids().get(18);
       final var signatureValue = (PDStructureElement) signatureDiv.getKids().get(1);
@@ -206,7 +206,7 @@ class PdfTextGeneratorTest {
 
     @Test
     void shouldAddNewDivForTopWatermarkText() throws IOException {
-      final var pageTag = getPageTag();
+      final var pageTag = getMainTag();
       final var divsInPageBefore = pageTag.getKids().size();
       pdfTextGenerator.addTopWatermark(document, VALUE, Matrix.getTranslateInstance(40, 665), 10,
           100, false);
@@ -216,7 +216,7 @@ class PdfTextGeneratorTest {
 
     @Test
     void shouldNotAddNewDivForTopWatermarkTextIfBooleanIsTrue() throws IOException {
-      final var pageTag = getPageTag();
+      final var pageTag = getMainTag();
       final var divsInPageBefore = pageTag.getKids().size();
       pdfTextGenerator.addTopWatermark(document, VALUE, Matrix.getTranslateInstance(40, 665), 10,
           100, true);
@@ -304,7 +304,7 @@ class PdfTextGeneratorTest {
     void shouldAddSignatureInCorrectDiv() throws IOException {
       pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 34, 0);
 
-      final var pageTag = getPageTag();
+      final var pageTag = getMainTag();
       final var questionDiv = (PDStructureElement) pageTag.getKids().get(0);
       final var signatureDiv = (PDStructureElement) questionDiv.getKids().get(34);
       assertEquals(2, signatureDiv.getKids().size());
@@ -314,7 +314,7 @@ class PdfTextGeneratorTest {
     void shouldAddSignatureTextInCorrectDiv() throws IOException {
       pdfTextGenerator.addDigitalSignatureText(document, VALUE, 30F, 30F, 100, 34, 0);
 
-      final var pageTag = getPageTag();
+      final var pageTag = getMainTag();
       final var questionDiv = (PDStructureElement) pageTag.getKids().get(0);
       final var signatureDiv = (PDStructureElement) questionDiv.getKids().get(34);
       final var signatureValue = (PDStructureElement) signatureDiv.getKids().get(1);
@@ -351,10 +351,10 @@ class PdfTextGeneratorTest {
   }
 
   private PDStructureElement getFirstDiv() {
-    return (PDStructureElement) getPageTag().getKids().get(0);
+    return (PDStructureElement) getMainTag().getKids().get(0);
   }
 
-  private PDStructureElement getPageTag() {
+  private PDStructureElement getMainTag() {
     final var documentTag = (PDStructureElement) document.getDocumentCatalog()
         .getStructureTreeRoot()
         .getKids().get(0);
@@ -362,7 +362,7 @@ class PdfTextGeneratorTest {
   }
 
   private PDStructureElement getLastDivInTree() {
-    final var section = getPageTag();
+    final var section = getMainTag();
     return (PDStructureElement) section.getKids().get(section.getKids().size() - 1);
   }
 
