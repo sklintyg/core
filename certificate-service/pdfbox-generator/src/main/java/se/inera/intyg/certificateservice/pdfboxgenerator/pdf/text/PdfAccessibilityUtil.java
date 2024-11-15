@@ -12,6 +12,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureElement;
 import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureNode;
 import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureTreeRoot;
+import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDMarkedContent;
 import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyList;
 import org.apache.pdfbox.pdmodel.documentinterchange.taggedpdf.StandardStructureTypes;
 
@@ -146,7 +147,7 @@ public class PdfAccessibilityUtil {
       int mcid)
       throws IOException {
     final var currentMarkedContentDictionary = new COSDictionary();
-    currentMarkedContentDictionary.setName("Tag", name.getName());
+    currentMarkedContentDictionary.setName("Tag" + System.currentTimeMillis(), name.getName());
     currentMarkedContentDictionary.setInt(COSName.MCID, mcid);
     contentStream.beginMarkedContent(name, PDPropertyList.create(currentMarkedContentDictionary));
     return currentMarkedContentDictionary;
@@ -159,10 +160,11 @@ public class PdfAccessibilityUtil {
     newContent.setActualText(text);
     newContent.setPage(page);
 
-    //final var markedContent = new PDMarkedContent(name, markedContentDictionary);
-    //markedContentDictionary.setItem(COSName.P, newContent.getCOSObject());
+    final var markedContent = new PDMarkedContent(name, markedContentDictionary);
+    markedContentDictionary.setItem(COSName.P,
+        newContent.getCOSObject()); // TODO: This is the one that breaks the code
 
-    //newContent.appendKid(markedContent);
+    newContent.appendKid(markedContent);
     currentSection.appendKid(newContent);
   }
 
