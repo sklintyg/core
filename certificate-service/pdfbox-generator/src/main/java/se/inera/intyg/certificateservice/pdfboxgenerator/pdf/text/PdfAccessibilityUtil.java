@@ -28,7 +28,7 @@ public class PdfAccessibilityUtil {
     throw new IllegalStateException("Utility class");
   }
 
-  public static PDStructureElement createNewPage(PDDocument pdf) {
+  public static PDStructureElement createNewPage(PDDocument pdf, int originalPage) {
     final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
     final var documentTag = getFirstChildFromStructuredElement(
         structuredTree.getKids(),
@@ -40,6 +40,13 @@ public class PdfAccessibilityUtil {
     final var section = createNewContainer(pageContainer, StandardStructureTypes.SECT, 0);
     createNewContainer(section, StandardStructureTypes.DIV, 0);
     createNewContainer(section, StandardStructureTypes.DIV, 0);
+
+    final var originalPageTag = getPageTag(structuredTree, originalPage);
+    final var kidsToCopy = originalPageTag.getKids()
+        .stream()
+        .toList();
+
+    pageContainer.getKids().addAll(kidsToCopy);
 
     return pageContainer;
   }
