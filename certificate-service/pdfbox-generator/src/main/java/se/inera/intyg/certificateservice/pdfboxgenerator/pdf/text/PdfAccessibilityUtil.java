@@ -46,7 +46,9 @@ public class PdfAccessibilityUtil {
         .stream()
         .toList();
 
-    pageContainer.getKids().addAll(kidsToCopy);
+    kidsToCopy.stream()
+        .map(PDStructureElement.class::cast)
+        .forEach(originalPageTag::appendKid);
 
     return pageContainer;
   }
