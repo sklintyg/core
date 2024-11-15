@@ -34,10 +34,17 @@ public class PdfTextGenerator {
     addText(pdf, text, fontSize, matrix, strokingColor, null, null, false, mcid, section, 0);
   }
 
-  public void addText(
+  public void addText(PDDocument pdf, String text, float fontSize, Float offsetX, Float offsetY,
+      int mcid, PDStructureElement section, int pageIndex)
+      throws IOException {
+    addText(pdf, text, fontSize, null, Color.black, offsetX, offsetY, false, mcid, section,
+        pageIndex);
+  }
+
+  private void addText(
       PDDocument pdf,
       String text,
-      int fontSize,
+      float fontSize,
       Matrix matrix,
       Color strokingColor,
       Float offsetX,

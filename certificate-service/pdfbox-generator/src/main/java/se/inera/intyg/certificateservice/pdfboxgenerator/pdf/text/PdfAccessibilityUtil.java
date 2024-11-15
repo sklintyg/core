@@ -12,7 +12,6 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureElement;
 import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureNode;
 import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureTreeRoot;
-import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDMarkedContent;
 import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyList;
 import org.apache.pdfbox.pdmodel.documentinterchange.taggedpdf.StandardStructureTypes;
 
@@ -36,7 +35,10 @@ public class PdfAccessibilityUtil {
     );
 
     final var pageContainer = createNewContainer(documentTag, "Page", null);
-    createNewContainer(pageContainer, "Div", 0);
+    createNewContainer(pageContainer, StandardStructureTypes.DIV, 0);
+    final var section = createNewContainer(pageContainer, StandardStructureTypes.SECT, 0);
+    createNewContainer(section, StandardStructureTypes.DIV, 0);
+    createNewContainer(section, StandardStructureTypes.DIV, 0);
 
     return pageContainer;
   }
@@ -88,10 +90,26 @@ public class PdfAccessibilityUtil {
         .max(Comparator.comparing(List::size));
 
     if (containerWithMostKids.isEmpty() || containerWithMostKids.get().size() - 1 < index) {
-      throw new IllegalStateException("Doesnt exist div to place signed tag in");
+      throw new IllegalStateException("Does not exist div to place tag in");
     }
 
     return (PDStructureElement) containerWithMostKids.get().get(index);
+  }
+
+  public static PDStructureElement getDivInLastSection(PDDocument pdf, int pageIndex) {
+    final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
+
+    final var pageTag = getPageTag(structuredTree, pageIndex);
+
+    if (pageTag.getKids().isEmpty()) {
+      return pageTag;
+    }
+
+    if (pageTag.getKids().isEmpty()) {
+      throw new IllegalStateException("Does not exist div to place tag in");
+    }
+
+    return (PDStructureElement) pageTag.getKids().getLast();
   }
 
   public static PDStructureElement getFirstChildFromStructuredElement(List<Object> kids,
@@ -141,10 +159,10 @@ public class PdfAccessibilityUtil {
     newContent.setActualText(text);
     newContent.setPage(page);
 
-    final var markedContent = new PDMarkedContent(name, markedContentDictionary);
-    markedContentDictionary.setItem(COSName.P, newContent.getCOSObject());
+    //final var markedContent = new PDMarkedContent(name, markedContentDictionary);
+    //markedContentDictionary.setItem(COSName.P, newContent.getCOSObject());
 
-    newContent.appendKid(markedContent);
+    //newContent.appendKid(markedContent);
     currentSection.appendKid(newContent);
   }
 
