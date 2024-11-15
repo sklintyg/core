@@ -79,7 +79,7 @@ public class PdfAdditionalInformationTextGenerator {
         xPosition,
         yPosition,
         mcid,
-        PdfAccessibilityUtil.getFirstDiv(document),
+        PdfAccessibilityUtil.getDivInQuestionSection(document, 1, pageIndex),
         pageIndex
     );
   }
