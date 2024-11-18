@@ -4,7 +4,7 @@ import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil.addContentToCurrentSection;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil.beginMarkedContent;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil.createContentStream;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil.createNewDivOnFirstPage;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil.createNewDivOnPage;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil.getDivInQuestionSection;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil.getFirstDiv;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil.getLastDivOfPage;
@@ -93,7 +93,7 @@ public class PdfTextGenerator {
         matrix,
         Color.gray,
         mcid,
-        addInExistingTopTag ? getFirstDiv(document) : createNewDivOnFirstPage(document, 0)
+        addInExistingTopTag ? getFirstDiv(document) : createNewDivOnPage(document, 0, 0)
     );
   }
 
@@ -133,8 +133,9 @@ public class PdfTextGenerator {
   }
 
   public void addWatermark(PDDocument document, String text, int mcid) throws IOException {
+    int pageIndex = 0;
     for (PDPage page : document.getPages()) {
-      final var section = createNewDivOnFirstPage(document, 0);
+      final var section = createNewDivOnPage(document, 0, pageIndex);
       final var contentStream = createContentStream(document, page);
 
       final var fontHeight = 105;
@@ -168,6 +169,7 @@ public class PdfTextGenerator {
           StandardStructureTypes.P, "Detta är ett " + text.toLowerCase());
 
       contentStream.close();
+      pageIndex++;
     }
   }
 

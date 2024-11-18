@@ -53,9 +53,9 @@ public class PdfAccessibilityUtil {
     return pageContainer;
   }
 
-  public static PDStructureElement createNewDivOnFirstPage(PDDocument pdf, int index) {
+  public static PDStructureElement createNewDivOnPage(PDDocument pdf, int index, int pageIndex) {
     final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
-    final var pageTag = getPageTag(structuredTree, 0);
+    final var pageTag = getPageTag(structuredTree, pageIndex);
 
     return createNewContainer(pageTag, StandardStructureTypes.DIV, index);
   }
