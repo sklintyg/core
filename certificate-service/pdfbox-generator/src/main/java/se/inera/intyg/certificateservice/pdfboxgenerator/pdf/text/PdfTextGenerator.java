@@ -174,27 +174,23 @@ public class PdfTextGenerator {
   }
 
   public void addTextLines(PDDocument document, List<String> lines, int fontSize,
-      PDFont font, Float xPosition, Float yPosition,
-      int mcid, int originalPageIndex, int pageIndex)
+      PDFont font, Float xPosition, Float yPosition, int mcid, int pageIndex)
       throws IOException {
 
     final var page = document.getPage(pageIndex);
     final var contentStream = createContentStream(document, page);
 
+    contentStream.beginText();
+    if (xPosition != null && yPosition != null) {
+      contentStream.newLineAtOffset(xPosition, yPosition);
+    }
     contentStream.setFont(font, fontSize);
 
     final var markedContentDictionary = beginMarkedContent(contentStream, COSName.P, mcid);
     final var section = createNewDivOnPage(document, 2, pageIndex);
 
     addContentToCurrentSection(page, markedContentDictionary, section, COSName.P,
-        StandardStructureTypes.P, String.valueOf(lines));
-
-    //TODO: need correct mcid and accessibility section
-
-    contentStream.beginText();
-    if (xPosition != null && yPosition != null) {
-      contentStream.newLineAtOffset(xPosition, yPosition);
-    }
+        StandardStructureTypes.P, String.join(" ", lines));
 
     float leading = TEXT_FIELD_LINE_HEIGHT * fontSize;
     for (String line : lines) {

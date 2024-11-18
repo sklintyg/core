@@ -15,7 +15,7 @@ public class FK7809PdfSpecification {
   public static final PdfMcid PDF_MCID = new PdfMcid(200);
   private static final int PDF_SIGNATURE_PAGE_INDEX = 3;
   private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(
-      10); // TODO: Probably needs to be fixed when we removed page nbr
+      10);
   private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(10);
   private static final List<PdfFieldId> PDF_PATIENT_ID_FIELD_IDS = List.of(
       new PdfFieldId("form1[0].#subform[0].flt_txtPersonNr[0]"),
@@ -64,6 +64,8 @@ public class FK7809PdfSpecification {
         )
         .hasPageNbr(false)
         .overFlowPageIndex(new OverflowPageIndex(4))
+        .untaggedWatermarks(
+            List.of("78090501", "FK 7809 (001 F 001) Fastställd av Försäkringskassan"))
         .build();
   }
 }

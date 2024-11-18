@@ -133,7 +133,7 @@ public class CertificatePdfFillService {
           .value(certificate.certificateMetaData().patient().id().idWithoutDash())
           .build();
       setFieldValuesAppendix(document, pdfSpecification.overFlowPageIndex().value(), appendedFields,
-          patientField, mcid);
+          patientField, mcid, pdfSpecification);
     } catch (IOException e) {
       throw new IllegalStateException(e);
     }
@@ -141,7 +141,7 @@ public class CertificatePdfFillService {
 
   private void setFieldValuesAppendix(PDDocument document,
       int overFlowPageIndex, List<PdfField> appendedFields, PdfField patientIdField,
-      AtomicInteger mcid)
+      AtomicInteger mcid, PdfSpecification pdfSpecification)
       throws IOException {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
     final var overflowField = acroForm.getField(appendedFields.getFirst().getId());
@@ -173,27 +173,28 @@ public class CertificatePdfFillService {
         }
 
         fillFieldsOnPage(document, overFlowPageIndex, appendedFieldsMutable, patientIdField, start,
-            count, acroForm, fontSize, font, rectangle, mcid);
+            count, acroForm, fontSize, font, rectangle, mcid, pdfSpecification);
         start = count;
       }
       count++;
     }
 
     fillFieldsOnPage(document, overFlowPageIndex, appendedFieldsMutable, patientIdField, start,
-        count, acroForm, fontSize, font, rectangle, mcid);
+        count, acroForm, fontSize, font, rectangle, mcid, pdfSpecification);
   }
 
   private void fillFieldsOnPage(PDDocument document, int overFlowPageIndex,
       List<PdfField> appendedFields,
       PdfField patientIdField, int start, int count, PDAcroForm acroForm, float fontSize,
-      PDType0Font font, PDRectangle rectangle, AtomicInteger mcid)
+      PDType0Font font, PDRectangle rectangle, AtomicInteger mcid,
+      PdfSpecification pdfSpecification)
       throws IOException {
     if (start == 0) {
       fillOverflowPage(appendedFields.subList(start, count), acroForm);
     } else {
       addAndFillOverflowPage(document, overFlowPageIndex, appendedFields.subList(start, count),
           acroForm,
-          patientIdField, fontSize, font, rectangle, mcid);
+          patientIdField, fontSize, font, rectangle, mcid, pdfSpecification);
     }
   }
 
@@ -213,7 +214,7 @@ public class CertificatePdfFillService {
   private void addAndFillOverflowPage(PDDocument document,
       int overFlowPageIndex, List<PdfField> fields,
       PDAcroForm acroForm, PdfField patientIdField, float fontSize, PDFont font,
-      PDRectangle rectangle, AtomicInteger mcid)
+      PDRectangle rectangle, AtomicInteger mcid, PdfSpecification pdfSpecification)
       throws IOException {
     final var pageToClone = document.getPage(overFlowPageIndex);
     COSDictionary pageDict = pageToClone.getCOSObject();
@@ -233,13 +234,13 @@ public class CertificatePdfFillService {
     }
 
     document.addPage(clonedPage);
-    PdfAccessibilityUtil.createNewOverflowPageTag(document, clonedPage);
+    PdfAccessibilityUtil.createNewOverflowPageTag(document, clonedPage, pdfSpecification);
 
     float startX = rectangle.getLowerLeftX() + X_MAGIN_APPENDIX_PAGE;
     float startY = rectangle.getUpperRightY() - Y_MAGIN_APPENDIX_PAGE;
-    pdfAdditionalInformationTextGenerator.addOverFlowPageText(document, overFlowPageIndex,
-        document.getNumberOfPages() - 1, lines, startX,
-        startY, fontSize, font, mcid.getAndIncrement());
+    pdfAdditionalInformationTextGenerator.addOverFlowPageText(document,
+        document.getNumberOfPages() - 1, lines, startX, startY, fontSize, font,
+        mcid.getAndIncrement());
 
     addPatientId(document, document.getNumberOfPages() - 1, patientIdField, acroForm, fontSize,
         mcid.getAndIncrement());

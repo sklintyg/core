@@ -108,12 +108,12 @@ public class PdfAdditionalInformationTextGenerator {
   }
 
 
-  public void addOverFlowPageText(PDDocument document, int originalPageIndex, int pageIndex,
+  public void addOverFlowPageText(PDDocument document, int pageIndex,
       List<String> lines,
       float xPosition, float yPosition, float fontSize, PDFont font, int mcid)
       throws IOException {
     pdfTextGenerator.addTextLines(document, lines, (int) fontSize, font, xPosition, yPosition, mcid,
-        originalPageIndex, pageIndex);
+        pageIndex);
 
   }
 }
