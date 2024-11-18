@@ -183,6 +183,12 @@ public class PdfTextGenerator {
 
     contentStream.setFont(font, fontSize);
 
+    final var markedContentDictionary = beginMarkedContent(contentStream, COSName.P, mcid);
+    final var section = createNewDivOnPage(document, 2, pageIndex);
+
+    addContentToCurrentSection(page, markedContentDictionary, section, COSName.P,
+        StandardStructureTypes.P, String.valueOf(lines));
+
     //TODO: need correct mcid and accessibility section
 
     contentStream.beginText();
@@ -196,6 +202,7 @@ public class PdfTextGenerator {
       contentStream.newLineAtOffset(0, -leading);
     }
 
+    contentStream.endMarkedContent();
     contentStream.endText();
     contentStream.close();
   }
