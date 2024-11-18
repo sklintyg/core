@@ -16,19 +16,13 @@ import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDMarkedConte
 import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyList;
 import org.apache.pdfbox.pdmodel.documentinterchange.taggedpdf.StandardStructureTypes;
 
-/**
- * Få in taggarna på vanliga sidor för sidnr Hämta ut pageTag Section i pagetag Ta första child i
- * section Få in en page tag för nya sidor Få in taggar för det vi skriver ut på nya sidor
- * Eventuellt kopiera över taggar från den sidan som vi klonat
- */
-
 public class PdfAccessibilityUtil {
 
   private PdfAccessibilityUtil() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static PDStructureElement createNewPage(PDDocument pdf, int originalPage) {
+  public static PDStructureElement createNewOverflowPageTag(PDDocument pdf, PDPage page) {
     final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
     final var documentTag = getFirstChildFromStructuredElement(
         structuredTree.getKids(),
@@ -37,20 +31,29 @@ public class PdfAccessibilityUtil {
 
     final var pageContainer = createNewContainer(documentTag, "Page", null);
     createNewContainer(pageContainer, StandardStructureTypes.DIV, 0);
+
     final var section = createNewContainer(pageContainer, StandardStructureTypes.SECT, 0);
-    createNewContainer(section, StandardStructureTypes.DIV, 0);
-    createNewContainer(section, StandardStructureTypes.DIV, 0);
+    createNewContainer(section, StandardStructureTypes.DIV, 0); //For page number
 
-    final var originalPageTag = getPageTag(structuredTree, originalPage);
-    final var kidsToCopy = originalPageTag.getKids()
-        .stream()
-        .toList();
+    final var patientIdDiv = createNewContainer(section, StandardStructureTypes.DIV, 1);
+    addContentToSection(page, patientIdDiv, "Personnummer", COSName.P);
 
-    kidsToCopy.stream()
-        .map(PDStructureElement.class::cast)
-        .forEach(pageContainer::appendKid);
+    final var h2Div = createNewContainer(section, StandardStructureTypes.DIV, 2);
+    addContentToSection(page, h2Div, "Fortsättningsblad", COSName.H);
 
     return pageContainer;
+  }
+
+  private static void addContentToSection(PDPage page, PDStructureElement section, String text,
+      COSName name) {
+    addContentToCurrentSection(
+        page,
+        null,
+        section,
+        name,
+        name.getName(),
+        text
+    );
   }
 
   public static PDStructureElement createNewDivOnPage(PDDocument pdf, int index, int pageIndex) {
@@ -106,22 +109,6 @@ public class PdfAccessibilityUtil {
     return (PDStructureElement) containerWithMostKids.get().get(index);
   }
 
-  public static PDStructureElement getDivInLastSection(PDDocument pdf, int pageIndex) {
-    final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
-
-    final var pageTag = getPageTag(structuredTree, pageIndex);
-
-    if (pageTag.getKids().isEmpty()) {
-      return pageTag;
-    }
-
-    if (pageTag.getKids().isEmpty()) {
-      throw new IllegalStateException("Does not exist div to place tag in");
-    }
-
-    return (PDStructureElement) pageTag.getKids().getLast();
-  }
-
   public static PDStructureElement getFirstChildFromStructuredElement(List<Object> kids,
       String s) {
     if (kids.isEmpty()) {
@@ -169,11 +156,10 @@ public class PdfAccessibilityUtil {
     newContent.setActualText(text);
     newContent.setPage(page);
 
-    final var markedContent = new PDMarkedContent(name, markedContentDictionary);
-    markedContentDictionary.setItem(COSName.P,
-        newContent.getCOSObject()); // TODO: This is the one that breaks the code
-
-    newContent.appendKid(markedContent);
+    if (markedContentDictionary != null) {
+      final var markedContent = new PDMarkedContent(name, markedContentDictionary);
+      newContent.appendKid(markedContent);
+    }
     currentSection.appendKid(newContent);
   }
 

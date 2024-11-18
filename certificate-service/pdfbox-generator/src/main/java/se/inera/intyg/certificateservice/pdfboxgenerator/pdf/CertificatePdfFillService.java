@@ -233,7 +233,7 @@ public class CertificatePdfFillService {
     }
 
     document.addPage(clonedPage);
-    PdfAccessibilityUtil.createNewPage(document, 4);
+    PdfAccessibilityUtil.createNewOverflowPageTag(document, clonedPage);
 
     float startX = rectangle.getLowerLeftX() + X_MAGIN_APPENDIX_PAGE;
     float startY = rectangle.getUpperRightY() - Y_MAGIN_APPENDIX_PAGE;
