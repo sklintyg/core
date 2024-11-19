@@ -187,7 +187,7 @@ public class PdfTextGenerator {
     contentStream.setFont(font, fontSize);
 
     final var markedContentDictionary = beginMarkedContent(contentStream, COSName.P, mcid);
-    final var section = createNewDivOnPage(document, 2, pageIndex);
+    final var section = createNewDivOnPage(document, 1, pageIndex);
 
     addContentToCurrentSection(page, markedContentDictionary, section, COSName.P,
         StandardStructureTypes.P, String.join(" ", lines));
