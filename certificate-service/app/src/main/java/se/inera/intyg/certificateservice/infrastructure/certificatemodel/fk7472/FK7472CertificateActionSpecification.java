@@ -127,6 +127,7 @@ public class FK7472CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST)
+            .allowedRolesForProtectedPersons(allowedRolesForProtectedPersons)
             .build()
     );
   }

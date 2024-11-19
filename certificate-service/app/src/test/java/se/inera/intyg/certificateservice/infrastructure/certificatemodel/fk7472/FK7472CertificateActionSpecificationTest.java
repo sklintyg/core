@@ -375,6 +375,7 @@ class FK7472CertificateActionSpecificationTest {
   void shallIncludeCertificateActionForwardCertificateFromList() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST)
+        .allowedRolesForProtectedPersons(ROLES_FOR_PROTECTED_PERSON)
         .build();
 
     final var actionSpecifications = FK7472CertificateActionSpecification.create();
