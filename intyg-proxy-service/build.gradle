@@ -31,7 +31,6 @@ ext {
 
 group = 'se.inera.intyg.intyg-proxy-service'
 version = System.properties['buildVersion'] ?: '0.0.1-SNAPSHOT'
-mainClassName = 'se.inera.intyg.intygproxyservice.IntygProxyServiceApplication'
 
 allprojects {
     repositories {
@@ -52,8 +51,10 @@ sonar {
 
 dependencyCheck {
     formats = List.of("HTML", "JSON")
-    nvd.setDatafeedUrl(nvdMirror)
-    analyzers.setAssemblyEnabled(false)
+
+    nvd {
+        datafeedUrl = "${nvdMirror}"
+    }
 }
 
 subprojects {
@@ -111,7 +112,7 @@ reporting {
         testReportAggregation project(':integration-fakepu')
         testReportAggregation project(':integration-hsa')
         testReportAggregation project(':integration-pu')
-        testReportAggregation project(':integration-pu-v4')
+        testReportAggregation project(':integration-pu-v5')
         testReportAggregation project(':integration-test')
     }
 }
