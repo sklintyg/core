@@ -1,5 +1,7 @@
 package se.inera.intyg.cts.infrastructure.integration.Intygstjanst;
 
+import static se.inera.intyg.cts.logging.MdcLogConstants.EVENT_TYPE_ACCESSED;
+
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +14,7 @@ import se.inera.intyg.cts.domain.model.CertificateSummary;
 import se.inera.intyg.cts.domain.model.CertificateXML;
 import se.inera.intyg.cts.infrastructure.integration.GetCertificateBatch;
 import se.inera.intyg.cts.infrastructure.integration.Intygstjanst.dto.CertificateExportPageDTO;
+import se.inera.intyg.cts.logging.PerformanceLogging;
 
 @Service
 public class GetCertificateBatchFromIntygstjanst implements GetCertificateBatch {
@@ -36,6 +39,7 @@ public class GetCertificateBatchFromIntygstjanst implements GetCertificateBatch 
   }
 
   @Override
+  @PerformanceLogging(eventAction = "get-certificate-batch", eventType = EVENT_TYPE_ACCESSED)
   public CertificateBatch get(String careProvider, int limit, int offset) {
     final var certificateExportPageDTOMono = webClient.get()
         .uri(uriBuilder -> uriBuilder

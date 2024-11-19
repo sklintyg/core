@@ -1,11 +1,12 @@
 plugins {
-    id 'org.springframework.boot' version '3.2.2'
+    id 'org.springframework.boot' version '3.3.4'
 }
 
 def applicationDir = "${rootProject.projectDir}/devops/dev"
 
 dependencies {
     implementation project(':integration-api')
+    implementation project(':logging')
     runtimeOnly project(':integration-common')
     runtimeOnly project(':integration-pu')
     runtimeOnly project(':integration-pu-v4')
@@ -13,6 +14,7 @@ dependencies {
     runtimeOnly project(':integration-hsa')
     runtimeOnly project(':integration-fakehsa')
 
+    implementation "co.elastic.logging:logback-ecs-encoder:${logbackEcsEncoderVersion}"
     implementation "com.google.guava:guava-gwt:${guavaVersion}"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     implementation 'org.springframework.boot:spring-boot-starter-web'

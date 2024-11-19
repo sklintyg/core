@@ -2,6 +2,7 @@ package se.inera.intyg.intygproxyservice.integration.authorization;
 
 
 import static se.inera.intyg.intygproxyservice.integration.api.constants.HsaConstants.FAKE_HSA_PROFILE;
+import static se.inera.intyg.intygproxyservice.logging.MdcLogConstants.EVENT_TYPE_ACCESSED;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
@@ -10,6 +11,7 @@ import se.inera.intyg.intygproxyservice.integration.api.authorization.GetCredent
 import se.inera.intyg.intygproxyservice.integration.api.authorization.GetCredentialsForPersonIntegrationResponse;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.GetCredentialsForPersonIntegrationService;
 import se.inera.intyg.intygproxyservice.integration.authorization.client.HsaAuthorizationClient;
+import se.inera.intyg.intygproxyservice.logging.PerformanceLogging;
 
 @Service
 @Profile("!" + FAKE_HSA_PROFILE)
@@ -20,6 +22,7 @@ public class HsaGetCredentialsForPersonIntegrationService implements
   private final HsaAuthorizationClient hsaAuthorizationClient;
 
   @Override
+  @PerformanceLogging(eventAction = "get-credentials-for-person", eventType = EVENT_TYPE_ACCESSED)
   public GetCredentialsForPersonIntegrationResponse get(
       GetCredentialsForPersonIntegrationRequest request) {
     final var response = hsaAuthorizationClient.getCredentialsForPerson(request);

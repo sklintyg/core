@@ -1,5 +1,7 @@
 package se.inera.intyg.cts.infrastructure.integration.sjut;
 
+import static se.inera.intyg.cts.logging.MdcLogConstants.EVENT_TYPE_CHANGE;
+
 import java.io.File;
 import java.net.URI;
 import org.hibernate.service.spi.ServiceException;
@@ -20,11 +22,12 @@ import reactor.core.publisher.Mono;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.service.UploadPackage;
 import se.inera.intyg.cts.infrastructure.integration.sjut.dto.PackageMetadata;
+import se.inera.intyg.cts.logging.PerformanceLogging;
 
 @Service
 public class UploadPackageToSjut implements UploadPackage {
 
-  private final static Logger LOG = LoggerFactory.getLogger(UploadPackageToSjut.class);
+  private static final Logger LOG = LoggerFactory.getLogger(UploadPackageToSjut.class);
 
   public static final String FILE_PREFIX = "file:";
   public static final String FILE_PART = "file";
@@ -56,6 +59,7 @@ public class UploadPackageToSjut implements UploadPackage {
   }
 
   @Override
+  @PerformanceLogging(eventAction = "upload-package", eventType = EVENT_TYPE_CHANGE)
   public void uploadPackage(Termination termination, File packageToUpload) {
     final var resource = getResource(packageToUpload);
     final var packageMetadata = getPackageMetadata(termination);
@@ -72,8 +76,8 @@ public class UploadPackageToSjut implements UploadPackage {
         .share()
         .block();
 
-    LOG.info(String.format("File for termination '%s' was uploaded to Sjut with result '%s'",
-        termination.terminationId().id(), clientReponse));
+    LOG.info("File for termination '{}' was uploaded to Sjut with result '{}'",
+        termination.terminationId().id(), clientReponse);
   }
 
   private Resource getResource(File packageToUpload) {
@@ -110,7 +114,7 @@ public class UploadPackageToSjut implements UploadPackage {
 
     final var message = String.format(
         "Could not upload file for termination '%s' to Sjut. Received status code '%s'.",
-        termination.terminationId().id(), clientResponse.rawStatusCode());
+        termination.terminationId().id(), clientResponse.statusCode());
     LOG.error(message);
     throw new ServiceException(message);
   }

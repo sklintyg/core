@@ -2,9 +2,10 @@ package se.inera.intyg.certificateservice.domain.certificate.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
@@ -23,11 +24,12 @@ public class DeleteCertificateDomainService {
   public Certificate delete(CertificateId certificateId, Revision revision,
       ActionEvaluation actionEvaluation) {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
-    
+
     final var certificate = certificateRepository.getById(certificateId);
-    if (!certificate.allowTo(CertificateActionType.DELETE, actionEvaluation)) {
+    if (!certificate.allowTo(CertificateActionType.DELETE, Optional.of(actionEvaluation))) {
       throw new CertificateActionForbidden(
-          "Not allowed to delete certificate for %s".formatted(certificateId)
+          "Not allowed to delete certificate for %s".formatted(certificateId),
+          certificate.reasonNotAllowed(CertificateActionType.DELETE, Optional.of(actionEvaluation))
       );
     }
 

@@ -53,7 +53,7 @@ class HandleCertificationPersonServiceTest {
 
   @Test
   void shouldThrowIllegalArgumentExceptionIfRequestIsNull() {
-    assertThrows(IllegalArgumentException.class, () -> handleCertificationPersonService.get(null));
+    assertThrows(IllegalArgumentException.class, () -> handleCertificationPersonService.handle(null));
   }
 
   @Test
@@ -64,7 +64,7 @@ class HandleCertificationPersonServiceTest {
         .operation(OPERATION)
         .build();
     assertThrows(IllegalArgumentException.class,
-        () -> handleCertificationPersonService.get(request));
+        () -> handleCertificationPersonService.handle(request));
   }
 
   @Test
@@ -76,7 +76,7 @@ class HandleCertificationPersonServiceTest {
         .operation(OPERATION)
         .build();
     assertThrows(IllegalArgumentException.class,
-        () -> handleCertificationPersonService.get(request));
+        () -> handleCertificationPersonService.handle(request));
   }
 
   @Test
@@ -88,7 +88,7 @@ class HandleCertificationPersonServiceTest {
         .operation(OPERATION)
         .build();
     assertThrows(IllegalArgumentException.class,
-        () -> handleCertificationPersonService.get(request));
+        () -> handleCertificationPersonService.handle(request));
   }
 
   @Test
@@ -99,7 +99,7 @@ class HandleCertificationPersonServiceTest {
         .certificationId(CERTIFICATION_ID)
         .build();
     assertThrows(IllegalArgumentException.class,
-        () -> handleCertificationPersonService.get(request));
+        () -> handleCertificationPersonService.handle(request));
   }
 
   @Test
@@ -111,7 +111,7 @@ class HandleCertificationPersonServiceTest {
         .operation("")
         .build();
     assertThrows(IllegalArgumentException.class,
-        () -> handleCertificationPersonService.get(request));
+        () -> handleCertificationPersonService.handle(request));
   }
 
   @Test
@@ -123,7 +123,7 @@ class HandleCertificationPersonServiceTest {
         .operation("  ")
         .build();
     assertThrows(IllegalArgumentException.class,
-        () -> handleCertificationPersonService.get(request));
+        () -> handleCertificationPersonService.handle(request));
   }
 
   @Nested
@@ -136,14 +136,14 @@ class HandleCertificationPersonServiceTest {
 
     @Test
     void shallReturnResult() {
-      final var response = handleCertificationPersonService.get(REQUEST);
+      final var response = handleCertificationPersonService.handle(REQUEST);
 
       assertEquals(RESPONSE.getResult(), response.getResult());
     }
 
     @Test
     void shallSetPersonIdInRequest() {
-      handleCertificationPersonService.get(REQUEST);
+      handleCertificationPersonService.handle(REQUEST);
 
       final var captor = ArgumentCaptor.forClass(
           HandleCertificationPersonIntegrationRequest.class);
@@ -154,7 +154,7 @@ class HandleCertificationPersonServiceTest {
 
     @Test
     void shallSetCertificationIdInRequest() {
-      handleCertificationPersonService.get(REQUEST);
+      handleCertificationPersonService.handle(REQUEST);
 
       final var captor = ArgumentCaptor.forClass(
           HandleCertificationPersonIntegrationRequest.class);
@@ -165,7 +165,7 @@ class HandleCertificationPersonServiceTest {
 
     @Test
     void shallSetReasonInRequest() {
-      handleCertificationPersonService.get(REQUEST);
+      handleCertificationPersonService.handle(REQUEST);
 
       final var captor = ArgumentCaptor.forClass(
           HandleCertificationPersonIntegrationRequest.class);
@@ -176,7 +176,7 @@ class HandleCertificationPersonServiceTest {
 
     @Test
     void shallSetOperationInRequest() {
-      handleCertificationPersonService.get(REQUEST);
+      handleCertificationPersonService.handle(REQUEST);
 
       final var captor = ArgumentCaptor.forClass(
           HandleCertificationPersonIntegrationRequest.class);

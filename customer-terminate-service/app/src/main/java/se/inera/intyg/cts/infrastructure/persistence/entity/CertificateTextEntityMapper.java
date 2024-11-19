@@ -8,6 +8,10 @@ import se.inera.intyg.cts.domain.model.CertificateXML;
 
 public class CertificateTextEntityMapper {
 
+  private CertificateTextEntityMapper() {
+    throw new IllegalStateException("Mapper class");
+  }
+
   public static CertificateTextEntity toEntity(CertificateText certificateText,
       TerminationEntity terminationEntity) {
     return new CertificateTextEntity(

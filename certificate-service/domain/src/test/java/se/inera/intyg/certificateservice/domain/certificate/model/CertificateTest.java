@@ -1,8 +1,11 @@
 package se.inera.intyg.certificateservice.domain.certificate.model;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -10,7 +13,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static se.inera.intyg.certificateservice.domain.patient.model.PersonIdType.COORDINATION_NUMBER;
+import static se.inera.intyg.certificateservice.domain.common.model.PersonIdType.COORDINATION_NUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.BETA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.alfaRegionenBuilder;
@@ -27,10 +30,18 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_PHONENUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REFERENCE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.REVISION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.XML;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.CONTACT_INFO;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.DATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.dateElementDataBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementDataConstants.DATE_ELEMENT_VALUE_DATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTENT;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ALVE_REACT_ALFREDSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.athenaReactAnderssonBuilder;
@@ -51,6 +62,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.INACTIVE_TRUE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALF_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
@@ -66,15 +78,27 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
-import se.inera.intyg.certificateservice.domain.patient.model.PersonId;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
+import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
+import se.inera.intyg.certificateservice.domain.message.model.Author;
+import se.inera.intyg.certificateservice.domain.message.model.Content;
+import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
+import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
 import se.inera.intyg.certificateservice.domain.validation.model.ErrorMessage;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
@@ -88,6 +112,11 @@ class CertificateTest {
   private CertificateModel certificateModel;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
 
+  @Mock
+  private XmlGenerator xmlGenerator = mock(XmlGenerator.class);
+  @Mock
+  private CertificateActionFactory certificateActionFactory;
+
   @BeforeEach
   void setUp() {
     certificateModel = mock(CertificateModel.class);
@@ -97,6 +126,7 @@ class CertificateTest {
         .certificateModel(certificateModel)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
         .status(Status.DRAFT)
+        .externalReference(EXTERNAL_REFERENCE)
         .certificateMetaData(
             CertificateMetaData.builder()
                 .patient(ATHENA_REACT_ANDERSSON)
@@ -675,112 +705,156 @@ class CertificateTest {
 
     @Test
     void shallReturnActionIfEvaluateTrue() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
       final var certificateAction = mock(CertificateAction.class);
       final var expectedActions = List.of(certificateAction);
 
       doReturn(expectedActions).when(certificate.certificateModel()).actions();
 
-      doReturn(true).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
+      doReturn(true).when(certificateAction)
+          .evaluate(Optional.of(certificate), Optional.of(actionEvaluation));
 
-      final var actualActions = certificate.actions(actionEvaluation);
+      final var actualActions = certificate.actions(Optional.of(actionEvaluation));
+
+      assertEquals(expectedActions, actualActions);
+    }
+
+    @Test
+    void shallReturnActionIfIncludeTrue() {
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var expectedActions = List.of(certificateAction);
+
+      doReturn(expectedActions).when(certificate.certificateModel()).actions();
+
+      doReturn(true).when(certificateAction)
+          .include(Optional.of(certificate), Optional.of(actionEvaluation));
+
+      final var actualActions = certificate.actionsInclude(Optional.of(actionEvaluation));
 
       assertEquals(expectedActions, actualActions);
     }
 
     @Test
     void shallNotReturnActionIfEvaluateFalse() {
-      final var actionEvaluation = ActionEvaluation.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
       final var certificateAction = mock(CertificateAction.class);
       final var expectedActions = Collections.emptyList();
 
       doReturn(List.of(certificateAction)).when(certificate.certificateModel()).actions();
 
       doReturn(false).when(certificateAction)
-          .evaluate(Optional.of(certificate), actionEvaluation);
+          .evaluate(Optional.of(certificate), Optional.of(actionEvaluation));
 
-      final var actualActions = certificate.actions(actionEvaluation);
+      final var actualActions = certificate.actions(Optional.of(actionEvaluation));
+
+      assertEquals(expectedActions, actualActions);
+    }
+
+    @Test
+    void shallNotReturnActionIfIncludeFalse() {
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var expectedActions = Collections.emptyList();
+
+      doReturn(List.of(certificateAction)).when(certificate.certificateModel()).actions();
+
+      doReturn(false).when(certificateAction)
+          .include(Optional.of(certificate), Optional.of(actionEvaluation));
+
+      final var actualActions = certificate.actionsInclude(Optional.of(actionEvaluation));
 
       assertEquals(expectedActions, actualActions);
     }
   }
 
   @Nested
-  class TestAllowTo {
-
-    @Test
-    void shallReturnTrueIfExistsAndEvaluateTrue() {
-      final var actionEvaluation = actionEvaluationBuilder.build();
-      final var certificateAction = mock(CertificateAction.class);
-      final var actions = List.of(certificateAction);
-
-      doReturn(actions).when(certificate.certificateModel()).actions();
-
-      doReturn(CertificateActionType.READ).when(certificateAction).getType();
-      doReturn(true).when(certificateAction).evaluate(Optional.of(certificate), actionEvaluation);
-
-      assertTrue(
-          certificate.allowTo(CertificateActionType.READ, actionEvaluation),
-          "Expected allowTo to return 'true'"
-      );
-    }
-
-    @Test
-    void shallReturnFalseIfExistsAndEvaluateFalse() {
-      final var actionEvaluation = actionEvaluationBuilder.build();
-      final var certificateAction = mock(CertificateAction.class);
-      final var actions = List.of(certificateAction);
-
-      doReturn(actions).when(certificate.certificateModel()).actions();
-
-      doReturn(CertificateActionType.READ).when(certificateAction).getType();
-      doReturn(false).when(certificateAction)
-          .evaluate(Optional.of(certificate), actionEvaluation);
-
-      assertFalse(
-          certificate.allowTo(CertificateActionType.READ, actionEvaluation),
-          "Expected allowTo to return 'false'"
-      );
-    }
-
-    @Test
-    void shallReturnFalseIfNotExists() {
-      final var actionEvaluation = actionEvaluationBuilder.build();
-      final var certificateAction = mock(CertificateAction.class);
-      final var actions = List.of(certificateAction);
-
-      doReturn(actions).when(certificate.certificateModel()).actions();
-
-      doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
-
-      assertFalse(
-          certificate.allowTo(CertificateActionType.READ, actionEvaluation),
-          "Expected allowTo to return 'false'"
-      );
-    }
-
-    @Test
-    void shallUseCertificatePatientIfPatientNotPresentInActionEvalutaion() {
-      final var actionEvaluation = actionEvaluationBuilder.patient(null).build();
-      final var actionEvaluationArgumentCaptor = ArgumentCaptor.forClass(ActionEvaluation.class);
-
-      final var certificateAction = mock(CertificateAction.class);
-      final var actions = List.of(certificateAction);
-
-      doReturn(actions).when(certificate.certificateModel()).actions();
-      doReturn(CertificateActionType.DELETE).when(certificateAction).getType();
-
-      certificate.allowTo(CertificateActionType.DELETE, actionEvaluation);
-
-      verify(certificateAction).evaluate(any(Optional.class),
-          actionEvaluationArgumentCaptor.capture());
-
-      assertEquals(ATHENA_REACT_ANDERSSON, actionEvaluationArgumentCaptor.getValue().patient());
-    }
-  }
-
-  @Nested
   class TestUpdateData {
+
+    @Nested
+    class TestAllowTo {
+
+      @Test
+      void shallReturnTrueIfExistsAndEvaluateTrue() {
+        final var actionEvaluation = actionEvaluationBuilder.build();
+        final var certificateAction = mock(CertificateAction.class);
+        final var actions = List.of(certificateAction);
+
+        doReturn(actions).when(certificate.certificateModel()).actions();
+
+        doReturn(CertificateActionType.READ).when(certificateAction).getType();
+        doReturn(true).when(certificateAction)
+            .evaluate(Optional.of(certificate), Optional.of(actionEvaluation));
+
+        assertTrue(
+            certificate.allowTo(CertificateActionType.READ, Optional.of(actionEvaluation)),
+            "Expected allowTo to return 'true'"
+        );
+      }
+
+      @Test
+      void shallReturnFalseIfExistsAndEvaluateFalse() {
+        final var actionEvaluation = actionEvaluationBuilder.build();
+        final var certificateAction = mock(CertificateAction.class);
+        final var actions = List.of(certificateAction);
+
+        doReturn(actions).when(certificate.certificateModel()).actions();
+
+        doReturn(CertificateActionType.READ).when(certificateAction).getType();
+        doReturn(false).when(certificateAction)
+            .evaluate(Optional.of(certificate), Optional.of(actionEvaluation));
+
+        assertFalse(
+            certificate.allowTo(CertificateActionType.READ, Optional.of(actionEvaluation)),
+            "Expected allowTo to return 'false'"
+        );
+      }
+
+      @Test
+      void shallReturnFalseIfNotExists() {
+        final var actionEvaluation = actionEvaluationBuilder.build();
+        final var certificateAction = mock(CertificateAction.class);
+        final var actions = List.of(certificateAction);
+
+        doReturn(actions).when(certificate.certificateModel()).actions();
+
+        doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
+
+        assertFalse(
+            certificate.allowTo(CertificateActionType.READ, Optional.of(actionEvaluation)),
+            "Expected allowTo to return 'false'"
+        );
+      }
+
+      @Test
+      void shallUseCertificatePatientIfPatientNotPresentInActionEvalutaion() {
+        final var actionEvaluation = actionEvaluationBuilder.patient(null).build();
+        final ArgumentCaptor<Optional<ActionEvaluation>> actionEvaluationArgumentCaptor =
+            ArgumentCaptor.forClass(Optional.class);
+
+        final var certificateAction = mock(CertificateAction.class);
+        final var actions = List.of(certificateAction);
+
+        doReturn(actions).when(certificate.certificateModel()).actions();
+        doReturn(CertificateActionType.DELETE).when(certificateAction).getType();
+
+        certificate.allowTo(CertificateActionType.DELETE, Optional.of(actionEvaluation));
+
+        verify(certificateAction).evaluate(any(Optional.class),
+            actionEvaluationArgumentCaptor.capture());
+
+        assertEquals(ATHENA_REACT_ANDERSSON,
+            actionEvaluationArgumentCaptor.getValue().orElseThrow().patient());
+      }
+    }
 
     @Test
     void shallUpdateDataIfChanged() {
@@ -1017,6 +1091,1628 @@ class CertificateTest {
           .status(Status.DELETED_DRAFT)
           .build();
       assertFalse(certificateWithStatusDeleted.isDraft());
+    }
+  }
+
+  @Nested
+  class TestSign {
+
+    private final Signature SIGNATURE = new Signature("Signature");
+
+    @Test
+    void shallThrowExceptionIfRevisionDontMatch() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var revision = new Revision(2);
+      final var concurrentModificationException = assertThrows(
+          ConcurrentModificationException.class,
+          () -> certificate.sign(xmlGenerator, SIGNATURE, revision, actionEvaluation
+          )
+      );
+      assertTrue(concurrentModificationException.getMessage().contains("Incorrect revision"),
+          () -> "Received message was: %s".formatted(concurrentModificationException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowExceptionIfStatusDoesntMatchDraft() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var deletedCertificate = certificateBuilder
+          .status(Status.DELETED_DRAFT)
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> deletedCertificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluation
+          )
+      );
+
+      assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowExceptionIfSignatureIsNull() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificate.sign(xmlGenerator, null, REVISION, actionEvaluation
+          )
+      );
+
+      assertTrue(illegalArgumentException.getMessage().contains("Incorrect signature"),
+          () -> "Received message was: %s".formatted(illegalArgumentException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowExceptionIfSignatureIsEmpty() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signatureEmpty = new Signature(" ");
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificate.sign(xmlGenerator, signatureEmpty, REVISION, actionEvaluation
+          )
+      );
+
+      assertTrue(illegalArgumentException.getMessage().contains("Incorrect signature"),
+          () -> "Received message was: %s".formatted(illegalArgumentException.getMessage())
+      );
+    }
+
+    @Test
+    void shallReturnStateSignedWhenSigned() {
+      certificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluationBuilder.build());
+      assertEquals(Status.SIGNED, certificate.status());
+    }
+
+    @Test
+    void shallReturnXmlWhenSigned() {
+      doReturn(XML).when(xmlGenerator).generate(certificate, SIGNATURE);
+      certificate.sign(xmlGenerator, SIGNATURE, REVISION, actionEvaluationBuilder.build()
+      );
+      assertEquals(XML, certificate.xml());
+    }
+  }
+
+  @Nested
+  class TestSignWithoutSignature {
+
+    @Test
+    void shallThrowExceptionIfRevisionDontMatch() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var revision = new Revision(2);
+      final var concurrentModificationException = assertThrows(
+          ConcurrentModificationException.class,
+          () -> certificate.sign(xmlGenerator, revision, actionEvaluation)
+      );
+      assertTrue(concurrentModificationException.getMessage().contains("Incorrect revision"),
+          () -> "Received message was: %s".formatted(concurrentModificationException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowExceptionIfStatusDoesntMatchDraft() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var deletedCertificate = certificateBuilder
+          .status(Status.DELETED_DRAFT)
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> deletedCertificate.sign(xmlGenerator, REVISION, actionEvaluation)
+      );
+
+      assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+
+    @Test
+    void shallReturnStateSignedWhenSigned() {
+      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build());
+      assertEquals(Status.SIGNED, certificate.status());
+    }
+
+    @Test
+    void shallReturnXmlWhenSigned() {
+      doReturn(XML).when(xmlGenerator).generate(certificate, true);
+      certificate.sign(xmlGenerator, REVISION, actionEvaluationBuilder.build());
+      assertEquals(XML, certificate.xml());
+    }
+  }
+
+  @Nested
+  class TestSend {
+
+    @Test
+    void shallIncludeRecipientWhenSent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      doReturn(RECIPIENT).when(certificateModel).recipient();
+      certificate.send(actionEvaluation);
+
+      assertEquals(RECIPIENT, certificate.sent().recipient());
+    }
+
+    @Test
+    void shallIncludeSentTimestampWhenSent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      doReturn(RECIPIENT).when(certificateModel).recipient();
+      certificate.send(actionEvaluation);
+
+      assertNotNull(certificate.sent().sentAt());
+    }
+
+    @Test
+    void shallIncludeSentByWhenSent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      doReturn(RECIPIENT).when(certificateModel).recipient();
+      certificate.send(actionEvaluation);
+
+      assertEquals(TestDataStaff.AJLA_DOKTOR, certificate.sent().sentBy());
+    }
+
+    @Test
+    void shallThrowIfStatusIsNotSigned() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.send(actionEvaluation));
+
+      assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowIfCertificateAlreadyBeenSent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .sent(
+              Sent.builder()
+                  .recipient(RECIPIENT)
+                  .build()
+          )
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.send(actionEvaluation));
+
+      assertTrue(illegalStateException.getMessage().contains("has already been sent to"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+  }
+
+  @Nested
+  class TestSendByCitizen {
+
+    @Test
+    void shallIncludeRecipientWhenSent() {
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      doReturn(RECIPIENT).when(certificateModel).recipient();
+      certificate.sendByCitizen();
+
+      assertEquals(RECIPIENT, certificate.sent().recipient());
+    }
+
+    @Test
+    void shallIncludeSentTimestampWhenSent() {
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      doReturn(RECIPIENT).when(certificateModel).recipient();
+      certificate.sendByCitizen();
+
+      assertNotNull(certificate.sent().sentAt());
+    }
+
+    @Test
+    void shallExcludeSentByWhenSent() {
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      doReturn(RECIPIENT).when(certificateModel).recipient();
+      certificate.sendByCitizen();
+
+      assertNull(certificate.sent().sentBy());
+    }
+
+    @Test
+    void shallThrowIfStatusIsNotSigned() {
+      final var certificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          certificate::sendByCitizen);
+
+      assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowIfCertificateAlreadyBeenSent() {
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .sent(
+              Sent.builder()
+                  .recipient(RECIPIENT)
+                  .build()
+          )
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          certificate::sendByCitizen);
+
+      assertTrue(illegalStateException.getMessage().contains("has already been sent to"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+  }
+
+  @Nested
+  class TestReadyForSign {
+
+    @Test
+    void shallIncludeSentTimestamp() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      certificate.readyForSign(actionEvaluation);
+
+      assertNotNull(certificate.readyForSign().readyForSignAt());
+    }
+
+    @Test
+    void shallIncludeStaff() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      certificate.readyForSign(actionEvaluation);
+
+      assertEquals(TestDataStaff.AJLA_DOKTOR, certificate.readyForSign().readyForSignBy());
+    }
+
+    @Test
+    void shallThrowIfStatusIsSigned() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.readyForSign(actionEvaluation));
+
+      assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowIfCertificateAlreadyBeenMarked() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.DRAFT)
+          .readyForSign(
+              ReadyForSign.builder()
+                  .readyForSignAt(LocalDateTime.now())
+                  .build()
+          )
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.readyForSign(actionEvaluation));
+
+      assertTrue(
+          illegalStateException.getMessage().contains("has already been marked as ready for sign"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+  }
+
+  @Nested
+  class TestRevoke {
+
+    private static final String MESSAGE = "message";
+    private static final String REASON = "reason";
+    private static final RevokedInformation REVOKED_INFORMATION = new RevokedInformation(REASON,
+        MESSAGE);
+
+    @Test
+    void shallSetStatusToRevoked() {
+      final var expectedRevokeInformation = Status.REVOKED;
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      certificate.revoke(actionEvaluation, REVOKED_INFORMATION);
+
+      assertEquals(expectedRevokeInformation, certificate.status());
+    }
+
+    @Test
+    void shallIncludeRevokeInformationWhenRevoked() {
+      final var expectedRevokeInformation = new RevokedInformation(REASON, MESSAGE);
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      certificate.revoke(actionEvaluation, REVOKED_INFORMATION);
+
+      assertEquals(expectedRevokeInformation, certificate.revoked().revokedInformation());
+    }
+
+    @Test
+    void shallIncludeRevokedTimestampWhenRevoked() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      certificate.revoke(actionEvaluation, REVOKED_INFORMATION);
+
+      assertNotNull(certificate.revoked().revokedAt());
+    }
+
+    @Test
+    void shallIncludeRevokedByWhenRevoked() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      certificate.revoke(actionEvaluation, REVOKED_INFORMATION);
+
+      assertEquals(TestDataStaff.AJLA_DOKTOR, certificate.revoked().revokedBy());
+    }
+
+    @Test
+    void shallThrowIfStatusIsNotSigned() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.revoke(actionEvaluation, REVOKED_INFORMATION));
+
+      assertTrue(illegalStateException.getMessage().contains("Incorrect status"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+
+    @Test
+    void shallThrowIfCertificateAlreadyBeenRevoked() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .status(Status.SIGNED)
+          .revoked(Revoked.builder().build())
+          .build();
+
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.revoke(actionEvaluation, REVOKED_INFORMATION));
+
+      assertTrue(illegalStateException.getMessage().contains("has already been revoked"),
+          () -> "Received message was: %s".formatted(illegalStateException.getMessage())
+      );
+    }
+  }
+
+  @Nested
+  class ExternalReference {
+
+    @Test
+    void shallSetExternalReference() {
+      final var certificateWithoutExternalReference = certificateBuilder
+          .externalReference(null)
+          .build();
+
+      certificateWithoutExternalReference.externalReference(EXTERNAL_REFERENCE);
+      assertEquals(EXTERNAL_REFERENCE, certificateWithoutExternalReference.externalReference());
+    }
+
+    @Test
+    void shallThrowIfExternalReferenceIfAlreadySet() {
+      final var illegalStateException = assertThrows(IllegalStateException.class,
+          () -> certificate.externalReference(EXTERNAL_REFERENCE));
+
+      assertTrue(illegalStateException.getMessage().contains("already has an external reference"));
+    }
+  }
+
+  @Nested
+  class TestReasonNotAllowed {
+
+    @Test
+    void shallReturnEmptyList() {
+      final var certificateActionSpecification = CertificateActionSpecification.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var actions = List.of(certificateAction);
+
+      doReturn(actions).when(certificate.certificateModel()).actions();
+      doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
+      doReturn(Collections.emptyList()).when(certificateAction)
+          .reasonNotAllowed(Optional.of(certificate), Optional.of(actionEvaluation));
+
+      final var actualResult = certificate.reasonNotAllowed(CertificateActionType.CREATE,
+          Optional.of(actionEvaluation));
+
+      assertTrue(actualResult.isEmpty(), "Expected reasonNotAllowed to return empty list");
+    }
+
+    @Test
+    void shallReturnReasons() {
+      final var expectedReasons = List.of("expectedReasons");
+      final var certificateActionSpecification = CertificateActionSpecification.builder().build();
+      final var actionEvaluation = ActionEvaluation.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .build();
+      final var certificateAction = mock(CertificateAction.class);
+      final var actions = List.of(certificateAction);
+
+      doReturn(actions).when(certificate.certificateModel()).actions();
+      doReturn(CertificateActionType.CREATE).when(certificateAction).getType();
+      doReturn(expectedReasons).when(certificateAction)
+          .reasonNotAllowed(Optional.of(certificate), Optional.of(actionEvaluation));
+
+      final var actualResult = certificate.reasonNotAllowed(CertificateActionType.CREATE,
+          Optional.of(actionEvaluation));
+
+      assertEquals(expectedReasons, actualResult);
+    }
+  }
+
+  @Nested
+  class TestReplace {
+
+    @Test
+    void shallReturnNewCertificateWithId() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.replace(actionEvaluation);
+
+      assertNotNull(actualCertificate.id());
+      assertNotEquals(signedCertificate.id(), actualCertificate.id());
+    }
+
+    @Test
+    void shallReturnNewCertificateWithCreated() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.replace(actionEvaluation);
+
+      assertEquals(
+          LocalDateTime.now(ZoneId.systemDefault()).toLocalDate(),
+          actualCertificate.created().toLocalDate()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithRevision() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.replace(actionEvaluation);
+
+      assertEquals(new Revision(0), actualCertificate.revision());
+    }
+
+    @Test
+    void shallReturnNewCertificateWithSameModel() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.replace(actionEvaluation);
+
+      assertEquals(signedCertificate.certificateModel(), actualCertificate.certificateModel());
+    }
+
+    @Test
+    void shallReturnNewCertificateWithSamePatient() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .patient(null)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.replace(actionEvaluation);
+
+      assertEquals(
+          signedCertificate.certificateMetaData().patient(),
+          actualCertificate.certificateMetaData().patient()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewPatient() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .patient(ALVE_REACT_ALFREDSSON)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.replace(actionEvaluation);
+
+      assertEquals(
+          actionEvaluation.patient(),
+          actualCertificate.certificateMetaData().patient()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewSubUnit() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .subUnit(ALFA_HUDMOTTAGNINGEN)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.replace(actionEvaluation);
+
+      assertEquals(
+          actionEvaluation.subUnit(),
+          actualCertificate.certificateMetaData().issuingUnit()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewCareUnit() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .careUnit(ALFA_VARDCENTRAL)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.replace(actionEvaluation);
+
+      assertEquals(
+          actionEvaluation.careUnit(),
+          actualCertificate.certificateMetaData().careUnit()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewCareProvider() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .careProvider(BETA_REGIONEN)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.replace(actionEvaluation);
+
+      assertEquals(
+          actionEvaluation.careProvider(),
+          actualCertificate.certificateMetaData().careProvider()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewStaff() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .user(ALF_DOKTOR)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.replace(actionEvaluation);
+
+      assertEquals(
+          Staff.create(actionEvaluation.user()),
+          actualCertificate.certificateMetaData().issuer()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithReplaceCertificateAsParent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.replace(actionEvaluation);
+
+      final var expectedRelation = Relation.builder()
+          .certificate(signedCertificate)
+          .type(RelationType.REPLACE)
+          .created(LocalDateTime.now(ZoneId.systemDefault()))
+          .build();
+
+      assertAll(
+          () -> assertEquals(expectedRelation.certificate(),
+              actualCertificate.parent().certificate()),
+          () -> assertEquals(expectedRelation.type(), actualCertificate.parent().type()),
+          () -> assertEquals(expectedRelation.created().toLocalDate(),
+              actualCertificate.parent().created().toLocalDate())
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithValues() {
+      final var expectedElementData = List.of(DATE, CONTACT_INFO);
+
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder
+          .elementData(expectedElementData)
+          .status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.replace(actionEvaluation);
+
+      assertEquals(expectedElementData, actualCertificate.elementData());
+    }
+
+    @Test
+    void shallUpdateReplacedCertificateWithNewCertificateAsChild() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var newCertificate = signedCertificate.replace(actionEvaluation);
+
+      final var expectedRelation = Relation.builder()
+          .certificate(newCertificate)
+          .type(RelationType.REPLACE)
+          .created(LocalDateTime.now(ZoneId.systemDefault()))
+          .build();
+
+      assertAll(
+          () -> assertEquals(expectedRelation.certificate(),
+              signedCertificate.children().get(0).certificate()),
+          () -> assertEquals(expectedRelation.type(),
+              signedCertificate.children().get(0).type()),
+          () -> assertEquals(expectedRelation.created().toLocalDate(),
+              signedCertificate.children().get(0).created().toLocalDate())
+      );
+    }
+  }
+
+  @Nested
+  class TestComplement {
+
+    @Test
+    void shallReturnNewCertificateWithId() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.complement(actionEvaluation);
+
+      assertNotNull(actualCertificate.id());
+      assertNotEquals(signedCertificate.id(), actualCertificate.id());
+    }
+
+    @Test
+    void shallReturnNewCertificateWithCreated() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.complement(actionEvaluation);
+
+      assertEquals(
+          LocalDateTime.now(ZoneId.systemDefault()).toLocalDate(),
+          actualCertificate.created().toLocalDate()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithRevision() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.complement(actionEvaluation);
+
+      assertEquals(new Revision(0), actualCertificate.revision());
+    }
+
+    @Test
+    void shallReturnNewCertificateWithSameModel() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.complement(actionEvaluation);
+
+      assertEquals(signedCertificate.certificateModel(), actualCertificate.certificateModel());
+    }
+
+    @Test
+    void shallReturnNewCertificateWithSamePatient() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .patient(null)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.complement(actionEvaluation);
+
+      assertEquals(
+          signedCertificate.certificateMetaData().patient(),
+          actualCertificate.certificateMetaData().patient()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewPatient() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .patient(ALVE_REACT_ALFREDSSON)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.complement(actionEvaluation);
+
+      assertEquals(
+          actionEvaluation.patient(),
+          actualCertificate.certificateMetaData().patient()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewSubUnit() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .subUnit(ALFA_HUDMOTTAGNINGEN)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.complement(actionEvaluation);
+
+      assertEquals(
+          actionEvaluation.subUnit(),
+          actualCertificate.certificateMetaData().issuingUnit()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewCareUnit() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .careUnit(ALFA_VARDCENTRAL)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.complement(actionEvaluation);
+
+      assertEquals(
+          actionEvaluation.careUnit(),
+          actualCertificate.certificateMetaData().careUnit()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewCareProvider() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .careProvider(BETA_REGIONEN)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.complement(actionEvaluation);
+
+      assertEquals(
+          actionEvaluation.careProvider(),
+          actualCertificate.certificateMetaData().careProvider()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewStaff() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .user(ALF_DOKTOR)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.complement(actionEvaluation);
+
+      assertEquals(
+          Staff.create(actionEvaluation.user()),
+          actualCertificate.certificateMetaData().issuer()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithComplementCertificateAsParent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.complement(actionEvaluation);
+
+      final var expectedRelation = Relation.builder()
+          .certificate(signedCertificate)
+          .type(RelationType.COMPLEMENT)
+          .created(LocalDateTime.now(ZoneId.systemDefault()))
+          .build();
+
+      assertAll(
+          () -> assertEquals(expectedRelation.certificate(),
+              actualCertificate.parent().certificate()),
+          () -> assertEquals(expectedRelation.type(), actualCertificate.parent().type()),
+          () -> assertEquals(expectedRelation.created().toLocalDate(),
+              actualCertificate.parent().created().toLocalDate())
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithValues() {
+      final var expectedElementData = List.of(DATE, CONTACT_INFO);
+
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder
+          .elementData(expectedElementData)
+          .status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.complement(actionEvaluation);
+
+      assertEquals(expectedElementData, actualCertificate.elementData());
+    }
+
+    @Test
+    void shallReturnNewCertificateWithoutOldMessages() {
+      final var oldMessages = List.of(Message.builder().build());
+
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder
+          .messages(oldMessages)
+          .status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.complement(actionEvaluation);
+
+      assertEquals(Collections.emptyList(), actualCertificate.messages());
+    }
+
+    @Test
+    void shallUpdateComplementedCertificateWithNewCertificateAsChild() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var newCertificate = signedCertificate.complement(actionEvaluation);
+
+      final var expectedRelation = Relation.builder()
+          .certificate(newCertificate)
+          .type(RelationType.COMPLEMENT)
+          .created(LocalDateTime.now(ZoneId.systemDefault()))
+          .build();
+
+      assertAll(
+          () -> assertEquals(expectedRelation.certificate(),
+              signedCertificate.children().get(0).certificate()),
+          () -> assertEquals(expectedRelation.type(),
+              signedCertificate.children().get(0).type()),
+          () -> assertEquals(expectedRelation.created().toLocalDate(),
+              signedCertificate.children().get(0).created().toLocalDate())
+      );
+    }
+  }
+
+  @Nested
+  class TestRenew {
+
+    @Test
+    void shallReturnNewCertificateWithId() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertNotNull(actualCertificate.id());
+      assertNotEquals(signedCertificate.id(), actualCertificate.id());
+    }
+
+    @Test
+    void shallReturnNewCertificateWithCreated() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(
+          LocalDateTime.now(ZoneId.systemDefault()).toLocalDate(),
+          actualCertificate.created().toLocalDate()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithRevision() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(new Revision(0), actualCertificate.revision());
+    }
+
+    @Test
+    void shallReturnNewCertificateWithSameModel() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(signedCertificate.certificateModel(), actualCertificate.certificateModel());
+    }
+
+    @Test
+    void shallReturnNewCertificateWithSamePatient() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .patient(null)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(
+          signedCertificate.certificateMetaData().patient(),
+          actualCertificate.certificateMetaData().patient()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewPatient() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .patient(ALVE_REACT_ALFREDSSON)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(
+          actionEvaluation.patient(),
+          actualCertificate.certificateMetaData().patient()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewSubUnit() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .subUnit(ALFA_HUDMOTTAGNINGEN)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(
+          actionEvaluation.subUnit(),
+          actualCertificate.certificateMetaData().issuingUnit()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewCareUnit() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .careUnit(ALFA_VARDCENTRAL)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(
+          actionEvaluation.careUnit(),
+          actualCertificate.certificateMetaData().careUnit()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewCareProvider() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .careProvider(BETA_REGIONEN)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(
+          actionEvaluation.careProvider(),
+          actualCertificate.certificateMetaData().careProvider()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewStaff() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .user(ALF_DOKTOR)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(
+          Staff.create(actionEvaluation.user()),
+          actualCertificate.certificateMetaData().issuer()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithRenewedCertificateAsParent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      final var expectedRelation = Relation.builder()
+          .certificate(signedCertificate)
+          .type(RelationType.RENEW)
+          .created(LocalDateTime.now(ZoneId.systemDefault()))
+          .build();
+
+      assertAll(
+          () -> assertEquals(expectedRelation.certificate(),
+              actualCertificate.parent().certificate()),
+          () -> assertEquals(expectedRelation.type(), actualCertificate.parent().type()),
+          () -> assertEquals(expectedRelation.created().toLocalDate(),
+              actualCertificate.parent().created().toLocalDate())
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithValuesThatShouldBeKept() {
+      final var expectedElementData = List.of(
+          CONTACT_INFO
+      );
+
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder
+          .elementData(
+              List.of(DATE, CONTACT_INFO)
+          )
+          .status(Status.SIGNED)
+          .build();
+
+      final var specification = mock(ElementSpecification.class);
+      doReturn(true).when(certificateModel).elementSpecificationExists(DATE.id());
+      doReturn(specification).when(certificateModel).elementSpecification(DATE.id());
+      doReturn(false).when(specification).includeWhenRenewing();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(expectedElementData, actualCertificate.elementData());
+    }
+
+    @Test
+    void shallUpdateReplacedCertificateWithNewCertificateAsChild() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var newCertificate = signedCertificate.renew(actionEvaluation);
+
+      final var expectedRelation = Relation.builder()
+          .certificate(newCertificate)
+          .type(RelationType.RENEW)
+          .created(LocalDateTime.now(ZoneId.systemDefault()))
+          .build();
+
+      assertAll(
+          () -> assertEquals(expectedRelation.certificate(),
+              signedCertificate.children().get(0).certificate()),
+          () -> assertEquals(expectedRelation.type(),
+              signedCertificate.children().get(0).type()),
+          () -> assertEquals(expectedRelation.created().toLocalDate(),
+              signedCertificate.children().get(0).created().toLocalDate())
+      );
+    }
+  }
+
+  @Nested
+  class SendActiveForCitizen {
+
+    @Test
+    void shouldNotReturnSendIfNoRecipient() {
+      final var certificate =
+          fk7210CertificateBuilder()
+              .sent(null)
+              .status(Status.SIGNED)
+              .certificateModel(CertificateModel.builder()
+                  .name("Intyg om graviditet")
+                  .build())
+              .build();
+
+      assertFalse(certificate.isSendActiveForCitizen());
+    }
+
+    @Test
+    void shouldNotReturnSendIfDraft() {
+      final var certificate =
+          fk7210CertificateBuilder()
+              .sent(null)
+              .status(Status.DRAFT)
+              .build();
+
+      assertFalse(certificate.isSendActiveForCitizen());
+    }
+
+    @Test
+    void shouldNotReturnSendIfAlreadySent() {
+      final var certificate =
+          fk7210CertificateBuilder()
+              .status(Status.SIGNED)
+              .sent(Sent.builder()
+                  .sentAt(LocalDateTime.now())
+                  .build())
+              .build();
+
+      assertFalse(certificate.isSendActiveForCitizen());
+    }
+
+    @Test
+    void shouldNotReturnSendIfReplacedBySignedCertificate() {
+      final var certificate =
+          fk7210CertificateBuilder()
+              .sent(null)
+              .status(Status.SIGNED)
+              .children(List.of(
+                  Relation.builder()
+                      .certificate(
+                          Certificate.builder()
+                              .status(Status.SIGNED)
+                              .build()
+                      )
+                      .type(RelationType.REPLACE)
+                      .build()
+              ))
+              .build();
+
+      assertFalse(certificate.isSendActiveForCitizen());
+    }
+
+    @Test
+    void shouldReturnSendIfReplacedByDraft() {
+      final var certificate =
+          fk7210CertificateBuilder()
+              .sent(null)
+              .status(Status.SIGNED)
+              .children(List.of(
+                  Relation.builder()
+                      .certificate(Certificate.builder()
+                          .status(Status.DRAFT)
+                          .build())
+                      .type(RelationType.REPLACE)
+                      .build()
+              ))
+              .build();
+
+      assertTrue(certificate.isSendActiveForCitizen());
+    }
+
+    @Test
+    void shouldReturnSendIfRenewed() {
+      final var certificate =
+          fk7210CertificateBuilder()
+              .sent(null)
+              .status(Status.SIGNED)
+              .children(List.of(
+                  Relation.builder()
+                      .certificate(Certificate.builder()
+                          .status(Status.SIGNED)
+                          .build())
+                      .type(RelationType.RENEW)
+                      .build()
+              ))
+              .build();
+
+      assertTrue(certificate.isSendActiveForCitizen());
+    }
+
+    @Test
+    void shouldReturnSendIfAllConditionsAreMet() {
+      final var certificate =
+          fk7210CertificateBuilder()
+              .sent(null)
+              .status(Status.SIGNED)
+              .build();
+
+      assertTrue(certificate.isSendActiveForCitizen());
+    }
+  }
+
+  @Nested
+  class GetLatestChildRelationOfTypeTest {
+
+    @Test
+    void shallReturnMatchingChildRelation() {
+      final var expectedRelation = Relation.builder()
+          .type(RelationType.COMPLEMENT)
+          .created(LocalDateTime.now())
+          .build();
+
+      final var certificate = Certificate.builder()
+          .children(
+              List.of(
+                  expectedRelation
+              )
+          )
+          .build();
+
+      assertEquals(Optional.of(expectedRelation),
+          certificate.latestChildRelation(RelationType.COMPLEMENT));
+    }
+
+    @Test
+    void shallReturnOptionalEmptyIfNoMatchingChildRelation() {
+      final var certificate = Certificate.builder()
+          .children(
+              List.of(
+                  Relation.builder()
+                      .type(RelationType.REPLACE)
+                      .created(LocalDateTime.now())
+                      .build()
+              )
+          )
+          .build();
+
+      assertEquals(Optional.empty(),
+          certificate.latestChildRelation(RelationType.COMPLEMENT));
+    }
+
+    @Test
+    void shallReturnLastestRelationIfMultipleChildRelationsArePresent() {
+      final var now = LocalDateTime.now();
+
+      final var expectedRelation = Relation.builder()
+          .type(RelationType.COMPLEMENT)
+          .created(now)
+          .build();
+
+      final var certificate = Certificate.builder()
+          .children(
+              List.of(
+                  expectedRelation,
+                  Relation.builder()
+                      .type(RelationType.COMPLEMENT)
+                      .created(LocalDateTime.now().minusDays(1))
+                      .build()
+              )
+          )
+          .build();
+
+      assertEquals(Optional.of(expectedRelation),
+          certificate.latestChildRelation(RelationType.COMPLEMENT));
+    }
+  }
+
+  @Nested
+  class AnswerComplementTests {
+
+
+    private final Message message = complementMessageBuilder().build();
+    private Certificate certificateWithMessages;
+
+    @BeforeEach
+    void setUp() {
+      certificateWithMessages = certificateBuilder.messages(
+              List.of(complementMessageBuilder().build()))
+          .build();
+    }
+
+    @Test
+    void shallBuildAnswerWithId() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
+      assertNotNull(answer.id());
+    }
+
+    @Test
+    void shallBuildAnswerWithType() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var expectedType = message.type();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
+      assertEquals(expectedType, answer.type());
+    }
+
+    @Test
+    void shallBuildAnswerWithCreated() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
+      assertNotNull(answer.created());
+    }
+
+    @Test
+    void shallBuildAnswerWithSubject() {
+      final var expectedSubject = message.subject();
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
+      assertEquals(expectedSubject, answer.subject());
+    }
+
+
+    @Test
+    void shallBuildAnswerWithContent() {
+      final var expectedContent = new Content(CONTENT);
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
+      assertEquals(expectedContent, answer.content());
+    }
+
+    @Test
+    void shallBuildAnswerWithModified() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
+      assertNotNull(answer.modified());
+    }
+
+    @Test
+    void shallBuildAnswerWithSent() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
+      assertNotNull(answer.sent());
+    }
+
+    @Test
+    void shallBuildAnswerWithStatus() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
+      assertEquals(MessageStatus.HANDLED, answer.status());
+    }
+
+    @Test
+    void shallBuildAnswerWithAuthor() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
+      assertEquals(new Author(AJLA_DOKTOR.name().fullName()), answer.author());
+    }
+
+    @Test
+    void shallBuildAnswerWithAuthoredStaff() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
+      assertNotNull(answer.authoredStaff());
+    }
+
+    @Test
+    void shallBuildAnswerWithReference() {
+      final var expectedReference = message.reference();
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      final var answer = certificateWithMessages.messages().get(0).answer();
+      assertEquals(expectedReference, answer.reference());
+    }
+
+    @Test
+    void shallNotAddAnswerIfTypeNotComplement() {
+      final var message1 = Message.builder()
+          .type(MessageType.REMINDER)
+          .build();
+      final var message2 = Message.builder()
+          .type(MessageType.REMINDER)
+          .build();
+
+      certificateWithMessages = certificateBuilder
+          .messages(
+              List.of(
+                  message1, message2
+              )
+          )
+          .build();
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
+      assertNull(certificateWithMessages.messages().get(0).answer());
+      assertNull(certificateWithMessages.messages().get(1).answer());
+    }
+  }
+
+  @Nested
+  class ForwardMessageTests {
+
+    @Test
+    void shallThrowIfCertificateIsNotSigned() {
+      final var draftCertificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      assertThrows(IllegalStateException.class, draftCertificate::forwardMessages,
+          "Certificate status needs to be signed");
+    }
+
+    @Test
+    void shallThrowIfCertificateDoesNotHaveMessages() {
+      final var draftCertificate = certificateBuilder
+          .status(Status.SIGNED)
+          .messages(Collections.emptyList())
+          .build();
+
+      assertThrows(IllegalStateException.class, draftCertificate::forwardMessages,
+          "Certificate requires to have messages");
+    }
+
+    @Test
+    void shallSetSentMessagesToForwarded() {
+      final var contactMessage = Message.builder()
+          .type(MessageType.CONTACT)
+          .status(MessageStatus.SENT)
+          .build();
+
+      final var certificateWithContact = certificateBuilder
+          .status(Status.SIGNED)
+          .messages(List.of(contactMessage))
+          .build();
+
+      certificateWithContact.forwardMessages();
+
+      assertTrue(contactMessage.forwarded().value());
+    }
+
+    @Test
+    void shallNotSetDraftMessagesToForwarded() {
+      final var contactMessage = Message.builder()
+          .type(MessageType.CONTACT)
+          .status(MessageStatus.DRAFT)
+          .forwarded(new Forwarded(false))
+          .build();
+
+      final var certificateWithContact = certificateBuilder
+          .status(Status.SIGNED)
+          .messages(List.of(contactMessage))
+          .build();
+
+      certificateWithContact.forwardMessages();
+
+      assertFalse(contactMessage.forwarded().value());
+    }
+  }
+
+  @Nested
+  class ForwardTests {
+
+    @Test
+    void shallThrowIfStatusIsNotDraft() {
+      final var signedCertificate = certificateBuilder
+          .status(Status.SIGNED)
+          .build();
+
+      assertThrows(IllegalStateException.class, signedCertificate::forward,
+          "Shall throw if certificate does not have status draft");
+    }
+
+    @Test
+    void shallSetForwardedToTrue() {
+      final var draftCertificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      draftCertificate.forward();
+
+      assertTrue(draftCertificate.forwarded().value());
+    }
+  }
+
+  @Nested
+  class LockTests {
+
+    @Test
+    void shallSetStatusToLocked() {
+      final var draftCertificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      draftCertificate.lock();
+
+      assertEquals(Status.LOCKED_DRAFT, draftCertificate.status());
+    }
+
+    @Test
+    void shallIncludeLockedTimestampWhenDraftIsLocked() {
+      final var draftCertificate = certificateBuilder
+          .status(Status.DRAFT)
+          .build();
+
+      draftCertificate.lock();
+
+      assertNotNull(draftCertificate.locked());
+    }
+
+    @Test
+    void shallSetParentToNull() {
+      final var draftCertificate = certificateBuilder
+          .status(Status.DRAFT)
+          .parent(Relation.builder().build())
+          .build();
+
+      draftCertificate.lock();
+
+      assertNull(draftCertificate.parent());
+    }
+
+    @Test
+    void shallSetChildrenToEmptyList() {
+      final var draftCertificate = certificateBuilder
+          .status(Status.DRAFT)
+          .children(List.of(Relation.builder().build()))
+          .build();
+
+      draftCertificate.lock();
+
+      assertTrue(draftCertificate.children().isEmpty());
+    }
+
+    @Test
+    void shallThrowIfStatusIsNotDraft() {
+      final var draftCertificate = certificateBuilder
+          .status(Status.SIGNED)
+          .children(List.of(Relation.builder().build()))
+          .build();
+
+      assertThrows(IllegalStateException.class, draftCertificate::lock);
     }
   }
 }

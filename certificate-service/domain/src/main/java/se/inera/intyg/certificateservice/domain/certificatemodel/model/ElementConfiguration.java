@@ -8,7 +8,21 @@ public interface ElementConfiguration {
     return null;
   }
 
+  default String description() {
+    return null;
+  }
+
+  default String label() {
+    return null;
+  }
+
+  default String header() {
+    return null;
+  }
+
   ElementType type();
 
   ElementValue emptyValue();
+
+  ElementMessage message();
 }

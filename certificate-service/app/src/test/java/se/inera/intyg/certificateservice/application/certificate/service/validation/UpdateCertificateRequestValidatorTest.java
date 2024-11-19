@@ -100,6 +100,74 @@ class UpdateCertificateRequestValidatorTest {
     }
 
     @Test
+    void shallThrowIfFirstNameIsNull() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .firstName(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> updateCertificateRequestValidator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: User.firstName",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfFirstNameIsEmpty() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .firstName("")
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> updateCertificateRequestValidator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: User.firstName",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfLastNameIsNull() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .lastName(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> updateCertificateRequestValidator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: User.lastName",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfLastNameIsEmpty() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .lastName("")
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> updateCertificateRequestValidator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: User.lastName",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
     void shallThrowIfRoleIsNull() {
       final var request = requestBuilder
           .user(
@@ -129,6 +197,57 @@ class UpdateCertificateRequestValidatorTest {
           () -> updateCertificateRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: User.blocked",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfAgreementIsNull() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .agreement(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> updateCertificateRequestValidator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: User.agreement",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfAllowCopyIsNull() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .allowCopy(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> updateCertificateRequestValidator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: User.allowCopy",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfHealthCareProfessionalLicenceIsNull() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .healthCareProfessionalLicence(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> updateCertificateRequestValidator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: User.healthCareProfessionalLicence",
           illegalArgumentException.getMessage());
     }
   }
@@ -180,6 +299,23 @@ class UpdateCertificateRequestValidatorTest {
           () -> updateCertificateRequestValidator.validate(request, CERTIFICATE_ID));
 
       assertEquals("Required parameter missing: Unit.id",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfWorkplaceCodeIsNull() {
+      final var request = requestBuilder
+          .unit(
+              alfaAllergimottagningenDtoBuilder()
+                  .workplaceCode(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> updateCertificateRequestValidator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: Unit.workplaceCode",
           illegalArgumentException.getMessage());
     }
 

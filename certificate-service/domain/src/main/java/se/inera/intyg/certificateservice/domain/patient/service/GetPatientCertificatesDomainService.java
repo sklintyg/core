@@ -1,11 +1,11 @@
 package se.inera.intyg.certificateservice.domain.patient.service;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 
@@ -19,7 +19,8 @@ public class GetPatientCertificatesDomainService {
             certificatesRequest(actionEvaluation)
         )
         .stream()
-        .filter(certificate -> certificate.allowTo(CertificateActionType.READ, actionEvaluation))
+        .filter(certificate -> certificate.allowTo(CertificateActionType.READ,
+            Optional.of(actionEvaluation)))
         .toList();
   }
 
@@ -28,14 +29,12 @@ public class GetPatientCertificatesDomainService {
       return CertificatesRequest.builder()
           .careUnitId(actionEvaluation.careUnit().hsaId())
           .personId(actionEvaluation.patient().id())
-          .statuses(Status.all())
           .build();
     }
 
     return CertificatesRequest.builder()
         .issuedUnitId(actionEvaluation.subUnit().hsaId())
         .personId(actionEvaluation.patient().id())
-        .statuses(Status.all())
         .build();
   }
 }

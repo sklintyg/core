@@ -1,7 +1,5 @@
 package se.inera.intyg.certificateservice.application.common;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
@@ -11,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,7 @@ class CertificatesRequestFactoryTest {
   @Test
   void shallCreateDefaultCertificatesRequest() {
     final var expectedCertificateRequest = CertificatesRequest.builder()
-        .statuses(Status.all())
+        .statuses(Status.unsigned())
         .build();
 
     assertEquals(expectedCertificateRequest,
@@ -51,7 +50,7 @@ class CertificatesRequestFactoryTest {
           .build();
 
       assertEquals(expectedFrom,
-          certificatesRequestFactory.create(queryCriteriaDTO).from()
+          certificatesRequestFactory.create(queryCriteriaDTO).modifiedFrom()
       );
     }
 
@@ -63,7 +62,7 @@ class CertificatesRequestFactoryTest {
           .build();
 
       assertEquals(expectedTo,
-          certificatesRequestFactory.create(queryCriteriaDTO).to()
+          certificatesRequestFactory.create(queryCriteriaDTO).modifiedTo()
       );
     }
 
@@ -121,24 +120,22 @@ class CertificatesRequestFactoryTest {
     }
 
     @Test
-    void shallIncludeStatusDRAFTIfStatusesEmpty() {
-      final var expectedStatuses = List.of(Status.DRAFT);
+    void shallIncludeEmptyListIfStatusesEmpty() {
       final var queryCriteriaDTO = CertificatesQueryCriteriaDTO.builder()
           .statuses(Collections.emptyList())
           .build();
 
-      assertEquals(expectedStatuses,
+      assertEquals(Collections.emptyList(),
           certificatesRequestFactory.create(queryCriteriaDTO).statuses()
       );
     }
 
     @Test
-    void shallIncludeStatusDRAFTIfStatusesNull() {
-      final var expectedStatuses = List.of(Status.DRAFT);
+    void shallIncludeEmptyListIfStatusesNull() {
       final var queryCriteriaDTO = CertificatesQueryCriteriaDTO.builder()
           .build();
 
-      assertEquals(expectedStatuses,
+      assertEquals(Collections.emptyList(),
           certificatesRequestFactory.create(queryCriteriaDTO).statuses()
       );
     }
@@ -156,8 +153,20 @@ class CertificatesRequestFactoryTest {
     }
 
     @Test
-    void shallNotIncludeStatusDRAFTIfStatusesNotContainsUNSIGNED() {
-      final var expectedStatuses = Collections.emptyList();
+    void shallIncludeStatusSIGNEDTIfStatusesContainsSIGNED() {
+      final var expectedStatuses = List.of(Status.SIGNED);
+      final var queryCriteriaDTO = CertificatesQueryCriteriaDTO.builder()
+          .statuses(List.of(CertificateStatusTypeDTO.SIGNED))
+          .build();
+
+      assertEquals(expectedStatuses,
+          certificatesRequestFactory.create(queryCriteriaDTO).statuses()
+      );
+    }
+
+    @Test
+    void shallIncludeStatusLOCKED_DRAFTTIfStatusesContainsLOCKED() {
+      final var expectedStatuses = List.of(Status.LOCKED_DRAFT);
       final var queryCriteriaDTO = CertificatesQueryCriteriaDTO.builder()
           .statuses(List.of(CertificateStatusTypeDTO.LOCKED))
           .build();
@@ -180,7 +189,8 @@ class CertificatesRequestFactoryTest {
           .validForSign(Boolean.TRUE)
           .build();
 
-      assertTrue(certificatesRequestFactory.create(queryCriteriaDTO).validCertificates());
+      Assertions.assertTrue(
+          certificatesRequestFactory.create(queryCriteriaDTO).validCertificates());
     }
 
     @Test
@@ -189,7 +199,8 @@ class CertificatesRequestFactoryTest {
           .validForSign(Boolean.FALSE)
           .build();
 
-      assertFalse(certificatesRequestFactory.create(queryCriteriaDTO).validCertificates());
+      Assertions.assertFalse(
+          certificatesRequestFactory.create(queryCriteriaDTO).validCertificates());
     }
   }
 }

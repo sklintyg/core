@@ -1,5 +1,7 @@
 package se.inera.intyg.cts.infrastructure.integration.privatepractitioner;
 
+import static se.inera.intyg.cts.logging.MdcLogConstants.EVENT_TYPE_DELETION;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,6 +14,7 @@ import se.inera.intyg.cts.domain.model.ServiceId;
 import se.inera.intyg.cts.domain.model.Termination;
 import se.inera.intyg.cts.domain.service.EraseDataInService;
 import se.inera.intyg.cts.domain.service.EraseException;
+import se.inera.intyg.cts.logging.PerformanceLogging;
 
 @Service
 public class EraseDataInPrivatePractitioner implements EraseDataInService {
@@ -39,6 +42,7 @@ public class EraseDataInPrivatePractitioner implements EraseDataInService {
   }
 
   @Override
+  @PerformanceLogging(eventAction = "erase-in-privatlakarportal", eventType = EVENT_TYPE_DELETION)
   public void erase(Termination termination) throws EraseException {
     try {
       webClient.delete().uri(uriBuilder -> uriBuilder

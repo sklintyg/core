@@ -1,12 +1,14 @@
 package se.inera.intyg.certificateservice.application.patient.service;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.certificateservice.application.certificate.service.CertificateConverter;
+import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
-import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
+import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesRequest;
 import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCertificatesResponse;
+import se.inera.intyg.certificateservice.application.patient.service.validator.GetPatientCertificatesRequestValidator;
 import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
 
 @Service
@@ -37,9 +39,16 @@ public class GetPatientCertificateService {
         .certificates(certificates.stream()
             .map(certificate -> certificateConverter.convert(
                     certificate,
-                    certificate.actions(actionEvaluation).stream()
-                        .map(resourceLinkConverter::convert)
-                        .toList()
+                    certificate.actionsInclude(Optional.of(actionEvaluation)).stream()
+                        .map(certificateAction ->
+                            resourceLinkConverter.convert(
+                                certificateAction,
+                                Optional.of(certificate),
+                                actionEvaluation
+                            )
+                        )
+                        .toList(),
+                    actionEvaluation
                 )
             )
             .toList()

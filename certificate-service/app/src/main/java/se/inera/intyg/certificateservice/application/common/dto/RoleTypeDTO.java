@@ -1,9 +1,10 @@
 package se.inera.intyg.certificateservice.application.common.dto;
 
-import se.inera.intyg.certificateservice.domain.staff.model.Role;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 
 public enum RoleTypeDTO {
   DOCTOR,
+  PRIVATE_DOCTOR,
   NURSE,
   MIDWIFE,
   CARE_ADMIN,
@@ -16,6 +17,7 @@ public enum RoleTypeDTO {
       case MIDWIFE -> Role.MIDWIFE;
       case CARE_ADMIN -> Role.CARE_ADMIN;
       case DENTIST -> Role.DENTIST;
+      case PRIVATE_DOCTOR -> Role.PRIVATE_DOCTOR;
     };
   }
 
@@ -26,6 +28,7 @@ public enum RoleTypeDTO {
       case MIDWIFE -> MIDWIFE;
       case CARE_ADMIN -> CARE_ADMIN;
       case DENTIST -> DENTIST;
+      case PRIVATE_DOCTOR -> PRIVATE_DOCTOR;
     };
   }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
@@ -22,6 +23,7 @@ public class TestabilityCertificateRequest {
   PatientDTO patient;
   CertificateModelIdDTO certificateModelId;
   TestabilityFillTypeDTO fillType;
+  CertificateStatusTypeDTO status;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class TestabilityCertificateRequestBuilder {

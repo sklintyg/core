@@ -20,9 +20,10 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidationErrorDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.service.converter.ElementCertificateConverter;
 import se.inera.intyg.certificateservice.application.certificate.service.validation.ValidateCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.service.ValidateCertificateDomainService;
@@ -38,7 +39,7 @@ class ValidateCertificateServiceTest {
   private static final String CERTIFICATE_ID = "certificateId";
   private static final String ELEMENT_ID = "elementId";
   private static final String CATEGORY_ID = "categoryId";
-  private static final String FIELD_ID = "fieldId";
+  private static final String FIELD_ID = "code";
   private static final String MESSAGE = "text";
   @Mock
   private ActionEvaluationFactory actionEvaluationFactory;

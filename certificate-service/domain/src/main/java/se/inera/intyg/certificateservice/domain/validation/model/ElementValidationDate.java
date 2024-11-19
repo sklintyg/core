@@ -1,7 +1,5 @@
 package se.inera.intyg.certificateservice.domain.validation.model;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.temporal.TemporalAmount;
 import java.util.Collections;
 import java.util.List;
@@ -33,18 +31,18 @@ public class ElementValidationDate implements ElementValidation {
 
     final var dateValue = getValue(data.value());
 
-    if (mandatory && dateValue.date() == null) {
-      return errorMessage(data, dateValue, categoryId, "Ange ett datum.");
+    if (mandatory && dateValue.isEmpty()) {
+      return errorMessage(data, dateValue, categoryId, ErrorMessageFactory.missingDate());
     }
 
-    if (isDateBeforeMin(dateValue)) {
+    if (ElementValidator.isDateBeforeMin(dateValue.date(), min)) {
       return errorMessage(data, dateValue, categoryId,
-          "Ange ett datum som är tidigast %s.".formatted(minDate()));
+          ErrorMessageFactory.minDate(min));
     }
 
-    if (isDateAfterMax(dateValue)) {
+    if (ElementValidator.isDateAfterMax(dateValue.date(), max)) {
       return errorMessage(data, dateValue, categoryId,
-          "Ange ett datum som är senast %s.".formatted(maxDate()));
+          ErrorMessageFactory.maxDate(max));
     }
 
     return Collections.emptyList();
@@ -65,32 +63,15 @@ public class ElementValidationDate implements ElementValidation {
 
   }
 
-  private boolean isDateAfterMax(ElementValueDate dateValue) {
-    return dateValue.date() != null && max != null && dateValue.date().isAfter(maxDate());
-  }
-
-  private boolean isDateBeforeMin(ElementValueDate dateValue) {
-    return dateValue.date() != null && min != null && dateValue.date().isBefore(minDate());
-  }
-
   private static List<ValidationError> errorMessage(ElementData data, ElementValueDate dateValue,
-      Optional<ElementId> categoryId, String message) {
+      Optional<ElementId> categoryId, ErrorMessage message) {
     return List.of(
         ValidationError.builder()
             .elementId(data.id())
             .fieldId(dateValue.dateId())
             .categoryId(categoryId.orElse(null))
-            .message(new ErrorMessage(message))
+            .message(message)
             .build()
     );
   }
-
-  private LocalDate minDate() {
-    return LocalDate.now(ZoneId.systemDefault()).minus(min);
-  }
-
-  private LocalDate maxDate() {
-    return LocalDate.now(ZoneId.systemDefault()).plus(max);
-  }
-
 }

@@ -12,16 +12,16 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest.CertificatesRequestBuilder;
@@ -49,7 +49,6 @@ class GetPatientCertificatesDomainServiceTest {
         .careProvider(ALFA_REGIONEN);
 
     certificatesRequestBuilder = CertificatesRequest.builder()
-        .statuses(Status.all())
         .issuedUnitId(ALFA_ALLERGIMOTTAGNINGEN.hsaId())
         .personId(ATHENA_REACT_ANDERSSON.id());
   }
@@ -85,7 +84,8 @@ class GetPatientCertificatesDomainServiceTest {
     final var certificatesRequest = certificatesRequestBuilder.build();
 
     final var certificate = mock(Certificate.class);
-    doReturn(true).when(certificate).allowTo(CertificateActionType.READ, actionEvaluation);
+    doReturn(true).when(certificate)
+        .allowTo(CertificateActionType.READ, Optional.of(actionEvaluation));
     doReturn(List.of(certificate)).when(certificateRepository)
         .findByCertificatesRequest(certificatesRequest);
 
@@ -101,8 +101,10 @@ class GetPatientCertificatesDomainServiceTest {
 
     final var certificate1 = mock(Certificate.class);
     final var certificate2 = mock(Certificate.class);
-    doReturn(true).when(certificate1).allowTo(CertificateActionType.READ, actionEvaluation);
-    doReturn(false).when(certificate2).allowTo(CertificateActionType.READ, actionEvaluation);
+    doReturn(true).when(certificate1)
+        .allowTo(CertificateActionType.READ, Optional.of(actionEvaluation));
+    doReturn(false).when(certificate2)
+        .allowTo(CertificateActionType.READ, Optional.of(actionEvaluation));
     doReturn(List.of(certificate1, certificate2)).when(certificateRepository)
         .findByCertificatesRequest(certificatesRequest);
 

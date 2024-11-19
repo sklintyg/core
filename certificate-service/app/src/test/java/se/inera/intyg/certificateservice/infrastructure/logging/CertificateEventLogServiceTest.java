@@ -6,31 +6,31 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.A
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7211_CERTIFICATE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_TYPE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7211_VERSION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_TYPE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ROLE;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_ACTION;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CATEGORY;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_CARE_PROVIDER_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_CARE_UNIT_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_PATIENT_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_TYPE;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_UNIT_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_VERSION;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_DURATION;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_END;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_START;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_TYPE;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.ORGANIZATION_CARE_PROVIDER_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.ORGANIZATION_CARE_UNIT_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.ORGANIZATION_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.USER_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.USER_ROLE;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_ACTION;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CATEGORY;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_CARE_PROVIDER_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_CARE_UNIT_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_PATIENT_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_TYPE;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_UNIT_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_VERSION;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_DURATION;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_END;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_START;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.ORGANIZATION_CARE_PROVIDER_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.ORGANIZATION_CARE_UNIT_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.ORGANIZATION_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.USER_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.USER_ROLE;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -49,7 +49,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
+import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent.CertificateEventBuilder;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
+import se.inera.intyg.certificateservice.logging.HashUtility;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateEventLogServiceTest {
@@ -68,13 +70,17 @@ class CertificateEventLogServiceTest {
     logger.addAppender(mockAppender);
 
     final var now = LocalDateTime.now(ZoneId.systemDefault());
-    certificateEvent = CertificateEvent.builder()
+    certificateEvent = getCertificateEventBuilder(now)
+        .build();
+  }
+
+  private static CertificateEventBuilder getCertificateEventBuilder(LocalDateTime now) {
+    return CertificateEvent.builder()
         .start(now.minusSeconds(1))
         .end(now)
         .type(CertificateEventType.READ)
-        .certificate(FK7211_CERTIFICATE)
-        .actionEvaluation(ACTION_EVALUATION)
-        .build();
+        .certificate(FK7210_CERTIFICATE)
+        .actionEvaluation(ACTION_EVALUATION);
   }
 
   @AfterEach
@@ -138,13 +144,13 @@ class CertificateEventLogServiceTest {
   @Test
   void shallIncludeCertificateTypeInMDC() {
     certificateEventLogService.event(certificateEvent);
-    assertEquals(FK7211_TYPE.type(), getValueFromMDC(EVENT_CERTIFICATE_TYPE));
+    assertEquals(FK7210_TYPE.type(), getValueFromMDC(EVENT_CERTIFICATE_TYPE));
   }
 
   @Test
   void shallIncludeCertificateVersionInMDC() {
     certificateEventLogService.event(certificateEvent);
-    assertEquals(FK7211_VERSION.version(), getValueFromMDC(EVENT_CERTIFICATE_VERSION));
+    assertEquals(FK7210_VERSION.version(), getValueFromMDC(EVENT_CERTIFICATE_VERSION));
   }
 
   @Test
@@ -202,6 +208,58 @@ class CertificateEventLogServiceTest {
   void shallIncludeOrganizationCareProviderIdInMDC() {
     certificateEventLogService.event(certificateEvent);
     assertEquals(ALFA_REGIONEN_ID, getValueFromMDC(ORGANIZATION_CARE_PROVIDER_ID));
+  }
+
+  @Test
+  void shallIncludeUserIdInMDCWithPatientId() {
+    final var now = LocalDateTime.now(ZoneId.systemDefault());
+    final var event = getCertificateEventBuilder(now)
+        .actionEvaluation(null)
+        .build();
+    certificateEventLogService.event(event);
+    assertEquals(
+        HashUtility.hash(ATHENA_REACT_ANDERSSON_ID),
+        getValueFromMDC(USER_ID));
+  }
+
+  @Test
+  void shallExcludeUserRoleInMDC() {
+    final var now = LocalDateTime.now(ZoneId.systemDefault());
+    final var event = getCertificateEventBuilder(now)
+        .actionEvaluation(null)
+        .build();
+    certificateEventLogService.event(event);
+    assertEquals("-", getValueFromMDC(USER_ROLE));
+  }
+
+  @Test
+  void shallExcludeOrganizationUnitIdInMDC() {
+    final var now = LocalDateTime.now(ZoneId.systemDefault());
+    final var event = getCertificateEventBuilder(now)
+        .actionEvaluation(null)
+        .build();
+    certificateEventLogService.event(event);
+    assertEquals("-", getValueFromMDC(ORGANIZATION_ID));
+  }
+
+  @Test
+  void shallExcludeOrganizationCareUnitIdInMDC() {
+    final var now = LocalDateTime.now(ZoneId.systemDefault());
+    final var event = getCertificateEventBuilder(now)
+        .actionEvaluation(null)
+        .build();
+    certificateEventLogService.event(event);
+    assertEquals("-", getValueFromMDC(ORGANIZATION_CARE_UNIT_ID));
+  }
+
+  @Test
+  void shallExcludeOrganizationCareProviderIdInMDC() {
+    final var now = LocalDateTime.now(ZoneId.systemDefault());
+    final var event = getCertificateEventBuilder(now)
+        .actionEvaluation(null)
+        .build();
+    certificateEventLogService.event(event);
+    assertEquals("-", getValueFromMDC(ORGANIZATION_CARE_PROVIDER_ID));
   }
 
   private String getValueFromMDC(String key) {

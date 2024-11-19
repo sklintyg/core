@@ -1,5 +1,7 @@
 package se.inera.intyg.cts.infrastructure.integration.intygsstatistik;
 
+import static se.inera.intyg.cts.logging.MdcLogConstants.EVENT_TYPE_DELETION;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +29,7 @@ import se.inera.intyg.cts.infrastructure.persistence.entity.CertificateEntity;
 import se.inera.intyg.cts.infrastructure.persistence.entity.TerminationEntity;
 import se.inera.intyg.cts.infrastructure.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.cts.infrastructure.persistence.repository.TerminationEntityRepository;
+import se.inera.intyg.cts.logging.PerformanceLogging;
 
 @Service
 public class EraseDataInIntygsstatistik implements EraseDataInService {
@@ -75,10 +78,10 @@ public class EraseDataInIntygsstatistik implements EraseDataInService {
    * In Intygsstatistik we first need to remove all related certificates before we remove the
    * careprovider. The reason is to not cause issues in Intygstatistik by removing careprovider
    * metadata before all certificates have been erased.
-   *
-   * There can be a large number of certificates that needs to be erased, therefor we erase them
-   * in batches (size based on configuration).
-   *
+   * <p>
+   * There can be a large number of certificates that needs to be erased, therefor we erase them in
+   * batches (size based on configuration).
+   * <p>
    * If any errors occurs during erasing, or that we only partially have deleted the certificates,
    * the implementation will throw an exception.
    *
@@ -86,6 +89,7 @@ public class EraseDataInIntygsstatistik implements EraseDataInService {
    * @throws EraseException
    */
   @Override
+  @PerformanceLogging(eventAction = "erase-in-intygsstatistik", eventType = EVENT_TYPE_DELETION)
   public void erase(Termination termination) throws EraseException {
     final var certificatesToDelete = getCertificatesToDelete(termination.terminationId());
 

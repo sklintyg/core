@@ -19,11 +19,14 @@
 
 package se.inera.intyg.intygproxyservice.organization;
 
+import static se.inera.intyg.intygproxyservice.logging.MdcLogConstants.EVENT_TYPE_ACCESSED;
+
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import se.inera.intyg.intygproxyservice.logging.PerformanceLogging;
 import se.inera.intyg.intygproxyservice.organization.dto.UnitRequest;
 import se.inera.intyg.intygproxyservice.organization.dto.UnitResponse;
 import se.inera.intyg.intygproxyservice.organization.service.UnitService;
@@ -36,6 +39,7 @@ public class UnitController {
   private final UnitService unitService;
 
   @PostMapping
+  @PerformanceLogging(eventAction = "retrieve-unit", eventType = EVENT_TYPE_ACCESSED)
   UnitResponse getUnit(@RequestBody UnitRequest request) {
     return unitService.get(request);
   }

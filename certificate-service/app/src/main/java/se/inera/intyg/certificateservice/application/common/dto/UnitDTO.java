@@ -18,6 +18,7 @@ public class UnitDTO {
   String city;
   String phoneNumber;
   String email;
+  String workplaceCode;
   Boolean inactive;
 
   @JsonPOJOBuilder(withPrefix = "")

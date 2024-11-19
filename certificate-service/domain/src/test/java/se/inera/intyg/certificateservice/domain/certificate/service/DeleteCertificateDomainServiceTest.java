@@ -7,10 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.DELETE;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.DELETE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.REVISION;
 
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -41,7 +44,7 @@ class DeleteCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(false).when(certificate).allowTo(DELETE, ACTION_EVALUATION);
+    doReturn(false).when(certificate).allowTo(DELETE, Optional.of(ACTION_EVALUATION));
 
     assertThrows(CertificateActionForbidden.class,
         () -> deleteCertificateDomainService.delete(CERTIFICATE_ID, revision, ACTION_EVALUATION)
@@ -54,7 +57,7 @@ class DeleteCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(DELETE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(DELETE, Optional.of(ACTION_EVALUATION));
 
     deleteCertificateDomainService.delete(CERTIFICATE_ID, revision, ACTION_EVALUATION);
 
@@ -67,7 +70,7 @@ class DeleteCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(DELETE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(DELETE, Optional.of(ACTION_EVALUATION));
 
     deleteCertificateDomainService.delete(CERTIFICATE_ID, revision, ACTION_EVALUATION);
 
@@ -81,7 +84,7 @@ class DeleteCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(DELETE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(DELETE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
 
     final var actualCertificate = deleteCertificateDomainService.delete(CERTIFICATE_ID, revision,
@@ -97,7 +100,7 @@ class DeleteCertificateDomainServiceTest {
 
     final var certificate = mock(Certificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
-    doReturn(true).when(certificate).allowTo(DELETE, ACTION_EVALUATION);
+    doReturn(true).when(certificate).allowTo(DELETE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
 
     deleteCertificateDomainService.delete(CERTIFICATE_ID, revision, ACTION_EVALUATION);
@@ -111,5 +114,21 @@ class DeleteCertificateDomainServiceTest {
         () -> assertEquals(ACTION_EVALUATION, certificateEventCaptor.getValue().actionEvaluation()),
         () -> assertTrue(certificateEventCaptor.getValue().duration() >= 0)
     );
+  }
+
+  @Test
+  void shallIncludeReasonNotAllowedToException() {
+    final var certificate = mock(Certificate.class);
+    final var expectedReason = List.of("expectedReason");
+    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
+    doReturn(false).when(certificate).allowTo(DELETE, Optional.of(ACTION_EVALUATION));
+    doReturn(expectedReason).when(certificate)
+        .reasonNotAllowed(DELETE, Optional.of(ACTION_EVALUATION));
+
+    final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
+        () -> deleteCertificateDomainService.delete(CERTIFICATE_ID, REVISION, ACTION_EVALUATION)
+    );
+
+    assertEquals(expectedReason, certificateActionForbidden.reason());
   }
 }

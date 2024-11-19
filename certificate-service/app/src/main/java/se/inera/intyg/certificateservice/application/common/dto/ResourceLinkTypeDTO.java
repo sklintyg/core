@@ -1,11 +1,19 @@
 package se.inera.intyg.certificateservice.application.common.dto;
 
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.CREATE;
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.DELETE;
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.READ;
-import static se.inera.intyg.certificateservice.domain.action.model.CertificateActionType.UPDATE;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.CREATE;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.DELETE;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.PRINT;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.READ;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.RENEW;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.REPLACE;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.REPLACE_CONTINUE;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.REVOKE;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.SEND;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.SIGN;
+import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.UPDATE;
 
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.message.model.MessageActionType;
 
 public enum ResourceLinkTypeDTO {
   EDIT_CERTIFICATE,
@@ -55,7 +63,11 @@ public enum ResourceLinkTypeDTO {
   MISSING_RELATED_CERTIFICATE_CONFIRMATION,
   SHOW_RELATED_CERTIFICATE,
   SRS_FULL_VIEW,
-  SRS_MINIMIZED_VIEW;
+  SRS_MINIMIZED_VIEW,
+  SEND_AFTER_SIGN_CERTIFICATE,
+  CANNOT_COMPLEMENT_CERTIFICATE_ONLY_MESSAGE,
+  QUESTIONS_ADMINISTRATIVE,
+  FORWARD_CERTIFICATE_FROM_LIST;
 
   public static ResourceLinkTypeDTO toResourceLinkType(CertificateActionType type) {
     return switch (type) {
@@ -63,6 +75,40 @@ public enum ResourceLinkTypeDTO {
       case READ -> READ_CERTIFICATE;
       case UPDATE -> EDIT_CERTIFICATE;
       case DELETE -> REMOVE_CERTIFICATE;
+      case SIGN -> SIGN_CERTIFICATE;
+      case SEND -> SEND_CERTIFICATE;
+      case PRINT -> PRINT_CERTIFICATE;
+      case REVOKE -> REVOKE_CERTIFICATE;
+      case REPLACE -> REPLACE_CERTIFICATE;
+      case REPLACE_CONTINUE -> REPLACE_CERTIFICATE_CONTINUE;
+      case RENEW -> RENEW_CERTIFICATE;
+      case SEND_AFTER_SIGN, SEND_AFTER_COMPLEMENT -> SEND_AFTER_SIGN_CERTIFICATE;
+      case COMPLEMENT -> COMPLEMENT_CERTIFICATE;
+      case CANNOT_COMPLEMENT -> CANNOT_COMPLEMENT_CERTIFICATE_ONLY_MESSAGE;
+      case FORWARD_MESSAGE -> FORWARD_QUESTION;
+      case HANDLE_COMPLEMENT, HANDLE_MESSAGE -> HANDLE_QUESTION;
+      case MESSAGES -> QUESTIONS;
+      case MESSAGES_ADMINISTRATIVE -> QUESTIONS_ADMINISTRATIVE;
+      case CREATE_MESSAGE -> CREATE_QUESTIONS;
+      case ANSWER_MESSAGE -> ANSWER_QUESTION;
+      case FORWARD_CERTIFICATE -> FORWARD_CERTIFICATE;
+      case READY_FOR_SIGN -> READY_FOR_SIGN;
+      case QUESTIONS_NOT_AVAILABLE -> QUESTIONS_NOT_AVAILABLE;
+      case FORWARD_CERTIFICATE_FROM_LIST -> FORWARD_CERTIFICATE_FROM_LIST;
+      case RECEIVE_COMPLEMENT, RECEIVE_ANSWER, RECEIVE_QUESTION, RECEIVE_REMINDER, SAVE_MESSAGE,
+           DELETE_MESSAGE, SEND_MESSAGE, SAVE_ANSWER, DELETE_ANSWER, SEND_ANSWER,
+           LIST_CERTIFICATE_TYPE ->
+          throw new IllegalArgumentException("%s is not a valid type!".formatted(type));
+    };
+  }
+
+  public static ResourceLinkTypeDTO toResourceLinkType(MessageActionType type) {
+    return switch (type) {
+      case ANSWER -> ANSWER_QUESTION;
+      case COMPLEMENT -> COMPLEMENT_CERTIFICATE;
+      case FORWARD -> FORWARD_QUESTION;
+      case CANNOT_COMPLEMENT -> CANNOT_COMPLEMENT_CERTIFICATE_ONLY_MESSAGE;
+      case HANDLE_COMPLEMENT, HANDLE_MESSAGE -> HANDLE_QUESTION;
     };
   }
 
@@ -72,6 +118,14 @@ public enum ResourceLinkTypeDTO {
       case READ_CERTIFICATE -> READ;
       case EDIT_CERTIFICATE -> UPDATE;
       case REMOVE_CERTIFICATE -> DELETE;
+      case SIGN_CERTIFICATE -> SIGN;
+      case SEND_CERTIFICATE -> SEND;
+      case PRINT_CERTIFICATE -> PRINT;
+      case REVOKE_CERTIFICATE -> REVOKE;
+      case REPLACE_CERTIFICATE -> REPLACE;
+      case REPLACE_CERTIFICATE_CONTINUE -> REPLACE_CONTINUE;
+      case RENEW_CERTIFICATE -> RENEW;
+      case READY_FOR_SIGN -> CertificateActionType.READY_FOR_SIGN;
       default -> throw new IllegalArgumentException(
           "Cannot convert %s to certificate action type!".formatted(this)
       );

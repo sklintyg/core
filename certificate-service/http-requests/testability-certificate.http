@@ -7,7 +7,11 @@ Content-Type: application/json
     "id": "TSTNMT2321000156-DRAA",
     "name": "Alja Doctor",
     "role": "DOCTOR",
-    "blocked": "false"
+    "blocked": "false",
+    "allowCopy": "true",
+    "paTitles": [],
+    "specialities": [],
+    "healthCareProfessionalLicence": ["Läkare"]
   },
   "unit": {
     "id": "TSTNMT2321000156-ALHM",
@@ -39,9 +43,11 @@ Content-Type: application/json
     "testIndicated": "false"
   },
   "certificateModelId": {
-    "type": "fk7211",
+    "type": "fk7472",
     "version": "1.0"
-  }
+  },
+  "status": "SIGNED",
+  "fillType": "MAXIMAL"
 }
 
 ### Create certificate

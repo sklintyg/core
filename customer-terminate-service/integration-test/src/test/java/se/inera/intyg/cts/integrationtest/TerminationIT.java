@@ -17,7 +17,7 @@ import se.inera.intyg.cts.application.dto.CreateTerminationDTO;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
 import se.inera.intyg.cts.application.dto.UpdateTerminationDTO;
 
-public class TerminationIT {
+class TerminationIT {
 
   private TestData testData;
 

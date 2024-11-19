@@ -6,16 +6,18 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityCertificateRequest;
+import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO;
 
 public class TestabilityCertificateRequestBuilder {
 
   private static final String VERSION = "1.0";
-  private static final String TYPE = "fk7211";
+  private static final String TYPE = "fk7210";
 
   private CertificateModelIdDTO certificateModelId = CertificateModelIdDTO.builder()
       .version(VERSION)
@@ -26,6 +28,8 @@ public class TestabilityCertificateRequestBuilder {
   private UnitDTO careUnit = ALFA_MEDICINCENTRUM_DTO;
   private UserDTO user = AJLA_DOCTOR_DTO;
   private PatientDTO patient = ATHENA_REACT_ANDERSSON_DTO;
+  private TestabilityFillTypeDTO fillType = TestabilityFillTypeDTO.MINIMAL;
+  private CertificateStatusTypeDTO status;
 
   public static TestabilityCertificateRequestBuilder create() {
     return new TestabilityCertificateRequestBuilder();
@@ -55,6 +59,16 @@ public class TestabilityCertificateRequestBuilder {
     return this;
   }
 
+  public TestabilityCertificateRequestBuilder fillType(TestabilityFillTypeDTO fillType) {
+    this.fillType = fillType;
+    return this;
+  }
+
+  public TestabilityCertificateRequestBuilder status(CertificateStatusTypeDTO status) {
+    this.status = status;
+    return this;
+  }
+
   public TestabilityCertificateRequestBuilder certificateModelId(
       CertificateModelIdDTO certificateModelIdDTO) {
     this.certificateModelId = certificateModelIdDTO;
@@ -71,6 +85,8 @@ public class TestabilityCertificateRequestBuilder {
         .certificateModelId(
             certificateModelId
         )
+        .fillType(fillType)
+        .status(status)
         .build();
   }
 }

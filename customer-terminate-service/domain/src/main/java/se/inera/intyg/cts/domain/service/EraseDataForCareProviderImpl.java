@@ -3,7 +3,6 @@ package se.inera.intyg.cts.domain.service;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.inera.intyg.cts.domain.model.EraseService;
@@ -14,7 +13,7 @@ import se.inera.intyg.cts.domain.repository.TerminationRepository;
 
 public class EraseDataForCareProviderImpl implements EraseDataForCareProvider {
 
-  private final static Logger LOG = LoggerFactory.getLogger(EraseDataForCareProviderImpl.class);
+  private static final Logger LOG = LoggerFactory.getLogger(EraseDataForCareProviderImpl.class);
 
   private final List<EraseDataInService> services;
   private final CertificateBatchRepository certificateBatchRepository;
@@ -68,17 +67,17 @@ public class EraseDataForCareProviderImpl implements EraseDataForCareProvider {
     termination.startErase(
         services.stream()
             .map(eraseDataInService -> new EraseService(eraseDataInService.serviceId(), false))
-            .collect(Collectors.toList())
+            .toList()
     );
   }
 
   private boolean verifyNoChangeSinceExport(Termination termination) {
     final var certificateSummary = certificateBatchRepository.certificateSummary(termination);
     if (!certificateSummary.equals(termination.export().certificateSummary())) {
-      LOG.error(String.format(
-          "Certificates for termination '%s' has changed since export. Exported '%s' and current '%s'. Erase will be cancelled!",
+      LOG.error(
+          "Certificates for termination '{}' has changed since export. Exported '{}' and current '{}'. Erase will be cancelled!",
           termination.terminationId().id(), termination.export().certificateSummary(),
-          certificateSummary));
+          certificateSummary);
       return true;
     }
     return false;
@@ -104,9 +103,9 @@ public class EraseDataForCareProviderImpl implements EraseDataForCareProvider {
       try {
         eraseDataInService.erase(termination);
         termination.erased(eraseDataInService.serviceId());
-        LOG.info(String.format("Erased care provider for termination '%s' in service '%s'",
+        LOG.info("Erased care provider for termination '{}' in service '{}'",
             termination.terminationId().id(),
-            eraseDataInService.serviceId().id()));
+            eraseDataInService.serviceId().id());
       } catch (EraseException e) {
         LOG.error(String.format(
             "Could not erase care provider for termination '%s' in service '%s' due to message '%s'",

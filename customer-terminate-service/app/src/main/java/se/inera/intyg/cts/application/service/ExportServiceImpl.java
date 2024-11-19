@@ -14,7 +14,7 @@ import se.inera.intyg.cts.domain.service.ExportPackage;
 @Service
 public class ExportServiceImpl implements ExportService {
 
-  private final static Logger LOG = LoggerFactory.getLogger(ExportServiceImpl.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ExportServiceImpl.class);
 
   private final TerminationRepository terminationRepository;
   private final CollectExportContent collectExportContent;
@@ -40,7 +40,7 @@ public class ExportServiceImpl implements ExportService {
           try {
             collectExportContent.collectCertificates(termination.terminationId());
             LOG.info("Collected certificates for termination '{}'",
-                termination.terminationId().id().toString());
+                termination.terminationId().id());
           } catch (Exception ex) {
             LOG.error(
                 String.format("Failed to collect certificates for termination '%s'",
@@ -64,7 +64,7 @@ public class ExportServiceImpl implements ExportService {
           try {
             collectExportContent.collectCertificateTexts(termination);
             LOG.info("Collected certificate texts for termination '{}'",
-                termination.terminationId().id().toString());
+                termination.terminationId().id());
           } catch (Exception ex) {
             LOG.error(
                 String.format("Failed to collect certificate texts for termination '%s'",
@@ -87,8 +87,7 @@ public class ExportServiceImpl implements ExportService {
         termination -> {
           try {
             exportPackage.export(termination);
-            LOG.info("Exported termination '{}'",
-                termination.terminationId().id().toString());
+            LOG.info("Exported termination '{}'", termination.terminationId().id());
           } catch (Exception ex) {
             LOG.error(
                 String.format("Failed to export termination '%s'",

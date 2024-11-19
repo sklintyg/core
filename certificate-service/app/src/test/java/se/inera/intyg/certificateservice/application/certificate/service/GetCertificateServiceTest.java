@@ -11,6 +11,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,17 +20,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
 import se.inera.intyg.certificateservice.application.certificate.service.validation.GetCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
-import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
+import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
-import se.inera.intyg.certificateservice.domain.action.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateAction;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
-import se.inera.intyg.certificateservice.domain.staff.model.Role;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
 @ExtendWith(MockitoExtension.class)
@@ -92,11 +94,12 @@ class GetCertificateServiceTest {
 
     final var certificateAction = mock(CertificateAction.class);
     final List<CertificateAction> certificateActions = List.of(certificateAction);
-    doReturn(certificateActions).when(certificate).actions(actionEvaluation);
+    doReturn(certificateActions).when(certificate).actionsInclude(Optional.of(actionEvaluation));
 
-    doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction);
+    doReturn(resourceLinkDTO).when(resourceLinkConverter).convert(certificateAction,
+        Optional.of(certificate), actionEvaluation);
     doReturn(certificateDTO).when(certificateConverter)
-        .convert(certificate, List.of(resourceLinkDTO));
+        .convert(certificate, List.of(resourceLinkDTO), actionEvaluation);
 
     final var actualResult = getCertificateService.get(
         GetCertificateRequest.builder()

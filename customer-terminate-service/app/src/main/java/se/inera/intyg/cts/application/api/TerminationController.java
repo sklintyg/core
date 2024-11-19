@@ -1,5 +1,10 @@
 package se.inera.intyg.cts.application.api;
 
+import static se.inera.intyg.cts.logging.MdcLogConstants.EVENT_TYPE_ACCESSED;
+import static se.inera.intyg.cts.logging.MdcLogConstants.EVENT_TYPE_CHANGE;
+import static se.inera.intyg.cts.logging.MdcLogConstants.EVENT_TYPE_CREATION;
+import static se.inera.intyg.cts.logging.MdcLogConstants.EVENT_TYPE_INFO;
+
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
@@ -16,6 +21,7 @@ import se.inera.intyg.cts.application.dto.UpdateTerminationDTO;
 import se.inera.intyg.cts.application.service.EraseService;
 import se.inera.intyg.cts.application.service.TerminationService;
 import se.inera.intyg.cts.domain.model.TerminationId;
+import se.inera.intyg.cts.logging.PerformanceLogging;
 
 @RestController
 @RequestMapping("/api/v1/terminations")
@@ -30,6 +36,7 @@ public class TerminationController {
   }
 
   @PostMapping
+  @PerformanceLogging(eventAction = "create-termination", eventType = EVENT_TYPE_CREATION)
   TerminationDTO create(@RequestBody CreateTerminationDTO request) {
     try {
       return terminationService.create(request);
@@ -39,6 +46,7 @@ public class TerminationController {
   }
 
   @PostMapping("/{terminationId}")
+  @PerformanceLogging(eventAction = "change-termination", eventType = EVENT_TYPE_CHANGE)
   TerminationDTO update(@PathVariable UUID terminationId,
       @RequestBody UpdateTerminationDTO updateTerminationDTO) {
     try {
@@ -49,6 +57,7 @@ public class TerminationController {
   }
 
   @GetMapping("/{terminationId}")
+  @PerformanceLogging(eventAction = "find-termination", eventType = EVENT_TYPE_ACCESSED)
   TerminationDTO findById(@PathVariable UUID terminationId) {
     return terminationService.findById(terminationId)
         .orElseThrow(
@@ -58,11 +67,13 @@ public class TerminationController {
   }
 
   @GetMapping
+  @PerformanceLogging(eventAction = "list-terminations", eventType = EVENT_TYPE_ACCESSED)
   List<TerminationDTO> findAll() {
     return terminationService.findAll();
   }
 
   @PostMapping("/{terminationId}/erase")
+  @PerformanceLogging(eventAction = "initiate-erase", eventType = EVENT_TYPE_INFO)
   TerminationDTO startErase(@PathVariable UUID terminationId) {
     try {
       return eraseService.initiateErase(new TerminationId(terminationId));
@@ -77,6 +88,7 @@ public class TerminationController {
    * @return updated termination
    */
   @PostMapping("/{terminationId}/resendpassword")
+  @PerformanceLogging(eventAction = "resend-password", eventType = EVENT_TYPE_INFO)
   TerminationDTO resendPassword(@PathVariable UUID terminationId) {
     try {
       return terminationService.resendPassword(terminationId);

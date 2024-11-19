@@ -21,6 +21,7 @@ import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesRequest.GetUnitCertificatesRequestBuilder;
+import se.inera.intyg.certificateservice.application.unit.service.validator.GetUnitCertificatesRequestValidator;
 
 class GetUnitCertificatesRequestValidatorTest {
 
@@ -106,6 +107,74 @@ class GetUnitCertificatesRequestValidatorTest {
     }
 
     @Test
+    void shallThrowIfFirstNameIsNull() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .firstName(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getUnitCertificatesRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: User.firstName",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfFirstNameIsEmpty() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .firstName("")
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getUnitCertificatesRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: User.firstName",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfLastNameIsNull() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .lastName(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getUnitCertificatesRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: User.lastName",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfLastNameIsEmpty() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .lastName("")
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getUnitCertificatesRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: User.lastName",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
     void shallThrowIfRoleIsNull() {
       final var request = requestBuilder
           .user(
@@ -135,6 +204,23 @@ class GetUnitCertificatesRequestValidatorTest {
           () -> getUnitCertificatesRequestValidator.validate(request));
 
       assertEquals("Required parameter missing: User.blocked",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfAgreementIsNull() {
+      final var request = requestBuilder
+          .user(
+              ajlaDoktorDtoBuilder()
+                  .agreement(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getUnitCertificatesRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: User.agreement",
           illegalArgumentException.getMessage());
     }
   }
@@ -186,6 +272,23 @@ class GetUnitCertificatesRequestValidatorTest {
           () -> getUnitCertificatesRequestValidator.validate(request));
 
       assertEquals("Required parameter missing: Unit.id",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfWorkplaceCodeIsNull() {
+      final var request = requestBuilder
+          .unit(
+              alfaAllergimottagningenDtoBuilder()
+                  .workplaceCode(null)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> getUnitCertificatesRequestValidator.validate(request));
+
+      assertEquals("Required parameter missing: Unit.workplaceCode",
           illegalArgumentException.getMessage());
     }
 

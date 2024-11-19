@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MappedElementValueDate implements MappedElementValue {
 
+  String dateId;
   LocalDate date;
-  
+
 }

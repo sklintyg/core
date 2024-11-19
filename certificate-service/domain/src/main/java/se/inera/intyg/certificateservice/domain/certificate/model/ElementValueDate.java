@@ -14,4 +14,8 @@ public class ElementValueDate implements ElementValue {
   @With
   LocalDate date;
 
+  @Override
+  public boolean isEmpty() {
+    return date == null;
+  }
 }

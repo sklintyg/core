@@ -12,5 +12,6 @@ public class CareUnit implements IssuingUnit {
   UnitAddress address;
   UnitName name;
   UnitContactInfo contactInfo;
+  WorkplaceCode workplaceCode;
   Inactive inactive;
 }

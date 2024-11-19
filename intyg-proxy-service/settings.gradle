@@ -15,5 +15,6 @@ include 'integration-fakepu'
 include 'integration-hsa'
 include 'integration-fakehsa'
 include 'integration-common'
+include 'logging'
 include 'integration-test'
 

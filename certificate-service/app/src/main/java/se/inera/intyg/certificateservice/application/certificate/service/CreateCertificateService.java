@@ -1,17 +1,20 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
 import se.inera.intyg.certificateservice.application.certificate.service.validation.CreateCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
-import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
+import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 
 @Service
 @RequiredArgsConstructor
@@ -33,16 +36,28 @@ public class CreateCertificateService {
         createCertificateRequest.getCareUnit(),
         createCertificateRequest.getCareProvider()
     );
+
     final var certificate = createCertificateDomainService.create(
         certificateModelId(createCertificateRequest),
-        actionEvaluation
+        actionEvaluation,
+        createCertificateRequest.getExternalReference() != null
+            ? new ExternalReference(createCertificateRequest.getExternalReference())
+            : null
     );
+
     return CreateCertificateResponse.builder()
         .certificate(certificateConverter.convert(
             certificate,
-            certificate.actions(actionEvaluation).stream()
-                .map(resourceLinkConverter::convert)
-                .toList())
+            certificate.actionsInclude(Optional.of(actionEvaluation)).stream()
+                .map(certificateAction ->
+                    resourceLinkConverter.convert(
+                        certificateAction,
+                        Optional.of(certificate),
+                        actionEvaluation
+                    )
+                )
+                .toList(),
+            actionEvaluation)
         )
         .build();
   }

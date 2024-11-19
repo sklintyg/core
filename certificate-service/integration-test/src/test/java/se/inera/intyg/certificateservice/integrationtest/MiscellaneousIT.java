@@ -1,11 +1,12 @@
 package se.inera.intyg.certificateservice.integrationtest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.FK7211;
-import static se.inera.intyg.certificateservice.integrationtest.fk7211.FK7211Constants.VERSION;
+import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.FK7210;
+import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.VERSION;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
+import se.inera.intyg.certificateservice.integrationtest.util.Containers;
 import se.inera.intyg.certificateservice.integrationtest.util.TestabilityApiUtil;
 
 @ActiveProfiles({"integration-test"})
@@ -35,6 +37,11 @@ class MiscellaneousIT {
     this.restTemplate = restTemplate;
   }
 
+  @BeforeAll
+  public static void beforeAll() {
+    Containers.ensureRunning();
+  }
+
   @BeforeEach
   void setUp() {
     this.api = new ApiUtil(restTemplate, port);
@@ -51,7 +58,7 @@ class MiscellaneousIT {
   @DisplayName("Om testability inte är aktiverat skall felkod 404 (NOT_FOUND) returneras")
   void shallReturn() {
     final var response = testabilityApi.addCertificate(
-        defaultTestablilityCertificateRequest(FK7211, VERSION)
+        defaultTestablilityCertificateRequest(FK7210, VERSION)
     );
 
     assertEquals(404, response.getStatusCode().value());

@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateModelRepository;
 
@@ -403,6 +404,110 @@ class InMemoryCertificateModelRepositoryTest {
       );
       assertTrue(actualModels.contains(expectedModelTwo),
           "Expected model with id: %s".formatted(expectedModelTwo.id())
+      );
+    }
+  }
+
+  @Nested
+  class FindLatestActiveByExternalTypeTests {
+
+    private static final String DISPLAY_NAME = "displayName";
+    private static final String CODE_1 = "code1";
+    private static final String CODE_SYSTEM_1 = "codeSystem1";
+    private static final String CODE_2 = "code2";
+    private static final String CODE_SYSTEM_2 = "codeSystem2";
+
+    @Test
+    void shallThrowIfCodeIsNull() {
+      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+          List.of(certificateModelFactoryOne)
+      );
+
+      assertThrows(IllegalArgumentException.class,
+          () -> inMemoryCertificateModelRepository.findLatestActiveByExternalType(null));
+    }
+
+    @Test
+    void shallReturnCertificateModelIfActiveAndMatchCode() {
+      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+          List.of(certificateModelFactoryOne)
+      );
+
+      final var expectedModel = CertificateModel.builder()
+          .type(new Code(CODE_1, CODE_SYSTEM_1, DISPLAY_NAME))
+          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+          .build();
+
+      doReturn(expectedModel).when(certificateModelFactoryOne).create();
+
+      final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByExternalType(
+          new Code(CODE_1, CODE_SYSTEM_1, null)
+      );
+
+      assertEquals(expectedModel, actualModel.orElse(null));
+    }
+
+    @Test
+    void shallReturnEmptyIfNotActiveAndMatchType() {
+      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+          List.of(certificateModelFactoryOne)
+      );
+
+      final var expectedModel = CertificateModel.builder()
+          .type(new Code(CODE_1, CODE_SYSTEM_1, DISPLAY_NAME))
+          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
+          .build();
+
+      doReturn(expectedModel).when(certificateModelFactoryOne).create();
+
+      final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByExternalType(
+          new Code(CODE_1, CODE_SYSTEM_1, null)
+      );
+
+      assertTrue(actualModel.isEmpty(),
+          () -> "Expect model to be empty but retured %s".formatted(actualModel.orElseThrow())
+      );
+    }
+
+    @Test
+    void shallReturnEmptyIfActiveAndDifferentCode() {
+      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+          List.of(certificateModelFactoryOne)
+      );
+
+      final var expectedModel = CertificateModel.builder()
+          .type(new Code(CODE_1, CODE_SYSTEM_1, DISPLAY_NAME))
+          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+          .build();
+
+      doReturn(expectedModel).when(certificateModelFactoryOne).create();
+
+      final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByExternalType(
+          new Code(CODE_2, CODE_SYSTEM_1, null)
+      );
+      assertTrue(actualModel.isEmpty(),
+          () -> "Expect model to be empty but retured %s".formatted(actualModel.orElseThrow())
+      );
+    }
+
+    @Test
+    void shallReturnEmptyIfActiveAndDifferentCodeSystem() {
+      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+          List.of(certificateModelFactoryOne)
+      );
+
+      final var expectedModel = CertificateModel.builder()
+          .type(new Code(CODE_1, CODE_SYSTEM_1, DISPLAY_NAME))
+          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+          .build();
+
+      doReturn(expectedModel).when(certificateModelFactoryOne).create();
+
+      final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByExternalType(
+          new Code(CODE_1, CODE_SYSTEM_2, null)
+      );
+      assertTrue(actualModel.isEmpty(),
+          () -> "Expect model to be empty but retured %s".formatted(actualModel.orElseThrow())
       );
     }
   }

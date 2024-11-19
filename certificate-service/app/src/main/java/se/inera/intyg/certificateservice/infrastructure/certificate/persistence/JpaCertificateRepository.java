@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,7 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateRepository;
 
 @Repository
@@ -25,6 +27,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   private final CertificateEntityRepository certificateEntityRepository;
   private final CertificateEntityMapper certificateEntityMapper;
   private final CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;
+  private final CertificateRelationRepository certificateRelationRepository;
 
   @Override
   public Certificate create(CertificateModel certificateModel) {
@@ -50,12 +53,25 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
     if (Status.DELETED_DRAFT.equals(certificate.status())) {
       certificateEntityRepository.findByCertificateId(certificate.id().id())
-          .ifPresent(certificateEntityRepository::delete);
+          .ifPresent(entity -> {
+                certificateRelationRepository.deleteRelations(entity);
+                certificateEntityRepository.delete(entity);
+              }
+          );
       return certificate;
+    }
+
+    if (Status.LOCKED_DRAFT.equals(certificate.status())) {
+      certificateEntityRepository.findByCertificateId(certificate.id().id())
+          .ifPresent(certificateRelationRepository::deleteRelations);
     }
 
     final var savedEntity = certificateEntityRepository.save(
         certificateEntityMapper.toEntity(certificate)
+    );
+
+    certificateRelationRepository.save(
+        certificate, savedEntity
     );
 
     return certificateEntityMapper.toDomain(savedEntity);
@@ -78,6 +94,64 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     return certificateEntityMapper.toDomain(certificateEntity);
   }
 
+
+  @Override
+  public List<Certificate> getByIds(List<CertificateId> certificateIds) {
+    if (certificateIds == null || certificateIds.isEmpty()) {
+      throw new IllegalArgumentException(
+          "Cannot get certificate if certificateIds is null or empty '%s'".formatted(
+              certificateIds)
+      );
+    }
+
+    final var certificateEntities = certificateEntityRepository.findCertificateEntitiesByCertificateIdIn(
+        certificateIds.stream()
+            .map(CertificateId::id)
+            .toList()
+    );
+
+    if (certificateEntities.size() != certificateIds.size()) {
+      throw new IllegalStateException(
+          "Missing certificate for ids '%s'".formatted(
+              certificateIds.stream()
+                  .map(CertificateId::id)
+                  .filter(
+                      certificateId -> certificateEntities.stream()
+                          .noneMatch(entity -> entity.getCertificateId().equals(certificateId))
+                  )
+                  .toList()
+          )
+      );
+    }
+
+    return certificateEntities.stream()
+        .map(certificateEntityMapper::toDomain)
+        .toList();
+  }
+
+  @Override
+  public List<Certificate> findByIds(List<CertificateId> certificateIds) {
+    if (certificateIds == null) {
+      throw new IllegalArgumentException(
+          "Cannot get certificate if certificateIds is null"
+      );
+    }
+
+    if (certificateIds.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    final var certificateEntities = certificateEntityRepository.findCertificateEntitiesByCertificateIdIn(
+        certificateIds.stream()
+            .map(CertificateId::id)
+            .toList()
+    );
+
+    return certificateEntities.stream()
+        .map(certificateEntityMapper::toDomain)
+        .toList();
+  }
+
   @Override
   public boolean exists(CertificateId certificateId) {
     if (certificateId == null) {
@@ -90,10 +164,6 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
   @Override
   public List<Certificate> findByCertificatesRequest(CertificatesRequest request) {
-    if (request.statuses().isEmpty()) {
-      return Collections.emptyList();
-    }
-
     final var specification = certificateEntitySpecificationFactory.create(request);
 
     return certificateEntityRepository.findAll(specification).stream()
@@ -107,15 +177,26 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
         certificateEntityMapper.toEntity(certificate)
     );
 
+    certificateRelationRepository.save(
+        certificate, savedEntity
+    );
+
     return certificateEntityMapper.toDomain(savedEntity);
   }
 
   @Override
   public void remove(List<CertificateId> certificateIds) {
+    certificateIds.stream()
+        .map(certificateId -> certificateEntityRepository.findByCertificateId(certificateId.id()))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .forEach(certificateRelationRepository::deleteRelations);
+
     certificateEntityRepository.deleteAllByCertificateIdIn(
         certificateIds.stream()
             .map(CertificateId::id)
             .toList()
     );
+
   }
 }

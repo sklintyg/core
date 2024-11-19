@@ -52,7 +52,15 @@ import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 
 public class TestDataCommonPatientDTO {
 
+  private TestDataCommonPatientDTO() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static final PatientDTO ATHENA_REACT_ANDERSSON_DTO = athenaReactAnderssonDtoBuilder().build();
+  public static final PersonIdDTO ATHENA_REACT_ANDERSSON_PERSON_ID_DTO = PersonIdDTO.builder()
+      .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
+      .id(ATHENA_REACT_ANDERSSON_ID)
+      .build();
   public static final PatientDTO ALVE_REACT_ALFREDSSON_DTO = alveReactAlfredssonDtoBuilder().build();
   public static final PatientDTO ATLAS_REACT_ABRAHAMSSON_DTO = atlasReactAbrahamssonDtoBuilder().build();
   public static final PatientDTO ANONYMA_REACT_ATTILA_DTO = anonymaReactAttilaDtoBuilder().build();

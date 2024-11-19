@@ -3,7 +3,7 @@ package se.inera.intyg.certificateservice.application.common.dto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
+import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 
 class PersonIdTypeDTOTest {
 

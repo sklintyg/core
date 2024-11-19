@@ -32,10 +32,23 @@ public class CertificateEntity {
   private Long key;
   @Column(name = "certificate_id", unique = true)
   private String certificateId;
+  @ManyToOne
+  @JoinColumn(name = "certificate_status_key")
+  private CertificateStatusEntity status;
   @Column(name = "created")
   private LocalDateTime created;
   @Column(name = "modified")
   private LocalDateTime modified;
+  @Column(name = "signed")
+  private LocalDateTime signed;
+  @Column(name = "ready_for_sign")
+  private LocalDateTime readyForSign;
+  @Column(name = "sent")
+  private LocalDateTime sent;
+  @Column(name = "revoked")
+  private LocalDateTime revoked;
+  @Column(name = "locked")
+  private LocalDateTime locked;
   @Column(name = "revision")
   private Long revision;
   @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
@@ -50,6 +63,12 @@ public class CertificateEntity {
   @JoinColumn(name = "issued_by_staff_key", referencedColumnName = "`key`", nullable = false)
   private StaffEntity issuedBy;
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+  @JoinColumn(name = "sent_by_staff_key", referencedColumnName = "`key`")
+  private StaffEntity sentBy;
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+  @JoinColumn(name = "ready_for_sign_by_staff_key", referencedColumnName = "`key`")
+  private StaffEntity readyForSignBy;
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
   @JoinColumn(name = "issued_on_unit_key", referencedColumnName = "`key`", nullable = false)
   private UnitEntity issuedOnUnit;
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
@@ -61,4 +80,20 @@ public class CertificateEntity {
   @OneToOne(mappedBy = "certificate", cascade = CascadeType.ALL)
   @PrimaryKeyJoinColumn
   private CertificateDataEntity data;
+  @OneToOne(mappedBy = "certificate", cascade = CascadeType.ALL)
+  @PrimaryKeyJoinColumn
+  private CertificateXmlEntity xml;
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+  @JoinColumn(name = "revoked_by_staff_key", referencedColumnName = "`key`")
+  private StaffEntity revokedBy;
+  @ManyToOne
+  @JoinColumn(name = "revoked_reason_key")
+  private RevokedReasonEntity revokedReason;
+  @Column(name = "revoked_message")
+  private String revokedMessage;
+  @OneToOne(mappedBy = "certificate", cascade = CascadeType.ALL)
+  @PrimaryKeyJoinColumn
+  private ExternalReferenceEntity externalReference;
+  @Column(name = "forwarded")
+  private Boolean forwarded;
 }

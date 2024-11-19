@@ -43,17 +43,25 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.INACTIVE_TRUE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AGREEMENT_FALSE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_AGREEMENT;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_BLOCKED;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_RESPONSIBLE_ISSUER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALLOW_COPY_FALSE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.application.common.dto.AccessScopeTypeDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
-import se.inera.intyg.certificateservice.domain.patient.model.PersonIdType;
+import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
+import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 
 class ActionEvaluationFactoryTest {
 
@@ -643,6 +651,66 @@ class ActionEvaluationFactoryTest {
     }
 
     @Test
+    void shallIncludeUserAgreementTrue() {
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          AJLA_DOCTOR_DTO,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(AJLA_DOCTOR_AGREEMENT.value(), actionEvaluation.user().agreement().value());
+    }
+
+    @Test
+    void shallIncludeUserAgreementFalse() {
+      final var user = ajlaDoktorDtoBuilder()
+          .agreement(false)
+          .build();
+
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          user,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(AGREEMENT_FALSE.value(), actionEvaluation.user().agreement().value());
+    }
+
+    @Test
+    void shallIncludeUserAllowCopyFalse() {
+      final var user = ajlaDoktorDtoBuilder()
+          .allowCopy(true)
+          .build();
+
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          user,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(ALLOW_COPY_FALSE.value(), actionEvaluation.user().blocked().value());
+    }
+
+    @Test
+    void shallIncludeUserAllowCopyTrue() {
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          AJLA_DOCTOR_DTO,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(AJLA_DOCTOR_ALLOW_COPY.value(), actionEvaluation.user().allowCopy().value());
+    }
+
+    @Test
     void shallIncludeUserName() {
       final var actionEvaluation = actionEvaluationFactory.create(
           ATHENA_REACT_ANDERSSON_DTO,
@@ -666,6 +734,102 @@ class ActionEvaluationFactoryTest {
       );
 
       assertEquals(AJLA_DOCTOR_ROLE, actionEvaluation.user().role());
+    }
+
+    @Test
+    void shallIncludeUserAccessScopeWithinCareUnit() {
+      final var user = ajlaDoktorDtoBuilder()
+          .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
+          .build();
+
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          user,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(AccessScope.WITHIN_CARE_UNIT, actionEvaluation.user().accessScope());
+    }
+
+    @Test
+    void shallIncludeUserAccessScopeWithinCareProvider() {
+      final var user = ajlaDoktorDtoBuilder()
+          .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
+          .build();
+
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          user,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(AccessScope.WITHIN_CARE_PROVIDER, actionEvaluation.user().accessScope());
+    }
+
+    @Test
+    void shallIncludeUserAccessScopeAllCareProviders() {
+      final var user = ajlaDoktorDtoBuilder()
+          .accessScope(AccessScopeTypeDTO.ALL_CARE_PROVIDERS)
+          .build();
+
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          user,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(AccessScope.ALL_CARE_PROVIDERS, actionEvaluation.user().accessScope());
+    }
+
+    @Test
+    void shallSetDefaultAccessScopeWithinCareUnitIfNull() {
+      final var user = ajlaDoktorDtoBuilder()
+          .accessScope(null)
+          .build();
+
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          user,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(AccessScope.WITHIN_CARE_UNIT, actionEvaluation.user().accessScope());
+    }
+
+    @Test
+    void shallIncludeLegitimateProfessionalRoles() {
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          AJLA_DOCTOR_DTO,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES,
+          actionEvaluation.user().healthCareProfessionalLicence());
+    }
+
+    @Test
+    void shallIncludeResponsibleIssuer() {
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          AJLA_DOCTOR_DTO,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(AJLA_DOCTOR_RESPONSIBLE_ISSUER,
+          actionEvaluation.user().responsibleIssuer());
     }
   }
 }

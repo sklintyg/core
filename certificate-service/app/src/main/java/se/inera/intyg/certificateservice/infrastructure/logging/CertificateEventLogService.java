@@ -1,31 +1,33 @@
 package se.inera.intyg.certificateservice.infrastructure.logging;
 
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_ACTION;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CATEGORY;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CATEGORY_PROCESS;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_CARE_PROVIDER_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_CARE_UNIT_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_PATIENT_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_TYPE;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_UNIT_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_CERTIFICATE_VERSION;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_DURATION;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_END;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_START;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.EVENT_TYPE;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.ORGANIZATION_CARE_PROVIDER_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.ORGANIZATION_CARE_UNIT_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.ORGANIZATION_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.USER_ID;
-import static se.inera.intyg.certificateservice.infrastructure.logging.MDCLogConstants.USER_ROLE;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_ACTION;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CATEGORY;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CATEGORY_PROCESS;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_CARE_PROVIDER_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_CARE_UNIT_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_PATIENT_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_TYPE;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_UNIT_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_CERTIFICATE_VERSION;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_DURATION;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_END;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_START;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.ORGANIZATION_CARE_PROVIDER_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.ORGANIZATION_CARE_UNIT_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.ORGANIZATION_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.USER_ID;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.USER_ROLE;
 
 import java.util.Arrays;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventSubscriber;
+import se.inera.intyg.certificateservice.logging.HashUtility;
+import se.inera.intyg.certificateservice.logging.MdcCloseableMap;
 
 @Service
 @Slf4j
@@ -33,33 +35,37 @@ public class CertificateEventLogService implements CertificateEventSubscriber {
 
   @Override
   public void event(CertificateEvent event) {
-    populateMDC(event);
-
-    log.info("CertificateEvent '{}' occurred on certificate '{}'.",
-        event.type().name(), event.certificate().id().id()
-    );
-  }
-
-  private void populateMDC(CertificateEvent event) {
-    MDC.put(EVENT_ACTION, eventAction(event));
-    MDC.put(EVENT_CATEGORY, eventCategory());
-    MDC.put(EVENT_TYPE, eventType(event));
-    MDC.put(EVENT_START, eventStart(event));
-    MDC.put(EVENT_END, eventEnd(event));
-    MDC.put(EVENT_DURATION, eventDuration(event));
-    MDC.put(EVENT_CERTIFICATE_ID, eventCertificateId(event));
-    MDC.put(EVENT_CERTIFICATE_TYPE, eventCertificateType(event));
-    MDC.put(EVENT_CERTIFICATE_VERSION, eventCertificateVersion(event));
-    MDC.put(EVENT_CERTIFICATE_UNIT_ID, eventCertificateUnitId(event));
-    MDC.put(EVENT_CERTIFICATE_CARE_UNIT_ID, eventCertificateCareUnitId(event));
-    MDC.put(EVENT_CERTIFICATE_CARE_PROVIDER_ID,
-        eventCertificateCareProviderId(event));
-    MDC.put(EVENT_CERTIFICATE_PATIENT_ID, eventCertificatePatientId(event));
-    MDC.put(USER_ID, userId(event));
-    MDC.put(USER_ROLE, userRoles(event));
-    MDC.put(ORGANIZATION_ID, organizationId(event));
-    MDC.put(ORGANIZATION_CARE_UNIT_ID, organizationCareUnitId(event));
-    MDC.put(ORGANIZATION_CARE_PROVIDER_ID, organizationCareProviderId(event));
+    final var actionEvaluation = Optional.ofNullable(event.actionEvaluation());
+    try (MdcCloseableMap mdc = MdcCloseableMap.builder()
+        .put(EVENT_ACTION, eventAction(event))
+        .put(EVENT_CATEGORY, eventCategory())
+        .put(EVENT_TYPE, eventType(event))
+        .put(EVENT_START, eventStart(event))
+        .put(EVENT_END, eventEnd(event))
+        .put(EVENT_DURATION, eventDuration(event))
+        .put(EVENT_CERTIFICATE_ID, eventCertificateId(event))
+        .put(EVENT_CERTIFICATE_TYPE, eventCertificateType(event))
+        .put(EVENT_CERTIFICATE_VERSION, eventCertificateVersion(event))
+        .put(EVENT_CERTIFICATE_UNIT_ID, eventCertificateUnitId(event))
+        .put(EVENT_CERTIFICATE_CARE_UNIT_ID, eventCertificateCareUnitId(event))
+        .put(EVENT_CERTIFICATE_CARE_PROVIDER_ID, eventCertificateCareProviderId(event))
+        .put(EVENT_CERTIFICATE_PATIENT_ID, eventCertificatePatientId(event))
+        .put(USER_ID,
+            actionEvaluation.isPresent() ? userId(event) : eventCertificatePatientId(event)
+        )
+        .put(USER_ROLE, actionEvaluation.isPresent() ? userRoles(event) : "-")
+        .put(ORGANIZATION_ID, actionEvaluation.isPresent() ? organizationId(event) : "-")
+        .put(ORGANIZATION_CARE_UNIT_ID,
+            actionEvaluation.isPresent() ? organizationCareUnitId(event) : "-"
+        )
+        .put(ORGANIZATION_CARE_PROVIDER_ID,
+            actionEvaluation.isPresent() ? organizationCareProviderId(event) : "-"
+        )
+        .build()) {
+      log.info("CertificateEvent '{}' occurred on certificate '{}'.",
+          event.type().name(), event.certificate().id().id()
+      );
+    }
   }
 
   private static String eventAction(CertificateEvent event) {

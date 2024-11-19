@@ -2,20 +2,27 @@ package se.inera.intyg.certificateservice.application.common;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
 
+import java.util.Collections;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionFactory;
-import se.inera.intyg.certificateservice.domain.action.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionCreate;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionSend;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 
 class ResourceLinkConverterTest {
 
   private static final String NAME = "Skapa intyg";
   private static final String DESCRIPTION = "Skapa ett intygsutkast.";
+  private static final String BODY = "<p>Om du går vidare kommer intyget skickas direkt till Försäkringskassans system vilket ska göras i samråd med patienten.</p>";
   private ResourceLinkConverter resourceLinkConverter;
 
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION_CREATE =
@@ -25,6 +32,11 @@ class ResourceLinkConverterTest {
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION_READ =
       CertificateActionSpecification.builder()
           .certificateActionType(CertificateActionType.READ)
+          .build();
+
+  private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION_SEND =
+      CertificateActionSpecification.builder()
+          .certificateActionType(CertificateActionType.SEND)
           .build();
 
   @BeforeEach
@@ -41,10 +53,13 @@ class ResourceLinkConverterTest {
           .type(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
           .build();
 
-      final var certificateActionCreate = CertificateActionFactory.create(
-          CERTIFICATE_ACTION_SPECIFICATION_CREATE);
+      final var certificateActionCreate = CertificateActionCreate.builder()
+          .certificateActionSpecification(CERTIFICATE_ACTION_SPECIFICATION_CREATE)
+          .actionRules(Collections.emptyList())
+          .build();
 
-      final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
+      final var actualResult = resourceLinkConverter.convert(certificateActionCreate,
+          Optional.empty(), ACTION_EVALUATION);
       assertEquals(resourceLinkDTO.getType(), actualResult.getType());
     }
 
@@ -54,10 +69,13 @@ class ResourceLinkConverterTest {
           .type(ResourceLinkTypeDTO.READ_CERTIFICATE)
           .build();
 
-      final var certificateActionCreate = CertificateActionFactory.create(
-          CERTIFICATE_ACTION_SPECIFICATION_READ);
+      final var certificateActionRead = CertificateActionCreate.builder()
+          .certificateActionSpecification(CERTIFICATE_ACTION_SPECIFICATION_READ)
+          .actionRules(Collections.emptyList())
+          .build();
 
-      final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
+      final var actualResult = resourceLinkConverter.convert(certificateActionRead,
+          Optional.of(FK7210_CERTIFICATE), ACTION_EVALUATION);
       assertEquals(resourceLinkDTO.getType(), actualResult.getType());
     }
 
@@ -67,10 +85,13 @@ class ResourceLinkConverterTest {
           .name(NAME)
           .build();
 
-      final var certificateActionCreate = CertificateActionFactory.create(
-          CERTIFICATE_ACTION_SPECIFICATION_CREATE);
+      final var certificateActionCreate = CertificateActionCreate.builder()
+          .certificateActionSpecification(CERTIFICATE_ACTION_SPECIFICATION_CREATE)
+          .actionRules(Collections.emptyList())
+          .build();
 
-      final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
+      final var actualResult = resourceLinkConverter.convert(certificateActionCreate,
+          Optional.empty(), ACTION_EVALUATION);
       assertEquals(resourceLinkDTO.getName(), actualResult.getName());
     }
 
@@ -80,11 +101,30 @@ class ResourceLinkConverterTest {
           .description(DESCRIPTION)
           .build();
 
-      final var certificateActionCreate = CertificateActionFactory.create(
-          CERTIFICATE_ACTION_SPECIFICATION_CREATE);
+      final var certificateActionCreate = CertificateActionCreate.builder()
+          .certificateActionSpecification(CERTIFICATE_ACTION_SPECIFICATION_CREATE)
+          .actionRules(Collections.emptyList())
+          .build();
 
-      final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
+      final var actualResult = resourceLinkConverter.convert(certificateActionCreate,
+          Optional.of(FK7210_CERTIFICATE), ACTION_EVALUATION);
       assertEquals(resourceLinkDTO.getDescription(), actualResult.getDescription());
+    }
+
+    @Test
+    void shallConvertBody() {
+      final var resourceLinkDTO = ResourceLinkDTO.builder()
+          .body(BODY)
+          .build();
+
+      final var certificateActionCreate = CertificateActionSend.builder()
+          .certificateActionSpecification(CERTIFICATE_ACTION_SPECIFICATION_SEND)
+          .actionRules(Collections.emptyList())
+          .build();
+
+      final var actualResult = resourceLinkConverter.convert(certificateActionCreate,
+          Optional.of(FK7210_CERTIFICATE), ACTION_EVALUATION);
+      assertEquals(resourceLinkDTO.getBody(), actualResult.getBody());
     }
 
     @Test
@@ -93,10 +133,13 @@ class ResourceLinkConverterTest {
           .enabled(true)
           .build();
 
-      final var certificateActionCreate = CertificateActionFactory.create(
-          CERTIFICATE_ACTION_SPECIFICATION_CREATE);
+      final var certificateActionCreate = CertificateActionCreate.builder()
+          .certificateActionSpecification(CERTIFICATE_ACTION_SPECIFICATION_CREATE)
+          .actionRules(Collections.emptyList())
+          .build();
 
-      final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
+      final var actualResult = resourceLinkConverter.convert(certificateActionCreate,
+          Optional.empty(), ACTION_EVALUATION);
       assertEquals(resourceLinkDTO.isEnabled(), actualResult.isEnabled());
     }
 
@@ -109,10 +152,13 @@ class ResourceLinkConverterTest {
           .enabled(true)
           .build();
 
-      final var certificateActionCreate = CertificateActionFactory.create(
-          CERTIFICATE_ACTION_SPECIFICATION_CREATE);
+      final var certificateActionCreate = CertificateActionCreate.builder()
+          .certificateActionSpecification(CERTIFICATE_ACTION_SPECIFICATION_CREATE)
+          .actionRules(Collections.emptyList())
+          .build();
 
-      final var actualResult = resourceLinkConverter.convert(certificateActionCreate);
+      final var actualResult = resourceLinkConverter.convert(certificateActionCreate,
+          Optional.empty(), ACTION_EVALUATION);
       assertEquals(resourceLinkDTO, actualResult);
     }
   }

@@ -1,13 +1,15 @@
 package se.inera.intyg.certificateservice.application.unit.service;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.certificateservice.application.certificate.service.CertificateConverter;
+import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.CertificatesRequestFactory;
-import se.inera.intyg.certificateservice.application.common.ResourceLinkConverter;
+import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesResponse;
+import se.inera.intyg.certificateservice.application.unit.service.validator.GetUnitCertificatesRequestValidator;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesDomainService;
 
 @Service
@@ -45,9 +47,16 @@ public class GetUnitCertificatesService {
         .certificates(certificates.stream()
             .map(certificate -> certificateConverter.convert(
                     certificate,
-                    certificate.actions(actionEvaluation).stream()
-                        .map(resourceLinkConverter::convert)
-                        .toList()
+                    certificate.actionsInclude(Optional.of(actionEvaluation)).stream()
+                        .map(certificateAction ->
+                            resourceLinkConverter.convert(
+                                certificateAction,
+                                Optional.of(certificate),
+                                actionEvaluation
+                            )
+                        )
+                        .toList(),
+                    actionEvaluation
                 )
             )
             .toList()

@@ -3,7 +3,6 @@ package se.inera.intyg.cts.integrationtest;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static se.inera.intyg.cts.integrationtest.TestData.PHONE_NUMBER;
 
 import io.restassured.RestAssured;
 import java.util.UUID;
@@ -15,7 +14,7 @@ import se.inera.intyg.cts.application.dto.TerminationDTO;
 import se.inera.intyg.cts.domain.model.TerminationStatus;
 import se.inera.intyg.cts.testability.dto.TestabilityExportEmbeddableDTO;
 
-public class ReceiptIT {
+class ReceiptIT {
 
   private TestData testData;
 
@@ -33,7 +32,7 @@ public class ReceiptIT {
   }
 
   @Test
-  public void shallUpdateStatusWhenReceiptReceived() {
+  void shallUpdateStatusWhenReceiptReceived() {
     testData.defaultTermination().setup();
 
     final var terminationId = testData.terminationIds().get(0);
@@ -53,7 +52,7 @@ public class ReceiptIT {
   }
 
   @Test
-  public void shallSetReceiptTime() {
+  void shallSetReceiptTime() {
     testData.defaultTermination().setup();
 
     final var terminationId = testData.terminationIds().get(0);
@@ -73,7 +72,7 @@ public class ReceiptIT {
   }
 
   @Test
-  public void shallReturnNotFoundIfReceiptForNonExistingTermination() {
+  void shallReturnNotFoundIfReceiptForNonExistingTermination() {
     testData.defaultTermination().setup();
 
     given()
@@ -101,7 +100,7 @@ public class ReceiptIT {
         .statusCode(HttpStatus.OK.value());
 
     final var generatedPassword = getPassword(testData.terminationIds().get(0));
-    final var passwordSentBySMS = getPasswordSentBySMS(PHONE_NUMBER);
+    final var passwordSentBySMS = getPasswordSentBySMS();
 
     assertEquals(generatedPassword, passwordSentBySMS);
   }
@@ -116,10 +115,10 @@ public class ReceiptIT {
         .extract().asString();
   }
 
-  private String getPasswordSentBySMS(String phoneNumber) {
+  private String getPasswordSentBySMS() {
     return given()
         .baseUri("http://localhost:18000")
-        .pathParam("phoneNumber", phoneNumber)
+        .pathParam("phoneNumber", TestData.PHONE_NUMBER)
         .when()
         .get("/testability-tellustalk/v1/passwords/{phoneNumber}")
         .then()

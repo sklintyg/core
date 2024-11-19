@@ -15,6 +15,7 @@ public class TestDataPatientConstants {
   public static final ProtectedPerson PROTECTED_PERSON_FALSE = new ProtectedPerson(false);
 
   public static final String ATHENA_REACT_ANDERSSON_ID = "19401130-6125";
+  public static final String ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH = "194011306125";
   public static final String ATHENA_REACT_ANDERSSON_FIRST_NAME = "Athena";
   public static final String ATHENA_REACT_ANDERSSON_MIDDLE_NAME = "React";
   public static final String ATHENA_REACT_ANDERSSON_LAST_NAME = "Andersson";

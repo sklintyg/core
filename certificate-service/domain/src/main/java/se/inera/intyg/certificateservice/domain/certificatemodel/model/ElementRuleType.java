@@ -1,5 +1,5 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 public enum ElementRuleType {
-  MANDATORY
+  MANDATORY, TEXT_LIMIT, SHOW
 }
