@@ -55,8 +55,7 @@ public class FK7210CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.REVOKE)
-            .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
+            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
             )
             .allowedRolesForProtectedPersons(allowedRolesForProtectedPersons)
             .build(),
@@ -85,6 +84,7 @@ public class FK7210CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST)
+            .allowedRolesForProtectedPersons(allowedRolesForProtectedPersons)
             .build()
     );
   }
