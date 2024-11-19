@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.X_MAGIN_APPENDIX_PAGE;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.Y_MAGIN_APPENDIX_PAGE;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.X_MARGIN_APPENDIX_PAGE;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.Y_MARGIN_APPENDIX_PAGE;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -236,8 +236,8 @@ public class CertificatePdfFillService {
     document.addPage(clonedPage);
     PdfAccessibilityUtil.createNewOverflowPageTag(document, clonedPage, pdfSpecification);
 
-    float startX = rectangle.getLowerLeftX() + X_MAGIN_APPENDIX_PAGE;
-    float startY = rectangle.getUpperRightY() - Y_MAGIN_APPENDIX_PAGE;
+    float startX = rectangle.getLowerLeftX() + X_MARGIN_APPENDIX_PAGE;
+    float startY = rectangle.getUpperRightY() - Y_MARGIN_APPENDIX_PAGE;
     pdfAdditionalInformationTextGenerator.addOverFlowPageText(document,
         document.getNumberOfPages() - 1, lines, startX, startY, fontSize, font,
         mcid.getAndIncrement());
