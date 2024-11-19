@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text;
 
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.TEXT_FIELD_LINE_HEIGHT;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.Y_MAGIN_APPENDIX_PAGE;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.Y_MARGIN_APPENDIX_PAGE;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -100,7 +100,7 @@ public class TextUtil {
     float lineHeight = fontSize * TEXT_FIELD_LINE_HEIGHT;
 
     var availableLineSpaces = (int) Math.max(Math.floor(
-        (rectangle.getHeight() - Y_MAGIN_APPENDIX_PAGE - currentTextHeight) / lineHeight), 0);
+        (rectangle.getHeight() - Y_MARGIN_APPENDIX_PAGE - currentTextHeight) / lineHeight), 0);
 
     for (String line : lines) {
       wrappedLines.addAll(wrapLine(line, rectangle.getWidth(), fontSize, font));

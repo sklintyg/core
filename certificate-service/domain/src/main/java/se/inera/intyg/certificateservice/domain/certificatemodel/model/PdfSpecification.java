@@ -18,6 +18,7 @@ public class PdfSpecification {
   List<PdfFieldId> patientIdFieldIds;
   PdfSignature signature;
   OverflowPageIndex overFlowPageIndex;
+  List<String> untaggedWatermarks;
   @Default
   boolean hasPageNbr = true;
 }

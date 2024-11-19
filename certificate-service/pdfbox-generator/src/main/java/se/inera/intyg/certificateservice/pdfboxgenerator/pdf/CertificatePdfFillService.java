@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.X_MAGIN_APPENDIX_PAGE;
-import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.Y_MAGIN_APPENDIX_PAGE;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.X_MARGIN_APPENDIX_PAGE;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.Y_MARGIN_APPENDIX_PAGE;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,9 +12,10 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.cos.COSDictionary;
+import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
@@ -28,6 +29,8 @@ import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAdditionalInformationTextGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextUtil;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfElementValueGenerator;
@@ -57,14 +60,19 @@ public class CertificatePdfFillService {
   public PDDocument fillDocument(Certificate certificate, String additionalInfoText,
       boolean isCitizenFormat) {
     final var template = getTemplatePath(certificate, isCitizenFormat);
+
+    final var mcid = new AtomicInteger(
+        certificate.certificateModel().pdfSpecification().pdfMcid().value()
+    );
+
     try (final var inputStream = getClass().getClassLoader().getResourceAsStream(template)) {
       if (inputStream == null) {
         throw new IllegalArgumentException("Template not found: " + template);
       }
 
       final var document = Loader.loadPDF(inputStream.readAllBytes());
-      setFields(certificate, document);
-      addTexts(certificate, additionalInfoText, document, isCitizenFormat);
+      setFields(certificate, document, mcid);
+      addTexts(certificate, additionalInfoText, document, isCitizenFormat, mcid);
       return document;
     } catch (Exception e) {
       throw new IllegalStateException("Could not create Pdf", e);
@@ -77,14 +85,11 @@ public class CertificatePdfFillService {
         : certificate.certificateModel().pdfSpecification().pdfNoAddressTemplatePath();
   }
 
-  private static int getSignatureTagIndex(Certificate certificate, boolean isCitizenFormat) {
-    if (isCitizenFormat) {
-      return certificate.certificateModel().pdfSpecification().signature()
-          .signatureWithoutAddressTagIndex()
-          .value();
-    }
-    return certificate.certificateModel().pdfSpecification().signature()
-        .signatureWithAddressTagIndex().value();
+  private static PdfTagIndex getSignatureTagIndex(Certificate certificate, boolean includeAddress) {
+    final var signature = certificate.certificateModel().pdfSpecification().signature();
+
+    return includeAddress ? signature.signatureWithAddressTagIndex()
+        : signature.signatureWithoutAddressTagIndex();
   }
 
   private static boolean includeAddress(Certificate certificate, boolean isCitizenFormat) {
@@ -95,7 +100,7 @@ public class CertificatePdfFillService {
     return certificate.sent() == null || certificate.sent().sentAt() == null;
   }
 
-  private void setFields(Certificate certificate, PDDocument document) {
+  private void setFields(Certificate certificate, PDDocument document, AtomicInteger mcid) {
     final var pdfSpecification = certificate.certificateModel().pdfSpecification();
     if (certificate.status() == Status.SIGNED) {
       setFieldValues(document, pdfSignatureValueGenerator.generate(certificate));
@@ -109,7 +114,7 @@ public class CertificatePdfFillService {
         .filter(field -> !field.getAppend())
         .toList();
 
-    setFieldValuesAppendix(document, certificate, pdfSpecification, appendedFields);
+    setFieldValuesAppendix(document, certificate, pdfSpecification, appendedFields, mcid);
     setFieldValues(document, fieldsWithoutAppend);
     setFieldValues(document, pdfUnitValueGenerator.generate(certificate));
     setFieldValues(document, pdfPatientValueGenerator.generate(certificate,
@@ -117,7 +122,7 @@ public class CertificatePdfFillService {
   }
 
   private void setFieldValuesAppendix(PDDocument document, Certificate certificate,
-      PdfSpecification pdfSpecification, List<PdfField> appendedFields) {
+      PdfSpecification pdfSpecification, List<PdfField> appendedFields, AtomicInteger mcid) {
     if (pdfSpecification.overFlowPageIndex() == null || appendedFields.isEmpty()) {
       return;
     }
@@ -125,17 +130,18 @@ public class CertificatePdfFillService {
     try {
       final var patientField = PdfField.builder()
           .id(pdfSpecification.patientIdFieldIds().getLast().id())
-          .value(certificate.certificateMetaData().patient().id().id())
+          .value(certificate.certificateMetaData().patient().id().idWithoutDash())
           .build();
       setFieldValuesAppendix(document, pdfSpecification.overFlowPageIndex().value(), appendedFields,
-          patientField);
+          patientField, mcid, pdfSpecification);
     } catch (IOException e) {
       throw new IllegalStateException(e);
     }
   }
 
   private void setFieldValuesAppendix(PDDocument document,
-      int overFlowPageIndex, List<PdfField> appendedFields, PdfField patientIdField)
+      int overFlowPageIndex, List<PdfField> appendedFields, PdfField patientIdField,
+      AtomicInteger mcid, PdfSpecification pdfSpecification)
       throws IOException {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
     final var overflowField = acroForm.getField(appendedFields.getFirst().getId());
@@ -143,7 +149,6 @@ public class CertificatePdfFillService {
     final var fontSize = new TextFieldAppearance((PDVariableText) overflowField).getFontSize();
     int start = 0;
     int count = 0;
-    //TODO: Get font from pdfSepc
     final var font = PDType0Font.load(document, fontResource.getInputStream());
     var appendedFieldsMutable = new ArrayList<>(appendedFields);
 
@@ -168,27 +173,28 @@ public class CertificatePdfFillService {
         }
 
         fillFieldsOnPage(document, overFlowPageIndex, appendedFieldsMutable, patientIdField, start,
-            count, acroForm, fontSize, font, rectangle);
+            count, acroForm, fontSize, font, rectangle, mcid, pdfSpecification);
         start = count;
       }
       count++;
     }
 
     fillFieldsOnPage(document, overFlowPageIndex, appendedFieldsMutable, patientIdField, start,
-        count, acroForm, fontSize, font, rectangle);
+        count, acroForm, fontSize, font, rectangle, mcid, pdfSpecification);
   }
 
   private void fillFieldsOnPage(PDDocument document, int overFlowPageIndex,
       List<PdfField> appendedFields,
       PdfField patientIdField, int start, int count, PDAcroForm acroForm, float fontSize,
-      PDType0Font font, PDRectangle rectangle)
+      PDType0Font font, PDRectangle rectangle, AtomicInteger mcid,
+      PdfSpecification pdfSpecification)
       throws IOException {
     if (start == 0) {
       fillOverflowPage(appendedFields.subList(start, count), acroForm);
     } else {
       addAndFillOverflowPage(document, overFlowPageIndex, appendedFields.subList(start, count),
           acroForm,
-          patientIdField, fontSize, font, rectangle);
+          patientIdField, fontSize, font, rectangle, mcid, pdfSpecification);
     }
   }
 
@@ -208,24 +214,15 @@ public class CertificatePdfFillService {
   private void addAndFillOverflowPage(PDDocument document,
       int overFlowPageIndex, List<PdfField> fields,
       PDAcroForm acroForm, PdfField patientIdField, float fontSize, PDFont font,
-      PDRectangle rectangle)
+      PDRectangle rectangle, AtomicInteger mcid, PdfSpecification pdfSpecification)
       throws IOException {
-
     final var pageToClone = document.getPage(overFlowPageIndex);
-    final var meidaBoxToClone = document.getPage(overFlowPageIndex).getMediaBox();
-    final var mediabox = new PDRectangle(meidaBoxToClone.getLowerLeftX(),
-        meidaBoxToClone.getLowerLeftY(),
-        meidaBoxToClone.getWidth(), meidaBoxToClone.getHeight());
+    COSDictionary pageDict = pageToClone.getCOSObject();
+    COSDictionary newPageDict = new COSDictionary(pageDict);
 
-    final var clonedPage = new PDPage(mediabox);
+    newPageDict.removeItem(COSName.ANNOTS);
 
-    float startX = rectangle.getLowerLeftX() + X_MAGIN_APPENDIX_PAGE;
-    float startY = rectangle.getUpperRightY() - Y_MAGIN_APPENDIX_PAGE;
-
-    try (PDPageContentStream contentStream = new PDPageContentStream(document,
-        clonedPage)) {
-      contentStream.appendRawCommands(pageToClone.getContents().readAllBytes());
-    }
+    PDPage clonedPage = new PDPage(newPageDict);
 
     String allText = fields.stream()
         .map(PdfField::getValue)
@@ -237,32 +234,33 @@ public class CertificatePdfFillService {
     }
 
     document.addPage(clonedPage);
-    pdfAdditionalInformationTextGenerator.addOverFlowPageText(document, overFlowPageIndex,
-        document.getNumberOfPages() - 1, lines, startX,
-        startY, fontSize, font);
+    PdfAccessibilityUtil.createNewOverflowPageTag(document, clonedPage, pdfSpecification);
 
-    addPatientId(document, document.getNumberOfPages() - 1, patientIdField, acroForm, fontSize);
+    float startX = rectangle.getLowerLeftX() + X_MARGIN_APPENDIX_PAGE;
+    float startY = rectangle.getUpperRightY() - Y_MARGIN_APPENDIX_PAGE;
+    pdfAdditionalInformationTextGenerator.addOverFlowPageText(document,
+        document.getNumberOfPages() - 1, lines, startX, startY, fontSize, font,
+        mcid.getAndIncrement());
+
+    addPatientId(document, document.getNumberOfPages() - 1, patientIdField, acroForm, fontSize,
+        mcid.getAndIncrement());
   }
 
   private void addPatientId(PDDocument document, int pageIndex,
       PdfField patientIdField,
-      PDAcroForm acroForm, float fontSize) throws IOException {
+      PDAcroForm acroForm, float fontSize, int mcid) throws IOException {
     final var patientIdRect = acroForm.getField(patientIdField.getId()).getWidgets().getFirst()
         .getRectangle();
-    final var marginY = 8;
+    final var marginY = 6;
     pdfAdditionalInformationTextGenerator.addPatientId(document, pageIndex,
         patientIdRect.getLowerLeftX(), patientIdRect.getLowerLeftY() + marginY,
-        patientIdField.getValue(), fontSize);
+        patientIdField.getValue(), fontSize, mcid);
 
   }
 
   private void addTexts(Certificate certificate, String additionalInfoText, PDDocument document,
-      boolean isCitizenFormat)
+      boolean isCitizenFormat, AtomicInteger mcid)
       throws IOException {
-    final var mcid = new AtomicInteger(
-        certificate.certificateModel().pdfSpecification().pdfMcid().value()
-    );
-
     setDraftWatermark(document, certificate, mcid);
     setSignatureText(
         document,
@@ -273,12 +271,22 @@ public class CertificatePdfFillService {
     setSentText(document, certificate, mcid);
 
     final var nbrOfPages = document.getNumberOfPages();
-    for (int i = 0; i < nbrOfPages; i++) {
-      setMarginText(document, certificate, additionalInfoText, mcid, i);
-      if (!certificate.certificateModel().pdfSpecification().hasPageNbr()) {
-        pdfAdditionalInformationTextGenerator.setPageNumber(document, i, nbrOfPages,
-            mcid.incrementAndGet());
-      }
+    for (int pageIndex = 0; pageIndex < nbrOfPages; pageIndex++) {
+      setMarginText(document, certificate, additionalInfoText, mcid, pageIndex);
+      setPageNumber(document, certificate, pageIndex, nbrOfPages, mcid);
+    }
+  }
+
+  private void setPageNumber(PDDocument document, Certificate certificate, int pageIndex,
+      int nbrOfPages,
+      AtomicInteger mcid) throws IOException {
+    if (!certificate.certificateModel().pdfSpecification().hasPageNbr()) {
+      pdfAdditionalInformationTextGenerator.setPageNumber(
+          document,
+          pageIndex,
+          nbrOfPages,
+          mcid.incrementAndGet()
+      );
     }
   }
 
@@ -334,7 +342,8 @@ public class CertificatePdfFillService {
       pdfAdditionalInformationTextGenerator.addDigitalSignatureText(
           document, getSignatureOffsetX(acroForm, certificate),
           getSignatureOffsetY(acroForm, certificate), mcid.getAndIncrement(),
-          getSignatureTagIndex(certificate, includeAddress(certificate, isCitizenFormat)), pageIndex
+          getSignatureTagIndex(certificate, includeAddress(certificate, isCitizenFormat)).value(),
+          pageIndex
       );
     }
   }

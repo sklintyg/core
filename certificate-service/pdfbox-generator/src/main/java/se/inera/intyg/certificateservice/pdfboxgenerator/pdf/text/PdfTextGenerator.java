@@ -1,22 +1,21 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text;
 
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.TEXT_FIELD_LINE_HEIGHT;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil.addContentToCurrentSection;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil.beginMarkedContent;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil.createContentStream;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil.createNewDivOnPage;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil.getDivInQuestionSection;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil.getFirstDiv;
+import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil.getLastDivOfPage;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.List;
-import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureElement;
-import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureNode;
-import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureTreeRoot;
-import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDMarkedContent;
-import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyList;
 import org.apache.pdfbox.pdmodel.documentinterchange.taggedpdf.StandardStructureTypes;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
@@ -35,10 +34,17 @@ public class PdfTextGenerator {
     addText(pdf, text, fontSize, matrix, strokingColor, null, null, false, mcid, section, 0);
   }
 
+  public void addText(PDDocument pdf, String text, float fontSize, Float offsetX, Float offsetY,
+      int mcid, PDStructureElement section, int pageIndex)
+      throws IOException {
+    addText(pdf, text, fontSize, null, Color.black, offsetX, offsetY, false, mcid, section,
+        pageIndex);
+  }
+
   private void addText(
       PDDocument pdf,
       String text,
-      int fontSize,
+      float fontSize,
       Matrix matrix,
       Color strokingColor,
       Float offsetX,
@@ -69,8 +75,10 @@ public class PdfTextGenerator {
     final var dictionary = beginMarkedContent(contentStream, COSName.P, mcid);
     contentStream.showText(text);
     contentStream.endMarkedContent();
-    addContentToCurrentSection(page, dictionary, section, COSName.P, StandardStructureTypes.P,
-        text);
+    if (section != null) {
+      addContentToCurrentSection(page, dictionary, section, COSName.P, StandardStructureTypes.P,
+          text);
+    }
     contentStream.endText();
     contentStream.close();
   }
@@ -85,7 +93,7 @@ public class PdfTextGenerator {
         matrix,
         Color.gray,
         mcid,
-        addInExistingTopTag ? getFirstDiv(document) : createNewDivOnTop(document)
+        addInExistingTopTag ? getFirstDiv(document) : createNewDivOnPage(document, 0, 0)
     );
   }
 
@@ -125,8 +133,9 @@ public class PdfTextGenerator {
   }
 
   public void addWatermark(PDDocument document, String text, int mcid) throws IOException {
+    int pageIndex = 0;
     for (PDPage page : document.getPages()) {
-      final var section = createNewDivOnTop(document);
+      final var section = createNewDivOnPage(document, 0, pageIndex);
       final var contentStream = createContentStream(document, page);
 
       final var fontHeight = 105;
@@ -160,148 +169,28 @@ public class PdfTextGenerator {
           StandardStructureTypes.P, "Detta är ett " + text.toLowerCase());
 
       contentStream.close();
+      pageIndex++;
     }
-  }
-
-  private static PDStructureElement createNewDivOnTop(PDDocument pdf) {
-    final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
-
-    final var pageTag = getPageTag(structuredTree, 0);
-
-    final var newDiv = new PDStructureElement(StandardStructureTypes.DIV, pageTag);
-
-    final var pageTagKids = pageTag.getKids();
-    pageTagKids.add(0, newDiv);
-    pageTag.setKids(pageTagKids);
-
-    return newDiv;
-  }
-
-  private static PDStructureElement getFirstDiv(PDDocument pdf) {
-    final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
-
-    final var pageTag = getPageTag(structuredTree, 0);
-
-    if (pageTag.getKids().isEmpty()) {
-      return pageTag;
-    }
-
-    return (PDStructureElement) pageTag.getKids().get(0);
-  }
-
-  private static PDStructureElement getLastDivOfPage(PDDocument pdf, int pageIndex) {
-    final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
-
-    final var pageTag = getPageTag(structuredTree, pageIndex);
-
-    if (pageTag.getKids().isEmpty()) {
-      return pageTag;
-    }
-
-    return (PDStructureElement) pageTag.getKids().get(pageTag.getKids().size() - 1);
-  }
-
-  private static PDStructureElement getDivInQuestionSection(PDDocument pdf, int index,
-      int pageIndex) {
-    final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
-
-    final var pageTag = getPageTag(structuredTree, pageIndex);
-
-    if (pageTag.getKids().isEmpty()) {
-      return pageTag;
-    }
-
-    final var containerWithMostKids = pageTag.getKids().stream()
-        .map(PDStructureElement.class::cast)
-        .map(PDStructureNode::getKids)
-        .max(Comparator.comparing(List::size));
-
-    if (containerWithMostKids.isEmpty() || containerWithMostKids.get().size() - 1 < index) {
-      throw new IllegalStateException("Doesnt exist div to place signed tag in");
-    }
-
-    return (PDStructureElement) containerWithMostKids.get().get(index);
-  }
-
-  private static PDStructureElement getPageTag(PDStructureTreeRoot structuredTree, int pageIndex) {
-    final var documentTag = getFirstChildFromStructuredElement(
-        structuredTree.getKids(),
-        "Pdf doesnt have expected root element for tags"
-    );
-
-    return getChildFromStructuredElement(
-        documentTag.getKids(),
-        pageIndex
-    );
-  }
-
-  private static PDStructureElement getFirstChildFromStructuredElement(List<Object> kids,
-      String s) {
-    if (kids.isEmpty()) {
-      throw new IllegalStateException(s);
-    }
-
-    return (PDStructureElement) kids.get(0);
-  }
-
-  private static PDStructureElement getChildFromStructuredElement(List<Object> kids,
-      int index) {
-    if (kids.isEmpty()) {
-      throw new IllegalStateException("Pdf doesnt have expected div/section element");
-    }
-
-    if (index >= kids.size() - 1) {
-      return (PDStructureElement) kids.getLast();
-    }
-
-    return (PDStructureElement) kids.get(index);
-  }
-
-  private PDPageContentStream createContentStream(PDDocument document, PDPage currentPage)
-      throws IOException {
-    return new PDPageContentStream(document, currentPage, AppendMode.APPEND, true, true);
-  }
-
-  private COSDictionary beginMarkedContent(PDPageContentStream contentStream, COSName name,
-      int mcid)
-      throws IOException {
-    final var currentMarkedContentDictionary = new COSDictionary();
-    currentMarkedContentDictionary.setName("Tag", name.getName());
-    currentMarkedContentDictionary.setInt(COSName.MCID, mcid);
-    contentStream.beginMarkedContent(name, PDPropertyList.create(currentMarkedContentDictionary));
-    return currentMarkedContentDictionary;
-  }
-
-  private void addContentToCurrentSection(PDPage page, COSDictionary markedContentDictionary,
-      PDStructureElement currentSection, COSName name, String type, String text) {
-
-    final var newContent = new PDStructureElement(type, currentSection);
-    newContent.setActualText(text);
-    newContent.setPage(page);
-
-    final var markedContent = new PDMarkedContent(name, markedContentDictionary);
-    markedContentDictionary.setItem(COSName.P, newContent.getCOSObject());
-
-    newContent.appendKid(markedContent);
-    currentSection.appendKid(newContent);
   }
 
   public void addTextLines(PDDocument document, List<String> lines, int fontSize,
-      PDFont font, Float xPosition, Float yPosition,
-      int mcid, int originalPageIndex, int pageIndex)
+      PDFont font, Float xPosition, Float yPosition, int mcid, int pageIndex)
       throws IOException {
 
     final var page = document.getPage(pageIndex);
     final var contentStream = createContentStream(document, page);
 
-    contentStream.setFont(font, fontSize);
-
-    //TODO: need correct mcid and accessibility section
-
     contentStream.beginText();
     if (xPosition != null && yPosition != null) {
       contentStream.newLineAtOffset(xPosition, yPosition);
     }
+    contentStream.setFont(font, fontSize);
+
+    final var markedContentDictionary = beginMarkedContent(contentStream, COSName.P, mcid);
+    final var section = createNewDivOnPage(document, 1, pageIndex);
+
+    addContentToCurrentSection(page, markedContentDictionary, section, COSName.P,
+        StandardStructureTypes.P, String.join(" ", lines));
 
     float leading = TEXT_FIELD_LINE_HEIGHT * fontSize;
     for (String line : lines) {
@@ -309,43 +198,8 @@ public class PdfTextGenerator {
       contentStream.newLineAtOffset(0, -leading);
     }
 
+    contentStream.endMarkedContent();
     contentStream.endText();
     contentStream.close();
   }
-
-  public void addText(
-      PDDocument pdf,
-      String text,
-      int fontSize,
-      Matrix matrix,
-      Color strokingColor,
-      Float offsetX,
-      Float offsetY,
-      boolean isBold,
-      int mcid,
-      int pageIndex
-  ) throws IOException {
-    final var page = pdf.getPage(pageIndex);
-    final var contentStream = createContentStream(pdf, page);
-
-    if (matrix != null) {
-      contentStream.transform(matrix);
-    }
-    contentStream.beginText();
-
-    if (offsetX != null && offsetY != null) {
-      contentStream.newLineAtOffset(offsetX, offsetY);
-    }
-
-    contentStream.setNonStrokingColor(strokingColor);
-    contentStream.setFont(new PDType1Font(
-        isBold
-            ? FontName.HELVETICA_BOLD
-            : FontName.HELVETICA
-    ), fontSize);
-    contentStream.showText(text);
-    contentStream.endText();
-    contentStream.close();
-  }
-
 }

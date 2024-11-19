@@ -3,7 +3,6 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.DIGITALLY_SIGNED_TEXT;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.WATERMARK_DRAFT;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -72,45 +71,49 @@ public class PdfAdditionalInformationTextGenerator {
   }
 
   public void addPatientId(PDDocument document, int pageIndex, float xPosition, float yPosition,
-      String patientId, float fontSize) throws IOException {
-    //TODO: create new div with paragraph and marked content for patientId
-    //TODO new correct mcid
-    var mcid = 999;
-    pdfTextGenerator.addText(document, patientId, (int) fontSize, null, Color.black, xPosition,
+      String patientId, float fontSize, int mcid) throws IOException {
+    pdfTextGenerator.addText(
+        document,
+        patientId,
+        fontSize,
+        xPosition,
         yPosition,
-        false,
-        mcid, pageIndex);
+        mcid,
+        PdfAccessibilityUtil.getDivInQuestionSection(document, 1, pageIndex),
+        pageIndex
+    );
   }
 
   public void setPageNumber(PDDocument document, int pageIndex, int nbrOfPages, int mcid)
       throws IOException {
-    final float MARGIN_LEFT = 63.5F;
-    final float MARGIN_TOP = 37;
-    final int fontSize = 10;
-    //TODO: create new div with paragraph and marked content for pagenr
+    final var MARGIN_LEFT = 63.5F;
+    final var MARGIN_TOP = 37;
+    final var fontSize = 10;
 
     PDPage page = document.getPage(pageIndex);
     final var x = page.getMediaBox().getWidth() - MARGIN_LEFT;
     final var y = page.getMediaBox().getHeight() - MARGIN_TOP;
 
     final var pageNumberText = "%d (%d)".formatted(pageIndex + 1, nbrOfPages);
-    pdfTextGenerator.addText(document, pageNumberText, fontSize,
-        null,
-        Color.black, x, y,
-        false,
-        mcid, pageIndex);
+    pdfTextGenerator.addText(
+        document,
+        pageNumberText,
+        fontSize,
+        x,
+        y,
+        mcid,
+        PdfAccessibilityUtil.getDivInQuestionSection(document, 0, pageIndex),
+        pageIndex
+    );
   }
 
 
-  public void addOverFlowPageText(PDDocument document, int originalPageIndex, int pageIndex,
+  public void addOverFlowPageText(PDDocument document, int pageIndex,
       List<String> lines,
-      float xPosition, float yPosition, float fontSize, PDFont font)
+      float xPosition, float yPosition, float fontSize, PDFont font, int mcid)
       throws IOException {
-
-    //TODO: need correct mcid
-    pdfTextGenerator.addTextLines(document, lines, (int) fontSize, font, xPosition,
-        yPosition,
-        998, originalPageIndex, pageIndex);
+    pdfTextGenerator.addTextLines(document, lines, (int) fontSize, font, xPosition, yPosition, mcid,
+        pageIndex);
 
   }
 }
