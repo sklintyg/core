@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.StaffRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageContactInfoEmbeddable;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageStatusEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageStatusEnum;
@@ -47,6 +48,16 @@ public class AnswerToMessageEntityMapper {
         .authoredByStaff(
             answer.authoredStaff() != null
                 ? staffEntityRepository.staff(answer.authoredStaff())
+                : null
+        )
+        .contactInfo(
+            answer.contactInfo() != null ? answer.contactInfo().lines().stream()
+                .map(info ->
+                    MessageContactInfoEmbeddable.builder()
+                        .info(info)
+                        .build()
+                )
+                .toList()
                 : null
         )
         .certificate(messageEntity.getCertificate())
