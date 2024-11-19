@@ -251,7 +251,7 @@ public class CertificatePdfFillService {
       PDAcroForm acroForm, float fontSize, int mcid) throws IOException {
     final var patientIdRect = acroForm.getField(patientIdField.getId()).getWidgets().getFirst()
         .getRectangle();
-    final var marginY = 8;
+    final var marginY = 6;
     pdfAdditionalInformationTextGenerator.addPatientId(document, pageIndex,
         patientIdRect.getLowerLeftX(), patientIdRect.getLowerLeftY() + marginY,
         patientIdField.getValue(), fontSize, mcid);
