@@ -6,7 +6,6 @@ import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.c
 import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.SAMORDNING_MONTH_INDEX;
 import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.SAMORDNING_MONTH_VALUE_MIN;
 
-import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,12 +55,14 @@ public class PuClientV5 {
       final var getPersonsForProfileResponseType = getPersonsForProfileResponderInterface
           .getPersonsForProfile(logicalAddress, parameters);
 
-      return getPersonsForProfileResponseTypeHandlerV5.handlePersons(
-          getPersonsForProfileResponseType);
+      return getPersonsForProfileResponseTypeHandlerV5.handle(
+          puRequest.getPersonIds(),
+          getPersonsForProfileResponseType
+      );
     } catch (Exception ex) {
       log.error("Unexpected error occurred when trying to call PU!", ex);
       return PuPersonsResponse.builder()
-          .persons(Collections.emptyList())
+          .persons(List.of(PuResponse.error()))
           .build();
     }
   }
