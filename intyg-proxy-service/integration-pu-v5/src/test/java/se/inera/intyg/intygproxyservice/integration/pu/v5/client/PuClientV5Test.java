@@ -23,7 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
-import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse.Status;
+import se.inera.intyg.intygproxyservice.integration.api.pu.Status;
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofile.v5.rivtabp21.GetPersonsForProfileResponderInterface;
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofileresponder.v5.GetPersonsForProfileResponseType;
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofileresponder.v5.GetPersonsForProfileType;

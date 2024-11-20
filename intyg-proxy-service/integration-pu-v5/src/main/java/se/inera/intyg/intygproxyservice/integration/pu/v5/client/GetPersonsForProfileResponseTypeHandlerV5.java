@@ -3,6 +3,7 @@ package se.inera.intyg.intygproxyservice.integration.pu.v5.client;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
 import se.inera.intyg.intygproxyservice.integration.pu.v5.client.converter.GetPersonsForProfileResponseTypeConverterV5;
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofileresponder.v5.GetPersonsForProfileResponseType;
@@ -33,6 +34,20 @@ public class GetPersonsForProfileResponseTypeHandlerV5 {
     );
 
     return PuResponse.found(person);
+  }
+
+  public PuPersonsResponse handlePersons(
+      GetPersonsForProfileResponseType getPersonsForProfileResponseType) {
+    return PuPersonsResponse.builder()
+        .persons(
+            getPersonsForProfileResponseType.getRequestedPersonRecord()
+                .stream()
+                .map(person -> PuResponse.found(
+                    getPersonsForProfileResponseTypeConverterV5.convert(person))
+                )
+                .toList()
+        )
+        .build();
   }
 
   private static boolean responseIsEmpty(

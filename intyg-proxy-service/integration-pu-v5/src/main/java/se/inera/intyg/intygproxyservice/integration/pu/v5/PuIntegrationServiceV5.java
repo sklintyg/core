@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsRequest;
+import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuService;
@@ -22,5 +24,10 @@ public class PuIntegrationServiceV5 implements PuService {
   @Override
   public PuResponse findPerson(PuRequest puRequest) {
     return puClientV5.findPerson(puRequest);
+  }
+
+  @Override
+  public PuPersonsResponse findPersons(PuPersonsRequest puRequest) {
+    return puClientV5.findPersons(puRequest);
   }
 }

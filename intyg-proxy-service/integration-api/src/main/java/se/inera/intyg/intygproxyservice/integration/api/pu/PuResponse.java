@@ -19,10 +19,5 @@ public class PuResponse {
   public static PuResponse error() {
     return new PuResponse(null, Status.ERROR);
   }
-
-  public enum Status {
-    FOUND,
-    NOT_FOUND,
-    ERROR
-  }
+  
 }

@@ -4,11 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
-import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse.Status;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuService;
 import se.inera.intyg.intygproxyservice.person.dto.PersonRequest;
 import se.inera.intyg.intygproxyservice.person.dto.PersonResponse;
-import se.inera.intyg.intygproxyservice.person.dto.StatusDTOType;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +19,7 @@ public class PersonService {
     validateRequest(personRequest);
 
     final var puResponse = findPersonInPu(personRequest);
-    return convert(puResponse);
+    return PuResponseConverter.convert(personDTOMapper, puResponse);
   }
 
   private static void validateRequest(PersonRequest personRequest) {
@@ -44,19 +42,5 @@ public class PersonService {
             )
             .build()
     );
-  }
-
-  private PersonResponse convert(PuResponse puResponse) {
-    return PersonResponse.builder()
-        .person(
-            Status.FOUND.equals(
-                puResponse.getStatus())
-                ? personDTOMapper.toDTO(puResponse.getPerson())
-                : null
-        )
-        .status(
-            StatusDTOType.valueOf(puResponse.getStatus().name())
-        )
-        .build();
   }
 }
