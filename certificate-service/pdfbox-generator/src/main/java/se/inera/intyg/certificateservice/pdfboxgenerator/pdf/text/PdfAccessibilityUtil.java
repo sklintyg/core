@@ -44,21 +44,26 @@ public class PdfAccessibilityUtil {
     addContentToSection(page, patientIdDiv, "Personnummer", COSName.P);
 
     final var h2Div = createNewContainer(section, StandardStructureTypes.DIV, 2);
-    addContentToSection(page, h2Div, "Fortsättningsblad", COSName.H);
+    addContentToSection(page, h2Div, "Fortsättningsblad", COSName.H, "H2");
 
     return pageContainer;
   }
 
   private static void addContentToSection(PDPage page, PDStructureElement section, String text,
-      COSName name) {
+      COSName name, String nameAsText) {
     addContentToCurrentSection(
         page,
         null,
         section,
         name,
-        name.getName(),
+        nameAsText,
         text
     );
+  }
+
+  private static void addContentToSection(PDPage page, PDStructureElement section, String text,
+      COSName name) {
+    addContentToSection(page, section, text, name, name.getName());
   }
 
   public static PDStructureElement createNewDivOnPage(PDDocument pdf, int index, int pageIndex) {
