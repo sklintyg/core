@@ -12,6 +12,7 @@ import static se.inera.intyg.intygproxyservice.integration.pu.v5.TestData.PERSON
 import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.KODVERK_PERSONNUMMER;
 import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.KODVERK_SAMORDNINGSNUMMER;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
+import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsRequest;
+import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.Status;
@@ -48,184 +51,382 @@ class PuClientV5Test {
   }
 
   @Nested
-  class PersonFoundInPu {
+  class GetPerson {
 
-    private PuRequest puRequest;
+    @Nested
+    class PersonFoundInPu {
 
-    @BeforeEach
-    void setUp() {
-      puRequest = PuRequest.builder()
-          .personId(PERSON_ID_AS_PERSONNUMMER)
-          .build();
+      private PuRequest puRequest;
 
-      final var getPersonsForProfileResponseType = new GetPersonsForProfileResponseType();
+      @BeforeEach
+      void setUp() {
+        puRequest = PuRequest.builder()
+            .personId(PERSON_ID_AS_PERSONNUMMER)
+            .build();
 
-      doReturn(getPersonsForProfileResponseType)
-          .when(getPersonsForProfileResponderInterface)
-          .getPersonsForProfile(anyString(), any(GetPersonsForProfileType.class));
+        final var getPersonsForProfileResponseType = new GetPersonsForProfileResponseType();
 
-      doReturn(PuResponse.found(PERSON))
-          .when(getPersonsForProfileResponseTypeHandlerV5)
-          .handle(getPersonsForProfileResponseType);
+        doReturn(getPersonsForProfileResponseType)
+            .when(getPersonsForProfileResponderInterface)
+            .getPersonsForProfile(anyString(), any(GetPersonsForProfileType.class));
+
+        doReturn(PuResponse.found(PERSON))
+            .when(getPersonsForProfileResponseTypeHandlerV5)
+            .handle(getPersonsForProfileResponseType);
+      }
+
+      @Test
+      void shallReturnPuResponseWithStatusFound() {
+        final var actualPuResponse = puClientV5.findPerson(puRequest);
+
+        assertEquals(Status.FOUND, actualPuResponse.getStatus());
+      }
+
+      @Test
+      void shallReturnPuResponseWithPerson() {
+        final var actualPuResponse = puClientV5.findPerson(puRequest);
+
+        assertEquals(PERSON, actualPuResponse.getPerson());
+      }
     }
 
-    @Test
-    void shallReturnPuResponseWithStatusFound() {
-      final var actualPuResponse = puClientV5.findPerson(puRequest);
+    @Nested
+    class PuArguments {
 
-      assertEquals(Status.FOUND, actualPuResponse.getStatus());
+      @Test
+      void shallCallPuWithLogicalAddressProvidedByConfig() {
+        final var logicalAddressArgumentCaptor = ArgumentCaptor.forClass(String.class);
+
+        puClientV5.findPerson(
+            PuRequest.builder()
+                .personId(PERSON_ID_AS_PERSONNUMMER)
+                .build()
+        );
+
+        verify(getPersonsForProfileResponderInterface)
+            .getPersonsForProfile(logicalAddressArgumentCaptor.capture(),
+                any(GetPersonsForProfileType.class));
+
+        assertEquals(LOGICAL_ADDRESS, logicalAddressArgumentCaptor.getValue());
+      }
+
+      @Test
+      void shallCallPuWithLookupProfileP2() {
+
+        final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
+            GetPersonsForProfileType.class);
+
+        puClientV5.findPerson(
+            PuRequest.builder()
+                .personId(PERSON_ID_AS_PERSONNUMMER)
+                .build()
+        );
+
+        verify(getPersonsForProfileResponderInterface)
+            .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
+
+        assertEquals(LookupProfileType.P_2,
+            getPersonsForProfileTypeArgumentCaptor.getValue().getProfile()
+        );
+      }
+
+      @Test
+      void shallCallPuWithKodverkPersonnummerWhenPersonnummerIsProvided() {
+
+        final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
+            GetPersonsForProfileType.class);
+
+        puClientV5.findPerson(
+            PuRequest.builder()
+                .personId(PERSON_ID_AS_PERSONNUMMER)
+                .build()
+        );
+
+        verify(getPersonsForProfileResponderInterface)
+            .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
+
+        assertEquals(KODVERK_PERSONNUMMER,
+            getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getRoot()
+        );
+      }
+
+      @Test
+      void shallCallPuWithPersonnummerWhenPersonnummerIsProvided() {
+
+        final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
+            GetPersonsForProfileType.class);
+
+        puClientV5.findPerson(
+            PuRequest.builder()
+                .personId(PERSON_ID_AS_PERSONNUMMER)
+                .build()
+        );
+
+        verify(getPersonsForProfileResponderInterface)
+            .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
+
+        assertEquals(PERSON_ID_AS_PERSONNUMMER,
+            getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst()
+                .getExtension()
+        );
+      }
+
+      @Test
+      void shallCallPuWithKodverkSamordningsnummerWhenSamordningsnummerIsProvided() {
+
+        final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
+            GetPersonsForProfileType.class);
+
+        puClientV5.findPerson(
+            PuRequest.builder()
+                .personId(PERSON_ID_AS_SAMORDNINGSNUMMER)
+                .build()
+        );
+
+        verify(getPersonsForProfileResponderInterface)
+            .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
+
+        assertEquals(KODVERK_SAMORDNINGSNUMMER,
+            getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getRoot()
+        );
+      }
+
+      @Test
+      void shallCallPuWithSamordningsnummerWhenSamordningsnummerIsProvided() {
+
+        final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
+            GetPersonsForProfileType.class);
+
+        puClientV5.findPerson(
+            PuRequest.builder()
+                .personId(PERSON_ID_AS_SAMORDNINGSNUMMER)
+                .build()
+        );
+
+        verify(getPersonsForProfileResponderInterface)
+            .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
+
+        assertEquals(PERSON_ID_AS_SAMORDNINGSNUMMER,
+            getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst()
+                .getExtension()
+        );
+      }
     }
 
-    @Test
-    void shallReturnPuResponseWithPerson() {
-      final var actualPuResponse = puClientV5.findPerson(puRequest);
+    @Nested
+    class UnexpectedErrors {
 
-      assertEquals(PERSON, actualPuResponse.getPerson());
+      private PuRequest puRequest;
+
+      @BeforeEach
+      void setUp() {
+        puRequest = PuRequest.builder()
+            .personId(PERSON_ID_AS_PERSONNUMMER)
+            .build();
+      }
+
+      @Test
+      void shallReturnPuResponseWithStatusFound() {
+        doThrow(new RuntimeException("UnexpectedError"))
+            .when(getPersonsForProfileResponderInterface)
+            .getPersonsForProfile(anyString(), any(GetPersonsForProfileType.class));
+
+        final var actualPuResponse = puClientV5.findPerson(puRequest);
+
+        assertEquals(Status.ERROR, actualPuResponse.getStatus());
+      }
     }
   }
 
   @Nested
-  class PuArguments {
+  class GetPersons {
 
-    @Test
-    void shallCallPuWithLogicalAddressProvidedByConfig() {
-      final var logicalAddressArgumentCaptor = ArgumentCaptor.forClass(String.class);
+    @Nested
+    class PersonFoundInPu {
 
-      puClientV5.findPerson(
-          PuRequest.builder()
-              .personId(PERSON_ID_AS_PERSONNUMMER)
-              .build()
-      );
+      private PuPersonsRequest puRequest;
 
-      verify(getPersonsForProfileResponderInterface)
-          .getPersonsForProfile(logicalAddressArgumentCaptor.capture(),
-              any(GetPersonsForProfileType.class));
+      @BeforeEach
+      void setUp() {
+        puRequest = PuPersonsRequest.builder()
+            .personIds(List.of(PERSON_ID_AS_PERSONNUMMER))
+            .build();
 
-      assertEquals(LOGICAL_ADDRESS, logicalAddressArgumentCaptor.getValue());
+        final var getPersonsForProfileResponseType = new GetPersonsForProfileResponseType();
+
+        doReturn(getPersonsForProfileResponseType)
+            .when(getPersonsForProfileResponderInterface)
+            .getPersonsForProfile(anyString(), any(GetPersonsForProfileType.class));
+
+        doReturn(
+            PuPersonsResponse.builder()
+                .persons(List.of(PuResponse.found(PERSON)))
+                .build()
+        )
+            .when(getPersonsForProfileResponseTypeHandlerV5)
+            .handle(List.of(PERSON_ID_AS_PERSONNUMMER), getPersonsForProfileResponseType);
+      }
+
+      @Test
+      void shallReturnPuResponseWithStatusFound() {
+        final var actualPuResponse = puClientV5.findPersons(puRequest);
+
+        assertEquals(Status.FOUND, actualPuResponse.getPersons().getFirst().getStatus());
+      }
+
+      @Test
+      void shallReturnPuResponseWithPerson() {
+        final var actualPuResponse = puClientV5.findPersons(puRequest);
+
+        assertEquals(PERSON, actualPuResponse.getPersons().getFirst().getPerson());
+      }
     }
 
-    @Test
-    void shallCallPuWithLookupProfileP2() {
+    @Nested
+    class PuArguments {
 
-      final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
-          GetPersonsForProfileType.class);
+      @Test
+      void shallCallPuWithLogicalAddressProvidedByConfig() {
+        final var logicalAddressArgumentCaptor = ArgumentCaptor.forClass(String.class);
 
-      puClientV5.findPerson(
-          PuRequest.builder()
-              .personId(PERSON_ID_AS_PERSONNUMMER)
-              .build()
-      );
+        puClientV5.findPersons(
+            PuPersonsRequest.builder()
+                .personIds(List.of(PERSON_ID_AS_PERSONNUMMER))
+                .build()
+        );
 
-      verify(getPersonsForProfileResponderInterface)
-          .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
+        verify(getPersonsForProfileResponderInterface)
+            .getPersonsForProfile(logicalAddressArgumentCaptor.capture(),
+                any(GetPersonsForProfileType.class));
 
-      assertEquals(LookupProfileType.P_2,
-          getPersonsForProfileTypeArgumentCaptor.getValue().getProfile()
-      );
+        assertEquals(LOGICAL_ADDRESS, logicalAddressArgumentCaptor.getValue());
+      }
+
+      @Test
+      void shallCallPuWithLookupProfileP2() {
+
+        final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
+            GetPersonsForProfileType.class);
+
+        puClientV5.findPerson(
+            PuRequest.builder()
+                .personId(PERSON_ID_AS_PERSONNUMMER)
+                .build()
+        );
+
+        verify(getPersonsForProfileResponderInterface)
+            .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
+
+        assertEquals(LookupProfileType.P_2,
+            getPersonsForProfileTypeArgumentCaptor.getValue().getProfile()
+        );
+      }
+
+      @Test
+      void shallCallPuWithKodverkPersonnummerWhenPersonnummerIsProvided() {
+
+        final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
+            GetPersonsForProfileType.class);
+
+        puClientV5.findPersons(
+            PuPersonsRequest.builder()
+                .personIds(List.of(PERSON_ID_AS_PERSONNUMMER))
+                .build()
+        );
+
+        verify(getPersonsForProfileResponderInterface)
+            .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
+
+        assertEquals(KODVERK_PERSONNUMMER,
+            getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getRoot()
+        );
+      }
+
+      @Test
+      void shallCallPuWithPersonnummerWhenPersonnummerIsProvided() {
+
+        final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
+            GetPersonsForProfileType.class);
+
+        puClientV5.findPersons(
+            PuPersonsRequest.builder()
+                .personIds(List.of(PERSON_ID_AS_PERSONNUMMER))
+                .build()
+        );
+
+        verify(getPersonsForProfileResponderInterface)
+            .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
+
+        assertEquals(PERSON_ID_AS_PERSONNUMMER,
+            getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst()
+                .getExtension()
+        );
+      }
+
+      @Test
+      void shallCallPuWithKodverkSamordningsnummerWhenSamordningsnummerIsProvided() {
+
+        final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
+            GetPersonsForProfileType.class);
+
+        puClientV5.findPersons(
+            PuPersonsRequest.builder()
+                .personIds(List.of(PERSON_ID_AS_SAMORDNINGSNUMMER))
+                .build()
+        );
+
+        verify(getPersonsForProfileResponderInterface)
+            .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
+
+        assertEquals(KODVERK_SAMORDNINGSNUMMER,
+            getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getRoot()
+        );
+      }
+
+      @Test
+      void shallCallPuWithSamordningsnummerWhenSamordningsnummerIsProvided() {
+
+        final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
+            GetPersonsForProfileType.class);
+
+        puClientV5.findPersons(
+            PuPersonsRequest.builder()
+                .personIds(List.of(PERSON_ID_AS_SAMORDNINGSNUMMER))
+                .build()
+        );
+
+        verify(getPersonsForProfileResponderInterface)
+            .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
+
+        assertEquals(PERSON_ID_AS_SAMORDNINGSNUMMER,
+            getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst()
+                .getExtension()
+        );
+      }
     }
 
-    @Test
-    void shallCallPuWithKodverkPersonnummerWhenPersonnummerIsProvided() {
+    @Nested
+    class UnexpectedErrors {
 
-      final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
-          GetPersonsForProfileType.class);
+      private PuRequest puRequest;
 
-      puClientV5.findPerson(
-          PuRequest.builder()
-              .personId(PERSON_ID_AS_PERSONNUMMER)
-              .build()
-      );
+      @BeforeEach
+      void setUp() {
+        puRequest = PuRequest.builder()
+            .personId(PERSON_ID_AS_PERSONNUMMER)
+            .build();
+      }
 
-      verify(getPersonsForProfileResponderInterface)
-          .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
+      @Test
+      void shallReturnPuResponseWithStatusFound() {
+        doThrow(new RuntimeException("UnexpectedError"))
+            .when(getPersonsForProfileResponderInterface)
+            .getPersonsForProfile(anyString(), any(GetPersonsForProfileType.class));
 
-      assertEquals(KODVERK_PERSONNUMMER,
-          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getRoot()
-      );
-    }
+        final var actualPuResponse = puClientV5.findPerson(puRequest);
 
-    @Test
-    void shallCallPuWithPersonnummerWhenPersonnummerIsProvided() {
-
-      final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
-          GetPersonsForProfileType.class);
-
-      puClientV5.findPerson(
-          PuRequest.builder()
-              .personId(PERSON_ID_AS_PERSONNUMMER)
-              .build()
-      );
-
-      verify(getPersonsForProfileResponderInterface)
-          .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
-
-      assertEquals(PERSON_ID_AS_PERSONNUMMER,
-          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getExtension()
-      );
-    }
-
-    @Test
-    void shallCallPuWithKodverkSamordningsnummerWhenSamordningsnummerIsProvided() {
-
-      final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
-          GetPersonsForProfileType.class);
-
-      puClientV5.findPerson(
-          PuRequest.builder()
-              .personId(PERSON_ID_AS_SAMORDNINGSNUMMER)
-              .build()
-      );
-
-      verify(getPersonsForProfileResponderInterface)
-          .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
-
-      assertEquals(KODVERK_SAMORDNINGSNUMMER,
-          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getRoot()
-      );
-    }
-
-    @Test
-    void shallCallPuWithSamordningsnummerWhenSamordningsnummerIsProvided() {
-
-      final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
-          GetPersonsForProfileType.class);
-
-      puClientV5.findPerson(
-          PuRequest.builder()
-              .personId(PERSON_ID_AS_SAMORDNINGSNUMMER)
-              .build()
-      );
-
-      verify(getPersonsForProfileResponderInterface)
-          .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
-
-      assertEquals(PERSON_ID_AS_SAMORDNINGSNUMMER,
-          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getExtension()
-      );
-    }
-  }
-
-  @Nested
-  class UnexpectedErrors {
-
-    private PuRequest puRequest;
-
-    @BeforeEach
-    void setUp() {
-      puRequest = PuRequest.builder()
-          .personId(PERSON_ID_AS_PERSONNUMMER)
-          .build();
-    }
-
-    @Test
-    void shallReturnPuResponseWithStatusFound() {
-      doThrow(new RuntimeException("UnexpectedError"))
-          .when(getPersonsForProfileResponderInterface)
-          .getPersonsForProfile(anyString(), any(GetPersonsForProfileType.class));
-
-      final var actualPuResponse = puClientV5.findPerson(puRequest);
-
-      assertEquals(Status.ERROR, actualPuResponse.getStatus());
+        assertEquals(Status.ERROR, actualPuResponse.getStatus());
+      }
     }
   }
 }
