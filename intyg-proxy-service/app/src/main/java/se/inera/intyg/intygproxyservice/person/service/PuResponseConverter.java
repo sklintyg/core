@@ -3,6 +3,7 @@ package se.inera.intyg.intygproxyservice.person.service;
 import static se.inera.intyg.intygproxyservice.integration.api.pu.Status.FOUND;
 
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
+import se.inera.intyg.intygproxyservice.person.dto.PersonDTO;
 import se.inera.intyg.intygproxyservice.person.dto.PersonResponse;
 import se.inera.intyg.intygproxyservice.person.dto.StatusDTOType;
 
@@ -17,7 +18,7 @@ public class PuResponseConverter {
         .person(
             FOUND.equals(puResponse.getStatus())
                 ? mapper.toDTO(puResponse.getPerson())
-                : null
+                : PersonDTO.builder().personnummer(puResponse.getPerson().getPersonnummer()).build()
         )
         .status(
             StatusDTOType.valueOf(puResponse.getStatus().name())
