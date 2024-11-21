@@ -16,8 +16,16 @@ public class PuResponse {
     return new PuResponse(null, Status.NOT_FOUND);
   }
 
+  public static PuResponse notFound(String patientId) {
+    return new PuResponse(Person.builder().personnummer(patientId).build(), Status.NOT_FOUND);
+  }
+
+  public static PuResponse error(String patientId) {
+    return new PuResponse(Person.builder().personnummer(patientId).build(), Status.ERROR);
+  }
+
   public static PuResponse error() {
     return new PuResponse(null, Status.ERROR);
   }
-  
+
 }

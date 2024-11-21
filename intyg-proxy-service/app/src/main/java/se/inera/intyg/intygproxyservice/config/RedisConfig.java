@@ -3,6 +3,7 @@ package se.inera.intyg.intygproxyservice.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.time.Duration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -15,13 +16,14 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 public class RedisConfig {
 
   public static final String PERSON_CACHE = "intygProxyService:personCache";
-  public static final int CACHE_SECONDS = 84600; // TODO: Add as config
+  @Value("${integration.pu.cache.seconds}")
+  private int puCacheSeconds;
 
   @Bean
   public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
     return RedisCacheManager.builder(connectionFactory)
         .withCacheConfiguration(PERSON_CACHE,
-            redisCacheConfiguration(Duration.ofSeconds(CACHE_SECONDS)))
+            redisCacheConfiguration(Duration.ofSeconds(puCacheSeconds)))
         .build();
   }
 

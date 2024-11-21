@@ -23,7 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
-import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse.Status;
+import se.inera.intyg.intygproxyservice.integration.api.pu.Status;
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofile.v3.rivtabp21.GetPersonsForProfileResponderInterface;
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofileresponder.v3.GetPersonsForProfileResponseType;
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofileresponder.v3.GetPersonsForProfileType;
@@ -140,7 +140,7 @@ class PuClientTest {
           .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
 
       assertEquals(KODVERK_PERSONNUMMER,
-          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().get(0).getRoot()
+          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getRoot()
       );
     }
 
@@ -160,7 +160,7 @@ class PuClientTest {
           .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
 
       assertEquals(PERSON_ID_AS_PERSONNUMMER,
-          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().get(0).getExtension()
+          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getExtension()
       );
     }
 
@@ -180,7 +180,7 @@ class PuClientTest {
           .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
 
       assertEquals(KODVERK_SAMORDNINGSNUMMER,
-          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().get(0).getRoot()
+          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getRoot()
       );
     }
 
@@ -200,7 +200,7 @@ class PuClientTest {
           .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
 
       assertEquals(PERSON_ID_AS_SAMORDNINGSNUMMER,
-          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().get(0).getExtension()
+          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getExtension()
       );
     }
   }

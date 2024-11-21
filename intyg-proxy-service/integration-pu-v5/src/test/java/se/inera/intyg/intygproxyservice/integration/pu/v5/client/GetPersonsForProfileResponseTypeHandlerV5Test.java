@@ -152,7 +152,10 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
             getPersonsForProfileResponseType
         );
 
-        assertEquals(Status.FOUND, actualPuResponse.getStatus());
+        assertAll(
+            () -> assertEquals(Status.FOUND, actualPuResponse.getStatus()),
+            () -> assertEquals(PERSON, actualPuResponse.getPerson())
+        );
       }
 
       @Test
@@ -221,7 +224,11 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
             getPersonsForProfileReponseType
         );
 
-        assertEquals(Status.ERROR, actualPuResponse.getPersons().getFirst().getStatus());
+        assertAll(
+            () -> assertEquals(Status.ERROR, actualPuResponse.getPersons().getFirst().getStatus()),
+            () -> assertEquals(PATIENT_ID_1,
+                actualPuResponse.getPersons().getFirst().getPerson().getPersonnummer())
+        );
       }
 
       @Test
@@ -231,7 +238,12 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
             getPersonsForProfileReponseType
         );
 
-        assertEquals(Status.NOT_FOUND, actualPuResponse.getPersons().getFirst().getStatus());
+        assertAll(
+            () -> assertEquals(Status.NOT_FOUND,
+                actualPuResponse.getPersons().getFirst().getStatus()),
+            () -> assertEquals(PATIENT_ID_1,
+                actualPuResponse.getPersons().getFirst().getPerson().getPersonnummer())
+        );
       }
 
       @Test
@@ -246,7 +258,11 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
 
         assertAll(
             () -> assertEquals(Status.NOT_FOUND, actualPuResponse.getPersons().get(1).getStatus()),
-            () -> assertEquals(Status.FOUND, actualPuResponse.getPersons().getFirst().getStatus())
+            () -> assertEquals(Status.FOUND, actualPuResponse.getPersons().getFirst().getStatus()),
+            () -> assertEquals(
+                PATIENT_ID_2,
+                actualPuResponse.getPersons().get(1).getPerson().getPersonnummer()
+            )
         );
       }
     }
