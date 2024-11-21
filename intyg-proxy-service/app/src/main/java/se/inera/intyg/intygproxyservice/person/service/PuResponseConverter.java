@@ -15,8 +15,7 @@ public class PuResponseConverter {
   public static PersonResponse convert(PersonDTOMapper mapper, PuResponse puResponse) {
     return PersonResponse.builder()
         .person(
-            FOUND.equals(
-                puResponse.getStatus())
+            FOUND.equals(puResponse.getStatus())
                 ? mapper.toDTO(puResponse.getPerson())
                 : null
         )
@@ -25,5 +24,4 @@ public class PuResponseConverter {
         )
         .build();
   }
-
 }
