@@ -31,14 +31,14 @@ public class PdfTextGenerator {
       Color strokingColor,
       int mcid, PDStructureElement section)
       throws IOException {
-    addText(pdf, text, fontSize, matrix, strokingColor, null, null, false, mcid, section, 0);
+    addText(pdf, text, fontSize, matrix, strokingColor, null, null, false, mcid, section, 0, text);
   }
 
   public void addText(PDDocument pdf, String text, float fontSize, Float offsetX, Float offsetY,
-      int mcid, PDStructureElement section, int pageIndex)
+      int mcid, PDStructureElement section, int pageIndex, String actualText)
       throws IOException {
     addText(pdf, text, fontSize, null, Color.black, offsetX, offsetY, false, mcid, section,
-        pageIndex);
+        pageIndex, actualText);
   }
 
   private void addText(
@@ -53,6 +53,36 @@ public class PdfTextGenerator {
       int mcid,
       PDStructureElement section,
       int pageIndex
+  ) throws IOException {
+    addText(
+        pdf,
+        text,
+        fontSize,
+        matrix,
+        strokingColor,
+        offsetX,
+        offsetY,
+        isBold,
+        mcid,
+        section,
+        pageIndex,
+        text
+    );
+  }
+
+  private void addText(
+      PDDocument pdf,
+      String text,
+      float fontSize,
+      Matrix matrix,
+      Color strokingColor,
+      Float offsetX,
+      Float offsetY,
+      boolean isBold,
+      int mcid,
+      PDStructureElement section,
+      int pageIndex,
+      String actualText
   ) throws IOException {
     final var page = pdf.getPage(pageIndex);
     final var contentStream = createContentStream(pdf, page);
@@ -77,7 +107,7 @@ public class PdfTextGenerator {
     contentStream.endMarkedContent();
     if (section != null) {
       addContentToCurrentSection(page, dictionary, section, COSName.P, StandardStructureTypes.P,
-          text);
+          actualText);
     }
     contentStream.endText();
     contentStream.close();
