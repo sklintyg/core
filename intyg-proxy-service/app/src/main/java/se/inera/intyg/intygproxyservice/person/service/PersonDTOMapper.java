@@ -9,7 +9,7 @@ import se.inera.intyg.intygproxyservice.person.dto.PersonDTO;
 @Component
 public class PersonDTOMapper {
 
-  @Value("${test.persons.ids}")
+  @Value("${putjanst.testindicated.reclassify.active.except.ssn:}")
   private List<String> testIndicatedPersonIds;
 
   PersonDTO toDTO(Person person) {
