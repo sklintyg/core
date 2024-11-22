@@ -1,11 +1,33 @@
 package se.inera.intyg.intygproxyservice.person.service;
 
-import org.mapstruct.Mapper;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import se.inera.intyg.intygproxyservice.integration.api.pu.Person;
 import se.inera.intyg.intygproxyservice.person.dto.PersonDTO;
 
-@Mapper(componentModel = "spring")
-public interface PersonDTOMapper {
+public class PersonDTOMapper {
 
-  PersonDTO toDTO(Person person);
+  @Value("${test.persons.ids}")
+  private List<String> testIndicatedPersonIds;
+
+  PersonDTO toDTO(Person person) {
+    if (person == null) {
+      return null;
+    }
+
+    return PersonDTO.builder()
+        .personnummer(person.getPersonnummer())
+        .sekretessmarkering(person.isSekretessmarkering())
+        .avliden(person.isAvliden())
+        .fornamn(person.getFornamn())
+        .mellannamn(person.getMellannamn())
+        .efternamn(person.getEfternamn())
+        .postadress(person.getPostadress())
+        .postnummer(person.getPostnummer())
+        .postort(person.getPostort())
+        .testIndicator(testIndicatedPersonIds != null && !testIndicatedPersonIds.isEmpty()
+            ? testIndicatedPersonIds.contains(person.getPersonnummer())
+            : person.isTestIndicator())
+        .build();
+  }
 }
