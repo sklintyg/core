@@ -2,7 +2,7 @@ package se.inera.intyg.intygproxyservice.integrationtest;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static se.inera.intyg.intygproxyservice.integration.api.constants.PuConstants.PU_PROFILE_V4;
+import static se.inera.intyg.intygproxyservice.integration.api.constants.PuConstants.PU_PROFILE_V5;
 import static se.inera.intyg.intygproxyservice.integrationtest.TestDataPatient.DECEASED_TEST_INDICATED_PERSON;
 
 import io.github.microcks.testcontainers.MicrocksContainer;
@@ -21,9 +21,9 @@ import org.testcontainers.utility.DockerImageName;
 import se.inera.intyg.intygproxyservice.integrationtest.util.ApiUtil;
 import se.inera.intyg.intygproxyservice.person.dto.PersonRequest;
 
-@ActiveProfiles({"integration-test", PU_PROFILE_V4})
+@ActiveProfiles({"integration-test", PU_PROFILE_V5})
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class GetPersonsForProfileV4IT {
+class GetPersonsForProfileV5IT {
 
   @LocalServerPort
   private int port;
@@ -32,7 +32,7 @@ class GetPersonsForProfileV4IT {
   private ApiUtil api;
 
   @Autowired
-  public GetPersonsForProfileV4IT(TestRestTemplate restTemplate) {
+  public GetPersonsForProfileV5IT(TestRestTemplate restTemplate) {
     this.restTemplate = restTemplate;
   }
 
@@ -40,12 +40,12 @@ class GetPersonsForProfileV4IT {
   static void beforeAll() {
     final var microcks = new MicrocksContainer(
         DockerImageName.parse("quay.io/microcks/microcks-uber:1.8.1"))
-        .withMainArtifacts("soapui/GetpersonsForProfile-4.0.xml");
+        .withMainArtifacts("soapui/GetPersonsForProfileResponder-5.0.xml");
 
     microcks.start();
 
     System.setProperty("integration.pu.getpersonsforprofile.endpoint",
-        microcks.getSoapMockEndpoint("GetPersonsForProfile", "4.0")
+        microcks.getSoapMockEndpoint("GetPersonsForProfile", "5.0")
     );
   }
 

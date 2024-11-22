@@ -20,7 +20,7 @@ import se.inera.intyg.intygproxyservice.integration.api.pu.PuService;
 import se.inera.intyg.intygproxyservice.person.dto.PersonDTO;
 import se.inera.intyg.intygproxyservice.person.dto.PersonRequest;
 import se.inera.intyg.intygproxyservice.person.dto.StatusDTOType;
-import se.inera.intyg.intygproxyservice.person.service.PersonDTOMapperImpl;
+import se.inera.intyg.intygproxyservice.person.service.PersonDTOMapper;
 import se.inera.intyg.intygproxyservice.person.service.PersonService;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,7 +38,7 @@ class PersonServiceTest {
 
   @BeforeEach
   void setUp() {
-    personService = new PersonService(puService, new PersonDTOMapperImpl());
+    personService = new PersonService(puService, new PersonDTOMapper());
   }
 
   @Nested
@@ -76,11 +76,9 @@ class PersonServiceTest {
   @Nested
   class PersonFoundInPuService {
 
-    private PuResponse puResponseFound;
-
     @BeforeEach
     void setUp() {
-      puResponseFound = PuResponse.found(
+      PuResponse puResponseFound = PuResponse.found(
           Person.builder().build()
       );
 
