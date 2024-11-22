@@ -19,4 +19,15 @@ class BatchUtilTest {
     );
   }
 
+  @Test
+  void shouldSplitUpIntoBatchWithAllItemsIfBatchSizeIsBiggerThanListSize() {
+    final var response = BatchUtil.split(List.of("s1", "s2", "s3"), 5);
+    assertAll(
+        () -> assertEquals(1, response.size()),
+        () -> assertEquals("s1", response.getFirst().getFirst()),
+        () -> assertEquals("s2", response.getFirst().get(1)),
+        () -> assertEquals("s3", response.getFirst().get(2))
+    );
+  }
+
 }
