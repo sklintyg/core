@@ -1,4 +1,4 @@
-package se.inera.intyg.intygproxyservice.integration.pu.v5.batch;
+package se.inera.intyg.intygproxyservice.integration.pu.v5.common;
 
 import java.util.List;
 import java.util.stream.Collectors;

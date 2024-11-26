@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.intygproxyservice.integration.pu.v5.common.BatchUtil;
 
 class BatchUtilTest {
 

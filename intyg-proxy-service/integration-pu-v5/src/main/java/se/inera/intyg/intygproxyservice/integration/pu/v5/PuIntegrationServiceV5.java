@@ -13,8 +13,8 @@ import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuService;
-import se.inera.intyg.intygproxyservice.integration.pu.v5.batch.BatchUtil;
 import se.inera.intyg.intygproxyservice.integration.pu.v5.client.PuClientV5;
+import se.inera.intyg.intygproxyservice.integration.pu.v5.common.BatchUtil;
 
 @Service
 @Slf4j
@@ -38,12 +38,16 @@ public class PuIntegrationServiceV5 implements PuService {
     return PuPersonsResponse.builder()
         .persons(
             batches.stream()
-                .map(batch -> PuPersonsRequest.builder().personIds(batch).build())
+                .map(PuIntegrationServiceV5::batchRequest)
                 .map(puClientV5::findPersons)
                 .map(PuPersonsResponse::getPersons)
                 .flatMap(List::stream)
                 .toList()
         )
         .build();
+  }
+
+  private static PuPersonsRequest batchRequest(List<String> batch) {
+    return PuPersonsRequest.builder().personIds(batch).build();
   }
 }
