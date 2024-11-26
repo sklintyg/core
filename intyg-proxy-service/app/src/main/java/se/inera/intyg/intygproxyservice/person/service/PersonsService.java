@@ -70,7 +70,7 @@ public class PersonsService {
                 .stream()
                 .filter(
                     id -> personsFromCache.stream()
-                        .noneMatch(person -> person.getPerson().getPersonnummer().equals(id))
+                        .noneMatch(person -> person.person().getPersonnummer().equals(id))
                 )
                 .toList()
         )
@@ -80,7 +80,7 @@ public class PersonsService {
   private void savePersonInCache(PuResponse person) {
     try {
       Objects.requireNonNull(cacheManager.getCache(RedisConfig.PERSON_CACHE))
-          .put(person.getPerson().getPersonnummer(),
+          .put(person.person().getPersonnummer(),
               objectMapper.writeValueAsString(person));
     } catch (JsonProcessingException e) {
       throw new IllegalStateException("Failed to serialize person", e);

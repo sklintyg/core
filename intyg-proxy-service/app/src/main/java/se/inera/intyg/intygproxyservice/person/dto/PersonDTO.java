@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.io.Serializable;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 import se.inera.intyg.intygproxyservice.person.dto.PersonDTO.PersonDTOBuilder;
 
 @JsonDeserialize(builder = PersonDTOBuilder.class)
-@Data
+@Value
 @Builder
 public class PersonDTO implements Serializable {
 

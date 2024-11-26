@@ -56,7 +56,7 @@ class FakePuIntegrationServiceTest {
                 .personId(PERSON_ID)
                 .build()
         );
-        assertEquals(Status.FOUND, actualPuResponse.getStatus());
+        assertEquals(Status.FOUND, actualPuResponse.status());
       }
 
       @Test
@@ -66,7 +66,7 @@ class FakePuIntegrationServiceTest {
                 .personId(PERSON_ID)
                 .build()
         );
-        assertEquals(personFound, actualPuResponse.getPerson());
+        assertEquals(personFound, actualPuResponse.person());
       }
     }
 
@@ -87,7 +87,7 @@ class FakePuIntegrationServiceTest {
                 .personId(PERSON_ID)
                 .build()
         );
-        assertEquals(Status.NOT_FOUND, actualPuResponse.getStatus());
+        assertEquals(Status.NOT_FOUND, actualPuResponse.status());
       }
     }
 
@@ -101,7 +101,7 @@ class FakePuIntegrationServiceTest {
 
   @Nested
   class GetPersons {
-    
+
     private Person personFound;
     private Person personFound2;
 
@@ -142,8 +142,8 @@ class FakePuIntegrationServiceTest {
                 .build()
         );
         assertAll(
-            () -> assertEquals(Status.FOUND, actualPuResponse.getPersons().getFirst().getStatus()),
-            () -> assertEquals(Status.FOUND, actualPuResponse.getPersons().get(1).getStatus())
+            () -> assertEquals(Status.FOUND, actualPuResponse.getPersons().getFirst().status()),
+            () -> assertEquals(Status.FOUND, actualPuResponse.getPersons().get(1).status())
         );
       }
 
@@ -155,8 +155,8 @@ class FakePuIntegrationServiceTest {
                 .build()
         );
         assertAll(
-            () -> assertEquals(personFound, actualPuResponse.getPersons().getFirst().getPerson()),
-            () -> assertEquals(personFound2, actualPuResponse.getPersons().get(1).getPerson())
+            () -> assertEquals(personFound, actualPuResponse.getPersons().getFirst().person()),
+            () -> assertEquals(personFound2, actualPuResponse.getPersons().get(1).person())
         );
       }
     }
@@ -188,8 +188,8 @@ class FakePuIntegrationServiceTest {
         );
         assertAll(
             () -> assertEquals(Status.NOT_FOUND,
-                actualPuResponse.getPersons().getFirst().getStatus()),
-            () -> assertEquals(Status.FOUND, actualPuResponse.getPersons().get(1).getStatus())
+                actualPuResponse.getPersons().getFirst().status()),
+            () -> assertEquals(Status.FOUND, actualPuResponse.getPersons().get(1).status())
         );
       }
     }

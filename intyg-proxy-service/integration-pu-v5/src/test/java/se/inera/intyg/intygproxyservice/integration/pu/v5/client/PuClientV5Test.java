@@ -79,14 +79,14 @@ class PuClientV5Test {
       void shallReturnPuResponseWithStatusFound() {
         final var actualPuResponse = puClientV5.findPerson(puRequest);
 
-        assertEquals(Status.FOUND, actualPuResponse.getStatus());
+        assertEquals(Status.FOUND, actualPuResponse.status());
       }
 
       @Test
       void shallReturnPuResponseWithPerson() {
         final var actualPuResponse = puClientV5.findPerson(puRequest);
 
-        assertEquals(PERSON, actualPuResponse.getPerson());
+        assertEquals(PERSON, actualPuResponse.person());
       }
     }
 
@@ -233,7 +233,7 @@ class PuClientV5Test {
 
         final var actualPuResponse = puClientV5.findPerson(puRequest);
 
-        assertEquals(Status.ERROR, actualPuResponse.getStatus());
+        assertEquals(Status.ERROR, actualPuResponse.status());
       }
     }
   }
@@ -271,14 +271,14 @@ class PuClientV5Test {
       void shallReturnPuResponseWithStatusFound() {
         final var actualPuResponse = puClientV5.findPersons(puRequest);
 
-        assertEquals(Status.FOUND, actualPuResponse.getPersons().getFirst().getStatus());
+        assertEquals(Status.FOUND, actualPuResponse.getPersons().getFirst().status());
       }
 
       @Test
       void shallReturnPuResponseWithPerson() {
         final var actualPuResponse = puClientV5.findPersons(puRequest);
 
-        assertEquals(PERSON, actualPuResponse.getPersons().getFirst().getPerson());
+        assertEquals(PERSON, actualPuResponse.getPersons().getFirst().person());
       }
     }
 
@@ -425,7 +425,7 @@ class PuClientV5Test {
 
         final var actualPuResponse = puClientV5.findPerson(puRequest);
 
-        assertEquals(Status.ERROR, actualPuResponse.getStatus());
+        assertEquals(Status.ERROR, actualPuResponse.status());
       }
     }
   }

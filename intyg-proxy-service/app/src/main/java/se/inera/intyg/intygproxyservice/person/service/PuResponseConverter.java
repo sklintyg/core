@@ -18,10 +18,10 @@ public class PuResponseConverter {
   public static PersonResponse convert(PersonDTOMapper mapper, PuResponse puResponse) {
     return PersonResponse.builder()
         .person(
-            getPerson(puResponse.getPerson(), puResponse.getStatus(), mapper)
+            getPerson(puResponse.person(), puResponse.status(), mapper)
         )
         .status(
-            StatusDTOType.valueOf(puResponse.getStatus().name())
+            StatusDTOType.valueOf(puResponse.status().name())
         )
         .build();
   }
