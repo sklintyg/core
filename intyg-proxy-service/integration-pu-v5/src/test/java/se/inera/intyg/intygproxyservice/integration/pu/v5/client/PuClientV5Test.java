@@ -9,8 +9,8 @@ import static org.mockito.Mockito.verify;
 import static se.inera.intyg.intygproxyservice.integration.pu.v5.TestData.PERSON;
 import static se.inera.intyg.intygproxyservice.integration.pu.v5.TestData.PERSON_ID_AS_PERSONNUMMER;
 import static se.inera.intyg.intygproxyservice.integration.pu.v5.TestData.PERSON_ID_AS_SAMORDNINGSNUMMER;
-import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.KODVERK_PERSONNUMMER;
-import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.KODVERK_SAMORDNINGSNUMMER;
+import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.CODE_COORDINATION_NUMBER;
+import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.CODE_PERSONAL_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -145,7 +145,7 @@ class PuClientV5Test {
         verify(getPersonsForProfileResponderInterface)
             .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
 
-        assertEquals(KODVERK_PERSONNUMMER,
+        assertEquals(CODE_PERSONAL_ID,
             getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getRoot()
         );
       }
@@ -186,7 +186,7 @@ class PuClientV5Test {
         verify(getPersonsForProfileResponderInterface)
             .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
 
-        assertEquals(KODVERK_SAMORDNINGSNUMMER,
+        assertEquals(CODE_COORDINATION_NUMBER,
             getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getRoot()
         );
       }
@@ -337,7 +337,7 @@ class PuClientV5Test {
         verify(getPersonsForProfileResponderInterface)
             .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
 
-        assertEquals(KODVERK_PERSONNUMMER,
+        assertEquals(CODE_PERSONAL_ID,
             getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getRoot()
         );
       }
@@ -378,7 +378,7 @@ class PuClientV5Test {
         verify(getPersonsForProfileResponderInterface)
             .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
 
-        assertEquals(KODVERK_SAMORDNINGSNUMMER,
+        assertEquals(CODE_COORDINATION_NUMBER,
             getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getRoot()
         );
       }

@@ -1,7 +1,7 @@
 package se.inera.intyg.intygproxyservice.integration.pu.v5;
 
+import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.CODE_PERSONAL_ID;
 import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.DEREGISTRATION_REASON_CODE_FOR_DECEASED;
-import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.KODVERK_PERSONNUMMER;
 
 import se.inera.intyg.intygproxyservice.integration.api.pu.Person;
 import se.riv.strategicresourcemanagement.persons.person.v5.AddressInformationType;
@@ -103,7 +103,7 @@ public class TestData {
 
   public static IIType personalIdentity() {
     final var iiType = new IIType();
-    iiType.setRoot(KODVERK_PERSONNUMMER);
+    iiType.setRoot(CODE_PERSONAL_ID);
     iiType.setExtension(PERSON_ID_AS_PERSONNUMMER);
     return iiType;
   }

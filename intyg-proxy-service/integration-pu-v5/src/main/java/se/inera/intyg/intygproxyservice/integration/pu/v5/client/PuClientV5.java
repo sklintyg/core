@@ -1,10 +1,10 @@
 package se.inera.intyg.intygproxyservice.integration.pu.v5.client;
 
 import static se.inera.intyg.intygproxyservice.integration.api.constants.PuConstants.PU_PROFILE_V5;
-import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.KODVERK_PERSONNUMMER;
-import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.KODVERK_SAMORDNINGSNUMMER;
-import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.SAMORDNING_MONTH_INDEX;
-import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.SAMORDNING_MONTH_VALUE_MIN;
+import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.CODE_COORDINATION_NUMBER;
+import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.CODE_PERSONAL_ID;
+import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.COORDINATION_NUMBER_MONTH_INDEX;
+import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.COORDINATION_NUMBER_MONTH_VALUE_MIN;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -66,28 +66,22 @@ public class PuClientV5 {
     }
   }
 
-  private static PuResponse error(Exception ex) {
-    log.error("Unexpected error occurred when trying to call PU", ex);
+  private static PuResponse error(Exception exception) {
+    log.error("Unexpected error occurred when trying to call PU", exception);
     return PuResponse.error();
   }
 
   private static GetPersonsForProfileType getParameters(String personId) {
     final var parameters = new GetPersonsForProfileType();
     parameters.setProfile(LookupProfileType.P_2);
-    parameters.getPersonId().add(
-        getIIType(personId)
-    );
+    parameters.getPersonId().add(getIIType(personId));
     return parameters;
   }
 
   private static GetPersonsForProfileType getParameters(List<String> personIds) {
     final var parameters = new GetPersonsForProfileType();
     parameters.setProfile(LookupProfileType.P_2);
-    personIds.forEach(id ->
-        parameters.getPersonId().add(
-            getIIType(id)
-        )
-    );
+    personIds.forEach(id -> parameters.getPersonId().add(getIIType(id)));
 
     return parameters;
   }
@@ -100,11 +94,11 @@ public class PuClientV5 {
   }
 
   private static String getRoot(String patientId) {
-    return isSamordningsNummer(patientId) ? KODVERK_SAMORDNINGSNUMMER : KODVERK_PERSONNUMMER;
+    return isCoordinationNumber(patientId) ? CODE_COORDINATION_NUMBER : CODE_PERSONAL_ID;
   }
 
-  private static boolean isSamordningsNummer(String personId) {
-    final var dateDigit = personId.charAt(SAMORDNING_MONTH_INDEX);
-    return Character.getNumericValue(dateDigit) >= SAMORDNING_MONTH_VALUE_MIN;
+  private static boolean isCoordinationNumber(String personId) {
+    final var dateDigit = personId.charAt(COORDINATION_NUMBER_MONTH_INDEX);
+    return Character.getNumericValue(dateDigit) >= COORDINATION_NUMBER_MONTH_VALUE_MIN;
   }
 }

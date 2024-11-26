@@ -6,9 +6,9 @@ public abstract class PuConstants {
     throw new IllegalStateException("Class to keep constants");
   }
 
-  public static final String KODVERK_PERSONNUMMER = "1.2.752.129.2.1.3.1";
-  public static final String KODVERK_SAMORDNINGSNUMMER = "1.2.752.129.2.1.3.3";
-  public static final int SAMORDNING_MONTH_INDEX = 6;
-  public static final int SAMORDNING_MONTH_VALUE_MIN = 6;
+  public static final String CODE_PERSONAL_ID = "1.2.752.129.2.1.3.1";
+  public static final String CODE_COORDINATION_NUMBER = "1.2.752.129.2.1.3.3";
+  public static final int COORDINATION_NUMBER_MONTH_INDEX = 6;
+  public static final int COORDINATION_NUMBER_MONTH_VALUE_MIN = 6;
   public static final String DEREGISTRATION_REASON_CODE_FOR_DECEASED = "AV";
 }
