@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
+import se.inera.intyg.intygproxyservice.common.HashUtility;
 import se.inera.intyg.intygproxyservice.config.RedisConfig;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsResponse;
@@ -80,7 +81,7 @@ public class PersonsService {
   private void savePersonInCache(PuResponse person) {
     try {
       Objects.requireNonNull(cacheManager.getCache(RedisConfig.PERSON_CACHE))
-          .put(person.person().getPersonnummer(),
+          .put(HashUtility.hash(person.person().getPersonnummer()),
               objectMapper.writeValueAsString(person));
     } catch (JsonProcessingException e) {
       throw new IllegalStateException("Failed to serialize person", e);
@@ -117,7 +118,7 @@ public class PersonsService {
   private Optional<PuResponse> getPersonFromCache(String id) {
     try {
       final var cacheValue = Objects.requireNonNull(cacheManager.getCache(RedisConfig.PERSON_CACHE))
-          .get(id, String.class);
+          .get(HashUtility.hash(id), String.class);
 
       if (cacheValue == null || cacheValue.isEmpty()) {
         return Optional.empty();

@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import se.inera.intyg.intygproxyservice.common.HashUtility;
 import se.inera.intyg.intygproxyservice.config.RedisConfig;
 import se.inera.intyg.intygproxyservice.integration.api.pu.Person;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsRequest;
@@ -74,7 +75,7 @@ class PersonsServiceTest {
 
     @BeforeEach
     void setup() {
-      when(cache.get(PERSON_ID_1, String.class))
+      when(cache.get(HashUtility.hash(PERSON_ID_1), String.class))
           .thenReturn(PERSON_RESPONSE_1.toString());
       try {
         when(objectMapper.readValue(PERSON_RESPONSE_1.toString(), PuResponse.class))

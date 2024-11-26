@@ -33,6 +33,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.utility.DockerImageName;
+import se.inera.intyg.intygproxyservice.common.HashUtility;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
 import se.inera.intyg.intygproxyservice.integrationtest.util.ApiUtil;
 import se.inera.intyg.intygproxyservice.integrationtest.util.Containers;
@@ -230,7 +231,8 @@ class GetPersonsForProfileV5IT {
       REDIS_CONTAINER.execInContainer(
           "redis-cli",
           "set",
-          String.format("%s::%s", PERSON_CACHE, PROTECTED_PERSON_DTO.getPersonnummer()),
+          String.format("%s::%s", PERSON_CACHE,
+              HashUtility.hash(PROTECTED_PERSON_DTO.getPersonnummer())),
           String.format("\"%s\"", cacheString)
       );
 
