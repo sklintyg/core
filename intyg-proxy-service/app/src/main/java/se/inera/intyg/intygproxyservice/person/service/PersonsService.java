@@ -1,18 +1,18 @@
 package se.inera.intyg.intygproxyservice.person.service;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import static se.inera.intyg.intygproxyservice.config.RedisConfig.PERSON_CACHE;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
+import se.inera.intyg.intygproxyservice.common.CacheUtility;
 import se.inera.intyg.intygproxyservice.common.HashUtility;
-import se.inera.intyg.intygproxyservice.config.RedisConfig;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
@@ -34,24 +34,30 @@ public class PersonsService {
     validateRequest(request);
 
     final var personsFromCache = getPersonsFromCache(request);
-
-    final var requestWithIdsNotInCache = getPersonIdsNotInCache(request, personsFromCache);
-    final var puResponse = requestWithIdsNotInCache.getPersonIds().isEmpty()
-        ? PuPersonsResponse.empty()
-        : findPersonsInPu(requestWithIdsNotInCache);
-
-    puResponse.getPersons().forEach(this::savePersonInCache);
-
-    final var mergedPersonsFromPuAndCache = Stream.concat(
-        puResponse.getPersons().stream(),
-        personsFromCache.stream()
-    ).toList();
+    final var personsFromPu = getPersonsFromPu(request, personsFromCache);
+    personsFromPu.getPersons().forEach(this::savePersonInCache);
 
     return convert(
         PuPersonsResponse.builder()
-            .persons(mergedPersonsFromPuAndCache)
+            .persons(mergeResponses(personsFromPu, personsFromCache))
             .build()
     );
+  }
+
+  private static List<PuResponse> mergeResponses(PuPersonsResponse personsFromPu,
+      List<PuResponse> personsFromCache) {
+    return Stream.concat(
+        personsFromPu.getPersons().stream(),
+        personsFromCache.stream()
+    ).toList();
+  }
+
+  private PuPersonsResponse getPersonsFromPu(PersonsRequest request,
+      List<PuResponse> personsFromCache) {
+    final var requestWithIdsNotInCache = getPersonIdsNotInCache(request, personsFromCache);
+    return requestWithIdsNotInCache.getPersonIds().isEmpty()
+        ? PuPersonsResponse.empty()
+        : findPersonsInPu(requestWithIdsNotInCache);
   }
 
   private List<PuResponse> getPersonsFromCache(PersonsRequest request) {
@@ -61,6 +67,15 @@ public class PersonsService {
         .filter(Optional::isPresent)
         .map(Optional::get)
         .toList();
+  }
+
+  private Optional<PuResponse> getPersonFromCache(String id) {
+    return CacheUtility.get(cacheManager, objectMapper, HashUtility.hash(id), PuResponse.class);
+  }
+
+  private void savePersonInCache(PuResponse puResponse) {
+    CacheUtility.save(cacheManager, objectMapper, puResponse,
+        HashUtility.hash(puResponse.person().getPersonnummer()), PERSON_CACHE);
   }
 
   private static PersonsRequest getPersonIdsNotInCache(PersonsRequest request,
@@ -76,22 +91,6 @@ public class PersonsService {
                 .toList()
         )
         .build();
-  }
-
-  private void savePersonInCache(PuResponse person) {
-    try {
-      Objects.requireNonNull(cacheManager.getCache(RedisConfig.PERSON_CACHE))
-          .put(HashUtility.hash(person.person().getPersonnummer()),
-              objectMapper.writeValueAsString(person));
-    } catch (JsonProcessingException e) {
-      throw new IllegalStateException("Failed to serialize person", e);
-    }
-  }
-
-  private static void validateRequest(PersonsRequest request) {
-    if (request == null) {
-      throw new IllegalArgumentException("PersonsRequest is null");
-    }
   }
 
   private PuPersonsResponse findPersonsInPu(PersonsRequest personRequest) {
@@ -115,19 +114,9 @@ public class PersonsService {
         .build();
   }
 
-  private Optional<PuResponse> getPersonFromCache(String id) {
-    try {
-      final var cacheValue = Objects.requireNonNull(cacheManager.getCache(RedisConfig.PERSON_CACHE))
-          .get(HashUtility.hash(id), String.class);
-
-      if (cacheValue == null || cacheValue.isEmpty()) {
-        return Optional.empty();
-      }
-
-      return Optional.of(objectMapper.readValue(cacheValue, PuResponse.class));
-    } catch (JsonProcessingException e) {
-      log.warn("Failed to deserialize PuResponse");
-      throw new IllegalStateException(e);
+  private static void validateRequest(PersonsRequest request) {
+    if (request == null) {
+      throw new IllegalArgumentException("PersonsRequest is null");
     }
   }
 }
