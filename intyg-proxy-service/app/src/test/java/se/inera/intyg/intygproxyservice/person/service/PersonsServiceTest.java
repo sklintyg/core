@@ -65,7 +65,7 @@ class PersonsServiceTest {
   void setup() {
     when(cacheManager.getCache(RedisConfig.PERSON_CACHE))
         .thenReturn(cache);
-    when(personDTOMapper.toDTO(PERSON_RESPONSE_1.getPerson()))
+    when(personDTOMapper.toDTO(PERSON_RESPONSE_1.person()))
         .thenReturn(PERSON_DTO_1);
   }
 
@@ -104,7 +104,7 @@ class PersonsServiceTest {
                   .persons(List.of(PERSON_RESPONSE_2))
                   .build()
           );
-      when(personDTOMapper.toDTO(PERSON_RESPONSE_2.getPerson()))
+      when(personDTOMapper.toDTO(PERSON_RESPONSE_2.person()))
           .thenReturn(PERSON_DTO_2);
 
       final var response = personsService.findPersons(
@@ -135,7 +135,7 @@ class PersonsServiceTest {
                 .persons(List.of(PERSON_RESPONSE_1, PERSON_RESPONSE_2))
                 .build()
         );
-    when(personDTOMapper.toDTO(PERSON_RESPONSE_2.getPerson()))
+    when(personDTOMapper.toDTO(PERSON_RESPONSE_2.person()))
         .thenReturn(PERSON_DTO_2);
 
     final var response = personsService.findPersons(

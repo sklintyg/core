@@ -957,20 +957,24 @@
          <!--You may enter ANY elements at this point-->\r
       </urn1:GetPersonsForProfile>\r
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:5:GetPersonsForProfile"/></con:call></con:operation></con:interface><con:testSuite id="786c0593-4bdc-42e1-979e-603242214748" name="GetPersonsForProfile TestSuite"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="b4939acb-9899-4901-8fc9-c5ad7d16bd14" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="GetPersonsForProfile TestCase" searchProperties="true"><con:settings/><con:testStep type="request" name="190503279812 Request" id="43e2dcbf-0e09-4488-b44e-fe4920af4717"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetPersonsForProfileResponderBinding</con:interface><con:operation>GetPersonsForProfile</con:operation><con:request name="190503279812 Request" id="792a1fbe-57ce-4ab7-bd61-4c3f97466bcc"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://tempuri.org</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:5" xmlns:urn2="urn:riv:strategicresourcemanagement:persons:person:5">\r
-   <soapenv:Header>\r
-      <urn:LogicalAddress>?</urn:LogicalAddress>\r
-   </soapenv:Header>\r
-   <soapenv:Body>\r
-      <urn1:GetPersonsForProfile>\r
-         <!--1 or more repetitions:-->\r
-         <urn1:personId>\r
-            <urn2:root>?</urn2:root>\r
-         </urn1:personId>\r
-         <urn1:profile>?</urn1:profile>\r
-         <urn1:ignoreReferredIdentity>?</urn1:ignoreReferredIdentity>\r
-      </urn1:GetPersonsForProfile>\r
-   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:5:GetPersonsForProfile"/></con:call></con:operation></con:interface><con:testSuite id="786c0593-4bdc-42e1-979e-603242214748" name="GetPersonsForProfile TestSuite"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="b4939acb-9899-4901-8fc9-c5ad7d16bd14" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="GetPersonsForProfile TestCase" searchProperties="true"><con:settings/><con:testStep type="request" name="190503279812 Request" id="43e2dcbf-0e09-4488-b44e-fe4920af4717"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetPersonsForProfileResponderBinding</con:interface><con:operation>GetPersonsForProfile</con:operation><con:request name="190503279812 Request" id="792a1fbe-57ce-4ab7-bd61-4c3f97466bcc"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://tempuri.org</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4" xmlns:urn2="urn:riv:strategicresourcemanagement:persons:person:4">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetPersonsForProfile>
+         <!--1 or more repetitions:-->
+         <urn1:personId>
+            <urn2:root>1.2.752.129.2.1.3.1</urn2:root>
+            <!--Optional:-->
+            <urn2:extension>190503279812</urn2:extension>
+            <!--You may enter ANY elements at this point-->
+         </urn1:personId>
+         <urn1:profile>P2</urn1:profile>
+         <urn1:ignoreReferredIdentity>false</urn1:ignoreReferredIdentity>
+         <!--You may enter ANY elements at this point-->
+      </urn1:GetPersonsForProfile>
+   </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="1fc8b85e-5be2-4f4d-abf9-3620afffd76a"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="195401782395 Request" id="02f7cadd-8cf9-4d66-aed3-a592ba9d143d"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetPersonsForProfileResponderBinding</con:interface><con:operation>GetPersonsForProfile</con:operation><con:request name="195401782395 Request" id="f0410122-8563-4c3c-b7cf-b49a36fe566f"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://tempuri.org</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:5" xmlns:urn2="urn:riv:strategicresourcemanagement:persons:person:5">
    <soapenv:Header>
       <urn:LogicalAddress>?</urn:LogicalAddress>
@@ -989,11 +993,48 @@
          <!--You may enter ANY elements at this point-->
       </urn1:GetPersonsForProfile>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="0dbb2aef-a2f5-4418-8abd-cbbf7f0cfb91"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:mockService id="41825914-23a6-44e0-993e-86f369bba80b" port="8080" path="/" host="AAP-1BLKRQ3" name="GetPersonsForProfile"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties><con:property><con:name>version</con:name><con:value>5.0</con:value></con:property></con:properties><con:mockOperation name="GetPersonsForProfile" id="28c193c8-fe20-49c8-8ec0-e6261988ccc9" interface="GetPersonsForProfileResponderBinding" operation="GetPersonsForProfile"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SCRIPT</con:dispatchStyle><con:dispatchPath>import com.eviware.soapui.support.XmlHolder
-def holder = new XmlHolder(mockRequest.requestContent)
-def id = holder["//*[local-name() = 'extension']"]
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="0dbb2aef-a2f5-4418-8abd-cbbf7f0cfb91"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="201212121212 Request" id="d1c39a6d-c5cb-48c8-8890-502a72e05637"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetPersonsForProfileResponderBinding</con:interface><con:operation>GetPersonsForProfile</con:operation><con:request name="201212121212 Request" id="f5421030-97de-44c7-bda6-a48643ee65ae"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://tempuri.org</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:5" xmlns:urn2="urn:riv:strategicresourcemanagement:persons:person:5">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetPersonsForProfile>
+         <!--1 or more repetitions:-->
+         <urn1:personId>
+            <urn2:root>1.2.752.129.2.1.3.1</urn2:root>
+            <!--Optional:-->
+            <urn2:extension>201212121212</urn2:extension>
+            <!--You may enter ANY elements at this point-->
+         </urn1:personId>
+         <urn1:profile>P2</urn1:profile>
+         <urn1:ignoreReferredIdentity>false</urn1:ignoreReferredIdentity>
+         <!--You may enter ANY elements at this point-->
+      </urn1:GetPersonsForProfile>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="d1f7b079-11fc-4c0e-a674-b44ddaaec76e"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="191212121212 Request" id="4f2cde5e-ae1c-419f-9863-47734755e9e7"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetPersonsForProfileResponderBinding</con:interface><con:operation>GetPersonsForProfile</con:operation><con:request name="191212121212 Request" id="f5421030-97de-44c7-bda6-a48643ee65ae"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://tempuri.org</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:5" xmlns:urn2="urn:riv:strategicresourcemanagement:persons:person:5">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetPersonsForProfile>
+         <!--1 or more repetitions:-->
+         <urn1:personId>
+            <urn2:root>1.2.752.129.2.1.3.1</urn2:root>
+            <!--Optional:-->
+            <urn2:extension>191212121212</urn2:extension>
+            <!--You may enter ANY elements at this point-->
+         </urn1:personId>
+         <urn1:profile>P2</urn1:profile>
+         <urn1:ignoreReferredIdentity>false</urn1:ignoreReferredIdentity>
+         <!--You may enter ANY elements at this point-->
+      </urn1:GetPersonsForProfile>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="d1f7b079-11fc-4c0e-a674-b44ddaaec76e"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:mockService id="41825914-23a6-44e0-993e-86f369bba80b" port="8080" path="/" host="AAP-1BLKRQ3" name="GetPersonsForProfile"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties><con:property><con:name>version</con:name><con:value>5.0</con:value></con:property></con:properties><con:mockOperation name="GetPersonsForProfile" id="28c193c8-fe20-49c8-8ec0-e6261988ccc9" interface="GetPersonsForProfileResponderBinding" operation="GetPersonsForProfile"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SCRIPT</con:dispatchStyle><con:dispatchPath>import com.eviware.soapui.support.XmlHolder
 
-return id + " Response"</con:dispatchPath><con:response name="190503279812 Response" id="fe0910b6-d9c9-4dab-b2f9-6ec7b0544a19" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+def holder = new XmlHolder(mockRequest.requestContent)
+def extensions = holder.getNodeValues("//*[local-name() = 'extension']")
+
+return extensions[0] + " Response"</con:dispatchPath><con:response name="190503279812 Response" id="fe0910b6-d9c9-4dab-b2f9-6ec7b0544a19" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
    <soap:Body>
       <ns2:GetPersonsForProfileResponse xmlns:ns3="urn:riv:itintegration:registry:1" xmlns:ns2="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:5" xmlns="urn:riv:strategicresourcemanagement:persons:person:5">
          <ns2:requestedPersonRecord>
@@ -1083,7 +1124,7 @@ return id + " Response"</con:dispatchPath><con:response name="190503279812 Respo
 						<extension>195401782395</extension>
 					</personalIdentity>
 					<gender>1</gender>
-					<protectedPersonIndicator>false</protectedPersonIndicator>
+					<protectedPersonIndicator>true</protectedPersonIndicator>
 					<testIndicator>false</testIndicator>
 					<primaryIdentity>true</primaryIdentity>
 					<version>20221205134402</version>
@@ -1136,635 +1177,102 @@ return id + " Response"</con:dispatchPath><con:response name="190503279812 Respo
 			</ns2:requestedPersonRecord>
 		</ns2:GetPersonsForProfileResponse>
 	</soap:Body>
-</soap:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:5:GetPersonsForProfile"/></con:response><con:response name="Response 3" id="d8a9056b-d3c6-40bc-b7bc-052ef635ff16" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:5" xmlns:urn1="urn:riv:strategicresourcemanagement:persons:person:5">
-   <soapenv:Header/>
-   <soapenv:Body>
-      <urn:GetPersonsForProfileResponse>
-         <!--1 or more repetitions:-->
-         <urn:requestedPersonRecord>
-            <urn1:requestedPersonalIdentity>
-               <urn1:root>?</urn1:root>
-               <!--Optional:-->
-               <urn1:extension>?</urn1:extension>
-               <!--You may enter ANY elements at this point-->
-            </urn1:requestedPersonalIdentity>
-            <!--Optional:-->
-            <urn1:personRecord>
-               <urn1:personalIdentity>
-                  <urn1:root>?</urn1:root>
-                  <!--Optional:-->
-                  <urn1:extension>?</urn1:extension>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:personalIdentity>
-               <!--Optional:-->
-               <urn1:identityLevel>?</urn1:identityLevel>
-               <!--Optional:-->
-               <urn1:identityLevelDate>
-                  <urn1:format>?</urn1:format>
-                  <urn1:value>?</urn1:value>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:identityLevelDate>
-               <!--Optional:-->
-               <urn1:gender>?</urn1:gender>
-               <urn1:protectedPersonIndicator>?</urn1:protectedPersonIndicator>
-               <urn1:testIndicator>?</urn1:testIndicator>
-               <urn1:primaryIdentity>?</urn1:primaryIdentity>
-               <!--Optional:-->
-               <urn1:version>?</urn1:version>
-               <!--Optional:-->
-               <urn1:name>
-                  <!--Optional:-->
-                  <urn1:givenNameIndicator>?</urn1:givenNameIndicator>
-                  <!--Optional:-->
-                  <urn1:givenName>?</urn1:givenName>
-                  <!--Optional:-->
-                  <urn1:middleName>?</urn1:middleName>
-                  <!--Optional:-->
-                  <urn1:surname>?</urn1:surname>
-                  <!--Optional:-->
-                  <urn1:notificationName>?</urn1:notificationName>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:name>
-               <!--Zero or more repetitions:-->
-               <urn1:linkedIdentity>
-                  <urn1:referredPersonalIdentity>
-                     <urn1:root>?</urn1:root>
-                     <!--Optional:-->
-                     <urn1:extension>?</urn1:extension>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:referredPersonalIdentity>
-                  <urn1:assuranceLevel>?</urn1:assuranceLevel>
-                  <urn1:primaryIdentity>?</urn1:primaryIdentity>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:linkedIdentity>
-               <!--Zero or more repetitions:-->
-               <urn1:referredPersonalIdentities>
-                  <urn1:referredPersonalIdentity>
-                     <urn1:root>?</urn1:root>
-                     <!--Optional:-->
-                     <urn1:extension>?</urn1:extension>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:referredPersonalIdentity>
-                  <!--Optional:-->
-                  <urn1:referredPersonalIdentityStatus>?</urn1:referredPersonalIdentityStatus>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:referredPersonalIdentities>
-               <!--Optional:-->
-               <urn1:birth>
-                  <!--Optional:-->
-                  <urn1:dateOfBirth>
-                     <urn1:format>?</urn1:format>
-                     <urn1:value>?</urn1:value>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:dateOfBirth>
-                  <!--Optional:-->
-                  <urn1:placeOfBirthSweden>
-                     <!--Optional:-->
-                     <urn1:birthCountyCode>?</urn1:birthCountyCode>
-                     <!--Optional:-->
-                     <urn1:birthParish>?</urn1:birthParish>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:placeOfBirthSweden>
-                  <!--Optional:-->
-                  <urn1:birthAbroad>
-                     <!--Optional:-->
-                     <urn1:placeOfBirthAbroad>?</urn1:placeOfBirthAbroad>
-                     <!--Optional:-->
-                     <urn1:countryOfBirth>?</urn1:countryOfBirth>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:birthAbroad>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:birth>
-               <!--Optional:-->
-               <urn1:populationRegistrationLocality>
-                  <!--Optional:-->
-                  <urn1:populationRegistrationDate>
-                     <urn1:format>?</urn1:format>
-                     <urn1:value>?</urn1:value>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:populationRegistrationDate>
-                  <!--Optional:-->
-                  <urn1:countyCode>?</urn1:countyCode>
-                  <!--Optional:-->
-                  <urn1:municipalityCode>?</urn1:municipalityCode>
-                  <!--Optional:-->
-                  <urn1:parishCode>?</urn1:parishCode>
-                  <!--Optional:-->
-                  <urn1:propertyDesignation>?</urn1:propertyDesignation>
-                  <!--Optional:-->
-                  <urn1:fictitiousPropertyNumber>?</urn1:fictitiousPropertyNumber>
-                  <!--Optional:-->
-                  <urn1:populationRegistrationType>?</urn1:populationRegistrationType>
-                  <!--Optional:-->
-                  <urn1:localRegistrationTime>?</urn1:localRegistrationTime>
-                  <!--Optional:-->
-                  <urn1:localRegistrationEndTime>?</urn1:localRegistrationEndTime>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:populationRegistrationLocality>
-               <!--Optional:-->
-               <urn1:populationRegistrationRecord>
-                  <!--Optional:-->
-                  <urn1:syncronizationTime>?</urn1:syncronizationTime>
-                  <!--Optional:-->
-                  <urn1:notificationCase>
-                     <!--Optional:-->
-                     <urn1:recordId>?</urn1:recordId>
-                     <!--Optional:-->
-                     <urn1:notificationType>?</urn1:notificationType>
-                     <!--Optional:-->
-                     <urn1:modificationTime>?</urn1:modificationTime>
-                     <!--Optional:-->
-                     <urn1:totalRecord>?</urn1:totalRecord>
-                     <!--Optional:-->
-                     <urn1:notificationDate>
-                        <urn1:format>?</urn1:format>
-                        <urn1:value>?</urn1:value>
-                        <!--You may enter ANY elements at this point-->
-                     </urn1:notificationDate>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:notificationCase>
-                  <!--Optional:-->
-                  <urn1:historicalRecords>
-                     <!--Zero or more repetitions:-->
-                     <urn1:populationRegistrationLocality>
-                        <!--Optional:-->
-                        <urn1:populationRegistrationDate>
-                           <urn1:format>?</urn1:format>
-                           <urn1:value>?</urn1:value>
-                           <!--You may enter ANY elements at this point-->
-                        </urn1:populationRegistrationDate>
-                        <!--Optional:-->
-                        <urn1:countyCode>?</urn1:countyCode>
-                        <!--Optional:-->
-                        <urn1:municipalityCode>?</urn1:municipalityCode>
-                        <!--Optional:-->
-                        <urn1:parishCode>?</urn1:parishCode>
-                        <!--Optional:-->
-                        <urn1:propertyDesignation>?</urn1:propertyDesignation>
-                        <!--Optional:-->
-                        <urn1:fictitiousPropertyNumber>?</urn1:fictitiousPropertyNumber>
-                        <!--Optional:-->
-                        <urn1:populationRegistrationType>?</urn1:populationRegistrationType>
-                        <!--Optional:-->
-                        <urn1:localRegistrationTime>?</urn1:localRegistrationTime>
-                        <!--Optional:-->
-                        <urn1:localRegistrationEndTime>?</urn1:localRegistrationEndTime>
-                        <!--You may enter ANY elements at this point-->
-                     </urn1:populationRegistrationLocality>
-                     <!--Optional:-->
-                     <urn1:historicalAddress>
-                        <!--Optional:-->
-                        <urn1:careOf>?</urn1:careOf>
-                        <!--Optional:-->
-                        <urn1:postalAddress1>?</urn1:postalAddress1>
-                        <!--Optional:-->
-                        <urn1:postalAddress2>?</urn1:postalAddress2>
-                        <!--Optional:-->
-                        <urn1:postalCode>?</urn1:postalCode>
-                        <!--Optional:-->
-                        <urn1:city>?</urn1:city>
-                        <!--You may enter ANY elements at this point-->
-                     </urn1:historicalAddress>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:historicalRecords>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:populationRegistrationRecord>
-               <!--Optional:-->
-               <urn1:addressInformation>
-                  <!--Optional:-->
-                  <urn1:residentialAddress>
-                     <!--Optional:-->
-                     <urn1:careOf>?</urn1:careOf>
-                     <!--Optional:-->
-                     <urn1:postalAddress1>?</urn1:postalAddress1>
-                     <!--Optional:-->
-                     <urn1:postalAddress2>?</urn1:postalAddress2>
-                     <!--Optional:-->
-                     <urn1:postalCode>?</urn1:postalCode>
-                     <!--Optional:-->
-                     <urn1:city>?</urn1:city>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:residentialAddress>
-                  <!--Optional:-->
-                  <urn1:nationalKeys>
-                     <!--Optional:-->
-                     <urn1:propertyId>?</urn1:propertyId>
-                     <!--Optional:-->
-                     <urn1:addressPlaceId>?</urn1:addressPlaceId>
-                     <!--Optional:-->
-                     <urn1:apartmentId>?</urn1:apartmentId>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:nationalKeys>
-                  <!--Optional:-->
-                  <urn1:district>
-                     <!--Optional:-->
-                     <urn1:districtCode>?</urn1:districtCode>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:district>
-                  <!--Optional:-->
-                  <urn1:specialPostalAddress>
-                     <!--Optional:-->
-                     <urn1:careOf>?</urn1:careOf>
-                     <!--Optional:-->
-                     <urn1:postalAddress1>?</urn1:postalAddress1>
-                     <!--Optional:-->
-                     <urn1:postalAddress2>?</urn1:postalAddress2>
-                     <!--Optional:-->
-                     <urn1:postalCode>?</urn1:postalCode>
-                     <!--Optional:-->
-                     <urn1:city>?</urn1:city>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:specialPostalAddress>
-                  <!--Optional:-->
-                  <urn1:addressAbroad>
-                     <!--Optional:-->
-                     <urn1:postalAddress1>?</urn1:postalAddress1>
-                     <!--Optional:-->
-                     <urn1:postalAddress2>?</urn1:postalAddress2>
-                     <!--Optional:-->
-                     <urn1:postalAddress3>?</urn1:postalAddress3>
-                     <!--Optional:-->
-                     <urn1:countryCode>?</urn1:countryCode>
-                     <!--Optional:-->
-                     <urn1:addressAbroadDate>
-                        <urn1:format>?</urn1:format>
-                        <urn1:value>?</urn1:value>
-                        <!--You may enter ANY elements at this point-->
-                     </urn1:addressAbroadDate>
-                     <!--Optional:-->
-                     <urn1:votingDate>
-                        <urn1:format>?</urn1:format>
-                        <urn1:value>?</urn1:value>
-                        <!--You may enter ANY elements at this point-->
-                     </urn1:votingDate>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:addressAbroad>
-                  <!--Optional:-->
-                  <urn1:givenAddress>
-                     <!--Optional:-->
-                     <urn1:careOf>?</urn1:careOf>
-                     <!--Optional:-->
-                     <urn1:postalAddress1>?</urn1:postalAddress1>
-                     <!--Optional:-->
-                     <urn1:postalAddress2>?</urn1:postalAddress2>
-                     <!--Optional:-->
-                     <urn1:postalCode>?</urn1:postalCode>
-                     <!--Optional:-->
-                     <urn1:city>?</urn1:city>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:givenAddress>
-                  <!--Optional:-->
-                  <urn1:UUID>
-                     <!--Optional:-->
-                     <urn1:propertyId>?</urn1:propertyId>
-                     <!--Optional:-->
-                     <urn1:addressPlaceId>?</urn1:addressPlaceId>
-                     <!--Optional:-->
-                     <urn1:apartmentId>?</urn1:apartmentId>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:UUID>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:addressInformation>
-               <!--Zero or more repetitions:-->
-               <urn1:contactInformation>
-                  <urn1:contactType>?</urn1:contactType>
-                  <!--Optional:-->
-                  <urn1:use>?</urn1:use>
-                  <!--Optional:-->
-                  <urn1:value>?</urn1:value>
-                  <!--Optional:-->
-                  <urn1:rank>?</urn1:rank>
-                  <!--Optional:-->
-                  <urn1:comment>?</urn1:comment>
-                  <!--Optional:-->
-                  <urn1:period>
-                     <!--Optional:-->
-                     <urn1:start>?</urn1:start>
-                     <!--Optional:-->
-                     <urn1:end>?</urn1:end>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:period>
-                  <!--Optional:-->
-                  <urn1:digitalNotification>?</urn1:digitalNotification>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:contactInformation>
-               <!--Zero or more repetitions:-->
-               <urn1:contactPerson>
-                  <urn1:contactRelationshipType>?</urn1:contactRelationshipType>
-                  <!--Optional:-->
-                  <urn1:priorityOrder>?</urn1:priorityOrder>
-                  <!--Optional:-->
-                  <urn1:givenName>?</urn1:givenName>
-                  <!--Optional:-->
-                  <urn1:surName>?</urn1:surName>
-                  <!--Optional:-->
-                  <urn1:middleName>?</urn1:middleName>
-                  <!--Optional:-->
-                  <urn1:contactPersonAddress>
-                     <!--Optional:-->
-                     <urn1:careOf>?</urn1:careOf>
-                     <!--Optional:-->
-                     <urn1:postalAddress1>?</urn1:postalAddress1>
-                     <!--Optional:-->
-                     <urn1:postalAddress2>?</urn1:postalAddress2>
-                     <!--Optional:-->
-                     <urn1:postalCode>?</urn1:postalCode>
-                     <!--Optional:-->
-                     <urn1:city>?</urn1:city>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:contactPersonAddress>
-                  <!--Zero or more repetitions:-->
-                  <urn1:contactPersonContactInformation>
-                     <urn1:contactType>?</urn1:contactType>
-                     <!--Optional:-->
-                     <urn1:use>?</urn1:use>
-                     <!--Optional:-->
-                     <urn1:value>?</urn1:value>
-                     <!--Optional:-->
-                     <urn1:rank>?</urn1:rank>
-                     <!--Optional:-->
-                     <urn1:comment>?</urn1:comment>
-                     <!--Optional:-->
-                     <urn1:period>
-                        <!--Optional:-->
-                        <urn1:start>?</urn1:start>
-                        <!--Optional:-->
-                        <urn1:end>?</urn1:end>
-                        <!--You may enter ANY elements at this point-->
-                     </urn1:period>
-                     <!--Optional:-->
-                     <urn1:digitalNotification>?</urn1:digitalNotification>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:contactPersonContactInformation>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:contactPerson>
-               <!--Zero or more repetitions:-->
-               <urn1:confirmedIdentity>
-                  <!--Optional:-->
-                  <urn1:typeOfIdentification>?</urn1:typeOfIdentification>
-                  <!--Optional:-->
-                  <urn1:identificationNumber>?</urn1:identificationNumber>
-                  <!--Optional:-->
-                  <urn1:issuersOfId>?</urn1:issuersOfId>
-                  <!--Optional:-->
-                  <urn1:validDatePeriod>
-                     <!--Optional:-->
-                     <urn1:start>?</urn1:start>
-                     <!--Optional:-->
-                     <urn1:end>?</urn1:end>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:validDatePeriod>
-                  <!--Zero or more repetitions:-->
-                  <urn1:attachmentId>?</urn1:attachmentId>
-                  <!--Optional:-->
-                  <urn1:countryCode>?</urn1:countryCode>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:confirmedIdentity>
-               <!--Optional:-->
-               <urn1:administrativeInformation>
-                  <!--Optional:-->
-                  <urn1:categoryOfPerson>?</urn1:categoryOfPerson>
-                  <!--Optional:-->
-                  <urn1:accountCode>?</urn1:accountCode>
-                  <!--Optional:-->
-                  <urn1:comment>?</urn1:comment>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:administrativeInformation>
-               <!--Optional:-->
-               <urn1:deregistration>
-                  <!--Optional:-->
-                  <urn1:deregistrationReasonCode>?</urn1:deregistrationReasonCode>
-                  <!--Optional:-->
-                  <urn1:deregistrationDate>
-                     <urn1:format>?</urn1:format>
-                     <urn1:value>?</urn1:value>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:deregistrationDate>
-                  <!--Optional:-->
-                  <urn1:foundDeadAtDate>
-                     <urn1:format>?</urn1:format>
-                     <urn1:value>?</urn1:value>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:foundDeadAtDate>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:deregistration>
-               <!--Optional:-->
-               <urn1:maritalStatus>
-                  <!--Optional:-->
-                  <urn1:maritalStatusCode>?</urn1:maritalStatusCode>
-                  <!--Optional:-->
-                  <urn1:maritalStatusDate>
-                     <urn1:format>?</urn1:format>
-                     <urn1:value>?</urn1:value>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:maritalStatusDate>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:maritalStatus>
-               <!--Optional:-->
-               <urn1:immigration>
-                  <!--Optional:-->
-                  <urn1:immigrationDate>
-                     <urn1:format>?</urn1:format>
-                     <urn1:value>?</urn1:value>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:immigrationDate>
-                  <!--Optional:-->
-                  <urn1:rightOfResidence>?</urn1:rightOfResidence>
-                  <!--Zero or more repetitions:-->
-                  <urn1:immigrationIdentity>
-                     <urn1:personalIdentityNumber>?</urn1:personalIdentityNumber>
-                     <urn1:country>?</urn1:country>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:immigrationIdentity>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:immigration>
-               <!--Zero or more repetitions:-->
-               <urn1:citizenship>
-                  <!--Optional:-->
-                  <urn1:citizenshipCountryCode>?</urn1:citizenshipCountryCode>
-                  <!--Optional:-->
-                  <urn1:citizenshipDate>
-                     <urn1:format>?</urn1:format>
-                     <urn1:value>?</urn1:value>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:citizenshipDate>
-                  <!--Optional:-->
-                  <urn1:status>?</urn1:status>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:citizenship>
-               <!--Zero or more repetitions:-->
-               <urn1:relationship>
-                  <urn1:relationshipId>
-                     <!--Optional:-->
-                     <urn1:personalIdentity>
-                        <urn1:root>?</urn1:root>
-                        <!--Optional:-->
-                        <urn1:extension>?</urn1:extension>
-                        <!--You may enter ANY elements at this point-->
-                     </urn1:personalIdentity>
-                     <!--Optional:-->
-                     <urn1:dateOfBirth>
-                        <urn1:format>?</urn1:format>
-                        <urn1:value>?</urn1:value>
-                        <!--You may enter ANY elements at this point-->
-                     </urn1:dateOfBirth>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:relationshipId>
-                  <urn1:relationshipType>?</urn1:relationshipType>
-                  <!--Optional:-->
-                  <urn1:relationshipFromDate>
-                     <urn1:format>?</urn1:format>
-                     <urn1:value>?</urn1:value>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:relationshipFromDate>
-                  <!--Optional:-->
-                  <urn1:relationshipToDate>
-                     <urn1:format>?</urn1:format>
-                     <urn1:value>?</urn1:value>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:relationshipToDate>
-                  <!--Optional:-->
-                  <urn1:name>
-                     <!--Optional:-->
-                     <urn1:givenNameIndicator>?</urn1:givenNameIndicator>
-                     <!--Optional:-->
-                     <urn1:givenName>?</urn1:givenName>
-                     <!--Optional:-->
-                     <urn1:middleName>?</urn1:middleName>
-                     <!--Optional:-->
-                     <urn1:surname>?</urn1:surname>
-                     <!--Optional:-->
-                     <urn1:notificationName>?</urn1:notificationName>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:name>
-                  <!--Optional:-->
-                  <urn1:deregistration>
-                     <!--Optional:-->
-                     <urn1:deregistrationReasonCode>?</urn1:deregistrationReasonCode>
-                     <!--Optional:-->
-                     <urn1:deregistrationDate>
-                        <urn1:format>?</urn1:format>
-                        <urn1:value>?</urn1:value>
-                        <!--You may enter ANY elements at this point-->
-                     </urn1:deregistrationDate>
-                     <!--Optional:-->
-                     <urn1:foundDeadAtDate>
-                        <urn1:format>?</urn1:format>
-                        <urn1:value>?</urn1:value>
-                        <!--You may enter ANY elements at this point-->
-                     </urn1:foundDeadAtDate>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:deregistration>
-                  <!--Optional:-->
-                  <urn1:status>?</urn1:status>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:relationship>
-               <!--Optional:-->
-               <urn1:coOrdinationNumberData>
-                  <!--Optional:-->
-                  <urn1:allocationDate>
-                     <urn1:format>?</urn1:format>
-                     <urn1:value>?</urn1:value>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:allocationDate>
-                  <!--Optional:-->
-                  <urn1:preliminaryTransferDate>
-                     <urn1:format>?</urn1:format>
-                     <urn1:value>?</urn1:value>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:preliminaryTransferDate>
-                  <!--Optional:-->
-                  <urn1:renewalDate>
-                     <urn1:format>?</urn1:format>
-                     <urn1:value>?</urn1:value>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:renewalDate>
-                  <!--Optional:-->
-                  <urn1:deceasedDate>
-                     <urn1:format>?</urn1:format>
-                     <urn1:value>?</urn1:value>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:deceasedDate>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:coOrdinationNumberData>
-               <!--Optional:-->
-               <urn1:personalIdentityStatus>
-                  <!--Optional:-->
-                  <urn1:identityStatus>?</urn1:identityStatus>
-                  <!--Optional:-->
-                  <urn1:identityStatusDate>
-                     <urn1:format>?</urn1:format>
-                     <urn1:value>?</urn1:value>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:identityStatusDate>
-                  <!--Optional:-->
-                  <urn1:identityStatusCause>?</urn1:identityStatusCause>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:personalIdentityStatus>
-               <!--Optional:-->
-               <urn1:updatePersonActor>
-                  <urn1:id>
-                     <urn1:root>?</urn1:root>
-                     <!--Optional:-->
-                     <urn1:extension>?</urn1:extension>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:id>
-                  <!--Optional:-->
-                  <urn1:professional>
-                     <urn1:organizationId>
-                        <urn1:root>?</urn1:root>
-                        <!--Optional:-->
-                        <urn1:extension>?</urn1:extension>
-                        <!--You may enter ANY elements at this point-->
-                     </urn1:organizationId>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:professional>
-                  <!--Optional:-->
-                  <urn1:updateTime>?</urn1:updateTime>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:updatePersonActor>
-               <!--Optional:-->
-               <urn1:updatePersonContactInformationActor>
-                  <urn1:id>
-                     <urn1:root>?</urn1:root>
-                     <!--Optional:-->
-                     <urn1:extension>?</urn1:extension>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:id>
-                  <!--Optional:-->
-                  <urn1:professional>
-                     <urn1:organizationId>
-                        <urn1:root>?</urn1:root>
-                        <!--Optional:-->
-                        <urn1:extension>?</urn1:extension>
-                        <!--You may enter ANY elements at this point-->
-                     </urn1:organizationId>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:professional>
-                  <!--Optional:-->
-                  <urn1:updateTime>?</urn1:updateTime>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:updatePersonContactInformationActor>
-               <!--Zero or more repetitions:-->
-               <urn1:attachment>
-                  <!--Optional:-->
-                  <urn1:id>?</urn1:id>
-                  <urn1:mediaType>?</urn1:mediaType>
-                  <!--Optional:-->
-                  <urn1:value>cid:58173719068</urn1:value>
-                  <!--Optional:-->
-                  <urn1:reference>?</urn1:reference>
-                  <!--You may enter ANY elements at this point-->
-               </urn1:attachment>
-               <!--Optional:-->
-               <urn1:optoutPaperNotification>?</urn1:optoutPaperNotification>
-               <!--Optional:-->
-               <urn1:protectedPopulationRecord>?</urn1:protectedPopulationRecord>
-               <!--You may enter ANY elements at this point-->
-            </urn1:personRecord>
-            <!--You may enter ANY elements at this point-->
-         </urn:requestedPersonRecord>
-         <!--You may enter ANY elements at this point-->
-      </urn:GetPersonsForProfileResponse>
-   </soapenv:Body>
-</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:5:GetPersonsForProfile"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
+</soap:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:5:GetPersonsForProfile"/></con:response><con:response name="201212121212 Response" id="d8a9056b-d3c6-40bc-b7bc-052ef635ff16" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+   <soap:Body>
+      <ns2:GetPersonsForProfileResponse xmlns:ns3="urn:riv:itintegration:registry:1" xmlns:ns2="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:5" xmlns="urn:riv:strategicresourcemanagement:persons:person:5">
+         <ns2:requestedPersonRecord>
+            <requestedPersonalIdentity>
+               <root>1.2.752.129.2.1.3.1</root>
+               <extension>201212121212</extension>
+            </requestedPersonalIdentity>
+            <personRecord>
+               <personalIdentity>
+                  <root>1.2.752.129.2.1.3.1</root>
+                  <extension>201212121212</extension>
+               </personalIdentity>
+               <gender>1</gender>
+               <protectedPersonIndicator>false</protectedPersonIndicator>
+               <testIndicator>false</testIndicator>
+               <primaryIdentity>false</primaryIdentity>
+               <version>20200916083433</version>
+               <name>
+                  <givenNameIndicator>10</givenNameIndicator>
+                  <givenName>Lilltolvan</givenName>
+                  <surname>Tolvansson</surname>
+               </name>
+            </personRecord>
+         </ns2:requestedPersonRecord>
+         <ns2:requestedPersonRecord>
+            <requestedPersonalIdentity>
+               <root>1.2.752.129.2.1.3.1</root>
+               <extension>191212121212</extension>
+            </requestedPersonalIdentity>
+            <personRecord>
+               <personalIdentity>
+                  <root>1.2.752.129.2.1.3.1</root>
+                  <extension>191212121212</extension>
+               </personalIdentity>
+               <gender>1</gender>
+               <protectedPersonIndicator>false</protectedPersonIndicator>
+               <testIndicator>false</testIndicator>
+               <primaryIdentity>false</primaryIdentity>
+               <version>20200916083433</version>
+               <name>
+                  <givenNameIndicator>10</givenNameIndicator>
+                  <givenName>Tolvan</givenName>
+                  <surname>Tolvansson</surname>
+               </name>
+            </personRecord>
+         </ns2:requestedPersonRecord>
+      </ns2:GetPersonsForProfileResponse>
+   </soap:Body>
+</soap:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:5:GetPersonsForProfile"/></con:response><con:response name="191212121212 Response" id="d8a9056b-d3c6-40bc-b7bc-052ef635ff16" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+   <soap:Body>
+      <ns2:GetPersonsForProfileResponse xmlns:ns3="urn:riv:itintegration:registry:1" xmlns:ns2="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:5" xmlns="urn:riv:strategicresourcemanagement:persons:person:5">
+         <ns2:requestedPersonRecord>
+            <requestedPersonalIdentity>
+               <root>1.2.752.129.2.1.3.1</root>
+               <extension>191212121212</extension>
+            </requestedPersonalIdentity>
+            <personRecord>
+               <personalIdentity>
+                  <root>1.2.752.129.2.1.3.1</root>
+                  <extension>191212121212</extension>
+               </personalIdentity>
+               <gender>1</gender>
+               <protectedPersonIndicator>false</protectedPersonIndicator>
+               <testIndicator>false</testIndicator>
+               <primaryIdentity>false</primaryIdentity>
+               <version>20200916083433</version>
+               <name>
+                  <givenNameIndicator>10</givenNameIndicator>
+                  <givenName>Lilltolvan</givenName>
+                  <surname>Tolvansson</surname>
+               </name>
+            </personRecord>
+         </ns2:requestedPersonRecord>
+         <ns2:requestedPersonRecord>
+            <requestedPersonalIdentity>
+               <root>1.2.752.129.2.1.3.1</root>
+               <extension>191212121212</extension>
+            </requestedPersonalIdentity>
+            <personRecord>
+               <personalIdentity>
+                  <root>1.2.752.129.2.1.3.1</root>
+                  <extension>191212121212</extension>
+               </personalIdentity>
+               <gender>1</gender>
+               <protectedPersonIndicator>false</protectedPersonIndicator>
+               <testIndicator>false</testIndicator>
+               <primaryIdentity>false</primaryIdentity>
+               <version>20200916083433</version>
+               <name>
+                  <givenNameIndicator>10</givenNameIndicator>
+                  <givenName>Tolvan</givenName>
+                  <surname>Tolvansson</surname>
+               </name>
+            </personRecord>
+         </ns2:requestedPersonRecord>
+      </ns2:GetPersonsForProfileResponse>
+   </soap:Body>
+</soap:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:5:GetPersonsForProfile"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>

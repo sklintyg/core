@@ -1,12 +1,7 @@
 package se.inera.intyg.intygproxyservice.integration.api.pu;
 
-import lombok.Value;
 
-@Value
-public class PuResponse {
-
-  Person person;
-  Status status;
+public record PuResponse(Person person, Status status) {
 
   public static PuResponse found(final Person person) {
     return new PuResponse(person, Status.FOUND);

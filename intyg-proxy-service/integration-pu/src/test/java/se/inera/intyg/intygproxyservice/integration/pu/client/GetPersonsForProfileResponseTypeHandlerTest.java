@@ -54,7 +54,7 @@ class GetPersonsForProfileResponseTypeHandlerTest {
           getPersonsForProfileReponseType
       );
 
-      assertEquals(Status.FOUND, actualPuResponse.getStatus());
+      assertEquals(Status.FOUND, actualPuResponse.status());
     }
 
     @Test
@@ -64,7 +64,7 @@ class GetPersonsForProfileResponseTypeHandlerTest {
           getPersonsForProfileReponseType
       );
 
-      assertEquals(PERSON, actualPuResponse.getPerson());
+      assertEquals(PERSON, actualPuResponse.person());
     }
   }
 
@@ -91,7 +91,7 @@ class GetPersonsForProfileResponseTypeHandlerTest {
           getPersonsForProfileReponseType
       );
 
-      assertEquals(Status.ERROR, actualPuResponse.getStatus());
+      assertEquals(Status.ERROR, actualPuResponse.status());
     }
 
     @Test
@@ -100,7 +100,7 @@ class GetPersonsForProfileResponseTypeHandlerTest {
           getPersonsForProfileReponseType
       );
 
-      assertEquals(Status.NOT_FOUND, actualPuResponse.getStatus());
+      assertEquals(Status.NOT_FOUND, actualPuResponse.status());
     }
 
     @Test
@@ -113,7 +113,7 @@ class GetPersonsForProfileResponseTypeHandlerTest {
           getPersonsForProfileReponseType
       );
 
-      assertEquals(Status.NOT_FOUND, actualPuResponse.getStatus());
+      assertEquals(Status.NOT_FOUND, actualPuResponse.status());
     }
   }
 }

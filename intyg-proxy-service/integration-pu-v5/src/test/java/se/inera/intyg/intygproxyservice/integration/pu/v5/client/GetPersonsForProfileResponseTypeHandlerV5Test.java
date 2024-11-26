@@ -59,7 +59,7 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
             getPersonsForProfileResponseType
         );
 
-        assertEquals(Status.FOUND, actualPuResponse.getStatus());
+        assertEquals(Status.FOUND, actualPuResponse.status());
       }
 
       @Test
@@ -69,7 +69,7 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
             getPersonsForProfileResponseType
         );
 
-        assertEquals(PERSON, actualPuResponse.getPerson());
+        assertEquals(PERSON, actualPuResponse.person());
       }
     }
 
@@ -96,7 +96,7 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
             getPersonsForProfileReponseType
         );
 
-        assertEquals(Status.ERROR, actualPuResponse.getStatus());
+        assertEquals(Status.ERROR, actualPuResponse.status());
       }
 
       @Test
@@ -105,7 +105,7 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
             getPersonsForProfileReponseType
         );
 
-        assertEquals(Status.NOT_FOUND, actualPuResponse.getStatus());
+        assertEquals(Status.NOT_FOUND, actualPuResponse.status());
       }
 
       @Test
@@ -118,7 +118,7 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
             getPersonsForProfileReponseType
         );
 
-        assertEquals(Status.NOT_FOUND, actualPuResponse.getStatus());
+        assertEquals(Status.NOT_FOUND, actualPuResponse.status());
       }
     }
   }
@@ -153,8 +153,8 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
         );
 
         assertAll(
-            () -> assertEquals(Status.FOUND, actualPuResponse.getStatus()),
-            () -> assertEquals(PERSON, actualPuResponse.getPerson())
+            () -> assertEquals(Status.FOUND, actualPuResponse.status()),
+            () -> assertEquals(PERSON, actualPuResponse.person())
         );
       }
 
@@ -165,7 +165,7 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
             getPersonsForProfileResponseType
         );
 
-        assertEquals(PERSON, actualPuResponse.getPerson());
+        assertEquals(PERSON, actualPuResponse.person());
       }
     }
 
@@ -225,9 +225,9 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
         );
 
         assertAll(
-            () -> assertEquals(Status.ERROR, actualPuResponse.getPersons().getFirst().getStatus()),
+            () -> assertEquals(Status.ERROR, actualPuResponse.getPersons().getFirst().status()),
             () -> assertEquals(PATIENT_ID_1,
-                actualPuResponse.getPersons().getFirst().getPerson().getPersonnummer())
+                actualPuResponse.getPersons().getFirst().person().getPersonnummer())
         );
       }
 
@@ -240,9 +240,9 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
 
         assertAll(
             () -> assertEquals(Status.NOT_FOUND,
-                actualPuResponse.getPersons().getFirst().getStatus()),
+                actualPuResponse.getPersons().getFirst().status()),
             () -> assertEquals(PATIENT_ID_1,
-                actualPuResponse.getPersons().getFirst().getPerson().getPersonnummer())
+                actualPuResponse.getPersons().getFirst().person().getPersonnummer())
         );
       }
 
@@ -257,11 +257,11 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
         );
 
         assertAll(
-            () -> assertEquals(Status.NOT_FOUND, actualPuResponse.getPersons().get(1).getStatus()),
-            () -> assertEquals(Status.FOUND, actualPuResponse.getPersons().getFirst().getStatus()),
+            () -> assertEquals(Status.NOT_FOUND, actualPuResponse.getPersons().get(1).status()),
+            () -> assertEquals(Status.FOUND, actualPuResponse.getPersons().getFirst().status()),
             () -> assertEquals(
                 PATIENT_ID_2,
-                actualPuResponse.getPersons().get(1).getPerson().getPersonnummer()
+                actualPuResponse.getPersons().get(1).person().getPersonnummer()
             )
         );
       }

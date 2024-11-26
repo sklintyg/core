@@ -73,14 +73,14 @@ class PuClientTest {
     void shallReturnPuResponseWithStatusFound() {
       final var actualPuResponse = puClient.findPerson(puRequest);
 
-      assertEquals(Status.FOUND, actualPuResponse.getStatus());
+      assertEquals(Status.FOUND, actualPuResponse.status());
     }
 
     @Test
     void shallReturnPuResponseWithPerson() {
       final var actualPuResponse = puClient.findPerson(puRequest);
 
-      assertEquals(PERSON, actualPuResponse.getPerson());
+      assertEquals(PERSON, actualPuResponse.person());
     }
   }
 
@@ -225,7 +225,7 @@ class PuClientTest {
 
       final var actualPuResponse = puClient.findPerson(puRequest);
 
-      assertEquals(Status.ERROR, actualPuResponse.getStatus());
+      assertEquals(Status.ERROR, actualPuResponse.status());
     }
   }
 }
