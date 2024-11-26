@@ -1,11 +1,10 @@
-package se.inera.intyg.intygproxyservice.integration.pu.v5.batch;
+package se.inera.intyg.intygproxyservice.integration.pu.v5.common;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.intygproxyservice.integration.pu.v5.common.BatchUtil;
 
 class BatchUtilTest {
 
