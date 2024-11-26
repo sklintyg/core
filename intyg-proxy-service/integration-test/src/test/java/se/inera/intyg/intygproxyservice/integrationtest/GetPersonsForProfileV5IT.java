@@ -16,7 +16,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.github.microcks.testcontainers.MicrocksContainer;
 import java.io.IOException;
 import java.util.List;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -79,11 +78,6 @@ class GetPersonsForProfileV5IT {
     System.setProperty("integration.pu.cache.seconds", "86400");
   }
 
-  @AfterAll
-  static void afterAll() {
-    System.out.println("DONE!");
-  }
-
   @AfterEach
   void tearDown() throws IOException, InterruptedException {
     REDIS_CONTAINER.execInContainer("redis-cli", "flushall");
@@ -134,9 +128,14 @@ class GetPersonsForProfileV5IT {
       final var response = api.person(request);
 
       assertAll(
-          () -> assertEquals(HttpStatus.OK, response.getStatusCode()),
-          () -> assertEquals(DECEASED_TEST_INDICATED_PERSON.isTestIndicator(),
-              response.getBody().getPerson().isTestIndicator())
+          () -> assertEquals(
+              HttpStatus.OK,
+              response.getStatusCode()
+          ),
+          () -> assertEquals(
+              DECEASED_TEST_INDICATED_PERSON.isTestIndicator(),
+              response.getBody().getPerson().isTestIndicator()
+          )
       );
     }
 
@@ -149,7 +148,10 @@ class GetPersonsForProfileV5IT {
       final var response = api.person(request);
 
       assertAll(
-          () -> assertEquals(HttpStatus.OK, response.getStatusCode()),
+          () -> assertEquals(
+              HttpStatus.OK,
+              response.getStatusCode()
+          ),
           () -> assertEquals(
               PROTECTED_PERSON_DTO.isTestIndicator(),
               response.getBody().getPerson().isTestIndicator()
@@ -170,13 +172,26 @@ class GetPersonsForProfileV5IT {
       final var response = api.persons(request);
 
       assertAll(
-          () -> assertEquals(HttpStatus.OK, response.getStatusCode()),
-          () -> assertEquals(LILLTOLVAN, response.getBody().getPersons().getFirst().getPerson()),
-          () -> assertEquals(StatusDTOType.FOUND,
-              response.getBody().getPersons().getFirst().getStatus()),
-          () -> assertEquals(TOLVAN, response.getBody().getPersons().get(1).getPerson()),
-          () -> assertEquals(StatusDTOType.FOUND,
-              response.getBody().getPersons().get(1).getStatus())
+          () -> assertEquals(
+              HttpStatus.OK,
+              response.getStatusCode()
+          ),
+          () -> assertEquals(
+              LILLTOLVAN,
+              response.getBody().getPersons().getFirst().getPerson()
+          ),
+          () -> assertEquals(
+              StatusDTOType.FOUND,
+              response.getBody().getPersons().getFirst().getStatus()
+          ),
+          () -> assertEquals(
+              TOLVAN,
+              response.getBody().getPersons().get(1).getPerson()
+          ),
+          () -> assertEquals(
+              StatusDTOType.FOUND,
+              response.getBody().getPersons().get(1).getStatus()
+          )
       );
     }
 
