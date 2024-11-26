@@ -15,7 +15,7 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 @Configuration
 public class RedisConfig {
 
-  public static final String PERSON_CACHE = "intygProxyService:personCache";
+  public static final String PERSON_CACHE = "intygProxyService::personCache";
   @Value("${integration.pu.cache.seconds}")
   private int puCacheSeconds;
 

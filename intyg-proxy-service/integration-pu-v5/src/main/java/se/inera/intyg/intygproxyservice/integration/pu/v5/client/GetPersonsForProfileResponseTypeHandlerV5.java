@@ -16,6 +16,7 @@ import se.riv.strategicresourcemanagement.persons.person.v5.RequestedPersonRecor
 @RequiredArgsConstructor
 public class GetPersonsForProfileResponseTypeHandlerV5 {
 
+  public static final int EXPECTED_NUMBER_OF_RESULTS = 1;
   private final GetPersonsForProfileResponseTypeConverterV5 getPersonsForProfileResponseTypeConverterV5;
 
   public PuResponse handle(GetPersonsForProfileResponseType getPersonsForProfileResponseType) {
@@ -24,20 +25,26 @@ public class GetPersonsForProfileResponseTypeHandlerV5 {
 
   private PuResponse handle(String id, List<RequestedPersonRecordType> records) {
     if (responseTooMany(records)) {
-      log.error(
-          String.format("Number of persons returned was '%s', when one was expected.",
-              records.size())
-      );
-      return PuResponse.error(id);
+      return error(id, records);
     }
 
     if (responseIsEmpty(records)) {
       return PuResponse.notFound(id);
     }
 
-    final var person = getPersonsForProfileResponseTypeConverterV5.convert(records.getFirst());
+    return PuResponse.found(
+        getPersonsForProfileResponseTypeConverterV5.convert(records.getFirst())
+    );
+  }
 
-    return PuResponse.found(person);
+  private static PuResponse error(String id, List<RequestedPersonRecordType> records) {
+    log.error(
+        String.format(
+            "Number of persons returned was '%s', when %s was expected.",
+            records.size(), EXPECTED_NUMBER_OF_RESULTS
+        )
+    );
+    return PuResponse.error(id);
   }
 
   public PuPersonsResponse handle(List<String> personIds,
@@ -64,17 +71,20 @@ public class GetPersonsForProfileResponseTypeHandlerV5 {
             )
         )
         .toList();
+
     return handle(personId, personRecords);
   }
 
-  private static boolean responseIsEmpty(List<RequestedPersonRecordType> requestedPersonRecord) {
-    if (requestedPersonRecord.isEmpty()) {
+  private static boolean responseIsEmpty(List<RequestedPersonRecordType> requestedPersonRecords) {
+    if (requestedPersonRecords.isEmpty()) {
       return true;
     }
-    return requestedPersonRecord.getFirst().getPersonRecord() == null;
+
+    return requestedPersonRecords.stream()
+        .noneMatch(requestedPersonRecord -> requestedPersonRecord.getPersonRecord() != null);
   }
 
   private static boolean responseTooMany(List<RequestedPersonRecordType> records) {
-    return records.size() > 1;
+    return records.size() > EXPECTED_NUMBER_OF_RESULTS;
   }
 }

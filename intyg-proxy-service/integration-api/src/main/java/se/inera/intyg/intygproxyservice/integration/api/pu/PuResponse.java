@@ -1,5 +1,6 @@
 package se.inera.intyg.intygproxyservice.integration.api.pu;
 
+
 public record PuResponse(Person person, Status status) {
 
   public static PuResponse found(final Person person) {

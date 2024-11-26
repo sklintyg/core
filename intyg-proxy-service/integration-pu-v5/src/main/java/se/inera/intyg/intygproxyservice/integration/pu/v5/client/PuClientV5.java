@@ -42,9 +42,8 @@ public class PuClientV5 {
           .getPersonsForProfile(logicalAddress, parameters);
 
       return getPersonsForProfileResponseTypeHandlerV5.handle(getPersonsForProfileResponseType);
-    } catch (Exception ex) {
-      log.error("Unexpected error occurred when trying to call PU!", ex);
-      return PuResponse.error();
+    } catch (Exception exception) {
+      return error(exception);
     }
   }
 
@@ -59,12 +58,17 @@ public class PuClientV5 {
           puRequest.getPersonIds(),
           getPersonsForProfileResponseType
       );
-    } catch (Exception ex) {
-      log.error("Unexpected error occurred when trying to call PU!", ex);
+
+    } catch (Exception exception) {
       return PuPersonsResponse.builder()
-          .persons(List.of(PuResponse.error()))
+          .persons(List.of(error(exception)))
           .build();
     }
+  }
+
+  private static PuResponse error(Exception ex) {
+    log.error("Unexpected error occurred when trying to call PU", ex);
+    return PuResponse.error();
   }
 
   private static GetPersonsForProfileType getParameters(String personId) {
@@ -90,9 +94,7 @@ public class PuClientV5 {
 
   private static IIType getIIType(String patientId) {
     final var iiType = new IIType();
-    iiType.setRoot(
-        getRoot(patientId)
-    );
+    iiType.setRoot(getRoot(patientId));
     iiType.setExtension(patientId);
     return iiType;
   }
