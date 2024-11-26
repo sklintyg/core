@@ -11,6 +11,8 @@ import static se.inera.intyg.intygproxyservice.integrationtest.TestDataPatient.P
 import static se.inera.intyg.intygproxyservice.integrationtest.TestDataPatient.TOLVAN;
 import static se.inera.intyg.intygproxyservice.integrationtest.util.Containers.REDIS_CONTAINER;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.github.microcks.testcontainers.MicrocksContainer;
 import java.io.IOException;
 import java.util.List;
@@ -30,7 +32,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testcontainers.utility.DockerImageName;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
 import se.inera.intyg.intygproxyservice.integrationtest.util.ApiUtil;
@@ -221,13 +222,16 @@ class GetPersonsForProfileV5IT {
     @Test
     void shallReturnPatientInCacheAndFromPu() throws IOException, InterruptedException {
       final var objectMapper = new ObjectMapper();
+      objectMapper.registerModule(new JavaTimeModule());
       final var cachedPuResponse = PuResponse.found(PROTECTED_PERSON);
+      final var cacheString = objectMapper.writeValueAsString(cachedPuResponse)
+          .replace("\"", "\\\"");
 
       REDIS_CONTAINER.execInContainer(
           "redis-cli",
           "set",
           String.format("%s::%s", PERSON_CACHE, PROTECTED_PERSON_DTO.getPersonnummer()),
-          objectMapper.writeValueAsString(cachedPuResponse)
+          String.format("\"%s\"", cacheString)
       );
 
       final var request = PersonsRequest.builder()
