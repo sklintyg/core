@@ -4,9 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.intygproxyservice.integration.api.constants.PuConstants.PU_PROFILE_V3;
 import static se.inera.intyg.intygproxyservice.integrationtest.TestDataPatient.DECEASED_TEST_INDICATED_PERSON;
+import static se.inera.intyg.intygproxyservice.integrationtest.TestDataPatient.PROTECTED_PERSON;
+import static se.inera.intyg.intygproxyservice.integrationtest.TestDataPatient.PROTECTED_PERSON_DTO;
 
 import io.github.microcks.testcontainers.MicrocksContainer;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,18 +41,13 @@ class GetPersonsForProfileV3IT {
   static void beforeAll() {
     final var microcks = new MicrocksContainer(
         DockerImageName.parse("quay.io/microcks/microcks-uber:1.8.1"))
-        .withMainArtifacts("soapui/GetpersonsForProfile-3.0.xml");
+        .withMainArtifacts("soapui/GetpersonsForProfileResponder-3.1.xml");
 
     microcks.start();
 
     System.setProperty("integration.pu.getpersonsforprofile.endpoint",
-        microcks.getSoapMockEndpoint("GetPersonsForProfile", "3.0")
+        microcks.getSoapMockEndpoint("GetPersonsForProfile", "3.1")
     );
-  }
-
-  @AfterAll
-  static void afterAll() {
-    System.out.println("DONE!");
   }
 
   @BeforeEach
@@ -62,21 +58,6 @@ class GetPersonsForProfileV3IT {
   @Test
   void shallReturnTestPerson() {
     final var request = PersonRequest.builder()
-        .personId("198602052386")
-        .build();
-
-    final var response = api.person(request);
-
-    assertAll(
-        () -> assertEquals(HttpStatus.OK, response.getStatusCode()),
-        () -> assertEquals("198602052386", response.getBody().getPerson().getPersonnummer()),
-        () -> assertEquals(Boolean.FALSE, response.getBody().getPerson().isTestIndicator())
-    );
-  }
-
-  @Test
-  void shallReturnDeceasedTestIndicatedPerson() {
-    final var request = PersonRequest.builder()
         .personId(DECEASED_TEST_INDICATED_PERSON.getPersonnummer())
         .build();
 
@@ -85,6 +66,20 @@ class GetPersonsForProfileV3IT {
     assertAll(
         () -> assertEquals(HttpStatus.OK, response.getStatusCode()),
         () -> assertEquals(DECEASED_TEST_INDICATED_PERSON, response.getBody().getPerson())
+    );
+  }
+
+  @Test
+  void shallReturnDeceasedTestIndicatedPerson() {
+    final var request = PersonRequest.builder()
+        .personId(PROTECTED_PERSON.getPersonnummer())
+        .build();
+
+    final var response = api.person(request);
+
+    assertAll(
+        () -> assertEquals(HttpStatus.OK, response.getStatusCode()),
+        () -> assertEquals(PROTECTED_PERSON_DTO, response.getBody().getPerson())
     );
   }
 }

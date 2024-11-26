@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project id="0b62f37a-7aea-4207-a733-1c7ca3f239f0" activeEnvironment="Default" name="GetPersonsForProfile" resourceRoot="" soapui-version="5.7.2" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="493f68d3-8bd3-46b1-96c0-5db15a36b3ed" wsaVersion="NONE" name="GetPersonsForProfileResponderBinding" type="wsdl" bindingName="{urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfile:4:rivtabp21}GetPersonsForProfileResponderBinding" soapVersion="1_1" anonymous="optional" definition="file:/Users/mwurschmidt/Downloads/ServiceContracts_strategicresourcemanagement_persons_person_4.10/schemas/interactions/GetPersonsForProfileInteraction/GetPersonsForProfileInteraction_4.0_RIVTABP21.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/Users/mwurschmidt/Downloads/ServiceContracts_strategicresourcemanagement_persons_person_4.10/schemas/interactions/GetPersonsForProfileInteraction/GetPersonsForProfileInteraction_4.0_RIVTABP21.wsdl"><con:part><con:url>file:/Users/mwurschmidt/Downloads/ServiceContracts_strategicresourcemanagement_persons_person_4.10/schemas/interactions/GetPersonsForProfileInteraction/GetPersonsForProfileInteraction_4.0_RIVTABP21.wsdl</con:url><con:content><![CDATA[<!--Licensed to the Apache Software Foundation (ASF) under one
+<con:soapui-project id="0ee546ef-8698-4116-b1e6-9523d180a4b0" activeEnvironment="Default" name="GetPersonsForProfile_3.1" resourceRoot="" soapui-version="5.7.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="219e45b7-dd98-44b6-878a-110317a6380a" wsaVersion="NONE" name="GetPersonsForProfileResponderBinding" type="wsdl" bindingName="{urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfile:3:rivtabp21}GetPersonsForProfileResponderBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/Users/mhoernfeldt/Documents/intyg/core/intyg-proxy-service/integration-pu/src/main/resources/schemas/person/3.1/interactions/GetPersonsForProfileInteraction/GetPersonsForProfileInteraction_3.1_RIVTABP21.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:\C:\Users\mhoernfeldt\Documents\intyg\core\intyg-proxy-service\integration-pu\src\main\resources\schemas\person\3.1\interactions\GetPersonsForProfileInteraction\GetPersonsForProfileInteraction_3.1_RIVTABP21.wsdl"><con:part><con:url>file:\C:\Users\mhoernfeldt\Documents\intyg\core\intyg-proxy-service\integration-pu\src\main\resources\schemas\person\3.1\interactions\GetPersonsForProfileInteraction\GetPersonsForProfileInteraction_3.1_RIVTABP21.wsdl</con:url><con:content><![CDATA[<!--Licensed to the Apache Software Foundation (ASF) under one
  or more contributor license agreements. See the NOTICE file
  distributed with this work for additional information
  regarding copyright ownership. Inera AB licenses this file
@@ -15,7 +15,7 @@
  KIND, either express or implied. See the License for the
  specific language governing permissions and limitations
  under the License.-->
-<wsdl:definitions name="GetPersonsForProfileInteraction" targetNamespace="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfile:4:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tjsr="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4" xmlns:itr="urn:riv:itintegration:registry:1" xmlns:tns="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfile:4:rivtabp21">
+<wsdl:definitions name="GetPersonsForProfileInteraction" targetNamespace="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfile:3:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tjsr="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3" xmlns:itr="urn:riv:itintegration:registry:1" xmlns:tns="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfile:3:rivtabp21">
   <wsdl:documentation>Tjänsteinteraktionens namn: GetPersonsForProfile
          Beskrivning: 
            Tjänst för att hämta uppgifter för 1..* personidentiteter.
@@ -26,8 +26,8 @@
          WS-profil: RIVTABP21
          Förvaltas av: Inera AB</wsdl:documentation>
   <wsdl:types>
-    <xs:schema targetNamespace="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfile:4:rivtabp21">
-      <xs:import schemaLocation="GetPersonsForProfileResponder_4.0.xsd" namespace="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4"/>
+    <xs:schema targetNamespace="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfile:3:rivtabp21">
+      <xs:import schemaLocation="GetPersonsForProfileResponder_3.1.xsd" namespace="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3"/>
       <xs:import schemaLocation="../../core_components/itintegration_registry_1.0.xsd" namespace="urn:riv:itintegration:registry:1"/>
     </xs:schema>
   </wsdl:types>
@@ -49,7 +49,7 @@
   <wsdl:binding name="GetPersonsForProfileResponderBinding" type="tns:GetPersonsForProfileResponderInterface">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
     <wsdl:operation name="GetPersonsForProfile">
-      <soap:operation soapAction="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4:GetPersonsForProfile" style="document"/>
+      <soap:operation soapAction="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3:GetPersonsForProfile" style="document"/>
       <wsdl:input>
         <soap:header use="literal" message="tns:GetPersonsForProfileRequest" part="LogicalAddress"/>
         <soap:body use="literal" parts="parameters"/>
@@ -64,7 +64,7 @@
       <soap:address location="http://tempuri.org"/>
     </wsdl:port>
   </wsdl:service>
-</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>file:/Users/mwurschmidt/Downloads/ServiceContracts_strategicresourcemanagement_persons_person_4.10/schemas/interactions/GetPersonsForProfileInteraction/GetPersonsForProfileResponder_4.0.xsd</con:url><con:content><![CDATA[<!--Licensed to the Apache Software Foundation (ASF) under one
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>file:\C:\Users\mhoernfeldt\Documents\intyg\core\intyg-proxy-service\integration-pu\src\main\resources\schemas\person\3.1\interactions\GetPersonsForProfileInteraction\GetPersonsForProfileResponder_3.1.xsd</con:url><con:content><![CDATA[<!--Licensed to the Apache Software Foundation (ASF) under one
  or more contributor license agreements. See the NOTICE file
  distributed with this work for additional information
  regarding copyright ownership. Inera AB licenses this file
@@ -80,8 +80,8 @@
  KIND, either express or implied. See the License for the
  specific language governing permissions and limitations
  under the License.-->
-<xs:schema targetNamespace="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="4.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4" xmlns:strategicresourcemanagementpersonsperson="urn:riv:strategicresourcemanagement:persons:person:4">
-  <xs:import schemaLocation="../../core_components/strategicresourcemanagement_persons_person_4.0.xsd" namespace="urn:riv:strategicresourcemanagement:persons:person:4"/>
+<xs:schema targetNamespace="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.1" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3" xmlns:strategicresourcemanagementpersonsperson="urn:riv:strategicresourcemanagement:persons:person:3">
+  <xs:import schemaLocation="../../core_components/strategicresourcemanagement_persons_person_3.1.xsd" namespace="urn:riv:strategicresourcemanagement:persons:person:3"/>
   <xs:element name="GetPersonsForProfile" type="tns:GetPersonsForProfileType"/>
   <xs:complexType name="GetPersonsForProfileType">
     <xs:annotation>
@@ -106,7 +106,7 @@
       <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
     </xs:sequence>
   </xs:complexType>
-</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:/Users/mwurschmidt/Downloads/ServiceContracts_strategicresourcemanagement_persons_person_4.10/schemas/core_components/strategicresourcemanagement_persons_person_4.0.xsd</con:url><con:content><![CDATA[<!--Licensed to the Apache Software Foundation (ASF) under one
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\C:\Users\mhoernfeldt\Documents\intyg\core\intyg-proxy-service\integration-pu\src\main\resources\schemas\person\3.1\core_components\strategicresourcemanagement_persons_person_3.1.xsd</con:url><con:content><![CDATA[<!--Licensed to the Apache Software Foundation (ASF) under one
  or more contributor license agreements. See the NOTICE file
  distributed with this work for additional information
  regarding copyright ownership. Inera AB licenses this file
@@ -122,10 +122,11 @@
  KIND, either express or implied. See the License for the
  specific language governing permissions and limitations
  under the License.-->
-<xs:schema targetNamespace="urn:riv:strategicresourcemanagement:persons:person:4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="4.0" xmlns:tns="urn:riv:strategicresourcemanagement:persons:person:4" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema targetNamespace="urn:riv:strategicresourcemanagement:persons:person:3" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.1" xmlns:tns="urn:riv:strategicresourcemanagement:persons:person:3" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:m1="urn:riv:strategicresourcemanagement:persons:person:3.1">
   <xs:annotation>
     <xs:documentation></xs:documentation>
   </xs:annotation>
+  <xs:import namespace="urn:riv:strategicresourcemanagement:persons:person:3.1" schemaLocation="strategicresourcemanagement_persons_person_ext_3.1.xsd"/>
   <xs:simpleType name="ResultCodeType">
     <xs:annotation>
       <xs:documentation>Enumerationsvärde som anger de svarskoder som finns.</xs:documentation>
@@ -466,8 +467,7 @@
       <xs:element name="rank" type="xs:int" minOccurs="0"/>
       <xs:element name="comment" type="xs:string" minOccurs="0"/>
       <xs:element name="period" type="tns:DatePeriodType" minOccurs="0"/>
-      <xs:element name="digitalNotification" type="xs:boolean" minOccurs="0"/>
-      <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+      <xs:element ref="m1:digitalNotification" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="ConfirmedIdentityType">
@@ -480,7 +480,6 @@
       <xs:element name="issuersOfId" type="xs:string" minOccurs="0"/>
       <xs:element name="validDatePeriod" type="tns:DatePeriodType" minOccurs="0"/>
       <xs:element name="attachmentId" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="countryCode" type="tns:CountryCode" minOccurs="0"/>
       <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
     </xs:sequence>
   </xs:complexType>
@@ -509,7 +508,6 @@
       <xs:element name="version" type="tns:Timestamp" minOccurs="0"/>
       <xs:element name="name" type="tns:NameType" minOccurs="0"/>
       <xs:element name="linkedIdentity" type="tns:LinkedIdentityType" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="referredPersonalIdentities" type="tns:ReferredPersonalIdentityType" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="birth" type="tns:BirthType" minOccurs="0"/>
       <xs:element name="populationRegistrationLocality" type="tns:PopulationRegistrationLocalityType" minOccurs="0"/>
       <xs:element name="populationRegistrationRecord" type="tns:PopulationRegistrationRecordType" minOccurs="0"/>
@@ -523,14 +521,11 @@
       <xs:element name="immigration" type="tns:ImmigrationType" minOccurs="0"/>
       <xs:element name="citizenship" type="tns:CitizenshipType" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="relationship" type="tns:RelationshipType" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="coOrdinationNumberData" type="tns:CoOrdinationNumberDataType" minOccurs="0"/>
-      <xs:element name="personalIdentityStatus" type="tns:PersonalIdentityStatusType" minOccurs="0"/>
       <xs:element name="updatePersonActor" type="tns:ActorType" minOccurs="0"/>
       <xs:element name="updatePersonContactInformationActor" type="tns:ActorType" minOccurs="0"/>
       <xs:element name="attachment" type="tns:MultimediaType" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="optoutPaperNotification" type="xs:boolean" minOccurs="0"/>
-      <xs:element name="protectedPopulationRecord" type="xs:boolean" minOccurs="0"/>
-      <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+      <xs:element ref="m1:optoutPaperNotification" minOccurs="0"/>
+      <xs:element ref="m1:protectedPopulationRecord" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="LinkedIdentityType">
@@ -541,22 +536,6 @@
       <xs:element name="referredPersonalIdentity" type="tns:IIType"/>
       <xs:element name="assuranceLevel" type="tns:CodedValue"/>
       <xs:element name="primaryIdentity" type="xs:boolean"/>
-      <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ReferredPersonalIdentityType">
-    <xs:annotation>
-      <xs:documentation>Klass för Hänvisningspersonnummer.
-                För de personer som bytt personnummer anges tidigare personnummer/samordningsnummer som hänvisningspersonnummer.
-                Det gamla personnumret/samordningsnumret utgör även det en egen personpost.
-                I det fallet anges det nya personnumret som hänvisningspersonnummer.
-                En person kan få nytt personnummer efter exempelvis ändring av en persons födelsetid eller vid beslut om ändrad könstillhörighet.
-                Klassen håller ihop personidentiteter av typerna personnummer och samordningsnummer enligt Skatteverket till skillnad från klassen KoppladIdenitet
-                som är Personuppgiftstjänstens egna klass för att kunna koppla ihop alla typer av personidentiteter (inkl. reservidentiteter).</xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="referredPersonalIdentity" type="tns:IIType" minOccurs="1"/>
-      <xs:element name="referredPersonalIdentityStatus" type="xs:string" minOccurs="0"/>
       <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
     </xs:sequence>
   </xs:complexType>
@@ -589,31 +568,6 @@
     <xs:sequence>
       <xs:element name="personalIdentity" type="tns:IIType" minOccurs="0"/>
       <xs:element name="dateOfBirth" type="tns:PartialDateType" minOccurs="0"/>
-      <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="CoOrdinationNumberDataType">
-    <xs:annotation>
-      <xs:documentation>Grupp för de personer som ej är folkbokförda men som har tilldelats ett samordningsnummer för identifiering av personen.
-                Syftet med samordningsnummer är att myndigheter och andra samhällsfunktioner ska kunna identifiera personer även om de inte är folkbokförda i Sverige.</xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="allocationDate" type="tns:PartialDateType" minOccurs="0"/>
-      <xs:element name="preliminaryTransferDate" type="tns:PartialDateType" minOccurs="0"/>
-      <xs:element name="renewalDate" type="tns:PartialDateType" minOccurs="0"/>
-      <xs:element name="deceasedDate" type="tns:PartialDateType" minOccurs="0"/>
-      <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="PersonalIdentityStatusType">
-    <xs:annotation>
-      <xs:documentation>Klass som beskriver status för ett samordningsnummer.
-                Status, datum och orsak ska vara obligatoriska uppgifter, när de finns, för aviseringar innehållande samordningsnummer.</xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="identityStatus" type="xs:string" minOccurs="0"/>
-      <xs:element name="identityStatusDate" type="tns:PartialDateType" minOccurs="0"/>
-      <xs:element name="identityStatusCause" type="xs:string" minOccurs="0"/>
       <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
     </xs:sequence>
   </xs:complexType>
@@ -783,7 +737,6 @@
       <xs:element name="specialPostalAddress" type="tns:ResidentialAddressType" minOccurs="0"/>
       <xs:element name="addressAbroad" type="tns:AddressAbroadType" minOccurs="0"/>
       <xs:element name="givenAddress" type="tns:ResidentialAddressType" minOccurs="0"/>
-      <xs:element name="UUID" type="tns:UUIDType" minOccurs="0"/>
       <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
     </xs:sequence>
   </xs:complexType>
@@ -822,8 +775,6 @@
       <xs:element name="propertyDesignation" type="tns:String40" minOccurs="0"/>
       <xs:element name="fictitiousPropertyNumber" type="tns:FictitiousPropertyNumber" minOccurs="0"/>
       <xs:element name="populationRegistrationType" type="tns:CodedValue" minOccurs="0"/>
-      <xs:element name="localRegistrationTime" type="xs:dateTime" minOccurs="0"/>
-      <xs:element name="localRegistrationEndTime" type="xs:dateTime" minOccurs="0"/>
       <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
     </xs:sequence>
   </xs:complexType>
@@ -834,8 +785,7 @@
     <xs:sequence>
       <xs:element name="deregistrationReasonCode" type="tns:CodedValue" minOccurs="0"/>
       <xs:element name="deregistrationDate" type="tns:PartialDateType" minOccurs="0"/>
-      <xs:element name="foundDeadAtDate" type="tns:PartialDateType" minOccurs="0"/>
-      <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+      <xs:element ref="m1:foundDeadAtDate" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="NotificationCaseType">
@@ -919,23 +869,17 @@
       <xs:element name="contactPerson" type="tns:ContactPersonType" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="protectedPersonIndicator" type="xs:boolean"/>
       <xs:element name="updatePersonContactInformationActor" type="tns:ActorType" minOccurs="0"/>
-      <xs:element name="optoutPaperNotification" type="xs:boolean" minOccurs="0"/>
-      <xs:element name="protectedPopulationRecord" type="xs:boolean" minOccurs="0"/>
-      <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+      <xs:element ref="m1:optoutPaperNotification" minOccurs="0"/>
+      <xs:element ref="m1:protectedPopulationRecord" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="UUIDType">
-    <xs:annotation>
-      <xs:documentation>UUID för fastighet, aderess och lägenhet</xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="propertyId" type="xs:string" minOccurs="0"/>
-      <xs:element name="addressPlaceId" type="xs:string" minOccurs="0"/>
-      <xs:element name="apartmentId" type="xs:string" minOccurs="0"/>
-      <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
-    </xs:sequence>
-  </xs:complexType>
-</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:/Users/mwurschmidt/Downloads/ServiceContracts_strategicresourcemanagement_persons_person_4.10/schemas/core_components/itintegration_registry_1.0.xsd</con:url><con:content><![CDATA[<xs:schema targetNamespace="urn:riv:itintegration:registry:1" elementFormDefault="qualified" version="1.0" xmlns="urn:riv:itintegration:registry:1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\C:\Users\mhoernfeldt\Documents\intyg\core\intyg-proxy-service\integration-pu\src\main\resources\schemas\person\3.1\core_components\strategicresourcemanagement_persons_person_ext_3.1.xsd</con:url><con:content><![CDATA[<xs:schema targetNamespace="urn:riv:strategicresourcemanagement:persons:person:3.1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.1" xmlns:core="urn:riv:strategicresourcemanagement:persons:person:3" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="urn:riv:strategicresourcemanagement:persons:person:3" schemaLocation="strategicresourcemanagement_persons_person_3.1.xsd"/>
+  <xs:element name="digitalNotification" type="xs:boolean"/>
+  <xs:element name="optoutPaperNotification" type="xs:boolean"/>
+  <xs:element name="protectedPopulationRecord" type="xs:boolean"/>
+  <xs:element name="foundDeadAtDate" type="core:PartialDateType"/>
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\C:\Users\mhoernfeldt\Documents\intyg\core\intyg-proxy-service\integration-pu\src\main\resources\schemas\person\3.1\core_components\itintegration_registry_1.0.xsd</con:url><con:content><![CDATA[<xs:schema targetNamespace="urn:riv:itintegration:registry:1" elementFormDefault="qualified" version="1.0" xmlns="urn:riv:itintegration:registry:1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:annotation>
     <xs:documentation>Beskrivning: 	Grundläggande informationsobjekt för domänen itintegration:registry (adressering av tjänster)
 			
@@ -966,7 +910,7 @@
   <xs:simpleType name="HsaIdType">
     <xs:restriction base="xs:string"/>
   </xs:simpleType>
-</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints/><con:operation id="a2900c52-e34c-4c7d-b19d-6eccec5bb34e" isOneWay="false" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4:GetPersonsForProfile" name="GetPersonsForProfile" bindingOperationName="GetPersonsForProfile" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="f0cbb9e3-46e7-4535-9e78-9540d527a7ab" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4:GetPersonsForProfile"/></con:call><con:call id="35c0a039-d583-4c6a-8a6a-d31b1f4bb99c" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4:GetPersonsForProfile"/></con:call></con:operation></con:interface><con:testSuite id="83747c86-ab23-47a4-a8e5-9c7c34784fa4" name="GetPersonsForProfile TestSuite"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="7862d683-3a86-402d-93e1-78c6b8eeff0d" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="GetPersonsForProfile TestCase" searchProperties="true"><con:settings/><con:testStep type="request" id="55cb0658-6aa8-4b28-b685-13da69907c1e" name="190503279812 Request"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetPersonsForProfileResponderBinding</con:interface><con:operation>GetPersonsForProfile</con:operation><con:request name="190503279812 Request" id="52536744-301a-4e49-9ffb-1b7a22f374a0"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint xsi:nil="true"/><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4" xmlns:urn2="urn:riv:strategicresourcemanagement:persons:person:4">
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://tempuri.org</con:endpoint></con:endpoints><con:operation id="9334a712-6187-4682-90b0-134b7556805c" isOneWay="false" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3:GetPersonsForProfile" name="GetPersonsForProfile" bindingOperationName="GetPersonsForProfile" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="e5a73b1e-3aca-4078-86b3-c77c4b44573b" name="190503279812 Request"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://tempuri.org</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3" xmlns:urn2="urn:riv:strategicresourcemanagement:persons:person:3">
    <soapenv:Header>
       <urn:LogicalAddress>?</urn:LogicalAddress>
    </soapenv:Header>
@@ -984,7 +928,25 @@
          <!--You may enter ANY elements at this point-->
       </urn1:GetPersonsForProfile>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4:GetPersonsForProfile" mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" id="ad517ef9-f4cb-41c1-bcff-3af866d2dfc9" name="195401782395 Request"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetPersonsForProfileResponderBinding</con:interface><con:operation>GetPersonsForProfile</con:operation><con:request name="195401782395 Request" id="52536744-301a-4e49-9ffb-1b7a22f374a0"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint xsi:nil="true"/><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4" xmlns:urn2="urn:riv:strategicresourcemanagement:persons:person:4">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3:GetPersonsForProfile"/><con:wsrmConfig version="1.2"/></con:call><con:call id="8d5652ee-228a-445d-a056-1a08b6c94ba5" name="195401782395 Request"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://tempuri.org</con:endpoint><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3:GetPersonsForProfile"/></con:call><con:call id="75c92d5a-9bb9-405d-8463-cf9a14b7a7c0" name="195401782395 Request"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://tempuri.org</con:endpoint><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3:GetPersonsForProfile"/></con:call><con:call id="562822f2-e7dd-4893-ab7c-9a2518f7ed43" name="Request 4"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://tempuri.org</con:endpoint><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3:GetPersonsForProfile"/></con:call><con:call id="e7ece2be-27cb-4837-bf35-040397247217" name="Request 5"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://tempuri.org</con:endpoint><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3:GetPersonsForProfile"/></con:call></con:operation></con:interface><con:testSuite id="d74463ad-bdee-4a9f-a986-d2edf29c0df4" name="GetPersonsForProfileResponderBinding TestSuite"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="51fe96cc-d073-4306-b1c8-e9d196bf58eb" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="GetPersonsForProfile TestCase" searchProperties="true"><con:settings/><con:testStep type="request" id="ed40dd6b-048b-49f1-8ebd-018560e5d6ce" name="190503279812 Request"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetPersonsForProfileResponderBinding</con:interface><con:operation>GetPersonsForProfile</con:operation><con:request name="190503279812 Request" id="602046f5-0123-4bec-bfc8-656c46f9c63c"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://tempuri.org</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3" xmlns:urn2="urn:riv:strategicresourcemanagement:persons:person:3">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetPersonsForProfile>
+         <!--1 or more repetitions:-->
+         <urn1:personId>
+            <urn2:root>1.2.752.129.2.1.3.1</urn2:root>
+            <!--Optional:-->
+            <urn2:extension>190503279812</urn2:extension>
+            <!--You may enter ANY elements at this point-->
+         </urn1:personId>
+         <urn1:profile>P2</urn1:profile>
+         <urn1:ignoreReferredIdentity>false</urn1:ignoreReferredIdentity>
+         <!--You may enter ANY elements at this point-->
+      </urn1:GetPersonsForProfile>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3:GetPersonsForProfile" mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" id="c443aeba-6add-48b6-a039-cf933f47bd3b" name="195401782395 Request"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetPersonsForProfileResponderBinding</con:interface><con:operation>GetPersonsForProfile</con:operation><con:request name="195401782395 Request" id="602046f5-0123-4bec-bfc8-656c46f9c63c"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://tempuri.org</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4" xmlns:urn2="urn:riv:strategicresourcemanagement:persons:person:4">
    <soapenv:Header>
       <urn:LogicalAddress>?</urn:LogicalAddress>
    </soapenv:Header>
@@ -1002,13 +964,99 @@
          <!--You may enter ANY elements at this point-->
       </urn1:GetPersonsForProfile>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4:GetPersonsForProfile" mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:mockService id="d5214c45-f417-4254-9fad-a11abe98398a" port="8088" path="/mockGetPersonsForProfileResponderBinding" host="AM-RWG9F9YX2L" name="GetPersonsForProfile"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties><con:property><con:name>version</con:name><con:value>4.0</con:value></con:property></con:properties><con:mockOperation name="GetPersonsForProfile" id="61f27cbb-b6a6-4281-ab62-8c3fd3b25e70" interface="GetPersonsForProfileResponderBinding" operation="GetPersonsForProfile"><con:settings/><con:defaultResponse>195401782395 Response</con:defaultResponse><con:dispatchStyle>SCRIPT</con:dispatchStyle><con:dispatchPath>import com.eviware.soapui.support.XmlHolder
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3:GetPersonsForProfile" mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:mockService id="c7e98ca1-1f37-40ff-9075-24abc22fd6bd" port="8080" path="/" host="AAP-1BLKRQ3" name="GetPersonsForProfile"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties><con:property><con:name>version</con:name><con:value>3.1</con:value></con:property></con:properties><con:mockOperation name="GetPersonsForProfile" id="77b6c92b-7beb-4806-a337-443493ceb121" interface="GetPersonsForProfileResponderBinding" operation="GetPersonsForProfile"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SCRIPT</con:dispatchStyle><con:dispatchPath>import com.eviware.soapui.support.XmlHolder
 def holder = new XmlHolder(mockRequest.requestContent)
 def id = holder["//*[local-name() = 'extension']"]
 
-return id + " Response"</con:dispatchPath><con:response name="190503279812 Response" id="8e67e723-c421-4a34-8d2d-365c13b2a8af" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+return id + " Response"</con:dispatchPath><con:response name="195401782395 Response" id="98042c45-fddb-4667-bbb7-097c2d2ee133" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+	<soap:Body>
+		<ns2:GetPersonsForProfileResponse xmlns:ns3="urn:riv:itintegration:registry:1" xmlns:ns2="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3" xmlns="urn:riv:strategicresourcemanagement:persons:person:3">
+			<ns2:requestedPersonRecord>
+				<requestedPersonalIdentity>
+					<root>1.2.752.129.2.1.3.3</root>
+					<extension>195401782395</extension>
+				</requestedPersonalIdentity>
+				<personRecord>
+					<personalIdentity>
+						<root>1.2.752.129.2.1.3.3</root>
+						<extension>195401782395</extension>
+					</personalIdentity>
+					<gender>1</gender>
+					<protectedPersonIndicator>false</protectedPersonIndicator>
+					<testIndicator>false</testIndicator>
+					<primaryIdentity>true</primaryIdentity>
+					<version>20221205134402</version>
+					<name>
+						<givenName>
+							Jan Petter
+						</givenName>
+						<surname>
+							Myrberg
+						</surname>
+					</name>
+					<linkedIdentity>
+						<referredPersonalIdentity>
+							<root>1.2.752.129.2.1.3.3</root>
+							<extension>195401872394</extension>
+						</referredPersonalIdentity>
+						<assuranceLevel>level4</assuranceLevel>
+						<primaryIdentity>false</primaryIdentity>
+					</linkedIdentity>
+					<referredPersonalIdentities>
+						<referredPersonalIdentity>
+							<root>1.2.752.129.2.1.3.3</root>
+							<extension>195401872394</extension>
+						</referredPersonalIdentity>
+					</referredPersonalIdentities>
+					<birth>
+						<dateOfBirth>
+							<format>YYYY-MM-DD</format>
+							<value>1954-01-18</value>
+						</dateOfBirth>
+						<birthAbroad>
+							<placeOfBirthAbroad>
+								<placeOfBirthAbroad>PARIS</placeOfBirthAbroad>
+								<attested>true</attested>
+							</placeOfBirthAbroad>
+						</birthAbroad>
+					</birth>
+					<populationRegistrationRecord>
+						<syncronizationTime>2022-12-05T13:44:02.000+01:00</syncronizationTime>
+						<notificationCase>
+							<modificationTime>2021-06-23T09:09:37.000+02:00</modificationTime>
+						</notificationCase>
+					</populationRegistrationRecord>
+					<citizenship>
+						<citizenshipCountryCode>
+							<countryCode>FR</countryCode>
+							<attested>false</attested>
+						</citizenshipCountryCode>
+						<citizenshipDate>
+							<format>YYYY-MM-DD</format>
+							<value>2000-01-30</value>
+						</citizenshipDate>
+					</citizenship>
+					<coOrdinationNumberData>
+						<allocationDate>
+							<format>YYYY-MM-DD</format>
+							<value>2000-01-30</value>
+						</allocationDate>
+						<preliminaryTransferDate>
+							<format>YYYY-MM-DD</format>
+							<value>2021-12-31</value>
+						</preliminaryTransferDate>
+					</coOrdinationNumberData>
+					<personalIdentityStatus>
+						<identityStatus>AKTIVT</identityStatus>
+					</personalIdentityStatus/>
+					<protectedPopulationRecord>false</protectedPopulationRecord>
+				</personRecord>
+			</ns2:requestedPersonRecord>
+		</ns2:GetPersonsForProfileResponse>
+	</soap:Body>
+</soap:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3:GetPersonsForProfile"/></con:response><con:response name="190503279812 Response" id="98042c45-fddb-4667-bbb7-097c2d2ee133" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
    <soap:Body>
-      <ns2:GetPersonsForProfileResponse xmlns:ns3="urn:riv:itintegration:registry:1" xmlns:ns2="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4" xmlns="urn:riv:strategicresourcemanagement:persons:person:4">
+      <ns2:GetPersonsForProfileResponse xmlns:ns3="urn:riv:itintegration:registry:1" xmlns:ns2="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3" xmlns="urn:riv:strategicresourcemanagement:persons:person:3">
          <ns2:requestedPersonRecord>
             <requestedPersonalIdentity>
                <root>1.2.752.129.2.1.3.1</root>
@@ -1027,10 +1075,10 @@ return id + " Response"</con:dispatchPath><con:response name="190503279812 Respo
                <name>
                   <givenNameIndicator>10</givenNameIndicator>
                   <givenName>
-                     <name>Karl</name>
+                     Karl
                   </givenName>
                   <surname>
-                     <name>Svensson</name>
+                     Svensson
                   </surname>
                </name>
                <birth>
@@ -1088,99 +1136,9 @@ return id + " Response"</con:dispatchPath><con:response name="190503279812 Respo
                      <value>1980-05-06</value>
                   </immigrationDate>
                </immigration>
-               <optoutPaperNotification>false</optoutPaperNotification>
                <protectedPopulationRecord>false</protectedPopulationRecord>
             </personRecord>
          </ns2:requestedPersonRecord>
       </ns2:GetPersonsForProfileResponse>
    </soap:Body>
-</soap:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4:GetPersonsForProfile"/></con:response><con:response name="195401782395 Response" id="8e67e723-c421-4a34-8d2d-365c13b2a8af" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-	<soap:Body>
-		<ns2:GetPersonsForProfileResponse xmlns:ns3="urn:riv:itintegration:registry:1" xmlns:ns2="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4" xmlns="urn:riv:strategicresourcemanagement:persons:person:4">
-			<ns2:requestedPersonRecord>
-				<requestedPersonalIdentity>
-					<root>1.2.752.129.2.1.3.3</root>
-					<extension>195401782395</extension>
-				</requestedPersonalIdentity>
-				<personRecord>
-					<personalIdentity>
-						<root>1.2.752.129.2.1.3.3</root>
-						<extension>195401782395</extension>
-					</personalIdentity>
-					<gender>1</gender>
-					<protectedPersonIndicator>false</protectedPersonIndicator>
-					<testIndicator>false</testIndicator>
-					<primaryIdentity>true</primaryIdentity>
-					<version>20221205134402</version>
-					<name>
-						<givenName>
-							<name>Jan Petter</name>
-							<attested>true</attested>
-						</givenName>
-						<surname>
-							<name>Myrberg</name>
-							<attested>true</attested>
-						</surname>
-					</name>
-					<linkedIdentity>
-						<referredPersonalIdentity>
-							<root>1.2.752.129.2.1.3.3</root>
-							<extension>195401872394</extension>
-						</referredPersonalIdentity>
-						<assuranceLevel>level4</assuranceLevel>
-						<primaryIdentity>false</primaryIdentity>
-					</linkedIdentity>
-					<referredPersonalIdentities>
-						<referredPersonalIdentity>
-							<root>1.2.752.129.2.1.3.3</root>
-							<extension>195401872394</extension>
-						</referredPersonalIdentity>
-					</referredPersonalIdentities>
-					<birth>
-						<dateOfBirth>
-							<format>YYYY-MM-DD</format>
-							<value>1954-01-18</value>
-						</dateOfBirth>
-						<birthAbroad>
-							<placeOfBirthAbroad>
-								<placeOfBirthAbroad>PARIS</placeOfBirthAbroad>
-								<attested>true</attested>
-							</placeOfBirthAbroad>
-						</birthAbroad>
-					</birth>
-					<populationRegistrationRecord>
-						<syncronizationTime>2022-12-05T13:44:02.000+01:00</syncronizationTime>
-						<notificationCase>
-							<modificationTime>2021-06-23T09:09:37.000+02:00</modificationTime>
-						</notificationCase>
-					</populationRegistrationRecord>
-					<citizenship>
-						<citizenshipCountryCode>
-							<countryCode>FR</countryCode>
-							<attested>false</attested>
-						</citizenshipCountryCode>
-						<citizenshipDate>
-							<format>YYYY-MM-DD</format>
-							<value>2000-01-30</value>
-						</citizenshipDate>
-					</citizenship>
-					<coOrdinationNumberData>
-						<allocationDate>
-							<format>YYYY-MM-DD</format>
-							<value>2000-01-30</value>
-						</allocationDate>
-						<preliminaryTransferDate>
-							<format>YYYY-MM-DD</format>
-							<value>2021-12-31</value>
-						</preliminaryTransferDate>
-					</coOrdinationNumberData>
-					<personalIdentityStatus>
-						<identityStatus>AKTIVT</identityStatus>
-					</personalIdentityStatus>
-					<optoutPaperNotification>false</optoutPaperNotification>
-					<protectedPopulationRecord>false</protectedPopulationRecord>
-				</personRecord>
-			</ns2:requestedPersonRecord>
-		</ns2:GetPersonsForProfileResponse>
-	</soap:Body>
-</soap:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:4:GetPersonsForProfile"/></con:response><con:dispatchConfig xsi:type="con:MockOperationQueryMatchDispatch" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
+</soap:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:strategicresourcemanagement:persons:person:GetPersonsForProfileResponder:3:GetPersonsForProfile"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>
