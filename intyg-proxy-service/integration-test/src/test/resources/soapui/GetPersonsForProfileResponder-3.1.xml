@@ -982,74 +982,18 @@ return id + " Response"</con:dispatchPath><con:response name="195401782395 Respo
 						<extension>195401782395</extension>
 					</personalIdentity>
 					<gender>1</gender>
-					<protectedPersonIndicator>false</protectedPersonIndicator>
+					<protectedPersonIndicator>true</protectedPersonIndicator>
 					<testIndicator>false</testIndicator>
 					<primaryIdentity>true</primaryIdentity>
 					<version>20221205134402</version>
 					<name>
 						<givenName>
-							Jan Petter
+							<name>Jan Petter</name>
 						</givenName>
 						<surname>
-							Myrberg
+							<name>Myrberg</name>
 						</surname>
 					</name>
-					<linkedIdentity>
-						<referredPersonalIdentity>
-							<root>1.2.752.129.2.1.3.3</root>
-							<extension>195401872394</extension>
-						</referredPersonalIdentity>
-						<assuranceLevel>level4</assuranceLevel>
-						<primaryIdentity>false</primaryIdentity>
-					</linkedIdentity>
-					<referredPersonalIdentities>
-						<referredPersonalIdentity>
-							<root>1.2.752.129.2.1.3.3</root>
-							<extension>195401872394</extension>
-						</referredPersonalIdentity>
-					</referredPersonalIdentities>
-					<birth>
-						<dateOfBirth>
-							<format>YYYY-MM-DD</format>
-							<value>1954-01-18</value>
-						</dateOfBirth>
-						<birthAbroad>
-							<placeOfBirthAbroad>
-								<placeOfBirthAbroad>PARIS</placeOfBirthAbroad>
-								<attested>true</attested>
-							</placeOfBirthAbroad>
-						</birthAbroad>
-					</birth>
-					<populationRegistrationRecord>
-						<syncronizationTime>2022-12-05T13:44:02.000+01:00</syncronizationTime>
-						<notificationCase>
-							<modificationTime>2021-06-23T09:09:37.000+02:00</modificationTime>
-						</notificationCase>
-					</populationRegistrationRecord>
-					<citizenship>
-						<citizenshipCountryCode>
-							<countryCode>FR</countryCode>
-							<attested>false</attested>
-						</citizenshipCountryCode>
-						<citizenshipDate>
-							<format>YYYY-MM-DD</format>
-							<value>2000-01-30</value>
-						</citizenshipDate>
-					</citizenship>
-					<coOrdinationNumberData>
-						<allocationDate>
-							<format>YYYY-MM-DD</format>
-							<value>2000-01-30</value>
-						</allocationDate>
-						<preliminaryTransferDate>
-							<format>YYYY-MM-DD</format>
-							<value>2021-12-31</value>
-						</preliminaryTransferDate>
-					</coOrdinationNumberData>
-					<personalIdentityStatus>
-						<identityStatus>AKTIVT</identityStatus>
-					</personalIdentityStatus/>
-					<protectedPopulationRecord>false</protectedPopulationRecord>
 				</personRecord>
 			</ns2:requestedPersonRecord>
 		</ns2:GetPersonsForProfileResponse>
@@ -1075,29 +1019,12 @@ return id + " Response"</con:dispatchPath><con:response name="195401782395 Respo
                <name>
                   <givenNameIndicator>10</givenNameIndicator>
                   <givenName>
-                     Karl
+                     <name>Karl</name>
                   </givenName>
                   <surname>
-                     Svensson
+                     <name>Svensson</name>
                   </surname>
                </name>
-               <birth>
-                  <birthAbroad>
-                     <placeOfBirthAbroad>
-                        <placeOfBirthAbroad>KEMER</placeOfBirthAbroad>
-                     </placeOfBirthAbroad>
-                     <countryOfBirth>TURKIET</countryOfBirth>
-                  </birthAbroad>
-               </birth>
-               <populationRegistrationLocality>
-                  <populationRegistrationDate>
-                     <format>YYYY-MM-DD</format>
-                     <value>2013-02-25</value>
-                  </populationRegistrationDate>
-                  <parishCode>1</parishCode>
-                  <propertyDesignation>DYRIS 4</propertyDesignation>
-                  <fictitiousPropertyNumber>0</fictitiousPropertyNumber>
-               </populationRegistrationLocality>
                <populationRegistrationRecord>
                   <syncronizationTime>2020-09-16T08:34:33.000+02:00</syncronizationTime>
                </populationRegistrationRecord>
@@ -1123,20 +1050,6 @@ return id + " Response"</con:dispatchPath><con:response name="195401782395 Respo
                      <value>2016-01-01</value>
                   </deregistrationDate>
                </deregistration>
-               <maritalStatus>
-                  <maritalStatusCode>G</maritalStatusCode>
-                  <maritalStatusDate>
-                     <format>YYYY-MM-DD</format>
-                     <value>2010-02-15</value>
-                  </maritalStatusDate>
-               </maritalStatus>
-               <immigration>
-                  <immigrationDate>
-                     <format>YYYY-MM-DD</format>
-                     <value>1980-05-06</value>
-                  </immigrationDate>
-               </immigration>
-               <protectedPopulationRecord>false</protectedPopulationRecord>
             </personRecord>
          </ns2:requestedPersonRecord>
       </ns2:GetPersonsForProfileResponse>
