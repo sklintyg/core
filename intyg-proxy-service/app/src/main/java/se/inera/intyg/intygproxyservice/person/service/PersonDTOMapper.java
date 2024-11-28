@@ -12,7 +12,7 @@ public class PersonDTOMapper {
   @Value("${putjanst.testindicated.reclassify.active.except.ssn:}")
   private List<String> testIndicatedPersonIds;
 
-  PersonDTO toDTO(Person person) {
+  public PersonDTO toDTO(Person person) {
     if (person == null) {
       return null;
     }

@@ -158,6 +158,44 @@ class GetPersonsForProfileV5IT {
           )
       );
     }
+
+    @Test
+    void shallReturnPatientFromCache() throws IOException, InterruptedException {
+      final var objectMapper = new ObjectMapper();
+      objectMapper.registerModule(new JavaTimeModule());
+      final var cachedPuResponse = PuResponse.found(PROTECTED_PERSON);
+      final var cacheString = objectMapper.writeValueAsString(cachedPuResponse)
+          .replace("\"", "\\\"");
+
+      REDIS_CONTAINER.execInContainer(
+          "redis-cli",
+          "set",
+          String.format("%s::%s", PERSON_CACHE,
+              HashUtility.hash(PROTECTED_PERSON_DTO.getPersonnummer())),
+          String.format("\"%s\"", cacheString)
+      );
+
+      final var request = PersonRequest.builder()
+          .personId(PROTECTED_PERSON_DTO.getPersonnummer())
+          .build();
+
+      final var response = api.person(request);
+
+      assertAll(
+          () -> assertEquals(
+              HttpStatus.OK,
+              response.getStatusCode()
+          ),
+          () -> assertEquals(
+              PROTECTED_PERSON_DTO,
+              response.getBody().getPerson()
+          ),
+          () -> assertEquals(
+              StatusDTOType.FOUND,
+              response.getBody().getStatus()
+          )
+      );
+    }
   }
 
   @Nested

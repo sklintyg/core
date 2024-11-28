@@ -5,7 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -13,6 +18,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import se.inera.intyg.intygproxyservice.common.HashUtility;
+import se.inera.intyg.intygproxyservice.config.RedisConfig;
 import se.inera.intyg.intygproxyservice.integration.api.pu.Person;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
@@ -26,19 +35,64 @@ import se.inera.intyg.intygproxyservice.person.service.PersonService;
 @ExtendWith(MockitoExtension.class)
 class PersonServiceTest {
 
+  private static final String PERSON_ID = "191212121212";
   private static final PersonRequest PU_REQUEST = PersonRequest.builder()
-      .personId("191212121212")
+      .personId(PERSON_ID)
+      .build();
+  private static final PuResponse PERSON_RESPONSE = PuResponse.found(
+      Person.builder()
+          .personnummer(PERSON_ID)
+          .build()
+  );
+  private static final PersonDTO PERSON_DTO = PersonDTO.builder()
+      .personnummer(PERSON_ID)
       .build();
 
   @Mock
   private PuService puService;
+  @Mock
+  private ObjectMapper objectMapper;
+  @Mock
+  private CacheManager cacheManager;
+  @Mock
+  private Cache cache;
+  @Mock
+  private PersonDTOMapper personDTOMapper;
 
   @InjectMocks
   private PersonService personService;
 
-  @BeforeEach
-  void setUp() {
-    personService = new PersonService(puService, new PersonDTOMapper());
+  @Nested
+  class PersonInCache {
+
+    @BeforeEach
+    void setup() {
+      when(personDTOMapper.toDTO(PERSON_RESPONSE.person()))
+          .thenReturn(PERSON_DTO);
+      when(cache.get(HashUtility.hash(PERSON_ID), String.class))
+          .thenReturn(PERSON_RESPONSE.toString());
+      when(cacheManager.getCache(RedisConfig.PERSON_CACHE))
+          .thenReturn(cache);
+
+      try {
+        when(objectMapper.readValue(PERSON_RESPONSE.toString(), PuResponse.class))
+            .thenReturn(PERSON_RESPONSE);
+      } catch (JsonProcessingException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+    @Test
+    void shouldNotMakeCallToPuServiceIfAllIdsAreInCache() {
+      final var response = personService.findPerson(
+          PersonRequest.builder()
+              .personId(PERSON_ID)
+              .build()
+      );
+
+      verify(puService, times(0)).findPersons(any());
+      assertEquals(PERSON_DTO, response.getPerson());
+    }
   }
 
   @Nested
@@ -78,13 +132,13 @@ class PersonServiceTest {
 
     @BeforeEach
     void setUp() {
-      PuResponse puResponseFound = PuResponse.found(
-          Person.builder().build()
-      );
-
-      doReturn(puResponseFound)
+      when(personDTOMapper.toDTO(PERSON_RESPONSE.person()))
+          .thenReturn(PERSON_DTO);
+      doReturn(PERSON_RESPONSE)
           .when(puService)
           .findPerson(any(PuRequest.class));
+      when(cacheManager.getCache(RedisConfig.PERSON_CACHE))
+          .thenReturn(cache);
     }
 
     @Test
@@ -95,9 +149,8 @@ class PersonServiceTest {
 
     @Test
     void shallReturnPersonFound() {
-      final var expectedPerson = PersonDTO.builder().build();
       final var personResponse = personService.findPerson(PU_REQUEST);
-      assertEquals(expectedPerson, personResponse.getPerson());
+      assertEquals(PERSON_DTO, personResponse.getPerson());
     }
   }
 
@@ -107,6 +160,9 @@ class PersonServiceTest {
     @BeforeEach
     void setUp() {
       final var puReponseNotFound = PuResponse.notFound();
+
+      when(cacheManager.getCache(RedisConfig.PERSON_CACHE))
+          .thenReturn(cache);
 
       doReturn(puReponseNotFound)
           .when(puService)
@@ -132,6 +188,9 @@ class PersonServiceTest {
     @BeforeEach
     void setUp() {
       final var puResponseError = PuResponse.error();
+
+      when(cacheManager.getCache(RedisConfig.PERSON_CACHE))
+          .thenReturn(cache);
 
       doReturn(puResponseError)
           .when(puService)

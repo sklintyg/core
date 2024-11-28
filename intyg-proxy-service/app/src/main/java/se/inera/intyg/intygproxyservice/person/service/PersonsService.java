@@ -17,6 +17,7 @@ import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuService;
+import se.inera.intyg.intygproxyservice.integration.api.pu.Status;
 import se.inera.intyg.intygproxyservice.person.dto.PersonsRequest;
 import se.inera.intyg.intygproxyservice.person.dto.PersonsResponse;
 
@@ -35,7 +36,10 @@ public class PersonsService {
 
     final var personsFromCache = getPersonsFromCache(request);
     final var personsFromPu = getPersonsFromPu(request, personsFromCache);
-    personsFromPu.getPersons().forEach(this::savePersonInCache);
+    personsFromPu.getPersons()
+        .stream()
+        .filter(person -> person.status().equals(Status.FOUND))
+        .forEach(this::savePersonInCache);
 
     return convert(
         PuPersonsResponse.builder()
