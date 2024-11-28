@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation project(':integration-api')
+    implementation project(':logging')
     implementation project(':integration-common')
     implementation "org.springframework:spring-context"
     implementation "org.springframework.boot:spring-boot-starter-web-services"

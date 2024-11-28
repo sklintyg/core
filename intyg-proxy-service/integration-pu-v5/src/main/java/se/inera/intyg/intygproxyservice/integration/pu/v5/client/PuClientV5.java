@@ -5,6 +5,7 @@ import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.c
 import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.CODE_PERSONAL_ID;
 import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.COORDINATION_NUMBER_MONTH_INDEX;
 import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.COORDINATION_NUMBER_MONTH_VALUE_MIN;
+import static se.inera.intyg.intygproxyservice.logging.MdcLogConstants.EVENT_TYPE_ACCESSED;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
+import se.inera.intyg.intygproxyservice.logging.PerformanceLogging;
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofile.v5.rivtabp21.GetPersonsForProfileResponderInterface;
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofileresponder.v5.GetPersonsForProfileType;
 import se.riv.strategicresourcemanagement.persons.person.v5.IIType;
@@ -34,6 +36,7 @@ public class PuClientV5 {
   @Value("${integration.pu.logical.address}")
   private String logicalAddress;
 
+  @PerformanceLogging(eventAction = "find-person", eventType = EVENT_TYPE_ACCESSED)
   public PuResponse findPerson(PuRequest puRequest) {
     final var parameters = getParameters(puRequest.getPersonId());
 
@@ -47,6 +50,7 @@ public class PuClientV5 {
     }
   }
 
+  @PerformanceLogging(eventAction = "find-persons", eventType = EVENT_TYPE_ACCESSED)
   public PuPersonsResponse findPersons(PuPersonsRequest puRequest) {
     final var parameters = getParameters(puRequest.getPersonIds());
 
