@@ -3,9 +3,11 @@ package se.inera.intyg.intygproxyservice.person.service;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static se.inera.intyg.intygproxyservice.person.dto.StatusDTOType.FOUND;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +30,7 @@ import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuService;
 import se.inera.intyg.intygproxyservice.person.dto.PersonDTO;
 import se.inera.intyg.intygproxyservice.person.dto.PersonsRequest;
+import se.inera.intyg.intygproxyservice.person.dto.StatusDTOType;
 
 @ExtendWith(MockitoExtension.class)
 class PersonsServiceTest {
@@ -46,6 +49,9 @@ class PersonsServiceTest {
       Person.builder()
           .personnummer(PERSON_ID_2)
           .build()
+  );
+  private static final PuResponse NOT_FOUND = PuResponse.notFound(
+      PERSON_ID_1
   );
 
   @Mock
@@ -66,8 +72,6 @@ class PersonsServiceTest {
   void setup() {
     when(cacheManager.getCache(RedisConfig.PERSON_CACHE))
         .thenReturn(cache);
-    when(personDTOMapper.toDTO(PERSON_RESPONSE_1.person()))
-        .thenReturn(PERSON_DTO_1);
   }
 
   @Nested
@@ -75,6 +79,8 @@ class PersonsServiceTest {
 
     @BeforeEach
     void setup() {
+      when(personDTOMapper.toDTO(PERSON_RESPONSE_1.person()))
+          .thenReturn(PERSON_DTO_1);
       when(cache.get(HashUtility.hash(PERSON_ID_1), String.class))
           .thenReturn(PERSON_RESPONSE_1.toString());
       try {
@@ -130,6 +136,8 @@ class PersonsServiceTest {
 
   @Test
   void shouldMakeCallToPuServiceIfNoIdsAreInCache() {
+    when(personDTOMapper.toDTO(PERSON_RESPONSE_1.person()))
+        .thenReturn(PERSON_DTO_1);
     when(puService.findPersons(any()))
         .thenReturn(
             PuPersonsResponse.builder()
@@ -153,7 +161,55 @@ class PersonsServiceTest {
 
     assertAll(
         () -> assertEquals(PERSON_DTO_1, response.getPersons().getFirst().getPerson()),
-        () -> assertEquals(PERSON_DTO_2, response.getPersons().get(1).getPerson())
+        () -> assertEquals(FOUND, response.getPersons().getFirst().getStatus()),
+        () -> assertEquals(PERSON_DTO_2, response.getPersons().get(1).getPerson()),
+        () -> assertEquals(FOUND, response.getPersons().get(1).getStatus())
+    );
+  }
+
+  @Test
+  void shouldSaveFoundPatientInCache() throws JsonProcessingException {
+    when(personDTOMapper.toDTO(PERSON_RESPONSE_1.person()))
+        .thenReturn(PERSON_DTO_1);
+    when(objectMapper.writeValueAsString(PERSON_RESPONSE_1))
+        .thenReturn(PERSON_RESPONSE_1.toString());
+    when(puService.findPersons(any()))
+        .thenReturn(
+            PuPersonsResponse.builder()
+                .persons(List.of(PERSON_RESPONSE_1))
+                .build()
+        );
+
+    personsService.findPersons(
+        PersonsRequest.builder()
+            .personIds(List.of(PERSON_ID_1))
+            .build()
+    );
+
+    verify(cache, times(1)).put(HashUtility.hash(PERSON_ID_1), PERSON_RESPONSE_1.toString());
+  }
+
+  @Test
+  void shouldNotSaveNotFoundPatientInCache() {
+    when(puService.findPersons(any()))
+        .thenReturn(
+            PuPersonsResponse.builder()
+                .persons(List.of(NOT_FOUND))
+                .build()
+        );
+
+    final var response = personsService.findPersons(
+        PersonsRequest.builder()
+            .personIds(List.of(PERSON_ID_1))
+            .build()
+    );
+
+    verify(cache, times(0)).put(anyString(), anyString());
+
+    assertAll(
+        () -> assertEquals(PersonDTO.builder().personnummer(PERSON_ID_1).build(),
+            response.getPersons().getFirst().getPerson()),
+        () -> assertEquals(StatusDTOType.NOT_FOUND, response.getPersons().getFirst().getStatus())
     );
   }
 }

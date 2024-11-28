@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.intygproxyservice.config.RedisConfig.PERSON_CACHE;
 import static se.inera.intyg.intygproxyservice.integration.api.constants.PuConstants.PU_PROFILE_V5;
+import static se.inera.intyg.intygproxyservice.integrationtest.TestDataPatient.ATHENA_REACT_ANDERSSON;
+import static se.inera.intyg.intygproxyservice.integrationtest.TestDataPatient.ATHENA_REACT_ANDERSSON_DTO;
 import static se.inera.intyg.intygproxyservice.integrationtest.TestDataPatient.DECEASED_TEST_INDICATED_PERSON;
 import static se.inera.intyg.intygproxyservice.integrationtest.TestDataPatient.LILLTOLVAN;
 import static se.inera.intyg.intygproxyservice.integrationtest.TestDataPatient.PROTECTED_PERSON;
@@ -163,7 +165,7 @@ class GetPersonsForProfileV5IT {
     void shallReturnPatientFromCache() throws IOException, InterruptedException {
       final var objectMapper = new ObjectMapper();
       objectMapper.registerModule(new JavaTimeModule());
-      final var cachedPuResponse = PuResponse.found(PROTECTED_PERSON);
+      final var cachedPuResponse = PuResponse.found(ATHENA_REACT_ANDERSSON);
       final var cacheString = objectMapper.writeValueAsString(cachedPuResponse)
           .replace("\"", "\\\"");
 
@@ -171,12 +173,12 @@ class GetPersonsForProfileV5IT {
           "redis-cli",
           "set",
           String.format("%s::%s", PERSON_CACHE,
-              HashUtility.hash(PROTECTED_PERSON_DTO.getPersonnummer())),
+              HashUtility.hash(ATHENA_REACT_ANDERSSON.getPersonnummer())),
           String.format("\"%s\"", cacheString)
       );
 
       final var request = PersonRequest.builder()
-          .personId(PROTECTED_PERSON_DTO.getPersonnummer())
+          .personId(ATHENA_REACT_ANDERSSON.getPersonnummer())
           .build();
 
       final var response = api.person(request);
@@ -187,7 +189,7 @@ class GetPersonsForProfileV5IT {
               response.getStatusCode()
           ),
           () -> assertEquals(
-              PROTECTED_PERSON_DTO,
+              ATHENA_REACT_ANDERSSON_DTO,
               response.getBody().getPerson()
           ),
           () -> assertEquals(

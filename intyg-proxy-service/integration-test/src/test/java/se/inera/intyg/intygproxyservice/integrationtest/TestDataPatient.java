@@ -57,4 +57,24 @@ public class TestDataPatient {
       .testIndicator(false)
       .sekretessmarkering(false)
       .build();
+
+  public final static Person ATHENA_REACT_ANDERSSON = Person.builder()
+      .personnummer("194011306125")
+      .fornamn("Athena")
+      .mellannamn("React")
+      .efternamn("Andersson")
+      .avliden(false)
+      .testIndicator(false)
+      .sekretessmarkering(false)
+      .build();
+
+  public final static PersonDTO ATHENA_REACT_ANDERSSON_DTO = PersonDTO.builder()
+      .personnummer("194011306125")
+      .fornamn("Athena")
+      .mellannamn("React")
+      .efternamn("Andersson")
+      .avliden(false)
+      .testIndicator(false)
+      .sekretessmarkering(false)
+      .build();
 }
