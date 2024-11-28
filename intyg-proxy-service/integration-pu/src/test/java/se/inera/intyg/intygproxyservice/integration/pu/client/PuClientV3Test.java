@@ -30,7 +30,7 @@ import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofileres
 import se.riv.strategicresourcemanagement.persons.person.v3.LookupProfileType;
 
 @ExtendWith(MockitoExtension.class)
-class PuClientTest {
+class PuClientV3Test {
 
   private static final String LOGICAL_ADDRESS = "PU-LogicalAddress";
   @Mock
@@ -40,11 +40,11 @@ class PuClientTest {
   private GetPersonsForProfileResponseTypeHandler getPersonsForProfileResponseTypeHandler;
 
   @InjectMocks
-  private PuClient puClient;
+  private PuClientV3 puClientV3;
 
   @BeforeEach
   void setUp() {
-    ReflectionTestUtils.setField(puClient, "logicalAddress", LOGICAL_ADDRESS);
+    ReflectionTestUtils.setField(puClientV3, "logicalAddress", LOGICAL_ADDRESS);
   }
 
   @Nested
@@ -71,14 +71,14 @@ class PuClientTest {
 
     @Test
     void shallReturnPuResponseWithStatusFound() {
-      final var actualPuResponse = puClient.findPerson(puRequest);
+      final var actualPuResponse = puClientV3.findPerson(puRequest);
 
       assertEquals(Status.FOUND, actualPuResponse.status());
     }
 
     @Test
     void shallReturnPuResponseWithPerson() {
-      final var actualPuResponse = puClient.findPerson(puRequest);
+      final var actualPuResponse = puClientV3.findPerson(puRequest);
 
       assertEquals(PERSON, actualPuResponse.person());
     }
@@ -91,7 +91,7 @@ class PuClientTest {
     void shallCallPuWithLogicalAddressProvidedByConfig() {
       final var logicalAddressArgumentCaptor = ArgumentCaptor.forClass(String.class);
 
-      puClient.findPerson(
+      puClientV3.findPerson(
           PuRequest.builder()
               .personId(PERSON_ID_AS_PERSONNUMMER)
               .build()
@@ -110,7 +110,7 @@ class PuClientTest {
       final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
           GetPersonsForProfileType.class);
 
-      puClient.findPerson(
+      puClientV3.findPerson(
           PuRequest.builder()
               .personId(PERSON_ID_AS_PERSONNUMMER)
               .build()
@@ -130,7 +130,7 @@ class PuClientTest {
       final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
           GetPersonsForProfileType.class);
 
-      puClient.findPerson(
+      puClientV3.findPerson(
           PuRequest.builder()
               .personId(PERSON_ID_AS_PERSONNUMMER)
               .build()
@@ -150,7 +150,7 @@ class PuClientTest {
       final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
           GetPersonsForProfileType.class);
 
-      puClient.findPerson(
+      puClientV3.findPerson(
           PuRequest.builder()
               .personId(PERSON_ID_AS_PERSONNUMMER)
               .build()
@@ -170,7 +170,7 @@ class PuClientTest {
       final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
           GetPersonsForProfileType.class);
 
-      puClient.findPerson(
+      puClientV3.findPerson(
           PuRequest.builder()
               .personId(PERSON_ID_AS_SAMORDNINGSNUMMER)
               .build()
@@ -190,7 +190,7 @@ class PuClientTest {
       final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
           GetPersonsForProfileType.class);
 
-      puClient.findPerson(
+      puClientV3.findPerson(
           PuRequest.builder()
               .personId(PERSON_ID_AS_SAMORDNINGSNUMMER)
               .build()
@@ -223,7 +223,7 @@ class PuClientTest {
           .when(getPersonsForProfileResponderInterface)
           .getPersonsForProfile(anyString(), any(GetPersonsForProfileType.class));
 
-      final var actualPuResponse = puClient.findPerson(puRequest);
+      final var actualPuResponse = puClientV3.findPerson(puRequest);
 
       assertEquals(Status.ERROR, actualPuResponse.status());
     }

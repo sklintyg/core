@@ -11,19 +11,19 @@ import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuService;
-import se.inera.intyg.intygproxyservice.integration.pu.client.PuClient;
+import se.inera.intyg.intygproxyservice.integration.pu.client.PuClientV3;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 @Profile(PU_PROFILE_V3)
-public class PuIntegrationService implements PuService {
+public class PuIntegrationServiceV3 implements PuService {
 
-  private final PuClient puClient;
+  private final PuClientV3 puClientV3;
 
   @Override
   public PuResponse findPerson(PuRequest puRequest) {
-    return puClient.findPerson(puRequest);
+    return puClientV3.findPerson(puRequest);
   }
 
   @Override

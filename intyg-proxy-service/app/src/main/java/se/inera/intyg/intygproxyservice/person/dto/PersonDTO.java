@@ -2,7 +2,6 @@ package se.inera.intyg.intygproxyservice.person.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import java.io.Serializable;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.intygproxyservice.person.dto.PersonDTO.PersonDTOBuilder;
@@ -10,7 +9,7 @@ import se.inera.intyg.intygproxyservice.person.dto.PersonDTO.PersonDTOBuilder;
 @JsonDeserialize(builder = PersonDTOBuilder.class)
 @Value
 @Builder
-public class PersonDTO implements Serializable {
+public class PersonDTO {
 
   String personnummer;
   boolean sekretessmarkering;

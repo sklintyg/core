@@ -24,7 +24,7 @@ import se.riv.strategicresourcemanagement.persons.person.v3.LookupProfileType;
 @Slf4j
 @RequiredArgsConstructor
 @Profile(PU_PROFILE_V3)
-public class PuClient {
+public class PuClientV3 {
 
   private final GetPersonsForProfileResponderInterface getPersonsForProfileResponderInterface;
 

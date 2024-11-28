@@ -15,7 +15,7 @@ import se.inera.intyg.intygproxyservice.integration.common.WebServiceClientFacto
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofile.v3.rivtabp21.GetPersonsForProfileResponderInterface;
 
 @ExtendWith(MockitoExtension.class)
-class PuClientConfigurationTest {
+class PuClientV3ConfigurationTest {
 
   public static final String GET_PERSONS_FOR_PROFILE_ENDPOINT = "endpoint";
   @Mock
