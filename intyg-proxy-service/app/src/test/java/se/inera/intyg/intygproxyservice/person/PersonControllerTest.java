@@ -9,6 +9,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.intygproxyservice.person.dto.PersonRequest;
+import se.inera.intyg.intygproxyservice.person.dto.PersonResponse;
+import se.inera.intyg.intygproxyservice.person.service.PersonService;
 
 @ExtendWith(MockitoExtension.class)
 class PersonControllerTest {

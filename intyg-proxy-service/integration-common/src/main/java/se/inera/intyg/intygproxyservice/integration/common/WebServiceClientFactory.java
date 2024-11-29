@@ -36,7 +36,7 @@ public class WebServiceClientFactory {
   public <T> T create(Class<T> webserviceType, String endpoint) {
     final var jaxWsProxyFactoryBean = new JaxWsProxyFactoryBean();
     jaxWsProxyFactoryBean.setAddress(endpoint);
-
+    
     final var webserviceInstance = jaxWsProxyFactoryBean.create(webserviceType);
 
     final var client = ClientProxy.getClient(webserviceInstance);

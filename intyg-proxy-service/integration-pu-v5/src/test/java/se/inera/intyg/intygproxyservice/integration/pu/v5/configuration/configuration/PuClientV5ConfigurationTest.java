@@ -1,4 +1,4 @@
-package se.inera.intyg.intygproxyservice.integration.pu.configuration;
+package se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
@@ -12,22 +12,22 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.intygproxyservice.integration.common.WebServiceClientFactory;
-import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofile.v3.rivtabp21.GetPersonsForProfileResponderInterface;
+import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofile.v5.rivtabp21.GetPersonsForProfileResponderInterface;
 
 @ExtendWith(MockitoExtension.class)
-class PuClientConfigurationTest {
+class PuClientV5ConfigurationTest {
 
   public static final String GET_PERSONS_FOR_PROFILE_ENDPOINT = "endpoint";
   @Mock
   private WebServiceClientFactory webServiceClientFactory;
 
   @InjectMocks
-  private PuClientConfiguration puClientConfiguration;
+  private PuClientConfigurationV5 puClientConfigurationV5;
 
   @BeforeEach
   void setUp() {
     ReflectionTestUtils.setField(
-        puClientConfiguration,
+        puClientConfigurationV5,
         "getPersonsForProfileEndpoint",
         GET_PERSONS_FOR_PROFILE_ENDPOINT
     );
@@ -41,7 +41,7 @@ class PuClientConfigurationTest {
         .when(webServiceClientFactory)
         .create(GetPersonsForProfileResponderInterface.class, GET_PERSONS_FOR_PROFILE_ENDPOINT);
 
-    final var actual = puClientConfiguration.getPersonsForProfileResponder();
+    final var actual = puClientConfigurationV5.getPersonsForProfileResponder();
     assertEquals(expected, actual);
   }
 }

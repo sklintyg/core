@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.intygproxyservice.logging.PerformanceLogging;
+import se.inera.intyg.intygproxyservice.person.dto.PersonRequest;
+import se.inera.intyg.intygproxyservice.person.dto.PersonResponse;
+import se.inera.intyg.intygproxyservice.person.service.PersonService;
 
 @RestController()
 @RequestMapping("/api/v1/person")

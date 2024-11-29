@@ -2,26 +2,34 @@ plugins {
     id 'org.springframework.boot' version '3.3.4'
 }
 
+def applicationDir = "${rootProject.projectDir}/devops/dev"
+
 dependencies {
     implementation project(':integration-api')
     implementation project(':logging')
     runtimeOnly project(':integration-common')
     runtimeOnly project(':integration-pu')
+    runtimeOnly project(':integration-pu-v5')
     runtimeOnly project(':integration-fakepu')
     runtimeOnly project(':integration-hsa')
     runtimeOnly project(':integration-fakehsa')
 
     implementation "co.elastic.logging:logback-ecs-encoder:${logbackEcsEncoderVersion}"
     implementation "com.google.guava:guava-gwt:${guavaVersion}"
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation "org.springframework.boot:spring-boot-starter-data-redis"
+    implementation "org.springframework.session:spring-session-data-redis"
 
     compileOnly 'org.projectlombok:lombok'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
@@ -34,6 +42,7 @@ tasks.named('test') {
 bootRun {
     systemProperty("application.dir", "${rootProject.projectDir}/devops/dev")
     systemProperty("spring.profiles.active", "testability,dev,fakepu,fakehsa")
+    systemProperty("spring.config.additional-location", "file:${applicationDir}/config/")
 }
 
 tasks.register("appRunDebug") {

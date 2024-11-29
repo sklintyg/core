@@ -23,14 +23,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
-import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse.Status;
+import se.inera.intyg.intygproxyservice.integration.api.pu.Status;
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofile.v3.rivtabp21.GetPersonsForProfileResponderInterface;
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofileresponder.v3.GetPersonsForProfileResponseType;
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofileresponder.v3.GetPersonsForProfileType;
 import se.riv.strategicresourcemanagement.persons.person.v3.LookupProfileType;
 
 @ExtendWith(MockitoExtension.class)
-class PuClientTest {
+class PuClientV3Test {
 
   private static final String LOGICAL_ADDRESS = "PU-LogicalAddress";
   @Mock
@@ -40,11 +40,11 @@ class PuClientTest {
   private GetPersonsForProfileResponseTypeHandler getPersonsForProfileResponseTypeHandler;
 
   @InjectMocks
-  private PuClient puClient;
+  private PuClientV3 puClientV3;
 
   @BeforeEach
   void setUp() {
-    ReflectionTestUtils.setField(puClient, "logicalAddress", LOGICAL_ADDRESS);
+    ReflectionTestUtils.setField(puClientV3, "logicalAddress", LOGICAL_ADDRESS);
   }
 
   @Nested
@@ -71,16 +71,16 @@ class PuClientTest {
 
     @Test
     void shallReturnPuResponseWithStatusFound() {
-      final var actualPuResponse = puClient.findPerson(puRequest);
+      final var actualPuResponse = puClientV3.findPerson(puRequest);
 
-      assertEquals(Status.FOUND, actualPuResponse.getStatus());
+      assertEquals(Status.FOUND, actualPuResponse.status());
     }
 
     @Test
     void shallReturnPuResponseWithPerson() {
-      final var actualPuResponse = puClient.findPerson(puRequest);
+      final var actualPuResponse = puClientV3.findPerson(puRequest);
 
-      assertEquals(PERSON, actualPuResponse.getPerson());
+      assertEquals(PERSON, actualPuResponse.person());
     }
   }
 
@@ -91,7 +91,7 @@ class PuClientTest {
     void shallCallPuWithLogicalAddressProvidedByConfig() {
       final var logicalAddressArgumentCaptor = ArgumentCaptor.forClass(String.class);
 
-      puClient.findPerson(
+      puClientV3.findPerson(
           PuRequest.builder()
               .personId(PERSON_ID_AS_PERSONNUMMER)
               .build()
@@ -110,7 +110,7 @@ class PuClientTest {
       final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
           GetPersonsForProfileType.class);
 
-      puClient.findPerson(
+      puClientV3.findPerson(
           PuRequest.builder()
               .personId(PERSON_ID_AS_PERSONNUMMER)
               .build()
@@ -130,7 +130,7 @@ class PuClientTest {
       final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
           GetPersonsForProfileType.class);
 
-      puClient.findPerson(
+      puClientV3.findPerson(
           PuRequest.builder()
               .personId(PERSON_ID_AS_PERSONNUMMER)
               .build()
@@ -140,7 +140,7 @@ class PuClientTest {
           .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
 
       assertEquals(KODVERK_PERSONNUMMER,
-          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().get(0).getRoot()
+          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getRoot()
       );
     }
 
@@ -150,7 +150,7 @@ class PuClientTest {
       final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
           GetPersonsForProfileType.class);
 
-      puClient.findPerson(
+      puClientV3.findPerson(
           PuRequest.builder()
               .personId(PERSON_ID_AS_PERSONNUMMER)
               .build()
@@ -160,7 +160,7 @@ class PuClientTest {
           .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
 
       assertEquals(PERSON_ID_AS_PERSONNUMMER,
-          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().get(0).getExtension()
+          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getExtension()
       );
     }
 
@@ -170,7 +170,7 @@ class PuClientTest {
       final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
           GetPersonsForProfileType.class);
 
-      puClient.findPerson(
+      puClientV3.findPerson(
           PuRequest.builder()
               .personId(PERSON_ID_AS_SAMORDNINGSNUMMER)
               .build()
@@ -180,7 +180,7 @@ class PuClientTest {
           .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
 
       assertEquals(KODVERK_SAMORDNINGSNUMMER,
-          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().get(0).getRoot()
+          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getRoot()
       );
     }
 
@@ -190,7 +190,7 @@ class PuClientTest {
       final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
           GetPersonsForProfileType.class);
 
-      puClient.findPerson(
+      puClientV3.findPerson(
           PuRequest.builder()
               .personId(PERSON_ID_AS_SAMORDNINGSNUMMER)
               .build()
@@ -200,7 +200,7 @@ class PuClientTest {
           .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
 
       assertEquals(PERSON_ID_AS_SAMORDNINGSNUMMER,
-          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().get(0).getExtension()
+          getPersonsForProfileTypeArgumentCaptor.getValue().getPersonId().getFirst().getExtension()
       );
     }
   }
@@ -223,9 +223,9 @@ class PuClientTest {
           .when(getPersonsForProfileResponderInterface)
           .getPersonsForProfile(anyString(), any(GetPersonsForProfileType.class));
 
-      final var actualPuResponse = puClient.findPerson(puRequest);
+      final var actualPuResponse = puClientV3.findPerson(puRequest);
 
-      assertEquals(Status.ERROR, actualPuResponse.getStatus());
+      assertEquals(Status.ERROR, actualPuResponse.status());
     }
   }
 }

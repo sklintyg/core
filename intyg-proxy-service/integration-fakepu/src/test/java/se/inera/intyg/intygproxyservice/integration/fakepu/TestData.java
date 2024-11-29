@@ -11,6 +11,7 @@ import se.inera.intyg.intygproxyservice.integration.fakepu.repository.model.Pars
 public class TestData {
 
   public static final String PERSON_ID = "191212121212";
+  public static final String PERSON_ID_2 = "201212121212";
   public static final String GIVEN_NAME = "Tolvan";
   public static final String MIDDLE_NAME = "TT";
   public static final String SURNAME = "Tolvansson";

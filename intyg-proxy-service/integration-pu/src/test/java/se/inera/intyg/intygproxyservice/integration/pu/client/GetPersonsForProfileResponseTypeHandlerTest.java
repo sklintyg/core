@@ -12,8 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
-import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse.Status;
+import se.inera.intyg.intygproxyservice.integration.api.pu.Status;
 import se.inera.intyg.intygproxyservice.integration.pu.client.converter.GetPersonsForProfileResponseTypeConverter;
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofileresponder.v3.GetPersonsForProfileResponseType;
 import se.riv.strategicresourcemanagement.persons.person.v3.PersonRecordType;
@@ -32,13 +31,10 @@ class GetPersonsForProfileResponseTypeHandlerTest {
   @Nested
   class PersonProvidedInResponse {
 
-    private PuResponse puResponse;
     private GetPersonsForProfileResponseType getPersonsForProfileReponseType;
 
     @BeforeEach
     void setUp() {
-      puResponse = PuResponse.found(PERSON);
-
       final var requestedPersonRecordType = new RequestedPersonRecordType();
       requestedPersonRecordType.setPersonRecord(new PersonRecordType());
       getPersonsForProfileReponseType = new GetPersonsForProfileResponseType();
@@ -58,7 +54,7 @@ class GetPersonsForProfileResponseTypeHandlerTest {
           getPersonsForProfileReponseType
       );
 
-      assertEquals(Status.FOUND, actualPuResponse.getStatus());
+      assertEquals(Status.FOUND, actualPuResponse.status());
     }
 
     @Test
@@ -68,7 +64,7 @@ class GetPersonsForProfileResponseTypeHandlerTest {
           getPersonsForProfileReponseType
       );
 
-      assertEquals(PERSON, actualPuResponse.getPerson());
+      assertEquals(PERSON, actualPuResponse.person());
     }
   }
 
@@ -95,7 +91,7 @@ class GetPersonsForProfileResponseTypeHandlerTest {
           getPersonsForProfileReponseType
       );
 
-      assertEquals(Status.ERROR, actualPuResponse.getStatus());
+      assertEquals(Status.ERROR, actualPuResponse.status());
     }
 
     @Test
@@ -104,7 +100,7 @@ class GetPersonsForProfileResponseTypeHandlerTest {
           getPersonsForProfileReponseType
       );
 
-      assertEquals(Status.NOT_FOUND, actualPuResponse.getStatus());
+      assertEquals(Status.NOT_FOUND, actualPuResponse.status());
     }
 
     @Test
@@ -117,7 +113,7 @@ class GetPersonsForProfileResponseTypeHandlerTest {
           getPersonsForProfileReponseType
       );
 
-      assertEquals(Status.NOT_FOUND, actualPuResponse.getStatus());
+      assertEquals(Status.NOT_FOUND, actualPuResponse.status());
     }
   }
 }
