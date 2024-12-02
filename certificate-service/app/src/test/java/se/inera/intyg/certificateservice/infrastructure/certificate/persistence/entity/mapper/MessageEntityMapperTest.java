@@ -737,6 +737,13 @@ class MessageEntityMapperTest {
     }
 
     @Test
+    void shallIncludeContactInfo() {
+      assertNotNull(
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).answer().contactInfo()
+      );
+    }
+
+    @Test
     void shallIncludeType() {
       assertEquals(ANSWER,
           mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).answer().type()
@@ -766,49 +773,49 @@ class MessageEntityMapperTest {
     @Test
     void shallIncludeId() {
       assertEquals(new MessageId(REMINDER_MESSAGE_ID),
-          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().get(0).id()
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().getFirst().id()
       );
     }
 
     @Test
     void shallIncludeReference() {
       assertEquals(new SenderReference(REFERENCE_ID),
-          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().get(0).reference()
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().getFirst().reference()
       );
     }
 
     @Test
     void shallIncludeSubject() {
       assertEquals(new Subject(SUBJECT),
-          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().get(0).subject()
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().getFirst().subject()
       );
     }
 
     @Test
     void shallIncludeContent() {
       assertEquals(new Content(CONTENT),
-          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().get(0).content()
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().getFirst().content()
       );
     }
 
     @Test
     void shallIncludeAuthor() {
       assertEquals(new Author(AUTHOR_INCOMING_MESSAGE),
-          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().get(0).author()
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().getFirst().author()
       );
     }
 
     @Test
     void shallIncludeCreated() {
       assertEquals(CREATED_AFTER_SENT,
-          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().get(0).created()
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().getFirst().created()
       );
     }
 
     @Test
     void shallIncludeSent() {
       assertEquals(SENT,
-          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().get(0).sent()
+          mapper.toDomain(COMPLEMENT_MESSAGE_ENTITY).reminders().getFirst().sent()
       );
     }
   }

@@ -139,14 +139,7 @@ public class MessageEntityMapper {
         .lastDateToReply(messageEntity.getLastDateToReply())
         .authoredStaff(messageEntity.getAuthoredByStaff() != null ? StaffEntityMapper.toDomain(
             messageEntity.getAuthoredByStaff()) : null)
-        .contactInfo(
-            new MessageContactInfo(
-                messageEntity.getContactInfo() != null ? messageEntity.getContactInfo().stream()
-                    .map(MessageContactInfoEmbeddable::getInfo)
-                    .toList()
-                    : Collections.emptyList()
-            )
-        )
+        .contactInfo(convertContactInfo(messageEntity))
         .complements(
             messageEntity.getComplements().stream()
                 .map(complement ->
@@ -187,6 +180,7 @@ public class MessageEntityMapper {
                             childMessage.getAuthoredByStaff() != null
                                 ? StaffEntityMapper.toDomain(childMessage.getAuthoredByStaff())
                                 : null)
+                        .contactInfo(convertContactInfo(childMessage))
                         .build()
                 )
                 .orElse(null)
@@ -216,5 +210,14 @@ public class MessageEntityMapper {
                 .toList()
         )
         .build();
+  }
+
+  private static MessageContactInfo convertContactInfo(MessageEntity messageEntity) {
+    return new MessageContactInfo(
+        messageEntity.getContactInfo() != null ? messageEntity.getContactInfo().stream()
+            .map(MessageContactInfoEmbeddable::getInfo)
+            .toList()
+            : Collections.emptyList()
+    );
   }
 }

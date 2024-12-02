@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -7,6 +8,7 @@ import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.Author;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
+import se.inera.intyg.certificateservice.domain.message.model.MessageContactInfo;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
@@ -40,6 +43,9 @@ class AnswerToMessageEntityMapperTest {
   private static final LocalDateTime SENT = LocalDateTime.now();
   private static final MessageStatus STATUS = MessageStatus.HANDLED;
   private static final MessageType TYPE = MessageType.COMPLEMENT;
+  private static final MessageContactInfo CONTACT_INFO = new MessageContactInfo(
+      List.of("CONTACT INFO")
+  );
   private static final boolean FORWARDED = true;
   private static final CertificateEntity CERTIFICATE = CertificateEntity.builder().build();
   private static final int KEY = 1;
@@ -83,6 +89,7 @@ class AnswerToMessageEntityMapperTest {
         .sent(SENT)
         .status(STATUS)
         .type(TYPE)
+        .contactInfo(CONTACT_INFO)
         .build();
     final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
     assertEquals(expectedId, result.getId());
@@ -108,6 +115,7 @@ class AnswerToMessageEntityMapperTest {
         .sent(SENT)
         .status(STATUS)
         .type(TYPE)
+        .contactInfo(CONTACT_INFO)
         .build();
 
     final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
@@ -223,6 +231,18 @@ class AnswerToMessageEntityMapperTest {
     assertNull(result.getAuthoredByStaff());
   }
 
+  @Test
+  void shallIncludeContactInfo() {
+    final var originalEntity = createOriginalEntity();
+    final var answer = createAnswer();
+    final var result = answerToMessageEntityMapper.toEntity(originalEntity, answer, KEY);
+    assertAll(
+        () -> assertEquals(CONTACT_INFO.lines().size(), result.getContactInfo().size()),
+        () -> assertEquals(CONTACT_INFO.lines().getFirst(),
+            result.getContactInfo().getFirst().getInfo())
+    );
+  }
+
   private MessageEntity createOriginalEntity() {
     return MessageEntity.builder()
         .certificate(CERTIFICATE)
@@ -241,6 +261,7 @@ class AnswerToMessageEntityMapperTest {
         .sent(SENT)
         .status(STATUS)
         .type(TYPE)
+        .contactInfo(CONTACT_INFO)
         .build();
   }
 
@@ -254,6 +275,7 @@ class AnswerToMessageEntityMapperTest {
         .modified(MODIFIED)
         .sent(SENT)
         .status(STATUS)
+        .contactInfo(CONTACT_INFO)
         .type(TYPE);
   }
 }
