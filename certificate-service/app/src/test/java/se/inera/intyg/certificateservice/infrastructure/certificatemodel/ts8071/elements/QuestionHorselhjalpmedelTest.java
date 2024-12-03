@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
-class QuestionHorselhjalpmedelhjalpmedelTest {
+class QuestionHorselhjalpmedelTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("9.2");
 
