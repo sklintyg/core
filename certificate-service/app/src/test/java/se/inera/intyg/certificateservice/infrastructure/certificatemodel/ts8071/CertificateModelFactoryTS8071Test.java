@@ -169,7 +169,7 @@ class CertificateModelFactoryTS8071Test {
 
 
     @ParameterizedTest
-    @ValueSource(strings = {"3"})
+    @ValueSource(strings = {"3", "4"})
     void shallIncludeQuestions(String value) {
       final var certificateModel = certificateModelFactoryTS8071.create();
 
