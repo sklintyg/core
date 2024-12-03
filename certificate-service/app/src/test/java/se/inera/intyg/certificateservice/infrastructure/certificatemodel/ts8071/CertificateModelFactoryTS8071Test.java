@@ -20,6 +20,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
@@ -162,6 +163,42 @@ class CertificateModelFactoryTS8071Test {
 
   @Nested
   class CertificateSpecifications {
+
+    @Test
+    void shallIncludeCategoryIntygetAvser() {
+      final var certificateModel = certificateModelFactoryTS8071.create();
+
+      final var id = new ElementId("KAT_0.0");
+      assertTrue(certificateModel.elementSpecificationExists(id),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              id,
+              certificateModel.elementSpecifications())
+      );
+    }
+
+    @Test
+    void shallIncludeCategoryIntygetBaseratPa() {
+      final var certificateModel = certificateModelFactoryTS8071.create();
+
+      final var id = new ElementId("KAT_0.1");
+      assertTrue(certificateModel.elementSpecificationExists(id),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              id,
+              certificateModel.elementSpecifications())
+      );
+    }
+
+    @Test
+    void shallIncludeCategoryIdentitet() {
+      final var certificateModel = certificateModelFactoryTS8071.create();
+
+      final var id = new ElementId("KAT_0.2");
+      assertTrue(certificateModel.elementSpecificationExists(id),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              id,
+              certificateModel.elementSpecifications())
+      );
+    }
 
   }
 
