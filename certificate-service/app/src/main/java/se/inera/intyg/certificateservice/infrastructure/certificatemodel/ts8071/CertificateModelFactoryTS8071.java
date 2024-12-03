@@ -11,6 +11,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategorySynfunktion.categorySynfunktion;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategorySynskarpa.categorySynskarpa;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIdentitet.questionIdentitet;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomEllerSynnedsattning.questionSjukdomEllerSynnedsattning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.questionSynfunktioner;
 
 import java.time.LocalDateTime;
@@ -105,7 +106,9 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                     questionSynfunktioner()
                 ),
                 categorySynskarpa(),
-                categoryAnamnes(),
+                categoryAnamnes(
+                    questionSjukdomEllerSynnedsattning()
+                ),
                 categoryBalanssinne(),
                 categoryHorsel(),
                 categoryRorelseorganensFunktioner(),

@@ -1,0 +1,74 @@
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
+import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
+
+class QuestionSjukdomEllerSynnedsattningTest {
+
+  private static final ElementId ELEMENT_ID = new ElementId("7");
+
+  @Test
+  void shallIncludeId() {
+    final var element = QuestionSjukdomEllerSynnedsattning.questionSjukdomEllerSynnedsattning();
+
+    assertEquals(ELEMENT_ID, element.id());
+  }
+
+  @Test
+  void shallIncludeConfiguration() {
+    final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
+        .name("Finns uppgift om ögonsjukdom eller synnedsättning?")
+        .description(
+            "Exempel på vanligt förekommande ögonsjukdomar är glaukom, retinopati och retinitis pigmentosa. Exempel på synnedsättning kan vara\n"
+                + "dubbelseende, syn med enbart ett öga eller plötsligt nedsatt synskärpa.")
+        .id(new FieldId("7.1"))
+        .selectedText("Ja")
+        .unselectedText("Nej")
+        .build();
+
+    final var element = QuestionSjukdomEllerSynnedsattning.questionSjukdomEllerSynnedsattning();
+
+    assertEquals(expectedConfiguration, element.configuration());
+  }
+
+  @Test
+  void shallIncludeRules() {
+    final var expectedRule = List.of(
+        ElementRuleExpression.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.MANDATORY)
+            .expression(
+                new RuleExpression(
+                    "exists($7.1)"
+                )
+            )
+            .build()
+    );
+
+    final var element = QuestionSjukdomEllerSynnedsattning.questionSjukdomEllerSynnedsattning();
+
+    assertEquals(expectedRule, element.rules());
+  }
+
+  @Test
+  void shallIncludeValidation() {
+    final var expectedValidations = List.of(
+        ElementValidationBoolean.builder()
+            .mandatory(true)
+            .build()
+    );
+
+    final var element = QuestionSjukdomEllerSynnedsattning.questionSjukdomEllerSynnedsattning();
+
+    assertEquals(expectedValidations, element.validations());
+  }
+}
