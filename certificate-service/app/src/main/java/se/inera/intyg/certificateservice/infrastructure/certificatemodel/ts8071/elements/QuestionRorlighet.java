@@ -8,24 +8,27 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
-public class QuestionHorselhjalpmedel {
+public class QuestionRorlighet {
 
-  public static final ElementId QUESTION_HORSELHJALPMEDEL_ID = new ElementId("9.2");
-  public static final FieldId QUESTION_HORSELHJALPMEDEL_FIELD_ID = new FieldId("9.2");
+  public static final ElementId QUESTION_RORLIGHET_ID = new ElementId("10.1");
+  public static final FieldId QUESTION_RORLIGHET_FIELD_ID = new FieldId("10.1");
 
-  private QuestionHorselhjalpmedel() {
+  private QuestionRorlighet() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionHorselhjalpmedel(ElementSpecification... children) {
+  public static ElementSpecification questionRorlighet(ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_HORSELHJALPMEDEL_ID)
+        .id(QUESTION_RORLIGHET_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_HORSELHJALPMEDEL_FIELD_ID)
+                .id(QUESTION_RORLIGHET_FIELD_ID)
+                .description(
+                    "Här avses till exempel nedsättningar av rörelseförmågan till följd av trauma, amputation, ryggmärgsskada, stroke eller annan sjukdom.")
                 .selectedText("Ja")
                 .unselectedText("Nej")
-                .name("Behöver hörapparat användas?")
+                .name(
+                    "Har personen någon sjukdom eller funktionsnedsättning som påverkar rörligheten och som medför att fordon inte kan köras på ett trafiksäkert sätt?")
                 .build()
         )
         .validations(
@@ -38,8 +41,8 @@ public class QuestionHorselhjalpmedel {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_HORSELHJALPMEDEL_ID,
-                    QUESTION_HORSELHJALPMEDEL_FIELD_ID
+                    QUESTION_RORLIGHET_ID,
+                    QUESTION_RORLIGHET_FIELD_ID
                 )
             )
         )
