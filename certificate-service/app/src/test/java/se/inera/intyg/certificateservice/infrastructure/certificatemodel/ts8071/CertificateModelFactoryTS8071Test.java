@@ -169,8 +169,8 @@ class CertificateModelFactoryTS8071Test {
 
 
     @ParameterizedTest
-    @ValueSource(strings = {"KAT_0.0", "KAT_0.1", "KAT_0.2", "3"})
-    void shallIncludeElements(String value) {
+    @ValueSource(strings = {"3"})
+    void shallIncludeQuestions(String value) {
       final var certificateModel = certificateModelFactoryTS8071.create();
 
       final var id = new ElementId(value);
