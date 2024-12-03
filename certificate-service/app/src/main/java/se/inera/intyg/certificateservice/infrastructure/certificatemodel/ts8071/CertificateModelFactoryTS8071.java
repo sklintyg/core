@@ -2,15 +2,18 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryAnamnes.categoryAnamnes;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryBalanssinne.categoryBalanssinne;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryDiabetes.categoryDiabetes;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryEpilepsi.categoryEpilepsi;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryHjartOchKarlsjukdomar.categoryHjartOchKarlsjukdomar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryHorsel.categoryHorsel;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryIdentitet.categoryIdentitet;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryIntygetAvser.categoryIntygetAvser;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryIntygetBaseratPa.categoryIntygetBaseratPa;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIdentitet.questionIdentitet;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryNeurologiskaSjukdomar.categoryNeurologiskaSjukdomar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryRorelseorganensFunktioner.categoryRorelseorganensFunktioner;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategorySynfunktion.categorySynfunktion;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategorySynskarpa.categorySynskarpa;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIdentitet.questionIdentitet;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -106,7 +109,10 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                 categoryBalanssinne(),
                 categoryHorsel(),
                 categoryRorelseorganensFunktioner(),
-                categoryHjartOchKarlsjukdomar()
+                categoryHjartOchKarlsjukdomar(),
+                categoryDiabetes(),
+                categoryNeurologiskaSjukdomar(),
+                categoryEpilepsi()
             )
         )
         .recipient(CertificateRecipientFactory.transp(tsLogicalAddress))

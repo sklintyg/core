@@ -182,7 +182,8 @@ class CertificateModelFactoryTS8071Test {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"KAT_1.0", "KAT_1.1", "KAT_1.2", "KAT_2", "KAT_3", "KAT_4", "KAT_5"})
+    @ValueSource(strings = {"KAT_1.0", "KAT_1.1", "KAT_1.2", "KAT_2", "KAT_3", "KAT_4", "KAT_5",
+        "KAT_6", "KAT_7", "KAT_8"})
     void shallIncludeCategories(String id) {
       final var elementId = new ElementId(id);
       CertificateModel certificateModel = certificateModelFactoryTS8071.create();
