@@ -21,4 +21,17 @@ class CertificateRecipientFactoryTest {
     assertEquals(expected, response);
   }
 
+  @Test
+  void shouldReturnTransp() {
+    final var expected = new Recipient(
+        new RecipientId("TRANSP"),
+        "Transportstyrelsen",
+        "Logisk adress"
+    );
+
+    final var response = CertificateRecipientFactory.fkassa("Logisk adress");
+
+    assertEquals(expected, response);
+  }
+
 }
