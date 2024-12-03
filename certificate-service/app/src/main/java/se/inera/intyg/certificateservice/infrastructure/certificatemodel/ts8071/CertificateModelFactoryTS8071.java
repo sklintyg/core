@@ -4,6 +4,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryAlkoholNarkotikaOchLakemedel.categoryAlkoholNarkotikaOchLakemedel;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryAnamnes.categoryAnamnes;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryBalanssinne.categoryBalanssinne;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryBedomning.categoryBedomning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryDemensOchAndraKognitivaStorningar.categoryDemensOchAndraKognitivaStorningar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryDiabetes.categoryDiabetes;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryEpilepsi.categoryEpilepsi;
@@ -14,6 +15,8 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryIntygetBaseratPa.categoryIntygetBaseratPa;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryNeurologiskaSjukdomar.categoryNeurologiskaSjukdomar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryNjursjukdomar.categoryNjursjukdomar;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryOvrigKommentar.categoryOvrigKommentar;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryOvrigMedicinering.categoryOvrigMedicinering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryPsykiskaSjukdomarOchStorningar.categoryPsykiskaSjukdomarOchStorningar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryRorelseorganensFunktioner.categoryRorelseorganensFunktioner;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategorySomnOchVakenhetsstorningar.categorySomnOchVakenhetsstorningar;
@@ -136,7 +139,10 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                 categorySomnOchVakenhetsstorningar(),
                 categoryAlkoholNarkotikaOchLakemedel(),
                 categoryPsykiskaSjukdomarOchStorningar(),
-                categoryAdhdAutismPsykiskUtvecklingsstorning()
+                categoryAdhdAutismPsykiskUtvecklingsstorning(),
+                categoryOvrigMedicinering(),
+                categoryOvrigKommentar(),
+                categoryBedomning()
             )
         )
         .recipient(CertificateRecipientFactory.transp(tsLogicalAddress))
