@@ -8,26 +8,27 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
-public class QuestionArytmi {
+public class QuestionSynkope {
 
-  public static final ElementId QUESTION_ARYTMI_ID = new ElementId("11.3");
-  public static final FieldId QUESTION_ARYTMI_FIELD_ID = new FieldId("11.3");
+  public static final ElementId QUESTION_SYNKOPE_ID = new ElementId("11.4");
+  public static final FieldId QUESTION_SYNKOPE_FIELD_ID = new FieldId("11.4");
 
-  private QuestionArytmi() {
+  private QuestionSynkope() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionArytmi(
+  public static ElementSpecification questionSynkope(
       ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_ARYTMI_ID)
+        .id(QUESTION_SYNKOPE_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_ARYTMI_FIELD_ID)
+                .id(QUESTION_SYNKOPE_FIELD_ID)
                 .selectedText("Ja")
                 .unselectedText("Nej")
-                .name("Har personen eller har personen haft någon arytmi?")
-                .description("Här avses inte välbehandlat förmaksflimmer utan synkope.")
+                .name("Har personen eller har personen haft någon synkope?")
+                .description(
+                    "Med synkope avses här sådan som är utlöst av arytmi men även situationsutlöst synkope (till följd av exempelvis hosta, nysning, skratt eller ansträngning) och reflexsynkope (vasovagal synkope) som exempelvis utlösts av rädsla eller smärta.")
                 .build()
         )
         .validations(
@@ -40,8 +41,8 @@ public class QuestionArytmi {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_ARYTMI_ID,
-                    QUESTION_ARYTMI_FIELD_ID
+                    QUESTION_SYNKOPE_ID,
+                    QUESTION_SYNKOPE_FIELD_ID
                 )
             )
         )

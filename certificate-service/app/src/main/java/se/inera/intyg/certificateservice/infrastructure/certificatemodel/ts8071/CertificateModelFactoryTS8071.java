@@ -22,6 +22,8 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategorySomnOchVakenhetsstorningar.categorySomnOchVakenhetsstorningar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategorySynfunktion.categorySynfunktion;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategorySynskarpa.categorySynskarpa;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionArytmi.questionArytmi;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionArytmiBeskrivning.questionArytmiBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBalanssinne.questionBalanssinne;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBalanssinneBeskrivning.questionBalanssinneBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHjartsjukdom.questionHjartsjukdom;
@@ -39,6 +41,8 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomshistorik.questionSjukdomshistorik;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomshistorikBeskrivning.questionSjukdomshistorikBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.questionSynfunktioner;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynkope.questionSynkope;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynkopeBeskrivning.questionSynkopeBeskrivning;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -162,6 +166,12 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                     ),
                     questionHjartsjukdomBehandlad(
                         questionHjartsjukdomBehandladBeskrivning()
+                    ),
+                    questionArytmi(
+                        questionArytmiBeskrivning()
+                    ),
+                    questionSynkope(
+                        questionSynkopeBeskrivning()
                     )
                 ),
                 categoryDiabetes(),
