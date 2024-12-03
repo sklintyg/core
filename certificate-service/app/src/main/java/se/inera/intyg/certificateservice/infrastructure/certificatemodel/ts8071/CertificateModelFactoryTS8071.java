@@ -18,6 +18,9 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategorySynskarpa.categorySynskarpa;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIdentitet.questionIdentitet;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomEllerSynnedsattning.questionSjukdomEllerSynnedsattning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomshistorik.questionSjukdomshistorik;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomshistorikBeskrivning.questionSjukdomshistorikBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.questionSynfunktioner;
 
 import java.time.LocalDateTime;
@@ -113,7 +116,10 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                 ),
                 categorySynskarpa(),
                 categoryAnamnes(
-                    questionSjukdomEllerSynnedsattning()
+                    questionSjukdomEllerSynnedsattning(),
+                    questionSjukdomEllerSynnedsattningBeskrivning(),
+                    questionSjukdomshistorik(),
+                    questionSjukdomshistorikBeskrivning()
                 ),
                 categoryBalanssinne(),
                 categoryHorsel(),
