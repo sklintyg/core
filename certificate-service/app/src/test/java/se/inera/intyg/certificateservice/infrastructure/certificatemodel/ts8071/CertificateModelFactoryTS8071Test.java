@@ -167,9 +167,8 @@ class CertificateModelFactoryTS8071Test {
   @Nested
   class CertificateSpecifications {
 
-
     @ParameterizedTest
-    @ValueSource(strings = {"3", "4"})
+    @ValueSource(strings = {"3", "4", "7"})
     void shallIncludeQuestions(String value) {
       final var certificateModel = certificateModelFactoryTS8071.create();
 
