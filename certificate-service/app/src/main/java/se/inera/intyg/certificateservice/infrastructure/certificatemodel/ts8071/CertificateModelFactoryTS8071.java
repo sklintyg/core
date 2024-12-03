@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryIdentitet.categoryIdentitet;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryIntygetAvser.categoryIntygetAvser;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryIntygetBaseratPa.categoryIntygetBaseratPa;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIdentitet.questionIdentitet;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -89,7 +90,9 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
             List.of(
                 categoryIntygetAvser(),
                 categoryIntygetBaseratPa(),
-                categoryIdentitet()
+                categoryIdentitet(
+                    questionIdentitet()
+                )
             )
         )
         .recipient(CertificateRecipientFactory.transp(tsLogicalAddress))

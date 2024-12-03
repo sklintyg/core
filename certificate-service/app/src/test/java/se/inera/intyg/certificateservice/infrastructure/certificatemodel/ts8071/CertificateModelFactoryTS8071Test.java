@@ -14,6 +14,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
@@ -164,42 +166,18 @@ class CertificateModelFactoryTS8071Test {
   @Nested
   class CertificateSpecifications {
 
-    @Test
-    void shallIncludeCategoryIntygetAvser() {
+    @ParameterizedTest
+    @ValueSource(strings = {"KAT_0.0", "KAT_0.1", "KAT_0.2", "3"})
+    void shallIncludeElements(String value) {
       final var certificateModel = certificateModelFactoryTS8071.create();
 
-      final var id = new ElementId("KAT_0.0");
+      final var id = new ElementId(value);
       assertTrue(certificateModel.elementSpecificationExists(id),
           "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
               id,
               certificateModel.elementSpecifications())
       );
     }
-
-    @Test
-    void shallIncludeCategoryIntygetBaseratPa() {
-      final var certificateModel = certificateModelFactoryTS8071.create();
-
-      final var id = new ElementId("KAT_0.1");
-      assertTrue(certificateModel.elementSpecificationExists(id),
-          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-              id,
-              certificateModel.elementSpecifications())
-      );
-    }
-
-    @Test
-    void shallIncludeCategoryIdentitet() {
-      final var certificateModel = certificateModelFactoryTS8071.create();
-
-      final var id = new ElementId("KAT_0.2");
-      assertTrue(certificateModel.elementSpecificationExists(id),
-          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-              id,
-              certificateModel.elementSpecifications())
-      );
-    }
-
   }
 
   @Test
