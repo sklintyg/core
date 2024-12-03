@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorselhjalpmedel.QUESTION_HORSELHJALPMEDEL_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorselhjalpmedel.QUESTION_HORSELHJALPMEDEL_ID;
+
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
@@ -10,45 +13,47 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIdKontroll;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemPositionHearingAid;
 
-public class QuestionIdentitet {
+public class QuestionHorselhjalpmedelPosition {
 
-  public static final ElementId QUESTION_IDENTITET_ID = new ElementId(
-      "3");
-  public static final FieldId QUESTION_IDENTITET_FIELD_ID = new FieldId(
-      "3.1");
+  public static final ElementId QUESTION_HORSELHJALPMEDEL_POSITION_ID = new ElementId(
+      "9.3");
+  public static final FieldId QUESTION_HORSELHJALPMEDEL_POSITION_FIELD_ID = new FieldId(
+      "9.3");
 
-  private QuestionIdentitet() {
+  private QuestionHorselhjalpmedelPosition() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionIdentitet(
+  public static ElementSpecification questionHorselhjalpmedelPosition(
       ElementSpecification... children) {
     final var radioMultipleCodes = List.of(
-        CodeFactory.elementConfigurationCode(CodeSystemKvIdKontroll.IDK1),
-        CodeFactory.elementConfigurationCode(CodeSystemKvIdKontroll.IDK2),
-        CodeFactory.elementConfigurationCode(CodeSystemKvIdKontroll.IDK3),
-        CodeFactory.elementConfigurationCode(CodeSystemKvIdKontroll.IDK4),
-        CodeFactory.elementConfigurationCode(CodeSystemKvIdKontroll.IDK5),
-        CodeFactory.elementConfigurationCode(CodeSystemKvIdKontroll.IDK6)
+        CodeFactory.elementConfigurationCode(CodeSystemPositionHearingAid.HOGER),
+        CodeFactory.elementConfigurationCode(CodeSystemPositionHearingAid.VANSTER),
+        CodeFactory.elementConfigurationCode(CodeSystemPositionHearingAid.BADA_ORONEN)
     );
 
     return ElementSpecification.builder()
-        .id(QUESTION_IDENTITET_ID)
+        .id(QUESTION_HORSELHJALPMEDEL_POSITION_ID)
         .configuration(
             ElementConfigurationRadioMultipleCode.builder()
-                .id(QUESTION_IDENTITET_FIELD_ID)
-                .name("Identitet är styrkt genom")
-                .elementLayout(ElementLayout.COLUMNS)
+                .id(QUESTION_HORSELHJALPMEDEL_POSITION_FIELD_ID)
+                .name(
+                    "Om personen behöver använda hörapparat, ange på vilket öra eller om hörapparat används på båda öronen")
+                .elementLayout(ElementLayout.ROWS)
                 .list(radioMultipleCodes)
                 .build()
         )
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_IDENTITET_ID,
+                    QUESTION_HORSELHJALPMEDEL_POSITION_ID,
                     radioMultipleCodes.stream().map(ElementConfigurationCode::id).toList()
+                ),
+                CertificateElementRuleFactory.show(
+                    QUESTION_HORSELHJALPMEDEL_ID,
+                    QUESTION_HORSELHJALPMEDEL_FIELD_ID
                 )
             )
         )
