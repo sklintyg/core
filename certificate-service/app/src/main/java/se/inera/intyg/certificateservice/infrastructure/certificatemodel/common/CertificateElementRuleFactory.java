@@ -37,6 +37,18 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
+  public static ElementRule showIfNot(ElementId id, FieldId fieldId) {
+    return ElementRuleExpression.builder()
+        .type(ElementRuleType.SHOW)
+        .id(id)
+        .expression(
+            new RuleExpression(
+                not(singleExpression(fieldId.value()))
+            )
+        )
+        .build();
+  }
+
   public static ElementRule mandatory(ElementId id, List<FieldId> fieldIds) {
     return ElementRuleExpression.builder()
         .id(id)
@@ -125,5 +137,9 @@ public class CertificateElementRuleFactory {
 
   public static String multipleOrExpressionWithNotEmpty(String... expression) {
     return multipleOrExpression("!empty", expression);
+  }
+
+  public static String not(String s) {
+    return String.format("!%s", s);
   }
 }

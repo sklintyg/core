@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 
 class QuestionSjukdomEllerSynnedsattningTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("7");
+  private static final ElementId ELEMENT_ID = new ElementId("7.1");
 
   @Test
   void shallIncludeId() {
@@ -28,7 +28,7 @@ class QuestionSjukdomEllerSynnedsattningTest {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
         .name("Finns uppgift om ögonsjukdom eller synnedsättning?")
         .description(
-            "Exempel på vanligt förekommande ögonsjukdomar är glaukom, retinopati och retinitis pigmentosa. Exempel på synnedsättning kan vara\n"
+            "Exempel på vanligt förekommande ögonsjukdomar är glaukom, retinopati och retinitis pigmentosa. Exempel på synnedsättning kan vara "
                 + "dubbelseende, syn med enbart ett öga eller plötsligt nedsatt synskärpa.")
         .id(new FieldId("7.1"))
         .selectedText("Ja")
@@ -46,11 +46,13 @@ class QuestionSjukdomEllerSynnedsattningTest {
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.MANDATORY)
-            .expression(
-                new RuleExpression(
-                    "exists($7.1)"
-                )
+            .expression(new RuleExpression("exists($7.1)")
             )
+            .build(),
+        ElementRuleExpression.builder()
+            .id(new ElementId("4"))
+            .type(ElementRuleType.SHOW)
+            .expression(new RuleExpression("!$4.1"))
             .build()
     );
 

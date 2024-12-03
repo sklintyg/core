@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_ID;
+
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -44,6 +47,10 @@ public class QuestionSjukdomEllerSynnedsattning {
                 CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID,
                     QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_FIELD_ID
+                ),
+                CertificateElementRuleFactory.showIfNot(
+                    QUESTION_SYNFUNKTIONER_ID,
+                    QUESTION_SYNFUNKTIONER_FIELD_ID
                 )
             )
         )
