@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBalanssinne.QUESTION_BALANSSINNE_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBalanssinne.QUESTION_BALANSSINNE_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomshistorik.QUESTION_SJUKDOMSHISTORIK_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
@@ -49,7 +48,7 @@ public class QuestionBalanssinneBeskrivning {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_SJUKDOMSHISTORIK_ID)
+            ShouldValidateFactory.radioBoolean(QUESTION_BALANSSINNE_ID)
         )
         .validations(
             List.of(

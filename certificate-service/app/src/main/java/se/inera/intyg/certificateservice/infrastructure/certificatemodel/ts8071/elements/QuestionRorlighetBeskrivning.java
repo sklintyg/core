@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighet.QUESTION_RORLIGHET_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighet.QUESTION_RORLIGHET_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomshistorik.QUESTION_SJUKDOMSHISTORIK_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
@@ -49,7 +48,7 @@ public class QuestionRorlighetBeskrivning {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_SJUKDOMSHISTORIK_ID)
+            ShouldValidateFactory.radioBoolean(QUESTION_RORLIGHET_ID)
         )
         .validations(
             List.of(
